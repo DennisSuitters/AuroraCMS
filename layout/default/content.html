@@ -1,0 +1,130 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="content">
+	<main class="container">
+		<pagenotes>
+      <div class="row mt-5">
+        <div class="col-12">
+					<div class="card">
+          	<div class="card-body">
+            	<print page="notes">
+						</div>
+          </div>
+        </div>
+      </div>
+    </pagenotes>
+		<div class="row my-5">
+			<div class="col-12 col-sm-9">
+				<item>
+					<article class="card mb-5">
+						<json-ld>
+						<img class="card-img-top img-fluid" src="<print content=image>" alt="<print content=imageALT>">
+						<div class="card-body">
+							<h1 class="card-title"><print content="title"></h1>
+							<div class="card-text">
+								<cost>
+									<div class="price_content mb-4 d-block d-sm-none">
+										<div>
+											<div class="h4 text-right"><print content="cost"></div>
+											<print content="quantity">
+											<service>
+												<a class="btn btn-outline-secondary btn-block" href="bookings/<print content=bookservice>">Book Now</a>
+											</service>
+											<inventory>
+												<choices>
+												<button class="addCart btn btn-outline-secondary btn-block" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+											</inventory>
+										</div>
+									</div>
+								</cost>
+								<print content="dateCreated" userrank="399" class="text-muted small" container="div" leadingtext="Created: ">
+								<print content="datePublished" class="text-muted small" container="div" leadingtext="Published: ">
+								<print content="dateEdited" userrank="399" class="text-muted small" container="div" leadingtext="Edited: ">
+								<print content="dateEvent" class="text-muted small" container="div" leadingtext="Event Date: ">
+								<print content="categories" class="text-muted small" container="div" leadingtext="Categories: ">
+								<print content="tags" class="text-muted small" container="div" leadingtext="Tags: ">
+								<mediaitems>
+									<div class="container">
+										<div class="row m-0 mt-sm-5 justify-content-center">
+											<mediaimages>
+												<a href="<print media=file>" data-fancybox="gallery" class="card gallery bg-dark text-white col-3 col-sm-2 m-1 m-sm-2 p-0">
+						            	<img src="<print media=thumb>" class="img-fluid" alt="<print media=title>">
+												</a>
+											</mediaimages>
+										</div>
+									</div>
+								</mediaitems>
+								<print content="notes">
+							</div>
+						</div>
+					</article>
+					<author>
+						<div class="card mb-5">
+							<div class="card-header border-0 font-weight-bold">About the Author</div>
+							<div class="card-body">
+								<div class="media mt-4 px-1">
+									<div class="col-4 col-sm-2">
+										<print author="avatar" alt="name" class="img-fluid rounded-circle d-flex z-depth-1 mr-3">
+									</div>
+		  						<div class="media-body">
+						      	<h5 class="font-weight-bold mt-0">
+											<a class="text-default" href="<print author=link>"><print author="name"></a>
+						      	</h5>
+										<div>
+											<print author="social" type="icon" class="libre libre-social libre-2x">
+										</div>
+		    						<print author="notes">
+									</div>
+		  					</div>
+							</div>
+						</div>
+					</author>
+					<review>
+						<div class="card hreview-aggregate">
+							<json-ld-review>
+							<div class="card-header border-0 font-weight-bold d-flex justify-content-between">
+								<div>Review by <span class="p-author h-card"><print review="name"></span> on <time class="dt-published" datetime="<print review=datetime>"><print review="date"></time></div>
+								<data class="p-rating" value="<print review=rating>">
+									<span class="rat">
+										<span class="<print review=set1>"></span>
+										<span class="<print review=set2>"></span>
+										<span class="<print review=set3>"></span>
+										<span class="<print review=set4>"></span>
+										<span class="<print review=set5>"></span>
+									</span>
+								</data>
+							</div>
+							<div class="card-body">
+								<div class="e-content summary"><print review="review"></div>
+							</div>
+						</div>
+					</review>
+				</item>
+				<settings itemCount="10">
+				<div class="row">
+					<items>
+						<div class="col-12 col-sm-6 m-0">
+							<article class="card mb-3 mb-sm-5">
+								<a href="<print content=linktitle>"><img class="card-img-top small" src="<print content=thumb>" alt="<print content=title>"></a>
+		        		<div class="card-body text-center" data-contenttype="<print content=contentType>">
+									<div class="card-subtitle mb-2 small text-muted text-center">By <a href="<print profileLink>"><print content="author"></a> on <print content="datePublished"></div>
+									<controls>
+										<view>
+											<h2 class="card-title"><a href="<print content=linktitle>"><print content="title"></a></h2>
+										</view>
+									</controls>
+									<div class="card-text text-truncate"><print content="notes"></div>
+									<a class="btn btn-outline-secondary mt-2" href="<print content=linktitle>">View</a>
+								</div>
+			  			</article>
+						</div>
+					</items>
+				</div>
+				<more>
+					<button id="more<print config=showItems>" class="addMore btn btn-outline-secondary btn-block" data-contenttype="<print contentType>" data-view="<print view>" data-itemcount="<print config=showItems>">More</button>
+				</more>
+			</div>
+</block>
+<block include="side_menu.html">
+<block include="footer.html">
+<block include="meta_footer.html">

@@ -1,0 +1,27 @@
+head{display:block;max-height:0;transition:max-height .5s ease-out;overflow:hidden}
+head.metashow{max-height:1200px;transition:max-height .5s ease-in}
+head{color:#fff;background-color:#2b3035}
+head{overflow-x:hidden}
+head::before,
+head::after{display:block;color:rgba(255,255,255,.4);font:16px monospace}
+head::before{margin-left:10px}
+head::after{margin-right:10px;text-align: right}
+head::before{content:'<head>'}
+head::after{content:'</head>'}
+title,
+meta[name][content]{display:block;margin:5px;color:#fff;white-space:nowrap;font-size:0}
+title::before,
+title::after,
+meta::before,
+meta::after{display:inline-block;vertical-align:middle;padding:5px;border:2px solid #fff;font:14px monospace}
+title::before,
+title::after,
+meta::before{border-right:none;border-radius:10px 0 0 10px;background-color:#333}
+title::before{border-radius:10px 0 0 10px;border:0;padding-right:5px}
+title::after{border-radius:0 10px 10px 0;border:0;padding-left:5px}
+meta::after{overflow:hidden;border-left:none;border-radius:0 10px 10px 0;background-color:#666}
+title{display:inline-block;font-size:14px;border-radius:10px;background-color:#666;border:2px solid #fff}
+meta[name][content]::before{content:'<meta '}
+meta[name][content]::after{content:'name="' attr(name) '" content="' attr(content) '">'}
+title::before{content:'<title>'}
+title::after{content:'</title>'}

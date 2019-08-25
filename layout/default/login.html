@@ -1,0 +1,124 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="content">
+	<main class="container">
+		<div class="row my-5">
+			<div class="col-12 col-sm-6 mx-auto">
+				<div class="card mb-5">
+					<div class="card-body">
+						<form class="form" method="post" action="<print url>">
+							<h1>Login</h1>
+							<input type="hidden" name="act" value="login">
+							<div class="form-group">
+								<label for="loginusername">Username</label>
+								<div class="input-group">
+									<input type="text" id="loginusername" class="form-control" name="username" value="" placeholder="Username..." required aria-required="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="loginpassword">Password</label>
+								<div class="input-group">
+									<input type="password" id="loginpassword" class="form-control" name="password" placeholder="Password..." required aria-required="true" autocomplete="off">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<button class="btn btn-outline-secondary btn-block">Login</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="card mb-5">
+					<div class="card-body">
+						<form class="form" target="rstresponse" id="rstform" method="post" action="core/view/rstform.php">
+							<h1>Reset Password</h1>
+							<input type="hidden" name="emailtrap" value="none">
+							<div class="form-group">
+								<label for="rsteml">Email</label>
+								<div class="input-group">
+									<input type="email" id="rsteml" class="form-control" name="rsteml" placeholder="Enter Account Email..." autocomplete="off" required aria-required="true">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="input-group">
+									<button id="rstbusy" class="btn btn-outline-secondary btn-block">Reset</button>
+								</div>
+							</div>
+						</form>
+						<div id="rstresponse"></div>
+						<script>
+							$('#rstform').submit(function(){
+		            $('#rstbusy').html('<i class="libre libre-spinner-1"></i>');
+		            $.ajax({
+		              data:$(this).serialize(),
+		              type:$(this).attr('method'),
+		              url:$(this).attr('action'),
+		              success:function(response){
+		                $('#rstresponse').html(response);
+		                $('#rstbusy').html('Reset');
+		              }
+		            });
+		            return false;
+		          });
+						</script>
+					</div>
+				</div>
+			</div>
+			<signup>
+				<div class="col-12 col-sm-6 mx-auto">
+					<div class="card">
+						<div class="card-body">
+							<form class="form" target="signresponse" id="signform" method="post" action="core/view/newaccount.php">
+								<h1 id="signup">Sign Up</h1>
+								<input type="hidden" name="emailtrap" value="none">
+								<div class="form-group">
+									<label for="newemail">Email</label>
+									<div class="input-group">
+										<input type="text" id="newemail" class="form-control is-invalid" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+									</div>
+								</div>
+								<div class="form-group">
+									<label for="newusername">Username</label>
+									<div class="input-group">
+										<input type="text" id="newusername" class="form-control is-invalid" name="username" placeholder="Enter a Username..." required aria-required="true">
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="checkbox">
+										<label for="terms">
+											<input type="checkbox" id="terms" name="terms" value="yes"> Agree to the <a href="tos/">Terms Of Service</a>
+										</label>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="input-group">
+										<button id="signbusy" class="btn btn-outline-secondary btn-block">Sign Up</button>
+									</div>
+								</div>
+							</form>
+							<div id="signresponse"></div>
+							<script>
+								$('#signform').submit(function(){
+									$('#signbusy').html('<i class="libre libre-spinner-1"></i>');
+									$.ajax({
+										data:$(this).serialize(),
+										type:$(this).attr('method'),
+										url:$(this).attr('action'),
+										success:function(response){
+											$('#signresponse').html(response);
+											$('#signbusy').html('Sign Up');
+										}
+									});
+									return false;
+								});
+							</script>
+						</div>
+					</div>
+				</div>
+			</signup>
+		</div>
+	</main>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

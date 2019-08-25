@@ -1,0 +1,44 @@
+<block inbed="maintenance">
+<!DOCTYPE html>
+<!--
+		LibreCMS - Copyright (C) Diemen Design 2019
+			the MIT Licensed Open Source Content Management System.
+ 
+		Project Maintained at https://github.com/DiemenDesign/LibreCMS
+ 
+		Theme: <print theme="title">
+		Creator: <print theme="creator">
+		Creator URL: <print theme="creatorurl">
+-->
+<html lang="en">
+	<head>
+		<base href="<print url>">
+		<meta charset="utf-8">
+		<meta name="generator" content="LibreCMS">
+    <meta name="robots" content="noindex,nofollow">
+		<meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+		<title>Maintenance Mode - <print config="business"></title>
+		<link rel="author" href="humans.txt">
+		<link rel="icon" href="<print meta=favicon>" type="image/png">
+		<link rel="stylesheet" type="text/css" href="<print theme>/css/maintenance.css">
+		<link rel="stylesheet" type="text/css" href="<print theme>/css/libreicons-svg.css">
+	</head>
+	<body itemscope itemtype="http://schema.org/WebPage" role="document">
+		<nav class="social-nav">
+			<ul>
+				<buildSocial>
+					<li><a class="libre libre-social" href="<print sociallink>"><print socialicon></a></li>
+				</buildSocial>
+			</ul>
+		</nav>
+		<main>
+			<h1 class="text-center"><print config="business"></h1>
+			<h3 class="text-center">is currently in Maintenance Mode.</h3>
+			<p class="text-center">
+				Please standby while we update, fix,<br>
+				and add more awesomeness to the Site.
+			</p>
+		</main>
+	</body>
+</html>
+</block>

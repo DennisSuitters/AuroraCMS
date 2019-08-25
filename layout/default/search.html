@@ -1,0 +1,39 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="content">
+	<main class="container">
+		<div class="row my-5">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<settings itemCount="50">
+						<items>
+							<div class="search mb-4">
+				        <div class="search-item">
+				          <div class="search-item-info">
+										<controls>
+											<view>
+												<div class="search-item-title">
+													<a href="<print content=linktitle>"><print content="title"></a>
+												</div>
+				                <div class="search-item-url small">
+				                  <print content=linktitle>
+				                </div>
+											</view>
+										</controls>
+				            <small><print content="caption" length="200"></small>
+				          </div>
+				        </div>
+				      </div>
+						</items>
+						<more>
+							<button id="more<print config=showItems>" class="addMore btn btn-outline-secondary btn-block" data-contenttype="<print contentType>" data-view="<print view>" data-itemcount="<print config=showItems>">More</button>
+						</more>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

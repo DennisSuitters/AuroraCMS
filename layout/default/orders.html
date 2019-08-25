@@ -1,0 +1,160 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="orders">
+	<main class="container">
+		<div class="row my-5">
+			<div class="col-12">
+				<div class="card">
+					<div class="card-body">
+						<div class="table-responsive-sm">
+							<table class="table table-sm table-borderless">
+								<thead class="thead-dark">
+									<tr>
+										<th class="text-center">Order #</th>
+										<th class="text-center">Status</th>
+										<th class="text-center d-none d-sm-table-cell">Date</th>
+										<th>&nbsp;</th>
+									</tr>
+								</thead>
+								<tbody>
+									<items>
+										<tr>
+											<td class="text-center">
+												<print order="ordernumber"><small class="d-block d-sm-none"><small><print order="date"><br>
+												Due: <print order="duedate"></small></small>
+											</td>
+											<td class="text-center"><print order="status"></td>
+											<td class="text-center small d-none d-sm-table-cell">
+												<small><print order="date"><br>Due: <print order="duedate"></small>
+											</td>
+											<td class="text-right"><a class="btn btn-outline-secondary" href="<print link>">View</a></td>
+										</tr>
+									</items>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<order>
+			<div class="row mt-5">
+				<div class="col-12">
+					<div class="card">
+						<div class="card-body">
+							<ul class="nav justify-content-end">
+								<li class="nav-item"><button class="btn btn-outline-secondary" onclick="$('#sp').load('core/email_order.php?id=<print order=id>&act=print');" aria-label="Print"><i class="libre"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.76923,11.615385 h 6.46154 V 9.769235 H 3.76923 v 1.84615 z m 0,-4.61538 h 6.46154 V 4.230775 H 9.07692 q -0.28846,0 -0.49038,-0.20193 Q 8.38462,3.826925 8.38462,3.538465 V 2.384615 H 3.76923 v 4.61539 z m 8.30769,0.46154 q 0,-0.1875 -0.13702,-0.32452 -0.13702,-0.13702 -0.32452,-0.13702 -0.1875,0 -0.32451,0.13702 -0.13702,0.13702 -0.13702,0.32452 0,0.1875 0.13702,0.32452 0.13701,0.13702 0.32451,0.13702 0.1875,0 0.32452,-0.13702 0.13702,-0.13702 0.13702,-0.32452 z m 0.92308,0 v 3 q 0,0.0937 -0.0685,0.16226 -0.0685,0.0685 -0.16226,0.0685 h -1.61538 v 1.15384 q 0,0.28846 -0.20193,0.49039 -0.20192,0.20192 -0.49038,0.20192 H 3.53847 q -0.28846,0 -0.49038,-0.20192 -0.20193,-0.20193 -0.20193,-0.49039 v -1.15384 H 1.230779 q -0.09375,0 -0.162259,-0.0685 Q 1,10.555295 1,10.461545 v -3 Q 1,6.891825 1.407452,6.484375 1.814904,6.076925 2.38462,6.076925 h 0.46153 v -3.92308 q 0,-0.28846 0.20193,-0.49038 Q 3.25,1.461545 3.53846,1.461545 h 4.84616 q 0.28846,0 0.63461,0.14423 0.34615,0.14423 0.54808,0.34615 l 1.09615,1.09616 q 0.20192,0.20192 0.34616,0.54807 0.14423,0.34616 0.14423,0.63462 v 1.84615 h 0.46153 q 0.56972,0 0.97717,0.40745 Q 13,6.891825 13,7.461545 z"/></svg></i></button></li>
+							</ul>
+							<div class="row">
+								<div class="col-12 col-sm-4 mb-4 border-right">
+									<h4>From</h4>
+									<div class="small">
+										<print config="business"><br>
+										ABN: <print config="abn"><br>
+										<print config="address">, <print config="suburb">, <print config="city">, <print config="state">, <print config="postcode"><br>
+										Email: <print config="email"><br>
+										Phone: <print config="phone"><br>
+										Mobile: <print config="mobile">
+									</div>
+								</div>
+								<div class="col-12 col-sm-4 mb-4 border-right">
+									<h4>To</h4>
+									<div class="small">
+										<print user="name"><br>
+										<print user="address">,
+										<print user="suburb">,<br>
+										<print user="city">, <print user="state">, <print user="postcode"><br>
+										Email: <print user="email"><br>
+										Phone: <print user="phone"><br>
+										Mobile: <print user="mobile"><br>
+									</div>
+			  				</div>
+			  				<div class="col-12 col-sm-4 mb-4">
+			  					<h4>Details</h4>
+			  					<div class="small">
+										<strong>Order #</strong><print order="ordernumber"><br>
+			  						<strong>Order Date: </strong><print order="date"><br>
+			  						<strong>Due Date: </strong><print order="duedate"><br>
+			  						<strong>Status: </strong><print order="status"><br>
+			  					</div>
+								</div>
+							</div>
+							<div class="table-responsive-sm">
+								<table class="table table-sm table-borderless">
+									<thead class="thead-dark">
+										<tr>
+											<th>Code</th>
+											<th class="col">Title</th>
+											<th class="text-center">Option</th>
+			  							<th class="text-center">Qty</th>
+			  							<th class="text-center">Cost</th>
+			  							<th class="text-right">Total</th>
+			  						</tr>
+			  					</thead>
+			  					<tbody>
+			            	<items>
+			      					<tr>
+				    						<td class="text-left"><print orderitem="code"></td>
+				    						<td class="text-left">
+													<print orderitem="title">
+													<small><br><print choice></small>
+												</td>
+												<td class="text-left d-none d-sm-table-cell"><print choice></td>
+				              	<td class="col-md-1 text-center"><print orderitem="quantity"></td>
+				              	<td class="col-md-1 text-center"><print orderitem="cost"></td>
+				              	<td class="text-right"><print orderitem="subtotal"></td>
+				            	</tr>
+				          	</items>
+										<rewards>
+											<tr>
+												<td colspan="3" class="text-right d-none d-sm-table-cell"><strong>Rewards</strong></td>
+												<td colspan="2" class="text-right d-table-cell d-sm-none"><strong>Rewards</strong></td>
+												<td class="text-center"><strong><print rewards="code"></strong></td>
+												<td class="text-center small"><small><print rewards="method"></small></td>
+												<td class="text-right border-top"><strong><print rewards="value"></strong></td>
+											</tr>
+										</rewards>
+										<postage>
+											<tr>
+												<td colspan="5" class="text-right d-none d-sm-table-cell"><strong>Postage</strong></td>
+												<td colspan="4" class="text-right d-table-cell d-sm-none"><strong>Postage</strong></td>
+												<td class="text-right border-top"><strong><print order="postage"></strong></td>
+											</tr>
+										</postage>
+									</tbody>
+									<tfoot>
+			  						<tr>
+			  							<td colspan="5" class="text-right d-none d-sm-table-cell"><strong>Total</strong></td>
+											<td colspan="4" class="text-right d-table-cell d-sm-none"><strong>Total</strong></td>
+			  							<td class="text-right border-top border-bottom border-dark"><strong><print order="total"></strong></td>
+			  						</tr>
+			  					</tfoot>
+			  				</table>
+			  			</div>
+			  			<div class="row">
+								<div class="col-12 col-sm-6">
+									<h4>Notes:</h4>
+									<div class="well small">
+										<print order="notes">
+									</div>
+								</div>
+								<div class="col-12 col-sm-6">
+									<h4>Banking Details:</h4>
+									<div class="small">
+										<strong>Bank: </strong><print config="bank"><br>
+										<strong>Account Name: </strong><print config="bankAccountName"><br>
+										<strong>Account Number: </strong><print config="bankAccountNumber"><br>
+										<strong>Bank BSB: </strong><print config="bankBSB"><br>
+									</div>
+								</div>
+			  			</div>
+			  		</div>
+					</div>
+				</div>
+			</div>
+		</order>
+	</main>
+	<iframe id="sp" name="sp" class="d-none"></iframe>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

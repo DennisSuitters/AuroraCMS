@@ -1,0 +1,89 @@
+<?php
+/**
+ * AuroraCMS - Copyright (C) Diemen Design 2019
+ *
+ * @category   Administration - Preferences - Tracker
+ * @package    core/layout/pref_tracker.php
+ * @author     Dennis Suitters <dennis@diemen.design>
+ * @copyright  2014-2019 Diemen Design
+ * @license    http://opensource.org/licenses/MIT  MIT License
+ * @version    0.0.1
+ * @link       https://github.com/DiemenDesign/AuroraCMS
+ * @notes      This PHP Script is designed to be executed using PHP 7+
+ */?>
+<main id="content" class="main">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+    <li class="breadcrumb-item active">Tracker</li>
+  </ol>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="table-responsive">
+              <div class="table">
+                <table class="table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th class="" style="min-width:150px;max-width:200px;">Page</th>
+                      <th class="" style="min-width:150px;max-width:200px;">Origin</th>
+                      <th class="text-center">IP</th>
+                      <th class="text-center">Browser</th>
+                      <th class="text-center">System</th>
+                      <th class="text-center">Date</th>
+                      <th><div class="btn-group float-right" data-tooltip="tooltip" data-placement="left" title="Purge All"><button class="btn btn-secondary btn-sm trash" onclick="purge('0','tracker');return false;" aria-label="Purge All"><?php svg('purge');?></button></th>
+                    </tr>
+                  </thead>
+                  <tbody id="l_tracker">
+<?php  
+if(isset($args[1])&&$args[1]!=''){
+  $s=$db->prepare("SELECT * FROM `".$prefix."tracker` WHERE LOWER(browser) LIKE LOWER (:browser) ORDER BY ti DESC LIMIT 20");
+  $s->execute([
+    ':browser'=>strtolower($args[1])
+  ]);
+}else{
+  $s=$db->prepare("SELECT * FROM `".$prefix."tracker` ORDER BY ti DESC LIMIT 20");
+  $s->execute();
+}
+while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr id="l_<?php echo$r['id'];?>" data-ip="<?php echo$r['ip'];?>" class="small">
+                      <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?php echo trim($r['urlDest']);?></td>
+                      <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?php echo trim($r['urlFrom']);?></td>
+                      <td class="text-center align-middle">
+                        <a target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>"><?php echo$r['ip'];?></a>
+                        <button class="btn btn-secondary btn-sm trash" data-tooltip="tooltip" title="Remove all of this IP" onclick="purge('<?php echo$r['ip'];?>','clearip')" aria-label="Remove all of this IP"><?php svg('eraser');?></button>
+                      </td>
+                      <td class="text-center align-middle"><?php echo ucfirst($r['browser']);?></td>
+                      <td class="text-center align-middle"><?php echo ucfirst($r['os']);?></td>
+                      <td class="text-center align-middle"><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                      <td class="align-middle">
+                        <div class="btn-group float-right">
+                          <button class="btn btn-secondary pathviewer" data-tooltip="tooltip" title="View Visitor Path" data-toggle="popover" data-dbid="<?php echo$r['id'];?>" aria-label="View Visitor Path"><?php svg('seo-path');?></button>
+<?php if($config['php_options']{0}==1){?>
+                          <button class="btn btn-secondary phpviewer" data-tooltip="tooltip" title="Check IP with Project Honey Pot" data-toggle="popover" data-dbid="<?php echo$r['id'];?>" data-dbt="tracker" aria-label="Check IP with Project Honey Pot"><?php svg('brand-projecthoneypot');?></button>
+<?php }?>
+                          <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','tracker')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        </div>
+                      </td>
+                    </tr>
+<?php }?>
+                    <tr id="more_20">
+                      <td colspan="7">
+                        <div class="form-group">
+                          <div class="input-group">
+                            <button class="btn btn-secondary btn-block" onclick="more('tracker','20','<?php echo(isset($args[1])&&$args[1]!=''?$args[1]:'');?>');">More</button>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

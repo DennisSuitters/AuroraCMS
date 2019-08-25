@@ -1,0 +1,210 @@
+/*!
+ * iCONS v0.0.1 by @devel - https://github.com/DiemenDesign/iCONS
+ * License - https://github.com/DiemenDesign/iCONS/blob/master/LICENSE
+ * Version 0.0.1
+*/
+@charset "UTF-8";
+.i{display:inline-block;width:14px;height:14px;line-height:0;vertical-align:middle;text-rendering:auto;fill:currentColor;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.i svg{width:14px!important;height:14px!important}
+.i-lg svg{width:28px!important;height:28px!important}
+.i-2x svg{width:28px!important;height:28px!important}
+.i-3x svg{width:42px!important;height:42px!important}
+.i-4x svg{width:56px!important;height:56px!important}
+.i-5x svg{width:70px!important;height:70px!important}
+.i-fw{width:1.28571429em;text-align:center}
+.i-white{fill:#fff}
+.i-red{fill:#f00}
+.btn:hover.add{color:#fff;background-color:#3ea662;border-color:#3a9d5d}
+.btn:hover.trash{color:#fff;background-color:#f64846;border-color:#f63c3a}
+.i-social{position:relative;display:inline-block;width:14px;height:14px;color:#000;fill:#000;border:0;-webkit-border-radius:3px;border-radius:3px}
+.i-social svg{border:0 solid transparent;margin:0;-webkit-border-radius:1px;border-radius:1px}
+.i-social.i-2x,
+.i-social.i-lg,
+.i-social.i-2x svg,
+.i-social.i-lg svg{width:28px;height:28px;-webkit-border-radius:3px;border-radius:3px}
+.i-social.i-3x,
+.i-social.i-3x svg{width:42px;height:42px;-webkit-border-radius:3px;border-radius:3px}
+.i-social.i-4x,
+.i-social.i-4x svg{width:56px;height:56px;-webkit-border-radius:3px;border-radius:5px}
+.i-social.i-5x,
+.i-social.i-5x svg{width:70px;height:70px;-webkit-border-radius:3px;border-radius:5px}
+.i-social-bw svg.social-{background:#000;fill:#fff;-webkit-transition:all 1s ease-out;-moz-transition:all 1s ease-out;-o-transition:all 1s ease-out;transition:all 1s ease-out}
+.i-social-bw svg.social-bitcoin,
+.i-social-bw svg.social-buffer,
+.i-social-bw svg.social-diaspora,
+.i-social-bw svg.social-digg,
+.i-social-bw svg.social-duckduckgo,
+.i-social-bw svg.social-envato,
+.i-social-bw svg.social-exposure,
+.i-social-bw svg.social-icq,
+.i-social-bw svg.social-lynda,
+.i-social-bw svg.social-map,
+.i-social-bw svg.social-medium,
+.i-social-bw svg.social-ovh,
+.i-social-bw svg.social-play-store,
+.i-social-bw svg.social-reddit,
+.i-social-bw svg.social-stackoverflow,
+.i-social-bw svg.social-tsu,
+.i-social-bw svg.social-twitch,
+.i-social-bw svg.social-wikipedia,
+.i-social-bw svg.social-windows-store,
+.i-social-bw svg.social-yelp,
+.i-social-bw svg.social-zerply,
+.i-social-bw svg.social-zune{background:#fff;fill:#000}
+.i-social svg.social-500px,
+.i-social-bw svg.social-500px:hover{background:#0099e5;fill:#fff}
+.i-social svg.social-amazon,
+.i-social-bw svg.social-amazon:hover{background:#232f3e;fill:#fff}
+.i-social svg.social-aus-post,
+.i-social-bw svg.social-aus-post:hover{background:#dc1928;fill:#fff}
+.i-social svg.social-behance,
+.i-social-bw svg.social-behance:hover{background:#131418;fill:#fff}
+.i-social svg.social-bitcoin,
+.i-social-bw svg.social-bitcoin:hover{background:#fff;fill:#faB915}
+.i-social svg.social-blogger,
+.i-social-bw svg.social-blogger:hover{background:#ff9334;fill:#fff}
+.i-social svg.social-buffer,
+.i-social-bw svg.social-buffer:hover{background:#fff;fill:#000}
+.i-social svg.social-cargo,
+.i-social-bw svg.social-cargo:hover{background:#000;fill:#fff}
+.i-social svg.social-codepen,
+.i-social-bw svg.social-codepen:hover{background:#000;fill:#fff}
+.i-social svg.social-coroflot,
+.i-social-bw svg.social-coroflot:hover{background:#000;fill:#ef482b}
+.i-social svg.social-creattica,
+.i-social-bw svg.social-creattica:hover{background:#000;fill:#83b541}
+.i-social svg.social-delicious,
+.i-social-bw svg.social-delicious:hover{background:#0076e8;fill:#fff}
+.i-social svg.social-deviantart,
+.i-social-bw svg.social-deviantart:hover{background:#475C4d;fill:#05cc47}
+.i-social svg.social-diaspora,
+.i-social-bw svg.social-diaspora:hover{background:#fff;fill:#000}
+.i-social svg.social-digg,
+.i-social-bw svg.social-digg:hover{background:#fff;fill:#000}
+.i-social svg.social-dribble,
+.i-social-bw svg.social-dribble:hover{background:#000;fill:#fff}
+.i-social svg.social-dropbox,
+.i-social-bw svg.social-dropbox:hover{background:#007ee5;fill:#fff}
+.i-social svg.social-duckduckgo,
+.i-social-bw svg.social-duckduckgo:hover{background:#fff;fill:#de5833}
+.i-social svg.social-envato,
+.i-social-bw svg.social-envato:hover{background:#fff;fill:#82b541}
+.i-social svg.social-exposure,
+.i-social-bw svg.social-exposure:hover{background:#fff;fill:#aaa}
+.i-social svg.social-facebook,
+.i-social-bw svg.social-facebook:hover{background:#46629e;fill:#fff}
+.i-social svg.social-feedburner,
+.i-social-bw svg.social-feedburner:hover{background:#ee3a42;fill:#fff}
+.i-social svg.social-flickr,
+.i-social-bw svg.social-flickr:hover{background:#0063db;fill:#fff}
+.i-social svg.social-forrst,
+.i-social-bw svg.social-forrst:hover{background:#000;fill:#fff}
+.i-social svg.social-github,
+.i-social-bw svg.social-github:hover{background:#000;fill:#fff}
+.i-social svg.social-google-maps,
+.i-social-bw svg.social-google-maps:hover{background:#af291e;fill:#fff}
+.i-social svg.social-google-plus,
+.i-social-bw svg.social-google-plus:hover{background:#da4835;fill:#fff}
+.i-social svg.social-gravatar,
+.i-social-bw svg.social-gravatar:hover{background:#1e8cbe;fill:#fff}
+.i-social svg.social-hackernews,
+.i-social-bw svg.social-hackernews:hover{background:#000;fill:#fff}
+.i-social svg.social-icq,
+.i-social-bw svg.social-icq:hover{background:#fff;fill:#4ec739}
+.i-social svg.social-instagram,
+.i-social-bw svg.social-instagram:hover{background:#125688;fill:#fff}
+.i-social svg.social-kickstarter,
+.i-social-bw svg.social-kickstarter:hover{background:#000;fill:#14e06e}
+.i-social svg.social-last-fm,
+.i-social-bw svg.social-last-fm:hover{background:#d3140a;fill:#fff}
+.i-social svg.social-lego,
+.i-social-bw svg.social-lego:hover{background:#f00;fill:#ff0}
+.i-social svg.social-linkedin,
+.i-social-bw svg.social-linkedin:hover{background:#0173b2;fill:#fff}
+.i-social svg.social-livejournal,
+.i-social-bw svg.social-livejournal:hover{background:#306599;fill:#fff}
+.i-social svg.social-lynda,
+.i-social-bw svg.social-lynda:hover{background:#fff;fill:#000}
+.i-social svg.social-map,
+.i-social-bw svg.social-map:hover{background:#fff;fill:#000}
+.i-social svg.social-massroots,
+.i-social-bw svg.social-massroots:hover{background:#3c925b;fill:#fff}
+.i-social svg.social-medium,
+.i-social-bw svg.social-medium:hover{background:#fff;fill:#a6a8aB}
+.i-social svg.social-netlify,
+.i-social-bw svg.social-netlify:hover{background:#313D3e;fill:#00c7b7}
+.i-social svg.social-ovh,
+.i-social-bw svg.social-ovh:hover{background:#fff;fill:#264670}
+.i-social svg.social-paypal,
+.i-social-bw svg.social-paypal:hover{background:#006492;fill:#fff}
+.i-social svg.social-periscope,
+.i-social-bw svg.social-periscope:hover{background:#3fa9c7;fill:#fff}
+.i-social svg.social-picasa,
+.i-social-bw svg.social-picasa:hover{background:#797979;fill:#fff}
+.i-social svg.social-pinterest,
+.i-social-bw svg.social-pinterest:hover{background:#d73532;fill:#fff}
+.i-social svg.social-play-store,
+.i-social-bw svg.social-play-store:hover{background:#fff;fill:#41b1bc}
+.i-social svg.social-quora,
+.i-social-bw svg.social-quora:hover{background:#a82400;fill:#fff}
+.i-social svg.social-redbubble,
+.i-social-bw svg.social-redbubble:hover{background:#fe0000;fill:#fff}
+.i-social svg.social-reddit,
+.i-social-bw svg.social-reddit:hover{background:#fff;fill:#000}
+.i-social svg.social-rss,
+.i-social-bw svg.social-rss:hover{background:#ff7b0a;fill:#fff}
+.i-social svg.social-sharethis,
+.i-social-bw svg.social-sharethis:hover{background:#64c011;fill:#fff}
+.i-social svg.social-skype,
+.i-social-bw svg.social-skype:hover{background:#00adef;fill:#fff}
+.i-social svg.social-snapchat,
+.i-social-bw svg.social-snapchat:hover{background:#fffc00;fill:#fff}
+.i-social svg.social-soundcloud,
+.i-social-bw svg.social-soundcloud:hover{background:#ff5419;fill:#fff}
+.i-social svg.social-stackoverflow,
+.i-social-bw svg.social-stackoverflow:hover{background:#fff;fill:#000}
+.i-social svg.social-steam,
+.i-social-bw svg.social-steam:hover{background:#000;fill:#fff}
+.i-social svg.social-stumbleupon,
+.i-social-bw svg.social-stumbleupon:hover{background:#eb4823;fill:#fff}
+.i-social svg.social-tor,
+.i-social-bw svg.social-tor:hover{background:#7d4698;fill:#fff}
+.i-social svg.social-tsu,
+.i-social-bw svg.social-tsu:hover{background:#fff;fill:#1abc9c}
+.i-social svg.social-tumblr,
+.i-social-bw svg.social-tumblr:hover{background:#395976;fill:#fff}
+.i-social svg.social-twitch,
+.i-social-bw svg.social-twitch:hover{background:#fff;fill:#000}
+.i-social svg.social-twitter,
+.i-social-bw svg.social-twitter:hover{background:#41abe1;fill:#fff}
+.i-social svg.social-ubiquiti,
+.i-social-bw svg.social-ubiquiti:hover{background:#0193d7;fill:#fff}
+.i-social svg.social-unsplash,
+.i-social-bw svg.social-unsplash:hover{background:#000;fill:#fff}
+.i-social svg.social-vimeo,
+.i-social-bw svg.social-vimeo:hover{background:#00adef;fill:#fff}
+.i-social svg.social-vine,
+.i-social-bw svg.social-vine:hover{background:#55Be95;fill:#fff}
+.i-social svg.social-whatsapp,
+.i-social-bw svg.social-whatsapp:hover{background:#0dc143;fill:#fff}
+.i-social svg.social-wikipedia,
+.i-social-bw svg.social-wikipedia:hover{background:#fff;fill:#000}
+.i-social svg.social-windows-store,
+.i-social-bw svg.social-windows-store:hover{background:#fff;fill:#000}
+.i-social svg.social-xbox-live,
+.i-social-bw svg.social-xbox-live:hover{background:#107c0F;fill:#fff}
+.i-social svg.social-yahoo,
+.i-social-bw svg.social-yahoo:hover{background:#560db0;fill:#fff}
+.i-social svg.social-yelp,
+.i-social-bw svg.social-yelp:hover{background:#fff;fill:#da1400}
+.i-social svg.social-youtube,
+.i-social-bw svg.social-youtube:hover{background:#e62117;fill:#fff}
+.i-social svg.social-zerply,
+.i-social-bw svg.social-zerply:hover{background:#fff;fill:#8db741}
+.i-social svg.social-zune,
+.i-social-bw svg.social-zune:hover{background:#fff;fill:#d33280}
+[aria-label^="Error:"]:before{content:attr(aria-label);position:absolute;top:0;left:0;background-color:#000!important;color:#f00!important;border:1px solid #f00;font-size:10px;padding:2px}
+[placeholder^="Error:"]::-webkit-input-placeholder{background-color:#000!important;color:#f00!important;border-width:1px!important;border-style:solid!important;border-color:#f00!important;padding:3px 5px}
+[placeholder^="Error:"]::-moz-placeholder{background-color:#000!important;color:#f00!important;border-width:1px!important;border-style:solid!important;border-color:#f00!important;padding:3px 5px}
+[placeholder^="Error:"]:-moz-placeholder{background-color:#000!important;color:#f00!important;border-width:1px!important;border-style:solid!important;border-color:#f00!important;padding:3px 5px}
+[placeholder^="Error:"]:-ms-input-placeholder{background-color:#000!important;color:#f00!important;border-width:1px!important;border-style:solid!important;border-color:#f00!important;padding:3px 5px}

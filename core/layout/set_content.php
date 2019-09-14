@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Related Item Categories Checkbox
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -24,6 +25,19 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        <legend>Related Content</legend>
+        <div class="form-group row">
+          <div class="input-group col-sm-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options11" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11"<?php echo$config['options']{11}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options11" class="col-form-label col-sm-6">Enable Related Content</label>
+        </div>
+        <div class="form-group row">
+          <div class="input-group col-sm-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options10" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10"<?php echo$config['options']{10}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options10" class="col-form-label col-sm-6">Display Similar Category if no Related Content items are selected</label>
+        </div>
         <div class="form-group row">
           <label for="showItems" class="col-form-label col-sm-2">Item Count</label>
           <div class="input-group col-sm-10">

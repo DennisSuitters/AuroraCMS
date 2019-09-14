@@ -25,3 +25,13 @@ meta[name][content]::before{content:'<meta '}
 meta[name][content]::after{content:'name="' attr(name) '" content="' attr(content) '">'}
 title::before{content:'<title>'}
 title::after{content:'</title>'}
+body.depth *{background-color:rgba(255,0,0,.1)}
+body.depth * *{background-color:rgba(255,0,0,.1)}
+body.depth * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * * * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * * * * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * * * * * * *{background-color:rgba(255,0,0,.1)}
+body.depth * * * * * * * * * *{background-color:rgba(255,0,0,.1)}

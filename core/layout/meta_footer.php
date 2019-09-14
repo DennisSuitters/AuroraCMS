@@ -78,7 +78,7 @@ window.onbeforeunload=function(e){
   		$("#seoDescriptioncnt").removeClass('text-danger');
   	}
   });
-<?php if(isset($r['pti'])){?>
+<?php if(isset($r['pti'])&&$user['options']{1}==1){?>
   $('#pti').daterangepicker({
     singleDatePicker:true,
     linkedCalendars:false,
@@ -94,7 +94,7 @@ window.onbeforeunload=function(e){
     $('#ptix').val(start.unix());
   });
 <?php }
-if(isset($r['tis'])){?>
+if(isset($r['tis'])&&($user['options']{2}==1||$user['options']{1}==1)){?>
   $('#tis').daterangepicker({
     singleDatePicker:true,
     linkedCalendars:false,
@@ -110,7 +110,7 @@ if(isset($r['tis'])){?>
     $('#tisx').val(start.unix());
   });
 <?php }
-if(isset($r['tie'])){?>
+if(isset($r['tie'])&&($user['options']{2}==1||$user['options']{1}==1)){?>
   $('#tie').daterangepicker({
     singleDatePicker:true,
     linkedCalendars:false,
@@ -232,7 +232,7 @@ if(isset($r['due_ti'])){?>
               filename="core/images/i-file-docs.svg";
             }
             var timestamp = $.now();
-            $('#attachments').append('<a id="a_'+timestamp+'" target="_blank" class="card col-2 p-0" href="'+file.url+'" title="'+file.url.replace(/^.*[\\\/]/,'')+'"><img class="card-img-top bg-white" src="'+filename+'" alt="'+file.url+'"><span class="card-footer text-truncate p-0 pl-1 pr-1 small">'+file.url.replace(/^.*[\\\/]/,'')+'</span><span class="attbuttons"><button class="btn btn-secondary btn-xs trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('libre-gui-trash');?></button></span></a>');
+            $('#attachments').append('<a id="a_'+timestamp+'" target="_blank" class="card col-2 p-0" href="'+file.url+'" title="'+file.url.replace(/^.*[\\\/]/,'')+'"><img class="card-img-top bg-white" src="'+filename+'" alt="'+file.url+'"><span class="card-footer text-truncate p-0 pl-1 pr-1 small">'+file.url.replace(/^.*[\\\/]/,'')+'</span><span class="attbuttons"><button class="btn btn-secondary trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('trash');?></button></span></a>');
             var atts=$('#atts').val();
             if(atts!='')atts+=',';
             atts+=file.url;
@@ -401,7 +401,7 @@ if(isset($r['due_ti'])){?>
     		}else{
     			$('#actions').toggleClass('hidden');
   		   }
-    		if(id=='checkboxtoggle'){
+//    		if(id=='checkboxtoggle'){
     			if(this.checked){
     				$('.switchinput').each(function(){
     					this.checked=true;
@@ -413,7 +413,7 @@ if(isset($r['due_ti'])){?>
               $(this).attr("aria-checked","false");
     				});
     			}
-    		}else{
+//    		}else{
     			var t=$(this).data("dbt");
     			var c=$(this).data("dbc");
     			var b=$(this).data("dbb");
@@ -429,7 +429,7 @@ if(isset($r['due_ti'])){?>
             }
           }).done(function(msg){
         });
-    		}
+//    		}
     	}
     );
     setInterval(function(){
@@ -582,6 +582,21 @@ if(isset($r['due_ti'])){?>
       });
     </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
+    <div id="searchbox" class="d-none">
+      <div class="searchclose"><a href="#" onclick="$('#searchbox').toggleClass('d-none');return false;">X</a></div>
+      <div class="container-fluid">
+        <div class="form-group">
+          <form method="post" action="<?php echo URL.$settings['system']['admin'].'/search';?>">
+            <div class="input-group col-12">
+              <input type="text" class="form-control" name="s" placeholder="What are you looking for?">
+              <div class="input-group-append">
+                <button type="submit" class="btn btn-secondary btn-lg">Go</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
     <div class="page-block">
       <div class="loader">
         <div class="dot"></div>

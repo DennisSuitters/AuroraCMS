@@ -46,7 +46,7 @@
       <div class="row justify-content-center mt-5">
         <div class="card aurora col-10 col-sm-4 mt-5 shadow-lg">
           <div class="card-body py-0">
-            <img src="core/images/auroracms.svg" class="logo" alt="AuroraCMS">
+            <img src="core/images/auroracms-white.svg" class="logo" alt="AuroraCMS">
             <div class="logo_slogan">The Australian Open Source Content Management System</div>
             <form id="login" class="" method="post" action="<?php echo(!empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
               <input type="hidden" name="act" value="login">

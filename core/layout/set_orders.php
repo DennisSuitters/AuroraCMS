@@ -143,7 +143,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <label class="switch switch-label switch-success"><input type="checkbox" id="orderEmailReadNotification" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" role="checkbox"<?php echo$config['orderEmailReadNotification']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
         </div>
-        <div class="col-12 text-right"><smal>Tokens:</small> 
+        <div class="col-12 text-right"><small>Tokens:</small> 
           <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{name}');return false;">{name}</a> 
           <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{first}');return false;">{first}</a> 
           <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{last}');return false;">{last}</a> 

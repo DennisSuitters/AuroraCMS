@@ -15,7 +15,7 @@
 <!--
      AuroraCMS - Instaler - Copyright (C) Diemen Design 2019
           the MIT Licensed Open Source Content Management System.
-     
+
      Project Maintained at https://github.com/DiemenDesign/AuroraCMS
 -->
 <html lang="en" id="AuroraCMS">
@@ -48,7 +48,7 @@
 				</div>
 				<div class="card-body">
 					<div id="step1">
-					<div id="dbinfo"></div>
+						<div id="dbinfo"></div>
 <?php $error=0;
 if(version_compare(phpversion(),'7.0','<'))echo'<div class="alert alert-danger" role="alert">AuroraCMS was built using PHP v7.0, your installed version is lower. While AuroraCMS may operate on your system, some functionality may not work or be available. We recommend using PHP 7.3 if available on you\'re services!</div>';
 if(extension_loaded('pdo')){
@@ -113,7 +113,7 @@ if($error==0){?>
 								<button type="submit" class="btn btn-primary btn-lg" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
-					<div class="clearfix"></div>
+					</div>
 					<div id="step2" class="d-none">
 						<h4 class="card-title">System Settings</h4>
 						<form target="sp" method="post" action="core/installer.php">
@@ -144,39 +144,38 @@ if($error==0){?>
 								<button type="submit" class="btn btn-primary btn-lg" onclick="$('#block').css({'display':'block'});" role="button" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
-						<div class="clearfix"></div>
-						<div id="step3" class="d-none">
-							<h4 class="card-title">Developer Account Settings</h4>
-							<form target="sp" method="post" action="core/installer.php">
-								<input type="hidden" name="emailtrap" value="none">
-								<input type="hidden" name="act" value="step3">
-								<div class="form-group">
-									<label for="aName">Name</label>
-									<input id="aName" name="aName" type="text" class="form-control" value="" placeholder="Enter a Name..." required>
-								</div>
-								<div class="form-group">
-									<label for="aEmail">Email</label>
-									<input id="aEmail" name="aEmail" type="text" class="form-control" value="" placeholder="Enter an Email..." required>
-								</div>
-								<div class="form-group">
-									<label for="aUsername">Username</label>
-									<input id="aUsername" name="aUsername" type="text" class="form-control" value="" placeholder="Enter a Username..." required>
-								</div>
-								<div class="form-group">
-									<label for="aPassword">Password</label>
-									<input id="aPassword" name="aPassword" type="password" class="form-control" value="" placeholder="Enter a Password..." required>
-								</div>
-								<div class="float-right">
-									<button type="submit" class="btn btn-primary btn-lg" role="button" aria-label="Go to Next Step">Next</button>
-								</div>
-							</form>
-						<div class="clearfix"></div>
-<?php }?>
-						<div id="step4" class="d-none">
-							<div class="well">
-								<div class="alert alert-success text-center" role="alert">Installation Complete!<br>Website is Ready to use!</div>
-								<div class="alert alert-info text-center" role="alert">NOTE: Website is currently in Maintenance Mode!</div>
+					</div>
+					<div id="step3" class="d-none">
+						<h4 class="card-title">Developer Account Settings</h4>
+						<form target="sp" method="post" action="core/installer.php">
+							<input type="hidden" name="emailtrap" value="none">
+							<input type="hidden" name="act" value="step3">
+							<div class="form-group">
+								<label for="aname">Name</label>
+								<input id="aname" name="aname" type="text" class="form-control" value="" placeholder="Enter a Name..." required>
 							</div>
+							<div class="form-group">
+								<label for="aemail">Email</label>
+								<input id="aemail" name="aemail" type="text" class="form-control" value="" placeholder="Enter an Email..." required>
+							</div>
+							<div class="form-group">
+								<label for="ausername">Username</label>
+								<input id="ausername" name="ausername" type="text" class="form-control" value="" placeholder="Enter a Username..." required>
+							</div>
+							<div class="form-group">
+								<label for="apassword">Password</label>
+								<input id="apassword" name="apassword" type="password" class="form-control" value="" placeholder="Enter a Password..." required>
+							</div>
+							<div class="float-right">
+								<button type="submit" class="btn btn-primary btn-lg" role="button" aria-label="Go to Next Step">Next</button>
+							</div>
+						</form>
+					</div>
+<?php }?>
+					<div id="step4" class="d-none">
+						<div class="well">
+							<div class="alert alert-success text-center" role="alert">Installation Complete!<br>Website is Ready to use!</div>
+							<div class="alert alert-info text-center" role="alert">NOTE: Website is currently in Maintenance Mode!</div>
 						</div>
 					</div>
 				</div>

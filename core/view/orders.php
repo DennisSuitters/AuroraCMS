@@ -41,7 +41,7 @@ else{
         '/<print link>/'
       ],[
         date($config['dateFormat'],$r['due_ti']),
-        URL.'orders/'.$r['qid'].$r['iid']
+        URL.'orders/'.$r['qid'].$r['iid'].'/'
       ],$item);
       $output.=$item;
     }

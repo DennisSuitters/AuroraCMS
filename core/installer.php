@@ -102,19 +102,18 @@ if($_POST['emailtrap']=='none'){
 	}
 	if($act=='step3'){
 		require'db.php';
-		$aName=isset($_POST['aName'])?filter_input(INPUT_POST,'aName',FILTER_SANITIZE_STRING):'';
-		$aEmail=isset($_POST['aEmail'])?filter_input(INPUT_POST,'aEmail',FILTER_SANITIZE_STRING):'';
-		$aUsername=isset($_POST['aUsername'])?filter_input(INPUT_POST,'aUsername',FILTER_SANITIZE_STRING):'';
-		$aPassword=isset($_POST['aPassword'])?filter_input(INPUT_POST,'aPassword',FILTER_SANITIZE_STRING):'';
+		$aname=isset($_POST['aname'])?filter_input(INPUT_POST,'aname',FILTER_SANITIZE_STRING):'';
+		$aemail=isset($_POST['aemail'])?filter_input(INPUT_POST,'aemail',FILTER_SANITIZE_STRING):'';
+		$ausername=isset($_POST['ausername'])?filter_input(INPUT_POST,'ausername',FILTER_SANITIZE_STRING):'';
+		$apassword=isset($_POST['apassword'])?filter_input(INPUT_POST,'apassword',FILTER_SANITIZE_STRING):'';
 		$prefix=$settings['database']['prefix'];
-		$hash=password_hash($aPassword,PASSWORD_DEFAULT);
-		$sql=$db->prepare("INSERT INTO `".$prefix."login` (options,username,password,email,hash,name,language,ti,active,activate,rank) VALUES ('11111111',:username,:password,:email,:hash,:name,'en-AU',:ti,'1','','1000')");
+		$hash=password_hash($apassword,PASSWORD_DEFAULT);
+		$sql=$db->prepare("INSERT INTO `".$prefix."login` (options,bio_options,username,password,email,name,language,ti,active,rank) VALUES ('11111111100000000000000000000000','11110000000000000000000000000000','dark',:username,:password,'',:email,:name,'en-AU',:ti,'1','1000')");
 		$sql->execute([
-			':username'=>$aUsername,
+			':username'=>$ausername,
 			':password'=>$hash,
-			':email'=>$aEmail,
-			':hash'=>md5($aEmail),
-			':name'=>$aName,
+			':email'=>$aemail,
+			':name'=>$aname,
 			':ti'=>time()
 		]);
 		$e=$db->errorInfo();

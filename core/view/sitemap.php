@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 $html=preg_replace([
 	'/<print page=[\"\']?notes[\"\']?>/'
@@ -25,7 +26,7 @@ if($s->rowCount()>0){
 		$items=$item;
 		$sitemaplinks='';
 		$items=preg_replace('/<print content=[\"\']?contentType[\"\']?>/',ucfirst($r['contentType']),$items);
-		$sitemaplinks.='<a href="'.$r['contentType'].'/'.$r['urlSlug'].'">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</a><br>';
+		$sitemaplinks.='<a href="'.$r['contentType'].'/'.$r['urlSlug'].'/">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</a><br>';
 		$items=preg_replace([
 			'/<print links>/',
 		],[

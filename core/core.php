@@ -21,10 +21,20 @@ if($config['php_options']{6}==1){
 	$s->execute([':ti'=>time()-2592000]);
 }
 if($config['php_options']{5}==1){
-	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login.php') ||(isset($_GET['author']) && $_GET['author']!='')){
+	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login')||stristr($_SERVER['REQUEST_URI'],'wp-content')||stristr($_SERVER['REQUEST_URI'],'wp-plugin')||(isset($_GET['author']) && $_GET['author']!='')){
 		require'core'.DS.'xmlrpc.php';
 		die();
 	}
+}
+if(stristr($_SERVER['REQUEST_URI'],'magento')){
+	echo'Nope NOT Magento!<br>';
+	require'core'.DS.'xmlrpc.php';
+	die();
+}
+if(stristr($_SERVER['REQUEST_URI'],'.aspx')){
+	echo'Nope doesn\'t run on ASP, blergh!<br>';
+	require'core'.DS.'xmlrpc.php';
+	die();
 }
 define('UNICODE','UTF-8');
 if(file_exists(THEME.DS.'images'.DS.'favicon.png')){
@@ -76,7 +86,7 @@ function rank($txt){
 	if($txt==1000)return'developer';
 }
 function svg($svg,$class=null,$size=null){
-	if($svg=='auroracms')
+	if($svg=='auroracms'||$svg=='auroracms-white')
 		echo file_get_contents('core'.DS.'images'.DS.$svg.'.svg');
 	else
 		echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';

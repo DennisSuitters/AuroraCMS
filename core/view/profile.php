@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 $rank=0;
 $notification='';
@@ -28,8 +29,10 @@ if($args[0]!=''){
       '/<\/profile>/',
       '~<profiles>.*?<\/profiles>~is'
     ],'',$html);
+    $name=explode(' ',$r['name']);
     $html=preg_replace([
       '/<print meta=[\"\']?seoTitle[\"\']?>/',
+      '/<print meta=[\"\']?seoDescription[\"\']?>/',
       '/<print meta=[\"\']?url[\"\']?>/',
       '/<print meta=[\"\']?favicon[\"\']?>/',
       '/<print theme>/',
@@ -42,25 +45,41 @@ if($args[0]!=''){
       '/<print user=[\"\']?url[\"\']?>/',
       '/<print config=[\"\']?url[\"\']?>/',
       '/<print config=[\"\']?business[\"\']?>/',
+      '/<print firstName>/',
+      '/<print lastName>/',
+      '/<print username>/',
+      '/<print site_verifications>/',
       '/<print year>/',
       '/<profile>/',
       '/<\/proflie>/',
       '/<profiles>.*?<\/profiles>/'
     ],[
-      htmlspecialchars($r['name'].' - Profile'.($config['business']!=''?' - '.$config['business']:''),ENT_QUOTES,'UTF-8'),
+      htmlspecialchars($r['name'].' - Profile'.($config['business']!=''?' | '.$config['business']:''),ENT_QUOTES,'UTF-8'),
+      htmlspecialchars($r['seoDescription'],ENT_QUOTES,'UTF-8'),
       URL,
       htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
       THEME,
-      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8'),
+      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8').'/',
       htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8'),
+      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8').'/',
       htmlspecialchars($r['caption'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['notes'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
       URL,
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
-      date('Y',time())
+      $name[0],
+      $name[1],
+      $r['username'],
+      ($config['ga_verification']!=''?'<meta name="google-site-verification" content="'.$config['ga_verification'].'">':'').
+        ($config['seo_msvalidate']!='<meta name="msvalidate.01" content="'.$config['seo_msvalidate'].'">'?'':'').
+        ($config['seo_yandexverification']!='<meta name="yandex-verification" content="'.$config['seo_yandexverification'].'">'?'':'').
+        ($config['seo_alexaverification']!=''?'<meta name="alexaVerifyID" content="'.$config['seo_alexaverification'].'">':'').
+        ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
+      date('Y',time()),
+      '',
+      '',
+      ''
     ],$html);
     if(stristr($html,'<buildSocial')){
     	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
@@ -299,7 +318,7 @@ if($args[0]!=''){
             htmlspecialchars($rs['fileALT']!=''?$rs['fileALT']:$rs['attributionImageTitle']),
             htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),
             htmlspecialchars(strip_tags(substr($rs['notes'], 0, strrpos(substr($rs['notes'], 0, 400), ' '))),ENT_QUOTES,'UTF-8'),
-            URL.'article/'.$rs['urlSlug']
+            URL.'article/'.$rs['urlSlug'].'/'
           ],$build);
           $items.=$build;
         }
@@ -390,7 +409,7 @@ if($args[0]!=''){
     URL,
     FAVICON,
     THEME,
-    URL.'profile'
+    URL.'profile/'
   ],$html);
   $s=$db->prepare("SELECT * FROM login WHERE bio_options LIKE '1%' ORDER BY name ASC");
   $s->execute();
@@ -413,7 +432,7 @@ if($args[0]!=''){
           '/<print user=[\"\']?image[\"\']?>/',
           '/<print user=[\"\']?caption[\"\']?>/'
         ],[
-          htmlspecialchars(URL.'profile/'.str_replace(' ','-',$r['name']),ENT_QUOTES,'UTF-8'),
+          htmlspecialchars(URL.'profile/'.str_replace(' ','-',$r['name']),ENT_QUOTES,'UTF-8').'/',
           htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($r['caption'],ENT_QUOTES,'UTF-8')

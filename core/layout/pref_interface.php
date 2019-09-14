@@ -92,7 +92,7 @@
             <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveupdate_url" class="btn btn-secondary save" data-dbid="update_url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
-        <div class="help-block small text-right">'0' Disables Idle Timeout.</div>
+        <div class="help-block small text-muted text-right">'0' Disables Idle Timeout.</div>
         <div class="form-group row">
           <label for="idleTime" class="col-form-label col-sm-2">Idle Timeout</label>
           <div class="input-group col-sm-10">
@@ -101,7 +101,7 @@
             <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveidleTime" class="btn btn-secondary save" data-dbid="idleTime" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
-        <div class="help-block small text-right">For information on Date Format Characters click <a target="_blank" href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">here</a>.</div>
+        <div class="help-block small text-muted text-right">For information on Date Format Characters click <a target="_blank" href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">here</a>.</div>
         <div class="form-group row">
           <label for="dateFormat" class="col-form-label col-sm-2">Date/Time Format</label>
           <div class="input-group col-sm-10">

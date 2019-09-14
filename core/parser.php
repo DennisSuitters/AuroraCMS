@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Adjust file check folder
  */
 $doc=new DOMDocument();
 if($show=='item'){
@@ -41,14 +42,10 @@ else
 $tags=$doc->getElementsByTagName('print');
 foreach($tags as$tag){
 	$parsing='';
-	if($tag->hasAttribute('page'))
-		$attribute='page';
-	if($tag->hasAttribute('content'))
-		$attribute='content';
-	if($tag->hasAttribute('user'))
-		$attribute='user';
-	if($tag->hasAttribute('config'))
-		$attribute='config';
+	if($tag->hasAttribute('page'))$attribute='page';
+	if($tag->hasAttribute('content'))$attribute='content';
+	if($tag->hasAttribute('user'))$attribute='user';
+	if($tag->hasAttribute('config'))$attribute='config';
 	if($tag->hasAttribute('author')){
 		$attribute='author';
 		$r['uid']=isset($r['uid'])?$r['uid']:0;
@@ -111,13 +108,13 @@ foreach($tags as$tag){
 			break;
 		case'categories':
 			if(isset($r['category_1'])&&$r['category_1']!=''){
-				$parsing.=' <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
+				$parsing.=' <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
 				if($r['category_2']!='')
-					$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'">'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'</a>';
+					$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/">'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'</a>';
 				if($r['category_3']!='')
-					$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.urlencode(str_replace(' ','-',$r['category_3'])).'">'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'</a>';
+					$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.urlencode(str_replace(' ','-',$r['category_3'])).'/">'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'</a>';
 				if($r['category_4']!='')
-					$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.urlencode(str_replace(' ','-',$r['category_3'])).'/'.urlencode(str_replace(' ','-',$r['category_4'])).'">'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'</a>';
+					$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.urlencode(str_replace(' ','-',$r['category_3'])).'/'.urlencode(str_replace(' ','-',$r['category_4'])).'/">'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'</a>';
 			}else
 				$container=$parsing='';
 			break;
@@ -125,7 +122,7 @@ foreach($tags as$tag){
 			if(isset($r['tags'])&&$r['tags']!=''){
 				$tags=explode(',',$r['tags']);
 				foreach($tags as$tag)
-					$parsing.='<a href="search/'.urlencode(str_replace(' ','-',$tag)).'">#'.htmlspecialchars($tag,ENT_QUOTES,'UTF-8').'</a> ';
+					$parsing.='<a href="search/'.urlencode(str_replace(' ','-',$tag)).'/">#'.htmlspecialchars($tag,ENT_QUOTES,'UTF-8').'</a> ';
 			}else
 				$container=$parsing='';
 			break;
@@ -186,7 +183,8 @@ foreach($tags as$tag){
 		case'thumb':
 			$filechk=basename($r['file']);
 			$thumbchk=basename($r['thumb']);
-			if($r['thumb']!=''&&(file_exists('media'.DS.$thumbchk)||file_exists('..'.DS.'..'.DS.'media'.DS.$thumbchk)))
+			if(stristr('thumbs',$r['thumb']))$thumbfolder='media'.DS.'thumbs';else$thumbfolder='media';
+			if($r['thumb']!=''&&(file_exists($thumbfolder.DS.$thumbchk)||file_exists('..'.DS.'..'.DS.$thumbfolder.DS.$thumbchk)))
 				$parsing.='<img src="'.$r['thumb'].'" alt="'.$r['title'].'">';
 			elseif($r['file']!=''&&(file_exists('media'.DS.$filechk)||file_exists('..'.DS.'..'.DS.'media'.DS.$filechk)))
 				$parsing.='<img src="'.$r['file'].'" alt="'.$r['title'].'">';
@@ -200,7 +198,7 @@ foreach($tags as$tag){
 			}elseif(isset($r['fileURL'])&&$r['fileURL']!='')
 				$parsing.=$r['fileURL'];
 			else
-				$parsing.='';
+				$parsing.=NOIMAGE;
 			break;
 		case'imageURL':
 			$parsing.=$r['fileURL'];

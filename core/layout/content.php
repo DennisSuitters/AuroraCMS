@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Adjust Links Layout Items
+ * @changes    v0.0.2 Add Permissions Options
  */
 $rank=0;
 $show='categories';
@@ -104,9 +105,11 @@ if($args[0]=='scheduler'){
 <?php }?>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-<?php if($args[1]!=''){?>
+<?php if($args[1]!=''){
+  if($user['options']{0}==1){?>
         <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'];?>/add/<?php echo$args[1];?>" data-tooltip="tooltip" data-placement="left" title="Add <?php echo ucfirst($args[1]);?>" role="button" aria-label="Add"><?php svg('add');?></a>
-<?php }?>
+<?php }
+}?>
       </div>
     </li>
   </ol>
@@ -202,34 +205,36 @@ if($args[0]=='scheduler'){
               <th class="col">Title</th>
               <th class="col-sm-1 text-center">Comments</th>
               <th class="col-sm-1 text-center" data-tooltip="tooltip" title="Reviews/Score">Reviews</th>
-              <th class="col-3 text-center"><span class="d-inline">Views&nbsp;</span><button class="btn btn-secondary btn-xs d-inline" onclick="$('[data-views=\'views\']').text('0');purge('0','contentviews','<?php echo$args[1];?>');" data-tooltip="tooltip" title="Clear All" aria-label="Clear All"><?php svg('eraser');?></button></th>
+              <th class="col-3 text-center"><span class="d-inline">Views&nbsp;</span><?php echo$user['options']{1}==1?'<button class="btn btn-secondary btn-xs d-inline" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);" data-tooltip="tooltip" title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
               <th class="col-sm-2"></th>
             </tr>
           </thead>
           <tbody id="listtype" class="list" data-t="menu" data-c="ord">
 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr id="l_<?php echo$r['id'];?>" class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>">
-              <td>
-<?php           if($r['thumb']!='')
+              <td class="align-middle">
+<?php           if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
                   echo'<a href="'.$r['file'].'" data-fancybox="lightbox'.$r['id'].'" data-max-width="700"><img class="img-rounded" style="max-width:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
-                elseif($r['file']!='')
+                elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
                   echo'<a href="'.$r['file'].'" data-fancybox="lightbox'.$r['id'].'" data-max-width="700"><img class="img-rounded" style="max-width:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
                 elseif($r['fileURL']!='')
                   echo'<a href="'.$r['fileURL'].'" data-fancybox="lightbox'.$r['id'].'" data-max-width="700"><img class="img-rounded" style="max-width:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
                 else
                   echo'';?>
               </td>
-              <td>
+              <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="table-thumb" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
-                <?php echo$r['suggestions']==1?'<span data-tooltip="tooltip" title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb').'</span>':'';
+<?php if($user['options']{1}==1){
+        echo$r['suggestions']==1?'<span data-tooltip="tooltip" title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
                 if($r['contentType']=='proofs'){
                   $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
                   $sp->execute([':id'=>$r['uid']]);
                   $sr=$sp->fetch(PDO::FETCH_ASSOC);?>
-                  <div class="small"><small><small>Belongs to <a href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?php echo$sr['username'].$sr['name']!=''?':'.$sr['name']:'';?></a></small></small></div>
-<?php           }?>
+                  <div class="small">Belongs to <a href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?php echo$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
+<?php           }
+}?>
               </td>
-              <td class="text-center">
+              <td class="text-center align-middle">
 <?php           if($r['contentType']=='article'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='proofs'){
                   $sc=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."comments` WHERE rid=:id AND contentType=:contentType");
                   $sc->execute([':id'=>$r['id'],':contentType'=>$r['contentType']]);
@@ -237,25 +242,25 @@ if($args[0]=='scheduler'){
                   $scc=$db->prepare("SELECT id FROM `".$prefix."comments` WHERE rid=:id AND contentType=:contentType AND status='unapproved'");
                   $scc->execute([':id'=>$r['id'],'contentType'=>$r['contentType']]);
                   $sccc=$scc->rowCount($scc);
-                  echo'<a class="btn btn-secondary'.($sccc>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#d43" data-tooltip="tooltip" title="'.$sccc.' New Comments" role="button" aria-label="New Comments">'.svg2('comments').'&nbsp;&nbsp;'.$cnt['cnt'].'</a>';
+                  echo'<a class="btn btn-secondary'.($sccc>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-comments" data-tooltip="tooltip" title="'.$sccc.' New Comments" role="button" aria-label="New Comments">'.svg2('comments').'&nbsp;&nbsp;'.$cnt['cnt'].'</a>';
                 }?>
               </td>
-              <td class="text-center">
+              <td class="text-center align-middle">
 <?php           $sr=$db->prepare("SELECT COUNT(id) as num,SUM(cid) as cnt FROM `".$prefix."comments` WHERE contentType='review' AND rid=:rid");
                 $sr->execute([':rid'=>$r['id']]);
                 $rr=$sr->fetch(PDO::FETCH_ASSOC);
                 $srr=$db->prepare("SELECT id FROM `".$prefix."comments` WHERE contentType='review' AND rid=:rid AND status!='approved'");
                 $srr->execute([':rid'=>$r['id']]);
                 $src=$srr->rowCount($srr);
-                echo$rr['num']>0?'<a class="btn btn-secondary'.($src>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#d60"'.($src>0?' data-tooltip="tooltip" title="'.$src.' New Reviews':'').' role="button" aria-label="New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
+                echo$rr['num']>0?'<a class="btn btn-secondary'.($src>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip" title="'.$src.' New Reviews':'').' role="button" aria-label="New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
               </td>
-              <td class="text-center">
-                <button class="btn btn-secondary trash" onclick="$('#views<?php echo$r['id'];?>').text('0');updateButtons('<?php echo$r['id'];?>','content','views','0');" data-tooltip="tooltip" title="Clear" aria-label="Clear"><?php svg('eraser');?>&nbsp;&nbsp;<span id="views<?php echo$r['id'];?>" data-views="views"><?php echo$r['views'];?></span></button>
+              <td class="text-center align-middle">
+                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
               </td>
-              <td id="controls_<?php echo$r['id'];?>">
+              <td id="controls_<?php echo$r['id'];?>" class="align-middle">
                 <div class="btn-group float-right">
-                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
-<?php   if($user['rank']==1000||$user['options']{0}==1){?>
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options']{1}==1?' title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
+<?php   if($user['options']{0}==1){?>
                   <button class="btn btn-secondary<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
                   <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="purge('<?php echo$r['id'];?>','content')" data-tooltip="tooltip" title="Purge" aria-label="Purge"><?php svg('purge');?></button>

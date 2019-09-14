@@ -1,28 +1,36 @@
 <block inbed="profile">
 <!DOCTYPE HTML>
-<!--
-     LibreCMS - Copyright (C) Diemen Design 2019
-          the MIT Licensed Open Source Content Management System.
-     
-     Project Maintained at https://github.com/DiemenDesign/LibreCMS
-		 
-     Theme: Default
-     Creator: Diemen Design
-     Creator URL: https://diemen.design
--->
-<html lang="en-AU" prefix="og:http://ogp.me/ns#" itemscope itemtype="http://schema.org/WebPage">
+<html lang="en-AU">
   <head>
-		<meta charset="UTF-8">
     <base href="<print meta=url>">
-		<meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta charset="UTF-8">
+    <title><print meta="seoTitle"></title>
 		<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=2">
-		<meta name="application-name" content="LibreCMS">
+    <meta name="robots" content="index,follow">
+    <meta name="description" content="<print meta=seoDescription>">
+    <meta name="google" content="nositelinkssearchbox">
 		<meta name="url" content="<print meta=canonical>">
 		<meta name="identifier-url" content="<print meta=url>">
-		<meta name="distribution" content="global">
-		<meta name="rating" content="general">
-		<title><print meta="seoTitle"></title>
+		<print site_verifications>
+    <link rel="alternate" media="all" href="<print meta=canonical>">
+		<link rel="canonical" href="<print meta=canonical>">
+		<link rel="alternate" href="<print meta=canonical>" hreflang="en-AU">
+		<link rel="author" href="humans.txt">
 		<link rel="icon" href="<print meta=favicon>" type="image/png">
+    <script type='application/ld+json'>{"@context":"http://schema.org","@type":"WebSite","url":"<print meta=canonical>","name":"<print meta=seoTitle>","author":{"@type":"Person","name":"<print meta=author>"},"description":"<print meta=seoDescription>","publisher":"<print meta=seoTitle>","potentialAction":{"@type":"SearchAction","target":"<print meta=url>search/{search_term}","query-input":"required name=search_term"}}</script>
+    <meta property="og:locale" content="en-AU">
+		<meta property="og:type" content="profile">
+		<meta property="og:title" content="<print meta=seoTitle>">
+		<meta property="og:description" content="<print meta=seoDescription>">
+		<meta property="og:url" content="<print meta=canonical>">
+		<meta property="og:site_name" content="<print config=business>">
+    <meta property="og:profile:first_name" content="<print firstName>">
+    <meta property="og:profile:last_name" content="<print lastName>">
+    <meta property="og:profile:username" content="<print username>">
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:title" content="<print meta=seoTitle>">
+		<meta name="twitter:description" content="<print meta=seoDescription>">
+		<link rel="publisher" href="<print meta=url>">
 		<link rel="home" href="<print meta=url>" title="Home page">
     <link rel="stylesheet" type="text/css" href="<print theme>/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="<print theme>/css/libreicons-svg.css">
@@ -31,7 +39,7 @@
 		<script src="<print theme>/js/bootstrap.min.js"></script>
 		<script src="<print theme>/js/js.js"></script>
   </head>
-  <body itemscope itemtype="http://schema.org/WebPage" role="document">
+  <body>
     <profile>
       <div class="page-wrapper">
         <div class="container">
@@ -62,7 +70,7 @@
                     </div>
                     <div class="socials mb-4">
                       <buildSocial>
-                        <a class="libre libre-social libre-2x" href="<print sociallink>"><print socialicon></a>
+                        <a class="libre libre-social libre-2x" href="<print sociallink>" role="link" rel="me"><print socialicon></a>
                       </buildSocial>
                     </div>
                   </nav>

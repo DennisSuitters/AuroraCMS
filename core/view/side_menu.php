@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Display Items according to primary documents category
+ * @changes    v0.0.2 Make sure all links end with /
  */
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
@@ -102,7 +104,7 @@ if(file_exists(THEME.DS.'side_menu.html')){
 				'<print viewlink>',
 				'<print view>'
 			],[
-				URL.$view,
+				URL.$view.'/',
 				ucfirst($view)
 			],$heading);
 		}else
@@ -135,9 +137,17 @@ if(file_exists(THEME.DS.'side_menu.html')){
 	}else
 		$sideTemp=preg_replace('/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
-	$insides=$matches[1];
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND internal!='1' AND status='published' ORDER BY featured DESC, ti DESC $show");
-	$s->execute([':contentType'=>$contentType]);
+	$insides=$matches[1];	
+	if(isset($sidecat)&&$sidecat!=''){
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND category_1 LIKE :cat AND internal=0 AND status='published' ORDER BY featured DESC, ti DESC $show");
+		$s->execute([
+			':contentType'=>$contentType,
+			':cat'=>$sidecat
+		]);
+	}else{
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND internal='0' AND status='published' ORDER BY featured DESC, ti DESC $show");
+		$s->execute([':contentType'=>$contentType]);
+	}
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		if($r['contentType']=='gallery'){
@@ -165,7 +175,7 @@ if(file_exists(THEME.DS.'side_menu.html')){
 			'/<print content=[\"\']?caption[\"\']?>/'
 		],[
 			htmlspecialchars($r['thumb'],ENT_QUOTES,'UTF-8'),
-			URL.$r['contentType'].'/'.$r['urlSlug'],
+			URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 			htmlspecialchars($r['schemaType'],ENT_QUOTES,'UTF-8'),
 			date('Y-m-d',$r['ti']),
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),

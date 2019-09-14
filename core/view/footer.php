@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
-	$link='<li><a href="logout">Logout</a></li>';
+	$link='<li><a href="logout/">Logout</a></li>';
 else{
 	if($config['options']{3}==1)
 		$link_x=' or Sign Up';
@@ -23,7 +24,7 @@ else{
 	$link='<li><a href="login/">Login'.$link_x.'</a></li>';
 }
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
-$html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'">Administration</a></li>',$html):str_replace('<administration>','',$html);
+$html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'/">Administration</a></li>',$html):str_replace('<administration>','',$html);
 $html=preg_replace([
 	'/<print year>/',
 	'/<print theme=[\"\']?title[\"\']?>/',
@@ -102,20 +103,20 @@ if(stristr($html,'<buildMenu')){
 			$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
 		if($r['contentType']!='index'){
 			if(isset($r['url'][0])&&$r['url'][0]=='#')
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'],$buildMenu);
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/',$buildMenu);
 			elseif(filter_var($r['url'],FILTER_VALIDATE_URL))
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',$r['url'],$buildMenu);
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',$r['url'].'/',$buildMenu);
 			elseif($r['contentType']=='page'&&$r['title']!='')
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']),$buildMenu);
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']).'/',$buildMenu);
 			else
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'],$buildMenu);
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'].'/',$buildMenu);
 			$buildMenu=preg_replace('/<print rel=[\"\']?contentType[\"\']?>/',strtolower($r['contentType']),$buildMenu);
 		}else{
 			$buildMenu=preg_replace([
 				'/<print menu=[\"\']?url[\"\']?>/',
 				'/<print rel=[\"\']?contentType[\"\']?>/'
 			],[
-				URL,
+				URL.'/',
 				'home'
 			],$buildMenu);
 		}
@@ -157,7 +158,7 @@ if(stristr($html,'<buildSocial')){
 			'<rss>',
 			'</rss>'
 		],'',$html);
-		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'],$html):str_replace('<print rsslink>','rss',$html);
+		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'].'/',$html):str_replace('<print rsslink>','rss',$html);
 		$html=str_replace('<print rssicon>',frontsvg('libre-social-rss'),$html);
 	}else
 		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);

@@ -31,11 +31,11 @@
             <label class="switch switch-label switch-success"><input type="checkbox" id="newslettersEmbedImages" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0"<?php echo$config['newslettersEmbedImages']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
           <div class="input-group col-sm-8">
-            <div class="help-block small p-1">Enable if your hosting doesn't support remote image access.</div>
+            <div class="help-block text-muted small text-right col-12 p-1">Enable if your hosting doesn't support remote image access.</div>
           </div>
         </div>
         <div class="form-group row">
-          <div class="help-block small col-12 text-right">Maximum Emails to Send in one Instance. '0' uses the Default of '50'.</div>
+          <div class="help-block text-muted small col-12 text-right">Maximum Emails to Send in one Instance. '0' uses the Default of '50'.</div>
           <label for="newslettersSendMax" class="col-form-label col-sm-2">Send Max</label>
           <div class="input-group col-sm-10">
             <input type="text" id="newslettersSendMax" class="form-control textinput" value="<?php echo$config['newslettersSendMax'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendMax">
@@ -43,7 +43,7 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="col-12 small text-right">Seconds to Delay between Email Sends. '0' uses the default of '1' second.</div>
+          <div class="col-12 text-muted small text-right">Seconds to Delay between Email Sends. '0' uses the default of '1' second.</div>
           <label for="newslettersSendDelay" class="col-form-label col-sm-2">Send Delay</label>
           <div class="input-group col-sm-10">
             <input type="text" id="newslettersSendDelay" class="form-control textinput" value="<?php echo$config['newslettersSendDelay'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendDelay">

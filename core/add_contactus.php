@@ -11,6 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
+ * @changes    v0.0.2 Add Check for Storing Messages
  */
 $getcfg=true;
 require'db.php';
@@ -83,84 +84,84 @@ if($act=='add_message'){
   				if($rs['url']!='')
             $config['email']=$rs['url'];
   			}
-  			$q=$db->prepare("INSERT INTO `".$prefix."messages` (uid,ip,folder,to_email,to_name,from_email,from_name,subject,status,notes_raw,ti) VALUES ('0',:ip,:folder,:to_email,:to_name,:from_email,:from_name,:subject,:status,:notes_raw,:ti)");
-  			$q->execute([
-					':ip'=>$ip,
-          ':folder'=>'INBOX',
-          ':to_email'=>$config['email'],
-          ':to_name'=>$config['business'],
-          ':from_email'=>$email,
-          ':from_name'=>$name,
-          ':subject'=>$subject,
-          ':status'=>'unread',
-          ':notes_raw'=>$notes,
-          ':ti'=>time()
-        ]);
-  			$id=$db->lastInsertId();
-  			$e=$db->errorInfo();
-  			if(is_null($e[2])){
-  				if($config['email']!=''){
-  					if($error==0){
-  						require'class.phpmailer.php';
-  						$mail=new PHPMailer;
-              $mail->isSendmail();
-  						$mail->SetFrom($email, $name);
-  						$toname=$config['email'];
-  						$mail->AddAddress($config['email']);
-  						$mail->IsHTML(true);
-  						$mail->Subject='Contact Email via '.$config['business'].': '.$subject;
-  						$msg='Message Date: '.date($config['dateFormat'],$ti).'<br />'.
-  								 'Subject: '.$subject.'<br />'.
-  								 'Name: '.$name.'<br />'.
-  								 'Email: '.$email.'<br />'.
-  								 'Message: '.$notes;
-  						$mail->Body=$msg;
-  						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-  						if($mail->Send())
-                $notification=$theme['settings']['contactus_success'];
-  						else
-                $notification=$theme['settings']['contactus_error'];
-  						$mail2=new PHPMailer;
-  						$mail2->isSendmail();
-  						$mail2->SetFrom($config['email'],$config['business']);
-  						$toname=$email;
-  						$mail2->AddAddress($email);
-  						$mail2->IsHTML(true);
-  						$subject=isset($config['contactAutoReplySubject'])&&$config['contactAutoReplySubject']=''?$config['contactAutoReplySubject']:'contact_autoreplysubject';
-  						$subject=str_replace([
-								'{business}',
-								'{date}'
-							],[
-								$config['business'],
-								date($config['dateFormat'],$ti)
-							],$subject);
-  						$mail2->Subject=$subject;
-  						$msg2=isset($config['contactAutoReplyLayout'])&&$config['contactAutoReplyLayout']!=''?rawurldecode($config['contactAutoReplyLayout']):'contact_autoreplylayout';
-  						$n=explode(' ',$name);
-  						$namefirst=$n[0];
-  						$namelast=end($n);
-  						$msg2=str_replace([
-								'{business}',
-								'{date}',
-								'{name}',
-								'{first}',
-								'{last}',
-								'{subject}'
-							],[
-								$config['business']!=''?$config['business']:'us',
-								date($config['dateFormat'],$ti),
-								$name,
-								$namefirst,
-								$namelast,
-								$subject
-							],$msg2);
-  						$mail2->Body=$msg2;
-  						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-  						if($mail2->Send())
-                $notification=$theme['settings']['contactus_success'];
-  						else
-                $notification=$theme['settings']['contactus_error'];
-  					}
+        if($config['storemessages']{0}==1){
+          $q=$db->prepare("INSERT INTO `".$prefix."messages` (uid,ip,folder,to_email,to_name,from_email,from_name,subject,status,notes_raw,ti) VALUES ('0',:ip,:folder,:to_email,:to_name,:from_email,:from_name,:subject,:status,:notes_raw,:ti)");
+  			  $q->execute([
+  					':ip'=>$ip,
+            ':folder'=>'INBOX',
+            ':to_email'=>$config['email'],
+            ':to_name'=>$config['business'],
+            ':from_email'=>$email,
+            ':from_name'=>$name,
+            ':subject'=>$subject,
+            ':status'=>'unread',
+            ':notes_raw'=>$notes,
+            ':ti'=>time()
+          ]);
+  			  $id=$db->lastInsertId();
+  			  $e=$db->errorInfo();
+        }
+				if($config['email']!=''){
+					if($error==0){
+						require'class.phpmailer.php';
+						$mail=new PHPMailer;
+            $mail->isSendmail();
+  					$mail->SetFrom($email, $name);
+						$toname=$config['email'];
+						$mail->AddAddress($config['email']);
+						$mail->IsHTML(true);
+						$mail->Subject='Contact Email via '.$config['business'].': '.$subject;
+						$msg='Message Date: '.date($config['dateFormat'],$ti).'<br />'.
+								 'Subject: '.$subject.'<br />'.
+								 'Name: '.$name.'<br />'.
+								 'Email: '.$email.'<br />'.
+								 'Message: '.$notes;
+						$mail->Body=$msg;
+						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+						if($mail->Send())
+              $notification=$theme['settings']['contactus_success'];
+						else
+              $notification=$theme['settings']['contactus_error'];
+						$mail2=new PHPMailer;
+						$mail2->isSendmail();
+						$mail2->SetFrom($config['email'],$config['business']);
+						$toname=$email;
+						$mail2->AddAddress($email);
+						$mail2->IsHTML(true);
+						$subject=isset($config['contactAutoReplySubject'])&&$config['contactAutoReplySubject']=''?$config['contactAutoReplySubject']:'contact_autoreplysubject';
+						$subject=str_replace([
+							'{business}',
+							'{date}'
+						],[
+							$config['business'],
+							date($config['dateFormat'],$ti)
+						],$subject);
+						$mail2->Subject=$subject;
+						$msg2=isset($config['contactAutoReplyLayout'])&&$config['contactAutoReplyLayout']!=''?rawurldecode($config['contactAutoReplyLayout']):'contact_autoreplylayout';
+						$n=explode(' ',$name);
+						$namefirst=$n[0];
+						$namelast=end($n);
+						$msg2=str_replace([
+							'{business}',
+							'{date}',
+							'{name}',
+							'{first}',
+							'{last}',
+							'{subject}'
+						],[
+							$config['business']!=''?$config['business']:'us',
+							date($config['dateFormat'],$ti),
+							$name,
+							$namefirst,
+							$namelast,
+							$subject
+						],$msg2);
+						$mail2->Body=$msg2;
+						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+						if($mail2->Send())
+              $notification=$theme['settings']['contactus_success'];
+						else
+              $notification=$theme['settings']['contactus_error'];
   				}
   			}else
           $notification=$theme['settings']['contactus_error'];

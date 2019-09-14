@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 if(stristr($html,'<events')){
 	preg_match('/<events>([\w\W]*?)<\/events>/',$html,$matches);
@@ -33,7 +34,7 @@ if(stristr($html,'<events')){
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 			date($config['dateFormat'],$r['tis']),
 			date($config['dateFormat'],$r['tis']),
-			URL.'events/'.$r['urlSlug'],
+			URL.'events/'.$r['urlSlug'].'/',
 			htmlspecialchars(preg_replace('/\s+?(\S+)?$/','',substr($r['seoCaption'],0,151)),ENT_QUOTES,'UTF-8')
 		],$items);
 		$output.=$items;
@@ -62,7 +63,7 @@ if(stristr($html,'<news')){
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 			date($config['dateFormat'],$r['tis']),
 			date($config['dateFormat'],$r['tis']),
-			URL.'news/'.$r['urlSlug'],
+			URL.'news/'.$r['urlSlug'].'/',
 			htmlspecialchars(preg_replace('/\s+?(\S+)?$/','',substr($r['seoCaption'],0,151)),ENT_QUOTES,'UTF-8')
 		],$items);
 		$output.=$items;

@@ -7,9 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
+ *             and only use content Title first, then Page Title if Content empty.
+ * @changes    v0.0.2 Add check if Visitor Tracking is Enabled.
+ * @changes    v0.0.2 Make sure all links end with /
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -118,15 +122,13 @@ if(!isset($canonical)||$canonical=='')
 if($seoTitle==''){
   if($page['seoTitle']=='')
     $seoTitle=$page['title'];
-  elseif($page['title']=='')
-    $seoTitle=$config['seoTitle'];
   else
     $seoTitle=$page['seoTitle'];
 }
-//if($seoTitle!=''){
-//  $seoTitle.=' - ';
-//}
-$seoTitle.=($view=='index'?'Home':'').($config['business']!=''?' - '.$config['business']:'');
+if($seoTitle==''){
+  $seoTitle.=$view=='index'?'Home':'';
+}
+$seoTitle.=$view=='index'?' | '.$config['business']:'';
 if($metaRobots==''){
   if($page['metaRobots']=='')
     $metaRobots=$config['metaRobots'];
@@ -136,16 +138,11 @@ if($metaRobots==''){
     $metaRobots=$page['metaRobots'];
 }
 if($seoCaption==''){
-  if($page['seoCaption']=='')
-    $seoCaption=$config['seoCaption'];
-  else
-    $seoCaption=$page['seoCaption'];
+  $seoCaption=$page['seoCaption'];
 }
 if($seoDescription==''){
   if($page['seoDescription']=='')
     $seoDescription=substr(strip_tags($page['notes']),0,160);
-  elseif($page['notes']=='')
-    $seoDescription=$config['seoDescription'];
   else
     $seoDescription=$page['seoDescription'];
 }
@@ -166,6 +163,8 @@ $head=preg_replace([
   '/<print meta=[\"\']?seoTitle[\"\']?>/',
   '/<print meta=[\"\']?seoCaption[\"\']?>/',
   '/<print meta=[\"\']?seoDescription[\"\']?>/',
+  '/<print meta=[\"\']?seoAbstract[\"\']?>/',
+  '/<print meta=[\"\']?seoSummary[\"\']?>/',
   '/<print meta=[\"\']?seoKeywords[\"\']?>/',
   '/<print meta=[\"\']?dateAtom[\"\']?>/',
   '/<print meta=[\"\']?canonical[\"\']?>/',
@@ -178,15 +177,8 @@ $head=preg_replace([
   '/<print microid>/',
   '/<print meta=[\"\']?author[\"\']?>/',
   '/<print theme>/',
-  '/<print google_verification>/',
-  '/<print seo_msvalidate>/',
-	'/<print seo_yandexverification>/',
-	'/<print seo_alexaverification>/',
-	'/<print seo_domain_verify>/',
-	'/<print geo_region>/',
-  '/<print geo_placename>/',
-	'/<print geo_position>/',
-	'/<print geo_position>/'
+  '/<print site_verifications>/',
+	'/<print geo>/'
 ],[
   trim(htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
@@ -196,26 +188,28 @@ $head=preg_replace([
   trim(htmlspecialchars($seoTitle,ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($seoCaption,ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8')),
+  trim(htmlspecialchars($seoCaption,ENT_QUOTES,'UTF-8')),
+  trim(htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8')),
   $contentTime,
   $canonical,
   URL,
   $view,
-  URL.'rss/'.$rss,
+  URL.'rss/'.$rss.'/',
   $view=='inventory'?'product':$view,
   $shareImage,
   FAVICON,
   microid($config['email'],$canonical),
   isset($r['name'])?$r['name']:$config['business'],
   THEME,
-  $config['ga_verification'],
-  $config['seo_msvalidate'],
-  $config['seo_yandexverification'],
-  $config['seo_alexaverification'],
-  $config['seo_domainverify'],
-  $config['geo_region'],
-  $config['geo_placename'],
-  $config['geo_position']
+  ($config['ga_verification']!=''?'<meta name="google-site-verification" content="'.$config['ga_verification'].'">':'').
+    ($config['seo_msvalidate']!='<meta name="msvalidate.01" content="'.$config['seo_msvalidate'].'">'?'':'').
+    ($config['seo_yandexverification']!='<meta name="yandex-verification" content="'.$config['seo_yandexverification'].'">'?'':'').
+    ($config['seo_alexaverification']!=''?'<meta name="alexaVerifyID" content="'.$config['seo_alexaverification'].'">':'').
+    ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
+  ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
+    ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
+    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
 ],$head);
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899)
   $head=str_replace('<meta_helper>','<link rel="stylesheet" type="text/css" href="core/css/seohelper.css">',$head);
@@ -229,10 +223,10 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>899&&$config['development']==1)
   $content.='<div style="text-align:right;padding:10px;">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().'</div>';
 print$head.$content;
 $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-if($config['maintenance']==0||$config['development']==0){
+if($config['maintenance']==0||$config['development']==0&&$config['options']{11}==1){
   if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&$_SESSION['current_page']!=$current_page)){
     if(!stristr($current_page,'core')||!stristr($current_page,'admin')||!stristr($current_page,'layout')||!stristr($current_page,'media')){
-//      if(filter_var($current_page,FILTER_VALIDATE_URL)===TRUE){
+      if(filter_var($current_page,FILTER_VALIDATE_URL)===TRUE){
         $s=$db->prepare("INSERT INTO `".$prefix."tracker` (pid,urlDest,urlFrom,userAgent,ip,browser,os,sid,ti) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
         $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
         $s->execute([
@@ -247,7 +241,7 @@ if($config['maintenance']==0||$config['development']==0){
           ':ti'=>time()
         ]);
         $_SESSION['current_page']=$current_page;
-//    }
+      }
     }
   }
 }

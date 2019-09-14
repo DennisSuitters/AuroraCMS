@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Permissions Options
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -46,7 +47,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
     },
     eventLimit:true,
     selectable:true,
-    editable:true,
+    editable:<?php echo$user['options']{1}==1?'true':'false';?>,
     height:$(window).height()*0.83,
     events:[
 <?php
@@ -56,19 +57,26 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
       {
         id:'<?php echo$r['id'];?>',
-        title:'<?php echo ucfirst($r['contentType']);?>',
+        title:'<?php echo ucfirst($r['contentType']).': '.$r['title'];?>',
         start:'<?php echo date("Y-m-d H:i:s",$r['pti']);?>',
         allDay:false,
         color:'<?php echo($r['status']=='published'?'#4dbd74':'#f86c6b');?>',
         description:'<?php echo ucfirst($r['contentType']).': '.$r['title'];?>',
         status:'<?php echo $r['status'];?>',
+        views:'<?php echo$r['views'];?>'
       },
 <?php	}?>
     ],
     eventMouseover:function(event,domEvent,view){
-      var layer='<div id="events-layer" class="btn-group float-right"><button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="Edit" aria-label="Edit"><?php svg('edit');?></button><button id="delbut'+event.id+'" class="btn btn-secondary btn-sm trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>';
-      var content='Published: '+$.fullCalendar.moment(event.start).format('HH:mm');
-      if(event.description!='')content+='<br>'+event.description;
+      var layer='<div id="events-layer" class="btn-group float-right">'+
+<?php if($user['options']{1}==1){?>
+        '<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="Edit" aria-label="Edit"><?php svg('edit');?></button>'+
+        '<button id="delbut'+event.id+'" class="btn btn-secondary btn-sm trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>'+
+<?php }else{?>
+        '<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="View" aria-label="View"><?php svg('view');?></button>'+
+<?php }?>
+        '</div>';
+      var content='Published: '+$.fullCalendar.moment(event.start).format('HH:mm')+'<br>Views: '+event.views;
       var el=$(this);
       el.append(layer);
       if(event.eventend!=''||event.eventend!=null||event.eventend!=0){

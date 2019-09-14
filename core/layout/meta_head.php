@@ -9,9 +9,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    Add test in Administration Header to test if admin.css exists,
+ *             and add if it does. This is for the WYSIWYG Editor to make text
+ *             look the same in the Editor as it does on the Main Site.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -43,6 +46,7 @@
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'daterangepicker.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'style.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'aurora.css';?>">
+<?php if(file_exists(THEME.DS.'css'.DS.'admin.css'))echo'<link rel="stylesheet" type="text/css" href="'.THEME.DS.'css'.DS.'admin.css">';?>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery-ui.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>

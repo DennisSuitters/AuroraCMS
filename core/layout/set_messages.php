@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Option to not store messages.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -24,6 +25,13 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        <legend>Contact Form</legend>
+        <div class="form-group row">
+          <div class="input-group col-sm-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="storemessages0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0"<?php echo$config['storemessages']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="storemessages0" class="col-form-label col-sm-6">Store Contact Form Messages</label>
+        </div>
         <div class="help-block small text-muted text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?php echo URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</div>
         <form target="sp" method="post" action="core/add_data.php">
           <input type="hidden" name="act" value="add_subject">
@@ -75,10 +83,10 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           </div>
         </div>
         <div class="form-group row">
-          <label for="options9" class="col-form-label col-sm-3">Delete Messages When Retrieved</label>
-          <div class="input-group col-sm-3">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options10" class="switch-input" data-dbid="1" data-dbt="user" data-dbc="options" data-dbb="9"<?php echo$user['options']{9}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          <div class="input-group col-sm-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options9" class="switch-input" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9"<?php echo$user['options']{9}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
+          <label for="options9" class="col-form-label col-sm-4">Delete Messages When Retrieved</label>
         </div>
         <h4>Mailboxes</h4>
         <form target="sp" method="post" action="core/add_mailbox.php">

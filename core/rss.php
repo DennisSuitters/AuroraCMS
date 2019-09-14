@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 header('Content-Type:application/rss+xml;charset=ISO-8859-1');
 require'db.php';
@@ -68,7 +69,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
     <item>
       <title><?php echo$r['title'].' - '.ucfirst($r['contentType']).' - '.$config['seoTitle'];?></title>
       <description><?php echo($r['seoCaption']==""?strip_tags(rawurldecode($r['notes'])):$r['seoCaption']);?></description>
-      <link><?php echo URL.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['title']));?></link>
+      <link><?php echo URL.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['title'])).'/';?></link>
       <pubDate><?php echo strftime("%a, %d %b %Y %T %Z",$r['ti']);?></pubDate>
       <enclosure url="<?php echo$img;?>" length="<?php echo$length;?>" type="<?php echo$filetype;?>"/>
     </item>

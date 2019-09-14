@@ -8,6 +8,7 @@ AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDes
 ### Features
 - Blog Articles, Portfolio's, Bookings, Events, News, Testimonials, Inventory, Services, Gallery, Proofs, Messages, and Newsletters.
 - Content Scheduler. Calendar based Scheduler.
+- Related Content, either Chosen or Category matched.
 - Add and Remove Custom Pages. Submenu custom and existing pages.
 - Messaging - Whenever a message is created via the Contact Us page, it is stored in the Messages system as well as emailed.
 - Orders - Create Quotes, Invoices. Client viewing of Orders.

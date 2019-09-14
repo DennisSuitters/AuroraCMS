@@ -32,7 +32,7 @@
             <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="2"<?php echo$config['options']{2}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
         </div>
-        <div class="help-block small text-right">Uploaded Images larger than the above size will be resized to their long edge.<br>If either value is '0', resizing will be disabled.</div>
+        <div class="help-block text-muted small text-right">Uploaded Images larger than the above size will be resized to their long edge.<br>If either value is '0', resizing will be disabled.</div>
         <div class="form-group row">
           <label for="mediaMaxWidth" class="control-label col-sm-2">Max Width</label>
           <div class="input-group col-sm-10">

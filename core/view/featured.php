@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
 $html=preg_replace('~<settings.*?>~is','',$html,1);
@@ -79,7 +80,7 @@ if($cT!='folder'){
 				'thumb'=>$r['thumb'],
 				'file'=>$r['file'],
 				'title'=>$r['title'],
-				'link'=>$r['contentType'].'/'.$r['urlSLug'],
+				'link'=>$r['contentType'].'/'.$r['urlSLug'].'/',
 				'seoCaption'=>$r['seoCaption'],
 				'attributionImageTitle'=>$r['attributionImageTitle'],
 				'attributionImageName'=>$r['attributionImageName'],
@@ -127,7 +128,7 @@ if($ii>0){
 			],[
 				'',
 				'',
-				$r['contentType'].'/'.$r['urlSlug'],
+				$r['contentType'].'/'.$r['urlSlug'].'/',
 			],$item);
 		}
 		$item=preg_replace('/<print content=[\"\']?title[\"\']?>/',$r['title'],$item);

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Make sure all links end with /
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
@@ -39,7 +40,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		],[
 			'',
 			'',
-			URL.$settings['system']['admin']
+			URL.$settings['system']['admin'].'/'
 		],$html);
 	}else{
 		$html=preg_replace([
@@ -91,11 +92,11 @@ if(stristr($html,'<buildMenu')){
 		$menuURL='';
 		if($r['contentType']!='index'){
 			if(isset($r['url'][0])&&$r['url'][0]=='#')
-				$menuURL.=URL.$r['url'];
+				$menuURL.=URL.$r['url'].'/';
 			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))
 				$menuURL.=$r['url'];
 			else{
-				$menuURL.=URL.$r['contentType'];
+				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
 					$r['contentType'],
 					[
@@ -118,7 +119,7 @@ if(stristr($html,'<buildMenu')){
 						'tos'
 					],
 					true)
-				)$menuURL.='/'.str_replace(' ','-',strtolower($r['title']));
+				)$menuURL.='/'.str_replace(' ','-',strtolower($r['title'])).'/';
 			}
 		}else
 			$menuURL.=URL;
@@ -156,11 +157,11 @@ if(stristr($html,'<buildMenu')){
 				$subURL='';
 				if($rm['contentType']!='index'){
 					if(isset($rm['url'][0])&&$rm['url'][0]=='#')
-						$subURL.=URL.$rm['url'];
+						$subURL.=URL.$rm['url'].'/';
 					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))
-						$subURL.=$rm['url'];
+						$subURL.=$rm['url'].'/';
 					else{
-						$subURL.=URL.$rm['contentType'];
+						$subURL.=URL.$rm['contentType'].'/';
 						if(!in_array(
 							$rm['contentType'],
 							[
@@ -183,7 +184,7 @@ if(stristr($html,'<buildMenu')){
 								'tos'
 							],
 							true)
-						)$subURL.='/'.str_replace(' ','-',strtolower($rm['title']));
+						)$subURL.='/'.str_replace(' ','-',strtolower($rm['title'])).'/';
 					}
 				}
 				$item=preg_replace([

@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.2 Add Description for Profiles and Meta-Description data
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -54,22 +56,26 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-group row">
               <label for="username" class="col-form-label col-sm-2">Username</label>
               <div class="input-group col-sm-10">
-                <input type="text" id="username" class="form-control textinput" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username...">
+                <input type="text" id="username" class="form-control textinput" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                 <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveusername" class="btn btn-secondary save" data-dbid="username" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
               </div>
               <div id="uerror" class="alert alert-danger col-sm-10 float-right d-none" role="alert">Username already exists!</div>
             </div>
             <div class="form-group row">
               <label for="email" class="col-form-label col-sm-2">Email</label>
               <div class="input-group col-sm-10">
-                <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email...">
+                <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                 <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
               </div>
             </div>
             <div class="form-group row">
               <label for="newsletter" class="col-form-label col-8 col-sm-2" data-tooltip="tooltip" title="Toggle Newsletter Subscription.">Subscriber</label>
               <div class="input-group col-4 col-sm-10">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" role="checkbox"<?php echo$r['newsletter']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0"<?php echo($r['newsletter']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
           </div>
@@ -79,6 +85,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 <label for="avatar" class="col-form-label col-sm-2">Avatar</label>
                 <div class="input-group col-sm-10">
                   <input type="text" class="form-control" value="<?php echo$r['avatar'];?>" readonly>
+<?php if($user['options']{5}==1){?>
                   <div class="input-group-append">
                     <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <input type="hidden" name="act" value="add_avatar">
@@ -87,12 +94,19 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                       <label for="avatarfu" aria-label="Browse Computer for Files."><?php svg('browse-computer');?></label>
                     </div>
                   </div>
+<?php }?>
                   <div class="input-group-text p-0">
-                    <img class="img-avatar img-fluid bg-white" style="width:32px;max-height:32px;border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);elseif($r['avatar']!='')echo$r['avatar'];elseif($r['gravatar']!='')echo$r['gravatar'];else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
+                    <img class="img-avatar img-fluid bg-white" style="width:32px;max-height:32px;border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
+                      echo'media'.DS.'avatar'.DS.basename($r['avatar']);
+                    elseif($r['gravatar']!='')
+                      echo$r['gravatar'];
+                    else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
                   </div>
+<?php if($user['options']{5}==1){?>
                   <div class="input-group-append">
                     <button class="btn btn-secondary trash" onclick="imageUpdate('<?php echo$r['id'];?>','login','avatar','');" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
+<?php }?>
                 </div>
               </div>
             </form>
@@ -100,8 +114,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-group row">
               <label for="gravatar" class="col-form-label col-sm-2">Gravatar</label>
               <div class="input-group col-sm-10">
-                <input type="text" id="gravatar" class="form-control textinput" value="<?php echo$r['gravatar'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link...">
+                <input type="text" id="gravatar" class="form-control textinput" value="<?php echo$r['gravatar'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                 <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savegravatar" class="btn btn-secondary save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
               </div>
             </div>
           </div>
@@ -124,7 +140,9 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
   $scc->execute([':rid'=>$rm['id']]);
   $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
                     <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" title="'.$sccn['cnt'].' New Comments"':'').' aria-label="View Comments"';?>>'.svg2('libre-gui-comments').'&nbsp;'.$scn['cnt'].'</a>';?>
+<?php if($user['options']{5}==1){?>
                     <span class="handle btn btn-default btn-xs" data-tooltip="tooltip" title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></span>
+<?php }?>
                   </div>
                   <div class="card-body">
                     <a href="<?php echo$rm['file'];?>" data-fancybox="gallery"><img src="<?php echo$rm['file'];?>" alt="Proof <?php echo$rm['id'];?>"></a>
@@ -136,6 +154,7 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
             </ul>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-social">
+<?php if($user['options']{0}==1||$user['options']{5}==1){?>
             <form target="sp" method="post" action="core/add_data.php">
               <div class="form-group row">
                 <input type="hidden" name="user" value="<?php echo$r['id'];?>">
@@ -227,6 +246,7 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
                 </div>
               </div>
             </form>
+<?php }?>
             <div id="social">
 <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=:uid ORDER BY icon ASC");
 $ss->execute([':uid'=>$r['id']]);
@@ -235,6 +255,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 <div class="input-group col-sm-12">
                   <div class="input-group-text"><span class="libre-social" data-tooltip="tooltip" title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon']);?></span></div>
                   <input type="text" class="form-control" value="<?php echo$rs['url'];?>" readonly>
+<?php if($user['options']{0}==1||$user['options']{5}==1){?>
                   <div class="input-group-append">
                     <form target="sp" action="core/purge.php" role="form">
                       <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
@@ -242,6 +263,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                       <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                     </form>
                   </div>
+<?php }?>
                 </div>
               </div>
 <?php }?>
@@ -271,109 +293,147 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 <div class="form-group row">
                   <label for="bio_options0" class="col-form-label col-sm-2">Enable</label>
                   <div class="input-group col-sm-10">
-                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="0"<?php echo$r['bio_options']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="0"<?php echo($r['bio_options']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="bio_options1" class="col-form-label col-sm-2">Show Address</label>
                   <div class="input-group col-sm-10">
-                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="1"<?php echo$r['bio_options']{1}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="1"<?php echo($r['bio_options']{1}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="name" class="col-form-label col-sm-2">Name</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="name" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" placeholder="Enter a Name...">
+                    <input type="text" id="name" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" placeholder="Enter a Name..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="url" class="col-form-label col-sm-2">URL</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="url" placeholder="Enter a URL...">
+                    <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="url" placeholder="Enter a URL..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="business" class="col-form-label col-sm-2">Business</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" placeholder="Enter a Business...">
+                    <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" placeholder="Enter a Business..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="phone" class="col-form-label col-sm-2">Phone</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="phone" class="form-control textinput" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" placeholder="Enter a Phone...">
+                    <input type="text" id="phone" class="form-control textinput" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" placeholder="Enter a Phone..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="mobile" class="col-form-label col-sm-2">Mobile</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="mobile" class="form-control textinput" value="<?php echo$r['mobile'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" placeholder="Enter a Mobile...">
+                    <input type="text" id="mobile" class="form-control textinput" value="<?php echo$r['mobile'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" placeholder="Enter a Mobile..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savemobile" class="btn btn-secondary save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="address" class="col-form-label col-sm-2">Address</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="address" class="form-control textinput" name="address" value="<?php echo$r['address'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="address" placeholder="Enter an Address...">
+                    <input type="text" id="address" class="form-control textinput" name="address" value="<?php echo$r['address'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="address" placeholder="Enter an Address..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="suburb" class="col-form-label col-sm-2">Suburb</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" placeholder="Enter a Suburb...">
+                    <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" placeholder="Enter a Suburb..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="city" class="col-form-label col-sm-2">City</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" placeholder="Enter a City...">
+                    <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" placeholder="Enter a City..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="state" class="control-label col-sm-2">State</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" placeholder="Enter a State...">
+                    <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" placeholder="Enter a State..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="postcode" class="control-label col-sm-2">Postcode</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" placeholder="Enter a Postcode...">
+                    <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" placeholder="Enter a Postcode..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="country" class="control-label col-sm-2">Country</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="country" class="form-control textinput" name="country" value="<?php echo$r['country'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="country" placeholder="Enter a Country...">
+                    <input type="text" id="country" class="form-control textinput" name="country" value="<?php echo$r['country'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="country" placeholder="Enter a Country..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecountry" class="btn btn-secondary save" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="caption" class="control-label col-sm-2">Caption</label>
                   <div class="input-group col-sm-10">
-                    <input type="text" id="caption" class="form-control textinput" name="caption" value="<?php echo$r['caption'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="caption" placeholder="Enter a Caption...">
+                    <input type="text" id="caption" class="form-control textinput" name="caption" value="<?php echo$r['caption'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="caption" placeholder="Enter a Caption..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecaption" class="btn btn-secondary save" data-dbid="caption" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
+                  </div>
+                </div>
+                <div class="help-block text-muted small text-right">This is used for the Meta-Description for SEO Purposes on the page</div>
+                <div class="form-group row">
+                  <label for="caption" class="control-label col-sm-2">Description</label>
+                  <div class="input-group col-sm-10">
+                    <input type="text" id="seoDescription" class="form-control textinput" name="seoDescription" value="<?php echo$r['seoDescription'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="seoDescription" placeholder="Enter a Description..."<?php echo$user['options']{5}==1?'':' readonly';?>>
+<?php if($user['options']{5}==1){?>
+                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php }?>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="notes" class="col-form-label col-sm-2">About</label>
                   <div class="col-sm-10">
                     <div class="card-header p-0">
+<?php if($user['options']{5}==1){?>
                       <form method="post" target="sp" action="core/update.php">
                         <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                         <input type="hidden" name="t" value="login">
                         <input type="hidden" name="c" value="notes">
                         <textarea id="notes" class="form-control summernote" name="da"><?php echo rawurldecode($r['notes']);?></textarea>
                       </form>
+<?php }else{?>
+                      <textarea class="form-control" style="background-color:#fff;color:#000;"><?php echo rawurldecode($r['notes']);?></textarea>
+<?php }?>
                     </div>
                   </div>
                 </div>
@@ -383,22 +443,27 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 <div class="form-group row">
                   <label for="bio_options2" class="col-form-label col-8 col-sm-2">Enable</label>
                   <div class="input-group col-4 col-sm-10">
-                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="2" role="checkbox"<?php echo$r['bio_options']{2}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="2"<?php echo($r['bio_options']{2}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
                 </div>
                 <div class="form-group row">
                   <label for="resume_notes" class="col-form-label col-sm-2">Resume Notes</label>
                   <div class="col-sm-10">
                     <div class="card-header p-0">
+<?php if($user['options']{5}==1){?>
                       <form method="post" target="sp" action="core/update.php">
                         <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                         <input type="hidden" name="t" value="login">
                         <input type="hidden" name="c" value="resume_notes">
                         <textarea id="resume_notes" class="form-control summernote" name="da"><?php echo rawurldecode($r['resume_notes']);?></textarea>
                       </form>
+<?php }else{?>
+                      <textarea class="form-control" style="background-color:#fff;color:#000;"><?php echo rawurldecode($r['resume_notes']);?></textarea>
+<?php }?>
                     </div>
                   </div>
                 </div>
+<?php if($user['options']{5}==1){?>
                 <legend>Add an Entry</legend>
                 <form target="sp" method="post" action="core/add_career.php">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -468,6 +533,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   });
                 </script>
                 <hr>
+<?php }?>
                 <div id="careers">
 <?php $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='career' AND cid=:cid ORDER BY tis ASC");
 $sc->execute([':cid'=>$user['id']]);
@@ -492,7 +558,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                         <div class="form-control"><?php echo$rc['notes'];?></div>
                       </div>
                       <div class="col-1">
+<?php if($user['options']{5}==1||$user['options']{0}==1){?>
                         <button class="btn btn-secondary trash" onclick="purge('<?php echo$rc['id'];?>','content')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+<?php }?>
                       </div>
                     </div>
                     <hr>
@@ -505,9 +573,10 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                 <div class="form-group row">
                   <label for="bio_options3" class="col-form-label col-8 col-sm-2">Enable</label>
                   <div class="input-group col-4 col-sm-10">
-                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="3" role="checkbox"<?php echo$r['bio_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                    <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="3"<?php echo($r['bio_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
                 </div>
+<?php if($user['options']{5}==1||$user['options']{0}==1){?>
                 <legend>Add an Entry</legend>
                 <form target="sp" method="post" action="core/add_education.php">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -577,6 +646,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                   });
                 </script>
                 <hr>
+<?php }?>
                 <div id="education">
 <?php $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='education' AND cid=:cid ORDER BY tis ASC");
 $sc->execute([':cid'=>$user['id']]);
@@ -601,7 +671,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                         <div class="form-control" readonly><?php echo$rc['notes'];?></div>
                       </div>
                       <div class="col-1">
+<?php if($user['options']{5}==1||$user['options']{0}==1){?>
                         <button class="btn btn-secondary trash" onclick="purge('<?php echo$rc['id'];?>','content')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+<?php }?>
                       </div>
                     </div>
                     <hr>
@@ -616,12 +688,16 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               <label for="email_signature" class="col-form-label col-sm-2">Email Signature</label>
               <div class="col-sm-10">
                 <div class="card-header p-0">
+<?php if($user['options']{5}==1){?>
                   <form method="post" target="sp" action="core/update.php">
                     <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <input type="hidden" name="t" value="login">
                     <input type="hidden" name="c" value="email_signature">
                     <textarea id="email_signature" class="form-control summernote" name="da"><?php echo rawurldecode($r['email_signature']);?></textarea>
                   </form>
+<?php }else{?>
+                  <textarea class="form-control" style="background-color:#fff;color:#000;"><?php echo rawurldecode($r['email_signature']);?></textarea>
+<?php }?>
                 </div>
               </div>
             </div>
@@ -630,31 +706,23 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
             <div class="form-group row">
               <label for="timezone" class="col-form-label col-sm-2">Timezone</label>
               <div class="input-group col-sm-10">
-                <select id="timezone" class="form-control" onchange="update('<?php echo$r['id'];?>','login','timezone',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="timezone">
+                <select id="timezone" class="form-control" onchange="update('<?php echo$r['id'];?>','login','timezone',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="timezone"<?php echo$user['options']{5}==1?'':' disabled';?>>
                   <option value="default">System Default</option>
-<?php               function get_timezones(){
-                      $o=array();
-                      $t_zones=timezone_identifiers_list();
-                      foreach($t_zones as$a){
-                        $t='';
-                        try{
-                          $zone=new DateTimeZone($a);
-                          $seconds=$zone->getOffset(new DateTime("now",$zone));
-                          $hours=sprintf("%+02d",intval($seconds/3600));
-                          $minutes=sprintf("%02d",($seconds%3600)/60);
-                          $t=$a." [ $hours:$minutes ]";
-                          $o[$a]=$t;
-                        }
-                        catch(Exception $e){}
-                      }
-                      ksort($o);
-                      return$o;
-                    }
-                    $o=get_timezones();
+<?php               $o=array(
+                      'Australia/Perth'      => "(GMT+08:00) Perth",
+                      'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
+                      'Australia/Darwin'     => "(GMT+09:30) Darwin",
+                      'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
+                      'Australia/Canberra'   => "(GMT+10:00) Canberra",
+                      'Australia/Hobart'     => "(GMT+10:00) Hobart",
+                      'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
+                      'Australia/Sydney'     => "(GMT+10:00) Sydney"
+                    );
                     foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
                 </select>
               </div>
             </div>
+<?php if($user['id']==$r['id']||$user['options']{5}==1){?>
             <form target="sp" method="post" action="core/update.php" onsubmit="Pace.restart();">
               <div class="form-group row">
                 <label for="password" class="col-form-label col-sm-2">Password</label>
@@ -667,17 +735,17 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                 </div>
               </div>
             </form>
+<?php }?>
             <div class="form-group row">
               <label for="active" class="col-form-label col-8 col-sm-2">Active</label>
               <div class="input-group col-4 col-sm-10">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="active" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0"<?php echo$r['active']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="active" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0"<?php echo($r['active']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
-<?php if($user['rank']>899){?>
             <div class="form-group row">
               <label for="rank" class="col-form-label col-sm-2">Rank</label>
               <div class="input-group col-sm-10">
-                <select id="rank" class="form-control" onchange="update('<?php echo$r['id'];?>','login','rank',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="rank">
+                <select id="rank" class="form-control" onchange="update('<?php echo$r['id'];?>','login','rank',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="rank"<?php echo$user['options']{5}==1?'':' disabled';?>>
                   <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Visitor</option>
                   <option value="100"<?php echo($r['rank']==100?' selected':'');?>>Subscriber</option>
                   <option value="200"<?php echo($r['rank']==200?' selected':'');?>>Member</option>
@@ -692,67 +760,62 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                 </select>
               </div>
             </div>
-<?php }
-if($user['rank']>899){?>
             <hr>
             <legend>Account Permissions</legend>
             <div class="form-group row">
               <label for="options0" class="col-form-label col-8 col-sm-3">Add or Remove Content</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0"<?php echo$r['options']{0}==1?' checked aria-checked="true"':' aria-checkd="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0"<?php echo($r['options']{0}==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options1" class="col-form-label col-8 col-sm-3">Edit Content</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1"<?php echo$r['options']{1}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1"<?php echo($r['options']{1}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options2" class="col-form-label col-8 col-sm-3">Add or Edit Bookings</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2"<?php echo$r['options']{2}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2"<?php echo($r['options']{2}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options3" class="col-form-label col-8 col-sm-3">Message Viewing or Editing</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3"<?php echo$r['options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3"<?php echo($r['options']{3}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options4" class="col-form-label col-8 col-sm-3">Orders Viewing or Editing</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4"<?php echo$r['options']{4}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4"<?php echo($r['options']{4}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options5" class="col-form-label col-8 col-sm-3">User Accounts Viewing or Editing</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options5" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5"<?php echo$r['options']{5}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options5" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5"<?php echo($r['options']{5}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options6" class="col-form-label col-8 col-sm-3">SEO Editing</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options6" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6"<?php echo$r['options']{6}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options6" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6"<?php echo($r['options']{6}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
             <div class="form-group row">
               <label for="options7" class="col-form-label col-8 col-sm-3">Preferences Viewing or Editing</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options7" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7"<?php echo$r['options']{7}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options7" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7"<?php echo($r['options']{7}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
-<?php }
-if($user['rank']==1000){?>
             <div class="form-group row">
               <label for="options8" class="col-form-label col-8 col-sm-3">System Utilization Viewing</label>
               <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options8" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="8"<?php echo$r['options']{8}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="options8" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="8"<?php echo($r['options']{8}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
-<?php }?>
           </div>
         </div>
       </div>

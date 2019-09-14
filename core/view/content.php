@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Related Content Processing
+ * @changes    v0.0.2 Make sure all links end with /
  */
 $rank=0;
 $notification='';
@@ -39,8 +41,8 @@ elseif($view=='search'){
 		':status'=>$status
 	]);
 }elseif($view=='index'){
-	$contentType='';
-	$itemCount=4;
+	$contentType=$cat1='';
+	$itemCount=$config['showItems'];
 	if(stristr($html,'<settings')){
 		preg_match('/<settings.*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
 		$itemCount=isset($matches[1])&&$matches[1]!=0?$matches[1]:$config['showItems'];
@@ -230,6 +232,7 @@ if($show=='categories'){
 			$mediaitem=$matches3[1];
 			$mediaoutput='';
 			while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
+				if(!file_exists('media'.DS.basename($rm['file'])))continue;
 				$mediaitems=$mediaitem;
 				list($width,$height)=getimagesize($rm['file']);
 				$tags='';
@@ -301,7 +304,7 @@ if($show=='categories'){
 			$catoutput='';
 			while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
 				$catitems=$catitem;
-				if(!$rc['icon']||!file_exists('media'.DS.basename($rc['icon'])))$rc['icon']=$noimage;
+				if($rc['icon']!=''||!file_exists('media'.DS.basename($rc['icon'])))$rc['icon']=$noimage;
 				$catitems=preg_replace([
 					'/<print category=[\"\']?image[\"\']?>/',
 					'/<print category=[\"\']?imageALT[\"\']?>/',
@@ -310,7 +313,7 @@ if($show=='categories'){
 				],[
 					htmlspecialchars($rc['icon'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
-					URL.$rc['url'].'/'.str_replace(' ','-',$rc['title']),
+					URL.$rc['url'].'/'.str_replace(' ','-',$rc['title']).'/',
 					htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8')
 				],$catitems);
 				$catoutput.=$catitems;
@@ -341,11 +344,9 @@ if($show=='categories'){
 				$filechk=$r['fileURL'];
 				$shareImage=$r['fileURL'];
 			}else{
-				$filechk=basename($r['file']);
-				$thumbchk=basename($r['thumb']);
-				if($r['thumb']!=''&&file_exists('media'.DS.$thumbchk))
-					$shareImage='media'.DS.basename($r['thumb']);
-				elseif($r['file']!=''&&file_exists('media'.DS.$filechk))
+				if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
+					$shareImage='media'.DS.'thumbs'.basename($r['thumb']);
+				elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
 					$shareImage='media'.DS.basename($r['file']);
 				else
 					$shareImage=URL.NOIMAGE;
@@ -372,13 +373,13 @@ if($show=='categories'){
 				'/<print content=[\"\']?contentType[\"\']?>/',
 				'/<print content=[\"\']?notes[\"\']?>/'
 			],[
-				$r['thumb']!=''||file_exists(basename('media'.DS.'thumbs'.DS.$r['thumb']))?$r['thumb']:URL.NOIMAGE,
+				$shareImage,
 				$shareImage,
 				htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
 				$shareImage,
 				htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
-				URL.'profile/'.strtolower(str_replace(' ','-',htmlspecialchars($r['login_user'],ENT_QUOTES,'UTF-8'))),
-				URL.$r['contentType'].'/'.$r['urlSlug'],
+				URL.'profile/'.strtolower(str_replace(' ','-',htmlspecialchars($r['login_user'],ENT_QUOTES,'UTF-8'))).'/',
+				URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 				htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8'),
 				date($config['dateFormat'],$r['ti']),
 				date($theme['settings']['dateFormat'],$r['pti']),
@@ -402,7 +403,7 @@ if($show=='categories'){
 						'/<view>/',
 						'/<\/view>/'
 					],[
-						URL.$r['contentType'].'/'.$r['urlSlug'],
+						URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 						htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 						'',
 						''
@@ -509,13 +510,11 @@ if($show=='item'){
 		':views'=>$r['views']+1,
 		':id'=>$r['id']
 	]);
-
 	$us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
 	$us->execute([
 		':uid'=>$r['uid']
 	]);
 	$ua=$us->fetch(PDO::FETCH_ASSOC);
-
 	if($r['fileURL']!='')
 		$shareImage=$r['fileURL'];
 	elseif($r['file']!='')
@@ -524,7 +523,7 @@ if($show=='item'){
 		$shareImage=$r['thumb'];
 	else
 		$shareImage=URL.NOIMAGE;
-	$canonical=URL.$view.'/'.$r['urlSlug'];
+	$canonical=URL.$view.'/'.$r['urlSlug'].'/';
 	$contentTime=isset($r['eti'])&&($r['eti']>$r['ti'])?$r['eti']:isset($r['ti'])?$r['ti']:0;
 	if(preg_match('/<print page=[\"\']?cover[\"\']?>/',$html)){
 		if($r['fileURL'])
@@ -541,10 +540,10 @@ if($show=='item'){
 	if(preg_match('/<print content=[\"\']?image[\"\']?>/',$html)){
 		if($r['fileURL'])
 			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-		elseif($r['file'])
+		elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))
 			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
 		else
-			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',URL.NOIMAGE,$html);
+			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
 	}
 	$html=preg_replace([
 			'/<print content=[\"\']?imageALT[\"\']?>/'
@@ -564,6 +563,7 @@ if($show=='item'){
 				$mediaitem=$matches3[1];
 				$mediaoutput='';
 				while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
+					if(!file_exists('media'.DS.basename($rm['file'])))continue;
 					$mediaitems=$mediaitem;
 					list($width,$height)=getimagesize($rm['file']);
 					$tags='';
@@ -717,7 +717,7 @@ if($show=='item'){
 					'"editor":"'.htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8').'",'.
 					'"genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'",'.
 					'"mainEntityOfPage":"True",'.
-					'"keywords":"'.htmlspecialchars($seokeywods,ENT_QUOTES,'UTF-8').'",'.
+					'"keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'",'.
 					'"wordcount":"'.htmlspecialchars(strlen(strip_tags($r['notes'])),ENT_QUOTES,'UTF-8').'",'.
 					'"publisher":{'.
 						'"@type":"Organization",'.
@@ -764,7 +764,7 @@ if($show=='item'){
 				$jrr=$jss->fetch(PDO::FETCH_ASSOC);
   			$jsonld.='"aggregateRating":{'.
     				'"@type":"aggregateRating",'.
-    				'"ratingValue":"'.($jrr['rate']==''?'1':$jrr['raite']).'",'.
+    				'"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
     				'"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
   				'},'.
   				'"offers":{'.
@@ -780,19 +780,19 @@ if($show=='item'){
     				'}'.
   				'}';
 			}elseif($r['schemaType']=='Service'){
-					$jsonld.='"@type": "Service",'.
-  				'"serviceType": "'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'",'.
-  				'"provider": {'.
-    				'"@type": "LocalBusiness",'.
-    				'"name": "'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
-						'"address": "'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'",'.
-						'"telephone": "'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'",'.
-						'"priceRange": "'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'",'.
-						'"image": "'.($r['file']!=''?$r['file']:URL.THEME.'/images/logo.png').'"'.
+					$jsonld.='"@type":"Service",'.
+  				'"serviceType":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'",'.
+  				'"provider":{'.
+    				'"@type":"LocalBusiness",'.
+    				'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
+						'"address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'",'.
+						'"telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'",'.
+						'"priceRange":"'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'",'.
+						'"image":"'.($r['file']!=''?$r['file']:URL.THEME.'/images/logo.png').'"'.
   				'},'.
-  				'"areaServed": {'.
-    				'"@type": "State",'.
-    				'"name": "All"'.
+  				'"areaServed":{'.
+    				'"@type":"State",'.
+    				'"name":"All"'.
   				'}';
 			}else{
 				$jsonld.='"@type":"'.$r['schemaType'].'",'.
@@ -824,13 +824,84 @@ if($show=='item'){
 			$jsonld.='}</script>';
 			$item=str_replace('<json-ld>',$jsonld,$item);
 		}
+		$sidecat=isset($r['category_1'])&&$r['category_1']!=''?$r['category_1']:'';
 		$item=preg_replace([
 			'/<print author=[\"\']?link[\"\']?>/',
 			'/<print author=[\"\']?name[\"\']?>/'
 		],[
-			URL.'profile/'.strtolower(str_replace(' ','-',htmlspecialchars($r['login_user'],ENT_QUOTES,'UTF-8'))),
+			URL.'profile/'.strtolower(str_replace(' ','-',htmlspecialchars($r['login_user'],ENT_QUOTES,'UTF-8'))).'/',
 			$ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')
 		],$item);
+/* Related */
+		if($view=='article'||$view=='inventory'||$view=='service'||$view=='portfolio'&&stristr($item,'<related')){
+			if($config['options']{11}==1){
+				preg_match('/<related.*itemCount=[\"\'](.+?)[\"\'].*>/',$item,$matches);
+				if(!isset($matches[1]))$iC='LIMIT '.$config['showItems'];
+				elseif($matches[1]=='all')$iC='';
+				elseif($matches[1]=='default')$iC='LIMIT '.$config['showItems'];
+				else$iC='LIMIT '.$matches[1];
+				$sr=$db->prepare("SELECT rid as id FROM `".$prefix."choices` WHERE uid=:id AND contentType='related' ORDER BY title ASC $iC");
+				$sr->execute([':id'=>$r['id']]);
+				$go=false;
+				if($sr->rowCount()>0){
+					$go=true;
+				}else{
+					if($config['options']{10}==1){
+						if($r['category_1']!=''){
+							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat ORDER BY title ASC $iC");
+							$sr->execute([':id'=>$r['id'],':cat'=>$r['category_1']]);
+							if($sr->rowCount()>0)$go=true;
+						}
+					}
+				}
+				if($go=true){
+					preg_match('/<related.*>([\w\W]*?)<\/related>/',$item,$matches);
+					$related=$matches[1];
+					preg_match('/<relitems>([\w\W]*?)<\/relitems>/',$related,$matches);
+					$relitem=$matches[1];
+					$relitems='';
+					while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
+						$relateditem=$relitem;
+						$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id AND status='published' AND internal=0");
+						$si->execute([':id'=>$rr['id']]);
+						$ri=$si->fetch(PDO::FETCH_ASSOC);
+						if($ri['fileURL']!=''&&($ri['thumb']==''||$ri['file']=='')){
+							$relatedImage=$ri['fileURL'];
+						}else{
+							if($ri['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($ri['thumb'])))
+								$relatedImage='media'.DS.'thumbs'.basename($ri['thumb']);
+							elseif($ri['file']!=''&&file_exists('media'.DS.basename($ri['file'])))
+								$relatedImage='media'.DS.basename($ri['file']);
+							else
+								$relatedImage=URL.NOIMAGE;
+						}
+						$relateditem=preg_replace([
+							'/<print related=[\"\']?linktitle[\"\']?>/',
+							'/<print related=[\"\']?thumb[\"\']?>/',
+							'/<print related=[\"\']?imageALT[\"\']?>/',
+							'/<print related=[\"\']?title[\"\']?>/',
+							'/<print related=[\"\']?contentType[\"\']?>/'
+						],[
+							URL.$ri['contentType'].'/'.$ri['urlSlug'].'/',
+							$relatedImage,
+							htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'),
+							htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'),
+							$ri['contentType']
+						],$relateditem);
+						$relitems.=$relateditem;
+					}
+					$related=preg_replace('~<relitems>.*?<\/relitems>~is',$relitems,$related,1);
+					$item=preg_replace('~<related.*>.*?<\/related>~is',$related,$item,1);
+				}else{
+					$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+				}
+			}else{
+				$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+			}
+		}else{
+			$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+		}
+/* Reviews */
 		if($view!='page'&&stristr($item,'<review')){
 			preg_match('/<review>([\w\W]*?)<\/review>/',$item,$matches);
 			$review=$matches[1];
@@ -841,27 +912,27 @@ if($show=='item'){
 				$reviewitem=$review;
 				if(stristr($reviewitem,'<json-ld-review>')){
 					$jsonldreview='<script type="application/ld+json">{'.
-						'"@context": "https://schema.org/",'.
-						'"@type": "Review",'.
-						'"itemReviewed": {'.
-							'"@type": "Product",'.
-							'"image": "'.$r['file'].'",'.
-							'"name": "'.$r['title'].'"'.
+						'"@context":"https://schema.org/",'.
+						'"@type":"Review",'.
+						'"itemReviewed":{'.
+							'"@type":"Product",'.
+							'"image":"'.$r['file'].'",'.
+							'"name":"'.$r['title'].'"'.
 						'},'.
-						'"reviewRating": {'.
-							'"@type": "Rating",'.
-							'"ratingValue": "'.$rr['cid'].'"'.
+						'"reviewRating":{'.
+							'"@type":"Rating",'.
+							'"ratingValue":"'.$rr['cid'].'"'.
 						'},'.
-						'"name": "'.$r['title'].'",'.
-						'"author": {'.
-							'"@type": "Person",'.
-							'"name": "'.($rr['name']!=''?$rr['name']:'Anonymous').'"'.
+						'"name":"'.$r['title'].'",'.
+						'"author":{'.
+							'"@type":"Person",'.
+							'"name":"'.($rr['name']!=''?$rr['name']:'Anonymous').'"'.
 						'},'.
 						'"datePublished":"'.date('Y-m-d',$rr['ti']).'",'.
-						'"reviewBody": "'.$rr['notes'].'",'.
-						'"publisher": {'.
-							'"@type": "Organization",'.
-							'"name": "'.$config['business'].'"'.
+						'"reviewBody":"'.$rr['notes'].'",'.
+						'"publisher":{'.
+							'"@type":"Organization",'.
+							'"name":"'.$config['business'].'"'.
 						'}'.
 					'}</script>';
 					$reviewitem=str_replace('<json-ld-review>',$jsonldreview,$reviewitem);

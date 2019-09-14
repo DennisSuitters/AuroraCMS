@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Permissions Options
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -66,7 +67,8 @@
                       <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-top">
                         <div id="controls-<?php echo$r['id'];?>" class="btn-group float-right">
-<?php $scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
+<?php if($user['options']{0}==1){
+  $scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
   $scc->execute([':ip'=>$r['ip']]);
   if($scc->rowCount()<1){?>
                           <form id="blacklist<?php echo$r['id'];?>" class="d-inline-block" target="sp" method="post" action="core/add_commentblacklist.php">
@@ -76,6 +78,7 @@
 <?php }?>
                           <button id="approve_<?php echo$r['id'];?>" class="btn btn-secondary btn-sm add<?php echo$r['status']!='unapproved'?' hidden':'';?>" onclick="update('<?php echo$r['id'];?>','comments','status','approved')" data-tooltip="tooltip" title="Approve" aria-label="Approve"><?php svg('approve');?></button>
                           <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','comments')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+<?php }?>
                         </div>
                       </td>
                     </tr>

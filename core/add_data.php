@@ -202,6 +202,55 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 <?php   }
       }
       break;
+		case'add_related':
+			$id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
+			$rid=isset($_POST['rid'])?filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'rid',FILTER_SANITIZE_NUMBER_INT);
+			if($id==$rid){?>
+	window.top.window.toastr["warning"]('Item can\'t be related to itself!');
+<?php	}else{
+				if($rid!=0){
+				  $s=$db->prepare("SELECT id FROM `".$prefix."choices` WHERE contentType='related' AND rid=:rid");
+				  $s->execute([
+				    ':rid'=>$rid
+				  ]);
+				  if($s->rowCount()==0){
+				    $ss=$db->prepare("INSERT INTO `".$prefix."choices` (uid,rid,contentType,ti) VALUES (:id,:rid,'related',:ti)");
+				    $ss->execute([
+				      ':id'=>$id,
+				      ':rid'=>$rid,
+				      ':ti'=>time()
+				    ]);
+						$id=$db->lastInsertId();
+						$e=$db->errorInfo();
+						if(is_null($e[2])){
+							$si=$db->prepare("SELECT id,contentType,title FROM `".$prefix."content` WHERE id=:id");
+							$si->execute([':id'=>$rid]);
+							$ri=$si->fetch(PDO::FETCH_ASSOC);?>
+		window.top.window.$('#relateditems').append('<?php
+echo'<div id="l_'.$id.'" class="form-group row">'.
+		'<div class="input-group col-12">'.
+			'<input type="text" class="form-control" value="'.ucfirst($ri['contentType']).': '.$ri['title'].'" readonly>'.
+			'<div class="input-group-append">'.
+				'<form target="sp" action="core/purge.php">'.
+					'<input type="hidden" name="id" value="'.$id.'">'.
+					'<input type="hidden" name="t" value="choices">'.
+					'<button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+				'</form>'.
+			'</div>'.
+		'</div>'.
+	'</div>';?>
+');
+<?php   			}else{?>
+		window.top.window.toastr["danger"]('There was an issue adding the Data!');
+<?php   		}
+			  	}else{?>
+	window.top.window.toastr["warning"]('Item is already related!');
+<?php			}
+				}else{?>
+	window.top.window.toastr["warning"]('You need to select in Item to Relate!');
+<?php		}
+			}
+			break;
     case'add_subject':
       $sub=filter_input(INPUT_POST,'sub',FILTER_SANITIZE_STRING);
       $eml=filter_input(INPUT_POST,'eml',FILTER_SANITIZE_STRING);

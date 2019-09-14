@@ -40,7 +40,7 @@
                   <div class="input-group-append">
                     <button type="submit" class="btn btn-secondary">Update</button>
                   </div>
-                  <div class="help-block col small">Changing the access folder for the Administration area may log you out.</div>
+                  <div class="help-block col text-muted small">Changing the access folder for the Administration area may log you out.</div>
                 </div>
               </div>
             </form>
@@ -48,14 +48,14 @@
               <label for="php_options5" class="col-form-label col-sm-2">Wordpress Attacks</label>
               <div class="input-group col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options5" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5"<?php echo$config['php_options']{5}==1?' checked':'';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-                <div class="help-block col small text-right">Enabling Wordpress Attacks will allow LibreCMS to look out for known Wordpres attack vectors such as the 'xmlrpc.php' and '?author=' brute force attempts and Auto Blacklist the origin IP.</div>
+                <div class="help-block col text-muted small text-right">Enabling Wordpress Attacks will allow LibreCMS to look out for known Wordpres attack vectors such as the 'xmlrpc.php' and '?author=' brute force attempts and Auto Blacklist the origin IP.</div>
               </div>
             </div>
             <div class="form-group row">
               <label for="php_options6" class="col-form-label col-sm-2">30 Day Blacklist</label>
               <div class="input-group col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options6" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6"<?php echo$config['php_options']{6}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-                <div class="help-block col small text-right">Enabling 30 Day Blacklist, removes Blacklisted IP's after 30 Days.</div>
+                <div class="help-block col text-muted small text-right">Enabling 30 Day Blacklist, removes Blacklisted IP's after 30 Days.</div>
               </div>
             </div>
             <h4>Project Honey Pot</h4>
@@ -74,7 +74,7 @@
               <label for="php_options3" class="col-form-label col-sm-2" data-tooltip="tooltip" title="Toggle Project Honey Pot.">Auto Blacklist</label>
               <div class="input-group col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options3" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3"<?php echo$config['php_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
-                <div class="help-block col small text-right">Auto Blacklisting requires an API Key to be entered below.<br>Auto Blacklisting filters IP's against Project Honey Pot's http:BL for public facing pages with data entry.</div>
+                <div class="help-block col text-muted small text-right">Auto Blacklisting requires an API Key to be entered below.<br>Auto Blacklisting filters IP's against Project Honey Pot's http:BL for public facing pages with data entry.</div>
               </div>
             </div>
             <div class="form-group row">

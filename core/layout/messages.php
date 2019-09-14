@@ -7,25 +7,59 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.2 Add Permissions Options
  */
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_messages.php';
-elseif($args[0]=='view'||$args[0]=='compose')
-  include'core'.DS.'layout'.DS.'edit_messages.php';
-else{
-  $folder="INBOX";
-  if(isset($args[0])){
-    if($args[0]=='unread')$folder='unread';
-    if($args[0]=='trash')$folder='trash';
+function strip_html_tags($t,$l=400){
+ $t=preg_replace([
+   '@<head[^>]*?>.*?</head>@siu',
+   '@<style[^>]*?>.*?</style>@siu',
+   '@<script[^>]*?.*?</script>@siu',
+   '@<object[^>]*?.*?</object>@siu',
+   '@<embed[^>]*?.*?</embed>@siu',
+   '@<applet[^>]*?.*?</applet>@siu',
+   '@<noframes[^>]*?.*?</noframes>@siu',
+   '@<noscript[^>]*?.*?</noscript>@siu',
+   '@<noembed[^>]*?.*?</noembed>@siu',
+   '@</?((address)|(blockquote)|(center)|(del))@iu',
+   '@</?((div)|(h[1-9])|(ins)|(isindex)|(p)|(pre))@iu',
+   '@</?((dir)|(dl)|(dt)|(dd)|(li)|(menu)|(ol)|(ul))@iu',
+   '@</?((table)|(th)|(td)|(caption))@iu',
+   '@</?((form)|(button)|(fieldset)|(legend)|(input))@iu',
+   '@</?((label)|(select)|(optgroup)|(option)|(textarea))@iu',
+   '@</?((frameset)|(frame)|(iframe))@iu',
+ ],[
+   ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
+   "\n\$0", "\n\$0", "\n\$0", "\n\$0", "\n\$0", "\n\$0",
+   "\n\$0", "\n\$0",
+ ],$t);
+ $t=strip_tags($t);
+ $t=trim(preg_replace('/[\t\n\r\s]+/',' ',$t));
+ return substr($t,0,$l);
+}
+function is_base64_string($s){
+ if(($b=base64_decode($s,TRUE))===FALSE)return FALSE;
+ $e=mb_detect_encoding($b);
+ if(in_array($e,array('UTF-8','ASCII')))return TRUE;else return FALSE;
+}
+if($user['options']{3}==1){
+  if($args[0]=='settings')
+    include'core'.DS.'layout'.DS.'set_messages.php';
+  elseif($args[0]=='view'||$args[0]=='compose')
+    include'core'.DS.'layout'.DS.'edit_messages.php';
+  else{
+    $folder="INBOX";
+    if(isset($args[0])){
+      if($args[0]=='unread')$folder='unread';
+      if($args[0]=='trash')$folder='trash';
 //     if($args[0]=='trash')$folder='DELETE';
-    if($args[0]=='starred')$folder='starred';
-    if($args[0]=='important')$folder='important';
-    if($args[0]=='sent')$folder='sent';
-    if($args[0]=='spam')$folder='spam';
-  }?>
+      if($args[0]=='starred')$folder='starred';
+      if($args[0]=='important')$folder='important';
+      if($args[0]=='sent')$folder='sent';
+      if($args[0]=='spam')$folder='spam';
+    }?>
 <main id="content" class="main">
   <ol class="breadcrumb">
     <li class="breadcrumb-item active">Messages</li>
@@ -58,7 +92,9 @@ else{
   $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE folder='spam' AND status='unread'")->fetch(PDO::FETCH_ASSOC);?>
         <div class="email-app mb-4">
           <nav>
+<?php if($user['options']{0}==1){?>
             <a class="btn btn-secondary btn-block" href="<?php echo URL.$settings['system']['admin'].'/messages/compose';?>">Compose</a>
+<?php }?>
             <ul id="messagemenu" class="nav">
               <li id="nav_1" class="nav-item<?php echo$folder=='INBOX'?' active':'';?>">
                 <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/messages';?>">
@@ -98,7 +134,9 @@ else{
               <li id="l_<?php echo$r['id'];?>" class="message animated fadeIn<?php echo' '.$r['status'];?>">
                 <div class="actions">
                   <div class="btn-group-vertical">
-<?php   $scc=$db->prepare("SELECT email FROM `".$prefix."whitelist` WHERE email=:email");
+<?php
+if($user['options']{0}==1){
+   $scc=$db->prepare("SELECT email FROM `".$prefix."whitelist` WHERE email=:email");
         $scc->execute([
           ':email'=>$r['from_email']
         ]);
@@ -119,6 +157,7 @@ else{
                     <button class="btn btn-secondary btn-sm" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');" data-tooltip="tooltip" title="Move to Spam Folder" aria-label="Move to Spam Folder"><?php svg('email-spam');?></button>
                     <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','messages')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
+<?php }?>
                 </div>
                 <a href="<?php echo URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>">
                   <span class="header">
@@ -137,8 +176,8 @@ else{
   }?>
                   <span class="title">Attachments: <?php echo$att;?></span>
 <?php }
-  if($r['notes_html']=='')$r['notes_html']=$r['notes_plain'];
-  if($r['notes_html']=='')$r['notes_html']=$r['notes_raw'];
+//  if($r['notes_html']=='')$r['notes_html']=$r['notes_plain'];
+//  if($r['notes_html']=='')$r['notes_html']=$r['notes_raw'];
   if(is_base64_string($r['notes_html']))$r['notes_html']=base64_decode($r['notes_html']);
 ?>
                   <span class="description d-block text-wrap"><?php echo strip_html_tags($r['notes_html']);?></span>
@@ -171,35 +210,13 @@ else{
 <?php }?>
 </script>
 <?php }
-function strip_html_tags($t,$l=400){
-  $t=preg_replace([
-    '@<head[^>]*?>.*?</head>@siu',
-    '@<style[^>]*?>.*?</style>@siu',
-    '@<script[^>]*?.*?</script>@siu',
-    '@<object[^>]*?.*?</object>@siu',
-    '@<embed[^>]*?.*?</embed>@siu',
-    '@<applet[^>]*?.*?</applet>@siu',
-    '@<noframes[^>]*?.*?</noframes>@siu',
-    '@<noscript[^>]*?.*?</noscript>@siu',
-    '@<noembed[^>]*?.*?</noembed>@siu',
-    '@</?((address)|(blockquote)|(center)|(del))@iu',
-    '@</?((div)|(h[1-9])|(ins)|(isindex)|(p)|(pre))@iu',
-    '@</?((dir)|(dl)|(dt)|(dd)|(li)|(menu)|(ol)|(ul))@iu',
-    '@</?((table)|(th)|(td)|(caption))@iu',
-    '@</?((form)|(button)|(fieldset)|(legend)|(input))@iu',
-    '@</?((label)|(select)|(optgroup)|(option)|(textarea))@iu',
-    '@</?((frameset)|(frame)|(iframe))@iu',
-  ],[
-    ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ',
-    "\n\$0", "\n\$0", "\n\$0", "\n\$0", "\n\$0", "\n\$0",
-    "\n\$0", "\n\$0",
-  ],$t);
-  $t=strip_tags($t);
-  $t=trim(preg_replace('/[\t\n\r\s]+/',' ',$t));
-  return substr($t,0,$l);
-}
-function is_base64_string($s){
-  if(($b=base64_decode($s,TRUE))===FALSE)return FALSE;
-  $e=mb_detect_encoding($b);
-  if(in_array($e,array('UTF-8','ASCII')))return TRUE;else return FALSE;
-}
+}else{?>
+<main id="content" class="main">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active">Messages</li>
+  </ol>
+  <div class="container-fluid">
+    <div class="alert alert-info" role="alert">You don't have permissions to View this Area!</div>
+  </div>
+</main>
+<?php }

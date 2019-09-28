@@ -11,6 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.3 Adjust editable fields for Coming Soon and Maintenance pages.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE id=:id");
 $s->execute([':id'=>$args[1]]);
@@ -42,13 +43,18 @@ if($so->rowCount()>0){
       <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="nav-item"><a class="nav-link active" href="#tab-page-content" aria-controls="tab-page-content" role="tab" data-toggle="tab">Content</a></li>
+<?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
           <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-images" aria-controls="tab-page-images" role="tab" data-toggle="tab">Images</a></li>
           <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-media" aria-controls="tab-page-media" role="tab" data-toggle="tab">Media</a></li>
+<?php }?>
           <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-seo" aria-controls="tab-page-seo" role="tab" data-toggle="tab">SEO</a></li>
+<?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
           <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-settings" aria-controls="tab-page-settings" role="tab" data-toggle="tab">Settings</a></li>
+<?php }?>
         </ul>
         <div class="tab-content">
           <div id="tab-page-content" class="tab-pane active" role="tabpanel">
+<?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
             <div class="form-group row">
               <label for="title" class="col-form-label col-sm-2">Title</label>
               <div class="input-group col-sm-10">
@@ -77,6 +83,7 @@ if($so->rowCount()>0){
                 </div>
               </div>
             </div>
+<?php }?>
             <div class="help-block small text-muted text-right">Edited: <?php echo$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></div>
             <div class="form-group row">
               <div class="card-header col-12 position-relative p-0">
@@ -110,6 +117,7 @@ if($so->rowCount()>0){
               </div>
             </div>
           </div>
+<?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
           <div id="tab-page-images" class="tab-pane" role="tabpanel">
             <fieldset class="control-fieldset">
               <legend class="control-legend">Cover</legend>
@@ -190,6 +198,8 @@ if($so->rowCount()>0){
               </div>
             </fieldset>
           </div>
+<?php }
+if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
           <div id="tab-page-media" class="tab-pane" role="tabpanel">
 <?php if($user['options']{1}==1){?>
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
@@ -246,6 +256,7 @@ if($sm->rowCount()>0){
               </div>
             </div>
           </div>
+<?php }?>
           <div id="tab-page-seo" class="tab-pane" role="tabpanel">
             <div class="form-group row">
               <label for="views" class="col-form-label col-sm-2">Views</label>
@@ -268,10 +279,10 @@ if($sm->rowCount()>0){
                 <div class="card col-12 bg-white">
                   <div class="card-body">
                     <div id="google-title" data-tooltip="tooltip" data-placement="left" title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
-                      <?php echo$r['seoTitle']!=''?$r['seoTitle']:$r['title'].' - '.$config['business'];?>
+                      <?php echo$r['seoTitle'];?>
                     </div>
                     <div id="google-link">
-                      <?php echo URL.($r['contentType']=='page'?$r['contentType'].'/':'').strtolower(str_replace(' ','-',$r['title']));?>
+                      <?php echo URL;?>
                     </div>
                     <div id="google-description" data-tooltip="tooltip" data-placement="left" title="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
                       <?php echo$r['seoDescription'];?>
@@ -352,6 +363,7 @@ if($cntc<0){
               </div>
             </div>
           </div>
+<?php if($r['contentType']!='comingsoon'&&['contentType']!='maintenance'){?>
           <div id="tab-page-settings" class="tab-pane" role="tabpanel">
 <?php if($r['contentType']!='index'){?>
             <div class="form-group row">
@@ -401,6 +413,7 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC))
               </div>
             </div>
           </div>
+<?php }?>
         </div>
       </div>
     </div>

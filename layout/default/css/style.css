@@ -95,10 +95,6 @@ a:hover{color:#888;text-decoration:none}
 .quote-footer h4{font-size:14px;margin-bottom:4px}
 .quote-footer p{font-weight:400;font-style:italic;font-size:14px}
 footer{font-size:1.25em}
-.theme{background:transparent;color:#000}
-.theme a{line-height:0;text-decoration:none}
-footer .theme .auroracms svg{width:100px!important;height:auto}
-footer .theme .libre{margin:0 5px}
 @media(min-width:360px){
   .w-50{width:100%!important}
   .m-4{margin:.75rem 0 .75rem 0!important}

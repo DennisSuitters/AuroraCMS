@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.3 Add Permissions Options
+ * @changes    v0.0.3 Add AutoPublish Options to Status
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -1018,6 +1019,7 @@ if($cntc<0){
               <div class="input-group col-sm-10">
                 <select id="status" class="form-control" onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Change Status"':' disabled';?>>
                   <option value="unpublished"<?php echo$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
+                  <option value="autopublish"<?php echo$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                   <option value="published"<?php echo$r['status']=='published'?' selected':'';?>>Published</option>
                   <option value="delete"<?php echo$r['status']=='delete'?' selected':'';?>>Delete</option>
                 </select>

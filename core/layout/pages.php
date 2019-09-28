@@ -57,7 +57,7 @@ else{
             </tr>
           </thead>
           <tbody id="sortable">
-<?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid=0 ORDER BY ord ASC");
+<?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid=0 AND menu!='none' ORDER BY ord ASC");
 $s->execute();
 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr id="l_<?php echo$r['id'];?>" class="item subsortable">
@@ -115,7 +115,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <?php echo$r['contentType']!='index'?'<label class="switch switch-label switch-success"><input type="checkbox" id="active'.$r['id'].'" class="switch-input" data-dbid="'.$r['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0"'.($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled').'><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>':'';?>
               </td>
               <td id="controls_<?php echo$r['id'];?>" class="align-middle">
-                <div class="btn-group float-right">
+                <div class="btn-group float-left">
                   <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Edit" aria-label="Edit"':' data-tooltip="tooltip" title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
                   <?php echo$user['options']{0}==1&&$r['contentType']=='page'?'<button class="btn btn-secondary btn-sm trash" onclick="purge(\''.$r['id'].'\',\'menu\')" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
                 </div>
@@ -125,6 +125,48 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr class="ghost hidden">
               <td colspan="3">&nbsp;</td>
             </tr>
+            <tr id="l_23">
+              <td class="align-middle">
+                <a href="<?php echo URL.$settings['system']['admin'].'/pages/edit/23';?>">Coming Soon</a>
+<?php           if($user['options']{1}==1){
+                  $ss=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."suggestions` WHERE rid=23");
+                  $ss->execute();
+                  $rs=$ss->fetch(PDO::FETCH_ASSOC);
+                  echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" title="'.$rs['cnt'].' Editing Suggestions" aria-label="Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
+                }?>
+              </td>
+              <td></td>
+              <td class="align-middle text-center">
+                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views23`).text(`0`);updateButtons(`23`,`menu`,`views`,`0`);" data-tooltip="tooltip" title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views23" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+              </td>
+              <td></td>
+              <td id="controls_" class="align-middle">
+                <div class="btn-group float-left">
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/23';?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Edit" aria-label="Edit"':' data-tooltip="tooltip" title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
+                </div>
+              </td>
+            </tr>
+            <tr id="l_24">
+              <td class="align-middle">
+                <a href="<?php echo URL.$settings['system']['admin'].'/pages/edit/24';?>">Maintenance</a>
+<?php           if($user['options']{1}==1){
+                  $ss=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."suggestions` WHERE rid=24");
+                  $ss->execute();
+                  $rs=$ss->fetch(PDO::FETCH_ASSOC);
+                  echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" title="'.$rs['cnt'].' Editing Suggestions" aria-label="Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
+                }?>
+              </td>
+              <td></td>
+              <td class="align-middle text-center">
+                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views24`).text(`0`);updateButtons(`24`,`menu`,`views`,`0`);" data-tooltip="tooltip" title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views24" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+              </td>
+              <td></td>
+              <td id="controls_" class="align-middle">
+                <div class="btn-group float-left">
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/24';?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Edit" aria-label="Edit"':' data-tooltip="tooltip" title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
+                </div>
+              </td>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -133,7 +175,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
 <?php if($user['options']{1}==1){?>
   <script>
     $('#sortable').sortable({
-      items:"tr",
+      items:"tr.item",
       placeholder:".ghost",
       helper:fixWidthHelper,
       axis:"y",

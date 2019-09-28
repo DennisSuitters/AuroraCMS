@@ -7,11 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.3 Add parsing of <print view>
+ * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
  */
 $rank=0;
 $notification='';
@@ -712,7 +714,7 @@ if($show=='item'){
 				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))
 					$jsonld.=$r['file'].'"';
 				else
-					$jsonld.=URL.NOIMAGE.'"';
+					$jsonld.=URL.FAVICON.'"';
 				$jsonld.='},'.
 					'"editor":"'.htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8').'",'.
 					'"genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'",'.
@@ -724,7 +726,7 @@ if($show=='item'){
 						'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
 						'"logo":{'.
 							'"@type":"ImageObject",'.
-							'"url":"'.URL.THEME.'/images/logo.png",'.
+							'"url":"'.URL.FAVICON.'",'.
 							'"width":"400",'.
 							'"height":"55"'.
 						'}'.
@@ -748,7 +750,7 @@ if($show=='item'){
 				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))
 					$jsonld.=$r['file'].'"';
 				else
-					$jsonld.=URL.NOIMAGE.'"';
+					$jsonld.=URL.FAVICON.'"';
 				$jsonld.='},'.
   				'"description":"'.($seoDescription!=''?htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8'):htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8')).'",'.
   				'"mpn":"'.($r['barcode']==''?$r['id']:htmlspecialchars($r['barcode'],ENT_QUOTES,'UTF-8')).'",'.
@@ -788,7 +790,7 @@ if($show=='item'){
 						'"address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'",'.
 						'"telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'",'.
 						'"priceRange":"'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'",'.
-						'"image":"'.($r['file']!=''?$r['file']:URL.THEME.'/images/logo.png').'"'.
+						'"image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"'.
   				'},'.
   				'"areaServed":{'.
     				'"@type":"State",'.
@@ -804,7 +806,7 @@ if($show=='item'){
 				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))
 					$jsonld.=$r['file'].'"';
 				else
-					$jsonld.=URL.NOIMAGE.'"';
+					$jsonld.=URL.FAVICON.'"';
 				$jsonld.='},'.
 					'"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'",'.
 					'"genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'",'.
@@ -916,7 +918,12 @@ if($show=='item'){
 						'"@type":"Review",'.
 						'"itemReviewed":{'.
 							'"@type":"Product",'.
-							'"image":"'.$r['file'].'",'.
+							'"image":"';
+							if(file_exists('media'.DS.basename($r['file'])))
+								$jsonldreview.=$r['file'];
+							else
+								$jsonldreview.=URL.FAVICON;
+					$jsonldreview.='",'.
 							'"name":"'.$r['title'].'"'.
 						'},'.
 						'"reviewRating":{'.
@@ -975,6 +982,7 @@ if($show=='item'){
 			'~<more>.*?<\/more>~is',
 			'/<print page=[\"\']?notes[\"\']?>/'
 		],'',$html);
+		$html=str_replace('<print view>',$view,$html);
 		if($view=='article'||$view=='events'||$view=='news'||$view=='proofs'){
 			$sc=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE contentType=:contentType AND rid=:rid AND status!='unapproved' ORDER BY ti ASC");
 			$sc->execute([

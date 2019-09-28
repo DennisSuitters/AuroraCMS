@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.3 Add AutoPublish
+ * @changes    v0.0.3 Fix Actions
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -18,11 +20,10 @@
     <li class="breadcrumb-item active">Scheduler</li>
   </ol>
   <div class="container-fluid">
-    <div class="alert alert-info" role="alert">Not all the Scheduler Functions are currently working at this time, we are working on it though.</div>
     <div class="card">
       <div class="card-body">
         <div id="calendar-view" class="col">
-          <small>Legend: <span class="badge badge-success" data-tooltip="tooltip" title="Content items that have already been Published.">Published</span> <span class="badge badge-danger" data-tooltip="tooltip" title="Content items that have NOT been Published.">Unpublished</span></small>
+          <small>Legend: <span class="badge badge-success" data-tooltip="tooltip" title="Content items that have already been Published.">Published</span> <span class="badge badge-danger" data-tooltip="tooltip" title="Content items that have NOT been Published.">Unpublished</span> <span class="badge badge-warning" data-tooltip="tooltip" title="Content items that are set to AutoPublish.">AutoPublish</span></small>
           <div class="float-right">
             <small>View: <a class="badge badge-<?php echo !isset($args[1])?'success':'secondary';?>" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>">All</a>
 <?php $s=$db->query("SELECT DISTINCT(contentType) as contentType FROM `".$prefix."content` WHERE contentType!='booking' ORDER BY contentType ASC");
@@ -57,12 +58,12 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
       {
         id:'<?php echo$r['id'];?>',
-        title:'<?php echo ucfirst($r['contentType']).': '.$r['title'];?>',
+        title:'<?php echo$r['title'];?>',
         start:'<?php echo date("Y-m-d H:i:s",$r['pti']);?>',
-        allDay:false,
-        color:'<?php echo($r['status']=='published'?'#4dbd74':'#f86c6b');?>',
+        allDay:true,
+        color:'<?php if($r['status']=='published')echo'#4dbd74';elseif($r['status']=='autopublish')echo'#ffc107';else echo'#f86c6b';?>',
         description:'<?php echo ucfirst($r['contentType']).': '.$r['title'];?>',
-        status:'<?php echo $r['status'];?>',
+        status:'<?php echo$r['status'];?>',
         views:'<?php echo$r['views'];?>'
       },
 <?php	}?>
@@ -76,7 +77,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
         '<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="View" aria-label="View"><?php svg('view');?></button>'+
 <?php }?>
         '</div>';
-      var content='Published: '+$.fullCalendar.moment(event.start).format('HH:mm')+'<br>Views: '+event.views;
+      var content=event.description+'<br>Publish Date: '+$.fullCalendar.moment(event.start).format('Do MMM YYYY, k:mm')+'<br>Views: '+event.views;
       var el=$(this);
       el.append(layer);
       if(event.eventend!=''||event.eventend!=null||event.eventend!=0){
@@ -126,11 +127,35 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
       Pace.restart();
       updateButtons(event.id,"content","pti",event.start.unix());
       if(event.start.unix()>moment().unix()){
-        updateButtons(event.id,"content","status","unpublished");
-        event.color="#f86c6b";
-        event.status="unpublished";
-        $("#calendar").fullCalendar("updateEvent",event);
+        if(event.status=='autopublish'){
+          updateButtons(event.id,"content","status",'autopublish');
+          event.color="#ffc107";
+          event.status='autopublish';
+        }
+        if(event.status=='unpublished'){
+          updateButtons(event.id,"content","status",'unpublished');
+          event.color="#f86c6b";
+          event.status='unpublished';
+        }
+        if(event.status=='published'){
+          updateButtons(event.id,"content","status",'unpublished');
+          event.color="#f86c6b";
+          event.status='unpublished';
+        }
       }
+      if(event.start.unix()<moment().unix()){
+        if(event.status=='autopublish'){
+          updateButtons(event.id,"content","status",'autopublish');
+          event.color='#4dbd74';
+          event.status='published';
+        }
+        if(event.status=='unpublished'){
+          updateButtons(event.id,"content","status",'unpublished');
+          event.color='#f86c6b';
+          event.status='unpublished';
+        }
+      }
+      $("#calendar").fullCalendar("updateEvent",event);
     }
   });
   $(window).resize(function(){

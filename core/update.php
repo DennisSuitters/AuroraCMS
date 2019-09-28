@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.3 Add Change to Unpublished when Content is moved to future date in Scheduler.
+ * @changes    v0.0.3 Add check for Administration Activity Tracking.
  */
 echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -54,9 +56,10 @@ $s->execute([':id'=>$id]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $oldda=$r[$col];
 if($tbl=='content'&&$col=='status'&&$da=='published'){
-  $q=$db->prepare("UPDATE `".$prefix."content` SET pti=:pti WHERE id=:id");
+	if($ti>time())$status='unpublished';else$status='published';
+  $q=$db->prepare("UPDATE `".$prefix."content` SET status=:status WHERE id=:id");
   $q->execute([
-    ':pti'=>$ti,
+		':status'=>$status,
     ':id' =>$id
   ]);
 }
@@ -275,18 +278,20 @@ if(is_null($e[2])){
 	window.top.window.Pace.stop();
 <?php
 echo'</script>';
-$s=$db->prepare("INSERT INTO `".$prefix."logs` (uid,rid,username,name,view,contentType,refTable,refColumn,oldda,newda,action,ti) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
-$s->execute([
-  ':uid'=>$log['uid'],
-  ':rid'=>$log['rid'],
-  ':username'=>$log['username'],
-  ':name'=>$log['name'],
-  ':view'=>$log['view'],
-  ':contentType'=>$log['contentType'],
-  ':refTable'=>$log['refTable'],
-  ':refColumn'=>$log['refColumn'],
-  ':oldda'=>$log['oldda'],
-  ':newda'=>$log['newda'],
-  ':action'=>$log['action'],
-  ':ti'=>$log['ti']
-]);
+if($config['options']{12}==1){
+	$s=$db->prepare("INSERT INTO `".$prefix."logs` (uid,rid,username,name,view,contentType,refTable,refColumn,oldda,newda,action,ti) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
+	$s->execute([
+	  ':uid'=>$log['uid'],
+	  ':rid'=>$log['rid'],
+	  ':username'=>$log['username'],
+	  ':name'=>$log['name'],
+	  ':view'=>$log['view'],
+	  ':contentType'=>$log['contentType'],
+	  ':refTable'=>$log['refTable'],
+	  ':refColumn'=>$log['refColumn'],
+	  ':oldda'=>$log['oldda'],
+	  ':newda'=>$log['newda'],
+	  ':action'=>$log['action'],
+	  ':ti'=>$log['ti']
+	]);
+}

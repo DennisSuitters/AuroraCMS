@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.3 Add Toggle to Enable Administration Activity Tracking.
+ * @changes    v0.0.3 Change position of Toggles and Descriptions for better formatting.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -21,10 +23,10 @@
       <div class="card-body">
 <?php if($user['rank']==1000){?>
         <div class="form-group row">
-          <label for="development0" class="col-form-label col-sm-2">Development Mode</label>
-          <div class="input-group col-sm-10">
+          <div class="input-group col-sm-1">
             <label class="switch switch-label switch-success"><input type="checkbox" id="development0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0"<?php echo$config['development']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
+          <label for="development0" class="col-form-label col-sm-11">Development Mode</label>
         </div>
 <?php if(file_exists('media'.DS.'cache'.DS.'error.log')){?>
         <div id="l_0">
@@ -47,22 +49,28 @@
 <?php }
 }?>
         <div class="form-group row">
-          <label for="comingsoon0" class="col-form-label col-sm-2">Coming Soon Mode</label>
-          <div class="input-group col-sm-10">
+          <div class="input-group col-sm-1">
             <label class="switch switch-label switch-success"><input type="checkbox" id="comingsoon0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0"<?php echo$config['comingsoon']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
+          <label for="comingsoon0" class="col-form-label col-sm-11">Coming Soon Mode</label>
         </div>
         <div class="form-group row">
-          <label for="maintenance0" class="col-form-label col-sm-2">Maintenance Mode</label>
-          <div class="input-group col-sm-10">
+          <div class="input-group col-sm-1">
             <label class="switch switch-label switch-success"><input type="checkbox" id="maintenance0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0"<?php echo$config['maintenance']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
+          <label for="maintenance0" class="col-form-label col-sm-11">Maintenance Mode</label>
         </div>
         <div class="form-group row">
-          <label for="options4" class="col-form-label col-sm-2">Enable Tooltips</label>
-          <div class="input-group col-sm-10">
+          <div class="input-group col-sm-1">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options12" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="12"<?php echo$config['options']{12}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options4" class="col-form-label col-sm-11">Admin Activity Tracking</label>
+        </div>
+        <div class="form-group row">
+          <div class="input-group col-sm-1">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4"<?php echo$config['options']{4}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
+          <label for="options4" class="col-form-label col-sm-11">Enable Tooltips</label>
         </div>
         <div class="form-group row">
           <label for="uti_freq" class="col-form-label col-sm-2">Update Frequency</label>

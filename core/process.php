@@ -7,13 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
  *             and only use content Title first, then Page Title if Content empty.
  * @changes    v0.0.2 Add check if Visitor Tracking is Enabled.
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.3 Add Check if shareImage is no image and replace with FavIcon.
+ * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -197,7 +199,7 @@ $head=preg_replace([
   $view,
   URL.'rss/'.$rss.'/',
   $view=='inventory'?'product':$view,
-  $shareImage,
+  stristr($shareImage,'noimage')?URL.FAVICON:$shareImage,
   FAVICON,
   microid($config['email'],$canonical),
   isset($r['name'])?$r['name']:$config['business'],
@@ -209,7 +211,7 @@ $head=preg_replace([
     ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
-    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
+    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':'')
 ],$head);
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899)
   $head=str_replace('<meta_helper>','<link rel="stylesheet" type="text/css" href="core/css/seohelper.css">',$head);

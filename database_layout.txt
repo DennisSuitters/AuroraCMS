@@ -60,9 +60,9 @@ config
     7
     8
     9   Delete Messages When Retrieved / Show RSS Feed Icon
-    10
-    11
-    12
+    10  Related Content by Content type
+    11  Enable Visitor Tracking
+    12  Enable Administration Acivity Tracking
     13
     14
     15
@@ -110,6 +110,7 @@ config
   `email_check` int(10)
   `email_interval` int(10)
   `email_signature` text
+  `storemessages` int(1)
   `message_check_interval` int(10)
   `language` varchar(8)
   `timezone` varchar(128)
@@ -150,6 +151,7 @@ config
   `seo_yandexverification` tinytext
   `seo_alexaverification` tinytext
   `seo_domainverify` tinytext
+  `seo_pinterestverify` tinytext
   `geo_region` tinytext
   `geo_placename` tinytext
   `geo_position` tinytext
@@ -311,7 +313,7 @@ login
     6   SEO Editing
     7   Preferences Viewing or Editing
     8   System Utilization Viewing
-    9
+    9   Delete Messages When Retrieved
     10
     11
     12

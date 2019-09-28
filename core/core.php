@@ -7,15 +7,18 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.3 Fix AutoPublishing
  */
 $getcfg=true;
 require'db.php';
 if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))$config['theme']=$_GET['theme'];
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+$s=$db->prepare("UPDATE `".$prefix."content` SET status='published' WHERE status='autopublish' AND pti<:pti");
+$s->execute([':pti'=>time()]);
 if($config['php_options']{6}==1){
 	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE ti<:ti");
 	$s->execute([':ti'=>time()-2592000]);

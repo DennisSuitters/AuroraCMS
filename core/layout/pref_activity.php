@@ -32,8 +32,11 @@ while($sr=$st->fetch(PDO::FETCH_ASSOC))
     <div id="l_logs" class="row">
       <div class="col">
         <div class="activities card">
-          <div class="card-body no-padding">
-<?php $s=$db->prepare("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC");
+          <div class="card-body">
+<?php if($config['options']{12}!=1){?>
+            <div class="alert alert-info">Administration Activity Tracking is Disabled.</div>
+<?php }
+$s=$db->prepare("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC");
   $s->execute();
   $i=1;
   while($r=$s->fetch(PDO::FETCH_ASSOC)){

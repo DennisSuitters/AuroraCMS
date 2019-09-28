@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Improve Statistic Panels
  * @changes    v0.0.2 Change Stats Panels to only be displayed when their values
  *             are greater than 0.
+ * @changes    v0.0.3 Change Pages Views to show Actual Page and Content Views.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_dashboard.php';
@@ -318,6 +319,8 @@ if($bs['cnt']>0){?>
 <?php } ?>
     </div>
     <div class="row">
+<?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");
+if($s->rowCount()>0){?>      
       <div class="col-12 col-sm-6">
         <div class="card">
           <div class="card-header"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>">Recent Admin Activity</a></div>
@@ -331,8 +334,7 @@ if($bs['cnt']>0){?>
                 </tr>
               </thead>
               <tbody>
-<?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");
-  while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+<?php  while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <tr>
                   <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                   <td class="small"><?php echo$r['username'].':'.$r['name'];?></td>
@@ -344,47 +346,72 @@ if($bs['cnt']>0){?>
           </div>
         </div>
       </div>
+<?php }
+$row=array();;
+$s=$db->query("SELECT title,views FROM menu WHERE active='1' AND views!=0");
+if($s->rowCount()>0){
+  while($r=$s->fetch(PDO::FETCH_ASSOC)){
+    $row[]=[
+      'title'=>$r['title'],
+      'views'=>$r['views']
+    ];
+  }
+}
+$s=$db->query("SELECT title,views FROM content WHERE views!=0");
+if($s->rowCount()>0){
+  while($r=$s->fetch(PDO::FETCH_ASSOC)){
+    $row[]=[
+      'title'=>$r['title'],
+      'views'=>$r['views']
+    ];
+  }
+}?>
       <div class="col-12 col-sm-6">
         <div class="card">
-          <div class="card-header"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker';?>">Highest Viewed Pages</a></div>
+          <div class="card-header">Top Ten Highest Viewed Pages</div>
           <div id="seostats-pageviews" class="card-body">
-<?php $s=$db->query("SELECT urlDest,count(*) count FROM `".$prefix."tracker` GROUP BY urlDest ORDER BY count DESC LIMIT 10");?>
             <table class="table table-responsive-sm table-striped table-sm table-hover">
               <thead>
                 <tr>
-                  <th>Page</th>
-                  <th class="col text-center">Tracked Views</th>
+                  <th class="col">Page</th>
+                  <th class="col text-center">Views</th>
                 </tr>
               </thead>
               <tbody>
-<?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
-  $sc=$db->prepare("SELECT COUNT(urlDest) AS cnt FROM `".$prefix."tracker` WHERE urlDest=:urlDest");
-  $sc->execute([':urlDest'=>$r['urlDest']]);
-  $c=$sc->fetch(PDO::FETCH_ASSOC);?>
+<?php 
+function array_sort_by_column(&$a,$c,$d=SORT_DESC){
+  $sc=array();
+  foreach($a as$k=>$r){
+    $sc[$k]=$r[$c];
+  }
+  array_multisort($sc,$d,$a);
+}
+array_sort_by_column($row, 'views');
+$i=1;
+foreach($row as $r){?>
                 <tr>
-                  <td class="small text-truncated"><?php echo$r['urlDest'];?></td>
-                  <td class="text-center"><?php echo$c['cnt'];?></td>
+                  <td class="small text-truncated"><?php echo$r['title'];?></td>
+                  <td class="text-center"><?php echo$r['views'];?></td>
                 </tr>
-<?php }?>
+<?php $i++;if($i>10)break;
+}?>
               </tbody>
             </table>
           </div>
         </div>
       </div>
-    </div>
 <?php if(file_exists('CHANGELOG.md')){?>
-    <div class="row">
       <div class="col-12 col-sm-6">
         <div class="card">
-          <div class="card-header"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Github Project Updates</a></div>
+          <div class="card-header"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a></div>
           <div class="card-body">
             <pre>
 <?php include'CHANGELOG.md';?>
             </pre>
           </div>
         </div>
-<?php }?>
       </div>
+<?php }?>
     </div>
   </div>
 </main>

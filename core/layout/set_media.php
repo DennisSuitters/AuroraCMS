@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -18,7 +19,7 @@
     <li class="breadcrumb-item active">Settings</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal info" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal info" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -37,35 +38,35 @@
           <label for="mediaMaxWidth" class="control-label col-sm-2">Max Width</label>
           <div class="input-group col-sm-10">
             <input type="text" id="mediaMaxWidth" class="form-control textinput" value="<?php echo$config['mediaMaxWidth'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidth">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savemediaMaxWidth" class="btn btn-secondary save" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxWidth" class="btn btn-secondary save" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="mediaMaxHeight" class="col-form-label col-sm-2">Max Height</label>
           <div class="input-group col-sm-10">
             <input type="text" id="mediaMaxHeight" class="form-control textinput" value="<?php echo$config['mediaMaxHeight'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeight">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savemediaMaxHeight" class="btn btn-secondary save" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxHeight" class="btn btn-secondary save" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="mediaMaxWidthThumb" class="col-form-label col-sm-2">Max Thumb Width</label>
           <div class="input-group col-sm-10">
             <input type="text" id="mediaMaxWidthThumb" class="form-control textinput" value="<?php echo$config['mediaMaxWidthThumb'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidthThumb">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savemediaMaxWidthThumb" class="btn btn-secondary save" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxWidthThumb" class="btn btn-secondary save" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="mediaMaxHeightThumb" class="col-form-label col-sm-2">Max Thumb Height</label>
           <div class="input-group col-sm-10">
             <input type="text" id="mediaMaxHeightThumb" class="form-control textinput" value="<?php echo$config['mediaMaxHeightThumb'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeightThumb">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savemediaMaxHeightThumb" class="btn btn-secondary save" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxHeightThumb" class="btn btn-secondary save" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="mediaQuality" class="col-form-label col-sm-2">Image Quality</label>
           <div class="input-group col-sm-10">
             <input type="text" id="mediaQuality" class="form-control textinput" value="<?php echo$config['mediaQuality'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaQuality">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savemediaQuality" class="btn btn-secondary save" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaQuality" class="btn btn-secondary save" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
       </div>

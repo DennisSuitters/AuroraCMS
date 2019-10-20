@@ -7,15 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <!DOCTYPE html>
 <!--
      AuroraCMS - Administration - Copyright (C) Diemen Design 2019
           the MIT Licensed Open Source Content Management System.
-     
+
      Project Maintained at https://github.com/DiemenDesign/AuroraCMS
 -->
 <html lang="en" id="AuroraCMS">
@@ -50,13 +51,13 @@
             <div class="logo_slogan">The Australian Open Source Content Management System</div>
             <form id="login" class="" method="post" action="<?php echo(!empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
               <input type="hidden" name="act" value="login">
-              <div class="input-group mb-3" data-tooltip="tooltip" title="Username">
+              <div class="input-group mb-3" data-tooltip="tooltip" data-title="Username">
                 <div class="input-group-prepend">
                   <label for="username" class="input-group-text"><?php svg('user');?></label>
                 </div>
                 <input type="text" id="username" class="form-control" name="username" placeholder="Username..." required aria-required="true" aria-label="Username">
               </div>
-              <div class="input-group mb-4" data-tooltip="tooltip" title="Password">
+              <div class="input-group mb-4" data-tooltip="tooltip" data-title="Password">
                 <div class="input-group-prepend">
                   <label for="password" class="input-group-text"><?php svg('lock');?></label>
                 </div>
@@ -68,14 +69,14 @@
             </form>
             <div class="row">
               <div class="col-12 mt-n3 mb-2 text-center">
-                <button class="btn btn-link" onclick="$('#panel-rst').toggleClass('d-none');" data-tooltip="tooltip" title="Click to show Password Reset Field" aria-label="Reset Password">Reset Password</button>
+                <button class="btn btn-link" onclick="$('#panel-rst').toggleClass('d-none');" data-tooltip="tooltip" data-title="Click to show Password Reset Field" aria-label="Reset Password">Reset Password</button>
               </div>
             </div>
             <form target="rstfeedback" id="panel-rst" class="d-none" method="post" action="core/rst.php" accept-charset="UTF-8">
               <input type="hidden" name="emailtrap" value="none">
               <div class="row">
                 <div class="col-12 text-center">
-                  <div class="input-group mb-4" data-tooltip="tooltip" title="Enter Email Associcated With Account">
+                  <div class="input-group mb-4" data-tooltip="tooltip" data-title="Enter Email Associcated With Account">
                     <input type="text" id="rst" class="form-control" name="rst" value="" autocomplete="off" placeholder="Enter an Email..." required aria-required="true" aria-label="Email">
                     <div class="input-group-append">
                       <button id="rstbusy" type="submit" class="btn btn-secondary" aria-label="Send Reset Password Email"><?php svg('email-send');?></button>

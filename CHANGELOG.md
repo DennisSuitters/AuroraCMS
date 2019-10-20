@@ -1,3 +1,12 @@
+### AuroraCMS v0.0.4
+- Fix Installer Account Creation SQL.
+- Add Timezone Option to Installer Page.
+- Adjust SQL for Related Items so only Published Content is selected.
+- Add Front End Editing.
+- Add Sessions Var Options for User Permissions.
+- Fix Tracking Acquisition.
+- Fix Administration Tooltips to stop interfering with Popovers.
+
 ### AuroraCMS v0.0.3
 - Add AutoPublish Options.
 - Fix Scheduler actions.

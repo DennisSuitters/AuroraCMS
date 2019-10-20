@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -31,6 +32,6 @@ if($cat!=''){
 	]);
   $id=$db->lastInsertId();?>
 <script>
-  window.top.window.$('#category').append('<div id="l_<?php echo$id;?>" class="form-group row"><div class="input-group col"><label for="cat<?php echo$id;?>" class="input-group-text">Category</label><input type="text" id="cat<?php echo$id;?>" class="form-control" value="<?php echo$cat;?>" readonly><label for="ct<?php echo$id;?>" class="input-group-text">Content</label><input type="text" id="ct<?php echo$id;?>" class="form-control" value="<?php echo$ct;?>" readonly><div class="input-group-text">Image</div><div class="input-group-append img"><?php echo$icon!=''?'<a href="'.$icon.'" data-lightbox="lightbox"><img id="thumbimage" src="'.$icon.'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?></div><div class="input-group-append"><form target="sp" action="core/purge.php"><input type="hidden" name="id" value="<?php echo$id;?>"><input type="hidden" name="t" value="choices"><button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button></form></div></div></div>');
+  window.top.window.$('#category').append('<div id="l_<?php echo$id;?>" class="form-group row"><div class="input-group col"><label for="cat<?php echo$id;?>" class="input-group-text">Category</label><input type="text" id="cat<?php echo$id;?>" class="form-control" value="<?php echo$cat;?>" readonly><label for="ct<?php echo$id;?>" class="input-group-text">Content</label><input type="text" id="ct<?php echo$id;?>" class="form-control" value="<?php echo$ct;?>" readonly><div class="input-group-text">Image</div><div class="input-group-append img"><?php echo$icon!=''?'<a href="'.$icon.'" data-lightbox="lightbox"><img id="thumbimage" src="'.$icon.'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?></div><div class="input-group-append"><form target="sp" action="core/purge.php"><input type="hidden" name="id" value="<?php echo$id;?>"><input type="hidden" name="t" value="choices"><button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button></form></div></div></div>');
 </script>
 <?php }

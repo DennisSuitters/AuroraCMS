@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <script>
 var unsaved=false;
@@ -202,7 +203,7 @@ if(isset($r['due_ti'])){?>
             $('#thumb').val(x.replace('media','media/thumbs')+'.png');
           }
           if(t=='category'){
-            
+
           }else if(t!='media'||t!='category'){
             if(t=='config'&&c=='php_honeypot'){
               $('#php_honeypot_link').html('<a target="_blank" href="'+file.url+'">'+file.url+'</a>');
@@ -232,7 +233,7 @@ if(isset($r['due_ti'])){?>
               filename="core/images/i-file-docs.svg";
             }
             var timestamp = $.now();
-            $('#attachments').append('<a id="a_'+timestamp+'" target="_blank" class="card col-2 p-0" href="'+file.url+'" title="'+file.url.replace(/^.*[\\\/]/,'')+'"><img class="card-img-top bg-white" src="'+filename+'" alt="'+file.url+'"><span class="card-footer text-truncate p-0 pl-1 pr-1 small">'+file.url.replace(/^.*[\\\/]/,'')+'</span><span class="attbuttons"><button class="btn btn-secondary trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('trash');?></button></span></a>');
+            $('#attachments').append('<a id="a_'+timestamp+'" target="_blank" class="card col-2 p-0" href="'+file.url+'" data-title="'+file.url.replace(/^.*[\\\/]/,'')+'"><img class="card-img-top bg-white" src="'+filename+'" alt="'+file.url+'"><span class="card-footer text-truncate p-0 pl-1 pr-1 small">'+file.url.replace(/^.*[\\\/]/,'')+'</span><span class="attbuttons"><button class="btn btn-secondary trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('trash');?></button></span></a>');
             var atts=$('#atts').val();
             if(atts!='')atts+=',';
             atts+=file.url;
@@ -477,6 +478,11 @@ if(isset($r['due_ti'])){?>
       }
     }).click(function(e){
       $(this).popover('toggle');
+      $('.pathviewer').draggable({
+        appendTo: 'document',
+        addClasses: false,
+        handle: 'h3',
+      });
     }).on('shown.bs.popover',function(e) {
       var current_popover='#'+$(e.target).attr('aria-describedby');
       var $cur_pop=$(current_popover);

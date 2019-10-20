@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -45,7 +46,7 @@ if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
           if($h->isCommentSpammer()==1)echo'a Comment Spammer';
           if($h->isHarvester()==1)echo'an Email Harvester';
           if($h->isSearchEngine()==1)echo', but could be a Search Engine.<br>';else echo'.<br>';
-          if($h->getThreatScore()>0)echo'The Threat Score for this record is <strong>'.$h->getThreatScore().'</strong> <a target="_blank" href="https://www.projecthoneypot.org/threat_info.php" data-tooltip="tooltip" title="Information about what this value represents.">?</a>.';
+          if($h->getThreatScore()>0)echo'The Threat Score for this record is <strong>'.$h->getThreatScore().'</strong> <a target="_blank" href="https://www.projecthoneypot.org/threat_info.php" data-tooltip="tooltip" data-title="Information about what this value represents.">?</a>.';
         }
       }else
         echo'No Recorded Incidents were found...';
@@ -57,7 +58,7 @@ if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
     <form id="blacklist<?php echo$idh;?>" method="post" action="core/add_blacklist.php">
       <input type="hidden" name="id" value="<?php echo$id;?>">
       <input type="hidden" name="t" value="<?php echo$t;?>">
-      <button class="btn btn-secondary btn-xs" data-tooltip="tooltip" title="Add Oringinators IP to Blacklist" aria-label="Add"><?php echo svg2('security');?></button>
+      <button class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Add Oringinators IP to Blacklist" aria-label="Add"><?php echo svg2('security');?></button>
     </form>
   </div>
   </div>

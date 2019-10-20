@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -17,8 +18,8 @@
     <li class="breadcrumb-item active">Activity</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a href="#" class="btn btn-ghost-normal trash" onclick="purge('0','logs');return false;" data-tooltip="tooltip" data-placement="left" title="Purge All" aria-label="Purge All"><?php svg('purge');?></a>
-        <a href="#" class="btn btn-ghost-normal dropdown-toggle" data-toggle="dropdown" data-tooltip="tooltip" data-placement="left" title="Show Items" aria-label="Show Items"><?php svg('view');?></a>
+        <a href="#" class="btn btn-ghost-normal trash" onclick="purge('0','logs');return false;" data-tooltip="tooltip" data-placement="left" data-title="Purge All" aria-label="Purge All"><?php svg('purge');?></a>
+        <a href="#" class="btn btn-ghost-normal dropdown-toggle" data-toggle="dropdown" data-tooltip="tooltip" data-placement="left" data-title="Show Items" aria-label="Show Items"><?php svg('view');?></a>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>">All</a>
 <?php $st=$db->query("SELECT DISTINCT action FROM `".$prefix."logs` ORDER BY action ASC");
@@ -78,8 +79,8 @@ $s=$db->prepare("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC");
                     <?php echo$action;?>
                   </p>
                   <div class="btn-group float-right">
-                    <?php echo$r['action']=='update'?'<button class="btn btn-secondary" onclick="restore(\''.$r['id'].'\');" data-tooltip="tooltip" title="Restore" aria-label="Restore">'.svg2('undo').'</button>':'';?>
-                    <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','logs')" data-tooltip="tooltip" title="Purge" aria-label="Purge"><?php svg('trash');?></button>
+                    <?php echo$r['action']=='update'?'<button class="btn btn-secondary" onclick="restore(\''.$r['id'].'\');" data-tooltip="tooltip" data-title="Restore" aria-label="Restore">'.svg2('undo').'</button>':'';?>
+                    <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','logs')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('trash');?></button>
                   </div>
                 </div>
               </div>

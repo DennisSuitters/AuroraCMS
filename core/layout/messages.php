@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.2 Add Permissions Options.
+ * @changes    v0.0.4 Fix Tooltips.
  */
 function strip_html_tags($t,$l=400){
  $t=preg_replace([
@@ -143,7 +144,7 @@ if($user['options']{0}==1){
         if($scc->rowCount()<1){?>
                     <form id="whitelist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                      <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="Add to Whitelist" aria-label="Add to Whitelist"><?php echo svg2('whitelist');?></button>
+                      <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add to Whitelist" aria-label="Add to Whitelist"><?php echo svg2('whitelist');?></button>
                     </form>
 <?php }
       $scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
@@ -151,11 +152,11 @@ if($user['options']{0}==1){
       if($scc->rowCount()<1){?>
                     <form id="blacklist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messageblacklist.php">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                      <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="Add to Blacklist" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
+                      <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
                     </form>
 <?php } ?>
-                    <button class="btn btn-secondary btn-sm" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');" data-tooltip="tooltip" title="Move to Spam Folder" aria-label="Move to Spam Folder"><?php svg('email-spam');?></button>
-                    <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','messages')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="btn btn-secondary btn-sm" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');" data-tooltip="tooltip" data-title="Move to Spam Folder" aria-label="Move to Spam Folder"><?php svg('email-spam');?></button>
+                    <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','messages')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
 <?php }?>
                 </div>
@@ -197,7 +198,7 @@ if($user['options']{0}==1){
     var f=function(){
       $('#checkmessages').removeClass('d-none');
       $.ajax({
-        url:"core/get_messages.php?folder=<?php echo$folder;?>",  
+        url:"core/get_messages.php?folder=<?php echo$folder;?>",
         success:function(data){
           $('#allmessages').append(data);
           $('#checkmessages').addClass('d-none');

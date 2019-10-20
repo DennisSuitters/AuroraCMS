@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -71,14 +72,14 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="php_options3" class="col-form-label col-sm-2" data-tooltip="tooltip" title="Toggle Project Honey Pot.">Auto Blacklist</label>
+              <label for="php_options3" class="col-form-label col-sm-2" data-tooltip="tooltip" data-title="Toggle Project Honey Pot.">Auto Blacklist</label>
               <div class="input-group col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options3" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3"<?php echo$config['php_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
                 <div class="help-block col text-muted small text-right">Auto Blacklisting requires an API Key to be entered below.<br>Auto Blacklisting filters IP's against Project Honey Pot's http:BL for public facing pages with data entry.</div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="php_options4" class="col-form-label col-sm-2" data-tooltip="tooltip" title="Toggle Project Honey Pot.">Block Blacklisted IP's</label>
+              <label for="php_options4" class="col-form-label col-sm-2" data-tooltip="tooltip" data-title="Toggle Project Honey Pot.">Block Blacklisted IP's</label>
               <div class="input-group col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4"<?php echo$config['php_options']{4}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
@@ -87,7 +88,7 @@
               <label for="php_APIkey" class="col-form-label col-sm-2">PHP API Key</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="php_APIkey" class="form-control textinput" value="<?php echo$config['php_APIkey'];?>" data-dbid="1" data-dbt="config" data-dbc="php_APIkey" placeholder="Enter a Project Honey Pot API Key...">
-                <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savephp_APIkey" class="btn btn-secondary save" data-dbid="php_APIkey" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savephp_APIkey" class="btn btn-secondary save" data-dbid="php_APIkey" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
@@ -97,15 +98,15 @@
                   <?php echo$config['php_honeypot']!=''?'<a target="_blank" href="'.$config['php_honeypot'].'">'.$config['php_honeypot'].'</a>':'Honey Pot File Not Uploaded...';?>
                 </div>
                 <div class="input-group-append">
-                  <button class="btn btn-secondary" onclick="elfinderDialog('1','config','php_honeypot');" data-tooltip="tooltip" title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button>
+                  <button class="btn btn-secondary" onclick="elfinderDialog('1','config','php_honeypot');" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button>
                 </div>
                 <div class="input-group-append">
-                  <button class="btn btn-secondary trash" onclick="updateButtons('1','config','php_honeypot','');" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  <button class="btn btn-secondary trash" onclick="updateButtons('1','config','php_honeypot','');" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                 </div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="php_options2" class="col-form-label col-sm-2" data-tooltip="tooltip" title="Toggle Quick Link.">Quick Link</label>
+              <label for="php_options2" class="col-form-label col-sm-2" data-tooltip="tooltip" data-title="Toggle Quick Link.">Quick Link</label>
               <div class="input-group col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options2" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2"<?php echo$config['php_options']{2}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
@@ -118,7 +119,7 @@
                   <input type="hidden" name="t" value="config">
                   <input type="hidden" name="c" value="php_quicklink">
                   <div class="input-group card-header p-2 mb-0">
-                    <button type="submit" id="php_quicklink_save" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-placement="bottom" title="Save" aria-label="Save"><?php svg('save');?></button>
+                    <button type="submit" id="php_quicklink_save" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save"><?php svg('save');?></button>
                   </div>
                   <div class="input-group">
                     <textarea id="php_quicklink" class="form-control" style="height:100px" name="da" onkeyup="$('#php_quicklink_save').addClass('btn-danger');"><?php echo $config['php_quicklink'];?></textarea>
@@ -165,7 +166,7 @@
                 </div>
                 <div class="form-group">
                   <div class="input-group card-header p-2 mb-0">
-                    <button id="codeSave" class="btn btn-secondary btn-sm" onclick="populateTextarea();" data-tooltip="tooltip" data-placement="bottom" title="Save" aria-label="Save"><?php svg('save');?></button>
+                    <button id="codeSave" class="btn btn-secondary btn-sm" onclick="populateTextarea();" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save"><?php svg('save');?></button>
                   </div>
                 </div>
                 <div class="form-group" style="margin-top:-15px">
@@ -216,7 +217,7 @@
                     <th class="col-xs-3 text-center">Reason</th>
                     <th class="col-xs-2">
                       <div class="btn-group float-right">
-                        <button class="btn btn-secondary btn-sm trash" onclick="purge('0','iplist');return false;" data-tooltip="tooltip" title="Purge All" aria-label="Purge All"><?php svg('purge');?></button>
+                        <button class="btn btn-secondary btn-sm trash" onclick="purge('0','iplist');return false;" data-tooltip="tooltip" data-title="Purge All" aria-label="Purge All"><?php svg('purge');?></button>
                       </div>
                     </th>
                   </tr>
@@ -232,9 +233,9 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <td class="text-left small"><?php echo$r['reason'];?></td>
                     <td id="controls_<?php echo$r['id'];?>">
                       <div class="btn-group float-right">
-                        <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
-                        <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','iplist');return false;" data-tooltip="tooltip" title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                        <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
+                        <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
+                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','iplist');return false;" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
                       </div>
                     </td>
                   </tr>
@@ -253,7 +254,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <th class="col-xs-3 text-center">IP</th>
                     <th class="col-xs-3">
                       <div class="btn-group float-right">
-                        <button class="btn btn-secondary btn-sm trash" onclick="purge('0','whitelist');return false;" data-tooltip="tooltip" title="Purge All" aria-label="Purge All"><?php svg('purge');?></button>
+                        <button class="btn btn-secondary btn-sm trash" onclick="purge('0','whitelist');return false;" data-tooltip="tooltip" data-title="Purge All" aria-label="Purge All"><?php svg('purge');?></button>
                       </div>
                     </th>
                   </tr>
@@ -268,9 +269,9 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <td class="text-center small"><?php echo'<strong>'.$r['ip'].'</strong>';?></td>
                     <td id="controls_<?php echo$r['id'];?>">
                       <div class="btn-group float-right">
-                        <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
-                        <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;" data-tooltip="tooltip" title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                        <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
+                        <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
+                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
                       </div>
                     </td>
                   </tr>

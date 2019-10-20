@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Add Page Editing.
  */
 if(stristr($html,'<settings')){
 	preg_match('/<settings items="(.*?)">/',$html,$matches);
@@ -25,7 +26,13 @@ if($page['notes']!=''){
 		'/<print page=[\"\']?notes[\"\']?>/',
 		'/<\/?pagenotes>/'
 	],[
-		rawurldecode($page['notes']),
+		(isset($_SESSION['rank'])&&$_SESSION['rank']>899?
+		'<form id="note-form" target="sp" enctype="multipart/form-data" method="post" action="core/update.php">'.
+			'<input type="hidden" name="id" value="'.$page['id'].'">'.
+			'<input type="hidden" name="t" value="menu">'.
+			'<input type="hidden" name="c" value="notes">'.
+			'<textarea class="editable" name="da">'.rawurldecode($page['notes']).'</textarea>'.
+		'</form>':rawurldecode($page['notes'])),
 		''
 	],$html);
 }else

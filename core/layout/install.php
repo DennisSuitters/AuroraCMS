@@ -7,17 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Change table prefix.
+ * @changes    v0.0.4 Add Timezone Option.
  */?>
 <!DOCTYPE HTML>
-<!--
-     AuroraCMS - Instaler - Copyright (C) Diemen Design 2019
-          the MIT Licensed Open Source Content Management System.
-
-     Project Maintained at https://github.com/DiemenDesign/AuroraCMS
--->
 <html lang="en" id="AuroraCMS">
 	<head>
 		<meta charset="UTF-8">
@@ -95,7 +91,7 @@ if($error==0){?>
 							</div>
 							<div class="form-group">
 								<label for="dbprefix">Table Prefix</label>
-								<input id="dbprefix" name="dbprefix" type="text" class="form-control" value="lcms_" placeholder="Enter a Table Prefix...">
+								<input id="dbprefix" name="dbprefix" type="text" class="form-control" value="aurora_" placeholder="Enter a Table Prefix...">
 							</div>
 							<div class="form-group">
 								<label for="dbschema">Schema</label>
@@ -165,6 +161,23 @@ if($error==0){?>
 							<div class="form-group">
 								<label for="apassword">Password</label>
 								<input id="apassword" name="apassword" type="password" class="form-control" value="" placeholder="Enter a Password..." required>
+							</div>
+							<div class="form-group">
+								<label for="atimezone">Timezone</label>
+								<select id="atimezone" name="atimezone" class="form-control">
+									<option value="default">System Default</option>
+<?php             $o=array(
+	                  'Australia/Perth'      => "(GMT+08:00) Perth",
+	                  'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
+	                  'Australia/Darwin'     => "(GMT+09:30) Darwin",
+	                  'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
+	                  'Australia/Canberra'   => "(GMT+10:00) Canberra",
+	                  'Australia/Hobart'     => "(GMT+10:00) Hobart",
+	                  'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
+	                  'Australia/Sydney'     => "(GMT+10:00) Sydney"
+	                );
+	                foreach($o as$tz=>$label)echo'<option value="'.$tz.'">'.$label.'</option>';?>
+								</select>
 							</div>
 							<div class="float-right">
 								<button type="submit" class="btn btn-primary btn-lg" role="button" aria-label="Go to Next Step">Next</button>

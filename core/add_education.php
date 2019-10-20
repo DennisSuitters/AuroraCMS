@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -62,7 +63,7 @@ echo'<script>'.
 				'<div class="form-control" readonly>'.$da.'</div>'.
 			'</div>'.
 			'<div class="col-1">'.
-				'<button class="btn btn-secondary trash" onclick="purge(`'.$id.'`,`content`)" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+				'<button class="btn btn-secondary trash" onclick="purge(`'.$id.'`,`content`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 			'</div>'.
 		'</div>'.
 		'<hr>'.

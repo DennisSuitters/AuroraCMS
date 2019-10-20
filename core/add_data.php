@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 $getcfg=true;
 require'db.php';
@@ -70,7 +71,7 @@ echo'<tr id="l_'.$id.'">'.
 				'<form target="sp" action="core/purge.php">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
 					'<input type="hidden" name="t" value="rewards">'.
-					'<button class="btn btn-default btn-sm trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+					'<button class="btn btn-default btn-sm trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 				'</form>'.
 			'</td>'.
 		'</tr>';?>
@@ -103,7 +104,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 					'<form target="sp" action="core/purge.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
 						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-default trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 					'</form>'.
 				'</div>'.
 			'</div>'.
@@ -134,13 +135,13 @@ echo'<div id="l_'.$id.'" class="form-group">'.
   window.top.window.$('#social').append(`<?php
 echo'<div id="l_'.$id.'" class="form-group row">'.
 			'<div class="input-group col-12">'.
-				'<div class="input-group-text" data-tooltip="tooltip" title="'.ucfirst($icon).'"><span class="social" aria-label="'.ucfirst($icon).'">'.svg2('social-'.$icon).'</span></div>'.
+				'<div class="input-group-text" data-tooltip="tooltip" data-title="'.ucfirst($icon).'"><span class="social" aria-label="'.ucfirst($icon).'">'.svg2('social-'.$icon).'</span></div>'.
 				'<input type="text" class="form-control" value="'.$url.'" placeholder="Enter a URL..." readonly>'.
 				'<div class="input-group-append">'.
 					'<form target="sp" action="core/purge.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
 						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 					'</form>'.
 				'</div>'.
 			'</div>'.
@@ -191,7 +192,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 					'<form target="sp" action="core/purge.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
 						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-default trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 					'</form>'.
 				'</div>'.
 			'</div>'.
@@ -234,7 +235,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
 				'<form target="sp" action="core/purge.php">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
 					'<input type="hidden" name="t" value="choices">'.
-					'<button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+					'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 				'</form>'.
 			'</div>'.
 		'</div>'.
@@ -276,7 +277,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
 					'<form target="sp" action="core/purge.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
 						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 					'</form>'.
 				'</div>'.
 			'</div>'.
@@ -351,7 +352,7 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
 			'<div class="media-body">'.
 				'<div class="well">'.
 					'<div id="controls-'.$id.'" class="btn-group btn-comments">'.
-						'<button class="btn btn-default btn-sm trash" onclick="purge(`'.$id.'`,`comments`);" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="btn btn-default btn-sm trash" onclick="purge(`'.$id.'`,`comments`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 					'</div>'.
 					'<h6 class="media-heading">'.$name.'</h6>'.
 					'<time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.
@@ -437,8 +438,8 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
 				'<img class="card-img" src="'.$fu.'" alt="Media '.$iid.'">'.
 			'</a>'.
 			'<div class="btn-group float-right">'.
-				'<div class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
-				'<button class="btn btn-secondary trash btn-sm" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+				'<div class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
+				'<button class="btn btn-secondary trash btn-sm" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 			'</div>'.
 		'</div>';?>
 ');
@@ -490,7 +491,7 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
 									'<input type="hidden" name="t" value="orderitems">'.
 									'<input type="hidden" name="c" value="quantity">'.
 									'<input type="hidden" name="da" value="0">'.
-									'<button class="btn btn-default trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+									'<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 								'</form>'.
 							'</td>'.
 						'</tr>';

@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Option to not store messages.
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -18,7 +19,7 @@
     <li class="breadcrumb-item active">Settings</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -41,7 +42,7 @@
               <input type="text" id="sub" class="form-control" name="sub" value="" placeholder="Enter a Subject...">
               <label for="eml" class="input-group-text">Email</label>
               <input type="text" id="eml" class="form-control" name="eml" value="" placeholder="Enter an Email...">
-              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></div>
+              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
             </div>
           </div>
         </form>
@@ -59,7 +60,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 <form target="sp" action="core/purge.php">
                   <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
                   <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                 </form>
               </div>
             </div>
@@ -117,7 +118,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               <input type="text" id="mailusr" class="form-control" name="mailusr" value="" placeholder="Enter a Username...">
               <label for="mailpwd" class="input-group-text">Password</label>
               <input type="text" id="mailpwd" class="form-control" name="mailpwd" value="" placeholder="Enter a Password">
-              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></div>
+              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
             </div>
           </div>
         </form>
@@ -165,7 +166,7 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
                 <form target="sp" action="core/purge.php">
                   <input type="hidden" name="id" value="<?php echo$rm['id'];?>">
                   <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                 </form>
               </div>
             </div>
@@ -174,24 +175,24 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
         </div>
         <hr>
         <legend>AutoReply Email</legend>
-        <div class="col-12 text-right"><small>Tokens:</small> 
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{business}');return false;">{business}</a> 
+        <div class="col-12 text-right"><small>Tokens:</small>
+          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{business}');return false;">{business}</a>
           <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{date}');return false;">{date}</a>
         </div>
         <div class="form-group row">
           <label for="contactAutoReplySubject" class="col-form-label col-sm-2">Subject</label>
           <div class="input-group col-sm-10">
             <input type="text" id="contactAutoReplySubject" class="form-control textinput" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecontactAutoReplySubject" class="btn btn-secondary save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecontactAutoReplySubject" class="btn btn-secondary save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="contactAutoReplyLayout" class="col-form-label col-sm-2">Layout</label>
           <div class="input-group card-header col-sm-10 p-0">
-            <div class="col text-right"><small>Tokens:</small> 
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{name}');return false;">{name}</a> 
+            <div class="col text-right"><small>Tokens:</small>
+              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{subject}');return false;">{subject}</a>
             </div>
             <form method="post" target="sp" action="core/update.php">

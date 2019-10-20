@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Move Settings Links into Menu.
- * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.2 Add Permissions Options.
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <header class="app-header navbar">
   <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" data-toggle="sidebar-show" aria-controls="sidebar" role="presentation" aria-label="Toggle Navigation Sidebar"><span class="sr-only">Toggle Sidebar</span><span class="navbar-toggler-icon"></span></button>
@@ -29,9 +30,9 @@
   </div>
   <button class="navbar-toggler sidebar-toggler ml-sm-5 d-md-down-none" type="button" data-toggle="sidebar-lg-show" aria-controls="sidebar" role="presentation" aria-label="Toggle Navigation Sidebar"><span class="sr-only">Toggle Sidebar</span><span class="navbar-toggler-icon"></span></button>
   <ul class="nav navbar-nav ml-auto">
-    <li class="nav-item"><a class="nav-link" href="#" role="button" data-tooltip="tooltip" data-placement="left" title="Search" onclick="$('#searchbox').toggleClass('d-none');return false;"><?php svg('search');?></a></li>
+    <li class="nav-item"><a class="nav-link" href="#" role="button" data-tooltip="tooltip" data-placement="left" data-title="Search" onclick="$('#searchbox').toggleClass('d-none');return false;"><?php svg('search');?></a></li>
     <li class="nav-item dropdown d-none d-sm-block">
-      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" title="Notifications"><?php svg('bell');?><span id="nav-stat" class="badge badge-pill badge-danger"><?php echo($navStat>0?$navStat:'');?></span></a>
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" data-title="Notifications"><?php svg('bell');?><span id="nav-stat" class="badge badge-pill badge-danger"><?php echo($navStat>0?$navStat:'');?></span></a>
       <div id="nav-stat-list" class="dropdown-menu dropdown-menu-right dropdown-menu-lg shadow">
         <div class="dropdown-header text-center"><strong>Notifications</strong></div>
 <?php   echo$nc['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/content">'.svg2('comments').' Comments<span id="nav-nc" class="badge badge-info">'.$nc['cnt'].'</span></a>':'';
@@ -45,7 +46,7 @@
       </div>
     </li>
     <li class="nav-item dropdown">
-      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" title="Account"><img class="img-avatar bg-white" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar'])))
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" data-title="Account"><img class="img-avatar bg-white" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar'])))
         echo'media'.DS.'avatar'.DS.basename($user['avatar']);
       elseif($user['gravatar']!=''){
         if(stristr($user['gravatar'],'@'))

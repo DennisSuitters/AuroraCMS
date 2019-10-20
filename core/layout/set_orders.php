@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -17,7 +18,7 @@
     <li class="breadcrumb-item active">Settings</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -32,7 +33,7 @@
               <input type="text" id="t" class="form-control" name="t" value="" placeholder="Enter an Option...">
               <label for="v" class="input-group-text">Cost</label>
               <input type="text" id="v" class="form-control" name="v" value="" placeholder="Enter Cost...">
-              <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></div>
+              <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
             </div>
           </div>
         </form>
@@ -50,7 +51,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 <form target="sp" action="core/purge.php">
                   <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
                   <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                 </form>
               </div>
             </div>
@@ -63,28 +64,28 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           <label for="bank" class="col-form-label col-sm-2">Bank</label>
           <div class="input-group col-sm-10">
             <input type="text" id="bank" class="form-control textinput" value="<?php echo$config['bank'];?>" data-dbid="1" data-dbt="config" data-dbc="bank" placeholder="Enter Bank...">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebank" class="btn btn-secondary save" data-dbid="bank" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebank" class="btn btn-secondary save" data-dbid="bank" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="bankAccountName" class="col-form-label col-sm-2">Account Name</label>
           <div class="input-group col-sm-10">
             <input type="text" id="bankAccountName" class="form-control textinput" value="<?php echo$config['bankAccountName'];?>"data-dbid="1" data-dbt="config" data-dbc="bankAccountName" placeholder="Enter an Account Name...">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebankAccountName" class="btn btn-secondary save" data-dbid="bankAccountName" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebankAccountName" class="btn btn-secondary save" data-dbid="bankAccountName" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="bankAccountNumber" class="col-form-label col-sm-2">Account Number</label>
           <div class="input-group col-sm-10">
             <input type="text" id="bankAccountNumber" class="form-control textinput" value="<?php echo$config['bankAccountNumber'];?>" data-dbid="1" data-dbt="config" data-dbc="bankAccountNumber" placeholder="Enter an Account Number...">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebankAccountNumber" class="btn btn-secondary save" data-dbid="bankAccountNumber" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebankAccountNumber" class="btn btn-secondary save" data-dbid="bankAccountNumber" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="bankBSB" class="col-form-label col-sm-2">BSB</label>
           <div class="input-group col-sm-10">
             <input type="text" id="bankBSB" class="form-control textinput" value="<?php echo$config['bankBSB'];?>" data-dbid="1" data-dbt="config" data-dbc="bankBSB" placeholder="Enter a BSB...">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebankBSB" class="btn btn-secondary save" data-dbid="bankBSB" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebankBSB" class="btn btn-secondary save" data-dbid="bankBSB" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <hr>
@@ -93,13 +94,13 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           <label for="bankPayPal" class="col-form-label col-sm-2">Account</label>
           <div class="input-group col-sm-10">
             <input type="text" id="bankPayPal" class="form-control textinput" value="<?php echo$config['bankPayPal'];?>" data-dbid="1" data-dbt="config" data-dbc="bankPayPal" placeholder="Enter a PayPal Account...">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebankPayPal" class="btn btn-secondary save" data-dbid="bankPayPal" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebankPayPal" class="btn btn-secondary save" data-dbid="bankPayPal" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="ipn" class="col-form-label col-sm-2">IPN</label>
           <div class="input-group col-sm-10">
-            <input type="text" id="ipn" class="form-control" value="Not Yet Implemented" readonly data-tooltip="tooltip" title="Not Yet Implemented">
+            <input type="text" id="ipn" class="form-control" value="Not Yet Implemented" readonly data-tooltip="tooltip" data-title="Not Yet Implemented">
           </div>
         </div>
         <hr>
@@ -120,11 +121,11 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         <div class="form-group row">
           <label for="orderEmailNotes" class="col-form-label col-sm-2">Order Notes</label>
           <div class="input-group card-header col-sm-10 p-0">
-            <div class="col text-right"><small>Tokens:</small> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{name}');return false;">{name}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{first}');return false;">{first}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{last}');return false;">{last}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{date}');return false;">{date}</a> 
+            <div class="col text-right"><small>Tokens:</small>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{name}');return false;">{name}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{first}');return false;">{first}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{last}');return false;">{last}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{date}');return false;">{date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{order_number}');return false;">{order_number}</a>
             </div>
             <form method="post" target="sp" action="core/update.php">
@@ -143,29 +144,29 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <label class="switch switch-label switch-success"><input type="checkbox" id="orderEmailReadNotification" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" role="checkbox"<?php echo$config['orderEmailReadNotification']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
         </div>
-        <div class="col-12 text-right"><small>Tokens:</small> 
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{name}');return false;">{name}</a> 
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{first}');return false;">{first}</a> 
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{last}');return false;">{last}</a> 
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{date}');return false;">{date}</a> 
+        <div class="col-12 text-right"><small>Tokens:</small>
+          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{name}');return false;">{name}</a>
+          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{first}');return false;">{first}</a>
+          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{last}');return false;">{last}</a>
+          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{date}');return false;">{date}</a>
           <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{order_number}');return false;">{order_number}</a>
         </div>
         <div class="form-group row">
           <label for="orderEmailSubject" class="col-form-label col-sm-2">Subject</label>
           <div class="input-group col-sm-10">
             <input type="text" id="orderEmailSubject" class="form-control textinput" value="<?php echo$config['orderEmailSubject'];?>" data-dbid="1" data-dbt="config" data-dbc="orderEmailSubject">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveorderEmailSubject" class="btn btn-secondary save" data-dbid="orderEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveorderEmailSubject" class="btn btn-secondary save" data-dbid="orderEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="orderEmailLayout" class="col-form-label col-sm-2">Layout</label>
           <div class="input-group card-header col-sm-10 p-0">
-            <div class="col text-right"><small>Tokens:</small> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{last}');return false;">{last}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{date}');return false;">{date}</a> 
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{order_number}');return false;">{order_number}</a> 
+            <div class="col text-right"><small>Tokens:</small>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{date}');return false;">{date}</a>
+              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{order_number}');return false;">{order_number}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{notes}');return false;">{notes}</a>
             </div>
             <form method="post" target="sp" action="core/update.php">

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -112,7 +113,7 @@
               </select>
               <label for="url" class="input-group-text">URL</label>
               <input type="text" id="url" class="form-control" name="url" value="" placeholder="Enter a URL...">
-              <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></div>
+              <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
             </div>
           </div>
         </form>
@@ -122,13 +123,13 @@ $ss->execute();
 while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           <div id="l_<?php echo$rs['id'];?>" class="form-group row">
             <div class="input-group col-12">
-              <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
+              <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
               <input type="text" id="icon<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
               <div class="input-group-append">
                 <form target="sp" action="core/purge.php">
                   <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
                   <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                 </form>
               </div>
             </div>

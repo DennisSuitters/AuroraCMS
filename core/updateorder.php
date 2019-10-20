@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -182,7 +183,7 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
 							'<input type="hidden" name="t" value="orderitems">'.
 							'<input type="hidden" name="c" value="quantity">'.
 							'<input type="hidden" name="da" value="0">'.
-							'<button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+							'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 						'</form>'.
 					'</td>'.
 				'</tr>';

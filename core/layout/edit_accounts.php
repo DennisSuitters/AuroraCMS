@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
- * @changes    v0.0.2 Add Description for Profiles and Meta-Description data
+ * @changes    v0.0.2 Add Permissions Options.
+ * @changes    v0.0.2 Add Description for Profiles and Meta-Description data.
+ * @changes    v0.0.4 Fix Tooltips.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -23,7 +24,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-item active"><span id="usersusername"><?php echo$r['username'];?></span>:<span id="usersname"><?php echo$r['name'];?></span></li>
     <li class="breadcrumb-menu">
       <div class="btn-group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -58,7 +59,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <div class="input-group col-sm-10">
                 <input type="text" id="username" class="form-control textinput" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveusername" class="btn btn-secondary save" data-dbid="username" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveusername" class="btn btn-secondary save" data-dbid="username" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
               </div>
               <div id="uerror" class="alert alert-danger col-sm-10 float-right d-none" role="alert">Username already exists!</div>
@@ -68,12 +69,12 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <div class="input-group col-sm-10">
                 <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
               </div>
             </div>
             <div class="form-group row">
-              <label for="newsletter" class="col-form-label col-8 col-sm-2" data-tooltip="tooltip" title="Toggle Newsletter Subscription.">Subscriber</label>
+              <label for="newsletter" class="col-form-label col-8 col-sm-2" data-tooltip="tooltip" data-title="Toggle Newsletter Subscription.">Subscriber</label>
               <div class="input-group col-4 col-sm-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0"<?php echo($r['newsletter']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
@@ -89,7 +90,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   <div class="input-group-append">
                     <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <input type="hidden" name="act" value="add_avatar">
-                    <div class="btn btn-secondary custom-file" data-tooltip="tooltip" title="Browse Computer for Files.">
+                    <div class="btn btn-secondary custom-file" data-tooltip="tooltip" data-title="Browse Computer for Files.">
                       <input id="avatarfu" type="file" class="custom-file-input hidden" name="fu" onchange="form.submit()">
                       <label for="avatarfu" aria-label="Browse Computer for Files."><?php svg('browse-computer');?></label>
                     </div>
@@ -104,7 +105,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   </div>
 <?php if($user['options']{5}==1){?>
                   <div class="input-group-append">
-                    <button class="btn btn-secondary trash" onclick="imageUpdate('<?php echo$r['id'];?>','login','avatar','');" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="btn btn-secondary trash" onclick="imageUpdate('<?php echo$r['id'];?>','login','avatar','');" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
 <?php }?>
                 </div>
@@ -116,7 +117,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <div class="input-group col-sm-10">
                 <input type="text" id="gravatar" class="form-control textinput" value="<?php echo$r['gravatar'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savegravatar" class="btn btn-secondary save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savegravatar" class="btn btn-secondary save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
               </div>
             </div>
@@ -139,9 +140,9 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
   $scc=$db->prepare("SELECT COUNT(rid) as cnt FROM `".$prefix."comments` WHERE rid=:rid AND status!='approved'");
   $scc->execute([':rid'=>$rm['id']]);
   $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
-                    <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" title="'.$sccn['cnt'].' New Comments"':'').' aria-label="View Comments"';?>>'.svg2('libre-gui-comments').'&nbsp;'.$scn['cnt'].'</a>';?>
+                    <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" data-title="'.$sccn['cnt'].' New Comments"':'').' aria-label="View Comments"';?>>'.svg2('libre-gui-comments').'&nbsp;'.$scn['cnt'].'</a>';?>
 <?php if($user['options']{5}==1){?>
-                    <span class="handle btn btn-default btn-xs" data-tooltip="tooltip" title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></span>
+                    <span class="handle btn btn-default btn-xs" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></span>
 <?php }?>
                   </div>
                   <div class="card-body">
@@ -242,7 +243,7 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
                   </select>
                   <label for="socialurl" class="input-group-text">URL</label>
                   <input type="text" id="socialurl" class="form-control" name="url" value="" placeholder="Enter a URL...">
-                  <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('plus');?></button></div>
+                  <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('plus');?></button></div>
                 </div>
               </div>
             </form>
@@ -253,14 +254,14 @@ $ss->execute([':uid'=>$r['id']]);
 while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               <div id="l_<?php echo$rs['id'];?>" class="form-group row">
                 <div class="input-group col-sm-12">
-                  <div class="input-group-text"><span class="libre-social" data-tooltip="tooltip" title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon']);?></span></div>
+                  <div class="input-group-text"><span class="libre-social" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon']);?></span></div>
                   <input type="text" class="form-control" value="<?php echo$rs['url'];?>" readonly>
 <?php if($user['options']{0}==1||$user['options']{5}==1){?>
                   <div class="input-group-append">
                     <form target="sp" action="core/purge.php" role="form">
                       <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
                       <input type="hidden" name="t" value="choices">
-                      <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                     </form>
                   </div>
 <?php }?>
@@ -307,7 +308,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="name" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" placeholder="Enter a Name..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -316,7 +317,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="url" placeholder="Enter a URL..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -325,7 +326,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" placeholder="Enter a Business..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -334,7 +335,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="phone" class="form-control textinput" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" placeholder="Enter a Phone..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -343,7 +344,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="mobile" class="form-control textinput" value="<?php echo$r['mobile'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" placeholder="Enter a Mobile..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savemobile" class="btn btn-secondary save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemobile" class="btn btn-secondary save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -352,7 +353,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="address" class="form-control textinput" name="address" value="<?php echo$r['address'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="address" placeholder="Enter an Address..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -361,7 +362,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" placeholder="Enter a Suburb..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -370,7 +371,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" placeholder="Enter a City..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -379,7 +380,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" placeholder="Enter a State..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -388,7 +389,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" placeholder="Enter a Postcode..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -397,7 +398,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="country" class="form-control textinput" name="country" value="<?php echo$r['country'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="country" placeholder="Enter a Country..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecountry" class="btn btn-secondary save" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecountry" class="btn btn-secondary save" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -406,7 +407,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="caption" class="form-control textinput" name="caption" value="<?php echo$r['caption'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="caption" placeholder="Enter a Caption..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecaption" class="btn btn-secondary save" data-dbid="caption" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecaption" class="btn btn-secondary save" data-dbid="caption" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -416,7 +417,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="input-group col-sm-10">
                     <input type="text" id="seoDescription" class="form-control textinput" name="seoDescription" value="<?php echo$r['seoDescription'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="seoDescription" placeholder="Enter a Description..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
-                    <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                   </div>
                 </div>
@@ -488,7 +489,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                       <textarea name="da" class="cnote" required aria-required="true" aria-label="Career Notes"></textarea>
                     </div>
                     <div class="col-1">
-                      <button type="submit" class="btn btn-secondary add" aria-label="Add Career" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button>
+                      <button type="submit" class="btn btn-secondary add" aria-label="Add Career" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
                     </div>
                   </div>
                 </form>
@@ -559,7 +560,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                       </div>
                       <div class="col-1">
 <?php if($user['options']{5}==1||$user['options']{0}==1){?>
-                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$rc['id'];?>','content')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$rc['id'];?>','content')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
 <?php }?>
                       </div>
                     </div>
@@ -601,7 +602,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                       <textarea name="da" class="enote" required aria-required="true"></textarea>
                     </div>
                     <div class="col-1">
-                      <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button>
+                      <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
                     </div>
                   </div>
                 </form>
@@ -672,7 +673,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                       </div>
                       <div class="col-1">
 <?php if($user['options']{5}==1||$user['options']{0}==1){?>
-                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$rc['id'];?>','content')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$rc['id'];?>','content')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
 <?php }?>
                       </div>
                     </div>

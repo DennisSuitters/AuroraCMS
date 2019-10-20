@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 if($args[0]!='compose'){
   $q=$db->prepare("UPDATE `".$prefix."messages` SET status='read' WHERE id=:id");
@@ -36,7 +37,7 @@ if($args[0]!='compose'){
     <li class="breadcrumb-item active"><strong id="titleupdate"><?php echo$r['subject'];?></strong></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -131,7 +132,7 @@ $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE fol
               <div class="form-group row">
                 <label class="col-form-label col-sm-11">Attachments</label>
                 <div class="input-group col-sm-1 p-0 mr-0">
-                  <button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','messages','attachments');return false;" data-tooltip="tooltip" title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button>
+                  <button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','messages','attachments');return false;" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button>
                 </div>
               </div>
               <div class="form-group row">
@@ -148,13 +149,13 @@ $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE fol
     if(preg_match("/\.(pdf)$/",$attachment))$attimg='core'.DS.'images'.DS.'i-file-pdf.svg';
     if(preg_match("/\.(zip|zipx|tar|gz|rar|7zip|7z|bz2)$/",$attachment))$attimg='core'.DS.'images'.DS.'i-file-archive.svg';
     if(preg_match("/\.(doc|docx|xls)$/",$attachment))$attimg='core'.DS.'images'.DS.'i-file-docs.svg';?>
-                  <a id="a_<?php echo$ti;?>" target="_blank" class="card col-2 p-0" href="<?php echo$attachment;?>" title="<?php echo basename($attachment);?>">
+                  <a id="a_<?php echo$ti;?>" target="_blank" class="card col-2 p-0" href="<?php echo$attachment;?>" data-title="<?php echo basename($attachment);?>">
                     <img class="card-img-top bg-white" src="<?php echo$attimg;?>" alt="<?php echo basename($attachment);?>">
                     <span class="card-footer text-truncate p-0 pl-1 pr-1 small">
                       <?php echo basename($attachment);?>
                     </span>
                     <span class="attbuttons">
-                      <button class="btn btn-secondary btn-xs trash" onclick="attRemove('<?php echo$ti;?>');return false;"><?php svg('trash');?></button>
+                      <button class="btn btn-secondary btn-xs trash" onclick="attRemove('<?php echo$ti;?>');return false;" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                     </span>
                   </a>
 <?php }

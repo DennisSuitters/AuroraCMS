@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -53,7 +54,7 @@
                   <td><input type="text" id="quantity" class="form-control input-sm" name="quantity" value="" placeholder="Quantity..."></td>
                   <td><div class="input-group"><input type="text" id="tis" class="form-control input-sm" data-datetime="<?php echo date($config['dateFormat'],time());?>" name="tis" value=""></div></td>
                   <td><div class="input-group"><input type="text" id="tie" class="form-control input-sm" data-datetime="<?php echo date($config['dateFormat'],time());?>" name="tie" value=""></div></td>
-                  <td><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></td>
+                  <td><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></td>
                 </tr>
               </thead>
             </form>
@@ -75,7 +76,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   <form target="sp" action="core/purge.php">
                     <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <input type="hidden" name="t" value="rewards">
-                    <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </form>
 <?php }?>
                 </td>

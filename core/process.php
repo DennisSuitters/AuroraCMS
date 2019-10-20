@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -16,6 +16,9 @@
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.3 Add Check if shareImage is no image and replace with FavIcon.
  * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
+ * @changes    v0.0.4 Adjust Visitor Tracking Option.
+ * @changes    v0.0.4 Add Front End Editing.
+ * @changes    v0.0.4 Fix Tracking Acquisition
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -213,9 +216,14 @@ $head=preg_replace([
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':'')
 ],$head);
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>899)
-  $head=str_replace('<meta_helper>','<link rel="stylesheet" type="text/css" href="core/css/seohelper.css">',$head);
-else
+if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
+  $head=preg_replace([
+    '/<meta_helper>/'
+    ],[
+      '<link rel="stylesheet" type="text/css" href="core/css/seohelper.css"><link rel="stylesheet" type="text/css" href="core/css/summernote-lite.min.css">'
+    ],$head
+  );
+}else
   $head=str_replace('<meta_helper>','',$head);
 if(isset($config['ga_tracking'])&&$config['ga_tracking']!='')
   $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
@@ -223,27 +231,75 @@ else
   $head=str_replace('<google_analytics>','',$head);
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899&&$config['development']==1)
   $content.='<div style="text-align:right;padding:10px;">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().'</div>';
+
+if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
+  $noteStyles='';
+  foreach($theme['settings']['note_styles'] as $nS){
+    $noteStyles.=$nS;
+  }
+  $content=preg_replace([
+    '/<jshelper>/',
+    '/<jsrunner>/'
+    ],[
+      '<script src="core/js/summernote-lite.js"></script>'.
+      '<script src="core/js/plugin/summernote/summernote-save-button.js">',
+      '<script>'.
+        '$(".editable").summernote({'.
+          'airMode: false,'.
+          'styleTags: ['.
+            '`p`, `blockquote`, `pre`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`,'.
+            $noteStyles.
+          '],'.
+          'popover: {'.
+            'air: ['.
+              '[`save`, [`save`]],'.
+              '[`styles`, [`style`, `color`]],'.
+              '[`style`, [`bold`, `italic`, `underline`, `clear`]],'.
+              '[`font`, [`strikethrough`, `superscript`, `subscript`]],'.
+              '[`para`, [`ul`, `ol`, `paragraph`]],'.
+              '[`view`, [`codeview`, `help`]],'.
+            ']'.
+          '}'.
+        '});'.
+      '</script>'.
+      '<iframe id="sp" name="sp" class="d-none"></iframe>'.
+      '<div class="page-block"><div class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>'
+    ],$content
+  );
+}else
+  $content=str_replace('<jshelper>','',$content);
+
 print$head.$content;
-$current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-if($config['maintenance']==0||$config['development']==0&&$config['options']{11}==1){
+if($config['options']{11}==1){
+  $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&$_SESSION['current_page']!=$current_page)){
-    if(!stristr($current_page,'core')||!stristr($current_page,'admin')||!stristr($current_page,'layout')||!stristr($current_page,'media')){
-      if(filter_var($current_page,FILTER_VALIDATE_URL)===TRUE){
-        $s=$db->prepare("INSERT INTO `".$prefix."tracker` (pid,urlDest,urlFrom,userAgent,ip,browser,os,sid,ti) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
-        $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
-        $s->execute([
-          ':pid'=>isset($page['id'])?$page['id']:0,
-          ':urlDest'=>$current_page,
-          ':urlFrom'=>$hr,
-          ':userAgent'=>$_SERVER['HTTP_USER_AGENT'],
-          ':ip'=>$_SERVER["REMOTE_ADDR"],
-          ':browser'=>getBrowser(),
-          ':os'=>getOS(),
-          ':sid'=>session_id(),
-          ':ti'=>time()
-        ]);
-        $_SESSION['current_page']=$current_page;
-      }
+    if(!stristr($current_page,'core/*')||
+      !stristr($current_page,'admin/*')||
+      !stristr($current_page,'layout/*')||
+      !stristr($current_page,'media/*')||
+      !stristr($current_page,'*.js')||
+      !stristr($current_page,'*.css')||
+      !stristr($current_page,'*.map')||
+      !stristr($current_page,'*.jpg')||
+      !stristr($current_page,'*.jpeg')||
+      !stristr($current_page,'*.png')||
+      !stristr($current_page,'*.gif')||
+      !stristr($current_page,'*.svg')
+    ){
+      $s=$db->prepare("INSERT INTO `".$prefix."tracker` (pid,urlDest,urlFrom,userAgent,ip,browser,os,sid,ti) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
+      $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+      $s->execute([
+        ':pid'=>isset($page['id'])?$page['id']:0,
+        ':urlDest'=>$current_page,
+        ':urlFrom'=>$hr,
+        ':userAgent'=>$_SERVER['HTTP_USER_AGENT'],
+        ':ip'=>$_SERVER["REMOTE_ADDR"],
+        ':browser'=>getBrowser(),
+        ':os'=>getOS(),
+        ':sid'=>session_id(),
+        ':ti'=>time()
+      ]);
+      $_SESSION['current_page']=$current_page;
     }
   }
 }

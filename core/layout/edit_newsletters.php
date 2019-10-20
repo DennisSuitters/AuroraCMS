@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -22,8 +23,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-item active" aria-current="page"><strong id="titleupdate"><?php echo$r['title'];?></strong></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group" aria-label="Settings">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
-        <a href="#" class="btn btn-ghost-normal info" onclick="Pace.restart();$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;" data-tooltip="tooltip" data-placement="left" title="Send Newsletters" aria-label="Send Newsletters"><?php svg('email-send');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal info" onclick="Pace.restart();$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;" data-tooltip="tooltip" data-placement="left" data-title="Send Newsletters" aria-label="Send Newsletters"><?php svg('email-send');?></a>
       </div>
     </li>
   </ol>
@@ -35,7 +36,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <label for="title" class="col-form-label col-sm-2">Subject</label>
           <div class="input-group col-sm-10">
             <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" placeholder="Enter a Subject..." onkeyup="$('#titleupdate').text($(this).val());">
-            <div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">

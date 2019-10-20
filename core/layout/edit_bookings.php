@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
+ * @changes    v0.0.2 Add Permissions Options.
+ * @changes    v0.0.4 Fix Tooltips.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
 $s->execute([':id'=>$id]);
@@ -24,9 +25,9 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-item active"><span id="bookingname"><?php echo$r['name'];?></span>:<span id="bookingbusiness"><?php echo$r['business'];?></span></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
 <?php if($user['options']{0}==1||$user['options']{2}==1){?>
-        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-placement="left" title="Email Booking" aria-label="Email"><?php svg('email-send');?></a>
+        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-placement="left" data-title="Email Booking" aria-label="Email"><?php svg('email-send');?></a>
 <?php }?>
       </div>
     </li>
@@ -39,7 +40,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           <div class="input-group col-sm-10">
             <input type="text" id="tis" class="form-control" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tis" data-datetime="<?php echo date($config['dateFormat'],$r['tis']);?>"<?php echo$user['options']{2}==1?'':'value="'.date($config['dateFormat'],$r['tis']).'" readonly';?>>
             <input type="hidden" id="tisx" value="<?php echo$r['tis'];?>">
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savetis" class="btn btn-secondary save" data-dbid="tis" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savetis" class="btn btn-secondary save" data-dbid="tis" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
@@ -47,7 +48,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           <div class="input-group col-sm-10">
             <input type="text" id="tie" class="form-control" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tie" data-datetime="<?php echo date($config['dateFormat'],($r['tie']!=0?$r['tie']:$r['tis']));?>" autocomplete="off"<?php echo$user['options']{2}==1?'':' value="'.date($config['dateFormat'],($r['tie']!=0?$r['tie']:$r['tis'])).'" readonly';?>>
             <input type="hidden" id="tiex" value="<?php echo$r['tie'];?>">
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savetie" class="btn btn-secondary save" data-dbid="tie" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savetie" class="btn btn-secondary save" data-dbid="tie" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
@@ -74,63 +75,63 @@ while($rs=$q->fetch(PDO::FETCH_ASSOC))
           <label for="email" class="col-form-label col-sm-2">Email</label>
           <div class="input-group col-sm-10">
             <input type="text" id="email" class="form-control textinput" name="email" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="email"<?php echo$user['options']{2}==1?' placeholder="Enter an Email..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="phone" class="col-form-label col-sm-2">Phone</label>
           <div class="input-group col-sm-10">
             <input type="text" id="phone" class="form-control textinput" name="phone" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="phone"<?php echo$user['options']{2}==1?' placeholder="Enter a Phone..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="name" class="col-form-label col-sm-2">Name</label>
           <div class="input-group col-sm-10">
             <input type="text" id="name" class="form-control textinput" name="name" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="name" onkeyup="$('#bookingname').html($(this).val());"<?php echo$user['options']{2}==1?' placeholder="Enter a Name..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="business" class="col-form-label col-sm-2">Business</label>
           <div class="input-group col-sm-10">
             <input type="text" id="business" class="form-control textinput" name="business" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business" onkeyup="$('#bookingbusiness').html($(this).val());"<?php echo$user['options']{2}==1?' placeholder="Enter a Business..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="address" class="col-form-label col-sm-2">Address</label>
           <div class="input-group col-sm-10">
             <input type="text" id="address" class="form-control textinput" name="address" value="<?php echo$r['address'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="address"<?php echo$user['options']{2}==1?' placeholder="Enter an Address..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="suburb" class="col-form-label col-sm-2">Suburb</label>
           <div class="input-group col-sm-10">
             <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="suburb"<?php echo$user['options']{2}==1?' placeholder="Enter a Suburb..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="city" class="col-form-label col-sm-2">City</label>
           <div class="input-group col-sm-10">
             <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="city"<?php echo$user['options']{2}==1?' placeholder="Enter a City..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="state" class="col-form-label col-sm-2">State</label>
           <div class="input-group col-sm-10">
             <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="state"<?php echo$user['options']{2}==1?' placeholder="Enter a State..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">
           <label for="postcode" class="col-form-label col-sm-2">Postcode</label>
           <div class="input-group col-sm-10">
             <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="postcode"<?php echo$user['options']{2}==1?' placeholder="Enter a Postcode..."':' readonly';?>>
-            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <?php echo$user['options']{2}==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
           </div>
         </div>
         <div class="form-group row">

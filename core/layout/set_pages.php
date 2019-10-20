@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -18,7 +19,7 @@
     <li class="breadcrumb-item active"><strong>Settings</strong></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal info" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal info" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -57,7 +58,7 @@
           </div>
           <div class="form-group">
             <div class="input-group card-header p-2 mb-0">
-              <button id="codeSave" class="btn btn-secondary" onclick="populateTextarea();$(this).removeClass('btn-danger');" data-tooltip="tooltip" data-placement="bottom" title="Save" aria-label="Save"><?php svg('save');?></button>
+              <button id="codeSave" class="btn btn-secondary" onclick="populateTextarea();$(this).removeClass('btn-danger');" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="form-group" style="margin-top:-15px">

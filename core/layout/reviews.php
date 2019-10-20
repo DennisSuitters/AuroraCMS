@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -33,7 +34,7 @@
                     </tr>
                   </thead>
                   <tbody id="l_comments">
-<?php  
+<?php
   $s=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE contentType='review' AND status='unapproved'");
   $s->execute();
   $scnt=$s->rowCount();
@@ -67,8 +68,8 @@
                       <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-top">
                         <div id="controls-<?php echo$r['id'];?>" class="btn-group float-right">
-                          <button id="approve_<?php echo$r['id'];?>" class="btn btn-secondary btn-sm<?php echo$r['status']=='approved'?' hidden':'';?>" onclick="update('<?php echo$r['id'];?>','comments','status','approved')" data-tooltip="tooltip" title="Approve" aria-label="Approve"><?php svg('approve');?></button>
-                          <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','comments')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                          <button id="approve_<?php echo$r['id'];?>" class="btn btn-secondary btn-sm<?php echo$r['status']=='approved'?' hidden':'';?>" onclick="update('<?php echo$r['id'];?>','comments','status','approved')" data-tooltip="tooltip" data-title="Approve" aria-label="Approve"><?php svg('approve');?></button>
+                          <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','comments')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                         </div>
                       </td>
                     </tr>

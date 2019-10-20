@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.3 Add Permissions Options
- * @changes    v0.0.3 Add AutoPublish Options to Status
+ * @changes    v0.0.3 Add Permissions Options.
+ * @changes    v0.0.3 Add AutoPublish Options to Status.
+ * @changes    v0.0.4 Fix Tooltips.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -34,7 +35,7 @@ if($so->rowCount()>0){
     </li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group" aria-label="">
-        <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" data-tooltip="tooltip" data-placement="left" title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
       </div>
     </li>
   </ol>
@@ -91,10 +92,10 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                 <?php if($user['options']{1}==1){
                   $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                   $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'title']);
-                  echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-toggle="popover" data-dbgid="title" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
+                  echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-toggle="popover" data-dbgid="title" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                 }?>
                 <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="btn-danger" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options']{1}==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-btn" data-tooltip="tooltip" title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-toggle="popover" data-dbgid="title" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-btn" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-toggle="popover" data-dbgid="title" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
               <script>
                 function genurl(){
@@ -129,7 +130,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               <div class="input-group col-sm-10">
                 <input type="text" id="pti" class="form-control textinput" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="pti" value="<?php echo date('M n, Y g:i A',$r['pti']);?>"<?php echo$user['options']{1}==1?'':' readonly';?>>
                 <input type="hidden" id="ptix" value="<?php echo$r['pti'];?>">
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savepti" class="btn btn-secondary save" data-dbid="pti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepti" class="btn btn-secondary save" data-dbid="pti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div id="nav-content-content-4" class="form-group row">
@@ -160,7 +161,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               <label for="code" class="col-form-label col-sm-2">Code</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="code" class="form-control textinput" value="<?php echo$r['code'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="code"<?php echo$user['options']{1}==1?' placeholder="Enter a Code..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecode" class="btn btn-secondary save" data-dbid="code" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecode" class="btn btn-secondary save" data-dbid="code" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -169,7 +170,7 @@ if($r['contentType']=='inventory'){?>
               <label for="barcode" class="col-form-label col-sm-2">Barcode</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="barcode" class="form-control textinput" value="<?php echo$r['barcode'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="barcode"<?php echo$user['options']{1}==1?' placeholder="Enter a Barcode..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebarcode" class="btn btn-secondary save" data-dbid="barcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebarcode" class="btn btn-secondary save" data-dbid="barcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -179,7 +180,7 @@ if($r['contentType']=='inventory'){?>
               <label for="fccid" class="col-form-label col-sm-2">FCCID</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="fccid" class="form-control textinput" value="<?php echo$r['fccid'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fccid"<?php echo$user['options']{1}==1?' placeholder="Enter an FCCID..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savefccid" class="btn btn-secondary save" data-dbid="fccid" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefccid" class="btn btn-secondary save" data-dbid="fccid" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -195,7 +196,7 @@ if($r['contentType']=='inventory'){?>
     while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['brand'].'"/>';
     echo'</datalist>';
   }
-  echo'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebrand" class="btn btn-secondary save" data-dbid="brand" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+  echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebrand" class="btn btn-secondary save" data-dbid="brand" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
@@ -204,7 +205,7 @@ if($r['contentType']=='event'){?>
             <div id="nav-content-content-11" class="form-group row">
               <label for="tis" class="col-form-label col-sm-2">Event Start</label>
               <div class="input-group col-sm-10">
-                <?php echo$user['options']{1}==1?'<input type="text" id="tis" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tis" data-datetime="'.date($config['dateFormat'],$r['tis']).'" autocomplete="off"><input type="hidden" id="tisx" value="'.$r['tis'].'"><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savetis" class="btn btn-secondary save" data-dbid="tis" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tis']).'" readonly>';?>
+                <?php echo$user['options']{1}==1?'<input type="text" id="tis" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tis" data-datetime="'.date($config['dateFormat'],$r['tis']).'" autocomplete="off"><input type="hidden" id="tisx" value="'.$r['tis'].'"><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetis" class="btn btn-secondary save" data-dbid="tis" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tis']).'" readonly>';?>
               </div>
             </div>
 <?php }
@@ -212,7 +213,7 @@ if($r['contentType']=='event'){?>
             <div id="nav-content-content-12" class="form-group row">
               <label for="tie" class="col-form-label col-sm-2">Event End</label>
               <div class="input-group col-sm-10">
-                <?php echo$user['options']{1}==1?'<input type="text" id="tie" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tie" data-datetime="'.date($config['dateFormat'],$r['tie']).'" autocomplete="off"><input type="hidden" id="tiex" value="'.$r['tie'].'"><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savetie" class="btn btn-secondary save" data-dbid="tie" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tie']).'" readonly>';?>
+                <?php echo$user['options']{1}==1?'<input type="text" id="tie" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tie" data-datetime="'.date($config['dateFormat'],$r['tie']).'" autocomplete="off"><input type="hidden" id="tiex" value="'.$r['tie'].'"><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetie" class="btn btn-secondary save" data-dbid="tie" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tie']).'" readonly>';?>
               </div>
             </div>
 <?php }
@@ -222,7 +223,7 @@ if($r['contentType']=='testimonials'){?>
               <label for="email" class="col-form-label col-sm-2">Email</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="email"<?php echo$user['options']{1}==1?' placeholder="Enter an Email..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -238,7 +239,7 @@ if($r['contentType']=='testimonials'){?>
     while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['name'].'"/>';
     echo'</datalist>';
   }
-  echo'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+  echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
@@ -248,7 +249,7 @@ if($r['contentType']=='testimonials'){?>
               <label for="url" class="col-form-label col-sm-2">URL</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url"<?php echo$user['options']{1}==1?' placeholder="Enter a URL..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -257,7 +258,7 @@ if($r['contentType']=='testimonials'){?>
               <label for="business" class="col-form-label col-sm-2">Business</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business"<?php echo$user['options']{1}==1?' placeholder="Enter a Business..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -273,7 +274,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
     while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
     echo'</datalist>';
   }
-                echo'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecategory_1" class="btn btn-secondary save" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+                echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_1" class="btn btn-secondary save" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
@@ -290,7 +291,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
     while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_2'].'"/>';
     echo'</datalist>';
   }
-                echo'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecategory_2" class="btn btn-secondary save" data-dbid="category_2" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+                echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_2" class="btn btn-secondary save" data-dbid="category_2" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
@@ -307,7 +308,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
     while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_3'].'"/>';
     echo'</datalist>';
   }
-                echo'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecategory_3" class="btn btn-secondary save" data-dbid="category_3" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+                echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_3" class="btn btn-secondary save" data-dbid="category_3" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
@@ -324,7 +325,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
     while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_4'].'"/>';
     echo'</datalist>';
   }
-                echo'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecategory_4" class="btn btn-secondary save" data-dbid="category_4" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+                echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_4" class="btn btn-secondary save" data-dbid="category_4" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
@@ -335,7 +336,7 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
               <div class="input-group col-sm-10">
                 <div class="input-group-text">$</div>
                 <input type="text" id="cost" class="form-control textinput" value="<?php echo$r['cost'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cost"<?php echo$user['options']{1}==1?' placeholder="Enter a Cost..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savecost" class="btn btn-secondary save" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecost" class="btn btn-secondary save" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -352,7 +353,7 @@ if($r['contentType']=='inventory'){?>
               <label for="quantity" class="col-form-label col-sm-2">Quantity</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="quantity" class="form-control textinput" value="<?php echo $r['quantity'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="quantity"<?php echo$user['options']{1}==1?' placeholder="Enter a Quantity..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savequantity" class="btn btn-secondary save" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savequantity" class="btn btn-secondary save" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }
@@ -360,7 +361,7 @@ if($r['contentType']=='inventory'){?>
             <div id="tab-content-content-24" class="form-group row">
               <label for="stockStatus" class="col-form-label col-sm-2">Stock Status</label>
               <div class="input-group col-sm-10">
-                <select id="stockStatus" class="form-control" onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());"<?php echo$user['options']{1}==1?'  data-tooltip="tooltip" title="Change Stock Status"':' disabled';?>>
+                <select id="stockStatus" class="form-control" onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());"<?php echo$user['options']{1}==1?'  data-tooltip="tooltip" data-title="Change Stock Status"':' disabled';?>>
                   <option value="quantity"<?php echo$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
                   <option value="in stock"<?php echo$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
                   <option value="out of stock"<?php echo$r['status']=='out of stock'?' selected':'';?>>Out Of Stock</option>
@@ -378,9 +379,9 @@ if($r['contentType']=='inventory'){?>
                   if($r['suggestions']==1){
                     $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                     $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'notes']);
-                    echo$ss->rowCount()>0?'<div data-tooltip="tooltip" title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="notesda" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
+                    echo$ss->rowCount()>0?'<div data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="notesda" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
-                  echo'<div class="d-flex justify-content-end" data-tooltip="tooltip" title="Add Suggestion"><button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" aria-label="Add Suggestions">'.svg2('idea').'</button></div>';?>
+                  echo'<div class="d-flex justify-content-end" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" aria-label="Add Suggestions">'.svg2('idea').'</button></div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
                 <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -419,13 +420,13 @@ if($r['contentType']=='inventory'){?>
                     <div class="input-group-append">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                       <input type="hidden" name="act" value="add_tstavatar">
-                      <div class="btn btn-secondary custom-file" data-tooltip="tooltip" title="Browse Computer for Image" aria-label="Browse Computer for Image">
+                      <div class="btn btn-secondary custom-file" data-tooltip="tooltip" data-title="Browse Computer for Image" aria-label="Browse Computer for Image">
                         <input id="avatarfu" type="file" class="custom-file-input hidden" name="fu" onchange="form.submit()">
                         <label for="avatarfu"><?php svg('browse-computer');?></label>
                       </div>
                     </div>
                     <div class="input-group-append bg-white"><img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['file']))?'media'.DS.'avatar'.DS.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar"></div>
-                    <div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate('<?php echo$r['id'];?>','content','file','');" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>
+                    <div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate('<?php echo$r['id'];?>','content','file','');" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>
                   </div>
                 </div>
               </form>
@@ -449,7 +450,7 @@ if($r['contentType']!='testimonials'){?>
                   <div class="input-group-append">
                     <?php echo$r['fileURL']!=''?'<a href="'.$r['fileURL'].'" data-fancybox="url"><img id="thumbimage" src="'.$r['fileURL'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savefileURL" class="btn btn-secondary save" data-dbid="fileURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefileURL" class="btn btn-secondary save" data-dbid="fileURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-4" class="form-group row">
@@ -457,17 +458,17 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <input id="file" type="text" class="form-control textinput" value="<?php echo$r['file'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="file" readonly>
 <?php if($user['options']{1}==1){?>
-                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');" data-tooltip="tooltip" title="Open Media Manager" role="button" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
+                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');" data-tooltip="tooltip" data-title="Open Media Manager" role="button" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
                   <form target="sp" method="post" action="core/magicimage.php">
                     <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <input type="hidden" name="act" value="file">
-                    <div class="input-group-append"><button class="btn btn-secondary" data-tooltip="tooltip" title="Resize Image (<?php echo$config['mediaMaxWidth'].'x'.$config['mediaMaxHeight'];?>)" aria-label="Resize Image"><?php svg('magic');?></button></div>
+                    <div class="input-group-append"><button class="btn btn-secondary" data-tooltip="tooltip" data-title="Resize Image (<?php echo$config['mediaMaxWidth'].'x'.$config['mediaMaxHeight'];?>)" aria-label="Resize Image"><?php svg('magic');?></button></div>
                   </form>
 <?php }?>
                   <div class="input-group-append img">
                     <?php echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a href="'.$r['file'].'" data-fancybox="image"><img id="thumbimage" src="'.$r['file'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`);" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savefile" class="btn btn-secondary save" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefile" class="btn btn-secondary save" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-5" class="form-group row">
@@ -475,24 +476,24 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <input id="thumb" type="text" class="form-control textinput" value="<?php echo$r['thumb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="thumb" readonly>
 <?php if($user['options']{1}==1){?>
-                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"data-tooltip="tooltip" title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
+                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
                   <form target="sp" method="post" action="core/magicimage.php">
                     <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <input type="hidden" name="act" value="thumb">
-                    <div class="input-group-append"><button class="btn btn-secondary" data-tooltip="tooltip" title="Create Thumbnail From Above Image (<?php echo$config['mediaMaxWidthThumb'].'x'.$config['mediaMaxHeightThumb'];?>)" aria-label="Create Thumbnail From Above Image."><?php svg('magic');?></button></div>
+                    <div class="input-group-append"><button class="btn btn-secondary" data-tooltip="tooltip" data-title="Create Thumbnail From Above Image (<?php echo$config['mediaMaxWidthThumb'].'x'.$config['mediaMaxHeightThumb'];?>)" aria-label="Create Thumbnail From Above Image."><?php svg('magic');?></button></div>
                   </form>
 <?php }?>
                   <div class="input-group-append img">
                     <?php echo$r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'<a href="'.$r['thumb'].'" data-fancybox="thumb"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`);" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savethumb" class="btn btn-secondary save" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savethumb" class="btn btn-secondary save" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-7" class="form-group row">
                 <label for="exifFilename" class="col-form-label col-sm-2">Image ALT</label>
                 <div class="input-group col-sm-10">
                   <input type="text" id="fileALT" class="form-control textinput" value="<?php echo$r['fileALT'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT"<?php echo$user['options']{1}==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save" aria-label="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
             </fieldset>
@@ -504,7 +505,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifFilename" class="form-control textinput" value="<?php echo$r['exifFilename'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFilename"<?php echo$user['options']{1}==1?' placeholder="Original Filename..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save" aria-label="Save"><button id="saveexifFilename" class="btn btn-secondary save" data-dbid="exifFilename" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="saveexifFilename" class="btn btn-secondary save" data-dbid="exifFilename" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-8" class="form-group row">
@@ -512,7 +513,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifCamera" class="form-control textinput" value="<?php echo$r['exifCamera'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifCamera"<?php echo$user['options']{1}==1?' placeholder="Enter a Camera"':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifCamera" class="btn btn-secondary save" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifCamera" class="btn btn-secondary save" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-9" class="form-group row">
@@ -520,7 +521,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);" role="button" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifLens" class="form-control textinput" value="<?php echo$r['exifLens'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifLens"<?php echo$user['options']{1}==1?' placeholder="Enter a Lens..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifLens" class="btn btn-secondary save" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifLens" class="btn btn-secondary save" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-10" class="form-group row">
@@ -528,7 +529,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifAperture" class="form-control textinput" value="<?php echo$r['exifAperture'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifAperture"<?php echo$user['options']{1}==1?' placeholder="Enter an Aperture..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifAperture" class="btn btn-secondary save" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifAperture" class="btn btn-secondary save" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-11" class="form-group row">
@@ -536,7 +537,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifFocalLength" class="form-control textinput" value="<?php echo$r['exifFocalLength'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFocalLength"<?php echo$user['options']{1}==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifFocalLength" class="btn btn-secondary save" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifFocalLength" class="btn btn-secondary save" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-12" class="form-group row">
@@ -544,7 +545,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);" role="button" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifShutterSpeed" class="form-control textinput" value="<?php echo$r['exifShutterSpeed'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifShutterSpeed"<?php echo$user['options']{1}==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifShutterSpeed" class="btn btn-secondary save" data-dbid="exifShutterSpeed" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifShutterSpeed" class="btn btn-secondary save" data-dbid="exifShutterSpeed" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-13" class="form-group row">
@@ -552,7 +553,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifISO" class="form-control textinput" value="<?php echo$r['exifISO'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifISO"<?php echo$user['options']{1}==1?' placeholder="Enter an ISO..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifISO" class="btn btn-secondary save" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifISO" class="btn btn-secondary save" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-14" class="form-group row">
@@ -560,7 +561,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-sm-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-btn"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifti" class="form-control textinput" value="<?php echo$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifti"<?php echo$user['options']{1}==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveexifti" class="btn btn-secondary save" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifti" class="btn btn-secondary save" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
             </fieldset>
@@ -570,7 +571,7 @@ if($r['contentType']!='testimonials'){?>
                 <label for="attributionImageTitle" class="col-form-label col-sm-2">Title</label>
                 <div class="input-group col-sm-10">
                   <input type="text" id="attributionImageTitle" class="form-control textinput" value="<?php echo$r['attributionImageTitle'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle"<?php echo$user['options']{1}==1?' placeholder="Enter a Title..."':' readonly';?>>
-                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveattributionImageTitle" class="btn btn-secondary save" data-dbid="attributionImageTitle" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageTitle" class="btn btn-secondary save" data-dbid="attributionImageTitle" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-17" class="form-group row">
@@ -585,7 +586,7 @@ if($r['contentType']!='testimonials'){?>
     echo'</datalist>';
   }
 }
-                  echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveattributionImageName" class="btn btn-secondary save" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageName" class="btn btn-secondary save" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-18" class="form-group row">
@@ -600,7 +601,7 @@ if($r['contentType']!='testimonials'){?>
     echo'</datalist>';
   }
 }
-                  echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveattributionImageURL" class="btn btn-secondary save" data-dbid="attributionImageURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                  echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageURL" class="btn btn-secondary save" data-dbid="attributionImageURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
             </fieldset>
@@ -617,8 +618,8 @@ if($r['contentType']!='testimonials'){?>
               <div class="form-group">
                 <div class="input-group">
                   <input id="mediafile" type="text" class="form-control" name="fu" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
-                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','media','mediafile');return false;" data-tooltip="tooltip" title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
-                  <div class="input-group-append"><button type="submit" class="btn btn-secondary add" onclick="" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></div>
+                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','media','mediafile');return false;" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
+                  <div class="input-group-append"><button type="submit" class="btn btn-secondary add" onclick="" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
                 </div>
               </div>
             </form>
@@ -639,8 +640,8 @@ if($sm->rowCount()>0){
                   </a>
 <?php   if($user['options']{1}==1){?>
                   <div class="btn-group float-right">
-                    <div class="handle btn btn-secondary btn-sm" onclick="return false;" data-tooltip="tooltip" title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></div>
-                    <button class="btn btn-secondary trash btn-sm" onclick="purge('<?php echo$rm['id'];?>','media')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <div class="handle btn btn-secondary btn-sm" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></div>
+                    <button class="btn btn-secondary trash btn-sm" onclick="purge('<?php echo$rm['id'];?>','media')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
 <?php   }?>
                 </div>
@@ -687,7 +688,7 @@ if($user['options']{1}==1){?>
                     <input type="text" class="form-control" name="ttl" value="" placeholder="Title">
                     <div class="input-group-text">Quantity</div>
                     <input type="text" class="form-control" name="qty" value="" placeholder="Quantity">
-                    <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button></div>
+                    <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
                   </div>
                 </form>
               </div>
@@ -708,7 +709,7 @@ if($ss->rowCount()>0){
                       <form target="sp" action="core/purge.php">
                         <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
                         <input type="hidden" name="t" value="choices">
-                        <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                       </form>
                     </div>
 <?php }?>
@@ -745,11 +746,11 @@ if($user['options']{1}==1){
         if($scc->rowCount()<1){?>
                     <form id="blacklist<?php echo$rc['id'];?>" class="d-inline-block" target="sp" method="post" action="core/add_commentblacklist.php">
                       <input type="hidden" name="id" value="<?php echo$rc['id'];?>">
-                      <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" title="Add IP to Blacklist" aria-label="Add IP to Blacklist"><?php echo svg2('security');?></button>
+                      <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add IP to Blacklist" aria-label="Add IP to Blacklist"><?php echo svg2('security');?></button>
                     </form>
 <?php   }?>
-                    <button id="approve_<?php echo$rc['id'];?>" class="btn btn-secondary btn-sm add<?php echo$rc['status']!='unapproved'?' hidden':'';?>" onclick="update('<?php echo$rc['id'];?>','comments','status','approved')" data-tooltip="tooltip" title="Approve" aria-label="Approve"><?php svg('approve');?></button>
-                    <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$rc['id'];?>','comments')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button id="approve_<?php echo$rc['id'];?>" class="btn btn-secondary btn-sm add<?php echo$rc['status']!='unapproved'?' hidden':'';?>" onclick="update('<?php echo$rc['id'];?>','comments','status','approved')" data-tooltip="tooltip" data-title="Approve" aria-label="Approve"><?php svg('approve');?></button>
+                    <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$rc['id'];?>','comments')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
 <?php }?>
                   <h6 class="media-heading">Name: <?php echo$rc['name']==''?'Anonymous':$rc['name'].' &lt;'.$rc['email'].'&gt;';?></h6>
@@ -799,8 +800,8 @@ if($sr->rowCount()>0){
               <div class="media-body well p-1 p-sm-3 border-top border-dark">
 <?php if($user['options']{1}==1){?>
                 <div id="controls-<?php echo$rr['id'];?>" class="btn-group float-right" role="group">
-                  <button id="approve_<?php echo$rr['id'];?>" class="btn btn-secondary btn-sm<?php echo$rr['status']=='approved'?' hidden':'';?>" onclick="update('<?php echo$rr['id'];?>','comments','status','approved')" data-tooltip="tooltip" title="Approve" aria-label="Approve"><?php svg('approve');?></button>
-                  <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$rr['id'];?>','comments')" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  <button id="approve_<?php echo$rr['id'];?>" class="btn btn-secondary btn-sm<?php echo$rr['status']=='approved'?' hidden':'';?>" onclick="update('<?php echo$rr['id'];?>','comments','status','approved')" data-tooltip="tooltip" data-title="Approve" aria-label="Approve"><?php svg('approve');?></button>
+                  <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$rr['id'];?>','comments')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                 </div>
 <?php }?>
                 <h6 class="media-heading">
@@ -832,11 +833,11 @@ if($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType
           $sr->execute([':id'=>$r['id']]);
           if($sr->rowCount()>0){?>
                   <div class="input-group">
-                    <select id="schemaType" class="form-control" name="rid"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Select a Content Item to Relate to this one..."':' disabled';?>>
+                    <select id="schemaType" class="form-control" name="rid"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Select a Content Item to Relate to this one..."':' disabled';?>>
                       <option value="0">Select a Content Item to Relate to this one...</option>
 <?php       while($rr=$sr->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rr['id'].'">'.$rr['contentType'].': '.$rr['title'].'</option>';?>
                     </select>
-                    <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" title="Add"><?php svg('add');?></button></div>
+                    <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add"><?php svg('add');?></button></div>
                   </div>
 <?php      }?>
                 </form>
@@ -857,7 +858,7 @@ while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
                       <form target="sp" action="core/purge.php">
                         <input type="hidden" name="id" value="<?php echo$rr['id'];?>">
                         <input type="hidden" name="t" value="choices">
-                        <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                       </form>
                     </div>
 <?php }?>
@@ -876,11 +877,11 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               <label for="views" class="col-form-label col-sm-2">Views</label>
               <div class="input-group col-sm-10">
                 <input type="number" id="views" class="form-control textinput" value="<?php echo$r['views'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="views"<?php echo$user['options']{1}==1?'':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" title="Clear" aria-label="Clear">'.svg2('eraser').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveviews" class="btn btn-secondary save" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveviews" class="btn btn-secondary save" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php if($user['options']{1}==1){?>
-            <div class="help-block small text-muted text-right">Options for Meta Robots: <span data-tooltip="tooltip" title="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="tooltip" title="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="tooltip" title="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="tooltip" title="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="tooltip" title="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="tooltip" title="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="tooltip" title="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="tooltip" title="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="tooltip" title="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="tooltip" title="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="tooltip" title="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
+            <div class="help-block small text-muted text-right">Options for Meta Robots: <span data-tooltip="tooltip" data-title="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="tooltip" data-title="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="tooltip" data-title="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="tooltip" data-title="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="tooltip" data-title="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
 <?php }?>
             <div class="form-group row">
               <label for="metaRobots" class="col-form-label col-sm-2">Meta Robots</label>
@@ -889,17 +890,17 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                   if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                   $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'metaRobots']);
-                  echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="metaRobots" aria-label="Editing Suggestions">'.svg2('lightbulb','','green').'</button></div>':'';
+                  echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="metaRobots" aria-label="Editing Suggestions">'.svg2('lightbulb','','green').'</button></div>':'';
                   }
                 }?>
                 <input type="text" id="metaRobots" class="form-control textinput" value="<?php echo$r['metaRobots'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="metaRobots"<?php echo$user['options']{1}==1?' placeholder="Enter a Meta Robots Option (Left empty the default will be `index,follow`)..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="metaRobots" role="button" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savemetaRobots" class="btn btn-secondary save" data-dbid="metaRobots" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="metaRobots" role="button" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemetaRobots" class="btn btn-secondary save" data-dbid="metaRobots" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div id="tab-content-seo-2" class="form-group row">
               <label for="schemaType" class="col-form-label col-sm-2">Schema Type</label>
               <div class="input-group col-sm-10">
-                <select id="schemaType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Schema for Microdata Content"':' disabled';?>>
+                <select id="schemaType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Schema for Microdata Content"':' disabled';?>>
                   <option value="blogPosting"<?php echo$r['schemaType']=='blogPosting'?' selected':'';?>>blogPosting for Articles</option>
                   <option value="Product"<?php echo$r['schemaType']=='Product'?' selected':'';?>>Product for Inventory</option>
                   <option value="Service"<?php echo$r['schemaType']=='Service'?' selected':'';?>>Service for Services</option>
@@ -916,13 +917,13 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               <div class="input-group col-sm-10">
                 <div class="card col-12 bg-white">
                   <div class="card-body">
-                    <div id="google-title" data-tooltip="tooltip" data-placement="left" title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
+                    <div id="google-title" data-tooltip="tooltip" data-placement="left" data-title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
 <?php echo($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
                     </div>
                     <div id="google-link">
 <?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>
                     </div>
-                    <div id="google-description" data-tooltip="tooltip" data-placement="left" title="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
+                    <div id="google-description" data-tooltip="tooltip" data-placement="left" data-title="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
 <?php if($r['seoDescription']!='')
   echo$r['seoDescription'];
 else
@@ -943,15 +944,15 @@ if($cntc<0){
 }else$cnt=number_format($cntc);?>
                 <div class="input-group-text"><span id="seoTitlecnt" class="text-success<?php echo$cnt<0?' text-danger':'';?>"><?php echo$cnt;?></span></div>
 <?php           if($user['options']{1}==1){?>
-                <div class="input-group-prepend"><button class="btn btn-secondary" onclick="removeStopWords('seoTitle',$('#seoTitle').val());" data-tooltip="tooltip" title="Remove Stop Words" aria-label="Remove Stop Words"><?php svg('magic');?></button></div>
+                <div class="input-group-prepend"><button class="btn btn-secondary" onclick="removeStopWords('seoTitle',$('#seoTitle').val());" data-tooltip="tooltip" data-title="Remove Stop Words" aria-label="Remove Stop Words"><?php svg('magic');?></button></div>
 <?php             if($r['suggestions']==1){
                     $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                     $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'seoTitle']);
-                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="seoTitle" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
+                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="seoTitle" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
                 }?>
                 <input type="text" id="seoTitle" class="form-control textinput" value="<?php echo$r['seoTitle'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoTitle"<?php echo$user['options']{1}==1?' placeholder="Enter a Meta Title..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoTitle" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoTitle" class="btn btn-secondary save" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoTitle" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoTitle" class="btn btn-secondary save" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">The recommended character count for Captions is 100.</div>':'';?>
@@ -968,11 +969,11 @@ if($cntc<0){
                   if($r['suggestions']==1){
                     $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                     $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'seoCaption']);
-                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="seoCaption" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
+                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="seoCaption" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
                 }?>
                 <input type="text" id="seoCaption" class="form-control textinput" value="<?php echo$r['seoCaption'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoCaption"<?php echo$user['options']{1}==1?' placeholder="Enter a Meta Caption..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoCaption" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoCaption" class="btn btn-secondary save" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoCaption" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoCaption" class="btn btn-secondary save" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">The recommended character count for Descriptions is 160.</div>':'';?>
@@ -989,25 +990,25 @@ if($cntc<0){
                   if($r['suggestions']==1){
                     $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                     $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'seoDescription']);
-                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="seoDescription" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
+                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="seoDescription" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
                 }?>
                 <input type="text" id="seoDescription" class="form-control textinput" value="<?php echo$r['seoDescription'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoDescription"<?php echo$user['options']{1}==1?' placeholder="Enter a Meta Description..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoDescription" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoDescription" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div id="tab-content-seo-5" class="form-group row<?php echo$r['contentType']=='proofs'?' hidden':'';?>">
               <label for="seoKeywords" class="col-form-label col-sm-2">Keywords</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="seoKeywords" class="form-control textinput" value="<?php echo$r['seoKeywords'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoKeywords"<?php echo$user['options']{1}==1?' placeholder="Enter Keywords..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="saveseoKeywords" class="btn btn-secondary save" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoKeywords" class="btn btn-secondary save" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div id="tab-content-seo-6" class="form-group row">
               <label for="tags" class="col-form-label col-sm-2">Tags</label>
               <div class="input-group col-sm-10">
                 <input type="text" id="tags" class="form-control textinput" value="<?php echo$r['tags'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags"<?php echo$user['options']{1}==1?' placeholder="Enter Tags..."':' readonly';?>>
-                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" title="Save"><button id="savetags" class="btn btn-secondary save" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetags" class="btn btn-secondary save" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
           </div>
@@ -1017,7 +1018,7 @@ if($cntc<0){
             <div id="tab-content-settings-1" class="form-group row">
               <label for="status" class="col-form-label col-sm-2">Status</label>
               <div class="input-group col-sm-10">
-                <select id="status" class="form-control" onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Change Status"':' disabled';?>>
+                <select id="status" class="form-control" onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Change Status"':' disabled';?>>
                   <option value="unpublished"<?php echo$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
                   <option value="autopublish"<?php echo$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                   <option value="published"<?php echo$r['status']=='published'?' selected':'';?>>Published</option>
@@ -1028,7 +1029,7 @@ if($cntc<0){
             <div id="tab-content-settings-3" class="form-group row">
               <label for="contentType" class="col-form-label col-sm-2">contentType</label>
               <div class="input-group col-sm-10">
-                <select id="contentType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" title="Change the Type of Content this Item belongs to."':' disabled';?>>
+                <select id="contentType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Change the Type of Content this Item belongs to."':' disabled';?>>
                   <option value="article"<?php echo$r['contentType']=='article'?' selected':'';?>>Article</option>
                   <option value="portfolio"<?php echo$r['contentType']=='portfolio'?' selected':'';?>>Portfolio</option>
                   <option value="events"<?php echo$r['contentType']=='events'?' selected':'';?>>Event</option>

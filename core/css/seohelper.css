@@ -35,3 +35,18 @@ body.depth * * * * * * *{background-color:rgba(255,0,0,.1)}
 body.depth * * * * * * * *{background-color:rgba(255,0,0,.1)}
 body.depth * * * * * * * * *{background-color:rgba(255,0,0,.1)}
 body.depth * * * * * * * * * *{background-color:rgba(255,0,0,.1)}
+.note-editor{position:relative;border:1px dotted #ccc;margin-top:5px}
+.note-editor.note-airframe .note-editing-area .note-editable,
+.note-editor.note-frame .note-editing-area .note-editable{background:transparent!important;color:inherit!important}
+.page-block{display:none;z-index:999999;position:fixed;top:0;right:0;bottom:0;left:0;width:100vw;height:100vh;background:#000;background:rgba(0,0,0,.8) url(../images/page-block.png) no-repeat center center fixed;background-size:cover;transition:background 2s ease;-webkit-transition:background 2s ease;-moz-transition:background 2s ease;-ms-transition:background 2s ease}
+.loader{position:absolute;top:50%;left:40%;margin-left:10%;transform:translate3d(-50%,-50%,0);-webkit-filter:blur(75px);-moz-filter:blur(75px);-ms-filter:blur(75px);-o-filter:blur(75px);filter:blur(75px)}
+.dot{width:32px;height:75vh;margin:auto 50px;background:#fff;border-radius:100%;display:inline-block;animation:slide 5s infinite}
+.dot:nth-child(1){animation-delay:1s;background:#e31485}
+.dot:nth-child(2){animation-delay:2s;background:#f80}
+.dot:nth-child(3){animation-delay:3s;background:#d1df01}
+.dot:nth-child(4){animation-delay:4s;background:#8f0}
+.dot:nth-child(5){animation-delay:5s;background:#6dcd46}
+@-moz-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
+@-webkit-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
+@-o-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
+@keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}

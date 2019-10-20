@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `libre`
+-- Database: `aurora`
 --
 
 -- --------------------------------------------------------
@@ -360,13 +360,6 @@ CREATE TABLE `login` (
   `userIP` varchar(32) COLLATE utf8_bin NOT NULL,
   `ti` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `login`
---
-
-INSERT INTO `login` (`id`, `options`, `bio_options`, `adminTheme`, `username`, `password`, `cover`, `coverURL`, `attributionImageTitle`, `attributionImageName`, `attributionImageURL`, `avatar`, `gravatar`, `business`, `name`, `email`, `www`, `experience`, `hash`, `emailPassword`, `email_check`, `email_signature`, `url`, `address`, `suburb`, `city`, `state`, `postcode`, `country`, `abn`, `phone`, `mobile`, `caption`, `seoDescription`, `notes`, `resume_notes`, `status`, `active`, `activate`, `newsletter`, `language`, `timezone`, `rank`, `discount`, `lti`, `userAgent`, `userIP`, `ti`) VALUES
-(1, '11111111100000000000000000000000', '11110000000000000000000000000000', 'dark', 'root', '$2y$10$jtUwv6IykbGfUogDnoQHvet3lbL27GYHQ/b1/67FB4DVmroE6uEBS', '', '', '', '', '', 'avatar_1.jpg', '', '', 'Dennis Suitters', 'dennis@diemen.design', '', 0, 'fd8a15f03e7c9137fb57c3a8cf0d144f', '', 0, 'This is a test Signature.', '', '', '', '', '', 0, '', '', '', '', 'test', 'test', 'Web Developer, Maker of Timber and Metal one off specialist items, Farmer or Goats and Children.', '', '', 1, '', 0, 'en-AU', 'default', 1000, '', 1569680425, 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/77.0.3865.90 Safari/537.36', '::1', 0);
 
 -- --------------------------------------------------------
 

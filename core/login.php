@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Add Session Options var for handling User Permissions.
  */
 if(!isset($act))
   $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
@@ -31,19 +32,23 @@ if($act=='logout'){
       $_SESSION['password']=$password;
       $_SESSION['uid']=$user['id'];
       $_SESSION['rank']=$user['rank'];
+      $_SESSION['options']=$user['options'];
       $_SESSION['loggedin']=true;
       date_default_timezone_set($user['timezone']=='default'?$config['timezone']:$user['timezone']);
     }else{
       $_SESSION['loggedin']=false;
       $_SESSION['rank']=0;
+      $_SESSION['options']=0;
     }
   }else{
     $_SESSION['loggedin']=false;
     $_SESSION['rank']=0;
+    $_SESSION['options']=0;
   }
 }else{
   $_SESSION['loggedin']=false;
   $_SESSION['rank']=0;
+  $_SESSION['options']=0;
 }
 if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
   $q=$db->prepare("UPDATE `".$prefix."login` SET lti=:lti,userAgent=:userAgent,userIP=:userIP WHERE id=:id");

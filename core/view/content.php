@@ -7,13 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.3 Add parsing of <print view>
  * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
+ * @changes    v0.0.4 Adjust SQL for Related Items so only Published Content is selected.
+ * @changes    v0.0.4 Add Front End Editing.
  */
 $rank=0;
 $notification='';
@@ -214,13 +216,28 @@ if($show=='categories'){
 		$notification
 	],$html);
 	if($page['notes']!=''){
-		$html=preg_replace([
-			'/<print page=[\"\']?notes[\"\']?>/',
-			'/<\/?pagenotes>/'
-		],[
-			rawurldecode($page['notes']),
-			''
-		],$html);
+		if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
+			$html=preg_replace([
+				'/<print page=[\"\']?notes[\"\']?>/',
+				'/<\/?pagenotes>/'
+			],[
+				'<form id="note-form" target="sp" enctype="multipart/form-data" method="post" action="core/update.php">'.
+					'<input type="hidden" name="id" value="'.$page['id'].'">'.
+					'<input type="hidden" name="t" value="menu">'.
+					'<input type="hidden" name="c" value="notes">'.
+					'<textarea class="editable" name="da">'.rawurldecode($page['notes']).'</textarea>'.
+				'</form>',
+				''
+			],$html);
+		}else{
+			$html=preg_replace([
+				'/<print page=[\"\']?notes[\"\']?>/',
+				'/<\/?pagenotes>/'
+			],[
+				rawurldecode($page['notes']),
+				''
+			],$html);
+		}
 	}else
 		$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 	$html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
@@ -838,11 +855,11 @@ if($show=='item'){
 		if($view=='article'||$view=='inventory'||$view=='service'||$view=='portfolio'&&stristr($item,'<related')){
 			if($config['options']{11}==1){
 				preg_match('/<related.*itemCount=[\"\'](.+?)[\"\'].*>/',$item,$matches);
-				if(!isset($matches[1]))$iC='LIMIT '.$config['showItems'];
+				if(!isset($matches[1]))$iC=$config['showItems'];
 				elseif($matches[1]=='all')$iC='';
-				elseif($matches[1]=='default')$iC='LIMIT '.$config['showItems'];
-				else$iC='LIMIT '.$matches[1];
-				$sr=$db->prepare("SELECT rid as id FROM `".$prefix."choices` WHERE uid=:id AND contentType='related' ORDER BY title ASC $iC");
+				elseif($matches[1]=='default')$iC=$config['showItems'];
+				else$iC=$matches[1];
+				$sr=$db->prepare("SELECT rid as id FROM `".$prefix."choices` WHERE uid=:id AND contentType='related' ORDER BY title ASC LIMIT $iC");
 				$sr->execute([':id'=>$r['id']]);
 				$go=false;
 				if($sr->rowCount()>0){
@@ -850,8 +867,11 @@ if($show=='item'){
 				}else{
 					if($config['options']{10}==1){
 						if($r['category_1']!=''){
-							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat ORDER BY title ASC $iC");
-							$sr->execute([':id'=>$r['id'],':cat'=>$r['category_1']]);
+							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat AND status='published' ORDER BY title ASC LIMIT $iC");
+							$sr->execute([
+								':id'=>$r['id'],
+								':cat'=>$r['category_1']
+							]);
 							if($sr->rowCount()>0)$go=true;
 						}
 					}

@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Change to Unpublished when Content is moved to future date in Scheduler.
  * @changes    v0.0.3 Add check for Administration Activity Tracking.
+ * @changes    v0.0.4 Fix Tooltips.
  */
 echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -233,7 +234,7 @@ if(is_null($e[2])){
                     '<input type="hidden" name="t" value="orderitems">'.
                     '<input type="hidden" name="c" value="quantity">'.
                     '<input type="hidden" name="da" value="0">'.
-                    '<button class="btn btn-default trash" data-tooltip="tooltip" title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+                    '<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
                   '</form>'.
                 '</td>'.
               '</tr>';

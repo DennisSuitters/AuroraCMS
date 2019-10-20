@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Improve Statistic Panels
  * @changes    v0.0.2 Change Stats Panels to only be displayed when their values
  *             are greater than 0.
  * @changes    v0.0.3 Change Pages Views to show Actual Page and Content Views.
+ * @changes    v0.0.4 Fix Tooltips.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_dashboard.php';
@@ -31,58 +32,7 @@ else{?>
   echo$config['business']==''?'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>':'';
   echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
     <div class="row">
-      <div class="card mx-3">
-        <div class="card-header h5">
-          Shuffled Website Suggestions
-          <span class="float-right">
-            <button class="btn btn-secondary btn-sm" onclick="$('.webseo').removeClass('hidden').addClass('animated fadeIn');$(this).addClass('hidden');">Show All</button>
-          </span>
-        </div>
-        <div class="card-body">
-          <div class="card-text small text-muted">
-            Note: The information provided here, are only suggestions, mileage will vary depending on numberous factors, for e.g. Industry, Content, Geographic Location, and so on. The suggestions have been gathered from many sources, and used if they make the most sense to help improve visitor interaction and hopefully converting visits to sales.
-          </div>
-<?php $webseo=rand(0,9);
-/*
-https://therecipeforseosuccess.com/ecommerce-seo-6-silly-mistakes/
-https://therecipeforseosuccess.com/pr-using-media-boost-seo/
-*/
-?>
-          <div class="webseo card-text my-3<?php echo($webseo==0?'':' hidden');?>">
-            Do you have a slider? Get rid of it, they slow sites down and heat map studies show that no one looks at them. We suggest that if you do indeed need to have a slider, make sure to optimise images if used, or consider using a text based Slider with an optimised background image.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==1?'':' hidden');?>">
-            Have you setup a <strong>Google My Business</strong> yet? This can greatly help with exposure for your website, as not only will it improve visbility for search's, it will also help finding your business using Google Maps. You can do it here <a target="_blank" href="https://www.google.com.au/business/">Google My Business</a>
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==2?'':' hidden');?>">
-            Do you have the word <strong>Us</strong> about <strong>About</strong> and <strong>Contact</strong>, get rid of it, it's not necessary. Remove the pronoun from your navigation and just have <strong>ABOUT</strong> and <strong>CONTACT</strong>. A cleaner nav is a better nav.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==3?'':' hidden');?>">
-            Do you have light grey font instead of black, change it to black, contrast is really important for readability.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==4?'':' hidden');?>">
-            Don't use CAPITALS for your text descriptions, it looks shouty. While it shouldn't affect how Search Engines index capitalized content, it doesn't look good to readers.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==5?'':' hidden');?>">
-            Can I tell what you do and who you do it for with in 10 seconds of visiting your page? If not add some clear copy that explains this.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==6?'':' hidden');?>">
-            Do you have a clear call to action button somewhere near the top of your page? Book now, shop now, get in touch, check out services...? Is the CTA button in a contrasting colour so it really pops?
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==7?'':' hidden');?>">
-            Be sure to use descriptive filenames for images, and to fill in the <strong>imageALT</strong> field for images where available. AuroraCMS will however automatically use the <strong>title</strong> text if the <strong>imageALT</strong> is left empty, but may not be optimal.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==8?'':' hidden');?>">
-            Do you have a pop up? Does it launch really quickly Slow it down to 45 seconds or on exit, and Limit the text on your pop up to max 20 words, and only ask for first name and email address.
-          </div>
-          <div class="webseo card-text my-3<?php echo($webseo==9?'':' hidden');?>">
-            Ensure your site passes the 'we we' test, is it all about you? Or all about your customers. Try to change as many we statements to You statements.
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="row">
-<?php 
+<?php
 $ss=$db->prepare("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."iplist` WHERE ti >= :ti");
 $ss->execute(['ti'=>time()-604800]);
 $sa=$ss->fetch(PDO::FETCH_ASSOC);
@@ -320,7 +270,7 @@ if($bs['cnt']>0){?>
     </div>
     <div class="row">
 <?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");
-if($s->rowCount()>0){?>      
+if($s->rowCount()>0){?>
       <div class="col-12 col-sm-6">
         <div class="card">
           <div class="card-header"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>">Recent Admin Activity</a></div>
@@ -352,15 +302,17 @@ $s=$db->query("SELECT title,views FROM menu WHERE active='1' AND views!=0");
 if($s->rowCount()>0){
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     $row[]=[
+      'contentType'=>'Page',
       'title'=>$r['title'],
       'views'=>$r['views']
     ];
   }
 }
-$s=$db->query("SELECT title,views FROM content WHERE views!=0");
+$s=$db->query("SELECT contentType,title,views FROM content WHERE views!=0");
 if($s->rowCount()>0){
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     $row[]=[
+      'contentType'=>$r['contentType'],
       'title'=>$r['title'],
       'views'=>$r['views']
     ];
@@ -378,7 +330,7 @@ if($s->rowCount()>0){
                 </tr>
               </thead>
               <tbody>
-<?php 
+<?php
 function array_sort_by_column(&$a,$c,$d=SORT_DESC){
   $sc=array();
   foreach($a as$k=>$r){
@@ -390,7 +342,7 @@ array_sort_by_column($row, 'views');
 $i=1;
 foreach($row as $r){?>
                 <tr>
-                  <td class="small text-truncated"><?php echo$r['title'];?></td>
+                  <td class="small text-truncated"><?php echo($r['contentType']!='Page'?ucfirst($r['contentType']).' ~ ':'').$r['title'];?></td>
                   <td class="text-center"><?php echo$r['views'];?></td>
                 </tr>
 <?php $i++;if($i>10)break;

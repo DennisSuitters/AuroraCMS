@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.4 Fix Tooltips.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
 $q->execute([':id'=>$id]);
@@ -45,9 +46,9 @@ else{?>
     <li class="breadcrumb-item active"><span id="ordertitle"><?php echo$r['qid'].$r['iid'];?></span></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" title="Back" aria-label="Back"><?php svg('back');?></a>
-        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');return false;" data-tooltip="tooltip" data-placement="left" title="Print Order" aria-label="Print Order"><?php svg('print');?></a>
-        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=');return false;" data-tooltip="tooltip" data-placement="left" title="Email Order" aria-label="Email Order"><?php svg('email-send');?></a>
+        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');return false;" data-tooltip="tooltip" data-placement="left" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></a>
+        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=');return false;" data-tooltip="tooltip" data-placement="left" data-title="Email Order" aria-label="Email Order"><?php svg('email-send');?></a>
       </div>
     </li>
   </ol>
@@ -125,63 +126,63 @@ else{?>
                 <label for="address" class="col-form-label col-sm-3">Address</label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="address" class="form-control form-control-sm textinput oce" value="<?php echo$client['address'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="address" data-bs="btn-danger" placeholder="Enter an Address..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                  <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="saveaddress" class="btn btn-secondary btn-sm save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                  <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="saveaddress" class="btn btn-secondary btn-sm save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
                 </div>
               </div>
               <div class="form-group row">
                 <label for="suburb" class="col-form-label col-sm-3">Suburb</label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="suburb" class="form-control form-control-sm textinput oce" value="<?php echo$client['suburb'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="suburb" data-bs="btn-danger" placeholder="Enter a Suburb..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                  <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savesuburb" class="btn btn-secondary btn-sm save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                  <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savesuburb" class="btn btn-secondary btn-sm save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
                 </div>
               </div>
             <div class="form-group row">
               <label for="city" class="col-form-label col-sm-3">City</label>
               <div class="input-group col-sm-9">
                 <input type="text" id="city" class="form-control form-control-sm textinput oce" value="<?php echo$client['city'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="city" data-bs="btn-danger" placeholder="Enter a City..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savecity" class="btn btn-secondary btn-sm save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savecity" class="btn btn-secondary btn-sm save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
               <label for="state" class="col-form-label col-sm-3">State</label>
               <div class="input-group col-sm-9">
                 <input type="text" id="state" class="form-control form-control-sm textinput oce" value="<?php echo$client['state'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="state" data-bs="btn-danger" placeholder="Enter a State..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savestate" class="btn btn-secondary btn-sm save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savestate" class="btn btn-secondary btn-sm save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
               <label for="postcode" class="col-form-label col-sm-3">Postcode</label>
               <div class="input-group col-sm-9">
                 <input type="text" id="postcode" class="form-control form-control-sm textinput oce" value="<?php echo$client['postcode']!=0?$client['postcode']:'';?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="postcode" data-bs="btn-danger" placeholder="Enter a Postcode..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                <?php if($r['status']!='archived'){?><div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savepostcode" class="btn btn-secondary btn-sm save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div><?php }?>
+                <?php if($r['status']!='archived'){?><div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savepostcode" class="btn btn-secondary btn-sm save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div><?php }?>
               </div>
             </div>
             <div class="form-group row">
               <label for="email" class="col-form-label col-sm-3">Email</label>
               <div class="input-group col-sm-9">
                 <input type="text" id="email" class="form-control form-control-sm textinput oce" value="<?php echo$client['email'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="email" data-bs="btn-danger" placeholder="Enter an Email..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="saveemail" class="btn btn-secondary btn-sm save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="saveemail" class="btn btn-secondary btn-sm save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
               <label for="phone" class="col-form-label col-sm-3">Phone</label>
               <div class="input-group col-sm-9">
                 <input type="text" id="phone" class="form-control form-control-sm textinput oce" value="<?php echo$client['phone'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="phone" data-bs="btn-danger" placeholder="Enter a Phone..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savephone" class="btn btn-secondary btn-sm save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savephone" class="btn btn-secondary btn-sm save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
               <label for="mobile" class="col-form-label col-sm-3">Mobile</label>
               <div class="input-group col-sm-9">
                 <input type="text" id="mobile" class="form-control form-control-sm textinput oce" value="<?php echo$client['mobile'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="mobile" data-bs="btn-danger" placeholder="Enter a Mobile..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
-                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savemobile" class="btn btn-secondary btn-sm save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemobile" class="btn btn-secondary btn-sm save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
 <?php if($r['status']!='archived'){?>
             <div class="form-group row">
               <label for="changeClient" class="col-form-label col-sm-3">Client</label>
               <div class="input-group col-sm-9">
-                <select id="changeClient" class="form-control form-control-sm" onchange="changeClient($(this).val(),'<?php echo$r['id'];?>');" data-tooltip="tooltip" title="Select a Client...">
+                <select id="changeClient" class="form-control form-control-sm" onchange="changeClient($(this).val(),'<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Select a Client...">
                   <option value="0"<?php echo($r['cid']=='0'?' selected':'');?>>None</option>
                   <?php $q=$db->query("SELECT id,business,username,name FROM `".$prefix."login` WHERE status!='delete' AND status!='suspended' AND active!='0' AND id!='0'");while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($r['cid']==$rs['id']?' selected':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business'].'</option>':'');?>
                   </select>
@@ -212,7 +213,7 @@ else{?>
 <?php if($r['status']!='archived'){?>
                   <div class="input-group-append">
                     <div class="dropdown">
-                      <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-tooltip="tooltip" title="Extend Due Date" aria-label="Extend Due Date"><?php svg('add');?></button>
+                      <button class="btn btn-secondary btn-sm dropdown-toggle" data-toggle="dropdown" data-tooltip="tooltip" data-title="Extend Due Date" aria-label="Extend Due Date"><?php svg('add');?></button>
                       <div class="dropdown-menu">
                         <a class="dropdown-item" href="#" onclick="update('<?php echo$r['id'];?>','orders','due_ti','<?php echo$r['due_ti']+604800;?>');return false;">7 Days</a>
                         <a class="dropdown-item" href="#" onclick="update('<?php echo$r['id'];?>','orders','due_ti','<?php echo$r['due_ti']+1209600;?>');return false;">14 Days</a>
@@ -221,7 +222,7 @@ else{?>
                       </div>
                     </div>
                   </div>
-                  <div class="input-group-append" data-tooltip="tooltip" data-placement="top" title="Save"><button id="savedue_ti" class="btn btn-secondary btn-sm save" data-dbid="due_ti" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+                  <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savedue_ti" class="btn btn-secondary btn-sm save" data-dbid="due_ti" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
                 </div>
               </div>
@@ -231,7 +232,7 @@ else{?>
 <?php if($r['status']=='archived')
   echo'<input type="text" class="form-control form-control-sm" value="Archived" readonly>';
 else{?>
-                  <select id="status" class="form-control form-control-sm" onchange="update('<?php echo$r['id'];?>','orders','status',$(this).val());" data-tooltip="tooltip" title="Change Order Status">
+                  <select id="status" class="form-control form-control-sm" onchange="update('<?php echo$r['id'];?>','orders','status',$(this).val());" data-tooltip="tooltip" data-title="Change Order Status">
                     <option value="pending"<?php echo$r['status']=='pending'?' selected':'';?>>Pending</option>
                     <option value="overdue"<?php echo$r['status']=='overdue'?' selected':'';?>>Overdue</option>
                     <option value="cancelled"<?php echo$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
@@ -251,12 +252,12 @@ else{?>
             <div class="form-group row">
               <div class="input-group col">
                 <div class="input-group-text">Inventory/Services</div>
-                <select class="form-control" name="da" data-tooltip="tooltip" title="Select Product, Service or Empty Entry">
+                <select class="form-control" name="da" data-tooltip="tooltip" data-title="Select Product, Service or Empty Entry">
                   <option value="0">Add Empty Entry...</option>
                   <?php $s=$db->query("SELECT id,contentType,code,cost,title FROM `".$prefix."content` WHERE contentType='inventory' OR contentType='service' OR contentType='events' ORDER BY code ASC");while($i=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$i['id'].'">'.ucfirst(rtrim($i['contentType'],'s')).$i['code'].':$'.$i['cost'].':'.$i['title'].'</option>';?>
                 </select>
                 <div class="input-group-append">
-                  <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button>
+                  <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
                 </div>
               </div>
             </div>
@@ -272,12 +273,12 @@ if($sp->rowCount()>0){?>
             <div class="form-group row">
               <div class="input-group col">
                 <div class="input-group-text">Postage Options</div>
-                <select class="form-control" name="da" data-tooltip="tooltip" title="Select Postage Option or Empty Entry">
+                <select class="form-control" name="da" data-tooltip="tooltip" data-title="Select Postage Option or Empty Entry">
                   <option value="0">Clear Postage Option and Cost</option>
                   <?php while($rp=$sp->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rp['id'].'">'.$rp['title'].':$'.$rp['value'].'</option>';?>
                 </select>
                 <div class="input-group-append">
-                  <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" title="Add" aria-label="Add"><?php svg('add');?></button>
+                  <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
                 </div>
               </div>
             </div>
@@ -370,7 +371,7 @@ if($oi['iid']!=0)
                       <input type="hidden" name="t" value="orderitems">
                       <input type="hidden" name="c" value="quantity">
                       <input type="hidden" name="da" value="0">
-                      <button class="btn btn-secondary trash" data-tooltip="tooltip" title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                     </form>
                   </td>
                 </tr>

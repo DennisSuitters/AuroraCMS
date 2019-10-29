@@ -302,6 +302,10 @@ class admin{
 		$view='bookings';
 		require'admin.php';
 	}
+	function livechat($args=false){
+		$view='livechat';
+		require'admin.php';
+	}
 	function comments($args=false){
 		$view='comments';
 		require'admin.php';
@@ -510,6 +514,7 @@ $routes=[
 	$settings['system']['admin'].'/accounts'=>['admin','accounts'],
 	$settings['system']['admin'].'/activity'=>['admin','activity'],
 	$settings['system']['admin'].'/bookings'=>['admin','bookings'],
+	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
 	$settings['system']['admin'].'/comments'=>['admin','comments'],
 	$settings['system']['admin'].'/content'=>['admin','content'],
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],

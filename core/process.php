@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -18,7 +18,9 @@
  * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
  * @changes    v0.0.4 Adjust Visitor Tracking Option.
  * @changes    v0.0.4 Add Front End Editing.
- * @changes    v0.0.4 Fix Tracking Acquisition
+ * @changes    v0.0.4 Fix Tracking Acquisition.
+ * @changes    v0.0.5 Add check if User Agent isn't set, or User Agent is
+ *             Google Speed Insight and don't render Google Analytics Code if us.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -225,9 +227,11 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
   );
 }else
   $head=str_replace('<meta_helper>','',$head);
-if(isset($config['ga_tracking'])&&$config['ga_tracking']!='')
-  $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
-else
+if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
+  if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false){
+    $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
+  }
+}else
   $head=str_replace('<google_analytics>','',$head);
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899&&$config['development']==1)
   $content.='<div style="text-align:right;padding:10px;">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().'</div>';
@@ -246,20 +250,28 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
       '<script>'.
         '$(".editable").summernote({'.
           'airMode: false,'.
+          'toolbar: ['.
+            '[`save`,   [`save`]],'.
+            '[`style`,  [`style`, `bold`, `italic`, `underline`, `clear`]],'.
+            '[`font`,   [`strikethrough`, `superscript`, `subscript`]],'.
+            '[`para`,   [`ul`, `ol`, `paragraph`]],'.
+            '[`insert`, [`link`, `picture`, `video`, `audio`]],'.
+            '[`view`,   [`fullscreen`, `codeview`, `help`]],'.
+          '],'.
           'styleTags: ['.
             '`p`, `blockquote`, `pre`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`,'.
             $noteStyles.
           '],'.
           'popover: {'.
             'air: ['.
-              '[`save`, [`save`]],'.
-              '[`styles`, [`style`, `color`]],'.
-              '[`style`, [`bold`, `italic`, `underline`, `clear`]],'.
-              '[`font`, [`strikethrough`, `superscript`, `subscript`]],'.
-              '[`para`, [`ul`, `ol`, `paragraph`]],'.
-              '[`view`, [`codeview`, `help`]],'.
+              '[`save`,   [`save`]],'.
+              '[`style`,  [`style`, `bold`, `italic`, `underline`, `clear`]],'.
+              '[`font`,   [`strikethrough`, `superscript`, `subscript`]],'.
+              '[`para`,   [`ul`, `ol`, `paragraph`]],'.
+              '[`insert`, [`link`, `picture`, `video`, `audio`]],'.
+              '[`view`,   [`fullscreen`, `codeview`, `help`]],'.
             ']'.
-          '}'.
+          '},'.
         '});'.
       '</script>'.
       '<iframe id="sp" name="sp" class="d-none"></iframe>'.

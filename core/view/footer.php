@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.5 Add parsing Live Chat markup.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 	$link='<li><a href="logout/">Logout</a></li>';
@@ -162,5 +163,26 @@ if(stristr($html,'<buildSocial')){
 		$html=str_replace('<print rssicon>',frontsvg('libre-social-rss'),$html);
 	}else
 		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
+}
+if(stristr($html,'<chat')){
+	if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
+		if($config['options']{13}==1){
+			if($config['options']{14}==1&&$config['messengerFBCode']!=''){
+				$html=preg_replace('~<chat>.*?<\/chat>~is',$config['messengerFBCode'],$html,1);
+			}else{
+				$html=preg_replace([
+					'/<chat>/',
+					'/<\/chat>/',
+					'/<print sid>/'
+				],[
+					'',
+					'',
+					SESSIONID
+				],$html);
+			}
+		}else
+			$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
+	}else
+		$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
 }
 $content.=$html;

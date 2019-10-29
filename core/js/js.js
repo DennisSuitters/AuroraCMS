@@ -153,7 +153,6 @@ function update(id,t,c,da){
 			if(da=='proofs')els='#d3,#d7,#d8,#d9,#d10,#d11,#d12,#d19,#d20,#d21,#d22,#d24,#d26t,#d46,#d47,#d53,#d54,#d060,#d60';
 			$(els).addClass('d-none');
 		}
-		Pace.stop();
 		$('.page-block').removeClass('d-none');
 	})
 }
@@ -172,7 +171,6 @@ function updateButtons(id,t,c,da){
 	$('#sp').load('core/update.php?id='+id+'&t='+t+'&c='+c+'&da='+escape(da));
 }
 function restore(id){
-	Pace.restart();
 	$.ajax({
 		type:"GET",
 		url:"core/restore.php",
@@ -203,7 +201,6 @@ function more(t,c,b){
 	});
 }
 function purge(id,t,c){
-	Pace.restart();
 	if(t=='clearip'){
 		var f='clearip';
 	}else{
@@ -234,12 +231,10 @@ function purge(id,t,c){
 			$('#l_'+id).addClass('animated zoomOut');
 			setTimeout(function(){$('#l_'+id).remove();},500);
 		}
-		Pace.stop();
 		$('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
 	});
 }
 function suggest(id){
-	Pace.restart();
 	$.ajax({
 		type:"GET",
 		url:"core/suggest.php",
@@ -308,7 +303,6 @@ function insertAtCaret(aId,t) {
 	ta.scrollTop=sP;
 }
 function removeStopWords(id,txt){
-	Pace.restart();
 //	$('.page-block').addClass('d-block');
 	var x;
 	var y;
@@ -337,12 +331,10 @@ function removeStopWords(id,txt){
 	$('#'+id).val(txt).change();
 }
 function makeClient(id){
-	Pace.restart();
 //	$('.page-block').addClass('d-block');
 	$('#sp').load('core/add_data.php?id='+id+'&act=make_client');
 }
 function changeClient(id,oid,w){
-	Pace.restart();
 	if(w=='booking'){
 		$('#sp').load('core/change_bookingClient.php?id='+id+'&bid='+oid);
 	}else{
@@ -358,13 +350,11 @@ function changeClient(id,oid,w){
 			$('.ocehelp').addClass('d-none');
 		}
 	}
-	Pace.stop();
 }
 function reload(c){
 	location.reload(true);
 }
 function loadMore(l,is,ie,action,lang){
-	Pace.restart();
 	$('#more_'+is).html('');
 	$.ajax({
 		type:"GET",
@@ -377,7 +367,6 @@ function loadMore(l,is,ie,action,lang){
 		}
 	}).done(function(msg){
 		$('#l_activity').append(msg);
-		Pace.stop();
 //		$('.page-block').removeClass('d-block');
 	})
 }

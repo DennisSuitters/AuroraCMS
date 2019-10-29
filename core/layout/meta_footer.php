@@ -307,9 +307,6 @@ if(isset($r['due_ti'])){?>
   });
 <?php }?>
   document.addEventListener("DOMContentLoaded",function(event){
-    $(document).ajaxComplete(function(){
-      Pace.restart();
-    });
 <?php if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings')){?>
     $('.summernote').summernote({
       height:300,

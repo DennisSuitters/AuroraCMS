@@ -38,6 +38,23 @@ body.depth * * * * * * * * * *{background-color:rgba(255,0,0,.1)}
 .note-editor{position:relative;border:1px dotted #ccc;margin-top:5px}
 .note-editor.note-airframe .note-editing-area .note-editable,
 .note-editor.note-frame .note-editing-area .note-editable{background:transparent!important;color:inherit!important}
+.note-editor.fullscreen.note-airframe .note-editing-area .note-editable,
+.note-editor.fullscreen.note-frame .note-editing-area .note-editable{background:#fff!important;color:inherit!important}
+.note-btn{padding-top:0!important;padding-bottom:0!important}
+.note-popover .popover-content .note-style .dropdown-style h1,
+.note-popover .popover-content .note-style .dropdown-style h2,
+.note-popover .popover-content .note-style .dropdown-style h3,
+.note-popover .popover-content .note-style .dropdown-style h4,
+.note-popover .popover-content .note-style .dropdown-style h5,
+.note-popover .popover-content .note-style .dropdown-style h6,
+.note-popover .popover-content .note-style .dropdown-style p,
+.note-toolbar .note-style .dropdown-style h1,
+.note-toolbar .note-style .dropdown-style h2,
+.note-toolbar .note-style .dropdown-style h3,
+.note-toolbar .note-style .dropdown-style h4,
+.note-toolbar .note-style .dropdown-style h5,
+.note-toolbar .note-style .dropdown-style h6,
+.note-toolbar .note-style .dropdown-style p{margin:0;padding:0;font-size:1em;}
 .page-block{display:none;z-index:999999;position:fixed;top:0;right:0;bottom:0;left:0;width:100vw;height:100vh;background:#000;background:rgba(0,0,0,.8) url(../images/page-block.png) no-repeat center center fixed;background-size:cover;transition:background 2s ease;-webkit-transition:background 2s ease;-moz-transition:background 2s ease;-ms-transition:background 2s ease}
 .loader{position:absolute;top:50%;left:40%;margin-left:10%;transform:translate3d(-50%,-50%,0);-webkit-filter:blur(75px);-moz-filter:blur(75px);-ms-filter:blur(75px);-o-filter:blur(75px);filter:blur(75px)}
 .dot{width:32px;height:75vh;margin:auto 50px;background:#fff;border-radius:100%;display:inline-block;animation:slide 5s infinite}

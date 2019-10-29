@@ -95,6 +95,77 @@ a:hover{color:#888;text-decoration:none}
 .quote-footer h4{font-size:14px;margin-bottom:4px}
 .quote-footer p{font-weight:400;font-style:italic;font-size:14px}
 footer{font-size:1.25em}
+.chat{
+  z-index:900!important;
+  position:fixed!important;
+  top:auto!important;
+  right:0!important;
+  bottom:0!important;
+  left:auto!important
+}
+.chat #chatBody{
+
+}
+.chat #chatScreen{
+  min-height:100px;
+  max-height:300px;
+  overflow-x:none;
+  overflow-y:auto;
+}
+#chatScreen{
+  position:relative;
+  height: auto;
+  min-height: calc(100% - 93px);
+  max-height: calc(100% - 93px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+#chatScreen::-webkit-scrollbar {
+  width: 8px;
+  background: transparent;
+}
+#chatScreen::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+#chatScreen ul li {
+  display: inline-block;
+  clear: both;
+  float: left;
+  margin: 10px 10px 5px 0;
+  width: calc(100% - 25px);
+  font-size: 0.9em;
+}
+#chatScreen ul li:nth-last-child(1) {
+  margin-bottom: 5px;
+}
+#chatScreen ul li.page img {
+  margin: 6px 8px 0 0;
+}
+#chatScreen ul li.page p {
+  background: #c8ced3;
+  color: #000;
+}
+#chatScreen ul li.admin img {
+  float: right;
+  margin: 6px 0 0 8px;
+}
+#chatScreen ul li.admin p {
+  background: #e4e7ea;
+  color:#000;
+  float: right;
+}
+#chatScreen ul li img {
+  width: 32px;
+  border-radius: 50%;
+  float: left;
+}
+#chatScreen ul li p {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 80%;
+  line-height: 130%;
+}
 @media(min-width:360px){
   .w-50{width:100%!important}
   .m-4{margin:.75rem 0 .75rem 0!important}
@@ -127,7 +198,7 @@ footer{font-size:1.25em}
 .custom-file-label.outline-danger::after{background-color:#fff;color:#dc3545;border-color:#dc3545}
 .custom-file-label.outline-light::after{background-color:#fff;color:#f8f9fa;border-color:#f8f9fa}
 .custom-file-label.outline-dark::after{background-color:#fff;color:#343a40;border-color:#343a40}
-/* Corner Styles <div class="corner-ribbon bottom-right sticky green shadow">Hello</div> */  
+/* Corner Styles <div class="corner-ribbon bottom-right sticky green shadow">Hello</div> */
 .corner-ribbon{width:200px;background:#f8f9fa;position:absolute;top:15px;left:-70px;text-align:center;font-size:.5em;line-height:30px;letter-spacing:1px;color:#212529;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
 .corner-ribbon.small{top:5px;left:-30px;line-height:20px}
 .corner-ribbon.top-left{top:15px;left:-70px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}

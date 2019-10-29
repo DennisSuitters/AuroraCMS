@@ -96,9 +96,6 @@
             }
           });
         });
-        function populateTextarea(){
-          Pace.restart();
-        }
       </script>
 <?php }?>
     </div>

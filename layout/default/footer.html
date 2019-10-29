@@ -41,5 +41,38 @@
 				<print honey_pot_quick_link>
 			</div>
 		</div>
+		<chat>
+			<div class="container chat col-12 col-sm-5 ml-0 ml-sm-auto">
+				<div class="card m-0 shadow-lg">
+					<div id="chatHeader" class="card-header">
+						Live Chat
+					</div>
+					<div id="chatBody" class="card-body d-none">
+						<input id="chatsid" type="hidden" value="<print sid>">
+						<input id="chatwho" type="hidden" value="page">
+						<div class="chathideme">
+							<div class="form-group">
+								<label for="chatName">Name</label>
+								<input id="chatName" type="text" class="form-control" value="test">
+							</div>
+							<div class="form-group">
+								<label for="chatEmail">Email</label>
+								<input id="chatEmail" type="text" class="form-control" value="test">
+							</div>
+							<div class="form-group">
+								<button id="startChat" class="btn btn-secondary btn-block">Start Chat</button>
+							</div>
+						</div>
+						<div id="chatScreen" class="form-control chatunhideme d-none"></div>
+						<div class="input-group chatunhideme d-none">
+							<input id="chatMessage" type="text" class="form-control">
+							<div class="input-group-append">
+								<button id="chatButton" class="btn btn-secondary">Send</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</chat>
 	</footer>
 </div>

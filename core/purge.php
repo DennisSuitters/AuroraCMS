@@ -7,19 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.5 Add Removal of Live Chat conversations.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
+$getcfg=false;
 require'db.php';
-$id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$tbl=filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
-$col=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
+$id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
+$tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
+$col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
-if($id!=0&&$tbl!='logs'){
+if($id!=0&&$tbl!='logs'&&$tbl!='livechat'){
   $s=$db->prepare("SELECT * FROM ".$prefix.$tbl." WHERE id=:id");
   $s->execute([':id'=>$id]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
@@ -70,6 +72,16 @@ if($id!=0&&$id!='activity'){
   $q->execute([':id'=>$id]);
   if($tbl=='media')$el='media_items_';
 }
+if($tbl=='livechat'){
+  $q=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE sid=:sid");
+  $q->execute([':sid'=>$col]);?>
+  window.top.window.$('#l_<?php echo$id;?>').removeClass('active');
+  window.top.window.$('#l_<?php echo$id;?>').remove();
+  window.top.window.$('#chatTitle').html('&nbsp;');
+  window.top.window.$('#chatScreen').html('');
+  window.top.window.$('#chatsid,#chataid,#chatemail,#chatname').val('');
+  window.top.window.$('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
+<?php }
 if($tbl=='errorlog'){
   unlink('..'.DS.'media'.DS.'cache'.DS.'error.log');
   $el='l_';

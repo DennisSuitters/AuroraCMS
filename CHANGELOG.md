@@ -1,3 +1,8 @@
+### AuroraCMS v0.0.5
+- Add Chat Widget. With option to use built-in Chat or Facebook Messenger.
+- Remove Pace.
+- Add check if User Agent isn't set, or User Agent is Google Speed Insight and don't render Google Analytics Code if us. This helps when Google is testing as Google Analytics slows page loading.
+
 ### AuroraCMS v0.0.4
 - Fix Installer Account Creation SQL.
 - Add Timezone Option to Installer Page.

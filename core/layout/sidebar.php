@@ -7,18 +7,23 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Move Settings Links into Menu.
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.5 Add Live Chat to Menu
  */?>
   <div id="sidebar" class="sidebar">
     <nav class="sidebar-nav">
       <ul class="nav">
         <li class="nav-item<?php echo($view=='dashboard'?' active':'');?>">
           <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/dashboard';?>"><?php svg('dashboard','nav-icon');?> Dashboard</a>
+        </li>
+        <li class="nav-item<?php echo($view=='livechat'?' active':'');?>">
+          <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/livechat';?>"><?php svg('chat','nav-icon');?> Live Chat</a>
+          <?php echo$user['options']{7}==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/livechat/settings" data-tooltip="tooltip" data-title="Live Chat Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
         </li>
         <li class="nav-item nav-dropdown<?php echo($view=='media'||$view=='pages'||$view=='content'||$view=='rewards'||$view=='newsletters'?' open':'');?>">
           <a class="nav-link nav-dropdown-toggle" href="<?php echo URL.$settings['system']['admin'].'/content';?>"><?php svg('content','nav-icon');?> Content</a>

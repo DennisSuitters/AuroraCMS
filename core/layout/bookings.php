@@ -170,7 +170,6 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
         }
       },
       eventDrop:function(event){
-        Pace.restart();
         updateButtons(event.id,"content","tis",event.start.unix());
       }
     });

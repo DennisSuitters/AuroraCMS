@@ -404,16 +404,13 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
             rename($tp,'..'.DS.'media'.DS.'avatar'.DS.'avatar'.$fn);
 						if($act=='add_tstavatar'){?>
 	window.top.window.$('#tstavatar').attr('src','media/avatar/avatar<?php echo$fn.'?'.time();?>');
-	window.top.window.Pace.stop();
 <?php 			}else{?>
   window.top.window.$('.img-avatar').attr('src','media/avatar/avatar<?php echo$fn.'?'.time();?>');
-	window.top.window.Pace.stop();
 <?php 			}
 					}
         }
-      }?>
-  window.top.window.Pace.stop();
-<?php break;
+      }
+			break;
     case'add_media':
       $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
       $t=filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING);
@@ -444,7 +441,6 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
 		'</div>';?>
 ');
 	window.top.window.$('[data-lightbox="media"]').simpleLightbox();
-  window.top.window.Pace.stop();
 <?php   }
       }
       break;

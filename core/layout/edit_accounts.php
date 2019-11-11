@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.2 Add Description for Profiles and Meta-Description data.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.6 Add option to make user receive LiveChat email Notifications.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -81,7 +82,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-images">
-            <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php" onsubmit="Pace.restart();">
+            <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <div class="form-group row">
                 <label for="avatar" class="col-form-label col-sm-2">Avatar</label>
                 <div class="input-group col-sm-10">
@@ -122,17 +123,23 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
           </div>
+<?php /* Proofs */ ?>
           <div id="account-proofs" class="tab-pane" role="tabpanel">
-            <ul id="proof_items">
+            <div id="mi" class="row">
 <?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='proofs' AND uid=:id ORDER BY ord ASC");
 $sm->execute([':id'=>$r['id']]);
 while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-  if(!file_exists($rm['file']))$rm['file']=ADMINNOIMAGE;
-  list($width,$height)=getimagesize($rm['file']);?>
-              <li id="proof_items_<?php echo$rm['id'];?>" class="col-6 col-sm-3">
-                <div class="card media">
-                  <div class="controls btn-group">
-                    <a class="btn btn-default btn-sm" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"><?php svg('edit');?></a>
+  if(file_exists('media/thumbs/'.substr(basename($rm['file']),0,-4).'.png'))
+    $thumb='media/thumbs/'.substr(basename($rm['file']),0,-4).'.png';
+  else
+    $thumb=ADMINNOIMAGE;?>
+              <div id="mi_<?php echo$rm['id'];?>" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0">
+                <div class="card bg-dark m-0">
+                  <img src="<?php echo$thumb;?>" class="card-img" alt="Proof <?php echo$rm['id'];?>">
+                  <div id="card-title<?php echo$rm['id'];?>" class="card-footer"><?php echo$rm['title'];?></div>
+                </div>
+                <div class="controls btn-group">
+                  <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"><?php svg('edit');?></a>
 <?php $scn=$sccn=0;
   $sc=$db->prepare("SELECT COUNT(rid) as cnt FROM `".$prefix."comments` WHERE rid=:rid AND contentType='proofs'");
   $sc->execute([':rid'=>$rm['id']]);
@@ -140,19 +147,38 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
   $scc=$db->prepare("SELECT COUNT(rid) as cnt FROM `".$prefix."comments` WHERE rid=:rid AND status!='approved'");
   $scc->execute([':rid'=>$rm['id']]);
   $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
-                    <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" data-title="'.$sccn['cnt'].' New Comments"':'').' aria-label="View Comments"';?>>'.svg2('libre-gui-comments').'&nbsp;'.$scn['cnt'].'</a>';?>
+                  <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" data-title="'.$sccn['cnt'].' New Comments"':'');?> aria-label="View Comments"><?php svg('comments').'&nbsp;'.$scn['cnt'];?></a>
 <?php if($user['options']{5}==1){?>
-                    <span class="handle btn btn-default btn-xs" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></span>
+                  <span class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></span>
 <?php }?>
-                  </div>
-                  <div class="card-body">
-                    <a href="<?php echo$rm['file'];?>" data-fancybox="gallery"><img src="<?php echo$rm['file'];?>" alt="Proof <?php echo$rm['id'];?>"></a>
-                  </div>
-                  <div id="media-title<?php echo$rm['id'];?>" class="card-footer"><?php echo$rm['title'];?></div>
                 </div>
-              </li>
+              </div>
 <?php }?>
-            </ul>
+            </div>
+<?php if($user['options']{1}==1){?>
+            <script>
+              $('#mi').sortable({
+                items:".media-gallery",
+                placeholder:".ghost",
+                helper:fixWidthHelper,
+                update:function(e,ui){
+                  var order=$("#mi").sortable("serialize");
+                  $.ajax({
+                    type:"POST",
+                    dataType:"json",
+                    url:"core/reorderproofs.php",
+                    data:order
+                  });
+                }
+              }).disableSelection();
+              function fixWidthHelper(e,ui){
+                ui.children().each(function(){
+                  $(this).width($(this).width());
+                });
+                return ui;
+              }
+            </script>
+<?php }?>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-social">
 <?php if($user['options']{0}==1||$user['options']{5}==1){?>
@@ -684,6 +710,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               </div>
             </div>
           </div>
+<?php /* Messages */ ?>
           <div role="tabpanel" class="tab-pane" id="account-messages">
             <div class="form-group row">
               <label for="email_signature" class="col-form-label col-sm-2">Email Signature</label>
@@ -703,6 +730,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               </div>
             </div>
           </div>
+<?php /* Settings */ ?>
           <div role="tabpanel" class="tab-pane" id="account-settings">
             <div class="form-group row">
               <label for="timezone" class="col-form-label col-sm-2">Timezone</label>
@@ -724,7 +752,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               </div>
             </div>
 <?php if($user['id']==$r['id']||$user['options']{5}==1){?>
-            <form target="sp" method="post" action="core/update.php" onsubmit="Pace.restart();">
+            <form target="sp" method="post" action="core/update.php">
               <div class="form-group row">
                 <label for="password" class="col-form-label col-sm-2">Password</label>
                 <div class="input-group col-sm-10">
@@ -764,58 +792,70 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
             <hr>
             <legend>Account Permissions</legend>
             <div class="form-group row">
-              <label for="options0" class="col-form-label col-8 col-sm-3">Add or Remove Content</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0"<?php echo($r['options']{0}==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options0" class="col-form-label col-sm-11">Add or Remove Content</label>
             </div>
             <div class="form-group row">
-              <label for="options1" class="col-form-label col-8 col-sm-3">Edit Content</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1"<?php echo($r['options']{1}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options1" class="col-form-label col-sm-11">Edit Content</label>
             </div>
             <div class="form-group row">
-              <label for="options2" class="col-form-label col-8 col-sm-3">Add or Edit Bookings</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2"<?php echo($r['options']{2}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options2" class="col-form-label col-sm-11">Add or Edit Bookings</label>
             </div>
             <div class="form-group row">
-              <label for="options3" class="col-form-label col-8 col-sm-3">Message Viewing or Editing</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3"<?php echo($r['options']{3}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options3" class="col-form-label col-sm-11">Message Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <label for="options4" class="col-form-label col-8 col-sm-3">Orders Viewing or Editing</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4"<?php echo($r['options']{4}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options4" class="col-form-label col-sm-11">Orders Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <label for="options5" class="col-form-label col-8 col-sm-3">User Accounts Viewing or Editing</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options5" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5"<?php echo($r['options']{5}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options5" class="col-form-label col-sm-11">User Accounts Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <label for="options6" class="col-form-label col-8 col-sm-3">SEO Editing</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options6" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6"<?php echo($r['options']{6}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options6" class="col-form-label col-sm-11">SEO Editing</label>
             </div>
             <div class="form-group row">
-              <label for="options7" class="col-form-label col-8 col-sm-3">Preferences Viewing or Editing</label>
-              <div class="input-group col-4 col-sm-9">
+              <div class="input-group col-sm-1">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options7" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7"<?php echo($r['options']{7}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options7" class="col-form-label col-sm-11">Preferences Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <label for="options8" class="col-form-label col-8 col-sm-3">System Utilization Viewing</label>
-              <div class="input-group col-4 col-sm-9">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="options8" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="8"<?php echo($r['options']{8}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+              <div class="input-group col-sm-1">
+                <label class="switch switch-label switch-success">
+                  <input type="checkbox" id="liveChatNotification0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0"<?php echo($r['liveChatNotification']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>>
+                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                </label>
               </div>
+              <label for="liveChatNotification0" class="col-form-label col-sm-11">Email LiveChat notifications</label>
+            </div>
+            <div class="form-group row">
+              <div class="input-group col-sm-1">
+                <label class="switch switch-label switch-success">
+                  <input type="checkbox" id="options8" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="8"<?php echo($r['options']{8}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>>
+                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                </label>
+              </div>
+              <label for="options8" class="col-form-label col-sm-11">System Utilization Viewing</label>
             </div>
           </div>
         </div>

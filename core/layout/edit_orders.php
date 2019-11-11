@@ -327,7 +327,7 @@ else
 <?php if($oi['iid']!=0)
   echo$i['title'];
 else{?>
-                    <form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();">
+                    <form target="sp" method="POST" action="core/updateorder.php">
                       <input type="hidden" name="act" value="title">
                       <input type="hidden" name="id" value="<?php echo$oi['id'];?>">
                       <input type="hidden" name="t" value="orderitems">
@@ -339,7 +339,7 @@ else{?>
                   <td class="text-left align-middle"><?php echo$c['title'];?></td>
                   <td class="text-center align-middle">
 <?php if($oi['iid']!=0){?>
-                    <form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();">
+                    <form target="sp" method="POST" action="core/updateorder.php">
                       <input type="hidden" name="act" value="quantity">
                       <input type="hidden" name="id" value="<?php echo$oi['id'];?>">
                       <input type="hidden" name="t" value="orderitems">
@@ -353,7 +353,7 @@ if($oi['iid']!=0)
                   </td>
                   <td class="text-right align-middle">
 <?php if($oi['iid']!=0){?>
-                    <form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();">
+                    <form target="sp" method="POST" action="core/updateorder.php">
                       <input type="hidden" name="act" value="cost">
                       <input type="hidden" name="id" value="<?php echo$oi['id'];?>">
                       <input type="hidden" name="t" value="orderitems">
@@ -365,7 +365,7 @@ if($oi['iid']!=0)
                   </td>
                   <td class="text-right align-middle"><?php echo$oi['iid']!=0?$oi['cost']*$oi['quantity']:'';?></td>
                   <td class="text-right">
-                    <form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();">
+                    <form target="sp" method="POST" action="core/updateorder.php">
                       <input type="hidden" name="act" value="trash">
                       <input type="hidden" name="id" value="<?php echo$oi['id'];?>">
                       <input type="hidden" name="t" value="orderitems">
@@ -384,7 +384,7 @@ $reward=$sr->fetch(PDO::FETCH_ASSOC);?>
                 <tr>
                   <td colspan="3" class="text-right align-middle"><strong>Rewards Code</strong></td>
                   <td colspan="2" class="text-center">
-                    <form id="rewardsinput" target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();">
+                    <form id="rewardsinput" target="sp" method="POST" action="core/updateorder.php">
                       <div class="form-group row">
                         <div class="input-group">
                           <input type="hidden" name="act" value="reward">
@@ -430,7 +430,7 @@ if($ssr->rowCount()>0){?>
                 <tr>
                   <td class="text-right align-middle"><strong>Postage</strong></td>
                   <td colspan="5" class="text-right align-middle">
-                    <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();" onsubmit="Pace.restart();">
+                    <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                       <input type="hidden" name="act" value="postoption">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                       <input type="hidden" name="t" value="orders">
@@ -439,7 +439,7 @@ if($ssr->rowCount()>0){?>
                     </form>
                   </td>
                   <td class="text-right pl-0 pr-0">
-                    <form target="sp" method="POST" action="core/updateorder.php" onchange="$(this).submit();" onsubmit="Pace.restart();">
+                    <form target="sp" method="POST" action="core/updateorder.php" onchange="$(this).submit();">
                       <input type="hidden" name="act" value="postcost">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                       <input type="hidden" name="t" value="orders">

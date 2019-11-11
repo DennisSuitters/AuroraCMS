@@ -26,7 +26,7 @@
             <div class="input-group col-sm-10">
               <input type="text" id="prefix" class="form-control textinput" name="dbprefix" value="<?php echo$prefix;?>" placeholder="Enter a Table Prefix...">
               <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary" onclick="$('body').append('<div id=blocker><div></div></div>');Pace.restart();">Update</button>
+                <button type="submit" class="btn btn-secondary" onclick="$('body').append('<div id=blocker><div></div></div>');">Update</button>
               </div>
             </div>
           </div>
@@ -42,7 +42,7 @@ if($config['backup_ti']<$tid)
             <div class="form-group row">
               <label class="col-form-label col-sm-2">Backup</label>
               <div class="input-group col-sm-10">
-                <button type="submit" class="btn btn-secondary btn-block" onclick="Pace.restart();">Perform Backup</button>
+                <button type="submit" class="btn btn-secondary btn-block">Perform Backup</button>
               </div>
             </div>
           </form>
@@ -70,7 +70,7 @@ if($config['backup_ti']<$tid)
                   <label class="custom-file-label" for="resturefu">Choose File</label>
                 </div>
                 <div class="input-group-append">
-                  <button type="submit" class="btn btn-secondary" onclick="Pace.restart();">Restore</button>
+                  <button type="submit" class="btn btn-secondary">Restore</button>
                 </div>
               </div>
             </div>

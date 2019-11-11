@@ -28,7 +28,5 @@ if(isset($_FILES['fu'])){
   window.top.window.toastr["danger"]('There was an issue Restoring the Backup!<br><?php echo$e[2];?>');
 <?php }
   }
-}?>
-  window.top.window.Pace.stop();
-<?php
+}
 echo'</script>';

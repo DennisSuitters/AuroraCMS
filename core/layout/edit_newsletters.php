@@ -24,7 +24,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group" aria-label="Settings">
         <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
-        <a href="#" class="btn btn-ghost-normal info" onclick="Pace.restart();$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;" data-tooltip="tooltip" data-placement="left" data-title="Send Newsletters" aria-label="Send Newsletters"><?php svg('email-send');?></a>
+        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;" data-tooltip="tooltip" data-placement="left" data-title="Send Newsletters" aria-label="Send Newsletters"><?php svg('email-send');?></a>
       </div>
     </li>
   </ol>

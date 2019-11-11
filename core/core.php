@@ -236,6 +236,17 @@ function tomoment($f){
   $r=['d'=>'DD','D'=>'ddd','j'=>'D','l'=>'dddd','N'=>'E','S'=>'o','w'=>'e','z'=>'DDD','W'=>'W','F'=>'MMMM','m'=>'MM','M'=>'MMM','n'=>'M','t'=>'','L'=>'','o'=>'YYYY','Y'=>'YYYY','y'=>'YY','a'=>'a','A'=>'A','B'=>'','g'=>'h','G'=>'H','h'=>'hh','H'=>'HH','i'=>'mm','s'=>'ss','u'=>'SSS','e'=>'zz','I'=>'','O'=>'','P'=>'','T'=>'','Z'=>'','c'=>'','r'=>'','U'=>'X'];
   return strtr($f,$r);
 }
+function getDomain($url){
+  $pieces=parse_url($url);
+  $domain=isset($pieces['host'])?$pieces['host']:'';
+  if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i',$domain,$regs)){
+    return$regs['domain'];
+  }
+  return FALSE;
+//		$rawurl = "http://asdf.sadf.abc.com/adsfkjl/adfs/adfs.html";
+//		$url = parse_url($rawurl);
+//		$domain = preg_replace('#^(?:.+?\\.)+(.+?\\.(?:co\\.uk|com|net))#', '$1', $url['host']);
+}
 function url_encode($str){
 	$str=trim(strtolower($str));
 	$str=str_replace(array('%2D','%2D','%2D','%2D','!','*',"'","(",")",";",":","@","&","=","+","$",",","/","?","#","[","]",' '),array(chr(149),chr(150),chr(151),chr(45),'%21','%2A',"%27","%28","%29","%3B","%3A","%40","%26","%3D","%2B","%24","%2C","%2F","%3F","%23","%5B","%5D",'-'),$str);

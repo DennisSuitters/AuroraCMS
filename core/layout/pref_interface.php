@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Toggle to Enable Administration Activity Tracking.
  * @changes    v0.0.3 Change position of Toggles and Descriptions for better formatting.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.6 Add GDPR Option.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -22,6 +23,13 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        <div class="form-group row">
+          <div class="input-group col-sm-1">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="development0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="8"<?php echo$config['options']{8}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options8" class="col-form-label col-sm-3">Display GDPR Banner.</label>
+          <div class="col-sm-8 text-right small text-muted">Check <a target="_blank" href="https://www.oaic.gov.au/privacy/guidance-and-advice/australian-entities-and-the-eu-general-data-protection-regulation/">here</a> to determine if you need to display a GDPR Banner.</div>
+        </div>
 <?php if($user['rank']==1000){?>
         <div class="form-group row">
           <div class="input-group col-sm-1">

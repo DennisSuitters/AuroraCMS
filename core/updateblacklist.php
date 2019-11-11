@@ -17,4 +17,3 @@ $code=$_POST['code'];
 $fp=fopen('..'.DS.$file,'w');
 fwrite($fp,$code);
 fclose($fp);
-echo'<script>window.top.window.Pace.stop();</script>';

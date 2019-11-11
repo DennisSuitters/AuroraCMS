@@ -44,6 +44,7 @@ if($s->rowCount()>0){
           '<small>'.$r['name'].'</small><br>'.
           '<small>'.$r['email'].'</small><br>'.
           '<small><small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.
+					($r['status']=='unseen'?'<span class="btn-group float-right"><span class="badge badge-danger">Unread</span></span>':'<span class="btn-group float-right"><span class="badge badge-success">Read</span></span>').
         '</span>';
   }
 }?>
@@ -56,6 +57,6 @@ $(".chatListItem").click(function(e){
   $('#chatTitle').html('Chat with <span id="chatTitleName">'+$(this).data('chatname')+'</span> <small id="chatTitleEmail"><a href="mailto:'+$(this).data('chatemail')+'">&lt;'+$(this).data('chatemail')+'&gt;</a></small>');
   $(".chatListItem").removeClass('active');
   $(this).addClass('active');
-  updateChat();
+  updateChat('seen');
 });
 </script>

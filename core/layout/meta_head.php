@@ -20,7 +20,7 @@
 <!--
      AuroraCMS - Administration - Copyright (C) Diemen Design 2019
           the Australian MIT Licensed Open Source Content Management System.
-     
+
      Project Maintained at https://github.com/DiemenDesign/AuroraCMS
 -->
 <html lang="en" id="AuroraCMS">
@@ -41,6 +41,7 @@
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'elfinder'.DS.'css'.DS.'elfinder.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'fullcalendar.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.simplecolorpicker.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'i.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'codemirror.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'daterangepicker.css';?>">
@@ -57,6 +58,7 @@
     <script src="<?php echo URL.'core'.DS.'elfinder'.DS.'js'.DS.'elfinder.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'aurora.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>
+    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.simplecolorpicker.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'moment.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'fullcalendar.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>

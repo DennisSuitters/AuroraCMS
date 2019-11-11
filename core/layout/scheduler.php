@@ -125,7 +125,6 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
       }
     },
     eventDrop:function(event){
-      Pace.restart();
       updateButtons(event.id,"content","pti",event.start.unix());
       if(event.start.unix()>moment().unix()){
         if(event.status=='autopublish'){

@@ -84,7 +84,7 @@ if($found==true){
   					"ALTER TABLE `".$prefix
   				],$sql);
   			$q=$db->exec($sql);
-  			$e=$db->errorInfo();        
+  			$e=$db->errorInfo();
         $upgradeExec=fopen('doupgrade.php','w');
         fwrite($upgradeExec,$contents);
         fclose($upgradeExec);
@@ -127,5 +127,4 @@ if($found==true){
 }
 $su=$db->prepare("UPDATE config SET uti=:uti WHERE id='1'");
 $su->execute([':uti'=>time()]);
-  echo'window.top.window.Pace.stop();'.
-'</script>';
+echo'</script>';

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.6 Add Read Status.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_livechat.php';
@@ -52,6 +53,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <small><?php echo$r['name'];?></small><br>
                     <small><?php echo$r['email'];?></small><br>
                     <small><small><?php echo date($config['dateFormat'],$r['ti']);?></small></small>
+                    <?php echo$r['status']=='unseen'?'<span class="btn-group float-right"><span class="badge badge-danger">Unread</span></span>':'<span class="btn-group float-right"><span class="badge badge-success">Read</span></span>';?>
                   </span>
 <?php }?>
                 </div>
@@ -85,13 +87,14 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
   </div>
 </main>
 <script>
-function updateChat(){
+function updateChat(seen){
   chatTimer=null;
   $.ajax({
     type:"POST",
     url:"core/chat.php",
     data:{
-      sid: $('#chatsid').val()
+      sid:$('#chatsid').val(),
+      seen:seen
     }
   }).done(function(data){
     if(data!='none'){
@@ -131,7 +134,7 @@ $(document).ready(function(){
     $('#chatTitle').html('Chat with <span id="chatTitleName">'+$(this).data('chatname')+'</span> <small id="chatTitleEmail"><a href="mailto:'+$(this).data('chatemail')+'">&lt;'+$(this).data('chatemail')+'&gt;</a></small>');
     $(".chatListItem").removeClass('active');
     $(this).addClass('active');
-    updateChat();
+    updateChat('seen');
   });
   $("#chatButton").click(function(){
     $.ajax({
@@ -149,7 +152,7 @@ $(document).ready(function(){
       $("#chatScreen").html(data);
       document.getElementById('chatScreen').scrollTop=9999999;
       $("#chatmessage").val("");
-      updateChat();
+      updateChat('seen');
     });
   });
 });

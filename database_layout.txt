@@ -58,14 +58,14 @@ config
     5
     6
     7
-    8
+    8   Display GDPR Banner
     9   Delete Messages When Retrieved / Show RSS Feed Icon
     10  Related Content by Content type
     11  Enable Visitor Tracking
     12  Enable Administration Acivity Tracking
     13  Enable Chat
     14  Facebook Messenger insted of Integrated Chat
-    15
+    15  Email Chat Notifications to Nominated Accounts
     16
     17
     18
@@ -386,6 +386,7 @@ login
   `experience` int(4) NOT NULL,
   `hash` varchar(32) COLLATE utf8_bin NOT NULL,
   `emailPassword` tinytext COLLATE utf8_bin NOT NULL,
+  liveChatNotification INT(10) NOT NULL,
   `email_check` int(10) NOT NULL,
   `email_signature` text COLLATE utf8_bin NOT NULL,
   `url` varchar(256) COLLATE utf8_bin NOT NULL,

@@ -34,7 +34,5 @@ if($col=='notes'){?>
   if(window.top.window.$('#<?php echo$col;?>')){
     window.top.window.$('#<?php echo$col;?>').val('<?php echo$r['oldda'];?>');
   }
-<?php }?>
-  window.top.window.Pace.stop();
-<?php
+<?php }
 echo'</script>';

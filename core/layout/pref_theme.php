@@ -44,7 +44,6 @@ foreach($folders as$folder){
       $('#preference-theme .card').removeClass("bg-success");
       $(this).addClass("bg-success");
       $('#notheme').addClass("hidden");
-      Pace.restart();
       $.ajax({
         type:"GET",
         url:"core/update.php",

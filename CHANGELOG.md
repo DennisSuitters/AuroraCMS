@@ -1,3 +1,10 @@
+### v0.0.6
+- Fix reference to jQuery on Login page being wrong.
+- Remove missed Pace Artifacts which were causing script errors.
+- Add GDPR Banner Optional Display.
+- Add features to LiveChat, email enable admin users, show status of new chat messages.
+- Adjust Bootstrap Tabs styling.
+
 ### AuroraCMS v0.0.5
 - Add Chat Widget. With option to use built-in Chat or Facebook Messenger.
 - Remove Pace.

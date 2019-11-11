@@ -263,7 +263,5 @@ window.top.window.toastr["success"]('<?php echo$alertmsg;?>');
     $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'There was an issue sending the Order to {business}!');?>
 window.top.window.toastr["danger"]('<?php echo$alertmsg;?>');
 <?php }
-}?>
-  window.top.window.Pace.stop();
-<?php
+}
 echo'</script>';

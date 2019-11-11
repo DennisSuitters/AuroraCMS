@@ -57,7 +57,5 @@ if($r['file']!=''){
   window.top.window.$('#<?php echo$c;?>').val('<?php echo$out;?>');
 <?php }else{?>
   window.top.window.$('#notification').html('<div class="alert alert-info">There is no image to get the EXIF Info from.</div>');
-<?php }?>
-  window.top.window.Pace.stop();
-<?php
+<?php }
 echo'</script>';

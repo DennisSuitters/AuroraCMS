@@ -382,7 +382,7 @@ if($cntc<0){
               </div>
             </div>
 <?php }?>
-            <div class="help-block small text-muted text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <code class="click" style="cursor:pointer;" onclick="$('#url').val('#<?php echo$r['contentType'];?>');update('<?php echo$r['id'];?>','menu','url',$('#url').val());pace.start();">#<?php echo$r['contentType'];?></code> to have menu item link to Anchor with same name on same page.</div>
+            <div class="help-block small text-muted text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <code class="click" style="cursor:pointer;" onclick="$('#url').val('#<?php echo$r['contentType'];?>');update('<?php echo$r['id'];?>','menu','url',$('#url').val());">#<?php echo$r['contentType'];?></code> to have menu item link to Anchor with same name on same page.</div>
             <div class="form-group row">
               <label for="url" class="col-form-label col-sm-2">URL Type</label>
               <div class="input-group col-sm-10">

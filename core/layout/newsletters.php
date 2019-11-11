@@ -67,7 +67,7 @@ else{
                     <td class="text-center align-middle"><?php echo$r['status']=='unpublished'?'Unpublished':date($config['dateFormat'],$r['tis']);?></td>
                     <td id="controls_<?php echo$r['id'];?>" class="align-middle">
                       <div class="btn-group float-right">
-                        <?php echo$user['options']{1}==1?'<button class="btn btn-secondary" onclick="Pace.restart();$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);" data-tooltip="tooltip" data-title="Send Newsletters" aria-label="Send Newsletters">'.svg2('email-send').'</button>':'';?>
+                        <?php echo$user['options']{1}==1?'<button class="btn btn-secondary" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);" data-tooltip="tooltip" data-title="Send Newsletters" aria-label="Send Newsletters">'.svg2('email-send').'</button>':'';?>
                         <a class="btn btn-secondary" href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" data-tooltip="tooltip"<?php echo$user['options']{1}==1?' data-title="Edit" aria-label="Edit"':' data-title="View" aria-label="View"';?>><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
 <?php   if($user['options']{0}==1){?>
                         <button class="btn btn-secondary<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>

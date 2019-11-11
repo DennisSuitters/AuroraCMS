@@ -32,6 +32,7 @@ window.onbeforeunload=function(e){
       },idleWait);
     });
     $("body").trigger("mousemove");
+    $('select[name="colorpicker"]').simplecolorpicker({theme: 'regularfont'});
   });
   $(function(){
     var hash=window.location.hash;

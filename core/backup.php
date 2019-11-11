@@ -124,5 +124,4 @@ if(file_exists('..'.DS.'media'.DS.'backup'.DS.$file)){
 <?php }else{?>
 	window.top.window.toastr["danger"]('There was an issue adding the Data!');
 <?php }?>
-  window.top.window.Pace.stop();
 </script>

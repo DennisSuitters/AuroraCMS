@@ -114,7 +114,7 @@
             <div class="form-group row text-right">
               <div class="col-form-label col-sm-2"></div>
               <div class="col-12 col-sm-10">
-                <form target="sp" method="post" action="core/update.php" onsubmit="Pace.restart();$('#php_quicklink_save').removeClass('btn-danger');">
+                <form target="sp" method="post" action="core/update.php" onsubmit="$('#php_quicklink_save').removeClass('btn-danger');">
                   <input type="hidden" name="id" value="1">
                   <input type="hidden" name="t" value="config">
                   <input type="hidden" name="c" value="php_quicklink">
@@ -161,7 +161,7 @@
                     }?>
                   </select>
                   <div class="input-group-append">
-                    <button id="filesEditLoad" class="btn btn-secondary" onclick="Pace.restart();">Load</button>
+                    <button id="filesEditLoad" class="btn btn-secondary">Load</button>
                   </div>
                 </div>
                 <div class="form-group">
@@ -194,16 +194,12 @@
                       url:url+'?<?php echo time();?>',
                       dataType:"text",
                       success:function(data){
-                        Pace.restart();
                         editor.setValue(data).refresh();
                       }
                     });
                   }
                 });
               });
-              function populateTextarea(){
-                Pace.restart();
-              }
             </script>
           </div>
           <div id="tab-security-blacklist" name="tab-security-blacklist" class="tab-pane">

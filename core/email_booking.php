@@ -83,7 +83,5 @@ window.top.window.toastr["danger"]('<?php echo$alertmsg;?>');
   <?php }
 }else{?>
 window.top.window.toastr["info"]('<?php echo'Client Email has not been set!';?>');
-<?php }?>
-window.top.window.Pace.stop();
-<?php
+<?php }
 echo'</script>';

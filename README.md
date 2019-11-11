@@ -1,9 +1,14 @@
 ![AuroraCMS](core/images/auroracms.svg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
+#### Version
+We are currently at v0.0.6
+
 ### FAQ
 - Why no Plugins?
   - Anybody who's worked on or developed any kind of Content Mangement System in any Programming Language knows that Plugins are a potential security problem. Plugins are something that because third parties can build them, end up being out of the control of the developer, especially if the Plugin Maker disregards the conventions set by the project.
+- Update Cycle.
+  - As at the moment there is only one person working on the project, updates are as they get time to do them.
 
 ### Features
 - Blog Articles, Portfolio's, Bookings, Events, News, Testimonials, Inventory, Services, Gallery, Proofs, Messages, and Newsletters.
@@ -34,6 +39,10 @@ AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDes
 - Page and Visitor Tracking.
 - SEO Stats within Content, Google (currently broken), Alexa, and Moz.
 - Button links to Wiki Help pages, and popup Video Help.
+- Live Chat.
+  - Choose between the built in Live Chat, or easily integrate Facebook Messenger.
+- GDPR Privacy Notice Compliancy.
+  - For those providing Services and or Products to European Countries.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Studio Junkyard:
   - summernote-accessibility (In Progress)
   - [summernote-cleaner](https://github.com/DiemenDesign/summernote-cleaner)

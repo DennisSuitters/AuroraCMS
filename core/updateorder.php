@@ -166,18 +166,18 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
 					'<td class="text-center align-middle"><img class="img-fluid" style="max-width:24px;height:24px;" src="'.$image.'" alt="'.$c['title'].'"></td>'.
     			'<td class="text-left align-middle">'.$i['code'].'</td>'.
     			'<td class="text-left align-middle">'.
-						($oi['iid']!=0?$i['title']:'<form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();"><input type="hidden" name="act" value="title"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="title"><input type="text" class="form-control" name="da" value="'.$oi['title'].'"></form>').
+						($oi['iid']!=0?$i['title']:'<form target="sp" method="POST" action="core/updateorder.php"><input type="hidden" name="act" value="title"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="title"><input type="text" class="form-control" name="da" value="'.$oi['title'].'"></form>').
 					'</td>'.
     			'<td class="text-left align-middle">'.$c['title'].'</td>'.
 					'<td class="text-center align-middle">'.
-						($oi['iid']!=0?'<form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();"><input type="hidden" name="act" value="quantity"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="quantity"><input class="form-control text-center" name="da" value="'.$oi['quantity'].'"'.($r['status']=='archived'?' readonly':'').'></form>':($oi['iid']!=0?$oi['quantity']:'')).
+						($oi['iid']!=0?'<form target="sp" method="POST" action="core/updateorder.php"><input type="hidden" name="act" value="quantity"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="quantity"><input class="form-control text-center" name="da" value="'.$oi['quantity'].'"'.($r['status']=='archived'?' readonly':'').'></form>':($oi['iid']!=0?$oi['quantity']:'')).
     			'</td>'.
 					'<td class="text-right align-middle">'.
-  					($oi['iid'] != 0?'<form target="sp" method="POST" action="core/updateorder.php" onsubmit="Pace.restart();"><input type="hidden" name="act" value="cost"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="cost"><input class="form-control text-center" style="min-width:80px" name="da" value="'.$oi['cost'].'"'.($r['status']=='archived'?' readonly':'').'></form>':($oi['iid'] != 0?$oi['cost']:'')).
+  					($oi['iid'] != 0?'<form target="sp" method="POST" action="core/updateorder.php"><input type="hidden" name="act" value="cost"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="cost"><input class="form-control text-center" style="min-width:80px" name="da" value="'.$oi['cost'].'"'.($r['status']=='archived'?' readonly':'').'></form>':($oi['iid'] != 0?$oi['cost']:'')).
     			'</td>'.
     			'<td class="text-right align-middle">'.($oi['iid']!=0?$oi['cost']*$oi['quantity']:'').'</td>'.
 					'<td class="text-right">'.
-						'<form target="sp" method="post" action="core/updateorder.php" onsubmit="Pace.restart();">'.
+						'<form target="sp" method="post" action="core/updateorder.php">'.
 							'<input type="hidden" name="act" value="trash">'.
 							'<input type="hidden" name="id" value="'.$oi['id'].'">'.
 							'<input type="hidden" name="t" value="orderitems">'.
@@ -195,7 +195,7 @@ $reward=$sr->fetch(PDO::FETCH_ASSOC);
   $html.='<tr>'.
 					'<td colspan="3" class="text-right align-middle"><strong>Rewards Code</strong></td>'.
 					'<td colpsan="2" class="text-center">'.
-						'<form id="rewardsinput" target="sp" method="post" action="core/updateorder.php" onsubmit="Pace.restart();">'.
+						'<form id="rewardsinput" target="sp" method="post" action="core/updateorder.php">'.
 							'<div class="form-group row">'.
 								'<div class="input-group">'.
 									'<input type="hidden" name="act" value="reward">'.
@@ -241,7 +241,7 @@ if($ssr->rowCount()>0){
 						'<tr>'.
 							'<td class="text-right align-middle"><strong>Postage</strong></td>'.
 							'<td colspan="5" class="text-right align-middle">'.
-								'<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();" onsubmit="Pace.restart();">'.
+								'<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
 									'<input type="hidden" name="act" value="postoption">'.
 									'<input type="hidden" name="id" value="'.$r['id'].'">'.
 									'<input type="hidden" name="t" value="orders">'.
@@ -250,7 +250,7 @@ if($ssr->rowCount()>0){
 								'</form>'.
 							'</td>'.
 							'<td class="text-right pl-0 pr-0">'.
-								'<form target="sp" method="POST" action="core/updateorder.php" onchange="$(this).submit();" onsubmit="Pace.restart();">'.
+								'<form target="sp" method="POST" action="core/updateorder.php" onchange="$(this).submit();">'.
 									'<input type="hidden" name="act" value="postcost">'.
 									'<input type="hidden" name="id" value="'.$r['id'].'">'.
 									'<input type="hidden" name="t" value="orders">'.
@@ -267,6 +267,5 @@ if($ssr->rowCount()>0){
 							'<td>&nbsp;</td>'.
 						'</tr>';?>
   window.top.window.$('#updateorder').html('<?php echo$html;?>');
-  window.top.window.Pace.stop();
 <?php
 echo'</script>';

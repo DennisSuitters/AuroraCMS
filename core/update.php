@@ -42,8 +42,11 @@ $e='';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-if($tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'&&$col=='notes'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'){
+if($tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'&&$col=='notes'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'){
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
+	if($col=='messengerFBCode'){
+		$da=rawurldecode($da);
+	}
 }else{
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
   $da=kses($da,array());
@@ -52,10 +55,12 @@ if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
 if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%3E%3C/p%3E','',$da);
 $si=session_id();
 $ti=time();
-$s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE id=:id");
-$s->execute([':id'=>$id]);
-$r=$s->fetch(PDO::FETCH_ASSOC);
-$oldda=$r[$col];
+if($col!='messengerFBCode'){
+	$s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE id=:id");
+	$s->execute([':id'=>$id]);
+	$r=$s->fetch(PDO::FETCH_ASSOC);
+	$oldda=$r[$col];
+}
 if($tbl=='content'&&$col=='status'&&$da=='published'){
 	if($ti>time())$status='unpublished';else$status='published';
   $q=$db->prepare("UPDATE `".$prefix."content` SET status=:status WHERE id=:id");
@@ -275,9 +280,7 @@ if(is_null($e[2])){
 <?php }else{?>
 	window.top.window.$('#l_<?php echo$id;?>').removeClass('danger');
 <?php }
-	}?>
-	window.top.window.Pace.stop();
-<?php
+	}
 echo'</script>';
 if($config['options']{12}==1){
 	$s=$db->prepare("INSERT INTO `".$prefix."logs` (uid,rid,username,name,view,contentType,refTable,refColumn,oldda,newda,action,ti) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");

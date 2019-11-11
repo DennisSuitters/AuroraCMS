@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.6 Make Facebook Messenger integration easier.
+ * @changes    v0.0.6 Add toggle option to email nominated Users to alert of new chat messages.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -25,11 +27,11 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group row">
-          <div class="input-group col-sm-2">
+          <div class="input-group col-sm-1">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options13" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13"<?php echo$config['options']{13}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options13" class="col-form-label col-sm-3">Enable Chat</label>
-          <div class="input-group col-sm-7">
+          <label for="options13" class="col-form-label col-sm-2">Enable Chat</label>
+          <div class="input-group col-sm-9">
             <div class="input-group-text">
               Remove Messages
             </div>
@@ -44,28 +46,65 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="input-group col-sm-2">
+          <div class="input-group col-sm-1">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options15" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15"<?php echo$config['options']{15}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options15" class="col-form-label col-sm-5">Email new LiveChat notifications to nominated accounts.</label>
+          <div class="col-sm-6">
+            <small class="text-muted">
+              If disabled notification emails will be sent to the email set as the main contact in preferences/contact.
+            </small>
+          </div>
+        </div>
+        <hr>
+        <div class="form-group row">
+          <div class="input-group col-sm-1">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options14" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14"<?php echo$config['options']{14}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options14" class="col-form-label col-sm-10">Use Embedded Messenger</label>
+          <label for="options14" class="col-form-label col-sm-2">Facebook Messenger</label>
+          <div class="col-sm-9">
+            <small class="text-muted">
+              To find your Page ID and fully enable Messenger:<br>
+              1. From News Feed, click Pages in the left side menu.<br>
+              2. Click your Page name to go to your Page.<br>
+              3. Click About in the left column. If you don't see About in the left column, click See More.<br>
+              4. Scroll down to find your Page ID below More Info, copy the ID, then place in the Page ID textbox below, and save.<br>
+              5. Before Messenger will work, you must "Whitelist" your Websites domain name. In the your pages "Settings", go to the "Advanced Messaging" Tab.<br>
+              6. Scroll down to find "White-listed Domains", and enter your domain name including the https:// protocol.
+            </small>
+          </div>
         </div>
         <div class="form-group row">
-          <label for="php_honeypot" class="col-form-label col-sm-2">Embedded Messenger Code</label>
-          <div class="col-12 col-sm-10">
-            <form target="sp" method="post" action="core/update.php" onsubmit="$('#messengerFBCode_save').removeClass('btn-danger');">
-              <input type="hidden" name="id" value="1">
-              <input type="hidden" name="t" value="config">
-              <input type="hidden" name="c" value="messengerFBCode">
-              <div class="input-group card-header p-2 mb-0">
-                <button type="submit" id="messengerFBCode_save" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save"><?php svg('save');?></button>
-              </div>
-              <div class="input-group">
-                <textarea id="messengerFBCode" class="form-control" style="height:300px" name="da" onkeyup="$('#messengerFBCode_save').addClass('btn-danger');"><?php echo $config['messengerFBCode'];?></textarea>
-              </div>
-            </form>
-            <small class="help-block">Follow the instructions in the below links to add an Embedded Messaging Service:<br>
-              <a target="_blank" href="https://developers.facebook.com/docs/messenger-platform/discovery/customer-chat-plugin#steps">Facebook Messenger</a>.
-            </small>
+          <label for="messengerFBCode" class="col-form-label col-sm-2">Page ID</label>
+          <div class="input-group col-sm-10">
+            <input type="text" id="messengerFBCode" class="form-control textinput" value="<?php echo$config['messengerFBCode'];?>" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" placeholder="Enter Page ID...">
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemessengerFBCode" class="btn btn-secondary save" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="messengerFBGreeting" class="col-form-label col-sm-2">Greeting</label>
+          <div class="input-group col-sm-10">
+            <input type="text" id="messengerFBGreeting" class="form-control textinput" value="<?php echo$config['messengerFBGreeting'];?>" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" placeholder="Enter Greeting...">
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemessengerFBGreeting" class="btn btn-secondary save" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="messengerFBColor" class="col-form-label col-sm-2">Colour</label>
+          <div class="input-group col-sm-10">
+            <select name="colorpicker" id="messengerFBColor" class="form-control"<?php echo$user['options']{1}==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?php echo$user['options']{1}==1?'':' disabled';?>>
+              <option value="#7bd148"<?php echo$config['messengerFBColor']=='#7bd148'?' selected="selected"':'';?>>Green</option>
+              <option value="#5484ed"<?php echo$config['messengerFBColor']=='#5484ed'?' selected="selected"':'';?>>Bold blue</option>
+              <option value="#a4bdfc"<?php echo$config['messengerFBColor']=='#a4bdfc'?' selected="selected"':'';?>>Blue</option>
+              <option value="#46d6db"<?php echo$config['messengerFBColor']=='#46d6db'?' selected="selected"':'';?>>Turquoise</option>
+              <option value="#7ae7bf"<?php echo$config['messengerFBColor']=='#7ae7bf'?' selected="selected"':'';?>>Light green</option>
+              <option value="#51b749"<?php echo$config['messengerFBColor']=='#51b749'?' selected="selected"':'';?>>Bold green</option>
+              <option value="#fbd75b"<?php echo$config['messengerFBColor']=='#fbd75b'?' selected="selected"':'';?>>Yellow</option>
+              <option value="#ffb878"<?php echo$config['messengerFBColor']=='#ffb878'?' selected="selected"':'';?>>Orange</option>
+              <option value="#ff887c"<?php echo$config['messengerFBColor']=='#ff887c'?' selected="selected"':'';?>>Red</option>
+              <option value="#dc2127"<?php echo$config['messengerFBColor']=='#dc2127'?' selected="selected"':'';?>>Bold red</option>
+              <option value="#dbadff"<?php echo$config['messengerFBColor']=='#dbadff'?' selected="selected"':'';?>>Purple</option>
+              <option value="#e1e1e1"<?php echo$config['messengerFBColor']=='#e1e1e1'?' selected="selected"':'';?>>Gray</option>
+            </select>
           </div>
         </div>
       </div>

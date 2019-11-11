@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.6 Add Email Notifications and Status.
  */
 $getcfg=true;
 require'db.php';
@@ -38,6 +39,7 @@ $who=isset($_POST['who'])?$_POST['who']:'none';
 $name=isset($_POST['name'])?$_POST['name']:'';
 $email=isset($_POST['email'])?$_POST['email']:'';
 $message=isset($_POST['message'])?$_POST['message']:'';
+$seen=isset($_POST['seen'])?$_POST['seen']:'unseen';
 $ip=$who=='page'?$_SERVER['REMOTE_ADDR']:'admin';
 $ua=$who=='page'?$_SERVER['HTTP_USER_AGENT']:'admin';
 $spam=FALSE;
@@ -71,7 +73,7 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 			}
 		}
 		if($spam==FALSE){
-		  $s=$db->prepare("INSERT INTO `".$prefix."livechat` (aid,sid,who,name,email,notes,ip,user_agent,ti) VALUES (:aid,:sid,:who,:name,:email,:notes,:ip,:ua,:ti)");
+		  $s=$db->prepare("INSERT INTO `".$prefix."livechat` (aid,sid,who,name,email,notes,ip,user_agent,status,ti) VALUES (:aid,:sid,:who,:name,:email,:notes,:ip,:ua,:status,:ti)");
 		  $s->execute([
 		    ':aid'=>$aid,
 		    ':sid'=>$sid,
@@ -81,6 +83,7 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 		    ':notes'=>$message,
 		    ':ip'=>$ip,
 		    ':ua'=>$ua,
+				':status'=>'unseen',
 		    ':ti'=>$ti
 		  ]);
 		}
@@ -131,13 +134,45 @@ if($message == "|*|*|*|*|*|"){
 		$cua=$db->prepare("SELECT id FROM `".$prefix."login` WHERE rank>699 AND active=1 AND lti>:lti");
 		$cua->execute([':lti'=>$cuati]);
 		if($cua->rowCount()<1){
-			echo'<ul>'.
-						'<li class="admin">'.
-							'<p>'.
-								'There is currently not anyone available to answer your queries, however you may leave a message here so a representative can back to you.'.
-							'</p>'.
-						'</li>'.
-					'</ul>';
+			require'class.phpmailer.php';
+			$sa=$db->prepare("SELECT id,username,name,email FROM `".$prefix."login` WHERE rank>699 AND active=1 AND liveChatNotification=1");
+			$sa->execute();
+			echo'<div class="alert alert-info">'.
+						'There are currently no operators available to answer your queries, however you may leave a message here so a representative can back to you.';
+			if($sa->rowCount()>0){
+				$cfgsent=0;
+				while($ra=$sa->fetch(PDO::FETCH_ASSOC)){
+					$mail=new PHPMailer;
+					$mail->isSendmail();
+					$mail->SetFrom($email,$name);
+					$mail->AddAddress($ra['email']);
+					if($config['email']!=''&&$cfgsent==0&&$config['email']!=$ra['email']){
+						$mail->AddAddress($config['email'],$config['business']);
+						$cfgsent++;
+					}
+					$mail->IsHTML(true);
+					$mail->Subject='Live Chat Started at '.($config['business']!=''?$config['business']:'Your Website!');
+					$msg='Chat Date: '.date($config['dateFormat'],$ti).'<br />';
+					$mail->Body=$msg;
+					$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+					if($mail->Send())
+						echo'<br>Nominated Operators have been notified!';
+				}
+			}else{
+				$mail=new PHPMailer;
+				$mail->isSendmail();
+				$mail->SetFrom($email,$name);
+				$mail->AddAddress($config['email'],$config['business']);
+				$mail->IsHTML(true);
+				$mail->Subject='Live Chat Started at '.($config['business']!=''?$config['business']:'Your Website!');
+				$msg='Chat Date: '.date($config['dateFormat'],$ti).'<br />';
+				$mail->Body=$msg;
+				$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+				if($mail->Send())
+					echo'<br>Nominated Operators have been notified!';
+			}
+//			echo'<br>In the meantime, you may ask simple questions, and our friendly Chat Bot will try to answer your queries';
+			echo'</div>';
 		}else{
 			if($message != ''){
 				$s=$db->prepare("SELECT sid FROM `".$prefix."livechat` WHERE sid=:sid");
@@ -150,6 +185,10 @@ if($message == "|*|*|*|*|*|"){
 	}
 }
 if($spam==FALSE){
+	if($seen=='seen'){
+		$scc=$db->prepare("UPDATE `".$prefix."livechat` SET status=:seen WHERE sid=:sid");
+		$scc->execute([':seen'=>$seen,':sid'=>$sid]);
+	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE sid=:sid ORDER BY ti ASC");
 	$s->execute([':sid'=>$sid]);
 	if($s->rowCount()>0){

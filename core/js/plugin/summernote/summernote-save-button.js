@@ -50,7 +50,7 @@
               var noteText = $note.summernote('code');
               $note.summernote('code', escape(noteText));
             }
-//            this.form.submit();
+            this.form.submit();
             $('#note-form').submit();
             if (options.save.encode) {
               $note.summernote('code', noteText);

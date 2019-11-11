@@ -1,6 +1,10 @@
 		<script src="<print theme>/js/jquery.min.js"></script>
 		<script src="<print theme>/js/bootstrap.min.js"></script>
 		<script src="<print theme>/js/jquery.fancybox.min.js"></script>
+		<script src="<print theme>/js/aos.js"></script>
+		<script>
+			AOS.init();
+		</script>
 		<jshelper>
 		<script src="<print theme>/js/js.js"></script>
 		<jsrunner>
@@ -11,9 +15,7 @@
 					$.ajax({
 						type:"POST",
 						url:"core/chat.php",
-						data:{
-							sid:$('#chatsid').val()
-						}
+						data:{sid:$('#chatsid').val()}
 					}).done(function(data){
 						if(data!='none'){
 							$("#chatScreen").html(data);
@@ -31,18 +33,18 @@
 					$.ajax({
 						type:"POST",
 						url:"core/chat.php",
-						data:{
-							sid:$('#chatsid').val()
-						}
+						data:{sid:$('#chatsid').val()}
 					}).done(function(data){
 						if(data!='none'){
 							$("#chatScreen").html(data);
-							if(data!='')$('#chatBody').removeClass('d-none');
+							if(data!=''){
+								$('#chatBody').removeClass('d-none');
+								$('.chat-close,.chat-open').toggleClass('d-none');
+							}
 							if($('#chatBody').hasClass('d-none')){
 								clearTimeout(chatTimer);
 							}else{
-								$('.chathideme').addClass('d-none');
-								$('.chatunhideme').removeClass('d-none');
+								$('.chathideme,.chatunhideme').toggleClass('d-none');
 								clearTimeout(chatTimer);
 							}
 						}
@@ -52,10 +54,8 @@
 				$(document).ready(function(){
 					initChat();
 					$("#chatHeader").click(function(e){
-						$('#chatBody').toggleClass('d-none');
-						if($('#chatBody').hasClass('d-none')){
-							clearTimeout(chatTimer);
-						}
+						$('#chatBody,.chat-close,.chat-open').toggleClass('d-none');
+						if($('#chatBody').hasClass('d-none'))clearTimeout(chatTimer);
 					});
 					$('#startChat').click(function(){
 						$.ajax({
@@ -69,15 +69,11 @@
 								message:'|*|*|*|*|*|'
 							}
 						}).done(function(data){
-							if(data=='available'){
-								$("#chatScreen").html('<ul><li class="admin"><p>Hello '+$('#chatName').val()+', how can we assist you?</p></li></ul>');
-							}else{
-								$('#chatScreen').html(data);
-							}
+							if(data=='available')$("#chatScreen").html('<ul><li class="admin"><p>Hello '+$('#chatName').val()+', how can we assist you?</p></li></ul>');
+							else $('#chatScreen').html(data);
 							document.getElementById('chatScreen').scrollTop=9999999;
 							$("#chatMessage").val("");
-							$('.chathideme').addClass('d-none');
-							$('.chatunhideme').removeClass('d-none');
+							$('.chathideme,.chatunhideme').toggleClass('d-none');
 							clearTimeout(chatTimer);
 						});
 					});
@@ -105,5 +101,6 @@
 				});
 			</script>
 		</chatscript>
+		<gdpr>
 	</body>
 </html>

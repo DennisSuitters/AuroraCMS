@@ -42,9 +42,9 @@ if($config['update_url']!=''){
       <p><?php echo'Current update was on '.date('M jS, Y g:i A',$settings['system']['version']);?></p>
       <p><?php echo$uL;?></p>
       <p>
-        <form target="sp" method="POST" action="core/upgrade.php" onsubmit="Pace.restart();" role="form">
+        <form target="sp" method="POST" action="core/upgrade.php">
           <input type="hidden" name="version" value="<?php echo$remoteVersion['system']['version'];?>">
-          <button type="submit" class="btn btn-success" role="button" aria-label="Do Updates">Do Updates...</button>
+          <button type="submit" class="btn btn-success" aria-label="Do Updates">Do Updates...</button>
         </form>
       </p>
     </div>

@@ -53,7 +53,7 @@
   }?>
             </select>
             <div class="input-group-append">
-              <button id="filesEditLoad" class="btn btn-secondary" onclick="Pace.restart();">Load</button>
+              <button id="filesEditLoad" class="btn btn-secondary">Load</button>
             </div>
           </div>
           <div class="form-group">
@@ -89,7 +89,6 @@
                 url:url+'?<?php echo time();?>',
                 dataType:"text",
                 success:function(data){
-                  Pace.restart();
                   editor.setValue(data);
                 }
               });

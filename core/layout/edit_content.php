@@ -412,7 +412,7 @@ if($r['contentType']=='inventory'){?>
             <fieldset id="tab-content-images-1" class="control-fieldset">
               <div id="tstavinfo" class="alert alert-info<?php echo$r['cid']==0?' hidden':'';?>" role="alert">Currently using the Avatar associated with the selected Client Account.</div>
 <?php if($user['options']{1}==1){?>
-              <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php" onsubmit="Pace,restart();">
+              <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
                 <div class="form-group row">
                   <label for="avatar" class="col-form-label col-sm-2">Avatar</label>
                   <div class="input-group col-sm-10">

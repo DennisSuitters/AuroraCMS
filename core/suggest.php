@@ -30,7 +30,5 @@ if($col=='notes'){?>
     window.top.window.$('#<?php echo$col;?>').val('<?php echo$r['notes'];?>');
     window.top.window.$('#save<?php echo$col;?>').addClass('btn-danger');
   }
-<?php }?>
-  window.top.window.Pace.stop();
-<?php
+<?php }
 echo'</script>';

@@ -82,6 +82,5 @@ if($config['email']!=''){
 <?php }
 }else{?>
   window.top.window.toastr("danger")('No system Email has been set!');
-  window.top.window.Pace.stop();
 <?php }
 echo'</script>';

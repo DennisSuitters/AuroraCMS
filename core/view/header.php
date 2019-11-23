@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
@@ -58,11 +59,14 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		],$html);
 //	}else
 //		$html=preg_replace('~<profile>.*?<\/profile>~is','',$html,1);
-		if(isset($user['rank'])&&$user['rank']>899){
-			$html=preg_replace(['/<[\/]?seohelper>/'],'',$html);
-		}else{
+		if(isset($_SESSION['options'])&&$_SESSION['options']{6}==1)
+			$html=preg_replace('/<[\/]?seohelper>/','',$html);
+		else
 			$html=preg_replace('~<seohelper>.*?<\/seohelper>~is','',$html,1);
-		}
+		if($config['development']{0}==1&&$_SESSION['rank']>899)
+			$html=preg_replace(['/<[\/]?development>/'],'',$html);
+		else
+			$html=preg_replace('~<development>.*?<\/development>~is','',$html,1);
 }else
 	$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
 $html=preg_replace([

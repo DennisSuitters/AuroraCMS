@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */
 if($args[0]=='add'){
   $type=filter_input(INPUT_GET,'type',FILTER_SANITIZE_STRING);
@@ -70,9 +71,9 @@ else{
               <tr>
                 <th></th>
                 <th>Username/Name</th>
-                <th class="text-center">Last Login</th>
-                <th class="text-center">Rank</th>
-                <th class="text-center">Status</th>
+                <th class="text-center d-none d-sm-table-cell">Last Login</th>
+                <th class="text-center d-none d-sm-table-cell">Rank</th>
+                <th class="text-center d-none d-sm-table-cell">Status</th>
                 <th></th>
               </tr>
             </thead>
@@ -89,18 +90,23 @@ else{
                 </td>
                 <td class="align-middle">
                   <a href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['name']==''?$r['username']:$r['name'];?>"><?php echo$r['username'].':'.$r['name'];?></a>
-                  <?php echo$user['rank']==1000?'<div class="small d-none d-sm-block"><small>IP: '.$r['userIP'].'<br>'.$r['userAgent'].'</small></div>':'';?>
+                  <div class="small d-block d-sm-none">
+                    Last Login: <?php echo _ago($r['lti']);?><br>
+                    Rank: <?php echo ucfirst(rank($r['rank']));?><br>
+                    Status: <?php echo$r['active']{0}==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?>
+                  </div>
+                  <?php echo$user['rank']==1000?'<div class="small">IP: '.$r['userIP'].'<br>'.$r['userAgent'].'</div>':'';?>
                 </td>
-                <td class="text-center align-middle"<?php echo$r['lti']!=0&&$user['rank']==1000?' data-tooltip="tooltip" title="'.date($config['dateFormat'],$r['lti']).'""':'';?>><?php echo _ago($r['lti']);?></td>
-                <td class="text-center align-middle"><?php echo ucfirst(rank($r['rank']));?></td>
-                <td class="text-center align-middle"><?php echo$r['active']{0}==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
-                <td id="controls_<?php echo$r['id'];?>" class="align-middle">
+                <td class="text-center align-middle d-none d-sm-table-cell"<?php echo$r['lti']!=0&&$user['rank']==1000?' data-tooltip="tooltip" title="'.date($config['dateFormat'],$r['lti']).'""':'';?>><?php echo _ago($r['lti']);?></td>
+                <td class="text-center align-middle d-none d-sm-table-cell"><?php echo ucfirst(rank($r['rank']));?></td>
+                <td class="text-center align-middle d-none d-sm-table-cell"><?php echo$r['active']{0}==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
+                <td id="controls_<?php echo$r['id'];?>" class="align-top align-sm-middle">
                   <div class="btn-group pull-right">
                     <a class="btn btn-secondary" href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
 <?php if($user['options']{0}==1){?>
-                    <button class="btn btn-secondary<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
-                    <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                    <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="purge('<?php echo$r['id'];?>','login')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                    <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
+                    <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','login')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
 <?php }?>
                   </div>
                 </td>

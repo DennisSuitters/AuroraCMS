@@ -106,7 +106,7 @@ if($error==0){?>
 								<input id="dbpassword" name="dbpassword" type="password" class="form-control" value="" placeholder="Enter Database Password..." required>
 							</div>
 							<div class="float-right">
-								<button type="submit" class="btn btn-primary btn-lg" aria-label="Go to Next Step">Next</button>
+								<button type="submit" class="btn btn-success btn-lg" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
 					</div>
@@ -137,7 +137,7 @@ if($error==0){?>
 								</select>
 							</div>
 							<div class="float-right">
-								<button type="submit" class="btn btn-primary btn-lg" onclick="$('#block').css({'display':'block'});" role="button" aria-label="Go to Next Step">Next</button>
+								<button type="submit" class="btn btn-success btn-lg" onclick="$('#block').css({'display':'block'});" role="button" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
 					</div>
@@ -180,7 +180,7 @@ if($error==0){?>
 								</select>
 							</div>
 							<div class="float-right">
-								<button type="submit" class="btn btn-primary btn-lg" role="button" aria-label="Go to Next Step">Next</button>
+								<button type="submit" class="btn btn-success btn-lg" role="button" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
 					</div>

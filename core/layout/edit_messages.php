@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */
 if($args[0]!='compose'){
   $q=$db->prepare("UPDATE `".$prefix."messages` SET status='read' WHERE id=:id");
@@ -96,27 +97,27 @@ $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE fol
               </div>
 <?php if($args[0]!='compose'){?>
               <div class="form-group row">
-                <label for="ti" class="col-form-label col-sm-2">Created</label>
-                <div class="input-group col-sm-10">
+                <label for="ti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Created</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="ti" class="form-control" value="<?php echo isset($r['ti'])?date($config['dateFormat'],$r['ti']):date($config['dateFormat'],time());?>" readonly>
                 </div>
               </div>
 <?php }?>
               <div class="form-group row">
-                <label for="subject" class="col-form-label col-sm-2">Subject</label>
-                <div class="input-group col-sm-10">
+                <label for="subject" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Subject</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="subject" class="form-control" name="subject" value="<?php echo$args[0]=='reply'?'Re: ':'';echo$args[0]!='compose'?$r['subject']:'';?>" placeholder="Enter a Subject" required aria-required="true">
                 </div>
               </div>
               <div class="form-group row">
-                <label for="to_email" class="col-form-label col-sm-2">To</label>
-                <div class="input-group col-sm-10">
+                <label for="to_email" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">To</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="to_email" class="form-control" name="to_email" value="<?php echo(isset($r)&&$r['to_email']!=''?$r['to_email']:'');?>" placeholder="Enter an Email..." required aria-required="true">
                 </div>
               </div>
               <div class="form-group row">
-                <label for="from_email" class="col-form-label col-sm-2">From</label>
-                <div class="input-group col-sm-10">
+                <label for="from_email" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">From</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php if($args[0]=='compose'){?>
                   <select id="from_email" name="from_email" class="form-control">
 <?php   if($config['email']!=''){?>
@@ -136,8 +137,8 @@ $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE fol
                 </div>
               </div>
               <div class="form-group row">
-                <div class="col-form-label col-sm-2">&nbsp;</div>
-                <div id="attachments" class="col-sm-10 card-group">
+                <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">&nbsp;</div>
+                <div id="attachments" class="col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 card-group">
 <?php if($r['attachments']!=''){
   $atts='';
   $ti=time();
@@ -170,12 +171,10 @@ $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE fol
                   }
                 </script>
               </div>
+              <input id="atts" type="hidden" class="form-control" name="atts" value="<?php echo$r['attachments'];?>">
               <div class="form-group row">
-                <input id="atts" type="hidden" class="form-control" name="atts" value="<?php echo$r['attachments'];?>">
-              </div>
-              <div class="form-group row">
-                <label for="bod" class="col-form-label col-sm-2">Reply</label>
-                <div class="input-group col-sm-10">
+                <label for="bod" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Reply</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <textarea id="bod" name="bod" class="form-control"></textarea>
                 </div>
               </div>
@@ -209,8 +208,8 @@ $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE fol
             </script>
 <?php if($args[0]!='compose'){?>
             <div class="form-group row">
-              <label for="order_notes" class="col-form-label col-sm-2">Message</label>
-              <div class="input-group col-sm-10">
+              <label for="order_notes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Message</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <iframe id="order_notes" src="core/viewemail.php?id=<?php echo$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
               </div>
             </div>

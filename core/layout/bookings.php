@@ -65,9 +65,9 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="btn-group float-right">
                     <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
 <?php if($user['options']{0}==1){?>
-                    <button class="btn btn-secondary<?php echo($r['status']!='delete'?' hidden':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
-                    <button class="btn btn-secondary trash<?php echo($r['status']=='delete'?' hidden':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                    <button class="btn btn-secondary trash<?php echo($r['status']!='delete'?' hidden':'');?>" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                    <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
+                    <button class="btn btn-secondary trash<?php echo($r['status']=='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="btn btn-secondary trash<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
 <?php }?>
                   </div>
                 </td>

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.7 Remove Disallow for cgi-bin.
  */
 header('Content-Type:text/plain');?>
 # As always, Asimov\'s Three Laws are in effect:
@@ -21,7 +22,6 @@ User-agent: *
 Disallow: /harm/to/humans
 Disallow: /ignoring/human/orders
 Disallow: /harm/to/self
-Disallow: /cgi-bin/
 Disallow: /admin/
 
 User-Agent: Samsung NaviBot

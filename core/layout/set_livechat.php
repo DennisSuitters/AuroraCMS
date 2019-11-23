@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.6
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Make Facebook Messenger integration easier.
  * @changes    v0.0.6 Add toggle option to email nominated Users to alert of new chat messages.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -27,14 +28,14 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group row">
-          <div class="input-group col-sm-1">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options13" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13"<?php echo$config['options']{13}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options13" class="col-form-label col-sm-2">Enable Chat</label>
-          <div class="input-group col-sm-9">
-            <div class="input-group-text">
-              Remove Messages
-            </div>
+          <label for="options13" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Chat</label>
+        </div>
+        <div class="form-group row">
+          <label for="chatAutoRemove" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Remove Messages</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <select id="chatAutoRemove" class="form-control" onchange="update('1','config','chatAutoRemove',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="chatAutoRemove">
               <option value="0"<?php echo$config['chatAutoRemove']==0?' selected="Selected"':'';?>>Never</option>
               <option value="86400"<?php echo$config['chatAutoRemove']==86400?' selected="Selected"':'';?>>Older than 24 Hours</option>
@@ -46,51 +47,48 @@
           </div>
         </div>
         <div class="form-group row">
-          <div class="input-group col-sm-1">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options15" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15"<?php echo$config['options']{15}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options15" class="col-form-label col-sm-5">Email new LiveChat notifications to nominated accounts.</label>
-          <div class="col-sm-6">
-            <small class="text-muted">
-              If disabled notification emails will be sent to the email set as the main contact in preferences/contact.
-            </small>
-          </div>
+          <label for="options15" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Email new LiveChat notifications to nominated accounts.</label>
         </div>
         <hr>
         <div class="form-group row">
-          <div class="input-group col-sm-1">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options14" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14"<?php echo$config['options']{14}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options14" class="col-form-label col-sm-2">Facebook Messenger</label>
-          <div class="col-sm-9">
-            <small class="text-muted">
-              To find your Page ID and fully enable Messenger:<br>
-              1. From News Feed, click Pages in the left side menu.<br>
-              2. Click your Page name to go to your Page.<br>
-              3. Click About in the left column. If you don't see About in the left column, click See More.<br>
-              4. Scroll down to find your Page ID below More Info, copy the ID, then place in the Page ID textbox below, and save.<br>
-              5. Before Messenger will work, you must "Whitelist" your Websites domain name. In the your pages "Settings", go to the "Advanced Messaging" Tab.<br>
-              6. Scroll down to find "White-listed Domains", and enter your domain name including the https:// protocol.
-            </small>
+          <label for="options14" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Facebook Messenger</label>
+        </div>
+<?php if($config['messengerFBCode']==''){?>
+        <div class="form-group row">
+          <div class="alert alert-info">
+            To find your Page ID and fully enable Messenger:<br>
+            1. From News Feed, click Pages in the left side menu.<br>
+            2. Click your Page name to go to your Page.<br>
+            3. Click About in the left column. If you don't see About in the left column, click See More.<br>
+            4. Scroll down to find your Page ID below More Info, copy the ID, then place in the Page ID textbox below, and save.<br>
+            5. Before Messenger will work, you must "Whitelist" your Websites domain name. In the your pages "Settings", go to the "Advanced Messaging" Tab.<br>
+            6. Scroll down to find "White-listed Domains", and enter your domain name including the https:// protocol.
           </div>
         </div>
+<?php }?>
         <div class="form-group row">
-          <label for="messengerFBCode" class="col-form-label col-sm-2">Page ID</label>
-          <div class="input-group col-sm-10">
+          <label for="messengerFBCode" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Page ID</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="messengerFBCode" class="form-control textinput" value="<?php echo$config['messengerFBCode'];?>" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" placeholder="Enter Page ID...">
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemessengerFBCode" class="btn btn-secondary save" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
-          <label for="messengerFBGreeting" class="col-form-label col-sm-2">Greeting</label>
-          <div class="input-group col-sm-10">
+          <label for="messengerFBGreeting" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Greeting</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="messengerFBGreeting" class="form-control textinput" value="<?php echo$config['messengerFBGreeting'];?>" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" placeholder="Enter Greeting...">
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemessengerFBGreeting" class="btn btn-secondary save" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
-          <label for="messengerFBColor" class="col-form-label col-sm-2">Colour</label>
-          <div class="input-group col-sm-10">
+          <label for="messengerFBColor" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Colour</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <select name="colorpicker" id="messengerFBColor" class="form-control"<?php echo$user['options']{1}==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?php echo$user['options']{1}==1?'':' disabled';?>>
               <option value="#7bd148"<?php echo$config['messengerFBColor']=='#7bd148'?' selected="selected"':'';?>>Green</option>
               <option value="#5484ed"<?php echo$config['messengerFBColor']=='#5484ed'?' selected="selected"':'';?>>Bold blue</option>

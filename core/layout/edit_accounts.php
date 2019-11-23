@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.6
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.2 Add Description for Profiles and Meta-Description data.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.6 Add option to make user receive LiveChat email Notifications.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -44,20 +45,20 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         <div class="tab-content">
           <div id="account-general" class="tab-pane active" role="tabpanel">
             <div class="form-group row">
-              <label for="ti" class="col-form-label col-sm-2">Created</label>
-              <div class="input-group col-sm-10">
+              <label for="ti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Created</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
               </div>
             </div>
             <div class="form-group row">
-              <label for="lti" class="col-form-label col-sm-2">Last Login</label>
-              <div class="input-group col-sm-10">
+              <label for="lti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Last Login</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="lti" class="form-control" value="<?php echo _ago($r['lti']);?>" readonly>
               </div>
             </div>
             <div class="form-group row">
-              <label for="username" class="col-form-label col-sm-2">Username</label>
-              <div class="input-group col-sm-10">
+              <label for="username" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Username</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="username" class="form-control textinput" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                 <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveusername" class="btn btn-secondary save" data-dbid="username" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -66,26 +67,20 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <div id="uerror" class="alert alert-danger col-sm-10 float-right d-none" role="alert">Username already exists!</div>
             </div>
             <div class="form-group row">
-              <label for="email" class="col-form-label col-sm-2">Email</label>
-              <div class="input-group col-sm-10">
+              <label for="email" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                 <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
 <?php }?>
               </div>
             </div>
-            <div class="form-group row">
-              <label for="newsletter" class="col-form-label col-8 col-sm-2" data-tooltip="tooltip" data-title="Toggle Newsletter Subscription.">Subscriber</label>
-              <div class="input-group col-4 col-sm-10">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0"<?php echo($r['newsletter']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-              </div>
-            </div>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-images">
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <div class="form-group row">
-                <label for="avatar" class="col-form-label col-sm-2">Avatar</label>
-                <div class="input-group col-sm-10">
+                <label for="avatar" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Avatar</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" class="form-control" value="<?php echo$r['avatar'];?>" readonly>
 <?php if($user['options']{5}==1){?>
                   <div class="input-group-append">
@@ -114,8 +109,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </form>
             <div class="help-block small text-right"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
             <div class="form-group row">
-              <label for="gravatar" class="col-form-label col-sm-2">Gravatar</label>
-              <div class="input-group col-sm-10">
+              <label for="gravatar" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Gravatar</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="gravatar" class="form-control textinput" value="<?php echo$r['gravatar'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                 <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savegravatar" class="btn btn-secondary save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -312,26 +307,26 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               <div role="tabpanel" class="tab-pane active" id="profile-bio" aria-labelledby="profile-bio">
                 <legend role="heading">BIO</legend>
                 <div class="form-group row">
-                  <label class="col-form-label col-sm-2">Profile Link</label>
-                  <div class="input-group col-sm-10">
+                  <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Profile Link</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <a class="form-control" target="_blank" href="<?php echo URL.'/profile/'.str_replace(' ','-',$r['name']);?>"><?php echo URL.'/profile/'.str_replace(' ','-',$r['name']);?></a>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="bio_options0" class="col-form-label col-sm-2">Enable</label>
-                  <div class="input-group col-sm-10">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                     <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="0"<?php echo($r['bio_options']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
+                  <label for="bio_options0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable</label>
                 </div>
                 <div class="form-group row">
-                  <label for="bio_options1" class="col-form-label col-sm-2">Show Address</label>
-                  <div class="input-group col-sm-10">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                     <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="1"<?php echo($r['bio_options']{1}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
+                  <label for="bio_options1" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Show Address</label>
                 </div>
                 <div class="form-group row">
-                  <label for="name" class="col-form-label col-sm-2">Name</label>
-                  <div class="input-group col-sm-10">
+                  <label for="name" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="name" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" placeholder="Enter a Name..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -339,8 +334,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="url" class="col-form-label col-sm-2">URL</label>
-                  <div class="input-group col-sm-10">
+                  <label for="url" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="url" placeholder="Enter a URL..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -348,8 +343,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="business" class="col-form-label col-sm-2">Business</label>
-                  <div class="input-group col-sm-10">
+                  <label for="business" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Business</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" placeholder="Enter a Business..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
@@ -357,8 +352,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="phone" class="col-form-label col-sm-2">Phone</label>
-                  <div class="input-group col-sm-10">
+                  <label for="phone" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Phone</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="phone" class="form-control textinput" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" placeholder="Enter a Phone..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -366,8 +361,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="mobile" class="col-form-label col-sm-2">Mobile</label>
-                  <div class="input-group col-sm-10">
+                  <label for="mobile" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Mobile</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="mobile" class="form-control textinput" value="<?php echo$r['mobile'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" placeholder="Enter a Mobile..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemobile" class="btn btn-secondary save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -375,8 +370,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="address" class="col-form-label col-sm-2">Address</label>
-                  <div class="input-group col-sm-10">
+                  <label for="address" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Address</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="address" class="form-control textinput" name="address" value="<?php echo$r['address'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="address" placeholder="Enter an Address..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -384,8 +379,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="suburb" class="col-form-label col-sm-2">Suburb</label>
-                  <div class="input-group col-sm-10">
+                  <label for="suburb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Suburb</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" placeholder="Enter a Suburb..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -393,8 +388,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="city" class="col-form-label col-sm-2">City</label>
-                  <div class="input-group col-sm-10">
+                  <label for="city" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">City</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" placeholder="Enter a City..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -402,8 +397,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="state" class="control-label col-sm-2">State</label>
-                  <div class="input-group col-sm-10">
+                  <label for="state" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">State</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" placeholder="Enter a State..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -411,8 +406,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="postcode" class="control-label col-sm-2">Postcode</label>
-                  <div class="input-group col-sm-10">
+                  <label for="postcode" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Postcode</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" placeholder="Enter a Postcode..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -420,8 +415,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="country" class="control-label col-sm-2">Country</label>
-                  <div class="input-group col-sm-10">
+                  <label for="country" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Country</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="country" class="form-control textinput" name="country" value="<?php echo$r['country'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="country" placeholder="Enter a Country..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecountry" class="btn btn-secondary save" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -429,8 +424,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="caption" class="control-label col-sm-2">Caption</label>
-                  <div class="input-group col-sm-10">
+                  <label for="caption" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Caption</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="caption" class="form-control textinput" name="caption" value="<?php echo$r['caption'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="caption" placeholder="Enter a Caption..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecaption" class="btn btn-secondary save" data-dbid="caption" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -439,8 +434,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 </div>
                 <div class="help-block text-muted small text-right">This is used for the Meta-Description for SEO Purposes on the page</div>
                 <div class="form-group row">
-                  <label for="caption" class="control-label col-sm-2">Description</label>
-                  <div class="input-group col-sm-10">
+                  <label for="caption" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Description</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="seoDescription" class="form-control textinput" name="seoDescription" value="<?php echo$r['seoDescription'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="seoDescription" placeholder="Enter a Description..."<?php echo$user['options']{5}==1?'':' readonly';?>>
 <?php if($user['options']{5}==1){?>
                     <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -448,8 +443,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                 </div>
                 <div class="form-group row">
-                  <label for="notes" class="col-form-label col-sm-2">About</label>
-                  <div class="col-sm-10">
+                  <label for="notes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">About</label>
+                  <div class=" col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <div class="card-header p-0">
 <?php if($user['options']{5}==1){?>
                       <form method="post" target="sp" action="core/update.php">
@@ -468,13 +463,13 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               <div role="tabpanel" class="tab-pane" id="profile-career" aria-labelledby="profile-career">
                 <legend role="heading">Career</legend>
                 <div class="form-group row">
-                  <label for="bio_options2" class="col-form-label col-8 col-sm-2">Enable</label>
-                  <div class="input-group col-4 col-sm-10">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                     <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="2"<?php echo($r['bio_options']{2}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
+                  <label for="bio_options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable</label>
                 </div>
                 <div class="form-group row">
-                  <label for="resume_notes" class="col-form-label col-sm-2">Resume Notes</label>
+                  <label for="resume_notes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Resume Notes</label>
                   <div class="col-sm-10">
                     <div class="card-header p-0">
 <?php if($user['options']{5}==1){?>
@@ -598,10 +593,10 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               <div role="tabpanel" class="tab-pane" id="profile-edu" aria-labelledby="profile-edu">
                 <legend>Education</legend>
                 <div class="form-group row">
-                  <label for="bio_options3" class="col-form-label col-8 col-sm-2">Enable</label>
-                  <div class="input-group col-4 col-sm-10">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                     <label class="switch switch-label switch-success"><input type="checkbox" id="bio_options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="bio_options" data-dbb="3"<?php echo($r['bio_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                   </div>
+                  <label for="bio_options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable</label>
                 </div>
 <?php if($user['options']{5}==1||$user['options']{0}==1){?>
                 <legend>Add an Entry</legend>
@@ -713,8 +708,8 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
 <?php /* Messages */ ?>
           <div role="tabpanel" class="tab-pane" id="account-messages">
             <div class="form-group row">
-              <label for="email_signature" class="col-form-label col-sm-2">Email Signature</label>
-              <div class="col-sm-10">
+              <label for="email_signature" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email Signature</label>
+              <div class=" col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="card-header p-0">
 <?php if($user['options']{5}==1){?>
                   <form method="post" target="sp" action="core/update.php">
@@ -733,8 +728,8 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
 <?php /* Settings */ ?>
           <div role="tabpanel" class="tab-pane" id="account-settings">
             <div class="form-group row">
-              <label for="timezone" class="col-form-label col-sm-2">Timezone</label>
-              <div class="input-group col-sm-10">
+              <label for="timezone" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Timezone</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="timezone" class="form-control" onchange="update('<?php echo$r['id'];?>','login','timezone',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="timezone"<?php echo$user['options']{5}==1?'':' disabled';?>>
                   <option value="default">System Default</option>
 <?php               $o=array(
@@ -754,8 +749,8 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
 <?php if($user['id']==$r['id']||$user['options']{5}==1){?>
             <form target="sp" method="post" action="core/update.php">
               <div class="form-group row">
-                <label for="password" class="col-form-label col-sm-2">Password</label>
-                <div class="input-group col-sm-10">
+                <label for="password" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Password</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                   <input type="hidden" name="t" value="login">
                   <input type="hidden" name="c" value="password">
@@ -766,14 +761,14 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
             </form>
 <?php }?>
             <div class="form-group row">
-              <label for="active" class="col-form-label col-8 col-sm-2">Active</label>
-              <div class="input-group col-4 col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="active" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0"<?php echo($r['active']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="active" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Active</label>
             </div>
             <div class="form-group row">
-              <label for="rank" class="col-form-label col-sm-2">Rank</label>
-              <div class="input-group col-sm-10">
+              <label for="rank" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Rank</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="rank" class="form-control" onchange="update('<?php echo$r['id'];?>','login','rank',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="rank"<?php echo$user['options']{5}==1?'':' disabled';?>>
                   <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Visitor</option>
                   <option value="100"<?php echo($r['rank']==100?' selected':'');?>>Subscriber</option>
@@ -792,70 +787,76 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
             <hr>
             <legend>Account Permissions</legend>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0"<?php echo($r['newsletter']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+              </div>
+              <label for="newsletter" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10" data-tooltip="tooltip" data-title="Toggle Newsletter Subscription.">Newsletter Subscriber</label>
+            </div>
+            <div class="form-group row">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0"<?php echo($r['options']{0}==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options0" class="col-form-label col-sm-11">Add or Remove Content</label>
+              <label for="options0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Add or Remove Content</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1"<?php echo($r['options']{1}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options1" class="col-form-label col-sm-11">Edit Content</label>
+              <label for="options1" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Edit Content</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2"<?php echo($r['options']{2}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options2" class="col-form-label col-sm-11">Add or Edit Bookings</label>
+              <label for="options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Add or Edit Bookings</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3"<?php echo($r['options']{3}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options3" class="col-form-label col-sm-11">Message Viewing or Editing</label>
+              <label for="options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Message Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4"<?php echo($r['options']{4}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options4" class="col-form-label col-sm-11">Orders Viewing or Editing</label>
+              <label for="options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Orders Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options5" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5"<?php echo($r['options']{5}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options5" class="col-form-label col-sm-11">User Accounts Viewing or Editing</label>
+              <label for="options5" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">User Accounts Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options6" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6"<?php echo($r['options']{6}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options6" class="col-form-label col-sm-11">SEO Editing</label>
+              <label for="options6" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">SEO Editing</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options7" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7"<?php echo($r['options']{7}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
-              <label for="options7" class="col-form-label col-sm-11">Preferences Viewing or Editing</label>
+              <label for="options7" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Preferences Viewing or Editing</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success">
                   <input type="checkbox" id="liveChatNotification0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0"<?php echo($r['liveChatNotification']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>>
                   <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
                 </label>
               </div>
-              <label for="liveChatNotification0" class="col-form-label col-sm-11">Email LiveChat notifications</label>
+              <label for="liveChatNotification0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Email LiveChat notifications</label>
             </div>
             <div class="form-group row">
-              <div class="input-group col-sm-1">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success">
                   <input type="checkbox" id="options8" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="8"<?php echo($r['options']{8}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{5}==1?'':' disabled');?>>
                   <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
                 </label>
               </div>
-              <label for="options8" class="col-form-label col-sm-11">System Utilization Viewing</label>
+              <label for="options8" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">System Utilization Viewing</label>
             </div>
           </div>
         </div>

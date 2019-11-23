@@ -9,12 +9,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Add test in Administration Header to test if admin.css exists,
  *             and add if it does. This is for the WYSIWYG Editor to make text
  *             look the same in the Editor as it does on the Main Site.
+ * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -64,4 +65,5 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show">
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development']{0}==1&&$user['rank']>999)echo' development" data-width="" onload="$(`body`).attr(`data-width`,$(window).width());" onresize="$(`body`).attr(`data-width`,$(window).width());';?>">
+<?php if($config['development']{0}==1&&$user['rank']>999)echo'<div class="development"></div>';?>

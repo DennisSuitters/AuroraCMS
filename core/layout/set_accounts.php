@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -26,24 +27,24 @@
     <div class="card">
       <div class="card-body">
         <div class="form-group row">
-          <label for="options3" class="col-form-label col-8 col-sm-2" data-tooltip="tooltip" data-title="Allow Users to Create Accounts.">Account Sign Ups</label>
-          <div class="input-group col-4 col-sm-10">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options3" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="3"<?php echo$config['options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
+          <label for="options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10" data-tooltip="tooltip" data-title="Allow Users to Create Accounts.">Account Sign Ups</label>
         </div>
         <hr/>
         <legend>Password Reset Email Layout</legend>
         <div class="col-12 text-right"><small>Tokens:</small> <a class="badge badge-secondary" href="#" onclick="insertAtCaret('passwordResetSubject','{business}');return false;">{business}</a> <a class="badge badge-secondary" href="#" onclick="insertAtCaret('passwordResetSubject','{date}');return false;">{date}</a></div>
         <div class="form-group row">
-          <label for="passwordResetSubject" class="col-form-label col-sm-2">Subject</label>
-          <div class="input-group col-sm-10">
+          <label for="passwordResetSubject" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Subject</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="passwordResetSubject" class="form-control textinput" value="<?php echo$config['passwordResetSubject'];?>" data-dbid="1" data-dbt="config" data-dbc="passwordResetSubject">
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepasswordResetSubject" class="btn btn-secondary save" data-dbid="passwordResetSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
-          <label for="passwordResetLayout" class="col-form-label col-sm-2">Layout</label>
-          <div class="input-group card-header col-sm-10 p-0">
+          <label for="passwordResetLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
+          <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
             <div class="col text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{name}');return false;">{name}</a>
@@ -64,15 +65,15 @@
         <legend>Sign Up Emails</legend>
         <div class="col-12 text-right"><small>Tokens:</small> <a class="badge badge-secondary" href="#" onclick="insertAtCaret('accountActivationSubject','{username}');return false;">{username}</a> <a class="badge badge-secondary" href="#" onclick="insertAtCaret('accountActivationSubject','{site}');return false;">{site}</a></div>
         <div class="form-group row">
-          <label for="accountActivationSubject" class="col-form-label col-sm-2">Subject</label>
-          <div class="input-group col-sm-10">
+          <label for="accountActivationSubject" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Subject</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="accountActivationSubject" class="form-control textinput" value="<?php echo$config['accountActivationSubject'];?>" data-dbid="1" data-dbt="config" data-dbc="accountActivationSubject">
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveaccountActivationSubject" class="btn btn-secondary save" data-dbid="accountActivationSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
-          <label for="accountActivationLayout" class="col-form-label col-sm-2">Layout</label>
-          <div class="input-group card-header col-sm-10 p-0">
+          <label for="accountActivationLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
+          <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
             <div class="col text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{username}');return false;">{username}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{password}');return false;">{password}</a>

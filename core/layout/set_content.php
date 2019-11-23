@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Item Categories Checkbox
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -28,20 +29,20 @@
       <div class="card-body">
         <legend>Related Content</legend>
         <div class="form-group row">
-          <div class="input-group col-sm-2">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options11" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11"<?php echo$config['options']{11}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options11" class="col-form-label col-sm-6">Enable Related Content</label>
+          <label for="options11" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Related Content</label>
         </div>
         <div class="form-group row">
-          <div class="input-group col-sm-2">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options10" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10"<?php echo$config['options']{10}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options10" class="col-form-label col-sm-6">Display Similar Category if no Related Content items are selected</label>
+          <label for="options10" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Display Similar Category if no Related Content items are selected</label>
         </div>
         <div class="form-group row">
-          <label for="showItems" class="col-form-label col-sm-2">Item Count</label>
-          <div class="input-group col-sm-10">
+          <label for="showItems" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Item Count</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="showItems" class="form-control textinput" value="<?php echo$config['showItems'];?>" data-dbid="1" data-dbt="config" data-dbc="showItems" placeholder="Enter Item Count...">
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveshowItems" class="btn btn-secondary save" data-dbid="showItems" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>

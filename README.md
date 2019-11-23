@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at v0.0.6
+We are currently at v0.0.7
 
 ### FAQ
 - Why no Plugins?
@@ -35,6 +35,7 @@ We are currently at v0.0.6
   - Site Block if visitor's IP is listed in Blacklist, saving servers resources, and to hopefully stop Spammers or Email Harvester's.
   - Database Backup and ability to Prefix Table Names.
   - Blacklist IP's that try to access WordPress based files.
+  - Developer "Lock Down", this stops accounts lower than the developer from taking the website out of "maintenance" or "Coming Soon" modes.
 - WYSIWYG Editor Content is encoded to get around some server filters blocking data such as iFrames that services such as YouTube use for Embedding.
 - Page and Visitor Tracking.
 - SEO Stats within Content, Google (currently broken), Alexa, and Moz.
@@ -43,7 +44,8 @@ We are currently at v0.0.6
   - Choose between the built in Live Chat, or easily integrate Facebook Messenger.
 - GDPR Privacy Notice Compliancy.
   - For those providing Services and or Products to European Countries.
-- Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Studio Junkyard:
+- Website Voice service. Ability to add a text to speech reader for visually impaired visitors.
+- Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design:
   - summernote-accessibility (In Progress)
   - [summernote-cleaner](https://github.com/DiemenDesign/summernote-cleaner)
   - [summernote-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
@@ -97,6 +99,7 @@ You can now get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](ht
 - Windows 7 + WAMP + PHP 5.5 + MySQL
 
 ### TODO:
+- Add Stripe Payment Services.
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.
 - Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q).
 - Create Free Templates.

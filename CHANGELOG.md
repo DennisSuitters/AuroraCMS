@@ -1,9 +1,18 @@
+### v0.0.7
+- Fix Width Formatting for better responsiveness.
+- Add Development Tools to assist with Theme Development.
+- Add Website Voice service.
+- Fix Stock Status Display.
+- Add Parsing for RRP (Recommended Retail Price) and Reduced Cost Prices.
+- Add Options to Lock Down Site for Developer Accounts (handy for non-paying clients).
+- Fix old CMS references.
+
 ### v0.0.6
 - Fix reference to jQuery on Login page being wrong.
 - Remove missed Pace Artifacts which were causing script errors.
 - Add GDPR Banner Optional Display.
 - Add features to LiveChat, email enable admin users, show status of new chat messages.
-- Adjust Bootstrap Tabs styling.
+- Adjust Admin Bootstrap Tabs styling.
 
 ### AuroraCMS v0.0.5
 - Add Chat Widget. With option to use built-in Chat or Facebook Messenger.

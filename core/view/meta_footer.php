@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.6
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.5 Add Live Chat
  * @changes    v0.0.6 Add GDPR
+ * @changes    v0.0.7 Add parsing for Website Voice service.
  */
 if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&file_exists(THEME.DS.'meta_footer.html')){
   $footer=file_get_contents(THEME.DS.'meta_footer.html');
@@ -58,6 +59,15 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     ],$footer);
   }else
     $footer=preg_replace('~<gdpr>~is','',$footer,1);
+  if($config['options']{8}==1){
+    $footer=preg_replace([
+      '/<websitevoice>/'
+    ],[
+      ($config['wv_site_id']!=''?'<script async src="https://widget.websitevoice.com/'.$config['wv_site_id'].'"></script>'.
+      '<script>window.wvData=window.wvData||{};function wvtag(a,b){wvData[a]=b;}wvtag(`id`,`'.$config['wv_site_id'].'`);</script>':'')
+    ],$footer);
+  }else
+    $footer=preg_replace('~<websitevoice>~is','',$footer,1);
 }else
   $footer='You MUST include a meta_footer template';
 $content.=$footer;

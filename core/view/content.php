@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -16,6 +16,7 @@
  * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
  * @changes    v0.0.4 Adjust SQL for Related Items so only Published Content is selected.
  * @changes    v0.0.4 Add Front End Editing.
+ * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  */
 $rank=0;
 $notification='';
@@ -153,7 +154,13 @@ if($show=='categories'){
 		$html=preg_replace('~<settings.*?>~is','',$html,1);
 	}else
 		$count=1;
-	$html=str_replace('<print view>',$view,$html);
+	$html=preg_replace([
+		'/<print view>/',
+		'/<print content=[\"\']?category[\"\']?>/'
+	],[
+		$view,
+		$args[0]!=''?html_entity_decode($args[0]):''
+	],$html);
 	if(stristr($html,'<print page="coverVideo">')){
 		if($page['coverVideo']!=''){
 			$cover=basename($page['coverVideo']);
@@ -790,7 +797,7 @@ if($show=='item'){
     				'"@type":"Offer",'.
 						'"url":"'.$canonical.'",'.
     				'"priceCurrency":"AUD",'.
-    				'"price":"'.($r['cost']==''?'0':$r['cost']).'",'.
+    				'"price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'",'.
     				'"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",'.
     				'"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'OutOfStock':'In Stock'):($r['stockStatus']=='none'?'OutOfStock':'InStock')).'",'.
     				'"seller":{'.
@@ -806,7 +813,7 @@ if($show=='item'){
     				'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
 						'"address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'",'.
 						'"telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'",'.
-						'"priceRange":"'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'",'.
+						'"priceRange":"'.htmlspecialchars(($r['rCost']!=0?$r['rCost']:$r['cost']),ENT_QUOTES,'UTF-8').'",'.
 						'"image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"'.
   				'},'.
   				'"areaServed":{'.

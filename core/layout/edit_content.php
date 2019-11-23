@@ -7,12 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
  * @changes    v0.0.3 Add AutoPublish Options to Status.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.7 Add Editing of RRP and Reduced Cost options.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -87,8 +89,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
           <div id="tab-content-content" class="tab-pane active" role="tabpanel">
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible.</div>':'';?>
             <div id="nav-content-content-1" class="form-group row">
-              <label for="title" class="col-form-label col-sm-2">Title</label>
-              <div class="input-group col-sm-10">
+              <label for="title" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <?php if($user['options']{1}==1){
                   $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                   $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'title']);
@@ -114,33 +116,37 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               </script>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-sm-2">URL Slug</label>
-              <div class="input-group col-sm-10">
+              <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL Slug</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text text-truncate col-sm-12">
                   <a id="genurl" target="_blank" href="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>"><?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?></a>
                 </div>
               </div>
             </div>
             <div id="nav-content-content-2" class="form-group row">
-              <label for="ti" class="col-form-label col-sm-2">Created</label>
-              <div class="input-group col-sm-10"><input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly></div>
+              <label for="ti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Created</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
+              </div>
             </div>
             <div id="nav-content-content-3" class="form-group row">
-              <label for="pti" class="col-form-label col-sm-2">Published On</label>
-              <div class="input-group col-sm-10">
+              <label for="pti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Published On</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="pti" class="form-control textinput" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="pti" value="<?php echo date('M n, Y g:i A',$r['pti']);?>"<?php echo$user['options']{1}==1?'':' readonly';?>>
                 <input type="hidden" id="ptix" value="<?php echo$r['pti'];?>">
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepti" class="btn btn-secondary save" data-dbid="pti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div id="nav-content-content-4" class="form-group row">
-              <label for="eti" class="col-form-label col-sm-2">Edited</label>
-              <div class="input-group col-sm-10"><input type="text" id="eti" class="form-control" value="<?php echo date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?>" readonly></div>
+              <label for="eti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Edited</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <input type="text" id="eti" class="form-control" value="<?php echo date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?>" readonly>
+              </div>
             </div>
 <?php if($r['contentType']=='proofs'){?>
             <div id="nav-content-content-5" class="form-group row">
-              <label for="cid" class="col-form-label col-sm-2">Client</label>
-              <div class="input-group col-sm-10">
+              <label for="cid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Client</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="cid" class="form-control"<?php echo$user['options']{1}==0?' disabled':'';?> onchange="update('<?php echo$r['id'];?>','content','cid',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cid"<?php echo$user['options']{1}==1?'':' disabled';?>>
                   <option value="0">Select a Client</option>
                   <?php $cs=$db->query("SELECT * FROM `".$prefix."login` ORDER BY name ASC, username ASC");while($cr=$cs->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$cr['id'].'"'.($r['cid']==$cr['id']?' selected':'').'>'.$cr['username'].':'.$cr['name'].'</option>';?>
@@ -149,8 +155,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             </div>
 <?php }?>
             <div id="nav-content-content-6" class="form-group row">
-              <label for="author" class="col-form-label col-sm-2">Author</label>
-              <div class="input-group col-sm-10">
+              <label for="author" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Author</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="uid" class="form-control" onchange="update('<?php echo$r['id'];?>','content','uid',$(this).val());" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="uid"<?php echo$user['options']{1}==1?'':' disabled';?>>
                   <?php $su=$db->query("SELECT id,username,name FROM `".$prefix."login` WHERE username!='' AND status!='delete' ORDER BY username ASC, name ASC");while($ru=$su->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$ru['id'].'"'.($ru['id']==$r['uid']?' selected':'').'>'.$ru['username'].':'.$ru['name'].'</option>';?>
                 </select>
@@ -158,8 +164,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             </div>
 <?php if($r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-7" class="form-group row">
-              <label for="code" class="col-form-label col-sm-2">Code</label>
-              <div class="input-group col-sm-10">
+              <label for="code" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Code</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="code" class="form-control textinput" value="<?php echo$r['code'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="code"<?php echo$user['options']{1}==1?' placeholder="Enter a Code..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecode" class="btn btn-secondary save" data-dbid="code" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -167,8 +173,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
 <?php }
 if($r['contentType']=='inventory'){?>
             <div id="nav-content-content-8" class="form-group row">
-              <label for="barcode" class="col-form-label col-sm-2">Barcode</label>
-              <div class="input-group col-sm-10">
+              <label for="barcode" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Barcode</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="barcode" class="form-control textinput" value="<?php echo$r['barcode'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="barcode"<?php echo$user['options']{1}==1?' placeholder="Enter a Barcode..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebarcode" class="btn btn-secondary save" data-dbid="barcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -177,8 +183,8 @@ if($r['contentType']=='inventory'){?>
 if($r['contentType']=='inventory'){?>
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right"><a target="_blank" href="https://fccid.io/">fccid.io</a> for more information or to look up an FCC ID.</div>':'';?>
             <div id="nav-content-content-9" class="form-group row">
-              <label for="fccid" class="col-form-label col-sm-2">FCCID</label>
-              <div class="input-group col-sm-10">
+              <label for="fccid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">FCCID</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="fccid" class="form-control textinput" value="<?php echo$r['fccid'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fccid"<?php echo$user['options']{1}==1?' placeholder="Enter an FCCID..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefccid" class="btn btn-secondary save" data-dbid="fccid" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -186,8 +192,8 @@ if($r['contentType']=='inventory'){?>
 <?php }
 if($r['contentType']=='inventory'){?>
             <div id="nav-content-content-10" class="form-group row">
-              <label for="brand" class="col-form-label col-sm-2">Brand</label>
-              <div class="input-group col-sm-10">
+              <label for="brand" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Brand</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="brand" list="brand_options" class="form-control textinput" value="<?php echo$r['brand'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="brand"<?php echo$user['options']{1}==1?' placeholder="Enter a Brand..."':' readonly';?>>
 <?php if($user['options']{1}==1){
   $s=$db->query("SELECT DISTINCT brand FROM `".$prefix."content` WHERE brand!='' ORDER BY brand ASC");
@@ -203,16 +209,16 @@ if($r['contentType']=='inventory'){?>
 <?php }
 if($r['contentType']=='event'){?>
             <div id="nav-content-content-11" class="form-group row">
-              <label for="tis" class="col-form-label col-sm-2">Event Start</label>
-              <div class="input-group col-sm-10">
+              <label for="tis" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Event Start</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <?php echo$user['options']{1}==1?'<input type="text" id="tis" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tis" data-datetime="'.date($config['dateFormat'],$r['tis']).'" autocomplete="off"><input type="hidden" id="tisx" value="'.$r['tis'].'"><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetis" class="btn btn-secondary save" data-dbid="tis" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tis']).'" readonly>';?>
               </div>
             </div>
 <?php }
 if($r['contentType']=='event'){?>
             <div id="nav-content-content-12" class="form-group row">
-              <label for="tie" class="col-form-label col-sm-2">Event End</label>
-              <div class="input-group col-sm-10">
+              <label for="tie" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Event End</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <?php echo$user['options']{1}==1?'<input type="text" id="tie" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tie" data-datetime="'.date($config['dateFormat'],$r['tie']).'" autocomplete="off"><input type="hidden" id="tiex" value="'.$r['tie'].'"><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetie" class="btn btn-secondary save" data-dbid="tie" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tie']).'" readonly>';?>
               </div>
             </div>
@@ -220,8 +226,8 @@ if($r['contentType']=='event'){?>
 echo$r['ip']!=''?'<div class="help-block small text-right">'.$r['ip'].'</div>':'';
 if($r['contentType']=='testimonials'){?>
             <div id="nav-content-content-13" class="form-group row">
-              <label for="email" class="col-form-label col-sm-2">Email</label>
-              <div class="input-group col-sm-10">
+              <label for="email" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="email"<?php echo$user['options']{1}==1?' placeholder="Enter an Email..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -229,8 +235,8 @@ if($r['contentType']=='testimonials'){?>
 <?php }
 if($r['contentType']=='testimonials'){?>
             <div id="nav-content-content-14" class="form-group row">
-              <label for="name" class="col-form-label col-sm-2">Name</label>
-              <div class="input-group col-sm-10">
+              <label for="name" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="name" list="name_options" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="name"<?php echo$user['options']{1}==1?' placeholder="Enter a Name..."':' readonly';?>>
 <?php if($user['options']{1}==1){
   $s=$db->query("SELECT DISTINCT name FROM `".$prefix."content` UNION SELECT DISTINCT name FROM `".$prefix."login` ORDER BY name ASC");
@@ -246,8 +252,8 @@ if($r['contentType']=='testimonials'){?>
 <?php }
 if($r['contentType']=='testimonials'){?>
             <div id="nav-content-content-15" class="form-group row">
-              <label for="url" class="col-form-label col-sm-2">URL</label>
-              <div class="input-group col-sm-10">
+              <label for="url" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url"<?php echo$user['options']{1}==1?' placeholder="Enter a URL..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -255,8 +261,8 @@ if($r['contentType']=='testimonials'){?>
 <?php }
 if($r['contentType']=='testimonials'){?>
             <div id="nav-content-content-16" class="form-group row">
-              <label for="business" class="col-form-label col-sm-2">Business</label>
-              <div class="input-group col-sm-10">
+              <label for="business" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Business</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business"<?php echo$user['options']{1}==1?' placeholder="Enter a Business..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -264,8 +270,8 @@ if($r['contentType']=='testimonials'){?>
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-17" class="form-group row">
-              <label for="category_1" class="col-form-label col-sm-2">Category One</label>
-              <div class="input-group col-sm-10">
+              <label for="category_1" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category One</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_1" list="category_1_options" type="text" class="form-control textinput" value="<?php echo$r['category_1'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_1"<?php echo$user['options']{1}==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
 <?php if($user['options']{1}==1){
   $sc=$db->query("SELECT DISTINCT category_1 FROM `".$prefix."content` WHERE category_1!='' ORDER BY category_1 ASC");
@@ -281,8 +287,8 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-18" class="form-group row">
-              <label for="category_2" class="col-form-label col-sm-2">Category Two</label>
-              <div class="input-group col-sm-10">
+              <label for="category_2" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category Two</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_2" list="category_2_options" type="text" class="form-control textinput" value="<?php echo$r['category_2'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_2"<?php echo($user['options']{1}==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
 <?php if($user['options']{1}==1){
   $sc=$db->query("SELECT DISTINCT category_2 FROM `".$prefix."content` WHERE category_2!='' ORDER BY category_2 ASC");
@@ -298,8 +304,8 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-19" class="form-group row">
-              <label for="category_3" class="col-form-label col-sm-2">Category Three</label>
-              <div class="input-group col-sm-10">
+              <label for="category_3" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category Three</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_3" list="category_3_options" type="text" class="form-control textinput" value="<?php echo$r['category_3'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_3"<?php echo($user['options']{1}==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
 <?php if($user['options']{1}==1){
   $sc=$db->query("SELECT DISTINCT category_3 FROM `".$prefix."content` WHERE category_3!='' ORDER BY category_3 ASC");
@@ -315,8 +321,8 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-20" class="form-group row">
-              <label for="category_4" class="col-form-label col-sm-2">Category Four</label>
-              <div class="input-group col-sm-10">
+              <label for="category_4" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category Four</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_4" list="category_4_options" type="text" class="form-control textinput" value="<?php echo$r['category_4'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_4"<?php echo($user['options']{1}==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
 <?php if($user['options']{1}==1){
   $sc=$db->query("SELECT DISTINCT category_4 FROM `".$prefix."content` WHERE category_4!='' ORDER BY category_4 ASC");
@@ -332,8 +338,18 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-21" class="form-group row">
-              <label for="cost" class="col-form-label col-sm-2">Cost</label>
-              <div class="input-group col-sm-10">
+              <label for="rrp" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">RRP</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-text">$</div>
+                <input type="text" id="rrp" class="form-control textinput" value="<?php echo$r['rrp'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rrp"<?php echo$user['options']{1}==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saverrp" class="btn btn-secondary save" data-dbid="rrp" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              </div>
+            </div>
+<?php }
+if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
+            <div id="nav-content-content-21" class="form-group row">
+              <label for="cost" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Cost</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text">$</div>
                 <input type="text" id="cost" class="form-control textinput" value="<?php echo$r['cost'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cost"<?php echo$user['options']{1}==1?' placeholder="Enter a Cost..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecost" class="btn btn-secondary save" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
@@ -341,17 +357,27 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
             </div>
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
+            <div id="nav-content-content-21" class="form-group row">
+              <label for="rCost" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Reduced Cost</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-text">$</div>
+                <input type="text" id="rCost" class="form-control textinput" value="<?php echo$r['rCost'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rCost"<?php echo$user['options']{1}==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
+                <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saverCost" class="btn btn-secondary save" data-dbid="rCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              </div>
+            </div>
+<?php }
+if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div id="nav-content-content-22" class="form-group row">
-              <label for="options0" class="col-form-label col-sm-2">Show Cost</label>
-              <div class="input-group col-sm-10">
+              <label for="options0" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Show Cost</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0"<?php echo($r['options']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
             </div>
 <?php }
 if($r['contentType']=='inventory'){?>
             <div id="nav-content-content-23" class="form-group row">
-              <label for="quantity" class="col-form-label col-sm-2">Quantity</label>
-              <div class="input-group col-sm-10">
+              <label for="quantity" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Quantity</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="quantity" class="form-control textinput" value="<?php echo $r['quantity'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="quantity"<?php echo$user['options']{1}==1?' placeholder="Enter a Quantity..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savequantity" class="btn btn-secondary save" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -359,14 +385,15 @@ if($r['contentType']=='inventory'){?>
 <?php }
 if($r['contentType']=='inventory'){?>
             <div id="tab-content-content-24" class="form-group row">
-              <label for="stockStatus" class="col-form-label col-sm-2">Stock Status</label>
-              <div class="input-group col-sm-10">
+              <label for="stockStatus" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Stock Status</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="stockStatus" class="form-control" onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());"<?php echo$user['options']{1}==1?'  data-tooltip="tooltip" data-title="Change Stock Status"':' disabled';?>>
                   <option value="quantity"<?php echo$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
                   <option value="in stock"<?php echo$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
-                  <option value="out of stock"<?php echo$r['status']=='out of stock'?' selected':'';?>>Out Of Stock</option>
-                  <option value="pre-order"<?php echo$r['status']=='pre-order'?' selected':'';?>>Pre-Order</option>
+                  <option value="out of stock"<?php echo$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
+                  <option value="pre-order"<?php echo$r['stockStatus']=='pre-order'?' selected':'';?>>Pre-Order</option>
                   <option value="available"<?php echo$r['stockStatus']=='available'?' selected':'';?>>Available</option>
+                  <option value="sold out"<?php echo$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
                   <option value="none"<?php echo($r['stockStatus']=='none'||$r['stockStatus']=='')?' selected':'';?>>No Display</option>
                 </select>
               </div>
@@ -414,8 +441,8 @@ if($r['contentType']=='inventory'){?>
 <?php if($user['options']{1}==1){?>
               <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
                 <div class="form-group row">
-                  <label for="avatar" class="col-form-label col-sm-2">Avatar</label>
-                  <div class="input-group col-sm-10">
+                  <label for="avatar" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Avatar</label>
+                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                     <input type="text" id="av" class="form-control" value="<?php echo$r['file'];?>" readonly data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="avatar">
                     <div class="input-group-append">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -432,8 +459,8 @@ if($r['contentType']=='inventory'){?>
               </form>
 <?php }else{?>
               <div class="form-group row">
-                <label for="avatar" class="col-form-label col-sm-2">Avatar</label>
-                <div class="input-group col-sm-10">
+                <label for="avatar" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Avatar</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="av" class="form-control" value="<?php echo$r['file'];?>" readonly data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="avatar">
                   <div class="input-group-append bg-white"><img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['file']))?'media'.DS.'avatar'.DS.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar"></div>
                 </div>
@@ -444,8 +471,8 @@ if($r['contentType']=='inventory'){?>
 if($r['contentType']!='testimonials'){?>
             <fieldset id="tab-content-images-2" class="control-fieldset">
               <div id="tab-content-images-3" class="form-group row">
-                <label for="file" class="col-form-label col-sm-2">URL</label>
-                <div class="input-group col-sm-10">
+                <label for="file" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="fileURL" class="form-control textinput" value="<?php echo$r['fileURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileURL"<?php echo$user['options']{1}==1?' placeholder="Enter a URL..."':' readonly';?>>
                   <div class="input-group-append">
                     <?php echo$r['fileURL']!=''?'<a href="'.$r['fileURL'].'" data-fancybox="url"><img id="thumbimage" src="'.$r['fileURL'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
@@ -454,8 +481,8 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
               <div id="tab-content-images-4" class="form-group row">
-                <label fore="file" class="col-form-label col-sm-2">Image</label>
-                <div class="input-group col-sm-10">
+                <label fore="file" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input id="file" type="text" class="form-control textinput" value="<?php echo$r['file'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="file" readonly>
 <?php if($user['options']{1}==1){?>
                   <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');" data-tooltip="tooltip" data-title="Open Media Manager" role="button" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
@@ -472,8 +499,8 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
               <div id="tab-content-images-5" class="form-group row">
-                <label for="thumb" class="col-form-label col-sm-2">Thumbnail</label>
-                <div class="input-group col-sm-10">
+                <label for="thumb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Thumbnail</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input id="thumb" type="text" class="form-control textinput" value="<?php echo$r['thumb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="thumb" readonly>
 <?php if($user['options']{1}==1){?>
                   <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
@@ -490,8 +517,8 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
               <div id="tab-content-images-7" class="form-group row">
-                <label for="exifFilename" class="col-form-label col-sm-2">Image ALT</label>
-                <div class="input-group col-sm-10">
+                <label for="exifFilename" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image ALT</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="fileALT" class="form-control textinput" value="<?php echo$r['fileALT'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT"<?php echo$user['options']{1}==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
                 </div>
@@ -501,64 +528,64 @@ if($r['contentType']!='testimonials'){?>
               <legend class="control-legend">EXIF Information</legend>
               <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</div>':'';?>
               <div id="tab-content-images-7" class="form-group row">
-                <label for="exifFilename" class="col-form-label col-sm-2">Original Filename</label>
-                <div class="input-group col-sm-10">
+                <label for="exifFilename" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Original Filename</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifFilename" class="form-control textinput" value="<?php echo$r['exifFilename'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFilename"<?php echo$user['options']{1}==1?' placeholder="Original Filename..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="saveexifFilename" class="btn btn-secondary save" data-dbid="exifFilename" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-8" class="form-group row">
-                <label for="exifCamera" class="col-form-label col-sm-2">Camera</label>
-                <div class="input-group col-sm-10">
+                <label for="exifCamera" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Camera</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifCamera" class="form-control textinput" value="<?php echo$r['exifCamera'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifCamera"<?php echo$user['options']{1}==1?' placeholder="Enter a Camera"':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifCamera" class="btn btn-secondary save" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-9" class="form-group row">
-                <label for="exifLens" class="col-form-label col-sm-2">Lens</label>
-                <div class="input-group col-sm-10">
+                <label for="exifLens" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Lens</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);" role="button" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifLens" class="form-control textinput" value="<?php echo$r['exifLens'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifLens"<?php echo$user['options']{1}==1?' placeholder="Enter a Lens..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifLens" class="btn btn-secondary save" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-10" class="form-group row">
-                <label for="exifAperture" class="col-form-label col-sm-2">Aperture</label>
-                <div class="input-group col-sm-10">
+                <label for="exifAperture" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Aperture</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifAperture" class="form-control textinput" value="<?php echo$r['exifAperture'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifAperture"<?php echo$user['options']{1}==1?' placeholder="Enter an Aperture..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifAperture" class="btn btn-secondary save" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-11" class="form-group row">
-                <label for="exifFocalLength" class="col-form-label col-sm-2">Focal Length</label>
-                <div class="input-group col-sm-10">
+                <label for="exifFocalLength" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Focal Length</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifFocalLength" class="form-control textinput" value="<?php echo$r['exifFocalLength'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFocalLength"<?php echo$user['options']{1}==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifFocalLength" class="btn btn-secondary save" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-12" class="form-group row">
-                <label for="exifShutterSpeed" class="col-form-label col-sm-2">Shutter Speed</label>
-                <div class="input-group col-sm-10">
+                <label for="exifShutterSpeed" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Shutter Speed</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);" role="button" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifShutterSpeed" class="form-control textinput" value="<?php echo$r['exifShutterSpeed'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifShutterSpeed"<?php echo$user['options']{1}==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifShutterSpeed" class="btn btn-secondary save" data-dbid="exifShutterSpeed" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-13" class="form-group row">
-                <label for="exifISO" class="col-form-label col-sm-2">ISO</label>
-                <div class="input-group col-sm-10">
+                <label for="exifISO" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">ISO</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifISO" class="form-control textinput" value="<?php echo$r['exifISO'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifISO"<?php echo$user['options']{1}==1?' placeholder="Enter an ISO..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifISO" class="btn btn-secondary save" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-14" class="form-group row">
-                <label for="exifti" class="col-form-label col-sm-2">Taken</label>
-                <div class="input-group col-sm-10">
+                <label for="exifti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Taken</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options']{1}==1?'<div class="input-group-btn"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
                   <input type="text" id="exifti" class="form-control textinput" value="<?php echo$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifti"<?php echo$user['options']{1}==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifti" class="btn btn-secondary save" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
@@ -568,15 +595,15 @@ if($r['contentType']!='testimonials'){?>
             <fieldset id="tab-content-images-15" class="control-fieldset">
               <legend class="control-legend">Image Attribution</legend>
               <div id="tab-content-images-16" class="form-group row">
-                <label for="attributionImageTitle" class="col-form-label col-sm-2">Title</label>
-                <div class="input-group col-sm-10">
+                <label for="attributionImageTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageTitle" class="form-control textinput" value="<?php echo$r['attributionImageTitle'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle"<?php echo$user['options']{1}==1?' placeholder="Enter a Title..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageTitle" class="btn btn-secondary save" data-dbid="attributionImageTitle" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div id="tab-content-images-17" class="form-group row">
-                <label for="attributionImageName" class="col-form-label col-sm-2">Name</label>
-                <div class="input-group col-sm-10">
+                <label for="attributionImageName" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageName" list="attributionImageName_option" class="form-control textinput" value="<?php echo$r['attributionImageName'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageName"<?php echo$user['options']{1}==1?' placeholder="Enter a Name..."':' readonly';?>>
 <?php if($user['options']{1}==1){
   $s=$db->query("SELECT DISTINCT attributionImageName AS name FROM `".$prefix."content` UNION SELECT DISTINCT name AS name FROM content UNION SELECT DISTINCT name AS name FROM login ORDER BY name ASC");
@@ -590,8 +617,8 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
               <div id="tab-content-images-18" class="form-group row">
-                <label for="attributionImageURL" class="col-form-label col-sm-2">URL</label>
-                <div class="input-group col-sm-10">
+                <label for="attributionImageURL" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageURL" list="attributionImageURL_option" class="form-control textinput" value="<?php echo$r['attributionImageURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageURL"<?php echo$user['options']{1}==1?' placeholder="Enter a URL..."':' readonly';?>>
 <?php if($user['options']{1}==1){
   $s=$db->query("SELECT DISTINCT attributionImageURL AS url FROM `".$prefix."content` ORDER BY attributionImageURL ASC");
@@ -723,10 +750,10 @@ if($ss->rowCount()>0){
 <?php /* Comments */ ?>
           <div id="tab-content-comments" class="tab-pane" role="tabpanel">
             <div class="form-group row">
-              <label for="options1" class="col-form-label col-sm-2">Enable Comments</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options1" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="1"<?php echo($r['options']{1}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="options1" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable</label>
             </div>
             <div id="comments" class="clearfix">
 <?php $sc=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE contentType=:contentType AND rid=:rid ORDER BY ti ASC");
@@ -768,21 +795,21 @@ if($user['options']{1}==1){
               <input type="hidden" name="rid" value="<?php echo$r['id'];?>">
               <input type="hidden" name="contentType" value="<?php echo$r['contentType'];?>">
               <div class="form-group row">
-                <label for="commentemail" class="col-form-label col-sm-2">Email</label>
+                <label for="commentemail" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email</label>
                 <div class="input-group col-sm-10"><input type="text" id="commentemail" class="form-control" name="email" value="<?php echo$user['email'];?>"></div>
               </div>
               <div class="form-group row">
-                <label for="commentname" class="col-form-label col-sm-2">Name</label>
+                <label for="commentname" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
                 <div class="input-group col-sm-10"><input type="text" id="commentname" class="form-control" name="name" value="<?php echo$user['name'];?>"></div>
               </div>
               <div class="form-group row">
-                <label for="commentda" class="col-form-label col-sm-2">Comment</label>
+                <label for="commentda" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Comment</label>
                 <div class="input-group col-sm-10">
                   <textarea id="commentda" class="form-control" name="da" placeholder="Enter a Comment..." required></textarea>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-form-label col-sm-2"></label>
+                <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></label>
                 <div class="input-group col-sm-10">
                   <button class="btn btn-secondary btn-block add" aria-label="Add Comment');?>">Add Comment</button>
                 </div>
@@ -874,8 +901,8 @@ while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
 if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
           <div id="tab-content-seo" class="tab-pane" role="tabpanel">
             <div id="tab-content-seo-1" class="form-group row">
-              <label for="views" class="col-form-label col-sm-2">Views</label>
-              <div class="input-group col-sm-10">
+              <label for="views" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Views</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="number" id="views" class="form-control textinput" value="<?php echo$r['views'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="views"<?php echo$user['options']{1}==1?'':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveviews" class="btn btn-secondary save" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -884,8 +911,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             <div class="help-block small text-muted text-right">Options for Meta Robots: <span data-tooltip="tooltip" data-title="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="tooltip" data-title="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="tooltip" data-title="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="tooltip" data-title="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="tooltip" data-title="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
 <?php }?>
             <div class="form-group row">
-              <label for="metaRobots" class="col-form-label col-sm-2">Meta Robots</label>
-              <div class="input-group col-sm-10">
+              <label for="metaRobots" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Robots</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php           if($user['options']{1}==1){
                   if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
@@ -898,8 +925,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               </div>
             </div>
             <div id="tab-content-seo-2" class="form-group row">
-              <label for="schemaType" class="col-form-label col-sm-2">Schema Type</label>
-              <div class="input-group col-sm-10">
+              <label for="schemaType" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Schema Type</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="schemaType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Schema for Microdata Content"':' disabled';?>>
                   <option value="blogPosting"<?php echo$r['schemaType']=='blogPosting'?' selected':'';?>>blogPosting for Articles</option>
                   <option value="Product"<?php echo$r['schemaType']=='Product'?' selected':'';?>>Product for Inventory</option>
@@ -913,8 +940,8 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-form-label col-sm-2"></div>
-              <div class="input-group col-sm-10">
+              <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></div>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="card col-12 bg-white">
                   <div class="card-body">
                     <div id="google-title" data-tooltip="tooltip" data-placement="left" data-title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
@@ -935,8 +962,8 @@ else
             </div>
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">The recommended character count for Title\'s is 70.</div>':'';?>
             <div class="form-group row">
-              <label for="seoTitle" class="col-form-label col-sm-2">Meta Title</label>
-              <div class="input-group col-sm-10">
+              <label for="seoTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Title</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=70-strlen($r['seoTitle']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -957,8 +984,8 @@ if($cntc<0){
             </div>
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">The recommended character count for Captions is 100.</div>':'';?>
             <div id="tab-content-seo-3" class="form-group row">
-              <label for="seoCaption" class="col-form-label col-sm-2">Meta Caption</label>
-              <div class="input-group col-sm-10">
+              <label for="seoCaption" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Caption</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=100-strlen($r['seoCaption']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -978,8 +1005,8 @@ if($cntc<0){
             </div>
             <?php echo$user['options']{1}==1?'<div class="help-block small text-muted text-right">The recommended character count for Descriptions is 160.</div>':'';?>
             <div id="tab-content-seo-4" class="form-group row">
-              <label for="seoDescription" class="col-form-label col-sm-2">Meta Description</label>
-              <div class="input-group col-sm-10">
+              <label for="seoDescription" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Description</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=160-strlen($r['seoDescription']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -998,15 +1025,15 @@ if($cntc<0){
               </div>
             </div>
             <div id="tab-content-seo-5" class="form-group row<?php echo$r['contentType']=='proofs'?' hidden':'';?>">
-              <label for="seoKeywords" class="col-form-label col-sm-2">Keywords</label>
-              <div class="input-group col-sm-10">
+              <label for="seoKeywords" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Keywords</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="seoKeywords" class="form-control textinput" value="<?php echo$r['seoKeywords'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoKeywords"<?php echo$user['options']{1}==1?' placeholder="Enter Keywords..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoKeywords" class="btn btn-secondary save" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div id="tab-content-seo-6" class="form-group row">
-              <label for="tags" class="col-form-label col-sm-2">Tags</label>
-              <div class="input-group col-sm-10">
+              <label for="tags" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Tags</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="tags" class="form-control textinput" value="<?php echo$r['tags'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags"<?php echo$user['options']{1}==1?' placeholder="Enter Tags..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetags" class="btn btn-secondary save" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -1016,8 +1043,8 @@ if($cntc<0){
 /* Settings */ ?>
           <div id="tab-content-settings" class="tab-pane" role="tabpanel">
             <div id="tab-content-settings-1" class="form-group row">
-              <label for="status" class="col-form-label col-sm-2">Status</label>
-              <div class="input-group col-sm-10">
+              <label for="status" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Status</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="status" class="form-control" onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Change Status"':' disabled';?>>
                   <option value="unpublished"<?php echo$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
                   <option value="autopublish"<?php echo$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
@@ -1027,8 +1054,8 @@ if($cntc<0){
               </div>
             </div>
             <div id="tab-content-settings-3" class="form-group row">
-              <label for="contentType" class="col-form-label col-sm-2">contentType</label>
-              <div class="input-group col-sm-10">
+              <label for="contentType" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">contentType</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="contentType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Change the Type of Content this Item belongs to."':' disabled';?>>
                   <option value="article"<?php echo$r['contentType']=='article'?' selected':'';?>>Article</option>
                   <option value="portfolio"<?php echo$r['contentType']=='portfolio'?' selected':'';?>>Portfolio</option>
@@ -1044,29 +1071,29 @@ if($cntc<0){
             </div>
 <?php if($r['contentType']!='proofs'){?>
             <div id="tab-content-settings-4" class="form-group row<?php echo$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
-              <label for="featured0" class="col-form-label col-sm-2">Featured</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="featured0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0"<?php echo($r['featured']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="featured0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Featured</label>
             </div>
 <?php }?>
             <div id="tab-content-settings-5" class="form-group row">
-              <label for="internal0" class="col-form-label check col-sm-2">Internal</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="internal0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="internal" data-dbb="0"<?php echo($r['internal']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="internal0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Internal</label>
             </div>
 <?php if($r['contentType']=='service'){?>
             <div id="tab-content-settings-6" class="form-group row">
-              <label for="bookable0" class="col-form-label col-sm-2">Bookable</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="bookable0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0"<?php echo($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="bookable0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Bookable</label>
             </div>
 <?php }?>
             <div class="form-group row">
-              <label for="mid" class="col-form-label col-sm-2">SubMenu</label>
-              <div class="input-group col-sm-10">
+              <label for="mid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">SubMenu</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="mid" class="form-control" onchange="update('<?php echo$r['id'];?>','content','mid',$(this).val());"<?php echo$user['options']{1}==1?'':' disabled';?>>
                   <option value="0"<?php if($r['mid']==0)echo' selected';?>>None</option>
                   <?php $sm=$db->prepare("SELECT id,title from menu WHERE mid=0 AND mid!=:mid AND active=1 ORDER BY ord ASC, title ASC");$sm->execute([':mid'=>$r['id']]);while($rm=$sm->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rm['id'].'"'.($r['mid']==$rm['id']?' selected':'').'>'.$rm['title'].'</option>';?>

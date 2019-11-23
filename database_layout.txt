@@ -66,8 +66,8 @@ config
     13  Enable Chat
     14  Facebook Messenger insted of Integrated Chat
     15  Email Chat Notifications to Nominated Accounts
-    16
-    17
+    16  Enable Website Voice Service
+    17  Lock Down Developer Options
     18
     19
     20

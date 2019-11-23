@@ -4,11 +4,19 @@ body.aurora .container{height:90vh}
 .card.aurora,
 .install.aurora{-webkit-filter:blur(100px);-moz-filter:blur(100px);-ms-filter:blur(100px);-o-filter:blur(100px);filter:blur(100px);-webkit-animation:blur 1s linear forwards;-moz-animation:blur 1s linear forwards;-ms-animation:blur 1s linear forwards;-o-animation:blur 1s linear forwards;animation:blur 1s linear forwards}
 @-webkit-keyframes blur{
-  from{background:rgba(230,67,67,1);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%)
-  }
+  from{background:rgba(230,67,67,1);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%)}
   to{background-color:#343a40!important;-webkit-filter:blur(0);filter:blur(0)}
-}@-moz-keyframes blur{from{background:rgba(230,67,67,1);background:-moz-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-ms-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);}to{background-color:#343a40!important;-moz-filter:blur(0);filter:blur(0)}}@keyframes blur{from{background:rgba(230,67,67,1);background:-moz-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-o-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-ms-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e64343',endColorstr='#5dff54',GradientType=1)}to{background-color:#343a40!important;-webkit-filter:blur(0);-moz-filter:blur(0);filter:blur(0)}}
-body,html{overflow-x:hidden;padding-right:0!important}
+}
+@-moz-keyframes blur{
+  from{background:rgba(230,67,67,1);background:-moz-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-ms-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);}
+  to{background-color:#343a40!important;-moz-filter:blur(0);filter:blur(0)}
+}
+@keyframes blur{
+  from{background:rgba(230,67,67,1);background:-moz-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-o-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-ms-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e64343',endColorstr='#5dff54',GradientType=1)}
+  to{background-color:#343a40!important;-webkit-filter:blur(0);-moz-filter:blur(0);filter:blur(0)}
+}
+body,
+html{overflow-x:hidden;padding-right:0!important}
 body{font-size:1rem;font-family:sans-serif;font-weight:initial;line-height:normal;-webkit-font-smoothing:antialiased}
 .diemen{position:absolute;background-color:#fff;width:48px;height:48px;bottom:5px;right:5px;border:5px solid #fff;border-radius:50%}
 .diemen a{outline:0}
@@ -28,19 +36,3 @@ body{font-size:1rem;font-family:sans-serif;font-weight:initial;line-height:norma
 @-webkit-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
 @-o-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
 @keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
-body.development:after{content:'Screen size > ALL (max-width:575.98px)';z-index:9999;position:fixed;top:2px;left:2px;background:#000;border:1px solid #888;color:#fff;font-size:12px;padding:2px 5px}
-@media (max-width:575.98px){
-  body.development:after{content:'Screen size > ALL (max-width:575.98px)'}
-}
-@media (min-width:576px){
-  body.development:after{content:'Screen size > SM (min-width:576px)'}
-}
-@media (min-width:768px){
-  body.development:after{content:'Screen size > MD (min-width:768px)'}
-}
-@media (min-width:992px){
-  body.development:after{content:'Screen size > LG (min-width:992px)'}  
-}
-@media (min-width:1200px){
-  body.development:after{content:'Screen size > XL (min-width:1200px)'}  
-}

@@ -40,10 +40,11 @@ else
 	define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
 if($act=='additem'){
 	if($da!=0){
-		$q=$db->prepare("SELECT title,cost FROM `".$prefix."content` WHERE id=:id");
+		$q=$db->prepare("SELECT title,cost,rCost FROM `".$prefix."content` WHERE id=:id");
 		$q->execute([':id'=>$da]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
 		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
+		if($r['rCost']!=0)$r['cost']=$r['rCost'];
 	}else{
     $r=[
       'title'=>'',

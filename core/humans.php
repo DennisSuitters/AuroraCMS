@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.7 Fix old CMS references.
  */
 header("Content-Type:text/plain");
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -29,7 +30,7 @@ Developer: Dennis Suitters
 Site: https://github.com/DiemenDesign/
 Location: Nirvana, Earth
 
-Help: You, are you interested in helping develop LibreCMS further?
+Help: You, are you interested in helping develop AuroraCMS further?
 Site: Jump into the GitHub Repo. https://github.com/DiemenDesign/AuroraCMS
 Location: Your Work Station
 

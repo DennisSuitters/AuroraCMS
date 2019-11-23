@@ -127,12 +127,12 @@ if($tbl=='login'&&$col=='username'){
       ':da'=>$da,
       ':id'=>$id
     ]);?>
-	window.top.window.$('#uerror').addClass('hidden');
+	window.top.window.$('#uerror').addClass('d-none');
 <?php }else{
     $uc2=$db->prepare("SELECT username FROM `".$prefix."login` WHERE id=:id");
     $uc2->execute([':id'=>$id]);
     $uc=$uc2->fetch(PDO::FETCH_ASSOC);?>
-	window.top.window.$('#uerror').removeClass('hidden');
+	window.top.window.$('#uerror').removeClass('d-none');
 <?php }
 }else{
   $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET $col=:da WHERE id=:id");
@@ -272,7 +272,7 @@ if(is_null($e[2])){
 	window.top.window.$('#l_<?php echo$id;?>').slideUp(500,function(){$(this).remove()});
 <?php }
 		if($tbl!='comments'||$da=='delete'||$da==''){?>
-	window.top.window.$('#controls_<?php echo$id;?> button.btn').toggleClass('hidden');
+	window.top.window.$('#controls_<?php echo$id;?> button.btn').toggleClass('d-none');
   window.top.window.$('#l_<?php echo$id;?>').removeClass('danger');
 <?php }
 		if($da=='delete'){?>

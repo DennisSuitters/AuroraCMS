@@ -834,7 +834,7 @@ class PHPMailer {
       $result .= $this -> addrAppend('Reply-To', $this -> ReplyTo);
     if ($this -> Mailer != 'mail')
       $result .= $this -> headerLine('Subject', $this -> encodeHeader($this -> secureHeader($this -> Subject)));
-    if ('' != $this -> MessageID and preg_match('/^<.*@.*>$/', $this -> MessageID)) 
+    if ('' != $this -> MessageID and preg_match('/^<.*@.*>$/', $this -> MessageID))
       $this -> lastMessageID = $this -> MessageID;
     else
       $this -> lastMessageID = sprintf('<%s@%s>', $this -> uniqueid, $this -> serverHostname());
@@ -842,7 +842,7 @@ class PHPMailer {
     if (!is_null($this -> Priority))
       $result .= $this -> headerLine('X-Priority', $this -> Priority);
     if ($this -> XMailer == '')
-      $result .= $this -> headerLine( 'X-Mailer', 'LibreCMS (https://github.com/DiemenDesign/LibreCMS)');
+      $result .= $this -> headerLine( 'X-Mailer', 'AuroraCMS (https://github.com/DiemenDesign/AuroraCMS)');
     else {
       $myXmailer = trim($this -> XMailer);
       if ($myXmailer)
@@ -1243,7 +1243,7 @@ class PHPMailer {
       case 'phrase':
         if (!preg_match('/[\200-\377]/', $str)) {
           $encoded = addcslashes($str, "\0..\37\177\\\"");
-          if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str)) 
+          if (($str == $encoded) && !preg_match('/[^A-Za-z0-9!#$%&\'*+\/=?^_`{|}~ -]/', $str))
             return ($encoded);
           else
             return ("\"$encoded\"");
@@ -1757,7 +1757,7 @@ class PHPMailer {
     $line = '';
     for ($i = 0; $i < strlen($txt); $i++) {
       $ord = ord($txt[$i]);
-      if (((0x21 <= $ord) && ($ord <= 0x3A)) || $ord == 0x3C || ((0x3E <= $ord) && ($ord <= 0x7E))) 
+      if (((0x21 <= $ord) && ($ord <= 0x3A)) || $ord == 0x3C || ((0x3E <= $ord) && ($ord <= 0x7E)))
         $line .= $txt[$i];
       else
         $line .= '=' . sprintf('%02X', $ord);

@@ -305,79 +305,40 @@ button.close{padding:0;cursor:pointer;background:0 0;border:0;-webkit-appearance
 #searchbox .searchclose{position:absolute;top:10px;right:10px;font-size:3em}
 #searchbox .searchclose a{color:#888}
 #searchbox .searchclose a:hover{color:#ccc;text-decoration:none}
-
-.chat .chatList{
-  border-right:0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+.chat .chatList{border-right:0;border-top-right-radius:0;border-bottom-right-radius:0}
+.chat .chatBody{border-top-left-radius:0;border-bottom-left-radius:0}
+#chatScreen{position:relative;height:auto;min-height:calc(100% - 93px);max-height:calc(100% - 93px);overflow-y:scroll;overflow-x:hidden}
+#chatScreen:empty:after{content:attr(data-empty);position:absolute;top:100px;width:100%;text-align:center;font-size:30px;font-family:Arial;color:#888}
+#chatScreen::-webkit-scrollbar{width:8px;background:transparent}
+#chatScreen::-webkit-scrollbar-thumb{background-color:rgba(0,0,0,.3)}
+#chatScreen ul li{display:inline-block;clear:both;float:left;margin:10px 10px 5px 0;width:calc(100% - 25px);font-size:.9em}
+#chatScreen ul li:nth-last-child(1){margin-bottom:5px}
+#chatScreen ul li.page img{margin:6px 8px 0 0}
+#chatScreen ul li.page p{background:#c8ced3;color:#000}
+#chatScreen ul li.admin img{float:right;margin:6px 0 0 8px}
+#chatScreen ul li.admin p{background:#e4e7ea;color:#000;float:right}
+#chatScreen ul li img{width:32px;border-radius:50%;float:left}
+#chatScreen ul li p{display:inline-block;padding:10px 15px;border-radius:20px;max-width:80%;line-height:130%}
+body.development{margin-top:24px!important}
+div.development{position:fixed;z-index:2000;top:0;right:0;left:0;height:24px;background-color:#2f353a!important;background-image:url(../images/developmentmode.png)!important;background-repeat:repeat-x;background-attachment:fixed}
+body.development:after{content:'Breakpoint Width > ALL (max-width:575.98px)';z-index:9999;position:fixed;top:2px;left:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
+body.development:before{content:'Current Width: ' attr(data-width) 'px';z-index:9999;position:fixed;top:2px;right:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
+@media (max-width:361px){
+  div.development{height:48px}
+  body.development:before{top:26px}
 }
-
-.chat .chatBody{
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+@media (max-width:575.98px){
+  body.development:after{content:'Breakpoint Width > ALL (max-width:575.98px)'}
 }
-
-#chatScreen{
-  position:relative;
-  height: auto;
-  min-height: calc(100% - 93px);
-  max-height: calc(100% - 93px);
-  overflow-y: scroll;
-  overflow-x: hidden;
+@media (min-width:576px){
+  body.development:after{content:'Breakpoint Width > SM (min-width:576px)'}
 }
-#chatScreen:empty:after{
-  content:attr(data-empty);
-  position:absolute;
-  top:100px;
-  width:100%;
-  text-align:center;
-  font-size:30px;
-  font-family:Arial;
-  color:#888;
+@media (min-width:768px){
+  body.development:after{content:'Breakpoint Width > MD (min-width:768px)'}
 }
-#chatScreen::-webkit-scrollbar {
-  width: 8px;
-  background: transparent;
+@media (min-width:992px){
+  body.development:after{content:'Breakpoint Width > LG (min-width:992px)'}
 }
-#chatScreen::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.3);
-}
-#chatScreen ul li {
-  display: inline-block;
-  clear: both;
-  float: left;
-  margin: 10px 10px 5px 0;
-  width: calc(100% - 25px);
-  font-size: 0.9em;
-}
-#chatScreen ul li:nth-last-child(1) {
-  margin-bottom: 5px;
-}
-#chatScreen ul li.page img {
-  margin: 6px 8px 0 0;
-}
-#chatScreen ul li.page p {
-  background: #c8ced3;
-  color: #000;
-}
-#chatScreen ul li.admin img {
-  float: right;
-  margin: 6px 0 0 8px;
-}
-#chatScreen ul li.admin p {
-  background: #e4e7ea;
-  color:#000;
-  float: right;
-}
-#chatScreen ul li img {
-  width: 32px;
-  border-radius: 50%;
-  float: left;
-}
-#chatScreen ul li p {
-  display: inline-block;
-  padding: 10px 15px;
-  border-radius: 20px;
-  max-width: 80%;
-  line-height: 130%;
+@media (min-width:1200px){
+  body.development:after{content:'Breakpoint Width > XL (min-width:1200px)'}
 }

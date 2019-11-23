@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Improve Statistic Panels
- * @changes    v0.0.2 Change Stats Panels to only be displayed when their values
- *             are greater than 0.
+ * @changes    v0.0.2 Change Stats Panels to only be displayed when their values are greater than 0.
  * @changes    v0.0.3 Change Pages Views to show Actual Page and Content Views.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_dashboard.php';
@@ -49,7 +49,7 @@ $sg=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE
 $sy=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Yahoo'")->fetch(PDO::FETCH_ASSOC);
 if($user['options']{3}==1){
   if($nm['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/messages';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/messages';?>">
         <span class="card">
           <span class="card-header h5">Messages</span>
           <span class="card-body card-text">
@@ -62,7 +62,7 @@ if($user['options']{3}==1){
 <?php }
 }
 if($nb['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/bookings';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/bookings';?>">
         <span class="card">
           <span class="card-header h5">Bookings</span>
           <span class="card-body card-text">
@@ -74,7 +74,7 @@ if($nb['cnt']>0){?>
       </a>
 <?php }
 if($nc['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/comments';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/comments';?>">
         <span class="card">
           <span class="card-header h5">Comments</span>
           <span class="card-body card-text">
@@ -86,7 +86,7 @@ if($nc['cnt']>0){?>
       </a>
 <?php }
 if($nr['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/reviews';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/reviews';?>">
         <span class="card">
           <span class="card-header h5">Reviews</span>
           <span class="card-body card-text">
@@ -98,7 +98,7 @@ if($nr['cnt']>0){?>
       </a>
 <?php }
 if($nt['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>">
         <span class="card">
           <span class="card-header h5">Testimonials</span>
           <span class="card-body card-text">
@@ -111,7 +111,7 @@ if($nt['cnt']>0){?>
 <?php }
 if($user['options']{4}==1){
   if($po['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/orders';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/orders';?>">
         <span class="card">
           <span class="card-header h5">Orders</span>
           <span class="card-body card-text">
@@ -124,7 +124,7 @@ if($user['options']{4}==1){
 <?php }
 }
 if($sa['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/security#tab-security-blacklist';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/security#tab-security-blacklist';?>">
         <span class="card">
           <span class="card-header h5">Blacklist</span>
           <span class="card-body card-text">
@@ -136,7 +136,7 @@ if($sa['cnt']>0){?>
       </a>
 <?php }
 if($sg['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/google';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/google';?>">
         <span class="card">
           <span class="card-header h5">Google</span>
           <span class="card-body card-text">
@@ -148,7 +148,7 @@ if($sg['cnt']>0){?>
       </a>
 <?php }
 if($sy['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/yahoo';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/yahoo';?>">
         <span class="card">
           <span class="card-header h5">Yahoo</span>
           <span class="card-body card-text">
@@ -160,7 +160,7 @@ if($sy['cnt']>0){?>
       </a>
 <?php }
 if($sb['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/bing';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/bing';?>">
         <span class="card">
           <span class="card-header h5">Bing</span>
           <span class="card-body card-text">
@@ -172,7 +172,7 @@ if($sb['cnt']>0){?>
       </a>
 <?php }
 if($sd['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/duckduckgo';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/duckduckgo';?>">
         <span class="card">
           <span class="card-header h5">DuckDuckGo</span>
           <span class="card-body card-text">
@@ -184,7 +184,7 @@ if($sd['cnt']>0){?>
       </a>
 <?php }
 if($sf['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/facebook';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/facebook';?>">
         <span class="card">
           <span class="card-header h5">Facebook</span>
           <span class="card-body card-text">
@@ -196,7 +196,7 @@ if($sf['cnt']>0){?>
       </a>
 <?php }
 if($bc['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/chrome';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/chrome';?>">
         <span class="card">
           <span class="card-header h5">Chrome</span>
           <span class="card-body card-text">
@@ -208,7 +208,7 @@ if($bc['cnt']>0){?>
       </a>
 <?php }
 if($be['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/edge';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/edge';?>">
         <span class="card">
           <span class="card-header h5">Edge</span>
           <span class="card-body card-text">
@@ -220,7 +220,7 @@ if($be['cnt']>0){?>
       </a>
 <?php }
 if($bie['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/explorer';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/explorer';?>">
         <span class="card">
           <span class="card-header h5">Explorer</span>
           <span class="card-body card-text">
@@ -232,7 +232,7 @@ if($bie['cnt']>0){?>
       </a>
 <?php }
 if($bf['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/firefox';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/firefox';?>">
         <span class="card">
           <span class="card-header h5">Firefox</span>
           <span class="card-body card-text">
@@ -244,7 +244,7 @@ if($bf['cnt']>0){?>
       </a>
 <?php }
 if($bo['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/opera';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/opera';?>">
         <span class="card">
           <span class="card-header h5">Opera</span>
           <span class="card-body card-text">
@@ -256,7 +256,7 @@ if($bo['cnt']>0){?>
       </a>
 <?php }
 if($bs['cnt']>0){?>
-      <a class="preferences col-6 col-sm-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/safari';?>">
+      <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/safari';?>">
         <span class="card">
           <span class="card-header h5">Safari</span>
           <span class="card-body card-text">
@@ -271,7 +271,7 @@ if($bs['cnt']>0){?>
     <div class="row">
 <?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");
 if($s->rowCount()>0){?>
-      <div class="col-12 col-sm-6">
+      <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-header"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>">Recent Admin Activity</a></div>
           <div id="seostats-activity" class="card-body">
@@ -318,7 +318,7 @@ if($s->rowCount()>0){
     ];
   }
 }?>
-      <div class="col-12 col-sm-6">
+      <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-header">Top Ten Highest Viewed Pages</div>
           <div id="seostats-pageviews" class="card-body">
@@ -353,7 +353,7 @@ foreach($row as $r){?>
         </div>
       </div>
 <?php if(file_exists('CHANGELOG.md')){?>
-      <div class="col-12 col-sm-6">
+      <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-header"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a></div>
           <div class="card-body">

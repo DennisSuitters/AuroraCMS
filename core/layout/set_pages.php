@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Add options for Website Voice service.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -26,6 +27,28 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        <legend>Website Voice</legend>
+<?php if($config['wv_site_id']==''){?>
+        <div class="alert alert-info">
+          <a target="_blank" class="alert-link" href="https://websitevoice.com/convert-text-to-audio-free">Website Voice</a> allows you to add a narrator to your Website to allow visually impaired visitors and those who wish to listen to your content read to them.<br>
+          To full-enable Website Voice, visit the link above and sign-up for free. You can optionally pay for the service to enable extra features.<br>
+          Once signed-up copy and paste the <code>WV_SITE_ID</code> into the field below, and enable the option. The Service will be automatically added to your site pages.
+        </div>
+<?php }?>
+        <div class="form-group row">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options16" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16"<?php echo$config['options']{16}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options16" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Website Voice</label>
+        </div>
+        <div class="form-group row">
+          <label for="update_url" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">WV_SITE_ID</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <input type="text" id="wv_site_id" class="form-control textinput" value="<?php echo$config['wv_site_id'];?>" data-dbid="1" data-dbt="config" data-dbc="wv_site_id" placeholder="Enter Website Voice ID...">
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savewv_site_id" class="btn btn-secondary save" data-dbid="wv_site_id" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+          </div>
+        </div>
+        <hr>
 <?php if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini')){
   echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
 }else{?>

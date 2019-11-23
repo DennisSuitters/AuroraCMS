@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -21,6 +21,7 @@
  * @changes    v0.0.4 Fix Tracking Acquisition.
  * @changes    v0.0.5 Add check if User Agent isn't set, or User Agent is
  *             Google Speed Insight and don't render Google Analytics Code if us.
+ * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -185,7 +186,10 @@ $head=preg_replace([
   '/<print meta=[\"\']?author[\"\']?>/',
   '/<print theme>/',
   '/<print site_verifications>/',
-	'/<print geo>/'
+	'/<print geo>/',
+  '/<print bodydevelopment>/',
+  '/<print development>/',
+  '/<meta_helper>/'
 ],[
   trim(htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
@@ -216,17 +220,11 @@ $head=preg_replace([
     ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
-    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':'')
+    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
+  ($config['development']{0}==1&&$_SESSION['rank']>999?' class="development" data-width="" onload="$(`.development`).attr(`data-width`,$(window).width());" onresize="$(`.development`).attr(`data-width`,$(window).width());"':''),
+  ($config['development']{0}==1&&$_SESSION['rank']>999?'<div class="development"></div>':''),
+  (isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<link rel="stylesheet" type="text/css" href="core/css/seohelper.css"><link rel="stylesheet" type="text/css" href="core/css/summernote-lite.min.css">':'')
 ],$head);
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
-  $head=preg_replace([
-    '/<meta_helper>/'
-    ],[
-      '<link rel="stylesheet" type="text/css" href="core/css/seohelper.css"><link rel="stylesheet" type="text/css" href="core/css/summernote-lite.min.css">'
-    ],$head
-  );
-}else
-  $head=str_replace('<meta_helper>','',$head);
 if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
   if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false){
     $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);

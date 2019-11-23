@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.3 Adjust editable fields for Coming Soon and Maintenance pages.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE id=:id");
 $s->execute([':id'=>$args[1]]);
@@ -57,8 +58,8 @@ if($so->rowCount()>0){
           <div id="tab-page-content" class="tab-pane active" role="tabpanel">
 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
             <div class="form-group row">
-              <label for="title" class="col-form-label col-sm-2">Title</label>
-              <div class="input-group col-sm-10">
+              <label for="title" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php           if($user['options']{1}==1){
                     $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                     $ss->execute([':rid'=>$r['id'],':t'=>'menu',':c'=>'title']);
@@ -77,8 +78,8 @@ if($so->rowCount()>0){
               </script>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-sm-2">URL Slug</label>
-              <div class="input-group col-sm-10">
+              <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL Slug</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text text-truncate col-12">
                   <a id="genurl" target="_blank" href="<?php echo URL.($r['contentType']=='page'?$r['contentType'].'/':'').strtolower(str_replace(' ','-',$r['title']));?>"><?php echo URL.($r['contentType']=='page'?$r['contentType'].'/':'').strtolower(str_replace(' ','-',$r['title']));?></a>
                 </div>
@@ -123,15 +124,15 @@ if($so->rowCount()>0){
             <fieldset class="control-fieldset">
               <legend class="control-legend">Cover</legend>
               <div class="form-group row">
-                <label for="coverURL" class="col-form-label col-sm-2">URL</label>
-                <div class="input-group col-sm-10">
+                <label for="coverURL" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="coverURL" class="form-control image" value="<?php echo$r['coverURL'];?>" onchange="coverUpdate('<?php echo$r['id'];?>','menu','coverURL',$(this).val());"<?php echo$user['options']{1}==1?' placeholder="Enter Cover URL..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverURL`,``);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="cover" class="col-form-label col-sm-2">Image</label>
-                <div class="input-group col-sm-10">
+                <label for="cover" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="cover" class="form-control" name="feature_image" value="<?php echo$r['cover'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="cover" onchange="coverUpdate('<?php echo$r['id'];?>','menu','cover',$(this).val());" readonly>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager">'.svg2('browse-media').'</button></div>':'';?>
                   <div class="input-group-append img">
@@ -144,15 +145,15 @@ if($so->rowCount()>0){
                 </div>
               </div>
               <div id="tab-content-images-7" class="form-group row">
-                <label for="exifFilename" class="col-form-label col-sm-2">Image ALT</label>
-                <div class="input-group col-sm-10">
+                <label for="exifFilename" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image ALT</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="fileALT" class="form-control textinput" value="<?php echo$r['fileALT'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="fileALT"<?php echo$user['options']{1}==1?' placeholder="Enter an Image ALT Test..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="coverVideo" class="col-form-label col-sm-2">Video URL</label>
-                <div class="input-group col-sm-10">
+                <label for="coverVideo" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Video URL</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="coverVideo" class="form-control" name="feature_image" value="<?php echo$r['coverVideo'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="coverVideo" readonly>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`coverVideo`);" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager">'.svg2('browse-media').'</button></div><div class="input-group-append"><button class="btn btn-secondary trash" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverVideo`,``);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
                 </div>
@@ -161,15 +162,15 @@ if($so->rowCount()>0){
             <fieldset class="control-fieldset">
               <legend class="control-legend" role="heading">Image Attribution</legend>
               <div class="form-group row">
-                <label for="attributionImageTitle" class="col-form-label col-sm-2">Title</label>
-                <div class="input-group col-sm-10">
+                <label for="attributionImageTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageTitle" class="form-control textinput" value="<?php echo$r['attributionImageTitle'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="attributionImageTitle"<?php echo$user['options']{1}==1?' placeholder="Enter a Title..."':' readonly';?>>
                   <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageTitle" class="btn btn-secondary save" data-dbid="attributionImageTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="attributionImageName" class="col-form-label col-sm-2">Name</label>
-                <div class="input-group col-sm-10">
+                <label for="attributionImageName" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageName" list="attributionImageTitle_option" class="form-control textinput" value="<?php echo$r['attributionImageName'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="attributionImageName"<?php echo$user['options']{1}==1?' placeholder="Enter a Name..."':' readonly';?>>
 <?php if($user['options']{1}==1){
                     $s=$db->query("SELECT DISTINCT attributionImageTitle AS name FROM `".$prefix."content` UNION SELECT DISTINCT name FROM `".$prefix."content` UNION SELECT DISTINCT name FROM `".$prefix."login` ORDER BY name ASC");
@@ -183,8 +184,8 @@ if($so->rowCount()>0){
                 </div>
               </div>
               <div class="form-group row">
-                <label for="attributionImageURL" class="col-form-label col-sm-2">URL</label>
-                <div class="input-group col-sm-10">
+                <label for="attributionImageURL" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageURL" list="attributionImageURL_option" class="form-control textinput" value="<?php echo$r['attributionImageURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="attributionImageURL"<?php echo$user['options']{1}==1?' placeholder="Enter a URL..."':' readonly';?>>
 <?php if($user['options']{1}==1){
   $s=$db->query("SELECT DISTINCT attributionImageURL AS url FROM `".$prefix."content` ORDER BY url ASC");
@@ -260,23 +261,23 @@ if($sm->rowCount()>0){
 <?php }?>
           <div id="tab-page-seo" class="tab-pane" role="tabpanel">
             <div class="form-group row">
-              <label for="views" class="col-form-label col-sm-2">Views</label>
-              <div class="input-group col-sm-10">
+              <label for="views" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Views</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="number" id="views" class="form-control textinput" value="<?php echo$r['views'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="views"<?php echo$user['options']{1}==1?'':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-addon"><button class="btn btn-secondary trash" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveviews" class="btn btn-secondary save" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div class="help-block small text-muted text-right">Options for Meta Robots: <span data-tooltip="tooltip" data-title="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="tooltip" data-title="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="tooltip" data-title="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="tooltip" data-title="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="tooltip" data-title="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
             <div class="form-group row">
-              <label for="metaRobots" class="col-form-label col-sm-2">Meta Robots</label>
-              <div class="input-group col-sm-10">
+              <label for="metaRobots" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Robots</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="metaRobots" class="form-control textinput" value="<?php echo$r['metaRobots'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="metaRobots"<?php echo$user['options']{1}==1?' placeholder="Enter a Meta Robots Option (Left empty the default will be `index,follow`)..."':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemetaRobots" class="btn btn-secondary save" data-dbid="metaRobots" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
             <div class="form-group row">
-              <div class="col-form-label col-sm-2"></div>
-              <div class="input-group col-sm-10">
+              <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></div>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="card col-12 bg-white">
                   <div class="card-body">
                     <div id="google-title" data-tooltip="tooltip" data-placement="left" data-title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
@@ -294,8 +295,8 @@ if($sm->rowCount()>0){
             </div>
             <div class="help-block small text-muted text-right">The recommended character count for Title's is 70.</div>
             <div class="form-group row">
-              <label for="seoTitle" class="col-form-label col-sm-2">Meta Title</label>
-              <div class="input-group col-sm-10">
+              <label for="seoTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Title</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=70-strlen($r['seoTitle']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -315,8 +316,8 @@ if($cntc<0){
             </div>
             <div class="help-block small text-muted text-right">The recommended character count for Captions is 100.</div>
             <div class="form-group row">
-              <label for="seoCaption" class="col-form-label col-sm-2">Meta Caption</label>
-              <div class="input-group col-sm-10">
+              <label for="seoCaption" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Caption</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=100-strlen($r['seoCaption']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -334,8 +335,8 @@ if($cntc<0){
             </div>
             <div class="help-block small text-muted text-right">The recommended character count for Descriptions is 160.</div>
             <div class="form-group row">
-              <label for="seoDescription" class="col-form-label col-sm-2">Meta Description</label>
-              <div class="input-group col-sm-10">
+              <label for="seoDescription" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Description</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=160-strlen($r['seoDescription']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -352,8 +353,8 @@ if($cntc<0){
               </div>
             </div>
             <div class="form-group row">
-              <label for="seoKeywords" class="col-form-label col-sm-2">Meta Keywords</label>
-              <div class="input-group col-sm-10">
+              <label for="seoKeywords" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Keywords</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php if($user['options']{1}==1){
                   $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
                   $ss->execute([':rid'=>$r['id'],':t'=>'menu',':c'=>'seoKewords']);
@@ -368,15 +369,15 @@ if($cntc<0){
           <div id="tab-page-settings" class="tab-pane" role="tabpanel">
 <?php if($r['contentType']!='index'){?>
             <div class="form-group row">
-              <label for="active" class="col-form-label col-sm-2">Active</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="active<?php echo$r['id'];?>" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0"<?php echo($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="active" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Active</label>
             </div>
 <?php if($user['rank']==1000){?>
             <div class="form-group row">
-              <label for="seoKeywords" class="col-form-label col-sm-2">contentType</label>
-              <div class="input-group col-sm-10">
+              <label for="seoKeywords" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">contentType</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="seoKeywords" class="form-control textinput" value="<?php echo$r['contentType'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="contentType" placeholder="">
                 <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecontentType" class="btn btn-secondary save" data-dbid="contentType" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
@@ -384,16 +385,16 @@ if($cntc<0){
 <?php }?>
             <div class="help-block small text-muted text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <code class="click" style="cursor:pointer;" onclick="$('#url').val('#<?php echo$r['contentType'];?>');update('<?php echo$r['id'];?>','menu','url',$('#url').val());">#<?php echo$r['contentType'];?></code> to have menu item link to Anchor with same name on same page.</div>
             <div class="form-group row">
-              <label for="url" class="col-form-label col-sm-2">URL Type</label>
-              <div class="input-group col-sm-10">
+              <label for="url" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL Type</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="url"<?php echo$user['options']{1}==1?'':' readonly';?>>
                 <?php echo$user['options']{1}==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
 <?php }?>
             <div class="form-group row">
-              <label for="menu" class="col-form-label col-sm-2">Menu</label>
-              <div class="input-group col-sm-10">
+              <label for="menu" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Menu</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="menu" class="form-control" onchange="update('<?php echo$r['id'];?>','menu','menu',$(this).val());"<?php echo$user['options']{1}==1?'':' disabled';?>>
                   <option value="head"<?php echo$r['menu']=='head'?' selected':'';?>>Head</option>
                   <option value="other"<?php echo$r['menu']=='other'?' selected':'';?>>Other</option>
@@ -402,8 +403,8 @@ if($cntc<0){
               </div>
             </div>
             <div class="form-group row">
-              <label for="mid" class="col-form-label col-sm-2">SubMenu</label>
-              <div class="input-group col-sm-10">
+              <label for="mid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">SubMenu</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="mid" class="form-control" onchange="update('<?php echo$r['id'];?>','mid','menu',$(this).val());"<?php echo$user['options']{1}==1?'':' disabled';?>>
                   <option value="0"<?php echo$r['mid']==0?' selected':'';?>>None</option>
 <?php $sm=$db->prepare("SELECT id,title from `".$prefix."menu` WHERE mid=0 AND mid!=:mid AND active=1 ORDER BY ord ASC, title ASC");

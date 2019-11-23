@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Option to not store messages.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -28,10 +29,10 @@
       <div class="card-body">
         <legend>Contact Form</legend>
         <div class="form-group row">
-          <div class="input-group col-sm-2">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="storemessages0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0"<?php echo$config['storemessages']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="storemessages0" class="col-form-label col-sm-6">Store Contact Form Messages</label>
+          <label for="storemessages0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Store Contact Form Messages</label>
         </div>
         <div class="help-block small text-muted text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?php echo URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</div>
         <form target="sp" method="post" action="core/add_data.php">
@@ -70,8 +71,8 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         <hr>
         <legend>Webmail</legend>
         <div class="form-group row">
-          <div class="input-group">
-            <label for="message_check_interval" class="input-group-text">Check for new Messages every</label>
+          <label for="message_check_interval" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Check for new Messages every</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <select id="message_check_interval" class="form-control" onchange="update('1','config','message_check_interval',$(this).val());">
               <option value="0"<?php echo$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
               <option value="1"<?php echo$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
@@ -84,10 +85,10 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           </div>
         </div>
         <div class="form-group row">
-          <div class="input-group col-sm-2">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options9" class="switch-input" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9"<?php echo$user['options']{9}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
-          <label for="options9" class="col-form-label col-sm-4">Delete Messages When Retrieved</label>
+          <label for="options9" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Delete Messages When Retrieved</label>
         </div>
         <h4>Mailboxes</h4>
         <form target="sp" method="post" action="core/add_mailbox.php">
@@ -180,15 +181,15 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
           <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{date}');return false;">{date}</a>
         </div>
         <div class="form-group row">
-          <label for="contactAutoReplySubject" class="col-form-label col-sm-2">Subject</label>
-          <div class="input-group col-sm-10">
+          <label for="contactAutoReplySubject" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Subject</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="contactAutoReplySubject" class="form-control textinput" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecontactAutoReplySubject" class="btn btn-secondary save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
-          <label for="contactAutoReplyLayout" class="col-form-label col-sm-2">Layout</label>
-          <div class="input-group card-header col-sm-10 p-0">
+          <label for="contactAutoReplyLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
+          <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
             <div class="col text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a>
@@ -207,8 +208,8 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
         <legend>Email Signature</legend>
         <div role="tabpanel" class="tab-pane" id="account-messages">
           <div class="form-group row">
-            <label for="email_signature" class="col-form-label col-sm-2">Signature</label>
-            <div class="col-sm-10">
+            <label for="email_signature" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Signature</label>
+            <div class="col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
               <div class="card-header p-0">
                 <form method="post" target="sp" action="core/update.php">
                   <input type="hidden" name="id" value="1">

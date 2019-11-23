@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -32,8 +33,8 @@
             <h4>Administration Access Page</h4>
             <form target="sp" method="post" action="core/change_adminaccess.php">
               <div class="form-group row">
-                <label for="adminfolder" class="col-form-label col-sm-2">Access Folder</label>
-                <div class="input-group col-sm-10">
+                <label for="adminfolder" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Access Folder</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <div id="adminaccess" class="input-group-text">
                     <a href="<?php echo URL.$settings['system']['admin'];?>"><?php echo URL;?></a>
                   </div>
@@ -46,19 +47,18 @@
               </div>
             </form>
             <div class="form-group row">
-              <label for="php_options5" class="col-form-label col-sm-2">Wordpress Attacks</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options5" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5"<?php echo$config['php_options']{5}==1?' checked':'';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-                <div class="help-block col text-muted small text-right">Enabling Wordpress Attacks will allow LibreCMS to look out for known Wordpres attack vectors such as the 'xmlrpc.php' and '?author=' brute force attempts and Auto Blacklist the origin IP.</div>
               </div>
+              <label for="php_options5" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Screen against Wordpress Attacks</label>
             </div>
             <div class="form-group row">
-              <label for="php_options6" class="col-form-label col-sm-2">30 Day Blacklist</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options6" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6"<?php echo$config['php_options']{6}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-                <div class="help-block col text-muted small text-right">Enabling 30 Day Blacklist, removes Blacklisted IP's after 30 Days.</div>
               </div>
+              <label for="php_options6" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">30 Day Blacklist</label>
             </div>
+            <hr>
             <h4>Project Honey Pot</h4>
 <?php if($config['php_APIkey']==''){?>
             <div class="form-group">
@@ -66,34 +66,33 @@
             </div>
 <?php }?>
             <div class="form-group row">
-              <label for="php_options0" class="col-form-label col-sm-2">Enable Monitoring</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0"<?php echo$config['php_options']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="php_options0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Monitoring</label>
             </div>
             <div class="form-group row">
-              <label for="php_options3" class="col-form-label col-sm-2" data-tooltip="tooltip" data-title="Toggle Project Honey Pot.">Auto Blacklist</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options3" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3"<?php echo$config['php_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
-                <div class="help-block col text-muted small text-right">Auto Blacklisting requires an API Key to be entered below.<br>Auto Blacklisting filters IP's against Project Honey Pot's http:BL for public facing pages with data entry.</div>
               </div>
+              <label for="php_options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Auto Blacklist</label>
             </div>
             <div class="form-group row">
-              <label for="php_options4" class="col-form-label col-sm-2" data-tooltip="tooltip" data-title="Toggle Project Honey Pot.">Block Blacklisted IP's</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4"<?php echo$config['php_options']{4}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
+              <label for="php_options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Block Blacklisted IP's</label>
             </div>
             <div class="form-group row">
-              <label for="php_APIkey" class="col-form-label col-sm-2">PHP API Key</label>
-              <div class="input-group col-sm-10">
+              <label for="php_APIkey" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">PHP API Key</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="php_APIkey" class="form-control textinput" value="<?php echo$config['php_APIkey'];?>" data-dbid="1" data-dbt="config" data-dbc="php_APIkey" placeholder="Enter a Project Honey Pot API Key...">
                 <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savephp_APIkey" class="btn btn-secondary save" data-dbid="php_APIkey" data-style="zoom-in" role="button" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="php_honeypot" class="col-form-label col-sm-2">Honey Pot</label>
-              <div class="input-group col-sm-10">
+              <label for="php_honeypot" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Honey Pot</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div id="php_honeypot_link" class="input-group-text col">
                   <?php echo$config['php_honeypot']!=''?'<a target="_blank" href="'.$config['php_honeypot'].'">'.$config['php_honeypot'].'</a>':'Honey Pot File Not Uploaded...';?>
                 </div>
@@ -106,14 +105,14 @@
               </div>
             </div>
             <div class="form-group row">
-              <label for="php_options2" class="col-form-label col-sm-2" data-tooltip="tooltip" data-title="Toggle Quick Link.">Quick Link</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options2" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2"<?php echo$config['php_options']{2}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
+              <label for="php_options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Quick Link</label>
             </div>
             <div class="form-group row text-right">
-              <div class="col-form-label col-sm-2"></div>
-              <div class="col-12 col-sm-10">
+              <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></div>
+              <div class="col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <form target="sp" method="post" action="core/update.php" onsubmit="$('#php_quicklink_save').removeClass('btn-danger');">
                   <input type="hidden" name="id" value="1">
                   <input type="hidden" name="t" value="config">
@@ -131,16 +130,16 @@
           <div id="tab-security-filters" name="tab-security-filters" class="tab-pane">
             <legend>Filter Settings</legend>
             <div class="form-group row">
-              <label for="spamfilter0" class="col-form-label col-sm-2">Filter Forms</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="spamfilter0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0"<?php echo$config['spamfilter']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="spamfilter0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Filter Forms</label>
             </div>
             <div class="form-group row">
-              <label for="spamfilter1" class="col-form-label col-sm-2">Auto Blacklist</label>
-              <div class="input-group col-sm-10">
+              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="spamfilter1" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="1"<?php echo$config['spamfilter']{1}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
+              <label for="spamfilter1" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Auto Blacklist</label>
             </div>
             <legend>Filters</legend>
             <div class="card-body">

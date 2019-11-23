@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  */
 require'db.php';
 $iid=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -29,10 +30,11 @@ if($sc->rowCount()>0){
   ]);
 }else{
   if(isset($iid)&&$iid!=0){
-    $q=$db->prepare("SELECT cost FROM `".$prefix."content` WHERE id=:id");
+    $q=$db->prepare("SELECT cost,rCost FROM `".$prefix."content` WHERE id=:id");
     $q->execute([':id'=>$iid]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
     if(is_numeric($r['cost'])){
+      if($r['cost']!=0)$r['cost']=$r['rCost'];
       $q=$db->prepare("INSERT INTO `".$prefix."cart` (iid,cid,quantity,cost,si,ti) VALUES (:iid,:cid,'1',:cost,:si,:ti)");
       $q->execute([
         ':iid'=>$iid,

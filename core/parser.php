@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Adjust file check folder
  * @changes    v0.0.4 Add Page Editing
+ * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  */
 $doc=new DOMDocument();
 if($show=='item'){
@@ -131,9 +132,13 @@ foreach($tags as$tag){
 			if(isset($r['contentType'])&&($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events')){
 				if($r['options']{0}==1||$r['cost']!=''){
 					if(is_numeric($r['cost'])&&$r['cost']!=0){
-						$parsing.='<span class="cost">';
+						if($r['stockStatus']=='sold out')$parsing.='<div class="sold">';
+						$parsing.=$r['rrp']!=0?'<span class="rrp" title="Recommended Retail Price">RRP &#36;'.htmlspecialchars($r['rrp'],ENT_QUOTES,'UTF-8').'</span>':'';
+						$parsing.='<span class="cost'.($r['rCost']!=0?' strike':'').'">';
 						if(is_numeric($r['cost']))$parsing.='&#36;';
 						$parsing.=htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
+						$parsing.=$r['rCost']!=0?'<span class="reduced">&#36;'.htmlspecialchars($r['rCost'],ENT_QUOTES,'UTF-8').'</span>':'';
+						if($r['stockStatus']=='sold out')$parsing.='</div>';
 					}else
 						$parsing.='<span class="cost">'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
 					if($r['contentType']=='service'||$r['contentType']=='events'&&$r['bookable']==1){
@@ -169,7 +174,7 @@ foreach($tags as$tag){
 				$parse=preg_replace('~<cost>.*?<\/cost>~is','',$parse,1);
 			break;
 		case'stockStatus':
-			$parsing.=$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):$r['stockStatus'];
+			$parsing.=$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']);
 		case'cover':
 			if($attribute=='page'){
 				$coverchk=basename($page['cover']);

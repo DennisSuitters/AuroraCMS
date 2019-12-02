@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -17,6 +17,7 @@
  * @changes    v0.0.4 Adjust SQL for Related Items so only Published Content is selected.
  * @changes    v0.0.4 Add Front End Editing.
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
+ * @changes    v0.0.8 Fix missing SQL prefix from SQL Query at line 326
  */
 $rank=0;
 $notification='';
@@ -322,7 +323,7 @@ if($show=='categories'){
 			$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
 	}
 	if(stristr($html,'<categories')){
-		$sc=$db->prepare("SELECT * FROM choices WHERE contentType='category' ORDER BY title ASC");
+		$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='category' ORDER BY title ASC");
 		$sc->execute();
 		if($sc->rowCount()>0){
 			preg_match('/<categories>([\w\W]*?)<\/categories>/',$html,$matches);

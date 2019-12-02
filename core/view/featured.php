@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.8 Add parsing featured item number.
  */
 preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
 $html=preg_replace('~<settings.*?>~is','',$html,1);
@@ -102,6 +103,7 @@ else
 $featuredfiles=array_slice($featuredfiles,0,$itemCount);
 $ii=count($featuredfiles);
 $i=0;
+$ci=0;
 if($ii>0){
 	if(stristr($html,'<indicators>')){
 		preg_match('/<indicators>([\w\W]*?)<\/indicators>/',$html,$matches);
@@ -118,6 +120,7 @@ if($ii>0){
 			$indicatorItem=str_replace('<print active>','',$indicatorItem);
 		}
 		$indicatorItem=str_replace('<print indicatorCount>',$i,$indicatorItem);
+		$item=str_replace('<print i>',$ci,$item);
 		if($r['link']=='nolink')
 			$item=preg_replace('~<link>.*?<\/link>~is','',$item,1);
 		else{
@@ -186,7 +189,7 @@ if($ii>0){
 			],'',$item);
 		}
 		$items.=$item;
-		$i++;
+		$i++;$ci++;if($ci>8)$ci=0;
 		$indicators.=$indicatorItem;
 	}
 }

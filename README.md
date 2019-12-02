@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at v0.0.7
+We are currently at v0.0.8
 
 ### FAQ
 - Why no Plugins?
@@ -39,12 +39,13 @@ We are currently at v0.0.7
 - WYSIWYG Editor Content is encoded to get around some server filters blocking data such as iFrames that services such as YouTube use for Embedding.
 - Page and Visitor Tracking.
 - SEO Stats within Content, Google (currently broken), Alexa, and Moz.
-- Button links to Wiki Help pages, and popup Video Help.
+- Progressive Web Application (PWA) Offline Pages.
 - Live Chat.
   - Choose between the built in Live Chat, or easily integrate Facebook Messenger.
 - GDPR Privacy Notice Compliancy.
   - For those providing Services and or Products to European Countries.
 - Website Voice service. Ability to add a text to speech reader for visually impaired visitors.
+- PayPal Integration for accepting PayPal and Credit Card Payments.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design:
   - summernote-accessibility (In Progress)
   - [summernote-cleaner](https://github.com/DiemenDesign/summernote-cleaner)

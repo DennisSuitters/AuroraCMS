@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix creation of Developer Account Insert SQL
  * @changes    v0.0.4 Add processing Timezone.
+ * @changes    v0.0.8 Fix SQL error when creating Developer Account in Install.
  */
 echo'<script>';
 $error=0;
@@ -111,7 +112,7 @@ if($_POST['emailtrap']=='none'){
 		$atimezone=isset($_POST['atimezone'])?filter_input(INPUT_POST,'atimezone',FILTER_SANITIZE_STRING):'';
 		$prefix=$settings['database']['prefix'];
 		$hash=password_hash($apassword,PASSWORD_DEFAULT);
-		$sql=$db->prepare("INSERT INTO `".$prefix."login` (options,bio_options,username,password,email,name,language,timezone,ti,active,rank) VALUES ('11111111100000000000000000000000','11110000000000000000000000000000',:username,:password,:email,:name,'en-AU',:timezone,:ti,'1','1000')");
+		$sql=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (options,bio_options,username,password,email,name,language,timezone,ti,active,rank) VALUES ('11111111100000000000000000000000','11110000000000000000000000000000',:username,:password,:email,:name,'en-AU',:timezone,:ti,'1','1000')");
 		$sql->execute([
 			':username'=>$ausername,
 			':password'=>$hash,

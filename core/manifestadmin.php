@@ -22,9 +22,8 @@ echo json_encode([
   "gcm_user_visible_only"=>true,
   "short_name"=>'AuroraCMS',
   "description"=>'Administration Area for AuroraCMS',
-  "start_url"=>URL.$settings['system']['admin'],
+  "start_url"=>'/',
   "display"=>"standalone",
-  "orientation"=>"portrait",
   "background_color"=>'#000',
   "theme_color"=>"#f0f0f0",
   "icons"=>[

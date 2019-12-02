@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.8 Add PayPal Parser.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 if($_SESSION['loggedin']==false)
@@ -195,6 +196,32 @@ else{
         $outitems
       ],$order);
       $html=preg_replace('~<order>~is',$order,$html,1);
+      if(stristr($html,'<print paypal>')){
+        $html=preg_replace([
+          '/<print paypal>/'
+        ],[
+          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
+          '<div id="paypal-button-container"></div>'.
+          '<script>paypal.Buttons({'.
+            'createOrder: function(data, actions) {'.
+              'return actions.order.create({'.
+                'purchase_units: [{'.
+                  'amount: {'.
+                    'value: `'.$total.'`'.
+                  '}'.
+                '}]'.
+              '});'.
+            '},'.
+            'onApprove: function(data, actions) {'.
+              'return actions.order.capture().then(function(details) {'.
+                'alert(`Transaction completed by ` + details.payer.name.given_name);'.
+            '});'.
+          '}'.
+        '}).render(`#paypal-button-container`);'.
+        '</script>',
+        ],$html);
+      }else
+        $html=str_replace('<print paypal','',$html);
     }else
       $html=preg_replace('~<order>~is','',$html,1);
   }else

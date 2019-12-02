@@ -277,8 +277,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
     ],$content
   );
 }else
-  $content=str_replace('<jshelper>','',$content);
-
+  $content=preg_replace(['/<jshelper>/','/<jsrunner>/'],'',$content);
+$content=preg_replace(['/<serviceworker>/'],[($config['options']{18}==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
 print$head.$content;
 if($config['options']{11}==1){
   $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];

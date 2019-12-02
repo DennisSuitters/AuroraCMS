@@ -11,6 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.8 Add Javascript for Offline PWA and Push Notifications.
  */?>
 <script>
 var unsaved=false;
@@ -584,6 +585,15 @@ if(isset($r['due_ti'])){?>
     });
 <?php }?>
       });
+      if('serviceWorker' in navigator){
+        window.addEventListener('load',()=>{
+          navigator.serviceWorker.register('core/js/service-worker-admin.php',{
+            scope:'/'
+          }).then((reg)=>{
+            console.log('[AuroraCMS] Administration Service worker registered.',reg);
+          });
+        });
+      }
     </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
     <div id="searchbox" class="d-none">

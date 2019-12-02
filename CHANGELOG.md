@@ -1,3 +1,10 @@
+### v0.0.8
+- Fix SQL error when creating Developer Account in Install.
+- Fix missing SQL prefix from SQL Query at line 326.
+- Add Offline Progressive Web Application (PWA) for Front End and Administration.
+- Add parser to Featured Items for item counting.
+- Add PayPal Payment Options.
+
 ### v0.0.7
 - Fix Width Formatting for better responsiveness.
 - Add Development Tools to assist with Theme Development.

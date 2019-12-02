@@ -33,22 +33,22 @@ else{?>
   echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
     <div class="row">
 <?php
-$ss=$db->prepare("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."iplist` WHERE ti >= :ti");
-$ss->execute(['ti'=>time()-604800]);
-$sa=$ss->fetch(PDO::FETCH_ASSOC);
-$bc=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Chrome'")->fetch(PDO::FETCH_ASSOC);
-$bie=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Explorer'")->fetch(PDO::FETCH_ASSOC);
-$be=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Edge'")->fetch(PDO::FETCH_ASSOC);
-$bf=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Firefox'")->fetch(PDO::FETCH_ASSOC);
-$bo=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Opera'")->fetch(PDO::FETCH_ASSOC);
-$bs=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Safari'")->fetch(PDO::FETCH_ASSOC);
-$sb=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Bing'")->fetch(PDO::FETCH_ASSOC);
-$sd=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='DuckDuckGo'")->fetch(PDO::FETCH_ASSOC);
-$sf=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Facebook' OR urlDest LIKE '%fbclid=%'")->fetch(PDO::FETCH_ASSOC);
-$sg=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Google'")->fetch(PDO::FETCH_ASSOC);
-$sy=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Yahoo'")->fetch(PDO::FETCH_ASSOC);
-if($user['options']{3}==1){
-  if($nm['cnt']>0){?>
+  $ss=$db->prepare("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."iplist` WHERE ti >= :ti");
+  $ss->execute(['ti'=>time()-604800]);
+  $sa=$ss->fetch(PDO::FETCH_ASSOC);
+  $bc=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Chrome'")->fetch(PDO::FETCH_ASSOC);
+  $bie=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Explorer'")->fetch(PDO::FETCH_ASSOC);
+  $be=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Edge'")->fetch(PDO::FETCH_ASSOC);
+  $bf=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Firefox'")->fetch(PDO::FETCH_ASSOC);
+  $bo=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Opera'")->fetch(PDO::FETCH_ASSOC);
+  $bs=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Safari'")->fetch(PDO::FETCH_ASSOC);
+  $sb=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Bing'")->fetch(PDO::FETCH_ASSOC);
+  $sd=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='DuckDuckGo'")->fetch(PDO::FETCH_ASSOC);
+  $sf=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Facebook' OR urlDest LIKE '%fbclid=%'")->fetch(PDO::FETCH_ASSOC);
+  $sg=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Google'")->fetch(PDO::FETCH_ASSOC);
+  $sy=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Yahoo'")->fetch(PDO::FETCH_ASSOC);
+  if($user['options']{3}==1){
+    if($nm['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/messages';?>">
         <span class="card">
           <span class="card-header h5">Messages</span>
@@ -60,8 +60,8 @@ if($user['options']{3}==1){
         </span>
       </a>
 <?php }
-}
-if($nb['cnt']>0){?>
+  }
+  if($nb['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/bookings';?>">
         <span class="card">
           <span class="card-header h5">Bookings</span>
@@ -73,7 +73,7 @@ if($nb['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($nc['cnt']>0){?>
+  if($nc['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/comments';?>">
         <span class="card">
           <span class="card-header h5">Comments</span>
@@ -85,7 +85,7 @@ if($nc['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($nr['cnt']>0){?>
+  if($nr['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/reviews';?>">
         <span class="card">
           <span class="card-header h5">Reviews</span>
@@ -97,7 +97,7 @@ if($nr['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($nt['cnt']>0){?>
+  if($nt['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>">
         <span class="card">
           <span class="card-header h5">Testimonials</span>
@@ -109,8 +109,8 @@ if($nt['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($user['options']{4}==1){
-  if($po['cnt']>0){?>
+  if($user['options']{4}==1){
+    if($po['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/orders';?>">
         <span class="card">
           <span class="card-header h5">Orders</span>
@@ -122,8 +122,8 @@ if($user['options']{4}==1){
         </span>
       </a>
 <?php }
-}
-if($sa['cnt']>0){?>
+  }
+  if($sa['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/security#tab-security-blacklist';?>">
         <span class="card">
           <span class="card-header h5">Blacklist</span>
@@ -135,7 +135,7 @@ if($sa['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($sg['cnt']>0){?>
+  if($sg['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/google';?>">
         <span class="card">
           <span class="card-header h5">Google</span>
@@ -147,7 +147,7 @@ if($sg['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($sy['cnt']>0){?>
+  if($sy['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/yahoo';?>">
         <span class="card">
           <span class="card-header h5">Yahoo</span>
@@ -159,7 +159,7 @@ if($sy['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($sb['cnt']>0){?>
+  if($sb['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/bing';?>">
         <span class="card">
           <span class="card-header h5">Bing</span>
@@ -171,7 +171,7 @@ if($sb['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($sd['cnt']>0){?>
+  if($sd['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/duckduckgo';?>">
         <span class="card">
           <span class="card-header h5">DuckDuckGo</span>
@@ -183,7 +183,7 @@ if($sd['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($sf['cnt']>0){?>
+  if($sf['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/facebook';?>">
         <span class="card">
           <span class="card-header h5">Facebook</span>
@@ -195,7 +195,7 @@ if($sf['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($bc['cnt']>0){?>
+  if($bc['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/chrome';?>">
         <span class="card">
           <span class="card-header h5">Chrome</span>
@@ -207,7 +207,7 @@ if($bc['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($be['cnt']>0){?>
+  if($be['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/edge';?>">
         <span class="card">
           <span class="card-header h5">Edge</span>
@@ -219,7 +219,7 @@ if($be['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($bie['cnt']>0){?>
+  if($bie['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/explorer';?>">
         <span class="card">
           <span class="card-header h5">Explorer</span>
@@ -231,7 +231,7 @@ if($bie['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($bf['cnt']>0){?>
+  if($bf['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/firefox';?>">
         <span class="card">
           <span class="card-header h5">Firefox</span>
@@ -243,7 +243,7 @@ if($bf['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($bo['cnt']>0){?>
+  if($bo['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/opera';?>">
         <span class="card">
           <span class="card-header h5">Opera</span>
@@ -255,7 +255,7 @@ if($bo['cnt']>0){?>
         </span>
       </a>
 <?php }
-if($bs['cnt']>0){?>
+  if($bs['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker/safari';?>">
         <span class="card">
           <span class="card-header h5">Safari</span>
@@ -270,7 +270,7 @@ if($bs['cnt']>0){?>
     </div>
     <div class="row">
 <?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");
-if($s->rowCount()>0){?>
+  if($s->rowCount()>0){?>
       <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-header"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>">Recent Admin Activity</a></div>
@@ -297,27 +297,27 @@ if($s->rowCount()>0){?>
         </div>
       </div>
 <?php }
-$row=array();;
-$s=$db->query("SELECT title,views FROM menu WHERE active='1' AND views!=0");
-if($s->rowCount()>0){
-  while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    $row[]=[
-      'contentType'=>'Page',
-      'title'=>$r['title'],
-      'views'=>$r['views']
-    ];
+  $row=array();;
+  $s=$db->query("SELECT title,views FROM menu WHERE active='1' AND views!=0");
+  if($s->rowCount()>0){
+    while($r=$s->fetch(PDO::FETCH_ASSOC)){
+      $row[]=[
+        'contentType'=>'Page',
+        'title'=>$r['title'],
+        'views'=>$r['views']
+      ];
+    }
   }
-}
-$s=$db->query("SELECT contentType,title,views FROM content WHERE views!=0");
-if($s->rowCount()>0){
-  while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    $row[]=[
-      'contentType'=>$r['contentType'],
-      'title'=>$r['title'],
-      'views'=>$r['views']
-    ];
-  }
-}?>
+  $s=$db->query("SELECT contentType,title,views FROM content WHERE views!=0");
+  if($s->rowCount()>0){
+    while($r=$s->fetch(PDO::FETCH_ASSOC)){
+      $row[]=[
+        'contentType'=>$r['contentType'],
+        'title'=>$r['title'],
+        'views'=>$r['views']
+      ];
+    }
+  }?>
       <div class="col-12 col-md-6">
         <div class="card">
           <div class="card-header">Top Ten Highest Viewed Pages</div>
@@ -331,22 +331,22 @@ if($s->rowCount()>0){
               </thead>
               <tbody>
 <?php
-function array_sort_by_column(&$a,$c,$d=SORT_DESC){
-  $sc=array();
-  foreach($a as$k=>$r){
-    $sc[$k]=$r[$c];
+  function array_sort_by_column(&$a,$c,$d=SORT_DESC){
+    $sc=array();
+    foreach($a as$k=>$r){
+      $sc[$k]=$r[$c];
+    }
+    array_multisort($sc,$d,$a);
   }
-  array_multisort($sc,$d,$a);
-}
-array_sort_by_column($row, 'views');
-$i=1;
-foreach($row as $r){?>
+  array_sort_by_column($row, 'views');
+  $i=1;
+  foreach($row as $r){?>
                 <tr>
                   <td class="small text-truncated"><?php echo($r['contentType']!='Page'?ucfirst($r['contentType']).' ~ ':'').$r['title'];?></td>
                   <td class="text-center"><?php echo$r['views'];?></td>
                 </tr>
 <?php $i++;if($i>10)break;
-}?>
+  }?>
               </tbody>
             </table>
           </div>

@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.8 Add PayPal Client ID and Secret.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -91,19 +92,34 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         </div>
         <hr>
         <legend>PayPal</legend>
-        <div class="form-group row">
-          <label for="bankPayPal" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Account</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <input type="text" id="bankPayPal" class="form-control textinput" value="<?php echo$config['bankPayPal'];?>" data-dbid="1" data-dbt="config" data-dbc="bankPayPal" placeholder="Enter a PayPal Account...">
-            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebankPayPal" class="btn btn-secondary save" data-dbid="bankPayPal" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+<?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
+        <div class="row text-right">
+          <div class="col">
+            <small class="text-muted">You will need to a PayPal Business Account to get a Client ID.</small>
           </div>
         </div>
+<?php }?>
+        <div class="form-group row">
+          <label for="payPalClientID" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Client ID</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <input type="text" id="payPalClientID" class="form-control textinput" value="<?php echo$config['payPalClientID'];?>" data-dbid="1" data-dbt="config" data-dbc="payPalClientID" placeholder="Enter a PayPal Client ID...">
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepayPalClientID" class="btn btn-secondary save" data-dbid="payPalClientID" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+          </div>
+        </div>
+        <div class="form-group row">
+          <label for="payPalSecret" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">PayPal Secret</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <input type="text" id="payPalSecret" class="form-control textinput" value="<?php echo$config['payPalSecret'];?>" data-dbid="1" data-dbt="config" data-dbc="payPalSecret" placeholder="Enter a PayPal Secret...">
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepayPalSecret" class="btn btn-secondary save" data-dbid="payPalSecret" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+          </div>
+        </div>
+<?php /*
         <div class="form-group row">
           <label for="ipn" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">IPN</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="ipn" class="form-control" value="Not Yet Implemented" readonly data-tooltip="tooltip" data-title="Not Yet Implemented">
           </div>
-        </div>
+        </div> */ ?>
         <hr>
         <legend>Order Processing</legend>
         <div class="form-group row">

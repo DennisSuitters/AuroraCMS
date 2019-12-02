@@ -28,14 +28,6 @@
 						</div>
 					</form>
 				</div>
-				<script>
-					$("#newslettersform").submit(function(){
-						$.post($(this).attr("action"),$(this).serialize(),function(data){
-							$("#newsletters").html(data);
-						});
-						return false;
-					});
-				</script>
 			</aside>
 		</div>
 	</div>

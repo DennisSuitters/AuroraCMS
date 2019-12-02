@@ -98,5 +98,16 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'popper.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
+    <script>
+      if('serviceWorker' in navigator){
+        window.addEventListener('load',()=>{
+          navigator.serviceWorker.register('core/js/service-worker-admin.php',{
+            scope:'/'
+          }).then((reg)=>{
+            console.log('[AuroraCMS] Administration Service worker registered.',reg);
+          });
+        });
+      }
+    </script>
   </body>
 </html>

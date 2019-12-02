@@ -16,6 +16,7 @@
  * @changes    v0.0.6 Add GDPR Option.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.7 Add Option to Lock Down Site for Developer Accounts.
+ * @changes    v0.0.8 Add Options for Offline PWA.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -39,6 +40,12 @@
           </div>
           <label for="options8" class="col-form-label col-2 col-sm-3 col-md-4 col-lg-3 col-xl-5">Display GDPR Banner.</label>
           <div class="col-6 col-sm-6 col-md-6 col-lg-6 col-xl-5 text-right small text-muted">Check <a target="_blank" href="https://www.oaic.gov.au/privacy/guidance-and-advice/australian-entities-and-the-eu-general-data-protection-regulation/">here</a> to determine if you need to display a GDPR Banner.</div>
+        </div>
+        <div class="form-group row">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="development0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="18"<?php echo$config['options']{18}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options18" class="col-form-label col-2 col-sm-3 col-md-4 col-lg-3 col-xl-5">Enable Offline Page (PWA).</label>
         </div>
 <?php if($user['rank']>999){?>
         <div class="form-group row">

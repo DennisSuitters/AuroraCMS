@@ -68,7 +68,7 @@ config
     15  Email Chat Notifications to Nominated Accounts
     16  Enable Website Voice Service
     17  Lock Down Developer Options
-    18
+    18  PWA Offline Page
     19
     20
     21

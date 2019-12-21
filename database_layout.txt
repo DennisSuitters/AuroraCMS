@@ -57,7 +57,7 @@ config
     4   Enable Tooltips
     5
     6
-    7
+    7   Display Payment Options Template Block
     8   Display GDPR Banner
     9   Delete Messages When Retrieved / Show RSS Feed Icon
     10  Related Content by Content type

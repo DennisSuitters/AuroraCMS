@@ -232,7 +232,7 @@ if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
 }else
   $head=str_replace('<google_analytics>','',$head);
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899&&$config['development']==1)
-  $content.='<div style="text-align:right;padding:10px;">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().'</div>';
+  $content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().'</div>';
 
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
   $noteStyles='';
@@ -244,33 +244,33 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
     '/<jsrunner>/'
     ],[
       '<script src="core/js/summernote-lite.js"></script>'.
-      '<script src="core/js/plugin/summernote/summernote-save-button.js">',
+      '<script src="core/js/plugin/summernote/summernote-save-button.js"></script>',
       '<script>'.
-        '$(".editable").summernote({'.
-          'airMode: false,'.
-          'toolbar: ['.
-            '[`save`,   [`save`]],'.
-            '[`style`,  [`style`, `bold`, `italic`, `underline`, `clear`]],'.
-            '[`font`,   [`strikethrough`, `superscript`, `subscript`]],'.
-            '[`para`,   [`ul`, `ol`, `paragraph`]],'.
-            '[`insert`, [`link`, `picture`, `video`, `audio`]],'.
-            '[`view`,   [`fullscreen`, `codeview`, `help`]],'.
+        '$(document).ready(function(){$(".editable").summernote({'.
+          'airMode:false,'.
+          'toolbar:['.
+            '[`save`,[`save`]],'.
+            '[`style`,[`style`,`bold`,`italic`,`underline`,`clear`]],'.
+            '[`font`,[`strikethrough`,`superscript`,`subscript`]],'.
+            '[`para`,[`ul`,`ol`,`paragraph`]],'.
+            '[`insert`,[`link`,`picture`,`video`,`audio`]],'.
+            '[`view`,[`fullscreen`,`codeview`,`help`]],'.
           '],'.
-          'styleTags: ['.
-            '`p`, `blockquote`, `pre`, `h1`, `h2`, `h3`, `h4`, `h5`, `h6`,'.
+          'styleTags:['.
+            '`p`,`blockquote`,`pre`,`h1`,`h2`,`h3`,`h4`,`h5`,`h6`,'.
             $noteStyles.
           '],'.
-          'popover: {'.
-            'air: ['.
-              '[`save`,   [`save`]],'.
-              '[`style`,  [`style`, `bold`, `italic`, `underline`, `clear`]],'.
-              '[`font`,   [`strikethrough`, `superscript`, `subscript`]],'.
-              '[`para`,   [`ul`, `ol`, `paragraph`]],'.
-              '[`insert`, [`link`, `picture`, `video`, `audio`]],'.
-              '[`view`,   [`fullscreen`, `codeview`, `help`]],'.
+          'popover:{'.
+            'air:['.
+              '[`save`,[`save`]],'.
+              '[`style`,[`style`,`bold`,`italic`,`underline`,`clear`]],'.
+              '[`font`,[`strikethrough`,`superscript`,`subscript`]],'.
+              '[`para`,[`ul`,`ol`,`paragraph`]],'.
+              '[`insert`,[`link`,`picture`,`video`,`audio`]],'.
+              '[`view`,[`fullscreen`,`codeview`,`help`]],'.
             ']'.
           '},'.
-        '});'.
+        '});});'.
       '</script>'.
       '<iframe id="sp" name="sp" class="d-none"></iframe>'.
       '<div class="page-block"><div class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>'

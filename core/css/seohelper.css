@@ -67,9 +67,11 @@ body.depth * * * * * * * * * *{background-color:rgba(255,0,0,.1)}
 @-webkit-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
 @-o-keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
 @keyframes slide{0%{transform:scale(1)}50%{opacity:.5;transform:scale(2)}100%{transform:scale(1)}}
-div.development{position:relative;height:24px;background-color:#2f353a!important;background-image:url(../images/developmentmode.png)!important;background-repeat:repeat-x}
+div.development,
+div.developmentbottom{position:relative;height:24px;background-color:#2f353a!important;background-image:url(../images/developmentmode.png)!important;background-repeat:repeat-x}
+div.developmentbottom{position:fixed;top:auto;right:0;bottom:0;left:0;text-align:right;padding:2px 5px;color:#fff;font-family:sans-serif;font-size:14px}
 div.development:after{content:'Breakpoint Width > ALL (max-width:575.98px)';z-index:9999;position:absolute;top:2px;left:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
-div.development:before{content:'Current Width: ' attr(data-width) 'px';z-index:9999;position:absolute;top:2px;right:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
+div.development:before{content:'Current Width: 'attr(data-width)'px';z-index:9999;position:absolute;top:2px;right:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
 @media (max-width:361px){
   div.development{height:48px}
   div.development:before{top:26px}

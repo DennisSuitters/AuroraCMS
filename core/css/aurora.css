@@ -1,8 +1,20 @@
 /* AuroraCMS Additions */
+@font-face{font-family:"AMC";src:url("../images/amc.ttf")}
 body.aurora{background:url(../images/loginbg-dark.jpeg) no-repeat center center fixed;background-size:cover;height:100%}
 body.aurora .container{height:90vh}
+body.amc *{font-family:amc;font-size:7px}
 .card.aurora,
 .install.aurora{-webkit-filter:blur(100px);-moz-filter:blur(100px);-ms-filter:blur(100px);-o-filter:blur(100px);filter:blur(100px);-webkit-animation:blur 1s linear forwards;-moz-animation:blur 1s linear forwards;-ms-animation:blur 1s linear forwards;-o-animation:blur 1s linear forwards;animation:blur 1s linear forwards}
+.llama{position:fixed;z-index:2000;top:auto;left:-50px;bottom:0;width:48px;height:42px;background:url(../images/llama.png) left center;animation:llamaplay 1s steps(10) 2000,llamarun 30s normal linear}
+.camel{position:fixed;z-index:2000;top:auto;left:-50px;bottom:0;width:48px;height:42px;background:url(../images/camel.png) left center;animation:camelplay 1s steps(13) 2000,camelrun 30s normal linear}
+.flymo{position:fixed;z-index:2000;top:auto;right:-100px;bottom:0;width:48px;height:42px;background:url(../images/hover.png) left center;animation:flymoplay 1s steps(4) 2000,flymorun 35s normal linear}
+.flymo:after{content:'';position:absolute;z-index:2000;top:0;left:-48px;width:48px;height:42px;background:url(../images/hovermower.png) left center}
+@keyframes llamaplay{100%{background-position:-480px}}
+@keyframes llamarun{100%{left:105%;}}
+@keyframes camelplay{100%{background-position:-624px}}
+@keyframes camelrun{100%{left:105%;}}
+@keyframes flymoplay{100%{background-position:192px}}
+@keyframes flymorun{100%{right:100%;}}
 @-webkit-keyframes blur{
   from{background:rgba(230,67,67,1);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%)}
   to{background-color:#343a40!important;-webkit-filter:blur(0);filter:blur(0)}

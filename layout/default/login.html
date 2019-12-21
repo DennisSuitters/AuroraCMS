@@ -48,19 +48,21 @@
 						</form>
 						<div id="rstresponse"></div>
 						<script>
-							$('#rstform').submit(function(){
-		            $('#rstbusy').html('<i class="libre libre-spinner-1"></i>');
-		            $.ajax({
-		              data:$(this).serialize(),
-		              type:$(this).attr('method'),
-		              url:$(this).attr('action'),
-		              success:function(response){
-		                $('#rstresponse').html(response);
-		                $('#rstbusy').html('Reset');
-		              }
-		            });
-		            return false;
-		          });
+							document.addEventListener("DOMContentLoaded",function(){
+								$('#rstform').submit(function(){
+			            $('#rstbusy').html('<i class="libre libre-spinner-1"></i>');
+			            $.ajax({
+			              data:$(this).serialize(),
+			              type:$(this).attr('method'),
+			              url:$(this).attr('action'),
+			              success:function(response){
+			                $('#rstresponse').html(response);
+			                $('#rstbusy').html('Reset');
+			              }
+			            });
+			            return false;
+			          });
+							});
 						</script>
 					</div>
 				</div>
@@ -99,18 +101,20 @@
 							</form>
 							<div id="signresponse"></div>
 							<script>
-								$('#signform').submit(function(){
-									$('#signbusy').html('<i class="libre libre-spinner-1"></i>');
-									$.ajax({
-										data:$(this).serialize(),
-										type:$(this).attr('method'),
-										url:$(this).attr('action'),
-										success:function(response){
-											$('#signresponse').html(response);
-											$('#signbusy').html('Sign Up');
-										}
+								document.addEventListener("DOMContentLoaded",function(){
+									$('#signform').submit(function(){
+										$('#signbusy').html('<i class="libre libre-spinner-1"></i>');
+										$.ajax({
+											data:$(this).serialize(),
+											type:$(this).attr('method'),
+											url:$(this).attr('action'),
+											success:function(response){
+												$('#signresponse').html(response);
+												$('#signbusy').html('Sign Up');
+											}
+										});
+										return false;
 									});
-									return false;
 								});
 							</script>
 						</div>

@@ -76,11 +76,13 @@
 							</div>
 						</form>
 						<script>
-							$("#contactform").submit(function(){
-								$.post($(this).attr("action"),$(this).serialize(),function(data){
-									$("#contact").html(data);
+							document.addEventListener("DOMContentLoaded",function(){
+								$("#contactform").submit(function(){
+									$.post($(this).attr("action"),$(this).serialize(),function(data){
+										$("#contact").html(data);
+									});
+									return false;
 								});
-								return false;
 							});
 						</script>
 					</div>

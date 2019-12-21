@@ -1,5 +1,11 @@
+### v0.0.9
+- Complete PayPal transaction order updating.
+- Fix service-worker not referencing Logo correctly.
+- Fix incorrect ID for input's.
+- 
+
 ### v0.0.8
-- Fix SQL error when creating Developer Account in Install.
+- Fix SQL error when creating a Developer Account in Install.
 - Fix missing SQL prefix from SQL Query at line 326.
 - Add Offline Progressive Web Application (PWA) for Front End and Administration.
 - Add parser to Featured Items for item counting.

@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.5 Add parsing Live Chat markup.
  * @changes    v0.0.6 Fix Doubling up of the Embedded Messaging.
+ * @changes    v0.0.9 Add Payment Options Display Parsing.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 	$link='<li><a href="logout/">Logout</a></li>';
@@ -164,6 +165,12 @@ if(stristr($html,'<buildSocial')){
 		$html=str_replace('<print rssicon>',frontsvg('libre-social-rss'),$html);
 	}else
 		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
+}
+if(stristr($html,'<paymentoptions>')){
+	if($config['options']{7}==1)
+		$html=preg_replace('/<\/paymentoptions>/','',$html,1);
+	else
+		$html=preg_replace('~<paymentoptions>.*?<\/paymentoptions>~is','',$html,1);
 }
 if(stristr($html,'<chat')){
 	if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){

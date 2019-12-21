@@ -49,11 +49,13 @@
 						</div>
 					</form>
 					<script>
-						$("#commentform").submit(function(){
-							$.post($(this).attr("action"),$(this).serialize(),function(data){
-								$("#comment").html(data);
+						document.addEventListener("DOMContentLoaded",function(){
+							$("#commentform").submit(function(){
+								$.post($(this).attr("action"),$(this).serialize(),function(data){
+									$("#comment").html(data);
+								});
+								return false;
 							});
-							return false;
 						});
 					</script>
 				</div>

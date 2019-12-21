@@ -4,19 +4,8 @@
 		<script src="<print theme>/js/aos.js"></script>
 		<script src="<print theme>/js/js.js"></script>
 		<script>
-			$("#newslettersform").submit(function(){
-				$.post($(this).attr("action"),$(this).serialize(),function(data){
-					$("#newsletters").html(data);
-				});
-				return false;
-			});
-		</script>
-		<script>
 			AOS.init();
 		</script>
-		<serviceworker>
-		<jshelper>
-		<jsrunner>
 		<chatscript>
 			<script>
 				function updateChat(){
@@ -112,5 +101,8 @@
 		</chatscript>
 		<gdpr>
 		<websitevoice>
+		<jshelper>
+		<jsrunner>
+		<serviceworker>
 	</body>
 </html>

@@ -115,11 +115,13 @@
 							</div>
 						</form>
 						<script>
-							$("#bookingform").submit(function(){
-								$.post($(this).attr("action"),$(this).serialize(),function(data){
-									$("#booking").html(data);
+							document.addEventListener("DOMContentLoaded",function(){
+								$("#bookingform").submit(function(){
+									$.post($(this).attr("action"),$(this).serialize(),function(data){
+										$("#booking").html(data);
+									});
+									return false;
 								});
-								return false;
 							});
 						</script>
 					</div>

@@ -196,32 +196,64 @@ else{
         $outitems
       ],$order);
       $html=preg_replace('~<order>~is',$order,$html,1);
-      if(stristr($html,'<print paypal>')){
+      if(stristr($html,'<print paypal>')&&$r['iid']!=''&&$r['status']!='paid'){
         $html=preg_replace([
           '/<print paypal>/'
         ],[
           '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
           '<div id="paypal-button-container"></div>'.
           '<script>paypal.Buttons({'.
-            'createOrder: function(data, actions) {'.
+            'createOrder:function(data,actions){'.
               'return actions.order.create({'.
-                'purchase_units: [{'.
-                  'amount: {'.
-                    'value: `'.$total.'`'.
+                'purchase_units:[{'.
+                  'amount:{'.
+                    'currency_code:`AUD`,'.
+                    'value:`'.$total.'`'.
                   '}'.
                 '}]'.
               '});'.
             '},'.
-            'onApprove: function(data, actions) {'.
-              'return actions.order.capture().then(function(details) {'.
-                'alert(`Transaction completed by ` + details.payer.name.given_name);'.
-            '});'.
-          '}'.
-        '}).render(`#paypal-button-container`);'.
-        '</script>',
+            'onApprove:function(data,actions){'.
+              '$.ajax({'.
+                'type:"POST",'.
+        					'url:"core/paymenttransaction.php",'.
+        					'data:{'.
+        						'id:"'.$r['id'].'",'.
+        						'act:"paid",'.
+        					'}'.
+        				'}).done(function(msg){'.
+                  '$("#paymenttransaction").html(msg).removeClass("d-none").addClass("alert alert-success");'.
+        				'});'.
+              '},'.
+              'onCancel:function(){'.
+                '$.ajax({'.
+                  'type:"POST",'.
+                  'url:"core/paymenttransaction.php",'.
+                  'data:{'.
+                    'id:"'.$r['id'].'",'.
+                    'act:"cancelled",'.
+                  '}'.
+                '}).done(function(msg){'.
+                  '$("#paymenttransaction").html(msg).removeClass("d-none").addClass("alert alert-danger");'.
+                '});'.
+              '},'.
+              'onError:function(){'.
+                '$.ajax({'.
+                  'type:"POST",'.
+                  'url:"core/paymenttransaction.php",'.
+                  'data:{'.
+                    'id:"'.$r['id'].'",'.
+                    'act:"error",'.
+                  '}'.
+                '}).done(function(msg){'.
+                  '$("#paymenttransaction").html(msg).removeClass("d-none").addClass("alert alert-danger");'.
+                '});'.
+              '},'.
+            '}).render(`#paypal-button-container`);'.
+          '</script>',
         ],$html);
       }else
-        $html=str_replace('<print paypal','',$html);
+        $html=str_replace('<print paypal>','',$html);
     }else
       $html=preg_replace('~<order>~is','',$html,1);
   }else

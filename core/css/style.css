@@ -49,7 +49,7 @@
 
 .installimg svg{width:50%}
 
-.navbar-brand i svg{height:28px!important}
+.app-header .navbar-brand i svg{height:28px!important;width:155px!important}
 
 a.preferences .card-header{color:#fff}
 a.preferences:hover{text-decoration:none}
@@ -301,7 +301,7 @@ button.close{padding:0;cursor:pointer;background:0 0;border:0;-webkit-appearance
 .rat{display:inline-block}
 .rat span{display:inline-block;width:1em;height:1em;background:url(../images/star-off.svg);background-size:contain}
 .rat span.set{display:inline-block;width:1em;height:1em;background:url(../images/star-on.svg);background-size:contain}
-#searchbox{position:fixed;z-index:5000;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.9);display:flex;flex-direction:column;justify-content:center}
+#searchbox{position:fixed;z-index:999999;top:0;right:0;bottom:0;left:0;background:rgba(0,0,0,.9);display:flex;flex-direction:column;justify-content:center}
 #searchbox .searchclose{position:absolute;top:10px;right:10px;font-size:3em}
 #searchbox .searchclose a{color:#888}
 #searchbox .searchclose a:hover{color:#ccc;text-decoration:none}
@@ -319,13 +319,16 @@ button.close{padding:0;cursor:pointer;background:0 0;border:0;-webkit-appearance
 #chatScreen ul li.admin p{background:#e4e7ea;color:#000;float:right}
 #chatScreen ul li img{width:32px;border-radius:50%;float:left}
 #chatScreen ul li p{display:inline-block;padding:10px 15px;border-radius:20px;max-width:80%;line-height:130%}
-body.development{margin-top:24px!important}
-div.development{position:fixed;z-index:2000;top:0;right:0;left:0;height:24px;background-color:#2f353a!important;background-image:url(../images/developmentmode.png)!important;background-repeat:repeat-x;background-attachment:fixed}
+body.development{margin-top:48px!important}
+div.development{position:fixed;z-index:2000;top:0;right:0;left:0;height:48px;background-color:#2f353a!important;background-image:linear-gradient(45deg,#000 25%,rgba(255,255,0,.15)25%,rgba(255,255,0,.15)50%,#000 50%,#000 75%,rgba(255,255,0,.15)75%,rgba(255,255,0,.15)100%);background-size:56.57px 56.57px}
+div.developmentbottom{position:fixed;z-index:2000;top:24px;right:0;bottom:auto0;left:0;text-align:right;padding:2px 5px;color:#fff;font-family:sans-serif;font-size:14px}
 body.development:after{content:'Breakpoint Width > ALL (max-width:575.98px)';z-index:9999;position:fixed;top:2px;left:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
-body.development:before{content:'Current Width: ' attr(data-width) 'px';z-index:9999;position:fixed;top:2px;right:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
+body.development:before{content:'Current Size: 'attr(data-width)'px X 'attr(data-height) 'px';z-index:9999;position:fixed;top:2px;right:2px;color:#fff;font-family:sans-serif;font-size:14px;padding:2px 5px}
 @media (max-width:361px){
-  div.development{height:48px}
-  body.development:before{top:26px}
+  body.development{margin-top:72px!important}
+  body.development:before{top:24px;}
+  div.developmentbottom{top:42px}
+  div.development{height:76px!important}
 }
 @media (max-width:575.98px){
   body.development:after{content:'Breakpoint Width > ALL (max-width:575.98px)'}

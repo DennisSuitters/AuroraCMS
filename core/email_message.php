@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.10 Fix Toastr Notifications.
  */
 echo'<script>';
 $getcfg=true;
@@ -120,7 +121,7 @@ if($to!=''){
     ]);
   }
   if(!empty($mail->ErrorInfo)){?>
-    window.top.window.alert('<?php echo$mail->ErrorInfo;?>');
+    window.top.window.toastr["error"]("<?php echo$mail->ErrorInfo;?>");
 <?php
     exite();
   }else{?>

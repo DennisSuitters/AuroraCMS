@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.10 Fix Toastr Notifications.
  */
 echo'<script>';
 $getcfg=true;
@@ -18,19 +19,19 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $adminfolder=isset($_POST['adminfolder'])?filter_input(INPUT_POST,'adminfolder',FILTER_SANITIZE_STRING):'';
 if($adminfolder==''){?>
   window.top.window.$('#adminfolder').addClass('is-invalid');
-  window.top.window.toastr["danger"]('Folder must NOT be blank!<br>Change not saved!');
+  window.top.window.toastr["error"]("Folder must NOT be blank!<br>Change not saved!");
 <?php
 }else{
   $s=$db->prepare("SELECT id FROM menu WHERE file LIKE :file");
   $s->execute([':file'=>$adminfolder]);
   if($s->rowCount()>0){?>
     window.top.window.$('#adminfolder').addClass('is-invalid');
-    window.top.window.toastr["danger"]('Folder must NOT be the same as an already existing Page!<br>Change not saved!');
+    window.top.window.toastr["error"]("Folder must NOT be the same as an already existing Page!<br>Change not saved!");
 <?php }elseif($adminfolder==$settings['system']['admin']){
   $htmladmin='<a href="'.URL.$settings['system']['admin'].'">'.URL.'</a>';?>
   window.top.window.$('#adminaccess').html(`<?php echo$htmladmin;?>`);
   window.top.window.$('#adminfolder').removeClass('is-invalid');
-  window.top.window.toastr["info"]('Administration Access Folder Still The Same!');
+  window.top.window.toastr["info"]("Administration Access Folder Still The Same!");
 <?php }else{
   $txt='[database]'.PHP_EOL.
        'prefix = '.$settings['database']['prefix'].PHP_EOL.
@@ -52,7 +53,7 @@ if($adminfolder==''){?>
   $htmladmin='<a href="'.URL.$adminfolder.'">'.URL.'</a>';?>
   window.top.window.$('#adminfolder').addClass('is-valid');
   window.top.window.$('#adminaccess').html(`<?php echo$htmladmin;?>`);
-  window.top.window.toastr["success"]('Administration Access Folder Updated!');
+  window.top.window.toastr["success"]("Administration Access Folder Updated!");
 <?php }
 }
 echo'</script>';

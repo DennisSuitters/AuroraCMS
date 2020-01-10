@@ -31,7 +31,8 @@ $html=preg_replace([
  'data:'.mime_content_type('..'.DS.'images'.DS.'auroracms-white.svg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'auroracms-white.svg'))
 ],$html);
 ?>
-const CACHE="AuroraCMSv0-0-8";
+
+const CACHE="AuroraCMSv0-0-9";
 const offlineFallbackPage=`<?php echo$html;?>`;
 const offlineFallbackPages=["/",];
 

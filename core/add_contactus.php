@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.2 Add Check for Storing Messages
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $getcfg=true;
 require'db.php';
@@ -25,7 +26,7 @@ $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $spam=FALSE;
 if($act=='add_message'){
-  if($config['php_options']{3}==1&&$config['php_APIkey']!=''){
+  if($config['php_options'][3]==1&&$config['php_APIkey']!=''){
     $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
     if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
 			$blacklisted=$theme['settings']['blacklist'];
@@ -48,7 +49,7 @@ if($act=='add_message'){
     $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
     $subject=filter_input(INPUT_POST,'subject',FILTER_SANITIZE_STRING);
 		$notes=filter_input(INPUT_POST,'notes',FILTER_SANITIZE_STRING);
-    if($config['spamfilter']{0}==1&&$spam==FALSE){
+    if($config['spamfilter'][0]==1&&$spam==FALSE){
       $filter=new SpamFilter();
       $result=$filter->check_email($email);
       if($result){
@@ -60,7 +61,7 @@ if($act=='add_message'){
         $blacklisted=$theme['settings']['blacklist'];
         $spam=TRUE;
       }
-      if($config['spamfilter']{1}==1&&$spam==TRUE){
+      if($config['spamfilter'][1]==1&&$spam==TRUE){
         $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
   			$sc->execute([':ip'=>$ip]);
   			if($sc->rowCount()<1){
@@ -84,7 +85,7 @@ if($act=='add_message'){
   				if($rs['url']!='')
             $config['email']=$rs['url'];
   			}
-        if($config['storemessages']{0}==1){
+        if($config['storemessages'][0]==1){
           $q=$db->prepare("INSERT INTO `".$prefix."messages` (uid,ip,folder,to_email,to_name,from_email,from_name,subject,status,notes_raw,ti) VALUES ('0',:ip,:folder,:to_email,:to_name,:from_email,:from_name,:subject,:status,:notes_raw,:ti)");
   			  $q->execute([
   					':ip'=>$ip,

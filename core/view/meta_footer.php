@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.5 Add Live Chat
  * @changes    v0.0.6 Add GDPR
  * @changes    v0.0.7 Add parsing for Website Voice service.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&file_exists(THEME.DS.'meta_footer.html')){
   $footer=file_get_contents(THEME.DS.'meta_footer.html');
@@ -22,8 +23,8 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     THEME
   ],$footer);
   if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
-    if($config['options']{13}==1){
-  		if($config['options']{14}==1&&$config['messengerFBCode']!='')
+    if($config['options'][13]==1){
+  		if($config['options'][14]==1&&$config['messengerFBCode']!='')
   			$footer=preg_replace(
           '~<chatscript>.*?<\/chatscript>~is',
           '<div id="fb-root"></div><script>window.fbAsyncInit=function(){FB.init({xfbml:true,version:\'v5.0\'});};(function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id))return;js=d.createElement(s);js.id=id;js.src=\'https://connect.facebook.net/en_GB/sdk/xfbml.customerchat.js\';fjs.parentNode.insertBefore(js,fjs);}(document,\'script\',\'facebook-jssdk\'));</script><div class="fb-customerchat" attribution=setup_tool page_id="'.$config['messengerFBCode'].'" theme_color="'.$config['messengerFBColor'].'"'.($config['messengerFBGreeting']!=''?' logged_in_greeting="'.$config['messengerFBGreeting'].'" logged_out_greeting="'.$config['messengerFBGreeting'].'"':'').'></div>',
@@ -38,7 +39,7 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
   		$footer=preg_replace('~<chatscript>.*?<\/chatscript>~is','',$footer,1);
   }else
     $footer=preg_replace('~<chatscript>.*?<\/chatscript>~is','',$footer,1);
-  if($config['options']{8}==1){
+  if($config['options'][8]==1){
     $footer=preg_replace([
       '/<gdpr>/'
     ],[
@@ -59,7 +60,7 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     ],$footer);
   }else
     $footer=preg_replace('~<gdpr>~is','',$footer,1);
-  if($config['options']{8}==1){
+  if($config['options'][8]==1){
     $footer=preg_replace([
       '/<websitevoice>/'
     ],[

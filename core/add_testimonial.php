@@ -7,10 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.10 Fix typo's causing errors.
+ * @changes    v0.0.10 Fix missing SQL Field when storing bad actors.
  */
 $getcfg=true;
 require'db.php';
@@ -22,9 +25,9 @@ $notification=$blacklisted='';
 $ti=time();
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $spam=FALSE;
-$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):'');
+$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):'';
 if($act=='add_test'){
-  if($config['php_options']{3}==1&&$config['php_APIkey']!=''){
+  if($config['php_options'][3]==1&&$config['php_APIkey']!=''){
     $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
     if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
       $blacklisted=$theme['settings']['blacklist'];
@@ -48,7 +51,7 @@ if($act=='add_test'){
     $business=isset($_POST['business'])?filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'business',FILTER_SANITIZE_STRING);
     $review=isset($_POST['review'])?filter_input(INPUT_POST,'review',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'review',FILTER_SANITIZE_STRING);
     $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
-    if($config['spamfilter']{0}==1&&$spam==FALSE){
+    if($config['spamfilter'][0]==1&&$spam==FALSE){
       $filter=new SpamFilter();
       $result=$filter->check_email($email);
       if($result){
@@ -60,11 +63,11 @@ if($act=='add_test'){
         $blacklisted=$theme['settings']['blacklist'];
         $spam=TRUE;
       }
-      if($config['spamfilter']{1}==1&&$spam==TRUE){
+      if($config['spamfilter'][1]==1&&$spam==TRUE){
         $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
   			$sc->execute([':ip'=>$ip]);
   			if($sc->rowCount()<1){
-  	      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,ti) VALUES (:ip,:oti,:ti)");
+  	      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
   	      $s->execute([
 	          ':ip'=>$ip,
 	          ':oti'=>$ti,

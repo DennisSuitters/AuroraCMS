@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.8
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -18,6 +18,7 @@
  * @changes    v0.0.4 Add Front End Editing.
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  * @changes    v0.0.8 Fix missing SQL prefix from SQL Query at line 326
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $rank=0;
 $notification='';
@@ -151,7 +152,7 @@ if($show=='categories'){
 	$html=preg_replace('~<item>.*?<\/item>~is','',$html,1);
 	if(stristr($html,'<settings')){
 		$matches=preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
-		$count=$matches[1];
+		$count=$matches[0];
 		$html=preg_replace('~<settings.*?>~is','',$html,1);
 	}else
 		$count=1;
@@ -861,7 +862,7 @@ if($show=='item'){
 		],$item);
 /* Related */
 		if($view=='article'||$view=='inventory'||$view=='service'||$view=='portfolio'&&stristr($item,'<related')){
-			if($config['options']{11}==1){
+			if($config['options'][11]==1){
 				preg_match('/<related.*itemCount=[\"\'](.+?)[\"\'].*>/',$item,$matches);
 				if(!isset($matches[1]))$iC=$config['showItems'];
 				elseif($matches[1]=='all')$iC='';
@@ -873,7 +874,7 @@ if($show=='item'){
 				if($sr->rowCount()>0){
 					$go=true;
 				}else{
-					if($config['options']{10}==1){
+					if($config['options'][10]==1){
 						if($r['category_1']!=''){
 							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat AND status='published' ORDER BY title ASC LIMIT $iC");
 							$sr->execute([
@@ -1017,7 +1018,7 @@ if($show=='item'){
 				':contentType'=>$view,
 				':rid'=>$r['id']
 			]);
-			if($sc->rowCount()>0||$r['options']{1}==1){
+			if($sc->rowCount()>0||$r['options'][1]==1){
 				if(file_exists(THEME.DS.'comments.html')){
 					$comments=$commentsHTML='';
 					$commentsHTML=file_get_contents(THEME.DS.'comments.html');
@@ -1043,7 +1044,7 @@ if($show=='item'){
 						$comments.=$comment;
 					}
 					$commentsHTML=preg_replace('~<items>.*?<\/items>~is',$comments,$commentsHTML,1);
-					$commentsHTML=$r['options']{1}==1?preg_replace('/<\/?comment>/','',$commentsHTML):preg_replace('~<comment>.*?<\/comment>~is','',$commentsHTML,1);
+					$commentsHTML=$r['options'][1]==1?preg_replace('/<\/?comment>/','',$commentsHTML):preg_replace('~<comment>.*?<\/comment>~is','',$commentsHTML,1);
 					$commentsHTML=preg_replace('~<items>.*?<\/items>~is','',$commentsHTML,1);
 					$item.=$commentsHTML;
 				}else
@@ -1055,7 +1056,7 @@ if($show=='item'){
 }
 if($view=='login'){
 	$html=preg_replace('/<print url>/',URL,$html,1);
-	if($config['options']{3}==1)
+	if($config['options'][3]==1)
 		$html=preg_replace('/<\/?signup?>/','',$html);
 	else
 		$html=preg_replace('~<signup>.*?<\/signup>~is','',$html,1);

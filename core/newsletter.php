@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 echo'<script>';
 $getcfg=true;
@@ -39,7 +40,7 @@ if($config['email']!=''){
   $mail->SetFrom($config['email'],$config['business']);
   $mail->Subject=$news['title'];
   $mail->AltBody='To view this message, please use an HTML compatible email viewer!';
-  if($config['newslettersEmbedImages']{0}==1){
+  if($config['newslettersEmbedImages'][0]==1){
     preg_match_all('/<img.*?>/',$body,$matches);
     if(isset($matches[0])){
       $i=1001;
@@ -74,13 +75,13 @@ if($config['email']!=''){
     }
   }
   if(!empty($mail->ErrorInfo)){?>
-    window.top.window.toastr("danger")('<?php echo$mail->ErrorInfo;?>');
+    window.top.window.toastr("error")("<?php echo$mail->ErrorInfo;?>");
     window.top.window.$('#block').css({'display':'none'});
 <?php }else{?>
-    window.top.window.toastr["success"]('Newsletters Sent Successfully!');
+    window.top.window.toastr["success"]("Newsletters Sent Successfully!");
     window.top.window.$('#block').css({'display':'none'});
 <?php }
 }else{?>
-  window.top.window.toastr("danger")('No system Email has been set!');
+  window.top.window.toastr("error")("No system Email has been set!");
 <?php }
 echo'</script>';

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.10 Fix Toastr Notifications.
  */
 echo'<script>';
 $getcfg=true;
@@ -38,7 +39,7 @@ if($act=='thumb'){
     $process=true;
   }else{
     $process=false;?>
-  window.top.window.toastr["danger"]('The file set as the Thumbnail does not exist on the server!');
+  window.top.window.toastr["error"]("The file set as the Thumbnail does not exist on the server!");
 <?php }
 }
 if($act=='file'){
@@ -63,31 +64,31 @@ if($process==true){
   if(!$image->resize($width,$height,ZEBRA_IMAGE_CROP_CENTER)){
     switch($image->error){
       case 1:?>
-  window.top.window.toastr["danger"]('Source file could not be found!');
+  window.top.window.toastr["error"]("Source file could not be found!");
 <?php   break;
       case 2:?>
-  window.top.window.toastr["danger"]('Source file is not readable!');
+  window.top.window.toastr["error"]("Source file is not readable!");
 <?php   break;
       case 3:?>
-  window.top.window.toastr["danger"]('Could not write target file!');
+  window.top.window.toastr["error"]("Could not write target file!");
 <?php   break;
       case 4:?>
-  window.top.window.toastr["danger"]('Unsupported source file format!');
+  window.top.window.toastr["error"]("Unsupported source file format!");
 <?php   break;
       case 5:?>
-  window.top.window.toastr["danger"]('Unsupported target file format!');
+  window.top.window.toastr["error"]("Unsupported target file format!");
 <?php   break;
       case 6:?>
-  window.top.window.toastr["danger"]('Unsupported target file format!');
+  window.top.window.toastr["error"]("Unsupported target file format!");
 <?php   break;
       case 7:?>
-  window.top.window.toastr["danger"]('GD Library is not installed!');
+  window.top.window.toastr["error"]("GD Library is not installed!");
 <?php   break;
       case 8:?>
-  window.top.window.toastr["danger"]('`chmod` command is disabled via server configuration!');
+  window.top.window.toastr["error"]("`chmod` command is disabled via server configuration!");
 <?php   break;
       case 9:?>
-  window.top.window.toastr["danger"]('`exif_read_data` function is not available!');
+  window.top.window.toastr["error"]("`exif_read_data` function is not available!");
 <?php   break;
     }
   }else{

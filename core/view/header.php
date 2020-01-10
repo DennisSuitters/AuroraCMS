@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
@@ -49,7 +50,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 			'~<administration>.*?<\/administration>~is'
 		],'',$html);
 	}
-//	if($user['bio_options']{0}==1){
+//	if($user['bio_options'][0]==1){
 		$html=preg_replace([
 			'/<print user=[\"\']?name[\"\']?>/',
 			'/<[\/]?profile>/'
@@ -59,11 +60,11 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		],$html);
 //	}else
 //		$html=preg_replace('~<profile>.*?<\/profile>~is','',$html,1);
-		if(isset($_SESSION['options'])&&$_SESSION['options']{6}==1)
+		if(isset($_SESSION['options'])&&$_SESSION['options'][6]==1)
 			$html=preg_replace('/<[\/]?seohelper>/','',$html);
 		else
 			$html=preg_replace('~<seohelper>.*?<\/seohelper>~is','',$html,1);
-		if($config['development']{0}==1&&$_SESSION['rank']>899)
+		if($config['development'][0]==1&&$_SESSION['rank']>899)
 			$html=preg_replace(['/<[\/]?development>/'],'',$html);
 		else
 			$html=preg_replace('~<development>.*?<\/development>~is','',$html,1);
@@ -223,7 +224,7 @@ if(stristr($html,'<buildMenu')){
 		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 			$menuLogin='';
 		else{
-			if($config['options']{3}==0)
+			if($config['options'][3]==0)
 				$menuLogin=preg_replace('~<signup>.*?<\/signup>~is','',$menuLogin,1);
 			else
 				$menuLogin=preg_replace(
@@ -261,7 +262,7 @@ if(stristr($html,'<buildSocial')){
 	}else
 		$socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
-	if($config['options']{9}==1){
+	if($config['options'][9]==1){
 		$html=str_replace([
 			'<rss>',
 			'</rss>'

@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.6
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Add liveChatNotification to allowed Columns.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -23,7 +24,7 @@ if(($tbl!='NaN'&&$col!='NaN')||($tbl!=''&&$col!='')){
     $q=$db->prepare("SELECT $col as c FROM `".$prefix.$tbl."` WHERE id=:id");
     $q->execute([':id'=>$id]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
-    $r['c']{$bit}=$r['c']{$bit}==1?0:1;
+    $r['c'][$bit]=$r['c'][$bit]==1?0:1;
     $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET $col=:c WHERE id=:id");
     $q->execute([':c'=>$r['c'],':id'=>$id]);
   }

@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Adjust file check folder
  * @changes    v0.0.4 Add Page Editing
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $doc=new DOMDocument();
 if($show=='item'){
@@ -130,7 +131,7 @@ foreach($tags as$tag){
 			break;
 		case'cost':
 			if(isset($r['contentType'])&&($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events')){
-				if($r['options']{0}==1||$r['cost']!=''){
+				if($r['options'][0]==1||$r['cost']!=''){
 					if(is_numeric($r['cost'])&&$r['cost']!=0){
 						if($r['stockStatus']=='sold out')$parsing.='<div class="sold">';
 						$parsing.=$r['rrp']!=0?'<span class="rrp" title="Recommended Retail Price">RRP &#36;'.htmlspecialchars($r['rrp'],ENT_QUOTES,'UTF-8').'</span>':'';

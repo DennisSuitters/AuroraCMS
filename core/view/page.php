@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $rank=0;
 $notification='';
@@ -37,7 +38,7 @@ $html=preg_replace([
   '/<\/item>/'
 ],[
   $r['title'],
-  (isset($_SESSION['options'])&&$_SESSION['options']{1}==1?
+  (isset($_SESSION['options'])&&$_SESSION['options'][1]==1?
   '<form id="note-form" target="sp" enctype="multipart/form-data" method="post" action="core/update.php">'.
     '<input type="hidden" name="id" value="'.$page['id'].'">'.
     '<input type="hidden" name="t" value="menu">'.

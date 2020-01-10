@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Move Settings Links into Menu.
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix old CMS references.
+ * @changes    v0.0.10 Fix Logo Width overriding other header items.
  */?>
 <header class="app-header navbar">
   <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" data-toggle="sidebar-show" aria-controls="sidebar" role="presentation" aria-label="Toggle Navigation Sidebar"><span class="sr-only">Toggle Sidebar</span><span class="navbar-toggler-icon"></span></button>

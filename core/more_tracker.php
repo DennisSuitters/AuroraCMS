@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -44,7 +45,7 @@ if($s->rowCount()>0){
           '<td class="align-middle">'.
             '<div class="btn-group float-right">'.
               '<button class="btn btn-secondary pathviewer" data-tooltip="tooltip" data-title="View Visitor Path" data-toggle="popover" data-dbid="'.$r['id'].'" aria-label="aria_view">'.svg2('seo-path').'</button>';
-    if($config['php_options']{0}==1){
+    if($config['php_options'][0]==1){
       echo'<button class="btn btn-secondary phpviewer" data-tooltip="tooltip" data-title="Check IP with Project Honey Pot" data-toggle="popover" data-dbid="'.$r['id'].'" data-dbt="tracker" aria-label="aria_check">'.svg2('brand-projecthoneypot').'</button>';
     }
               echo'<button class="btn btn-secondary trash" onclick="purge(`'.$r['id'].'`,`tracker`)" data-tooltip="tooltip" data-title="Delete" aria-label="aria_delete">'.svg2('trash').'</button>'.

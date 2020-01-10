@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.10 Fix Rewards Display Layout.
+ * @changes    v0.0.10 Fix Toastr Notifications.
  */
 $getcfg=true;
 require'db.php';
@@ -44,40 +46,44 @@ if($act!=''){
 			$tie=filter_input(INPUT_POST,'tie',FILTER_SANITIZE_STRING);
 			$tis=$tis!=''?strtotime($tis):0;
 			$tie=$tie!=''?strtotime($tie):0;
-			$q=$db->prepare("INSERT INTO `".$prefix."rewards` (code,title,method,value,quantity,tis,tie,ti) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
-			$q->execute([
-        ':code'=>$code,
-        ':title'=>$title,
-        ':method'=>$method,
-        ':value'=>$value,
-        ':quantity'=>$quantity,
-        ':tis'=>$tis,
-        ':tie'=>$tie,
-        ':ti'=>$ti
-      ]);
-			$id=$db->lastInsertId();
-			$e=$db->errorInfo();
-			if(is_null($e[2])){?>
-	window.top.window.$('#rewards').append('<?php
-echo'<tr id="l_'.$id.'">'.
-			'<td class="col-1 small text-center">'.$code.'</td>'.
-			'<td class="col-4 small text-center">'.$title.'</td>'.
-			'<td class="col-1 small text-center">'.($method==0?'% Off':'$ Off').'</td>'.
-			'<td class="col-1 small text-center">'.$value.'</td>'.
-			'<td class="col-1 small text-center">'.$quantity.'</td>'.
-			'<td class="col-2 small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td>'.
-			'<td class="col-2 small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td>'.
-			'<td>'.
-				'<form target="sp" action="core/purge.php">'.
-					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<input type="hidden" name="t" value="rewards">'.
-					'<button class="btn btn-default btn-sm trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-				'</form>'.
-			'</td>'.
-		'</tr>';?>
-');
+			if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
+				$q=$db->prepare("INSERT INTO `".$prefix."rewards` (code,title,method,value,quantity,tis,tie,ti) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
+				$q->execute([
+	        ':code'=>$code,
+	        ':title'=>$title,
+	        ':method'=>$method,
+	        ':value'=>$value,
+	        ':quantity'=>$quantity,
+	        ':tis'=>$tis,
+	        ':tie'=>$tie,
+	        ':ti'=>$ti
+	      ]);
+				$id=$db->lastInsertId();
+				$e=$db->errorInfo();
+				if(is_null($e[2])){?>
+		window.top.window.$('#rewards').append('<?php
+	echo'<tr id="l_'.$id.'">'.
+				'<td class="small text-center">'.$code.'</td>'.
+				'<td class="small text-center">'.$title.'</td>'.
+				'<td class="small text-center">'.($method==0?'% Off':'$ Off').'</td>'.
+				'<td class="small text-center">'.$value.'</td>'.
+				'<td class="small text-center">'.$quantity.'</td>'.
+				'<td class="small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td>'.
+				'<td class="small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td>'.
+				'<td>'.
+					'<form target="sp" action="core/purge.php">'.
+						'<input type="hidden" name="id" value="'.$id.'">'.
+						'<input type="hidden" name="t" value="rewards">'.
+						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+					'</form>'.
+				'</td>'.
+			'</tr>';?>
+	');
 <?php	}else{?>
-  window.top.window.toastr["danger"]('There was an issue adding the Reward!');
+	 window.top.window.toastr["error"]("There was an issue adding the Reward!");
+<?php }
+}else{?>
+	window.top.window.toastr["error"]("Some required fields are empty!");
 <?php }
 			break;
     case'add_dashrss':
@@ -111,7 +117,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 		'</div>';?>
 ');
 <?php   }else{?>
-  window.top.window.toastr["danger"]('There was an issue adding the RSS URL!');
+  window.top.window.toastr["error"]("There was an issue adding the RSS URL!");
 <?php   }
       }
       break;
@@ -121,7 +127,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
       $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
       if(filter_var($url,FILTER_VALIDATE_URL)){
         if($icon=='none'||$url==''){?>
-  window.top.window.$.notify({type:'danger',icon:'',message:text:'Not all Fields were filled in!'});
+  window.top.window.toastr["error"]("Not all Fields were filled in!");
 <?php   }else{
           $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,contentType,icon,url) VALUES (:uid,'social',:icon,:url)");
           $q->execute([
@@ -147,11 +153,11 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
 			'</div>'.
 		'</div>';?>`);
 <?php     }else{?>
-  window.top.window.toastr["danger"]('There was an issue adding the Social Networking Link!');
+  window.top.window.toastr["error"]("There was an issue adding the Social Networking Link!");
 <?php     }
       	}
       }else{?>
-  window.top.window.toastr["danger"]('The URL entered is not valid!');
+  window.top.window.toastr["error"]("The URL entered is not valid!");
 <?php }
       break;
 		case'add_option':
@@ -159,7 +165,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       $ttl=filter_input(INPUT_POST,'ttl',FILTER_SANITIZE_STRING);
 			$qty=filter_input(INPUT_POST,'qty',FILTER_SANITIZE_NUMBER_INT);
       if($ttl==''){?>
-	window.top.window.toastr["danger"]('Not all Fields were filled in!');
+	window.top.window.toastr["error"]("Not all Fields were filled in!");
 <?php }else{
         $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,rid,contentType,title,ti) VALUES (:uid,:rid,'option',:title,:ti)");
         $q->execute([
@@ -199,7 +205,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 		'</div>';?>
 ');
 <?php   }else{?>
-	window.top.window.toastr["danger"]('There was an issue adding the Data!');
+	window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   }
       }
       break;
@@ -207,7 +213,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 			$id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 			$rid=isset($_POST['rid'])?filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'rid',FILTER_SANITIZE_NUMBER_INT);
 			if($id==$rid){?>
-	window.top.window.toastr["warning"]('Item can\'t be related to itself!');
+	window.top.window.toastr["warning"]("Item can't be related to itself!");
 <?php	}else{
 				if($rid!=0){
 				  $s=$db->prepare("SELECT id FROM `".$prefix."choices` WHERE contentType='related' AND rid=:rid");
@@ -242,13 +248,13 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
 	'</div>';?>
 ');
 <?php   			}else{?>
-		window.top.window.toastr["danger"]('There was an issue adding the Data!');
+		window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   		}
 			  	}else{?>
-	window.top.window.toastr["warning"]('Item is already related!');
+	window.top.window.toastr["warning"]("Item is already related!");
 <?php			}
 				}else{?>
-	window.top.window.toastr["warning"]('You need to select in Item to Relate!');
+	window.top.window.toastr["warning"]("You need to select in Item to Relate!");
 <?php		}
 			}
 			break;
@@ -256,7 +262,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       $sub=filter_input(INPUT_POST,'sub',FILTER_SANITIZE_STRING);
       $eml=filter_input(INPUT_POST,'eml',FILTER_SANITIZE_STRING);
       if($sub==''){?>
-  window.top.window.toastr["danger"]('Not all Fields were filled in!');
+  window.top.window.toastr["error"]("Not all Fields were filled in!");
 <?php }else{
         $q=$db->prepare("INSERT INTO `".$prefix."choices` (contentType,title,url) VALUES ('subject',:title,:url)");
         $q->execute([
@@ -284,7 +290,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
 		'</div>';?>
 ');
 <?php   }else{?>
-  window.top.window.toastr["danger"]('There was an issue adding the Data!');
+  window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   }
       }
       break;
@@ -302,9 +308,9 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       ]);
       $e=$db->errorInfo();
       if(is_null($e[2])){?>
-  window.top.window.toastr["success"]('Contact added as Client');
+  window.top.window.toastr["success"]("Contact added as Client");
 <?php }else{?>
-  window.top.window.toastr["danger"]('There was an issue adding the Data!');
+  window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php }
       break;
     case'add_comment':
@@ -362,10 +368,10 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
 		'</div>';?>
 ');
 <?php   }else{?>
-  window.top.window.toastr["danger"]('There was an issue adding the Data!');
+  window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   }
       }else{?>
-  window.top.window.toastr["danger"]('The Email enter is not valid!');
+  window.top.window.toastr["error"]("The Email enter is not valid!");
 <?php }
       break;
     case'add_avatar':

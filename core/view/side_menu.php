@@ -7,19 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Display Items according to primary documents category.
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.7 Fix Stock Status Display.
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 		$sideCost='';
-		if($r['options']{0}==1){
+		if($r['options'][0]==1){
 			if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
 			$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'').(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
 			if($r['stockStatus']=='sold out')$sideCost.='</div>';
@@ -154,7 +155,7 @@ if(file_exists(THEME.DS.'side_menu.html')){
 			$contentType='';
 	}
 	$r=$db->query("SELECT * FROM `".$prefix."menu` WHERE id=17")->fetch(PDO::FETCH_ASSOC);
-	if($r['active']{0}==1){
+	if($r['active'][0]==1){
 		$sideTemp=str_replace([
 			'<newsletters>',
 			'</newsletters>'

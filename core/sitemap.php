@@ -7,20 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.3 Stop pages that only show up when logged in from being listed.
  * @changes    v0.0.3 Fix listing all pages when site is in Coming Soon or Maintenance modes.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 header('Content-type:text/xml');
 require'db.php';
 $config=$db->query("SELECT comingsoon,maintenance FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
 echo'<?xml version="1.0" encoding="UTF-8"?>';?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-<?php 
-if($config['comingsoon']{0}==1||$config['maintenance']{0}==1){?>
+<?php
+if($config['comingsoon'][0]==1||$config['maintenance'][0]==1){?>
   <url>
     <loc><?php echo URL;?></loc>
     <changefreq>daily</changefreq>

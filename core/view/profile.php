@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $rank=0;
 $notification='';
@@ -19,7 +20,7 @@ if($args[0]!=''){
   $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE LOWER(name)=LOWER(:name)");
   $s->execute([':name'=>str_replace('-',' ',$args[0])]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
-  if($r['bio_options']{0}==1){
+  if($r['bio_options'][0]==1){
     if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
       $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
     else
@@ -191,7 +192,7 @@ if($args[0]!=''){
     if(stristr($html,'<resume')){
       preg_match('/<resume>([\w\W]*?)<\/resume>/',$html,$matches);
       $resume=$matches[1];
-      if(stristr($resume,'<career')&&$r['bio_options']{2}==1){
+      if(stristr($resume,'<career')&&$r['bio_options'][2]==1){
         preg_match('/<career>([\w\W]*?)<\/career>/',$resume,$matches);
         $career=$matches[1];
         preg_match('/<item>([\w\W]*?)<\/item>/',$career,$matches);
@@ -229,7 +230,7 @@ if($args[0]!=''){
         $career=preg_replace('~<item>.*?<\/item>~is',$items,$career,1);
       }else
         $career='';
-      if(stristr($resume,'<education')&&$r['bio_options']{3}==1){
+      if(stristr($resume,'<education')&&$r['bio_options'][3]==1){
         preg_match('/<education>([\w\W]*?)<\/education>/',$resume,$matches);
         $education=$matches[1];
         preg_match('/<item>([\w\W]*?)<\/item>/',$education,$matches);
@@ -340,7 +341,7 @@ if($args[0]!=''){
         '~<contentMenu>.*?<\/contentMenu>~is'
       ],'',$html,1);
     }
-    if(stristr($html,'<contact')&&$r['bio_options']{1}==1){
+    if(stristr($html,'<contact')&&$r['bio_options'][1]==1){
       preg_match('/<contact>([\w\W]*?)<\/contact>/',$html,$matches);
       $contact=$matches[1];
       $contact=preg_replace([

@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.10 Fix Toastr Notifications.
  */
 $getcfg=true;
 require'db.php';
@@ -211,7 +213,7 @@ if($act=='print'){?>
 	$mail->SetFrom($config['email'],$config['business']);
 	$mail->AddAddress($c['email']);
 	$mail->IsHTML(true);
-  if($config['orderEmailReadNotification']{0}==1){
+  if($config['orderEmailReadNotification'][0]==1){
     $mail->AddCustomHeader("X-Confirm-Reading-To:".$config['email']);
     $mail->AddCustomHeader("Return-receipt-to:".$config['email']);
     $mail->AddCustomHeader("Disposition-Notification-To:".$config['email']);
@@ -258,10 +260,10 @@ if($act=='print'){?>
 	$mail->AddAttachment('..'.DS.'media'.DS.'orders'.DS.$oid.'.pdf');
 	if($mail->Send()){
     $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'The Order to {business} was Sent Successfully!');?>
-window.top.window.toastr["success"]('<?php echo$alertmsg;?>');
+window.top.window.toastr["success"]("<?php echo$alertmsg;?>");
 <?php }else{
     $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'There was an issue sending the Order to {business}!');?>
-window.top.window.toastr["danger"]('<?php echo$alertmsg;?>');
+window.top.window.toastr["error"]("<?php echo$alertmsg;?>");
 <?php }
 }
 echo'</script>';

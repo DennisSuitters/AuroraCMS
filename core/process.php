@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -22,6 +22,8 @@
  * @changes    v0.0.5 Add check if User Agent isn't set, or User Agent is
  *             Google Speed Insight and don't render Google Analytics Code if us.
  * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -61,7 +63,7 @@ if(isset($act)&&$act=='logout')
   require'core'.DS.'login.php';
 include'core'.DS.'cart_quantity.php';
 $status=isset($_SESSON['rank'])&&$_SESSION['rank']>699?"%":"published";
-if($config['php_options']{4}==1){
+if($config['php_options'][4]==1){
   $sb=$db->prepare("SELECT * FROM `".$prefix."iplist` WHERE ip=:ip");
   $sb->execute([':ip'=>$ip]);
   if($sb->rowCount()>0){
@@ -70,14 +72,14 @@ if($config['php_options']{4}==1){
     die();
   }
 }
-if($config['comingsoon']{0}==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
+if($config['comingsoon'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
     if(file_exists(THEME.DS.'comingsoon.html'))
       $template=file_get_contents(THEME.DS.'comingsoon.html');
     else{
       include'core'.DS.'layout'.DS.'comingsoon.php';
       die();
     }
-}elseif($config['maintenance']{0}==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
+}elseif($config['maintenance'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
   if(file_exists(THEME.DS.'maintenance.html'))
     $template=file_get_contents(THEME.DS.'maintenance.html');
   else{
@@ -221,8 +223,8 @@ $head=preg_replace([
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-  ($config['development']{0}==1&&$_SESSION['rank']>999?' class="development" data-width="" onload="$(`.development`).attr(`data-width`,$(window).width());" onresize="$(`.development`).attr(`data-width`,$(window).width());"':''),
-  ($config['development']{0}==1&&$_SESSION['rank']>999?'<div class="development"></div>':''),
+  ($config['development'][0]==1&&$_SESSION['rank']>999?' class="development" data-width="" onload="$(`.development`).attr(`data-width`,$(window).width());" onresize="$(`.development`).attr(`data-width`,$(window).width());"':''),
+  ($config['development'][0]==1&&$_SESSION['rank']>999?'<div class="development"></div>':''),
   (isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<link rel="stylesheet" type="text/css" href="core/css/seohelper.css"><link rel="stylesheet" type="text/css" href="core/css/summernote-lite.min.css">':'')
 ],$head);
 if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
@@ -232,7 +234,7 @@ if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
 }else
   $head=str_replace('<google_analytics>','',$head);
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899&&$config['development']==1)
-  $content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().'</div>';
+  $content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
 
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
   $noteStyles='';
@@ -278,9 +280,9 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
   );
 }else
   $content=preg_replace(['/<jshelper>/','/<jsrunner>/'],'',$content);
-$content=preg_replace(['/<serviceworker>/'],[($config['options']{18}==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
+$content=preg_replace(['/<serviceworker>/'],[($config['options'][18]==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
 print$head.$content;
-if($config['options']{11}==1){
+if($config['options'][11]==1){
   $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&$_SESSION['current_page']!=$current_page)){
     if(!stristr($current_page,'core/*')||

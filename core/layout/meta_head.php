@@ -2,20 +2,19 @@
 /**
  * AuroraCMS - Copyright (C) Diemen Design 2019
  *
- * Administration - Meta-Head contains <head> and Stylesheet logic and JS Links
- *
  * @category   Administration - Meta-Head
  * @package    core/layout/meta_head.php
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Add test in Administration Header to test if admin.css exists,
  *             and add if it does. This is for the WYSIWYG Editor to make text
  *             look the same in the Editor as it does on the Main Site.
  * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
+ * @changes    v0.0.10 Fix missing manifestadmin.json.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -35,6 +34,7 @@
     <base href="<?php echo URL;?>">
     <link rel="alternate" media="handheld" href="<?php echo URL;?>">
     <link rel="alternate" hreflang="<?php echo$config['language'];?>" href="<?php echo URL;?>">
+    <link rel="manifest" href="<?php echo URL.'core'.DS.'manifestadmin.php';?>">
     <link rel="icon" href="<?php echo URL.$favicon;?>">
     <link rel="apple-touch-icon" href="<?php echo URL.$favicon;?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'bootstrap.min.css';?>">
@@ -65,5 +65,5 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development']{0}==1&&$user['rank']>999)echo' development" data-width="" onload="$(`body`).attr(`data-width`,$(window).width());" onresize="$(`body`).attr(`data-width`,$(window).width());';?>">
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development']{0}==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
 <?php if($config['development']{0}==1&&$user['rank']>999)echo'<div class="development"></div>';?>

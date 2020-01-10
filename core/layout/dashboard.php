@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Improve Statistic Panels
@@ -15,10 +15,12 @@
  * @changes    v0.0.3 Change Pages Views to show Actual Page and Content Views.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.10 Add Markdown Parsing for prettier, easier to read CHANGELOG.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_dashboard.php';
-else{?>
+else{
+  include'core'.DS.'class.parsedown.php';?>
 <main id="content" class="main">
   <ol class="breadcrumb">
     <li class="breadcrumb-item active">Dashboard</li>
@@ -357,9 +359,7 @@ else{?>
         <div class="card">
           <div class="card-header"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a></div>
           <div class="card-body">
-            <pre>
-<?php include'CHANGELOG.md';?>
-            </pre>
+<?php $Parsedown=new Parsedown();echo$Parsedown->text(file_get_contents('CHANGELOG.md'));?>
           </div>
         </div>
       </div>

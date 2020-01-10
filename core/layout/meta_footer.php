@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.8 Add Javascript for Offline PWA and Push Notifications.
+ * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
  */?>
 <script>
 var unsaved=false;
@@ -620,5 +621,8 @@ if(isset($r['due_ti'])){?>
         <div class="dot"></div>
       </div>
     </div>
+<?php if($config['development']==1){
+  echo'<div class="developmentbottom">Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
+}?>
   </body>
 </html>

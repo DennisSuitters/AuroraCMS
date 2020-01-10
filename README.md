@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at Version v0.0.9
+We are currently at Version v0.0.10
 
 ### FAQ
 - Why no Plugins?
@@ -27,9 +27,14 @@ We are currently at Version v0.0.9
 - Featured Content.
   - Can use Content Items as Featured Content, or Images and HTML Templates uploaded into the `media/carousel/` folder. Which then will get sorted, and number of items displayed depending on the settings attributes in the `featured.html` template file.
 - Accounts.
-  - Create Accounts for co-workers with Account Types for Administrators, Editors (especially good for SEO and Copywriters), Client's, and Visitors.
+  - Create Accounts for co-workers with Account Types for:
+    - Administrators.
+    - Editors (especially good for SEO and Copywriters).
+    - Client's.
+    - Visitors.
 - Client Proofs and Commenting.
 - Easy Theme Selector.
+  - Themes are built in such a way that changes in Administration are carried over to other themes. However, this will also depend on the features built into the theme selected.
 - Front End Theme Engine using HTML Style Markup, the use of any CSS or Javascript Framework.
 - Administration uses jQuery, Modified Bootstrap, iCONS, and other jQuery Addons.
 - Activity Fingerprint Analysis Logs of Previous Content Changes with Undo, and who made the changes. Examine Content Inputs with Draggable Popover with Undoing.

@@ -7,11 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Fix AutoPublishing
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.10 Move other platform security checks so they only check when enabled.
  */
+define('UNICODE','UTF-8');
 $getcfg=true;
 require'db.php';
 if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))$config['theme']=$_GET['theme'];
@@ -19,27 +22,27 @@ define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $s=$db->prepare("UPDATE `".$prefix."content` SET status='published' WHERE status='autopublish' AND pti<:pti");
 $s->execute([':pti'=>time()]);
-if($config['php_options']{6}==1){
+if($config['php_options'][6]==1){
 	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE ti<:ti");
 	$s->execute([':ti'=>time()-2592000]);
 }
-if($config['php_options']{5}==1){
+if($config['php_options'][5]==1){
 	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login')||stristr($_SERVER['REQUEST_URI'],'wp-content')||stristr($_SERVER['REQUEST_URI'],'wp-plugin')||(isset($_GET['author']) && $_GET['author']!='')){
+		echo'You know, not every fecking Website uses WordPress!<br>';
+		require'core'.DS.'xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'magento')){
+		echo'Nope NOT Magento!<br>';
+		require'core'.DS.'xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'.aspx')){
+		echo'Nope doesn\'t run on ASP, blergh!<br>Damn it! Now I have to get the taste of Microsoft out of my interpreter!<br>';
 		require'core'.DS.'xmlrpc.php';
 		die();
 	}
 }
-if(stristr($_SERVER['REQUEST_URI'],'magento')){
-	echo'Nope NOT Magento!<br>';
-	require'core'.DS.'xmlrpc.php';
-	die();
-}
-if(stristr($_SERVER['REQUEST_URI'],'.aspx')){
-	echo'Nope doesn\'t run on ASP, blergh!<br>';
-	require'core'.DS.'xmlrpc.php';
-	die();
-}
-define('UNICODE','UTF-8');
 if(file_exists(THEME.DS.'images'.DS.'favicon.png')){
 	define('FAVICON',THEME.DS.'images'.DS.'favicon.png');
 	define('FAVICONTYPE','image/png');

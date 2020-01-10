@@ -7,18 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.9
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.5 Add parsing Live Chat markup.
  * @changes    v0.0.6 Fix Doubling up of the Embedded Messaging.
  * @changes    v0.0.9 Add Payment Options Display Parsing.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 	$link='<li><a href="logout/">Logout</a></li>';
 else{
-	if($config['options']{3}==1)
+	if($config['options'][3]==1)
 		$link_x=' or Sign Up';
 	else{
 		$link_x='';
@@ -66,8 +67,8 @@ $html=preg_replace([
 	htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8'),
 	htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8'),
 	isset($theme['hosting'])&&$theme['hosting']!=''?'Hosting by <a target="_blank" href="'.$theme['hosting_url'].'">'.$theme['hosting'].'</a><br>':'',
-	$config['php_options']{0}==1?' Protected by <a href="http://www.projecthoneypot.org?rf=113735"><img src="'.URL.'layout/'.$config['theme'].'/images/phpot.gif" alt="Stop Spam Harvesters, Join Project Honey Pot"></a><br>':'',
-	$config['php_options']{0}==1&&$config['php_options']{2}==1&&$config['php_quicklink']!=''?$config['php_quicklink']:''
+	$config['php_options'][0]==1?' Protected by <a href="http://www.projecthoneypot.org?rf=113735"><img src="'.URL.'layout/'.$config['theme'].'/images/phpot.gif" alt="Stop Spam Harvesters, Join Project Honey Pot"></a><br>':'',
+	$config['php_options'][0]==1&&$config['php_options'][2]==1&&$config['php_quicklink']!=''?$config['php_quicklink']:''
 ],$html);
 if(stristr($html,'<subjectText>')){
 	$s=$db >prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='subject' ORDER BY title ASC");
@@ -156,7 +157,7 @@ if(stristr($html,'<buildSocial')){
 		}
 	}else$socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
-	if($config['options']{9}==1){
+	if($config['options'][9]==1){
 		$html=str_replace([
 			'<rss>',
 			'</rss>'
@@ -167,15 +168,15 @@ if(stristr($html,'<buildSocial')){
 		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
 }
 if(stristr($html,'<paymentoptions>')){
-	if($config['options']{7}==1)
+	if($config['options'][7]==1)
 		$html=preg_replace('/<\/paymentoptions>/','',$html,1);
 	else
 		$html=preg_replace('~<paymentoptions>.*?<\/paymentoptions>~is','',$html,1);
 }
 if(stristr($html,'<chat')){
 	if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
-		if($config['options']{13}==1){
-			if($config['options']{14}==1&&$config['messengerFBCode']!=''){
+		if($config['options'][13]==1){
+			if($config['options'][14]==1&&$config['messengerFBCode']!=''){
 				$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
 			}else{
 				$html=preg_replace([

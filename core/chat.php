@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.6
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Add Email Notifications and Status.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $getcfg=true;
 require'db.php';
@@ -49,13 +50,13 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 	$q->execute([':notes'=>'Hello, how can we assist you?']);
 	if($q->rowCount()==0){
 		if($who=='page'){
-			if($config['spamfilter']{0}==1&&$spam==FALSE&&$ip!='admin'){
+			if($config['spamfilter'][0]==1&&$spam==FALSE&&$ip!='admin'){
 				$filter=new SpamFilter();
 				$result=$filter->check_text($name.' '.$message);
 				if($result){
 					$blacklisted=$theme['settings']['blacklist'];
 					$spam=TRUE;
-					if($config['spamfilter']{1}==1){
+					if($config['spamfilter'][1]==1){
 						$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
 						$sc->execute([':ip'=>$ip]);
 						if($sc->rowCount()<1){
@@ -90,7 +91,7 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 	}
 }
 if($message == "|*|*|*|*|*|"){
-	if($config['php_options']{3}==1&&$config['php_APIkey']!=''&&$ip!='admin'){
+	if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='admin'){
 		$h=new ProjectHoneyPot($ip,$config['php_APIkey']);
 		if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
 			$blacklisted=$theme['settings']['blacklist'];
@@ -109,7 +110,7 @@ if($message == "|*|*|*|*|*|"){
 			echo$blacklisted;
 		}
 	}
-	if($config['spamfilter']{0}==1&&$spam==FALSE&&$ip!='admin'){
+	if($config['spamfilter'][0]==1&&$spam==FALSE&&$ip!='admin'){
 		$filter=new SpamFilter();
 		$result=$filter->check_email($email);
 		if($result){

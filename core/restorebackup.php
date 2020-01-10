@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.10 Fix Toastr Notifications.
  */
 echo"<script>window.top.window.$('#backup_info').html('');";
 $getcfg=true;
@@ -23,9 +24,9 @@ if(isset($_FILES['fu'])){
     $q=$db->exec($sql);
     $e=$db->errorInfo();
     if(is_null($e[2])){?>
-  window.top.window.toastr["success"]('Resture from Backup Successfull!');
+  window.top.window.toastr["success"]("Resture from Backup Successfull!");
 <?php }else{?>
-  window.top.window.toastr["danger"]('There was an issue Restoring the Backup!<br><?php echo$e[2];?>');
+  window.top.window.toastr["error"]("There was an issue Restoring the Backup!<br><?php echo$e[2];?>");
 <?php }
   }
 }

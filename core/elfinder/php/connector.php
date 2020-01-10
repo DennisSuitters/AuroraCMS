@@ -18,7 +18,7 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].DS);
 function access($attr,$path,$data,$volume){
   return strpos(basename($path),'.')===0?!($attr=='read'||$attr=='write'):null;
 }
-$mediaEnable=$config['options']{2}==1?true:false;
+$mediaEnable=$config['options'][2]==1?true:false;
 if($config['mediaMaxWidth']==0)$mediaEnable==false;
 if($config['mediaMaxHeight']==0)$mediaEnable==false;
 $opts=[

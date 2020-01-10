@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 $getcfg=true;
 require'db.php';
@@ -76,7 +77,7 @@ if($config['message_check_interval']!=0){
       foreach($imap->emails() as $email){
         $folder='INBOX';
         $status='unread';
-        if($config['spamfilter']{0}==1){
+        if($config['spamfilter'][0]==1){
           $filter=new SpamFilter();
           $result=$filter->check_email($email->fromEmail());
           if($result){
@@ -112,7 +113,7 @@ if($config['message_check_interval']!=0){
           ':size'=>$email->size(),
           ':ti'=>time()
         ]);
-        if($user['options']{9}==1){
+        if($user['options'][9]==1){
           $imap->deleteEmail($email->id());
         }
       }

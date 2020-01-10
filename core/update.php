@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Change to Unpublished when Content is moved to future date in Scheduler.
  * @changes    v0.0.3 Add check for Administration Activity Tracking.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  */
 echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -282,7 +283,7 @@ if(is_null($e[2])){
 <?php }
 	}
 echo'</script>';
-if($config['options']{12}==1){
+if($config['options'][12]==1){
 	$s=$db->prepare("INSERT INTO `".$prefix."logs` (uid,rid,username,name,view,contentType,refTable,refColumn,oldda,newda,action,ti) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
 	$s->execute([
 	  ':uid'=>$log['uid'],

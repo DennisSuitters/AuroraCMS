@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 if($view=='add'){
   $ti=time();
@@ -33,7 +34,7 @@ else{?>
     <li class="breadcrumb-item active">Bookings</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <?php echo$user['options']{2}==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/bookings" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+        <?php echo$user['options'][2]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/bookings" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
         <a href="#" class="btn btn-ghost-normal info<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" onclick="toggleCalendar();return false;" data-tooltip="tooltip" data-placement="left" data-title="Switch to Table View" role="button" aria-label="Switch to Table View"><?php svg('table');?></a>
         <a href="#" class="btn btn-ghost-normal info<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>" onclick="toggleCalendar();return false;" data-tooltip="tooltip" data-placement="left" data-title="Switch to Calendar View" role="button" aria-label="Switch to Calendar View"><?php svg('calendar');?></a>
       </div>
@@ -64,7 +65,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <td id="controls_<?php echo$r['id'];?>">
                   <div class="btn-group float-right">
                     <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
-<?php if($user['options']{0}==1){?>
+<?php if($user['options'][0]==1){?>
                     <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
                     <button class="btn btn-secondary trash<?php echo($r['status']=='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                     <button class="btn btn-secondary trash<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
@@ -91,7 +92,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
     },
     eventLimit:true,
     selectable:true,
-<?php if($user['options']{2}==1){?>editable:true,<?php }?>
+<?php if($user['options'][2]==1){?>editable:true,<?php }?>
     height:$(window).height()*0.83,
     events:[
 <?php $s=$db->query("SELECT * FROM `".$prefix."content` WHERE contentType='booking'");
@@ -113,7 +114,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
     ],
     eventMouseover:function(event,domEvent,view){
       var layer='<div id="events-layer" class="btn-group float-right">';
-<?php if($user['options']{2}==1){?>
+<?php if($user['options'][2]==1){?>
       if(event.status=="unconfirmed")layer+='<button id="cbut'+event.id+'" class="btn btn-secondary btn-sm add" data-tooltip="tooltip" data-title="Confirm" aria-label="Approve"><?php svg('approve');?></button> ';
       layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></button>';
       layer+='<button id="delbut'+event.id+'" class="btn btn-secondary btn-sm trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>';
@@ -130,7 +131,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
         if(event.status=='confirmed')eventEndClass='eventEndConfirmed';
         $('[data-date="'+moment(event.eventend).format('YYYY-MM-DD')+'"]').addClass(eventEndClass);
       }
-<?php if($user['options']{0}==1||$user['options']{2}==1){?>
+<?php if($user['options'][0]==1||$user['options'][2]==1){?>
       $("#cbut"+event.id).click(function(){
         $("#cbut"+event.id).remove();
         $("#events-layer").remove();

@@ -30,21 +30,21 @@
 					</div>
 				</div>
 			</div>
-			<div id="contact" class="col-12 col-sm-6">
+			<div class="col-12 col-sm-6">
 				<div class="card">
-					<div class="card-body">
-						<form id="contactform" method="post" action="core/add_contactus.php">
+					<div id="contact" class="card-body">
+						<form id="contactform" class="auroraForm" data-formtype="contact" method="post" action="core/add_contactus.php">
 							<input type="hidden" name="emailtrap" value="none">
 							<input type="hidden" name="act" value="add_message">
 							<div class="alert alert-danger" role="alert">Highlighted Fields are Required</div>
 							<div class="form-group">
-								<label for="subject">Subject</label>
+								<label for="contactsubject">Subject</label>
 								<div class="input-group">
 									<subjectText>
-										<input type="text" id="subject" class="form-control is-invalid" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true">
+										<input type="text" id="contactsubject" class="form-control is-invalid" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true">
 									</subjectText>
 									<subjectSelect>
-										<select id="subject" class="form-control is-invalid" name="subject" required>
+										<select id="contactsubject" class="form-control is-invalid" name="subject" required>
 											<option value="">Please Select a Subject for Contacting Us</option>
 											<subjectOptions>
 										</select>
@@ -52,39 +52,29 @@
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="email">Email</label>
+								<label for="contactemail">Email</label>
 								<div class="input-group">
-									<input type="email" id="email" class="form-control is-invalid" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+									<input type="email" id="contactemail" class="form-control is-invalid" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name">Name</label>
+								<label for="contactname">Name</label>
 								<div class="input-group">
-									<input type="text" id="name" class="form-control" name="name" value="" placeholder="Enter Your Name...">
+									<input type="text" id="contactname" class="form-control" name="name" value="" placeholder="Enter Your Name...">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="notes">Message</label>
+								<label for="contacttxt">Message</label>
 								<div class="input-group">
-									<textarea id="notes" class="form-control is-invalid" name="notes" placeholder="Enter a Message..." required></textarea>
+									<textarea id="contacttxt" class="form-control is-invalid" name="notes" placeholder="Enter a Message..." required></textarea>
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="input-group">
-									<button type="submit" class="btn btn-outline-secondary btn-lg btn-block">Send</button>
+									<button id="contact-btn" class="btn btn-outline-secondary btn-lg btn-block" type="submit">Send</button>
 								</div>
 							</div>
 						</form>
-						<script>
-							document.addEventListener("DOMContentLoaded",function(){
-								$("#contactform").submit(function(){
-									$.post($(this).attr("action"),$(this).serialize(),function(data){
-										$("#contact").html(data);
-									});
-									return false;
-								});
-							});
-						</script>
 					</div>
 				</div>
 			</div>

@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 if($args[0]=='add'){
   $type=filter_input(INPUT_GET,'type',FILTER_SANITIZE_STRING);
@@ -45,7 +46,7 @@ else{
     $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE rank=:rank ORDER BY ti DESC");
     $s->execute([':rank'=>$rank]);
   }else{
-    if($user['options']{5}==1){
+    if($user['options'][5]==1){
       $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE rank<:rank ORDER BY ti DESC");
       $s->execute([':rank'=>$_SESSION['rank']+1]);
     }else{
@@ -58,7 +59,7 @@ else{
     <li class="breadcrumb-item active">Accounts</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <?php echo$user['options']{0}==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/accounts/add" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+        <?php echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/accounts/add" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
       </div>
     </li>
   </ol>
@@ -93,17 +94,17 @@ else{
                   <div class="small d-block d-sm-none">
                     Last Login: <?php echo _ago($r['lti']);?><br>
                     Rank: <?php echo ucfirst(rank($r['rank']));?><br>
-                    Status: <?php echo$r['active']{0}==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?>
+                    Status: <?php echo$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?>
                   </div>
                   <?php echo$user['rank']==1000?'<div class="small">IP: '.$r['userIP'].'<br>'.$r['userAgent'].'</div>':'';?>
                 </td>
                 <td class="text-center align-middle d-none d-sm-table-cell"<?php echo$r['lti']!=0&&$user['rank']==1000?' data-tooltip="tooltip" title="'.date($config['dateFormat'],$r['lti']).'""':'';?>><?php echo _ago($r['lti']);?></td>
                 <td class="text-center align-middle d-none d-sm-table-cell"><?php echo ucfirst(rank($r['rank']));?></td>
-                <td class="text-center align-middle d-none d-sm-table-cell"><?php echo$r['active']{0}==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
+                <td class="text-center align-middle d-none d-sm-table-cell"><?php echo$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
                 <td id="controls_<?php echo$r['id'];?>" class="align-top align-sm-middle">
                   <div class="btn-group pull-right">
                     <a class="btn btn-secondary" href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
-<?php if($user['options']{0}==1){?>
+<?php if($user['options'][0]==1){?>
                     <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
                     <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                     <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','login')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>

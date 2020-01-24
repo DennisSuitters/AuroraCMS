@@ -1,30 +1,24 @@
 <?php
-define('DS', DIRECTORY_SEPARATOR);
-include_once dirname(__FILE__) . DS . 'autoload.php';
-include_once dirname(__FILE__) . DS . 'elFinderConnector.class.php';
-include_once dirname(__FILE__) . DS . 'elFinder.class.php';
-include_once dirname(__FILE__) . DS . 'elFinderVolumeDriver.class.php';
-include_once dirname(__FILE__) . DS . 'elFinderVolumeLocalFileSystem.class.php';
-$settings = parse_ini_file('..' . DS . '..' . DS . '..' . DS . 'core' . DS . 'config.ini',TRUE);
-$prefix = $settings['database']['prefix'];
-$dns = ((!empty($settings['database']['driver'])) ? ($settings['database']['driver']) : '') .
-((!empty($settings['database']['host'])) ? (':host=' . $settings['database']['host']) : '') .
-((!empty($settings['database']['port'])) ? (';port=' . $settings['database']['port']) : '') .
-((!empty($settings['database']['schema'])) ? (';dbname=' . $settings['database']['schema']) : '');
-$db = new PDO($dns, $settings['database']['username'], $settings['database']['password']);
-$config = $db -> query("SELECT * FROM `".$prefix."config` WHERE id=1") -> fetch(PDO::FETCH_ASSOC);
-if ((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || $_SERVER['SERVER_PORT']==443)
-  define('PROTOCOL', 'https://');
-else
-  define('PROTOCOL', 'http://');
-define('URL', PROTOCOL . $_SERVER['HTTP_HOST'] . $settings['system']['url'] . '/');
-function access($attr, $path, $data, $volume) {
-  return strpos(basename($path),'.') === 0 ? !($attr == 'read' || $attr == 'write') : null;
+define('DS',DIRECTORY_SEPARATOR);
+include_once dirname(__FILE__).DS.'autoload.php';
+include_once dirname(__FILE__).DS.'elFinderConnector.class.php';
+include_once dirname(__FILE__).DS.'elFinder.class.php';
+include_once dirname(__FILE__).DS.'elFinderVolumeDriver.class.php';
+include_once dirname(__FILE__).DS.'elFinderVolumeLocalFileSystem.class.php';
+$settings=parse_ini_file('..'.DS.'..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
+$prefix=$settings['database']['prefix'];
+$dns=((!empty($settings['database']['driver']))?($settings['database']['driver']):'').((!empty($settings['database']['host']))?(':host='.$settings['database']['host']):'').((!empty($settings['database']['port']))?(';port='.$settings['database']['port']):'').((!empty($settings['database']['schema']))?(';dbname='.$settings['database']['schema']):'');
+$db=new PDO($dns, $settings['database']['username'],$settings['database']['password']);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+if ((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443)define('PROTOCOL', 'https://');else define('PROTOCOL','http://');
+define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+function access($attr,$path,$data,$volume){
+  return strpos(basename($path),'.')===0? !($attr=='read'||$attr=='write'):null;
 }
-$mediaEnable = ($config['options']{2} == 0) ? false : true;
-if($config['mediaMaxWidth'] == 0 && $mediaEnable == true) $mediaEnable == false;
-if($config['mediaMaxHeight'] == 0 && $mediaEnable == true) $mediaEnable == false;
-$opts = array(
+$mediaEnable=($config['options'][2]==0)?false:true;
+if($config['mediaMaxWidth']==0 && $mediaEnable==true)$mediaEnable==false;
+if($config['mediaMaxHeight']==0 && $mediaEnable==true)$mediaEnable==false;
+$opts=array(
   'bind' => array(
     'upload.presave' => array(
       'Plugin.AutoResize.onUpLoadPreSave'
@@ -95,5 +89,5 @@ $opts = array(
     )
   )
 );
-$connector = new elFinderConnector(new elFinder($opts));
-$connector -> run();
+$connector=new elFinderConnector(new elFinder($opts));
+$connector->run();

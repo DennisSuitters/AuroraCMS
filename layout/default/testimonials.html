@@ -37,55 +37,45 @@
 			    </div>
 				</items>
 			</div>
-			<div id="testimonial" class="col-12 col-sm-6">
+			<div class="col-12 col-sm-6">
 				<div class="card">
-					<div class="card-body">
-						<form id="testimonialform" method="post" action="core/add_testimonial.php">
+					<div id="testimonial" class="card-body">
+						<form id="testimonialform" class="auroraForm" data-formtype="testimonial" method="post" action="core/add_testimonial.php">
 							<input type="hidden" name="act" value="add_test">
 							<input type="hidden" name="emailtrap" value="none">
 							<h1 class="h4">We would love to have you share your experience with us.</h1>
 							<div class="alert alert-info" role="alert">Entering your email is only for our records, we don't use it for displaying your Testimonial.</div>
 							<div class="alert alert-danger" role="alert">Red Highlighted fields are required.</div>
 							<div class="form-group">
-								<label for="review">Enter how your Experience was with us</label>
+								<label for="testimonialtxt">Enter how your Experience was with us</label>
 								<div class="input-group">
-									<textarea id="review" class="form-control is-invalid" name="review" required></textarea>
+									<textarea id="testimonialtxt" class="form-control is-invalid" name="review" required></textarea>
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="email">Please Enter your Email</label>
+								<label for="testimonialemail">Please Enter your Email</label>
 								<div class="input-group">
-									<input type="email" id="email" class="form-control is-invalid" name="email" required aria-required="true">
+									<input type="email" id="testimonialemail" class="form-control is-invalid" name="email" required aria-required="true">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="name">Please Enter your Name</label>
-								<div class="input-group">
-									<input type="text" id="name" class="form-control is-invalid" name="name" required aria-required="true">
+								<label for="testimonialname">Please Enter your Name</label>
+								<div class="input-group"
+									<input type="text" id="testimonialname" class="form-control is-invalid" name="name" required aria-required="true">
 								</div>
 							</div>
 							<div class="form-group">
-								<label for="business">Please Enter Your Business</label>
+								<label for="testimonialbusiness">Please Enter Your Business</label>
 								<div class="input-group">
-									<input type="text" id="business" class="form-control" name="business">
+									<input type="text" id="testimonialbusiness" class="form-control" name="business">
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="input-group">
-									<button type="submit" class="btn btn-outline-secondary btn-block">Submit your Testimonial</button>
+									<button id="testimonial-btn" class="btn btn-outline-secondary btn-block" type="submit">Submit your Testimonial</button>
 								</div>
 							</div>
 						</form>
-						<script>
-							document.addEventListener("DOMContentLoaded",function(){
-								$("#testimonialform").submit(function(){
-									$.post($(this).attr("action"),$(this).serialize(),function(data){
-										$("#testimonial").html(data);
-									});
-									return false;
-								});
-							});
-						</script>
 					</div>
 				</div>
 			</div>

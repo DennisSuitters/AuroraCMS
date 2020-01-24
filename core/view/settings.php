@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.11 Fix unlogged in users accessing Settings page.
  */
 $rank=0;
 $show='';
@@ -23,7 +24,7 @@ if(isset($_SESSION['uid'])&&$_SESSION['uid']>0){
 	$s->execute([':id'=>$_SESSION['uid']]);
 	$user=$s->fetch(PDO::FETCH_ASSOC);
 }
-if(isset($user)&&$user['rank']>0){
+if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$user['rank']>0)){
 	if(isset($act)&&$act=='updatePassword'){
 		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']==''){
 			$password=filter_input(INPUT_POST,'newPass',FILTER_SANITIZE_STRING);

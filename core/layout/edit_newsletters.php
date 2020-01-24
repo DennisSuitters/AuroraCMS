@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -49,7 +50,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         <div class="form-group row">
           <label for="published" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Status</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <select id="status" class="form-control" onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());"<?php echo$user['options']{1}==0?' readonly':'';?>>
+            <select id="status" class="form-control" onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());"<?php echo$user['options'][1]==0?' readonly':'';?>>
               <option value="unpublished"<?php echo$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
               <option value="published"<?php echo$r['status']=='published'?' selected':'';?>>Published</option>
               <option value="delete"<?php echo$r['status']=='delete'?' selected':'';?>>Delete</option>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Improve Statistic Panels
@@ -16,8 +16,9 @@
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.10 Add Markdown Parsing for prettier, easier to read CHANGELOG.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
-if($args[0]=='settings')
+if(isset($args[0])&&$args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_dashboard.php';
 else{
   include'core'.DS.'class.parsedown.php';?>
@@ -26,8 +27,8 @@ else{
     <li class="breadcrumb-item active">Dashboard</li>
   </ol>
   <div class="container-fluid">
-<?php echo$config['maintenance']{0}==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
-  echo$config['comingsoon']{0}==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
+<?php echo$config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
+  echo$config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
   if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini'))
     echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
   $tid=$ti-2592000;
@@ -49,7 +50,7 @@ else{
   $sf=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Facebook' OR urlDest LIKE '%fbclid=%'")->fetch(PDO::FETCH_ASSOC);
   $sg=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Google'")->fetch(PDO::FETCH_ASSOC);
   $sy=$db->query("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."tracker` WHERE browser='Yahoo'")->fetch(PDO::FETCH_ASSOC);
-  if($user['options']{3}==1){
+  if($user['options'][3]==1){
     if($nm['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/messages';?>">
         <span class="card">
@@ -111,7 +112,7 @@ else{
         </span>
       </a>
 <?php }
-  if($user['options']{4}==1){
+  if($user['options'][4]==1){
     if($po['cnt']>0){?>
       <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2" href="<?php echo URL.$settings['system']['admin'].'/orders';?>">
         <span class="card">
@@ -340,7 +341,7 @@ else{
     }
     array_multisort($sc,$d,$a);
   }
-  array_sort_by_column($row, 'views');
+  array_sort_by_column($row,'views');
   $i=1;
   foreach($row as $r){?>
                 <tr>

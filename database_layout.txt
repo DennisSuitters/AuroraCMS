@@ -314,14 +314,14 @@ login
     7   Preferences Viewing or Editing
     8   System Utilization Viewing
     9   Delete Messages When Retrieved
-    10
-    11
-    12
-    13
-    14
-    15
-    16
-    17
+    10  elFinder Create Folders
+    11  elFinder Read Files
+    12  elFinder Write Files
+    13  elFinder Extract Archives
+    14  elFinder Create Archives
+    15  elFinder Upload Files other than Images
+    16  elFinder Administrator Hide Folders
+    17  elFinder Allow Administrator to Administer Folders for Accounts
     18
     19
     20

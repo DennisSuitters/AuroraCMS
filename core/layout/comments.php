@@ -7,11 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.11 Add check for Nonexistent user emails.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -51,7 +53,7 @@
   $ru=$su->fetch(PDO::FETCH_ASSOC);
   echo$ru['username'].($ru['name']!=''?':'.$ru['name']:'').'<br><small><small>'.rank($ru['rank']).'</small></small>';
 }else{
-  echo'<a href="mailto:'.$ru['email'].'">'.$ru['email'].'</a>';
+  echo isset($ru['email'])&&$ru['email']!=''?'<a href="mailto:'.$ru['email'].'">'.$ru['email'].'</a>':'Nonexistent User';
 }?>
                       </td>
                       <td class="small"><?php echo strip_tags($r['notes']);?></td>
@@ -68,7 +70,7 @@
                       <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-top">
                         <div id="controls-<?php echo$r['id'];?>" class="btn-group float-right">
-<?php if($user['options']{0}==1){
+<?php if($user['options'][0]==1){
   $scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
   $scc->execute([':ip'=>$r['ip']]);
   if($scc->rowCount()<1){?>

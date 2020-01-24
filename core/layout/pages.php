@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 $rank=0;
 $show='pages';
@@ -37,14 +38,14 @@ else{
     <li class="breadcrumb-item active">Pages</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-        <?php echo$user['options']{0}==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/pages/add" data-tooltip="tooltip" data-placement="left" data-title="Add" aria-label="Add">'.svg2('add').'</a>':'';?>
+        <?php echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/pages/add" data-tooltip="tooltip" data-placement="left" data-title="Add" aria-label="Add">'.svg2('add').'</a>':'';?>
       </div>
     </li>
   </ol>
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
-        <?php echo$user['options']{1}==1?'<div class="help-block text-muted text-small">Pages can be dragged to change their order.</div>':'';?>
+        <?php echo$user['options'][1]==1?'<div class="help-block text-muted text-small">Pages can be dragged to change their order.</div>':'';?>
         <table class="table table-responsive-sm table-sm table-hover">
           <thead>
             <tr>
@@ -52,7 +53,7 @@ else{
                 Title<small class="float-right">Submenu Title</small>
               </th>
               <th class="col-1 text-center">Menu</th>
-              <th class="col text-center"><span class="d-inline">Views&nbsp;</span><?php echo$user['options']{1}==1?'<button class="btn btn-secondary btn-xs trash d-inline" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`pageviews`);" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
+              <th class="col text-center"><span class="d-inline">Views&nbsp;</span><?php echo$user['options'][1]==1?'<button class="btn btn-secondary btn-xs trash d-inline" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`pageviews`);" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
               <th class="col-1 text-center">Active</th>
               <th class="col-2"></th>
             </tr>
@@ -64,7 +65,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr id="l_<?php echo$r['id'];?>" class="item subsortable">
               <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"><?php echo$r['title'];?></a>
-<?php           if($user['options']{1}==1){
+<?php           if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."suggestions` WHERE rid=:id");
                   $ss->execute([':id'=>$r['id']]);
                   $rs=$ss->fetch(PDO::FETCH_ASSOC);
@@ -76,12 +77,12 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <small id="s_<?php echo$rm['id'];?>" class="sub help-block zebra float-right">
                   <a href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'];?>"><?php echo$rm['title'];?></a>
                   <span id="controls_<?php echo$rm['id'];?>" class="text-right" role="group">
-                    <?php echo$user['options']{0}==1?'<button class="btn btn-secondary dark btn-sm trash" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').' <span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
-                    <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'];?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
-                    <?php echo$user['options']{0}==1&&$rm['contentType']=='page'?'<button class="btn btn-secondary btn-sm trash" onclick="purge(\''.$rm['id'].'\',\'menu\')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                    <?php echo$user['options'][0]==1?'<button class="btn btn-secondary dark btn-sm trash" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').' <span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
+                    <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'];?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                    <?php echo$user['options'][0]==1&&$rm['contentType']=='page'?'<button class="btn btn-secondary btn-sm trash" onclick="purge(\''.$rm['id'].'\',\'menu\')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
                   </span>
                 </small>
-<?php if($user['options']{1}==1){?>
+<?php if($user['options'][1]==1){?>
                 <script>
                   $('#l_<?php echo$r['id'];?>').sortable({
                     items:"small",
@@ -110,15 +111,15 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               </td>
               <td class="align-middle text-center"><?php echo ucfirst($r['menu']);?></td>
               <td class="align-middle text-center">
-                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+                <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
               </td>
               <td class="align-middle text-center">
-                <?php echo$r['contentType']!='index'?'<label class="switch switch-label switch-success"><input type="checkbox" id="active'.$r['id'].'" class="switch-input" data-dbid="'.$r['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0"'.($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{1}==1?'':' disabled').'><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>':'';?>
+                <?php echo$r['contentType']!='index'?'<label class="switch switch-label switch-success"><input type="checkbox" id="active'.$r['id'].'" class="switch-input" data-dbid="'.$r['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0"'.($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled').'><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>':'';?>
               </td>
               <td id="controls_<?php echo$r['id'];?>" class="align-middle">
                 <div class="btn-group float-left">
-                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
-                  <?php echo$user['options']{0}==1&&$r['contentType']=='page'?'<button class="btn btn-secondary btn-sm trash" onclick="purge(\''.$r['id'].'\',\'menu\')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                  <?php echo$user['options'][0]==1&&$r['contentType']=='page'?'<button class="btn btn-secondary btn-sm trash" onclick="purge(\''.$r['id'].'\',\'menu\')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
                 </div>
               </td>
             </tr>
@@ -129,7 +130,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr id="l_23">
               <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/pages/edit/23';?>">Coming Soon</a>
-<?php           if($user['options']{1}==1){
+<?php           if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."suggestions` WHERE rid=23");
                   $ss->execute();
                   $rs=$ss->fetch(PDO::FETCH_ASSOC);
@@ -138,19 +139,19 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               </td>
               <td></td>
               <td class="align-middle text-center">
-                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views23`).text(`0`);updateButtons(`23`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views23" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+                <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views23`).text(`0`);updateButtons(`23`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views23" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
               </td>
               <td></td>
               <td id="controls_" class="align-middle">
                 <div class="btn-group float-left">
-                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/23';?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/23';?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                 </div>
               </td>
             </tr>
             <tr id="l_24">
               <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/pages/edit/24';?>">Maintenance</a>
-<?php           if($user['options']{1}==1){
+<?php           if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."suggestions` WHERE rid=24");
                   $ss->execute();
                   $rs=$ss->fetch(PDO::FETCH_ASSOC);
@@ -159,12 +160,12 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               </td>
               <td></td>
               <td class="align-middle text-center">
-                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views24`).text(`0`);updateButtons(`24`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views24" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+                <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views24`).text(`0`);updateButtons(`24`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views24" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
               </td>
               <td></td>
               <td id="controls_" class="align-middle">
                 <div class="btn-group float-left">
-                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/24';?>"<?php echo$user['options']{1}==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/24';?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                 </div>
               </td>
             </tr>
@@ -173,7 +174,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
       </div>
     </div>
   </div>
-<?php if($user['options']{1}==1){?>
+<?php if($user['options'][1]==1){?>
   <script>
     $('#sortable').sortable({
       items:"tr.item",

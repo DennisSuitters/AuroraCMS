@@ -82,7 +82,7 @@
 					<related itemCount="4">
 						<div class="card mb-5">
 							<div class="card-header border-0 font-weight-bold">Related content</div>
-							<div class="card-body">
+							<div class="card-body overflow-hidden">
 								<div class="row">
 									<relitems>
 										<div class="col-6 col-sm-3 mb-3 mb-sm-5 d-flex align-items-stretch">
@@ -91,6 +91,7 @@
 												<span class="card-body text-center p-1" data-contenttype="<print related=contentType>">
 													<span class="card-title"><print related="title"></span>
 												</span>
+												<div class="corner-ribbon top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
 												<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow"><print related="contentType"></div>
 											</a>
 										</div>
@@ -124,7 +125,7 @@
 				<div class="row">
 					<items>
 						<div class="col-12 col-sm-6 m-0">
-							<article class="card mb-3 mb-sm-5">
+							<article class="card overflow-hidden mb-3 mb-sm-5">
 								<a href="<print content=linktitle>"><img class="card-img-top small" src="<print content=thumb>" alt="<print content=title>"></a>
 		        		<div class="card-body text-center" data-contenttype="<print content=contentType>">
 									<div class="card-subtitle mb-2 small text-muted text-center">By <a href="<print profileLink>"><print content="author"></a> on <print content="datePublished"></div>
@@ -135,6 +136,7 @@
 									</controls>
 									<div class="card-text text-truncate"><print content="notes"></div>
 									<a class="btn btn-outline-secondary mt-2" href="<print content=linktitle>">View</a>
+									<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
 								</div>
 			  			</article>
 						</div>

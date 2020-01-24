@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.11 Fix wrong reference to Output Templates.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -74,14 +75,14 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
         ':password'=>$hash,
         ':id'=>$c['id']
       ]);
-      include'..'.DS.'class.phpmailer.php';
+      require'..'.DS.'class.phpmailer.php';
     	$mail=new PHPMailer;
     	$mail->isSendmail();
     	$toname=$c['name'];
     	$mail->SetFrom($config['email'],$config['business']);
     	$mail->AddAddress($c['email']);
     	$mail->IsHTML(true);
-      $subject=isset($config['passwordResetSubject'])&&$config['passwordResetSubject']!=''?$config['passwordResetLayout']:'Password Reset from {business}';
+      $subject=isset($config['passwordResetSubject'])&&$config['passwordResetSubject']!=''?$config['passwordResetSubject']:'Password Reset for '.($c['name']!=''?$c['name']:$c['username']).' from {business}';
       $subject=str_replace([
         '{business}',
         '{date}'
@@ -90,7 +91,7 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
         date($config['dateFormat'],time())
       ],$subject);
     	$mail->Subject=$subject;
-    	$msg=isset($config['passwordResetLayout'])&&$config['passwordResetLayout']!=''?$config['passwordResetLayout']:'<p>Hi {name},</p><p>A Password Reset was requested, it is now: {password}</p><p>We recommend changing the above password after logging in.</p>';
+    	$msg=isset($config['passwordResetLayout'])&&$config['passwordResetLayout']!=''?rawurldecode($config['passwordResetLayout']):'<p>Hi {name},</p><p>A Password Reset was requested, it is now: {password}</p><p>We recommend changing the above password after logging in.</p>';
       $namee=explode(' ',$c['name']);
       $msg=str_replace([
         '{business}',
@@ -114,7 +115,7 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
       else
         $notification=$theme['settings']['passwordreset_erroremail'];
     }else
-      $notification=$theme['settings']['passwordrest_erroraccount'];
+      $notification=$theme['settings']['passwordreset_erroraccount'];
   }
 }else
   $notification=$theme['settings']['passwordreset_errorinvalidemail'];

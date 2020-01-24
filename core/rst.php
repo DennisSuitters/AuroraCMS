@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.11 Fix formatting of password reset email layouts.
  */
 $getcfg=true;
 require'db.php';
-if(isset($_POST['emailtrap'])&&$_POST['emailtrap']==''){
+if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
   $eml=filter_input(INPUT_POST,'rst',FILTER_SANITIZE_STRING);
   $s=$db->prepare("SELECT id,name,email FROM `".$prefix."login` WHERE email=:email LIMIT 1");
   $s->execute([':email'=>$eml]);
@@ -27,20 +28,40 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']==''){
       ':password'=>$hash,
       ':id'=>$c['id']
     ]);
-    include'class.phpmailer.php';
+    require'class.phpmailer.php';
   	$mail=new PHPMailer;
   	$mail->isSendmail();
   	$toname=$c['name'];
   	$mail->SetFrom($config['email'],$config['business']);
   	$mail->AddAddress($c['email']);
   	$mail->IsHTML(true);
-  	$mail->Subject='Password Reset from '.$config['business'];
-  	$msg=rawurldecode($config['PasswordResetLayout']);
-  	$msg=str_replace('{name}',$c['name'],$msg);
-  	$name=explode(' ',$c['name']);
-  	$msg=str_replace('{password}',$password,$msg);
-  	$mail->Body=$msg;
-  	$mail->AltBody=$msg;
+    $subject=str_replace([
+      '{business}',
+      '{date}'
+    ],[
+      $config['business'],
+      date($config['dateFormat'],time())
+    ],$config['passwordResetSubject']);
+  	$mail->Subject=($subject!=''?$subject:'Password Reset from '.$config['business']);
+    $name=explode(' ',$c['name']);
+    $layout=rawurldecode($config['passwordResetLayout']);
+    $msg=str_replace([
+      '{business}',
+      '{name}',
+      '{first}',
+      '{last}',
+      '{date}',
+      '{password}'
+    ],[
+      $config['business'],
+      $c['name'],
+      $name[0],
+      end($name),
+      date($config['dateFormat'],time()),
+      $password
+    ],$layout);
+  	$mail->Body=($msg=''?$msg:'Hello '.($c['name']!=''?$name[0]:$c['username']).',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
+  	$mail->AltBody=($msg=''?$msg:'Hello '.$name[0].',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
   	if($mail->Send())
       echo'<div class="alert alert-success text-center">Check your Email!</div>';
     else

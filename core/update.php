@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Change to Unpublished when Content is moved to future date in Scheduler.
  * @changes    v0.0.3 Add check for Administration Activity Tracking.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.11 Add Password remove Page Block, and reset Password Update button colour.
  */
 echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -282,6 +283,10 @@ if(is_null($e[2])){
 	window.top.window.$('#l_<?php echo$id;?>').removeClass('danger');
 <?php }
 	}
+	if($col=='password'){?>
+	window.top.window.$('#passButton').removeClass('btn-danger');
+	window.top.window.$('.page-block').removeClass('d-block');
+<?php }
 echo'</script>';
 if($config['options'][12]==1){
 	$s=$db->prepare("INSERT INTO `".$prefix."logs` (uid,rid,username,name,view,contentType,refTable,refColumn,oldda,newda,action,ti) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");

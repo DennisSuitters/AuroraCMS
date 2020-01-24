@@ -2,14 +2,14 @@
 cheet('a s t i n k y o x',function(){var r=Math.floor(Math.random()*(3-1+1))+1;if(r==1){if($(".llama").length<5){$('body').addClass('amc');$('<div class="llama"></div>').appendTo('body').delay(30000).queue(function(){$(this).remove();if($('.llama').length==0&&$('.camel').length==0&&$('.flymo').length==0)$('body').removeClass('amc');});}else r=2;}if(r==2){if($(".camel").length<5){$('body').addClass('amc');$('<div class="camel"></div>').appendTo('body').delay(30000).queue(function(){$(this).remove();if($('.llama').length==0&&$('.camel').length==0&&$('.flymo').length==0)$('body').removeClass('amc');});}else r=3;}if(r==3){if($(".flymo").length<1){$('body').addClass('amc');$('<div class="flymo"><audio id="flymo" src="core/images/flymo.ogg" autoplay loop hidden volume="0.25"></audio></div>').appendTo('body').delay(35000).queue(function(){$(this).remove();if($('.llama').length==0&&$('.camel').length==0&&$('.flymo').length==0)$('body').removeClass('amc');});var audio=document.getElementById("flymo");audio.volume=.1;}}});
 $('[data-tooltip="tooltip"]').tooltip();
 $('#panel-rst').submit(function(){
-  $('#rstbusy').html('<i class="libre libre-spinner-1"></i>');
+  $('#rstbusy').html('<i class="i animated infinite spin"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 4.62,11.2 q 0,0.525 -0.371875,0.8925 Q 3.87625,12.46 3.36,12.46 2.835,12.46 2.4675,12.0925 2.1,11.725 2.1,11.2 2.1,10.675 2.4675,10.3075 2.835,9.94 3.36,9.94 3.87625,9.94 4.248125,10.3075 4.62,10.675 4.62,11.2 z m 3.78,1.68 q 0,0.46375 -0.328125,0.791875 Q 7.74375,14 7.28,14 6.81625,14 6.488125,13.671875 6.16,13.34375 6.16,12.88 6.16,12.41625 6.488125,12.088125 6.81625,11.76 7.28,11.76 q 0.46375,0 0.791875,0.328125 Q 8.4,12.41625 8.4,12.88 z M 3.08,7.28 Q 3.08,7.8575 2.66875,8.26875 2.2575,8.68 1.68,8.68 1.1025,8.68 0.69125,8.26875 0.28,7.8575 0.28,7.28 0.28,6.7025 0.69125,6.29125 1.1025,5.88 1.68,5.88 2.2575,5.88 2.66875,6.29125 3.08,6.7025 3.08,7.28 z m 9.1,3.92 q 0,0.4025 -0.28875,0.69125 Q 11.6025,12.18 11.2,12.18 10.7975,12.18 10.50875,11.89125 10.22,11.6025 10.22,11.2 q 0,-0.4025 0.28875,-0.69125 Q 10.7975,10.22 11.2,10.22 q 0.4025,0 0.69125,0.28875 Q 12.18,10.7975 12.18,11.2 z M 4.9,3.36 Q 4.9,3.99875 4.449375,4.449375 3.99875,4.9 3.36,4.9 2.72125,4.9 2.270625,4.449375 1.82,3.99875 1.82,3.36 1.82,2.72125 2.270625,2.270625 2.72125,1.82 3.36,1.82 3.99875,1.82 4.449375,2.270625 4.9,2.72125 4.9,3.36 z M 8.96,1.68 q 0,0.7 -0.49,1.19 Q 7.98,3.36 7.28,3.36 6.58,3.36 6.09,2.87 5.6,2.38 5.6,1.68 5.6,0.98 6.09,0.49 6.58,0 7.28,0 7.98,0 8.47,0.49 8.96,0.98 8.96,1.68 z m 4.76,5.6 q 0,0.35 -0.245,0.595 Q 13.23,8.12 12.88,8.12 12.53,8.12 12.285,7.875 12.04,7.63 12.04,7.28 12.04,6.93 12.285,6.685 12.53,6.44 12.88,6.44 q 0.35,0 0.595,0.245 Q 13.72,6.93 13.72,7.28 z M 11.9,3.36 q 0,0.28875 -0.205625,0.494375 Q 11.48875,4.06 11.2,4.06 10.91125,4.06 10.705625,3.854375 10.5,3.64875 10.5,3.36 10.5,3.07125 10.705625,2.865625 10.91125,2.66 11.2,2.66 q 0.28875,0 0.494375,0.205625 Q 11.9,3.07125 11.9,3.36 z"/></svg></i>');
   $.ajax({
     data:$(this).serialize(),
     type:$(this).attr('method'),
     url:$(this).attr('action'),
     success:function(response){
       $('#rstfeedback').html(response);
-      $('#rstbusy').html('<i class="libre libre-envelope"></i>');
+      $('#rstbusy').html('<i class="i"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.1785961,9.3930934 0.020751,0.113565 0.4753898,2.5991746 c 0.035466,0.193174 0.1645,0.355033 0.3440917,0.433133 0.1795917,0.07772 0.3867258,0.06112 0.5512258,-0.0449 C 5.2322045,12.06697 6.0969612,11.500275 6.073569,11.467073 L 3.1785961,9.3930934 Z M 1.4849255,5.7031624 c -0.258446,0.09923 -0.4418107,0.331641 -0.4784082,0.605934 -0.0362201,0.274669 0.080364,0.546698 0.3040986,0.709311 l 2.4493895,1.782335 8.7000106,-6.844481 -7.692637,7.578317 3.3484798,2.4365606 c 0.2131709,0.155068 0.4878405,0.201475 0.7410045,0.124507 0.2527866,-0.07697 0.4542613,-0.268633 0.5448118,-0.516137 L 12.9837,1.7755374 c 0.03622,-0.09961 0.01094,-0.210907 -0.06452,-0.285234 -0.07546,-0.07433 -0.186761,-0.09772 -0.285989,-0.05961 L 1.4849255,5.7031624 Z"/></svg></i>');
     }
   });
   return false;
@@ -42,81 +42,6 @@ function update(id,t,c,da){
 		if(t=='login'){
 			if(c=='layoutAccounts'||c=='layoutContent'){
 				$('#listtype').removeClass('list card table').addClass(da);
-			}
-			if(c=='rank'){
-				if(da>-1&&da<400){
-					$.ajax({
-						type:"GET",
-						url:"core/update.php",
-						data:{
-							id:id,
-							t:t,
-							c:'options',
-							da:'000000000000000000000000000000000'
-						}
-					}).done(function(msg){
-						$('#options0,#options1,#options2,#options3,#options4,#options5,#options6,#options7,#options8').attr('checked',false);
-					});
-				}
-				if(da==400||da==500){
-					$.ajax({
-						type:"GET",
-						url:"core/update.php",
-						data:{
-							id:id,
-							t:t,
-							c:'options',
-							da:'110000000000000000000000000000000'
-						}
-					}).done(function(msg){
-						$('#options0,#options1').attr('checked',true);
-						$('#options2,#options3,#options4,#options5,#options6,#options7,#options8').attr('checked',false);
-					});
-				}
-				if(da==600){
-					$.ajax({
-						type:"GET",
-						url:"core/update.php",
-						data:{
-							id:id,
-							t:t,
-							c:'options',
-							da:'110000100000000000000000000000000'
-						}
-					}).done(function(msg){
-						$('#options0,#options1,#options6').attr('checked',true);
-						$('#options2,#options3,#options4,#options5,#options7,#options8').attr('checked',false);
-					});
-				}
-				if(da==700||da==800||da==900){
-					$.ajax({
-						type:"GET",
-						url:"core/update.php",
-						data:{
-							id:id,
-							t:t,
-							c:'options',
-							da:'111111110000000000000000000000000'
-						}
-					}).done(function(msg){
-						$('#options0,#options1,#options2,#options3,#options4,#options5,#options6,#options7').attr('checked',true);
-						$('#options8').attr('checked',false);
-					});
-				}
-				if(da==1000){
-					$.ajax({
-						type:"GET",
-						url:"core/update.php",
-						data:{
-							id:id,
-							t:t,
-							c:'options',
-							da:'111111110000000000000000000000000'
-						}
-					}).done(function(msg){
-						$('#options0,#options1,#options2,#options3,#options4,#options5,#options6,#options7,#options8').attr('checked',true);
-					});
-				}
 			}
 		}
 		if(t=='config'&&c=='language'){

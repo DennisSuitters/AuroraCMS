@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.8 Add Javascript for Offline PWA and Push Notifications.
  * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */?>
 <script>
 var unsaved=false;
@@ -82,7 +83,7 @@ window.onbeforeunload=function(e){
   		$("#seoDescriptioncnt").removeClass('text-danger');
   	}
   });
-<?php if(isset($r['pti'])&&$user['options']{1}==1){?>
+<?php if(isset($r['pti'])&&$user['options'][1]==1){?>
   $('#pti').daterangepicker({
     singleDatePicker:true,
     linkedCalendars:false,
@@ -98,7 +99,7 @@ window.onbeforeunload=function(e){
     $('#ptix').val(start.unix());
   });
 <?php }
-if(isset($r['tis'])&&($user['options']{2}==1||$user['options']{1}==1)){?>
+if(isset($r['tis'])&&($user['options'][2]==1||$user['options'][1]==1)){?>
   $('#tis').daterangepicker({
     singleDatePicker:true,
     linkedCalendars:false,
@@ -114,7 +115,7 @@ if(isset($r['tis'])&&($user['options']{2}==1||$user['options']{1}==1)){?>
     $('#tisx').val(start.unix());
   });
 <?php }
-if(isset($r['tie'])&&($user['options']{2}==1||$user['options']{1}==1)){?>
+if(isset($r['tie'])&&($user['options'][2]==1||$user['options'][1]==1)){?>
   $('#tie').daterangepicker({
     singleDatePicker:true,
     linkedCalendars:false,
@@ -181,7 +182,7 @@ if(isset($r['due_ti'])){?>
   $.widget.bridge('uibutton',$.ui.button);
   $.widget.bridge('uitooltip',$.ui.tooltip);
 <?php }
-  if($config['options']{4}==0){?>
+  if($config['options'][4]==0){?>
   $().tooltip('disable');
 <?php }else{?>
   $('body').tooltip({
@@ -621,7 +622,7 @@ if(isset($r['due_ti'])){?>
         <div class="dot"></div>
       </div>
     </div>
-<?php if($config['development']==1){
+<?php if($config['development']==1&&$user['rank']==1000){
   echo'<div class="developmentbottom">Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
 }?>
   </body>

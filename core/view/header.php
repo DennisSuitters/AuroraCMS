@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.11 Remove unneeded URL forward slash for extra pages in menu.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
@@ -124,7 +125,7 @@ if(stristr($html,'<buildMenu')){
 						'tos'
 					],
 					true)
-				)$menuURL.='/'.str_replace(' ','-',strtolower($r['title'])).'/';
+				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';
 			}
 		}else
 			$menuURL.=URL;
@@ -189,7 +190,7 @@ if(stristr($html,'<buildMenu')){
 								'tos'
 							],
 							true)
-						)$subURL.='/'.str_replace(' ','-',strtolower($rm['title'])).'/';
+						)$subURL.=str_replace(' ','-',strtolower($rm['title'])).'/';
 					}
 				}
 				$item=preg_replace([

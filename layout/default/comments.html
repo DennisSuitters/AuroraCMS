@@ -19,45 +19,35 @@
 			<h2>Join the conversation</h2>
 			<div class="media col-12">
 				<div id="comment" class="media-body">
-					<form id="commentform" method="post" action="core/add_comment.php">
+					<form id="commentform" class="auroraForm" data-formtype="comment" method="post" action="core/add_comment.php">
 						<input type="hidden" name="emailtrap" value="none">
 						<input type="hidden" name="act" value="add_comment">
 						<input type="hidden" name="rid" value="<print content=id>">
 						<input type="hidden" name="ct" value="<print content=contentType>">
 						<div class="form-group">
-							<label for="email">Email</label>
+							<label for="commentemail">Email</label>
 							<div class="input-group">
-								<input type="text" id="email" class="form-control" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+								<input type="text" id="commentemail" class="form-control" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name">Name</label>
+							<label for="commentname">Name</label>
 							<div class="input-group">
-								<input type="text" id="name" class="form-control" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
+								<input type="text" id="commentname" class="form-control" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="notes">Comment</label>
+							<label for="commenttxt">Comment</label>
 							<div class="input-group">
-								<textarea id="notes" class="form-control" name="notes" placeholder="Enter a Comment..." required></textarea>
+								<textarea id="commenttxt" class="form-control" name="notes" placeholder="Enter a Comment..." required></textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="input-group">
-								<button class="btn btn-outline-secondary btn-block" type="submit">Add Comment</button>
+								<button id="comment-btn" class="btn btn-outline-secondary btn-block" type="submit">Add Comment</button>
 							</div>
 						</div>
 					</form>
-					<script>
-						document.addEventListener("DOMContentLoaded",function(){
-							$("#commentform").submit(function(){
-								$.post($(this).attr("action"),$(this).serialize(),function(data){
-									$("#comment").html(data);
-								});
-								return false;
-							});
-						});
-					</script>
 				</div>
 			</div>
 		</comment>

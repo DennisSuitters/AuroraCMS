@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Make Facebook Messenger integration easier.
  * @changes    v0.0.6 Add toggle option to email nominated Users to alert of new chat messages.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -29,7 +30,7 @@
       <div class="card-body">
         <div class="form-group row">
           <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options13" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13"<?php echo$config['options']{13}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options13" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13"<?php echo$config['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
           <label for="options13" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Chat</label>
         </div>
@@ -48,14 +49,14 @@
         </div>
         <div class="form-group row">
           <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options15" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15"<?php echo$config['options']{15}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options15" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15"<?php echo$config['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
           <label for="options15" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Email new LiveChat notifications to nominated accounts.</label>
         </div>
         <hr>
         <div class="form-group row">
           <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options14" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14"<?php echo$config['options']{14}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options14" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14"<?php echo$config['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
           <label for="options14" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Facebook Messenger</label>
         </div>
@@ -89,7 +90,7 @@
         <div class="form-group row">
           <label for="messengerFBColor" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Colour</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <select name="colorpicker" id="messengerFBColor" class="form-control"<?php echo$user['options']{1}==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?php echo$user['options']{1}==1?'':' disabled';?>>
+            <select name="colorpicker" id="messengerFBColor" class="form-control"<?php echo$user['options'][1]==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?php echo$user['options'][1]==1?'':' disabled';?>>
               <option value="#7bd148"<?php echo$config['messengerFBColor']=='#7bd148'?' selected="selected"':'';?>>Green</option>
               <option value="#5484ed"<?php echo$config['messengerFBColor']=='#5484ed'?' selected="selected"':'';?>>Bold blue</option>
               <option value="#a4bdfc"<?php echo$config['messengerFBColor']=='#a4bdfc'?' selected="selected"':'';?>>Blue</option>

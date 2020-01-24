@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.10 Fix Rewards Display Layout.
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.11 Fix Rewards Date/Time Picker value retrieval.
  */
 $getcfg=true;
 require'db.php';
@@ -42,10 +43,8 @@ if($act!=''){
 			$method=filter_input(INPUT_POST,'method',FILTER_SANITIZE_NUMBER_INT);
 			$value=filter_input(INPUT_POST,'value',FILTER_SANITIZE_NUMBER_INT);
 			$quantity=filter_input(INPUT_POST,'quantity',FILTER_SANITIZE_NUMBER_INT);
-			$tis=filter_input(INPUT_POST,'tis',FILTER_SANITIZE_STRING);
-			$tie=filter_input(INPUT_POST,'tie',FILTER_SANITIZE_STRING);
-			$tis=$tis!=''?strtotime($tis):0;
-			$tie=$tie!=''?strtotime($tie):0;
+			$tis=filter_input(INPUT_POST,'tisx',FILTER_SANITIZE_STRING);
+			$tie=filter_input(INPUT_POST,'tiex',FILTER_SANITIZE_STRING);
 			if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
 				$q=$db->prepare("INSERT INTO `".$prefix."rewards` (code,title,method,value,quantity,tis,tie,ti) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
 				$q->execute([

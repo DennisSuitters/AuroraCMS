@@ -1,11 +1,32 @@
+### v0.0.11
+- Adjust administration avatar styling to reflect account type when logged in.
+- Continue to prepare for PHP7.4 compatibility. Remove {} in favour [].
+- Set permissions per account of what is allowed in media manager.
+- Fix elFinder dialog buttons to be more consistent with other dialogs.
+- Fix elFinder multi-menu styling.
+- Fix administration rewards page Date/Time picker.
+- Fix initial number of notifications displayed in title on page load.
+- Fix administration navigation stats.
+- Add Define VERSION constant.
+- Fix formatting of password reset email layouts.
+- Update PHPMailer and fix references and interaction to use new version.
+- Fix unlogged in users accessing Settings page.
+- Add Password remove Page Block, and reset Password Update button colour.
+- Add login.html parsing to display Terms of Service in Modal.
+- Add logged in info alert.
+- Fix all themes form layouts and ajax processing to a single ajax method and feedback.
+- Add check for Nonexistent user emails when display Comments in Administration.
+- Remove unneeded URL forward slash for extra pages in menu.
+- Add parsing for Inventory Item status.
+
 ### v0.0.10
 - Fix Administration Service Worker not displaying Offline Page.
 - Add Markdown Parsing for prettier, easier to read CHANGELOG.
-- Prepare for PHP7.4 Compatibilty. Remove {} in favour [].
-- Add PHP Version to Developer Display and move to top of page.
+- Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+- Add PHP Version to Developer Display and move to the top of the page.
 - Add Developer Information to Administration.
 - Fix Logo Width overriding other header items in Administration.
-- Fix typo's and missing SQL Fields in add_testimonial.php file.
+- Fix typos and missing SQL Fields in add_testimonial.php file.
 - Relabel "Screen against WordPress Attacks" to "Screen Against Attacks".
 - Update Summernote WYSIWYG Editor to v0.8.14
 - Move other platform security checks so they only check when enabled.

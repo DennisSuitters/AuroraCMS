@@ -151,16 +151,22 @@ footer{font-size:1.25em}
 .custom-file-label.outline-light::after{background-color:#fff;color:#f8f9fa;border-color:#f8f9fa}
 .custom-file-label.outline-dark::after{background-color:#fff;color:#343a40;border-color:#343a40}
 /* Corner Styles <div class="corner-ribbon bottom-right sticky green shadow">Hello</div> */
+.corner-ribbon:empty{display:none}
 .corner-ribbon{width:200px;background:#f8f9fa;position:absolute;top:15px;left:-70px;text-align:center;font-size:.5em;line-height:30px;letter-spacing:1px;color:#212529;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
 .corner-ribbon.small{top:5px;left:-30px;line-height:20px}
-.corner-ribbon.top-left{top:15px;left:-70px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
+.corner-ribbon.big{top:20px;left:-50px;line-height:60px;font-size:1em}
+.corner-ribbon.top-left{top:25px;left:-65px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
 .corner-ribbon.small.top-left{top:15px;left:-80px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
-.corner-ribbon.top-right{top:15px;right:-70px;left:auto;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
+.corner-ribbon.big.top-left{top:20px;left:-50px;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
+.corner-ribbon.top-right{top:25px;right:-65px;left:auto;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
 .corner-ribbon.small.top-right{top:15px;right:-80px;left:auto;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
-.corner-ribbon.bottom-left{top:auto;bottom:15px;left:-70px;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
+.corner-ribbon.big.top-right{top:20px;right:-50px;left:auto;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
+.corner-ribbon.bottom-left{top:auto;bottom:25px;left:-65px;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
 .corner-ribbon.small.bottom-left{top:auto;bottom:15px;left:-80px;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
-.corner-ribbon.bottom-right{top:auto;right:-70px;bottom:15px;left:auto;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
+.corner-ribbon.big.bottom-left{top:auto;bottom:20px;left:-50px;transform:rotate(45deg);-webkit-transform:rotate(45deg)}
+.corner-ribbon.bottom-right{top:auto;right:-25px;bottom:65px;left:auto;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
 .corner-ribbon.small.bottom-right{top:auto;right:-80px;bottom:15px;left:auto;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
+.corner-ribbon.big.bottom-right{top:auto;bottom:20px;right:-50px;left:auto;transform:rotate(-45deg);-webkit-transform:rotate(-45deg)}
 .corner-ribbon.black{background:#333;color:#fff}
 .corner-ribbon.danger{background:#dc3545;color:#fff}
 .corner-ribbon.dark{background:#343a40;color:#fff}

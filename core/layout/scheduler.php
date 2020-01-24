@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.3 Add AutoPublish
  * @changes    v0.0.3 Fix Actions
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -49,7 +50,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
     },
     eventLimit:true,
     selectable:true,
-    editable:<?php echo$user['options']{1}==1?'true':'false';?>,
+    editable:<?php echo$user['options'][1]==1?'true':'false';?>,
     height:$(window).height()*0.83,
     events:[
 <?php
@@ -71,7 +72,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
     ],
     eventMouseover:function(event,domEvent,view){
       var layer='<div id="events-layer" class="btn-group float-right">'+
-<?php if($user['options']{1}==1){?>
+<?php if($user['options'][1]==1){?>
         '<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></button>'+
         '<button id="delbut'+event.id+'" class="btn btn-secondary btn-sm trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>'+
 <?php }else{?>

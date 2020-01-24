@@ -14,7 +14,7 @@
 			</main>
 			<aside class="col-12 col-sm-3 mt-3 mt-sm-0" data-aos="zoom-in-up">
 				<div id="newsletters" class="list-group">
-					<form id="newslettersform" class="list-group-item" method="post" action="core/add_subscriber.php">
+					<form id="newslettersform" class="list-group-item auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
 						<input type="hidden" name="emailtrap" value="none">
 						<div class="h6">Subscribe to our Newsletters</div>
 						<div class="form-group">
@@ -24,7 +24,7 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<button type="submit" class="btn btn-outline-secondary btn-block">Subscribe</button>
+							<button id="newsletters-btn" class="btn btn-outline-secondary btn-block" type="submit">Subscribe</button>
 						</div>
 					</form>
 				</div>
@@ -56,7 +56,8 @@
 								</view>
 							</controls>
 	   				</div>
-						<div class="corner-ribbon top-right text-uppercase font-weight-bold shadow"><print content="contentType"></div>
+						<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+						<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow"><print content="contentType"></div>
 	  			</div>
 				</article>
 			</items>

@@ -15,8 +15,8 @@
 				</div>
 			</controls>
 			<review>
-				<div id="reviewhtml" class="list-group mb-4">
-					<form id="reviewform" target="review" class="list-group-item" method="post" action="core/add_review.php">
+				<div id="review" class="list-group mb-4">
+					<form id="reviewform" class="list-group-item auroraForm" data-formtype="review" method="post" action="core/add_review.php">
 						<input type="hidden" name="id" value="<print content=id>">
 						<input type="hidden" name="emailtrap" value="none">
 						<div class="h3">Add a Review</div>
@@ -38,40 +38,30 @@
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="email">Email</label>
+							<label for="reviewemail">Email</label>
 							<div class="input-group">
-								<input type="text" id="email" class="form-control" name="email" value="" required aria-required="true">
+								<input type="text" id="reviewemail" class="form-control" name="email" value="" required aria-required="true">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="name">Name</label>
+							<label for="reviewname">Name</label>
 							<div class="input-group">
-								<input type="text" id="name" class="form-control" name="name" value="">
+								<input type="text" id="reviewname" class="form-control" name="name" value="">
 							</div>
 						</div>
 						<div class="form-group">
-							<label for="review">Review</label>
+							<label for="reviewtxt">Review</label>
 							<div class="input-group">
-								<textarea id="review" class="form-control" name="review"></textarea>
+								<textarea id="reviewtxt" class="form-control" name="review"></textarea>
 							</div>
 						</div>
 						<div class="form-group">
 							<div class="input-group">
-								<button type="submit" class="btn btn-outline-secondary btn-block">Add Review</button>
+								<button id="review-btn" class="btn btn-outline-secondary btn-block" type="submit">Add Review</button>
 							</div>
 						</div>
 					</form>
 				</div>
-				<script>
-					document.addEventListener("DOMContentLoaded",function(){
-						$("#reviewform").submit(function(){
-							$.post($(this).attr("action"),$(this).serialize(),function(data){
-								$("#reviewhtml").html(data);
-							});
-							return false;
-						});
-					});
-				</script>
 			</review>
 			<item>
 				<settings items="all" contenttype="current">

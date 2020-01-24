@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Move Settings Links into Menu.
@@ -15,14 +15,15 @@
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix old CMS references.
  * @changes    v0.0.10 Fix Logo Width overriding other header items.
+ * @changes    v0.0.11 Add data-rank to indicate Account Type when Logged In.
  */?>
 <header class="app-header navbar">
   <button class="navbar-toggler sidebar-toggler d-lg-none mr-auto" data-toggle="sidebar-show" aria-controls="sidebar" role="presentation" aria-label="Toggle Navigation Sidebar"><span class="sr-only">Toggle Sidebar</span><span class="navbar-toggler-icon"></span></button>
-  <a class="navbar-brand ml-sm-3" data-toggle="dropdown" href="<?php echo URL.$settings['system']['admin'];?>" role="button" aria-label="AuroraCMS" aria-haspopup="true" aria-expanded="false"><i><?php svg('auroracms-white');?></i></a>
+  <a class="navbar-brand ml-sm-3" data-toggle="dropdown" href="<?php echo URL.$settings['system']['admin'];?>" role="button" aria-label="AuroraCMS" aria-haspopup="true" aria-expanded="false"><i><?php svg('auroracms-white');?></i><br><span class="version"><?php echo VERSION;?></span></a>
   <div class="dropdown-menu dropdown-menu-left dropdown-menu-lg">
     <div class="dropdown-header text-center">
       <div class="small">
-        AuroraCMS <small><?php if(file_exists('VERSION'))include'VERSION';?></small> is an Australian <a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE">MIT Licensed</a><br>Open Source Content<br>and Business Management System.<br><br>Built with love<br>using <a href="http://getbootstrap.com/">Bootstrap</a>, <a href="https://jquery.com/">jQuery</a>, and <a href="http://www.php.net/">PHP</a>.<br>Coded with <a href="https://atom.io/">Atom</a> and <a href="https://www.linuxmint.com/">Linux Mint</a>.
+        AuroraCMS <small><?php echo VERSION;?></small> is an Australian <a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE">MIT Licensed</a><br>Open Source Content<br>and Business Management System.<br><br>Built with love<br>using <a href="http://getbootstrap.com/">Bootstrap</a>, <a href="https://jquery.com/">jQuery</a>, and <a href="http://www.php.net/">PHP</a>.<br>Coded with <a href="https://atom.io/">Atom</a> and <a href="https://www.linuxmint.com/">Linux Mint</a>.
       </div>
     </div>
     <div class="divider"></div>
@@ -47,7 +48,7 @@
         echo$nou['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/accounts">'.svg2('users').' Active Users<span id="nav-nou" class="badge badge-info">'.$nou['cnt'].'</span></a>':'';?>
       </div>
     </li>
-    <li class="nav-item dropdown">
+    <li class="nav-item dropdown" data-rank="<?php echo$user['rank'];?>">
       <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" data-title="Account"><img class="img-avatar bg-white" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar'])))
         echo'media'.DS.'avatar'.DS.basename($user['avatar']);
       elseif($user['gravatar']!=''){

@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.10 Relabel "Screen against WordPress Attacks" to "Screen Against Attacks".
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -49,13 +50,13 @@
             </form>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options5" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5"<?php echo$config['php_options']{5}==1?' checked':'';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options5" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5"<?php echo$config['php_options'][5]==1?' checked':'';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="php_options5" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Screen Against Attacks</label>
             </div>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options6" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6"<?php echo$config['php_options']{6}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options6" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6"<?php echo$config['php_options'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="php_options6" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">30 Day Blacklist</label>
             </div>
@@ -68,19 +69,19 @@
 <?php }?>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0"<?php echo$config['php_options']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0"<?php echo$config['php_options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="php_options0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Monitoring</label>
             </div>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options3" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3"<?php echo$config['php_options']{3}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options3" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3"<?php echo$config['php_options'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
               <label for="php_options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Auto Blacklist</label>
             </div>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4"<?php echo$config['php_options']{4}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4"<?php echo$config['php_options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
               <label for="php_options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Block Blacklisted IP's</label>
             </div>
@@ -107,7 +108,7 @@
             </div>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options2" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2"<?php echo$config['php_options']{2}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="php_options2" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2"<?php echo$config['php_options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></label>
               </div>
               <label for="php_options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Quick Link</label>
             </div>
@@ -132,13 +133,13 @@
             <legend>Filter Settings</legend>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="spamfilter0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0"<?php echo$config['spamfilter']{0}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="spamfilter0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0"<?php echo$config['spamfilter'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="spamfilter0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Filter Forms</label>
             </div>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success"><input type="checkbox" id="spamfilter1" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="1"<?php echo$config['spamfilter']{1}==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                <label class="switch switch-label switch-success"><input type="checkbox" id="spamfilter1" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="1"<?php echo$config['spamfilter'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="spamfilter1" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Auto Blacklist</label>
             </div>

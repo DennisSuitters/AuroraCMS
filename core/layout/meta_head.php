@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Add test in Administration Header to test if admin.css exists,
@@ -15,6 +15,8 @@
  *             look the same in the Editor as it does on the Main Site.
  * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
  * @changes    v0.0.10 Fix missing manifestadmin.json.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.11 Fix display of number of Notifications in Title.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -30,7 +32,7 @@
     <meta name="robots" content="noindex,nofollow">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Administration <?php echo($config['business']!=''?' for '.$config['business']:'');?> - AuroraCMS</title>
+    <title><?php echo(isset($navStat)&&$navStat>0?'('.$navStat.') ':'');?>Administration <?php echo($config['business']!=''?' for '.$config['business']:'');?> - AuroraCMS</title>
     <base href="<?php echo URL;?>">
     <link rel="alternate" media="handheld" href="<?php echo URL;?>">
     <link rel="alternate" hreflang="<?php echo$config['language'];?>" href="<?php echo URL;?>">
@@ -65,5 +67,5 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development']{0}==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
-<?php if($config['development']{0}==1&&$user['rank']>999)echo'<div class="development"></div>';?>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
+<?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div>';?>

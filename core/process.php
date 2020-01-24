@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -24,6 +24,8 @@
  * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
+ * @changes    v0.0.11 Add login.html parsing to display Terms of Service in Modal.
+ * @changes    v0.0.11 Add logged in info alert.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -233,7 +235,33 @@ if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
   }
 }else
   $head=str_replace('<google_analytics>','',$head);
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>899&&$config['development']==1)
+if($view=='login'){
+  if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
+    $content=preg_replace([
+      '/<loggedin>/',
+      '/<\/loggedin>/',
+      '~<notloggedin>.*?<\/notloggedin>~is'
+    ],'',$content);
+  }else{
+    if(stristr($content,'<print page="terms-of-service">')){
+      $cs=$db->prepare("SELECT notes FROM `".$prefix."menu` WHERE LOWER(title)=LOWER(:title) AND active=1");
+      $cs->execute([':title'=>'terms of service']);
+      $cp=$cs->fetch(PDO::FETCH_ASSOC);
+      $content=preg_replace([
+        '~<loggedin>.*?<\/loggedin>~is',
+        '/<notloggedin>/',
+        '/<\/notloggedin>/',
+        '/<print page=[\'\"]?terms-of-service[\'\"]?>/'
+      ],[
+        '',
+        '',
+        '',
+        $cp['notes']
+      ],$content);
+    }
+  }
+}
+if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1)
   $content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
 
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){

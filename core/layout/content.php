@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Adjust Links Layout Items
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 $rank=0;
 $show='categories';
@@ -108,7 +109,7 @@ if($args[0]=='scheduler'){
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
 <?php if($args[1]!=''){
-        echo$user['options']{0}==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($args[1]).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+        echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($args[1]).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
 <?php }?>
       </div>
     </li>
@@ -205,7 +206,7 @@ if($args[0]=='scheduler'){
               <th class="col">Title</th>
               <th class="col text-center d-none d-sm-table-cell">Comments</th>
               <th class="col text-center d-none d-sm-table-cell">Reviews</th>
-              <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options']{1}==1?' <button class="btn btn-secondary btn-xs" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
+              <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options'][1]==1?' <button class="btn btn-secondary btn-xs" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
               <th class="col"></th>
             </tr>
           </thead>
@@ -224,8 +225,8 @@ if($args[0]=='scheduler'){
               </td>
               <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="table-thumb" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
-<?php if($user['options']{1}==1){
-        echo$r['suggestions']==1?'<span data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
+<?php if($user['options'][1]==1){
+                echo$r['suggestions']==1?'<span data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
                 if($r['contentType']=='proofs'){
                   $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
                   $sp->execute([':id'=>$r['uid']]);
@@ -255,12 +256,12 @@ if($args[0]=='scheduler'){
                 echo$rr['num']>0?'<a class="btn btn-secondary'.($src>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip" data-title="'.$src.' New Reviews':'').' role="button" aria-label="New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
               </td>
               <td class="text-center align-middle d-none d-sm-table-cell">
-                <?php echo$user['options']{1}==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+                <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
               </td>
               <td id="controls_<?php echo$r['id'];?>" class="align-middle">
                 <div class="btn-group float-right">
-                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options']{1}==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
-<?php   if($user['options']{0}==1){?>
+                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+<?php   if($user['options'][0]==1){?>
                   <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
                   <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>

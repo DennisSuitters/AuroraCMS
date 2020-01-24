@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -19,6 +19,7 @@
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  * @changes    v0.0.8 Fix missing SQL prefix from SQL Query at line 326
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.11 Add parsing for Inventory Item status.
  */
 $rank=0;
 $notification='';
@@ -383,6 +384,10 @@ if($show=='categories'){
 			$su=$db->prepare("SELECT id,username,name FROM login WHERE id=:id");
 			$su->execute([':id'=>$r['uid']]);
 			$ua=$su->fetch(PDO::FETCH_ASSOC);
+			$itemQuantity='';
+			if(is_numeric($r['quantity'])&&$r['quantity']!=0){
+				$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
+			}
 			$items=preg_replace([
 				'/<print content=[\"\']?thumb[\"\']?>/',
 				'/<print content=[\"\']?image[\"\']?>/',
@@ -399,6 +404,7 @@ if($show=='categories'){
 				'/<print date=[\"\']?month[\"\']?>/',
 				'/<print date=[\"\']?year[\"\']?>/',
 				'/<print content=[\"\']?contentType[\"\']?>/',
+				'/<print content=[\"\']?quantity[\"\']?>/',
 				'/<print content=[\"\']?notes[\"\']?>/'
 			],[
 				$shareImage,
@@ -416,6 +422,7 @@ if($show=='categories'){
 				date('M',$r['tis']!=0?$r['tis']:$r['ti']),
 				date('Y',$r['tis']!=0?$r['tis']:$r['ti']),
 				$r['contentType'],
+				$itemQuantity,
 				($view=='index'?substr(htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'),0,300).'...':htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'))
 			],$items);
 			$r['notes']=strip_tags($r['notes']);
@@ -513,7 +520,6 @@ if($show=='categories'){
 				'',
 				'',
 				$view,
-				$contentType,
 				$config['showItems']
 			],$html);
 		}
@@ -906,18 +912,24 @@ if($show=='item'){
 							else
 								$relatedImage=URL.NOIMAGE;
 						}
+						$relatedQuantity='';
+						if(is_numeric($ri['quantity'])&&$ri['quantity']!=0){
+							$relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
+						}
 						$relateditem=preg_replace([
 							'/<print related=[\"\']?linktitle[\"\']?>/',
 							'/<print related=[\"\']?thumb[\"\']?>/',
 							'/<print related=[\"\']?imageALT[\"\']?>/',
 							'/<print related=[\"\']?title[\"\']?>/',
-							'/<print related=[\"\']?contentType[\"\']?>/'
+							'/<print related=[\"\']?contentType[\"\']?>/',
+							'/<print related=[\"\']?quantity[\"\']?>/'
 						],[
 							URL.$ri['contentType'].'/'.$ri['urlSlug'].'/',
 							$relatedImage,
 							htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'),
 							htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'),
-							$ri['contentType']
+							$ri['contentType'],
+							$relatedQuantity
 						],$relateditem);
 						$relitems.=$relateditem;
 					}

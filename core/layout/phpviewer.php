@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -69,7 +70,7 @@ if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
         });
         return false;
     });
-<?php if($config['options']{4}==1){?>
+<?php if($config['options'][4]==1){?>
         $('[data-tooltip="tooltip"]').tooltip();
 <?php }?>
   </script>

@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -34,7 +35,7 @@ while($sr=$st->fetch(PDO::FETCH_ASSOC))
       <div class="col">
         <div class="activities card">
           <div class="card-body">
-<?php if($config['options']{12}!=1){?>
+<?php if($config['options'][12]!=1){?>
             <div class="alert alert-info">Administration Activity Tracking is Disabled.</div>
 <?php }
 $s=$db->prepare("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC");

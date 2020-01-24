@@ -6,7 +6,7 @@
 			<div class="col-12 col-sm-6 mx-auto">
 				<div class="card mb-5">
 					<div class="card-body">
-						<form class="form" method="post" action="<print url>">
+						<form method="post" action="<print url>">
 							<h1>Login</h1>
 							<input type="hidden" name="act" value="login">
 							<div class="form-group">
@@ -23,7 +23,7 @@
 							</div>
 							<div class="form-group">
 								<div class="input-group">
-									<button class="btn btn-outline-secondary btn-block">Login</button>
+									<button class="btn btn-outline-secondary btn-block" type="submit">Login</button>
 								</div>
 							</div>
 						</form>
@@ -31,39 +31,22 @@
 				</div>
 				<div class="card mb-5">
 					<div class="card-body">
-						<form class="form" target="rstresponse" id="rstform" method="post" action="core/view/rstform.php">
+						<form id="resetform" class="auroraForm" data-formtype="reset" method="post" action="core/view/rstform.php">
 							<h1>Reset Password</h1>
 							<input type="hidden" name="emailtrap" value="none">
 							<div class="form-group">
-								<label for="rsteml">Email</label>
+								<label for="resetemail">Email</label>
 								<div class="input-group">
-									<input type="email" id="rsteml" class="form-control" name="rsteml" placeholder="Enter Account Email..." autocomplete="off" required aria-required="true">
+									<input type="email" id="resetemail" class="form-control" name="rsteml" placeholder="Enter Account Email..." autocomplete="off" required aria-required="true">
 								</div>
 							</div>
 							<div class="form-group">
 								<div class="input-group">
-									<button id="rstbusy" class="btn btn-outline-secondary btn-block">Reset</button>
+									<button id="reset-btn" class="btn btn-outline-secondary btn-block" type="submit">Reset</button>
 								</div>
 							</div>
 						</form>
-						<div id="rstresponse"></div>
-						<script>
-							document.addEventListener("DOMContentLoaded",function(){
-								$('#rstform').submit(function(){
-			            $('#rstbusy').html('<i class="libre libre-spinner-1"></i>');
-			            $.ajax({
-			              data:$(this).serialize(),
-			              type:$(this).attr('method'),
-			              url:$(this).attr('action'),
-			              success:function(response){
-			                $('#rstresponse').html(response);
-			                $('#rstbusy').html('Reset');
-			              }
-			            });
-			            return false;
-			          });
-							});
-						</script>
+						<div id="reset"></div>
 					</div>
 				</div>
 			</div>
@@ -71,54 +54,55 @@
 				<div class="col-12 col-sm-6 mx-auto">
 					<div class="card">
 						<div class="card-body">
-							<form class="form" target="signresponse" id="signform" method="post" action="core/view/newaccount.php">
-								<h1 id="signup">Sign Up</h1>
+							<form id="signupform" class="auroraForm" data-formtype="signup" method="post" action="core/view/newaccount.php">
+								<h1>Sign Up</h1>
 								<input type="hidden" name="emailtrap" value="none">
 								<div class="form-group">
-									<label for="newemail">Email</label>
+									<label for="signupemail">Email</label>
 									<div class="input-group">
-										<input type="text" id="newemail" class="form-control is-invalid" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+										<input type="text" id="signupemail" class="form-control is-invalid" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
 									</div>
 								</div>
 								<div class="form-group">
-									<label for="newusername">Username</label>
+									<label for="signupusername">Username</label>
 									<div class="input-group">
-										<input type="text" id="newusername" class="form-control is-invalid" name="username" placeholder="Enter a Username..." required aria-required="true">
+										<input type="text" id="signupusername" class="form-control is-invalid" name="username" placeholder="Enter a Username..." required aria-required="true">
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="checkbox">
-										<label for="terms">
-											<input type="checkbox" id="terms" name="terms" value="yes"> Agree to the <a href="tos/">Terms Of Service</a>
+										<label for="signupterms">
+											<input type="checkbox" id="signupterms" name="terms" value="yes"> Agree to the <a href="page/Terms-of-Service" data-toggle="modal" data-target="#tosModal">Terms Of Service</a>
 										</label>
 									</div>
 								</div>
 								<div class="form-group">
 									<div class="input-group">
-										<button id="signbusy" class="btn btn-outline-secondary btn-block">Sign Up</button>
+										<button id="signup-btn" class="btn btn-outline-secondary btn-block" type="submit">Sign Up</button>
 									</div>
 								</div>
 							</form>
-							<div id="signresponse"></div>
-							<script>
-								document.addEventListener("DOMContentLoaded",function(){
-									$('#signform').submit(function(){
-										$('#signbusy').html('<i class="libre libre-spinner-1"></i>');
-										$.ajax({
-											data:$(this).serialize(),
-											type:$(this).attr('method'),
-											url:$(this).attr('action'),
-											success:function(response){
-												$('#signresponse').html(response);
-												$('#signbusy').html('Sign Up');
-											}
-										});
-										return false;
-									});
-								});
-							</script>
+							<div id="signup"></div>
 						</div>
 					</div>
+				</div>
+				<div class="modal fade" id="tosModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				  <div class="modal-dialog modal-lg modal-dialog-scrollable" role="document">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title" id="exampleModalLabel">Terms of Service</h5>
+				        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+				          <span aria-hidden="true">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body">
+				        <print page="terms-of-service">
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+				      </div>
+				    </div>
+				  </div>
 				</div>
 			</signup>
 		</div>

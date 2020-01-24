@@ -7,11 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.11 Define 'VERSION' constant.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
+if(!defined('VERSION'))define('VERSION',trim(file_get_contents('VERSION')));
 if(!isset($_COOKIE['bookingview'])){
   setcookie("bookingview","calendar",time()+(60*60*24*14));
   $_COOKIE['bookingview']='calendar';

@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 if($args[0]=='add'){
   $q=$db->prepare("INSERT INTO `".$prefix."content` (contentType,status,ti) VALUES ('newsletters','unpublished',:ti)");
@@ -33,7 +34,7 @@ else{
     <li class="breadcrumb-item active">Newsletters</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-<?php if($user['options']{0}==1){?>
+<?php if($user['options'][0]==1){?>
         <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'].'/newsletters/add';?>" data-tooltip="tooltip" data-placement="left" data-title="Add" aria-label="Add"><?php svg('add');?></a>
 <?php }?>
       </div>
@@ -67,9 +68,9 @@ else{
                     <td class="text-center align-middle"><?php echo$r['status']=='unpublished'?'Unpublished':date($config['dateFormat'],$r['tis']);?></td>
                     <td id="controls_<?php echo$r['id'];?>" class="align-middle">
                       <div class="btn-group float-right">
-                        <?php echo$user['options']{1}==1?'<button class="btn btn-secondary" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);" data-tooltip="tooltip" data-title="Send Newsletters" aria-label="Send Newsletters">'.svg2('email-send').'</button>':'';?>
-                        <a class="btn btn-secondary" href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" data-tooltip="tooltip"<?php echo$user['options']{1}==1?' data-title="Edit" aria-label="Edit"':' data-title="View" aria-label="View"';?>><?php echo$user['options']{1}==1?svg2('edit'):svg2('view');?></a>
-<?php   if($user['options']{0}==1){?>
+                        <?php echo$user['options'][1]==1?'<button class="btn btn-secondary" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);" data-tooltip="tooltip" data-title="Send Newsletters" aria-label="Send Newsletters">'.svg2('email-send').'</button>':'';?>
+                        <a class="btn btn-secondary" href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' data-title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+<?php   if($user['options'][0]==1){?>
                         <button class="btn btn-secondary<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
                         <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' hidden':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                         <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' hidden':'';?>" onclick="purge('<?php echo$r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
@@ -98,7 +99,7 @@ else{
                   <tr>
                     <td class="align-middle"><?php echo$r['email'];?></td>
                     <td class="text-right align-middle">
-                      <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter<?php echo$r['id'];?>" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0"<?php echo($r['newsletter']{0}==1?' checked aria-checked="true"':' aria-checked="false"').($user['options']{0}==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                      <label class="switch switch-label switch-success"><input type="checkbox" id="newsletter<?php echo$r['id'];?>" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0"<?php echo($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][0]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                     </td>
                   </tr>
 <?php }?>
@@ -120,7 +121,7 @@ else{
                     <td><?php echo$r['email'];?></td>
                     <td><?php echo date($config['dateFormat'],$r['ti']);?></td>
                     <td class="text-right">
-                      <?php echo$user['options']{0}==1?'<button class="btn btn-secondary trash" onclick="purge(`'.$r['id'].'`,`subscribers`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                      <?php echo$user['options'][0]==1?'<button class="btn btn-secondary trash" onclick="purge(`'.$r['id'].'`,`subscribers`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
                     </td>
                   </tr>
 <?php }?>

@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
 function strip_html_tags($t,$l=400){
  $t=preg_replace([
@@ -45,7 +46,7 @@ function is_base64_string($s){
  $e=mb_detect_encoding($b);
  if(in_array($e,array('UTF-8','ASCII')))return TRUE;else return FALSE;
 }
-if($user['options']{3}==1){
+if($user['options'][3]==1){
   if($args[0]=='settings')
     include'core'.DS.'layout'.DS.'set_messages.php';
   elseif($args[0]=='view'||$args[0]=='compose')
@@ -93,7 +94,7 @@ if($user['options']{3}==1){
   $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE folder='spam' AND status='unread'")->fetch(PDO::FETCH_ASSOC);?>
         <div class="email-app mb-4">
           <nav>
-<?php if($user['options']{0}==1){?>
+<?php if($user['options'][0]==1){?>
             <a class="btn btn-secondary btn-block" href="<?php echo URL.$settings['system']['admin'].'/messages/compose';?>">Compose</a>
 <?php }?>
             <ul id="messagemenu" class="nav">
@@ -136,7 +137,7 @@ if($user['options']{3}==1){
                 <div class="actions">
                   <div class="btn-group-vertical">
 <?php
-if($user['options']{0}==1){
+if($user['options'][0]==1){
    $scc=$db->prepare("SELECT email FROM `".$prefix."whitelist` WHERE email=:email");
         $scc->execute([
           ':email'=>$r['from_email']

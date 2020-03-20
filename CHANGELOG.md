@@ -1,3 +1,11 @@
+### v0.0.12
+- Fix showing stock status.
+- Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
+- Add option to Enable Panoramic Photo's.
+- Fix Multiple Media Adding.
+- Remove Front End Editing in preperation of multi-site single Administration.
+- Fix Parser not correctly parsing some content elements.
+
 ### v0.0.11
 - Adjust administration avatar styling to reflect account type when logged in.
 - Continue to prepare for PHP7.4 compatibility. Remove {} in favour [].

@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Adjust file check folder
  * @changes    v0.0.4 Add Page Editing
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.12 Fix Output Parser not parsing some elements.
  */
 $doc=new DOMDocument();
 if($show=='item'){
@@ -271,13 +272,7 @@ foreach($tags as$tag){
 			if($attribute=='author')$notes=rawurldecode($author['notes']);
 			if($attribute=='comments')$notes=rawurldecode($rc['notes']);
 			if($attribute=='page')$notes=rawurldecode($page['notes']);
-			if($attribute=='content')$notes=(isset($_SESSION['rank'])&&$_SESSION['rank']>899?
-			'<form id="note-form" target="sp" method="post" action="core/update.php">'.
-				'<input type="hidden" name="id" value="'.$r['id'].'">'.
-				'<input type="hidden" name="t" value="content">'.
-				'<input type="hidden" name="c" value="notes">'.
-				'<textarea class="editable" name="da">'.rawurldecode($r['notes']).'</textarea>'.
-			'</form>':rawurldecode($r['notes']));
+			if($attribute=='content')$notes=rawurldecode($r['notes']);
 			if($strip==true)$notes=strip_tags($notes);
 			if($length!=0)$notes=strtok(wordwrap($notes,$length,"...\n"),"\n");
 			$parsing.=$notes;
@@ -325,8 +320,7 @@ foreach($tags as$tag){
 			if($attribute=='media')$parsing.=$rm[$print];
 	}
 	if($container!='')$parsing.='</'.$container.'>';
-	$parse=preg_replace('~<print[^>]+.*?'.$attribute.'=.'.$print.'.*?[^>]+>~is',$parsing,$parse,1);
-/*	$parse=preg_replace('~<print '.$attribute.'=[\"\']?'.$print.'[\"\']?>~is',$parsing,$parse,1); */
+	$parse=preg_replace('/<print[^>]+.*?'.$attribute.'=.'.$print.'.*?[^>]+>/',$parsing,$parse,1);
 }
 if($show=='item'){
 	if(isset($comment)&&$comment!='')

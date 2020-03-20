@@ -208,11 +208,12 @@ if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <input type="hidden" name="act" value="add_media">
               <input type="hidden" name="id" value="<?php echo$r['id'];?>">
+              <input type="hidden" name="rid" value="0">
               <input type="hidden" name="t" value="pages">
               <div class="form-group">
                 <div class="input-group">
-                  <input id="file" type="text" class="form-control" name="fu" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
-                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','media','file');return false;" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
+                  <input id="mediafile" type="text" class="form-control" name="fu" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
+                  <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('<?php echo$r['id'];?>','media','mediafile');return false;" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
                   <div class="input-group-append"><button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
                 </div>
               </div>
@@ -377,9 +378,9 @@ if($cntc<0){
             </div>
 <?php if($user['rank']==1000){?>
             <div class="form-group row">
-              <label for="seoKeywords" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">contentType</label>
+              <label for="contentType" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">contentType</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <input type="text" id="seoKeywords" class="form-control textinput" value="<?php echo$r['contentType'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="contentType" placeholder="">
+                <input type="text" id="contentType" class="form-control textinput" value="<?php echo$r['contentType'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="contentType" placeholder="">
                 <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecontentType" class="btn btn-secondary save" data-dbid="contentType" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>

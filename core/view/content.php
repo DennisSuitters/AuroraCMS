@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -20,6 +20,8 @@
  * @changes    v0.0.8 Fix missing SQL prefix from SQL Query at line 326
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.11 Add parsing for Inventory Item status.
+ * @changes    v0.0.12 Fix showing stock status.
+ * @changes    v0.0.12 Add Parsing for Panoramic Photo.
  */
 $rank=0;
 $notification='';
@@ -218,39 +220,7 @@ if($show=='categories'){
 			],
 			$html);
 	}
-	$html=preg_replace([
-		'/<print page=[\"\']?contentType[\"\']?>/',
-		'/<notification>/'
-	],[
-		htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
-		$notification
-	],$html);
-	if($page['notes']!=''){
-		if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
-			$html=preg_replace([
-				'/<print page=[\"\']?notes[\"\']?>/',
-				'/<\/?pagenotes>/'
-			],[
-				'<form id="note-form" target="sp" enctype="multipart/form-data" method="post" action="core/update.php">'.
-					'<input type="hidden" name="id" value="'.$page['id'].'">'.
-					'<input type="hidden" name="t" value="menu">'.
-					'<input type="hidden" name="c" value="notes">'.
-					'<textarea class="editable" name="da">'.rawurldecode($page['notes']).'</textarea>'.
-				'</form>',
-				''
-			],$html);
-		}else{
-			$html=preg_replace([
-				'/<print page=[\"\']?notes[\"\']?>/',
-				'/<\/?pagenotes>/'
-			],[
-				rawurldecode($page['notes']),
-				''
-			],$html);
-		}
-	}else
-		$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
-	$html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
+
 	if(stristr($html,'<mediaitems')){
 		$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=0 ORDER BY ord ASC");
 		$sm->execute([':pid'=>$page['id']]);
@@ -263,17 +233,12 @@ if($show=='categories'){
 			while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
 				if(!file_exists('media'.DS.basename($rm['file'])))continue;
 				$mediaitems=$mediaitem;
-				list($width,$height)=getimagesize($rm['file']);
-				$tags='';
-				if($rm['tags']!=''){
-					$mediatags=explode(',',$rm['tags']);
-					foreach($mediatags as$mt)$tags.='#'.htmlspecialchars($mt,ENT_QUOTES,'UTF-8').' ';
-				}
+				$bname=basename(substr($rm['file'],0,-4));
+				$bname=rtrim($bname,'.');
 				$mediaitems=preg_replace([
-					'/<print media=[\"\']?image[\"\']?>/',
+					'/<print media=[\"\']?thumb[\"\']?>/',
+					'/<print media=["\']?file[\"\']?>/',
 					'/<print media=[\"\']?fileALT[\"\']?>/',
-					'/<print media=[\"\']?width[\"\']?>/',
-					'/<print media=[\"\']?height[\"\']?>/',
 					'/<print media=[\"\']?title[\"\']?>/',
 					'/<print media=[\"\']?category_1[\"\']?>/',
 					'/<print media=[\"\']?category_2[\"\']?>/',
@@ -289,15 +254,13 @@ if($show=='categories'){
 					'/<print media=[\"\']?exifLens[\"\']?>/',
 					'/<print media=[\"\']?exifFilename[\"\']?>/',
 					'/<print media=[\"\']?exifTime[\"\']?>/',
-					'/<print media=[\"\']?tags[\"\']?>/',
 					'/<print media=[\"\']?seoTitle[\"\']?>/',
 					'/<print media=[\"\']?caption[\"\']?>/',
 					'/<print media=[\"\']?description[\"\']?>/'
 				],[
+					URL.'media/thumbs/'.$bname.'.png',
 					htmlspecialchars($rm['file'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rm['fileALT']!=''?$rm['fileALT']:$rm['title'],ENT_QUOTES,'UTF-8'),
-					$width,
-					$height,
 					htmlspecialchars($rm['title'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rm['category_1'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rm['category_2'],ENT_QUOTES,'UTF-8'),
@@ -313,17 +276,43 @@ if($show=='categories'){
 					htmlspecialchars($rm['exifLens'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rm['exifFilename'],ENT_QUOTES,'UTF-8'),
 					date($config['dateFormat'],$rm['exifti']),
-					$tags,
 					htmlspecialchars($rm['seoTitle'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rm['seoCaption'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rm['seoDescription'],ENT_QUOTES,'UTF-8')
 				],$mediaitems);
 				$mediaoutput.=$mediaitems;
 			}
-			$html=preg_replace('~<mediaimages>.*?<\/mediaimages>~is',$mediaoutput,$html,1);
+			$html=preg_replace([
+				'~<mediaimages>.*?<\/mediaimages>~is',
+				'/<mediaitems>/',
+				'/<\/mediaitems>/'
+			],[
+				$mediaoutput,
+				'',
+				''
+			],$html,1);
 		}else
 			$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
 	}
+
+	$html=preg_replace([
+		'/<print page=[\"\']?contentType[\"\']?>/',
+		'/<notification>/'
+	],[
+		htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
+		$notification
+	],$html);
+	if($page['notes']!=''){
+		$html=preg_replace([
+			'/<print page=[\"\']?notes[\"\']?>/',
+			'/<\/?pagenotes>/'
+		],[
+			rawurldecode($page['notes']),
+			''
+		],$html);
+	}else
+		$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+	$html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
 	if(stristr($html,'<categories')){
 		$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='category' ORDER BY title ASC");
 		$sc->execute();
@@ -385,7 +374,7 @@ if($show=='categories'){
 			$su->execute([':id'=>$r['uid']]);
 			$ua=$su->fetch(PDO::FETCH_ASSOC);
 			$itemQuantity='';
-			if(is_numeric($r['quantity'])&&$r['quantity']!=0){
+			if(is_numeric($r['quantity'])){
 				$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
 			}
 			$items=preg_replace([
@@ -578,101 +567,66 @@ if($show=='item'){
 			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
 		else
 			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
+		$html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
+		if($r['options'][2]==1&&$r['file']!=''){
+			$html=preg_replace([
+				'/<panoramic>/',
+				'/<\/panoramic>/',
+				'~<image>.*?<\/image>~is'
+			],'',$html);
+		}else{
+			$html=preg_replace([
+				'/<image>/',
+				'/<\/image>/',
+				'~<panoramic>.*?<\/panoramic>~is'
+			],'',$html);
+		}
 	}
-	$html=preg_replace([
-			'/<print content=[\"\']?imageALT[\"\']?>/'
-		],[
-			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8')
-		],$html);
 	if(stristr($html,'<item')){
 		preg_match('/<item>([\w\W]*?)<\/item>/',$html,$matches);
 		$item=$matches[1];
 		if(stristr($item,'<mediaitems')){
-			$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:id ORDER BY ord ASC");
-			$sm->execute([':id'=>isset($r['id'])?$r['id']:$page['id']]);
+			$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=:rid ORDER BY ord ASC");
+			$sm->execute([
+				':pid'=>isset($r['id'])?$r['id']:$page['id'],
+				':rid'=>$r['id']
+			]);
 			if($sm->rowCount()>0){
 				preg_match('/<mediaitems>([\w\W]*?)<\/mediaitems>/',$item,$matches2);
 				$media=$matches2[1];
-				preg_match('/<mediaimages>([\w\W]*?)<\/mediaimages>/',$media,$matches3);
+				preg_match('/<mediaimages>([\w\W]*?)<\/mediaimages>/',$item,$matches3);
 				$mediaitem=$matches3[1];
 				$mediaoutput='';
 				while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
 					if(!file_exists('media'.DS.basename($rm['file'])))continue;
 					$mediaitems=$mediaitem;
-					list($width,$height)=getimagesize($rm['file']);
-					$tags='';
-					if($rm['tags']!=''){
-						$mediatags=explode(',',$rm['tags']);
-						foreach($mediatags as$mt)$tags.='#'.htmlspecialchars($mt,ENT_QUOTES,'UTF-8').' ';
-					}
 					$bname=basename(substr($rm['file'],0,-4));
 					$bname=rtrim($bname,'.');
 					$mediaitems=preg_replace([
 						'/<print media=[\"\']?thumb[\"\']?>/',
 						'/<print media=[\"\']?file[\"\']?>/',
 						'/<print media=[\"\']?fileALT[\"\']?>/',
-						'/<print media=[\"\']?width[\"\']?>/',
-						'/<print media=[\"\']?height[\"\']?>/',
-						'/<print media=[\"\']?title[\"\']?>/',
-						'/<print media=[\"\']?category_1[\"\']?>/',
-						'/<print media=[\"\']?category_2[\"\']?>/',
-						'/<print media=[\"\']?category_3[\"\']?>/',
-						'/<print media=[\"\']?category_4[\"\']?>/',
-						'/<print media=[\"\']?attributionName[\"\']?>/',
-						'/<print media=[\"\']?attributionURL[\"\']?>/',
-						'/<print media=[\"\']?exifISO[\"\']?>/',
-						'/<print media=[\"\']?exifAperture[\"\']?>/',
-						'/<print media=[\"\']?exifFocalLength[\"\']?>/',
-						'/<print media=[\"\']?exifShutterSpeed[\"\']?>/',
-						'/<print media=[\"\']?exifCamera[\"\']?>/',
-						'/<print media=[\"\']?exifLens[\"\']?>/',
-						'/<print media=[\"\']?exifFilename[\"\']?>/',
-						'/<print media=[\"\']?exifTime[\"\']?>/',
-						'/<print media=[\"\']?tags[\"\']?>/',
-						'/<print media=[\"\']?seoTitle[\"\']?>/',
-						'/<print media=[\"\']?caption[\"\']?>/',
-						'/<print media=[\"\']?description[\"\']?>/'
+						'/<print media=[\"\']?title[\"\']?>/'
 					],[
 						URL.'media/thumbs/'.$bname.'.png',
 						htmlspecialchars($rm['file'],ENT_QUOTES,'UTF-8'),
 						htmlspecialchars(($rm['fileALT']!=''?$rm['fileALT']:$bname),ENT_QUOTES,'UTF-8'),
-						$width,
-						$height,
-						htmlspecialchars(($rm['title']!=''?$rm['title']:$bname),ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['category_1'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['category_2'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['category_3'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['category_4'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['attributionImageName'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['attributionImageURL'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifISO'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifAperture'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifFocalLength'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifShutterSpeed'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifCamera'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifLens'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['exifFilename'],ENT_QUOTES,'UTF-8'),
-						date($config['dateFormat'],$rm['exifti']),
-						$tags,
-						htmlspecialchars($rm['seoTitle'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['seoCaption'],ENT_QUOTES,'UTF-8'),
-						htmlspecialchars($rm['seoDescription'],ENT_QUOTES,'UTF-8')
+						isset($rm['title'])&&$rm['title']!=''?htmlspecialchars(($rm['title']!=''?$rm['title']:$bname),ENT_QUOTES,'UTF-8'):$bname
 					],$mediaitems);
 					$mediaoutput.=$mediaitems;
 				}
 				$item=preg_replace([
+					'~<mediaimages>.*?<\/mediaimages>~is',
 					'/<mediaitems>/',
-					'/<\/mediaitems>/',
-					'~<mediaimages>.*?<\/mediaimages>~is'
+					'/<\/mediaitems>/'
 				],[
+					$mediaoutput,
 					'',
-					'',
-					$mediaoutput
-				],$item);
+					''
+				],$item,1);
 			}else
 				$item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
-		}else
-			$item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
+		}
 		if(isset($r['contentType'])&&($r['contentType']=='service'||$r['contentType']=='events')){
 			if($r['bookable']==1){
 				if(stristr($item,'<service>')){
@@ -702,7 +656,7 @@ if($show=='item'){
 		}
 		$address=$edit=$contentQuantity='';
 		if(isset($r['contentType'])&&($r['contentType']=='inventory')){
-			if(is_numeric($r['quantity'])&&$r['quantity']!=0){
+			if(is_numeric($r['quantity'])){
 				$contentQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
 			}
 			$item=preg_replace([
@@ -1019,7 +973,6 @@ if($show=='item'){
 			$item=preg_replace('~<controls>.*?<\/controls>~is','',$item,1);
 		$html=preg_replace([
 			'~<settings.*?>~is',
-			'~<items>.*?<\/items>~is',
 			'~<more>.*?<\/more>~is',
 			'/<print page=[\"\']?notes[\"\']?>/'
 		],'',$html);

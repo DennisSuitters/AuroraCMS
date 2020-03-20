@@ -208,6 +208,9 @@ function imageUpdate(id,t,c,da){
 		if(t=='login'&&c=='avatar'&&da==''){
 			$('.img-avatar').attr('src','core/images/i-noavatar.svg');
 		}else{
+      if(c=='file'||c=='thumb'||c=='fileDepth'){
+        $('#'+c).val('');
+      }
 			if(da==''){
 				$('#'+c).html('');
 			}else{

@@ -7,13 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.8 Add Javascript for Offline PWA and Push Notifications.
  * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.12 Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
+ * @changes    v0.0.12 Fix Multiple Media Adding.
  */?>
 <script>
 var unsaved=false;
@@ -201,10 +203,19 @@ if(isset($r['due_ti'])){?>
       useBrowserHistory:false,
       getFileCallback:function(file,fm){
         if(id>0||c=='attachments'){
-          $('#'+c).val(file.url);
+          if(c=='mediafile'){
+            var urls = $.each(file,function(i,f){return f.url;});
+            $('#'+c).val(urls);
+          }else{
+            $('#'+c).val(file.url);
+            $('#save'+c).addClass('btn-danger');
+          }
           if(t=='content'&&c=='file'){
-            var x=file.url.substring(0,file.url.lastIndexOf('.'));
-            $('#thumb').val(x.replace('media','media/thumbs')+'.png');
+            $('#thumb').val(file.tmb);
+            $('#savethumb').addClass('btn-danger');
+          }
+          if(t=='content'&&c=='fileDepth'){
+            $('#savefileDepth').addClass('btn-danger');
           }
           if(t=='category'){
 
@@ -267,10 +278,12 @@ if(isset($r['due_ti'])){?>
           }
         }
       },
-      commandsOptions:{
-        getfile:{
-          oncomplete:'close',
-          folders:false
+      commandsOptions: {
+        getfile: {
+          onlyURL: true,
+          folders: false,
+          multiple: true,
+          oncomplete: "close"
         }
       }
     }).dialogelfinder('instance');

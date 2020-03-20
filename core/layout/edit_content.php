@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
@@ -16,6 +16,9 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.7 Add Editing of RRP and Reduced Cost options.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.12 Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
+ * @changes    v0.0.12 Add Options for using Panoramic Photo's.
+ * @changes    v0.0.12 Fix Multiple Media Adding.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -472,7 +475,7 @@ if($r['contentType']=='inventory'){?>
 if($r['contentType']!='testimonials'){?>
             <fieldset id="tab-content-images-2" class="control-fieldset">
               <div id="tab-content-images-3" class="form-group row">
-                <label for="file" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
+                <label for="fileURL" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="fileURL" class="form-control textinput" value="<?php echo$r['fileURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileURL"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
                   <div class="input-group-append">
@@ -482,7 +485,7 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
               <div id="tab-content-images-4" class="form-group row">
-                <label fore="file" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image</label>
+                <label for="file" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input id="file" type="text" class="form-control textinput" value="<?php echo$r['file'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="file" readonly>
 <?php if($user['options'][1]==1){?>
@@ -494,9 +497,15 @@ if($r['contentType']!='testimonials'){?>
                   </form>
 <?php }?>
                   <div class="input-group-append img">
-                    <?php echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a href="'.$r['file'].'" data-fancybox="image"><img id="thumbimage" src="'.$r['file'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
+                    <?php echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a href="'.$r['file'].'" data-fancybox="image"><img id="fileimage" src="'.$r['file'].'" alt="Thumbnail"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefile" class="btn btn-secondary save" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
+              </div>
+              <div id="nav-content-content-pano" class="form-group row">
+                <label for="options2" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Enable Panorama</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                  <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2"<?php echo($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                 </div>
               </div>
               <div id="tab-content-images-5" class="form-group row">
@@ -642,6 +651,7 @@ if($r['contentType']!='testimonials'){?>
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <input type="hidden" name="act" value="add_media">
               <input type="hidden" name="id" value="<?php echo$r['id'];?>">
+              <input type="hidden" name="rid" value="<?php echo$r['id'];?>">
               <input type="hidden" name="t" value="content">
               <div class="form-group">
                 <div class="input-group">

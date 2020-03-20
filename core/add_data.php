@@ -14,6 +14,7 @@
  * @changes    v0.0.10 Fix Rewards Display Layout.
  * @changes    v0.0.10 Fix Toastr Notifications.
  * @changes    v0.0.11 Fix Rewards Date/Time Picker value retrieval.
+ * @changes    v0.0.12 Fix Multiple Media Adding.
  */
 $getcfg=true;
 require'db.php';
@@ -418,35 +419,38 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
 			break;
     case'add_media':
       $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
+			$rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
       $t=filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING);
       $fu=filter_input(INPUT_POST,'fu',FILTER_SANITIZE_STRING);
       if($fu!=''){
         if($t=='pages'||$t=='content'){
-          $q=$db->prepare("INSERT INTO `".$prefix."media` (rid,pid,file,ti) VALUES (0,:pid,:file,:ti)");
-          $q->execute([
-            ':pid'=>$id,
-            ':file'=>$fu,
-            ':ti'=>time()
-          ]);
-          $iid=$db->lastInsertId();
-          $q=$db->prepare("UPDATE `".$prefix."media` SET ord=:ord WHERE id=:id");
-          $q->execute([
-            ':id'=>$iid,
-            ':ord'=>$iid+1
-          ]);?>
+					$file_list=explode(',',$fu);
+					foreach($file_list as $file){
+	          $q=$db->prepare("INSERT INTO `".$prefix."media` (rid,pid,file,ti) VALUES (:rid,:pid,:file,:ti)");
+	          $q->execute([
+							':rid'=>$rid,
+	            ':pid'=>$id,
+	            ':file'=>$file,
+	            ':ti'=>time()
+	          ]);
+	          $iid=$db->lastInsertId();
+	          $q=$db->prepare("UPDATE `".$prefix."media` SET ord=:ord WHERE id=:id");
+	          $q->execute([
+	            ':id'=>$iid,
+	            ':ord'=>$iid+1
+	          ]);?>
   window.top.window.$('#mi').append('<?php
 echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0 animated zoomIn">'.
-			'<a class="card bg-dark m-0" href="'.$fu.'" data-lightbox="media">'.
-				'<img class="card-img" src="'.$fu.'" alt="Media '.$iid.'">'.
+			'<a class="card bg-dark m-0" href="'.$file.'" data-fancybox="media">'.
+				'<img src="'.$file.'" class="card-img"  alt="Media '.$iid.'">'.
 			'</a>'.
 			'<div class="btn-group float-right">'.
-				'<div class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
+				'<div class="handle btn btn-secondary btn-sm" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
 				'<button class="btn btn-secondary trash btn-sm" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 			'</div>'.
 		'</div>';?>
-');
-	window.top.window.$('[data-lightbox="media"]').simpleLightbox();
-<?php   }
+');<?php }
+				}
       }
       break;
     case'add_orderitem':

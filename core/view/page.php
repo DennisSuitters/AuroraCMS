@@ -38,13 +38,7 @@ $html=preg_replace([
   '/<\/item>/'
 ],[
   $r['title'],
-  (isset($_SESSION['options'])&&$_SESSION['options'][1]==1?
-  '<form id="note-form" target="sp" enctype="multipart/form-data" method="post" action="core/update.php">'.
-    '<input type="hidden" name="id" value="'.$page['id'].'">'.
-    '<input type="hidden" name="t" value="menu">'.
-    '<input type="hidden" name="c" value="notes">'.
-    '<textarea class="editable" name="da">'.rawurldecode($page['notes']).'</textarea>'.
-  '</form>':rawurldecode($page['notes'])),
+  rawurldecode($page['notes']),
   $r['contentType'],
   '',
   '',

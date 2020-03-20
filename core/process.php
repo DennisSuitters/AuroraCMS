@@ -264,50 +264,6 @@ if($view=='login'){
 if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1)
   $content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
 
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>899){
-  $noteStyles='';
-  foreach($theme['settings']['note_styles'] as $nS){
-    $noteStyles.=$nS;
-  }
-  $content=preg_replace([
-    '/<jshelper>/',
-    '/<jsrunner>/'
-    ],[
-      '<script src="core/js/summernote-lite.js"></script>'.
-      '<script src="core/js/plugin/summernote/summernote-save-button.js"></script>',
-      '<script>'.
-        '$(document).ready(function(){$(".editable").summernote({'.
-          'airMode:false,'.
-          'toolbar:['.
-            '[`save`,[`save`]],'.
-            '[`style`,[`style`,`bold`,`italic`,`underline`,`clear`]],'.
-            '[`font`,[`strikethrough`,`superscript`,`subscript`]],'.
-            '[`para`,[`ul`,`ol`,`paragraph`]],'.
-            '[`insert`,[`link`,`picture`,`video`,`audio`]],'.
-            '[`view`,[`fullscreen`,`codeview`,`help`]],'.
-          '],'.
-          'styleTags:['.
-            '`p`,`blockquote`,`pre`,`h1`,`h2`,`h3`,`h4`,`h5`,`h6`,'.
-            $noteStyles.
-          '],'.
-          'popover:{'.
-            'air:['.
-              '[`save`,[`save`]],'.
-              '[`style`,[`style`,`bold`,`italic`,`underline`,`clear`]],'.
-              '[`font`,[`strikethrough`,`superscript`,`subscript`]],'.
-              '[`para`,[`ul`,`ol`,`paragraph`]],'.
-              '[`insert`,[`link`,`picture`,`video`,`audio`]],'.
-              '[`view`,[`fullscreen`,`codeview`,`help`]],'.
-            ']'.
-          '},'.
-        '});});'.
-      '</script>'.
-      '<iframe id="sp" name="sp" class="d-none"></iframe>'.
-      '<div class="page-block"><div class="loader"><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>'
-    ],$content
-  );
-}else
-  $content=preg_replace(['/<jshelper>/','/<jsrunner>/'],'',$content);
 $content=preg_replace(['/<serviceworker>/'],[($config['options'][18]==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
 print$head.$content;
 if($config['options'][11]==1){

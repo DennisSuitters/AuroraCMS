@@ -198,7 +198,7 @@ content
   `options` varchar(8)
     0 Show Cost
     1 Enable Comments
-    2
+    2 Enable Panorama
     3
     4
     5

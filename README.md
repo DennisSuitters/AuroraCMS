@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at Version v0.0.12
+We are currently at Version v0.0.13
 
 ### FAQ
 - Why no Plugins?
@@ -97,10 +97,10 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 
 ### Tested on:
 - CentOS Linux 7.2.1511 with Webmin 1.791
-- Ubuntu Linux 14.04 + Apache v2.4.7 + PHP v5.6 + MySQL v5.5.37
+- Ubuntu Linux 14.04 + Apache v2.4.7 + PHP v5.6-7.3 + MySQL v5.5.37
 - Linux Mint Ubuntu Edition Apache 2.4.7 + PHP v5.6-7+ & MySQL v5.5.37
 - Linux Mint Debian Edition Apache 2.4.7 + PHP v5.6-7+ & MySQL v5.5.37
-- Debian 7 + nGinx + PHP 5.5 + MySQL
+- Debian 7 + nGinx + PHP 5.5-7.3 + MySQL
 - Windows 7 + WAMP + PHP 5.5 + MySQL
 
 ### TODO:
@@ -124,6 +124,7 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Diemen Design](https://diemen.design/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
+- [Hays Computer World](https://hayscomputerworld.com.au/)
 - [K9FineDining](https://k9finedining.com/)
 - [Live Lightly Centre](https://www.livelightlycentre.com.au/)
 - [Lovely Gardens](https://www.lovelygardens.com.au/)

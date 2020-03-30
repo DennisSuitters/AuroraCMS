@@ -86,8 +86,8 @@ a:hover{color:#888;text-decoration:none}
 .testimonials h2::after{content:"";width:130px;position:absolute;margin:0 auto;height:3px;background:#000;left:0;right:0;bottom:-10px}
 .testimonials .carousel-inner .carousel-item .img-box{width:135px;height:135px}
 .testimonials .carousel-inner .carousel-item .img-box img{width:100%;height:100%}
-.testimonials .carousel-control-prev{left:-100px}
-.testimonials .carousel-control-next{right:-100px}
+.testimonials .carousel-control-prev{left:-30px}
+.testimonials .carousel-control-next{right:-30px}
 .testimonials .carousel-indicators{top:auto;bottom:-30px}
 @media(min-width:320px)and(max-width:640px){
 	.testimonials .carousel-inner .carousel-item p{font-size:14px}

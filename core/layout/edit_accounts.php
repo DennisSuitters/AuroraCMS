@@ -312,7 +312,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                 <div class="form-group row">
                   <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Profile Link</label>
                   <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <a class="form-control" target="_blank" href="<?php echo URL.'/profile/'.str_replace(' ','-',$r['name']);?>"><?php echo URL.'/profile/'.str_replace(' ','-',$r['name']);?></a>
+                    <a class="form-control" target="_blank" href="<?php echo URL.'profile/'.str_replace(' ','-',$r['name']);?>"><?php echo URL.'profile/'.str_replace(' ','-',$r['name']);?></a>
                   </div>
                 </div>
                 <div class="form-group row">

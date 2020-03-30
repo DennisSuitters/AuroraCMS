@@ -1,3 +1,11 @@
+### v0.0.13
+- Add X-Clacks Silent Attribute Header, Add you site to the list: https://xclacksoverhead.org/dearheart/review
+- Add Lorem Generator for Administrators.
+- Fix Scheduler breaking on Quotes in Titles.
+- Fix wrong hidden class on Orders items in Administration.
+- Fix width issues with Default Theme on Mobile.
+- Update Summernote WYSIWYG Editor to v0.8.16
+
 ### v0.0.12
 - Fix showing stock status.
 - Fix Save Button for Image and Thumbnail selection not showing unsaved changes.

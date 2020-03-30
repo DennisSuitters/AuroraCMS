@@ -60,13 +60,13 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
       {
         id:'<?php echo$r['id'];?>',
-        title:'<?php echo$r['title'];?>',
-        start:'<?php echo date("Y-m-d H:i:s",$r['pti']);?>',
+        title:`<?php echo$r['title'];?>`,
+        start:`<?php echo date("Y-m-d H:i:s",$r['pti']);?>`,
         allDay:true,
         color:'<?php if($r['status']=='published')echo'#4dbd74';elseif($r['status']=='autopublish')echo'#ffc107';else echo'#f86c6b';?>',
-        description:'<?php echo ucfirst($r['contentType']).': '.$r['title'];?>',
-        status:'<?php echo$r['status'];?>',
-        views:'<?php echo$r['views'];?>'
+        description:`<?php echo ucfirst($r['contentType']).`: `.$r['title'];?>`,
+        status:`<?php echo$r['status'];?>`,
+        views:`<?php echo$r['views'];?>`
       },
 <?php	}?>
     ],

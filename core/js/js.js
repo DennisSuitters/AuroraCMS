@@ -300,3 +300,85 @@ function loadMore(l,is,ie,action,lang){
 //		$('.page-block').removeClass('d-block');
 	})
 }
+
+var phrases=[
+" A cold one","A few stubbies short of a six-pack","A few sandwiches short of a picnic","Accadacca","Ace ","Aerial pingpong ","Ambo ","Amber fluid ","and","also","Ankle biter ","Apples ","Arvo ","As busy as a ","As cross as a","As cunning as a","As dry as a","As stands out like ","Aussie Rules Footy ","Aussie salute","Avo ","Avos "
+,"Back of Bourke ","Bail ","Bail out ","Banana bender","Barbie","Barbie ","Barrack ","Bastard ","Bastards ","Bathers ","Battler ","Bazza","Bail up ","Beauty ","Better than a ham sandwich","Better than a kick up the backside ","Big Smoke ","Bikie","Billabong ","Billy ","Bingle ","Bities","Bitzer","Bizzo ","Blimey ","Blind ","Bloke","bloody","Bloody ","Bloody oath ","Bloody ripper ","Blow in the bag ","Blowie ","Bludger ","Blue ","Bluey","Boardies","Bodgy ","Bog standard ","Bogan","Bogged ","Boil-over ","Bonza","Bonzer ","Boogie board ","Booze","Booze bus","Boozer ","Bottle-o ","Bottlo","Bounce ","Bradman","Brass razoo","Brekkie ","Brickie ","Brisvegas ","Brizzie","Brolly","Bruce","Brumby ","Buck's night ","Buckley's chance ","Budgie smugglers ","Buggered","Built like a","Bull bar ","Bundy ","Bunyip ","Burk","Burk ","Bush","Bush bash ","Bush oyster ","Bush telly ","Bushie","Bushman's handkerchief ","Bushranger ","Butcher "
+,"Cab Sav ","Catcus ","Cactus mate","Cane toad ","Captain Cook ","Cark it ","Carry on like a pork chop ","Carrying on like a pork chop ","Chewie ","Chin wag ","Chock a Block ","Chokkie ","Chook ","Chrissie ","Christmas ","Chuck a sickie","Chuck a spaz","Chuck a yewy","Chunder ","Ciggies","Ciggy","Clacker ","Cleanskin","Clucky ","Coathanger ","Cobber ","Cockie ","Cockie","Coldie","Come a ","Compo","Cooee","Cook ","Coppers ","Corker ","Counter meal","Crack the shits ","Cracker","Cranky ","Cream ","Crikey ","Crook ","Crow eaters ","Cubby house ","Cut lunch ","Cut lunch commando","Cut snake"
+,"Dag","Daks ","Damper ","Dardy ","Dead horse ","Deadset ","decent nik","Defo ","Dero ","Devo ","Digger ","Dill ","Dinky-di","Dinky-di ","Dipstick ","Divvy van ","Do the Harry ","Dob","Dog's balls","Dog's breakfast ","Dog's eye","Dole bludger ","Donga ","Donger ","Doovalacky ","Down Under ","Drongo","Dropkick ","Dry as as dead dingo's donga","Dunny","Dunny ","Dunny rat","Durry "
+,"Esky","Eureka"
+,"Facey ","Fair crack of the whip","Fair dinkum ","Fair go ","Fair go, mate","Fair suck of the sauce bottle","Fairy floss ","Feral","Few roos loose in the top paddock","Figjam ","Fisho ","Flake ","flamin'","Flanno","Flanny","Flat out","Flat out like a","Flick","Fly wire ","Footy ","Ford","Fossicker","Franger ","Freckle","Fremantle Doctor ","Freo ","Frog in a sock","Frothy ","Fruit loop ","Full blown ","Full boar ","Furthy"
+,"G'day","Galah","Galah ","Garbo","Get a dog up ya","Give it a burl ","Gnarly","Gobful","Gobsmacked ","Going off ","Good oil ","Good onya ","Gone Walkabout ","Goon","Goon Bag","Grab us a ","Greenie ","Grog ","Grouse ","Grundies ","Gutful of ","gutta","Gyno "
+,"Hard yakka ","Have a Captain Cook ","Have a go, you mug","Head like a dropped pie","heaps","Heaps","He hasn't got a","he's dreaming ","He's got a massive","His blood's worth bottling ","Hit the frog and toad","Hit the turps","Holden","Holy dooley ","Home grown ","Hoon ","Hooroo","Hottie ","how"
+,"Icy pole","Iffy ","Ironman","It'll be"
+,"Jackaroo","Jillaroo ","Joey","Jug","Jumbuck "
+,"Kelpie","Ken Oath","Kero ","Kindie ","Knackered ","Knickers","Knock "
+,"Lappy","Larrikin","Laughing gear ","leg it","Lets get some","Lets throw a","Like a madwoman's shit ","Lippy ","Lizard drinking","Lollies","Longneck ","Loose cannon ","Lurk "
+,"Maccas","Mad as a","Manchester","Mates","mate","Mate ","Mate's rates","Metho","Mickey Mouse Mate","Middy","Milk bar ","Mokkies","Mongrel ","Moolah","Mozzie","Mullet","Muster ","my"
+,"Nah, yeah ","Nipper","no dramas","No dramas","no worries","No worries","No worries, mate, she'll be right","No Wucka's","No wuckin' furries ","No-hoper ","Not my bowl of rice ","Not my cup of tea ","Nuddy"
+,"Ocker ","Off chops ","Offsider ","oi","Oldies","On the cans ","One for the road","Onya bike ","Op shop","Outback"
+,"Paddock ","Parma","Pash","Pav ","Pelican","Piece of Piss","Piker","pinga","Pint ","Piss Off","Piss Up","Pissed","Pissed Off","Plonk ","Pokies","Porky ","Postie","Pot ","Pozzy ","Pretty spiffy ","Prezzy ","Pub","Pull the wool over your eyes ","Pull the wool over their eyes ","Put a sock in it "
+,"Quid"
+,"Rack off ","Rage on ","Rapt ","Ratbag ","Reckon","Rego","Rellie","Rello ","Ridgy-didge","Rip snorter","Ripper ","Road train ","Roadie ","Rock up ","Rollie","Roo ","Roo bar ","Root Rat","Ropeable ","Rort ","Rotten","Rubbish ","Runners"
+,"Sandgropper ","Sandgroppers ","Sanger ","Schooner","Scratchy","Servo","Shag on a rock","Shark Biscuit ","Shazza","Shazza got us some ","She'll be apples ","She'll be right","Shoey","Shoot Through","Sickie","Sheila","Sheila ","Shonky","Show pony ","Sick","Sickie","Six of one, half a dozen of the other","Skeg ","Skite ","Skull ","Slab ","Slabs","Slacker","slappa ","Slaps","Sleepout ","Smokes","Smoko ","Snag ","Sook ","Spag bol ","Spewin' ","Spit the dummy","Squizz ","Stands out like a","Stickybeak","Stoked ","Stonkered ","Straight to the pool room","Straya ","Strewth","Strides ","Struth","Stubby","Stubby holder ","Stuffed ","Sunnies ","Suss",,"Suss it out","Swag ","Swagger"
+,"Taking the piss ","Tell him he's dreaming ","Tell your story walkin'","Ten Clicks away","Thingo ","Thongs ","Throw a shrimp on the barbie ","Throw-down ","Thunderbox ","Tickets on yourself ","Tinny","to ","Toads ","Too right","Top Bloke","Top End ","Tosser ","Trackie dacks ","Trackies","Trackies ","Tradie","Trent from punchy ","Troppo","Truckie ","True blue ","Tucker ","Tucker-bag","Turps ","Two pot screamer","Two up "
+,"U-IE ","Ugg","Ugg boots ","Uluru","unit ","Up the duff ","Up Yours","Up Yourself","Ute","Ute "
+,"VB","Vee dub","Veg out ","Vinnie's"
+,"Waggin' school","Waratah","Watch out for the","Waazoo ","What's crackin' ","What's the John Dory?","Whinge ","We're going ","when","where","whit","Wobbly ","Woop Woop","Wouldn't piss on them if they're on fire","Wrap your laughing gear 'round that","Wuss"
+,"ya","Yabber ","Yakka","Yobbo ","You little ripper","Your Shout","Yous"
+];
+
+function ipsuMe(el,p){
+	if(typeof(phrases)=="undefined")return;
+  var ipsum=[];
+  if(el=='editor'){
+	  var paramnum=p;
+	  var paras=p;
+    var sentr1=4;
+    var sentr2=25;
+    var parar1=4;
+    var parar2=12;
+  }else if(el=='title'){
+    var paramnum=1;
+    var paras=1;
+    var sentr1=1;
+    var sentr2=1;
+    var parar1=1;
+    var parar2=6;
+  }else{
+    var paramnum=1;
+	  var paras=1;
+    var sentr1=4;
+    var sentr2=25;
+    var parar1=4;
+    var parar2=12;
+  }
+	for(i=0;i<paras;i++){
+		para="";
+		for(j=0;j<ipsumRandom(sentr1,sentr2);j++){
+			sent="";
+			prevW=-1;
+			for(k=0;k<ipsumRandom(parar1,parar2);k++){
+				if(sent!="")sent+=" ";
+				var rW=ipsumRandom(0,phrases.length);
+				while(rW==prevW){rW=ipsumRandom(0,phrases.length);}
+        if(phrases[rW])sent+=phrases[rW].trim();
+				prevW=rW;
+			}
+      if(el!='title')sent+=".";
+			sent=sent.charAt(0).toUpperCase()+sent.slice(1).toLowerCase();
+			if(para!="")para+=" ";
+			para+=sent;
+		}
+		ipsum[ipsum.length]=para;
+	}
+  if(el=='editor'){
+	  var resultHTML='';
+	  for(p in ipsum){resultHTML+="<p>"+ipsum[p]+"</p>";}
+    $('.summernote').summernote('code',resultHTML);
+  }else{
+    var resultHTML=$('#'+el);
+    for(p in ipsum){resultHTML.val(ipsum[p]);}
+  }
+}
+function ipsumRandom(min,max){return Math.floor((Math.random()*max)+min);}

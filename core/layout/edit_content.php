@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.12
+ * @version    0.0.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
@@ -19,6 +19,7 @@
  * @changes    v0.0.12 Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
  * @changes    v0.0.12 Add Options for using Panoramic Photo's.
  * @changes    v0.0.12 Fix Multiple Media Adding.
+ * @changes    v0.0.13 Add Lorem Ipsum Generator for Administrators.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -101,7 +102,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                   echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-toggle="popover" data-dbgid="title" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                 }?>
                 <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="btn-danger" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<div class="input-group-btn" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-toggle="popover" data-dbgid="title" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`btn-danger`);return false;">'.svg2('loremipsum').'</button></div><div class="input-group-btn" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-toggle="popover" data-dbgid="title" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
               <script>
                 function genurl(){
@@ -412,7 +413,10 @@ if($r['contentType']=='inventory'){?>
                     $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'notes']);
                     echo$ss->rowCount()>0?'<div data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="notesda" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
-                  echo'<div class="d-flex justify-content-end" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" aria-label="Add Suggestions">'.svg2('idea').'</button></div>';?>
+                  echo'<div class="d-flex justify-content-end">'.
+                  '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
+                  '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
+                    '<button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestions">'.svg2('idea').'</button></div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
                 <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">

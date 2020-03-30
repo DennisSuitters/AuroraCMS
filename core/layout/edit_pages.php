@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
@@ -15,6 +15,7 @@
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.13 Add Lorem Generator for Administrators.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE id=:id");
 $s->execute([':id'=>$args[1]]);
@@ -67,7 +68,7 @@ if($so->rowCount()>0){
                     echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="title" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                 }?>
                 <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="title" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="title" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary addsuggestion" data-dbgid="title" data-tooltip="tooltip" data-placement="top" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
               <script>
                 function genurl(){
@@ -96,7 +97,10 @@ if($so->rowCount()>0){
                     $ss->execute([':rid'=>$r['id'],':t'=>'menu',':c'=>'notes']);
                     echo$ss->rowCount()>0?'<span data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary btn-sm suggestions" data-dbgid="notesda" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></span>':'';
                   }
-                  echo'<span class="d-flex justify-content-end" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" aria-label="Add Suggestion">'.svg2('idea').'</button></span>';?>
+                  echo'<div class="d-flex justify-content-end">'.
+                    '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
+                    '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
+                    '<button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button></div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
                 <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">

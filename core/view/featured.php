@@ -153,8 +153,15 @@ if($ii>0){
 				$alt=$r['title'];
 			$item=preg_replace('/<print content=[\"\']?alt[\"\']?>/',htmlspecialchars($alt,ENT_QUOTES,'UTF-8'),$item);
 		}
-		if(preg_match('/<print content=[\"\']?image[\"\']?>/',$item))
-			$item=$r['file']!=''?preg_replace('/<print content=[\"\']?image[\"\']?>/',htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'),$item):preg_replace('/<print content=[\"\']?image[\"\']?>/','',$item);
+		if(preg_match('/<print content=[\"\']?image[\"\']?>/',$item)){
+			$item=$r['file']!=''?preg_replace([
+					'/<print content=[\"\']?image[\"\']?>/',
+					'/<print cnt>/'
+				],[
+					htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'),
+					$i+1
+				],$item):preg_replace('/<print content=[\"\']?image[\"\']?>/','',$item);
+		}
 		$item=$r['link']=='nolink'?preg_replace('/<print content=[\"\']?title[\"\']?>/','<span class="hidden">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</span>',$item):preg_replace('/<print content=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$item);
 		if($r['contentType']=='carousel')
 			$item=preg_replace('~<caption>.*?<\/caption>~is',$r['seoCaption'],$item,1);

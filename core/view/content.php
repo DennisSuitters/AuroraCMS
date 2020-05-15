@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.12
+ * @version    0.0.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -22,6 +22,9 @@
  * @changes    v0.0.11 Add parsing for Inventory Item status.
  * @changes    v0.0.12 Fix showing stock status.
  * @changes    v0.0.12 Add Parsing for Panoramic Photo.
+ * @changes    v0.0.14 Fix Index/Home page not showing Category images.
+ * @changes    v0.0.14 Adjust Template Category select to allow selecting up to 4 different categories.
+ * @changes    v0.0.14 Fix displaying just Categories when using Shop by Category.
  */
 $rank=0;
 $notification='';
@@ -59,12 +62,25 @@ elseif($view=='search'){
 		preg_match('/<settings.*contenttype=[\"\'](.*?)[\"\'].*>/',$html,$matches);
 		$contentType=isset($matches[1])&&($matches[1]!='all')?$matches[1]:'%';
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti	ORDER BY featured DESC, ti DESC LIMIT $itemCount");
-	$s->execute([
-		':contentType'=>$contentType,
-		':status'=>$status,
-		':ti'=>time()
-	]);
+	if(stristr($contentType,'|')){
+		$ctarray=explode('|',$contentType);
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType1 OR contentType LIKE :contentType2 OR contentType LIkE :contentType3 OR contentType LIKE :contentType4 AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti	ORDER BY featured DESC, ti DESC LIMIT $itemCount");
+		$s->execute([
+			':contentType1'=>(isset($ctarray[0])?$ctarray[0]:''),
+			':contentType2'=>(isset($ctarray[1])?$ctarray[1]:''),
+			':contentType3'=>(isset($ctarray[2])?$ctarray[2]:''),
+			':contentType4'=>(isset($ctarray[3])?$ctarray[3]:''),
+			':status'=>$status,
+			':ti'=>time()
+		]);
+	}else{
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti	ORDER BY featured DESC, ti DESC LIMIT $itemCount");
+		$s->execute([
+			':contentType'=>$contentType,
+			':status'=>$status,
+			':ti'=>time()
+		]);
+	}
 }elseif($view=='bookings')
 	$id=(isset($args[0])?(int)$args[0]:0);
 elseif(isset($args[1])&&strlen($args[1])==2){
@@ -82,6 +98,14 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':ti'=>DateTime::createFromFormat('!d/m/Y','01/01/'.$args[0])->getTimestamp()
 	]);
 	$show='categories';
+}elseif(isset($args[0])&&$args[0]=='category'){
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+	$s->execute([
+		':contentType'=>$view,
+		':category_1'=>html_entity_decode(str_replace('-',' ',$args[1])),
+		':status'=>$status,
+		':ti'=>time()
+	]);
 }elseif(isset($args[1])){
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
 	$s->execute([
@@ -322,7 +346,7 @@ if($show=='categories'){
 			$catoutput='';
 			while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
 				$catitems=$catitem;
-				if($rc['icon']!=''||!file_exists('media'.DS.basename($rc['icon'])))$rc['icon']=$noimage;
+				if($rc['icon']!=''&&file_exists('media'.DS.basename($rc['icon']))){}else $rc['icon']=NOIMAGE;
 				$catitems=preg_replace([
 					'/<print category=[\"\']?image[\"\']?>/',
 					'/<print category=[\"\']?imageALT[\"\']?>/',
@@ -331,7 +355,7 @@ if($show=='categories'){
 				],[
 					htmlspecialchars($rc['icon'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
-					URL.$rc['url'].'/'.str_replace(' ','-',$rc['title']).'/',
+					URL.$rc['url'].'/category/'.str_replace(' ','-',$rc['title']).'/',
 					htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8')
 				],$catitems);
 				$catoutput.=$catitems;
@@ -384,6 +408,7 @@ if($show=='categories'){
 				'/<print content=[\"\']?file[\"\']?>/',
 				'/<print content=[\"\']?title[\"\']?>/',
 				'/<print profileLink>/',
+				'/<print link=[\"\']?contentType[\"\']?>/',
 				'/<print content=[\"\']?linktitle[\"\']?>/',
 				'/<print content=[\"\']?author[\"\']?>/',
 				'/<print content=[\"\']?dateCreated[\"\']?>/',
@@ -402,6 +427,7 @@ if($show=='categories'){
 				$shareImage,
 				htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 				URL.'profile/'.strtolower(str_replace(' ','-',htmlspecialchars($r['login_user'],ENT_QUOTES,'UTF-8'))).'/',
+				URL.str_replace(' ','-',htmlspecialchars($r['contentType'],ENT_QUOTES,'UTF-8')),
 				URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 				htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8'),
 				date($config['dateFormat'],$r['ti']),
@@ -489,7 +515,7 @@ if($show=='categories'){
 			''
 		],$html,1);
 	}else
-		$html=preg_replace('~<items>.*?<\/items>~is','',$html,1);
+		$html=preg_replace('~<section data-content="content-items">.*?<\/section>~is','',$html,1);
 	$html=preg_replace([
 		'~<item>.*?<\/item>~is',
 		'/<items>/',
@@ -518,6 +544,7 @@ if($view=='testimonials')$show='';
 if($show=='item'){
 	$html=preg_replace([
 		'~<items>.*?<\/items>~is',
+		'~<section data-content="content-items">.*?<\/section>~is',
 		'~<pagenotes>.*?<\/pagenotes>~is'
 	],[
 		''

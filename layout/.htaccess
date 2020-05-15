@@ -1,0 +1,41 @@
+
+RewriteOptions inherit
+# Uncomment this on a live site
+#<IfModule mod_headers.c>
+#    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
+#        Header set Cache-Control "max-age=604800, public"
+#    </FilesMatch>
+#</IfModule>
+#Disable Directory Browsing
+#Options All -Indexes
+<IfModule mod_rewrite.c>
+  SetEnv HTTP_MOD_REWRITE On
+	RewriteEngine On
+  Options +SymLinksIfOwnerMatch
+# Uncomment the below two lines if you want to force https site
+#  RewriteCond %{HTTP_HOST} !^www\.(.*)$ [NC]
+#  RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+# Uncomment below to redirict to non-www and force https
+#  RewriteBase /
+#  RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
+#  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
+  RewriteCond %{HTTPS} off
+  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+  
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*) index.php?url=$1 [L,QSA]
+</IfModule>
+# Block Access to .ini, .db, .sql, .htaccess Files
+<FilesMatch "(^.*\.([Ii][Nn][Ii]|[Dd][Bb]|[Ss][Qq][Ll]|[Hh][Tt][Aa])|~)$">
+    Order allow,deny
+    Deny from all
+    Satisfy All
+</FilesMatch>
+
+# php -- BEGIN cPanel-generated handler, do not edit
+# Set the “ea-php70” package as the default “PHP” programming language.
+<IfModule mime_module>
+  AddHandler application/x-httpd-ea-php70 .php .php7 .phtml
+</IfModule>
+# php -- END cPanel-generated handler, do not edit

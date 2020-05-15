@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.12
+ * @version    0.0.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -16,6 +16,7 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.12 Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
  * @changes    v0.0.12 Fix Multiple Media Adding.
+ * @changes    v0.0.14 Fix elFinder not adding files to single fields.
  */?>
 <script>
 var unsaved=false;
@@ -204,7 +205,7 @@ if(isset($r['due_ti'])){?>
       getFileCallback:function(file,fm){
         if(id>0||c=='attachments'){
           if(c=='mediafile'){
-            var urls = $.each(file,function(i,f){return f.url;});
+            var urls=$.each(file,function(i,f){return f.url;});
             $('#'+c).val(urls);
           }else{
             $('#'+c).val(file.url);
@@ -280,9 +281,9 @@ if(isset($r['due_ti'])){?>
       },
       commandsOptions: {
         getfile: {
-          onlyURL: true,
-          folders: false,
-          multiple: true,
+          onlyURL: c=='mediafile'?true:false,
+          folders: c=='mediafile'?false:true,
+          multiple: c=='mediafile'?true:false,
           oncomplete: "close"
         }
       }

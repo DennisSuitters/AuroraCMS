@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Display Items according to primary documents category.
@@ -15,6 +15,7 @@
  * @changes    v0.0.7 Fix Stock Status Display.
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.14 Add parsing of images into side items.
  */
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
@@ -190,22 +191,27 @@ if(file_exists(THEME.DS.'side_menu.html')){
 					$time.=' &rarr; <time datetime="'.date('Y-m-d',$r['tie']).'">'.date('dS M H:i',$r['tie']).'</time>';
 			}
 		}
+		if(file_exists('media/thumbs/'.basename($r['thumb']))){
+			$sideImage='<img src="'.$r['thumb'].'" alt="'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"/>';
+		}else{
+			$sideImage='';
+		}
 		$caption=$r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags(rawurldecode($r['notes'])),0,100).'...';
 		$items=preg_replace([
-			'/<print content=[\"\']?thumb[\"\']?>/',
 			'/<print link>/',
 			'/<print content=[\"\']?schemaType[\"\']?>/',
 			'/<print metaDate>/',
 			'/<print content=[\"\']?title[\"\']?>/',
 			'/<print time>/',
+			'/<thumb>/',
 			'/<print content=[\"\']?caption[\"\']?>/'
 		],[
-			htmlspecialchars($r['thumb'],ENT_QUOTES,'UTF-8'),
 			URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 			htmlspecialchars($r['schemaType'],ENT_QUOTES,'UTF-8'),
 			date('Y-m-d',$r['ti']),
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 			$time,
+			$sideImage,
 			htmlspecialchars($caption,ENT_QUOTES,'UTF-8')
 		],$items);
 		$output.=$items;

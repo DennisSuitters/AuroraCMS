@@ -56,6 +56,13 @@ a:hover{color:#888;text-decoration:none}
 .price .cost.strike{display:block;font-size:1.75em;text-decoration:line-through}
 .price .reduced{position:relative;font-size:2.5em}
 .price .reduced:before{content:'Reduced to';position:absolute;top:-14px;left:-10px;font-size:14px}
+
+.side_menu time{font-size:12px}
+
+.side_menu .list-group-item-text{font-size:14px;line-height:1.1}
+
+.side_menu img{max-width:48px;margin:0 10px 5px 0;float:left}
+
 #menuavatar{width:20px;height:20px}
 #headeravatar{width:32px;height:32px}
 #cart{position:absolute;display:block;top:-10px;right:-5px}

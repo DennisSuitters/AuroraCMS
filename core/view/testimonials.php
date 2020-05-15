@@ -7,20 +7,17 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
+ * @changes    v0.0.14 Fix incorrect number of items returned from database.
  */
 if(stristr($html,'<settings')){
-	preg_match('/<settings items="(.*?)">/',$html,$matches);
-	$count=$matches[1];
-}else$count=4;
-$html=preg_replace([
-	'~<settings.*?>~is'
-],[
-	''
-],$html);
+	preg_match('/<settings.*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+	$count=isset($matches[1])&&$matches[1]!=0?$matches[1]:$config['showItems'];
+}else$count=$config['showItems'];
+$html=preg_replace('~<settings.*?>~is','',$html);
 if($page['notes']!=''){
 	$html=preg_replace([
 		'/<print page=[\"\']?notes[\"\']?>/',
@@ -33,7 +30,8 @@ if($page['notes']!=''){
 	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
-$s=$db->query("SELECT * FROM `".$prefix."content` WHERE contentType='testimonials' AND status='published' ORDER BY ti DESC");
+$sqltest="SELECT * FROM `".$prefix."content` WHERE contentType='testimonials' AND status='published' ORDER BY ti DESC".($count!='all'?" LIMIT 0,".$count:"");
+$s=$db->query($sqltest);
 $i=0;
 $items=$testitems='';
 if($s->rowCount()>0){

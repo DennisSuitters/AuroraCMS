@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.14 Remove Views from "Coming Soon" and "Maintenance" pages.
  */
 $rank=0;
 $show='pages';
@@ -137,11 +138,9 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" data-title="'.$rs['cnt'].' Editing Suggestions" aria-label="Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
                 }?>
               </td>
-              <td></td>
-              <td class="align-middle text-center">
-                <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views23`).text(`0`);updateButtons(`23`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views23" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
-              </td>
-              <td></td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
               <td id="controls_" class="align-middle">
                 <div class="btn-group float-left">
                   <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/23';?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
@@ -158,11 +157,9 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" data-title="'.$rs['cnt'].' Editing Suggestions" aria-label="Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
                 }?>
               </td>
-              <td></td>
-              <td class="align-middle text-center">
-                <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views24`).text(`0`);updateButtons(`24`,`menu`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views24" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
-              </td>
-              <td></td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
+              <td>&nbsp;</td>
               <td id="controls_" class="align-middle">
                 <div class="btn-group float-left">
                   <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/24';?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Edit" aria-label="Edit"':' data-tooltip="tooltip" data-title="View" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>

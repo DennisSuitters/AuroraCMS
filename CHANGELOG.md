@@ -1,3 +1,12 @@
+### v0.0.14
+- Fix elFinder not adding files to single fields.
+- Remove Views from "Coming Soon" and "Maintenance" pages.
+- Fix Index/Home page not showing Category images.
+- Create default-mvp theme based on mvp.css the classless CSS Framework.
+- Fix incorrect number of Testimonials being displayed dependant on <settings items="#">
+- Adjust Template Category select to allow selecting up to 4 different categories.
+- Fix displaying just Categories when using Shop by Category.
+
 ### v0.0.13
 - Add X-Clacks Silent Attribute Header, Add you site to the list: https://xclacksoverhead.org/dearheart/review
 - Add Lorem Generator for Administrators.

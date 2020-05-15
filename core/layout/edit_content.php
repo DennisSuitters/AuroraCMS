@@ -279,12 +279,18 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_1" list="category_1_options" type="text" class="form-control textinput" value="<?php echo$r['category_1'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_1"<?php echo$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
 <?php if($user['options'][1]==1){
+  echo'<datalist id="category_1_options">';
+  $sc=$db->prepare("SELECT DISTINCT title FROM `".$prefix."choices` WHERE title!='' AND contentType='category' AND url=:url ORDER BY title ASC");
+  $sc->execute([':url'=>$r['contentType']]);
+  if($sc->rowCount()>0){
+    while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['title'].'"/>';
+  }
   $sc=$db->query("SELECT DISTINCT category_1 FROM `".$prefix."content` WHERE category_1!='' ORDER BY category_1 ASC");
   if($sc->rowCount()>0){
-    echo'<datalist id="category_1_options">';
     while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
-    echo'</datalist>';
   }
+  echo'</datalist>';
+
                 echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_1" class="btn btn-secondary save" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>

@@ -1,0 +1,21 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="content">
+	<section class="covertron about" style="<print page=cover>"><print page="coverVideo"></section>
+	<section class="media">
+		<mediaitems>
+			<mediaimages>
+					<a href="<print media=file>" data-fancybox="gallery">
+						<img class="img-thumbnail" src="<print media=thumb>" alt="<print media=title>">
+					</a>
+			</mediaimages>
+		</mediaitems>
+	</section>
+	<section class="row">
+		<article class="col-11">
+			<print page="notes">
+		</article>
+	</section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

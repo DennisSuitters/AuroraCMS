@@ -1,0 +1,155 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="content">
+	<pagenotes>
+		<section class="row">
+			<article class="col-11">
+      	<print page="notes">
+			</article>
+		</section>
+  </pagenotes>
+	<section class="row">
+		<item>
+			<article class="card col-11 col-sm-8">
+				<json-ld>
+				<image>
+					<div class="card-image full">
+						<img src="<print content=image>" alt="<print content=imageALT>">
+					</div>
+				</image>
+				<panoramic>
+					<div class="panorama" data-paver><img src="<print content=image>" alt="<print content=imageALT>"></div>
+				</panoramic>
+				<div class="card-text m-3">
+					<h1><print content="title"></h1>
+					<print content="dateCreated" userrank="399" class="text-muted small" container="div" leadingtext="Created: ">
+					<print content="datePublished" class="text-muted small" container="div" leadingtext="Published: ">
+					<print content="dateEdited" userrank="399" class="text-muted small" container="div" leadingtext="Edited: ">
+					<print content="dateEvent" class="text-muted small" container="div" leadingtext="Event Date: ">
+					<print content="categories" class="text-muted small" container="div" leadingtext="Categories: ">
+					<print content="tags" class="text-muted small" container="div" leadingtext="Tags: ">
+					<cost>
+						<div class="my-4 d-block d-sm-none text-center">
+							<div class="price"><print content="cost"></div>
+							<print content="quantity">
+							<div class="text-right">
+								<service>
+									<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
+								</service>
+								<inventory>
+									<choices>
+									<button class="addCart" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+								</inventory>
+							</div>
+						</div>
+					</cost>
+					<mediaitems>
+						<div class="media my-5 text-center">
+							<mediaimages>
+								<a class="m-2" data-fancybox="media<print content=id>" data-caption="<print media=fileALT>" href="<print media=file>"><img class="img-thumbnail" src="<print media=thumb>" alt="<print media=title>"></a>
+							</mediaimages>
+						</div>
+					</mediaitems>
+					<print content="notes">
+				</div>
+				<author>
+					<hr>
+					<aside class="card border-0">
+						<div class="card-header"><h5>About the Author</h5></div>
+						<div class="card-body">
+							<div class="row">
+								<div class="col-2 col-sm-1">
+									<print author="avatar" alt="name" class="img-thumbnail">
+								</div>
+								<div class="col-9 col-sm-10 ml-2">
+				      		<h5>
+										<a class="text-default" href="<print author=link>"><print author="name"></a>
+				      		</h5>
+									<div>
+										<print author="social" type="icon" class="libre libre-social libre-2x m-1">
+									</div>
+	  							<print author="notes">
+								</div>
+							</div>
+						</div>
+					</aside>
+				</author>
+				<review>
+					<div class="card border-0 border-top hreview-aggregate">
+						<json-ld-review>
+						<div class="card-header font-weight-bold d-flex justify-content-between">
+							<div>Review by <span class="p-author h-card"><print review="name"></span> on <time class="dt-published" datetime="<print review=datetime>"><print review="date"></time></div>
+							<data class="p-rating" value="<print review=rating>">
+								<span class="rat">
+									<span class="<print review=set1>"></span>
+									<span class="<print review=set2>"></span>
+									<span class="<print review=set3>"></span>
+									<span class="<print review=set4>"></span>
+									<span class="<print review=set5>"></span>
+								</span>
+							</data>
+						</div>
+						<div class="card-body">
+							<div class="e-content summary"><print review="review"></div>
+						</div>
+					</div>
+				</review>
+				<comments>
+				<related itemCount="4">
+					<hr>
+					<div class="card border-0 mb-5">
+						<div class="card-header"><h4>Related content</h4></div>
+						<div class="card-body overflow-hidden">
+							<section>
+								<relitems>
+									<article class="card col-12 col-sm-3 m-2 m-sm-0">
+										<div class="card-image">
+											<img src="<print related=thumb>" alt="<print related=imageALT>">
+										</div>
+										<div class="card-footer d-inline-block text-center p-1 py-2">
+											<a class="stretched-link" href="<print related=linktitle>">
+												<print related="title">
+											</a>
+										</div>
+										<div class="corner-ribbon top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+										<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow"><print related="contentType"></div>
+									</article>
+								</relitems>
+							</section>
+						</div>
+					</div>
+				</related>
+			</article>
+		</item>
+		<settings itemCount="all">
+		<contentitems>
+			<section class="col-12 col-sm-8">
+				<items>
+					<article class="col-12 col-sm-4 m-0 p-0">
+						<div class="card m-1">
+							<div class="card-image">
+								<img src="<print content=thumb>" alt="<print content=imageALT>">
+							</div>
+							<div class="card-header">
+								<div class="title"><h4><a href="<print content=linktitle>"><print content="title"></a></h4></div>
+								<div class="card-subtitle"><print content="category_1">&nbsp;</div>
+							</div>
+							<div class="card-body">
+								<print content="notes">
+							</div>
+							<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+							<div class="card-footer">
+								<a class="btn" href="<print content=linktitle>" role="button">View</a>
+							</div>
+						</div>
+					</article>
+				</items>
+				<more>
+					<button id="more<print config=showItems>" class="addMore btn btn-outline-secondary btn-block" data-contenttype="<print contentType>" data-view="<print view>" data-itemcount="<print config=showItems>">More</button>
+				</more>
+			</section>
+		</contentitems>
+</block>
+<block include="side_menu.html">
+<block include="footer.html">
+<block include="meta_footer.html">

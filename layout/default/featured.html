@@ -1,0 +1,31 @@
+<settings itemcount="4" contenttype="folder" order="random">
+<section id="#featured" class="slider-wrapper">
+  <input checked id="slide1" name="slides" type="radio">
+  <input id="slide2" name="slides" type="radio">
+  <div class="slider-arrow-nav">
+    <label class="nav-arrow prev" for="slide1"></label>
+    <label class="nav-arrow prev" for="slide2"></label>
+  </div>
+  <div class="slider-arrow-nav">
+    <label class="nav-arrow next" for="slide1"></label>
+    <label class="nav-arrow next" for="slide2"></label>
+  </div>
+  <div class='slider-content'>
+		<items>
+			<div class="slide slide<print cnt>">
+				<img src="<print content=image>" alt="<print content=title>">
+        <caption>
+				  <div class="slide-caption">
+						<div class="title" role="heading"><a href="<print link>"><print content="title"></a></div>
+						<print content="caption">
+						<attribution>
+							<div class="attribution">
+								<a href="<print media=attributionURL>" target="_blank" rel="noopener noreferrer"><print media="attributionName"></a>
+							</div>
+						</attribution>
+          </div>
+			  </caption>
+			</div>
+		</items>
+  </div>
+</section>

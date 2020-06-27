@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.14
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Display Items according to primary documents category.
@@ -16,6 +16,7 @@
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.14 Add parsing of images into side items.
+ * @changes    v0.0.15 Add parsing for Weight and Size.
  */
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
@@ -23,7 +24,8 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		$sideCost='';
 		if($r['options'][0]==1){
 			if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
-			$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'').(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+			$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
+			$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
 			if($r['stockStatus']=='sold out')$sideCost.='</div>';
 		}
 		if($r['stockStatus']=='out of stock')$r['quantity']=0;
@@ -60,6 +62,24 @@ if(file_exists(THEME.DS.'side_menu.html')){
 			$sideTemp=preg_replace([
 				'/<print content=[\"\']?quantity[\"\']?>/'
 			],$sideQuantity,$sideTemp);
+			if(stristr($sideTemp,'<weight>')){
+				if($r['weight']!=''){
+					$sideTemp=preg_replace(
+						'/<weight>/',
+						'<div class="text-left"><small>Weight: '.$r['weight'].$r['weightunit'].'</small></div>',
+						$sideTemp);
+				}else
+					$sideTemp=str_replace('<weight>','',$sideTemp);
+			}
+			if(stristr($sideTemp,'<size>')){
+				if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
+					$sideTemp=preg_replace(
+						'/<size>/',
+						'<div class="text-left"><small>Width: '.$r['width'].$r['widthunit'].'<br>Height: '.$r['height'].$r['heightunit'].'<br>Length: '.$r['length'].$r['lengthunit'].'</small></div>',
+						$sideTemp);
+				}else
+					$sideTemp=str_replace('<size>','',$sideTemp);
+			}
 			if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
 				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE rid=:id ORDER BY title ASC");
 				$scq->execute([':id'=>$r['id']]);

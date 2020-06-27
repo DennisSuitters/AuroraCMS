@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Add test in Administration Header to test if admin.css exists,
@@ -17,6 +17,7 @@
  * @changes    v0.0.10 Fix missing manifestadmin.json.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.11 Fix display of number of Notifications in Title.
+ * @changes    v0.0.15 Add Summernote plugin summernote-classes.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -43,11 +44,12 @@
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery-ui.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'elfinder'.DS.'css'.DS.'elfinder.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'fullcalendar.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.simplecolorpicker.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'i.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'codemirror.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'daterangepicker.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'summernote-lite.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'style.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'aurora.css';?>">
 <?php if(file_exists(THEME.DS.'css'.DS.'admin.css'))echo'<link rel="stylesheet" type="text/css" href="'.THEME.DS.'css'.DS.'admin.css">';?>
@@ -56,16 +58,17 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'summernote-lite.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-save-button.js';?>"></script>
+    <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-classes.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'codemirror.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'elfinder'.DS.'elfinder.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'elfinder'.DS.'js'.DS.'elfinder.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'aurora.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.simplecolorpicker.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'moment.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'fullcalendar.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
+    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
-<?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div>';?>
+<?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div><div class="developmentbottom"></div>';?>

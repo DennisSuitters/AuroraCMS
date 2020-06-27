@@ -1,0 +1,115 @@
+<accountmenu>
+	<nav class="account-menu sticky-top" role="menubar">
+		<input class="menubar-input" type="checkbox" id="administration-menu">
+		<label class="menubar-label" for="administration-menu" onclick>Administration</label>
+		<ul>
+			<seohelper>
+				<li class="d-none d-sm-inline-block"><button onclick="$('head').toggleClass('metashow');"><strong>Show Meta</strong></button></li>
+			</seohelper>
+			<development>
+				<li><button onclick="$('body').toggleClass('depth');"><strong>Show Elements Depth</strong></button></li>
+			</development>
+			<li><a href="proofs">Proofs</a></li>
+			<li><a href="orders">Orders</a></li>
+			<li><a href="settings">Settings</a></li>
+			<profile>
+				<li><a href="profile/<print user=name>">Profile</a></li>
+			</profile>
+			<administration>
+				<li><a href="<print administrationLink>">Administration</a></li>
+			</administration>
+			<li><a href="logout">Logout</a></li>
+			<li class="d-none d-sm-inline-block"><img id="accountavatar" class="rounded-circle" src="<print user=avatar>" alt="<print user=name>"></li>
+		</ul>
+		<img id="accountavatar" class="rounded-circle d-inline-block d-sm-none" src="<print user=avatar>" alt="<print user=name>">
+	</nav>
+</accountmenu>
+<address class="row mx-2 pt-2 pt-sm-4 glass">
+	<aside class="col-12 col-sm-3 mt-1 mt-sm-2 pt-4 text-center">
+		<a href="<print meta=url>"><img src="layout/default/images/logo.png" alt="<print config=business>"></a>
+	</aside>
+	<aside class="col-12 col-sm-3 mt-3 mt-sm-2">
+		<div class="row text-center text-sm-left">
+			<div class="col-1 pt-2 mr-2">
+				<i class="libre libre-2x"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 13,10.477272 q 0,0.230114 -0.0852,0.600853 -0.0852,0.370739 -0.17897,0.583807 -0.17898,0.426136 -1.03978,0.903409 Q 10.89489,13 10.1108,13 9.88068,13 9.66335,12.97017 9.44602,12.94034 9.1733,12.863636 8.90057,12.786926 8.76847,12.740056 8.63636,12.693186 8.29545,12.56534 7.95455,12.437499 7.87784,12.411931 7.04261,12.113636 6.38636,11.704545 5.29545,11.031249 4.1321,9.867897 2.96875,8.704545 2.29545,7.613636 1.886364,6.957385 1.588068,6.122158 1.562498,6.045458 1.434659,5.704545 1.306818,5.363636 1.259943,5.231533 1.213073,5.099431 1.136364,4.826704 1.059654,4.553976 1.02983,4.336647 1,4.119318 1,3.889204 1,3.105113 1.434659,2.303977 1.911932,1.443182 2.33807,1.264204 2.55114,1.170454 2.92187,1.085227 3.29261,1 3.52273,1 3.64205,1 3.7017,1.02557 q 0.15341,0.05114 0.45171,0.647727 0.0937,0.161932 0.25568,0.460228 0.16193,0.298295 0.2983,0.541193 0.13636,0.242898 0.2642,0.455966 0.0256,0.03409 0.14915,0.213068 0.12358,0.178977 0.18324,0.302557 0.0597,0.123579 0.0597,0.242897 0,0.170455 -0.2429,0.426137 -0.2429,0.255682 -0.52841,0.46875 -0.28551,0.213068 -0.52841,0.451705 -0.2429,0.238636 -0.2429,0.392045 0,0.0767 0.0426,0.191761 0.0426,0.115057 0.0724,0.174716 0.0298,0.05966 0.11932,0.204546 0.0895,0.144886 0.098,0.161932 0.64773,1.167613 1.48295,2.002841 0.83523,0.835227 2.00284,1.482954 0.017,0.0085 0.16194,0.09801 0.14488,0.08949 0.20454,0.119318 0.0597,0.02983 0.17472,0.07244 0.11505,0.04261 0.19176,0.04261 0.15341,0 0.39204,-0.242897 0.23864,-0.242898 0.45171,-0.52841 0.21307,-0.285511 0.46875,-0.528408 0.25568,-0.242899 0.42614,-0.242899 0.11931,0 0.24289,0.05966 0.12358,0.05966 0.30256,0.183239 0.17898,0.123579 0.21307,0.149147 0.21307,0.127841 0.45596,0.264205 0.2429,0.136363 0.5412,0.298295 0.29829,0.161932 0.46022,0.255682 0.5966,0.298295 0.64773,0.451704 Q 13,10.357949 13,10.477266 z"/></svg></i>
+			</div>
+			<div class="col-10 text-2x">
+				<print config="phone"><br>
+				<print config="mobile">
+			</div>
+		</div>
+	</aside>
+	<aside class="col-12 col-sm-3 mt-3 mt-sm-2">
+		<div class="row text-center text-sm-left">
+			<div class="col-1 pt-2 mr-2">
+				<i class="libre libre-2x"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 8,4.25 v 3.5 Q 8,7.859375 7.9297,7.929687 7.85938,8 7.75,8 H 5.25 Q 5.14062,8 5.07031,7.92969 5,7.859375 5,7.75 V 7.25 Q 5,7.140625 5.0703,7.070312 5.14062,7 5.25,7 H 7 V 4.25 Q 7,4.140625 7.0703,4.070312 7.14063,4 7.25,4 h 0.5 Q 7.85938,4 7.92969,4.07031 8,4.140625 8,4.25 z M 11.25,7 Q 11.25,5.84375 10.67969,4.867187 10.10938,3.890625 9.13281,3.320312 8.15625,2.75 7,2.75 5.84375,2.75 4.86719,3.320312 3.89062,3.890625 3.32031,4.867187 2.75,5.84375 2.75,7 q 0,1.15625 0.57031,2.132813 0.57031,0.976562 1.54688,1.546875 Q 5.84375,11.25 7,11.25 q 1.15625,0 2.13281,-0.570312 0.97657,-0.570313 1.54688,-1.546875 Q 11.25,8.15625 11.25,7 z M 13,7 q 0,1.632813 -0.80469,3.011718 -0.80469,1.378907 -2.18359,2.183594 Q 8.63281,13 7,13 5.36719,13 3.98828,12.195312 2.60938,11.390625 1.804688,10.011718 1,8.632813 1,7 1,5.367187 1.804688,3.988282 2.60938,2.609375 3.98828,1.804688 5.36719,1 7,1 8.63281,1 10.01172,1.804688 11.39062,2.609375 12.19531,3.988282 13,5.367187 13,7 z"/></svg></i>
+			</div>
+			<div class="col-10 text-2x">
+				Mon-Fri 9am-5pm<br>
+				Sat 10am-1pm<br>
+				Sun Closed
+			</div>
+		</div>
+	</aside>
+	<aside class="col-12 col-sm-3 mt-3 mt-sm-2 text-center text-sm-right">
+		<buildSocial>
+			<a class="libre-social libre-3x" href="<print sociallink>" aria-label="<print rel=label>"><print socialicon></a>
+		</buildSocial>
+		<rss>
+			<a class="libre-social libre-3x" href="<print rsslink>" aria-label="RSS Feed"><print rssicon></a>
+		</rss>
+		<a href="bookings" role="button">Make a Booking</a>
+	</aside>
+</address>
+<header class="row sticky-top glass border-bottom mb-5 py-3">
+	<nav role="menubar" class="my-0">
+		<input class="menubar-input" type="checkbox" id="mobile-menu">
+    <label class="menubar-label" for="mobile-menu" onclick>Menu</label>
+		<ul>
+			<buildMenu>
+				<nondropDown>
+					<li class="<print active=menu>">
+						<a href="<print menu=url>"><print menu="title"></a>
+						<menuCart>
+					</li>
+				</nondropDown>
+				<dropDown>
+					<li>
+						<a href="<print menu=url>"><print menu="title"></a>
+						<ul>
+							<subMenuItem>
+								<li><a href="<print submenu=url>"><print submenu="title"></a></li>
+							</subMenuItem>
+						</ul>
+					</li>
+				</dropDown>
+				<menuLogin>
+					<li>
+						<a href="#login">Login</a>
+						<ul>
+							<li>
+								<form method="post" action="<print url>" class="padding-0">
+									<input type="hidden" name="act" value="login">
+									<label for="menuLoginUsername">Username</label>
+									<input type="text" id="menuLoginUsername" name="username" placeholder="Username...">
+									<label for="loginMenuPassword">Password</label>
+									<input type="password" id="loginMenuPassword" name="password" placeholder="Password...">
+									<div class="text-right mt-3">
+										<button type="submit">Sign in</button>
+									</div>
+									<div class="mt-3">
+										<signup>
+											<a href="login#signupform">New around here? Sign up</a>
+										</signup>
+										<a href="login#resetform">Forgot password?</a>
+									</div>
+								</form>
+							</li>
+						</ul>
+					</li>
+				</menuLogin>
+			</buildMenu>
+		</ul>
+	</nav>
+</header>
+<main>

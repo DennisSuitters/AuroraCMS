@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.15 Add GST Calculation.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
 $q->execute([':id'=>$id]);
@@ -63,55 +64,55 @@ else{?>
                 <input type="text" id="fromfrom" class="form-control" name="fromfrom" value="<?php echo$config['business'];?>" readonly>
               </div>
               <div class="form-group row">
-                <label for="fromabn" class="col-form-label col-sm-3">ABN</label>
+                <label for="fromabn" class="col-form-label col-sm-3"><small>ABN</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromabn" class="form-control form-control-sm" name="fromabn" value="<?php echo$config['abn'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="fromaddress" class="col-form-label col-sm-3">Address</label>
+                <label for="fromaddress" class="col-form-label col-sm-3"><small>Address</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromaddress" class="form-control form-control-sm" name="fromaddress" value="<?php echo$config['address'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="fromsuburb" class="col-form-label col-sm-3">Suburb</label>
+                <label for="fromsuburb" class="col-form-label col-sm-3"><small>Suburb</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromsuburb" class="form-control form-control-sm" name="fromsuburb" value="<?php echo$config['suburb'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="fromcity" class="col-form-label col-sm-3">City</label>
+                <label for="fromcity" class="col-form-label col-sm-3"><small>City</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromcity" class="form-control form-control-sm" name="fromcity" value="<?php echo$config['city'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="fromstate" class="col-form-label col-sm-3">State</label>
+                <label for="fromstate" class="col-form-label col-sm-3"><small>State</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromstate" class="form-control form-control-sm" name="fromstate" value="<?php echo$config['state'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="frompostcode" class="col-form-label col-sm-3">Postcode</label>
+                <label for="frompostcode" class="col-form-label col-sm-3"><small>Postcode</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="frompostcode" class="form-control form-control-sm" name="frompostcode" value="<?php echo$config['postcode']!=0?$config['postcode']:'';?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="fromemail" class="col-form-label col-sm-3">Email</label>
+                <label for="fromemail" class="col-form-label col-sm-3"><small>Email</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromemail" class="form-control form-control-sm" name="fromemail" value="<?php echo$config['email'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="fromphone" class="col-form-label col-sm-3">Phone</label>
+                <label for="fromphone" class="col-form-label col-sm-3"><small>Phone</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="fromphone" class="form-control form-control-sm" name="fromphone" value="<?php echo$config['phone'];?>" readonly>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="frommobile" class="col-form-label col-sm-3">Mobile</label>
+                <label for="frommobile" class="col-form-label col-sm-3"><small>Mobile</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="frommobile" class="form-control form-control-sm" name="frommobile" value="<?php echo$config['mobile'];?>" readonly>
                 </div>
@@ -123,56 +124,56 @@ else{?>
                 <input type="text" id="client_business" class="form-control" name="client_business" value="<?php echo$client['username'];echo$client['name']!=''?' ['.$client['name'].']':'';echo$client['business']!=''?' -> '.$client['business']:'';?>" placeholder="Username, Business or Name..." readonly>
               </div>
               <div class="form-group row">
-                <label for="address" class="col-form-label col-sm-3">Address</label>
+                <label for="address" class="col-form-label col-sm-3"><small>Address</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="address" class="form-control form-control-sm textinput oce" value="<?php echo$client['address'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="address" data-bs="btn-danger" placeholder="Enter an Address..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                   <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="saveaddress" class="btn btn-secondary btn-sm save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
                 </div>
               </div>
               <div class="form-group row">
-                <label for="suburb" class="col-form-label col-sm-3">Suburb</label>
+                <label for="suburb" class="col-form-label col-sm-3"><small>Suburb</small></label>
                 <div class="input-group col-sm-9">
                   <input type="text" id="suburb" class="form-control form-control-sm textinput oce" value="<?php echo$client['suburb'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="suburb" data-bs="btn-danger" placeholder="Enter a Suburb..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                   <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savesuburb" class="btn btn-secondary btn-sm save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
                 </div>
               </div>
             <div class="form-group row">
-              <label for="city" class="col-form-label col-sm-3">City</label>
+              <label for="city" class="col-form-label col-sm-3"><small>City</small></label>
               <div class="input-group col-sm-9">
                 <input type="text" id="city" class="form-control form-control-sm textinput oce" value="<?php echo$client['city'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="city" data-bs="btn-danger" placeholder="Enter a City..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                 <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savecity" class="btn btn-secondary btn-sm save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="state" class="col-form-label col-sm-3">State</label>
+              <label for="state" class="col-form-label col-sm-3"><small>State</small></label>
               <div class="input-group col-sm-9">
                 <input type="text" id="state" class="form-control form-control-sm textinput oce" value="<?php echo$client['state'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="state" data-bs="btn-danger" placeholder="Enter a State..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                 <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savestate" class="btn btn-secondary btn-sm save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="postcode" class="col-form-label col-sm-3">Postcode</label>
+              <label for="postcode" class="col-form-label col-sm-3"><small>Postcode</small></label>
               <div class="input-group col-sm-9">
                 <input type="text" id="postcode" class="form-control form-control-sm textinput oce" value="<?php echo$client['postcode']!=0?$client['postcode']:'';?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="postcode" data-bs="btn-danger" placeholder="Enter a Postcode..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                 <?php if($r['status']!='archived'){?><div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savepostcode" class="btn btn-secondary btn-sm save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div><?php }?>
               </div>
             </div>
             <div class="form-group row">
-              <label for="email" class="col-form-label col-sm-3">Email</label>
+              <label for="email" class="col-form-label col-sm-3"><small>Email</small></label>
               <div class="input-group col-sm-9">
                 <input type="text" id="email" class="form-control form-control-sm textinput oce" value="<?php echo$client['email'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="email" data-bs="btn-danger" placeholder="Enter an Email..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                 <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="saveemail" class="btn btn-secondary btn-sm save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="phone" class="col-form-label col-sm-3">Phone</label>
+              <label for="phone" class="col-form-label col-sm-3"><small>Phone</small></label>
               <div class="input-group col-sm-9">
                 <input type="text" id="phone" class="form-control form-control-sm textinput oce" value="<?php echo$client['phone'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="phone" data-bs="btn-danger" placeholder="Enter a Phone..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                 <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savephone" class="btn btn-secondary btn-sm save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
               </div>
             </div>
             <div class="form-group row">
-              <label for="mobile" class="col-form-label col-sm-3">Mobile</label>
+              <label for="mobile" class="col-form-label col-sm-3"><small>Mobile</small></label>
               <div class="input-group col-sm-9">
                 <input type="text" id="mobile" class="form-control form-control-sm textinput oce" value="<?php echo$client['mobile'];?>" data-dbid="<?php echo$client['id'];?>" data-dbt="login" data-dbc="mobile" data-bs="btn-danger" placeholder="Enter a Mobile..."<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' readonly':'';?>>
                 <div class="input-group-append ocesave<?php echo$r['status']=='archived'||($client['address']==''&&$client['id']==0)?' hidden':'';?>" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemobile" class="btn btn-secondary btn-sm save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
@@ -180,7 +181,7 @@ else{?>
             </div>
 <?php if($r['status']!='archived'){?>
             <div class="form-group row">
-              <label for="changeClient" class="col-form-label col-sm-3">Client</label>
+              <label for="changeClient" class="col-form-label col-sm-3"><small>Client</small></label>
               <div class="input-group col-sm-9">
                 <select id="changeClient" class="form-control form-control-sm" onchange="changeClient($(this).val(),'<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Select a Client...">
                   <option value="0"<?php echo($r['cid']=='0'?' selected':'');?>>None</option>
@@ -322,7 +323,7 @@ else
 ?>
                 <tr>
                   <td class="text-center align-middle"><?php echo$image;?></td>
-                  <td class="text-left align-middle"><?php echo$i['code'];?></td>
+                  <td class="text-left align-middle small"><?php echo$i['code'];?></td>
                   <td class="text-left align-middle">
 <?php if($oi['iid']!=0)
   echo$i['title'];
@@ -377,6 +378,7 @@ if($oi['iid']!=0)
                 </tr>
 <?php if($oi['iid']!=0)
   $total=$total+($oi['cost']*$oi['quantity']);
+  $total=number_format((float)$total, 2, '.', '');
 }
 $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE id=:rid");
 $sr->execute([':rid'=>$r['rid']]);
@@ -421,12 +423,25 @@ if($ssr->rowCount()>0){?>
     echo'%';
     $total=($total*((100-$reward['value'])/100));
   }
+  $total=number_format((float)$total, 2, '.', '');
   echo' Off';
 }?>
                   </td>
                   <td class="text-right align-middle"><strong><?php echo$total;?></strong></td>
+                  <td>&nbsp;</td>
+                </tr>
+<?php if($config['gst']>0){
+  $gst=$total*($config['gst']/100);
+  $gst=number_format((float)$gst, 2, '.', '');?>
+                <tr>
+                  <td colspan="6" class="text-right"><strong>GST</strong></td>
+                  <td class="total text-right border-top border-bottom"><strong><?php echo$gst;?></strong></td>
                   <td></td>
                 </tr>
+<?php
+  $total=$total+$gst;
+  $total=number_format((float)$total, 2, '.', '');
+}?>
                 <tr>
                   <td class="text-right align-middle"><strong>Postage</strong></td>
                   <td colspan="5" class="text-right align-middle">
@@ -445,13 +460,14 @@ if($ssr->rowCount()>0){?>
                       <input type="hidden" name="t" value="orders">
                       <input type="hidden" name="c" value="postageCost">
                       <input type="text" class="form-control text-right" name="da" value="<?php echo$r['postageCost'];$total=$total+$r['postageCost'];?>">
+<?php $total=number_format((float)$total, 2, '.', '');?>
                     </form>
                   </td>
                   <td></td>
                 </tr>
                 <tr>
                   <td colspan="6" class="text-right"><strong>Total</strong></td>
-                  <td class="total text-right border-top"><strong><?php echo$total;?></strong></td>
+                  <td class="total text-right border-top border-bottom"><strong><?php echo$total;?></strong></td>
                   <td></td>
                 </tr>
               </tbody>

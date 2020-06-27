@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.10 Fix typo's causing errors.
  * @changes    v0.0.10 Fix missing SQL Field when storing bad actors.
+ * @changes    v0.0.15 Add Ratings.
  */
 $getcfg=true;
 require'db.php';
@@ -50,6 +51,7 @@ if($act=='add_test'){
     $name=isset($_POST['name'])?filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'name',FILTER_SANITIZE_STRING);
     $business=isset($_POST['business'])?filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'business',FILTER_SANITIZE_STRING);
     $review=isset($_POST['review'])?filter_input(INPUT_POST,'review',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'review',FILTER_SANITIZE_STRING);
+    $rating=isset($_POST['rating'])?filter_input(INPUT_POST,'rating',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'rating',FILTER_SANITIZE_NUMBER_INT);
     $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
     if($config['spamfilter'][0]==1&&$spam==FALSE){
       $filter=new SpamFilter();
@@ -79,7 +81,7 @@ if($act=='add_test'){
     }
     if($spam==FALSE){
       if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-        $q=$db->prepare("INSERT INTO `".$prefix."content` (contentType,ip,title,email,name,business,notes,status,ti) VALUES ('testimonials',:ip,:title,:email,:name,:business,:notes,'unapproved',:ti)");
+        $q=$db->prepare("INSERT INTO `".$prefix."content` (contentType,ip,title,email,name,business,notes,status,review,ti) VALUES ('testimonials',:ip,:title,:email,:name,:business,:notes,'unapproved',:review,:ti)");
         $q->execute([
           ':ip'=>$ip,
           ':title'=>$name.' - '.$business,
@@ -87,6 +89,7 @@ if($act=='add_test'){
           ':name'=>$name,
           ':business'=>$business,
           ':notes'=>$review,
+          ':review'=>$rating,
           ':ti'=>time()
         ]);
         $e=$db->errorInfo();

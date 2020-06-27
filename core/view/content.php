@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.14
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -25,6 +25,7 @@
  * @changes    v0.0.14 Fix Index/Home page not showing Category images.
  * @changes    v0.0.14 Adjust Template Category select to allow selecting up to 4 different categories.
  * @changes    v0.0.14 Fix displaying just Categories when using Shop by Category.
+ * @changes    v0.0.15 Fix parsing in of comments correctly.
  */
 $rank=0;
 $notification='';
@@ -351,11 +352,13 @@ if($show=='categories'){
 					'/<print category=[\"\']?image[\"\']?>/',
 					'/<print category=[\"\']?imageALT[\"\']?>/',
 					'/<print category=[\"\']?link[\"\']?>/',
-					'/<print category=[\"\']?title[\"\']?>/'
+					'/<print category=[\"\']?title[\"\']?>/',
+					'/<print category=[\"\']?category[\"\']?>/'
 				],[
 					htmlspecialchars($rc['icon'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
 					URL.$rc['url'].'/category/'.str_replace(' ','-',$rc['title']).'/',
+					htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8'),
 					htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8')
 				],$catitems);
 				$catoutput.=$catitems;
@@ -519,7 +522,9 @@ if($show=='categories'){
 	$html=preg_replace([
 		'~<item>.*?<\/item>~is',
 		'/<items>/',
-		'/<\/items>/'
+		'/<\/items>/',
+		'/<contentitems>/',
+		'/<\/contentitems>/'
 	],'',$html);
 	if(stristr($html,'<more>')){
 		if($s->rowCount()<=$config['showItems'])
@@ -543,7 +548,7 @@ if($show=='categories'){
 if($view=='testimonials')$show='';
 if($show=='item'){
 	$html=preg_replace([
-		'~<items>.*?<\/items>~is',
+		'~<contentitems>.*?<\/contentitems>~is',
 		'~<section data-content="content-items">.*?<\/section>~is',
 		'~<pagenotes>.*?<\/pagenotes>~is'
 	],[
@@ -678,7 +683,8 @@ if($show=='item'){
 		}else{
 			$item=preg_replace([
 				'~<service.*?>.*?<\/service>~is',
-				'~<inventory>.*?<\/inventory>~is'
+				'/<inventory>/',
+				'/<\/inventory>/'
 			],'',$item,1);
 		}
 		$address=$edit=$contentQuantity='';
@@ -1038,7 +1044,8 @@ if($show=='item'){
 					$commentsHTML=preg_replace('~<items>.*?<\/items>~is',$comments,$commentsHTML,1);
 					$commentsHTML=$r['options'][1]==1?preg_replace('/<\/?comment>/','',$commentsHTML):preg_replace('~<comment>.*?<\/comment>~is','',$commentsHTML,1);
 					$commentsHTML=preg_replace('~<items>.*?<\/items>~is','',$commentsHTML,1);
-					$item.=$commentsHTML;
+					$item=preg_replace('~<comments>~is',$commentsHTML,$item,1);
+//					$item.=$commentsHTML;
 				}else
 					$item.='Comments for this post is Enabled, but no <strong>"'.THEME.DS.'comments.html"</strong> template file exists';
 			}

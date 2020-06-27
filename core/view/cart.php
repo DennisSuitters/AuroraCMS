@@ -7,12 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
+ * @changes    v0.0.15 Fix creating new accounts and sending new account details.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
+require'core'.DS.'class.phpmailer.php';
 if($page['notes']!=''){
 	$html=preg_replace([
 		'/<print page=[\"\']?notes[\"\']?>/',
@@ -42,6 +44,7 @@ if($args[0]=='confirm'){
 				else
 					$uid=$ru['id'];
 			}else{
+				$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 				$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
 				$address=filter_input(INPUT_POST,'address',FILTER_SANITIZE_STRING);
 				$suburb=filter_input(INPUT_POST,'suburb',FILTER_SANITIZE_STRING);
@@ -51,11 +54,15 @@ if($args[0]=='confirm'){
 				$country=filter_input(INPUT_POST,'country',FILTER_SANITIZE_STRING);
 				$phone=filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING);
 				$username=explode('@',$email);
-				$q=$db->prepare("INSERT INTO `".$prefix."login` (username,
-					password,email,business,address,suburb,city,state,postcode,country,phone,status,active,language,timezone,rank,ti) VALUES (:username,'',:email,:business,:address,:suburb,:city,:state,:postcode,:country,:phone,'','1',:language,'default','200',:ti)");
+				$q=$db->prepare("INSERT INTO `".$prefix."login` (username,password,email,name,business,address,suburb,city,state,postcode,country,phone,status,active,language,timezone,rank,ti) VALUES (:username,:password,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:phone,'','1',:language,'default','200',:ti)");
+				$chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	    	$pass=substr(str_shuffle($chars),0,8);
+				$password=password_hash($pass,PASSWORD_DEFAULT);
 				$q->execute([
 					':username'=>$username[0],
+					':password'=>$password,
 					':email'=>$email,
+					':name'=>$name,
 					':business'=>$business,
 					':address'=>$address,
 					':suburb'=>$suburb,
@@ -73,6 +80,19 @@ if($args[0]=='confirm'){
 					':id'=>$uid,
 					':username'=>$username[0].$uid
 				]);
+				if($email!=''){
+					$name=$name!=''?$name:$business;
+					$mail=new PHPMailer;
+					$mail->isSendmail();
+					$mail->SetFrom($config['email'],$config['business']);
+					$mail->AddAddress($email,$name);
+					$mail->IsHTML(true);
+					$mail->Subject='Order at '.$config['business'];
+					$msg='Thank you for placing an Order at '.$config['business'].'<br />You can view your order after logging in using the below credentials.<br />Username: '.$username[0].$uid.'<br />Password: '.$pass.'<br />We suggest changing this once you log in to something you will more easily remember.';
+					$mail->Body=$msg;
+					$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
+					if($mail->Send()){}
+				}
 			}
 			$r=$db->query("SELECT MAX(id) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
 			$sr=$db->prepare("SELECT id,quantity,tis,tie FROM `".$prefix."rewards` WHERE code=:code");
@@ -142,14 +162,13 @@ if($args[0]=='confirm'){
 			$q->execute([':si'=>SESSIONID]);
 			$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
 			if($config['email']!=''){
-				require'core'.DS.'class.phpmailer.php';
 				$mail=new PHPMailer;
 				$mail->isSendmail();
-				$mail->SetFrom($config['email'],$config['seoTitle']);
+				$mail->SetFrom($config['email'],$config['business']);
 				$mail->AddAddress($config['email']);
 				$mail->IsHTML(true);
-				$mail->Subject='New Order was Created at '.$config['seoTitle'];
-				$msg='New Order was Created at '.$config['seoTitle'].'<br />'.'Order #'.$qid;
+				$mail->Subject='New Order was Created at '.$config['business'];
+				$msg='New Order was Created at '.$config['business'].'<br />'.'Order #'.$qid;
 				$mail->Body=$msg;
 				$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
 				if($mail->Send()){}
@@ -207,7 +226,7 @@ if($args[0]=='confirm'){
 				$total=$total+($ci['cost']*$ci['quantity']);
 				$cartitems.=$cartitem;
 			}
-			$total=$total+$ci['postagecost'];
+			$total=$total+$ci['postageCost'];
 			$html=preg_replace([
 				'~<items>.*?<\/items>~is',
 				'/<print totalcalculate>/'

@@ -1,0 +1,85 @@
+	<aside class="col-12 col-sm-3 mt-3">
+		<controls>
+			<div class="card mb-3 d-none d-sm-block">
+				<div class="card-body my-4">
+					<div class="price text-center"><print content="cost"></div>
+					<print content="quantity">
+					<div class="row text-right">
+						<service>
+							<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
+						</service>
+						<inventory>
+							<weight>
+							<size>
+							<choices>
+							<button class="addCart mt-3" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+						</inventory>
+					</div>
+				</div>
+			</div>
+		</controls>
+		<review>
+			<div id="review" class="card mb-3">
+				<form id="reviewform" class="auroraForm" data-formtype="review" method="post" action="core/add_review.php">
+					<input type="hidden" name="id" value="<print content=id>">
+					<input type="hidden" name="emailtrap" value="none">
+					<h3>Add a Review</h3>
+					<label>Rating</label>
+					<span class="starRating">
+						<input id="rating5" type="radio" name="rating" value="5" checked>
+						<label for="rating5" title="Awesome!">5</label>
+						<input id="rating4" type="radio" name="rating" value="4">
+						<label for="rating4" title="Great!">4</label>
+						<input id="rating3" type="radio" name="rating" value="3">
+						<label for="rating3" title="Meh!">3</label>
+						<input id="rating2" type="radio" name="rating" value="2">
+						<label for="rating2" title="So So!">2</label>
+						<input id="rating1" type="radio" name="rating" value="1">
+						<label for="rating1" title="Bad!">1</label>
+		      </span>
+					<label for="reviewemail">Email</label>
+					<input type="email" id="reviewemail" name="email" value="" required aria-required="true">
+					<div class="requirements alert alert-danger mb-0">
+      			Must be a valid email address.
+    			</div>
+					<label for="reviewname">Name</label>
+					<input type="text" id="reviewname" name="name" value="" required aria-required="true">
+					<label for="reviewtxt">Review</label>
+					<textarea id="reviewtxt" name="review"></textarea>
+					<div class="text-right margin-top-3">
+						<button id="review-btn" type="submit">Add Review</button>
+					</div>
+				</form>
+			</div>
+		</review>
+		<item>
+			<settings items="4" contenttype="current">
+			<div class="list-group card">
+				<items>
+					<a class="list-group-item border-0" href="<print link>" itemscope>
+						<span class="list-group-item-heading" itemprop="headline"><print content="title"></span>
+						<meta itemprop="datePublished" content="<print metaDate>">
+						<p class="list-group-item-text">
+							<small><small><small class="text-muted"><print time></small></small></small><br>
+							<small><small><print content="caption"></small></small>
+						</p>
+					</a>
+					<media>
+						<a class="list-group-item" href="<print link>" itemscope>
+							<span class="media">
+								<span class="media-left">
+									<img class="img-thumbnail side_menu_gallery pull-left" src="<print content=thumb>" alt="<print content=title>">
+								</span>
+								<meta itemprop="datePublished" content="<print metaDate>">
+								<span class="media-body">
+									<span class="media-heading"><print content="title"></span>
+									<small><small><print content="caption"></small></small>
+								</span>
+							</span>
+						</a>
+					</media>
+				</items>
+			</div>
+		</item>
+	</aside>
+</section>

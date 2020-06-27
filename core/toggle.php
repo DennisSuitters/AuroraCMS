@@ -20,7 +20,7 @@ $tbl=filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $ti=time();
 if(($tbl!='NaN'&&$col!='NaN')||($tbl!=''&&$col!='')){
-  if(in_array($tbl,['cart','choices','comments','config','content','iplist','login','logs','media','menu','messages','orderitems','orders','rewards','subscribers','suggestions','tracker'])&&in_array($col,['active','bio_options','bookable','bookingEmailReadNotification','comingsoon','development','featured','important','internal','liveChatNotification','maintenance','method','newsletter','newslettersEmbedImages','options','orderEmailReadNotification','php_options','pin','recurring','starred','storemessages','suggestions'])){
+  if(in_array($tbl,['cart','choices','comments','config','content','iplist','login','logs','media','menu','messages','orderitems','orders','rewards','subscribers','suggestions','tracker'])&&in_array($col,['active','bio_options','bookable','bookingEmailReadNotification','comingsoon','development','featured','important','internal','liveChatNotification','maintenance','method','newsletter','newslettersEmbedImages','options','orderEmailReadNotification','php_options','pin','recurring','starred','storemessages','suggestions','checklist'])){
     $q=$db->prepare("SELECT $col as c FROM `".$prefix.$tbl."` WHERE id=:id");
     $q->execute([':id'=>$id]);
     $r=$q->fetch(PDO::FETCH_ASSOC);

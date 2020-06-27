@@ -1,0 +1,112 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="cart">
+	<pagenotes>
+    <section class="row">
+      <article class="col-11">
+      	<print page="notes">
+      </article>
+  	</section>
+  </pagenotes>
+	<section class="row">
+		<emptycart>
+			<article class="col-11 col-sm-5 m-0 p-0 mx-1">
+				<table>
+					<thead>
+						<tr>
+							<th>&nbsp;</th>
+							<th class="d-none d-sm-table-cell">Title/Option</th>
+							<th>Quantity</th>
+							<th>Cost</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<items>
+							<tr>
+								<td class="col-3 col-sm-2"><img class="col-8" src="<print content=image>" alt="<print content=title>"></td>
+								<td class="d-none d-sm-table-cell text-center">
+									<print content="code"> <print content="title"><br>
+									<print choice>
+								</td>
+								<td class="text-center"><print cart="quantity"></td>
+								<td class="text-center"><print cart="cost"></td>
+								<td class="text-right"><print itemscalculate></td>
+							</tr>
+						</items>
+					</tbody>
+					<tfoot>
+						<td class="d-none d-sm-table-cell">&nbsp;</td>
+						<td colspan="3" class="text-right">
+							Total (AUD)
+						</td>
+						<td class="text-right border-black border-2 border-top">
+							<strong id="total"><print totalcalculate></strong>
+						</td>
+					</tfoot>
+				</table>
+			</article>
+			<article class="col-11 col-sm-5 m-0 p-0 mx-1">
+				<iframe id="sp" name="sp" class="d-none"></iframe>
+				<form class="card p-3" method="post" action="cart/confirm">
+					<input type="hidden" name="emailtrap" value="none">
+					<loggedin>
+						<h3>Create or Add to Existing Account</h3>
+						<div class="alert alert-info" role="alert">
+							If you have ordered from us previously, or already have an account, you can just enter your email below, and we will add this order using your account details.
+						</div>
+						<div class="alert alert-danger" role="alert">
+							Red Highlighted Fields are Required.
+						</div>
+						<label for="email">Email</label>
+						<input type="email" id="email" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+						<div class="requirements alert alert-danger">
+							Must be a valid email address.
+						</div>
+						<label for="name" class="mt-0">Name</label>
+						<input type="text" id="name" name="name" value="" placeholder="Enter a Name...">
+						<label for="business">Business</label>
+						<input type="text" id="business" name="business" value="" placeholder="Enter a Business...">
+						<label for="phone">Phone</label>
+						<input type="tel" id="phone" name="phone" value="" placeholder="Enter a Phone Number...">
+						<label for="address">Address</label>
+						<input type="text" id="address" name="address" value="" placeholder="Enter an Address...">
+						<label for="city">City</label>
+						<input type="text" id="city" name="city" value="" placeholder="Enter a City...">
+						<label for="suburb">Suburb</label>
+						<input type="text" id="suburb" name="suburb" value="" placeholder="Enter a Suburb...">
+						<label for="country">Country</label>
+						<input type="text" id="country" name="country" value="Australia" placeholder="Enter a Country...">
+						<label for="state">State</label>
+						<select id="state" name="state">
+							<option value="">Choose...</option>
+							<option value="New South Wales">New South Wales</option>
+							<option value="Northern Territory">Northern Territory</option>
+							<option value="Queensland">Queensland</option>
+							<option value="South Australia">South Australia</option>
+							<option value="Tasmania">Tasmania</option>
+							<option value="Victoria">Victoria</option>
+							<option value="Western Australia">Western Australia</option>
+							<option value="Australian Capital Territory">Australian Capital Territory</option>
+						</select>
+						<label for="postcode">Postcode</label>
+						<input type="text" id="postcode" name="postcode" value="" placeholder="Enter a Postcode...">
+					</loggedin>
+					<label for="rewards">Rewards</label>
+					<input type="text" id="rewards" name="rewards" value="" placeholder="Enter Your Rewards Code...">
+					<postageoptions>
+						<label for="postoption">Delivery Options</label>
+						<select id="postoption" name="postoption">
+							<option value="0">Select a Delivery Option</option>
+							<postoptions>
+						</select>
+						<small>Note: Delivery prices are estimates, and may change depending on order items and location of delivery.</small><br>
+					</postageoptions>
+					<button type="submit" class="margin-top-3">Confirm Order</button>
+				</form>
+			</article>
+		</emptycart>
+	</section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

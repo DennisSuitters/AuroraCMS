@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at Version v0.0.14
+We are currently at v0.0.15
 
 ### FAQ
 - Why no Plugins?
@@ -62,6 +62,7 @@ We are currently at Version v0.0.14
   - [summernote-save-button](https://github.com/DiemenDesign/summernote-save-button)
   - [summernote-seo](https://github.com/DiemenDesign/summernote-seo)
   - [summernote-video-attributes](https://github.com/DiemenDesign/summernote-video-attributes)
+  - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
 
 You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https://github.com/DiemenDesign/AuroraCMS-themes)
 
@@ -85,6 +86,7 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
   - [summernote-video-attributes](https://github.com/DiemenDesign/summernote-video-attributes)
   - [summernote-ext-elfinder](https://github.com/semplon/summernote-ext-elfinder)
   - [summernote-libreICONS-svg](https://github.com/DiemenDesign/LibreICONS/tree/master/themes/summernote)
+  - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
 - [CodeMirror](https://github.com/codemirror/CodeMirror)
 - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
   - fullcalendar-bootstrap-theme (Unreleased, but within AuroraCMS, WIP)

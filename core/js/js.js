@@ -154,6 +154,9 @@ function purge(id,t,c){
 		}else if(id==0&&t=='tracker'){
 			$('#l_'+t).addClass('animated zoomOut');
 			setTimeout(function(){$('#l_'+t).remove();},500);
+    }else if(id==0&&t=='cart'){
+			$('#l_'+t).addClass('animated zoomOut');
+			setTimeout(function(){$('#l_'+t).remove();},500);
 		}else{
 			$('#l_'+id).addClass('animated zoomOut');
 			setTimeout(function(){$('#l_'+id).remove();},500);
@@ -187,11 +190,15 @@ function coverUpdate(id,t,c,da){
 		if(da==''){
 			$('#'+c).val('');
 			$('#'+c+'image').attr('src','core/images/noimage.png');
+      $('#'+c+'image')[0].parentNode.remove();
 		}else{
 			if(imgsrc==''){
 				$('#'+c+'image').attr('src',da);
+        $('#'+c+'image')[0].parentNode.remove();
+        $('#'+c+'image').wrap('<a data-fslightbox="cover" href="'+da+'"></a>');
 			}
 		}
+    refreshFsLightbox();
 	})
 }
 function imageUpdate(id,t,c,da){

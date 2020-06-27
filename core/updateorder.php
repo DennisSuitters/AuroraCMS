@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.15
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -155,16 +156,16 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   $sc->execute([':id'=>$oi['cid']]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
 	$image='';
-	if($i['thumb']!=''&&file_exists('media'.DS.basename($i['thumb'])))
-		$image='media'.DS.basename($i['thumb']);
-	elseif($i['file']!=''&&file_exists('media'.DS.basename($i['file'])))
-		$image='media'.DS.basename($i['file']);
+	if($i['thumb']!=''&&file_exists('..'.DS.'media'.DS.basename($i['thumb'])))
+	  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
+	elseif($i['file']!=''&&file_exists('..'.DS.'media'.DS.basename($i['file'])))
+	  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
 	elseif($i['fileURL']!='')
-		$image=$i['fileURL'];
+	  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
 	else
-		$image='';
+	  $image='';
   $html.='<tr>'.
-					'<td class="text-center align-middle"><img class="img-fluid" style="max-width:24px;height:24px;" src="'.$image.'" alt="'.$c['title'].'"></td>'.
+					'<td class="text-center align-middle">'.$image.'</td>'.
     			'<td class="text-left align-middle">'.$i['code'].'</td>'.
     			'<td class="text-left align-middle">'.
 						($oi['iid']!=0?$i['title']:'<form target="sp" method="POST" action="core/updateorder.php"><input type="hidden" name="act" value="title"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="title"><input type="text" class="form-control" name="da" value="'.$oi['title'].'"></form>').
@@ -195,8 +196,8 @@ $sr->execute([':rid'=>$r['rid']]);
 $reward=$sr->fetch(PDO::FETCH_ASSOC);
   $html.='<tr>'.
 					'<td colspan="3" class="text-right align-middle"><strong>Rewards Code</strong></td>'.
-					'<td colpsan="2" class="text-center">'.
-						'<form id="rewardsinput" target="sp" method="post" action="core/updateorder.php">'.
+					'<td colspan="2" class="text-center">'.
+						'<form id="rewardsinput" target="sp" method="POST" action="core/updateorder.php">'.
 							'<div class="form-group row">'.
 								'<div class="input-group">'.
 									'<input type="hidden" name="act" value="reward">'.
@@ -233,13 +234,27 @@ if($ssr->rowCount()>0){
 			    $html.='%';
 			    $total=($total*((100-$reward['value'])/100));
 			  }
+				$total=number_format((float)$total, 2, '.', '');
 			  $html.=' Off';
 			}
     	$html.='</td>'.
 							'<td class="text-right align-middle"><strong>'.$total.'</strong></td>'.
 							'<td>&nbsp;</td>'.
-						'</tr>'.
-						'<tr>'.
+						'</tr>';
+
+			if($config['gst']>0){
+			  $gst=$total*($config['gst']/100);
+			  $gst=number_format((float)$gst, 2, '.', '');
+				$html.='<tr>'.
+								'<td colspan="6" class="text-right"><strong>GST</strong></td>'.
+								'<td class="total text-right border-top border-bottom"><strong>'.$gst.'</strong></td>'.
+								'<td>&nbsp;</td>'.
+							'</tr>';
+				$total=$total+$gst;
+				$total=number_format((float)$total, 2, '.', '');
+			}
+
+			$html.='<tr>'.
 							'<td class="text-right align-middle"><strong>Postage</strong></td>'.
 							'<td colspan="5" class="text-right align-middle">'.
 								'<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
@@ -258,6 +273,7 @@ if($ssr->rowCount()>0){
 									'<input type="hidden" name="c" value="postage">'.
 									'<input type="text" class="form-control text-right" style="min-width:70px" name="da" value="'.$r['postageCost'].'">';
 									$total=$total+$r['postageCost'];
+									$total=number_format((float)$total, 2, '.', '');
 					$html.='</form>'.
 							'</td>'.
 							'<td>&nbsp;</td>'.

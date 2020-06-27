@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.5 Add Removal of Live Chat conversations.
+ * @changes    v0.0.15 Add Removal of Cart items.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -52,6 +53,11 @@ if($id==0&&$tbl=='tracker'){
   $q=$db->query("DELETE FROM `".$prefix."tracker`");
   $q->execute();
   $id='tracker';
+}
+if($id==0&&$tbl=='cart'){
+  $q=$db->query("DELETE FROM `".$prefix."cart`");
+  $q->execute();
+  $id='cart';
 }
 if($id==0&&$tbl=='pageviews'){
   $q=$db->query("UPDATE menu SET views='0'");

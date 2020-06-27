@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -15,6 +15,10 @@
  * @changes    v0.0.8 Add PayPal Client ID and Secret.
  * @changes    v0.0.9 Add Option Toggle to Display Payment Options.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.15 Add GST value editing.
+ * @changes    v0.0.15 Add AustPost API Cost retreival.
+ * https://auspost.com.au/forms/pacpcs-registration.html
+ * https://github.com/fontis/auspost-api-php
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -70,6 +74,13 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           </div>
           <label for="options7" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Display Payment Options Logo's (Logo's should be contained within the Tempate tags).</label>
         </div>
+        <div class="form-group row">
+          <label for="gst" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">GST</label>
+          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <input type="number" id="gst" class="form-control textinput" value="<?php echo$config['gst'];?>"data-dbid="1" data-dbt="config" data-dbc="gst" placeholder="Enter a GST Value...">
+            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savegst" class="btn btn-secondary save" data-dbid="gst" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+          </div>
+        </div>
         <hr>
         <legend>Banking</legend>
         <div class="form-group row">
@@ -116,6 +127,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepayPalClientID" class="btn btn-secondary save" data-dbid="payPalClientID" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
+<?php /*
         <div class="form-group row">
           <label for="payPalSecret" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">PayPal Secret</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
@@ -123,7 +135,6 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepayPalSecret" class="btn btn-secondary save" data-dbid="payPalSecret" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
-<?php /*
         <div class="form-group row">
           <label for="ipn" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">IPN</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">

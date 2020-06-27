@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Adjust Links Layout Items
@@ -204,6 +204,7 @@ if($args[0]=='scheduler'){
             <tr>
               <th></th>
               <th class="col">Title</th>
+              <th class="col">Code</th>
               <th class="col text-center d-none d-sm-table-cell">Comments</th>
               <th class="col text-center d-none d-sm-table-cell">Reviews</th>
               <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options'][1]==1?' <button class="btn btn-secondary btn-xs" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
@@ -215,11 +216,11 @@ if($args[0]=='scheduler'){
             <tr id="l_<?php echo$r['id'];?>" class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>">
               <td class="align-middle">
 <?php           if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
-                  echo'<a href="'.$r['file'].'" data-fancybox="lightbox'.$r['id'].'" data-max-width="700"><img class="img-rounded" style="max-width:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
+                  echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
                 elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
-                  echo'<a href="'.$r['file'].'" data-fancybox="lightbox'.$r['id'].'" data-max-width="700"><img class="img-rounded" style="max-width:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
+                  echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
                 elseif($r['fileURL']!='')
-                  echo'<a href="'.$r['fileURL'].'" data-fancybox="lightbox'.$r['id'].'" data-max-width="700"><img class="img-rounded" style="max-width:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
+                  echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
                 else
                   echo'';?>
               </td>
@@ -235,6 +236,7 @@ if($args[0]=='scheduler'){
 <?php           }
 }?>
               </td>
+              <td class="align-middle small"><small><?php echo$r['code'];?></small></td>
               <td class="text-center align-middle d-none d-sm-table-cell">
 <?php           if($r['contentType']=='article'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='proofs'){
                   $sc=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."comments` WHERE rid=:id AND contentType=:contentType");

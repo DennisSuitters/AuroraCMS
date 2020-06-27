@@ -1,0 +1,50 @@
+<aside>
+	<hr>
+	<div id="comments" class="card col-12 border-0">
+		<div class="card-header">
+			<h2 class="m-0">Comments</h2>
+		</div>
+		<div class="card-body col-11 mt-0 p-0 mx-auto">
+			<items>
+				<div class="row">
+					<div class="col-3 col-sm-1 p-2 p-sm-1">
+						<print comments="avatar" class="img-thumbnail">
+					</div>
+	    		<div class="col-8 col-sm-10 ml-2">
+	      		<h5 class="mt-2 mb-0">
+	        		<print comments="name">
+	      		</h5>
+						<time datetime="<print comments=datetime>"><small class="text-muted"><print comments="dateCreated"></small></time><br>
+	      		<print comments="notes">
+					</div>
+				</div>
+				<hr>
+			</items>
+		</div>
+	</div>
+	<comment>
+		<div class="card col-12 border-0">
+			<div class="card-header"><h2 class="m-0">Join the conversation</h2></div>
+			<div id="comment" class="card-body col-11 mt-0 p-0 mx-auto">
+				<div class="row">
+					<form id="commentform" class="auroraForm" data-formtype="comment" method="post" action="core/add_comment.php">
+						<input type="hidden" name="emailtrap" value="none">
+						<input type="hidden" name="act" value="add_comment">
+						<input type="hidden" name="rid" value="<print content=id>">
+						<input type="hidden" name="ct" value="<print content=contentType>">
+						<label for="commentemail">Email</label>
+						<input type="email" id="commentemail" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+						<div class="requirements alert alert-danger">
+							Must be a valid email address.
+						</div>
+						<label for="commentname" class="mt-0">Name</label>
+						<input type="text" id="commentname" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
+						<label for="commenttxt">Comment</label>
+						<textarea id="commenttxt" name="notes" placeholder="Enter a Comment..." required></textarea>
+						<button id="comment-btn" class="btn-block mt-3" type="submit">Add Comment</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</comment>
+</aside>

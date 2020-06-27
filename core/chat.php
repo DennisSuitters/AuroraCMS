@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Add Email Notifications and Status.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.15 Fix Typo's.
  */
 $getcfg=true;
 require'db.php';
@@ -25,14 +26,10 @@ if($config['chatAutoRemove']!=0){
 	$s->execute([':ti'=>$ti - $config['chatAutoRemove']]);
 }
 define('THEME','layout'.DS.$config['theme']);
-if(file_exists(THEME.DS.'images'.DS.'noavatar.png'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar.gif'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar.jpg'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.jpg');
-else
-	define('NOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
+if(file_exists(THEME.DS.'images'.DS.'noavatar.png')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.png');
+elseif(file_exists(THEME.DS.'images'.DS.'noavatar.gif')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.gif');
+elseif(file_exists(THEME.DS.'images'.DS.'noavatar.jpg')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.jpg');
+else define('NOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
 define('ADMINNOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
 $aid=isset($_POST['aid'])?$_POST['aid']:0;
 $sid=isset($_POST['sid'])?$_POST['sid']:0;
@@ -138,8 +135,7 @@ if($message == "|*|*|*|*|*|"){
 			require'class.phpmailer.php';
 			$sa=$db->prepare("SELECT id,username,name,email FROM `".$prefix."login` WHERE rank>699 AND active=1 AND liveChatNotification=1");
 			$sa->execute();
-			echo'<div class="alert alert-info">'.
-						'There are currently no operators available to answer your queries, however you may leave a message here so a representative can back to you.';
+			echo'<div class="alert alert-info">There are currently no operators available to answer your queries, however you may leave a message here so a representative can get back to you.</div>';
 			if($sa->rowCount()>0){
 				$cfgsent=0;
 				while($ra=$sa->fetch(PDO::FETCH_ASSOC)){
@@ -156,8 +152,7 @@ if($message == "|*|*|*|*|*|"){
 					$msg='Chat Date: '.date($config['dateFormat'],$ti).'<br />';
 					$mail->Body=$msg;
 					$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-					if($mail->Send())
-						echo'<br>Nominated Operators have been notified!';
+					if($mail->Send())echo'<br>Nominated Operators have been notified!';
 				}
 			}else{
 				$mail=new PHPMailer;
@@ -169,8 +164,7 @@ if($message == "|*|*|*|*|*|"){
 				$msg='Chat Date: '.date($config['dateFormat'],$ti).'<br />';
 				$mail->Body=$msg;
 				$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-				if($mail->Send())
-					echo'<br>Nominated Operators have been notified!';
+				if($mail->Send())echo'<br>Nominated Operators have been notified!';
 			}
 //			echo'<br>In the meantime, you may ask simple questions, and our friendly Chat Bot will try to answer your queries';
 			echo'</div>';
@@ -178,9 +172,7 @@ if($message == "|*|*|*|*|*|"){
 			if($message != ''){
 				$s=$db->prepare("SELECT sid FROM `".$prefix."livechat` WHERE sid=:sid");
 				$s->execute([':sid'=>$sid]);
-				if($s->rowCount()<1){
-					echo'available';
-				}
+				if($s->rowCount()<1)echo'available';
 			}
 		}
 	}
@@ -200,33 +192,21 @@ if($spam==FALSE){
 	      if($scc->rowCount()>0)header('Location:'.$_SERVER['PHP_SELF']);
 			}
 	    if($r['notes']=='|*|*|*|*|*|')continue;
-	    echo'<ul>'.
-	      		'<li class="'.$r['who'].'">';
+	    echo'<ul><li class="'.$r['who'].'">';
 	    if($r['aid']!=0){
 	      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:aid");
 	      $su->execute([':aid'=>$r['aid']]);
 	      $ru=$su->fetch(PDO::FETCH_ASSOC);
-		        	echo'<img class="bg-white" src="';
-				if($ru['avatar']!='')
-			        echo'media'.DS.'avatar'.DS.basename($ru['avatar']);
+		    echo'<img class="bg-white" src="';
+				if($ru['avatar']!='')echo'media'.DS.'avatar'.DS.basename($ru['avatar']);
 	      elseif($ru['gravatar']!=''){
-	        if(stristr($ru['gravatar'],'@'))
-		          echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);
-	        elseif(stristr($ru['gravatar'],'gravatar.com/avatar/'))
-		          echo$ru['gravatar'];
-	        else
-		          echo ADMINNOAVATAR;
-	      }else
-			        echo ADMINNOAVATAR;
-						echo'"/>';
-	    }else
-		        echo'<img class="bg-white" src="'.NOAVATAR.'"/>';
-		        echo'<p>'.
-		          		'<small class="d-block">'.$r['name'].' <small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.
-			          		$r['notes'].
-		        		'</p>'.
-		      		'</li>'.
-		    		'</ul>';
+	        if(stristr($ru['gravatar'],'@'))echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);
+	        elseif(stristr($ru['gravatar'],'gravatar.com/avatar/'))echo$ru['gravatar'];
+	        else echo ADMINNOAVATAR;
+	      }else echo ADMINNOAVATAR;
+				echo'">';
+	    }else echo'<img class="bg-white" src="'.NOAVATAR.'">';
+      echo'<p><small class="d-block">'.$r['name'].' <small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.$r['notes'].'</p></li></ul>';
 	  }
 	}
 }

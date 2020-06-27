@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -15,6 +15,8 @@
  * @changes    v0.0.10 Fix Toastr Notifications.
  * @changes    v0.0.11 Fix Rewards Date/Time Picker value retrieval.
  * @changes    v0.0.12 Fix Multiple Media Adding.
+ * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
+ * @changes    v0.0.15 Add Edit Media information button.
  */
 $getcfg=true;
 require'db.php';
@@ -438,18 +440,22 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
 	          $q->execute([
 	            ':id'=>$iid,
 	            ':ord'=>$iid+1
-	          ]);?>
+	          ]);
+						$thumb='media/thumbs/'.preg_replace('/\\.[^.\\s]{3,4}$/','',basename($file)).'.png';?>
   window.top.window.$('#mi').append('<?php
 echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0 animated zoomIn">'.
-			'<a class="card bg-dark m-0" href="'.$file.'" data-fancybox="media">'.
-				'<img src="'.$file.'" class="card-img"  alt="Media '.$iid.'">'.
+			'<a data-fancybox="media" class="card bg-dark m-0" href="'.$file.'">'.
+				'<img src="'.$thumb.'" class="card-img"  alt="Media '.$iid.'">'.
 			'</a>'.
 			'<div class="btn-group float-right">'.
-				'<div class="handle btn btn-secondary btn-sm" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
-				'<button class="btn btn-secondary trash btn-sm" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+				'<div class="handle btn btn-secondary btn-xs" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
+				'<a class="btn btn-secondary btn-xs" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
+				'<button class="btn btn-secondary trash btn-xs" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 			'</div>'.
 		'</div>';?>
-');<?php }
+');
+	window.top.window.$().fancybox({selector:'[data-fancybox="media"]'});
+<?php }
 				}
       }
       break;

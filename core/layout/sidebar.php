@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Move Settings Links into Menu.
@@ -16,6 +16,8 @@
  * @changes    v0.0.5 Add Live Chat to Menu
  * @changes    v0.0.11 Fix String Offset line 150
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.15 Add Preferences Cart to Menu.
+ * @changes    v0.0.15 Remove System Resource Information, moved to Dashboard.
  */?>
   <div id="sidebar" class="sidebar">
     <nav class="sidebar-nav">
@@ -141,40 +143,14 @@
               <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker';?>"><?php svg('tracker','nav-icon ml-2');?> Tracker</a>
             </li>
             <li class="nav-item">
+              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/cart';?>"><?php svg('shop-cart','nav-icon ml-2');?> Cart</a>
+            </li>
+            <li class="nav-item">
               <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/security';?>"><?php svg('security','nav-icon ml-2');?> Security</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/database';?>"><?php svg('database','nav-icon ml-2');?> Database</a></li>
           </ul>
-        </li>
-<?php }
-if($user['options'][8]==1){?>
-        <li class="nav-divider"></li>
-        <li class="nav-title">System Utilization</li>
-        <li class="nav-item px-3 d-compact-none d-minimized-none">
-          <div class="text-uppercase mb-1">
-            <small><b>CPU Usage</b></small>
-          </div>
-          <div class="progress progress-xs">
-            <div class="progress-bar bg-info" role="progressbar" style="width: <?php echo getload();?>%" aria-valuenow="<?php echo getload();?>" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <small><?php echo gpc();?> Processes. <?php echo num_cpu();?> Cores.</small>
-        </li>
-<?php $mem=getmemstats();?>
-        <li class="nav-item px-3 d-compact-none d-minimized-none">
-          <div class="text-uppercase mb-1">
-            <small><b>Memory Usage</b></small>
-          </div>
-          <div class="progress progress-xs">
-            <div class="progress-bar bg-warning" role="progressbar" style="width: <?php echo$mem['percent'];?>%" aria-valuenow="<?php echo$mem['percent'];?>" aria-valuemin="0" aria-valuemax="100"></div>
-          </div>
-          <small><?php echo size_format($mem['used']).'/'.size_format($mem['total']);?></small>
-        </li>
-        <li class="nav-item px-3 d-compact-none d-minimized-none">
-          <div class="text-uppercase">
-            <small><b>Server Uptime</b></small>
-          </div>
-          <small><?php echo shell_exec('uptime -p');?></small>
         </li>
 <?php }?>
       </ul>

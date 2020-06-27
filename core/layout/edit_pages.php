@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.13
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
@@ -16,6 +16,10 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.13 Add Lorem Generator for Administrators.
+ * @changes    v0.0.15 Add Display Block Elements in Editor Button.
+ * @changes    v0.0.15 Add Check to Current Item in Dropdown.
+ * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
+ * @changes    v0.0.15 Add Edit Media information button.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE id=:id");
 $s->execute([':id'=>$args[1]]);
@@ -27,12 +31,12 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-item"><?php echo$user['options'][1]==1?'Edit':'View';?></li>
     <li class="breadcrumb-item active">
       <span id="titleupdate"><?php echo$r['title'];?></span>
-<?php $so=$db->prepare("SELECT id,title FROM menu WHERE id!=:id ORDER BY ord ASC, title ASC");
-$so->execute([':id'=>$r['id']]);
+<?php $so=$db->prepare("SELECT id,title,active,ord FROM `".$prefix."menu` WHERE active=:act ORDER BY ord ASC");
+$so->execute([':act'=>1]);
 if($so->rowCount()>0){
       echo'<a class="btn btn-ghost-normal dropdown-toggle m-0 p-0 pl-2 pr-2 text-white" data-toggle="dropdown" href="'.URL.$settings['system']['admin'].'/pages'.'" aria-haspopup="true" aria-expanded="false"></a>'.
       '<div class="dropdown-menu">';
-      while($ro=$so->fetch(PDO::FETCH_ASSOC))echo'<a class="dropdown-item small pt-1 pb-1" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'].'">'.$ro['title'].'</a>';
+      while($ro=$so->fetch(PDO::FETCH_ASSOC))echo'<a class="dropdown-item small pt-1 pb-1 text-white'.($ro['id']==$r['id']?' active':'').'" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'].'">'.($ro['id']==$r['id']?'&check;&nbsp;':'&nbsp;&nbsp;&nbsp;').$ro['title'].'</a>';
       echo'</div>';
 }?>
     </li>
@@ -46,26 +50,26 @@ if($so->rowCount()>0){
     <div class="card">
       <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
-          <li role="presentation" class="nav-item"><a class="nav-link active" href="#tab-page-content" aria-controls="tab-page-content" role="tab" data-toggle="tab">Content</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link active" href="#tab-pages-content" aria-controls="tab-pages-content" role="tab" data-toggle="tab">Content</a></li>
 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-images" aria-controls="tab-page-images" role="tab" data-toggle="tab">Images</a></li>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-media" aria-controls="tab-page-media" role="tab" data-toggle="tab">Media</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-images" aria-controls="tab-pages-images" role="tab" data-toggle="tab">Images</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-media" aria-controls="tab-pages-media" role="tab" data-toggle="tab">Media</a></li>
 <?php }?>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-seo" aria-controls="tab-page-seo" role="tab" data-toggle="tab">SEO</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-seo" aria-controls="tab-pages-seo" role="tab" data-toggle="tab">SEO</a></li>
 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-page-settings" aria-controls="tab-page-settings" role="tab" data-toggle="tab">Settings</a></li>
+          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-settings" aria-controls="tab-pages-settings" role="tab" data-toggle="tab">Settings</a></li>
 <?php }?>
         </ul>
         <div class="tab-content">
-          <div id="tab-page-content" class="tab-pane active" role="tabpanel">
+          <div id="tab-pages-content" class="tab-pane active" role="tabpanel">
 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
             <div class="form-group row">
               <label for="title" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php           if($user['options'][1]==1){
-                    $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
-                    $ss->execute([':rid'=>$r['id'],':t'=>'menu',':c'=>'title']);
-                    echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="title" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
+                  $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
+                  $ss->execute([':rid'=>$r['id'],':t'=>'menu',':c'=>'title']);
+                  echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="title" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                 }?>
                 <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="title" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary addsuggestion" data-dbgid="title" data-tooltip="tooltip" data-placement="top" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
@@ -98,8 +102,9 @@ if($so->rowCount()>0){
                     echo$ss->rowCount()>0?'<span data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary btn-sm suggestions" data-dbgid="notesda" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></span>':'';
                   }
                   echo'<div class="d-flex justify-content-end">'.
+                    '<button class="btn btn-secondary btn-sm" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;" data-tooltip="tooltip" data-title="Show Element Blocks" aria-label="Show Element Blocks">'.svg2('blocks').'</button>'.
                     '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
-                    '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
+                    '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;" data-tooltip="tooltip" data-title="Add Aussie Lorem Ipsum" aria-label="Add Aussie Lorem Ipsum">'.svg2('loremipsum').'</button>'.
                     '<button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button></div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
                 <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
@@ -125,7 +130,7 @@ if($so->rowCount()>0){
             </div>
           </div>
 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-          <div id="tab-page-images" class="tab-pane" role="tabpanel">
+          <div id="tab-pages-images" class="tab-pane" role="tabpanel">
             <fieldset class="control-fieldset">
               <legend class="control-legend">Cover</legend>
               <div class="form-group row">
@@ -141,9 +146,9 @@ if($so->rowCount()>0){
                   <input type="text" id="cover" class="form-control" name="feature_image" value="<?php echo$r['cover'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="cover" onchange="coverUpdate('<?php echo$r['id'];?>','menu','cover',$(this).val());" readonly>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager">'.svg2('browse-media').'</button></div>':'';?>
                   <div class="input-group-append img">
-                    <?php if($r['cover']!='')echo'<a href="'.$r['cover'].'" data-fancybox="image"><img id="coverimage" class="bg-white" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
-                    elseif($r['coverURL']!='')echo'<a href="'.$r['coverURL'].'" data-fancybox="image"><img id="coverimage" class="bg-white" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
-                    elseif($r['coverURL'] != '')echo'<a href="'.$r['coverURL'].'" data-fancybox="image"><img id="coverimage" class="bg-white" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
+                    <?php if($r['cover']!='')echo'<a data-fslightbox="cover" data-type="image" href="'.$r['cover'].'"><img id="coverimage" class="bg-white" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
+                    elseif($r['coverURL']!='')echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img id="coverimage" class="bg-white" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
+                    elseif($r['coverURL'] != '')echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img id="coverimage" class="bg-white" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
                     else echo'<img id="coverimage" class="bg-white" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';?>
                   </div>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,``);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
@@ -207,7 +212,7 @@ if($so->rowCount()>0){
           </div>
 <?php }
 if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-          <div id="tab-page-media" class="tab-pane" role="tabpanel">
+          <div id="tab-pages-media" class="tab-pane" role="tabpanel">
 <?php if($user['options'][1]==1){?>
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <input type="hidden" name="act" value="add_media">
@@ -229,13 +234,13 @@ if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
 $sm->execute([':id'=>$r['id']]);
 if($sm->rowCount()>0){
   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-    if(file_exists('media/thumbs/'.substr(basename($rm['file']),0,-4).'.png'))$thumb='media/thumbs/'.substr(basename($rm['file']),0,-4).'.png';
+    if(file_exists('media/thumbs/'.preg_replace('/\\.[^.\\s]{3,4}$/','',basename($rm['file'])).'.png'))$thumb='media/thumbs/'.preg_replace('/\\.[^.\\s]{3,4}$/','',basename($rm['file'])).'.png';
     else$thumb=$rm['file'];?>
                 <div id="mi_<?php echo$rm['id'];?>" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0">
-                  <a class="card bg-dark m-0" href="<?php echo$rm['file'];?>" data-fancybox="media">
+                  <a data-fslightbox="media" data-type="image" class="card bg-dark m-0" href="<?php echo$rm['file'];?>">
                     <img src="<?php echo$thumb;?>" class="card-img" alt="Media <?php echo$rm['id'];?>">
                   </a>
-                  <?php echo$user['options'][1]==1?'<div class="btn-group float-right"><div class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div><button class="btn btn-secondary trash btn-sm" onclick="purge(`'.$rm['id'].'`,`media`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
+<?php echo$user['options'][1]==1?'<div class="btn-group float-right"><div class="handle btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div><a class="btn btn-secondary btn-xs" href="'.URL.$settings['system']['admin'].'/media/edit/'.$rm['id'].'">'.svg2('edit').'</a><button class="btn btn-secondary trash btn-xs" onclick="purge(`'.$rm['id'].'`,`media`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
                 </div>
 <?php }?>
                 <script>
@@ -265,7 +270,7 @@ if($sm->rowCount()>0){
             </div>
           </div>
 <?php }?>
-          <div id="tab-page-seo" class="tab-pane" role="tabpanel">
+          <div id="tab-pages-seo" class="tab-pane" role="tabpanel">
             <div class="form-group row">
               <label for="views" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Views</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
@@ -372,7 +377,7 @@ if($cntc<0){
             </div>
           </div>
 <?php if($r['contentType']!='comingsoon'&&['contentType']!='maintenance'){?>
-          <div id="tab-page-settings" class="tab-pane" role="tabpanel">
+          <div id="tab-pages-settings" class="tab-pane" role="tabpanel">
 <?php if($r['contentType']!='index'){?>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">

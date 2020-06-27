@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.8
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.8 Add PayPal Parser.
+ * @changes    v0.0.15 Fix incorrect variable $r['postageCost'] line 182
+ * @changes    v0.0.15 Add GST Calculation and Template Parser.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 if($_SESSION['loggedin']==false)
@@ -158,6 +160,7 @@ else{
         $reward=$sr->fetch(PDO::FETCH_ASSOC);
         if($reward['method']==1)$total=$total-$reward['value'];
         else$total=($total*((100-$reward['value'])/100));
+        $total=number_format((float)$total, 2, '.', '');
         $order=preg_replace([
           '/<print rewards=[\"\']?code[\"\']?>/',
           '/<print rewards=[\"\']?method[\"\']?>/',
@@ -173,17 +176,36 @@ else{
         ],$order);
       }else
         $order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
+      if($config['gst']>0){
+        $gst=$total*($config['gst']/100);
+        $gst=number_format((float)$gst, 2, '.', '');
+        $order=preg_replace([
+          '/<print order=[\"\']?gst[\"\']?>/',
+          '/<gst>/',
+          '/<\/gst>/'
+        ],[
+          $gst,
+          '',
+          ''
+        ],$order);
+        $total=$total+$gst;
+        $total=number_format((float)$total, 2, '.', '');
+      }else
+        $order=preg_replace('~<gst>.*?<\/gst>~is','',$order,1);
       if($r['postageCost']>0){
         $order=preg_replace([
-          '/<print order=[\"\']?postage[\"\']?>/',
+          '/<print order=[\"\']?postageOption[\"\']?>/',
+          '/<print order=[\"\']?postageCost[\"\']?>/',
           '/<postage>/',
           '/<\/postage>/'
         ],[
-          $r['postage'],
+          $r['postageOption'],
+          $r['postageCost'],
           '',
           ''
         ],$order);
         $total=$total+$r['postageCost'];
+        $total=number_format((float)$total, 2, '.', '');
       }else
         $order=preg_replace('~<postage>.*?<\/postage>~is','',$order,1);
       $order=preg_replace([
@@ -196,11 +218,38 @@ else{
         $outitems
       ],$order);
       $html=preg_replace('~<order>~is',$order,$html,1);
-      if(stristr($html,'<print paypal>')&&$r['iid']!=''&&$r['status']!='paid'){
+      if(stristr($html,'<print paypal>')&&$r['iid']==''&&$r['status']!='paid'){
         $html=preg_replace([
           '/<print paypal>/'
         ],[
-          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
+          '<div id="paypal-button-container"></div>'.
+          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script>'.
+          '<script>'.
+            'paypal.Buttons({'.
+              'style:{'.
+                'shape:"rect",'.
+                'color:"gold",'.
+                'layout:"horizontal",'.
+                'label:"pay",'.
+              '},'.
+              'createOrder:function(data,actions){'.
+                'return actions.order.create({'.
+                  'purchase_units:[{'.
+                    'amount:{'.
+                      'value:"'.$total.'"'.
+                    '}'.
+                  '}]'.
+                '});'.
+              '},'.
+              'Approve: function(data, actions) {'.
+                'return actions.order.capture().then(function(details) {'.
+                  'alert("Transaction completed by "+details.payer.name.given_name+"!");'.
+                '});'.
+              '}'.
+            '}).render("#paypal-button-container");'.
+          '</script>',
+
+/*          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
           '<div id="paypal-button-container"></div>'.
           '<script>paypal.Buttons({'.
             'createOrder:function(data,actions){'.
@@ -250,7 +299,7 @@ else{
                 '});'.
               '},'.
             '}).render(`#paypal-button-container`);'.
-          '</script>',
+          '</script>', */
         ],$html);
       }else
         $html=str_replace('<print paypal>','',$html);

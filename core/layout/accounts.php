@@ -7,17 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.15 Remove Options from Account Creation so database default is used.
+ * @changes    v0.0.15 Fix Timezone not being added to Account Creation.
  */
 if($args[0]=='add'){
   $type=filter_input(INPUT_GET,'type',FILTER_SANITIZE_STRING);
-  $q=$db->prepare("INSERT INTO `".$prefix."login` (options,active,ti) VALUES ('00000000','1',:ti)")->execute(array(':ti'=>time()));
+  $q=$db->prepare("INSERT INTO `".$prefix."login` (active,timezone,ti) VALUES ('1','default',:ti)")->execute(array(':ti'=>time()));
   $args[1]=$db->lastInsertId();
   $q=$db->prepare("UPDATE `".$prefix."login` SET username=:username WHERE id=:id");
   $q->execute([':username'=>'User '.$args[1],':id'=>$args[1]]);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.13
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
@@ -20,6 +20,13 @@
  * @changes    v0.0.12 Add Options for using Panoramic Photo's.
  * @changes    v0.0.12 Fix Multiple Media Adding.
  * @changes    v0.0.13 Add Lorem Ipsum Generator for Administrators.
+ * @changes    v0.0.15 Add Display Block Elements in Editor Button.
+ * @changes    v0.0.15 Add Check to Current Item in Dropdown.
+ * @changes    v0.0.15 Add SEO Pre-Publish Checklist.
+ * @changes    v0.0.15 Add Add Content Button next to back button for quickly adding next content item.
+ * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
+ * @changes    v0.0.15 Add Edit Media information button.
+ * @changes    v0.0.15 Add Weight and Size Fields for Postage Calculation.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -29,25 +36,23 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-item"><?php echo$user['options'][1]==1?'Edit':'View';?></li>
     <li class="breadcrumb-item active">
       <span id="titleupdate"><?php echo$r['title'];?></span>
-<?php $so=$db->prepare("SELECT id,title FROM content WHERE lower(contentType) LIKE lower(:contentType) AND id!=:id ORDER BY title ASC");
-$so->execute([
-  ':contentType'=>$r['contentType'],
-  ':id'=>$r['id']
-]);
+<?php $so=$db->prepare("SELECT id,title,active,ord FROM `".$prefix."content` WHERE lower(contentType) LIKE lower(:contentType) ORDER BY title ASC");
+$so->execute([':contentType'=>$r['contentType']]);
 if($so->rowCount()>0){
       echo'<a class="btn btn-ghost-normal dropdown-toggle m-0 p-0 pl-2 pr-2 text-white" data-toggle="dropdown" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'" role="button" aria-label="Quick Content Selection" aria-haspopup="true" aria-expanded="false"></a><div class="dropdown-menu">';
-  while($ro=$so->fetch(PDO::FETCH_ASSOC))echo'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/content/edit/'.$ro['id'].'">'.$ro['title'].'</a>';
-    echo'</div>';
+      while($ro=$so->fetch(PDO::FETCH_ASSOC))echo'<a class="dropdown-item small pt-1 pb-1 text-white'.($ro['id']==$r['id']?' active':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$ro['id'].'">'.($ro['id']==$r['id']?'&check;&nbsp;':'&nbsp;&nbsp;&nbsp;').$ro['title'].'</a>';
+      echo'</div>';
 }?>
     </li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group" aria-label="">
         <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
+        <?php echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($r['contentType']).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
       </div>
     </li>
   </ol>
-  <div class="container-fluid">
-    <div class="card">
+  <div class="container-fluid row">
+    <div class="card col-12 col-md-9 order-2 order-md-1">
       <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
           <li id="nav-content-content" class="nav-item" role="presentation">
@@ -393,12 +398,180 @@ if($r['contentType']=='inventory'){?>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savequantity" class="btn btn-secondary save" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
+
+            <div id="nav-content-content-24" class="form-group row">
+              <label for="weight" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Weight</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <input type="text" id="weight" class="form-control textinput" value="<?php echo $r['weight'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="weight"<?php echo$user['options'][1]==1?' placeholder="Enter a Weight..."':' readonly';?>>
+                <select id="weightunit" class="form-control" onchange="update('<?php echo$r['id'];?>','content','weightunit',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Weight Unit"':' disabled';?>>
+                  <option value="kg"<?php echo$r['weightunit']=='kg'?' selected':'';?>>Kilograms (kg)</option>
+                  <option value="mg"<?php echo$r['weightunit']=='mg'?' selected':'';?>>Milligrams (mg)</option>
+                  <option value="g"<?php echo$r['weightunit']=='g'?' selected':'';?>>Grams (g)</option>
+                  <option value="lb"<?php echo$r['weightunit']=='lb'?' selected':'';?>>Pound (lb)</option>
+                  <option value="t"<?php echo$r['weightunit']=='t'?' selected':'';?>>Tonne (t)</option>
+                  <option value="Gt"<?php echo$r['weightunit']=='Gt'?' selected':'';?>>Gigatonne (Gt)</option>
+                  <option value="Mt"<?php echo$r['weightunit']=='Mt'?' selected':'';?>>Megatonne (Mt)</option>
+                  <option value="ug"<?php echo$r['weightunit']=='ug'?' selected':'';?>>Microgram (ug)</option>
+                  <option value="ng"<?php echo$r['weightunit']=='ng'?' selected':'';?>>Nanogram (ng)</option>
+                  <option value="pg"<?php echo$r['weightunit']=='pg'?' selected':'';?>>Picogram (pg)</option>
+                  <option value="oz"<?php echo$r['weightunit']=='oz'?' selected':'';?>>Ounce (oz)</option>
+                  <option value="cg"<?php echo$r['weightunit']=='cg'?' selected':'';?>>Centigram (cg)</option>
+                  <option value="dg"<?php echo$r['weightunit']=='dg'?' selected':'';?>>Decigram (dg)</option>
+                  <option value="dag"<?php echo$r['weightunit']=='dag'?' selected':'';?>>Dekagram (dag)</option>
+                  <option value="hg"<?php echo$r['weightunit']=='hg'?' selected':'';?>>Hectogram (hg)</option>
+                  <option value="dr"<?php echo$r['weightunit']=='dr'?' selected':'';?>>Dram (dr)</option>
+                  <option value="grains"<?php echo$r['weightunit']=='grains'?' selected':'';?>>Grains (grains)</option>
+                  <option value="cwt"<?php echo$r['weightunit']=='cwt'?' selected':'';?>>Hundredweight (cwt)</option>
+                  <option value="dwt"<?php echo$r['weightunit']=='dwt'?' selected':'';?>>Pennyweight (dwt)</option>
+                </select>
+                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveweight" class="btn btn-secondary save" data-dbid="weight" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              </div>
+            </div>
+
+            <div id="nav-content-content-24" class="form-group row">
+              <label for="Size" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Size</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-prepend">
+                  <span class="input-group-text">Width</span>
+                </div>
+                <input type="text" id="width" class="form-control textinput" value="<?php echo $r['width'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="width"<?php echo$user['options'][1]==1?' placeholder="Width"':' readonly';?>>
+                <select id="widthunit" class="form-control" onchange="update('<?php echo$r['id'];?>','content','widthunit',$(this).val());"<?php echo$user['options'][1]==1?'  data-tooltip="tooltip" data-title="Change Width Unit"':' disabled';?>>
+                  <option value="mm"<?php echo$r['widthunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
+                  <option value="cm"<?php echo$r['widthunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
+                  <option value="in"<?php echo$r['widthunit']=='in'?' selected':'';?>>Inch (in)</option>
+                  <option value="foot"<?php echo$r['widthunit']=='ft'?' selected':'';?>>Foot (ft)</option>
+                  <option value="m"<?php echo$r['widthunit']=='m'?' selected':'';?>>Metre (m)</option>
+                  <option value="km"<?php echo$r['widthunit']=='km'?' selected':'';?>>Kilometre (km)</option>
+                  <option value="mi"<?php echo$r['widthunit']=='mi'?' selected':'';?>>Mile (mi)</option>
+                  <option value="angstrom"<?php echo$r['widthunit']=='angstrom'?' selected':'';?>>Angstrom (angstrom)</option>
+                  <option value="AU"<?php echo$r['widthunit']=='AU'?' selected':'';?>>Astronimical Unit (AU)</option>
+                  <option value="chain"<?php echo$r['widthunit']=='chain'?' selected':'';?>>Chain (chain)</option>
+                  <option value="dam"<?php echo$r['widthunit']=='dam'?' selected':'';?>>Decametre (dam)</option>
+                  <option value="dm"<?php echo$r['widthunit']=='dm'?' selected':'';?>>Decimetre (dm)</option>
+                  <option value="fathom"<?php echo$r['widthunit']=='fathom'?' selected':'';?>>Fathom (fathom)</option>
+                  <option value="furlong"<?php echo$r['widthunit']=='furlong'?' selected':'';?>>Furlong (furlong)</option>
+                  <option value="Gly"<?php echo$r['widthunit']=='Gly'?' selected':'';?>>Gigalight-Year (Gly)</option>
+                  <option value="Gm"<?php echo$r['widthunit']=='Gm'?' selected':'';?>>Gigametre (Gm)</option>
+                  <option value="Gpc"<?php echo$r['widthunit']=='Gpc'?' selected':'';?>>Gigaparsec (Gpc)</option>
+                  <option value="hand"<?php echo$r['widthunit']=='hand'?' selected':'';?>>Hand (hand)</option>
+                  <option value="hm"<?php echo$r['widthunit']=='hm'?' selected':'';?>>Hectometre (hm)</option>
+                  <option value="Kly"<?php echo$r['widthunit']=='Kly'?' selected':'';?>>Kilolight-Year (Kly)</option>
+                  <option value="Kpc"<?php echo$r['widthunit']=='Kpc'?' selected':'';?>>Kiloparsec (Kpc)</option>
+                  <option value="ly"<?php echo$r['widthunit']=='ly'?' selected':'';?>>Light-Year (ly)</option>
+                  <option value="Mly"<?php echo$r['widthunit']=='Mly'?' selected':'';?>>Megalight-Year (Mly)</option>
+                  <option value="Mm"<?php echo$r['widthunit']=='Mm'?' selected':'';?>>Megametre (Mm)</option>
+                  <option value="Mpc"<?php echo$r['widthunit']=='Mpc'?' selected':'';?>>Megaparsec (Mpc)</option>
+                  <option value="um"<?php echo$r['widthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
+                  <option value="nm"<?php echo$r['widthunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
+                  <option value="nmi"<?php echo$r['widthunit']=='nmi'?' selected':'';?>>Nautical Mile (nmi)</option>
+                  <option value="pc"<?php echo$r['widthunit']=='pc'?' selected':'';?>>Parsec (pc)</option>
+                  <option value="perch"<?php echo$r['widthunit']=='perch'?' selected':'';?>>Perch (perch)</option>
+                  <option value="pole"<?php echo$r['widthunit']=='pole'?' selected':'';?>>Pole (pole)</option>
+                  <option value="rd"<?php echo$r['widthunit']=='rd'?' selected':'';?>>Rod (rd)</option>
+                  <option value="yard"<?php echo$r['widthunit']=='yd'?' selected':'';?>>Yard (yd)</option>
+                </select>
+                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savewidth" class="btn btn-secondary save" data-dbid="width" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              </div>
+            </div>
+
+            <div id="nav-content-content-24" class="form-group row">
+              <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">&nbsp;</div>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-append">
+                  <span class="input-group-text">Height</span>
+                </div>
+                <input type="text" id="height" class="form-control textinput" value="<?php echo $r['height'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="height"<?php echo$user['options'][1]==1?' placeholder="Height"':' readonly';?>>
+                <select id="heightunit" class="form-control" onchange="update('<?php echo$r['id'];?>','content','heightunit',$(this).val());"<?php echo$user['options'][1]==1?'  data-tooltip="tooltip" data-title="Change Height Unit"':' disabled';?>>
+                  <option value="mm"<?php echo$r['heightunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
+                  <option value="cm"<?php echo$r['heightunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
+                  <option value="in"<?php echo$r['heightunit']=='in'?' selected':'';?>>Inch (in)</option>
+                  <option value="foot"<?php echo$r['heightunit']=='ft'?' selected':'';?>>Foot (ft)</option>
+                  <option value="m"<?php echo$r['heightunit']=='m'?' selected':'';?>>Metre (m)</option>
+                  <option value="km"<?php echo$r['heightunit']=='km'?' selected':'';?>>Kilometre (km)</option>
+                  <option value="mi"<?php echo$r['heightunit']=='mi'?' selected':'';?>>Mile (mi)</option>
+                  <option value="angstrom"<?php echo$r['heightunit']=='angstrom'?' selected':'';?>>Angstrom (angstrom)</option>
+                  <option value="AU"<?php echo$r['heightunit']=='AU'?' selected':'';?>>Astronimical Unit (AU)</option>
+                  <option value="chain"<?php echo$r['heightunit']=='chain'?' selected':'';?>>Chain (chain)</option>
+                  <option value="dam"<?php echo$r['heightunit']=='dam'?' selected':'';?>>Decametre (dam)</option>
+                  <option value="dm"<?php echo$r['heightunit']=='dm'?' selected':'';?>>Decimetre (dm)</option>
+                  <option value="fathom"<?php echo$r['heightunit']=='fathom'?' selected':'';?>>Fathom (fathom)</option>
+                  <option value="furlong"<?php echo$r['heightunit']=='furlong'?' selected':'';?>>Furlong (furlong)</option>
+                  <option value="Gly"<?php echo$r['heightunit']=='Gly'?' selected':'';?>>Gigalight-Year (Gly)</option>
+                  <option value="Gm"<?php echo$r['heightunit']=='Gm'?' selected':'';?>>Gigametre (Gm)</option>
+                  <option value="Gpc"<?php echo$r['heightunit']=='Gpc'?' selected':'';?>>Gigaparsec (Gpc)</option>
+                  <option value="hand"<?php echo$r['heightunit']=='hand'?' selected':'';?>>Hand (hand)</option>
+                  <option value="hm"<?php echo$r['heightunit']=='hm'?' selected':'';?>>Hectometre (hm)</option>
+                  <option value="Kly"<?php echo$r['heightunit']=='Kly'?' selected':'';?>>Kilolight-Year (Kly)</option>
+                  <option value="Kpc"<?php echo$r['heightunit']=='Kpc'?' selected':'';?>>Kiloparsec (Kpc)</option>
+                  <option value="ly"<?php echo$r['heightunit']=='ly'?' selected':'';?>>Light-Year (ly)</option>
+                  <option value="Mly"<?php echo$r['heightunit']=='Mly'?' selected':'';?>>Megalight-Year (Mly)</option>
+                  <option value="Mm"<?php echo$r['heightunit']=='Mm'?' selected':'';?>>Megametre (Mm)</option>
+                  <option value="Mpc"<?php echo$r['heightunit']=='Mpc'?' selected':'';?>>Megaparsec (Mpc)</option>
+                  <option value="um"<?php echo$r['heightunit']=='um'?' selected':'';?>>Micrometre (um)</option>
+                  <option value="nm"<?php echo$r['heightunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
+                  <option value="nmi"<?php echo$r['heightunit']=='nmi'?' selected':'';?>>Nautical Mile (nmi)</option>
+                  <option value="pc"<?php echo$r['heightunit']=='pc'?' selected':'';?>>Parsec (pc)</option>
+                  <option value="perch"<?php echo$r['heightunit']=='perch'?' selected':'';?>>Perch (perch)</option>
+                  <option value="pole"<?php echo$r['heightunit']=='pole'?' selected':'';?>>Pole (pole)</option>
+                  <option value="rd"<?php echo$r['heightunit']=='rd'?' selected':'';?>>Rod (rd)</option>
+                  <option value="yard"<?php echo$r['heightunit']=='yd'?' selected':'';?>>Yard (yd)</option>
+                </select>
+                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveheight" class="btn btn-secondary save" data-dbid="height" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              </div>
+            </div>
+
+            <div id="nav-content-content-24" class="form-group row">
+              <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">&nbsp;</div>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-append">
+                  <span class="input-group-text">Length</span>
+                </div>
+                <input type="text" id="length" class="form-control textinput" value="<?php echo$r['length'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="length"<?php echo$user['options'][1]==1?' placeholder="Length"':' readonly';?>>
+                <select id="lengthunit" class="form-control" onchange="update('<?php echo$r['id'];?>','content','lengthunit',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Length Unit"':' disabled';?>>
+                  <option value="mm"<?php echo$r['lengthunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
+                  <option value="cm"<?php echo$r['lengthunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
+                  <option value="in"<?php echo$r['lengthunit']=='in'?' selected':'';?>>Inch (in)</option>
+                  <option value="foot"<?php echo$r['lengthunit']=='ft'?' selected':'';?>>Foot (ft)</option>
+                  <option value="m"<?php echo$r['lengthunit']=='m'?' selected':'';?>>Metre (m)</option>
+                  <option value="km"<?php echo$r['lengthunit']=='km'?' selected':'';?>>Kilometre (km)</option>
+                  <option value="mi"<?php echo$r['lengthunit']=='mi'?' selected':'';?>>Mile (mi)</option>
+                  <option value="angstrom"<?php echo$r['lengthunit']=='angstrom'?' selected':'';?>>Angstrom (angstrom)</option>
+                  <option value="AU"<?php echo$r['lengthunit']=='AU'?' selected':'';?>>Astronimical Unit (AU)</option>
+                  <option value="chain"<?php echo$r['lengthunit']=='chain'?' selected':'';?>>Chain (chain)</option>
+                  <option value="dam"<?php echo$r['lengthunit']=='dam'?' selected':'';?>>Decametre (dam)</option>
+                  <option value="dm"<?php echo$r['lengthunit']=='dm'?' selected':'';?>>Decimetre (dm)</option>
+                  <option value="fathom"<?php echo$r['lengthunit']=='fathom'?' selected':'';?>>Fathom (fathom)</option>
+                  <option value="furlong"<?php echo$r['lengthunit']=='furlong'?' selected':'';?>>Furlong (furlong)</option>
+                  <option value="Gly"<?php echo$r['lengthunit']=='Gly'?' selected':'';?>>Gigalight-Year (Gly)</option>
+                  <option value="Gm"<?php echo$r['lengthunit']=='Gm'?' selected':'';?>>Gigametre (Gm)</option>
+                  <option value="Gpc"<?php echo$r['lengthunit']=='Gpc'?' selected':'';?>>Gigaparsec (Gpc)</option>
+                  <option value="hand"<?php echo$r['lengthunit']=='hand'?' selected':'';?>>Hand (hand)</option>
+                  <option value="hm"<?php echo$r['lengthunit']=='hm'?' selected':'';?>>Hectometre (hm)</option>
+                  <option value="Kly"<?php echo$r['lengthunit']=='Kly'?' selected':'';?>>Kilolight-Year (Kly)</option>
+                  <option value="Kpc"<?php echo$r['lengthunit']=='Kpc'?' selected':'';?>>Kiloparsec (Kpc)</option>
+                  <option value="ly"<?php echo$r['lengthunit']=='ly'?' selected':'';?>>Light-Year (ly)</option>
+                  <option value="Mly"<?php echo$r['lengthunit']=='Mly'?' selected':'';?>>Megalight-Year (Mly)</option>
+                  <option value="Mm"<?php echo$r['lengthunit']=='Mm'?' selected':'';?>>Megametre (Mm)</option>
+                  <option value="Mpc"<?php echo$r['lengthunit']=='Mpc'?' selected':'';?>>Megaparsec (Mpc)</option>
+                  <option value="um"<?php echo$r['lengthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
+                  <option value="nm"<?php echo$r['lengthunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
+                  <option value="nmi"<?php echo$r['lengthunit']=='nmi'?' selected':'';?>>Nautical Mile (nmi)</option>
+                  <option value="pc"<?php echo$r['lengthunit']=='pc'?' selected':'';?>>Parsec (pc)</option>
+                  <option value="perch"<?php echo$r['lengthunit']=='perch'?' selected':'';?>>Perch (perch)</option>
+                  <option value="pole"<?php echo$r['lengthunit']=='pole'?' selected':'';?>>Pole (pole)</option>
+                  <option value="rd"<?php echo$r['lengthunit']=='rd'?' selected':'';?>>Rod (rd)</option>
+                  <option value="yard"<?php echo$r['lengthunit']=='yd'?' selected':'';?>>Yard (yd)</option>
+                </select>
+                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savelength" class="btn btn-secondary save" data-dbid="length" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              </div>
+            </div>
+
 <?php }
 if($r['contentType']=='inventory'){?>
             <div id="tab-content-content-24" class="form-group row">
               <label for="stockStatus" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Stock Status</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <select id="stockStatus" class="form-control" onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());"<?php echo$user['options'][1]==1?'  data-tooltip="tooltip" data-title="Change Stock Status"':' disabled';?>>
+                <select id="stockStatus" class="form-control" onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Stock Status"':' disabled';?>>
                   <option value="quantity"<?php echo$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
                   <option value="in stock"<?php echo$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
                   <option value="out of stock"<?php echo$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
@@ -420,8 +593,9 @@ if($r['contentType']=='inventory'){?>
                     echo$ss->rowCount()>0?'<div data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="notesda" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
                   echo'<div class="d-flex justify-content-end">'.
-                  '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
-                  '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
+                    '<button class="btn btn-secondary btn-sm" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;" data-tooltip="tooltip" data-title="Show Element Blocks" aria-label="Show Element Blocks">'.svg2('blocks').'</button>'.
+                    '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
+                    '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;" data-tooltip="tooltip" data-title="Add Aussie Lorem Ipsum" aria-label="Add Aussie Lorem Ipsum">'.svg2('loremipsum').'</button>'.
                     '<button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestions">'.svg2('idea').'</button></div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
                 <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
@@ -489,7 +663,7 @@ if($r['contentType']!='testimonials'){?>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="fileURL" class="form-control textinput" value="<?php echo$r['fileURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileURL"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
                   <div class="input-group-append">
-                    <?php echo$r['fileURL']!=''?'<a href="'.$r['fileURL'].'" data-fancybox="url"><img id="thumbimage" src="'.$r['fileURL'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
+                    <?php echo$r['fileURL']!=''?'<a data-fancybox="thumb" href="'.$r['fileURL'].'"><img id="thumbimage" src="'.$r['fileURL'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefileURL" class="btn btn-secondary save" data-dbid="fileURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
@@ -507,7 +681,7 @@ if($r['contentType']!='testimonials'){?>
                   </form>
 <?php }?>
                   <div class="input-group-append img">
-                    <?php echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a href="'.$r['file'].'" data-fancybox="image"><img id="fileimage" src="'.$r['file'].'" alt="Thumbnail"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
+                    <?php echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefile" class="btn btn-secondary save" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
@@ -531,7 +705,7 @@ if($r['contentType']!='testimonials'){?>
                   </form>
 <?php }?>
                   <div class="input-group-append img">
-                    <?php echo$r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'<a href="'.$r['thumb'].'" data-fancybox="thumb"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
+                    <?php echo$r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                   </div>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savethumb" class="btn btn-secondary save" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
@@ -678,18 +852,19 @@ if($r['contentType']!='testimonials'){?>
 $sm->execute([':id'=>$r['id']]);
 if($sm->rowCount()>0){
   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-    if(file_exists('media/thumbs/'.substr(basename($rm['file']),0,-4).'.png'))
-      $thumb='media/thumbs/'.substr(basename($rm['file']),0,-4).'.png';
+    if(file_exists('media/thumbs/'.preg_replace('/\\.[^.\\s]{3,4}$/','',basename($rm['file'])).'.png'))
+      $thumb='media/thumbs/'.preg_replace('/\\.[^.\\s]{3,4}$/','',basename($rm['file'])).'.png';
     else
       $thumb=$rm['file'];?>
                 <div id="mi_<?php echo$rm['id'];?>" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0">
-                  <a class="card bg-dark m-0" href="<?php echo$rm['file'];?>" data-fancybox="media">
+                  <a data-fancybox="media" data-caption="<?php echo($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" class="card bg-dark m-0" href="<?php echo$rm['file'];?>">
                     <img src="<?php echo$thumb;?>" class="card-img" alt="Media <?php echo$rm['id'];?>">
                   </a>
 <?php   if($user['options'][1]==1){?>
                   <div class="btn-group float-right">
-                    <div class="handle btn btn-secondary btn-sm" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></div>
-                    <button class="btn btn-secondary trash btn-sm" onclick="purge('<?php echo$rm['id'];?>','media')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <div class="handle btn btn-secondary btn-xs" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></div>
+                    <a class="btn btn-secondary btn-xs" href="<?php echo URL.$settings['system']['admin'].'/media/edit/'.$rm['id'];?>"><?php svg('edit');?></a>
+                    <button class="btn btn-secondary trash btn-xs" onclick="purge('<?php echo$rm['id'];?>','media')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
 <?php   }?>
                 </div>
@@ -1121,6 +1296,37 @@ if($cntc<0){
                 </select>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card col-12 col-md-3 order-1 order-md-2">
+      <div class="card-body">
+        <h6 class="card-title">SEO Pre-Publish Checklist</h6>
+        <div class="card-text">
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input striker" id="checklist0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="0"<?php echo$r['checklist'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label class="form-check-label" for="checklist0">Title is Catchy</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input striker" id="checklist1" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="1"<?php echo$r['checklist'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label class="form-check-label" for="checklist1">Category Selected</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input striker" id="checklist2" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="2"<?php echo$r['checklist'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label class="form-check-label" for="checklist2">Formatting Done</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input striker" id="checklist3" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="3"<?php echo$r['checklist'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label class="form-check-label" for="checklist3">Spelling and Grammar</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input striker" id="checklist4" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="4"<?php echo$r['checklist'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label class="form-check-label" for="checklist4">Image Added</label>
+          </div>
+          <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input striker" id="checklist5" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="5"<?php echo$r['checklist'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label class="form-check-label" for="checklist5">SEO Checked</label>
           </div>
         </div>
       </div>

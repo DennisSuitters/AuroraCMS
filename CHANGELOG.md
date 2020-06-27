@@ -1,4 +1,28 @@
-### v0.0.14
+### v0.0.15
+- Enable CodeMirror to work with Summernote Codeview.
+- Add styling to indicate unnecessary H1 Headers in Editor.
+- Refactor CSS to reduce footprint size.
+- Add Display Block Elements in Editor Button.
+- Add Check to Current Item in Dropdown.
+- Update Summernote WYSIWYG to our development version.
+- Add Summernote Plugin Classes, and adjust theme.ini to include custom classes.
+- Add Star Rating parser to Testimonials.
+- Add SEO Pre-Publish Checklist.
+- Add Add Content Button next to back button for quickly adding next content item.
+- Fix incorrect column name /core/view/orders.php line 182
+- Fix truncating file extensions for 3 or 4 character length extensions.
+- Fix Check for Reduced Cost against Cost.
+- Add Preferences Cart page for clearing or removing cart items.
+- Add Media Edit page.
+- Add Edit Media button to media items.
+- Fix Adding Postage Options.
+- Add GST Calculation, Options and Template Parser.
+- Fix Linking to PayPal for Online Payments.
+- Fix Account Creation Errors, Timezone and Options.
+- Remove System Utilization from Side Menu, add to Dashboard.
+- Fix Typo's in Chat Script.
+
+##### v0.0.14
 - Fix elFinder not adding files to single fields.
 - Remove Views from "Coming Soon" and "Maintenance" pages.
 - Fix Index/Home page not showing Category images.
@@ -7,7 +31,7 @@
 - Adjust Template Category select to allow selecting up to 4 different categories.
 - Fix displaying just Categories when using Shop by Category.
 
-### v0.0.13
+##### v0.0.13
 - Add X-Clacks Silent Attribute Header, Add you site to the list: https://xclacksoverhead.org/dearheart/review
 - Add Lorem Generator for Administrators.
 - Fix Scheduler breaking on Quotes in Titles.
@@ -15,7 +39,7 @@
 - Fix width issues with Default Theme on Mobile.
 - Update Summernote WYSIWYG Editor to v0.8.16
 
-### v0.0.12
+##### v0.0.12
 - Fix showing stock status.
 - Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
 - Add option to Enable Panoramic Photo's.
@@ -23,7 +47,7 @@
 - Remove Front End Editing in preperation of multi-site single Administration.
 - Fix Parser not correctly parsing some content elements.
 
-### v0.0.11
+##### v0.0.11
 - Adjust administration avatar styling to reflect account type when logged in.
 - Continue to prepare for PHP7.4 compatibility. Remove {} in favour [].
 - Set permissions per account of what is allowed in media manager.
@@ -44,7 +68,7 @@
 - Remove unneeded URL forward slash for extra pages in menu.
 - Add parsing for Inventory Item status.
 
-### v0.0.10
+##### v0.0.10
 - Fix Administration Service Worker not displaying Offline Page.
 - Add Markdown Parsing for prettier, easier to read CHANGELOG.
 - Prepare for PHP7.4 Compatibility. Remove {} in favour [].
@@ -56,19 +80,19 @@
 - Update Summernote WYSIWYG Editor to v0.8.14
 - Move other platform security checks so they only check when enabled.
 
-#### v0.0.9
+##### v0.0.9
 - Complete PayPal transaction order updating.
 - Fix service-worker not referencing Logo correctly.
 - Fix incorrect ID for input's.
 
-#### v0.0.8
+##### v0.0.8
 - Fix SQL error when creating a Developer Account in Install.
 - Fix missing SQL prefix from SQL Query at line 326.
 - Add Offline Progressive Web Application (PWA) for Front End and Administration.
 - Add parser to Featured Items for item counting.
 - Add PayPal Payment Options.
 
-#### v0.0.7
+##### v0.0.7
 - Fix Width Formatting for better responsiveness.
 - Add Development Tools to assist with Theme Development.
 - Add Website Voice service.
@@ -77,19 +101,19 @@
 - Add Options to Lock Down Site for Developer Accounts (handy for non-paying clients).
 - Fix old CMS references.
 
-#### v0.0.6
+##### v0.0.6
 - Fix reference to jQuery on Login page being wrong.
 - Remove missed Pace Artifacts which were causing script errors.
 - Add GDPR Banner Optional Display.
 - Add features to LiveChat, email enable admin users, show status of new chat messages.
 - Adjust Admin Bootstrap Tabs styling.
 
-#### AuroraCMS v0.0.5
+##### v0.0.5
 - Add Chat Widget. With option to use built-in Chat or Facebook Messenger.
 - Remove Pace.
 - Add check if User Agent isn't set, or User Agent is Google Speed Insight and don't render Google Analytics Code if us. This helps when Google is testing as Google Analytics slows page loading.
 
-#### AuroraCMS v0.0.4
+##### v0.0.4
 - Fix Installer Account Creation SQL.
 - Add Timezone Option to Installer Page.
 - Adjust SQL for Related Items so only Published Content is selected.
@@ -98,7 +122,7 @@
 - Fix Tracking Acquisition.
 - Fix Administration Tooltips to stop interfering with Popovers.
 
-#### AuroraCMS v0.0.3
+##### v0.0.3
 - Add AutoPublish Options.
 - Fix Scheduler actions.
 - Add content processing for Coming Soon and Maintenance pages. Both "Coming Soon" and "Maintenance" pages can be edited like other pages, including SEO information.
@@ -112,7 +136,7 @@
 - Add Check if shareImage is no image and replace with FavIcon.
 - Fix Image for JSON-LD Schema to fall back to Favicon.
 
-#### AuroraCMS v0.0.2
+##### v0.0.2
 - Add test in Administration Header to test if admin.css exists in the theme, and add if it does. This is for the WYSIWYG Editor to make text look the same in the Editor as it does on the Main Site.
 - Change Administration Dashboard to only show Stats that have values greater than 0.
 - Properly Add Permissions Options.
@@ -123,7 +147,7 @@
 - Make sure all links end with /
 - Add Description for Profiles and Meta-Description data.
 
-#### AuroraCMS v0.0.1
+##### v0.0.1
 - Rebrand from LibreCMS to AuroraCMS (see https://github.com/DiemenDesign/LibreCMS for previous changes).
 - Add Reason to Blacklist (add field to iplist table in database and interface additions).
 - Move Settings Links to Menu.

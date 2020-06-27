@@ -1,0 +1,103 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block include="featured.html">
+<block inbed="content">
+	<section class="covertron" style="<print page=cover>"><print page="coverVideo"></section>
+	<section class="row">
+		<article class="col-11 col-sm-8">
+			<print page="notes">
+		</article>
+		<aside id="newsletters" class="col-12 col-sm-3 m-0">
+			<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
+				<input type="hidden" name="emailtrap" value="none">
+				<div class="card">
+					<fieldset class="border-0 m-0">
+						<legend>Subscribe to our Newsletters</legend>
+						<label for="newslettersemail">Email</label>
+						<input type="email" id="newslettersemail" name="email" value="" required aria-required="true" placeholder="Email...">
+						<div class="requirements alert alert-danger">
+							Must be a valid email address.
+						</div>
+						<div class="text-right">
+							<button id="newsletters-btn" class="justify-content-flex-end" type="submit">Subscribe</button>
+						</div>
+					</fieldset>
+				</div>
+			</form>
+		</aside>
+	</section>
+	<section class="jumbotron">
+  	<header>
+			<h2>Fluid jumbotron</h2>
+		</header>
+  	<p>This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+	</section>
+	<settings items="4" contenttype="all">
+	<section class="mt-5">
+		<header>
+			<h2>Latest Content Additions</h2>
+		</header>
+		<items>
+			<article class="card">
+				<div class="card-image">
+					<img src="<print content=thumb>" alt="<print content=imageALT>">
+				</div>
+				<div class="card-header">
+					<div class="card-title"><h4><a href="<print content=linktitle>"><print content="title"></a></h4></div>
+					<div class="card-subtitle"><print content="category_1">&nbsp;</div>
+				</div>
+				<div class="card-body">
+					<print content="notes">
+				</div>
+				<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+				<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow"><print content="contentType"></div>
+				<div class="card-footer">
+					<a class="btn" href="<print content=linktitle>">View</a>
+				</div>
+			</article>
+		</items>
+	</section>
+	<section class="mt-5">
+		<header>
+			<h2>Shop by Category</h2>
+		</header>
+		<categories>
+			<article class="card">
+				<a href="<print category=link>"><img src="<print category=image>" alt="<print category=imageALT>"></a>
+				<div class="corner-ribbon top-right text-uppercase font-weight-bold shadow"><print category="category"></div>
+			</article>
+		</categories>
+	</section>
+</block>
+<block inbed="testimonials">
+	<settings items="3">
+	<section class="mt-5">
+		<header>
+			<h2 class=""><strong><a href="testimonials/">Testimonials</a> <small>Our Clients Love Us!</small></strong></h2>
+		</header>
+		<div class="row">
+			<items>
+				<blockquote class="testimonials col-11 col-sm-3">
+					<img src="<print content=avatar>" alt="<print content=name>">
+					<footer>
+						<h3 itemprop="author"><print content="name"></h3>
+						<h5><print content="business"></h5>
+					</footer>
+					<json-ld-testimonial>
+					<p><print content="notes"></p>
+					<data class="p-rating" value="<print review=rating>">
+						<span class="rat">
+							<span class="<print review=set1>"></span>
+							<span class="<print review=set2>"></span>
+							<span class="<print review=set3>"></span>
+							<span class="<print review=set4>"></span>
+							<span class="<print review=set5>"></span>
+						</span>
+					</data>
+	  		</blockquote>
+			</items>
+		</div>
+	</section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

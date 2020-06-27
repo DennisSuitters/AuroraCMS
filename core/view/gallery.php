@@ -36,6 +36,7 @@ if(stristr($html,'<items')){
     $items=preg_replace([
       '/<print media=[\"\']?thumb[\"\']?>/',
       '/<print media=[\"\']?file[\"\']?>/',
+			'/<print media=[\"\']?fileALT[\"\']?>/',
       '/<print media=[\"\']?title[\"\']?>/',
       '/<print media=[\"\']?caption[\"\']?>/',
       '/<print media=[\"\']?attributionImageName[\"\']?>/',
@@ -43,6 +44,7 @@ if(stristr($html,'<items')){
     ],[
       URL.'media/thumbs/'.$bname.'.png',
       htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars(($r['fileALT']!=''?$r['fileALT']:$r['title']),ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['attributionImageName'],ENT_QUOTES,'UTF-8'),

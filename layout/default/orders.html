@@ -1,0 +1,170 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="orders">
+	<section class="row">
+		<article class="col-12 col-sm-11">
+			<table class="border">
+				<thead class="d-none d-sm-table-header-group">
+					<tr>
+						<th class="text-center"><span class="d-none d-sm-block">Order #</span></th>
+						<th class="d-none d-sm-table-cell text-center">Status</th>
+						<th class="d-none d-sm-table-cell text-center">Date</th>
+						<th>&nbsp;</th>
+					</tr>
+				</thead>
+				<tbody>
+					<items>
+						<tr class="border-bottom">
+							<td class="text-center">
+								<print order="ordernumber">
+								<span class="d-inline d-sm-none"><br>
+									<small>
+										<print order="date"><br>
+										Due: <print order="duedate">
+									</small>
+								</span>
+							</td>
+							<td class="d-none d-sm-table-cell text-center"><print order="status"></td>
+							<td class="d-none d-sm-table-cell text-center">
+								<print order="date"><br>
+								Due: <print order="duedate">
+							</td>
+							<td class="text-right align-middle"><a class="btn" href="<print link>">View</a></td>
+						</tr>
+					</items>
+				</tbody>
+			</table>
+		</article>
+	</section>
+	<order>
+		<section class="row">
+			<article class="col-12 col-sm-3 border-right">
+				<button class="float-right d-block d-sm-none" onclick="$('#sp').load('core/email_order.php?id=<print order=id>&act=print');" aria-label="Print"><i class="libre"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.76923,11.615385 h 6.46154 V 9.769235 H 3.76923 v 1.84615 z m 0,-4.61538 h 6.46154 V 4.230775 H 9.07692 q -0.28846,0 -0.49038,-0.20193 Q 8.38462,3.826925 8.38462,3.538465 V 2.384615 H 3.76923 v 4.61539 z m 8.30769,0.46154 q 0,-0.1875 -0.13702,-0.32452 -0.13702,-0.13702 -0.32452,-0.13702 -0.1875,0 -0.32451,0.13702 -0.13702,0.13702 -0.13702,0.32452 0,0.1875 0.13702,0.32452 0.13701,0.13702 0.32451,0.13702 0.1875,0 0.32452,-0.13702 0.13702,-0.13702 0.13702,-0.32452 z m 0.92308,0 v 3 q 0,0.0937 -0.0685,0.16226 -0.0685,0.0685 -0.16226,0.0685 h -1.61538 v 1.15384 q 0,0.28846 -0.20193,0.49039 -0.20192,0.20192 -0.49038,0.20192 H 3.53847 q -0.28846,0 -0.49038,-0.20192 -0.20193,-0.20193 -0.20193,-0.49039 v -1.15384 H 1.230779 q -0.09375,0 -0.162259,-0.0685 Q 1,10.555295 1,10.461545 v -3 Q 1,6.891825 1.407452,6.484375 1.814904,6.076925 2.38462,6.076925 h 0.46153 v -3.92308 q 0,-0.28846 0.20193,-0.49038 Q 3.25,1.461545 3.53846,1.461545 h 4.84616 q 0.28846,0 0.63461,0.14423 0.34615,0.14423 0.54808,0.34615 l 1.09615,1.09616 q 0.20192,0.20192 0.34616,0.54807 0.14423,0.34616 0.14423,0.63462 v 1.84615 h 0.46153 q 0.56972,0 0.97717,0.40745 Q 13,6.891825 13,7.461545 z"/></svg></i></button>
+				<h4>From</h4>
+				<div class="small">
+					<print config="business"><br>
+					ABN: <print config="abn"><br>
+					<print config="address">, <print config="suburb">, <print config="city">, <print config="state">, <print config="postcode"><br>
+					Email: <print config="email"><br>
+					Phone: <print config="phone"><br>
+					Mobile: <print config="mobile">
+				</div>
+			</article>
+			<article class="col-12 col-sm-3 border-right">
+				<h4>To</h4>
+				<div class="small">
+					<print user="name"><br>
+					<print user="address">,
+					<print user="suburb">,<br>
+					<print user="city">, <print user="state">, <print user="postcode"><br>
+					Email: <print user="email"><br>
+					Phone: <print user="phone"><br>
+					Mobile: <print user="mobile"><br>
+				</div>
+			</article>
+			<article class="col-12 col-sm-3">
+				<button class="float-right d-none d-sm-block" onclick="$('#sp').load('core/email_order.php?id=<print order=id>&act=print');" aria-label="Print"><i class="libre"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.76923,11.615385 h 6.46154 V 9.769235 H 3.76923 v 1.84615 z m 0,-4.61538 h 6.46154 V 4.230775 H 9.07692 q -0.28846,0 -0.49038,-0.20193 Q 8.38462,3.826925 8.38462,3.538465 V 2.384615 H 3.76923 v 4.61539 z m 8.30769,0.46154 q 0,-0.1875 -0.13702,-0.32452 -0.13702,-0.13702 -0.32452,-0.13702 -0.1875,0 -0.32451,0.13702 -0.13702,0.13702 -0.13702,0.32452 0,0.1875 0.13702,0.32452 0.13701,0.13702 0.32451,0.13702 0.1875,0 0.32452,-0.13702 0.13702,-0.13702 0.13702,-0.32452 z m 0.92308,0 v 3 q 0,0.0937 -0.0685,0.16226 -0.0685,0.0685 -0.16226,0.0685 h -1.61538 v 1.15384 q 0,0.28846 -0.20193,0.49039 -0.20192,0.20192 -0.49038,0.20192 H 3.53847 q -0.28846,0 -0.49038,-0.20192 -0.20193,-0.20193 -0.20193,-0.49039 v -1.15384 H 1.230779 q -0.09375,0 -0.162259,-0.0685 Q 1,10.555295 1,10.461545 v -3 Q 1,6.891825 1.407452,6.484375 1.814904,6.076925 2.38462,6.076925 h 0.46153 v -3.92308 q 0,-0.28846 0.20193,-0.49038 Q 3.25,1.461545 3.53846,1.461545 h 4.84616 q 0.28846,0 0.63461,0.14423 0.34615,0.14423 0.54808,0.34615 l 1.09615,1.09616 q 0.20192,0.20192 0.34616,0.54807 0.14423,0.34616 0.14423,0.63462 v 1.84615 h 0.46153 q 0.56972,0 0.97717,0.40745 Q 13,6.891825 13,7.461545 z"/></svg></i></button>
+				<h4>Details</h4>
+				<div class="small">
+					<strong>Order #</strong><print order="ordernumber"><br>
+					<strong>Order Date: </strong><print order="date"><br>
+					<strong>Due Date: </strong><print order="duedate"><br>
+					<strong>Status: </strong><print order="status"><br>
+				</div>
+			</article>
+		</section>
+		<section class="row mt-0">
+			<article class="col-12 col-sm-11 mt-0">
+				<table>
+					<thead>
+						<tr>
+							<th class="d-none d-sm-table-cell">Code</th>
+							<th class="col-3">Title</th>
+							<th class="text-center d-none d-sm-table-cell">Option</th>
+							<th class="text-center">Qty</th>
+							<th class="text-center">Cost</th>
+							<th class="text-right">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+	        	<items>
+	  					<tr>
+	  						<td class="text-left d-none d-sm-table-cell"><print orderitem="code"></td>
+	  						<td class="text-left">
+									<span class="d-none d-sm-inline"><print orderitem="title"></span>
+									<small class="d-inline d-sm-none">
+										<print orderitem="title"><br>
+										Code: <print orderitem="code"><br>
+										Option: <print choice>
+									</small>
+								</td>
+								<td class="text-left d-none d-sm-table-cell"><print choice></td>
+	            	<td class="col-md-1 text-center"><print orderitem="quantity"></td>
+	            	<td class="col-md-1 text-center"><print orderitem="cost"></td>
+	            	<td class="text-right"><print orderitem="subtotal"></td>
+	          	</tr>
+	        	</items>
+						<rewards>
+							<tr>
+								<td colspan="1" class="text-right d-table-cell d-sm-none"><strong>Rewards</strong></td>
+								<td colspan="3" class="text-right d-none d-sm-table-cell"><strong>Rewards</strong></td>
+								<td class="text-center"><strong><print rewards="code"></strong></td>
+								<td class="text-center small"><small><print rewards="method"></small></td>
+								<td class="text-right border-top border-2 border-black"><strong><print rewards="value"></strong></td>
+							</tr>
+						</rewards>
+						<gst>
+							<tr>
+								<td colspan="2" class="d-none d-sm-table-cell">&nbsp;</td>
+								<td colspan="3" class="text-right"><strong>GST</strong></td>
+								<td class="text-right border-top border-2 border-black"><strong><print order="gst"></strong></td>
+							</tr>
+						</gst>
+						<postage>
+							<tr>
+								<td colspan="2" class="d-none d-sm-table-cell">&nbsp;</td>
+								<td colspan="3" class="text-right"><strong>Postage:</strong> <print order="postageOption"></td>
+								<td class="text-right border-top border-2 border-black"><strong><print order="postageCost"></strong></td>
+							</tr>
+						</postage>
+					</tbody>
+					<tfoot>
+						<tr>
+							<td colspan="2" class="d-table-cell d-sm-none">&nbsp;</td>
+							<td colspan="4" class="d-none d-sm-table-cell">&nbsp;</td>
+							<td class="display-table-cell text-right"><strong>Total</strong></td>
+							<td class="text-right border-top border-bottom border-2 border-black"><strong><print order="total"></strong></td>
+						</tr>
+					</tfoot>
+				</table>
+			</article>
+		</section>
+		<section class="row">
+			<article class="col-12 col-sm-3 border-right">
+				<div id="paymenttransaction"></div>
+				<h4>Notes:</h4>
+				<div>
+					<small>
+						<print order="notes">
+					</small>
+				</div>
+			</article>
+			<article class="col-12 col-sm-3 border-right">
+				<h4>Banking Details:</h4>
+				<div>
+					<strong>Bank: </strong><print config="bank"><br>
+					<strong>Account Name: </strong><print config="bankAccountName"><br>
+					<strong>Account Number: </strong><print config="bankAccountNumber"><br>
+					<strong>Bank BSB: </strong><print config="bankBSB"><br>
+				</div>
+			</article>
+			<article class="col-12 col-sm-3">
+				<h4>Pay Online:</h4>
+				<print paypal>
+			</article>
+		</section>
+		<iframe id="sp" name="sp" class="d-none"></iframe>
+	</order>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

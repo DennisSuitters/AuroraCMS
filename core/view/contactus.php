@@ -21,26 +21,24 @@ if($page['notes']!=''){
 		''
 	],$html);
 }else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
-if(stristr($html,'<address')){
-	$html=preg_replace([
-		'/<print config=[\"\']?address[\"\']?>/',
-		'/<print config=[\"\']?state[\"\']?>/',
-		'/<print config=[\"\']?suburb[\"\']?>/',
-		'/<print config=[\"\']?country[\"\']?>/',
-		'/<print config=[\"\']?postcode[\"\']?>/',
-		'/<print config=[\"\']?phone[\"\']?>/',
-		'/<print config=[\"\']?mobile[\"\']?>/'
-	],[
-		htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8'),
-		htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8')
-	],$html);
-}
+$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+$html=preg_replace([
+	'/<print config=[\"\']?address[\"\']?>/',
+	'/<print config=[\"\']?state[\"\']?>/',
+	'/<print config=[\"\']?suburb[\"\']?>/',
+	'/<print config=[\"\']?country[\"\']?>/',
+	'/<print config=[\"\']?postcode[\"\']?>/',
+	'/<print config=[\"\']?phone[\"\']?>/',
+	'/<print config=[\"\']?mobile[\"\']?>/'
+],[
+	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')
+],$html);
 $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='subject' ORDER BY title ASC");
 $s->execute();
 if($s->rowCount()>0){

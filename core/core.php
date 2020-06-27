@@ -172,7 +172,7 @@ function elapsed_time($b=0,$e=0){
 }
 function size_format($f,$p=2){
   $us=array('','K','M','G','T','P','E','Z','Y');
-  foreach($us as$iU => $u){
+  foreach($us as$iU=>$u){
     if($f>1024)
       $f/=1024;
     else
@@ -187,6 +187,8 @@ function getmemstats(){
     $membuffers=shell_exec('grep Buffers /proc/meminfo | awk \'{print $2}\'');
     $memcached=shell_exec('grep Cached /proc/meminfo | awk \'{print $2}\'');
     $memfree=(int)$memfree+(int)$membuffers+(int)$memcached;
+		$memswap=shell_exec('grep SwapTotal /proc/meminfo | awk \'{print $2}\'');
+		$memswapfree=shell_exec('grep SwapFree /proc/meminfo | awk \'{print $2}\'');
   }
   if(!($memtotal=shell_exec('grep MemTotal /proc/meminfo | awk \'{print $2}\'')))$memtotal=0;
   $memtotal=(int)$memtotal;
@@ -194,10 +196,12 @@ function getmemstats(){
   $mempercent=0;
   if($memtotal>0)$mempercent=100-(round($memfree/$memtotal*100));
   $memfree=size_format($memfree*1024);
-  $mem = [
+  $mem=[
     'percent'=>$mempercent,
     'total'=>$memtotal*1024,
-    'used'=>$memused*1024
+    'used'=>$memused*1024,
+		'swap'=>$memswap,
+		'swapused'=>$memswap-$memswapfree
   ];
   return$mem;
 }
@@ -234,6 +238,56 @@ function num_cpu():int{
 		if($count>0)return$count;
 	}
 	throw new \LogicException('failed to detect number of CPUs!');
+}
+function cpudat(){
+	if(is_readable('/proc/cpuinfo')){
+		$file=file('/proc/cpuinfo');
+		$cpu=[
+			'cores'=>substr($file[12],12),
+			'vendor'=>substr($file[1],12),
+			'name'=>substr($file[4],12),
+		];
+	}
+	return$cpu;
+}
+function disk_usage(){
+	$disktotal=disk_total_space('/');
+	$diskfree=disk_free_space('/');
+	$diskuse=round(100-(($diskfree/$disktotal)*100)).'%';
+	$diskpercent=0;
+	if($disktotal>0)$diskpercent=100-(round($diskfree/$disktotal*100));
+	$disk=[
+		'percent'=>$diskpercent,
+		'total'=>$disktotal,
+		'free'=>$diskfree,
+		'used'=>$disktotal-$diskfree,
+		'usedpercent'=>$diskuse
+	];
+	return$disk;
+}
+function kernel_version(){
+	$kernel=explode(' ',file_get_contents('/proc/version'));
+	$kernel=$kernel[2];
+	return$kernel;
+}
+function OSInformation(){
+  if(false==function_exists("shell_exec")||false==is_readable("/etc/os-release")){return null;}
+  $os=shell_exec('cat /etc/os-release');
+  $listIds=preg_match_all('/.*=/',$os,$matchListIds);
+  $listIds=$matchListIds[0];
+  $listVal=preg_match_all('/=.*/',$os,$matchListVal);
+  $listVal=$matchListVal[0];
+  array_walk($listIds,function(&$v,$k){$v=strtolower(str_replace('=','',$v));});
+  array_walk($listVal,function(&$v,$k){$v=preg_replace('/=|"/','',$v);});
+  return array_combine($listIds,$listVal);
+}
+function Uptime(){
+    $ut=strtok(exec("cat /proc/uptime"),".");
+    $days=sprintf("%2d",($ut/(3600*24)));
+    $hours=sprintf("%2d",(($ut % (3600*24))/3600));
+    $min=sprintf("%2d",($ut % (3600*24) % 3600)/60);
+    $sec=sprintf("%2d",($ut % (3600*24) % 3600)%60);
+    return array($days,$hours,$min,$sec);
 }
 function tomoment($f){
   $r=['d'=>'DD','D'=>'ddd','j'=>'D','l'=>'dddd','N'=>'E','S'=>'o','w'=>'e','z'=>'DDD','W'=>'W','F'=>'MMMM','m'=>'MM','M'=>'MMM','n'=>'M','t'=>'','L'=>'','o'=>'YYYY','Y'=>'YYYY','y'=>'YY','a'=>'a','A'=>'A','B'=>'','g'=>'h','G'=>'H','h'=>'hh','H'=>'HH','i'=>'mm','s'=>'ss','u'=>'SSS','e'=>'zz','I'=>'','O'=>'','P'=>'','T'=>'','Z'=>'','c'=>'','r'=>'','U'=>'X'];

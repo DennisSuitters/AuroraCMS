@@ -104,91 +104,6 @@ if($args[0]!=''){
         $items='';
     	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$items,$html,1);
     }
-    if(stristr($html,'<skills')){
-      preg_match('/<skills>([\w\W]*?)<\/skills>/',$html,$matches);
-      $skills=$matches[1];
-      preg_match('/<item>([\w\W]*?)<\/item>/',$skills,$matches);
-      $item=$matches[1];
-      $items='';
-      $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='bio_skills' AND uid=:uid ORDER BY title ASC");
-      $ss->execute([':uid'=>$r['id']]);
-      if($ss->rowCount()>0){
-        while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-          $build=$item;
-          $build=preg_replace([
-            '/<print skill=[\"\']?title[\"\']?>/',
-            '/<print skill=[\"\']?value[\"\']?>/'
-          ],[
-            htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),
-            htmlspecialchars($rs['value'],ENT_QUOTES,'UTF-8')
-          ],$build);
-          $items.=$build;
-        }
-      }else
-        $skills='';
-      $skills=preg_replace('~<item>.*?<\/item>~is',$items,$skills,1);
-      $html=preg_replace('~<skills>.*?<\/skills>~is',$skills,$html,1);
-    }
-    if(stristr($html,'<testimonials')){
-      preg_match('/<testimonials>([\w\W]*?)<\/testimonials>/',$html,$matches);
-      $testimonials=$matches[1];
-      preg_match('/<item>([\w\W]*?)<\/item>/',$testimonials,$matches);
-      $item=$matches[1];
-      $items='';
-      $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='testimonials' AND cid=:cid ORDER BY ti DESC");
-      $ss->execute([':cid'=>$r['id']]);
-      if($ss->rowCount()>0){
-        while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-          if($rs['file']!=''&&file_exists('media'.DS.basename($rs['file'])))
-            $rs['file']='media'.DS.basename($rs['file']);
-          elseif($rs['file']=='')
-            $rs['file']=NOAVATAR;
-          $build=$item;
-          $build=preg_replace([
-            '/<print content=[\"\']?file[\"\']?>/',
-            '/<print content=[\"\']?name[\"\']?>/',
-            '/<print content=[\"\']?notes[\"\']?>/'
-          ],[
-            htmlspecialchars($rs['file'],ENT_QUOTES,'UTF-8'),
-            htmlspecialchars($rs['name'],ENT_QUOTES,'UTF-8'),
-            $rs['notes']
-          ],$build);
-          $items.=$build;
-        }
-      }else
-        $testimonials='';;
-      $testimonials=preg_replace('~<item>.*?<\/item>~is',$items,$testimonials,1);
-      $html=preg_replace('~<testimonials>.*?<\/testimonials>~is',$testimonials,$html,1);
-    }
-    if(stristr($html,'<services')){
-      preg_match('/<services>([\w\W]*?)<\/services>/',$html,$matches);
-      $services=$matches[1];
-      preg_match('/<item>([\w\W]*?)<\/item>/',$services,$matches);
-      $item=$matches[1];
-      $items='';
-      $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='service' AND cid=:cid ORDER BY ti DESC");
-      $ss->execute([':cid'=>$r['id']]);
-      if($ss->rowCount()>0){
-        while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-          $build=$item;
-          $build=preg_replace([
-            '/<print content=[\"\']?file[\"\']?>/',
-            '/<print content=[\"\']?fileALT[\"\']?>/',
-            '/<print content=[\"\']?title[\"\']?>/',
-            '/<print content=[\"\']?notes[\"\']?>/'
-          ],[
-            htmlspecialchars($rs['file'],ENT_QUOTES,'UTF-8'),
-            htmlspecialchars($rs['fileALT']!=''?$rs['fileALT']:$rs['attributionImageTitle']),
-            htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),
-            $rs['notes']
-          ],$build);
-          $items.=$build;
-        }
-      }else
-        $services='';;
-      $services=preg_replace('~<item>.*?<\/item>~is',$items,$services,1);
-      $html=preg_replace('~<services>.*?<\/services>~is',$services,$html,1);
-    }
     if(stristr($html,'<resume')){
       preg_match('/<resume>([\w\W]*?)<\/resume>/',$html,$matches);
       $resume=$matches[1];
@@ -275,11 +190,15 @@ if($args[0]!=''){
           '~<education>.*?<\/education>~is',
           '~<resumeMenu>~is',
           '~<\/resumeMenu>~is',
+          '~<resume>~is',
+          '~<\/resume>~is',
           '~<resume>.*?<\/resume>~'
         ],[
           htmlspecialchars($r['resume_notes'],ENT_QUOTES,'UTF-8'),
           $career,
           $education,
+          '',
+          '',
           '',
           '',
           $resume
@@ -289,7 +208,9 @@ if($args[0]!=''){
       $html=preg_replace([
           '~<resume>.*?<\/resume>~is',
           '~<resumeMenu>.*?<\/resumeMenu>~is'
-        ],'',$html,1);
+        ],
+        '',
+        $html,1);
     }
     if(stristr($html,'<content')){
       preg_match('/<content>([\w\W]*?)<\/content>/',$html,$matches);

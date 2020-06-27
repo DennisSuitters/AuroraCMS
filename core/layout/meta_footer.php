@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.14
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -17,6 +17,7 @@
  * @changes    v0.0.12 Fix Save Button for Image and Thumbnail selection not showing unsaved changes.
  * @changes    v0.0.12 Fix Multiple Media Adding.
  * @changes    v0.0.14 Fix elFinder not adding files to single fields.
+ * @changes    v0.0.15 Enable CodeMirror to be used with editor.
  */?>
 <script>
 var unsaved=false;
@@ -298,19 +299,21 @@ if(isset($r['due_ti'])){?>
       width:'85vw',
       height:$(window).height()-102,
       resizeable:false,
-      handlers:{
-        dblclick:function(e,eI){
-          e.preventDefault();
-          eI.exec('getfile').done(function(){
-            eI.exec('quicklook');
-          }).fail(function(){
-            eI.exec('open');
-          });
+      commandsOptions: {
+        getfile: {
+          open : {
+            selectAction : 'getfile'
+          },
+          preference : {
+            selectActions : ['getfile', 'edit/download', 'resize/edit/download', 'download', 'quicklook']
+          },
+
         }
       },
-      getFileCallback:function(){
-        return false;
-      },
+      getFileCallback : function(file, elFinderInstance) {
+        var url = file.url;
+        $.fancybox.open({src: url});
+      }
     }).elfinder('instance');
     var $elfinder=$('#elfinder').elfinder();
     $(window).resize(function(){
@@ -327,24 +330,38 @@ if(isset($r['due_ti'])){?>
   document.addEventListener("DOMContentLoaded",function(event){
 <?php if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings')){?>
     $('.summernote').summernote({
+      codemirror:{
+        lineNumbers:true,
+        lineWrapping:true,
+        theme:'base16-dark',
+      },
       isNotSplitEdgePoint:true,
       height:300,
       tabsize:2,
+      styleTags: [
+        'p',
+          { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
+        'pre',
+        'h2',
+        'h3',
+        'h4',
+        'h5',
+        'h6'
+      ],
       popover:{
         image:
           [
-            ['custom',['imageAttributes','imageShapes','captionIt']],
+            ['custom',['picture','imageShapes','captionIt']],
             ['imagesize',['imageSize100','imageSize50','imageSize25']],
             ['float',['floatLeft','floatRight','floatNone']],
             ['remove',['removeMedia']],
           ],
         link:
           [
-            ['link',['linkDialogShow','unlink']]
+            ['link',['linkDialogShow','unlink']],
           ],
         air:
           [
-            ['color',['color']],
             ['font',['bold','underline','clear']],
             ['para',['ul','paragraph']],
             ['table',['table']],
@@ -355,16 +372,11 @@ if(isset($r['due_ti'])){?>
       toolbar:
         [
           ['save',['save']],
-//        ['aria',['accessibility','findnreplace','cleaner','seo']],
           ['style',['style']],
           ['font',['bold','italic','underline','clear']],
-          ['fontname',['fontname']],
-          ['fontsize',['fontsize']],
-          ['color',['color']],
           ['para',['ul','ol','paragraph']],
-          ['height',['height']],
           ['table',['table']],
-          ['insert',['videoAttributes','elfinder','link','hr']],
+          ['insert',['elfinder','video','link','hr']],
           ['view',['fullscreen','codeview']],
           ['help',['help']]
         ],
@@ -637,8 +649,10 @@ if(isset($r['due_ti'])){?>
         <div class="dot"></div>
       </div>
     </div>
-<?php if($config['development']==1&&$user['rank']==1000){
-  echo'<div class="developmentbottom">Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
-}?>
+<?php if($config['development']==1&&$user['rank']==1000){?>
+    <script>
+      $('.developmentbottom').html('Memory Used: <?php echo size_format(memory_get_usage());?> | Process Time: <?php echo elapsed_time();?> | PHPv<?php echo (float)PHP_VERSION;?> ');
+    </script>
+<?php }?>
   </body>
 </html>

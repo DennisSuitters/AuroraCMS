@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.15 Fix database references.
  */
 $getcfg=true;
 require'db.php';
@@ -138,6 +139,7 @@ while($ro=$s->fetch(PDO::FETCH_ASSOC)){
            '<td class="col-50 text-right">'.$st.'</td>'.
           '</tr>';
   $ot=$ot+$st;
+  $ot=number_format((float)$ot, 2, '.', '');
   $zeb=($zeb==1?0:1);
 }
 $html.='</tbody>'.
@@ -158,17 +160,29 @@ if($sr->rowCount()>0){
     $html.='%';
     $ot=($ot*((100-$reward['value'])/100));
   }
+  $ot=number_format((float)$ot, 2, '.', '');
   $html.=' Off</small></td>'.
           '<td class="col-75 text-right"><strong>'.$ot.'</strong></td>'.
         '</tr>';
 }
-if($r['postage']!=0){
-	$html.='<tr style="background-color:#f0f0f0">'.
+if($config['gst']>0){
+  $gst=$ot*($config['gst']/100);
+  $gst=number_format((float)$gst, 2, '.', '');
+  $html.='<tr style="background-color:#f0f0f0">'.
             '<td colspan="3">&nbsp;</td>'.
-            '<td class="col-75 text-right">Postage</td>'.
-            '<td class="col-75 text-right"><strong>'.$r['postage'].'</strong></td>'.
+            '<td class="col-75 text-right">GST</td>'.
+            '<td class="col-75 text-right"><strong>'.$gst.'</strong></td>'.
           '</tr>';
-	$ot=$ot+$r['postage'];
+  $ot=$ot+$gst;
+  $ot=number_format((float)$ot, 2, '.', '');
+}
+if($r['postageCost']!=0){
+	$html.='<tr style="background-color:#f0f0f0">'.
+            '<td colspan="4" class="text-right">Postage: '.$r['postageOption'].'</td>'.
+            '<td class="col-75 text-right"><strong>'.$r['postageCost'].'</strong></td>'.
+          '</tr>';
+	$ot=$ot+$r['postageCost'];
+  $ot=number_format((float)$ot, 2, '.', '');
 }
 $html.='<tr style="background-color:#f0f0f0">'.
           '<td colspan="3">&nbsp;</td>'.
@@ -195,6 +209,9 @@ $html.='<tr style="background-color:#f0f0f0">'.
               'BSB: <strong>'.$config['bankBSB'].'</strong></small>'.
             '</p>'.
           '</td>'.
+          '<td>'.
+          
+          '</td>'.
         '</tr>'.
       '</tbody>'.
     '</table>'.
@@ -209,7 +226,7 @@ if($act=='print'){?>
 	require'class.phpmailer.php';
 	$mail=new PHPMailer;
 	$mail->isSendmail();
-	$toname=$c['name'];
+	$toname=$c['name']!=''?$c['name']:$c['business'];
 	$mail->SetFrom($config['email'],$config['business']);
 	$mail->AddAddress($c['email']);
 	$mail->IsHTML(true);

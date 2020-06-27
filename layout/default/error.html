@@ -1,0 +1,33 @@
+<block include="meta_head.html">
+<block inbed="error">
+	<main>
+		<section class="row">
+			<article class="col-11">
+				<h1 class="text-center">This is not the page you're looking for.</h1>
+				<h2 class="text-center">Here's some things that might interest you.</h2>
+			</article>
+		</section>
+		<section>
+			<settings items="4">
+			<items>
+				<article class="card">
+					<div class="card-image">
+						<img src="<print content=thumb>" alt="<print content=imageALT>">
+					</div>
+					<div class="card-header">
+						<div class="card-title"><h4><a href="<print content=linktitle>"><print content="title"></a></h4></div>
+						<div class="card-subtitle"><print content="category_1">&nbsp;</div>
+					</div>
+					<div class="card-body">
+						<print content="notes">
+					</div>
+					<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow"><print content="contentType"></div>
+					<div class="card-footer">
+						<a class="btn" href="<print content=linktitle>">View</a>
+					</div>
+				</article>
+			</items>
+		</section>
+	</main>
+</block>
+<block include="meta_footer.html">

@@ -1,0 +1,23 @@
+This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
+
+- Installation checks for cURL, and Zip, it was discovered that the updates were failing due to zip and cURL not being installed on some installations causing updates to fail but not reporting errors in logs.
+- Add clear tables data when installing.
+- content
+  - Sort options dependent on contentType
+    - Newest
+    - Oldest
+    - Name: A-Z
+    - Name: Z-A
+    - Best Selling
+    - Most viewed
+    - Price: high to low
+    - Price: low to high
+- Inventory
+  - Customer/Contact List
+  - weight : Weight.
+  - width,height,length : Dimensions (W x H x L).
+  - mid (references from choices): Manufacturer/Brand (with logo).
+  - condition (new, used) : Condition.
+  - Transaction Log.
+- Import Catalogue from CSV.
+- Import databases from other systems (WordPress, CubeCart, osCommerce, etc.).

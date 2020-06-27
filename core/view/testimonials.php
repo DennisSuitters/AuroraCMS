@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.14
+ * @version    0.0.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.14 Fix incorrect number of items returned from database.
+ * @changes    v0.0.15 Add Star Rating parser.
  */
 if(stristr($html,'<settings')){
 	preg_match('/<settings.*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
@@ -103,12 +104,24 @@ if($s->rowCount()>0){
 			'/<print content=[\"\']?notes[\"\']?>/',
 			'/<print content=[\"\']?business[\"\']?>/',
 			'/<print content=[\"\']?name[\"\']?>/',
-			'/<json-ld-testimonial>/'
+			'/<json-ld-testimonial>/',
+			'/<print review=[\"\']?rating[\"\']?>/',
+			'/<print review=[\"\']?set5[\"\']?>/',
+			'/<print review=[\"\']?set4[\"\']?>/',
+			'/<print review=[\"\']?set3[\"\']?>/',
+			'/<print review=[\"\']?set2[\"\']?>/',
+			'/<print review=[\"\']?set1[\"\']?>/'
 		],[
 			($view=='index'?substr(strip_tags(rawurldecode($r['notes'])),0,600):strip_tags(rawurldecode($r['notes']))),
 			$r['business']!=''?htmlspecialchars($r['business'],ENT_QUOTES,'UTF-8'):'Anonymous',
 			$r['name']!=''?htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'):'Anonymous',
-			$jsonld
+			$jsonld,
+			$r['rating'],
+			$r['rating']>=5?'set':'',
+			$r['rating']>=4?'set':'',
+			$r['rating']>=3?'set':'',
+			$r['rating']>=2?'set':'',
+			$r['rating']>=1?'set':''
 		],$items);
 		$testitems.=$items;
 		$i++;

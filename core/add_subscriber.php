@@ -78,15 +78,10 @@ if($_POST['emailtrap']=='none'){
           ':ti'=>time()
         ]);
         $e=$db->errorInfo();
-        if(is_null($e[2]))
-          $notification.=$theme['settings']['subscriber_success'];
-        else
-          $notification.=$theme['settings']['subscriber_error'];
-      }else
-        $notification.=$theme['settings']['subscriber_already'];
-    }else
-      $notification.=$theme['settings']['subscriber_spam'];
+        if(is_null($e[2]))$notification.=$theme['settings']['subscriber_success'];
+        else$notification.=$theme['settings']['subscriber_error'];
+      }else$notification.=$theme['settings']['subscriber_already'];
+    }else$notification.=$theme['settings']['subscriber_spam'];
   }
-}else
-  $notification.=$theme['settings']['subscriber_spam'];
+}else$notification.=$theme['settings']['subscriber_spam'];
 echo$blacklisted.$notification;

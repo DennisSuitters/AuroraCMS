@@ -168,9 +168,9 @@
               }
               ksort($o);
               return$o;
-              }
-              $o=get_timezones();
-              foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$config['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
+            }
+            $o=get_timezones();
+            foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$config['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
             </select>
           </div>
         </div>

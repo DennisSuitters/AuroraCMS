@@ -60,22 +60,14 @@ $html='<style>'.
       '</style>'.
       '<body>';
 $pdflogo='';
-if(file_exists('..'.DS.'media'.DS.'orderheading.png'))
-  $pdflogo='..'.DS.'media'.DS.'orderheading.png';
-elseif(file_exists('..'.DS.'media'.DS.'orderheading.jpg'))
-  $pdflogo='..'.DS.'media'.DS.'orderheading.jpg';
-elseif(file_exists('..'.DS.'media'.DS.'orderheading.gif'))
-  $pdflogo='..'.DS.'media'.DS.'orderheading.gif';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.png'))
-  $pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.png';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.jpg'))
-  $pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.jpg';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.gif'))
-  $pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.gif';
-else
-  $pdflogo='';
-if($pdflogo!='')
-  $html.='<table class="table"><tr><td style="text-align:right"><img src="'.$pdflogo.'"></td></tr></table>';
+if(file_exists('..'.DS.'media'.DS.'orderheading.png'))$pdflogo='..'.DS.'media'.DS.'orderheading.png';
+elseif(file_exists('..'.DS.'media'.DS.'orderheading.jpg'))$pdflogo='..'.DS.'media'.DS.'orderheading.jpg';
+elseif(file_exists('..'.DS.'media'.DS.'orderheading.gif'))$pdflogo='..'.DS.'media'.DS.'orderheading.gif';
+elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.png'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.png';
+elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.jpg'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.jpg';
+elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.gif'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.gif';
+else$pdflogo='';
+if($pdflogo!='')$html.='<table class="table"><tr><td style="text-align:right"><img src="'.$pdflogo.'"></td></tr></table>';
 $html.='<table class="table">'.
           '<tr>'.
             '<td>'.
@@ -210,7 +202,7 @@ $html.='<tr style="background-color:#f0f0f0">'.
             '</p>'.
           '</td>'.
           '<td>'.
-          
+
           '</td>'.
         '</tr>'.
       '</tbody>'.

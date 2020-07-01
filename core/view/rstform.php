@@ -110,13 +110,9 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
       ],$msg);
     	$mail->Body=$msg;
     	$mail->AltBody=$msg;
-    	if($mail->Send())
-        $notification=$theme['settings']['passwordreset_success'];
-      else
-        $notification=$theme['settings']['passwordreset_erroremail'];
-    }else
-      $notification=$theme['settings']['passwordreset_erroraccount'];
+    	if($mail->Send())$notification=$theme['settings']['passwordreset_success'];
+      else$notification=$theme['settings']['passwordreset_erroremail'];
+    }else$notification=$theme['settings']['passwordreset_erroraccount'];
   }
-}else
-  $notification=$theme['settings']['passwordreset_errorinvalidemail'];
+}else$notification=$theme['settings']['passwordreset_errorinvalidemail'];
 echo$blacklisted.$notification;

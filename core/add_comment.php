@@ -123,13 +123,10 @@ if($act=='add_comment'){
                  'Comment: '.$notes;
             $mail->Body=$msg;
             $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
-            if($mail->Send())
-              $notification=$theme['settings']['comment_success'];
-            else
-              $notification=$theme['settings']['comment_error'];
+            if($mail->Send())$notification=$theme['settings']['comment_success'];
+            else$notification=$theme['settings']['comment_error'];
           }
-        }else
-          $notification=$theme['settings']['comment_error'];
+        }else$notification=$theme['settings']['comment_error'];
       }
     }
   }

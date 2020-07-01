@@ -21,17 +21,12 @@ if($args[0]!=''){
   $s->execute([':name'=>str_replace('-',' ',$args[0])]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($r['bio_options'][0]==1){
-    if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
-      $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
-    else
-      $r['avatar']=NOAVATAR;
-    $html=preg_replace([
-      '/<profile>/',
-      '/<\/profile>/',
-      '~<profiles>.*?<\/profiles>~is'
-    ],'',$html);
+    if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))$r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
+    else$r['avatar']=NOAVATAR;
     $name=explode(' ',$r['name']);
     $html=preg_replace([
+      '/<[\/]?profile>/',
+      '~<profiles>.*?<\/profiles>~is',
       '/<print meta=[\"\']?seoTitle[\"\']?>/',
       '/<print meta=[\"\']?seoDescription[\"\']?>/',
       '/<print meta=[\"\']?url[\"\']?>/',
@@ -51,10 +46,11 @@ if($args[0]!=''){
       '/<print username>/',
       '/<print site_verifications>/',
       '/<print year>/',
-      '/<profile>/',
-      '/<\/proflie>/',
+      '/<[\/]?proflie>/',
       '/<profiles>.*?<\/profiles>/'
     ],[
+      '',
+      '',
       htmlspecialchars($r['name'].' - Profile'.($config['business']!=''?' | '.$config['business']:''),ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['seoDescription'],ENT_QUOTES,'UTF-8'),
       URL,
@@ -79,7 +75,6 @@ if($args[0]!=''){
         ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
       date('Y',time()),
       '',
-      '',
       ''
     ],$html);
     if(stristr($html,'<buildSocial')){
@@ -100,8 +95,7 @@ if($args[0]!=''){
   				],$build);
   			$items.=$build;
     		}
-    	}else
-        $items='';
+    	}else$items='';
     	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$items,$html,1);
     }
     if(stristr($html,'<resume')){
@@ -121,8 +115,7 @@ if($args[0]!=''){
             if(stristr($build,'<print icon')){
               preg_match('/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',$build,$matches);
               $icon=$matches[1];
-            }else
-              $icon='';
+            }else$icon='';
             $build=preg_replace([
               '/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',
               '/<print career=[\"\']?title[\"\']?>/',
@@ -140,11 +133,9 @@ if($args[0]!=''){
             ],$build);
             $items.=$build;
           }
-        }else
-          $items='';
+        }else$items='';
         $career=preg_replace('~<item>.*?<\/item>~is',$items,$career,1);
-      }else
-        $career='';
+      }else$career='';
       if(stristr($resume,'<education')&&$r['bio_options'][3]==1){
         preg_match('/<education>([\w\W]*?)<\/education>/',$resume,$matches);
         $education=$matches[1];
@@ -159,8 +150,7 @@ if($args[0]!=''){
             if(stristr($build,'<print icon')){
               preg_match('/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',$build,$matches);
               $icon=$matches[1];
-            }else
-              $icon='';
+            }else$icon='';
             $build=preg_replace([
               '/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',
               '/<print education=[\"\']?title[\"\']?>/',
@@ -178,27 +168,21 @@ if($args[0]!=''){
             ],$build);
             $items.=$build;
           }
-        }else
-          $items='';
+        }else$items='';
         $education=preg_replace('~<item>.*?<\/item>~is',$items,$education,1);
-      }else
-        $education='';
+      }else$education='';
       if($career!=''||$education!=''){
         $html=preg_replace([
           '/<print resume=[\"\']?notes[\"\']?>/',
           '~<career>.*?<\/career>~is',
           '~<education>.*?<\/education>~is',
-          '~<resumeMenu>~is',
-          '~<\/resumeMenu>~is',
-          '~<resume>~is',
-          '~<\/resume>~is',
+          '/<[\/]?resumeMenu>/',
+          '/<[\/]?resume>/',
           '~<resume>.*?<\/resume>~'
         ],[
           htmlspecialchars($r['resume_notes'],ENT_QUOTES,'UTF-8'),
           $career,
           $education,
-          '',
-          '',
           '',
           '',
           $resume
@@ -222,12 +206,8 @@ if($args[0]!=''){
       $ss->execute([':uid'=>$r['id']]);
       if($ss->rowCount()>0){
         while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-          if($rs['fileURL']!=''&&$rs['file']=='')
-            $rs['file']=$fileURL;
-          elseif($rs['fileURL']==''&&$rs['file']=='')
-            $rs['file']=NOIMAGE;
-//          else
-//            $rs['file']=NOIMAGE;
+          if($rs['fileURL']!=''&&$rs['file']=='')$rs['file']=$fileURL;
+          elseif($rs['fileURL']==''&&$rs['file']=='')$rs['file']=NOIMAGE;
           $build=$item;
           $build=preg_replace([
             '/<print content=[\"\']?image[\"\']?>/',
@@ -244,16 +224,13 @@ if($args[0]!=''){
           ],$build);
           $items.=$build;
         }
-      }else
-        $items='';
+      }else$items='';
       $profilecontent=preg_replace('~<item>.*?<\/item>~is',$items,$profilecontent,1);
       $html=preg_replace([
         '~<content>.*?<\/content>~is',
-        '~<contentMenu>~is',
-        '~<\/contentMenu>~is',
+        '/<[\/]?contentMenu>/',
       ],[
         $profilecontent,
-        '',
         ''
       ],$html,1);
     }else{
@@ -294,7 +271,6 @@ if($args[0]!=''){
         ],'',$html,1);
     }
     $items=$html;
-    //include'core'.DS.'parser.php';
     $html=$items;
     $doc=new DOMDocument();
     @$doc->loadHTML($html);
@@ -315,8 +291,7 @@ if($args[0]!=''){
   }
 }else{
   $html=preg_replace([
-    '/<profiles>/',
-    '/<\/profiles>/',
+    '/<[\/]?profiles>/',
     '~<profile>.*?<\/profile>~is',
     '/<print meta=[\"\']?seoTitle[\"\']?>/',
     '/<print meta=[\"\']?url[\"\']?>/',
@@ -324,7 +299,6 @@ if($args[0]!=''){
     '/<print theme>/',
     '/<print meta=[\"\']?canonical[\"\']?>/'
   ],[
-    '',
     '',
     '',
     htmlspecialchars('Profiles'.($config['business']!=''?' - '.$config['business']:''),ENT_QUOTES,'UTF-8'),
@@ -341,12 +315,9 @@ if($args[0]!=''){
       $item=$matches[1];
       $items='';
       while($r=$s->fetch(PDO::FETCH_ASSOC)){
-        if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
-          $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
-        elseif($r['gravatar']!='')
-          $r['avatar']=$r['gravatar'];
-        else
-          $r['avatar']=NOAVATAR;
+        if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))$r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
+        elseif($r['gravatar']!='')$r['avatar']=$r['gravatar'];
+        else$r['avatar']=NOAVATAR;
         $build=$item;
         $build=preg_replace([
           '/<print user=[\"\']?link[\"\']?>/',
@@ -361,8 +332,7 @@ if($args[0]!=''){
         ],$build);
         $items.=$build;
       }
-    }else
-      $items='';
+    }else$items='';
     $html=preg_replace('~<items>.*?<\/items>~is',$items,$html,1);
   }
   $content.=$html;

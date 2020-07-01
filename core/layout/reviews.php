@@ -56,14 +56,10 @@
                         </small>
                       </td>
                       <td class="">
-<?php
-  $sc=$db->prepare("SELECT id,title FROM `".$prefix."content` WHERE id=:id");
-  $sc->execute([
-    ':id'=>$r['rid']
-  ]);
+<?php $sc=$db->prepare("SELECT id,title FROM `".$prefix."content` WHERE id=:id");
+  $sc->execute([':id'=>$r['rid']]);
   $rc=$sc->fetch(PDO::FETCH_ASSOC);
-  echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab-content-reviews">'.$rc['title'].'</a>';
-?>
+  echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab-content-reviews">'.$rc['title'].'</a>';?>
                       </td>
                       <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-top">

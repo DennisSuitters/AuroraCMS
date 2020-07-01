@@ -62,6 +62,4 @@ if($s->rowCount()>0){
               '</div>'.
             '</td>'.
           '</tr>';
-}else{
-  echo'nomore';
-}
+}else echo'nomore';

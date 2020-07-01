@@ -49,9 +49,8 @@ if($s->rowCount()>0){?>
       <td class="text-center small"><?php echo$r['action'];?></td>
       <td class="text-center small"><small><?php echo date($config['dateFormat'],$r['ti']);?></small></td>
       <td>
-<?php if($r['refColumn']=='notes'&&strlen($r['oldda'])>400&&strlen($r['newda'])>400){?>
-        <div><small>Dataset too large to display</small></div>
-<?php }else{?>
+<?php if($r['refColumn']=='notes'&&strlen($r['oldda'])>400&&strlen($r['newda'])>400)echo'<div><small>Dataset too large to display</small></div>';
+      else{?>
         <div><small>From: <small><?php if(strlen($r['oldda'])>400)echo'Dataset too large to display';else echo htmlspecialchars($r['oldda']);?></small></small></div>
         <div><small>To: <small><?php if(strlen($r['newda'])>400)echo'Dataset too large to display';else echo htmlspecialchars($r['newda']);?></small></small></div>
 <?php }?>

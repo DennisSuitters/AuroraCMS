@@ -21,8 +21,7 @@ if($username!= 0){
   $s->execute([':username'=>$username]);
   if($s->rowCount()==1){
     $user=$s->fetch(PDO::FETCH_ASSOC);
-    if($user['rank']>899)
-      $config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+    if($user['rank']>899)$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
     else{
       $config=[
         'business'=>NULL,

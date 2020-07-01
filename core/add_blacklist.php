@@ -19,12 +19,9 @@ $config=$db->query("SELECT * FROM config WHERE id='1'")->fetch(PDO::FETCH_ASSOC)
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $reason=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'r',FILTER_SANITIZE_STRING);
-if($t=='comments')
-  $s=$db->prepare("SELECT ip,ti FROM `".$prefix."comments` WHERE id=:id");
-elseif($t=='tracker')
-  $s=$db->prepare("SELECT ip,ti FROM `".$prefix."tracker` WHERE id=:id");
-elseif($t=='livechat')
-  $s=$db->prepare("SELECT ip,ti FROM `".$prefix."livechat` WHERE id=:id");
+if($t=='comments')$s=$db->prepare("SELECT ip,ti FROM `".$prefix."comments` WHERE id=:id");
+elseif($t=='tracker')$s=$db->prepare("SELECT ip,ti FROM `".$prefix."tracker` WHERE id=:id");
+elseif($t=='livechat')$s=$db->prepare("SELECT ip,ti FROM `".$prefix."livechat` WHERE id=:id");
 $s->execute([':id'=>$id]);
 if($s->rowCount()>0){
   $r=$s->fetch(PDO::FETCH_ASSOC);
@@ -36,6 +33,5 @@ if($s->rowCount()>0){
     ':ti'=>time()
   ]);
   echo'IP Added to Blacklist!';
-}else
-  echo'IP already exists in the Blacklist!';
+}else echo'IP already exists in the Blacklist!';
 echo'<script>window.top.window.$(`[data-tooltip="tooltip"]`).tooltip(`hide`);</script>';

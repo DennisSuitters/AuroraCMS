@@ -70,29 +70,21 @@ if($config['message_check_interval']!=0){
       $ss=$db->prepare("UPDATE `".$prefix."choices` SET ti=:ti WHERE id=:id");
       $ss->execute([':id'=>$rm['id'],':ti'=>time()]);
       $imap=new Reader('{'.$rm['url'].':'.$rm['port'].'/'.$rm['flag'].'}', $rm['username'], $rm['password'], '../media/email/');
-      if($rm['ti']==0)
-        $imap->all()->get();
-      else
-        $imap->limit(10)->unread()->get();
+      if($rm['ti']==0)$imap->all()->get();
+      else$imap->limit(10)->unread()->get();
       foreach($imap->emails() as $email){
         $folder='INBOX';
         $status='unread';
         if($config['spamfilter'][0]==1){
           $filter=new SpamFilter();
           $result=$filter->check_email($email->fromEmail());
-          if($result){
-            $folder='spam';
-          }
+          if($result)$folder='spam';
           $result=$filter->check_text($email->subject().' '.($email->html()!=''?$email->html():$email->plain()));
-          if($result){
-            $folder='spam';
-          }
+          if($result)$folder='spam';
         }
         $attachments='';
         if($email->hasAttachments()){
-          foreach($email->attachments() as $attachment){
-            $attachments.=($attachments!=''?',':'').$attachment->filePath();
-          }
+          foreach($email->attachments() as $attachment)$attachments.=($attachments!=''?',':'').$attachment->filePath();
         }
         if($email->isAnswered()){$status='read';}
         if($email->isDeleted()){$status='trash';}
@@ -113,13 +105,11 @@ if($config['message_check_interval']!=0){
           ':size'=>$email->size(),
           ':ti'=>time()
         ]);
-        if($user['options'][9]==1){
-          $imap->deleteEmail($email->id());
-        }
+        if($user['options'][9]==1)$imap->deleteEmail($email->id());
       }
     }catch(Exception $e){
-      echo'<script>window.top.window.$("#allmessages").html(`<div class="alert alert-danger">'.$e->getMessage().'</div>`);</script>';
-    }
+			echo'<script>window.top.window.$("#allmessages").html(`<div class="alert alert-danger">'.$e->getMessage().'</div>`);</script>';
+		}
   }
 	$fol=isset($_GET['folder'])?$_GET['folder']:'INBOX';
   $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE folder=:folder AND ti>:tis ORDER BY ti DESC, subject ASC");
@@ -129,9 +119,7 @@ if($config['message_check_interval']!=0){
 					'<div class="actions">'.
 						'<div class="btn-group-vertical">';
       $scc=$db->prepare("SELECT email FROM `".$prefix."whitelist` WHERE email=:email");
-      $scc->execute([
-        ':email'=>$r['from_email']
-      ]);
+      $scc->execute([':email'=>$r['from_email']]);
       if($scc->rowCount()<1){
 		  		echo'<form id="whitelist'.$r['id'].'" target="sp" method="post" action="core/add_messagewhitelist.php">'.
 								'<input type="hidden" name="id" value="'.$r['id'].'">'.

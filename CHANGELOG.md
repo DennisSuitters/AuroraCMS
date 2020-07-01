@@ -1,4 +1,12 @@
-### v0.0.15
+### v0.0.16
+- Add adding Brands (URL and Image) to Content Settings, so a Brand can be added for display when viewing content items.
+- Add selecting Brand in Content Editing.
+- Add Weight, Size and Branding parsing to Side Area and Content.
+- Add Condition to Content Options.
+- Add Sold field to database, calculation and storage.
+- Add parsing and processing for Sort Form selection.
+
+##### v0.0.15
 - Enable CodeMirror to work with Summernote Codeview.
 - Add styling to indicate unnecessary H1 Headers in Editor.
 - Refactor CSS to reduce footprint size.

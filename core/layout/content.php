@@ -18,9 +18,8 @@
  */
 $rank=0;
 $show='categories';
-if($args[0]=='scheduler'){
-  include'core'.DS.'layout'.DS.'scheduler.php';
-}else{
+if($args[0]=='scheduler')include'core'.DS.'layout'.DS.'scheduler.php';
+else{
   if($view=='add'){
     $stockStatus='none';
     $ti=time();
@@ -103,14 +102,10 @@ if($args[0]=='scheduler'){
 <main id="content" class="main">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-<?php if($args[1]!=''){?>
-    <li class="breadcrumb-item active"><?php echo ucfirst($args[1]).(in_array($args[1],array('article','service'))?'s':'');?></li>
-<?php }?>
+    <?php if($args[1]!='')echo'<li class="breadcrumb-item active">'.ucfirst($args[1]).(in_array($args[1],array('article','service'))?'s':'').'</li>';?>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-<?php if($args[1]!=''){
-        echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($args[1]).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
-<?php }?>
+        <?php if($args[1]!='')echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($args[1]).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
       </div>
     </li>
   </ol>
@@ -215,14 +210,10 @@ if($args[0]=='scheduler'){
 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr id="l_<?php echo$r['id'];?>" class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>">
               <td class="align-middle">
-<?php           if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
-                  echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
-                elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
-                  echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
-                elseif($r['fileURL']!='')
-                  echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
-                else
-                  echo'';?>
+                <?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
+                elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
+                elseif($r['fileURL']!='')echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
+                else echo'';?>
               </td>
               <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="table-thumb" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
@@ -280,7 +271,6 @@ if($args[0]=='scheduler'){
   </div>
 </main>
 <?php }
-    if($show=='item')
-      include'core'.DS.'layout'.DS.'edit_content.php';
+    if($show=='item')include'core'.DS.'layout'.DS.'edit_content.php';
   }
 }

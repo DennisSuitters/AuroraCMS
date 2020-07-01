@@ -1,18 +1,49 @@
-	<aside class="col-12 col-sm-3 mt-3">
+	<aside class="col-12 col-sm-3 order-1 order-sm-2">
+		<sort>
+			<div class="card col-11 col-sm-12 mx-auto mb-3">
+				<form method="POST" action="">
+					<input type="hidden" name="act" value="sort">
+					<h3>Sort Items</h3>
+					<div class="row">
+						<select class="col-9" name="sort">
+							<option value="">Select a Sort Option</option>
+							<sortOptions>
+						</select>
+						<button class="col-3" type="submit">Sort</button>
+					</div>
+				</form>
+			</div>
+		</sort>
 		<controls>
 			<div class="card mb-3 d-none d-sm-block">
 				<div class="card-body my-4">
+					<quantity>
+						<div class="content-quantity text-center"><print content="quantity"> <print content="stock"></div>
+					</quantity>
 					<div class="price text-center"><print content="cost"></div>
-					<print content="quantity">
 					<div class="row text-right">
 						<service>
 							<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
 						</service>
 						<inventory>
-							<weight>
-							<size>
 							<choices>
 							<button class="addCart mt-3" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+							<condition>
+								<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
+							</condition>
+							<weight>
+								<div class="content-weight col-12 col-sm-6 mt-3 text-left">Weight: <print content="weight"></div>
+							</weight>
+							<size>
+								<div class="content-size col-12 col-sm-6 mt-3 text-right">Size:
+									<span class="content-width">Width: <print content="width"></span><br>
+									<span class="content-height">Height: <print content="height"></span><br>
+									<span class="content-length">Length: <print content="length"></span>
+								</div>
+							</size>
+							<brand>
+								<div class="content-brand text-center mt-3"><print brand></div>
+							</brand>
 						</inventory>
 					</div>
 				</div>
@@ -54,7 +85,7 @@
 		</review>
 		<item>
 			<settings items="4" contenttype="current">
-			<div class="list-group card">
+			<div class="list-group card d-none d-sm-block">
 				<items>
 					<a class="list-group-item border-0" href="<print link>" itemscope>
 						<span class="list-group-item-heading" itemprop="headline"><print content="title"></span>

@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Item Categories Checkbox
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.16 Add Brand/Manufacturer Items.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -82,6 +83,45 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               <input type="text" id="cat<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" readonly>
               <label for="ct<?php echo$rs['id'];?>" class="input-group-text">Content</label>
               <input type="text" id="ct<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
+              <div class="input-group-text">Image</div>
+              <div class="input-group-append img"><?php echo$rs['icon']!=''&&file_exists('media'.DS.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-lightbox="lightbox"><img id="thumbimage" src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?></div>
+              <div class="input-group-append">
+                <form target="sp" action="core/purge.php">
+                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                  <input type="hidden" name="t" value="choices">
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                </form>
+              </div>
+            </div>
+          </div>
+<?php }?>
+        </div>
+        <hr>
+        <legend>Brands</legend>
+        <form target="sp" method="POST" action="core/add_brand.php">
+          <div class="form-group row">
+            <div class="input-group col">
+              <label for="brandtitle" class="input-group-text">Brand</label>
+              <input type="text" id="brandtitle" class="form-control" name="brandtitle" placeholder="Enter a Brand..." required aria-required="true">
+              <label for="brandurl" class="input-group-text">URL</label>
+              <input type="text" id="brandurl" class="form-control" name="brandurl" placeholder="Enter a URL...">
+              <div class="input-group-text">Image</div>
+              <input type="text" id="brandicon" class="form-control" name="brandicon" value="" readonly>
+              <div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog('1','brand','brandicon');return false;" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button></div>
+              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
+            </div>
+          </div>
+        </form>
+        <div id="brand">
+<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='brand' ORDER BY title ASC");
+$ss->execute();
+while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+          <div id="l_<?php echo$rs['id'];?>" class="form-group row">
+            <div class="input-group col">
+              <label for="title<?php echo$rs['id'];?>" class="input-group-text">Brand</label>
+              <input type="text" id="title<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" readonly>
+              <label for="url<?php echo$rs['id'];?>" class="input-group-text">URL</label>
+              <input type="text" id="url<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
               <div class="input-group-text">Image</div>
               <div class="input-group-append img"><?php echo$rs['icon']!=''&&file_exists('media'.DS.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-lightbox="lightbox"><img id="thumbimage" src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?></div>
               <div class="input-group-append">

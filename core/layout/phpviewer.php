@@ -19,9 +19,8 @@ require'..'.DS.'db.php';
 include'..'.DS.'class.projecthoneypot.php';
 $idh=time();
 echo'<div id="phpviewer'.$idh.'">';
-if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
-  echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
-}else{
+if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
+else{
   function svg($svg,$class=null,$size=null){
   	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('..'.'..'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
   }
@@ -32,10 +31,8 @@ if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
   define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
   define('UNICODE','UTF-8');
-  if($t=='comments')
-    $s=$db->prepare("SELECT ip FROM `".$prefix."comments` WHERE id=:id");
-  else
-    $s=$db->prepare("SELECT ip FROM `".$prefix."tracker` WHERE id=:id");
+  if($t=='comments')$s=$db->prepare("SELECT ip FROM `".$prefix."comments` WHERE id=:id");
+  else$s=$db->prepare("SELECT ip FROM `".$prefix."tracker` WHERE id=:id");
   $s->execute([':id'=>$id]);
   if($s->rowCount()>0){
     $r=$s->fetch(PDO::FETCH_ASSOC);
@@ -49,8 +46,7 @@ if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
           if($h->isSearchEngine()==1)echo', but could be a Search Engine.<br>';else echo'.<br>';
           if($h->getThreatScore()>0)echo'The Threat Score for this record is <strong>'.$h->getThreatScore().'</strong> <a target="_blank" href="https://www.projecthoneypot.org/threat_info.php" data-tooltip="tooltip" data-title="Information about what this value represents.">?</a>.';
         }
-      }else
-        echo'No Recorded Incidents were found...';
+      }else echo'No Recorded Incidents were found...';
       $sql=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."iplist` WHERE ip=:ip");
       $sql->execute([':ip'=>$r['ip']]);
       $row=$sql->fetch(PDO::FETCH_ASSOC);
@@ -75,8 +71,6 @@ if(!isset($config['php_APIkey'])||$config['php_APIkey']==''){
 <?php }?>
   </script>
 <?php }
-    }else
-      echo'The IP Recorded isn\'t valid.';
-  }else
-    echo'No Results Found.';
+    }else echo'The IP Recorded isn\'t valid.';
+  }else echo'No Results Found.';
 }

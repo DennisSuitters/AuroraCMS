@@ -7,21 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
 if($page['notes']!=''){
 	$html=preg_replace([
 		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<\/?pagenotes>/'
+		'/<[\/]?pagenotes>/'
 	],[
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else
-$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 $html=preg_replace([
 	'/<print config=[\"\']?address[\"\']?>/',
 	'/<print config=[\"\']?state[\"\']?>/',
@@ -44,18 +44,15 @@ $s->execute();
 if($s->rowCount()>0){
 	$html=preg_replace([
 		'~<subjectText>.*?<\/subjectText>~is',
-		'/<subjectSelect>/',
-		'/<\/subjectSelect>/'
+		'/<[\/]?subjectSelect>/'
 	],'',$html);
 	$options='';
-	while($r=$s->fetch(PDO::FETCH_ASSOC))
-		$options.='<option value="'.$r['id'].'">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</option>';
+	while($r=$s->fetch(PDO::FETCH_ASSOC))$options.='<option value="'.$r['id'].'">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</option>';
 	$html=str_replace('<subjectOptions>',$options,$html);
 }else{
 	$html=preg_replace([
 		'~<subjectSelect>.*?<\/subjectSelect>~is',
-		'/<subjectText>/',
-		'/<\/subjectText>/'
+		'/<[\/]?subjectText>/'
 	],'',$html);
 }
 require'core'.DS.'parser.php';

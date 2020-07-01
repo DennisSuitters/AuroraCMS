@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
 $rank=0;
 $notification='';
@@ -34,13 +35,11 @@ $html=preg_replace([
   '/<print page=[\"\']?notes[\"\']?>/',
   '/<items>([\w\W]*?)<\/items>/',
   '/<more>([\w\W]*?)<\/more>/',
-  '/<item>/',
-  '/<\/item>/'
+  '/<[\/]?item>/'
 ],[
   $r['title'],
   rawurldecode($page['notes']),
   $r['contentType'],
-  '',
   '',
   '',
   '',

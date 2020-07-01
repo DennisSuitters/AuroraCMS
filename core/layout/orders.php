@@ -26,29 +26,54 @@ if($user['options'][4]==1){
     $sd->execute([':id'=>$id]);
     $rd=$sd->fetch(PDO::FETCH_ASSOC);
     $s=$db->prepare("INSERT INTO `".$prefix."orders` (cid,uid,contentType,due_ti,notes,status,recurring,ti) VALUES (:cid,:uid,:contentType,:due_ti,:notes,:status,:recurring,:ti)");
-    $s->execute([':cid'=>$rd['cid'],':uid'=>$uid,':contentType'=>$rd['contentType'],':due_ti'=>$ti+$config['orderPayti'],':notes'=>$rd['notes'],':status'=>'outstanding',':recurring'=>$rd['recurring'],':ti'=>$ti]);
+    $s->execute([
+      ':cid'=>$rd['cid'],
+      ':uid'=>$uid,
+      ':contentType'=>$rd['contentType'],
+      ':due_ti'=>$ti+$config['orderPayti'],
+      ':notes'=>$rd['notes'],
+      ':status'=>'outstanding',
+      ':recurring'=>$rd['recurring'],
+      ':ti'=>$ti
+    ]);
     $iid=$db->lastInsertId();
     if($rd['qid']!=''){
       $rd['qid']='Q'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
       $qid_ti=$ti+$config['orderPayti'];
-    }else
-      $qid_ti=0;
+    }else$qid_ti=0;
     if($rd['iid']!=''){
       $rd['iid']='I'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
       $iid_ti=$ti+$config['orderPayti'];
-    }else
-      $iid_ti=0;
+    }else$iid_ti=0;
     $s=$db->prepare("UPDATE `".$prefix."orders` SET qid=:qid,qid_ti=:qid_ti,iid=:iid,iid_ti=:iid_ti WHERE id=:id");
-    $s->execute([':qid'=>$rd['qid'],':qid_ti'=>$qid_ti,':iid'=>$rd['iid'],':iid_ti'=>$iid_ti,':id'=>$iid]);
+    $s->execute([
+      ':qid'=>$rd['qid'],
+      ':qid_ti'=>$qid_ti,
+      ':iid'=>$rd['iid'],
+      ':iid_ti'=>$iid_ti,
+      ':id'=>$iid
+    ]);
     $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid");
     $s->execute(array(':oid'=>$id));
     while($r=$s->fetch(PDO::FETCH_ASSOC)){
       $so=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,title,quantity,cost,status,ti) VALUES (:oid,:iid,:title,:quantity,:cost,:status,:ti)");
-      $so->execute([':oid'=>$iid,':iid'=>$r['iid'],':title'=>$r['title'],':quantity'=>$r['quantity'],':cost'=>$r['cost'],':status'=>$r['status'],':ti'=>$ti]);
+      $so->execute([
+        ':oid'=>$iid,
+        ':iid'=>$r['iid'],
+        ':title'=>$r['title'],
+        ':quantity'=>$r['quantity'],
+        ':cost'=>$r['cost'],
+        ':status'=>$r['status'],
+        ':ti'=>$ti
+      ]);
     }
     $aid='A'.date("ymd",$ti).sprintf("%06d",$id,6);
     $s=$db->prepare("UPDATE `".$prefix."orders` SET aid=:aid,aid_ti=:aid_ti WHERE id=:id");
-    $s->execute([':aid'=>$aid,':aid_ti'=>$ti,':id'=>$id]);
+    $s->execute([
+      ':aid'=>$aid,
+      ':aid_ti'=>$ti,
+      ':id'=>$id
+    ]);
     $args[0]='all';
   }
   if($args[0]=='addquote'||$args[0]=='addinvoice'){
@@ -57,12 +82,22 @@ if($user['options'][4]==1){
     if($args[0]=='addquote'){
       $oid='Q'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
       $q=$db->prepare("INSERT INTO `".$prefix."orders` (uid,qid,qid_ti,due_ti,status) VALUES (:uid,:qid,:qid_ti,:due_ti,'pending')");
-      $q->execute([':uid'=>$uid,':qid'=>$oid,':qid_ti'=>$ti,':due_ti'=>$dti]);
+      $q->execute([
+        ':uid'=>$uid,
+        ':qid'=>$oid,
+        ':qid_ti'=>$ti,
+        ':due_ti'=>$dti
+      ]);
     }
     if($args[0]=='addinvoice'){
       $oid='I'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
       $s=$db->prepare("INSERT INTO `".$prefix."orders` (uid,iid,iid_ti,due_ti,status) VALUES (:uid,:iid,:iid_ti,:due_ti,'pending')");
-      $s->execute([':uid'=>$uid,':iid'=>$oid,':iid_ti'=>$ti,':due_ti'=>$dti]);
+      $s->execute([
+        ':uid'=>$uid,
+        ':iid'=>$oid,
+        ':iid_ti'=>$ti,
+        ':due_ti'=>$dti
+      ]);
     }
     $id=$db->lastInsertId();
     $e=$db->errorInfo();
@@ -74,14 +109,16 @@ if($user['options'][4]==1){
     $q->execute(array(':id'=>$id));
     $r=$q->fetch(PDO::FETCH_ASSOC);
     $q=$db->prepare("UPDATE `".$prefix."orders` SET iid=:iid,iid_ti=:iid_ti,qid='',qid_ti='0' WHERE id=:id");
-    $q->execute([':iid'=>'I'.date("ymd",$ti).sprintf("%06d",$id,6),':iid_ti'=>$ti,':id'=>$id]);
+    $q->execute([
+      ':iid'=>'I'.date("ymd",$ti).sprintf("%06d",$id,6),
+      ':iid_ti'=>$ti,
+      ':id'=>$id
+    ]);
     if(file_exists('..'.DS.'media'.DS.'order'.DS.$r['qid'].'.pdf'))unlink('..'.DS.'media'.DS.'orders'.DS.$r['qid'].'.pdf');
     $args[0]='invoices';
   }
-  if($args[0]=='settings')
-    include'core'.DS.'layout'.DS.'set_orders.php';
-  elseif($args[0]=='edit')
-    include'core'.DS.'layout'.DS.'edit_orders.php';
+  if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_orders.php';
+  elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_orders.php';
   else{
     if($args[0]=='all'||$args[0]==''){
       $sort="all";
@@ -175,9 +212,7 @@ if($user['options'][4]==1){
 }?>
                     <button class="btn btn-secondary" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
                     <?php echo$c['email']!=''?'<button class="btn btn-secondary" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');" data-tooltip="tooltip" data-title="Email Order" aria-label="Email Order">'.svg2('email-send').'</button>':'';
-if($user['options'][0]==1){?>
-                    <a class="btn btn-secondary<?php echo$r['status']=='delete'?' d-none':'';?>" href="<?php echo URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'];?>" data-tooltip="tooltip" data-title="Duplicate" aria-label="Duplicate"><?php svg('copy');?></a>
-<?php }?>
+                    echo$user['options'][0]==1?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" data-tooltip="tooltip" data-title="Duplicate" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
                     <a class="btn btn-secondary<?php echo$r['status']=='delete'?' d-none':'';?>" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></a>
 <?php if($user['options'][0]==1){?>
                     <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>

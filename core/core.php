@@ -170,15 +170,10 @@ function elapsed_time($b=0,$e=0){
   }else$b=number_format($td,3).'s';
   return trim($b);
 }
-function size_format($f,$p=2){
-  $us=array('','K','M','G','T','P','E','Z','Y');
-  foreach($us as$iU=>$u){
-    if($f>1024)
-      $f/=1024;
-    else
-      break;
-  }
-  return round($f,$p).$us[$iU].'B';
+function size_format($B, $D=2){
+    $S = 'kMGTPEZY';
+    $F = floor((strlen($B) - 1) / 3);
+    return @sprintf("%.{$D}f", $B / pow(1024, $F)) . ' ' . @$S[$F-1] . 'B';
 }
 function getmemstats(){
   $memfree=0;
@@ -201,7 +196,7 @@ function getmemstats(){
     'total'=>$memtotal*1024,
     'used'=>$memused*1024,
 		'swap'=>$memswap,
-		'swapused'=>$memswap-$memswapfree
+		'swapused'=>$memswap - $memswapfree
   ];
   return$mem;
 }
@@ -282,12 +277,12 @@ function OSInformation(){
   return array_combine($listIds,$listVal);
 }
 function Uptime(){
-    $ut=strtok(exec("cat /proc/uptime"),".");
-    $days=sprintf("%2d",($ut/(3600*24)));
-    $hours=sprintf("%2d",(($ut % (3600*24))/3600));
-    $min=sprintf("%2d",($ut % (3600*24) % 3600)/60);
-    $sec=sprintf("%2d",($ut % (3600*24) % 3600)%60);
-    return array($days,$hours,$min,$sec);
+  $ut=strtok(exec("cat /proc/uptime"),".");
+  $days=sprintf("%2d",($ut/(3600*24)));
+  $hours=sprintf("%2d",(($ut % (3600*24))/3600));
+  $min=sprintf("%2d",($ut % (3600*24) % 3600)/60);
+  $sec=sprintf("%2d",($ut % (3600*24) % 3600)%60);
+  return array($days,$hours,$min,$sec);
 }
 function tomoment($f){
   $r=['d'=>'DD','D'=>'ddd','j'=>'D','l'=>'dddd','N'=>'E','S'=>'o','w'=>'e','z'=>'DDD','W'=>'W','F'=>'MMMM','m'=>'MM','M'=>'MMM','n'=>'M','t'=>'','L'=>'','o'=>'YYYY','Y'=>'YYYY','y'=>'YY','a'=>'a','A'=>'A','B'=>'','g'=>'h','G'=>'H','h'=>'hh','H'=>'HH','i'=>'mm','s'=>'ss','u'=>'SSS','e'=>'zz','I'=>'','O'=>'','P'=>'','T'=>'','Z'=>'','c'=>'','r'=>'','U'=>'X'];
@@ -296,13 +291,8 @@ function tomoment($f){
 function getDomain($url){
   $pieces=parse_url($url);
   $domain=isset($pieces['host'])?$pieces['host']:'';
-  if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i',$domain,$regs)){
-    return$regs['domain'];
-  }
+  if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i',$domain,$regs))return$regs['domain'];
   return FALSE;
-//		$rawurl = "http://asdf.sadf.abc.com/adsfkjl/adfs/adfs.html";
-//		$url = parse_url($rawurl);
-//		$domain = preg_replace('#^(?:.+?\\.)+(.+?\\.(?:co\\.uk|com|net))#', '$1', $url['host']);
 }
 function url_encode($str){
 	$str=trim(strtolower($str));
@@ -620,10 +610,8 @@ $routes=[
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE active=1");
 $s->execute();
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
-	if(method_exists('front',$r['contentType']))
-		$routes[$r['contentType']]=['front',$r['contentType']];
-  else
-		$routes[$r['contentType']]=['front','content'];
+	if(method_exists('front',$r['contentType']))$routes[$r['contentType']]=['front',$r['contentType']];
+  else$routes[$r['contentType']]=['front','content'];
 }
 $route->setRoutes($routes);
 $route->routeURL(preg_replace("|/$|","",filter_input(INPUT_GET,'url',FILTER_SANITIZE_URL)));
@@ -643,8 +631,7 @@ class router{
 			return true;
 		}
 		foreach($this->routes as$path=>$call){
-			if(empty($path))
-				continue;
+			if(empty($path))continue;
 			preg_match("|{$path}/(.*)$|i",$url,$match);
 			if(!empty($match[1])){
 				$this->route_match=$path;
@@ -667,7 +654,6 @@ class router{
 		if(is_array($call)){
 			$call_obj=new $call[0]();
 			$call_obj->{$call[1]}($this->route_call_args);
-		}else
-			$call($this->route_call_args);
+		}else$call($this->route_call_args);
 	}
 }

@@ -26,10 +26,8 @@ if($args[0]=='add'){
   $args[0]='edit';
   echo'<script>/*<![CDATA[*/history.replaceState("","","'.URL.$settings['system']['admin'].'/accounts/edit/'.$args[1].'");/*]]>*/</script>';
 }
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_accounts.php';
-elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_accounts.php';
+if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_accounts.php';
+elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_accounts.php';
 else{
   if($args[0]=='type'){
     if(isset($args[1])){
@@ -84,12 +82,9 @@ else{
 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               <tr id="l_<?php echo$r['id'];?>">
                 <td class="align-middle">
-                  <img class="img-fluid img-circle bg-white" style="max-width:32px;height:32px;" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
-                    echo'media'.DS.'avatar'.DS.basename($r['avatar']);
-                  elseif($r['gravatar']!='')
-                    echo$r['gravatar'];
-                  else
-                    echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
+                  <img class="img-fluid img-circle bg-white" style="max-width:32px;height:32px;" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
+                  elseif($r['gravatar']!='')echo$r['gravatar'];
+                  else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
                 </td>
                 <td class="align-middle">
                   <a href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['name']==''?$r['username']:$r['name'];?>"><?php echo$r['username'].':'.$r['name'];?></a>

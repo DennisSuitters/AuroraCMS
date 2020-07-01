@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
@@ -27,6 +27,8 @@
  * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
  * @changes    v0.0.15 Add Edit Media information button.
  * @changes    v0.0.15 Add Weight and Size Fields for Postage Calculation.
+ * @changes    v0.0.16 Change Brand Textbox to Select Box to choose Brand from added options.
+ * @changes    v0.0.16 Add Condition Option.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -61,36 +63,12 @@ if($so->rowCount()>0){
           <li id="nav-content-images" class="nav-item" role="presentation">
             <a class="nav-link" href="#tab-content-images" aria-controls="tab-content-images" role="tab" data-toggle="tab">Images</a>
           </li>
-<?php if($r['contentType']!='testimonials'){?>
-          <li id="nav-content-media" class="nav-item" role="presentation">
-            <a class="nav-link" href="#tab-content-media" aria-controls="tab-content-media" role="tab" data-toggle="tab">Media</a>
-          </li>
-<?php }
-if($r['contentType']=='inventory'){?>
-          <li id="nav-content-options" class="nav-item" role="presentation">
-            <a class="nav-link" href="#tab-content-options" aria-controls="tab-content-options" role="tab" data-toggle="tab">Options</a>
-          </li>
-<?php }
-if($r['contentType']=='article'){?>
-          <li id="nav-content-comments" class="nav-item" role="presentation">
-            <a class="nav-link" href="#tab-content-comments" aria-controls="tab-content-comments" role="tab" data-toggle="tab">Comments</a>
-          </li>
-<?php }
-if($r['contentType']=='inventory'||$r['contentType']=='service'){?>
-          <li id="nav-content-reviews" class="nav-item" role="presentation">
-            <a class="nav-link" href="#tab-content-reviews" aria-controls="tab-content-reviews" role="tab" data-toggle="tab">Reviews</a>
-          </li>
-<?php }
-if($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-          <li id="nav-content-related" class="nav-item" role="presentation">
-            <a class="nav-link" href="#tab-content-related" aria-controls="tab-content-related" role="tab" data-toggle="tab">Related</a>
-          </li>
-<?php }
-if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
-          <li id="nav-content-seo" class="nav-item" role="presentation">
-            <a class="nav-link" href="#tab-content-seo" aria-controls="tab-content-seo" role="tab" data-toggle="tab">SEO</a>
-          </li>
-<?php }?>
+          <?php echo$r['contentType']!='testimonials'?'<li id="nav-content-media" class="nav-item" role="presentation"><a class="nav-link" href="#tab-content-media" aria-controls="tab-content-media" role="tab" data-toggle="tab">Media</a></li>':'';
+          echo$r['contentType']=='inventory'?'<li id="nav-content-options" class="nav-item" role="presentation"><a class="nav-link" href="#tab-content-options" aria-controls="tab-content-options" role="tab" data-toggle="tab">Options</a></li>':'';
+          echo$r['contentType']=='article'?'<li id="nav-content-comments" class="nav-item" role="presentation"><a class="nav-link" href="#tab-content-comments" aria-controls="tab-content-comments" role="tab" data-toggle="tab">Comments</a></li>':'';
+          echo$r['contentType']=='inventory'||$r['contentType']=='service'?'<li id="nav-content-reviews" class="nav-item" role="presentation"><a class="nav-link" href="#tab-content-reviews" aria-controls="tab-content-reviews" role="tab" data-toggle="tab">Reviews</a></li>':'';
+          echo$r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<li id="nav-content-related" class="nav-item" role="presentation"><a class="nav-link" href="#tab-content-related" aria-controls="tab-content-related" role="tab" data-toggle="tab">Related</a></li>':'';
+          echo$r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<li id="nav-content-seo" class="nav-item" role="presentation"><a class="nav-link" href="#tab-content-seo" aria-controls="tab-content-seo" role="tab" data-toggle="tab">SEO</a></li>':'';?>
           <li id="nav-content-settings" class="nav-item" role="presentation">
             <a class="nav-link" href="#tab-content-settings" aria-controls="tab-content-settings" role="tab" data-toggle="tab">Settings</a>
           </li>
@@ -125,7 +103,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                 }
               </script>
             </div>
-            <div class="form-group row">
+            <div id="nav-content-content-2" class="form-group row">
               <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL Slug</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text text-truncate col-sm-12">
@@ -133,13 +111,13 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                 </div>
               </div>
             </div>
-            <div id="nav-content-content-2" class="form-group row">
+            <div id="nav-content-content-3" class="form-group row">
               <label for="ti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Created</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
               </div>
             </div>
-            <div id="nav-content-content-3" class="form-group row">
+            <div id="nav-content-content-4" class="form-group row">
               <label for="pti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Published On</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="pti" class="form-control textinput" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="pti" value="<?php echo date('M n, Y g:i A',$r['pti']);?>"<?php echo$user['options'][1]==1?'':' readonly';?>>
@@ -147,14 +125,14 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepti" class="btn btn-secondary save" data-dbid="pti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-            <div id="nav-content-content-4" class="form-group row">
+            <div id="nav-content-content-5" class="form-group row">
               <label for="eti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Edited</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="eti" class="form-control" value="<?php echo date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?>" readonly>
               </div>
             </div>
 <?php if($r['contentType']=='proofs'){?>
-            <div id="nav-content-content-5" class="form-group row">
+            <div id="nav-content-content-6" class="form-group row">
               <label for="cid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Client</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="cid" class="form-control"<?php echo$user['options']{1}==0?' disabled':'';?> onchange="update('<?php echo$r['id'];?>','content','cid',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cid"<?php echo$user['options'][1]==1?'':' disabled';?>>
@@ -164,7 +142,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               </div>
             </div>
 <?php }?>
-            <div id="nav-content-content-6" class="form-group row">
+            <div id="nav-content-content-7" class="form-group row">
               <label for="author" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Author</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="uid" class="form-control" onchange="update('<?php echo$r['id'];?>','content','uid',$(this).val());" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="uid"<?php echo$user['options'][1]==1?'':' disabled';?>>
@@ -173,7 +151,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
               </div>
             </div>
 <?php if($r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-7" class="form-group row">
+            <div id="nav-content-content-8" class="form-group row">
               <label for="code" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Code</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="code" class="form-control textinput" value="<?php echo$r['code'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="code"<?php echo$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
@@ -182,7 +160,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             </div>
 <?php }
 if($r['contentType']=='inventory'){?>
-            <div id="nav-content-content-8" class="form-group row">
+            <div id="nav-content-content-9" class="form-group row">
               <label for="barcode" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Barcode</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="barcode" class="form-control textinput" value="<?php echo$r['barcode'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="barcode"<?php echo$user['options'][1]==1?' placeholder="Enter a Barcode..."':' readonly';?>>
@@ -192,7 +170,7 @@ if($r['contentType']=='inventory'){?>
 <?php }
 if($r['contentType']=='inventory'){?>
             <?php echo$user['options'][1]==1?'<div class="help-block small text-muted text-right"><a target="_blank" href="https://fccid.io/">fccid.io</a> for more information or to look up an FCC ID.</div>':'';?>
-            <div id="nav-content-content-9" class="form-group row">
+            <div id="nav-content-content-10" class="form-group row">
               <label for="fccid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">FCCID</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="fccid" class="form-control textinput" value="<?php echo$r['fccid'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fccid"<?php echo$user['options'][1]==1?' placeholder="Enter an FCCID..."':' readonly';?>>
@@ -201,24 +179,21 @@ if($r['contentType']=='inventory'){?>
             </div>
 <?php }
 if($r['contentType']=='inventory'){?>
-            <div id="nav-content-content-10" class="form-group row">
+            <div id="nav-content-content-11" class="form-group row">
               <label for="brand" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Brand</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <input type="text" id="brand" list="brand_options" class="form-control textinput" value="<?php echo$r['brand'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="brand"<?php echo$user['options'][1]==1?' placeholder="Enter a Brand..."':' readonly';?>>
-<?php if($user['options'][1]==1){
-  $s=$db->query("SELECT DISTINCT brand FROM `".$prefix."content` WHERE brand!='' ORDER BY brand ASC");
-  if($s->rowCount()>0){
-    echo'<datalist id="brand_options">';
-    while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['brand'].'"/>';
-    echo'</datalist>';
-  }
-  echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebrand" class="btn btn-secondary save" data-dbid="brand" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
+                <select id="brand" class="form-control" onchange="update('<?php echo$r['id'];?>','content','brand',$(this).val());" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="brand"<?php echo$user['options'][1]==1?'':' disabled';?>>
+                  <option value="">None</option>
+<?php $s=$db->query("SELECT id,title FROM `".$prefix."choices` WHERE contentType='brand' ORDER BY title ASC");
+if($s->rowCount()>0){
+  while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['brand']?' selected':'').'>'.$rs['title'].'</option>';
 }?>
+                </select>
               </div>
             </div>
 <?php }
 if($r['contentType']=='event'){?>
-            <div id="nav-content-content-11" class="form-group row">
+            <div id="nav-content-content-12" class="form-group row">
               <label for="tis" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Event Start</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <?php echo$user['options'][1]==1?'<input type="text" id="tis" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tis" data-datetime="'.date($config['dateFormat'],$r['tis']).'" autocomplete="off"><input type="hidden" id="tisx" value="'.$r['tis'].'"><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetis" class="btn btn-secondary save" data-dbid="tis" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tis']).'" readonly>';?>
@@ -226,7 +201,7 @@ if($r['contentType']=='event'){?>
             </div>
 <?php }
 if($r['contentType']=='event'){?>
-            <div id="nav-content-content-12" class="form-group row">
+            <div id="nav-content-content-13" class="form-group row">
               <label for="tie" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Event End</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <?php echo$user['options'][1]==1?'<input type="text" id="tie" class="form-control" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="tie" data-datetime="'.date($config['dateFormat'],$r['tie']).'" autocomplete="off"><input type="hidden" id="tiex" value="'.$r['tie'].'"><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetie" class="btn btn-secondary save" data-dbid="tie" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'<input type="text" class="form-control" value="'.date($config['dateFormat'],$r['tie']).'" readonly>';?>
@@ -235,7 +210,7 @@ if($r['contentType']=='event'){?>
 <?php }
 echo$r['ip']!=''?'<div class="help-block small text-right">'.$r['ip'].'</div>':'';
 if($r['contentType']=='testimonials'){?>
-            <div id="nav-content-content-13" class="form-group row">
+            <div id="nav-content-content-14" class="form-group row">
               <label for="email" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="email"<?php echo$user['options'][1]==1?' placeholder="Enter an Email..."':' readonly';?>>
@@ -244,7 +219,7 @@ if($r['contentType']=='testimonials'){?>
             </div>
 <?php }
 if($r['contentType']=='testimonials'){?>
-            <div id="nav-content-content-14" class="form-group row">
+            <div id="nav-content-content-15" class="form-group row">
               <label for="name" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="name" list="name_options" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="name"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
@@ -261,7 +236,7 @@ if($r['contentType']=='testimonials'){?>
             </div>
 <?php }
 if($r['contentType']=='testimonials'){?>
-            <div id="nav-content-content-15" class="form-group row">
+            <div id="nav-content-content-16" class="form-group row">
               <label for="url" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
@@ -270,7 +245,7 @@ if($r['contentType']=='testimonials'){?>
             </div>
 <?php }
 if($r['contentType']=='testimonials'){?>
-            <div id="nav-content-content-16" class="form-group row">
+            <div id="nav-content-content-17" class="form-group row">
               <label for="business" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Business</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business"<?php echo$user['options'][1]==1?' placeholder="Enter a Business..."':' readonly';?>>
@@ -279,7 +254,7 @@ if($r['contentType']=='testimonials'){?>
             </div>
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-17" class="form-group row">
+            <div id="nav-content-content-18" class="form-group row">
               <label for="category_1" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category One</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_1" list="category_1_options" type="text" class="form-control textinput" value="<?php echo$r['category_1'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_1"<?php echo$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
@@ -295,14 +270,13 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
     while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
   }
   echo'</datalist>';
-
                 echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_1" class="btn btn-secondary save" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
 }?>
               </div>
             </div>
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-18" class="form-group row">
+            <div id="nav-content-content-19" class="form-group row">
               <label for="category_2" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category Two</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_2" list="category_2_options" type="text" class="form-control textinput" value="<?php echo$r['category_2'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_2"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
@@ -319,7 +293,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
             </div>
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-19" class="form-group row">
+            <div id="nav-content-content-20" class="form-group row">
               <label for="category_3" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category Three</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_3" list="category_3_options" type="text" class="form-control textinput" value="<?php echo$r['category_3'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_3"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
@@ -336,7 +310,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
             </div>
 <?php }
 if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-20" class="form-group row">
+            <div id="nav-content-content-21" class="form-group row">
               <label for="category_4" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Category Four</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input id="category_4" list="category_4_options" type="text" class="form-control textinput" value="<?php echo$r['category_4'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_4"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
@@ -353,7 +327,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
             </div>
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-21" class="form-group row">
+            <div id="nav-content-content-22" class="form-group row">
               <label for="rrp" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">RRP</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text">$</div>
@@ -363,7 +337,7 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
             </div>
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-21" class="form-group row">
+            <div id="nav-content-content-23" class="form-group row">
               <label for="cost" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Cost</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text">$</div>
@@ -373,7 +347,7 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
             </div>
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-21" class="form-group row">
+            <div id="nav-content-content-24" class="form-group row">
               <label for="rCost" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Reduced Cost</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-text">$</div>
@@ -383,7 +357,7 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
             </div>
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div id="nav-content-content-22" class="form-group row">
+            <div id="nav-content-content-25" class="form-group row">
               <label for="options0" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Show Cost</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="options0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0"<?php echo($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
@@ -391,7 +365,7 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
             </div>
 <?php }
 if($r['contentType']=='inventory'){?>
-            <div id="nav-content-content-23" class="form-group row">
+            <div id="nav-content-content-26" class="form-group row">
               <label for="quantity" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Quantity</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="quantity" class="form-control textinput" value="<?php echo $r['quantity'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="quantity"<?php echo$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
@@ -399,7 +373,42 @@ if($r['contentType']=='inventory'){?>
               </div>
             </div>
 
-            <div id="nav-content-content-24" class="form-group row">
+            <div id="nav-content-content-27" class="form-group row">
+              <label for="itemCondition" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Condition</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <select id="itemCondition" class="form-control" onchange="update('<?php echo$r['id'];?>','content','itemCondition',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Condition"':' disabled';?>>
+                  <option value=""<?php echo$r['itemCondition']==''?' selected':'';?>>None</option>
+                  <option value="acceptable"<?php echo$r['itemCondition']=='acceptable'?' selected':'';?>>Acceptable</option>
+                  <option value="brand new"<?php echo$r['itemCondition']=='brand new'?' selected':'';?>>Brand New</option>
+                  <option value="certified pre-owned"<?php echo$r['itemCondition']=='certified pre-owned'?' selected':'';?>>Certified Pre-Owned</option>
+                  <option value="damaged"<?php echo$r['itemCondition']=='damaged'?' selected':'';?>>Damaged</option>
+                  <option value="excellent"<?php echo$r['itemCondition']=='excellent'?' selected':'';?>>Excellent</option>
+                  <option value="fair"<?php echo$r['itemCondition']=='fair'?' selected':'';?>>Fair</option>
+                  <option value="for parts"<?php echo$r['itemCondition']=='for parts'?' selected':'';?>>For Parts</option>
+                  <option value="good"<?php echo$r['itemCondition']=='good'?' selected':'';?>>Good</option>
+                  <option value="like new"<?php echo$r['itemCondition']=='like new'?' selected':'';?>>Like New</option>
+                  <option value="mint"<?php echo$r['itemCondition']=='mint'?' selected':'';?>>Mint</option>
+                  <option value="mint in box"<?php echo$r['itemCondition']=='mint in box'?' selected':'';?>>Mint In Box</option>
+                  <option value="new"<?php echo$r['itemCondition']=='new'?' selected':'';?>>New</option>
+                  <option value="new with box"<?php echo$r['itemCondition']=='new with box'?' selected':'';?>>New With Box</option>
+                  <option value="new with defects"<?php echo$r['itemCondition']=='new with defects'?' selected':'';?>>New With Defects</option>
+                  <option value="new with tags"<?php echo$r['itemCondition']=='new with tags'?' selected':'';?>>New With Tags</option>
+                  <option value="new without box"<?php echo$r['itemCondition']=='new without box'?' selected':'';?>>New Without Box</option>
+                  <option value="new without tags"<?php echo$r['itemCondition']=='new without tags'?' selected':'';?>>New Without Tags</option>
+                  <option value="non functioning"<?php echo$r['itemCondition']=='non functioning'?' selected':'';?>>Non Functioning</option>
+                  <option value="poor"<?php echo$r['itemCondition']=='poor'?' selected':'';?>>Poor</option>
+                  <option value="pre-owned"<?php echo$r['itemCondition']=='pre-owned'?' selected':'';?>>Pre-Owned</option>
+                  <option value="refurbished"<?php echo$r['itemCondition']=='refurbished'?' selected':'';?>>Refurbished</option>
+                  <option value="remanufactured"<?php echo$r['itemCondition']=='remanufactured'?' selected':'';?>>Remanufactured</option>
+                  <option value="seasoned"<?php echo$r['itemCondition']=='seasoned'?' selected':'';?>>Seasoned</option>
+                  <option value="unseasoned"<?php echo$r['itemCondition']=='unseasoned'?' selected':'';?>>Unseasoned</option>
+                  <option value="used"<?php echo$r['itemCondition']=='used'?' selected':'';?>>Used</option>
+                  <option value="very good"<?php echo$r['itemCondition']=='very good'?' selected':'';?>>Very Good</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="nav-content-content-28" class="form-group row">
               <label for="weight" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Weight</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="weight" class="form-control textinput" value="<?php echo $r['weight'];?>" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="weight"<?php echo$user['options'][1]==1?' placeholder="Enter a Weight..."':' readonly';?>>
@@ -427,8 +436,7 @@ if($r['contentType']=='inventory'){?>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveweight" class="btn btn-secondary save" data-dbid="weight" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-
-            <div id="nav-content-content-24" class="form-group row">
+            <div id="nav-content-content-29" class="form-group row">
               <label for="Size" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Size</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-prepend">
@@ -473,8 +481,7 @@ if($r['contentType']=='inventory'){?>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savewidth" class="btn btn-secondary save" data-dbid="width" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-
-            <div id="nav-content-content-24" class="form-group row">
+            <div id="nav-content-content-30" class="form-group row">
               <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">&nbsp;</div>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-append">
@@ -520,7 +527,7 @@ if($r['contentType']=='inventory'){?>
               </div>
             </div>
 
-            <div id="nav-content-content-24" class="form-group row">
+            <div id="nav-content-content-31" class="form-group row">
               <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">&nbsp;</div>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="input-group-append">
@@ -568,7 +575,7 @@ if($r['contentType']=='inventory'){?>
 
 <?php }
 if($r['contentType']=='inventory'){?>
-            <div id="tab-content-content-24" class="form-group row">
+            <div id="tab-content-content-32" class="form-group row">
               <label for="stockStatus" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Stock Status</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="stockStatus" class="form-control" onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Stock Status"':' disabled';?>>
@@ -584,7 +591,7 @@ if($r['contentType']=='inventory'){?>
             </div>
 <?php }?>
             <div class="help-block small text-muted text-right">Edited: <?php echo$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></div>
-            <div id="nav-content-content-25" class="form-group">
+            <div id="nav-content-content-33" class="form-group">
               <div class="card-header col-sm-12 position-relative p-0">
 <?php           if($user['options'][1]==1){
                   if($r['suggestions']==1){
@@ -596,7 +603,8 @@ if($r['contentType']=='inventory'){?>
                     '<button class="btn btn-secondary btn-sm" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;" data-tooltip="tooltip" data-title="Show Element Blocks" aria-label="Show Element Blocks">'.svg2('blocks').'</button>'.
                     '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
                     '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;" data-tooltip="tooltip" data-title="Add Aussie Lorem Ipsum" aria-label="Add Aussie Lorem Ipsum">'.svg2('loremipsum').'</button>'.
-                    '<button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestions">'.svg2('idea').'</button></div>';?>
+                    '<button class="btn btn-secondary btn-sm addsuggestion" data-dbgid="notesda" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestions">'.svg2('idea').'</button>'.
+                  '</div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
                 <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -686,13 +694,13 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savefile" class="btn btn-secondary save" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="nav-content-content-pano" class="form-group row">
+              <div id="nav-content-images-5" class="form-group row">
                 <label for="options2" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Enable Panorama</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2"<?php echo($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                 </div>
               </div>
-              <div id="tab-content-images-5" class="form-group row">
+              <div id="tab-content-images-6" class="form-group row">
                 <label for="thumb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Thumbnail</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input id="thumb" type="text" class="form-control textinput" value="<?php echo$r['thumb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="thumb" readonly>
@@ -718,10 +726,10 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
             </fieldset>
-            <fieldset id="tab-content-images-6" class="control-fieldset">
+            <fieldset id="tab-content-images-8" class="control-fieldset">
               <legend class="control-legend">EXIF Information</legend>
               <?php echo$user['options'][1]==1?'<div class="help-block small text-muted text-right">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</div>':'';?>
-              <div id="tab-content-images-7" class="form-group row">
+              <div id="tab-content-images-9" class="form-group row">
                 <label for="exifFilename" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Original Filename</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -729,7 +737,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="saveexifFilename" class="btn btn-secondary save" data-dbid="exifFilename" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-8" class="form-group row">
+              <div id="tab-content-images-10" class="form-group row">
                 <label for="exifCamera" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Camera</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -737,7 +745,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifCamera" class="btn btn-secondary save" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-9" class="form-group row">
+              <div id="tab-content-images-11" class="form-group row">
                 <label for="exifLens" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Lens</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);" role="button" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -745,7 +753,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifLens" class="btn btn-secondary save" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-10" class="form-group row">
+              <div id="tab-content-images-12" class="form-group row">
                 <label for="exifAperture" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Aperture</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -753,7 +761,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifAperture" class="btn btn-secondary save" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-11" class="form-group row">
+              <div id="tab-content-images-13" class="form-group row">
                 <label for="exifFocalLength" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Focal Length</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -761,7 +769,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifFocalLength" class="btn btn-secondary save" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-12" class="form-group row">
+              <div id="tab-content-images-14" class="form-group row">
                 <label for="exifShutterSpeed" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Shutter Speed</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);" role="button" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -769,7 +777,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifShutterSpeed" class="btn btn-secondary save" data-dbid="exifShutterSpeed" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-13" class="form-group row">
+              <div id="tab-content-images-15" class="form-group row">
                 <label for="exifISO" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">ISO</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-prepend"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -777,7 +785,7 @@ if($r['contentType']!='testimonials'){?>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifISO" class="btn btn-secondary save" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-14" class="form-group row">
+              <div id="tab-content-images-16" class="form-group row">
                 <label for="exifti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Taken</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <?php echo$user['options'][1]==1?'<div class="input-group-btn"><button class="btn btn-secondary" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);" aria-label="Get EXIF Information">'.svg2('magic').'</button></div>':'';?>
@@ -786,16 +794,16 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
             </fieldset>
-            <fieldset id="tab-content-images-15" class="control-fieldset">
+            <fieldset id="tab-content-images-17" class="control-fieldset">
               <legend class="control-legend">Image Attribution</legend>
-              <div id="tab-content-images-16" class="form-group row">
+              <div id="tab-content-images-18" class="form-group row">
                 <label for="attributionImageTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageTitle" class="form-control textinput" value="<?php echo$r['attributionImageTitle'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageTitle" class="btn btn-secondary save" data-dbid="attributionImageTitle" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-17" class="form-group row">
+              <div id="tab-content-images-19" class="form-group row">
                 <label for="attributionImageName" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageName" list="attributionImageName_option" class="form-control textinput" value="<?php echo$r['attributionImageName'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageName"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
@@ -810,7 +818,7 @@ if($r['contentType']!='testimonials'){?>
                   echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageName" class="btn btn-secondary save" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="tab-content-images-18" class="form-group row">
+              <div id="tab-content-images-20" class="form-group row">
                 <label for="attributionImageURL" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                   <input type="text" id="attributionImageURL" list="attributionImageURL_option" class="form-control textinput" value="<?php echo$r['attributionImageURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageURL"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
@@ -1106,7 +1114,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
 <?php if($user['options'][1]==1){?>
             <div class="help-block small text-muted text-right">Options for Meta Robots: <span data-tooltip="tooltip" data-title="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="tooltip" data-title="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="tooltip" data-title="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="tooltip" data-title="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="tooltip" data-title="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="tooltip" data-title="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="tooltip" data-title="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="tooltip" data-title="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
 <?php }?>
-            <div class="form-group row">
+            <div id="tab-content-seo-2" class="form-group row">
               <label for="metaRobots" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Robots</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php           if($user['options'][1]==1){
@@ -1120,7 +1128,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="metaRobots" role="button" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemetaRobots" class="btn btn-secondary save" data-dbid="metaRobots" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-            <div id="tab-content-seo-2" class="form-group row">
+            <div id="tab-content-seo-3" class="form-group row">
               <label for="schemaType" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Schema Type</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="schemaType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Schema for Microdata Content"':' disabled';?>>
@@ -1135,29 +1143,27 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
                 </select>
               </div>
             </div>
-            <div class="form-group row">
+            <div id="tab-content-seo-4" class="form-group row">
               <div class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></div>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <div class="card col-12 bg-white">
                   <div class="card-body">
                     <div id="google-title" data-tooltip="tooltip" data-placement="left" data-title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
-<?php echo($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
+                      <?php echo($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
                     </div>
                     <div id="google-link">
-<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>
+                      <?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>
                     </div>
                     <div id="google-description" data-tooltip="tooltip" data-placement="left" data-title="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
-<?php if($r['seoDescription']!='')
-  echo$r['seoDescription'];
-else
-  echo$config['seoDescription'];?>
+                      <?php if($r['seoDescription']!='')echo$r['seoDescription'];
+                      else echo$config['seoDescription'];?>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
             <?php echo$user['options'][1]==1?'<div class="help-block small text-muted text-right">The recommended character count for Title\'s is 70.</div>':'';?>
-            <div class="form-group row">
+            <div id="tab-content-seo-5" class="form-group row">
               <label for="seoTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Title</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=70-strlen($r['seoTitle']);
@@ -1179,7 +1185,7 @@ if($cntc<0){
               </div>
             </div>
             <?php echo$user['options'][1]==1?'<div class="help-block small text-muted text-right">The recommended character count for Captions is 100.</div>':'';?>
-            <div id="tab-content-seo-3" class="form-group row">
+            <div id="tab-content-seo-6" class="form-group row">
               <label for="seoCaption" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Caption</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=100-strlen($r['seoCaption']);
@@ -1200,7 +1206,7 @@ if($cntc<0){
               </div>
             </div>
             <?php echo$user['options'][1]==1?'<div class="help-block small text-muted text-right">The recommended character count for Descriptions is 160.</div>':'';?>
-            <div id="tab-content-seo-4" class="form-group row">
+            <div id="tab-content-seo-7" class="form-group row">
               <label for="seoDescription" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Description</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
 <?php $cntc=160-strlen($r['seoDescription']);
@@ -1220,14 +1226,14 @@ if($cntc<0){
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-dbgid="seoDescription" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-            <div id="tab-content-seo-5" class="form-group row<?php echo$r['contentType']=='proofs'?' hidden':'';?>">
+            <div id="tab-content-seo-8" class="form-group row<?php echo$r['contentType']=='proofs'?' hidden':'';?>">
               <label for="seoKeywords" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Keywords</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="seoKeywords" class="form-control textinput" value="<?php echo$r['seoKeywords'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoKeywords"<?php echo$user['options'][1]==1?' placeholder="Enter Keywords..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoKeywords" class="btn btn-secondary save" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-            <div id="tab-content-seo-6" class="form-group row">
+            <div id="tab-content-seo-9" class="form-group row">
               <label for="tags" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Tags</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <input type="text" id="tags" class="form-control textinput" value="<?php echo$r['tags'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags"<?php echo$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
@@ -1249,7 +1255,7 @@ if($cntc<0){
                 </select>
               </div>
             </div>
-            <div id="tab-content-settings-3" class="form-group row">
+            <div id="tab-content-settings-2" class="form-group row">
               <label for="contentType" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">contentType</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="contentType" class="form-control" onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change the Type of Content this Item belongs to."':' disabled';?>>
@@ -1266,28 +1272,28 @@ if($cntc<0){
               </div>
             </div>
 <?php if($r['contentType']!='proofs'){?>
-            <div id="tab-content-settings-4" class="form-group row<?php echo$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
+            <div id="tab-content-settings-3" class="form-group row<?php echo$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="featured0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0"<?php echo($r['featured'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="featured0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Featured</label>
             </div>
 <?php }?>
-            <div id="tab-content-settings-5" class="form-group row">
+            <div id="tab-content-settings-4" class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="internal0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="internal" data-dbb="0"<?php echo($r['internal']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="internal0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Internal</label>
             </div>
 <?php if($r['contentType']=='service'){?>
-            <div id="tab-content-settings-6" class="form-group row">
+            <div id="tab-content-settings-5" class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="bookable0" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0"<?php echo($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
               </div>
               <label for="bookable0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Bookable</label>
             </div>
 <?php }?>
-            <div class="form-group row">
+            <div id="tab-content-settings-6" class="form-group row">
               <label for="mid" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">SubMenu</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
                 <select id="mid" class="form-control" onchange="update('<?php echo$r['id'];?>','content','mid',$(this).val());"<?php echo$user['options'][1]==1?'':' disabled';?>>
@@ -1300,33 +1306,35 @@ if($cntc<0){
         </div>
       </div>
     </div>
-    <div class="card col-12 col-md-3 order-1 order-md-2">
-      <div class="card-body">
-        <h6 class="card-title">SEO Pre-Publish Checklist</h6>
-        <div class="card-text">
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input striker" id="checklist0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="0"<?php echo$r['checklist'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label class="form-check-label" for="checklist0">Title is Catchy</label>
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input striker" id="checklist1" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="1"<?php echo$r['checklist'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label class="form-check-label" for="checklist1">Category Selected</label>
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input striker" id="checklist2" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="2"<?php echo$r['checklist'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label class="form-check-label" for="checklist2">Formatting Done</label>
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input striker" id="checklist3" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="3"<?php echo$r['checklist'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label class="form-check-label" for="checklist3">Spelling and Grammar</label>
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input striker" id="checklist4" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="4"<?php echo$r['checklist'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label class="form-check-label" for="checklist4">Image Added</label>
-          </div>
-          <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input striker" id="checklist5" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="5"<?php echo$r['checklist'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label class="form-check-label" for="checklist5">SEO Checked</label>
+    <div class="col-12 col-md-3 order-1 order-md-2">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">SEO Pre-Publish Checklist</h6>
+          <div class="card-text">
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input striker" id="checklist0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="0"<?php echo$r['checklist'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label class="form-check-label" for="checklist0">Title is Catchy</label>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input striker" id="checklist1" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="1"<?php echo$r['checklist'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label class="form-check-label" for="checklist1">Category Selected</label>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input striker" id="checklist2" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="2"<?php echo$r['checklist'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label class="form-check-label" for="checklist2">Formatting Done</label>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input striker" id="checklist3" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="3"<?php echo$r['checklist'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label class="form-check-label" for="checklist3">Spelling and Grammar</label>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input striker" id="checklist4" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="4"<?php echo$r['checklist'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label class="form-check-label" for="checklist4">Image Added</label>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input striker" id="checklist5" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="checklist" data-dbb="5"<?php echo$r['checklist'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label class="form-check-label" for="checklist5">SEO Checked</label>
+            </div>
           </div>
         </div>
       </div>

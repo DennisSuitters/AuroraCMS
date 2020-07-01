@@ -34,8 +34,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <?php $so=$db->prepare("SELECT id,title,active,ord FROM `".$prefix."menu` WHERE active=:act ORDER BY ord ASC");
 $so->execute([':act'=>1]);
 if($so->rowCount()>0){
-      echo'<a class="btn btn-ghost-normal dropdown-toggle m-0 p-0 pl-2 pr-2 text-white" data-toggle="dropdown" href="'.URL.$settings['system']['admin'].'/pages'.'" aria-haspopup="true" aria-expanded="false"></a>'.
-      '<div class="dropdown-menu">';
+      echo'<a class="btn btn-ghost-normal dropdown-toggle m-0 p-0 pl-2 pr-2 text-white" data-toggle="dropdown" href="'.URL.$settings['system']['admin'].'/pages'.'" aria-haspopup="true" aria-expanded="false"></a><div class="dropdown-menu">';
       while($ro=$so->fetch(PDO::FETCH_ASSOC))echo'<a class="dropdown-item small pt-1 pb-1 text-white'.($ro['id']==$r['id']?' active':'').'" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'].'">'.($ro['id']==$r['id']?'&check;&nbsp;':'&nbsp;&nbsp;&nbsp;').$ro['title'].'</a>';
       echo'</div>';
 }?>
@@ -51,14 +50,10 @@ if($so->rowCount()>0){
       <div class="card-body">
         <ul class="nav nav-tabs" role="tablist">
           <li role="presentation" class="nav-item"><a class="nav-link active" href="#tab-pages-content" aria-controls="tab-pages-content" role="tab" data-toggle="tab">Content</a></li>
-<?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-images" aria-controls="tab-pages-images" role="tab" data-toggle="tab">Images</a></li>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-media" aria-controls="tab-pages-media" role="tab" data-toggle="tab">Media</a></li>
-<?php }?>
+          <?php echo$r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'?'<li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-images" aria-controls="tab-pages-images" role="tab" data-toggle="tab">Images</a></li>'.
+          '<li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-media" aria-controls="tab-pages-media" role="tab" data-toggle="tab">Media</a></li>':'';?>
           <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-seo" aria-controls="tab-pages-seo" role="tab" data-toggle="tab">SEO</a></li>
-<?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-          <li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-settings" aria-controls="tab-pages-settings" role="tab" data-toggle="tab">Settings</a></li>
-<?php }?>
+          <?php echo$r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'?'<li role="presentation" class="nav-item"><a class="nav-link" href="#tab-pages-settings" aria-controls="tab-pages-settings" role="tab" data-toggle="tab">Settings</a></li>':'';?>
         </ul>
         <div class="tab-content">
           <div id="tab-pages-content" class="tab-pane active" role="tabpanel">

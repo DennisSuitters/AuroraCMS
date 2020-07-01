@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at v0.0.15
+We are currently at v0.0.16
 
 ### FAQ
 - Why no Plugins?
@@ -106,10 +106,7 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - Windows 7 + WAMP + PHP 5.5 + MySQL
 
 ### TODO:
-- Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.
-- Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q).
-- Create Free Templates.
-- Testing, and Bug Squashing, as per the usual with ongoing projects.
+Consult the everchanging [TODO](https://github.com/DiemenDesign/AuroraCMS/TODO.md) file.
 
 ### LEGAL:
 By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for any damages that your usage of AuroraCMS may cause to your system, or persons. Damages may infer such things as Data Loss, Aural or Visual Impairment, Server Crashes, Alien Abduction, Coding nightmare's, Alien Implants, or Visiting Alternate Realities. AuroraCMS is Licensed under [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE). We request that if you modify, and hopefully enhance AuroraCMS, that you take part in maintaining, and contributing to it's code base here at GitHub.

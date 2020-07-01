@@ -21,10 +21,8 @@ if($args[0]=='add'){
   $args[0]='edit';
   echo'<script>history.replaceState("","","'.URL.$settings['system']['admin'].'/newsletters/edit/'.$args[1].'");</script>';
 }
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_newsletters.php';
-elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_newsletters.php';
+if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_newsletters.php';
+elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_newsletters.php';
 else{
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType=:contentType ORDER BY ti DESC, title ASC");
   $s->execute([':contentType'=>'newsletters']);?>
@@ -34,9 +32,7 @@ else{
     <li class="breadcrumb-item active">Newsletters</li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
-<?php if($user['options'][0]==1){?>
-        <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'].'/newsletters/add';?>" data-tooltip="tooltip" data-placement="left" data-title="Add" aria-label="Add"><?php svg('add');?></a>
-<?php }?>
+        <?php echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/newsletters/add" data-tooltip="tooltip" data-placement="left" data-title="Add" aria-label="Add">'.svg2('add').'</a>':'';?>
       </div>
     </li>
   </ol>

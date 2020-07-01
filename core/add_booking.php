@@ -91,8 +91,7 @@ if($act=='add_booking'){
 					$s->execute([':id'=>$rid]);
 					$r=$s->fetch(PDO::FETCH_ASSOC);
 					$tie=$r['tie'];
-				}else
-					$tie=0;
+				}else$tie=0;
 				$q=$db->prepare("INSERT INTO `".$prefix."content` (rid,contentType,name,email,business,address,suburb,city,state,postcode,phone,notes,status,tis,tie,ti) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
 				$q->execute([
 					':rid'=>$rid,
@@ -149,8 +148,7 @@ if($act=='add_booking'){
 									'Notes: '.$notes;
 						$mail->Body=$msg;
 						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-						if($mail->Send())
-							$notification=$theme['settings']['booking_success'];
+						if($mail->Send())$notification=$theme['settings']['booking_success'];
 					}
 					if($email!=''){
 						$mail2=new PHPMailer;
@@ -158,8 +156,7 @@ if($act=='add_booking'){
 						$mail2->SetFrom($config['email'], $config['business']);
 						$toname=$email;
 						$mail2->AddAddress($email);
-						if($config['bookingAttachment']!='')
-							$mail2->AddAttachment('..'.DS.'media'.DS.basename($config['bookingAttachment']));
+						if($config['bookingAttachment']!='')$mail2->AddAttachment('..'.DS.'media'.DS.basename($config['bookingAttachment']));
 						$mail2->IsHTML(true);
 						$namee=explode(' ',$name);
 						$subject=isset($config['bookingAutoReplySubject'])&&$config['bookingAutoReplySubject']!=''?$config['bookingAutoReplySubject']:'Booking Confirmation from {business}';
@@ -200,13 +197,10 @@ if($act=='add_booking'){
 						],$msg2);
 						$mail2->Body=$msg2;
 						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg2));
-						if($mail2->Send())
-							$notification=$theme['settings']['booking_success'];
-						else
-							$notification=$theme['settings']['booking_error'];
+						if($mail2->Send())$notification=$theme['settings']['booking_success'];
+						else$notification=$theme['settings']['booking_error'];
 					}
-				}else
-					$notification=$theme['settings']['booking_error'];
+				}else$notification=$theme['settings']['booking_error'];
 			}
 		}
 	}

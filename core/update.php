@@ -46,9 +46,7 @@ $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filt
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 if($tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'&&$col=='notes'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'){
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
-	if($col=='messengerFBCode'){
-		$da=rawurldecode($da);
-	}
+	if($col=='messengerFBCode')$da=rawurldecode($da);
 }else{
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
   $da=kses($da,array());
@@ -166,16 +164,11 @@ if(is_null($e[2])){
 	window.top.window.$("#due_ti").val(`<?php echo date($config['dateFormat'],$da);?>`);
 <?php }
 	if($tbl=='content'&&$col=='file'&&$da==''){
-		if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.jpeg'))
-			unlink('..'.DS.'media'.DS.'file_'.$id.'.jpeg');
-    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.jpg'))
-			unlink('..'.DS.'media'.DS.'file_'.$id.'.jpg');
-    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.png'))
-			unlink('..'.DS.'media'.DS.'file_'.$id.'.png');
-    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.gif'))
-			unlink('..'.DS.'media'.DS.'file_'.$id.'.gif');
-		if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.tif'))
-			unlink('..'.DS.'media'.DS.'file_'.$id.'.tif');
+		if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.jpeg'))unlink('..'.DS.'media'.DS.'file_'.$id.'.jpeg');
+    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.jpg'))unlink('..'.DS.'media'.DS.'file_'.$id.'.jpg');
+    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.png'))unlink('..'.DS.'media'.DS.'file_'.$id.'.png');
+    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.gif'))unlink('..'.DS.'media'.DS.'file_'.$id.'.gif');
+		if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.tif'))unlink('..'.DS.'media'.DS.'file_'.$id.'.tif');
 	}
 	if($tbl=='config'&&$col=='php_honeypot'){?>
 	window.top.window.$('#php_honeypot_link').html('<?php echo($da!=''?'<a target="_blank" href="'.$da.'">'.$da.'</a>':'Honey Pot File Not Uploaded');?>');

@@ -47,10 +47,8 @@ function is_base64_string($s){
  if(in_array($e,array('UTF-8','ASCII')))return TRUE;else return FALSE;
 }
 if($user['options'][3]==1){
-  if($args[0]=='settings')
-    include'core'.DS.'layout'.DS.'set_messages.php';
-  elseif($args[0]=='view'||$args[0]=='compose')
-    include'core'.DS.'layout'.DS.'edit_messages.php';
+  if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_messages.php';
+  elseif($args[0]=='view'||$args[0]=='compose')include'core'.DS.'layout'.DS.'edit_messages.php';
   else{
     $folder="INBOX";
     if(isset($args[0])){
@@ -94,9 +92,7 @@ if($user['options'][3]==1){
   $sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE folder='spam' AND status='unread'")->fetch(PDO::FETCH_ASSOC);?>
         <div class="email-app mb-4">
           <nav>
-<?php if($user['options'][0]==1){?>
-            <a class="btn btn-secondary btn-block" href="<?php echo URL.$settings['system']['admin'].'/messages/compose';?>">Compose</a>
-<?php }?>
+            <?php echo$user['options'][0]==1?'<a class="btn btn-secondary btn-block" href="'.URL.$settings['system']['admin'].'/messages/compose">Compose</a>':'';?>
             <ul id="messagemenu" class="nav">
               <li id="nav_1" class="nav-item<?php echo$folder=='INBOX'?' active':'';?>">
                 <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/messages';?>">
@@ -139,9 +135,7 @@ if($user['options'][3]==1){
 <?php
 if($user['options'][0]==1){
    $scc=$db->prepare("SELECT email FROM `".$prefix."whitelist` WHERE email=:email");
-        $scc->execute([
-          ':email'=>$r['from_email']
-        ]);
+        $scc->execute([':email'=>$r['from_email']]);
         if($scc->rowCount()<1){?>
                     <form id="whitelist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -180,8 +174,7 @@ if($user['options'][0]==1){
 <?php }
 //  if($r['notes_html']=='')$r['notes_html']=$r['notes_plain'];
 //  if($r['notes_html']=='')$r['notes_html']=$r['notes_raw'];
-  if(is_base64_string($r['notes_html']))$r['notes_html']=base64_decode($r['notes_html']);
-?>
+  if(is_base64_string($r['notes_html']))$r['notes_html']=base64_decode($r['notes_html']);?>
                   <span class="description d-block text-wrap"><?php echo strip_html_tags($r['notes_html']);?></span>
                 </a>
               </li>

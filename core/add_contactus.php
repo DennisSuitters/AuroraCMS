@@ -82,8 +82,7 @@ if($act=='add_message'){
   			if($ss->rowCount()==1){
   				$rs=$ss->fetch(PDO::FETCH_ASSOC);
   				$subject=$rs['title'];
-  				if($rs['url']!='')
-            $config['email']=$rs['url'];
+  				if($rs['url']!='')$config['email']=$rs['url'];
   			}
         if($config['storemessages'][0]==1){
           $q=$db->prepare("INSERT INTO `".$prefix."messages` (uid,ip,folder,to_email,to_name,from_email,from_name,subject,status,notes_raw,ti) VALUES ('0',:ip,:folder,:to_email,:to_name,:from_email,:from_name,:subject,:status,:notes_raw,:ti)");
@@ -119,10 +118,8 @@ if($act=='add_message'){
 								 'Message: '.$notes;
 						$mail->Body=$msg;
 						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-						if($mail->Send())
-              $notification=$theme['settings']['contactus_success'];
-						else
-              $notification=$theme['settings']['contactus_error'];
+						if($mail->Send())$notification=$theme['settings']['contactus_success'];
+						else$notification=$theme['settings']['contactus_error'];
 						$mail2=new PHPMailer;
 						$mail2->isSendmail();
 						$mail2->SetFrom($config['email'],$config['business']);
@@ -159,13 +156,10 @@ if($act=='add_message'){
 						],$msg2);
 						$mail2->Body=$msg2;
 						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-						if($mail2->Send())
-              $notification=$theme['settings']['contactus_success'];
-						else
-              $notification=$theme['settings']['contactus_error'];
+						if($mail2->Send())$notification=$theme['settings']['contactus_success'];
+						else$notification=$theme['settings']['contactus_error'];
   				}
-  			}else
-          $notification=$theme['settings']['contactus_error'];
+  			}else$notification=$theme['settings']['contactus_error'];
   		}
     }
 	}

@@ -12,8 +12,7 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Add Read Status.
  */
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_livechat.php';
+if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_livechat.php';
 else{?>
 <main id="content" class="main">
   <ol class="breadcrumb">

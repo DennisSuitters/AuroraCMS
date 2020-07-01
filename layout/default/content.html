@@ -10,7 +10,7 @@
   </pagenotes>
 	<section class="row">
 		<item>
-			<article class="card col-11 col-sm-8">
+			<article class="card col-12 col-sm-8">
 				<json-ld>
 				<image>
 					<div class="card-image full">
@@ -30,15 +30,33 @@
 					<print content="tags" class="text-muted small" container="div" leadingtext="Tags: ">
 					<cost>
 						<div class="my-4 d-block d-sm-none text-center">
+							<quantity>
+								<div class="content-quantity"><print content="quantity"> <print content="stock"></div>
+							</quantity>
 							<div class="price"><print content="cost"></div>
-							<print content="quantity">
 							<div class="text-right">
 								<service>
 									<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
 								</service>
 								<inventory>
 									<choices>
-									<button class="addCart" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+									<button class="addCart btn-block" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+									<condition>
+										<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
+									</condition>
+									<weight>
+										<div class="content-weight col-12 col-sm-6 mt-3 text-left">Weight: <print content="weight"></div>
+									</weight>
+									<size>
+										<div class="content-size col-12 col-sm-6 mt-3 text-right">Size:
+											<span class="content-width">Width: <print content="width"></span><br>
+											<span class="content-height">Height: <print content="height"></span><br>
+											<span class="content-length">Length: <print content="length"></span>
+										</div>
+									</size>
+									<brand>
+										<div class="content-brand text-center mt-3"><print brand></div>
+									</brand>
 								</inventory>
 							</div>
 						</div>
@@ -123,10 +141,10 @@
 		</item>
 		<settings itemCount="all">
 		<contentitems>
-			<section class="col-12 col-sm-8">
+				<section class="col-12 col-sm-8 order-2 order-sm-1">
 				<items>
 					<article class="col-12 col-sm-4 m-0 p-0">
-						<div class="card m-1">
+						<div class="card m-2">
 							<div class="card-image">
 								<img src="<print content=thumb>" alt="<print content=imageALT>">
 							</div>
@@ -137,7 +155,8 @@
 							<div class="card-body">
 								<print content="notes">
 							</div>
-							<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+							<div class="corner-ribbon big top-right text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+							<div class="corner-ribbon small top-right success text-uppercase font-weight-bold shadow"><print content="cost"></div>
 							<div class="card-footer">
 								<a class="btn" href="<print content=linktitle>" role="button">View</a>
 							</div>

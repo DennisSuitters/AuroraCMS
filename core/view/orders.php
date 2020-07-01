@@ -7,16 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.8 Add PayPal Parser.
  * @changes    v0.0.15 Fix incorrect variable $r['postageCost'] line 182
  * @changes    v0.0.15 Add GST Calculation and Template Parser.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
-if($_SESSION['loggedin']==false)
-  $html=$theme['settings']['page_not_found'];
+if($_SESSION['loggedin']==false)$html=$theme['settings']['page_not_found'];
 else{
   if(stristr($html,'<order')){
     preg_match('/<order>([\w\W]*?)<\/order>/',$html,$matches);
@@ -165,49 +165,40 @@ else{
           '/<print rewards=[\"\']?code[\"\']?>/',
           '/<print rewards=[\"\']?method[\"\']?>/',
           '/<print rewards=[\"\']?value[\"\']?>/',
-          '/<rewards>/',
-          '/<\/rewards>/'
+          '/<[\/]?rewards>/'
         ],[
           $reward['code'],
           $reward['method']==1?'$'.$reward['value'].' Off':$reward['value'].'% Off',
           $total,
-          '',
           ''
         ],$order);
-      }else
-        $order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
+      }else$order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
       if($config['gst']>0){
         $gst=$total*($config['gst']/100);
         $gst=number_format((float)$gst, 2, '.', '');
         $order=preg_replace([
           '/<print order=[\"\']?gst[\"\']?>/',
-          '/<gst>/',
-          '/<\/gst>/'
+          '/<[\/]?gst>/'
         ],[
           $gst,
-          '',
           ''
         ],$order);
         $total=$total+$gst;
         $total=number_format((float)$total, 2, '.', '');
-      }else
-        $order=preg_replace('~<gst>.*?<\/gst>~is','',$order,1);
+      }else$order=preg_replace('~<gst>.*?<\/gst>~is','',$order,1);
       if($r['postageCost']>0){
         $order=preg_replace([
           '/<print order=[\"\']?postageOption[\"\']?>/',
           '/<print order=[\"\']?postageCost[\"\']?>/',
-          '/<postage>/',
-          '/<\/postage>/'
+          '/<[\/]?postage>/'
         ],[
           $r['postageOption'],
           $r['postageCost'],
-          '',
           ''
         ],$order);
         $total=$total+$r['postageCost'];
         $total=number_format((float)$total, 2, '.', '');
-      }else
-        $order=preg_replace('~<postage>.*?<\/postage>~is','',$order,1);
+      }else$order=preg_replace('~<postage>.*?<\/postage>~is','',$order,1);
       $order=preg_replace([
         '/<print order=[\"\']?total[\"\']?>/',
         '/<print order=[\"\']?id[\"\']?>/',
@@ -301,11 +292,8 @@ else{
             '}).render(`#paypal-button-container`);'.
           '</script>', */
         ],$html);
-      }else
-        $html=str_replace('<print paypal>','',$html);
-    }else
-      $html=preg_replace('~<order>~is','',$html,1);
-  }else
-    $html=preg_replace('~<order>~is','',$html,1);
+      }else$html=str_replace('<print paypal>','',$html);
+    }else$html=preg_replace('~<order>~is','',$html,1);
+  }else$html=preg_replace('~<order>~is','',$html,1);
 }
 $content.=$html;

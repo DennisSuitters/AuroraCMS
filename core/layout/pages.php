@@ -28,8 +28,7 @@ if($args[0]=='add'){
 <script>history.replaceState('','','<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$args[1];?>');</script>
 <?php
 }
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_pages.php';
+if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_pages.php';
 else{
   if($args[0]=='edit')$show='item';
   if($show=='pages'){?>
@@ -199,5 +198,4 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
 </main>
 <?php }
 }
-if($show=='item')
-  include'core'.DS.'layout'.DS.'edit_pages.php';
+if($show=='item')include'core'.DS.'layout'.DS.'edit_pages.php';

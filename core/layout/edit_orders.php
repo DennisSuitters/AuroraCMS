@@ -36,13 +36,9 @@ else{?>
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/orders';?>">Orders</a></li>
     <li class="breadcrumb-item">
-<?php if(isset($r['aid'])&&$r['aid']!='')
-        echo'<a href="'.URL.$settings['system']['admin'].'/orders/archived">Archived</a>';
-      elseif(isset($r['iid'])&&$r['iid']!='')
-        echo'<a href="'.URL.$settings['system']['admin'].'/orders/invoices">Invoices</a>';
-      elseif($r['qid']!='')
-        echo'<a href="'.URL.$settings['system']['admin'].'/orders/quotes">Quotes</a>';
-?>
+<?php if(isset($r['aid'])&&$r['aid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/archived">Archived</a>';
+      elseif(isset($r['iid'])&&$r['iid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/invoices">Invoices</a>';
+      elseif($r['qid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/quotes">Quotes</a>';?>
     </li>
     <li class="breadcrumb-item active"><span id="ordertitle"><?php echo$r['qid'].$r['iid'];?></span></li>
     <li class="breadcrumb-menu">
@@ -230,8 +226,7 @@ else{?>
               <div class="form-group row">
                 <label class="col-form-label col-sm-3">Status</label>
                 <div class="input-group col-sm-9">
-<?php if($r['status']=='archived')
-  echo'<input type="text" class="form-control form-control-sm" value="Archived" readonly>';
+<?php if($r['status']=='archived')echo'<input type="text" class="form-control form-control-sm" value="Archived" readonly>';
 else{?>
                   <select id="status" class="form-control form-control-sm" onchange="update('<?php echo$r['id'];?>','orders','status',$(this).val());" data-tooltip="tooltip" data-title="Change Order Status">
                     <option value="pending"<?php echo$r['status']=='pending'?' selected':'';?>>Pending</option>
@@ -312,21 +307,16 @@ $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
 $sc->execute([':id'=>$oi['cid']]);
 $c=$sc->fetch(PDO::FETCH_ASSOC);
 $image='';
-if($i['thumb']!=''&&file_exists('media'.DS.basename($i['thumb'])))
-  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
-elseif($i['file']!=''&&file_exists('media'.DS.basename($i['file'])))
-  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
-elseif($i['fileURL']!='')
-  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
-else
-  $image='';
+if($i['thumb']!=''&&file_exists('media'.DS.basename($i['thumb'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
+elseif($i['file']!=''&&file_exists('media'.DS.basename($i['file'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
+elseif($i['fileURL']!='')$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
+else$image='';
 ?>
                 <tr>
                   <td class="text-center align-middle"><?php echo$image;?></td>
                   <td class="text-left align-middle small"><?php echo$i['code'];?></td>
                   <td class="text-left align-middle">
-<?php if($oi['iid']!=0)
-  echo$i['title'];
+<?php if($oi['iid']!=0)echo$i['title'];
 else{?>
                     <form target="sp" method="POST" action="core/updateorder.php">
                       <input type="hidden" name="act" value="title">
@@ -348,8 +338,7 @@ else{?>
                       <input type="text" class="form-control text-center" name="da" value="<?php echo$oi['quantity'];?>"<?php echo$r['status']=='archived'?' readonly':'';?>>
                     </form>
 <?php }else{
-if($oi['iid']!=0)
-  echo$oi['quantity'];
+if($oi['iid']!=0)echo$oi['quantity'];
 }?>
                   </td>
                   <td class="text-right align-middle">
@@ -361,8 +350,7 @@ if($oi['iid']!=0)
                       <input type="hidden" name="c" value="cost">
                       <input class="form-control text-center" style="min-width:80px" name="da" value="<?php echo$oi['cost'];?>"<?php echo$r['status']=='archived'?' readonly':'';?>>
                     </form>
-<?php }elseif($oi['iid']!=0)
-  echo$oi['cost'];?>
+<?php }elseif($oi['iid']!=0)echo$oi['cost'];?>
                   </td>
                   <td class="text-right align-middle"><?php echo$oi['iid']!=0?$oi['cost']*$oi['quantity']:'';?></td>
                   <td class="text-right">
@@ -481,8 +469,7 @@ if($ssr->rowCount()>0){?>
               <input type="hidden" name="c" value="notes">
               <textarea class="summernote" name="da"><?php echo rawurldecode($r['notes']);?></textarea>
             </form>
-<?php }else
-    echo'<div class="well">'.$r['notes'].'</div>';?>
+<?php }else echo'<div class="well">'.$r['notes'].'</div>';?>
           </div>
         </div>
       </div>

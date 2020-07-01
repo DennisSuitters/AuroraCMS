@@ -22,12 +22,9 @@ if($view=='add'){
   $view='bookings';
   $args[0]='edit';
   echo'<script>/*<![CDATA[*/history.replaceState("","","'.URL.$settings['system']['admin'].'/bookings/edit/'.$id.'");/*]]>*/</script>';
-}elseif(isset($args[1]))
-  $id=$args[1];
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_bookings.php';
-elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_bookings.php';
+}elseif(isset($args[1]))$id=$args[1];
+if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_bookings.php';
+elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_bookings.php';
 else{?>
 <main id="content" class="main">
   <ol class="breadcrumb shadow">

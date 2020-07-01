@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
 $rank=0;
 $notification='';
@@ -41,12 +42,9 @@ if(stristr($html,'<items')){
       $filechk=$r['fileURL'];
       $shareImage=$r['fileURL'];
     }else{
-      if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
-        $shareImage='media'.DS.'thumbs'.basename($r['thumb']);
-      elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
-        $shareImage='media'.DS.basename($r['file']);
-      else
-        $shareImage=URL.NOIMAGE;
+      if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))$shareImage='media'.DS.'thumbs'.basename($r['thumb']);
+      elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))$shareImage='media'.DS.basename($r['file']);
+      else$shareImage=URL.NOIMAGE;
     }
     if($si==1)$si++;
     $su=$db->prepare("SELECT id,username,name FROM login WHERE id=:id");
@@ -89,20 +87,17 @@ if(stristr($html,'<items')){
     ],$items);
     $r['notes']=strip_tags($r['notes']);
     if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){
-      if(stristr($items,'<controls>'))
-        $items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
+      if(stristr($items,'<controls>'))$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
       $controls='';
     }else{
       if(stristr($items,'<view>')){
         $items=preg_replace([
           '/<print content=[\"\']?linktitle[\"\']?>/',
           '/<print content=[\"\']?title[\"\']?>/',
-          '/<view>/',
-          '/<\/view>/'
+          '/<[\/]?view>/'
         ],[
           URL.$r['contentType'].'/'.$r['urlSlug'].'/',
           htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
-          '',
           ''
         ],$items);
       }
@@ -111,45 +106,35 @@ if(stristr($html,'<items')){
           if(stristr($items,'<service')){
             $items=preg_replace([
               '/<print content=[\"\']?bookservice[\"\']?>/',
-              '/<service>/',
-              '/<\/service>/',
+              '/<[\/]?service>/',
               '~<inventory>.*?<\/inventory>~is'
             ],[
               $r['id'],
-              '',
               '',
               ''
             ],$items);
           }
         }else{
           $items=preg_replace([
-            '/<inventory>/',
-            '/<\/inventory>/',
+            '/<[\/]?inventory>/',
             '~<service.*?>.*?<\/service>~is'
           ],'',$items,1);
         }
       }else{
         $items=preg_replace([
-          '/<inventory>/',
-          '/<\/inventory>/',
+          '/<[\/]?inventory>/',
           '~<service.*?>.*?<\/service>~is'
         ],'',$items,1);
       }
       if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
         if(stristr($items,'<inventory')){
           $items=preg_replace([
-            '/<inventory>/',
-            '/<\/inventory>/',
+            '/<[\/]?inventory>/',
             '~<service>.*?<\/service>~is'
           ],'',$items);
-        }elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))
-          $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-      }else
-        $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-      $items=preg_replace([
-        '/<controls>/',
-        '/<\/controls>/'
-      ],'',$items);
+        }elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+      }else$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+      $items=preg_replace('/<[\/]?controls>/','',$items);
     }
     require'core'.DS.'parser.php';
     $output.=$items;
@@ -162,14 +147,11 @@ if(stristr($html,'<items')){
     $output,
     ''
   ],$html,1);
-}else
-  $html=preg_replace('~<items>.*?<\/items>~is','',$html,1);
+}else$html=preg_replace('~<items>.*?<\/items>~is','',$html,1);
 $html=preg_replace([
   '~<item>.*?<\/item>~is',
-  '/<items>/',
-  '/<\/items>/'
+  '/<[\/]?items>/'
 ],'',$html);
-
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 $seoTitle='404 Error'.($config['business']!=''?' - '.$config['business']:'');
 $metaRobots='index,follow';

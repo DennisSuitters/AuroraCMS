@@ -17,14 +17,10 @@ if(session_status()==PHP_SESSION_NONE){
   session_start();
   define('SESSIONID',session_id());
 }
-if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))
-  $settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('..'.DS.'core'.DS.'config.ini'))
-  $settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('core'.DS.'config.ini'))
-  $settings=parse_ini_file('core'.DS.'config.ini',TRUE);
-elseif(file_exists('config.ini'))
-  $settings=parse_ini_file('config.ini',TRUE);
+if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('core'.DS.'config.ini'))$settings=parse_ini_file('core'.DS.'config.ini',TRUE);
+elseif(file_exists('config.ini'))$settings=parse_ini_file('config.ini',TRUE);
 else{
   require(ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php');
   die();

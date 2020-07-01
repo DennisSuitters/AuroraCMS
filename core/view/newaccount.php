@@ -70,8 +70,7 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
         $s=$db->prepare("SELECT username FROM `".$prefix."login` WHERE username=:username LIMIT 1");
         $s->execute([':username'=>$username]);
         $r=$s->fetch(PDO::FETCH_ASSOC);
-        if($s->rowCount()>0)
-          $notification.=$theme['settings]']['signup_erroruserexists'];
+        if($s->rowCount()>0)$notification.=$theme['settings]']['signup_erroruserexists'];
         else{
           $chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&";
           $password=substr(str_shuffle($chars),0,8);
@@ -117,15 +116,11 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
           ],$msg);
         	$mail->Body=$msg;
         	$mail->AltBody=$msg;
-        	if($mail->Send())
-            $notification.=$theme['settings']['signup_success'];
-          else
-            $notification.=$theme['settings']['signup_error'];
+        	if($mail->Send())$notification.=$theme['settings']['signup_success'];
+          else$notification.=$theme['settings']['signup_error'];
         }
-      }else
-        $notification.=$theme['settings']['signup_errorusername'];
-    }else
-      $notification.=$theme['settings']['signup_erroremail'];
+      }else$notification.=$theme['settings']['signup_errorusername'];
+    }else$notification.=$theme['settings']['signup_erroremail'];
   }
 }
 echo$blacklisted.$notification;

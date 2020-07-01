@@ -277,7 +277,6 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               </table>
             </div>
           </div>
-          </div>
         </div>
       </div>
     </div>

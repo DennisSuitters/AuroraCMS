@@ -43,29 +43,20 @@
   $scnt=$s->rowCount();
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     $su=$db->prepare("SELECT id,username,name,rank FROM `".$prefix."login` WHERE id=:uid");
-    $su->execute([
-      ':uid'=>$r['uid']
-    ]);
-    ?>
+    $su->execute([':uid'=>$r['uid']]);?>
                     <tr id="l_<?php echo$r['id'];?>">
                       <td class="">
 <?php if($su->rowCount()==1){
   $ru=$su->fetch(PDO::FETCH_ASSOC);
   echo$ru['username'].($ru['name']!=''?':'.$ru['name']:'').'<br><small><small>'.rank($ru['rank']).'</small></small>';
-}else{
-  echo isset($ru['email'])&&$ru['email']!=''?'<a href="mailto:'.$ru['email'].'">'.$ru['email'].'</a>':'Nonexistent User';
-}?>
+}else echo isset($ru['email'])&&$ru['email']!=''?'<a href="mailto:'.$ru['email'].'">'.$ru['email'].'</a>':'Nonexistent User';?>
                       </td>
                       <td class="small"><?php echo strip_tags($r['notes']);?></td>
                       <td class="">
-<?php
-  $sc=$db->prepare("SELECT id,title FROM `".$prefix."content` WHERE id=:id");
-  $sc->execute([
-    ':id'=>$r['rid']
-  ]);
+<?php $sc=$db->prepare("SELECT id,title FROM `".$prefix."content` WHERE id=:id");
+  $sc->execute([':id'=>$r['rid']]);
   $rc=$sc->fetch(PDO::FETCH_ASSOC);
-  echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab-content-comments">'.$rc['title'].'</a>';
-?>
+  echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab-content-comments">'.$rc['title'].'</a>';?>
                       </td>
                       <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-top">

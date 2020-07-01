@@ -31,14 +31,10 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 $c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
 $ti=time();
-if(file_exists(THEME.DS.'images'.DS.'noimage.png'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage.gif'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage.jpg'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.jpg');
-else
-	define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
+if(file_exists(THEME.DS.'images'.DS.'noimage.png'))define('NOIMAGE',THEME.DS.'images'.DS.'noimage.png');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage.gif'))define('NOIMAGE',THEME.DS.'images'.DS.'noimage.gif');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage.jpg'))define('NOIMAGE',THEME.DS.'images'.DS.'noimage.jpg');
+else define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
 if($act=='additem'){
 	if($da!=0){
 		$q=$db->prepare("SELECT title,cost,rCost FROM `".$prefix."content` WHERE id=:id");
@@ -156,14 +152,10 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   $sc->execute([':id'=>$oi['cid']]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
 	$image='';
-	if($i['thumb']!=''&&file_exists('..'.DS.'media'.DS.basename($i['thumb'])))
-	  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
-	elseif($i['file']!=''&&file_exists('..'.DS.'media'.DS.basename($i['file'])))
-	  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
-	elseif($i['fileURL']!='')
-	  $image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
-	else
-	  $image='';
+	if($i['thumb']!=''&&file_exists('..'.DS.'media'.DS.basename($i['thumb'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
+	elseif($i['file']!=''&&file_exists('..'.DS.'media'.DS.basename($i['file'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
+	elseif($i['fileURL']!='')$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
+	else$image='';
   $html.='<tr>'.
 					'<td class="text-center align-middle">'.$image.'</td>'.
     			'<td class="text-left align-middle">'.$i['code'].'</td>'.
@@ -241,7 +233,6 @@ if($ssr->rowCount()>0){
 							'<td class="text-right align-middle"><strong>'.$total.'</strong></td>'.
 							'<td>&nbsp;</td>'.
 						'</tr>';
-
 			if($config['gst']>0){
 			  $gst=$total*($config['gst']/100);
 			  $gst=number_format((float)$gst, 2, '.', '');
@@ -253,7 +244,6 @@ if($ssr->rowCount()>0){
 				$total=$total+$gst;
 				$total=number_format((float)$total, 2, '.', '');
 			}
-
 			$html.='<tr>'.
 							'<td class="text-right align-middle"><strong>Postage</strong></td>'.
 							'<td colspan="5" class="text-right align-middle">'.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -26,12 +26,12 @@
  * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
  * @changes    v0.0.11 Add login.html parsing to display Terms of Service in Modal.
  * @changes    v0.0.11 Add logged in info alert.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
-if(file_exists(THEME.DS.'theme.ini'))
-  $theme=parse_ini_file(THEME.DS.'theme.ini',TRUE);
+if(file_exists(THEME.DS.'theme.ini'))$theme=parse_ini_file(THEME.DS.'theme.ini',TRUE);
 else{
   echo'A Website Theme has not been set.';
   die();
@@ -61,8 +61,7 @@ $seoDescription=$page['seoDescription'];
 $seoKeywords=$page['seoKeywords'];
 $pu=$db->prepare("UPDATE `".$prefix."menu` SET views=views+1 WHERE id=:id");
 $pu->execute([':id'=>$page['id']]);
-if(isset($act)&&$act=='logout')
-  require'core'.DS.'login.php';
+if(isset($act)&&$act=='logout')require'core'.DS.'login.php';
 include'core'.DS.'cart_quantity.php';
 $status=isset($_SESSON['rank'])&&$_SESSION['rank']>699?"%":"published";
 if($config['php_options'][4]==1){
@@ -75,25 +74,20 @@ if($config['php_options'][4]==1){
   }
 }
 if($config['comingsoon'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
-    if(file_exists(THEME.DS.'comingsoon.html'))
-      $template=file_get_contents(THEME.DS.'comingsoon.html');
+    if(file_exists(THEME.DS.'comingsoon.html'))$template=file_get_contents(THEME.DS.'comingsoon.html');
     else{
       include'core'.DS.'layout'.DS.'comingsoon.php';
       die();
     }
 }elseif($config['maintenance'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
-  if(file_exists(THEME.DS.'maintenance.html'))
-    $template=file_get_contents(THEME.DS.'maintenance.html');
+  if(file_exists(THEME.DS.'maintenance.html'))$template=file_get_contents(THEME.DS.'maintenance.html');
   else{
   	include'core'.DS.'layout'.DS.'maintenance.php';
     die();
   }
-}elseif(file_exists(THEME.DS.$view.'.html'))
-  $template=file_get_contents(THEME.DS.$view.'.html');
-elseif(file_exists(THEME.DS.'default.html'))
-  $template=file_get_contents(THEME.DS.'default.html');
-else
-  $template=file_get_contents(THEME.DS.'content.html');
+}elseif(file_exists(THEME.DS.$view.'.html'))$template=file_get_contents(THEME.DS.$view.'.html');
+elseif(file_exists(THEME.DS.'default.html'))$template=file_get_contents(THEME.DS.'default.html');
+else$template=file_get_contents(THEME.DS.'content.html');
 $newDom=new DOMDocument();
 @$newDom->loadHTML($template);
 $tag=$newDom->getElementsByTagName('block');
@@ -103,12 +97,9 @@ foreach($tag as$tag1){
   if($include!=''){
     $include=rtrim($include,'.html');
     $html=file_exists(THEME.DS.$include.'.html')?file_get_contents(THEME.DS.$include.'.html'):'';
-    if(file_exists(THEME.'view'.DS.$include.'.php'))
-      include THEME.'view'.DS.$include.'.php';
-    elseif(file_exists('core'.DS.'view'.DS.$include.'.php'))
-      include'core'.DS.'view'.DS.$include.'.php';
-    else
-      include'core'.DS.'view'.DS.'content.php';
+    if(file_exists(THEME.'view'.DS.$include.'.php'))include THEME.'view'.DS.$include.'.php';
+    elseif(file_exists('core'.DS.'view'.DS.$include.'.php')) include'core'.DS.'view'.DS.$include.'.php';
+    else include'core'.DS.'view'.DS.'content.php';
     $req=$include;
   }
   if($inbed!=''){
@@ -118,51 +109,33 @@ foreach($tag as$tag1){
     if($view=='sitemap')$inbed='sitemap';
     if($view=='settings')$inbed='settings';
     if($view=='page')$inbed='page';
-    if(file_exists(THEME.'view'.DS.$inbed.'.php'))
-      include THEME.'view'.DS.$inbed.'.php';
-    elseif(file_exists('core'.DS.'view'.DS.$inbed.'.php'))
-      include'core'.DS.'view'.DS.$inbed.'.php';
-    else
-      include'core'.DS.'view'.DS.'content.php';
+    if(file_exists(THEME.'view'.DS.$inbed.'.php'))include THEME.'view'.DS.$inbed.'.php';
+    elseif(file_exists('core'.DS.'view'.DS.$inbed.'.php'))include'core'.DS.'view'.DS.$inbed.'.php';
+    else include'core'.DS.'view'.DS.'content.php';
     $req=$inbed;
   }
 }
-if(!isset($contentTime))
-  $contentTime=($page['eti']>$config['ti']?$page['eti']:$config['ti']);
-if(!isset($canonical)||$canonical=='')
-  $canonical=($view=='index'?URL:URL.$view.'/');
+if(!isset($contentTime))$contentTime=($page['eti']>$config['ti']?$page['eti']:$config['ti']);
+if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
 if($seoTitle==''){
-  if($page['seoTitle']=='')
-    $seoTitle=$page['title'];
-  else
-    $seoTitle=$page['seoTitle'];
+  if($page['seoTitle']=='')$seoTitle=$page['title'];
+  else$seoTitle=$page['seoTitle'];
 }
-if($seoTitle==''){
-  $seoTitle.=$view=='index'?'Home':'';
-}
+if($seoTitle=='')$seoTitle.=$view=='index'?'Home':'';
 $seoTitle.=$view=='index'?' | '.$config['business']:'';
 if($metaRobots==''){
-  if($page['metaRobots']=='')
-    $metaRobots=$config['metaRobots'];
-  elseif(in_array($view,['proofs','orders','settings'],true))
-    $metaRobots='noindex,nofollow';
-  else
-    $metaRobots=$page['metaRobots'];
+  if($page['metaRobots']=='')$metaRobots=$config['metaRobots'];
+  elseif(in_array($view,['proofs','orders','settings'],true))$metaRobots='noindex,nofollow';
+  else$metaRobots=$page['metaRobots'];
 }
-if($seoCaption==''){
-  $seoCaption=$page['seoCaption'];
-}
+if($seoCaption=='')$seoCaption=$page['seoCaption'];
 if($seoDescription==''){
-  if($page['seoDescription']=='')
-    $seoDescription=substr(strip_tags($page['notes']),0,160);
-  else
-    $seoDescription=$page['seoDescription'];
+  if($page['seoDescription']=='')$seoDescription=substr(strip_tags($page['notes']),0,160);
+  else$seoDescription=$page['seoDescription'];
 }
 if($seoKeywords==''){
-  if($page['seoKeywords']=='')
-    $seoKeywords=$config['seoKeywords'];
-  else
-    $seoKeywords=$page['seoKeywords'];
+  if($page['seoKeywords']=='')$seoKeywords=$config['seoKeywords'];
+  else$seoKeywords=$page['seoKeywords'];
 }
 $rss='';
 if($args[0]!='index'||$args[0]!='bookings'||$args[0]!='contactus'||$args[0]!='cart'||$args[0]!='proofs'||$args[0]!='settings'||$args[0]!='accounts'){}else{$rss=$view;}
@@ -233,13 +206,11 @@ if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
   if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false){
     $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
   }
-}else
-  $head=str_replace('<google_analytics>','',$head);
+}else$head=str_replace('<google_analytics>','',$head);
 if($view=='login'){
   if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
     $content=preg_replace([
-      '/<loggedin>/',
-      '/<\/loggedin>/',
+      '/<[\/]?loggedin>/',
       '~<notloggedin>.*?<\/notloggedin>~is'
     ],'',$content);
   }else{
@@ -249,11 +220,9 @@ if($view=='login'){
       $cp=$cs->fetch(PDO::FETCH_ASSOC);
       $content=preg_replace([
         '~<loggedin>.*?<\/loggedin>~is',
-        '/<notloggedin>/',
-        '/<\/notloggedin>/',
+        '/<[\/]?notloggedin>/',
         '/<print page=[\'\"]?terms-of-service[\'\"]?>/'
       ],[
-        '',
         '',
         '',
         $cp['notes']
@@ -261,9 +230,7 @@ if($view=='login'){
     }
   }
 }
-if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1)
-  $content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
-
+if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1)$content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
 $content=preg_replace(['/<serviceworker>/'],[($config['options'][18]==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
 print$head.$content;
 if($config['options'][11]==1){

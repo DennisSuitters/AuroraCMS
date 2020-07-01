@@ -53,8 +53,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
     editable:<?php echo$user['options'][1]==1?'true':'false';?>,
     height:$(window).height()*0.83,
     events:[
-<?php
-//$args[1]=!isset($args[1])||$args[1]==''?'%':$args[1];
+<?php //$args[1]=!isset($args[1])||$args[1]==''?'%':$args[1];
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType");
 $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>

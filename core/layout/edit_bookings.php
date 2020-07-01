@@ -68,8 +68,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
             <select id="cid" class="form-control" onchange="changeClient($(this).val(),<?php echo$r['id'];?>,'booking');" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cid"<?php echo$user['options'][2]==0?' disabled':'';?>>
               <option value="0"<?php echo$r['cid']=='0'?' selected':'';?>>Select a Client...</option>
 <?php $q=$db->query("SELECT id,business,username,name FROM `".$prefix."login` WHERE status!='delete' AND status!='suspended' AND active!='0' AND id!='0'");
-while($rs=$q->fetch(PDO::FETCH_ASSOC))
-  echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['cid']?' selected="selected"':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business']:'').'</option>';?>
+while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['cid']?' selected="selected"':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business']:'').'</option>';?>
             </select>
           </div>
         </div>
@@ -151,16 +150,7 @@ while($row=$sql->fetch(PDO::FETCH_ASSOC))
           <label for="notes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Notes</label>
           <div class=" col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <div class="card-header p-0">
-<?php if($user['options'][2]==1){?>
-              <form id="summernote" method="post" target="sp" action="core/update.php">
-                <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                <input type="hidden" name="t" value="content">
-                <input type="hidden" name="c" value="notes">
-                <textarea id="notes" class="summernote" name="da"><?php echo rawurldecode($r['notes']);?></textarea>
-              </form>
-<?php }else{?>
-              <div class="form-control" style="background:#fff;color:#000"><?php echo rawurldecode($r['notes']);?></div>
-<?php }?>
+            <?php echo$user['options'][2]==1?'<form id="summernote" method="post" target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$r['id'].'"><input type="hidden" name="t" value="content"><input type="hidden" name="c" value="notes"><textarea id="notes" class="summernote" name="da">'.rawurldecode($r['notes']).'</textarea></form>':'<div class="form-control" style="background:#fff;color:#000">'.rawurldecode($r['notes']).'</div>';?>
             </div>
           </div>
         </div>

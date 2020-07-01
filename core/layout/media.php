@@ -15,10 +15,8 @@
  * @changes    v0.0.11 Update var offset.
  * @changes    v0.0.15 Add directive to edit media items.
  */
-if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_media.php';
-elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_media.php';
+if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_media.php';
+elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_media.php';
 else{?>
 <main id="content" class="main">
   <ol class="breadcrumb m-0">

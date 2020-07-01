@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -26,6 +26,9 @@
  * @changes    v0.0.14 Adjust Template Category select to allow selecting up to 4 different categories.
  * @changes    v0.0.14 Fix displaying just Categories when using Shop by Category.
  * @changes    v0.0.15 Fix parsing in of comments correctly.
+ * @changes    v0.0.16 Add parsing for Weight, Size, Brand and Condition.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.16 Add parsing for Sort Form selection.
  */
 $rank=0;
 $notification='';
@@ -40,16 +43,25 @@ if($view=='newsletters'){
 		$notification=$theme['settings']['notification_unsubscribe'];
 	}
 }
-if($view=='page')
-	$show='';
+if(isset($_POST['act'])=='sort'){
+	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
+	$sortOrder=" ORDER BY ";
+	if($sort=="")$sortOrder.="ti DESC ";
+	if($sort=="new")$sortOrder.="ti ASC ";
+	if($sort=="old")$sortOrder.="ti DESC ";
+	if($sort=="namea")$sortOrder.="title ASC ";
+	if($sort=="namez")$sortOrder.="title DESC ";
+	if($sort=="best")$sortOrder.="sold ASC ";
+	if($sort=="view")$sortOrder.="views ASC ";
+	if($sort=="priceh")$sortOrder.="cost ASC ";
+	if($sort=="pricel")$sortOrder.="cost DESC ";
+}else$sortOrder="";
+if($view=='page')$show='';
 elseif($view=='search'){
-	if(isset($args[0])&&$args[0]!='')
-		$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
-	elseif(isset($_POST['search'])&&$_POST['search']!='')
-		$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
-	else
-		$search='%';
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(code) LIKE LOWER(:search) OR LOWER(brand) LIKE LOWER(:search) OR LOWER(title) LIKE LOWER(:search) OR LOWER(category_1) LIKE LOWER(:search) OR LOWER(category_2) LIKE LOWER(:search) OR LOWER(category_3) LIKE LOWER(:search) OR LOWER(category_4) LIKE LOWER(:search) OR LOWER(seoKeywords) LIKE LOWER(:search) OR LOWER(tags) LIKE LOWER(:search) OR LOWER(seoCaption) LIKE LOWER(:search) OR LOWER(seoDescription) LIKE LOWER(:search) OR LOWER(notes) LIKE LOWER(:search) AND status=:status ORDER BY ti DESC");
+	if(isset($args[0])&&$args[0]!='')$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
+	elseif(isset($_POST['search'])&&$_POST['search']!='')$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
+	else$search='%';
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(code) LIKE LOWER(:search) OR LOWER(brand) LIKE LOWER(:search) OR LOWER(title) LIKE LOWER(:search) OR LOWER(category_1) LIKE LOWER(:search) OR LOWER(category_2) LIKE LOWER(:search) OR LOWER(category_3) LIKE LOWER(:search) OR LOWER(category_4) LIKE LOWER(:search) OR LOWER(seoKeywords) LIKE LOWER(:search) OR LOWER(tags) LIKE LOWER(:search) OR LOWER(seoCaption) LIKE LOWER(:search) OR LOWER(seoDescription) LIKE LOWER(:search) OR LOWER(notes) LIKE LOWER(:search) AND status=:status".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':search'=>$search,
 		':status'=>$status
@@ -65,7 +77,7 @@ elseif($view=='search'){
 	}
 	if(stristr($contentType,'|')){
 		$ctarray=explode('|',$contentType);
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType1 OR contentType LIKE :contentType2 OR contentType LIkE :contentType3 OR contentType LIKE :contentType4 AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti	ORDER BY featured DESC, ti DESC LIMIT $itemCount");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType1 OR contentType LIKE :contentType2 OR contentType LIkE :contentType3 OR contentType LIKE :contentType4 AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY featured DESC, ti DESC":$sortOrder)." LIMIT $itemCount");
 		$s->execute([
 			':contentType1'=>(isset($ctarray[0])?$ctarray[0]:''),
 			':contentType2'=>(isset($ctarray[1])?$ctarray[1]:''),
@@ -75,15 +87,14 @@ elseif($view=='search'){
 			':ti'=>time()
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti	ORDER BY featured DESC, ti DESC LIMIT $itemCount");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY featured DESC, ti DESC":$sortOrder)." LIMIT $itemCount");
 		$s->execute([
 			':contentType'=>$contentType,
 			':status'=>$status,
 			':ti'=>time()
 		]);
 	}
-}elseif($view=='bookings')
-	$id=(isset($args[0])?(int)$args[0]:0);
+}elseif($view=='bookings')$id=(isset($args[0])?(int)$args[0]:0);
 elseif(isset($args[1])&&strlen($args[1])==2){
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND ti < :ti ORDER BY ti ASC");
 	$s->execute([
@@ -100,7 +111,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 	]);
 	$show='categories';
 }elseif(isset($args[0])&&$args[0]=='category'){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[1])),
@@ -108,7 +119,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':ti'=>time()
 	]);
 }elseif(isset($args[1])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -117,7 +128,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':ti'=>time()
 	]);
 }elseif(isset($args[2])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -127,7 +138,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':ti'=>time()
 	]);
 }elseif(isset($args[3])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND LOWER(category_4) LIKE LOWER(:category_4) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND LOWER(category_4) LIKE LOWER(:category_4) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder=''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -138,7 +149,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':ti'=>time()
 	]);
 }elseif(isset($args[0])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder=''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -151,7 +162,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 			if($_SESSION['loggedin']==false)
 				die();
 		}
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(urlSlug) LIKE LOWER(:urlSlug) AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(urlSlug) LIKE LOWER(:urlSlug) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 		$s->execute([
 			':contentType'=>$view,
 			':urlSlug'=>$args[0],
@@ -167,7 +178,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 			$s->execute([':uid'=>$_SESSION['uid']]);
 		}
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC LIMIT $itemCount");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder=''?" ORDER BY ti DESC":$sortOrder)." LIMIT $itemCount");
 		$s->execute([
 			':contentType'=>$view,
 			':status'=>$status,
@@ -182,8 +193,7 @@ if($show=='categories'){
 		$matches=preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
 		$count=$matches[0];
 		$html=preg_replace('~<settings.*?>~is','',$html,1);
-	}else
-		$count=1;
+	}else$count=1;
 	$html=preg_replace([
 		'/<print view>/',
 		'/<print content=[\"\']?category[\"\']?>/'
@@ -199,53 +209,41 @@ if($show=='categories'){
 				'<video preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video>',
 				$html
 			);
-		}else
-			$html=preg_replace('/<print page=[\"\']?coverVideo[\"\']?>/','',$html);
+		}else$html=preg_replace('/<print page=[\"\']?coverVideo[\"\']?>/','',$html);
 	}
 	if(stristr($html,'<print page=cover>')){
 		if($page['cover']!=''||$page['coverURL']!=''){
 			$cover=basename($page['cover']);
 			$coverLink='';
-			if(isset($page['cover'])&&$page['cover']!='')
-				$coverLink.='media'.DS.$cover;
-			elseif($page['coverURL']!='')
-				$coverLink.=$page['coverURL'];
+			if(isset($page['cover'])&&$page['cover']!='')$coverLink.='media'.DS.$cover;
+			elseif($page['coverURL']!='')$coverLink.=$page['coverURL'];
 			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','background-image:url('.htmlspecialchars($coverLink,ENT_QUOTES,'UTF-8').');',$html);
-		}else
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
+		}else$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
 	}
 	if(preg_match('/<print page=[\"\']?cover[\"\']?>/',$html)){
 		if($page['cover']!=''||$page['coverURL']!=''){
 			$cover=basename($page['cover']);
 			list($width,$height)=getimagesize($page['cover']);
 			$coverHTML='<img src="';
-			if(file_exists('media'.DS.$cover))
-				$coverHTML.=htmlspecialchars($page['cover'],ENT_QUOTES,'UTF-8');
-			elseif($page['coverURL']!='')
-				$coverHTML.=htmlspecialchars($page['coverURL'],ENT_QUOTES,'UTF-8');
+			if(file_exists('media'.DS.$cover))$coverHTML.=htmlspecialchars($page['cover'],ENT_QUOTES,'UTF-8');
+			elseif($page['coverURL']!='')$coverHTML.=htmlspecialchars($page['coverURL'],ENT_QUOTES,'UTF-8');
 			$coverHTML.='" alt="';
 			if($page['attributionImageTitle']==''&&$page['attributionImageName']==''&&$page['attributionImageURL']==''){
 				if($page['attributionImageTitle'])$coverHTML.=$page['attributionImageTitle'].$page['attributionImageName']!=''?' - ':'';
 				if($page['attributionImageName'])$coverHTML.=$page['attributionImageName'].$page['attributionImageURL']!=''?' - ':'';
 				if($page['attributionImageURL'])$coverHTML.=htmlspecialchars($page['attributionImageURL'],ENT_QUOTES,'UTF-8');
-			}else
-				$coverHTML.=$page['seoTitle']!=''?$page['seoTitle']:$config['seoTitle'];
-			if($page['seoTitle']==''&&$config['seoTitle']=='')
-				$coverHTML.=htmlspecialchars(basename($page['cover']),ENT_QUOTES,'UTF-8');
+			}else$coverHTML.=$page['seoTitle']!=''?$page['seoTitle']:$config['seoTitle'];
+			if($page['seoTitle']==''&&$config['seoTitle']=='')$coverHTML.=htmlspecialchars(basename($page['cover']),ENT_QUOTES,'UTF-8');
 			$coverHTML.='">';
-		}else
-			$coverHTML='';
-		$html=preg_replace(
-			[
-				'/<print page=[\"\']?cover[\"\']?>/',
-				'/<print page=[\"\']?fileALT[\"\']?>/'
-			],[
-				$coverHTML,
-				htmlspecialchars($page['fileALT'],ENT_QUOTES,'UTF-8')
-			],
-			$html);
+		}else$coverHTML='';
+		$html=preg_replace([
+			'/<print page=[\"\']?cover[\"\']?>/',
+			'/<print page=[\"\']?fileALT[\"\']?>/'
+		],[
+			$coverHTML,
+			htmlspecialchars($page['fileALT'],ENT_QUOTES,'UTF-8')
+		],$html);
 	}
-
 	if(stristr($html,'<mediaitems')){
 		$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=0 ORDER BY ord ASC");
 		$sm->execute([':pid'=>$page['id']]);
@@ -309,17 +307,13 @@ if($show=='categories'){
 			}
 			$html=preg_replace([
 				'~<mediaimages>.*?<\/mediaimages>~is',
-				'/<mediaitems>/',
-				'/<\/mediaitems>/'
+				'/<[\/]?mediaitems>/'
 			],[
 				$mediaoutput,
-				'',
 				''
 			],$html,1);
-		}else
-			$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
+		}else$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
 	}
-
 	$html=preg_replace([
 		'/<print page=[\"\']?contentType[\"\']?>/',
 		'/<notification>/'
@@ -330,13 +324,12 @@ if($show=='categories'){
 	if($page['notes']!=''){
 		$html=preg_replace([
 			'/<print page=[\"\']?notes[\"\']?>/',
-			'/<\/?pagenotes>/'
+			'/<[\/]?pagenotes>/'
 		],[
 			rawurldecode($page['notes']),
 			''
 		],$html);
-	}else
-		$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+	}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 	$html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
 	if(stristr($html,'<categories')){
 		$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='category' ORDER BY title ASC");
@@ -364,8 +357,7 @@ if($show=='categories'){
 				$catoutput.=$catitems;
 			}
 			$html=preg_replace('~<categories>.*?<\/categories>~is',$catoutput,$html,1);
-		}else
-			$html=preg_replace('~<categories>.*?<\/categories>~is','',$html,1);
+		}else$html=preg_replace('~<categories>.*?<\/categories>~is','',$html,1);
 	}
 	if(stristr($html,'<items')){
 		preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
@@ -389,21 +381,16 @@ if($show=='categories'){
 				$filechk=$r['fileURL'];
 				$shareImage=$r['fileURL'];
 			}else{
-				if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
-					$shareImage='media'.DS.'thumbs'.basename($r['thumb']);
-				elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
-					$shareImage='media'.DS.basename($r['file']);
-				else
-					$shareImage=URL.NOIMAGE;
+				if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))$shareImage='media'.DS.'thumbs'.basename($r['thumb']);
+				elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))$shareImage='media'.DS.basename($r['file']);
+				else$shareImage=URL.NOIMAGE;
 			}
 			if($si==1)$si++;
 			$su=$db->prepare("SELECT id,username,name FROM login WHERE id=:id");
 			$su->execute([':id'=>$r['uid']]);
 			$ua=$su->fetch(PDO::FETCH_ASSOC);
 			$itemQuantity='';
-			if(is_numeric($r['quantity'])){
-				$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
-			}
+			if(is_numeric($r['quantity']))$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
 			$items=preg_replace([
 				'/<print content=[\"\']?thumb[\"\']?>/',
 				'/<print content=[\"\']?image[\"\']?>/',
@@ -445,20 +432,17 @@ if($show=='categories'){
 			],$items);
 			$r['notes']=strip_tags($r['notes']);
 			if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){
-				if(stristr($items,'<controls>'))
-					$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
+				if(stristr($items,'<controls>'))$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
 				$controls='';
 			}else{
 				if(stristr($items,'<view>')){
 					$items=preg_replace([
 						'/<print content=[\"\']?linktitle[\"\']?>/',
 						'/<print content=[\"\']?title[\"\']?>/',
-						'/<view>/',
-						'/<\/view>/'
+						'/<[\/]?view>/'
 					],[
 						URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 						htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
-						'',
 						''
 					],$items);
 				}
@@ -467,45 +451,35 @@ if($show=='categories'){
 						if(stristr($items,'<service')){
 							$items=preg_replace([
 								'/<print content=[\"\']?bookservice[\"\']?>/',
-								'/<service>/',
-								'/<\/service>/',
+								'/<[\/]?service>/',
 								'~<inventory>.*?<\/inventory>~is'
 							],[
 								$r['id'],
-								'',
 								'',
 								''
 							],$items);
 						}
 					}else{
 						$items=preg_replace([
-							'/<inventory>/',
-							'/<\/inventory>/',
+							'/<[\/]?inventory>/',
 							'~<service.*?>.*?<\/service>~is'
 						],'',$items,1);
 					}
 				}else{
 					$items=preg_replace([
-						'/<inventory>/',
-						'/<\/inventory>/',
+						'/<[\/]?inventory>/',
 						'~<service.*?>.*?<\/service>~is'
 					],'',$items,1);
 				}
 				if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
 					if(stristr($items,'<inventory')){
 						$items=preg_replace([
-							'/<inventory>/',
-							'/<\/inventory>/',
+							'/<[\/]?inventory>/',
 							'~<service>.*?<\/service>~is'
 						],'',$items);
-					}elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))
-						$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-				}else
-					$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-				$items=preg_replace([
-					'/<controls>/',
-					'/<\/controls>/'
-				],'',$items);
+					}elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+				}else$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+				$items=preg_replace('/<[\/]?controls>/','',$items);
 			}
 			require'core'.DS.'parser.php';
 			$output.=$items;
@@ -517,27 +491,21 @@ if($show=='categories'){
 			$output,
 			''
 		],$html,1);
-	}else
-		$html=preg_replace('~<section data-content="content-items">.*?<\/section>~is','',$html,1);
+	}else$html=preg_replace('~<section data-content="content-items">.*?<\/section>~is','',$html,1);
 	$html=preg_replace([
 		'~<item>.*?<\/item>~is',
-		'/<items>/',
-		'/<\/items>/',
-		'/<contentitems>/',
-		'/<\/contentitems>/'
+		'/<[\/]?items>/',
+		'/<[\/]?contentitems>/'
 	],'',$html);
 	if(stristr($html,'<more>')){
-		if($s->rowCount()<=$config['showItems'])
-			$html=preg_replace('~<more>.*?<\/more>~is','',$html,1);
+		if($s->rowCount()<=$config['showItems'])$html=preg_replace('~<more>.*?<\/more>~is','',$html,1);
 		else{
 			$html=preg_replace([
-				'/<more>/',
-				'/<\/more>/',
+				'/<[\/]?more>/',
 				'/<print view>/',
 				'/<print contentType>/',
 				'/<print config=[\"\']?showItems[\"\']?>/'
 			],[
-				'',
 				'',
 				$view,
 				$config['showItems']
@@ -551,9 +519,7 @@ if($show=='item'){
 		'~<contentitems>.*?<\/contentitems>~is',
 		'~<section data-content="content-items">.*?<\/section>~is',
 		'~<pagenotes>.*?<\/pagenotes>~is'
-	],[
-		''
-	],$html,1);
+	],'',$html,1);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
 	$seoTitle=$r['seoTitle']==''?$r['title']:$r['seoTitle'];
 	$metaRobots=$r['metaRobots']==''?$r['metaRobots']:$page['metaRobots'];
@@ -566,50 +532,34 @@ if($show=='item'){
 		':id'=>$r['id']
 	]);
 	$us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
-	$us->execute([
-		':uid'=>$r['uid']
-	]);
+	$us->execute([':uid'=>$r['uid']]);
 	$ua=$us->fetch(PDO::FETCH_ASSOC);
-	if($r['fileURL']!='')
-		$shareImage=$r['fileURL'];
-	elseif($r['file']!='')
-		$shareImage=$r['file'];
-	elseif($r['thumb']!='')
-		$shareImage=$r['thumb'];
-	else
-		$shareImage=URL.NOIMAGE;
+	if($r['fileURL']!='')$shareImage=$r['fileURL'];
+	elseif($r['file']!='')$shareImage=$r['file'];
+	elseif($r['thumb']!='')$shareImage=$r['thumb'];
+	else$shareImage=URL.NOIMAGE;
 	$canonical=URL.$view.'/'.$r['urlSlug'].'/';
 	$contentTime=isset($r['eti'])&&($r['eti']>$r['ti'])?$r['eti']:isset($r['ti'])?$r['ti']:0;
 	if(preg_match('/<print page=[\"\']?cover[\"\']?>/',$html)){
-		if($r['fileURL'])
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img class="img-fluid" src="'.$r['fileURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
-		elseif($r['file'])
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img class="img-fluid" src="'.$r['file'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
-		elseif($page['cover'])
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img src="'.$page['cover'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
-		elseif($page['coverURL'])
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img src="'.$page['coverURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
-		else
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
+		if($r['fileURL'])$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img class="img-fluid" src="'.$r['fileURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
+		elseif($r['file'])$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img class="img-fluid" src="'.$r['file'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
+		elseif($page['cover'])$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img src="'.$page['cover'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
+		elseif($page['coverURL'])$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img src="'.$page['coverURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
+		else$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
 	}
 	if(preg_match('/<print content=[\"\']?image[\"\']?>/',$html)){
-		if($r['fileURL'])
-			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-		elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))
-			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
-		else
-			$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
+		if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
+		elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
+		else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
 		$html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
 		if($r['options'][2]==1&&$r['file']!=''){
 			$html=preg_replace([
-				'/<panoramic>/',
-				'/<\/panoramic>/',
+				'/<[\/]?panoramic>/',
 				'~<image>.*?<\/image>~is'
 			],'',$html);
 		}else{
 			$html=preg_replace([
-				'/<image>/',
-				'/<\/image>/',
+				'/<[\/]?image>/',
 				'~<panoramic>.*?<\/panoramic>~is'
 			],'',$html);
 		}
@@ -649,26 +599,21 @@ if($show=='item'){
 				}
 				$item=preg_replace([
 					'~<mediaimages>.*?<\/mediaimages>~is',
-					'/<mediaitems>/',
-					'/<\/mediaitems>/'
+					'/<[\/]?mediaitems>/'
 				],[
 					$mediaoutput,
-					'',
 					''
 				],$item,1);
-			}else
-				$item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
+			}else$item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
 		}
 		if(isset($r['contentType'])&&($r['contentType']=='service'||$r['contentType']=='events')){
 			if($r['bookable']==1){
 				if(stristr($item,'<service>')){
 					$item=preg_replace([
-						'/<service>/',
-						'/<\/service>/',
+						'/<[\/]?service>/',
 						'~<inventory>.*?<\/inventory>~is',
 						'/<print content=[\"\']?bookservice[\"\']?>/'
 					],[
-						'',
 						'',
 						'',
 						$r['id']
@@ -683,22 +628,73 @@ if($show=='item'){
 		}else{
 			$item=preg_replace([
 				'~<service.*?>.*?<\/service>~is',
-				'/<inventory>/',
-				'/<\/inventory>/'
+				'/<[\/]?inventory>/'
 			],'',$item,1);
 		}
 		$address=$edit=$contentQuantity='';
 		if(isset($r['contentType'])&&($r['contentType']=='inventory')){
-			if(is_numeric($r['quantity'])){
-				$contentQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
-			}
 			$item=preg_replace([
-				'/<print content=[\"\']?quantity[\"\']?>/'
+				'/<[\/]?quantity>/',
+				'/<print content=[\"\']?quantity[\"\']?>/',
+				'/<print content=[\"\']?stock[\"\']?>/'
 			],[
-				$contentQuantity
+				'',
+				($r['quantity']==0?'out of stock':$r['quantity']),
+				($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
 			],$item);
-		}else
-			$item=preg_replace('/<print content=[\"\']?quantity[\"\']?>/','',$item);
+		}else$item=preg_replace('~<quantity>.*?<\/quantity>~is','',$item);
+		if(stristr($item,'<condition>')){
+			if($r['itemCondition']!=''){
+				$item=preg_replace([
+					'/<[\/]?condition>/',
+					'/<print content=[\"\']?condition[\"\']?>/'
+				],[
+					'',
+					$r['itemCondition'],
+				],$item);
+			}else$item=preg_replace('~<condition>.*?<\/condition>~is','',$item);
+		}
+		if(stristr($item,'<weight>')){
+			if($r['weight']!=''){
+				$item=preg_replace([
+					'/<[\/]?weight>/',
+					'/<print content=[\"\']?weight[\"\']?>/'
+				],[
+					'',
+					$r['weight'].$r['weightunit'],
+				],$item);
+			}else$item=preg_replace('~<weight>.*?<\/weight>~is','',$item);
+		}
+		if(stristr($item,'<size>')){
+			if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
+				$item=preg_replace([
+					'/<[\/]?size>/',
+					'/<print content=[\"\']?width[\"\']?>/',
+					'/<print content=[\"\']?height[\"\']?>/',
+					'/<print content=[\"\']?length[\"\']?>/'
+				],[
+					'',
+					$r['width'].$r['widthunit'],
+					$r['height'].$r['heightunit'],
+					$r['length'].$r['lengthunit']
+				],$item);
+			}else$item=str_replace('~<size>.*?<\/size>~is','',$item);
+		}
+		if(stristr($item,'<brand>')){
+			if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
+				$sb=$db->prepare("SELECT id,title,url,icon FROM `".$prefix."choices` WHERE contentType='brand' AND id=:id");
+				$sb->execute([':id'=>$r['brand']]);
+				$rb=$sb->fetch(PDO::FETCH_ASSOC);
+				$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
+				$item=preg_replace([
+					'/<[\/]?brand>/',
+					'/<print brand>/',
+				],[
+					'',
+					$brand,
+				],$item);
+			}else$item=preg_replace('~<brand>.*?<\/brand>~is','',$item);
+		}
 		if(stristr($item,'<choices')){
 			$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE rid=:id ORDER BY title ASC");
 			$scq->execute([':id'=>isset($r['id'])?$r['id']:$page['id']]);
@@ -710,10 +706,8 @@ if($show=='item'){
 				}
 				$choices.='</select>';
 				$item=str_replace('<choices>',$choices,$item);
-			}else
-				$item=str_replace('<choices>','',$item);
-		}else
-			$item=str_replace('<choices>','',$item);
+			}else$item=str_replace('<choices>','',$item);
+		}else$item=str_replace('<choices>','',$item);
 		if(stristr($item,'<json-ld>')){
 			$r['schemaType']=isset($r['schemaType'])?$r['schemaType']:$page['schemaType'];
 			$r['notes']=isset($r['notes'])?$r['notes']:$page['notes'];
@@ -721,126 +715,28 @@ if($show=='item'){
 			$r['pti']=isset($r['pti'])?$r['pti']:$page['ti'];
 			$r['ti']=isset($r['ti'])?$r['ti']:$page['ti'];
 			$r['eti']=isset($r['eti'])?$r['eti']:$page['eti'];
-			$jsonld='<script type="application/ld+json">{'.
-				'"@context":"http://schema.org/",';
+			$jsonld='<script type="application/ld+json">{"@context":"http://schema.org/",';
 			if($r['schemaType']=='blogPosting'){
-				$jsonld.='"@type":"BlogPosting",'.
-					'"headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
-					'"alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
-					'"image":{'.
-						'"@type":"ImageObject",'.
-						'"url":"';
-				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))
-					$jsonld.=$r['file'].'"';
-				else
-					$jsonld.=URL.FAVICON.'"';
-				$jsonld.='},'.
-					'"editor":"'.htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8').'",'.
-					'"genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'",'.
-					'"mainEntityOfPage":"True",'.
-					'"keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'",'.
-					'"wordcount":"'.htmlspecialchars(strlen(strip_tags($r['notes'])),ENT_QUOTES,'UTF-8').'",'.
-					'"publisher":{'.
-						'"@type":"Organization",'.
-						'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
-						'"logo":{'.
-							'"@type":"ImageObject",'.
-							'"url":"'.URL.FAVICON.'",'.
-							'"width":"400",'.
-							'"height":"55"'.
-						'}'.
-					'},'.
-					'"url":"'.$canonical.'",'.
-					'"datePublished":"'.date('Y-m-d',$r['pti']).'",'.
-					'"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
-					'"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
-					'"description":"'.htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8').'",'.
-					'"articleBody":"'.htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8').'",'.
-					'"author":{'.
-						'"@type":"Person",'.
-						'"name":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'"'.
-				 	'}';
+				$jsonld.='"@type":"BlogPosting","headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"';
+				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))$jsonld.=$r['file'].'"';
+				else$jsonld.=URL.FAVICON.'"';
+				$jsonld.='},"editor":"'.htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8').'","genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'","mainEntityOfPage":"True","keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'","wordcount":"'.htmlspecialchars(strlen(strip_tags($r['notes'])),ENT_QUOTES,'UTF-8').'","publisher":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","logo":{"@type":"ImageObject","url":"'.URL.FAVICON.'","width":"400","height":"55"}},"url":"'.$canonical.'","datePublished":"'.date('Y-m-d',$r['pti']).'","dateCreated":"'.date('Y-m-d',$r['ti']).'","dateModified":"'.date('Y-m-d',$r['eti']).'","description":"'.htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8').'","articleBody":"'.htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8').'","author":{"@type":"Person","name":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'"}';
 			}elseif($r['schemaType']=='Product'){
-				$jsonld.='"@type":"Product",'.
-  				'"name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
-					'"image":{'.
-						'"@type":"ImageObject",'.
-						'"url":"';
-				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))
-					$jsonld.=$r['file'].'"';
-				else
-					$jsonld.=URL.FAVICON.'"';
-				$jsonld.='},'.
-  				'"description":"'.($seoDescription!=''?htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8'):htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8')).'",'.
-  				'"mpn":"'.($r['barcode']==''?$r['id']:htmlspecialchars($r['barcode'],ENT_QUOTES,'UTF-8')).'",'.
-					'"sku":"'.($r['fccid']==''?$r['id']:htmlspecialchars($r['fccid'],ENT_QUOTES,'UTF-8')).'",'.
-  				'"brand":{'.
-    				'"@type":"Thing",'.
-    				'"name":"'.htmlspecialchars($r['brand'],ENT_QUOTES,'UTF-8').'"'.
-  				'},';
+				$jsonld.='"@type":"Product","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"';
+				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))$jsonld.=$r['file'].'"';
+				else$jsonld.=URL.FAVICON.'"';
+				$jsonld.='},"description":"'.($seoDescription!=''?htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8'):htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8')).'","mpn":"'.($r['barcode']==''?$r['id']:htmlspecialchars($r['barcode'],ENT_QUOTES,'UTF-8')).'","sku":"'.($r['fccid']==''?$r['id']:htmlspecialchars($r['fccid'],ENT_QUOTES,'UTF-8')).'","brand":{"@type":"Thing","name":"'.htmlspecialchars($r['brand'],ENT_QUOTES,'UTF-8').'"},';
 				$jss=$db->prepare("SELECT AVG(cid) as rate,COUNT(id) as cnt FROM `".$prefix."comments` WHERE contentType='review' AND rid=:rid AND status='approved'");
-				$jss->execute([
-					':rid'=>$r['id']
-				]);
+				$jss->execute([':rid'=>$r['id']]);
 				$jrr=$jss->fetch(PDO::FETCH_ASSOC);
-  			$jsonld.='"aggregateRating":{'.
-    				'"@type":"aggregateRating",'.
-    				'"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
-    				'"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
-  				'},'.
-  				'"offers":{'.
-    				'"@type":"Offer",'.
-						'"url":"'.$canonical.'",'.
-    				'"priceCurrency":"AUD",'.
-    				'"price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'",'.
-    				'"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",'.
-    				'"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'OutOfStock':'In Stock'):($r['stockStatus']=='none'?'OutOfStock':'InStock')).'",'.
-    				'"seller":{'.
-      				'"@type":"Organization",'.
-      				'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"'.
-    				'}'.
-  				'}';
+  			$jsonld.='"aggregateRating":{"@type":"aggregateRating","ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'","reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"},"offers":{"@type":"Offer","url":"'.$canonical.'","priceCurrency":"AUD","price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'","priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'","availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'OutOfStock':'In Stock'):($r['stockStatus']=='none'?'OutOfStock':'InStock')).'","seller":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"}}';
 			}elseif($r['schemaType']=='Service'){
-					$jsonld.='"@type":"Service",'.
-  				'"serviceType":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'",'.
-  				'"provider":{'.
-    				'"@type":"LocalBusiness",'.
-    				'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
-						'"address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'",'.
-						'"telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'",'.
-						'"priceRange":"'.htmlspecialchars(($r['rCost']!=0?$r['rCost']:$r['cost']),ENT_QUOTES,'UTF-8').'",'.
-						'"image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"'.
-  				'},'.
-  				'"areaServed":{'.
-    				'"@type":"State",'.
-    				'"name":"All"'.
-  				'}';
+					$jsonld.='"@type":"Service","serviceType":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'","provider":{"@type":"LocalBusiness","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'","telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'","priceRange":"'.htmlspecialchars(($r['rCost']!=0?$r['rCost']:$r['cost']),ENT_QUOTES,'UTF-8').'","image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"},"areaServed":{"@type":"State","name":"All"}';
 			}else{
-				$jsonld.='"@type":"'.$r['schemaType'].'",'.
-					'"headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
-					'"alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
-					'"image":{'.
-						'"@type":"ImageObject",'.
-						'"url":"';
-				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))
-					$jsonld.=$r['file'].'"';
-				else
-					$jsonld.=URL.FAVICON.'"';
-				$jsonld.='},'.
-					'"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'",'.
-					'"genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'",'.
-					'"keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'",'.
-					'"wordcount":"'.htmlspecialchars(strlen(strip_tags(escaper($r['notes']))),ENT_QUOTES,'UTF-8').'",'.
-					'"publisher":{'.
-						'"@type":"Organization",'.
-						'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"'.
-					'},'.
-					'"url":"'.$canonical.'/",'.
-					'"datePublished":"'.date('Y-m-d',$r['pti']).'",'.
-					'"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
-					'"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
-					'"description":"'.htmlspecialchars(strip_tags(rawurldecode($seoDescription)),ENT_QUOTES,'UTF-8').'",'.
-					'"articleBody":"'.htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8').'"';
+				$jsonld.='"@type":"'.$r['schemaType'].'","headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"';
+				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))$jsonld.=$r['file'].'"';
+				else$jsonld.=URL.FAVICON.'"';
+				$jsonld.='},"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'","genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'","keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'","wordcount":"'.htmlspecialchars(strlen(strip_tags(escaper($r['notes']))),ENT_QUOTES,'UTF-8').'","publisher":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"},"url":"'.$canonical.'/","datePublished":"'.date('Y-m-d',$r['pti']).'","dateCreated":"'.date('Y-m-d',$r['ti']).'","dateModified":"'.date('Y-m-d',$r['eti']).'","description":"'.htmlspecialchars(strip_tags(rawurldecode($seoDescription)),ENT_QUOTES,'UTF-8').'","articleBody":"'.htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8').'"';
 			}
 			$jsonld.='}</script>';
 			$item=str_replace('<json-ld>',$jsonld,$item);
@@ -864,9 +760,8 @@ if($show=='item'){
 				$sr=$db->prepare("SELECT rid as id FROM `".$prefix."choices` WHERE uid=:id AND contentType='related' ORDER BY title ASC LIMIT $iC");
 				$sr->execute([':id'=>$r['id']]);
 				$go=false;
-				if($sr->rowCount()>0){
-					$go=true;
-				}else{
+				if($sr->rowCount()>0)$go=true;
+				else{
 					if($config['options'][10]==1){
 						if($r['category_1']!=''){
 							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat AND status='published' ORDER BY title ASC LIMIT $iC");
@@ -889,20 +784,14 @@ if($show=='item'){
 						$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id AND status='published' AND internal=0");
 						$si->execute([':id'=>$rr['id']]);
 						$ri=$si->fetch(PDO::FETCH_ASSOC);
-						if($ri['fileURL']!=''&&($ri['thumb']==''||$ri['file']=='')){
-							$relatedImage=$ri['fileURL'];
-						}else{
-							if($ri['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($ri['thumb'])))
-								$relatedImage='media'.DS.'thumbs'.basename($ri['thumb']);
-							elseif($ri['file']!=''&&file_exists('media'.DS.basename($ri['file'])))
-								$relatedImage='media'.DS.basename($ri['file']);
-							else
-								$relatedImage=URL.NOIMAGE;
+						if($ri['fileURL']!=''&&($ri['thumb']==''||$ri['file']==''))$relatedImage=$ri['fileURL'];
+						else{
+							if($ri['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($ri['thumb'])))$relatedImage='media'.DS.'thumbs'.basename($ri['thumb']);
+							elseif($ri['file']!=''&&file_exists('media'.DS.basename($ri['file'])))$relatedImage='media'.DS.basename($ri['file']);
+							else$relatedImage=URL.NOIMAGE;
 						}
 						$relatedQuantity='';
-						if(is_numeric($ri['quantity'])&&$ri['quantity']!=0){
-							$relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
-						}
+						if(is_numeric($ri['quantity'])&&$ri['quantity']!=0)$relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
 						$relateditem=preg_replace([
 							'/<print related=[\"\']?linktitle[\"\']?>/',
 							'/<print related=[\"\']?thumb[\"\']?>/',
@@ -922,15 +811,9 @@ if($show=='item'){
 					}
 					$related=preg_replace('~<relitems>.*?<\/relitems>~is',$relitems,$related,1);
 					$item=preg_replace('~<related.*>.*?<\/related>~is',$related,$item,1);
-				}else{
-					$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
-				}
-			}else{
-				$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
-			}
-		}else{
-			$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
-		}
+				}else$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+			}else$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+		}else$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
 /* Reviews */
 		if($view!='page'&&stristr($item,'<review')){
 			preg_match('/<review>([\w\W]*?)<\/review>/',$item,$matches);
@@ -941,35 +824,10 @@ if($show=='item'){
 			while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
 				$reviewitem=$review;
 				if(stristr($reviewitem,'<json-ld-review>')){
-					$jsonldreview='<script type="application/ld+json">{'.
-						'"@context":"https://schema.org/",'.
-						'"@type":"Review",'.
-						'"itemReviewed":{'.
-							'"@type":"Product",'.
-							'"image":"';
-							if(file_exists('media'.DS.basename($r['file'])))
-								$jsonldreview.=$r['file'];
-							else
-								$jsonldreview.=URL.FAVICON;
-					$jsonldreview.='",'.
-							'"name":"'.$r['title'].'"'.
-						'},'.
-						'"reviewRating":{'.
-							'"@type":"Rating",'.
-							'"ratingValue":"'.$rr['cid'].'"'.
-						'},'.
-						'"name":"'.$r['title'].'",'.
-						'"author":{'.
-							'"@type":"Person",'.
-							'"name":"'.($rr['name']!=''?$rr['name']:'Anonymous').'"'.
-						'},'.
-						'"datePublished":"'.date('Y-m-d',$rr['ti']).'",'.
-						'"reviewBody":"'.$rr['notes'].'",'.
-						'"publisher":{'.
-							'"@type":"Organization",'.
-							'"name":"'.$config['business'].'"'.
-						'}'.
-					'}</script>';
+					$jsonldreview='<script type="application/ld+json">{"@context":"https://schema.org/","@type":"Review","itemReviewed":{"@type":"Product","image":"';
+							if(file_exists('media'.DS.basename($r['file'])))$jsonldreview.=$r['file'];
+							else$jsonldreview.=URL.FAVICON;
+					$jsonldreview.='","name":"'.$r['title'].'"},"reviewRating":{"@type":"Rating","ratingValue":"'.$rr['cid'].'"},"name":"'.$r['title'].'","author":{"@type":"Person","name":"'.($rr['name']!=''?$rr['name']:'Anonymous').'"},"datePublished":"'.date('Y-m-d',$rr['ti']).'","reviewBody":"'.$rr['notes'].'","publisher":{"@type":"Organization","name":"'.$config['business'].'"}}</script>';
 					$reviewitem=str_replace('<json-ld-review>',$jsonldreview,$reviewitem);
 				}
 				$reviewitem=preg_replace('/<print review=[\"\']?rating[\"\']?>/',$rr['cid'],$reviewitem);
@@ -1002,8 +860,7 @@ if($show=='item'){
 		}
 		require'core'.DS.'parser.php';
 		$authorHTML='';
-		if(isset($r['contentType'])&&($r['contentType']=='article'||$r['contentType']=='portfolio'))
-			$item=preg_replace('~<controls>.*?<\/controls>~is','',$item,1);
+		if(isset($r['contentType'])&&($r['contentType']=='article'||$r['contentType']=='portfolio'))$item=preg_replace('~<controls>.*?<\/controls>~is','',$item,1);
 		$html=preg_replace([
 			'~<settings.*?>~is',
 			'~<more>.*?<\/more>~is',
@@ -1033,11 +890,7 @@ if($show=='item'){
 					while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
 						$comment=$matches[1];
 						$rc['notes']=htmlspecialchars(strip_tags(rawurldecode($rc['notes'])),ENT_QUOTES,'UTF-8');
-						$comment=preg_replace([
-							'/<print comments=[\"\']?datetime[\"\']?>/'
-						],[
-							date('Y-m-d',$rc['ti'])
-						],$comment,1);
+						$comment=preg_replace('/<print comments=[\"\']?datetime[\"\']?>/',date('Y-m-d',$rc['ti']),$comment,1);
 						require'core'.DS.'parser.php';
 						$comments.=$comment;
 					}
@@ -1045,9 +898,7 @@ if($show=='item'){
 					$commentsHTML=$r['options'][1]==1?preg_replace('/<\/?comment>/','',$commentsHTML):preg_replace('~<comment>.*?<\/comment>~is','',$commentsHTML,1);
 					$commentsHTML=preg_replace('~<items>.*?<\/items>~is','',$commentsHTML,1);
 					$item=preg_replace('~<comments>~is',$commentsHTML,$item,1);
-//					$item.=$commentsHTML;
-				}else
-					$item.='Comments for this post is Enabled, but no <strong>"'.THEME.DS.'comments.html"</strong> template file exists';
+				}else$item.='Comments for this post is Enabled, but no <strong>"'.THEME.DS.'comments.html"</strong> template file exists';
 			}
 		}
 		$html=preg_replace('~<item>.*?<\/item>~is',$item,$html,1);
@@ -1055,9 +906,7 @@ if($show=='item'){
 }
 if($view=='login'){
 	$html=preg_replace('/<print url>/',URL,$html,1);
-	if($config['options'][3]==1)
-		$html=preg_replace('/<\/?signup?>/','',$html);
-	else
-		$html=preg_replace('~<signup>.*?<\/signup>~is','',$html,1);
+	if($config['options'][3]==1)$html=preg_replace('/<\/?signup?>/','',$html);
+	else$html=preg_replace('~<signup>.*?<\/signup>~is','',$html,1);
 }
 $content.=$html;

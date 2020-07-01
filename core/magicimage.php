@@ -43,8 +43,7 @@ if($act=='thumb'){
 <?php }
 }
 if($act=='file'){
-  if($r['file']=='')
-    $process=false;
+  if($r['file']=='')$process=false;
   else{
     $imgsrc=basename($r['file']);
     $imgdest=$imgsrc;

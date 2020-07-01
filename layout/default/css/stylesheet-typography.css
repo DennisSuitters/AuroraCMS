@@ -6,8 +6,7 @@ hr {
   background-color: #e9e9e9;
   height: 1px; }
 
-hr:not([size]) {
-  height: 1px; }
+hr:not([size]) { height: 1px; }
 
 h1,
 h2,
@@ -21,43 +20,27 @@ h6 {
   font-weight: 500;
   line-height: 1.2; }
 
-h1 {
-  font-size: calc(1.375rem + 1.5vw); }
+h1 { font-size: calc(1.375rem + 1.5vw); }
+
+h2 { font-size: calc(1.325rem + .9vw); }
+
+h3 { font-size: calc(1.3rem + .6vw); }
+
+h4 { font-size: calc(1.275rem + .3vw); }
 
 @media (min-width: 1200px) {
-  h1 {
-    font-size: 2.5rem; }
+  h1 { font-size: 2.5rem; }
+
+  h2 { font-size: 2rem; }
+
+  h3 { font-size: 1.75rem; }
+
+  h4 { font-size: 1.5rem; }
 }
 
-h2 {
-  font-size: calc(1.325rem + .9vw); }
+h5 { font-size: 1.25rem; }
 
-@media (min-width: 1200px) {
-  h2 {
-    font-size: 2rem; }
-}
-
-h3 {
-  font-size: calc(1.3rem + .6vw); }
-
-@media (min-width: 1200px) {
-  h3 {
-    font-size: 1.75rem; }
-}
-
-h4 {
-  font-size: calc(1.275rem + .3vw); }
-
-@media (min-width: 1200px) {
-  h4 {
-    font-size: 1.5rem; }
-}
-
-h5 {
-  font-size: 1.25rem; }
-
-h6 {
-  font-size: 1rem; }
+h6 { font-size: 1rem; }
 
 blockquote {
   margin-left: 0;
@@ -76,8 +59,7 @@ p {
   line-height: 1.25; }
 
 ol,
-ul {
-  padding-left: 2rem; }
+ul { padding-left: 2rem; }
 
 ol,
 ul,
@@ -88,11 +70,9 @@ dl {
 ol ol,
 ul ul,
 ol ul,
-ul ol {
-  margin-bottom: 0; }
+ul ol { margin-bottom: 0; }
 
-dt {
-  font-weight: 700; }
+dt { font-weight: 700; }
 
 dd {
   margin-bottom: .5rem;
@@ -118,8 +98,7 @@ figcaption {
   border: var(--border-width) var(--border-style) var(--border-color);
   border-radius: var(--border-radius);
   max-width: 100%;
-  height: auto;
-}
+  height: auto; }
 
 a {
   background-color: transparent;
@@ -164,94 +143,66 @@ sup {
   font-size: 75%;
   line-height: 0; }
 
-sub {
-  bottom:-.25em; }
+sub { bottom:-.25em; }
 
-sup {
-  top: -.5em; }
+sup { top: -.5em; }
 
 .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap; }
 
-.text-muted {
-  color: var(--color-muted) !important; }
+.text-muted { color: var(--color-muted) !important; }
 
-.align-baseline {
-  vertical-align: baseline !important; }
+.align-baseline { vertical-align: baseline !important; }
 
-.align-top {
-  vertical-align: top !important; }
+.align-top { vertical-align: top !important; }
 
-.align-middle {
-  vertical-align: middle !important; }
+.align-middle { vertical-align: middle !important; }
 
-.align-bottom {
-  vertical-align: bottom !important; }
+.align-bottom { vertical-align: bottom !important; }
 
-.align-text-bottom {
-  vertical-align: text-bottom !important; }
+.align-text-bottom { vertical-align: text-bottom !important; }
 
-.align-text-top {
-  vertical-align: text-top !important; }
+.align-text-top { vertical-align: text-top !important; }
 
-.text-lowercase {
-  text-transform: lowercase !important; }
+.text-lowercase { text-transform: lowercase !important; }
 
-.text-uppercase {
-  text-transform: uppercase !important; }
+.text-uppercase { text-transform: uppercase !important; }
 
-.text-capitalize {
-  text-transform: capitalize !important; }
+.text-capitalize { text-transform: capitalize !important; }
 
-.text-left {
-  text-align: left !important; }
+.text-left { text-align: left !important; }
 
-.text-center {
-  text-align: center !important; }
+.text-center { text-align: center !important; }
 
-.text-right {
-  text-align: right !important; }
+.text-right { text-align: right !important; }
 
-.text-wrap {
-  white-space: normal !important; }
+.text-wrap { white-space: normal !important; }
 
-.text-nowrap {
-  white-space: nowrap !important; }
+.text-nowrap { white-space: nowrap !important; }
 
-.text-decoration-none {
-  text-decoration: none !important; }
+.text-decoration-none { text-decoration: none !important; }
 
-.text-decoration-underline {
-  text-decoration: underline !important; }
+.text-decoration-underline { text-decoration: underline !important; }
 
-.text-decoration-line-through {
-  text-decoration: line-through !important; }
+.text-decoration-line-through { text-decoration: line-through !important; }
 
-.text-decoration-wavy {
-  text-decoration-style: wavy red; }
+.text-decoration-wavy { text-decoration-style: wavy red; }
 
-.font-italic {
-  font-style: italic !important; }
+.font-italic { font-style: italic !important; }
 
-.font-normal {
-  font-style: normal !important; }
+.font-normal { font-style: normal !important; }
 
-.font-weight-light {
-  font-weight: 300 !important; }
+.font-weight-light { font-weight: 300 !important; }
 
-.font-weight-lighter {
-  font-weight: lighter !important; }
+.font-weight-lighter { font-weight: lighter !important; }
 
-.font-weight-normal {
-  font-weight: 400 !important; }
+.font-weight-normal { font-weight: 400 !important; }
 
-.font-weight-bold {
-  font-weight: 700 !important; }
+.font-weight-bold { font-weight: 700 !important; }
 
-.font-weight-bolder {
-  font-weight: 900 !important; }
+.font-weight-bolder { font-weight: 900 !important; }
 
 .text-break {
   word-wrap: break-word !important;
@@ -273,11 +224,9 @@ sup {
   font-size: -webkit-calc(100% * 2);
   font-size: -calc(100% * 2); }
 
-.ellipsis {
-  text-overflow: ellipsis !important; }
+.ellipsis { text-overflow: ellipsis !important; }
 
-.clip {
-  text-overflow: clip !important; }
+.clip { text-overflow: clip !important; }
 
 .list-unstyled {
   padding-left: 0;
@@ -287,8 +236,6 @@ sup {
   padding-left: 0;
   list-style: none; }
 
-.list-inline-item {
-  display: inline-block; }
+.list-inline-item { display: inline-block; }
 
-.list-inline-item:not(:last-child) {
-  margin-right: .5rem; }
+.list-inline-item:not(:last-child) { margin-right: .5rem; }

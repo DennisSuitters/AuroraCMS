@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -15,12 +15,11 @@
  * @changes    v0.0.6 Fix Doubling up of the Embedded Messaging.
  * @changes    v0.0.9 Add Payment Options Display Parsing.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
-	$link='<li><a href="logout/">Logout</a></li>';
+if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='<li><a href="logout/">Logout</a></li>';
 else{
-	if($config['options'][3]==1)
-		$link_x=' or Sign Up';
+	if($config['options'][3]==1)$link_x=' or Sign Up';
 	else{
 		$link_x='';
 		$html=preg_replace('~<block signup>.*?<\/block signup>~is','',$html,1);
@@ -76,18 +75,15 @@ if(stristr($html,'<subjectText>')){
 	if($s->rowCount()>0){
 		$html=preg_replace([
 			'~<subjectText>.*?<\/subjectText>~is',
-			'/<subjectSelect>/',
-			'/<\/subjectSelect>/'
+			'/<[\/]?subjectSelect>/'
 		],'',$html);
 		$options='';
-		while($r=$s->fetch(PDO::FETCH_ASSOC))
-			$options.='<option value="'.$r['id'].'">'.$r['title'].'</option>';
+		while($r=$s->fetch(PDO::FETCH_ASSOC))$options.='<option value="'.$r['id'].'">'.$r['title'].'</option>';
 		$html=str_replace('<subjectOptions>',$options,$html);
 	}else{
 		$html=preg_replace([
 			'~<subjectSelect>.*?<\/subjectSelect>~is',
-			'/<subjectText>/',
-			'/<\/subjectText>/'
+			'/<[\/]?subjectText>/'
 		],'',$html);
 	}
 }
@@ -98,22 +94,13 @@ if(stristr($html,'<buildMenu')){
 	$menu='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$buildMenu=$htmlMenu;
-/*		if($r['contentType']=='page'&&$r['title']==$activeTitle)
-			$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu);
-		else */
-		if($view==$r['contentType']||$view==$r['contentType'].'s')
-			$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu);
-		else
-			$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
+		if($view==$r['contentType']||$view==$r['contentType'].'s')$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu);
+		else$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
 		if($r['contentType']!='index'){
-			if(isset($r['url'][0])&&$r['url'][0]=='#')
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/',$buildMenu);
-			elseif(filter_var($r['url'],FILTER_VALIDATE_URL))
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',$r['url'].'/',$buildMenu);
-			elseif($r['contentType']=='page'&&$r['title']!='')
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']).'/',$buildMenu);
-			else
-				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'].'/',$buildMenu);
+			if(isset($r['url'][0])&&$r['url'][0]=='#')$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/',$buildMenu);
+			elseif(filter_var($r['url'],FILTER_VALIDATE_URL))$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',$r['url'].'/',$buildMenu);
+			elseif($r['contentType']=='page'&&$r['title']!='')$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']).'/',$buildMenu);
+			else$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'].'/',$buildMenu);
 			$buildMenu=preg_replace('/<print rel=[\"\']?contentType[\"\']?>/',strtolower($r['contentType']),$buildMenu);
 		}else{
 			$buildMenu=preg_replace([
@@ -158,20 +145,14 @@ if(stristr($html,'<buildSocial')){
 	}else$socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
 	if($config['options'][9]==1){
-		$html=str_replace([
-			'<rss>',
-			'</rss>'
-		],'',$html);
+		$html=preg_replace('/<[\/]?rss>/','',$html);
 		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'].'/',$html):str_replace('<print rsslink>','rss',$html);
 		$html=str_replace('<print rssicon>',frontsvg('libre-social-rss'),$html);
-	}else
-		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
+	}else$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
 }
 if(stristr($html,'<paymentoptions>')){
-	if($config['options'][7]==1)
-		$html=preg_replace('/<\/paymentoptions>/','',$html,1);
-	else
-		$html=preg_replace('~<paymentoptions>.*?<\/paymentoptions>~is','',$html,1);
+	if($config['options'][7]==1)$html=preg_replace('/<[\/]?paymentoptions>/','',$html);
+	else$html=preg_replace('~<paymentoptions>.*?<\/paymentoptions>~is','',$html,1);
 }
 if(stristr($html,'<chat')){
 	if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
@@ -180,18 +161,14 @@ if(stristr($html,'<chat')){
 				$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
 			}else{
 				$html=preg_replace([
-					'/<chat>/',
-					'/<\/chat>/',
+					'/<[\/]?chat>/',
 					'/<print sid>/'
 				],[
-					'',
 					'',
 					SESSIONID
 				],$html);
 			}
-		}else
-			$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
-	}else
-		$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
+		}else$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
+	}else$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
 }
 $content.=$html;

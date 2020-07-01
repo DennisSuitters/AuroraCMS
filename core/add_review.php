@@ -85,13 +85,9 @@ if($_POST['emailtrap']=='none'){
         ':ti'=>time()
       ]);
       $e=$db->errorInfo();
-      if(is_null($e[2]))
-        $notification.=$theme['settings']['review_success'];
-      else
-        $notification.=$theme['settings']['review_error'];
-    }else
-      $notification.=$theme['settings']['review_errorspam'];
+      if(is_null($e[2]))$notification.=$theme['settings']['review_success'];
+      else$notification.=$theme['settings']['review_error'];
+    }else$notification.=$theme['settings']['review_errorspam'];
   }
-}else
-  $notification.=$theme['settings']['review_errorspam'];
+}else$notification.=$theme['settings']['review_errorspam'];
 echo$blacklisted.$notification;

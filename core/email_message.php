@@ -64,9 +64,7 @@ if($to!=''){
     $fr['name']!=''?$fr['name']:$fr['business'];
     $fr['email']!=''?$fr['email']:$config['email'];
     $mail->SetFrom($fr['email'],$fr['name']);
-  }else{
-    $mail->AddReplyTo($from,$config['business']);
-  }
+  }else$mail->AddReplyTo($from,$config['business']);
   $mto=explode(",",$to);
   if(isset($mto[1])&&$mto[1]!=''){
     foreach($mto as $to2){
@@ -76,18 +74,12 @@ if($to!=''){
         $tr=$ts->fetch(PDO::FETCH_ASSOC);
         $toname=$tr['name']!=''?$tr['name']:$tr['business'];
         $mail->AddAddress($tr['email'],$toname);
-      }else{
-        $mail->AddAddress($to2);
-      }
+      }else$mail->AddAddress($to2);
     }
-  }else{
-    $mail->AddAddress($to);
-  }
+  }else$mail->AddAddress($to);
   if($atts!=''){
     $attachments=explode(",",$atts);
-    foreach($attachments as $attachment){
-      $mail->addAttachment('..'.DS.'media'.DS.basename($attachment));
-    }
+    foreach($attachments as $attachment)$mail->addAttachment('..'.DS.'media'.DS.basename($attachment));
   }
   $mail->Subject=$subject;
   preg_match_all('/<img.*?>/',$body,$matches);

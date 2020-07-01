@@ -18,8 +18,7 @@
  * @changes    v0.0.10 Add Markdown Parsing for prettier, easier to read CHANGELOG.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  */
-if(isset($args[0])&&$args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_dashboard.php';
+if(isset($args[0])&&$args[0]=='settings')include'core'.DS.'layout'.DS.'set_dashboard.php';
 else{
   include'core'.DS.'class.parsedown.php';?>
 <main id="content" class="main">
@@ -27,13 +26,12 @@ else{
     <li class="breadcrumb-item active">Dashboard</li>
   </ol>
   <div class="container-fluid">
-<?php echo$config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
-  echo$config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
-  if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini'))
-    echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
-  $tid=$ti-2592000;
-  echo$config['business']==''?'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>':'';
-  echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
+    <?php echo$config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
+    echo$config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
+    if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
+    $tid=$ti-2592000;
+    echo$config['business']==''?'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>':'';
+    echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
     <div class="row">
 <?php
   $ss=$db->prepare("SELECT COUNT(DISTINCT ip) AS cnt FROM `".$prefix."iplist` WHERE ti >= :ti");
@@ -360,35 +358,7 @@ else{
           </div>
         </div>
       </div>
-
-<?php /*
-      <li class="nav-title">System Utilization</li>
-      <li class="nav-item px-3 d-compact-none d-minimized-none">
-        <div class="text-uppercase mb-1">
-          <small><b>CPU Usage</b></small>
-        </div>
-        <div class="progress progress-xs">
-          <div class="progress-bar bg-info" role="progressbar" style="width: <?php echo getload();?>%" aria-valuenow="<?php echo getload();?>" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <small><?php echo gpc();?> Processes. <?php echo num_cpu();?> Cores.</small>
-      </li>
-<?php $mem=getmemstats();?>
-      <li class="nav-item px-3 d-compact-none d-minimized-none">
-        <div class="text-uppercase mb-1">
-          <small><b>Memory Usage</b></small>
-        </div>
-        <div class="progress progress-xs">
-          <div class="progress-bar bg-warning" role="progressbar" style="width: <?php echo$mem['percent'];?>%" aria-valuenow="<?php echo$mem['percent'];?>" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <small><?php echo size_format($mem['used']).'/'.size_format($mem['total']);?></small>
-      </li>
-<?php
-*/
- }?>
-
-
-
-
+<?php }?>
     <div class="row">
 <?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");
   if($s->rowCount()>0){?>
@@ -454,9 +424,7 @@ else{
 <?php
   function array_sort_by_column(&$a,$c,$d=SORT_DESC){
     $sc=array();
-    foreach($a as$k=>$r){
-      $sc[$k]=$r[$c];
-    }
+    foreach($a as$k=>$r)$sc[$k]=$r[$c];
     array_multisort($sc,$d,$a);
   }
   array_sort_by_column($row,'views');

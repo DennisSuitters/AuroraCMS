@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Display Items according to primary documents category.
@@ -16,10 +16,13 @@
  * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.14 Add parsing of images into side items.
- * @changes    v0.0.15 Add parsing for Weight and Size.
+ * @changes    v0.0.16 Add parsing for Weight, Size, Brand and Condition.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.16 Add parsing for Sort Field.
  */
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
+	if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 		$sideCost='';
 		if($r['options'][0]==1){
@@ -41,44 +44,68 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		],$sideTemp);
 		$sideQuantity='';
 		if($r['contentType']=='inventory'){
-			if($r['stockStatus']=='quantity')
-				$sideQuantity=is_numeric($r['quantity'])&&$r['quantity']<1?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>';
-			if($r['stockStatus']=='none')
-				$sideQuantity='';
-			else{
-				if($r['quantity']!=0)
-					$sideQuantity='<div class="quantity">'.$r['quantity'].' In Stock</div>';
-				else{
-					if($r['stockStatus']=='pre-order')
-						$sideQuantity='<div class="quantity">Pre-Order</div>';
-					else{
-						$sideQuantity='<div class="quantity">Out Of Stock</div>';
-						$r['stockStatus']='out of stock';
-					}
-				}
-			}
-			if($r['stockStatus']=='sold out')
-				$sideQuantity='<div class="quantity">Sold Out</div>';
 			$sideTemp=preg_replace([
-				'/<print content=[\"\']?quantity[\"\']?>/'
-			],$sideQuantity,$sideTemp);
+				'/<[\/]?quantity>/',
+				'/<print content=[\"\']?quantity[\"\']?>/',
+				'/<print content=[\"\']?stock[\"\']?>/'
+			],[
+				'',
+				($r['quantity']==0?'out of stock':$r['quantity']),
+				($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
+			],$sideTemp);
+			if($r['stockStatus']=='sold out')$sideQuantity='<div class="quantity">Sold Out</div>';
+			$sideTemp=preg_replace(['/<print content=[\"\']?quantity[\"\']?>/'],$sideQuantity,$sideTemp);
+			if(stristr($sideTemp,'<condition>')){
+				if($r['itemCondition']!=''){
+					$sideTemp=preg_replace([
+						'/<[\/]?condition>/',
+						'/<print content=[\"\']?condition[\"\']?>/'
+					],[
+						'',
+						$r['itemCondition'],
+					],$sideTemp);
+				}else$sideTemp=preg_replace('~<condition>.*?<\/condition>~is','',$sideTemp);
+			}
 			if(stristr($sideTemp,'<weight>')){
 				if($r['weight']!=''){
-					$sideTemp=preg_replace(
-						'/<weight>/',
-						'<div class="text-left"><small>Weight: '.$r['weight'].$r['weightunit'].'</small></div>',
-						$sideTemp);
-				}else
-					$sideTemp=str_replace('<weight>','',$sideTemp);
+					$sideTemp=preg_replace([
+						'/<[\/]?weight>/',
+						'/<print content=[\"\']?weight[\"\']?>/'
+					],[
+						'',
+						$r['weight'].$r['weightunit'],
+					],$sideTemp);
+				}else$sideTemp=preg_replace('~<weight>.*?<\/weight>~is','',$sideTemp);
 			}
 			if(stristr($sideTemp,'<size>')){
 				if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
-					$sideTemp=preg_replace(
-						'/<size>/',
-						'<div class="text-left"><small>Width: '.$r['width'].$r['widthunit'].'<br>Height: '.$r['height'].$r['heightunit'].'<br>Length: '.$r['length'].$r['lengthunit'].'</small></div>',
-						$sideTemp);
-				}else
-					$sideTemp=str_replace('<size>','',$sideTemp);
+					$sideTemp=preg_replace([
+						'/<[\/]?size>/',
+						'/<print content=[\"\']?width[\"\']?>/',
+						'/<print content=[\"\']?height[\"\']?>/',
+						'/<print content=[\"\']?length[\"\']?>/'
+					],[
+						'',
+						$r['width'].$r['widthunit'],
+						$r['height'].$r['heightunit'],
+						$r['length'].$r['lengthunit']
+					],$sideTemp);
+				}else$sideTemp=preg_replace('~<size>.*?<\/size>~is','',$sideTemp);
+			}
+			if(stristr($sideTemp,'<brand>')){
+				if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
+					$sb=$db->prepare("SELECT id,title,url,icon FROM `".$prefix."choices` WHERE contentType='brand' AND id=:id");
+					$sb->execute([':id'=>$r['brand']]);
+					$rb=$sb->fetch(PDO::FETCH_ASSOC);
+					$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
+					$sideTemp=preg_replace([
+						'/<[\/]?brand>/',
+						'/<print brand>/',
+					],[
+						'',
+						$brand,
+					],$sideTemp);
+				}else$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
 			}
 			if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
 				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE rid=:id ORDER BY title ASC");
@@ -91,53 +118,58 @@ if(file_exists(THEME.DS.'side_menu.html')){
 					}
 					$choices.='</select>';
 					$sideTemp=str_replace('<choices>',$choices,$sideTemp);
-				}else
-					$sideTemp=str_replace('<choices>','',$sideTemp);
-			}else
-				$sideTemp=preg_replace(['<choices>','~<inventory>.*?<\/inventory>~is'],'',$sideTemp);
-		}else
-			$sideTemp=preg_replace('/<print content=[\"\']?quantity[\"\']?>/','',$sideTemp);
+				}else$sideTemp=str_replace('<choices>','',$sideTemp);
+			}else$sideTemp=preg_replace(['<choices>','~<inventory>.*?<\/inventory>~is'],'',$sideTemp);
+		}else$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
 		if($r['contentType']=='service'||$r['contentType']=='events'){
 			if($r['bookable']==1){
 				if(stristr($sideTemp,'<service>')){
 					$sideTemp=preg_replace([
-						'/<service>/',
-						'/<\/service>/',
+						'/<[\/]?service>/',
 						'/<print content=[\"\']?bookservice[\"\']?>/',
 						'~<inventory>.*?<\/inventory>~is'
 					],[
-						'',
 						'',
 						$r['id'],
 						''
 					],$sideTemp);
 				}
-			}else
-				$sideTemp=preg_replace('~<service.*?>.*?<\/service>~is','',$sideTemp,1);
-		}else
-			$sideTemp=preg_replace('~<service.*?>.*?<\/service>~is','',$sideTemp,1);
+			}else$sideTemp=preg_replace('~<service.*?>.*?<\/service>~is','',$sideTemp,1);
+		}else$sideTemp=preg_replace('~<service.*?>.*?<\/service>~is','',$sideTemp,1);
 		if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
 			if(stristr($sideTemp,'<inventory>')){
 				$sideTemp=preg_replace([
-					'/<inventory>/',
-					'/<\/inventory>/',
+					'/<[\/]?inventory>/',
 					'~<service>.*?<\/service>~is'
 				],'',$sideTemp);
-			}elseif(stristr($sideTemp,'<inventory>')&&$r['contentType']!='inventory')
-				$sideTemp=preg_replace('~<inventory>.*?<\/inventory>~is','',$sideTemp,1);
-		}else
-			$sideTemp=preg_replace('~<inventory>.*?<\/inventory>~is','',$sideTemp,1);
-		$sideTemp=str_replace([
-			'<controls>',
-			'</controls>',
-			'<review>',
-			'</review>'
+			}elseif(stristr($sideTemp,'<inventory>')&&$r['contentType']!='inventory')$sideTemp=preg_replace('~<inventory>.*?<\/inventory>~is','',$sideTemp,1);
+		}else$sideTemp=preg_replace('~<inventory>.*?<\/inventory>~is','',$sideTemp,1);
+		$sideTemp=preg_replace([
+			'/<[\/]?controls>/',
+			'/<[\/]?review>/'
 		],'',$sideTemp);
 	}else{
 		$sideTemp=preg_replace([
 			'/<controls>([\w\W]*?)<\/controls>/',
 			'/<review>([\w\W]*?)<\/review>/',
 		],'',$sideTemp,1);
+		if(stristr($sideTemp,'<sort>')){
+			if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
+			elseif($view=='inventory'||$view=='service'||$view=='article'||$view=='news'||$view=='events'||$view=='portfolio'||$view=='gallery'){
+				$sortOptions='';
+				if($view=='inventory')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="best"'.(isset($sort)&&$sort=='best'?' selected':'').'>Best Selling</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option><option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option><option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
+				if($view=='service')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option><option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option><option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
+				if($view=='article'||$view=='news'||$view=='events')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+				if($view=='portfolio'||$view=='gallery')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+				$sideTemp=preg_replace([
+					'/<[\/]?sort>/',
+					'/<sortOptions>/'
+				],[
+					'',
+					$sortOptions
+				],$sideTemp);
+			}else$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
+		}
 	}
 	preg_match('/<item>([\w\W]*?)<\/item>/',$sideTemp,$matches);
 	$outside=$matches[1];
@@ -154,35 +186,24 @@ if(file_exists(THEME.DS.'side_menu.html')){
 				URL.$view.'/',
 				ucfirst($view)
 			],$heading);
-		}else
-			$heading='';
+		}else$heading='';
 		$outside=preg_replace('~<heading>.*?<\/heading>~is',$heading,$outside,1);
 	}
 	if(stristr($sideTemp,'<settings')){
 		preg_match('/<settings items="(.*?)" contenttype="(.*?)">/',$outside,$matches);
 		if(isset($matches[1])){
-			if($matches[1]=='all'||$matches[1]=='')
-				$show='';
-			elseif($matches[1]=='limit')
-				$show=' LIMIT '.$config['showItems'];
-			else
-				$show=' LIMIT '.$matches[1];
-		}else
-			$show='';
+			if($matches[1]=='all'||$matches[1]=='')$show='';
+			elseif($matches[1]=='limit')$show=' LIMIT '.$config['showItems'];
+			else$show=' LIMIT '.$matches[1];
+		}else$show='';
 		if(isset($matches[2])){
 			if($matches[2]=='current')$contentType=strtolower($view);
 			if($matches[2]=='all'||$matches[2]=='')$contentType=$heading='';
-		}else
-			$contentType='';
+		}else$contentType='';
 	}
 	$r=$db->query("SELECT * FROM `".$prefix."menu` WHERE id=17")->fetch(PDO::FETCH_ASSOC);
-	if($r['active'][0]==1){
-		$sideTemp=str_replace([
-			'<newsletters>',
-			'</newsletters>'
-		],'',$sideTemp);
-	}else
-		$sideTemp=preg_replace('/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
+	if($r['active'][0]==1)$sideTemp=preg_replace('/<[\/]?newsletters>/','',$sideTemp);
+	else$sideTemp=preg_replace('/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 	$insides=$matches[1];
 	if(isset($sidecat)&&$sidecat!=''){
@@ -200,22 +221,16 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		if($r['contentType']=='gallery'){
 			preg_match('/<media>([\w\W]*?)<\/media>/',$insides,$matches);
 			$inside=$matches[1];
-		}else
-			$inside=preg_replace('/<media>([\w\W]*?)<\/media>/','',$insides,1);
+		}else$inside=preg_replace('/<media>([\w\W]*?)<\/media>/','',$insides,1);
 		$items=$inside;
 		$time='<time datetime="'.date('Y-m-d',$r['ti']).'">'.date($config['dateFormat'],$r['ti']).'</time>';
 		if($r['contentType']=='events'||$r['contentType']=='news'){
-			if($r['tis']!=0){
-				$time='<time datetime="'.date('Y-m-d',$r['tis']).'">'.date('dS M H:i',$r['tis']).'</time>';
-				if($r['tie']!=0)
-					$time.=' &rarr; <time datetime="'.date('Y-m-d',$r['tie']).'">'.date('dS M H:i',$r['tie']).'</time>';
+			if($r['tis']!=0){$time='<time datetime="'.date('Y-m-d',$r['tis']).'">'.date('dS M H:i',$r['tis']).'</time>';
+				if($r['tie']!=0)$time.=' &rarr; <time datetime="'.date('Y-m-d',$r['tie']).'">'.date('dS M H:i',$r['tie']).'</time>';
 			}
 		}
-		if(file_exists('media/thumbs/'.basename($r['thumb']))){
-			$sideImage='<img src="'.$r['thumb'].'" alt="'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"/>';
-		}else{
-			$sideImage='';
-		}
+		if(file_exists('media/thumbs/'.basename($r['thumb'])))$sideImage='<img src="'.$r['thumb'].'" alt="'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"/>';
+		else$sideImage='';
 		$caption=$r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags(rawurldecode($r['notes'])),0,100).'...';
 		$items=preg_replace([
 			'/<print link>/',
@@ -244,6 +259,5 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		'',
 	],$outside,1);
 	$sideTemp=preg_replace('~<item>.*?<\/item>~is',$outside,$sideTemp,1);
-}else
-	$sideTemp='';
+}else$sideTemp='';
 $content.=$sideTemp;

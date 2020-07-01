@@ -79,7 +79,7 @@ if($c['email']!=''){
   if($mail->Send()){
     $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'The Booking to {business} was Sent Successfully!');?>
 window.top.window.toastr["success"]("<?php echo$alertmsg;?>");
-  <?php }else{
+<?php }else{
     $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'There was an issue sending the Order to {business}!');?>
 window.top.window.toastr["error"]("<?php echo$alertmsg;?>");
   <?php }

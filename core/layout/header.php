@@ -49,17 +49,12 @@
       </div>
     </li>
     <li class="nav-item dropdown" data-rank="<?php echo$user['rank'];?>">
-      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" data-title="Account"><img class="img-avatar bg-white" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar'])))
-        echo'media'.DS.'avatar'.DS.basename($user['avatar']);
+      <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" data-title="Account"><img class="img-avatar bg-white" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar']))) echo'media'.DS.'avatar'.DS.basename($user['avatar']);
       elseif($user['gravatar']!=''){
-        if(stristr($user['gravatar'],'@'))
-          echo'http://gravatar.com/avatar/'.md5($user['gravatar']);
-        elseif(stristr($user['gravatar'],'gravatar.com/avatar/'))
-          echo$user['gravatar'];
-        else
-          echo ADMINNOAVATAR;
-      }else
-        echo ADMINNOAVATAR;?>" alt="<?php echo$user['username'];?>"></a>
+        if(stristr($user['gravatar'],'@')) echo'http://gravatar.com/avatar/'.md5($user['gravatar']);
+        elseif(stristr($user['gravatar'],'gravatar.com/avatar/')) echo$user['gravatar'];
+        else echo ADMINNOAVATAR;
+      }else echo ADMINNOAVATAR;?>" alt="<?php echo$user['username'];?>"></a>
       <div class="dropdown-menu dropdown-menu-right">
         <div class="dropdown-header text-center"><strong>Account</strong></div>
         <a class="dropdown-item" href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>"><?php svg('user-settings');?> Settings</a>

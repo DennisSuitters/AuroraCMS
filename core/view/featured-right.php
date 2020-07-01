@@ -28,8 +28,7 @@ if(stristr($html,'<events')){
 			'/<print time>/',
 			'/<print link>/',
 			'/<print content=[\"\']?caption[\"\']?>/'
-		],
-		[
+		],[
 			$r['schemaType'],
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 			date($config['dateFormat'],$r['tis']),
@@ -49,8 +48,7 @@ if(stristr($html,'<news')){
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$items=$news;
-		if($r['seoCaption']=='')
-			$r['seoCaption']=strip_tags($r['notes']);
+		if($r['seoCaption']=='')$r['seoCaption']=strip_tags($r['notes']);
 		$items=preg_replace([
 			'/<print content=[\"\']?schemaType[\"\']?>/',
 			'/<print content=[\"\']?title[\"\']?>/',

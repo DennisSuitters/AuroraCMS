@@ -7,24 +7,25 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.15 Fix creating new accounts and sending new account details.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.16 Add sold calculation and database update.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 require'core'.DS.'class.phpmailer.php';
 if($page['notes']!=''){
 	$html=preg_replace([
 		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<\/?pagenotes>/'
+		'/<[\/]?pagenotes>/'
 	],[
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 $notification='';
 $ti=time();
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
@@ -39,10 +40,8 @@ if($args[0]=='confirm'){
 			$s->execute([':email'=>$email]);
 			if($s->rowCount()>0){
 				$ru=$s->fetch(PDO::FETCH_ASSOC);
-				if($ru['status']=='delete'||$ru['status']=='disabled')
-					$notification.=$theme['settings']['account_suspend'];
-				else
-					$uid=$ru['id'];
+				if($ru['status']=='delete'||$ru['status']=='disabled')$notification.=$theme['settings']['account_suspend'];
+				else$uid=$ru['id'];
 			}else{
 				$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 				$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
@@ -100,8 +99,7 @@ if($args[0]=='confirm'){
 			if($sr->rowCount()>0){
 				$reward=$sr->fetch(PDO::FETCH_ASSOC);
 				if(!$reward['tis']>$ti&&!$reward['tie']<$ti)$rewards['id']=0;
-				if($reward['quantity']<1)
-					$reward['id']=0;
+				if($reward['quantity']<1)$reward['id']=0;
 				else{
 					$sr=$db->prepare("UPDATE `".$prefix."rewards` SET quantity=:quantity WHERE code=:code");
 					$sr->execute([
@@ -109,8 +107,7 @@ if($args[0]=='confirm'){
 						':code'=>$rewards
 					]);
 				}
-			}else
-				$reward['id']=0;
+			}else$reward['id']=0;
 			$dti=$ti+$config['orderPayti'];
 			$qid='Q'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
 			$postOption='';
@@ -138,13 +135,15 @@ if($args[0]=='confirm'){
 			$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE si=:si");
 			$s->execute([':si'=>SESSIONID]);
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
-				$si=$db->prepare("SELECT title,quantity FROM `".$prefix."content` WHERE id=:id");
+				$si=$db->prepare("SELECT title,quantity,sold FROM `".$prefix."content` WHERE id=:id");
 				$si->execute([':id'=>$r['iid']]);
 				$i=$si->fetch(PDO::FETCH_ASSOC);
 				$quantity=$i['quantity']-$r['quantity'];
-				$qry=$db->prepare("UPDATE `".$prefix."content` SET quantity=:quantity WHERE id=:id");
+				$sold=$i['quantity']+$r['quantity'];
+				$qry=$db->prepare("UPDATE `".$prefix."content` SET quantity=:quantity, sold=:sold WHERE id=:id");
 				$qry->execute([
 					':quantity'=>$quantity,
+					':sold'=>$sold,
 					':id'=>$r['iid']
 				]);
 				$sq=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,cid,title,quantity,cost,ti) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:ti)");
@@ -174,11 +173,9 @@ if($args[0]=='confirm'){
 				if($mail->Send()){}
 			}
 			$notification.=$theme['settings']['cart_success'];
-		}else
-			$notification.=$theme['settings']['cart_suspend'];
+		}else$notification.=$theme['settings']['cart_suspend'];
 		$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$notification,$html,1);
-	}else
-		$html=preg_replace('~<emptycart>.*?<\/emptycart>~is','',$html,1);
+	}else$html=preg_replace('~<emptycart>.*?<\/emptycart>~is','',$html,1);
 }else{
 	$total=0;
 	if(stristr($html,'<items')){
@@ -196,14 +193,10 @@ if($args[0]=='confirm'){
 				$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
 				$sc->execute([':id'=>$ci['cid']]);
 				$c=$sc->fetch(PDO::FETCH_ASSOC);
-				if($i['thumb']!='')
-					$image=$i['thumb'];
-				elseif($i['fileURL']!='')
-					$image=$i['fileURL'];
-				elseif($i['file']!='')
-					$image=$i['file'];
-				else
-					$image=NOIMAGE;
+				if($i['thumb']!='')$image=$i['thumb'];
+				elseif($i['fileURL']!='')$image=$i['fileURL'];
+				elseif($i['file']!='')$image=$i['file'];
+				else$image=NOIMAGE;
 				$cartitem=preg_replace([
 					'/<print content=[\"\']?image[\"\']?>/',
 					'/<print content=[\"\']?code[\"\']?>/',
@@ -238,46 +231,32 @@ if($args[0]=='confirm'){
 			$sc->execute();
 			$option='';
 			if($sc->rowCount()>0){
-				while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
-					$option.='<option value="'.$rc['id'].'">'.$rc['title'].' (&#36;'.$rc['value'].')</option>';
-				}
+				while($rc=$sc->fetch(PDO::FETCH_ASSOC))$option.='<option value="'.$rc['id'].'">'.$rc['title'].' (&#36;'.$rc['value'].')</option>';
 				$html=preg_replace([
 					'/<postoptions>/',
-					'/<postageoptions>/',
-					'/<\/postageoptions>/',
-					'/<emptycart>/',
-					'/<\/emptycart>/'
+					'/<[\/]?postageoptions>/',
+					'/<[\/]?emptycart>/'
 				],[
 					$option,
-					'',
-					'',
 					'',
 					''
 				],$html,1);
 			}else{
 				$html=preg_replace([
 					'~<postageoptions>.*?<\/postageoptions>~',
-					'/<postageoptions>/',
-					'/<\/postageoptions>/',
+					'/<[\/]?postageoptions>/',
 					'/<postoptions>/',
-					'/<emptycart>/',
-					'/<\/emptycart>/'
+					'/<[\/]?emptycart>/'
 				],[
 					'<input type="hidden" name="postoption" value="0">',
-					'',
-					'',
 					'',
 					'',
 					''
 				],$html,1);
 			}
-			if(isset($user['id'])&&$user['id']>0){
-				$html=preg_replace('~<loggedin>.*?<\/loggedin>~is','<input type="hidden" name="email" value="'.htmlspecialchars($user['email'],ENT_QUOTES,'UTF-8').'">',$html,1);
-			}else{
-				$html=preg_replace(['/<loggedin>/','/<\/loggedin>/'],'',$html);
-			}
-		}else
-			$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
+			if(isset($user['id'])&&$user['id']>0)$html=preg_replace('~<loggedin>.*?<\/loggedin>~is','<input type="hidden" name="email" value="'.htmlspecialchars($user['email'],ENT_QUOTES,'UTF-8').'">',$html,1);
+			else$html=preg_replace(['/<loggedin>/','/<\/loggedin>/'],'',$html);
+		}else$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
 	}
 }
 $content.=$html;

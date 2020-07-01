@@ -7,21 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
+ * @changes    v0.0.16 Reduce preg_replace parsing strings.
  */
 if($page['notes']!=''){
 	$html=preg_replace([
 		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<\/?pagenotes>/'
+		'/<[\/]?pagenotes>/'
 	],[
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 $gals='';
 if(stristr($html,'<items')){
   preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
@@ -51,15 +51,10 @@ if(stristr($html,'<items')){
       htmlspecialchars($r['attributionImageURL'],ENT_QUOTES,'UTF-8')
     ],$items);
     if($r['attributionImageName']!=''&&$r['attributionImageURL']!=''){
-      $items=str_replace([
-        '<attribution>',
-        '</attribution>'
-      ],'',$items);
-    }else
-      $items=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
+      $items=preg_replace('/<[\/]?attribution>/','',$items);
+    }else$items=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
     $output.=$items;
   }
 	$gals=preg_replace('~<items>.*?<\/items>~is',$output,$html,1);
-}else
-  $gals='';
+}else$gals='';
 $content.=$gals;

@@ -46,9 +46,7 @@
 <?php
 if(isset($args[1])&&$args[1]!=''){
   $s=$db->prepare("SELECT * FROM `".$prefix."tracker` WHERE LOWER(browser) LIKE LOWER (:browser) ORDER BY ti DESC LIMIT 20");
-  $s->execute([
-    ':browser'=>strtolower($args[1])
-  ]);
+  $s->execute([':browser'=>strtolower($args[1])]);
 }else{
   $s=$db->prepare("SELECT * FROM `".$prefix."tracker` ORDER BY ti DESC LIMIT 20");
   $s->execute();

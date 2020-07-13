@@ -48,7 +48,7 @@
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'i.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'codemirror.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'daterangepicker.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'summernote-lite.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'summernote.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'style.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'aurora.css';?>">
@@ -56,7 +56,7 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery-ui.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'summernote-lite.js';?>"></script>
+    <script src="<?php echo URL.'core'.DS.'js'.DS.'summernote.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-save-button.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-classes.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'codemirror.js';?>"></script>

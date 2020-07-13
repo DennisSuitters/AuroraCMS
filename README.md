@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at v0.0.16
+We are currently at v0.0.17
 
 ### FAQ
 - Why no Plugins?
@@ -11,6 +11,7 @@ We are currently at v0.0.16
   - As at the moment there is only one person working on the project, updates are as they get time to do them.
 
 ### Features
+- Business Hours Editor.
 - Blog Articles, Portfolio's, Bookings, Events, News, Testimonials, Inventory, Services, Gallery, Proofs, Messages, and Newsletters.
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
@@ -39,6 +40,8 @@ We are currently at v0.0.16
 - Administration uses jQuery, Modified Bootstrap, iCONS, and other jQuery Addons.
 - Activity Fingerprint Analysis Logs of Previous Content Changes with Undo, and who made the changes. Examine Content Inputs with Draggable Popover with Undoing.
 - Suggestions Editor to allow Administrators and Content Editor to make Editing Suggestions with Reasons, and Click Adding of Suggestions.
+- SEO Information.
+  - Informational Popups for important items for client's to learn SEO.
 - Security.
   - Spam Filter than can Auto Blacklist IP's using custom blacklist text files that can be edited.
   - Project Honey Pot Integration that can Auto Blacklist when check IP's against the httpBL API Service when forms are submitted via visitors.

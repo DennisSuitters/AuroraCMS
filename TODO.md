@@ -4,7 +4,9 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Add clear tables data when installing
 - Inventory
   - Customer/Contact List
-- Business Hours
+- Orders
+  - Integrate Other Payment Options
+  - Integrate AustPost Calculation
 - Import Catalogue from CSV
 - Import databases from other systems (WordPress, CubeCart, osCommerce, etc.)
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.

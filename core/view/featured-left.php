@@ -7,17 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.17 Add SQL for rank fetching data.
  */
 if(stristr($html,'<categories')){
 	preg_match('/<categories>([\w\W]*?)<\/categories>/',$html,$matches);
 	$cat=$matches[1];
-	$s=$db->prepare("SELECT DISTINCT category_1 FROM `".$prefix."content` WHERE contentType LIKE 'inventory' AND internal!='1' AND status='published' ORDER BY category_1 ASC");
-	$s->execute();
+	$s=$db->prepare("SELECT DISTINCT category_1 FROM `".$prefix."content` WHERE contentType LIKE 'inventory' AND internal!='1' AND status='published' AND rank<=:rank ORDER BY category_1 ASC");
+	$s->execute([
+		':rank'=>$_SESSION['rank']
+	]);
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$items=$cat;

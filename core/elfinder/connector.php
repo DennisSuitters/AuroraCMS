@@ -68,7 +68,8 @@ $opts=array(
         'text/html',
         'application/pdf',
         'application/x-php',
-        'text/x-php'
+        'text/x-php',
+        'video/mp4'
       ),
       'uploadOrder' => array(
         'deny',

@@ -291,7 +291,7 @@ if(isset($r['due_ti'])){?>
     }).dialogelfinder('instance');
   }
 <?php }
-  if($view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
+  if($view=='seo'||$view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
   $().ready(function(){
     var fm=$('#elfinder').elfinder({
       url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>",
@@ -540,6 +540,11 @@ if(isset($r['due_ti'])){?>
       }
     }).click(function(e){
       $(this).popover('toggle');
+      $('.phpviewer').draggable({
+        appendTo: 'document',
+        addClasses: false,
+        handle: 'h3',
+      })
     }).on('shown.bs.popover',function(e){
       var current_popover='#'+$(e.target).attr('aria-describedby');
       var $cur_pop=$(current_popover);
@@ -572,6 +577,11 @@ if(isset($r['due_ti'])){?>
       }
     }).click(function(e) {
       $(this).popover('toggle');
+      $('.suggestions').draggable({
+        appendTo: 'document',
+        addClasses: false,
+        handle: 'h3',
+      });
     }).on('shown.bs.popover',function(e){
       var current_popover='#'+$(e.target).attr('aria-describedby');
       var $cur_pop=$(current_popover);
@@ -605,6 +615,11 @@ if(isset($r['due_ti'])){?>
       }
     }).click(function(e) {
       $(this).popover('toggle');
+      $('.addsuggestion').draggable({
+        appendTo: 'document',
+        addClasses: false,
+        handle: 'h3',
+      });
     }).on('shown.bs.popover',function(e){
       var current_popover='#'+$(e.target).attr('aria-describedby');
       var $cur_pop=$(current_popover);
@@ -613,7 +628,52 @@ if(isset($r['due_ti'])){?>
       });
     });
 <?php }?>
+    $('.seohelper').popover({
+      html:true,
+      trigger:'manual',
+      title:'SEO Information <button type="button" class="close" data-dismiss="popover" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
+      container:'body',
+      placement:'auto',
+      template:'<div class="popover seohelper shadow" role="tooltip"><h3 class="popover-header"></h3><div class="popover-body"></div></div>',
+      content:function(){
+        var t=$(this).data("type");
+        return $.ajax({
+          url:'core/layout/seohelper.php',
+          dataType:'html',
+          async:false,
+          data:{
+            t:t
+          }
+        }).responseText;
+      }
+    }).click(function(e) {
+      $(this).popover('toggle');
+      $('.seohelper').draggable({
+        appendTo: 'document',
+        addClasses: false,
+        handle: 'h3',
       });
+    }).on('shown.bs.popover',function(e){
+      var current_popover='#'+$(e.target).attr('aria-describedby');
+      var $cur_pop=$(current_popover);
+      $cur_pop.find('.close').click(function(){
+        $cur_pop.popover('hide');
+      });
+    });
+  });
+  $('.editseo').click(function(){
+    var id=$(this).data('dbid');
+    $.ajax({
+      url:'core/layout/edit_seo.php',
+      type:'post',
+      data:{id:id},
+      success:function(response){
+        $('#editseo .modal-body').html(response);
+        $('#editseo').modal('show');
+      }
+    });
+  });
+
       if('serviceWorker' in navigator){
         window.addEventListener('load',()=>{
           navigator.serviceWorker.register('core/js/service-worker-admin.php',{
@@ -623,8 +683,24 @@ if(isset($r['due_ti'])){?>
           });
         });
       }
+
     </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
+    <div class="modal fade" id="editseo" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">SEO Editor</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body p-4">
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="searchbox" class="d-none">
       <div class="searchclose"><a href="#" onclick="$('#searchbox').toggleClass('d-none');return false;">X</a></div>
       <div class="container-fluid">

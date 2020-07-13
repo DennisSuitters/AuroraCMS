@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
@@ -29,6 +29,9 @@
  * @changes    v0.0.15 Add Weight and Size Fields for Postage Calculation.
  * @changes    v0.0.16 Change Brand Textbox to Select Box to choose Brand from added options.
  * @changes    v0.0.16 Add Condition Option.
+ * @changes    v0.0.17 Add Access levels for content.
+ * @changes    v0.0.17 Add better options for Videos.
+ * @changes    v0.0.17 Add SEO Helper buttons.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
@@ -84,6 +87,7 @@ if($so->rowCount()>0){
                   $ss->execute([':rid'=>$r['id'],':t'=>'content',':c'=>'title']);
                   echo$ss->rowCount()>0?'<div class="input-group-prepend" data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-toggle="popover" data-dbgid="title" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                 }?>
+                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Title Information"><button class="btn btn-secondary seohelper" data-type="title" aria-label="SEO Title Information"><?php svg('seo');?></button></div>
                 <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="btn-danger" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`btn-danger`);return false;">'.svg2('loremipsum').'</button></div><div class="input-group-btn" data-tooltip="tooltip" data-title="Add Suggestion"><button class="btn btn-secondary addsuggestion" data-toggle="popover" data-dbgid="title" aria-label="Add Suggestion">'.svg2('idea').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -572,7 +576,6 @@ if($r['contentType']=='inventory'){?>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savelength" class="btn btn-secondary save" data-dbid="length" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
-
 <?php }
 if($r['contentType']=='inventory'){?>
             <div id="tab-content-content-32" class="form-group row">
@@ -600,6 +603,7 @@ if($r['contentType']=='inventory'){?>
                     echo$ss->rowCount()>0?'<div data-tooltip="tooltip" data-title="Editing Suggestions"><button class="btn btn-secondary suggestions" data-dbgid="notesda" role="button" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button></div>':'';
                   }
                   echo'<div class="d-flex justify-content-end">'.
+                    '<button class="btn btn-secondary seohelper" data-type="content" data-tooltip="tooltip" data-title="SEO Content Information" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
                     '<button class="btn btn-secondary btn-sm" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;" data-tooltip="tooltip" data-title="Show Element Blocks" aria-label="Show Element Blocks">'.svg2('blocks').'</button>'.
                     '<input id="ipsumc" class="form-control" style="width:40px;" value="5">'.
                     '<button class="btn btn-secondary btn-sm" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;" data-tooltip="tooltip" data-title="Add Aussie Lorem Ipsum" aria-label="Add Aussie Lorem Ipsum">'.svg2('loremipsum').'</button>'.
@@ -695,10 +699,16 @@ if($r['contentType']!='testimonials'){?>
                 </div>
               </div>
               <div id="nav-content-images-5" class="form-group row">
-                <label for="options2" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Enable Panorama</label>
-                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                   <label class="switch switch-label switch-success"><input type="checkbox" id="options2" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2"<?php echo($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
                 </div>
+                <label for="options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Panorama</label>
+              </div>
+              <div id="nav-content-images-5" class="form-group row">
+                <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                  <label class="switch switch-label switch-success"><input type="checkbox" id="options3" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="3"<?php echo($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                </div>
+                <label for="options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable 360 Viewer</label>
               </div>
               <div id="tab-content-images-6" class="form-group row">
                 <label for="thumb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Thumbnail</label>
@@ -721,9 +731,36 @@ if($r['contentType']!='testimonials'){?>
               <div id="tab-content-images-7" class="form-group row">
                 <label for="exifFilename" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image ALT</label>
                 <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                  <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Image Alt Information"><button class="btn btn-secondary seohelper" data-type="alt" aria-label="SEO Image Alt Information"><?php svg('seo');?></button></div>
                   <input type="text" id="fileALT" class="form-control textinput" value="<?php echo$r['fileALT'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
                 </div>
+              </div>
+              <div class="form-group row">
+                <label for="coverVideo" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Video URL</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                  <input type="text" id="videoURL" class="form-control" name="videoURL" value="<?php echo$r['videoURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="videoURL">
+                  <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`videoURL`);" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager">'.svg2('browse-media').'</button></div><div class="input-group-append"><button class="btn btn-secondary trash" onclick="coverUpdate(`'.$r['id'].'`,`content`,`videoURL`,``);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
+                  <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savevideoURL" class="btn btn-secondary save" data-dbid="videoURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                  <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="4"<?php echo$r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                </div>
+                <label for="options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">AutoPlay Video</label>
+              </div>
+              <div class="form-group row">
+                <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                  <label class="switch switch-label switch-success"><input type="checkbox" id="options5" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="5"<?php echo$r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                </div>
+                <label for="options5" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Loop Video</label>
+              </div>
+              <div class="form-group row">
+                <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                  <label class="switch switch-label switch-success"><input type="checkbox" id="options6" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="6"<?php echo$r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+                </div>
+                <label for="options6" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Show Controls</label>
               </div>
             </fieldset>
             <fieldset id="tab-content-images-8" class="control-fieldset">
@@ -1117,6 +1154,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             <div id="tab-content-seo-2" class="form-group row">
               <label for="metaRobots" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Robots</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Meta Robots Information"><button class="btn btn-secondary seohelper" data-type="metarobots" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button></div>
 <?php           if($user['options'][1]==1){
                   if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT rid FROM `".$prefix."suggestions` WHERE rid=:rid AND t=:t AND c=:c");
@@ -1166,6 +1204,7 @@ if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             <div id="tab-content-seo-5" class="form-group row">
               <label for="seoTitle" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Title</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Title Information"><button class="btn btn-secondary seohelper" data-type="title" aria-label="SEO Title Information"><?php svg('seo');?></button></div>
 <?php $cntc=70-strlen($r['seoTitle']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -1188,6 +1227,7 @@ if($cntc<0){
             <div id="tab-content-seo-6" class="form-group row">
               <label for="seoCaption" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Caption</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Meta Caption Information"><button class="btn btn-secondary seohelper" data-type="metacaption" aria-label="SEO Meta Caption Information"><?php svg('seo');?></button></div>
 <?php $cntc=100-strlen($r['seoCaption']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -1209,6 +1249,7 @@ if($cntc<0){
             <div id="tab-content-seo-7" class="form-group row">
               <label for="seoDescription" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Meta Description</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Meta Description Information"><button class="btn btn-secondary seohelper" data-type="metadescription" aria-label="SEO Meta Description Information"><?php svg('seo');?></button></div>
 <?php $cntc=160-strlen($r['seoDescription']);
 if($cntc<0){
   $cnt=abs($cntc);
@@ -1229,6 +1270,7 @@ if($cntc<0){
             <div id="tab-content-seo-8" class="form-group row<?php echo$r['contentType']=='proofs'?' hidden':'';?>">
               <label for="seoKeywords" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Keywords</label>
               <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Keywords Information"><button class="btn btn-secondary seohelper" data-type="keywords" aria-label="SEO Keywords Information"><?php svg('seo');?></button></div>
                 <input type="text" id="seoKeywords" class="form-control textinput" value="<?php echo$r['seoKeywords'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoKeywords"<?php echo$user['options'][1]==1?' placeholder="Enter Keywords..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoKeywords" class="btn btn-secondary save" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
@@ -1252,6 +1294,23 @@ if($cntc<0){
                   <option value="autopublish"<?php echo$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                   <option value="published"<?php echo$r['status']=='published'?' selected':'';?>>Published</option>
                   <option value="delete"<?php echo$r['status']=='delete'?' selected':'';?>>Delete</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="rank" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Access</label>
+              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <select id="rank" class="form-control" onchange="update('<?php echo$r['id'];?>','content','rank',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rank"<?php echo$user['options'][1]==1?'':' disabled';?>>
+                  <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Visitor and above</option>
+                  <option value="100"<?php echo($r['rank']==100?' selected':'');?>>Subscriber and above</option>
+                  <option value="200"<?php echo($r['rank']==200?' selected':'');?>>Member and above</option>
+                  <option value="300"<?php echo($r['rank']==300?' selected':'');?>>Client and above</option>
+                  <option value="400"<?php echo($r['rank']==400?' selected':'');?>>Contributor and above</option>
+                  <option value="500"<?php echo($r['rank']==500?' selected':'');?>>Author and above</option>
+                  <option value="600"<?php echo($r['rank']==600?' selected':'');?>>Editor and above</option>
+                  <option value="700"<?php echo($r['rank']==700?' selected':'');?>>Moderator and above</option>
+                  <option value="800"<?php echo($r['rank']==800?' selected':'');?>>Manager and above</option>
+                  <option value="900"<?php echo($r['rank']==900?' selected':'');?>>Administrator and above</option>
                 </select>
               </div>
             </div>

@@ -28,6 +28,105 @@ else{
 }
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 $html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'/">Administration</a></li>',$html):str_replace('<administration>','',$html);
+if(stristr($html,'<hours>')){
+	if($config['options'][19]==1){
+		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
+		$htmlHours=$matches[1];
+		$hoursItems='';
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='hours'");
+		if($s->rowCount()>0){
+			while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$buildHours=$htmlHours;
+				if($r['tis']!=0){
+					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
+					if($config['options'][21]==1){
+						$hourFrom=$r['tis'];
+					}else{
+						$hourFromH=substr($r['tis'],0,2);
+						$hourFromM=substr($r['tis'],3,4);
+						$hourFrom=($hourFromH < 12 ? ltrim($hourFromH,'0') . ($hourFromM > 0 ? $hourFromM : '' ).'am' : $hourFromH - 12 . ($hourFromM > 0 ? $hourFromM : '') . 'pm');
+					}
+				}else$hourFrom='';
+				if($r['tie']!=0){
+					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
+					if($config['options'][21]==1){
+						$hourTo=$r['tie'];
+					}else{
+						$hourToH=substr($r['tie'],0,2);
+						$hourToM=substr($r['tie'],3,4);
+						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
+					}
+				}else$hourTo='';
+				$buildHours=preg_replace([
+					'/<print dayfrom>/',
+					'/<print dayto>/',
+					'/<print timefrom>/',
+					'/<print timeto>/',
+					'/<print info>/'
+				],[
+					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])),
+					($r['password']==$r['username']?'':'-'.ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
+					$hourFrom,
+					($r['tie']>0?'-' . $hourTo : ''),
+					($r['title']!=''?ucfirst($r['title']):'')
+				],$buildHours);
+				$hoursItems.=$buildHours;
+			}
+		}
+		$html=preg_replace([
+				'/<[\/]?hours>/',
+				'~<buildHours>.*?<\/buildHours>~is'
+			],[
+				'',
+				$hoursItems,
+			],$html);
+	}else
+		$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
+}
+if(stristr($html,'<email>')){
+	if($config['options'][23]==1){
+		$html=preg_replace([
+			'/<[\/]?email>/',
+			'/<print config=[\"\']?email[\"\']?>/'
+		],[
+			'',
+			'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
+		],$html);
+	}else$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
+}
+if(stristr($html,'<contact>')){
+	if($config['options'][22]==1){
+		$html=preg_replace([
+			'/<[\/]?contact>/',
+			'/<print config=[\"\']?business[\"\']?>/',
+			'/<print config=[\"\']?address[\"\']?>/',
+			'/<print config=[\"\']?suburb[\"\']?>/',
+			'/<print config=[\"\']?postcode[\"\']?>/',
+			'/<print config=[\"\']?country[\"\']?>/',
+		],[
+			'',
+			htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
+			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
+		],$html);
+	}else$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
+}
+if(stristr($html,'<phone>')){
+	if($config['options'][24]==1){
+		$html=preg_replace([
+			'/<[\/]?phone>/',
+			'/<print config=[\"\']?phone[\"\']?>/',
+			'/<print config=[\"\']?mobile[\"\']?>/'
+		],[
+			'',
+			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
+			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
+		],$html);
+	}else$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
+}
+
 $html=preg_replace([
 	'/<print year>/',
 	'/<print theme=[\"\']?title[\"\']?>/',
@@ -36,15 +135,7 @@ $html=preg_replace([
 	'/<print theme=[\"\']?creator_url_title[\"\']?>/',
 	'/<login>/',
 	'/<print config=[\"\']?seoDescription[\"\']?>/',
-	'/<print config=[\"\']?business[\"\']?>/',
 	'/<print config=[\"\']?abn[\"\']?>/',
-	'/<print config=[\"\']?address[\"\']?>/',
-	'/<print config=[\"\']?suburb[\"\']?>/',
-	'/<print config=[\"\']?postcode[\"\']?>/',
-	'/<print config=[\"\']?country[\"\']?>/',
-	'/<print config=[\"\']?email[\"\']?>/',
-	'/<print config=[\"\']?phone[\"\']?>/',
-	'/<print config=[\"\']?mobile[\"\']?>/',
 	'/<print hosting>/',
 	'/<print honey_pot_link>/',
 	'/<print honey_pot_quick_link>/'
@@ -56,15 +147,7 @@ $html=preg_replace([
 	htmlspecialchars($theme['creator_url_title'],ENT_QUOTES,'UTF-8'),
 	$link,
 	htmlspecialchars($config['seoDescription'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
 	$config['abn']!=''?htmlspecialchars('ABN '.$config['abn'],ENT_QUOTES,'UTF-8'):'',
-	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8'),
-	htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8'),
 	isset($theme['hosting'])&&$theme['hosting']!=''?'Hosting by <a target="_blank" href="'.$theme['hosting_url'].'">'.$theme['hosting'].'</a><br>':'',
 	$config['php_options'][0]==1?' Protected by <a href="http://www.projecthoneypot.org?rf=113735"><img src="'.URL.'layout/'.$config['theme'].'/images/phpot.gif" alt="Stop Spam Harvesters, Join Project Honey Pot"></a><br>':'',
 	$config['php_options'][0]==1&&$config['php_options'][2]==1&&$config['php_quicklink']!=''?$config['php_quicklink']:''
@@ -88,7 +171,8 @@ if(stristr($html,'<subjectText>')){
 	}
 }
 if(stristr($html,'<buildMenu')){
-	$s=$db->query("SELECT * FROM `".$prefix."menu` WHERE menu='footer' AND mid=0 AND active=1 ORDER BY ord ASC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE menu='footer' AND mid=0 AND active=1 AND rank<=:rank ORDER BY ord ASC");
+	$s->execute([':rank'=>$_SESSION['rank']]);
 	preg_match('/<buildMenu>([\w\W]*?)<\/buildMenu>/',$html,$matches);
 	$htmlMenu=$matches[1];
 	$menu='';

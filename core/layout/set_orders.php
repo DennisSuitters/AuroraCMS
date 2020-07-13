@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -17,6 +17,7 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.15 Add GST value editing.
  * @changes    v0.0.15 Add AustPost API Cost retreival.
+ * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
  * https://auspost.com.au/forms/pacpcs-registration.html
  * https://github.com/fontis/auspost-api-php
  */?>
@@ -159,14 +160,14 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         <div class="form-group row">
           <label for="orderEmailNotes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Order Notes</label>
           <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col text-right"><small>Tokens:</small>
+            <div class="col col-12 text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{first}');return false;">{first}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{last}');return false;">{last}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{date}');return false;">{date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{order_number}');return false;">{order_number}</a>
             </div>
-            <form method="post" target="sp" action="core/update.php">
+            <form method="post" target="sp" action="core/update.php" class="w-100">
               <input type="hidden" name="id" value="1">
               <input type="hidden" name="t" value="config">
               <input type="hidden" name="c" value="orderEmailNotes">
@@ -199,7 +200,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         <div class="form-group row">
           <label for="orderEmailLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
           <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col text-right"><small>Tokens:</small>
+            <div class="col col-12 text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
@@ -207,7 +208,7 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{order_number}');return false;">{order_number}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{notes}');return false;">{notes}</a>
             </div>
-            <form method="post" target="sp" action="core/update.php">
+            <form method="post" target="sp" action="core/update.php" class="w-100">
               <input type="hidden" name="id" value="1">
               <input type="hidden" name="t" value="config">
               <input type="hidden" name="c" value="orderEmailLayout">

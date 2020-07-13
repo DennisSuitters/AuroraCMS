@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Improve Statistic Panels
@@ -17,6 +17,7 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.10 Add Markdown Parsing for prettier, easier to read CHANGELOG.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.17 Fix System Utilization display.
  */
 if(isset($args[0])&&$args[0]=='settings')include'core'.DS.'layout'.DS.'set_dashboard.php';
 else{
@@ -280,7 +281,7 @@ else{
         <div class="card">
           <div class="card-header h5">
             Processor
-            <div class="small text-muted text-right"><small><?php echo $cpu['vendor'];?></small></div>
+            <div class="small text-muted text-right"><small>&nbsp;<?php echo $cpu['vendor'];?></small></div>
           </div>
           <div class="card-body card-text text-right">
             <?php echo getload();?>%
@@ -300,7 +301,7 @@ else{
         <div class="card">
           <div class="card-header h5">
             Machine
-            <div class="small text-muted text-right"><small><?php echo $os['pretty_name'];?></small></div>
+            <div class="small text-muted text-right"><small>&nbsp;<?php echo $os['pretty_name'];?></small></div>
           </div>
           <div class="card-body card-text text-right">
             <?php echo size_format($mem['used']);?>
@@ -331,7 +332,7 @@ else{
           <div class="card-footer">
             <div class="row">
               <div class="col small text-muted border-right" data-type="total"><?php echo size_format($disk['total']);?></div>
-              <div class="col small text-muted" data-type="swap"><?php echo size_format($mem['swapused']).'/'.size_format($mem['swap']);?></div>
+              <div class="col small text-muted" data-type="swap"><small><?php echo$mem['swap']>0?($mem['swapused']>0?size_format($mem['swapused']).'/':'').size_format($mem['swap']):'&nbsp;';?></small></div>
             </div>
           </div>
         </div>
@@ -358,6 +359,7 @@ else{
           </div>
         </div>
       </div>
+    </div>
 <?php }?>
     <div class="row">
 <?php $s=$db->query("SELECT * FROM `".$prefix."logs` ORDER BY ti DESC LIMIT 10");

@@ -85,6 +85,7 @@ $opts=[
         $user['options'][15]==1?'application/pdf':'',
         $user['options'][15]==1?'application/x-php':'',
         $user['options'][15]==1?'text/x-php':'',
+        $user['options'][15]==1?'video/mp4':''
       ],
       'uploadOrder'=>[
         'deny',

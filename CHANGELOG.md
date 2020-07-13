@@ -1,4 +1,20 @@
-### v0.0.16
+### v0.0.17
+- Fix System Utilization display.
+- Add Access Levels for content.
+- Add better video embedding and upload options, and parsing logic into themes.
+- Add 360 Viewer Images for content items.
+- Add Form action for previous Referer URL.
+- Add SQL to queries for rank content display.
+- Fix Swap Memory calculation when None is used.
+- Reconfigure Pages Listing for easier visual navigation.
+- Fix dropdown menu creation adding wrong link element.
+- Fix Thumbnail Display for content items.
+- Add editable Business Hours in Administration.
+- Add parsing for Business Hours templates.
+- Add SEO Helper buttons and Information.
+- Fix WYSIWYG Editor Layout.
+
+##### v0.0.16
 - Add adding Brands (URL and Image) to Content Settings, so a Brand can be added for display when viewing content items.
 - Add selecting Brand in Content Editing.
 - Add Weight, Size and Branding parsing to Side Area and Content.

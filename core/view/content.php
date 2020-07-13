@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -29,6 +29,9 @@
  * @changes    v0.0.16 Add parsing for Weight, Size, Brand and Condition.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.16 Add parsing for Sort Form selection.
+ * @changes    v0.0.17 Add parsing video coverVideo, determines if YouTube, Vimeo or Server.
+ * @changes    v0.0.17 Add option to enable 360 Viewer Images for content items.
+ * @changes    v0.0.17 Add SQL for rank fetching data.
  */
 $rank=0;
 $notification='';
@@ -61,10 +64,11 @@ elseif($view=='search'){
 	if(isset($args[0])&&$args[0]!='')$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
 	elseif(isset($_POST['search'])&&$_POST['search']!='')$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
 	else$search='%';
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(code) LIKE LOWER(:search) OR LOWER(brand) LIKE LOWER(:search) OR LOWER(title) LIKE LOWER(:search) OR LOWER(category_1) LIKE LOWER(:search) OR LOWER(category_2) LIKE LOWER(:search) OR LOWER(category_3) LIKE LOWER(:search) OR LOWER(category_4) LIKE LOWER(:search) OR LOWER(seoKeywords) LIKE LOWER(:search) OR LOWER(tags) LIKE LOWER(:search) OR LOWER(seoCaption) LIKE LOWER(:search) OR LOWER(seoDescription) LIKE LOWER(:search) OR LOWER(notes) LIKE LOWER(:search) AND status=:status".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(code) LIKE LOWER(:search) OR LOWER(brand) LIKE LOWER(:search) OR LOWER(title) LIKE LOWER(:search) OR LOWER(category_1) LIKE LOWER(:search) OR LOWER(category_2) LIKE LOWER(:search) OR LOWER(category_3) LIKE LOWER(:search) OR LOWER(category_4) LIKE LOWER(:search) OR LOWER(seoKeywords) LIKE LOWER(:search) OR LOWER(tags) LIKE LOWER(:search) OR LOWER(seoCaption) LIKE LOWER(:search) OR LOWER(seoDescription) LIKE LOWER(:search) OR LOWER(notes) LIKE LOWER(:search) AND status=:status AND rank<=:rank".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':search'=>$search,
-		':status'=>$status
+		':status'=>$status,
+		':rank'=>$_SESSION['rank']
 	]);
 }elseif($view=='index'){
 	$contentType=$cat1='';
@@ -77,68 +81,75 @@ elseif($view=='search'){
 	}
 	if(stristr($contentType,'|')){
 		$ctarray=explode('|',$contentType);
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType1 OR contentType LIKE :contentType2 OR contentType LIkE :contentType3 OR contentType LIKE :contentType4 AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY featured DESC, ti DESC":$sortOrder)." LIMIT $itemCount");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType1 OR contentType LIKE :contentType2 OR contentType LIkE :contentType3 OR contentType LIKE :contentType4 AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder==''?" ORDER BY featured DESC, ti DESC":$sortOrder)." LIMIT $itemCount");
 		$s->execute([
 			':contentType1'=>(isset($ctarray[0])?$ctarray[0]:''),
 			':contentType2'=>(isset($ctarray[1])?$ctarray[1]:''),
 			':contentType3'=>(isset($ctarray[2])?$ctarray[2]:''),
 			':contentType4'=>(isset($ctarray[3])?$ctarray[3]:''),
 			':status'=>$status,
-			':ti'=>time()
+			':ti'=>time(),
+			':rank'=>$_SESSION['rank']
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY featured DESC, ti DESC":$sortOrder)." LIMIT $itemCount");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND contentType NOT LIKE 'message%' AND contentType NOT LIKE 'testimonial%' AND contentType NOT LIKE 'proof%' AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder==''?" ORDER BY featured DESC, ti DESC":$sortOrder)." LIMIT $itemCount");
 		$s->execute([
 			':contentType'=>$contentType,
 			':status'=>$status,
-			':ti'=>time()
+			':ti'=>time(),
+			':rank'=>$_SESSION['rank']
 		]);
 	}
 }elseif($view=='bookings')$id=(isset($args[0])?(int)$args[0]:0);
 elseif(isset($args[1])&&strlen($args[1])==2){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND ti < :ti ORDER BY ti ASC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND ti < :ti AND rank<=:rank ORDER BY ti ASC");
 	$s->execute([
 		':contentType'=>$view,
-		':ti'=>DateTime::createFromFormat('!d/m/Y','01/'.$args[1].'/'.$args[0])->getTimestamp()
+		':ti'=>DateTime::createFromFormat('!d/m/Y','01/'.$args[1].'/'.$args[0])->getTimestamp(),
+		':rank'=>$_SESSION['rank']
 	]);
 	$show='categories';
 }elseif(isset($args[0])&&strlen($args[0])==4){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND ti>:ti ORDER BY ti ASC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND ti>:ti AND rank<=:rank ORDER BY ti ASC");
 	$tim=strtotime('01-Jan-'.$args[0]);
 	$s->execute([
 		':contentType'=>$view,
-		':ti'=>DateTime::createFromFormat('!d/m/Y','01/01/'.$args[0])->getTimestamp()
+		':ti'=>DateTime::createFromFormat('!d/m/Y','01/01/'.$args[0])->getTimestamp(),
+		':rank'=>$_SESSION['rank']
 	]);
 	$show='categories';
 }elseif(isset($args[0])&&$args[0]=='category'){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[1])),
 		':status'=>$status,
-		':ti'=>time()
+		':ti'=>time(),
+		':rank'=>$_SESSION['rank']
 	]);
 }elseif(isset($args[1])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
 		':category_2'=>html_entity_decode(str_replace('-',' ',$args[1])),
 		':status'=>$status,
-		':ti'=>time()
+		':ti'=>time(),
+		':rank'=>$_SESSION['rank']
 	]);
 }elseif(isset($args[2])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
 		':category_2'=>html_entity_decode(str_replace('-',' ',$args[1])),
 		':category_3'=>html_entity_decode(str_replace('-',' ',$args[2])),
 		':status'=>$status,
-		':ti'=>time()
+		':ti'=>time(),
+		':rank'=>$_SESSION['rank']
 	]);
 }elseif(isset($args[3])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND LOWER(category_4) LIKE LOWER(:category_4) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder=''?" ORDER BY ti DESC":$sortOrder));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND LOWER(category_2) LIKE LOWER(:category_2) AND LOWER(category_3) LIKE LOWER(:category_3) AND LOWER(category_4) LIKE LOWER(:category_4) AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder=''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -146,43 +157,49 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':category_3'=>html_entity_decode(str_replace('-',' ',$args[2])),
 		':category_4'=>html_entity_decode(str_replace('-',' ',$args[3])),
 		':status'=>$status,
-		':ti'=>time()
+		':ti'=>time(),
+		':rank'=>$_SESSION['rank']
 	]);
 }elseif(isset($args[0])){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder=''?" ORDER BY ti DESC":$sortOrder));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(category_1) LIKE LOWER(:category_1) AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder=''?" ORDER BY ti DESC":$sortOrder));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
 		':status'=>$status,
-		':ti'=>time()
+		':ti'=>time(),
+		':rank'=>$_SESSION['rank']
 	]);
 	if($s->rowCount()<1){
 		if($view=='proofs'){
 			$status='%';
-			if($_SESSION['loggedin']==false)
-				die();
+			if($_SESSION['loggedin']==false)die();
 		}
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(urlSlug) LIKE LOWER(:urlSlug) AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND LOWER(urlSlug) LIKE LOWER(:urlSlug) AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder==''?" ORDER BY ti DESC":$sortOrder));
 		$s->execute([
 			':contentType'=>$view,
 			':urlSlug'=>$args[0],
 			':status'=>$status,
-			':ti'=>time()
+			':ti'=>time(),
+			':rank'=>$_SESSION['rank']
 		]);
 		$show='item';
 	}
 }else{
 	if($view=='proofs'){
 		if(isset($_SESSION['uid'])&&$_SESSION['uid']!=0){
-			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE 'proofs' AND uid=:uid ORDER BY ord ASC, ti DESC");
-			$s->execute([':uid'=>$_SESSION['uid']]);
+			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE 'proofs' AND uid=:uid AND rank<=:rank ORDER BY ord ASC, ti DESC");
+			$s->execute([
+				':uid'=>$_SESSION['uid'],
+				':rank'=>$_SESSION['rank']
+			]);
 		}
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status LIKE :status AND internal!='1' AND pti < :ti".($sortOrder=''?" ORDER BY ti DESC":$sortOrder)." LIMIT $itemCount");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank".($sortOrder=''?" ORDER BY ti DESC":$sortOrder)." LIMIT $itemCount");
 		$s->execute([
 			':contentType'=>$view,
 			':status'=>$status,
-			':ti'=>time()
+			':ti'=>time(),
+			':rank'=>$_SESSION['rank']
 		]);
 	}
 }
@@ -204,9 +221,17 @@ if($show=='categories'){
 	if(stristr($html,'<print page="coverVideo">')){
 		if($page['coverVideo']!=''){
 			$cover=basename($page['coverVideo']);
+			if(stristr($page['coverVideo'],'youtu')){
+				preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$page['coverVideo'],$vidMatch);
+				$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+    	}elseif(stristr($page['coverVideo'],'vimeo')){
+				preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$page['coverVideo'],$vidMatch);
+				$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
+			}else
+				$videoHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
 			$html=preg_replace(
 				'/<print page=[\"\']?coverVideo[\"\']?>/',
-				'<video preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video>',
+				$videoHTML,
 				$html
 			);
 		}else$html=preg_replace('/<print page=[\"\']?coverVideo[\"\']?>/','',$html);
@@ -245,8 +270,11 @@ if($show=='categories'){
 		],$html);
 	}
 	if(stristr($html,'<mediaitems')){
-		$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=0 ORDER BY ord ASC");
-		$sm->execute([':pid'=>$page['id']]);
+		$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=0 AND rank<=:rank ORDER BY ord ASC");
+		$sm->execute([
+			':pid'=>$page['id'],
+			':rank'=>$_SESSION['rank']
+		]);
 		if($sm->rowCount()>0){
 			preg_match('/<mediaitems>([\w\W]*?)<\/mediaitems>/',$html,$matches2);
 			$media=$matches2[1];
@@ -313,6 +341,23 @@ if($show=='categories'){
 				''
 			],$html,1);
 		}else$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
+	}
+	if(stristr($html,'<sort>')){
+		if($show=='item')$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
+		elseif($view=='inventory'||$view=='service'||$view=='article'||$view=='news'||$view=='events'||$view=='portfolio'||$view=='gallery'){
+			$sortOptions='';
+			if($view=='inventory')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="best"'.(isset($sort)&&$sort=='best'?' selected':'').'>Best Selling</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option><option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option><option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
+			if($view=='service')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option><option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option><option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
+			if($view=='article'||$view=='news'||$view=='events')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+			if($view=='portfolio'||$view=='gallery')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+			$html=preg_replace([
+				'/<[\/]?sort>/',
+				'/<sortOptions>/'
+			],[
+				'',
+				$sortOptions
+			],$html);
+		}else$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
 	}
 	$html=preg_replace([
 		'/<print page=[\"\']?contentType[\"\']?>/',
@@ -547,31 +592,73 @@ if($show=='item'){
 		elseif($page['coverURL'])$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','<img src="'.$page['coverURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">',$html);
 		else$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
 	}
-	if(preg_match('/<print content=[\"\']?image[\"\']?>/',$html)){
+	if($r['videoURL']!=''){
+		$html=preg_replace([
+			'/<[\/]?videoviewer>/',
+			'~<image>.*?<\/image>~is',
+			'~<panoramic>.*?<\/panoramic>~is',
+			'~<360viewer>.*?<\/360viewer>~is'
+		],'',$html);
+		if($r['videoURL']!=''){
+			$cover=basename($r['videoURL']);
+			if(stristr($r['videoURL'],'youtu')){
+				preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$r['videoURL'],$vidMatch);
+				$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($r['options'][4]==1?'autoplay=1&':'').($r['options'][5]==1?'loop=1&':'').($page['options'][6]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+			}elseif(stristr($r['videoURL'],'vimeo')){
+				preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$r['videoURL'],$vidMatch);
+				$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.($r['options'][4]==1?'autoplay=1&':'').($r['options'][5]==1?'loop=1&':'').($r['options'][6]==1?'controls=1&':'controls=0&').'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
+			}else{
+				$videoHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($r['videoURL'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
+			}
+			$html=preg_replace(
+				'/<print content=[\"\']?video[\"\']?>/',
+				$videoHTML,
+				$html
+			);
+		}else$html=preg_replace('/<print content=[\"\']?video[\"\']?>/','',$html);
+	}elseif($r['options'][3]==1&&$r['file']!=''){
+		$html=preg_replace([
+			'/<[\/]?360viewer>/',
+			'~<image>.*?<\/image>~is',
+			'~<panoramic>.*?<\/panoramic>~is',
+			'~<videoviewer>.*?<\/videoviewer>~is'
+		],'',$html);
 		if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
 		elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
 		else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
 		$html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
-		if($r['options'][2]==1&&$r['file']!=''){
-			$html=preg_replace([
-				'/<[\/]?panoramic>/',
-				'~<image>.*?<\/image>~is'
-			],'',$html);
-		}else{
-			$html=preg_replace([
-				'/<[\/]?image>/',
-				'~<panoramic>.*?<\/panoramic>~is'
-			],'',$html);
-		}
+	}elseif($r['options'][2]==1&&$r['file']!=''){
+		$html=preg_replace([
+			'/<[\/]?panoramic>/',
+			'~<image>.*?<\/image>~is',
+			'~<360viewer>.*?<\/360viewer>~is',
+			'~<videoviewer>.*?<\/videoviewer>~is'
+		],'',$html);
+		if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
+		elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
+		else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
+		$html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
+	}else{
+		$html=preg_replace([
+			'/<[\/]?image>/',
+			'~<panoramic>.*?<\/panoramic>~is',
+			'~<360viewer>.*?<\/360viewer>~is',
+			'~<videoviewer>.*?<\/videoviewer>~is'
+		],'',$html);
+		if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
+		elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
+		else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
+		$html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
 	}
 	if(stristr($html,'<item')){
 		preg_match('/<item>([\w\W]*?)<\/item>/',$html,$matches);
 		$item=$matches[1];
 		if(stristr($item,'<mediaitems')){
-			$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=:rid ORDER BY ord ASC");
+			$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rid=:rid AND rank<=:rank ORDER BY ord ASC");
 			$sm->execute([
 				':pid'=>isset($r['id'])?$r['id']:$page['id'],
-				':rid'=>$r['id']
+				':rid'=>$r['id'],
+				':rank'=>$_SESSION['rank']
 			]);
 			if($sm->rowCount()>0){
 				preg_match('/<mediaitems>([\w\W]*?)<\/mediaitems>/',$item,$matches2);
@@ -730,9 +817,8 @@ if($show=='item'){
 				$jss->execute([':rid'=>$r['id']]);
 				$jrr=$jss->fetch(PDO::FETCH_ASSOC);
   			$jsonld.='"aggregateRating":{"@type":"aggregateRating","ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'","reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"},"offers":{"@type":"Offer","url":"'.$canonical.'","priceCurrency":"AUD","price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'","priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'","availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'OutOfStock':'In Stock'):($r['stockStatus']=='none'?'OutOfStock':'InStock')).'","seller":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"}}';
-			}elseif($r['schemaType']=='Service'){
-					$jsonld.='"@type":"Service","serviceType":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'","provider":{"@type":"LocalBusiness","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'","telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'","priceRange":"'.htmlspecialchars(($r['rCost']!=0?$r['rCost']:$r['cost']),ENT_QUOTES,'UTF-8').'","image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"},"areaServed":{"@type":"State","name":"All"}';
-			}else{
+			}elseif($r['schemaType']=='Service')$jsonld.='"@type":"Service","serviceType":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'","provider":{"@type":"LocalBusiness","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","address":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').', '.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'","telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'","priceRange":"'.htmlspecialchars(($r['rCost']!=0?$r['rCost']:$r['cost']),ENT_QUOTES,'UTF-8').'","image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"},"areaServed":{"@type":"State","name":"All"}';
+			else{
 				$jsonld.='"@type":"'.$r['schemaType'].'","headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"';
 				if($r['file']!=''&&file_exists('media/'.basename($r['file'])))$jsonld.=$r['file'].'"';
 				else$jsonld.=URL.FAVICON.'"';
@@ -764,10 +850,11 @@ if($show=='item'){
 				else{
 					if($config['options'][10]==1){
 						if($r['category_1']!=''){
-							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat AND status='published' ORDER BY title ASC LIMIT $iC");
+							$sr=$db->prepare("SELECT id FROM `".$prefix."content` WHERE id!=:id AND category_1 LIKE :cat AND status='published' AND rank<=:rank ORDER BY title ASC LIMIT $iC");
 							$sr->execute([
 								':id'=>$r['id'],
-								':cat'=>$r['category_1']
+								':cat'=>$r['category_1'],
+								':rank'=>$_SESSION['rank']
 							]);
 							if($sr->rowCount()>0)$go=true;
 						}
@@ -781,8 +868,11 @@ if($show=='item'){
 					$relitems='';
 					while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
 						$relateditem=$relitem;
-						$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id AND status='published' AND internal=0");
-						$si->execute([':id'=>$rr['id']]);
+						$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id AND status='published' AND internal=0 AND rank<=:rank");
+						$si->execute([
+							':id'=>$rr['id'],
+							':rank'=>$_SESSION['rank']
+						]);
 						$ri=$si->fetch(PDO::FETCH_ASSOC);
 						if($ri['fileURL']!=''&&($ri['thumb']==''||$ri['file']==''))$relatedImage=$ri['fileURL'];
 						else{
@@ -825,8 +915,8 @@ if($show=='item'){
 				$reviewitem=$review;
 				if(stristr($reviewitem,'<json-ld-review>')){
 					$jsonldreview='<script type="application/ld+json">{"@context":"https://schema.org/","@type":"Review","itemReviewed":{"@type":"Product","image":"';
-							if(file_exists('media'.DS.basename($r['file'])))$jsonldreview.=$r['file'];
-							else$jsonldreview.=URL.FAVICON;
+					if(file_exists('media'.DS.basename($r['file'])))$jsonldreview.=$r['file'];
+					else$jsonldreview.=URL.FAVICON;
 					$jsonldreview.='","name":"'.$r['title'].'"},"reviewRating":{"@type":"Rating","ratingValue":"'.$rr['cid'].'"},"name":"'.$r['title'].'","author":{"@type":"Person","name":"'.($rr['name']!=''?$rr['name']:'Anonymous').'"},"datePublished":"'.date('Y-m-d',$rr['ti']).'","reviewBody":"'.$rr['notes'].'","publisher":{"@type":"Organization","name":"'.$config['business'].'"}}</script>';
 					$reviewitem=str_replace('<json-ld-review>',$jsonldreview,$reviewitem);
 				}

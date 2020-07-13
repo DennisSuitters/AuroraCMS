@@ -7,12 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Fix AutoPublishing
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.10 Move other platform security checks so they only check when enabled.
+ * @changes    v0.0.17 Add rank selection to menu retrieval query.
+ * @changes    v0.0.17 Fix Swap Memory calculation when None is used.
  */
 define('UNICODE','UTF-8');
 $getcfg=true;
@@ -196,7 +198,7 @@ function getmemstats(){
     'total'=>$memtotal*1024,
     'used'=>$memused*1024,
 		'swap'=>$memswap,
-		'swapused'=>$memswap - $memswapfree
+		'swapused'=>($memswap==$memswapfree?0:$memswap - $memswapfree)
   ];
   return$mem;
 }
@@ -607,8 +609,8 @@ $routes=[
 	'logout'=>['front','logout'],
   ''=>['front','index']
 ];
-$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE active=1");
-$s->execute();
+$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE active=1 AND rank<=:rank");
+$s->execute([':rank'=>$_SESSION['rank']]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
 	if(method_exists('front',$r['contentType']))$routes[$r['contentType']]=['front',$r['contentType']];
   else$routes[$r['contentType']]=['front','content'];

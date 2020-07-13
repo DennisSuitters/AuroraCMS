@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.17 Add SEO Helper buttons.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."media` WHERE id=:id");
 $s->execute([':id'=>$args[1]]);
@@ -30,6 +31,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <div class="form-group row">
           <label for="title" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Title Information"><button class="btn btn-secondary seohelper" data-type="title" aria-label="SEO Title Information"><?php svg('seo');?></button></div>
             <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="title" data-bs="btn-danger"<?php echo$user['options'][1]==1?' placeholder="Media Item Title...."':' readonly';?>>
             <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
           </div>
@@ -37,6 +39,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <div class="form-group row">
           <label for="exifFilename" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image ALT</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Image Alt Information"><button class="btn btn-secondary seohelper" data-type="alt" aria-label="SEO Image Alt Information"><?php svg('seo');?></button></div>
             <input type="text" id="fileALT" class="form-control textinput" value="<?php echo$r['fileALT'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="fileALT"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
             <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
           </div>

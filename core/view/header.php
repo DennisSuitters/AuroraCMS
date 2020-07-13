@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -15,6 +15,9 @@
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.11 Remove unneeded URL forward slash for extra pages in menu.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.17 Add check for rank access for menu items.
+ * @changes    v0.0.17 Fix dropdown menu creation adding wrong link element.
+ * @changes    v0.0.17 Add parsing for Business Hours.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
@@ -80,7 +83,8 @@ if(stristr($html,'<buildMenu')){
 		$menuLogin=$matches[1];
 	}else$menuLogin='';
 	$htmlMenu='';
-	$s=$db->query("SELECT * FROM `".$prefix."menu` WHERE menu='head' AND mid=0 AND active=1 ORDER BY ord ASC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE menu='head' AND mid=0 AND active=1 AND rank<=:rank ORDER BY ord ASC");
+	$s->execute([':rank'=>$_SESSION['rank']]);
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$menuURL='';
 		if($r['contentType']!='index'){
@@ -113,8 +117,11 @@ if(stristr($html,'<buildMenu')){
 				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';
 			}
 		}else$menuURL.=URL;
-		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid=:mid AND active=1 ORDER BY ord ASC");
-		$sm->execute([':mid'=>$r['id']]);
+		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid=:id AND  active=1 AND rank<=:rank ORDER BY ord ASC");
+		$sm->execute([
+			':id'=>$r['id'],
+			':rank'=>$_SESSION['rank']
+		]);
 		$smc=$sm->rowCount();
 		$menuItem=$nondropDown;
 		if($smc>0)$menuItem=$dropDown;
@@ -131,17 +138,6 @@ if(stristr($html,'<buildMenu')){
 		],$menuItem);
 		if($smc>0){
 			$submenu='';
-			$item=$subMenuItem;
-			$item=preg_replace([
-				'/<print submenu=[\"\']?url[\"\']?>/',
-				'/<print rel=[\"\']?contentType[\"\']?>/',
-				'/<print submenu=[\"\']?title[\"\']?>/'
-			],[
-				$menuURL,
-				$r['contentType'],
-				$r['title']
-			],$item);
-			$submenu.=$item;
 			while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
 				$item=$subMenuItem;
 				$subURL='';
@@ -247,23 +243,102 @@ if(isset($_GET['activate'])&&$_GET['activate']!=''){
 	$sa->execute([':activate'=>$activate]);
 	$html=$sa->rowCount()>0?str_replace('<activation>',$theme['settings']['activation_success'],$html):str_replace('<activation>',$theme['settings']['activation_error'],$html);
 }else$html=str_replace('<activation>','',$html);
-$html=preg_replace([
-	'/<print config=[\"\']?business[\"\']?>/',
-	'/<print config=[\"\']?address[\"\']?>/',
-	'/<print config=[\"\']?suburb[\"\']?>/',
-	'/<print config=[\"\']?postcode[\"\']?>/',
-	'/<print config=[\"\']?country[\"\']?>/',
-	'/<print config=[\"\']?email[\"\']?>/',
-	'/<print config=[\"\']?phone[\"\']?>/',
-	'/<print config=[\"\']?mobile[\"\']?>/'
-],[
-	htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
-	$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
-	htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8'),
-	$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
-	$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
-],$html);
+if(stristr($html,'<hours>')){
+	if($config['options'][19]==1){
+		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
+		$htmlHours=$matches[1];
+		$hoursItems='';
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='hours'");
+		if($s->rowCount()>0){
+			while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$buildHours=$htmlHours;
+				if($r['tis']!=0){
+					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
+					if($config['options'][21]==1){
+						$hourFrom=$r['tis'];
+					}else{
+						$hourFromH=substr($r['tis'],0,2);
+						$hourFromM=substr($r['tis'],3,4);
+						$hourFrom=($hourFromH < 12 ? ltrim($hourFromH,'0') . ($hourFromM > 0 ? $hourFromM : '' ).'am' : $hourFromH - 12 . ($hourFromM > 0 ? $hourFromM : '') . 'pm');
+					}
+				}else$hourFrom='';
+				if($r['tie']!=0){
+					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
+					if($config['options'][21]==1){
+						$hourTo=$r['tie'];
+					}else{
+						$hourToH=substr($r['tie'],0,2);
+						$hourToM=substr($r['tie'],3,4);
+						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
+					}
+				}else$hourTo='';
+				$buildHours=preg_replace([
+					'/<print dayfrom>/',
+					'/<print dayto>/',
+					'/<print timefrom>/',
+					'/<print timeto>/',
+					'/<print info>/'
+				],[
+					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])),
+					($r['password']==$r['username']?'':'-'.ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
+					$hourFrom,
+					($r['tie']>0?'-' . $hourTo : ''),
+					($r['title']!=''?ucfirst($r['title']):'')
+				],$buildHours);
+				$hoursItems.=$buildHours;
+			}
+		}
+		$html=preg_replace([
+				'/<[\/]?hours>/',
+				'~<buildHours>.*?<\/buildHours>~is'
+			],[
+				'',
+				$hoursItems,
+			],$html);
+	}else
+		$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
+}
+if(stristr($html,'<email>')){
+	if($config['options'][23]==1){
+		$html=preg_replace([
+			'/<[\/]?email>/',
+			'/<print config=[\"\']?email[\"\']?>/'
+		],[
+			'',
+			'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
+		],$html);
+	}else$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
+}
+if(stristr($html,'<contact>')){
+	if($config['options'][22]==1){
+		$html=preg_replace([
+			'/<[\/]?contact>/',
+			'/<print config=[\"\']?business[\"\']?>/',
+			'/<print config=[\"\']?address[\"\']?>/',
+			'/<print config=[\"\']?suburb[\"\']?>/',
+			'/<print config=[\"\']?postcode[\"\']?>/',
+			'/<print config=[\"\']?country[\"\']?>/',
+		],[
+			'',
+			htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
+			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
+			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
+		],$html);
+	}else$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
+}
+if(stristr($html,'<phone>')){
+	if($config['options'][24]==1){
+		$html=preg_replace([
+			'/<[\/]?phone>/',
+			'/<print config=[\"\']?phone[\"\']?>/',
+			'/<print config=[\"\']?mobile[\"\']?>/'
+		],[
+			'',
+			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
+			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
+		],$html);
+	}else$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
+}
 $content.=$html;

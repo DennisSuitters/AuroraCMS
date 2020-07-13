@@ -134,6 +134,45 @@ nav.account-menu #accountavatar {
   display: block;
   font-size: 1.5rem; }
 
+.jumbotron:empty{display:none}
+.jumbotron[style*="background-image"]{display:block}
+.jumbotron{
+  position:relative;
+  width:100%;
+  height:100vh;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-repeat:no-repeat;
+  background-position:center center;
+  background-attachment:fixed;
+  -webkit-background-size:cover;
+  -moz-background-size:cover;
+  -o-background-size:cover;
+  background-size:cover;
+  object-fit:contain;
+  overflow:hidden;
+  -moz-box-shadow:inset 0 -30px 30px -30px rgba(0,0,0,.5);
+  -webkit-box-shadow:inset 0 -30px 30px -30px rgba(0,0,0,.5);
+  box-shadow:inset 0 -30px 30px -30px rgba(0,0,0,.5);
+}
+.jumbotron video,
+.jumbotron iframe{
+  position:absolute;
+  top:0;
+  right:0;
+  bottom:0;
+  left:0;
+  height:auto;
+  width:auto;
+  min-height:100%;
+  min-width:100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color:#000;
+  z-index:1;
+}
+
+
 .content-quantity,
 .content-condition,
 .content-weight,

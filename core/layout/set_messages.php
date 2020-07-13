@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Option to not store messages.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -191,13 +192,13 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
         <div class="form-group row">
           <label for="contactAutoReplyLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
           <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col text-right"><small>Tokens:</small>
+            <div class="col col-12 text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{subject}');return false;">{subject}</a>
             </div>
-            <form method="post" target="sp" action="core/update.php">
+            <form method="post" target="sp" action="core/update.php" class="w-100">
               <input type="hidden" name="id" value="1">
               <input type="hidden" name="t" value="config">
               <input type="hidden" name="c" value="contactAutoReplyLayout">
@@ -210,15 +211,13 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
         <div role="tabpanel" class="tab-pane" id="account-messages">
           <div class="form-group row">
             <label for="email_signature" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Signature</label>
-            <div class="col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-              <div class="card-header p-0">
-                <form method="post" target="sp" action="core/update.php">
-                  <input type="hidden" name="id" value="1">
-                  <input type="hidden" name="t" value="config">
-                  <input type="hidden" name="c" value="email_signature">
-                  <textarea id="email_signature" class="form-control summernote" name="da"><?php echo rawurldecode($config['email_signature']);?></textarea>
-                </form>
-              </div>
+            <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
+              <form method="post" target="sp" action="core/update.php" class="w-100">
+                <input type="hidden" name="id" value="1">
+                <input type="hidden" name="t" value="config">
+                <input type="hidden" name="c" value="email_signature">
+                <textarea id="email_signature" class="form-control summernote" name="da"><?php echo rawurldecode($config['email_signature']);?></textarea>
+              </form>
             </div>
           </div>
         </div>

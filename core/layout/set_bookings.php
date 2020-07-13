@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
  */?>
 <main id="content" class="main position-relative">
   <ol class="breadcrumb shadow">
@@ -51,7 +52,7 @@
         <div class="form-group row">
           <label for="bookingEmailLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
           <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col text-right"><small>Tokens:</small>
+            <div class="col col-12 text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
@@ -60,7 +61,7 @@
               <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{service}');return false;">{service}</a>
             </div>
-            <form method="post" target="sp" action="core/update.php">
+            <form method="post" target="sp" action="core/update.php" class="w-100">
               <input type="hidden" name="id" value="1">
               <input type="hidden" name="t" value="config">
               <input type="hidden" name="c" value="bookingEmailLayout">
@@ -95,7 +96,7 @@
         <div class="form-group row">
           <label for="bookingAutoReplyLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
           <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col text-right"><small>Tokens:</small>
+            <div class="col col-12 text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
@@ -104,7 +105,7 @@
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{service}');return false;">{service}</a>
             </div>
-            <form method="post" target="sp" action="core/update.php">
+            <form method="post" target="sp" action="core/update.php" class="w-100">
               <input type="hidden" name="id" value="1">
               <input type="hidden" name="t" value="config">
               <input type="hidden" name="c" value="bookingAutoReplyLayout">

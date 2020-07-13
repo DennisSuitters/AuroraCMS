@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Adjust Links Layout Items
@@ -15,6 +15,7 @@
  * @changes    v0.0.4 Fix Tooltips
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.17 Fix Thumbnail Display.
  */
 $rank=0;
 $show='categories';
@@ -210,10 +211,13 @@ else{
 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <tr id="l_<?php echo$r['id'];?>" class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>">
               <td class="align-middle">
-                <?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
-                elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
-                elseif($r['fileURL']!='')echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="img-rounded" style="max-width:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
-                else echo'';?>
+<?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb'])))
+        echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
+      elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
+        echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
+      elseif($r['fileURL']!='')
+        echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
+      else echo'';?>
               </td>
               <td class="align-middle">
                 <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="table-thumb" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>

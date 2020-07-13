@@ -69,12 +69,12 @@ config
     16  Enable Website Voice Service
     17  Lock Down Developer Options
     18  PWA Offline Page
-    19
-    20
-    21
-    22
-    23
-    24
+    19  Display Business Hours
+    20  Truncate Day Lengths
+    21  Use 24 Hour Display
+    22  Display Address Details
+    23  Display Email
+    24  Display Phone Numbers
     25
     26
     27
@@ -112,6 +112,11 @@ config
   `email_signature` text
   `storemessages` int(1)
   `message_check_interval` int(10)
+  `chatAutoRemove` int(16)
+  `messengerFBCode` tinytext
+  `messengerFBColor` varchar(16)
+  `messengerFBGreeting` tinytext
+  `wv_site_id` tinytext
   `language` varchar(8)
   `timezone` varchar(128)
   `orderPayti` int(10)
@@ -119,6 +124,8 @@ config
   `orderEmailLayout` text
   `orderEmailNotes` text
   `orderEmailReadNotification` tinyint(1)
+  `austPostAPIKey` varchar(128)
+  `gst` varchar(4)
   `passwordResetLayout` text
   `passwordResetSubject` tinytext
   `accountActivationSubject` tinytext
@@ -139,7 +146,8 @@ config
   `bankAccountName` varchar(40)
   `bankAccountNumber` varchar(40)
   `bankBSB` varchar(16)
-  `bankPayPal` varchar(60)
+  `payPalClientID` varchar(256)
+  `payPalSecret` varchar(256)
   `showItems` int(4)
   `idleTime` int(6)
   `git_commits` longblob
@@ -199,10 +207,10 @@ content
     0 Show Cost
     1 Enable Comments
     2 Enable Panorama
-    3
-    4
-    5
-    6
+    3 Enable 360 Viewer
+    4 Video Autoplay
+    5 Video Loop
+    6 Video Controls
     7
   `rank` int(4)
   `rid` bigint(20)
@@ -258,12 +266,20 @@ content
   `exifLens` tinytext COLLATE utf8_bin NOT NULL,
   `exifFilename` tinytext COLLATE utf8_bin NOT NULL,
   `exifti` int(10) NOT NULL,
+  `rrp` decimal(10,2)
   `cost` decimal(10,2) DEFAULT NULL,
+  `rCost` decimal(10,2)
+  `sold` bigint(20)
+  `weight` varchar(6)
+  `weightunit` varchar(6)
+  `height` varchar(6)
+  `heightunit` varchar(6)
   `subject` varchar(60) COLLATE utf8_bin NOT NULL,
   `notes` text COLLATE utf8_bin NOT NULL,
   `attributionContentName` tinytext COLLATE utf8_bin NOT NULL,
   `attributionContentURL` varchar(256) COLLATE utf8_bin NOT NULL,
   `quantity` mediumint(20) UNSIGNED NOT NULL,
+  `itemCondition` varchar(32)
   `tags` varchar(255) COLLATE utf8_bin NOT NULL,
   `seoTitle` varchar(255) COLLATE utf8_bin NOT NULL,
   `seoCaption` varchar(255) COLLATE utf8_bin NOT NULL,
@@ -285,7 +301,9 @@ content
   `assoc` varchar(128) COLLATE utf8_bin NOT NULL,
   `ord` bigint(20) UNSIGNED NOT NULL,
   `views` bigint(20) UNSIGNED NOT NULL,
+  `rating` int(1)
   `suggestions` int(1) NOT NULL,
+  `checklist` varchar(16)
   `active` tinyint(1) UNSIGNED NOT NULL,
   `pin` tinyint(1) NOT NULL,
   `tis` int(10) UNSIGNED NOT NULL,
@@ -300,6 +318,20 @@ iplist
   `ip` varchar(32) COLLATE utf8_bin NOT NULL,
   `oti` int(10) NOT NULL,
   `ti` int(10) NOT NULL
+
+liveChat
+  `id` bigint(20)
+  `aid` bigint(20)
+  `sid` varchar(64)
+  `who` varchar(6)
+  `name` tinytext
+  `email` tinytext
+  `notes` text
+  `ip` int(32)
+  `user_agent` varchar(255)
+  `phpChecked` int(1)
+  `status` tinytext
+  `ti` int(10)
 
 login
   `id` bigint(20) UNSIGNED NOT NULL,
@@ -369,7 +401,6 @@ login
     29
     30
     31
-  `adminTheme` varchar(32) COLLATE utf8_bin NOT NULL,
   `username` varchar(128) COLLATE utf8_bin NOT NULL,
   `password` varchar(256) COLLATE utf8_bin NOT NULL,
   `cover` varchar(60) COLLATE utf8_bin NOT NULL,
@@ -388,6 +419,7 @@ login
   `emailPassword` tinytext COLLATE utf8_bin NOT NULL,
   liveChatNotification INT(10) NOT NULL,
   `email_check` int(10) NOT NULL,
+  `liveChatNotification` int(1)
   `email_signature` text COLLATE utf8_bin NOT NULL,
   `url` varchar(256) COLLATE utf8_bin NOT NULL,
   `address` varchar(80) COLLATE utf8_bin NOT NULL,
@@ -400,6 +432,7 @@ login
   `phone` varchar(14) COLLATE utf8_bin NOT NULL,
   `mobile` varchar(14) COLLATE utf8_bin NOT NULL,
   `caption` tinytext COLLATE utf8_bin NOT NULL,
+  `seoDescription` tinytext
   `notes` text COLLATE utf8_bin NOT NULL,
   `resume_notes` text COLLATE utf8_bin NOT NULL,
   `status` varchar(16) COLLATE utf8_bin NOT NULL,
@@ -474,8 +507,18 @@ media
 
 menu
   `id` bigint(20) UNSIGNED NOT NULL,
+  `rank` int(4)
   `mid` bigint(20) NOT NULL DEFAULT '0',
   `uid` bigint(20) NOT NULL,
+  `options` varchar(8)
+    0 Video Autoplay
+    1 Video Loop
+    2 Video Controls
+    3
+    4
+    5
+    6
+    7
   `login_user` varchar(128) COLLATE utf8_bin NOT NULL,
   `title` varchar(60) COLLATE utf8_bin NOT NULL,
   `seoTitle` varchar(255) COLLATE utf8_bin DEFAULT NULL,
@@ -578,6 +621,13 @@ rewards
   `tis` int(10) NOT NULL,
   `tie` int(10) NOT NULL,
   `ti` int(10) NOT NULL
+
+seo
+  `id` bigint(20) NOT NULL,
+  `contentType` tinytext
+  `type` tinytext
+  `notes` text
+  `ti` into(10) NOT NULL
 
 subscribers
   `id` bigint(20) NOT NULL,

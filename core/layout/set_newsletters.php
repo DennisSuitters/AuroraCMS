@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -58,10 +59,10 @@
         <div class="form-group row">
           <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></label>
           <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col text-right"><small>Tokens:</small>
+            <div class="col col-12 text-right"><small>Tokens:</small>
               <a class="badge badge-secondary" href="#" onclick="$('#optOutLayout').summernote('insertText','{optOutLink}');return false;">{optOutLink}</a>
             </div>
-            <form method="post" target="sp" action="core/update.php">
+            <form method="post" target="sp" action="core/update.php" class="w-100">
               <input type="hidden" name="id" value="1">
               <input type="hidden" name="t" value="config">
               <input type="hidden" name="c" value="newslettersOptOutLayout">

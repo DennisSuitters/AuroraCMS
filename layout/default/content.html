@@ -20,6 +20,15 @@
 				<panoramic>
 					<div class="panorama" data-paver><img src="<print content=image>" alt="<print content=imageALT>"></div>
 				</panoramic>
+				<360viewer>
+					<div class="viewer-360">
+  					<input class="viewer-slider" type="range" min="1" max="36" value="1" oninput="this.setAttribute('value', this.value);">
+  					<figure class="viewer-image" style="background-image:url('<print content=image>');"></figure>
+					</div>
+				</360viewer>
+				<videoviewer>
+					<div class="jumbotron"><print content="video"></div>
+				</videoviewer>
 				<div class="card-text m-3">
 					<h1><print content="title"></h1>
 					<print content="dateCreated" userrank="399" class="text-muted small" container="div" leadingtext="Created: ">

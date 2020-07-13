@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.17 Add SQL for rank fetching data.
  */
 if($page['notes']!=''){
 	$html=preg_replace([
@@ -26,8 +27,11 @@ $gals='';
 if(stristr($html,'<items')){
   preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
   $gal=$matches[1];
-  $s=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid ORDER BY ord ASC");
-  $s->execute([':pid'=>10]);
+  $s=$db->prepare("SELECT * FROM `".$prefix."media` WHERE pid=:pid AND rank<=:rank ORDER BY ord ASC");
+  $s->execute([
+		':pid'=>10,
+		':rank'=>$_SESSION['rank']
+	]);
   $output='';
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     $items=$gal;

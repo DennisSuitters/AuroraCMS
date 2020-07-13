@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.17 Add SQL for rank fetching data.
  */
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -25,11 +26,12 @@ $show='categories';
 $i=isset($_POST['i'])?filter_input(INPUT_POST,'i',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'i',FILTER_SANITIZE_NUMBER_INT);
 $html=file_exists('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.$view.'.html')?file_get_contents('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.$view.'.html'):file_get_contents('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.'content.html');
 $itemCount=$config['showItems'];
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status LIKE :status AND internal!='1' AND pti < :ti ORDER BY ti DESC LIMIT $i,$itemCount");
+$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status LIKE :status AND internal!='1' AND pti < :ti AND rank<=:rank ORDER BY ti DESC LIMIT $i,$itemCount");
 $s->execute([
   ':contentType'=>$contentType,
   ':status'=>'published',
-  ':ti'=>time()
+  ':ti'=>time(),
+  ':rank'=>$_SESSION['rank']
 ]);
 if(stristr($html,'<more')){
   preg_match('/<more>([\w\W]*?)<\/more>/',$html,$matches);

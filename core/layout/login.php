@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.6
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.6 Fix reference to jQuery.
+ * @changes    v0.0.17 Add Form action for previous Referer URL.
  */?>
 <!DOCTYPE html>
 <!--
@@ -50,7 +51,7 @@
           <div class="card-body py-0">
             <img src="core/images/auroracms-white.svg" class="logo" alt="AuroraCMS">
             <div class="logo_slogan">The Australian Open Source Content Management System</div>
-            <form id="login" class="" method="post" action="<?php echo(!empty($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
+            <form id="login" class="" method="post" action="<?php echo(!empty($_SERVER['HTTP_REFERER'])?(stristr($_SERVER['HTTP_REFERER'],URL)?rtrim($settings['system']['admin'],'/').'/dashboard':$_SERVER['HTTP_REFERER']):rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
               <input type="hidden" name="act" value="login">
               <div class="input-group mb-3" data-tooltip="tooltip" data-title="Username">
                 <div class="input-group-prepend">

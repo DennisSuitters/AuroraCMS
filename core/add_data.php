@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -17,6 +17,7 @@
  * @changes    v0.0.12 Fix Multiple Media Adding.
  * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
  * @changes    v0.0.15 Add Edit Media information button.
+ * @changes    v0.0.17 Add Business Hours.
  */
 $getcfg=true;
 require'db.php';
@@ -162,6 +163,49 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
   window.top.window.toastr["error"]("The URL entered is not valid!");
 <?php }
       break;
+			case'add_hours':
+	      $from=filter_input(INPUT_POST,'from',FILTER_SANITIZE_STRING);
+	      $to=filter_input(INPUT_POST,'to',FILTER_SANITIZE_STRING);
+				$timefrom=filter_input(INPUT_POST,'timefrom',FILTER_SANITIZE_NUMBER_INT);
+				$timeto=filter_input(INPUT_POST,'timeto',FILTER_SANITIZE_NUMBER_INT);
+	      $info=filter_input(INPUT_POST,'info',FILTER_SANITIZE_STRING);
+        $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,contentType,username,password,tis,tie,title) VALUES (0,'hours',:f,:t,:tis,:tie,:info)");
+        $q->execute([
+          ':f'=>$from,
+          ':t'=>$to,
+          ':tis'=>$timefrom,
+					':tie'=>$timeto,
+					':info'=>$info
+        ]);
+        $id=$db->lastInsertId();
+        $e=$db->errorInfo();
+        if(is_null($e[2])){?>
+	  window.top.window.$('#hours').append(`<?php
+	echo'<div id="l_'.$id.'" class="form-group row">'.
+				'<div class="input-group col-12">'.
+					'<div class="input-group-text">From</div>'.
+					'<input type="text" class="form-control" value="'.ucfirst($from).'" readonly>'.
+					'<div class="input-group-text">To</div>'.
+					'<input type="text" class="form-control" value="'.ucfirst($to).'" readonly>'.
+					'<div class="input-group-text">Time From</div>'.
+					'<input type="text" class="form-control" value="'.$timefrom.'" readonly>'.
+					'<div class="input-group-text">Time From</div>'.
+					'<input type="text" class="form-control" value="'.$timeto.'" readonly>'.
+					'<div class="input-group-text">Additional Info</div>'.
+					'<input type="text" class="form-control" value="'.$info.'" readonly>'.
+					'<div class="input-group-append">'.
+						'<form target="sp" action="core/purge.php">'.
+							'<input type="hidden" name="id" value="'.$id.'">'.
+							'<input type="hidden" name="t" value="choices">'.
+							'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'</form>'.
+					'</div>'.
+				'</div>'.
+			'</div>';?>`);
+<?php   }else{?>
+	  window.top.window.toastr["error"]("There was an issue adding the Hours Data!");
+<?php   }
+	      break;
 		case'add_option':
       $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
       $ttl=filter_input(INPUT_POST,'ttl',FILTER_SANITIZE_STRING);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Option to not store messages.
@@ -15,6 +15,7 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
+ * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -72,9 +73,9 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         </div>
         <hr>
         <legend>Webmail</legend>
-        <div class="form-group row">
-          <label for="message_check_interval" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Check for new Messages every</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="message_check_interval">Check for new Messages every</label>
+          <div class="input-group">
             <select id="message_check_interval" class="form-control" onchange="update('1','config','message_check_interval',$(this).val());">
               <option value="0"<?php echo$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
               <option value="1"<?php echo$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
@@ -178,21 +179,22 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
         </div>
         <hr>
         <legend>AutoReply Email</legend>
-        <div class="col-12 text-right"><small>Tokens:</small>
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{business}');return false;">{business}</a>
-          <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{date}');return false;">{date}</a>
-        </div>
-        <div class="form-group row">
-          <label for="contactAutoReplySubject" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Subject</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="contactAutoReplySubject">Subject</label>
+          <div class="form-text small text-muted float-right">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{business}');return false;">{business}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{date}');return false;">{date}</a>
+          </div>
+          <div class="input-group">
             <input type="text" id="contactAutoReplySubject" class="form-control textinput" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecontactAutoReplySubject" class="btn btn-secondary save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append">
+              <button id="savecontactAutoReplySubject" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="contactAutoReplyLayout" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Layout</label>
-          <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
-            <div class="col col-12 text-right"><small>Tokens:</small>
+        <div class="form-group">
+          <div class="input-group card-header p-0">
+            <div class="col-12 form-text small text-muted text-right">Tokens:
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{name}');return false;">{name}</a>
@@ -209,9 +211,8 @@ while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
         <hr>
         <legend>Email Signature</legend>
         <div role="tabpanel" class="tab-pane" id="account-messages">
-          <div class="form-group row">
-            <label for="email_signature" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Signature</label>
-            <div class="input-group card-header col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10 p-0">
+          <div class="form-group">
+            <div class="input-group card-header p-0">
               <form method="post" target="sp" action="core/update.php" class="w-100">
                 <input type="hidden" name="id" value="1">
                 <input type="hidden" name="t" value="config">

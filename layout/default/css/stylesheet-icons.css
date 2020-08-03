@@ -1,0 +1,434 @@
+/* stylesheet v0.9 - iCons - https://github.com/DiemenDesign/stylesheet */
+
+.i {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  vertical-align: -5%;
+  text-rendering: auto;
+  fill: currentColor;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.i svg {
+  width: 14px !important;
+  height:14px !important; }
+
+.i-lg svg {
+  width: 28px !important;
+  height: 28px !important; }
+
+.i-2x svg {
+  width: 28px !important;
+  height: 28px !important; }
+
+.i-3x svg {
+  width: 42px !important;
+  height: 42px !important; }
+
+.i-4x svg {
+  width: 56px !important;
+  height: 56px !important; }
+
+.i-5x svg {
+  width: 70px !important;
+  height: 70px !important; }
+
+.i-fw {
+  width: 1.28571429em;
+  text-align: center; }
+
+.i-white {
+  fill: #fff; }
+
+.i-red {
+  fill: #f00; }
+
+.i-social {
+  position: relative;
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  color: #000;
+  fill: #000;
+  border: 0;
+  -webkit-border-radius: 3px;
+  border-radius: 3px; }
+
+.i-social svg {
+  border: 0 solid transparent;
+  margin: 0;
+  -webkit-border-radius: 1px;
+  border-radius: 1px; }
+
+.i-social.i-2x,
+.i-social.i-lg {
+  width: 28px;
+  height: 28px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px; }
+
+.i-social.i-2x svg,
+.i-social.i-lg svg {
+  width: 28px;
+  height: 28px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px; }
+
+.i-social.i-3x {
+  width: 42px;
+  height: 42px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px; }
+
+.i-social.i-3x svg {
+  width: 42px;
+  height: 42px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px; }
+
+.i-social.i-4x {
+  width: 56px;
+  height: 56px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px; }
+
+.i-social.i-4x svg {
+  width: 56px;
+  height: 56px;
+  -webkit-border-radius: 3px;
+  border-radius: 5px; }
+
+.i-social.i-5x {
+  width: 70px;
+  height: 70px;
+  -webkit-border-radius: 5px;
+  border-radius: 5px; }
+
+.i-social.i-5x svg {
+  width: 70px;
+  height: 70px;
+  -webkit-border-radius: 3px;
+  border-radius: 5px; }
+
+.i-social svg.social-500px {
+  background-color: #0099e5;
+  fill: #fff; }
+
+.i-social svg.social-aboutme {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-airbnb {
+  background-color: #ff5a60;
+  fill: #fff; }
+
+.i-social svg.social-amazon {
+  background-color: #232f3e;
+  fill: #fff; }
+
+.i-social svg.social-australia-post {
+  background-color: #dc1928;
+  fill: #fff; }
+
+.i-social svg.social-behance {
+  background-color: #131418;
+  fill: #fff; }
+
+.i-social svg.social-bitcoin {
+  background-color: #fff;
+  fill: #faB915; }
+
+.i-social svg.social-blogger {
+  background-color: #ff9334;
+  fill: #fff; }
+
+.i-social svg.social-buffer {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-cargo {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-codepen {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-coroflot {
+  background-color: #000;
+  fill: #ef482b; }
+
+.i-social svg.social-creattica {
+  background-color: #000;
+  fill: #83b541; }
+
+.i-social svg.social-delicious {
+  background-color: #0076e8;
+  fill: #fff; }
+
+.i-social svg.social-deviantart {
+  background-color: #475C4d;
+  fill: #05cc47; }
+
+.i-social svg.social-diaspora {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-digg {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-discord {
+  background-color: #7289da;
+  fill: #fff; }
+
+.i-social svg.social-discourse {
+  background-color: #000;
+  fill: #fff;
+}
+
+.i-social svg.social-disqus {
+  background-color: #91ccff;
+  fill: #fff;
+}
+
+.i-social svg.social-dribble {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-dropbox {
+  background-color: #007ee5;
+  fill: #fff; }
+
+.i-social svg.social-duckduckgo {
+  background-color: #fff;
+  fill: #de5833; }
+
+.i-social svg.social-envato {
+  background-color: #fff;
+  fill: #82b541; }
+
+.i-social svg.social-etsy {
+  background-color: #f66401;
+  fill: #fff; }
+
+.i-social svg.social-facebook {
+  background-color: #46629e;
+  fill: #fff; }
+
+.i-social svg.social-feedburner {
+  background-color: #ee3a42;
+  fill: #fff; }
+
+.i-social svg.social-flickr {
+  background-color: #0063db;
+  fill: #fff; }
+
+.i-social svg.social-forrst {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-github {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-gitlab {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-gravatar {
+  background-color: #1e8cbe;
+  fill: #fff; }
+
+.i-social svg.social-hackernews {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-icq {
+  background-color: #fff;
+  fill: #4ec739; }
+
+.i-social svg.social-instagram {
+  background-color: #125688;
+  fill: #fff; }
+
+.i-social svg.social-kickstarter {
+  background-color: #000;
+  fill: #14e06e; }
+
+.i-social svg.social-last-fm {
+  background-color: #d3140a;
+  fill: #fff; }
+
+.i-social svg.social-lego {
+  background-color: #f00;
+  fill: #ff0; }
+
+.i-social svg.social-linkedin {
+  background-color: #0173b2;
+  fill: #fff; }
+
+.i-social svg.social-livejournal {
+  background-color: #306599;
+  fill: #fff; }
+
+.i-social svg.social-lynda {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-map {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-massroots {
+  background-color: #3c925b;
+  fill: #fff; }
+
+.i-social svg.social-medium {
+  background-color: #fff;
+  fill: #a6a8ab; }
+
+.i-social svg.social-netlify {
+  background-color: #313D3e;
+  fill: #00c7b7; }
+
+.i-social svg.social-ovh {
+  background-color: #fff;
+  fill: #264670; }
+
+.i-social svg.social-paypal {
+  background-color: #006492;
+  fill: #fff; }
+
+.i-social svg.social-periscope {
+  background-color: #3fa9c7;
+  fill: #fff; }
+
+.i-social svg.social-picasa {
+  background-color: #797979;
+  fill: #fff; }
+
+.i-social svg.social-pinterest {
+  background-color: #d73532;
+  fill: #fff; }
+
+.i-social svg.social-play-store {
+  background-color: #fff;
+  fill: #41b1bc; }
+
+.i-social svg.social-quora {
+  background-color: #a82400;
+  fill: #fff; }
+
+.i-social svg.social-redbubble {
+  background-color: #fe0000;
+  fill: #fff; }
+
+.i-social svg.social-reddit {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-rss {
+  background-color: #ff7b0a;
+  fill: #fff; }
+
+.i-social svg.social-sharethis {
+  background-color: #64c011;
+  fill: #fff; }
+
+.i-social svg.social-skype {
+  background-color: #00adef;
+  fill: #fff; }
+
+.i-social svg.social-snapchat {
+  background-color: #fffc00;
+  fill: #fff; }
+
+.i-social svg.social-soundcloud {
+  background-color: #ff5419;
+  fill: #fff; }
+
+.i-social svg.social-stackoverflow {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-steam {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-stumbleupon {
+  background-color: #eb4823;
+  fill: #fff; }
+
+.i-social svg.social-tor {
+  background-color: #7d4698;
+  fill: #fff; }
+
+.i-social svg.social-tsu {
+  background-color: #fff;
+  fill: #1abc9c; }
+
+.i-social svg.social-tumblr {
+  background-color: #395976;
+  fill: #fff; }
+
+.i-social svg.social-twitch {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-twitter {
+  background-color: #41abe1;
+  fill: #fff; }
+
+.i-social svg.social-ubiquiti {
+  background-color: #0193d7;
+  fill: #fff; }
+
+.i-social svg.social-unsplash {
+  background-color: #000;
+  fill: #fff; }
+
+.i-social svg.social-vimeo {
+  background-color: #00adef;
+  fill: #fff; }
+
+.i-social svg.social-vine {
+  background-color: #55Be95;
+  fill: #fff; }
+
+.i-social svg.social-whatsapp {
+  background-color: #0dc143;
+  fill: #fff; }
+
+.i-social svg.social-wikipedia {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-windows-store {
+  background-color: #fff;
+  fill: #000; }
+
+.i-social svg.social-xbox-live {
+  background-color: #107c0F;
+  fill: #fff; }
+
+.i-social svg.social-yahoo {
+  background-color: #560db0;
+  fill: #fff; }
+
+.i-social svg.social-yelp {
+  background-color: #fff;
+  fill: #da1400; }
+
+.i-social svg.social-youtube {
+  background-color: #e62117;
+  fill: #fff; }
+
+.i-social svg.social-zerply {
+  background-color: #fff;
+  fill: #8db741; }
+
+.i-social svg.social-zune {
+  background-color: #fff;
+  fill: #d33280; }

@@ -17,6 +17,7 @@ echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
 $getcfg=true;
 require'db.php';
+require'puconverter.php';
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 function svg($svg,$class=null,$size=null){
@@ -31,10 +32,14 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 $c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
 $ti=time();
-if(file_exists(THEME.DS.'images'.DS.'noimage.png'))define('NOIMAGE',THEME.DS.'images'.DS.'noimage.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage.gif'))define('NOIMAGE',THEME.DS.'images'.DS.'noimage.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage.jpg'))define('NOIMAGE',THEME.DS.'images'.DS.'noimage.jpg');
-else define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
+if(file_exists(THEME.DS.'images'.DS.'noimage.png'))
+	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.png');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage.gif'))
+	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.gif');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage.jpg'))
+	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.jpg');
+else
+	define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
 if($act=='additem'){
 	if($da!=0){
 		$q=$db->prepare("SELECT title,cost,rCost FROM `".$prefix."content` WHERE id=:id");
@@ -108,32 +113,95 @@ if($act=='reward'){
 if($act=='addpostoption'){
 	if($da==0){
 		$rc=[
+			'id'=>0,
+			'type'=>'',
 			'title'=>'',
 			'value'=>0
 		];
 	}else{
-		$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' AND id=:id");
+		$sc=$db->prepare("SELECT id,type,title,value FROM `".$prefix."choices` WHERE contentType='postoption' AND id=:id");
 		$sc->execute([':id'=>$da]);
 		$rc=$sc->fetch(PDO::FETCH_ASSOC);
 	}
-	$s=$db->prepare("UPDATE `".$prefix."orders` SET postageOption=:postoption, postageCost=:postcost WHERE id=:id");
+	if($config['austPostAPIKey']!=''&&stristr($rc['type'],'AUS_')){
+		$apiKey=$config['austPostAPIKey'];
+		$totalweight=$weight=$dimW=$dimL=$dimH=0;
+		$os=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
+		$os->execute([':id'=>$id]);
+		$oir=$os->fetch(PDO::FETCH_ASSOC);
+		$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
+		$su->execute([':uid'=>$oir['uid']]);
+		$ru=$su->fetch(PDO::FETCH_ASSOC);
+		$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:id");
+		$si->execute([':id'=>$id]);
+		while($ri=$si->fetch(PDO::FETCH_ASSOC)){
+			$sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:sid");
+			$sc->execute([':sid'=>$ri['iid']]);
+			while($i=$sc->fetch(PDO::FETCH_ASSOC)){
+				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+				$weight=$weight+($i['weight']*$ri['quantity']);
+				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+				if($i['width']>$dimW)$dimW=$i['width'];
+				if($i['length']>$dimL)$dimL=$i['length'];
+				$dimH=$dimH+($i['height']*$ri['quantity']);
+			}
+		}
+		$queryParams=array(
+			"from_postcode"=>$config['postcode'],
+			"to_postcode"=>$ru['postcode'],
+			"length"=>$dimL,
+			"width"=>$dimW,
+			"height"=>$dimH,
+			"weight"=>$weight,
+			"service_code"=>$rc['type']
+		);
+		$calculateRateURL='https://digitalapi.auspost.com.au/postage/parcel/domestic/calculate.json?' .
+		http_build_query($queryParams);
+		$ch=curl_init();
+		curl_setopt($ch,CURLOPT_URL,$calculateRateURL);
+		curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+		curl_setopt($ch,CURLOPT_HTTPHEADER,array('AUTH-KEY: '.$apiKey));
+		$rawBody=curl_exec($ch);
+		if($rawBody!=''){
+			$priceJSON=json_decode($rawBody,true);
+			$rc=[
+				'id'=>$rc['id'],
+				'type'=>$rc['type'],
+				'title'=>$rc['title'],
+				'value'=>isset($priceJSON['postage_result']['total_cost'])?$priceJSON['postage_result']['total_cost']:0
+			];
+		}else{
+			$rc=[
+				'id'=>$rc['id'],
+				'type'=>$rc['type'],
+				'title'=>'An Error Ocurred!',
+				'value'=>0
+			];
+		}
+	}
+	$s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageOption=:postageOption, postageCost=:postagCost WHERE id=:id");
 	$s->execute([
 		':id'=>$id,
-		':postoption'=>$rc['title'],
-		':postcost'=>$rc['value']
+		':postageCode'=>$rc['id'],
+		':postageOption'=>$rc['title'],
+		':postagCost'=>$rc['value']
 	]);
 }
 if($act=='postoption'){
-	$s=$db->prepare("UPDATE `".$prefix."orders` SET postageOption=:postoption WHERE id=:id");
+	$s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageOption=:postageOption WHERE id=:id");
 	$s->execute([
-		':postoption'=>$da,
+		':postageCode'=>0,
+		':postageOption'=>$da,
 		':id'=>$id
 	]);
 }
 if($act=='postcost'){
-  $s=$db->prepare("UPDATE `".$prefix."orders` SET postageCost=:postcost WHERE id=:id");
+  $s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageCost=:postageCost WHERE id=:id");
   $s->execute([
-    ':postcost'=>$da,
+		':postageCode'=>0,
+    ':postageCost'=>$da,
     ':id'=>$id
   ]);
 }
@@ -274,5 +342,6 @@ if($ssr->rowCount()>0){
 							'<td>&nbsp;</td>'.
 						'</tr>';?>
   window.top.window.$('#updateorder').html('<?php echo$html;?>');
+	window.top.window.$('.page-block').removeClass('d-block');
 <?php
 echo'</script>';

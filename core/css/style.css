@@ -71,6 +71,15 @@
 .cartzebra2 {
   background-color: rgba(0, 0, 0, .05); }
 
+.input-group-text,
+.input-group-text p {
+  white-space: -moz-pre-wrap !important;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  white-space: pre-wrap;
+  word-wrap: break-word !important;
+}
+
 pre {
   width: 100%;
   color: #fff;
@@ -857,7 +866,7 @@ details summary::-webkit-details-marker {
   display: none; }
 
 .input-group-append.avatar:before {
-  background-image: url(../svg/libre-user.svg); }
+  background-image: url(../images/i-user.svg); }
 
 .input-group-append img {
   z-index: +1;
@@ -964,7 +973,7 @@ details summary::-webkit-details-marker {
 [class^=fc-icon-] {
   display: inline-block;
   vertical-align: middle;
-  background-image: url(../svg/libre-svg-black.svg);
+  background-image: url(../images/i-back.svg);
   background-repeat: no-repeat;
   width: 14px;
   height: 14px; }
@@ -1219,6 +1228,15 @@ label.control-label.check {
   font-family: sans-serif;
   font-size: 10px;
   content:'H1 Headings are auto-generated and are not needed in this editing area!'; }
+
+.disable-block h1 {
+  position: relative;
+  border: 0 !important;
+  background-color: transparent !important;
+  padding: inherit !important; }
+
+.note-editor h1:before {
+  display: none }
 
 .note-editor .note-editing-area .note-editable.note-show-block div,
 .note-editor .note-editing-area .note-editable.note-show-block h2,

@@ -7,16 +7,18 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.3
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Fix content parsing to help with SEO Indexing.
  * @changes    v0.0.3 Add Forgotten Google Analytics tracking script.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE contentType='maintenance'");
 $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
-if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
+if(!isset($canonical)||$canonical=='')
+  $canonical=($view=='index'?URL:URL.$view.'/');
 $html=preg_replace([
   '/<print theme>/',
   '/<print theme=[\"\']?title[\"\']?>/',
@@ -78,8 +80,10 @@ $html=preg_replace([
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
   $page['notes']
 ],$html);
-if($config['ga_tracking']!='')$html=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$html);
-else$html=str_replace('<google_analytics>','',$html);
+if($config['ga_tracking']!='')
+  $html=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$html);
+else
+  $html=str_replace('<google_analytics>','',$html);
 if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];
@@ -93,11 +97,12 @@ if(stristr($html,'<buildSocial')){
 				'<print socialicon>'
 			],[
 				htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
-				frontsvg('libre-social-'.$r['icon'])
+				frontsvg('i-social-'.$r['icon'])
 			],$buildSocial);
 			$socialItems.=$buildSocial;
 		}
-	}else$socialItems='';
+	}else
+    $socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
 }
 $content.=$html;

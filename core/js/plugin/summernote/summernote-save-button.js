@@ -35,6 +35,7 @@
     'save':function (context) {
       var ui      = $.summernote.ui,
           $editor = context.layoutInfo.editor,
+          $note   = context.layoutInfo.note,
           options = context.options,
 //          options.airMode = context.options.airMode,
           lang    = options.langInfo;
@@ -46,8 +47,8 @@
           click:function (e) {
             e.preventDefault();
             $('.page-block').addClass('d-block');
+            var noteText = $note.summernote('code');
             if (options.save.encode) {
-              var noteText = $note.summernote('code');
               $note.summernote('code', escape(noteText));
             }
             this.form.submit();
@@ -56,6 +57,18 @@
               $note.summernote('code', noteText);
             }
             unsaved = false;
+            $.ajax({
+          		type:"POST",
+          		url:"core/textstats.php",
+          		data:{
+          			t:noteText
+          		}
+          	}).done(function(results){
+              var stats=results.split(",");
+              $('#textWordCount').val(stats[0]);
+              $('#textSentences').val(stats[1]);
+              $('#textReadingLevel').val(stats[2]);
+            });
             if(options.airMode==false){
               $editor.find('.note-save button').removeClass('bg-danger');
             }else{

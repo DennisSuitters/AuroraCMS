@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Make Facebook Messenger integration easier.
  * @changes    v0.0.6 Add toggle option to email nominated Users to alert of new chat messages.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -34,9 +35,9 @@
           </div>
           <label for="options13" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Chat</label>
         </div>
-        <div class="form-group row">
-          <label for="chatAutoRemove" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Remove Messages</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="chatAutoRemove">Remove Messages</label>
+          <div class="input-group">
             <select id="chatAutoRemove" class="form-control" onchange="update('1','config','chatAutoRemove',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="chatAutoRemove">
               <option value="0"<?php echo$config['chatAutoRemove']==0?' selected="Selected"':'';?>>Never</option>
               <option value="86400"<?php echo$config['chatAutoRemove']==86400?' selected="Selected"':'';?>>Older than 24 Hours</option>
@@ -73,23 +74,27 @@
           </div>
         </div>
 <?php }?>
-        <div class="form-group row">
-          <label for="messengerFBCode" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Page ID</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="messengerFBCode">Page ID</label>
+          <div class="input-group">
             <input type="text" id="messengerFBCode" class="form-control textinput" value="<?php echo$config['messengerFBCode'];?>" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" placeholder="Enter Page ID...">
-            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemessengerFBCode" class="btn btn-secondary save" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append">
+              <button id="savemessengerFBCode" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="messengerFBGreeting" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Greeting</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="messengerFBGreeting">Greeting</label>
+          <div class="input-group">
             <input type="text" id="messengerFBGreeting" class="form-control textinput" value="<?php echo$config['messengerFBGreeting'];?>" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" placeholder="Enter Greeting...">
-            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemessengerFBGreeting" class="btn btn-secondary save" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append">
+              <button id="savemessengerFBGreeting" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="messengerFBColor" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Colour</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="messengerFBColor">Colour</label>
+          <div class="input-group">
             <select name="colorpicker" id="messengerFBColor" class="form-control"<?php echo$user['options'][1]==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?php echo$user['options'][1]==1?'':' disabled';?>>
               <option value="#7bd148"<?php echo$config['messengerFBColor']=='#7bd148'?' selected="selected"':'';?>>Green</option>
               <option value="#5484ed"<?php echo$config['messengerFBColor']=='#5484ed'?' selected="selected"':'';?>>Bold blue</option>

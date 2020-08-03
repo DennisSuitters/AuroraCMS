@@ -1,4 +1,21 @@
-### v0.0.17
+##### v0.0.18
+- Reformat source for legibility.
+- Fix Theme demo URL parsing.
+- Fix Content Item Parser not removing all unneeded template items.
+- Update Cart Layout for Client themes, and add recalculating quantities and prices.
+- Add parsing for Cart for mobile devices.
+- Add function to accept quantity changes from front end.
+- Add Postage Options and Australia Post API Calculations.
+- Add Booking Signatures, and extra field options.
+- Fix script error in Sitemap.
+- Fix Sort Ordering which was opposite order than expected.
+- Fix Heading block warning only for content that has Auto-Generated H1 Elements.
+- Fix Footer Theme URL Parsing.
+- Fix Multiple Content Items not using Thumbnails.
+- Add Text Statistics.
+- Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+
+##### v0.0.17
 - Fix System Utilization display.
 - Add Access Levels for content.
 - Add better video embedding and upload options, and parsing logic into themes.

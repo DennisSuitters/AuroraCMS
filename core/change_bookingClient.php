@@ -7,14 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.18 Add functionality to retreive client information from content table and bookings.
  */
 echo'<script>';
 require_once'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $bid=filter_input(INPUT_GET,'bid',FILTER_SANITIZE_NUMBER_INT);
+$w=filter_input(INPUT_GET,'w',FILTER_SANITIZE_STRING);
 if($id==0){
   $c=[
     'id'=>0,
@@ -31,9 +33,16 @@ if($id==0){
     'mobile'=>''
   ];
 }else{
-  $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-  $q->execute([':id'=>$id]);
-  $c=$q->fetch(PDO::FETCH_ASSOC);
+  if($w=='booking'){
+    $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
+    $q->execute([':id'=>$id]);
+    $c=$q->fetch(PDO::FETCH_ASSOC);
+  }
+  if($w=='noaccount'){
+    $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
+    $q->execute([':id'=>$id]);
+    $c=$q->fetch(PDO::FETCH_ASSOC);
+  }
 }
 $q=$db->prepare("UPDATE `".$prefix."content` SET  cid=:cid,business=:business,name=:name,address=:address,suburb=:suburb,state=:state,city=:city,postcode=:postcode,email=:email,phone=:phone,mobile=:mobile WHERE id=:id");
 $q->execute([

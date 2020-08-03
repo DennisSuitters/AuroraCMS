@@ -7,12 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.18 Add extra status indicators and sorting.
+ * @changes    v0.0.18 Fix Cookies for toggling between Table and Calendar views not sticking.
  */
 if($view=='add'){
   $ti=time();
@@ -25,10 +27,28 @@ if($view=='add'){
 }elseif(isset($args[1]))$id=$args[1];
 if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_bookings.php';
 elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_bookings.php';
-else{?>
+else{
+  $sortOrder='';
+  $bookSearch=isset($_POST['booksearch'])?" AND LOWER(name) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%' OR LOWER(business) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%'":'';
+//    $bookSearch=str_replace(' ','%',$_POST['booksearch']);
+
+  $bookStatus=isset($args[0])?" AND status='".$args[0]."'":'';
+
+  if(isset($_POST['booksort'])){
+  	$sort=isset($_POST['booksort'])?filter_input(INPUT_POST,'booksort',FILTER_SANITIZE_STRING):'';
+  	$sortOrder=" ORDER BY ";
+  	if($sort=="")$sortOrder.="ti DESC";
+  	if($sort=="new")$sortOrder.="ti ASC";
+  	if($sort=="old")$sortOrder.="ti DESC";
+  }
+
+  $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='booking'".$bookSearch.$bookStatus.$sortOrder);
+  $s->execute();
+  $s2=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='booking'".$bookSearch.$bookStatus.$sortOrder);
+  $s2->execute();?>
 <main id="content" class="main">
   <ol class="breadcrumb shadow">
-    <li class="breadcrumb-item active">Bookings</li>
+    <li class="breadcrumb-item active">Bookings <?php echo$bookStatus;?></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <?php echo$user['options'][2]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/bookings" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
@@ -38,35 +58,90 @@ else{?>
     </li>
   </ol>
   <div class="container-fluid">
-    <div class="card">
+    <div class="row">
+    <div class="card col">
       <div class="card-body">
-        <div id="calendar-view" class="col<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>">
-          <small>Legend: <span class="badge badge-success" data-tooltip="tooltip" data-title="Bookings that have been Confirmed">Confirmed</span> <span class="badge badge-danger" data-tooltip="tooltip" data-title="Bookings that have NOT been Confirmed">Unconfirmed</span></small>
+        <div class="row">
+          <div class="col-12 col-sm-6">
+            <small>Legend:
+              <a class="badge badge-secondary" href="<?php echo URL.$settings['system']['admin'].'/bookings/';?>" data-tooltip="tooltip" data-title="All Bookings">All</a>
+              <a class="badge badge-danger" href="<?php echo URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" data-tooltip="tooltip" data-title="Bookings that have NOT been Confirmed">Unconfirmed</a>
+              <a class="badge badge-success" href="<?php echo URL.$settings['system']['admin'].'/bookings/confirmed';?>" data-tooltip="tooltip" data-title="Bookings that have been Confirmed">Confirmed</a>
+              <a class="badge badge-warning" href="<?php echo URL.$settings['system']['admin'].'/bookings/in-progress';?>" data-tooltip="tooltip" data-title="Booking that is in Progress">In Progress</a>
+              <a class="badge badge-info" href="<?php echo URL.$settings['system']['admin'].'/bookings/complete';?>" data-tooltip="tooltip" data-title="Booking that is Complete">Complete</a>
+              <a class="badge badge-secondary" href="<?php echo URL.$settings['system']['admin'].'/bookings/archived';?>" data-tooltip="tooltip" data-title="Booking that is Archived">Archived</a>
+            </small>
+          </div>
+          <div class="col-12 col-sm-6">
+            <form method="post" class="form-inline float-center float-sm-right" action="">
+              <div class="input-group input-group-sm">
+                <small class="input-group-prepend">
+                  <small class="input-group-text">Find</small>
+                </small>
+                <input id="booksearch" name="booksearch" class="form-control form-control-sm" value="<?php echo(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
+                <div class="input-group-append">
+                  <select id="bookingsort" class="form-control form-control-sm" name="booksort">
+                    <option value="">Select Display Order</option>
+                    <option value="new"<?php echo(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
+                    <option value="old"<?php echo(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
+                  </select>
+                </div>
+                <div class="input-group-btn">
+                  <button type="submit" class="btn btn-secondary btn-sm">Go</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+        <div id="calendar-view" class="<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>">
           <div id="calendar"></div>
         </div>
         <div id="table-view" class="table-responsive<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>">
           <table class="table table-condensed table-striped table-hover">
             <thead>
               <tr>
-                <th class="col"></th>
-                <th class="col-sm-3"></th>
+                <th class="w-75 d-table-cell d-sm-none"></th>
+                <th class="w-5 d-none d-sm-table-cell">Created</th>
+                <th class="w-5 d-none d-sm-table-cell">Start/End</th>
+                <th class="d-none d-sm-table-cell">Details</th>
+                <th class="w-5"></th>
               </tr>
             </thead>
             <tbody id="bookings">
-<?php $s=$db->query("SELECT * FROM `".$prefix."content` WHERE contentType='booking' ORDER BY ti DESC");
-while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-              <tr id="l_<?php echo$r['id'];?>" class="<?php echo$r['status']=='unconfirmed'?' danger':'';?>">
-                <td>
+<?php
+while($r=$s->fetch(PDO::FETCH_ASSOC)){
+$eColor='bg-danger';
+if($r['status']=='confirmed')
+  $eColor='bg-success';
+elseif($r['status']=='in-progress')
+  $eColor='bg-warning text-dark';
+elseif($r['status']=='complete')
+  $eColor='bg-info text-dark';
+elseif($r['status']=='archived')
+  $eColor='bg-secondary';?>
+              <tr id="l_<?php echo$r['id'];?>" class="<?php echo$eColor;?>">
+                <td class="d-table-cell d-sm-none">
                   <?php echo date($config['dateFormat'],$r['ti']).'<br>Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: ' . date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>Business: '.$r['business']:'').($r['name']!=''?'<br>Name: '.$r['name']:'').($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
                 </td>
+                <td class="d-none d-sm-table-cell">
+                  <?php echo date($config['dateFormat'],$r['ti']);?></td>
+                <td class="d-none d-sm-table-cell">
+                  <?php echo date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?date($config['dateFormat'], $r['tie']):'');?>
+                </td>
+                <td class="d-none d-sm-table-cell">
+                  <?php echo ($r['business']!=''?'Business: '.$r['business'].'<br>':'').($r['name']!=''?'Name: '.$r['name'].'<br>':'').($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?>
+                </td>
                 <td id="controls_<?php echo$r['id'];?>">
-                  <div class="btn-group float-right">
-                    <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                  <div clss="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                    <div class="btn-group" role="group" aria-label="Item Controls">
+                      <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
 <?php if($user['options'][0]==1){?>
-                    <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
-                    <button class="btn btn-secondary trash<?php echo($r['status']=='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                    <button class="btn btn-secondary trash<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                      <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?> btn-sm" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
+                      <button class="btn btn-secondary rounded-right trash<?php echo($r['status']=='delete'?' d-none':'');?> btn-sm" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="btn btn-secondary rounded-right trash<?php echo($r['status']!='delete'?' d-none':'');?> btn-sm" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
 <?php }?>
+                    </div>
                   </div>
                 </td>
               </tr>
@@ -92,18 +167,27 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
 <?php if($user['options'][2]==1){?>editable:true,<?php }?>
     height:$(window).height()*0.83,
     events:[
-<?php $s=$db->query("SELECT * FROM `".$prefix."content` WHERE contentType='booking'");
-while($r=$s->fetch(PDO::FETCH_ASSOC)){
+<?php
+while($r=$s2->fetch(PDO::FETCH_ASSOC)){
   $bs=$db->prepare("SELECT contentType,title,tis,tie,ti FROM content WHERE id=:id");
   $bs->execute([':id'=>$r['rid']]);
-  $br=$bs->fetch(PDO::FETCH_ASSOC);?>
+  $br=$bs->fetch(PDO::FETCH_ASSOC);
+  $eColor='#f86c6b';
+  if($r['status']=='confirmed')
+    $eColor='#4rdb74';
+  elseif($r['status']=='in-progress')
+    $eColor='#FFC107';
+  elseif($r['status']=='complete')
+    $eColor='#63C2DE';
+  elseif($r['status']=='archived')
+    $eColor='#73818F';?>
       {
         id:'<?php echo$r['id'];?>',
         title:'<?php if($br['contentType']=='events'){echo'Event: '.$br['title'];}elseif($br['contentType']!=''){echo ucfirst(rtrim($br['contentType'],'s')).': '.$br['title'];}else echo$r['name'];?>',
         start:'<?php echo date("Y-m-d H:i:s",$r['tis']);?>',
 <?php echo$r['tie']>$r['tis']?'eventend: \''.date("Y-m-d H:i:s",$r['tie']).'\',':'';?>
         allDay:false,
-        color:'<?php echo$r['status']=='confirmed'?'#4dbd74':'#f86c6b';?>',
+        color:'<?php echo$eColor;?>',
         description:'<?php echo($r['business']!=''?'Business: '.$r['business'].'<br>':'').($r['name']!=''?'Name: '.$r['name'].'<br>':'').($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?>',
         status:'<?php echo$r['status'];?>',
       },

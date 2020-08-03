@@ -86,6 +86,7 @@ function update(id,t,c,da){
 function toggleCalendar(){
 	$('#calendar-view,#table-view').toggleClass('d-none');
 	$('.i-calendar,.i-table').toggleClass('d-none');
+  document.cookie = 'bookingview=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 	if(!$('#calendar-view').hasClass('d-none')){
 		Cookies.set('bookingview','calendar',{expires:14});
 		$('#calendar').fullCalendar('render');
@@ -272,8 +273,8 @@ function makeClient(id){
 	$('#sp').load('core/add_data.php?id='+id+'&act=make_client');
 }
 function changeClient(id,oid,w){
-	if(w=='booking'){
-		$('#sp').load('core/change_bookingClient.php?id='+id+'&bid='+oid);
+	if(w=='booking'||w=='noaccount'){
+		$('#sp').load('core/change_bookingClient.php?id='+id+'&bid='+oid+'&w='+w);
 	}else{
 		if(id==0){
 			$('#sp').load('core/change_orderClient.php?id='+id+'&oid='+oid);

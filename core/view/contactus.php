@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 if($page['notes']!=''){
 	$html=preg_replace([
@@ -21,7 +22,8 @@ if($page['notes']!=''){
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else
+	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 if(stristr($html,'<hours>')){
 	if($config['options'][19]==1){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
@@ -33,24 +35,26 @@ if(stristr($html,'<hours>')){
 				$buildHours=$htmlHours;
 				if($r['tis']!=0){
 					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1){
+					if($config['options'][21]==1)
 						$hourFrom=$r['tis'];
-					}else{
+					else{
 						$hourFromH=substr($r['tis'],0,2);
 						$hourFromM=substr($r['tis'],3,4);
 						$hourFrom=($hourFromH < 12 ? ltrim($hourFromH,'0') . ($hourFromM > 0 ? $hourFromM : '' ).'am' : $hourFromH - 12 . ($hourFromM > 0 ? $hourFromM : '') . 'pm');
 					}
-				}else$hourFrom='';
+				}else
+					$hourFrom='';
 				if($r['tie']!=0){
 					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1){
+					if($config['options'][21]==1)
 						$hourTo=$r['tie'];
-					}else{
+					else{
 						$hourToH=substr($r['tie'],0,2);
 						$hourToM=substr($r['tie'],3,4);
 						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
 					}
-				}else$hourTo='';
+				}else
+					$hourTo='';
 				$buildHours=preg_replace([
 					'/<print dayfrom>/',
 					'/<print dayto>/',
@@ -86,7 +90,8 @@ if(stristr($html,'<email>')){
 			'',
 			'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
 		],$html);
-	}else$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
+	}else
+		$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
 }
 if(stristr($html,'<contact>')){
 	if($config['options'][22]==1){
@@ -105,7 +110,8 @@ if(stristr($html,'<contact>')){
 			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
 			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
 		],$html);
-	}else$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
+	}else
+		$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
 }
 if(stristr($html,'<phone>')){
 	if($config['options'][24]==1){
@@ -118,7 +124,8 @@ if(stristr($html,'<phone>')){
 			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
 			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
 		],$html);
-	}else$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
+	}else
+		$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
 }
 $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='subject' ORDER BY title ASC");
 $s->execute();

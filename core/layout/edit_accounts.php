@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
@@ -18,7 +18,8 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.11 Add Administrator and Developer setting per user elFinder Media Permissions.
  * @changes    v0.0.11 Update Password change interaction.
- */
+ * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+*/
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
 $r=$q->fetch(PDO::FETCH_ASSOC);?>
@@ -47,63 +48,67 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         </ul>
         <div class="tab-content">
           <div id="account-general" class="tab-pane active" role="tabpanel">
-            <div class="form-group row">
-              <label for="ti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Created</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
+            <div class="row">
+              <div class="form-group col-12 col-sm-6">
+                <label for="ti">Created</label>
+                <div class="input-group">
+                  <input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
+                </div>
+              </div>
+              <div class="form-group col-12 col-sm-6">
+                <label for="lti">Last Login</label>
+                <div class="input-group">
+                  <input type="text" id="lti" class="form-control" value="<?php echo _ago($r['lti']);?>" readonly>
+                </div>
               </div>
             </div>
-            <div class="form-group row">
-              <label for="lti" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Last Login</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <input type="text" id="lti" class="form-control" value="<?php echo _ago($r['lti']);?>" readonly>
+            <div class="row">
+              <div class="form-group col-12 col-sm-6">
+                <label for="username">Username</label>
+                <div class="input-group">
+                  <input type="text" id="username" class="form-control textinput" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                  <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="saveusername" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="username" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
+                <div id="uerror" class="alert alert-danger col-sm-10 float-right d-none" role="alert">Username already exists!</div>
               </div>
-            </div>
-            <div class="form-group row">
-              <label for="username" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Username</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <input type="text" id="username" class="form-control textinput" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveusername" class="btn btn-secondary save" data-dbid="username" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-              </div>
-              <div id="uerror" class="alert alert-danger col-sm-10 float-right d-none" role="alert">Username already exists!</div>
-            </div>
-            <div class="form-group row">
-              <label for="email" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveemail" class="btn btn-secondary save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+              <div class="form-group col-12 col-sm-6">
+                <label for="email">Email</label>
+                <div class="input-group">
+                  <input type="text" id="email" class="form-control textinput" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                  <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="saveemail" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
               </div>
             </div>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-images">
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
-              <div class="form-group row">
-                <label for="avatar" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Avatar</label>
-                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+              <div class="form-group">
+                <label for="avatar">Avatar</label>
+                <div class="input-group">
                   <input type="text" class="form-control" value="<?php echo$r['avatar'];?>" readonly>
-                  <?php echo$user['options'][5]==1?'<div class="input-group-append">'.
-                    '<input type="hidden" name="id" value="'.$r['id'].'">'.
+                  <div class="input-group-append">
+                  <?php echo$user['options'][5]==1?'<input type="hidden" name="id" value="'.$r['id'].'">'.
                     '<input type="hidden" name="act" value="add_avatar">'.
                     '<div class="btn btn-secondary custom-file" data-tooltip="tooltip" data-title="Browse Computer for Files.">'.
                       '<input id="avatarfu" type="file" class="custom-file-input hidden" name="fu" onchange="form.submit()">'.
                       '<label for="avatarfu" aria-label="Browse Computer for Files.">'.svg2('browse-computer').'</label>'.
-                    '</div>'.
-                  '</div>':'';?>
-                  <div class="input-group-text p-0">
-                    <img class="img-avatar img-fluid bg-white" style="width:32px;max-height:32px;border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
-                    elseif($r['gravatar']!='')echo$r['gravatar'];
-                    else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
+                    '</div>':'';?>
+                    <div class="input-group-text p-0">
+                      <img class="img-avatar img-fluid m-0 bg-white" style="border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
+                      elseif($r['gravatar']!='')echo$r['gravatar'];
+                      else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
+                    </div>
+                    <?php echo$user['options'][5]==1?'<button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
                   </div>
-                  <?php echo$user['options'][5]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></div>':'';?>
                 </div>
               </div>
             </form>
-            <div class="help-block small text-right"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
-            <div class="form-group row">
-              <label for="gravatar" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Gravatar</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <div class="form-group">
+              <label for="gravatar">Gravatar</label>
+              <div class="form-text small text-muted float-right"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
+              <div class="input-group">
                 <input type="text" id="gravatar" class="form-control textinput" value="<?php echo$r['gravatar'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savegravatar" class="btn btn-secondary save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savegravatar" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
               </div>
             </div>
           </div>
@@ -291,9 +296,9 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <div class="tab-content">
               <div role="tabpanel" class="tab-pane active" id="profile-bio" aria-labelledby="profile-bio">
                 <legend role="heading">BIO</legend>
-                <div class="form-group row">
-                  <label class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Profile Link</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label>Profile Link</label>
+                  <div class="input-group">
                     <a class="form-control" target="_blank" href="<?php echo URL.'profile/'.str_replace(' ','-',$r['name']);?>"><?php echo URL.'profile/'.str_replace(' ','-',$r['name']);?></a>
                   </div>
                 </div>
@@ -309,101 +314,107 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                   <label for="bio_options1" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Show Address</label>
                 </div>
-                <div class="form-group row">
-                  <label for="name" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Name</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="name" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" placeholder="Enter a Name..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savename" class="btn btn-secondary save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <div class="row">
+                  <div class="form-group col-12 col-sm-6">
+                    <label for="name">Name</label>
+                    <div class="input-group">
+                      <input type="text" id="name" class="form-control textinput" value="<?php echo$r['name'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" placeholder="Enter a Name..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savename" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-sm-6">
+                    <label for="business">Business</label>
+                    <div class="input-group">
+                      <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" placeholder="Enter a Business..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savebusiness" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="business" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="url" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">URL</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label for="url">URL</label>
+                  <div class="input-group">
                     <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="url" placeholder="Enter a URL..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveurl" class="btn btn-secondary save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="saveurl" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="business" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Business</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="business" class="form-control textinput" value="<?php echo$r['business'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" placeholder="Enter a Business..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savebusiness" class="btn btn-secondary save" data-dbid="business" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <div class="row">
+                  <div class="form-group col-12 col-sm-6">
+                    <label for="phone">Phone</label>
+                    <div class="input-group">
+                      <input type="text" id="phone" class="form-control textinput" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" placeholder="Enter a Phone..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savephone" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="phone" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-sm-6">
+                    <label for="mobile">Mobile</label>
+                    <div class="input-group">
+                      <input type="text" id="mobile" class="form-control textinput" value="<?php echo$r['mobile'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" placeholder="Enter a Mobile..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savemobile" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="mobile" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="phone" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Phone</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="phone" class="form-control textinput" value="<?php echo$r['phone'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" placeholder="Enter a Phone..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savephone" class="btn btn-secondary save" data-dbid="phone" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="mobile" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Mobile</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="mobile" class="form-control textinput" value="<?php echo$r['mobile'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" placeholder="Enter a Mobile..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savemobile" class="btn btn-secondary save" data-dbid="mobile" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="address" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Address</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <div class="input-group">
                     <input type="text" id="address" class="form-control textinput" name="address" value="<?php echo$r['address'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="address" placeholder="Enter an Address..."<?php echo$user['options'][5]==1?'':' readonly';?>>
                     <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveaddress" class="btn btn-secondary save" data-dbid="address" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="suburb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Suburb</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" placeholder="Enter a Suburb..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savesuburb" class="btn btn-secondary save" data-dbid="suburb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                <div class="row">
+                  <div class="form-group col-12 col-sm-3">
+                    <label for="suburb">Suburb</label>
+                    <div class="input-group">
+                      <input type="text" id="suburb" class="form-control textinput" name="suburb" value="<?php echo$r['suburb'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" placeholder="Enter a Suburb..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savesuburb" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="suburb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-sm-3">
+                    <label for="city">City</label>
+                    <div class="input-group">
+                      <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" placeholder="Enter a City..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savecity" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="city" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-sm-3">
+                    <label for="state">State</label>
+                    <div class="input-group">
+                      <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" placeholder="Enter a State..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savestate" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="state" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
+                  </div>
+                  <div class="form-group col-12 col-sm-3">
+                    <label for="postcode">Postcode</label>
+                    <div class="input-group">
+                      <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" placeholder="Enter a Postcode..."<?php echo$user['options'][5]==1?'':' readonly';?>>
+                      <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savepostcode" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="postcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    </div>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="city" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">City</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="city" class="form-control textinput" name="city" value="<?php echo$r['city'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" placeholder="Enter a City..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecity" class="btn btn-secondary save" data-dbid="city" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="state" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">State</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="state" class="form-control textinput" name="state" value="<?php echo$r['state'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" placeholder="Enter a State..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savestate" class="btn btn-secondary save" data-dbid="state" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="postcode" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Postcode</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-                    <input type="text" id="postcode" class="form-control textinput" name="postcode" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" placeholder="Enter a Postcode..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepostcode" class="btn btn-secondary save" data-dbid="postcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="country" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Country</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label for="country">Country</label>
+                  <div class="input-group">
                     <input type="text" id="country" class="form-control textinput" name="country" value="<?php echo$r['country'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="country" placeholder="Enter a Country..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecountry" class="btn btn-secondary save" data-dbid="country" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savecountry" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="country" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="caption" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Caption</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label for="caption">Caption</label>
+                  <div class="input-group">
                     <input type="text" id="caption" class="form-control textinput" name="caption" value="<?php echo$r['caption'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="caption" placeholder="Enter a Caption..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecaption" class="btn btn-secondary save" data-dbid="caption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savecaption" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="caption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                   </div>
                 </div>
-                <div class="help-block text-muted small text-right">This is used for the Meta-Description for SEO Purposes on the page</div>
-                <div class="form-group row">
-                  <label for="caption" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Description</label>
-                  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label for="caption">Description</label>
+                  <div class="form-text text-muted small float-right">This is used for the Meta-Description for SEO Purposes on the page</div>
+                  <div class="input-group">
                     <input type="text" id="seoDescription" class="form-control textinput" name="seoDescription" value="<?php echo$r['seoDescription'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="seoDescription" placeholder="Enter a Description..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveseoDescription" class="btn btn-secondary save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                    <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="saveseoDescription" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                   </div>
                 </div>
-                <div class="form-group row">
-                  <label for="notes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">About</label>
-                  <div class=" col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                <div class="form-group">
+                  <label for="notes">About</label>
+                  <div class="card">
                     <div class="card-header p-0">
                       <?php echo$user['options'][5]==1?'<form method="post" target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$r['id'].'"><input type="hidden" name="t" value="login"><input type="hidden" name="c" value="notes"><textarea id="notes" class="form-control summernote" name="da">'.rawurldecode($r['notes']).'</textarea></form>':'<textarea class="form-control" style="background-color:#fff;color:#000;">'.rawurldecode($r['notes']).'</textarea>';?>
                     </div>
@@ -418,9 +429,9 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                   <label for="bio_options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable</label>
                 </div>
-                <div class="form-group row">
-                  <label for="resume_notes" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Resume Notes</label>
-                  <div class="col-sm-10">
+                <div class="form-group">
+                  <label for="resume_notes">Resume Notes</label>
+                  <div class="card">
                     <div class="card-header p-0">
                       <?php echo$user['options'][5]==1?'<form method="post" target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$r['id'].'"><input type="hidden" name="t" value="login"><input type="hidden" name="c" value="resume_notes"><textarea id="resume_notes" class="form-control summernote" name="da">'.rawurldecode($r['resume_notes']).'</textarea></form>':'<textarea class="form-control" style="background-color:#fff;color:#000;">'.rawurldecode($r['resume_notes']).'</textarea>';?>
                     </div>
@@ -644,9 +655,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
           </div>
 <?php /* Messages */ ?>
           <div role="tabpanel" class="tab-pane" id="account-messages">
-            <div class="form-group row">
-              <label for="email_signature" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Email Signature</label>
-              <div class=" col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <div class="form-group">
+              <label for="email_signature">Email Signature</label>
+              <div class="card">
                 <div class="card-header p-0">
                   <?php echo$user['options'][5]==1?'<form method="post" target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$r['id'].'"><input type="hidden" name="t" value="login"><input type="hidden" name="c" value="email_signature"><textarea id="email_signature" class="form-control summernote" name="da">'.rawurldecode($r['email_signature']).'</textarea></form>':'<textarea class="form-control" style="background-color:#fff;color:#000;">'.rawurldecode($r['email_signature']).'</textarea>';?>
                 </div>
@@ -655,9 +666,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
           </div>
 <?php /* Settings */ ?>
           <div role="tabpanel" class="tab-pane" id="account-settings">
-            <div class="form-group row">
-              <label for="timezone" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Timezone</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <div class="form-group">
+              <label for="timezone">Timezone</label>
+              <div class="input-group">
                 <select id="timezone" class="form-control" onchange="update('<?php echo$r['id'];?>','login','timezone',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="timezone"<?php echo$user['options'][5]==1?'':' disabled';?>>
                   <option value="default">System Default</option>
 <?php               $o=array(
@@ -676,9 +687,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
             </div>
 <?php if($user['id']==$r['id']||$user['options'][5]==1){?>
             <form target="sp" method="post" action="core/update.php" onsubmit="$('.page-block').addClass('d-block');">
-              <div class="form-group row">
-                <label for="password" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Password</label>
-                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+              <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-group">
                   <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                   <input type="hidden" name="t" value="login">
                   <input type="hidden" name="c" value="password">
@@ -694,9 +705,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               </div>
               <label for="active" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Active</label>
             </div>
-            <div class="form-group row">
-              <label for="rank" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Rank</label>
-              <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+            <div class="form-group">
+              <label for="rank">Rank</label>
+              <div class="input-group">
                 <select id="rank" class="form-control" onchange="update('<?php echo$r['id'];?>','login','rank',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="rank"<?php echo$user['options'][5]==1?'':' disabled';?>>
                   <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Visitor</option>
                   <option value="100"<?php echo($r['rank']==100?' selected':'');?>>Subscriber</option>

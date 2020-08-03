@@ -205,20 +205,22 @@ if($user['options'][4]==1){
                   <span class="badge badge-<?php echo($ti>$r['due_ti'])||($r['status']=='overdue')?'danger"':'info';?>"><?php echo ucfirst($r['status']);?></span>
                 </td>
                 <td id="controls_<?php echo$r['id'];?>">
-                  <div class="btn-group float-right" role="group">
+                  <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                    <div class="btn-group radius-right" role="group" aria-label="Item Controls">
 <?php if($user['options'][0]==1){
-                    echo$r['qid']!=''&&$r['aid']==''?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" data-tooltip="tooltip" data-title="Convert to Invoice..." aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
-                    echo$r['aid']==''?'<button class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\')" data-tooltip="tooltip" data-title="Archive" aria-label="Archive">'.svg2('archive').'</button>':'';
+                      echo$r['qid']!=''&&$r['aid']==''?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" data-tooltip="tooltip" data-title="Convert to Invoice..." aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
+                      echo$r['aid']==''?'<button class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\')" data-tooltip="tooltip" data-title="Archive" aria-label="Archive">'.svg2('archive').'</button>':'';
 }?>
-                    <button class="btn btn-secondary" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
-                    <?php echo$c['email']!=''?'<button class="btn btn-secondary" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');" data-tooltip="tooltip" data-title="Email Order" aria-label="Email Order">'.svg2('email-send').'</button>':'';
-                    echo$user['options'][0]==1?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" data-tooltip="tooltip" data-title="Duplicate" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
-                    <a class="btn btn-secondary<?php echo$r['status']=='delete'?' d-none':'';?>" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></a>
+                      <button class="btn btn-secondary" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
+                      <?php echo$c['email']!=''?'<button class="btn btn-secondary" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');" data-tooltip="tooltip" data-title="Email Order" aria-label="Email Order">'.svg2('email-send').'</button>':'';
+                      echo$user['options'][0]==1?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" data-tooltip="tooltip" data-title="Duplicate" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
+                      <a class="btn btn-secondary<?php echo$r['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></a>
 <?php if($user['options'][0]==1){?>
-                    <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
-                    <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                    <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                      <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
+                      <button class="btn btn-secondary rounded-right trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
 <?php }?>
+                    </div>
                   </div>
                 </td>
               </tr>

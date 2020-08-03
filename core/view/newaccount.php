@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -70,7 +71,8 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
         $s=$db->prepare("SELECT username FROM `".$prefix."login` WHERE username=:username LIMIT 1");
         $s->execute([':username'=>$username]);
         $r=$s->fetch(PDO::FETCH_ASSOC);
-        if($s->rowCount()>0)$notification.=$theme['settings]']['signup_erroruserexists'];
+        if($s->rowCount()>0)
+          $notification.=$theme['settings]']['signup_erroruserexists'];
         else{
           $chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&";
           $password=substr(str_shuffle($chars),0,8);
@@ -116,11 +118,15 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
           ],$msg);
         	$mail->Body=$msg;
         	$mail->AltBody=$msg;
-        	if($mail->Send())$notification.=$theme['settings']['signup_success'];
-          else$notification.=$theme['settings']['signup_error'];
+        	if($mail->Send())
+            $notification.=$theme['settings']['signup_success'];
+          else
+            $notification.=$theme['settings']['signup_error'];
         }
-      }else$notification.=$theme['settings']['signup_errorusername'];
-    }else$notification.=$theme['settings']['signup_erroremail'];
+      }else
+        $notification.=$theme['settings']['signup_errorusername'];
+    }else
+      $notification.=$theme['settings']['signup_erroremail'];
   }
 }
 echo$blacklisted.$notification;

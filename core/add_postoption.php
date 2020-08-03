@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.15 Fix reference to SVG2 function.
+ * @changes    v0.0.18 Add Code for Postal Services lookup API's.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -19,17 +20,20 @@ $config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO:
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
+$c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):'';
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
 $v=isset($_POST['v'])?filter_input(INPUT_POST,'v',FILTER_SANITIZE_STRING):0;
 if($t!=''){
-  $s=$db->prepare("INSERT INTO `".$prefix."choices` (rid,contentType,title,value) VALUES (0,'postoption',:t,:v)");
-  $s->execute([':t'=>$t,':v'=>$v]);
+  $s=$db->prepare("INSERT INTO `".$prefix."choices` (rid,contentType,type,title,value) VALUES (0,'postoption',:c,:t,:v)");
+  $s->execute([':c'=>$c,':t'=>$t,':v'=>$v]);
   if($v==0)$v='';
   $id=$db->lastInsertId();
 echo'<script>'.
   'window.top.window.$("#postoption").append(`<div id="l_'.$id.'" class="form-group row">'.
 		'<div class="input-group col">'.
-			'<span class="input-group-text">Service</span>'.
+			'<span class="input-group-text">Code</span>'.
+			'<input type="text" class="form-control" name="service" value="'.$c.'" readonly>'.
+			'<span class="input-group-text">Title</span>'.
 			'<input type="text" class="form-control" name="service" value="'.$t.'" readonly>'.
 			'<span class="input-group-text">Cost</span>'.
 			'<input type="text" class="form-control" name="cost" value="'.$v.'" readonly>'.

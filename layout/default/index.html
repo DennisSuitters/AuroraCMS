@@ -39,11 +39,11 @@
 		</header>
 		<items>
 			<article class="card">
-				<div class="card-image">
+				<a class="card-image" href="<print content=linktitle>">
 					<img src="<print content=thumb>" alt="<print content=imageALT>">
-				</div>
+				</a>
 				<div class="card-header">
-					<div class="card-title"><h4><a href="<print content=linktitle>"><print content="title"></a></h4></div>
+					<div class="card-title"><h2 class="h4"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
 					<div class="card-subtitle"><print content="category_1">&nbsp;</div>
 				</div>
 				<div class="card-body">
@@ -63,8 +63,12 @@
 		</header>
 		<categories>
 			<article class="card">
-				<a href="<print category=link>"><img src="<print category=image>" alt="<print category=imageALT>"></a>
-				<div class="corner-ribbon top-right text-uppercase font-weight-bold shadow"><print category="category"></div>
+				<a href="<print category=link>" class="card-image">
+					<img src="<print category=image>" alt="<print category=imageALT>">
+				</a>
+				<div class="card-header">
+					<div class="card-title"><h2 class="h4 text-center"><a href="<print category=link>"><print category="category"></a></h2></div>
+				</div>
 			</article>
 		</categories>
 	</section>

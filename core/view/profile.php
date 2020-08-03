@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.18 Reformat source for legiblity.
  */
 $rank=0;
 $notification='';
@@ -21,8 +22,10 @@ if($args[0]!=''){
   $s->execute([':name'=>str_replace('-',' ',$args[0])]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($r['bio_options'][0]==1){
-    if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))$r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
-    else$r['avatar']=NOAVATAR;
+    if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
+      $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
+    else
+      $r['avatar']=NOAVATAR;
     $name=explode(' ',$r['name']);
     $html=preg_replace([
       '/<[\/]?profile>/',
@@ -53,7 +56,7 @@ if($args[0]!=''){
       '',
       htmlspecialchars($r['name'].' - Profile'.($config['business']!=''?' | '.$config['business']:''),ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['seoDescription'],ENT_QUOTES,'UTF-8'),
-      URL,
+      URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
       htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
       THEME,
       htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8').'/',
@@ -63,7 +66,7 @@ if($args[0]!=''){
       htmlspecialchars($r['caption'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['notes'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
-      URL,
+      URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
       $name[0],
       $name[1],
@@ -91,11 +94,12 @@ if($args[0]!=''){
   					'<print socialicon>'
   				],[
   					htmlspecialchars($rl['url'],ENT_QUOTES,'UTF-8'),
-  					frontsvg('libre-social-'.$rl['icon'])
+  					frontsvg('i-social-'.$rl['icon'])
   				],$build);
   			$items.=$build;
     		}
-    	}else$items='';
+    	}else
+        $items='';
     	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$items,$html,1);
     }
     if(stristr($html,'<resume')){
@@ -115,7 +119,8 @@ if($args[0]!=''){
             if(stristr($build,'<print icon')){
               preg_match('/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',$build,$matches);
               $icon=$matches[1];
-            }else$icon='';
+            }else
+              $icon='';
             $build=preg_replace([
               '/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',
               '/<print career=[\"\']?title[\"\']?>/',
@@ -133,9 +138,11 @@ if($args[0]!=''){
             ],$build);
             $items.=$build;
           }
-        }else$items='';
+        }else
+          $items='';
         $career=preg_replace('~<item>.*?<\/item>~is',$items,$career,1);
-      }else$career='';
+      }else
+        $career='';
       if(stristr($resume,'<education')&&$r['bio_options'][3]==1){
         preg_match('/<education>([\w\W]*?)<\/education>/',$resume,$matches);
         $education=$matches[1];
@@ -150,7 +157,8 @@ if($args[0]!=''){
             if(stristr($build,'<print icon')){
               preg_match('/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',$build,$matches);
               $icon=$matches[1];
-            }else$icon='';
+            }else
+              $icon='';
             $build=preg_replace([
               '/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',
               '/<print education=[\"\']?title[\"\']?>/',
@@ -168,9 +176,11 @@ if($args[0]!=''){
             ],$build);
             $items.=$build;
           }
-        }else$items='';
+        }else
+          $items='';
         $education=preg_replace('~<item>.*?<\/item>~is',$items,$education,1);
-      }else$education='';
+      }else
+        $education='';
       if($career!=''||$education!=''){
         $html=preg_replace([
           '/<print resume=[\"\']?notes[\"\']?>/',
@@ -206,8 +216,10 @@ if($args[0]!=''){
       $ss->execute([':uid'=>$r['id']]);
       if($ss->rowCount()>0){
         while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-          if($rs['fileURL']!=''&&$rs['file']=='')$rs['file']=$fileURL;
-          elseif($rs['fileURL']==''&&$rs['file']=='')$rs['file']=NOIMAGE;
+          if($rs['fileURL']!=''&&$rs['file']=='')
+            $rs['file']=$fileURL;
+          elseif($rs['fileURL']==''&&$rs['file']=='')
+            $rs['file']=NOIMAGE;
           $build=$item;
           $build=preg_replace([
             '/<print content=[\"\']?image[\"\']?>/',
@@ -220,11 +232,12 @@ if($args[0]!=''){
             htmlspecialchars($rs['fileALT']!=''?$rs['fileALT']:$rs['attributionImageTitle']),
             htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),
             htmlspecialchars(strip_tags(substr($rs['notes'], 0, strrpos(substr($rs['notes'], 0, 400), ' '))),ENT_QUOTES,'UTF-8'),
-            URL.'article/'.$rs['urlSlug'].'/'
+            URL.'article/'.$rs['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
           ],$build);
           $items.=$build;
         }
-      }else$items='';
+      }else
+        $items='';
       $profilecontent=preg_replace('~<item>.*?<\/item>~is',$items,$profilecontent,1);
       $html=preg_replace([
         '~<content>.*?<\/content>~is',
@@ -302,10 +315,10 @@ if($args[0]!=''){
     '',
     '',
     htmlspecialchars('Profiles'.($config['business']!=''?' - '.$config['business']:''),ENT_QUOTES,'UTF-8'),
-    URL,
+    URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
     FAVICON,
     THEME,
-    URL.'profile/'
+    URL.'profile/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
   ],$html);
   $s=$db->prepare("SELECT * FROM login WHERE bio_options LIKE '1%' ORDER BY name ASC");
   $s->execute();
@@ -315,9 +328,12 @@ if($args[0]!=''){
       $item=$matches[1];
       $items='';
       while($r=$s->fetch(PDO::FETCH_ASSOC)){
-        if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))$r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
-        elseif($r['gravatar']!='')$r['avatar']=$r['gravatar'];
-        else$r['avatar']=NOAVATAR;
+        if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
+          $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
+        elseif($r['gravatar']!='')
+          $r['avatar']=$r['gravatar'];
+        else
+          $r['avatar']=NOAVATAR;
         $build=$item;
         $build=preg_replace([
           '/<print user=[\"\']?link[\"\']?>/',
@@ -325,14 +341,15 @@ if($args[0]!=''){
           '/<print user=[\"\']?image[\"\']?>/',
           '/<print user=[\"\']?caption[\"\']?>/'
         ],[
-          htmlspecialchars(URL.'profile/'.str_replace(' ','-',$r['name']),ENT_QUOTES,'UTF-8').'/',
+          htmlspecialchars(URL.'profile/'.str_replace(' ','-',$r['name']),ENT_QUOTES,'UTF-8').'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
           htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($r['caption'],ENT_QUOTES,'UTF-8')
         ],$build);
         $items.=$build;
       }
-    }else$items='';
+    }else
+      $items='';
     $html=preg_replace('~<items>.*?<\/items>~is',$items,$html,1);
   }
   $content.=$html;

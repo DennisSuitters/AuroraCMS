@@ -19,7 +19,8 @@
 define('UNICODE','UTF-8');
 $getcfg=true;
 require'db.php';
-if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))$config['theme']=$_GET['theme'];
+if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))
+	$config['theme']=$_GET['theme'];
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $s=$db->prepare("UPDATE `".$prefix."content` SET status='published' WHERE status='autopublish' AND pti<:pti");
@@ -153,9 +154,11 @@ function _ago($time){
 	return$timeDiff;
 }
 function elapsed_time($b=0,$e=0){
-  if($b==0)$b=$_SERVER["REQUEST_TIME_FLOAT"];
+  if($b==0)
+		$b=$_SERVER["REQUEST_TIME_FLOAT"];
   $b=explode(' ',$b);
-  if($e==0)$e=microtime();
+  if($e==0)
+		$e=microtime();
   $e=explode(' ',$e);
   @$td=($e[0]+$e[1])-($b[0]+$b[1]);
   $b='';
@@ -167,14 +170,16 @@ function elapsed_time($b=0,$e=0){
 	];
   if((int)$td>30){
     foreach($tt as$u=>$ti){
-      if($ti>0)$b.="$ti$u ";
+      if($ti>0)
+				$b.="$ti$u ";
     }
-  }else$b=number_format($td,3).'s';
+  }else
+		$b=number_format($td,3).'s';
   return trim($b);
 }
 function size_format($B, $D=2){
-    $S = 'kMGTPEZY';
-    $F = floor((strlen($B) - 1) / 3);
+    $S='kMGTPEZY';
+    $F=floor((strlen($B) - 1) / 3);
     return @sprintf("%.{$D}f", $B / pow(1024, $F)) . ' ' . @$S[$F-1] . 'B';
 }
 function getmemstats(){
@@ -187,11 +192,13 @@ function getmemstats(){
 		$memswap=shell_exec('grep SwapTotal /proc/meminfo | awk \'{print $2}\'');
 		$memswapfree=shell_exec('grep SwapFree /proc/meminfo | awk \'{print $2}\'');
   }
-  if(!($memtotal=shell_exec('grep MemTotal /proc/meminfo | awk \'{print $2}\'')))$memtotal=0;
+  if(!($memtotal=shell_exec('grep MemTotal /proc/meminfo | awk \'{print $2}\'')))
+		$memtotal=0;
   $memtotal=(int)$memtotal;
   $memused=$memtotal-$memfree;
   $mempercent=0;
-  if($memtotal>0)$mempercent=100-(round($memfree/$memtotal*100));
+  if($memtotal>0)
+		$mempercent=100-(round($memfree/$memtotal*100));
   $memfree=size_format($memfree*1024);
   $mem=[
     'percent'=>$mempercent,
@@ -212,8 +219,10 @@ function gpc(){
   static $ver,$runs=0;
   if(is_null($ver))$ver=version_compare(PHP_VERSION,'5.3.0','>=');
   if($runs++>0){
-    if($ver)clearstatcache(true,'/proc');
-    else clearstatcache();
+    if($ver)
+			clearstatcache(true,'/proc');
+    else
+			clearstatcache();
   }
   $stat=stat('/proc');
   return((false!==$stat && isset($stat[3]))?$stat[3]:0);
@@ -221,18 +230,21 @@ function gpc(){
 function num_cpu():int{
 	if(defined('PHP_WINDOWS_VERSION_MAJOR')){
 		$str=trim(shell_exec ('wmic cpu get NumberOfCores 2>&1'));
-		if(!preg_match('/(\d+)/',$str,$matches))throw new \RuntimeException('wmic failed to get number of cpu cores on windows!');
+		if(!preg_match('/(\d+)/',$str,$matches))
+			throw new \RuntimeException('wmic failed to get number of cpu cores on windows!');
 		return((int)$matches[1]);
 	}
 	$ret=@shell_exec('nproc');
 	if(is_string($ret)){
 		$ret=trim($ret);
-		if(false!==($tmp=filter_var($ret,FILTER_VALIDATE_INT)))return$tmp;
+		if(false!==($tmp=filter_var($ret,FILTER_VALIDATE_INT)))
+			return$tmp;
 	}
 	if(is_readable('/proc/cpuinfo')){
 		$cpuinfo=file_get_contents('/proc/cpuinfo');
 		$count=substr_count($cpuinfo,'processor');
-		if($count>0)return$count;
+		if($count>0)
+			return$count;
 	}
 	throw new \LogicException('failed to detect number of CPUs!');
 }
@@ -252,7 +264,8 @@ function disk_usage(){
 	$diskfree=disk_free_space('/');
 	$diskuse=round(100-(($diskfree/$disktotal)*100)).'%';
 	$diskpercent=0;
-	if($disktotal>0)$diskpercent=100-(round($diskfree/$disktotal*100));
+	if($disktotal>0)
+		$diskpercent=100-(round($diskfree/$disktotal*100));
 	$disk=[
 		'percent'=>$diskpercent,
 		'total'=>$disktotal,
@@ -612,8 +625,10 @@ $routes=[
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE active=1 AND rank<=:rank");
 $s->execute([':rank'=>$_SESSION['rank']]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
-	if(method_exists('front',$r['contentType']))$routes[$r['contentType']]=['front',$r['contentType']];
-  else$routes[$r['contentType']]=['front','content'];
+	if(method_exists('front',$r['contentType']))
+		$routes[$r['contentType']]=['front',$r['contentType']];
+  else
+		$routes[$r['contentType']]=['front','content'];
 }
 $route->setRoutes($routes);
 $route->routeURL(preg_replace("|/$|","",filter_input(INPUT_GET,'url',FILTER_SANITIZE_URL)));
@@ -656,6 +671,7 @@ class router{
 		if(is_array($call)){
 			$call_obj=new $call[0]();
 			$call_obj->{$call[1]}($this->route_call_args);
-		}else$call($this->route_call_args);
+		}else
+			$call($this->route_call_args);
 	}
 }

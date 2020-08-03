@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.17 Add SQL for rank fetching data.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -45,8 +46,10 @@ if(stristr($html,'<more')){
     $contentType,
     $itemCount+$i
   ],$more);
-}else$more='';
-if($s->rowCount()<=$itemCount)$more='';
+}else
+  $more='';
+if($s->rowCount()<=$itemCount)
+  $more='';
 if(stristr($html,'<items>')){
   preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
   $item=$matches[1];
@@ -58,8 +61,10 @@ if(stristr($html,'<items>')){
     if($si==1){
       $filechk=basename($r['file']);
       $thumbchk=basename($r['thumb']);
-      if($r['file']!=''&&file_exists('media'.DS.$filechk))$shareImage=$r['file'];
-      elseif($r['thumb']!=''&&file_exists('media'.DS.$thumbchk))$shareImage=$r['thumb'];
+      if($r['file']!=''&&file_exists('media'.DS.$filechk))
+        $shareImage=$r['file'];
+      elseif($r['thumb']!=''&&file_exists('media'.DS.$thumbchk))
+        $shareImage=$r['thumb'];
       $si++;
     }
     if(preg_match('/<print content=[\"\']?thumb[\"\']?>/',$items)){
@@ -69,7 +74,8 @@ if(stristr($html,'<items>')){
     $items=preg_replace('/<print content=[\"\']?alttitle[\"\']?>/',$r['title'],$items);
     $r['notes']=strip_tags($r['notes']);
     if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){
-      if(stristr($items,'<controls>'))$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
+      if(stristr($items,'<controls>'))
+        $items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
       $controls='';
     }else{
       if(stristr($items,'<view>')){
@@ -78,39 +84,43 @@ if(stristr($html,'<items>')){
           '/<print content=[\"\']?title[\"\']?>/',
           '/<[\/]?view>/'
         ],[
-          URL.$r['contentType'].'/'.$r['urlSlug'].'/',
+          URL.$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
           $r['title'],
           ''
         ],$items);
       }
-    if($r['contentType']=='service'){
-      if($r['bookable']==1){
-        if(stristr($items,'<service>')){
+      if($r['contentType']=='service'){
+        if($r['bookable']==1){
+          if(stristr($items,'<service>')){
+            $items=preg_replace([
+              '/<print content=[\"\']?bookservice[\"\']?>/',
+              '/<[\/]?service>/',
+              '~<inventory>.*?<\/inventory>~is'
+            ],[
+              URL.'bookings/'.$r['id'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+              '',
+              ''
+            ],$items);
+          }
+        }else
+          $items=preg_replace('~<service.*?>.*?<\/service>~is','',$items,1);
+      }else
+        $items=preg_replace('~<service>.*?<\/service>~is','',$items,1);
+      if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
+        if(stristr($items,'<inventory>')){
           $items=preg_replace([
-            '/<print content=[\"\']?bookservice[\"\']?>/',
-            '/<[\/]?service>/',
-            '~<inventory>.*?<\/inventory>~is'
-          ],[
-            URL.'bookings/'.$r['id'].'/',
-            '',
-            ''
-          ],$items);
-        }
-      }else$items=preg_replace('~<service.*?>.*?<\/service>~is','',$items,1);
-    }else$items=preg_replace('~<service>.*?<\/service>~is','',$items,1);
-    if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
-      if(stristr($items,'<inventory>')){
-        $items=preg_replace([
-          '/<[\/]?inventory>/',
-          '~<service>.*?<\/service>~is'
-        ],'',$items);
-      }elseif(stristr($items,'<inventory>')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-    }else$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-    $items=preg_replace('/<[\/]?controls>/','',$items);
+            '/<[\/]?inventory>/',
+            '~<service>.*?<\/service>~is'
+          ],'',$items);
+        }elseif(stristr($items,'<inventory>')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))
+          $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+      }else
+        $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+      $items=preg_replace('/<[\/]?controls>/','',$items);
+    }
+    require'..'.DS.'parser.php';
+    $output.=$items;
   }
-  require'..'.DS.'parser.php';
-  $output.=$items;
-}
 $html=$output;
 }
 print$html.$more;

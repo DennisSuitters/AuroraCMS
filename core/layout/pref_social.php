@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -31,9 +32,11 @@
         <form target="sp" method="post" action="core/add_data.php">
           <input type="hidden" name="user" value="0">
           <input type="hidden" name="act" value="add_social">
-          <div class="form-group row">
-            <div class="input-group col-12">
-              <label for="icon" class="input-group-text">Network</label>
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label for="icon" class="input-group-text">Network</label>
+              </div>
               <select id="icon" class="form-control" name="icon">
                 <option value="">Select a Social Network...</option>
                 <option value="500px">500px</option>
@@ -113,9 +116,13 @@
                 <option value="zerply">Zerply</option>
                 <option value="zune">Zune</option>
               </select>
-              <label for="url" class="input-group-text">URL</label>
+              <div class="input-group-append">
+                <label for="url" class="input-group-text">URL</label>
+              </div>
               <input type="text" id="url" class="form-control" name="url" value="" placeholder="Enter a URL...">
-              <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
+              <div class="input-group-append">
+                <button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+              </div>
             </div>
           </div>
         </form>
@@ -123,9 +130,11 @@
 <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=0 ORDER BY icon ASC");
 $ss->execute();
 while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group row">
-            <div class="input-group col-12">
-              <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
+          <div id="l_<?php echo$rs['id'];?>" class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
+              </div>
               <input type="text" id="icon<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
               <div class="input-group-append">
                 <form target="sp" action="core/purge.php">

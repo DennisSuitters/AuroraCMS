@@ -7,18 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.14 Fix incorrect number of items returned from database.
  * @changes    v0.0.15 Add Star Rating parser.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 if(stristr($html,'<settings')){
 	preg_match('/<settings.*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
 	$count=isset($matches[1])&&$matches[1]!=0?$matches[1]:$config['showItems'];
-}else$count=$config['showItems'];
+}else
+	$count=$config['showItems'];
 $html=preg_replace('~<settings.*?>~is','',$html);
 if($page['notes']!=''){
 	$html=preg_replace([
@@ -28,7 +30,8 @@ if($page['notes']!=''){
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else
+	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
 $sqltest="SELECT * FROM `".$prefix."content` WHERE contentType='testimonials' AND status='published' ORDER BY ti DESC".($count!='all'?" LIMIT 0,".$count:"");
@@ -53,14 +56,22 @@ if($s->rowCount()>0){
 				$su=$db->prepare("SELECT avatar,gravatar FROM `".$prefix."login` WHERE id=:id");
 				$su->execute([':id'=>$r['cid']]);
 				$ru=$su->fetch(PDO::FETCH_ASSOC);
-				if($ru['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$ru['avatar']))$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.$ru['avatar'],$items);
-				elseif($r['file']&&file_exists('media'.DS.'avatar'.DS.basename($r['file'])))$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.basename($r['file']),$items);
-				elseif(stristr($ru['gravatar'],'@'))$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($ru['gravatar']),$items);
-				elseif(stristr($ru['gravatar'],'gravatar.com'))$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$ru['gravatar'],$items);
-				else$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$noavatar,$items);
-			}elseif($r['file']&&file_exists('media'.DS.'avatar'.DS.basename($r['file'])))$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.basename($r['file']),$items);
-			elseif($r['file']!='')$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$r['file'],$items);
-			else$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$noavatar,$items);
+				if($ru['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$ru['avatar']))
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.$ru['avatar'],$items);
+				elseif($r['file']&&file_exists('media'.DS.'avatar'.DS.basename($r['file'])))
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.basename($r['file']),$items);
+				elseif(stristr($ru['gravatar'],'@'))
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($ru['gravatar']),$items);
+				elseif(stristr($ru['gravatar'],'gravatar.com'))
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$ru['gravatar'],$items);
+				else
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$noavatar,$items);
+			}elseif($r['file']&&file_exists('media'.DS.'avatar'.DS.basename($r['file'])))
+				$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.basename($r['file']),$items);
+			elseif($r['file']!='')
+				$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$r['file'],$items);
+			else
+				$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$noavatar,$items);
 		}
 		$jsonld='';
 		if(stristr($items,'<json-ld-testimonial>')){

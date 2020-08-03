@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.17 Add SQL for rank fetching data.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 if(stristr($html,'<categories')){
 	preg_match('/<categories>([\w\W]*?)<\/categories>/',$html,$matches);
@@ -34,5 +35,6 @@ if(stristr($html,'<categories')){
 		$output.=$items;
 	}
 	$cats=preg_replace('~<categories>.*?<\/categories>~is',$output,$html,1);
-}else$cats='';
+}else
+	$cats='';
 $content.=$cats;

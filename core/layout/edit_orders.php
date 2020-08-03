@@ -7,11 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.15 Add GST Calculation.
+ * @changes    v0.0.18 Fix Postage Calculation.
+ * @changes    v0.0.18 Add Australia Post Selection and Calculations.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
 $q->execute([':id'=>$id]);
@@ -257,6 +259,11 @@ else{?>
                 </div>
               </div>
             </div>
+            <div class="row">
+              <div class="col text-right">
+                <small class="form-text text-muted">Note: Adding or removing items does not recalculate Postage Costs, you will need to do that manually with the selection below</small>
+              </div>
+            </div>
           </form>
 <?php $sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' ORDER BY title ASC");
 $sp->execute();
@@ -269,13 +276,10 @@ if($sp->rowCount()>0){?>
             <div class="form-group row">
               <div class="input-group col">
                 <div class="input-group-text">Postage Options</div>
-                <select class="form-control" name="da" data-tooltip="tooltip" data-title="Select Postage Option or Empty Entry">
+                <select class="form-control" name="da" data-tooltip="tooltip" data-title="Select Postage Option or Empty Entry" onchange="$('.page-block').addClass('d-block');this.form.submit();">
                   <option value="0">Clear Postage Option and Cost</option>
-                  <?php while($rp=$sp->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rp['id'].'">'.$rp['title'].':$'.$rp['value'].'</option>';?>
+<?php while($rp=$sp->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rp['id'].'">'.$rp['title'].($rp['value']>0?' : $'.$rp['value']:'').'</option>';?>
                 </select>
-                <div class="input-group-append">
-                  <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
-                </div>
               </div>
             </div>
           </form>

@@ -6,6 +6,9 @@ if(session_status()==PHP_SESSION_NONE){
 $uid=$_SESSION['uid'];
 $view=isset($_GET['view'])&&$_GET['view']!=''?filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING):'';
 define('DS',DIRECTORY_SEPARATOR);
+$id=isset($_GET['id'])?filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT):'';
+$t=isset($_GET['t'])?filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING):'';
+$c=isset($_GET['c'])?filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING):'';
 include_once dirname(__FILE__).DS.'autoload.php';
 include_once dirname(__FILE__).DS.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DS.'elFinder.class.php';
@@ -27,6 +30,12 @@ function access($attr,$path,$data,$volume){
 $mediaEnable=$config['options'][2]==1?true:false;
 if($config['mediaMaxWidth']==0)$mediaEnable=false;
 if($config['mediaMaxHeight']==0)$mediaEnable=false;
+if($id>0&&$t=='content'&&$c=='file'){
+  $sc=$db->prepare("SELECT id,options FROM `".$prefix."content` WHERE id=:id");
+  $sc->execute([':id'=>$id]);
+  $rc=$sc->fetch(PDO::FETCH_ASSOC);
+  if($rc['options'][3]==1)$mediaEnable=false;
+}
 $folders='';
 if($user['rank']==900){
   $folders.='!^/core|layout|';
@@ -67,14 +76,14 @@ $opts=[
   ],
   'roots'=>[
     [
-      'imgLib'=>'gd',
+      'imgLib'=>'imagick',
       'driver'=>'LocalFileSystem',
       'path'=>$_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.($user['rank']<1000?'media'.DS:''),
       'URL'=>URL.($user['rank']<1000?'media'.DS:''),
       'tmbPath'=>$_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.'media'.DS.'thumbs'.DS,
       'tmbURL'=>URL.'media'.DS.'thumbs'.DS,
       'tmbSize'=>$config['mediaMaxWidthThumb'],
-      'tmbBgColor'=>'transparent',
+      'tmbBgColor'=>'#ffffff',
       'uploadDeny'=>[
         'all',
       ],

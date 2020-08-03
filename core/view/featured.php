@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.8 Add parsing featured item number.
  * @changes    v0.0.17 Add SQL for rank fetching data.
+ * @changes    v0.0.18 Reformat source for legibility.
 */
 preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
 $html=preg_replace('~<settings.*?>~is','',$html,1);
@@ -50,8 +51,10 @@ if($cT=='all'||$cT=='mixed'||$cT=='folder'){
 			$filename=basename($file,'.'.$fileinfo['extension']);
 			if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'){
 				if(!in_array('media'.DS.'carousel'.DS.$filename.'.html',$featuredfiles)){
-					if(file_exists('media'.DS.'carousel'.DS.$filename.'.html'))$filehtml=file_get_contents('media'.DS.'carousel'.DS.$filename.'.html');
-					else$filehtml='';
+					if(file_exists('media'.DS.'carousel'.DS.$filename.'.html'))
+						$filehtml=file_get_contents('media'.DS.'carousel'.DS.$filename.'.html');
+					else
+						$filehtml='';
 					$featuredfiles[]=[
 						'contentType'=>'carousel',
 						'thumb'=>'',
@@ -95,9 +98,12 @@ if($cT!='folder'){
 	}
 }
 $indicators=$indicator=$featuredIndicators='';
-if($arrayOrder=='random')shuffle($featuredfiles);
-elseif($arrayOrder=='asc')asort($featuredfiles);
-else arsort($featuredfiles);
+if($arrayOrder=='random')
+	shuffle($featuredfiles);
+elseif($arrayOrder=='asc')
+	asort($featuredfiles);
+else
+	arsort($featuredfiles);
 $featuredfiles=array_slice($featuredfiles,0,$itemCount);
 $ii=count($featuredfiles);
 $i=0;
@@ -119,21 +125,25 @@ if($ii>0){
 		}
 		$indicatorItem=str_replace('<print indicatorCount>',$i,$indicatorItem);
 		$item=str_replace('<print i>',$ci,$item);
-		if($r['link']=='nolink')$item=preg_replace('~<link>.*?<\/link>~is','',$item,1);
+		if($r['link']=='nolink')
+			$item=preg_replace('~<link>.*?<\/link>~is','',$item,1);
 		else{
 			$item=preg_replace([
 				'/<[\/]?link>/',
 				'/<print link>/'
 			],[
 				'',
-				$r['contentType'].'/'.$r['urlSlug'].'/'
+				$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
 			],$item);
 		}
 		$item=preg_replace('/<print content=[\"\']?title[\"\']?>/',$r['title'],$item);
 		if(preg_match('/<print content=[\"\']?thumb[\"\']?>/',$item)){
-			if($r['thumb']!='')$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$item);
-			elseif($r['file']!='')$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['file'],$item);
-			else$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/','',$item);
+			if($r['thumb']!='')
+				$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$item);
+			elseif($r['file']!='')
+				$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['file'],$item);
+			else
+				$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/','',$item);
 		}
 		if(preg_match('/<print content=[\"\']?alt[\"\']?>/',$item)){
 			if($r['file']!=''){
@@ -141,7 +151,8 @@ if($ii>0){
 				$alt=$alt['filename'];
 				$alt=str_replace('-',' ',$alt);
 				$alt=ucfirst($alt);
-			}else$alt=$r['title'];
+			}else
+				$alt=$r['title'];
 			$item=preg_replace('/<print content=[\"\']?alt[\"\']?>/',htmlspecialchars($alt,ENT_QUOTES,'UTF-8'),$item);
 		}
 		if(preg_match('/<print content=[\"\']?image[\"\']?>/',$item)){
@@ -154,14 +165,18 @@ if($ii>0){
 				],$item):preg_replace('/<print content=[\"\']?image[\"\']?>/','',$item);
 		}
 		$item=$r['link']=='nolink'?preg_replace('/<print content=[\"\']?title[\"\']?>/','<span class="hidden">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</span>',$item):preg_replace('/<print content=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$item);
-		if($r['contentType']=='carousel')$item=preg_replace('~<caption>.*?<\/caption>~is',$r['seoCaption'],$item,1);
+		if($r['contentType']=='carousel')
+			$item=preg_replace('~<caption>.*?<\/caption>~is',$r['seoCaption'],$item,1);
 		else{
 			$r['notes']=strip_tags($r['notes']);
 			$pos=strpos($r['notes'],' ',300);
 			$r['notes']=substr(rawurldecode($r['notes']),0,$pos).'...';
-			if($r['seoCaption']!='')$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'),$item);
-			elseif($r['notes']!='')$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars(rawurldecode($r['notes']),ENT_QUOTES,'UTF-8'),$item);
-			else$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/','',$item);
+			if($r['seoCaption']!='')
+				$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'),$item);
+			elseif($r['notes']!='')
+				$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars(rawurldecode($r['notes']),ENT_QUOTES,'UTF-8'),$item);
+			else
+				$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/','',$item);
 			if($r['attributionImageName']!=''&&$r['attributionImageURL']!=''){
 				$item=preg_replace([
 					'/<print media=[\"\']?attributionName[\"\']?>/',
@@ -172,7 +187,8 @@ if($ii>0){
 	        htmlspecialchars($r['attributionImageURL'],ENT_QUOTES,'UTF-8'),
 					''
 				],$item);
-			}else$item=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
+			}else
+				$item=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
 			$item=$r['notes']!=''?preg_replace('/<print content=[\"\']?notes[\"\']?>/',htmlspecialchars(strip_tags(rawurldecode($r['notes'])),$item,ENT_QUOTES,'UTF-8')):preg_replace('/<print content=[\"\']?notes[\"\']?>/','',$item);
 			$item=preg_replace('/<[\/]?caption>/','',$item);
 		}

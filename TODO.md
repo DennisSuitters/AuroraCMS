@@ -2,11 +2,23 @@ This is a quick list of things what need to be fixed or worked on to help those 
 
 - Installation checks for cURL, and Zip, it was discovered that the updates were failing due to zip and cURL not being installed on some installations causing updates to fail but not reporting errors in logs
 - Add clear tables data when installing
+- content
+  - SEO
+    - https://github.com/DaveChild/Text-Statistics
+- Accounts
+  - Spent, keep track of what an account has purchased in value.
+  - Add fields for cost reduction depending on what an account has spent. Use Choices table, to compare prices and to retrieve value off.
 - Inventory
   - Customer/Contact List
+  - Prices for Distributors
+  - Add Coming Soon for Products
+  - Add Archived status for content
+- Bookings
+  - Revisit, add Job list.
+  - Copy to invoice for payments.
 - Orders
-  - Integrate Other Payment Options
-  - Integrate AustPost Calculation
+  - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways).
+- Check Password Reset functionality.
 - Import Catalogue from CSV
 - Import databases from other systems (WordPress, CubeCart, osCommerce, etc.)
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.

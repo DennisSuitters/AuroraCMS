@@ -33,7 +33,7 @@ $(document).on(
 			}
 		}).done(
 			function(msg){
-				$('#cart').text(msg)
+				$('.cart').text(msg)
 		});
 	}
 );

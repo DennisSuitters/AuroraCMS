@@ -168,10 +168,11 @@ if($config['gst']>0){
   $ot=$ot+$gst;
   $ot=number_format((float)$ot, 2, '.', '');
 }
-if($r['postageCost']!=0){
+if($r['postageCost']!=0||$r['postageOption']!=''){
 	$html.='<tr style="background-color:#f0f0f0">'.
-            '<td colspan="4" class="text-right">Postage: '.$r['postageOption'].'</td>'.
-            '<td class="col-75 text-right"><strong>'.$r['postageCost'].'</strong></td>'.
+            '<td colspan="3" class="text-right">Postage: '.$r['postageOption'].'</td>'.
+            '<td class="col-75">&nbsp;</td>'.
+            '<td class="col-75 text-right"><strong>'.($r['postageCost']!=0?$r['postageCost']:'').'</strong></td>'.
           '</tr>';
 	$ot=$ot+$r['postageCost'];
   $ot=number_format((float)$ot, 2, '.', '');

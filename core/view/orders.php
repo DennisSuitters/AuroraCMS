@@ -7,16 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.8 Add PayPal Parser.
  * @changes    v0.0.15 Fix incorrect variable $r['postageCost'] line 182
  * @changes    v0.0.15 Add GST Calculation and Template Parser.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
-if($_SESSION['loggedin']==false)$html=$theme['settings']['page_not_found'];
+require'core/puconverter.php';
+if($_SESSION['loggedin']==false)
+  $html=$theme['settings']['page_not_found'];
 else{
   if(stristr($html,'<order')){
     preg_match('/<order>([\w\W]*?)<\/order>/',$html,$matches);
@@ -27,30 +30,102 @@ else{
     preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
     $items=$matches[1];
     $output='';
-    $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE uid=:uid AND status!='archived' ORDER BY ti DESC");
-    $s->execute([':uid'=>$_SESSION['uid']]);
+    $zebra=1;
+    $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE cid=:cid AND status!='archived' ORDER BY ti DESC");
+    $s->execute([':cid'=>$_SESSION['uid']]);
     while($r=$s->fetch(PDO::FETCH_ASSOC)){
       $item=$items;
       $item=preg_replace([
+        '/<print zebra>/',
         '/<print order=[\"\']?ordernumber[\"\']?>/',
-        '/<print order=[\"\']?status[\"\']?>/'
-      ],[
-        $r['qid'].$r['iid'],
-        ucfirst($r['status'])
-      ],$item);
-      $item=$r['iid_ti']>0?preg_replace('/<print order=[\"\']?date[\"\']?>/',date($config['dateFormat'],$r['iid_ti']),$item):preg_replace('/<print order=[\"\']?date[\"\']?>/',date($config['dateFormat'],$r['qid_ti']),$item);
-      $item=preg_replace([
+        '/<print order=[\"\']?status[\"\']?>/',
+        '/<print order=[\"\']?date[\"\']?>/',
         '/<print order=[\"\']?duedate[\"\']?>/',
         '/<print link>/'
       ],[
+        'zebra'.$zebra,
+        $r['qid'].$r['iid'],
+        ucfirst($r['status']),
+        $r['iid_ti']>0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']),
         date($config['dateFormat'],$r['due_ti']),
         URL.'orders/'.$r['qid'].$r['iid'].'/'
       ],$item);
       $output.=$item;
+      $zebra=$zebra==2?$zebra=1:$zebra=2;
     }
     $html=preg_replace('~<items>.*?<\/items>~is',$output,$html,1);
   }
   if(isset($args[0])&&$args[0]!=''){
+    if(isset($_POST['act'])=='postupdate'){  // https://developers.auspost.com.au/apis/pac/tutorial/domestic-parcel
+      $oid=filter_input(INPUT_POST,'oid',FILTER_SANITIZE_NUMBER_INT);
+      $postoption=filter_input(INPUT_POST,'postoption',FILTER_SANITIZE_STRING);
+      $sp=$db->prepare("SELECT id,type,title,value FROM `".$prefix."choices` WHERE id=:id");
+      $sp->execute([':id'=>$postoption]);
+      if($sp->rowCount()>0){
+        $post=$sp->fetch(PDO::FETCH_ASSOC);
+      }else{
+        $post=[
+          'id'=>$postoption,
+          'type'=>'',
+          'title'=>'',
+          'value'=>0
+        ];
+      }
+      if($config['austPostAPIKey']!=''&&stristr($post['type'],'AUS_')){
+        $apiKey=$config['austPostAPIKey'];
+        $totalWeight=$weight=$dimW=$dimL=$dimH=0;
+        $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
+        $su->execute([':uid'=>$_SESSION['uid']]);
+        $ru=$su->fetch(PDO::FETCH_ASSOC);
+        $si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:id");
+        $si->execute([':id'=>$oid]);
+        while($ri=$si->fetch(PDO::FETCH_ASSOC)){
+          $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:sid");
+          $sc->execute([':sid'=>$ri['iid']]);
+          while($i=$sc->fetch(PDO::FETCH_ASSOC)){
+            if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+    				$weight=$weight+($i['weight']*$ri['quantity']);
+    				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+    				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+    				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+    				if($i['width']>$dimW)$dimW=$i['width'];
+    				if($i['length']>$dimL)$dimL=$i['length'];
+    				$dimH=$dimH+($i['height']*$ri['quantity']);
+          }
+        }
+        $queryParams=array(
+          "from_postcode"=>$config['postcode'],
+          "to_postcode"=>$ru['postcode'],
+          "length"=>$dimL,
+          "width"=>$dimW,
+          "height"=>$dimH,
+          "weight"=>$weight,
+          "service_code"=>$post['type']
+        );
+        // https://auspost.com.au/developers/docs
+        $calculateRateURL='https://digitalapi.auspost.com.au/postage/parcel/domestic/calculate.json?' .
+        http_build_query($queryParams);
+        $ch=curl_init();
+        curl_setopt($ch,CURLOPT_URL,$calculateRateURL);
+        curl_setopt($ch,CURLOPT_RETURNTRANSFER,1);
+        curl_setopt($ch,CURLOPT_HTTPHEADER,array('AUTH-KEY: '.$apiKey));
+        $rawBody=curl_exec($ch);
+        $priceJSON=json_decode($rawBody,true);
+        $post=[
+          'id'=>$post['id'],
+          'type'=>$post['type'],
+          'title'=>$post['title'],
+          'value'=>isset($priceJSON['postage_result']['total_cost'])?$priceJSON['postage_result']['total_cost']:0
+        ];
+      }
+      $s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageOption=:postageOption, postageCost=:postageCost WHERE id=:id");
+      $s->execute([
+        ':postageCode'=>$post['id'],
+        ':postageOption'=>$post['title'],
+        ':postageCost'=>$post['value'],
+        ':id'=>$oid
+      ]);
+    }
     preg_match('/<items>([\w\W]*?)<\/items>/',$order,$matches);
     $orderItem=$matches[1];
     $order=preg_replace('~<items>.*?<\/items>~is','<orderitems>',$order,1);
@@ -127,9 +202,10 @@ else{
       $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid");
       $ois->execute([':oid'=>$r['id']]);
       $outitems='';
-      $total=0;
+      $total=$weight=$totalWeight=$dimW=$dimL=$dimH=0;
+      $zebra=1;
       while($oir=$ois->fetch(PDO::FETCH_ASSOC)){
-        $is=$db->prepare("SELECT id,code,title FROM `".$prefix."content` WHERE id=:id");
+        $is=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
 				$is->execute([':id'=>$oir['iid']]);
 				$i=$is->fetch(PDO::FETCH_ASSOC);
         $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
@@ -137,23 +213,45 @@ else{
         $c=$sc->fetch(PDO::FETCH_ASSOC);
         $item=$orderItem;
         $item=preg_replace([
+          '/<print zebra>/',
           '/<print orderitem=[\"\']?code[\"\']?>/',
           '/<print orderitem=[\"\']?title[\"\']?>/',
+          '/<print weight>/',
+          '/<print size>/',
           '/<print choice>/',
           '/<print orderitem=[\"\']?quantity[\"\']?>/',
           '/<print orderitem=[\"\']?cost[\"\']?>/',
           '/<print orderitem=[\"\']?subtotal[\"\']?>/'
         ],[
+          'zebra'.$zebra,
           htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
+          ($i['weight']==''?'':'<br><small class="text-muted">Weight: '.$i['weight'].$i['weightunit']),
+          ($i['width']==''?'':'<br><small class="text-muted">W: '.$i['width'].$i['widthunit'].' L: '.$i['length'].$i['lengthunit'].' H: '.$i['height'].$i['heightunit'].'</small>'),
           htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($oir['quantity'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($oir['cost'],ENT_QUOTES,'UTF-8'),
           htmlspecialchars($oir['cost']*$oir['quantity'],ENT_QUOTES,'UTF-8')
         ],$item);
         $total=$total+($oir['cost']*$oir['quantity']);
+        if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+				$weight=$weight+($i['weight']*$oir['quantity']);
+				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+				if($i['width']>$dimW)$dimW=$i['width'];
+				if($i['length']>$dimL)$dimL=$i['length'];
+				$dimH=$dimH+($i['height']*$oir['quantity']);
         $outitems.=$item;
+        $zebra=$zebra==2?$zebra=1:$zebra=2;
       }
+      $order=preg_replace([
+        '/<print dimensions>/',
+        '/<print weight>/'
+      ],[
+        'W: '.$dimW.'cm X L: '.$dimL.'cm X H: '.$dimH.'cm',
+        $weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':'')
+      ],$order);
       $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE id=:id");
       $sr->execute([':id'=>$r['rid']]);
       if($sr->rowCount()>0){
@@ -172,7 +270,8 @@ else{
           $total,
           ''
         ],$order);
-      }else$order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
+      }else
+        $order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
       if($config['gst']>0){
         $gst=$total*($config['gst']/100);
         $gst=number_format((float)$gst, 2, '.', '');
@@ -185,20 +284,39 @@ else{
         ],$order);
         $total=$total+$gst;
         $total=number_format((float)$total, 2, '.', '');
-      }else$order=preg_replace('~<gst>.*?<\/gst>~is','',$order,1);
-      if($r['postageCost']>0){
+      }else{
         $order=preg_replace([
-          '/<print order=[\"\']?postageOption[\"\']?>/',
-          '/<print order=[\"\']?postageCost[\"\']?>/',
-          '/<[\/]?postage>/'
+          '/<print order=[\"\']?gst[\"\']?>/',
+          '/<[\/]?gst>/'
         ],[
-          $r['postageOption'],
-          $r['postageCost'],
+          'Incl',
           ''
         ],$order);
-        $total=$total+$r['postageCost'];
-        $total=number_format((float)$total, 2, '.', '');
-      }else$order=preg_replace('~<postage>.*?<\/postage>~is','',$order,1);
+      }
+
+      $option='<option value="0">'.($r['postageCode']==0?($r['postageOption']!=''?$r['postageOption']:'Nothing Selected'):'Nothing Selected').'</option>';
+      $sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' ORDER BY title ASC");
+      $sco->execute();
+      if($sco->rowCount()>0){
+        while($rco=$sco->fetch(PDO::FETCH_ASSOC)){
+          $option.='<option value="'.$rco['id'].'"'.($r['postageCode']==$rco['id']?' selected':'').'>'.$rco['title'].'</option>';
+        }
+      }
+      $order=preg_replace([
+        '/<print orderurl>/',
+        '/<print order=[\"\']?oid[\"\']?>/',
+        '/<postoptions>/',
+        '/<print order=[\"\']?post[\"\']?>/'
+      ],[
+        URL.'orders/'.$r['qid'].$r['iid'].'/',
+        $r['id'],
+        $option,
+        $r['postageCost']
+      ],$order);
+
+
+      $total=$total+$r['postageCost'];
+      $total=number_format((float)$total, 2, '.', '');
       $order=preg_replace([
         '/<print order=[\"\']?total[\"\']?>/',
         '/<print order=[\"\']?id[\"\']?>/',
@@ -292,8 +410,11 @@ else{
             '}).render(`#paypal-button-container`);'.
           '</script>', */
         ],$html);
-      }else$html=str_replace('<print paypal>','',$html);
-    }else$html=preg_replace('~<order>~is','',$html,1);
-  }else$html=preg_replace('~<order>~is','',$html,1);
+      }else
+        $html=str_replace('<print paypal>','',$html);
+    }else
+      $html=preg_replace('~<order>~is','',$html,1);
+  }else
+    $html=preg_replace('~<order>~is','',$html,1);
 }
 $content.=$html;

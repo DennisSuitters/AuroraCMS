@@ -229,7 +229,8 @@ else{
                   $sr=$sp->fetch(PDO::FETCH_ASSOC);?>
                   <div class="small">Belongs to <a href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?php echo$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
 <?php           }
-}?>
+      }
+      echo'<br><small class="text-muted">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
               </td>
               <td class="align-middle small"><small><?php echo$r['code'];?></small></td>
               <td class="text-center align-middle d-none d-sm-table-cell">
@@ -256,13 +257,15 @@ else{
                 <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
               </td>
               <td id="controls_<?php echo$r['id'];?>" class="align-middle">
-                <div class="btn-group float-right">
-                  <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                  <div class="btn-group" role="group" aria-label="Item Controls">
+                    <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
 <?php   if($user['options'][0]==1){?>
-                  <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
-                  <button class="btn btn-secondary trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                  <button class="btn btn-secondary trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                    <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
+                    <button class="btn btn-secondary rounded-right trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
 <?php   }?>
+                  </div>
                 </div>
               </td>
             </tr>

@@ -6,9 +6,23 @@
 @import url('stylesheet-typography.css');
 @import url('stylesheet-helpers.css');
 @import url('stylesheet-xtras.css');
+@import url('stylesheet-icons.css');
 
 body {
   background-color: #fafafa; }
+
+.brand {
+  position: absolute;
+  top:10px;
+  right:auto;
+  bottom:auto;
+  left:60px;
+  max-width: 200px !important;
+  max-height: 50px !important;
+  display: block;
+  margin: 0 !important;
+  padding: 0 !important;
+}
 
 .glass {
   background-color: rgba(255, 255, 255, .7);
@@ -20,8 +34,7 @@ body {
 .sticky-top:first-of-type ~ address { margin-top: 38px !important; }
 
 nav {
-  background-color: transparent !important;
-  margin-bottom: 1rem !important; }
+  background-color: transparent !important; }
 
 nav.account-menu {
   z-index: 1021 !important;
@@ -101,7 +114,7 @@ nav.account-menu #accountavatar {
   display: inline-block;
   position: absolute;
   top: -5px;
-  right: -5px;
+  right: 0;
   transform: translate(-.05rem, -.5rem);
   box-shadow: 0 0 0 .1rem var(--box-shadow-color);
   border-radius: 50%;
@@ -111,8 +124,41 @@ nav.account-menu #accountavatar {
   color: var(--badge-color);
   white-space: nowrap; }
 
-#cart:empty,
-.cart:empty { display: none; }
+.cart:empty {
+  display: none; }
+
+.navbar-cart {
+  position: relative;
+  display: inline; }
+
+.navbar-cart svg {
+  color: #000 !important
+}
+
+.navbar-cart .cart{
+  position: absolute;
+  top: -1px;
+  right: 3px;
+  width: 37px;
+  background-color: transparent;
+  font-size: 14px;
+  text-align:center;
+  color: #fff;
+  border: 0;
+  border-radius: 0;
+  box-shadow: 0 0 0; }
+
+.zebra1 {
+  background-color: #f2f2f2; }
+
+.zebra2 {
+  background-color: #fff; }
+
+.orderstheme {
+  background-color: #fff !important;
+  color: #000 !important;
+  font-family:Arial !important;
+  font-size: 1em !important; }
 
 .price { display: block; }
 

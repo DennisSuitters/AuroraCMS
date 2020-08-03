@@ -200,7 +200,7 @@ $head=preg_replace([
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
   ($config['development'][0]==1&&$_SESSION['rank']>999?' class="development" data-width="" onload="$(`.development`).attr(`data-width`,$(window).width());" onresize="$(`.development`).attr(`data-width`,$(window).width());"':''),
   ($config['development'][0]==1&&$_SESSION['rank']>999?'<div class="development"></div>':''),
-  (isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<link rel="stylesheet" type="text/css" href="core/css/seohelper.css"><link rel="stylesheet" type="text/css" href="core/css/summernote-lite.min.css">':'')
+  (isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<link rel="stylesheet" type="text/css" href="core/css/seohelper.css">':'')
 ],$head);
 if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
   if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false){

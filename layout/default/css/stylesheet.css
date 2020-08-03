@@ -1,4 +1,4 @@
-/* stylesheet v0.8 - https://github.com/DiemenDesign/stylesheet */
+/* stylesheet v0.9 - https://github.com/DiemenDesign/stylesheet */
 
 :root {
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -9,6 +9,7 @@
   --color-muted: #6c757d;
   --link-color: #0044ff;
   --link-color-hover: #0056b3;
+  --text-decoration-wave-color: #f00;
   --content-background-color: #920de90b;
   --content-border-color: #007bff;
   --box-shadow-x: .05rem;
@@ -56,10 +57,10 @@
 
   --button-color: #fff;
   --button-color-hover: #f5f5f5;
-  --button-background-color: #007bff;
-  --button-background-color-hover: #0069d9;
-  --button-border-color: #007bff;
-  --button-border-color-hover: #0069d9;
+  --button-background-color: #000;
+  --button-background-color-hover: #aaa;
+  --button-border-color: #000;
+  --button-border-color-hover: #aaa;
 
   --table-background-color: #fff;
   --table-color: #000;
@@ -310,8 +311,11 @@ caption {
   caption-side: top;
   color: var(--color);
   text-align: left; }
+
 col {}
+
 colgroup {}
+
 table {
   vertical-align: top;
   margin-bottom: 1rem;
@@ -319,62 +323,77 @@ table {
   width: 100%;
   caption-side: bottom;
   color: var(--table-color); }
+
 tbody {
   vertical-align: inherit; }
+
 tr {
   border: 0; }
+
 td,
 th {
   padding: .5rem; }
-th {
-  text-align: inherit;
-  text-align: -webkit-match-parent; }
+
 thead {
   margin: 0;
-  border-radius: var(--border-radius);
   border-collapse: collapse;
-  background-color: var(--table-head-background-color);
   padding: 0;
   color: var(--table-head-color); }
-thead tr {
-  border: var(--border-width) var(--border-style) var(--table-border-color);
 
-}
+thead tr {
+  background-color: var(--table-head-background-color);
+  border: 0;
+  border-radius: 0 !important; }
+
 thead th {
   vertical-align: bottom;
   border: 0;
-  border-bottom-color: var(--table-border-color); }
-thead th:first-child {
-  border-top-left-radius: 5px; }
-thead th:last-child {
+  border-bottom-color: var(--table-border-color);
+  text-align: inherit;
+  text-align: -webkit-match-parent; }
+
+thead {
+  border-top-left-radius: 5px;
   border: 0;
   border-top-right-radius: 5px; }
+
 thead th:first-child,
-tr td:first-child {
+tbody tr td:first-child {
   text-align: var(--justify-normal); }
-table tr:nth-child(even) {
-  background-color: var(--table-zebra-background); }
+
 tfoot {}
+
 /* Interactive */
 command {}
+
 details {
   display: block;
   margin: 1.3rem 0; }
+
 details summary {
   display: list-item;
   cursor: pointer;
   font-weight: 700; }
+
 details summary:focus {
   outline: none; }
+
 menu {}
+
 /* Edits */
 del {}
+
 ins {}
+
 /* Embedded */
 area {}
+
 audio {}
+
 canvas {}
+
 embed {}
+
 img,
 svg,
 video,
@@ -384,36 +403,54 @@ iframe,
 embed,
 object {
   vertical-align: middle; }
+
 img {
   border-style: none; }
+
 img,
 video {
   max-width: 100%;
   height: auto; }
+
 iframe {}
+
 map {}
+
 object {}
+
 param {}
+
 source {}
+
 track {}
+
 video {}
+
 @media print {
   .d-print-none {
     display: none !important; }
+
   .d-print-inline {
     display: inline !important; }
+
   .d-print-inline-block {
     display: inline-block !important; }
+
   .d-print-block {
     display: block !important; }
+
   .d-print-table {
     display: table !important; }
+
   .d-print-table-row {
     display: table-row !important; }
+
   .d-print-table-cell {
     display: table-cell !important; }
+
   .d-print-flex {
     display: flex !important; }
+
   .d-print-inline-flex {
     display: inline-flex !important; }
 }

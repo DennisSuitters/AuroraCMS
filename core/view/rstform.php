@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.11 Fix wrong reference to Output Templates.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -110,9 +111,13 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
       ],$msg);
     	$mail->Body=$msg;
     	$mail->AltBody=$msg;
-    	if($mail->Send())$notification=$theme['settings']['passwordreset_success'];
-      else$notification=$theme['settings']['passwordreset_erroremail'];
-    }else$notification=$theme['settings']['passwordreset_erroraccount'];
+    	if($mail->Send())
+        $notification=$theme['settings']['passwordreset_success'];
+      else
+        $notification=$theme['settings']['passwordreset_erroremail'];
+    }else
+      $notification=$theme['settings']['passwordreset_erroraccount'];
   }
-}else$notification=$theme['settings']['passwordreset_errorinvalidemail'];
+}else
+  $notification=$theme['settings']['passwordreset_errorinvalidemail'];
 echo$blacklisted.$notification;

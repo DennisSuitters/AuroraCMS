@@ -197,7 +197,7 @@ if(isset($r['due_ti'])){?>
   if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'||($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view')){?>
   function elfinderDialog(id,t,c){
     var fm=$('<div class="shadow light"/>').dialogelfinder({
-      url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>",
+      url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>?id="+id+"&t="+t+"&c="+c,
       lang:'en',
       width:840,
       height:450,
@@ -376,7 +376,7 @@ if(isset($r['due_ti'])){?>
           ['font',['bold','italic','underline','clear']],
           ['para',['ul','ol','paragraph']],
           ['table',['table']],
-          ['insert',['elfinder','video','link','hr']],
+          ['insert',['elfinder','video','link','hr','checkbox']],
           ['view',['fullscreen','codeview']],
           ['help',['help']]
         ],

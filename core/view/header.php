@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -18,6 +18,8 @@
  * @changes    v0.0.17 Add check for rank access for menu items.
  * @changes    v0.0.17 Fix dropdown menu creation adding wrong link element.
  * @changes    v0.0.17 Add parsing for Business Hours.
+ * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.18 Add parsing for Cart for mobile devices.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
@@ -65,11 +67,13 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 $html=preg_replace([
 	'/<print view>/',
 	'/<print config=[\"\']?seoTitle[\"\']?>/',
+	'/<print config=[\"\']?business[\"\']?>/',
 	'/<print meta=[\"\']?url[\"\']?>/'
 ],[
 	$view,
 	$config['seoTitle'],
-	URL
+	$config['business'],
+	URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
 ],$html);
 if(stristr($html,'<buildMenu')){
 	preg_match('/<nondropDown>([\w\W]*?)<\/nondropDown>/',$html,$matches);
@@ -81,15 +85,18 @@ if(stristr($html,'<buildMenu')){
 	if(stristr($html,'<menuLogin')){
 		preg_match('/<menuLogin>([\w\W]*?)<\/menuLogin>/',$html,$matches);
 		$menuLogin=$matches[1];
-	}else$menuLogin='';
+	}else
+		$menuLogin='';
 	$htmlMenu='';
-	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE menu='head' AND mid=0 AND active=1 AND rank<=:rank ORDER BY ord ASC");
+	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE menu = 'head' AND mid = 0 AND active = 1 AND rank <= :rank ORDER BY ord ASC");
 	$s->execute([':rank'=>$_SESSION['rank']]);
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$menuURL='';
 		if($r['contentType']!='index'){
-			if(isset($r['url'][0])&&$r['url'][0]=='#')$menuURL.=URL.$r['url'].'/';
-			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))$menuURL.=$r['url'];
+			if(isset($r['url'][0])&&$r['url'][0]=='#')
+				$menuURL.=URL.$r['url'].'/';
+			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))
+				$menuURL.=$r['url'];
 			else{
 				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
@@ -116,8 +123,9 @@ if(stristr($html,'<buildMenu')){
 					true)
 				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';
 			}
-		}else$menuURL.=URL;
-		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid=:id AND  active=1 AND rank<=:rank ORDER BY ord ASC");
+		}else
+			$menuURL.=URL;
+		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid = :id AND  active = 1 AND rank <= :rank ORDER BY ord ASC");
 		$sm->execute([
 			':id'=>$r['id'],
 			':rank'=>$_SESSION['rank']
@@ -132,7 +140,7 @@ if(stristr($html,'<buildMenu')){
 			'/<print menu=[\"\']?title[\"\']?>/'
 		],[
 			$r['contentType']==$view?$theme['settings']['settings_activeClass']:'',
-			$menuURL,
+			$menuURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
 			$r['contentType'],
 			$r['title']
 		],$menuItem);
@@ -142,8 +150,10 @@ if(stristr($html,'<buildMenu')){
 				$item=$subMenuItem;
 				$subURL='';
 				if($rm['contentType']!='index'){
-					if(isset($rm['url'][0])&&$rm['url'][0]=='#')$subURL.=URL.$rm['url'].'/';
-					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))$subURL.=$rm['url'].'/';
+					if(isset($rm['url'][0])&&$rm['url'][0]=='#')
+						$subURL.=URL.$rm['url'].'/';
+					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))
+						$subURL.=$rm['url'].'/';
 					else{
 						$subURL.=URL.$rm['contentType'].'/';
 						if(!in_array(
@@ -176,7 +186,7 @@ if(stristr($html,'<buildMenu')){
 					'/<print rel=[\"\']?contentType[\"\']?>/',
 					'/<print submenu=[\"\']?title[\"\']?>/'
 				],[
-					$subURL,
+					$subURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
 					$rm['contentType'],
 					$rm['title']
 				],$item);
@@ -189,7 +199,7 @@ if(stristr($html,'<buildMenu')){
 			$dti=$ti-86400;
 			$crtq=$db->prepare("DELETE FROM `".$prefix."cart` WHERE ti<:ti");
 			$crtq->execute([':ti'=>$dti]);
-			$crtq=$db->prepare("SELECT SUM(quantity) as quantity FROM `".$prefix."cart` WHERE si=:si");
+			$crtq=$db->prepare("SELECT SUM(quantity) as quantity FROM `".$prefix."cart` WHERE si = :si");
 			$crtq->execute([':si'=>SESSIONID]);
 			$crtr=$crtq->fetch(PDO::FETCH_ASSOC);
 			$cart=$theme['settings']['cart_menu'];
@@ -200,21 +210,29 @@ if(stristr($html,'<buildMenu')){
 	}
 	if($menuLogin!=''){
 		$menuLogin=preg_replace('/<print url>/',URL,$menuLogin,1);
-		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$menuLogin='';
+		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
+			$menuLogin='';
 		else{
-			if($config['options'][3]==0)$menuLogin=preg_replace('~<signup>.*?<\/signup>~is','',$menuLogin,1);
+			if($config['options'][3]==0)
+				$menuLogin=preg_replace('~<signup>.*?<\/signup>~is','',$menuLogin,1);
 			else
 				$menuLogin=preg_replace('/<[\/]?signup>/','',$menuLogin);
 			$htmlMenu.=$menuLogin;
 		}
 	}
-	$html=preg_replace('~<buildMenu>.*?<\/buildMenu>~is',$htmlMenu,$html,1);
+	$html=preg_replace([
+		'~<buildMenu>.*?<\/buildMenu>~is',
+		'/<print cart=[\"\']?quantity[\"\']?>/'
+	],[
+		$htmlMenu,
+		$crtr['quantity']>0?$crtr['quantity']:''
+	],$html,1);
 }
 if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];
 	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=0 ORDER BY icon ASC");
+	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType = 'social' AND uid = 0 ORDER BY icon ASC");
 	if($s->rowCount()>0){
 		while($r=$s->fetch(PDO::FETCH_ASSOC)){
 			$buildSocial=$htmlSocial;
@@ -224,25 +242,28 @@ if(stristr($html,'<buildSocial')){
 				'<print rel=label>'
 			],[
 				$r['url'],
-				frontsvg('libre-social-'.$r['icon']),
+				frontsvg('i-social-'.$r['icon']),
 				ucfirst($r['icon'])
 			],$buildSocial);
 			$socialItems.=$buildSocial;
 		}
-	}else$socialItems='';
+	}else
+		$socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
 	if($config['options'][9]==1){
 		$html=preg_replace('/<[\/]?rss>/','',$html);
 		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'],$html):str_replace('<print rsslink>','rss',$html);
-		$html=str_replace('<print rssicon>',frontsvg('libre-social-rss'),$html);
-	}else$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
+		$html=str_replace('<print rssicon>',frontsvg('i-social-rss'),$html);
+	}else
+		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
 }
 if(isset($_GET['activate'])&&$_GET['activate']!=''){
 	$activate=filter_input(INPUT_GET,'activate',FILTER_SANITIZE_STRING);
 	$sa=$db->prepare("UPDATE `".$prefix."login` SET active='1',activate='',rank='100' WHERE activate=:activate");
 	$sa->execute([':activate'=>$activate]);
 	$html=$sa->rowCount()>0?str_replace('<activation>',$theme['settings']['activation_success'],$html):str_replace('<activation>',$theme['settings']['activation_error'],$html);
-}else$html=str_replace('<activation>','',$html);
+}else
+	$html=str_replace('<activation>','',$html);
 if(stristr($html,'<hours>')){
 	if($config['options'][19]==1){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
@@ -254,24 +275,26 @@ if(stristr($html,'<hours>')){
 				$buildHours=$htmlHours;
 				if($r['tis']!=0){
 					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1){
+					if($config['options'][21]==1)
 						$hourFrom=$r['tis'];
-					}else{
+					else{
 						$hourFromH=substr($r['tis'],0,2);
 						$hourFromM=substr($r['tis'],3,4);
 						$hourFrom=($hourFromH < 12 ? ltrim($hourFromH,'0') . ($hourFromM > 0 ? $hourFromM : '' ).'am' : $hourFromH - 12 . ($hourFromM > 0 ? $hourFromM : '') . 'pm');
 					}
-				}else$hourFrom='';
+				}else
+					$hourFrom='';
 				if($r['tie']!=0){
 					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1){
+					if($config['options'][21]==1)
 						$hourTo=$r['tie'];
-					}else{
+					else{
 						$hourToH=substr($r['tie'],0,2);
 						$hourToM=substr($r['tie'],3,4);
 						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
 					}
-				}else$hourTo='';
+				}else
+					$hourTo='';
 				$buildHours=preg_replace([
 					'/<print dayfrom>/',
 					'/<print dayto>/',
@@ -305,7 +328,7 @@ if(stristr($html,'<email>')){
 			'/<print config=[\"\']?email[\"\']?>/'
 		],[
 			'',
-			'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
+			'<a href="contactus/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
 		],$html);
 	}else$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
 }
@@ -326,7 +349,8 @@ if(stristr($html,'<contact>')){
 			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
 			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
 		],$html);
-	}else$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
+	}else
+		$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
 }
 if(stristr($html,'<phone>')){
 	if($config['options'][24]==1){
@@ -339,6 +363,7 @@ if(stristr($html,'<phone>')){
 			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
 			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
 		],$html);
-	}else$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
+	}else
+		$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
 }
 $content.=$html;

@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.11 Fix unlogged in users accessing Settings page.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 $rank=0;
 $show='';
@@ -71,21 +72,32 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 			$s->execute([':id'=>$user['id']]);
 			$user=$s->fetch(PDO::FETCH_ASSOC);
-			if(stristr($html,'<success accountHidden>'))$html=str_replace('<success accountHidden>',$theme['settings']['settings_show'],$html);
-			if(stristr($html,'<error accountHidden>'))$html=str_replace('<error accountHidden>',$theme['settings']['settings_hidden'],$html);
+			if(stristr($html,'<success accountHidden>'))
+				$html=str_replace('<success accountHidden>',$theme['settings']['settings_show'],$html);
+			if(stristr($html,'<error accountHidden>'))
+				$html=str_replace('<error accountHidden>',$theme['settings']['settings_hidden'],$html);
 		}else{
-			if(stristr($html,'<success accountHidden>'))$html=str_replace('<success accountHidden>',$theme['settings']['settings_hidden'],$html);
-			if(stristr($html,'<error accountHidden>'))$html=str_replace('<error accountHidden>',$theme['settings']['settings_show'],$html);
+			if(stristr($html,'<success accountHidden>'))
+				$html=str_replace('<success accountHidden>',$theme['settings']['settings_hidden'],$html);
+			if(stristr($html,'<error accountHidden>'))
+				$html=str_replace('<error accountHidden>',$theme['settings']['settings_show'],$html);
 		}
 	}else{
-		if(stristr($html,'<success accountHidden>'))$html=str_replace('<success accountHidden>',$theme['settings']['settings_hidden'],$html);
-		if(stristr($html,'<error accountHidden>'))$html=str_replace('<error accountHidden>',$theme['settings']['settings_hidden'],$html);
+		if(stristr($html,'<success accountHidden>'))
+			$html=str_replace('<success accountHidden>',$theme['settings']['settings_hidden'],$html);
+		if(stristr($html,'<error accountHidden>'))
+			$html=str_replace('<error accountHidden>',$theme['settings']['settings_hidden'],$html);
 	}
-	if(stristr($html,'<error currentPassCSS>'))$html=str_replace('<error currentPassCSS>',$currentPassCSS,$html);
-	if(stristr($html,'<error currentPassHidden>'))$html=str_replace('<error currentPassHidden>',$currentPassHidden,$html);
-	if(stristr($html,'<error matchPassCSS>'))$html=str_replace('<error matchPassCSS>',$matchPassCSS,$html);
-	if(stristr($html,'<error matchPassHidden>'))$html=str_replace('<error matchPassHidden>',$matchPassHidden,$html);
-	if(stristr($html,'<success passUpdated>'))$html=str_replace('<success passUpdated>',$success,$html);
+	if(stristr($html,'<error currentPassCSS>'))
+		$html=str_replace('<error currentPassCSS>',$currentPassCSS,$html);
+	if(stristr($html,'<error currentPassHidden>'))
+		$html=str_replace('<error currentPassHidden>',$currentPassHidden,$html);
+	if(stristr($html,'<error matchPassCSS>'))
+		$html=str_replace('<error matchPassCSS>',$matchPassCSS,$html);
+	if(stristr($html,'<error matchPassHidden>'))
+		$html=str_replace('<error matchPassHidden>',$matchPassHidden,$html);
+	if(stristr($html,'<success passUpdated>'))
+		$html=str_replace('<success passUpdated>',$success,$html);
 	$rank='Visitor';
 	switch($user['rank']){
 		case 100:
@@ -122,7 +134,8 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 			$rank='Visitor';
 			break;
 	}
-	if($user['postcode']==0)$user['postcode']='';
+	if($user['postcode']==0)
+		$user['postcode']='';
 	$html=preg_replace([
 		'/<print user=[\"\']?gravatar[\"\']?>/',
 		'/<print user=[\"\']?ti[\"\']?>/',
@@ -162,6 +175,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 	],$html);
 }else{
 	$html='';
-	if(file_exists(THEME.DS.'noaccess.html'))$html=file_get_contents(THEME.DS.'noaccess.html');
+	if(file_exists(THEME.DS.'noaccess.html'))
+		$html=file_get_contents(THEME.DS.'noaccess.html');
 }
 $content.=$html;

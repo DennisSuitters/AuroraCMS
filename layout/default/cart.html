@@ -10,41 +10,84 @@
   </pagenotes>
 	<section class="row">
 		<emptycart>
-			<article class="col-11 col-sm-5 m-0 p-0 mx-1">
-				<table>
-					<thead>
-						<tr>
-							<th>&nbsp;</th>
-							<th class="d-none d-sm-table-cell">Title/Option</th>
-							<th>Quantity</th>
-							<th>Cost</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<items>
+			<article id="cart" name="cart" class="col-11 col-sm-5 m-0 p-0 mx-1">
+				<div class="card">
+					<h3 class="p-3">Your Cart</h3>
+					<table class="border-0">
+						<thead class="border-0">
 							<tr>
-								<td class="col-3 col-sm-2"><img class="col-8" src="<print content=image>" alt="<print content=title>"></td>
-								<td class="d-none d-sm-table-cell text-center">
-									<print content="code"> <print content="title"><br>
-									<print choice>
-								</td>
-								<td class="text-center"><print cart="quantity"></td>
-								<td class="text-center"><print cart="cost"></td>
-								<td class="text-right"><print itemscalculate></td>
+								<th class="w-25 d-none d-sm-table-cell border-0"></th>
+								<th colspan="6" class="small border-0">
+									<span class="text-muted">Code : </span>Title<span class="text-muted"> : Choices</span>
+								</th>
 							</tr>
-						</items>
-					</tbody>
-					<tfoot>
-						<td class="d-none d-sm-table-cell">&nbsp;</td>
-						<td colspan="3" class="text-right">
-							Total (AUD)
-						</td>
-						<td class="text-right border-black border-2 border-top">
-							<strong id="total"><print totalcalculate></strong>
-						</td>
-					</tfoot>
-				</table>
+							<tr>
+								<th class="d-none d-sm-table-cell border-0"></th>
+								<th colspan="2" class="border-0"></th>
+								<th class="w-10 small text-right pr-5 border-0">Quantity</th>
+								<th class="w-10 small text-right border-0">X</th>
+								<th class="w-10 small text-center border-0">Cost</th>
+								<th class="w-10 small text-right border-0">Total</th>
+							</tr>
+						</thead>
+						<tbody>
+							<items>
+								<tr class="<print zebra>">
+									<td class="d-none d-sm-table-cell align-middle border-0 p-0 pt-1 pl-1">
+										<img src="<print content=image>" class="m-0" alt="<print content=title>">
+									</td>
+									<td colspan="6" class="small align-middle border-0">
+										<print content="code"><print content="title"><print choice>
+									</td>
+								</tr>
+								<tr class="<print zebra> my-0 py-0">
+									<td class="d-none d-sm-table-cell border-0"></td>
+									<td colspan="2" class="text-right align-middle my-0 py-0 border-0">
+										<small class="d-none d-sm-inline text-muted float-left text-left"><small>
+											Weight: <print content="weight"><br>
+											Dimensions: <print content="dimensions">
+										</small></small>
+									</td>
+									<td class="align-middle my-0 py-0 border-0">
+										<form method="post" action="<print carturl>#cart">
+											<div class="form-group row">
+												<input type="hidden" name="qid" value="<print cart=id>">
+												<input type="number" class="form-control form-control-sm col-4 ml-auto text-center" name="qty" value="<print cart=quantity>" onchange="this.form.submit();">
+											</div>
+										</form>
+									</td>
+									<td class="small align-middle text-right border-0" style="width:30px;">X</td>
+									<td class="w-10 text-center align-middle my-0 py-0 border-0"><print cart="cost"></td>
+									<td class="w-10 text-right align-middle my-0 py-0 border-0"><print itemscalculate></td>
+								</tr>
+							</items>
+						</tbody>
+						<tfoot>
+							<tr class="my-0 py-0">
+								<td class="d-none d-sm-table-cell border-0"></td>
+								<td colspan="5" class="text-right my-0 py-0 border-0">Total</td>
+								<td id="total" class="text-right border-dark border-top border-bottom my-0 py-0 font-weight-bold"><print totalcalculate></td>
+							</tr>
+							<tr class="my-0 py-0">
+								<td class="d-none d-sm-table-cell border-0"></td>
+								<td colspan="5" class="text-right my-0 py-0 border-0">
+									<small>Estimated Dimensions: <print dimensions></small>
+								</td>
+								<td class="border-0"></td>
+							</tr>
+							<tr class="my-0 py-0">
+								<td class="d-none d-sm-table-cell border-0"></td>
+								<td colspan="5" class="text-right my-0 py-0 border-0">
+									<small>Total Weight: <print weight></small>
+								</td>
+								<td class="border-0"></td>
+							</tr>
+						</tfoot>
+					</table>
+					<div class="text-right pr-2"><small>We are unable to calculate the postage cost as we need your Post Code, once you fill in the details <span class="d-none d-sm-inline">to the right</span><span class="d-inline d-sm-none">below</span>, and activate your account we will be able to estimate the postage cost's.</small></div>
+					<div class="text-right pr-2"><small>Changing Quantities will refresh the page to recalculate.<br> To remove items change it's Quantity to '0'</small></div>
+					<div class="text-right pr-2"><small>Prices are in Australian Dollars (AUD)</small></div>
+				</div>
 			</article>
 			<article class="col-11 col-sm-5 m-0 p-0 mx-1">
 				<iframe id="sp" name="sp" class="d-none"></iframe>
@@ -97,7 +140,6 @@
 					<postageoptions>
 						<label for="postoption">Delivery Options</label>
 						<select id="postoption" name="postoption">
-							<option value="0">Select a Delivery Option</option>
 							<postoptions>
 						</select>
 						<small>Note: Delivery prices are estimates, and may change depending on order items and location of delivery.</small><br>

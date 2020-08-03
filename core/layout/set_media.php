@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -35,40 +36,54 @@
           </div>
           <label for="options2" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Image Resizing</label>
         </div>
-        <div class="help-block text-muted small text-right">Uploaded Images larger than the above size will be resized to their long edge. If either value is '0', resizing will be disabled.</div>
-        <div class="form-group row">
-          <label for="mediaMaxWidth" class="control-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Max Width</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <input type="text" id="mediaMaxWidth" class="form-control textinput" value="<?php echo$config['mediaMaxWidth'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidth">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxWidth" class="btn btn-secondary save" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+        <div class="form-text text-muted small text-right">Uploaded Images larger than the above size will be resized to their long edge. If either value is '0', resizing will be disabled.</div>
+        <div class="row">
+          <div class="form-group col-12 col-sm-6">
+            <label for="mediaMaxWidth">Max Width</label>
+            <div class="input-group">
+              <input type="text" id="mediaMaxWidth" class="form-control textinput" value="<?php echo$config['mediaMaxWidth'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidth">
+              <div class="input-group-append">
+                <button id="savemediaMaxWidth" class="btn btn-secondary save" data-tooltip="tooltip" data-placement="top" data-title="Save" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label for="mediaMaxHeight">Max Height</label>
+            <div class="input-group">
+              <input type="text" id="mediaMaxHeight" class="form-control textinput" value="<?php echo$config['mediaMaxHeight'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeight">
+              <div class="input-group-append">
+                <button id="savemediaMaxHeight" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="mediaMaxHeight" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Max Height</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <input type="text" id="mediaMaxHeight" class="form-control textinput" value="<?php echo$config['mediaMaxHeight'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeight">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxHeight" class="btn btn-secondary save" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+        <div class="row">
+          <div class="form-group col-12 col-sm-6">
+            <label for="mediaMaxWidthThumb">Max Thumb Width</label>
+            <div class="input-group">
+              <input type="text" id="mediaMaxWidthThumb" class="form-control textinput" value="<?php echo$config['mediaMaxWidthThumb'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidthThumb">
+              <div class="input-group-append">
+                <button id="savemediaMaxWidthThumb" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-12 col-sm-6">
+            <label for="mediaMaxHeightThumb">Max Thumb Height</label>
+            <div class="input-group">
+              <input type="text" id="mediaMaxHeightThumb" class="form-control textinput" value="<?php echo$config['mediaMaxHeightThumb'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeightThumb">
+              <div class="input-group-append">
+                <button id="savemediaMaxHeightThumb" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="mediaMaxWidthThumb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Max Thumb Width</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <input type="text" id="mediaMaxWidthThumb" class="form-control textinput" value="<?php echo$config['mediaMaxWidthThumb'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidthThumb">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxWidthThumb" class="btn btn-secondary save" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="mediaMaxHeightThumb" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Max Thumb Height</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <input type="text" id="mediaMaxHeightThumb" class="form-control textinput" value="<?php echo$config['mediaMaxHeightThumb'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeightThumb">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaMaxHeightThumb" class="btn btn-secondary save" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="mediaQuality" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Image Quality</label>
-          <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+        <div class="form-group">
+          <label for="mediaQuality">Image Quality</label>
+          <div class="input-group">
             <input type="text" id="mediaQuality" class="form-control textinput" value="<?php echo$config['mediaQuality'];?>" data-dbid="1" data-dbt="config" data-dbc="mediaQuality">
-            <div class="input-group-append" data-tooltip="tooltip" data-placement="top" data-title="Save"><button id="savemediaQuality" class="btn btn-secondary save" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append">
+              <button id="savemediaQuality" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            </div>
           </div>
         </div>
       </div>

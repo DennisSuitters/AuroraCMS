@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.17 Add SQL for rank fetching data.
+ * @changes    v0.0.18 Reformat source for legibility.
  */
 if(stristr($html,'<events')){
 	preg_match('/<events>([\w\W]*?)<\/events>/',$html,$matches);
@@ -23,7 +24,8 @@ if(stristr($html,'<events')){
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$items=$event;
-		if($r['seoCaption']=='')$r['seoCaption']=strip_tags($r['notes']);
+		if($r['seoCaption']=='')
+			$r['seoCaption']=strip_tags($r['notes']);
 		$items=preg_replace([
 			'/<print content=[\"\']?schematype[\"\']?>/',
 			'/<print content=[\"\']?title[\"\']?>/',

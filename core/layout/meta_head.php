@@ -59,6 +59,7 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'summernote.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-save-button.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-classes.js';?>"></script>
+    <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-checkbox.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'codemirror.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'elfinder'.DS.'elfinder.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'elfinder'.DS.'js'.DS.'elfinder.min.js';?>"></script>
@@ -69,6 +70,9 @@
     <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>
     <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
+    <!--[if lt IE 9]>
+    	<script type="text/javascript" src="libs/flashcanvas.js"></script>
+  	<![endif]-->
   </head>
   <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
 <?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div><div class="developmentbottom"></div>';?>

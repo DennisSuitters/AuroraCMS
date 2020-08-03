@@ -93,7 +93,7 @@ if(stristr($html,'<buildSocial')){
 				'<print socialicon>'
 			],[
 				htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
-				frontsvg('libre-social-'.$r['icon'])
+				frontsvg('i-social-'.$r['icon'])
 			],$buildSocial);
 			$socialItems.=$buildSocial;
 		}

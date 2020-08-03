@@ -3,9 +3,9 @@
 			<div class="card col-11 col-sm-12 mx-auto mb-3">
 				<form method="POST" action="">
 					<input type="hidden" name="act" value="sort">
-					<h3>Sort Items</h3>
+					<label for="sort" class="h3">Sort Items</label>
 					<div class="row">
-						<select class="col-9" name="sort">
+						<select id="sort" class="col-9" name="sort">
 							<option value="">Select a Sort Option</option>
 							<sortOptions>
 						</select>
@@ -55,7 +55,7 @@
 					<input type="hidden" name="id" value="<print content=id>">
 					<input type="hidden" name="emailtrap" value="none">
 					<h3>Add a Review</h3>
-					<label>Rating</label>
+					<label for="rating5">Rating</label>
 					<span class="starRating">
 						<input id="rating5" type="radio" name="rating" value="5" checked>
 						<label for="rating5" title="Awesome!">5</label>

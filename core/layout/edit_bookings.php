@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
@@ -15,6 +15,7 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.18 Add extra editing fields for Job accounting.
+ * @changes    v0.0.19 Add Save All button.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
 $s->execute([':id'=>$id]);
@@ -29,9 +30,11 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></a>
 <?php if($user['options'][0]==1||$user['options'][2]==1){?>
         <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-placement="left" data-title="Email Booking" aria-label="Email"><?php svg('email-send');?></a>
 <?php }?>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>
@@ -234,7 +237,7 @@ while($row=$sql->fetch(PDO::FETCH_ASSOC))
           <div class="form-inline row">
             <div class="input-group col-12 col-sm-11 offset-sm-1">
               <div class="input-group-text w-10">
-                <input id="agreementCheck" type="checkbox">
+                <input id="agreementCheck" type="checkbox" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="agreementCheck" data-dbb="0"<?php echo$r['agreementCheck'][0]==1?' checked aria-checked="true"':' aria-checked="fale"';?>>
               </div>
               <label for="agreementCheck" class="input-group-text col text-wrap">
                 <?php echo$config['bookingAgreement'];?>
@@ -367,7 +370,7 @@ stockStatus for signature
           }
         }
     });
-    $("#signature").jSignature();
+    $("#signature").jSignature({color:"#000"});
 <?php if($r['signature']!=''){?>
     $("#signature").jSignature("importData",'<?php echo$r['signature'];?>');
 <?php }?>

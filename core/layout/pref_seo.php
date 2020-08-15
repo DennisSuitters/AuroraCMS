@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Remove SEO Meta/Title/Caption/Description.
@@ -15,11 +15,17 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.17 Add Administration Tabs and editable SEO Helper Info.
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Add Save All button.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
     <li class="breadcrumb-item active">SEO</li>
+    <li class="breadcrumb-menu">
+      <div class="btn-group" role="group">
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
+      </div>
+    </li>
   </ol>
   <div class="container-fluid">
     <div class="card">

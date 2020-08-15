@@ -132,6 +132,11 @@ function microid($identity,$service,$algorithm='sha1'){
 	if(function_exists($algorithm))
 		return$microid.=$algorithm($algorithm($identity).$algorithm($service));
 }
+function requestSameDomain(){
+  $myDomain=$_SERVER['SCRIPT_URI'];
+  $requestsSource=$_SERVER['HTTP_REFERER'];
+  return parse_url($myDomain,PHP_URL_HOST)===parse_url($requestsSource,PHP_URL_HOST);
+}
 function _ago($time){
 	if($time==0)
 		$timeDiff='Never';

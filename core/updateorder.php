@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.15
+ * @changes    v0.0.19 Add process to add entry that deducts values.
+ * @changes    v0.0.19 Add Discount Range Calculation.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -47,18 +48,26 @@ if($act=='additem'){
 		$r=$q->fetch(PDO::FETCH_ASSOC);
 		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
 		if($r['rCost']!=0)$r['cost']=$r['rCost'];
+	}elseif($da=='neg'){
+		$r=[
+			'title'=>'',
+			'cost'=>0,
+			'status'=>'neg'
+		];
 	}else{
     $r=[
       'title'=>'',
-      'cost'=>0
+      'cost'=>0,
+			'status'=>''
     ];
   }
-	$q=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,title,quantity,cost,ti) VALUES (:oid,:iid,:title,'1',:cost,:ti)");
+	$q=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,title,quantity,cost,status,ti) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
 	$q->execute([
     ':oid'=>$id,
     ':iid'=>$da,
     ':title'=>$r['title'],
     ':cost'=>$r['cost'],
+		':status'=>isset($r['status'])&&$r['status']!=''?$r['status']:'',
     ':ti'=>time()
   ]);
 }
@@ -208,7 +217,7 @@ if($act=='postcost'){
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
 $s->execute([':id'=>$id]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid ORDER BY ti ASC,title ASC");
+$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='neg' ORDER BY ti ASC,title ASC");
 $si->execute([':oid'=>$r['id']]);
 $total=0;
 $html='';
@@ -220,10 +229,14 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   $sc->execute([':id'=>$oi['cid']]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
 	$image='';
-	if($i['thumb']!=''&&file_exists('..'.DS.'media'.DS.basename($i['thumb'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
-	elseif($i['file']!=''&&file_exists('..'.DS.'media'.DS.basename($i['file'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
-	elseif($i['fileURL']!='')$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
-	else$image='';
+	if($i['thumb']!=''&&file_exists('..'.DS.'media'.DS.basename($i['thumb'])))
+		$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
+	elseif($i['file']!=''&&file_exists('..'.DS.'media'.DS.basename($i['file'])))
+		$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
+	elseif($i['fileURL']!='')
+		$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
+	else
+		$image='';
   $html.='<tr>'.
 					'<td class="text-center align-middle">'.$image.'</td>'.
     			'<td class="text-left align-middle">'.$i['code'].'</td>'.
@@ -301,20 +314,50 @@ if($ssr->rowCount()>0){
 							'<td class="text-right align-middle"><strong>'.$total.'</strong></td>'.
 							'<td>&nbsp;</td>'.
 						'</tr>';
+			if($config['options'][26]==1){
+				$us=$db->prepare("SELECT spent FROM `".$prefix."login` WHERE id=:uid");
+				$us->execute([
+					':uid'=>$r['uid']
+				]);
+				if($us->rowCount()>0){
+					$usr=$us->fetch(PDO::FETCH_ASSOC);
+					if($usr['spent']>0){
+						$sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+						$sd->execute([
+					  	':f'=>$usr['spent'],
+					  	':t'=>$usr['spent']
+						]);
+						if($sd->rowCount()>0){
+						  $rd=$sd->fetch(PDO::FETCH_ASSOC);
+						  if($rd['value']==2)
+						    $total=$total*($rd['cost']/100);
+						  else
+						    $total=$total-$rd['cost'];
+			  			$total=number_format((float)$total, 2, '.', '');
+				$html.='<tr>'.
+              	'<td colspan="6" class="text-right"><strong>Spent Discount '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off</strong></td>'.
+                '<td class="text-right align-middle"><strong>'.$total.'</strong></td>'.
+                '<td>&nbsp;</td>'.
+              '</tr>';
+						}
+					}
+				}
+			}
+
 			if($config['gst']>0){
 			  $gst=$total*($config['gst']/100);
 			  $gst=number_format((float)$gst, 2, '.', '');
-				$html.='<tr>'.
-								'<td colspan="6" class="text-right"><strong>GST</strong></td>'.
-								'<td class="total text-right border-top border-bottom"><strong>'.$gst.'</strong></td>'.
-								'<td>&nbsp;</td>'.
-							'</tr>';
 				$total=$total+$gst;
 				$total=number_format((float)$total, 2, '.', '');
+				$html.='<tr>'.
+								'<td colspan="6" class="text-right"><strong>'.$config['gst'].'% GST $'.$gst.'</strong></td>'.
+								'<td class="total text-right border-top border-bottom"><strong>'.$total.'</strong></td>'.
+								'<td>&nbsp;</td>'.
+							'</tr>';
 			}
 			$html.='<tr>'.
-							'<td class="text-right align-middle"><strong>Postage</strong></td>'.
-							'<td colspan="5" class="text-right align-middle">'.
+							'<td colspan="2" class="text-right align-middle"><strong>Shipping</strong></td>'.
+							'<td colspan="4" class="text-right align-middle">'.
 								'<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
 									'<input type="hidden" name="act" value="postoption">'.
 									'<input type="hidden" name="id" value="'.$r['id'].'">'.
@@ -340,7 +383,51 @@ if($ssr->rowCount()>0){
 							'<td colspan="6" class="text-right"><strong>Total</strong></td>'.
 							'<td class="total text-right border-top"><strong>'.$total.'</strong></td>'.
 							'<td>&nbsp;</td>'.
-						'</tr>';?>
+						'</tr>';
+$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status='neg' ORDER BY ti ASC");
+$sn->execute([':oid'=>$r['id']]);
+if($sn->rowCount()>0){
+	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
+					$html.='<tr><td colspan="2" class="small align-middle">'.
+									'<small>'.date($config['dateFormat'],$rn['ti']).
+								'</td>'.
+								'<td colspan="4" class="align-middle">'.
+									'<form target="sp" method="POST" action="core/updateorder.php">'.
+										'<input type="hidden" name="act" value="title">'.
+										'<input type="hidden" name="id" value="'.$rn['id'].'">'.
+										'<input type="hidden" name="t" value="orderitems">'.
+										'<input type="hidden" name="c" value="title">'.
+										'<input type="text" class="form-control" name="da" value="'.$rn['title'].'">'.
+									'</form>'.
+								'</td>'.
+								'<td class="text-right align-middle">'.
+									'<form target="sp" method="POST" action="core/updateorder.php">'.
+										'<input type="hidden" name="act" value="cost">'.
+										'<input type="hidden" name="id" value="'.$rn['id'].'">'.
+										'<input type="hidden" name="t" value="orderitems">'.
+										'<input type="hidden" name="c" value="cost">'.
+										'<input class="form-control text-center" style="min-width:80px" name="da" value="'.$rn['cost'].'">'.
+									'</form>'.
+								'</td>'.
+								'<td>'.
+									'<form target="sp" method="post" action="core/updateorder.php">'.
+										'<input type="hidden" name="act" value="trash">'.
+										'<input type="hidden" name="id" value="'.$rn['id'].'">'.
+										'<input type="hidden" name="t" value="orderitems">'.
+										'<input type="hidden" name="c" value="quantity">'.
+										'<input type="hidden" name="da" value="0">'.
+										'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+									'</form>'.
+								'</td></tr>';
+		$total=$total-$rn['cost'];
+							}
+		$total=number_format((float)$total,2,'.','');
+				$html.='<tr>'.
+								'<td colspan="6" class="text-right"><strong>Total</strong></td>'.
+								'<td class="total text-right border-top border-bottom"><strong>'.$total.'</td>'.
+								'<td></td>'.
+							'</tr>';
+}?>
   window.top.window.$('#updateorder').html('<?php echo$html;?>');
 	window.top.window.$('.page-block').removeClass('d-block');
 <?php

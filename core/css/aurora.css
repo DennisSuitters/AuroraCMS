@@ -38,6 +38,7 @@ body{font-size:1rem;font-family:sans-serif;font-weight:initial;line-height:norma
 .page-block,
 .note-block{display:none;z-index:999999;position:fixed;top:0;right:0;bottom:0;left:0;width:100vw;height:100vh;background:#000;background:rgba(0,0,0,.8) url(../images/page-block.png) no-repeat center center fixed;background-size:cover;transition:background 2s ease;-webkit-transition:background 2s ease;-moz-transition:background 2s ease;-ms-transition:background 2s ease}
 .loader{position:absolute;top:50%;left:40%;margin-left:10%;transform:translate3d(-50%,-50%,0);-webkit-filter:blur(75px);-moz-filter:blur(75px);-ms-filter:blur(75px);-o-filter:blur(75px);filter:blur(75px)}
+.konami{display:block;z-index:-1;position:fixed;top:0;right:0;bottom:0;left:0;width:100vw;height:100vh;transition:background 2s ease;-webkit-transition:background 2s ease;-moz-transition:background 2s ease;-ms-transition:background 2s ease}
 .dot{width:32px;height:75vh;margin:auto 50px;background:#fff;border-radius:100%;display:inline-block;animation:slide 5s infinite}
 .dot:nth-child(1){animation-delay:1s;background:#e31485}
 .dot:nth-child(2){animation-delay:2s;background:#f80}

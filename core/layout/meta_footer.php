@@ -176,7 +176,9 @@ if(isset($r['due_ti'])){?>
     }).done(function(msg){
       l.stop();
       $('#'+el).removeAttr('disabled');
+      $('#'+el).removeClass('unsaved');
       $('#save'+c).removeClass('btn-danger');
+      if($('.unsaved').length===0)$('.saveall').removeClass('btn-danger');
       unsaved=false;
     });
 	 	return false;
@@ -387,6 +389,35 @@ if(isset($r['due_ti'])){?>
         }
     });
 <?php }?>
+$.fn.ogni=function(f,t){var i=0;function recurse(list){var el=list.shift();f.apply(el,[i++,el])||setTimeout(function(){list.length&&recurse(list)},t)}this.length&&recurse(this.toArray());return this}
+    $(".saveall").on({
+      click:function(event){
+        event.preventDefault();
+        if($('.unsaved').length>0)$('.page-block').addClass('d-block');
+        $(".unsaved").ogni(function(event){
+            var id = $(this).data("dbid");
+            var t = $(this).data("dbt");
+            var c = $(this).data("dbc");
+            var da = $(this).val();
+            $(this).removeClass('unsaved');
+            $.ajax({
+              type:"GET",
+              url:"core/update.php",
+              data:{
+                id:id,
+                t:t,
+                c:c,
+                da:da
+              }
+            }).done(function(msg){
+              $('.saveall').removeClass('btn-danger');
+              unsaved=false;
+            });
+            $('#save'+c).removeClass('btn-danger');
+            if($('.unsaved').length===0)$('.page-block').removeClass('d-block');
+        },1000);
+      }
+    });
     $(".textinput").on({
     	blur:function(event){
     		event.preventDefault();
@@ -409,6 +440,8 @@ if(isset($r['due_ti'])){?>
     	keypress:function(event){
         var save=$(this).data("dbc");
         $('#save'+save).addClass('btn-danger');
+        $('.saveall').addClass('btn-danger');
+        $('#'+save).addClass('unsaved');
         unsaved=true;
     		if(event.which==13){
     			event.preventDefault();
@@ -416,6 +449,7 @@ if(isset($r['due_ti'])){?>
     	},
     	change:function(event){
         var save=$(this).data("dbc");
+        $('#'+save).addClass('unsaved');
         $('#save'+save).addClass('btn-danger');
         unsaved=true;
     	}

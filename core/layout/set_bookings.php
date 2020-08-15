@@ -7,14 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
- * @changes    v0.0.18 Add Choices for Bookings.
+ * @changes    v0.0.19 Add Choices for Bookings.
+ * @changes    v0.0.19 Add option to Archive Bookings when converted to Invoice.
  */?>
 <main id="content" class="main position-relative">
   <ol class="breadcrumb shadow">
@@ -23,12 +24,19 @@
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
+        <div class="form-group row">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options25" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25"<?php echo$config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options25" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Archive Bookings when Converted to Invoice</label>
+        </div>
         <legend>Booking Agreement Template</legend>
         <div class="form-group">
           <div class="input-group p-0">

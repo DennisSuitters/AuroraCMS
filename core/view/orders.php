@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.8 Add PayPal Parser.
@@ -15,6 +15,8 @@
  * @changes    v0.0.15 Add GST Calculation and Template Parser.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.18 https://auspost.com.au/developers/docs
+ * @changes    v0.0.19 Add calculating payment deductions.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 require'core/puconverter.php';
@@ -102,7 +104,6 @@ else{
           "weight"=>$weight,
           "service_code"=>$post['type']
         );
-        // https://auspost.com.au/developers/docs
         $calculateRateURL='https://digitalapi.auspost.com.au/postage/parcel/domestic/calculate.json?' .
         http_build_query($queryParams);
         $ch=curl_init();
@@ -199,7 +200,7 @@ else{
         date($config['dateFormat'],$r['due_ti']),
         htmlspecialchars($r['status'],ENT_QUOTES,'UTF-8'),
       ],$order);
-      $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid");
+      $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='neg' ORDER BY ti ASC");
       $ois->execute([':oid'=>$r['id']]);
       $outitems='';
       $total=$weight=$totalWeight=$dimW=$dimL=$dimH=0;
@@ -235,13 +236,13 @@ else{
         ],$item);
         $total=$total+($oir['cost']*$oir['quantity']);
         if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
-				$weight=$weight+($i['weight']*$oir['quantity']);
+				$weight=(int)$weight+((int)$i['weight']*(int)$oir['quantity']);
 				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
 				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
 				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
 				if($i['width']>$dimW)$dimW=$i['width'];
 				if($i['length']>$dimL)$dimL=$i['length'];
-				$dimH=$dimH+($i['height']*$oir['quantity']);
+				$dimH=(int)$dimH+((int)$i['height']*(int)$oir['quantity']);
         $outitems.=$item;
         $zebra=$zebra==2?$zebra=1:$zebra=2;
       }
@@ -294,6 +295,36 @@ else{
         ],$order);
       }
 
+      if($ru['spent']>0&&$config['options'][26]==1){
+        if(stristr($order,'<discountRange>')){
+          $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+          $sd->execute([
+            ':f'=>$ru['spent'],
+            ':t'=>$ru['spent']
+          ]);
+          if($sd->rowCount()>0){
+            $rd=$sd->fetch(PDO::FETCH_ASSOC);
+            if($rd['value']==2)
+              $total=$total*($rd['cost']/100);
+            else
+              $total=$total-$rd['cost'];
+            $total=number_format((float)$total, 2, '.', '');
+            $order=preg_replace([
+              '/<[\/]?discountRange>/',
+              '/<print discount=[\"\']?method[\"\']?>/',
+              '/<print discount=[\"\']?total[\"\']?>/'
+            ],[
+              '',
+              'Spent Discount '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off',
+              $total
+            ],$order);
+          }else
+            $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order);
+        }else
+          $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order);
+      }else
+        $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order);
+
       $option='<option value="0">'.($r['postageCode']==0?($r['postageOption']!=''?$r['postageOption']:'Nothing Selected'):'Nothing Selected').'</option>';
       $sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' ORDER BY title ASC");
       $sco->execute();
@@ -313,8 +344,6 @@ else{
         $option,
         $r['postageCost']
       ],$order);
-
-
       $total=$total+$r['postageCost'];
       $total=number_format((float)$total, 2, '.', '');
       $order=preg_replace([
@@ -326,6 +355,42 @@ else{
         $r['id'],
         $outitems
       ],$order);
+
+      if(stristr($order,'<orderDeduction>')){
+        preg_match('/<orderDeduction>([\w\W]*?)<\/orderDeduction>/',$order,$matches);
+        $deductionHTML=$matches[1];
+        preg_match('/<deductionItems>([\w\W]*?)<\/deductionItems>/',$order,$matches);
+        $deductionItem=$matches[1];
+        $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status='neg' ORDER BY ti ASC");
+        $sn->execute([':oid'=>$r['id']]);
+        $deductionItems=$deductionHTML='';
+        if($sn->rowCount()>0){
+      	   while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
+		        $item=$deductionItem;
+            $item=preg_replace([
+              '/<print deduction=[\"\']?title[\"\']?>/',
+              '/<print deduction=[\"\']?date[\"\']?>/',
+              '/<print deduction=[\"\']?cost[\"\']?>/'
+            ],[
+              $rn['title'],
+              date($config['dateFormat'],$rn['ti']),
+              $rn['cost']
+            ],$item);
+            $deductionItems.=$item;
+      		  $total=$total-$rn['cost'];
+          }
+    		  $total=number_format((float)$total,2,'.','');
+          $deductionHTML=preg_replace([
+            '~<deductionItems>.*?<\/deductionItems>~is',
+            '/<print deduction=[\"\']?total[\"\']?>/'
+          ],[
+            $deductionItems,
+            $total
+          ],$deductionHTML);
+        }
+        $order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is',$deductionHTML,$order);
+      }
+
       $html=preg_replace('~<order>~is',$order,$html,1);
       if(stristr($html,'<print paypal>')&&$r['iid']==''&&$r['status']!='paid'){
         $html=preg_replace([

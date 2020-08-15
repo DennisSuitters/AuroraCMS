@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Add options for Website Voice service.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.19 Add Save All button.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -22,6 +23,7 @@
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <a class="btn btn-ghost-normal info" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>

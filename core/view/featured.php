@@ -108,23 +108,18 @@ $featuredfiles=array_slice($featuredfiles,0,$itemCount);
 $ii=count($featuredfiles);
 $i=0;
 $ci=0;
+$indicators='';
+$arrowsPrev='';
+$arrowsNext='';
 if($ii>0){
-	if(stristr($html,'<indicators>')){
-		preg_match('/<indicators>([\w\W]*?)<\/indicators>/',$html,$matches);
-		$indicator=$matches[1];
-	}
 	foreach($featuredfiles as$key=>$r){
 		$item=$it;
-		$indicatorItem=$indicator;
-		if($i==0){
-			$item=str_replace('<print active>',' active',$item);
-			$indicatorItem=str_replace('<print active>','active',$indicatorItem);
-		}else{
-			$item=str_replace('<print active>','',$item);
-			$indicatorItem=str_replace('<print active>','',$indicatorItem);
-		}
-		$indicatorItem=str_replace('<print indicatorCount>',$i,$indicatorItem);
-		$item=str_replace('<print i>',$ci,$item);
+		if($i==0)
+			$indicators.='<input checked id="slide'.($i+1).'" name="slides" type="radio">';
+		else
+			$indicators.='<input id="slide'.($i+1).'" name="slides" type="radio">';
+		$arrowsprev.='<label class="slider-arrow prev" for="slide'.($i+1).'"></label>';
+		$arrowsnext.='<label class="slider-arrow next" for="slide'.($i+1).'"></label>';
 		if($r['link']=='nolink')
 			$item=preg_replace('~<link>.*?<\/link>~is','',$item,1);
 		else{
@@ -199,13 +194,13 @@ if($ii>0){
 }
 if($ii>1){
 	$html=preg_replace([
-		'~<indicators>.*?<\/indicators>~is',
-		'/<[\/]?featuredIndicators>/',
-		'/<[\/]?featuredControls>/'
+		'/<indicators>/',
+		'/<arrowsprev>/',
+		'/<arrowsnext>/'
 	],[
 		$indicators,
-		'',
-		''
+		$arrowsprev,
+		$arrowsnext
 	],$html);
 }else{
 	$html=preg_replace([

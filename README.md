@@ -2,7 +2,7 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at v0.0.18
+We are currently at v0.0.19
 
 ### FAQ
 - Why no Plugins?
@@ -12,17 +12,35 @@ We are currently at v0.0.18
 
 ### Features
 - Business Hours Editor.
-- Blog Articles, Portfolio's, Bookings, Events, News, Testimonials, Inventory, Services, Gallery, Proofs, Messages, and Newsletters.
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
 - Custom Pages.
+- Articles
+- Portfolio
+- Events
+- News
+- Testimonials
+- Inventory
+- Services
+- Gallery
+- Client Proofs
+- Messages
+- Newsletters.
+- Bookings.
+  - Convert booking to invoice.
+  - Print booking.
+  - Signature taking and storage for confirmation of Services.
 - Messaging.
-  - Whenever a message is created via the Contact Us page, it is stored in the Messages system as well as emailed.
+  - Whenever a message is created via the Contact Us page, it is stored in the messages system as well as emailed.
   - Live Chat. Choose between the built in Live Chat, or easily integrate Facebook Messenger.
 - Orders.
-  - Create Quotes, Invoices. Client viewing of Orders.
+  - Create quotes, invoices. Client viewing of Orders.
   - Send PDF versions of Orders.
   - PayPal Integration for accepting PayPal and Credit Card Payments.
+  - Australia Post API Integration for Calculating Postage Costs.
+  - Add deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
+  - Rewards with percentage or value off, date period available, quantity usage.
+  - Discount Range Calculation depending on Account Spenditure.
 - Media.
   - Upload and manage various types of files for addition into content using elFinder.
 - Featured Content.
@@ -109,7 +127,7 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - Windows 7 + WAMP + PHP 5.5 + MySQL
 
 ### TODO:
-Consult the everchanging [TODO](https://github.com/DiemenDesign/AuroraCMS/TODO.md) file.
+Consult the everchanging [TODO](https://github.com/DiemenDesign/AuroraCMS/blob/master/TODO.md) file.
 
 ### LEGAL:
 By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for any damages that your usage of AuroraCMS may cause to your system, or persons. Damages may infer such things as Data Loss, Aural or Visual Impairment, Server Crashes, Alien Abduction, Coding nightmare's, Alien Implants, or Visiting Alternate Realities. AuroraCMS is Licensed under [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE). We request that if you modify, and hopefully enhance AuroraCMS, that you take part in maintaining, and contributing to it's code base here at GitHub.

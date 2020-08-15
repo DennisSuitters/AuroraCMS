@@ -20,6 +20,8 @@
  * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
  * @changes    v0.0.18 Adjust AustPost API and adding Post Options.
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Add Save All button.
+ * @changes    v0.0.19 Add Discount Range editor.
  * https://auspost.com.au/forms/pacpcs-registration.html
  * https://github.com/fontis/auspost-api-php
  */?>
@@ -30,6 +32,7 @@
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>
@@ -115,6 +118,73 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             </div>
           </div>
         </div>
+        <hr>
+        <legend>Account Discount Ranges</legend>
+        <div class="form-group row">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options26" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="26"<?php echo$config['options'][26]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options26" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Discount Range Calculations.</label>
+        </div>
+        <form target="sp" method="post" action="core/add_discountrange.php">
+          <div class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">From $</div>
+              </div>
+              <input type="number" id="f" class="form-control" name="f" value="" placeholder="Enter Code...">
+              <div class="input-group-append">
+                <div class="input-group-text">To $</div>
+              </div>
+              <input type="number" id="t" class="form-control" name="t" value="" placeholder="Enter an Option...">
+              <div class="input-group-append">
+                <div class="input-group-text">Method</div>
+              </div>
+              <select id="m" class="form-control" name="m">
+                <option value="1">$ Off</option>
+                <option value="2">&#37; Off</option>
+              </select>
+              <div class="input-group-append">
+                <div class="input-group-text">Value</div>
+              </div>
+              <input type="number" id="v" class="form-control" name="v" value="" placeholder="Enter Cost...">
+              <div class="input-group-append">
+                <button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div id="discountrange">
+<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND uid=0 ORDER BY t ASC");
+$ss->execute();
+while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+          <div id="l_<?php echo$rs['id'];?>" class="form-group">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text">From &#36;</div>
+              </div>
+              <input type="number" class="form-control" value="<?php echo$rs['f'];?>" readonly>
+              <div class="input-group-append">
+                <div class="input-group-text">To &#36;</div>
+              </div>
+              <input type="number" class="form-control" value="<?php echo$rs['t'];?>" readonly>
+              <div class="input-group-append">
+                <div class="input-group-text">Method</div>
+              </div>
+              <input type="text" class="form-control" value="<?php echo$rs['value']==2?'&#37; Off':'&#36; Off';?>" readonly>
+              <input type="number" class="form-control" value="<?php echo$rs['cost'];?>" readonly>
+              <div class="input-group-append">
+                <form target="sp" action="core/purge.php">
+                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                  <input type="hidden" name="t" value="choices">
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                </form>
+              </div>
+            </div>
+          </div>
+<?php }?>
+        </div>
+
         <hr>
         <legend>Banking</legend>
         <div class="row">

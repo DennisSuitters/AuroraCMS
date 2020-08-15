@@ -29,35 +29,13 @@ body {
   -webkit-backdrop-filter: blur(5px);
   backdrop-filter: blur(5px); }
 
-.sticky-top ~ .sticky-top { top: 38px; }
+.sticky-top ~ .sticky-top { top: 50px; }
 
-.sticky-top:first-of-type ~ address { margin-top: 38px !important; }
+.sticky-top:first-of-type ~ address { margin-top: 50px !important; }
 
 nav {
   background-color: transparent !important; }
 
-nav.account-menu {
-  z-index: 1021 !important;
-  height: 38px !important; }
-
-nav.account-menu label {
-  background-color: #000 !important;
-  border-color: #000 !important; }
-
-nav.account-menu ul { background-color: #000; }
-
-#accountavatar {
-  position: absolute;
-  top: 3px;
-  right: 3px; }
-
-@media (min-width: 576px) {
-  .sticky-top ~ .sticky-top { top: 50px; }
-
-  .sticky-top:first-of-type ~ address { margin-top: 50px !important; }
-
-  nav.account-menu { height: 52px !important; }
-}
 
 nav ul li {
   display: inline-block !important;
@@ -77,38 +55,6 @@ nav ul li:hover ul { margin-top: 10px; }
 nav ul li ul { z-index: 2000; }
 
 nav ul li ul form { background-color: var(--menu-dropdown-background-color) !important; }
-
-nav.account-menu {
-  position: fixed;
-  top: 0;
-  height:50px;
-  background: #000 !important;
-  margin: 0 !important;
-  padding: 0; }
-
-nav.account-menu ul li { height: auto; }
-
-nav.account-menu ul li a { color: #aaa; }
-
-nav.account-menu ul li a:hover { color: #ddd; }
-
-nav.account-menu button {
-  margin-top: 0;
-  border-radius: 5px;
-  display: inline-block;
-  font-size: medium;
-  font-weight: 700;
-  line-height: 150%;
-  padding: .25rem .5rem;
-  font-family: var(--font);
-  background-color: #d9534f;
-  border: 2px solid #d9534f;
-  color: #fff; }
-
-nav.account-menu #accountavatar {
-  width: 32px;
-  max-height: 32px;
-  border-radius: 5px; }
 
 .cart {
   display: inline-block;

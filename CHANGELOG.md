@@ -1,3 +1,16 @@
+### v0.0.19
+- Add Star Rating option for Editing Testimonials.
+- Fix Business Hours Selections to clear values.
+- Improve Business Hours editing, added Drag to Reorder.
+- Add Distributor Cost. (Yet to add to Order calculations).
+- Add a Save All button that saves all edited fields on a page.
+- Add "agreementCheck" to allowed columns array.
+- Add Convert Booking to Invoice, and settings option to Archive Booking.
+  - Includes creating new Account if Client/Business account doesn't exist.
+- Add option to add a Deduction Cost row to Orders for Client's paying off Orders.
+- Add Discount Range Calculation to Automatically apply discounts set in ranges depending on what Accounts have spent.
+- Fix broken images fallback.
+
 ##### v0.0.18
 - Reformat source for legibility.
 - Fix Theme demo URL parsing.

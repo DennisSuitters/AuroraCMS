@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
@@ -18,7 +18,8 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.11 Add Administrator and Developer setting per user elFinder Media Permissions.
  * @changes    v0.0.11 Update Password change interaction.
- * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Add Save All button.
 */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
 $q->execute([':id'=>$args[1]]);
@@ -31,6 +32,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-menu">
       <div class="btn-group">
         <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>
@@ -79,7 +81,22 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
             </div>
+            <hr>
+            <legend role="heading">Orders Information</legend>
+            <div class="row">
+              <div class="form-group col-12 col-sm-6">
+                <label for="spent">Spent</label>
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">$</div>
+                  </div>
+                  <input type="number" id="spent" class="form-control textinput" value="<?php echo$r['spent'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="spent"<?php echo$user['options'][5]==1?'':' readonly';?>>
+                  <?php echo$user['options'][5]==1?'<div class="input-group-append"><button id="savespent" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
+              </div>
+            </div>
           </div>
+
           <div role="tabpanel" class="tab-pane" id="account-images">
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <div class="form-group">

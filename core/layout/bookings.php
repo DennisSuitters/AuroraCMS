@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
@@ -15,6 +15,7 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.18 Add extra status indicators and sorting.
  * @changes    v0.0.18 Fix Cookies for toggling between Table and Calendar views not sticking.
+ * @changes    v0.0.19 Add Print Booking Button.
  */
 if($view=='add'){
   $ti=time();
@@ -31,9 +32,12 @@ else{
   $sortOrder='';
   $bookSearch=isset($_POST['booksearch'])?" AND LOWER(name) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%' OR LOWER(business) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%'":'';
 //    $bookSearch=str_replace(' ','%',$_POST['booksearch']);
-
-  $bookStatus=isset($args[0])?" AND status='".$args[0]."'":'';
-
+  if(isset($args[0])&&$args[0]=='archived')
+    $bookStatus=isset($args[0])?" AND status='archived'":'';
+  elseif(isset($args[0])&&$args[0]!='')
+    $bookStatus=isset($args[0])?" AND status='".$args[0]."' AND status!='archived'":'';
+  else
+    $bookStatus=" AND status!='archived'";
   if(isset($_POST['booksort'])){
   	$sort=isset($_POST['booksort'])?filter_input(INPUT_POST,'booksort',FILTER_SANITIZE_STRING):'';
   	$sortOrder=" ORDER BY ";
@@ -48,7 +52,7 @@ else{
   $s2->execute();?>
 <main id="content" class="main">
   <ol class="breadcrumb shadow">
-    <li class="breadcrumb-item active">Bookings <?php echo$bookStatus;?></li>
+    <li class="breadcrumb-item active">Bookings <?php echo isset($args[0])&&$args[0]!=''?' / '.$args[0]:'';?></li>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <?php echo$user['options'][2]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/bookings" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
@@ -135,11 +139,13 @@ elseif($r['status']=='archived')
                 <td id="controls_<?php echo$r['id'];?>">
                   <div clss="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                     <div class="btn-group" role="group" aria-label="Item Controls">
-                      <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                      <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                      <button class="btn btn-secondary" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
+                      <button class="btn btn-secondary" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice"><?php svg('bookingtoinvoice');?></button>
 <?php if($user['options'][0]==1){?>
-                      <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?> btn-sm" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
-                      <button class="btn btn-secondary rounded-right trash<?php echo($r['status']=='delete'?' d-none':'');?> btn-sm" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                      <button class="btn btn-secondary rounded-right trash<?php echo($r['status']!='delete'?' d-none':'');?> btn-sm" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                      <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
+                      <button class="btn btn-secondary rounded-right trash<?php echo($r['status']=='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="btn btn-secondary rounded-right trash<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
 <?php }?>
                     </div>
                   </div>
@@ -166,24 +172,26 @@ elseif($r['status']=='archived')
     selectable:true,
 <?php if($user['options'][2]==1){?>editable:true,<?php }?>
     height:$(window).height()*0.83,
+    eventRender:function(event,element){
+      element.bind('dblclick',function(){
+        window.location="<?php echo$settings['system']['admin'];?>/bookings/edit/"+event.id;
+      });
+    },
     events:[
 <?php
 while($r=$s2->fetch(PDO::FETCH_ASSOC)){
-  $bs=$db->prepare("SELECT contentType,title,tis,tie,ti FROM content WHERE id=:id");
-  $bs->execute([':id'=>$r['rid']]);
-  $br=$bs->fetch(PDO::FETCH_ASSOC);
-  $eColor='#f86c6b';
+  $eColor='#f86c6b'; // bg-danger
   if($r['status']=='confirmed')
-    $eColor='#4rdb74';
+    $eColor='#4dbd74'; // bg-success
   elseif($r['status']=='in-progress')
-    $eColor='#FFC107';
+    $eColor='#ffc107'; // bg-warning
   elseif($r['status']=='complete')
-    $eColor='#63C2DE';
+    $eColor='#63c2de'; // bg-info
   elseif($r['status']=='archived')
-    $eColor='#73818F';?>
+    $eColor='#73818f'; // bg-secondary?>
       {
         id:'<?php echo$r['id'];?>',
-        title:'<?php if($br['contentType']=='events'){echo'Event: '.$br['title'];}elseif($br['contentType']!=''){echo ucfirst(rtrim($br['contentType'],'s')).': '.$br['title'];}else echo$r['name'];?>',
+        title:`<?php echo($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?>`,
         start:'<?php echo date("Y-m-d H:i:s",$r['tis']);?>',
 <?php echo$r['tie']>$r['tis']?'eventend: \''.date("Y-m-d H:i:s",$r['tie']).'\',':'';?>
         allDay:false,
@@ -196,11 +204,12 @@ while($r=$s2->fetch(PDO::FETCH_ASSOC)){
     eventMouseover:function(event,domEvent,view){
       var layer='<div id="events-layer" class="btn-group float-right">';
 <?php if($user['options'][2]==1){?>
-      if(event.status=="unconfirmed")layer+='<button id="cbut'+event.id+'" class="btn btn-secondary btn-sm add" data-tooltip="tooltip" data-title="Confirm" aria-label="Approve"><?php svg('approve');?></button> ';
-      layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></button>';
-      layer+='<button id="delbut'+event.id+'" class="btn btn-secondary btn-sm trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>';
+      layer+=`<button id="prbut`+event.id+`" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>`;
+      layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></button>';
+      layer+='<button id="bibut'+event.id+'" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice"><?php svg('bookingtoinvoice');?></button>';
+      layer+='<button id="delbut'+event.id+'" class="btn btn-secondary btn-xs trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>';
 <?php }else{?>
-      layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="View" aria-label="View"><?php svg('view');?></button>';
+      layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="View" aria-label="View"><?php svg('view');?></button>';
 <?php }?>
       var content="Start: "+$.fullCalendar.moment(event.start).format('HH:mm');
 <?php echo$r['tie']>$r['tis']?'content+=\'<br>End: \'+$.fullCalendar.moment(event.eventend).format(\'HH:mm\');':'';?>
@@ -212,53 +221,57 @@ while($r=$s2->fetch(PDO::FETCH_ASSOC)){
         if(event.status=='confirmed')eventEndClass='eventEndConfirmed';
         $('[data-date="'+moment(event.eventend).format('YYYY-MM-DD')+'"]').addClass(eventEndClass);
       }
-<?php if($user['options'][0]==1||$user['options'][2]==1){?>
-      $("#cbut"+event.id).click(function(){
-        $("#cbut"+event.id).remove();
-        $("#events-layer").remove();
-        event.color="#4dbd74";
-        event.status="confirmed";
-        updateButtons(event.id,"content","status","confirmed");
-        $("#calendar").fullCalendar("updateEvent",event);
+      $("#prbut"+event.id).click(function(){
+         $('#sp').load('core/print_booking.php?id='+event.id);
       });
+      $("#bibut"+event.id).click(function(){
+        $('#sp').load('core/bookingtoinvoice.php?id='+event.id);
+<?php if($config['options'][25]==1){?>
+        $('#calendar').fullCalendar('removeEvents',event.id);
+        window.top.window.purge(event.id,"content");
+        window.top.window.$(el).remove();
+        window.top.window.$(".popover").remove();
 <?php }?>
+      });
       $("#delbut"+event.id).click(function(){
         $('#calendar').fullCalendar('removeEvents',event.id);
         window.top.window.purge(event.id,"content");
         window.top.window.$(el).remove();
-        window.top.window.$(".popover").remove();});$("#edbut"+event.id).click(function(){
-          window.location="<?php echo$settings['system']['admin'];?>/bookings/edit/"+event.id;
-        });
-        $(this).popover({
-          title:event.title,
-          placement:"top",
-          html:true,
-          container:"body",
-          content:content,
-        }).popover("show");
-      },
-      eventMouseout:function(event){
-        $("#events-layer").remove();
-        $(this).not(event).popover("hide");
-        var eventEndClass='eventEnd';
-        if(event.status=='confirmed')eventEndClass='eventEndConfirmed';
-        $('[data-date="'+moment(event.eventend).format('YYYY-MM-DD')+'"]').removeClass(eventEndClass);
-        $('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
-      },
-      dayClick:function(date,jsEvent,view){
-        if(view.name=='month'||view.name=='basicWeek'){
-          $('#calendar').fullCalendar('changeView','basicDay');
-          $('#calendar').fullCalendar('gotoDate',date);
-        }
-      },
-      eventDrop:function(event){
-        updateButtons(event.id,"content","tis",event.start.unix());
+        window.top.window.$(".popover").remove();
+      });
+      $("#edbut"+event.id).click(function(){
+        window.location="<?php echo$settings['system']['admin'];?>/bookings/edit/"+event.id;
+      });
+      $(this).popover({
+        title:event.title,
+        placement:"top",
+        html:true,
+        container:"body",
+        content:content,
+      }).popover("show");
+    },
+    eventMouseout:function(event){
+      $("#events-layer").remove();
+      $(this).not(event).popover("hide");
+      var eventEndClass='eventEnd';
+      if(event.status=='confirmed')eventEndClass='eventEndConfirmed';
+      $('[data-date="'+moment(event.eventend).format('YYYY-MM-DD')+'"]').removeClass(eventEndClass);
+      $('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
+    },
+    dayClick:function(date,jsEvent,view){
+      if(view.name=='month'||view.name=='basicWeek'){
+        $('#calendar').fullCalendar('changeView','basicDay');
+        $('#calendar').fullCalendar('gotoDate',date);
       }
-    });
-    $(window).resize(function(){
-      var calHeight=$(window).height()*0.83;
-      $('#calendar').fullCalendar('option','height',calHeight);
-    });
+    },
+    eventDrop:function(event){
+      updateButtons(event.id,"content","tis",event.start.unix());
+    }
+  });
+  $(window).resize(function(){
+    var calHeight=$(window).height()*0.83;
+    $('#calendar').fullCalendar('option','height',calHeight);
+  });
 <?php }?>
 </script>
 <?php }

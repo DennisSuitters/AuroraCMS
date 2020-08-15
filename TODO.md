@@ -2,12 +2,9 @@ This is a quick list of things what need to be fixed or worked on to help those 
 
 - Installation checks for cURL, and Zip, it was discovered that the updates were failing due to zip and cURL not being installed on some installations causing updates to fail but not reporting errors in logs
 - Add clear tables data when installing
-- content
-  - SEO
-    - https://github.com/DaveChild/Text-Statistics
+- Fix update core system.
+- Add ability to upload and update themes.
 - Accounts
-  - Spent, keep track of what an account has purchased in value.
-  - Add fields for cost reduction depending on what an account has spent. Use Choices table, to compare prices and to retrieve value off.
 - Inventory
   - Customer/Contact List
   - Prices for Distributors
@@ -15,7 +12,6 @@ This is a quick list of things what need to be fixed or worked on to help those 
   - Add Archived status for content
 - Bookings
   - Revisit, add Job list.
-  - Copy to invoice for payments.
 - Orders
   - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways).
 - Check Password Reset functionality.

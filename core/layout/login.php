@@ -51,7 +51,7 @@
           <div class="card-body py-0">
             <img src="core/images/auroracms-white.svg" class="logo" alt="AuroraCMS">
             <div class="logo_slogan">The Australian Open Source Content Management System</div>
-            <form id="login" class="" method="post" action="<?php echo (!empty($_SERVER['HTTP_REFERER'])?(stristr(URL,$_SERVER['HTTP_REFERER'])?rtrim($settings['system']['admin'],'/').'/dashboard':$_SERVER['HTTP_REFERER']):rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
+            <form id="login" class="" method="post" action="<?php echo (requestSameDomain()==true?$_SERVER['HTTP_REFERER']:rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
               <input type="hidden" name="act" value="login">
               <div class="input-group mb-3" data-tooltip="tooltip" data-title="Username">
                 <div class="input-group-prepend">

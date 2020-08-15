@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -18,6 +18,7 @@
  * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
  * @changes    v0.0.15 Add Edit Media information button.
  * @changes    v0.0.17 Add Business Hours.
+ * @changes    v0.0.19 Improve Business Hours item Layout, and rebind Drag to Reorder.
  */
 $getcfg=true;
 require'db.php';
@@ -181,27 +182,70 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
         $e=$db->errorInfo();
         if(is_null($e[2])){?>
 	  window.top.window.$('#hours').append(`<?php
-	echo'<div id="l_'.$id.'" class="form-group row">'.
-				'<div class="input-group col-12">'.
-					'<div class="input-group-text">From</div>'.
+	echo'<div id="l_'.$id.'" class="form-group row px-0 item">'.
+				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pr-xl-0">'.
+					'<div class="input-group-prepend">'.
+						'<div class="input-group-text">From</div>'.
+					'</div>'.
 					'<input type="text" class="form-control" value="'.ucfirst($from).'" readonly>'.
-					'<div class="input-group-text">To</div>'.
+				'</div>'.
+				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">'.
+					'<div class="input-group-prepend">'.
+						'<div class="input-group-text">To</div>'.
+					'</div>'.
 					'<input type="text" class="form-control" value="'.ucfirst($to).'" readonly>'.
-					'<div class="input-group-text">Time From</div>'.
+				'</div>'.
+				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">'.
+					'<div class="input-group-prepend">'.
+						'<div class="input-group-text">Time From</div>'.
+					'</div>'.
 					'<input type="text" class="form-control" value="'.$timefrom.'" readonly>'.
-					'<div class="input-group-text">Time From</div>'.
+				'</div>'.
+				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">'.
+					'<div class="input-group-prepend">'.
+						'<div class="input-group-text">Time From</div>'.
+					'</div>'.
 					'<input type="text" class="form-control" value="'.$timeto.'" readonly>'.
-					'<div class="input-group-text">Additional Info</div>'.
+				'</div>'.
+				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-3 px-xl-0">'.
+					'<div class="input-group-prepend">'.
+						'<div class="input-group-text">Additional Info</div>'.
+					'</div>'.
 					'<input type="text" class="form-control" value="'.$info.'" readonly>'.
-					'<div class="input-group-append">'.
-						'<form target="sp" action="core/purge.php">'.
-							'<input type="hidden" name="id" value="'.$id.'">'.
-							'<input type="hidden" name="t" value="choices">'.
-							'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-						'</form>'.
+				'</div>'.
+				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-1 pl-xl-0">'.
+					'<div class="btn-group">'.
+						'<div class="btn btn-secondary" data-tooltip="tooltip" data-title="Drag to Reorder">'.svg2('drag').'</div>'.
+							'<form target="sp" action="core/purge.php">'.
+								'<input type="hidden" name="id" value="'.$id.'">'.
+								'<input type="hidden" name="t" value="choices">'.
+								'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+							'</form>'.
+						'</div>'.
 					'</div>'.
 				'</div>'.
 			'</div>';?>`);
+			$('#hours').sortable({
+				items:"div.item",
+				placeholder:".ghost",
+				helper:fixWidthHelper,
+				axis:"y",
+				update:function(e,ui){
+					var order=$("#hours").sortable("serialize");
+					$.ajax({
+						type:"POST",
+						dataType:"json",
+						url:"core/reorderhours.php",
+						data:order
+					});
+				}
+			}).disableSelection();
+			function fixWidthHelper(e,ui){
+				ui.children().each(function(){
+					$(this).width($(this).width());
+				});
+				return ui;
+			}
 <?php   }else{?>
 	  window.top.window.toastr["error"]("There was an issue adding the Hours Data!");
 <?php   }

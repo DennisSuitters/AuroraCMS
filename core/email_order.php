@@ -7,12 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.10 Fix Toastr Notifications.
- * @changes    v0.0.15 Fix database references.
+ * @changes    v0.0.19 Fix database references.
+ * @changes    v0.0.19 Add Deductions to pdf output.
+ * @changes    v0.0.19 Add Discount Range Calculation.
  */
 $getcfg=true;
 require'db.php';
@@ -112,7 +114,7 @@ $html.='<table class="table">'.
 $i=13;
 $ot=$st=$pwc=0;
 $zeb=1;
-$s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='delete'");
+$s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='delete' AND status!='neg'");
 $s->execute([':oid'=>$id]);
 while($ro=$s->fetch(PDO::FETCH_ASSOC)){
 	$si=$db->prepare("SELECT code,title FROM `".$prefix."content` WHERE id=:id");
@@ -168,6 +170,36 @@ if($config['gst']>0){
   $ot=$ot+$gst;
   $ot=number_format((float)$ot, 2, '.', '');
 }
+
+if($config['options'][26]==1){
+  $us=$db->prepare("SELECT spent FROM `".$prefix."login` WHERE id=:uid");
+  $us->execute([
+    ':uid'=>$r['uid']
+  ]);
+  if($us->rowCount()>0){
+    $usr=$us->fetch(PDO::FETCH_ASSOC);
+    if($usr['spent']>0){
+      $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+      $sd->execute([
+        ':f'=>$usr['spent'],
+        ':t'=>$usr['spent']
+      ]);
+      if($sd->rowCount()>0){
+        $rd=$sd->fetch(PDO::FETCH_ASSOC);
+        if($rd['value']==2)
+          $ot=$ot*($rd['cost']/100);
+        else
+          $ot=$ot-$rd['cost'];
+        $ot=number_format((float)$ot, 2, '.', '');
+  $html.='<tr style="background-color:#f0f0f0">'.
+          '<td colspan="4" class="text-right">Spent Discount '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off</td>'.
+          '<td class="col-75 text-right"><strong>'.$ot.'</strong></td>'.
+        '</tr>';
+      }
+    }
+  }
+}
+
 if($r['postageCost']!=0||$r['postageOption']!=''){
 	$html.='<tr style="background-color:#f0f0f0">'.
             '<td colspan="3" class="text-right">Postage: '.$r['postageOption'].'</td>'.
@@ -181,8 +213,27 @@ $html.='<tr style="background-color:#f0f0f0">'.
           '<td colspan="3">&nbsp;</td>'.
           '<td class="col-75 text-right"><strong>Total</strong></td>'.
           '<td class="col-75 text-right '.$r['status'].'"><strong>'.$ot.'</strong></td>'.
-        '</tr>'.
-      '</tfoot>'.
+        '</tr>';
+$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status='neg' ORDER BY ti ASC");
+$sn->execute([':oid'=>$r['id']]);
+if($sn->rowCount()>0){
+	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
+    $html.='<tr style="background-color:#f4f4f4;">'.
+        '<td colspan="4" class="text-right">'.
+          $rn['title'].' on '.date($config['dateFormat'],$rn['ti']).
+        '</td>'.
+        '<td class="col-75 text-right">-'.$rn['cost'].'</td>'.
+      '</tr>';
+    $ot=$ot-$rn['cost'];
+  }
+  $ot=number_format((float)$ot,2,'.','');
+  $html.='<tr style="background-color:#f0f0f0">'.
+    '<td colspan="3">&nbsp;</td>'.
+    '<td class="col-75 text-right"><strong>Total</strong></td>'.
+    '<td class="total text-right"><strong>'.$ot.'</strong></td>'.
+  '</tr>';
+}
+$html.='</tfoot>'.
     '</table>'.
     '<br />'.
     '<br />'.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Permissions Options.
@@ -34,6 +34,8 @@
  * @changes    v0.0.17 Add SEO Helper buttons.
  * @changes    v0.0.18 Add Text Statistics.
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Add Ratings Editing for Testimonials.
+ * @changes    v0.0.19 Add Distributor Cost.
  */
 require'core'.DS.'TextStatistics'.DS.'Maths.php';
 require'core'.DS.'TextStatistics'.DS.'Pluralise.php';
@@ -61,6 +63,7 @@ if($so->rowCount()>0){
       <div class="btn-group" role="group" aria-label="">
         <a class="btn btn-ghost-normal add" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
         <?php echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($r['contentType']).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>
@@ -249,11 +252,30 @@ if($r['contentType']=='testimonials'){?>
                 </div>
               </div>
             </div>
-            <div id="nav-content-content-17" class="form-group">
-              <label for="url">URL</label>
-              <div class="input-group">
-                <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<div class="input-group-append"><button id="saveurl" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+            <div class="row">
+              <div id="nav-content-content-17" class="form-group col-12 col-sm-6">
+                <label for="url">URL</label>
+                <div class="input-group">
+                  <input type="text" id="url" class="form-control textinput" value="<?php echo$r['url'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
+                  <?php echo$user['options'][1]==1?'<div class="input-group-append"><button id="saveurl" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
+              </div>
+              <div class="nav-content-1-" class="form-group col-12 col-sm-6">
+                <label for="rating">Rating</label>
+                <div class="input-group">
+                  <span class="starRating">
+                    <input id="rating5" type="radio" name="rating" value="5" onclick="update('<?php echo$r['id'];?>','content','rating','5');"<?php echo$r['rating']==5?' checked':'';?>>
+                    <label for="rating5" title="Awesome!">5</label>
+                    <input id="rating4" type="radio" name="rating" value="4" onclick="update('<?php echo$r['id'];?>','content','rating','4');"<?php echo$r['rating']==4?' checked':'';?>>
+                    <label for="rating4" title="Great!">4</label>
+                    <input id="rating3" type="radio" name="rating" value="3" onclick="update('<?php echo$r['id'];?>','content','rating','3');"<?php echo$r['rating']==3?' checked':'';?>>
+                    <label for="rating3" title="Meh!">3</label>
+                    <input id="rating2" type="radio" name="rating" value="2" onclick="update('<?php echo$r['id'];?>','content','rating','2');"<?php echo$r['rating']==2?' checked':'';?>>
+                    <label for="rating2" title="So So!">2</label>
+                    <input id="rating1" type="radio" name="rating" value="1" onclick="update('<?php echo$r['id'];?>','content','rating','1');"<?php echo$r['rating']==1?' checked':'';?>>
+                    <label for="rating1" title="Bad!">1</label>
+                  </span>
+                </div>
               </div>
             </div>
 <?php }
@@ -330,7 +352,7 @@ if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType
 <?php }
 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
             <div class="row">
-              <div id="nav-content-content-22" class="form-group col-12 col-sm-4">
+              <div id="nav-content-content-22" class="form-group col-12 col-sm-3">
                 <label for="rrp" data-tooltip="tooltip" data-title="Recommended Retail Price">RRP</label>
                 <div class="input-group">
                   <div class="input-group-text">$</div>
@@ -338,7 +360,7 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button id="saverrp" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="rrp" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="nav-content-content-23" class="form-group col-12 col-sm-4">
+              <div id="nav-content-content-23" class="form-group col-12 col-sm-3">
                 <label for="cost">Cost</label>
                 <div class="input-group">
                   <div class="input-group-text">$</div>
@@ -346,12 +368,20 @@ if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button id="savecost" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
-              <div id="nav-content-content-24" class="form-group col-12 col-sm-4">
+              <div id="nav-content-content-24" class="form-group col-12 col-sm-3">
                 <label for="rCost">Reduced Cost</label>
                 <div class="input-group">
                   <div class="input-group-text">$</div>
                   <input type="text" id="rCost" class="form-control textinput" value="<?php echo$r['rCost'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rCost"<?php echo$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
                   <?php echo$user['options'][1]==1?'<div class="input-group-append"><button id="saverCost" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="rCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
+                </div>
+              </div>
+              <div id="nav-content-content-24" class="form-group col-12 col-sm-3">
+                <label for="rCost">Distributor Cost</label>
+                <div class="input-group">
+                  <div class="input-group-text">$</div>
+                  <input type="text" id="dCost" class="form-control textinput" value="<?php echo$r['dCost'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="dCost"<?php echo$user['options'][1]==1?' placeholder="Enter a Distributor Cost..."':' readonly';?>>
+                  <?php echo$user['options'][1]==1?'<div class="input-group-append"><button id="savedCost" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="dCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
                 </div>
               </div>
             </div>
@@ -1374,7 +1404,10 @@ if($gunScore > 20) $gunText .= 'Post Graduate Plus.';?>
               </div>
             </div>
           </div>
-          <div class="form-text text-muted small">Text Stats are updated when editor content is saved.</div>
+          <div class="form-text text-muted small">
+            The Readbility Score is derived from the Gunning Fog Score. Click <a target="_blank" href="https://en.wikipedia.org/wiki/Gunning_fog_index">here</a> for more information.<br>
+            Text Stats are updated when editor content is saved.
+          </div>
         </div>
       </div>
     </div>

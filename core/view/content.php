@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Content Processing
@@ -36,6 +36,7 @@
  * @changes    v0.0.18 Fix Content Item Parser not removing all unneeded template items.
  * @changes    v0.0.18 Fix Sort Ordering which was opposite order than expected.
  * @changes    v0.0.18 Fix Multiple Content Items not using Thumbnails.
+ * @changes    v0.0.19 Fix broken images fallback.
  */
 $rank=0;
 $notification='';
@@ -252,12 +253,15 @@ if($show=='categories'){
 	if(stristr($html,'<print page=cover>')){
 		if($page['cover']!=''||$page['coverURL']!=''){
 			$cover=basename($page['cover']);
-			$coverLink='';
-			if(isset($page['cover'])&&$page['cover']!='')
-				$coverLink.='media'.DS.$cover;
-			elseif($page['coverURL']!='')
-				$coverLink.=$page['coverURL'];
-			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','background-image:url('.htmlspecialchars($coverLink,ENT_QUOTES,'UTF-8').');',$html);
+			if(file_exists('media'.DS.$cover)){
+				$coverLink='';
+				if(isset($page['cover'])&&$page['cover']!='')
+					$coverLink.='media'.DS.$cover;
+				elseif($page['coverURL']!='')
+					$coverLink.=$page['coverURL'];
+				$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','background-image:url('.htmlspecialchars($coverLink,ENT_QUOTES,'UTF-8').');',$html);
+			}else
+				$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
 		}else
 			$html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','',$html);
 	}
@@ -484,11 +488,18 @@ if($show=='categories'){
 				$filechk=$r['fileURL'];
 				$shareImage=$r['fileURL'];
 			}else{
-				if($r['thumb']!='')
-					$shareImage=URL.'media'.DS.'thumbs'.DS.basename($r['thumb']);
-				elseif($r['file']!='')
-					$shareImage=URL.'media'.DS.basename($r['file']);
-				else
+				if($r['thumb']!=''){
+					if(file_exists('media'.DS.'thumbs'.DS.basename($r['thumb'])))
+						$shareImage=URL.'media'.DS.'thumbs'.DS.basename($r['thumb']);
+					else
+						$shareImage=URL.NOIMAGE;
+				}elseif($r['file']!=''){
+					if(file_exists('media'.DS.basename($r['file'])))
+						$shareImage=URL.'media'.DS.basename($r['file']);
+					else
+						$shareImage=URL.NOIMAGE;
+
+				}else
 					$shareImage=URL.NOIMAGE;
 			}
 			if($si==1)$si++;

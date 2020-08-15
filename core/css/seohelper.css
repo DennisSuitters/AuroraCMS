@@ -9,8 +9,8 @@ head {
   background-color: #2b3035; }
 
 head.metashow {
-  margin-top: 52px;
-  margin-bottom: -50px;
+  margin-top: 38px;
+  margin-bottom: -38px;
   max-height: 1200px;
   transition: max-height .5s ease-in; }
 
@@ -81,6 +81,69 @@ title::before {
 
 title::after {
   content: '</title>'; }
+
+nav.account-menu {
+  z-index: 1021 !important;
+  position: fixed !important;
+  width: 100% !important;
+  height: 50px !important;
+  background: #000 !important;
+  margin: 0 !important;
+  padding: 0 !important; }
+
+nav.account-menu ul {
+  background-color: #000 !important; }
+
+nav.account-menu ul li {
+  margin: 0 !important;
+  padding: .1rem .75rem !important; }
+
+nav.account-menu ul li a {
+  font-family: Arial !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important ;
+  color: #aaa !important; }
+
+nav.account-menu ul li a:hover {
+  color: #ddd !important;
+  text-decoration: none !important; }
+
+nav.account-menu label {
+  font-family: Arial !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  background-color: #000 !important;
+  border-color: #000 !important;
+  color: #aaa !important; }
+
+nav.account-menu label:hover {
+  color: #ddd !important; }
+
+nav.account-menu button {
+  margin-top: 0 !important;
+  border-radius: 5px !important;
+  display: inline-block !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+  line-height: 150% !important;
+  padding: .25rem .5rem !important;
+  font-family: Arial !important;
+  background-color: #dc3545 !important;
+  border: 2px solid #dc3545 !important;
+  color: #fff !important;
+  outline: none !important; }
+
+nav.account-menu button:focus,
+nav.account-menu button:hover {
+  color: #fff !important;
+  background-color: #c82333 !important;
+  border-color: #bd2130 !important;
+  outline: none !important; }
+
+nav.account-menu #accountavatar {
+  width: 32px;
+  max-height: 32px;
+  border-radius: 5px; }
 
 body.depth *,
 body.depth * *,

@@ -7,13 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.15 Add GST Calculation.
  * @changes    v0.0.18 Fix Postage Calculation.
  * @changes    v0.0.18 Add Australia Post Selection and Calculations.
+ * @changes    v0.0.19 Add Cost Deductions.
+ * @changes    v0.0.19 Add Discount Range Calculation.
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
 $q->execute([':id'=>$id]);
@@ -183,7 +185,9 @@ else{?>
               <div class="input-group col-sm-9">
                 <select id="changeClient" class="form-control form-control-sm" onchange="changeClient($(this).val(),'<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Select a Client...">
                   <option value="0"<?php echo($r['cid']=='0'?' selected':'');?>>None</option>
-                  <?php $q=$db->query("SELECT id,business,username,name FROM `".$prefix."login` WHERE status!='delete' AND status!='suspended' AND active!='0' AND id!='0'");while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($r['cid']==$rs['id']?' selected':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business'].'</option>':'');?>
+<?php $q=$db->query("SELECT id,business,username,name FROM `".$prefix."login` WHERE status!='delete' AND status!='suspended' AND id!='0'");
+while($rs=$q->fetch(PDO::FETCH_ASSOC))
+  echo'<option value="'.$rs['id'].'"'.($r['cid']==$rs['id']?' selected':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business'].'</option>':'');?>
                   </select>
                 </div>
                 <small class="alert alert-info ocehelp mt-2<?php echo$client['id']!=0?' hidden':'';?>" role="alert"><small>To edit Client details her you must first create an Account for the Client or Select an already existing Client above.</small></small>
@@ -252,6 +256,7 @@ else{?>
                 <div class="input-group-text">Inventory/Services</div>
                 <select class="form-control" name="da" data-tooltip="tooltip" data-title="Select Product, Service or Empty Entry">
                   <option value="0">Add Empty Entry...</option>
+                  <option value="neg">Add Deducation Entry...</option>
                   <?php $s=$db->query("SELECT id,contentType,code,cost,title FROM `".$prefix."content` WHERE contentType='inventory' OR contentType='service' OR contentType='events' ORDER BY code ASC");while($i=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$i['id'].'">'.ucfirst(rtrim($i['contentType'],'s')).$i['code'].':$'.$i['cost'].':'.$i['title'].'</option>';?>
                 </select>
                 <div class="input-group-append">
@@ -300,7 +305,7 @@ if($sp->rowCount()>0){?>
                 </tr>
               </thead>
               <tbody id="updateorder">
-<?php $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid ORDER BY ti ASC,title ASC");
+<?php $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='neg' ORDER BY ti ASC,title ASC");
 $s->execute([':oid'=>$r['id']]);
 $total=0;
 while($oi=$s->fetch(PDO::FETCH_ASSOC)){
@@ -422,21 +427,41 @@ if($ssr->rowCount()>0){?>
                   <td class="text-right align-middle"><strong><?php echo$total;?></strong></td>
                   <td>&nbsp;</td>
                 </tr>
-<?php if($config['gst']>0){
-  $gst=$total*($config['gst']/100);
-  $gst=number_format((float)$gst, 2, '.', '');?>
-                <tr>
-                  <td colspan="6" class="text-right"><strong>GST</strong></td>
-                  <td class="total text-right border-top border-bottom"><strong><?php echo$gst;?></strong></td>
-                  <td></td>
-                </tr>
 <?php
-  $total=$total+$gst;
-  $total=number_format((float)$total, 2, '.', '');
-}?>
+if($usr['spent']>0&&$config['options'][26]==1){
+  $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+  $sd->execute([
+    ':f'=>$usr['spent'],
+    ':t'=>$usr['spent']
+  ]);
+  if($sd->rowCount()>0){
+    $rd=$sd->fetch(PDO::FETCH_ASSOC);
+    if($rd['value']==2)
+      $total=$total*($rd['cost']/100);
+    else
+      $total=$total-$rd['cost'];
+    $total=number_format((float)$total, 2, '.', '');?>
                 <tr>
-                  <td class="text-right align-middle"><strong>Postage</strong></td>
-                  <td colspan="5" class="text-right align-middle">
+                  <td colspan="6" class="text-right"><strong>Spent Discount <?php echo($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off';?></strong></td>
+                  <td class="text-right align-middle"><strong><?php echo$total;?></strong></td>
+                  <td>&nbsp;</td>
+                </tr>
+<?php }
+}
+if($config['gst']>0){
+  $gst=$total*($config['gst']/100);
+  $gst=number_format((float)$gst, 2, '.', '');
+  $total=$total+$gst;
+  $total=number_format((float)$total, 2, '.', ''); ?>
+                <tr>
+                  <td colspan="6" class="text-right"><strong><?php echo$config['gst'].'% GST $'.$gst;?></strong></td>
+                  <td class="total text-right border-top border-bottom"><strong><?php echo$total;?></strong></td>
+                  <td>&nbsp;</td>
+                </tr>
+<?php }?>
+                <tr>
+                  <td colspan="2" class="text-right align-middle"><strong>Shipping</strong></td>
+                  <td colspan="4" class="text-right align-middle">
                     <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                       <input type="hidden" name="act" value="postoption">
                       <input type="hidden" name="id" value="<?php echo$r['id'];?>">
@@ -460,8 +485,58 @@ if($ssr->rowCount()>0){?>
                 <tr>
                   <td colspan="6" class="text-right"><strong>Total</strong></td>
                   <td class="total text-right border-top border-bottom"><strong><?php echo$total;?></strong></td>
-                  <td></td>
+                  <td>&nbsp;</td>
                 </tr>
+<?php
+$su=$db->prepare("UPDATE `".$prefix."orders` SET total=:total WHERE id=:id");
+$su->execute([
+  ':id'=>$r['id'],
+  ':total'=>$total
+]);
+$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status='neg' ORDER BY ti ASC");
+$sn->execute([':oid'=>$r['id']]);
+if($sn->rowCount()>0){
+	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
+            echo'<tr><td colspan="2" class="small align-middle">'.
+                  '<small>'.date($config['dateFormat'],$rn['ti']).
+                '</td>'.
+                '<td colspan="4" class="align-middle">'.
+                  '<form target="sp" method="POST" action="core/updateorder.php">'.
+                    '<input type="hidden" name="act" value="title">'.
+                    '<input type="hidden" name="id" value="'.$rn['id'].'">'.
+                    '<input type="hidden" name="t" value="orderitems">'.
+                    '<input type="hidden" name="c" value="title">'.
+                    '<input type="text" class="form-control" name="da" value="'.$rn['title'].'">'.
+                  '</form>'.
+                '</td>'.
+                '<td class="text-right align-middle">'.
+                  '<form target="sp" method="POST" action="core/updateorder.php">'.
+                    '<input type="hidden" name="act" value="cost">'.
+                    '<input type="hidden" name="id" value="'.$rn['id'].'">'.
+                    '<input type="hidden" name="t" value="orderitems">'.
+                    '<input type="hidden" name="c" value="cost">'.
+                    '<input class="form-control text-center" style="min-width:80px" name="da" value="'.$rn['cost'].'">'.
+                  '</form>'.
+                '</td>'.
+                '<td>'.
+                  '<form target="sp" method="post" action="core/updateorder.php">'.
+                    '<input type="hidden" name="act" value="trash">'.
+                    '<input type="hidden" name="id" value="'.$rn['id'].'">'.
+                    '<input type="hidden" name="t" value="orderitems">'.
+                    '<input type="hidden" name="c" value="quantity">'.
+                    '<input type="hidden" name="da" value="0">'.
+                    '<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+                  '</form>'.
+                '</td></tr>';
+    $total=$total-$rn['cost'];
+  }
+  $total=number_format((float)$total,2,'.','');
+            echo'<tr>'.
+                  '<td colspan="6" class="text-right"><strong>Total</strong></td>'.
+                  '<td class="total text-right border-top border-bottom"><strong>'.$total.'</td>'.
+                  '<td></td>'.
+                '</tr>';
+}?>
               </tbody>
             </table>
           </div>

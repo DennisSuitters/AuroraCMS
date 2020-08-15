@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.17 Add SEO Helper buttons.
+ * @changes    v0.0.19 Add Save All button.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."media` WHERE id=:id");
 $s->execute([':id'=>$args[1]]);
@@ -22,6 +23,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group" aria-label="">
         <a class="btn btn-ghost-normal add" href="<?php echo $_SERVER['HTTP_REFERER'];?>#tab-<?php if(stristr($_SERVER['HTTP_REFERER'],'content')){echo'content';}else{echo'pages';}?>-media" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>

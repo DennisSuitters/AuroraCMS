@@ -7,17 +7,26 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Fix Business Hours Selections to clear values.
+ * @changes    v0.0.19 Add Drag to Reorder Business Hours items.
+ * @changes    v0.0.19 Change Select for Additional Info to Text Input with Datalist.
+ * @changes    v0.0.19 Add Save All button.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
     <li class="breadcrumb-item active">Contact</li>
+    <li class="breadcrumb-menu">
+      <div class="btn-group" role="group">
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
+      </div>
+    </li>
   </ol>
   <div class="container-fluid">
     <div class="card">
@@ -56,9 +65,10 @@
             <div class="form-group row px-0">
               <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pr-xl-0">
                 <div class="input-group-prepend">
-                  <label for="from" class="input-group-text">From 1</label>
+                  <label for="from" class="input-group-text">From </label>
                 </div>
                 <select id="from" class="form-control" name="from">
+                  <option value="">No day</option>
                   <option value="monday">Monday</option>
                   <option value="tuesday">Tueday</option>
                   <option value="wednesday">Wednesday</option>
@@ -73,6 +83,7 @@
                   <label for="to" class="input-group-text">To</label>
                 </div>
                 <select id="to" class="form-control" name="to">
+                  <option value="">No day</option>
                   <option value="monday">Monday</option>
                   <option value="tuesday">Tuesday</option>
                   <option value="wednesday">Wednesday</option>
@@ -94,41 +105,66 @@
                 </div>
                 <input id="hourstimeto" type="time" class="form-control" name="timeto">
               </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-3 px-xl-0">
                 <div class="input-group-prepend">
                   <label for="hoursinfo" class="input-group-text">Aditional Text</label>
                 </div>
-                <select id="hoursinfo" class="form-control" name="info">
-                  <option value="">No Additional Information</option>
-                  <option value="closed">Closed</option>
-                  <option value="call for assistance">Call for Assistance</option>
-                  <option value="call for help">Call for Help</option>
-                  <option value="call for a quote">Call for a Quote</option>
-                  <option value="call to book">Call to book</option>
-                </select>
+                <input id="hoursinfo" class="form-control" name="info" list="hrsinfo">
+                <datalist id="hrsinfo">
+                  <option>Closed</option>
+                  <option>By Appointment</option>
+                  <option>Call for Assistance</option>
+                  <option>Call for Help</option>
+                  <option>Call for a Quote</option>
+                  <option>Call to book</option>
+                </datalist>
               </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pl-xl-0">
-                <button class="btn btn-secondary btn-block add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-1 pl-xl-0">
+                <div class="btn-group">
+                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Clear Values" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><?php svg('eraser');?></button>
+                  <button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+                </div>
               </div>
             </div>
           </form>
           <div id="hours">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='hours' AND uid=0 ORDER BY icon ASC");
+<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='hours' ORDER BY ord ASC");
 $ss->execute();
 while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-            <div id="l_<?php echo$rs['id'];?>" class="form-group row">
-              <div class="input-group col-12">
-                <div class="input-group-text">From</div>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group row px-0 item">
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pr-xl-0">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">From</div>
+                </div>
                 <input type="text" class="form-control" value="<?php echo ucfirst($rs['username']);?>" readonly>
-                <div class="input-group-text">To</div>
+              </div>
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">To</div>
+                </div>
                 <input type="text" class="form-control" value="<?php echo ucfirst($rs['password']);?>" readonly>
-                <div class="input-group-text">Time From</div>
+              </div>
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Time From</div>
+                </div>
                 <input type="text" class="form-control" value="<?php echo $rs['tis'];?>" readonly>
-                <div class="input-group-text">Time From</div>
+              </div>
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Time To</div>
+                </div>
                 <input type="text" class="form-control" value="<?php echo $rs['tie'];?>" readonly>
-                <div class="input-group-text">Additional Info</div>
+              </div>
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-3 px-xl-0">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Additional Info</div>
+                </div>
                 <input type="text" class="form-control" value="<?php echo $rs['title'];?>" readonly>
-                <div class="input-group-append">
+              </div>
+              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-1 pl-xl-0">
+                <div class="btn-group">
+                  <div class="btn btn-secondary" data-tooltip="tooltip" data-title="Drag to Reorder"><?php echo svg('drag');?></div>
                   <form target="sp" action="core/purge.php">
                     <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
                     <input type="hidden" name="t" value="choices">
@@ -138,7 +174,33 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
               </div>
             </div>
 <?php }?>
+            <div class="ghost hidden"></div>
           </div>
+<?php if($user['options'][1]==1){?>
+          <script>
+            $('#hours').sortable({
+              items:"div.item",
+              placeholder:".ghost",
+              helper:fixWidthHelper,
+              axis:"y",
+              update:function(e,ui){
+                var order=$("#hours").sortable("serialize");
+                $.ajax({
+                  type:"POST",
+                  dataType:"json",
+                  url:"core/reorderhours.php",
+                  data:order
+                });
+              }
+            }).disableSelection();
+            function fixWidthHelper(e,ui){
+              ui.children().each(function(){
+                $(this).width($(this).width());
+              });
+              return ui;
+            }
+          </script>
+<?php }?>
         </fieldset>
         <hr>
         <div class="form-group row">

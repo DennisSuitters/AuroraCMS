@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Toggle to Enable Administration Activity Tracking.
@@ -20,11 +20,17 @@
  * @changes    v0.0.9 Fix incorrect ID for input's.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Add Save All button.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
     <li class="breadcrumb-item active">Interface</li>
+    <li class="breadcrumb-menu">
+      <div class="btn-group" role="group">
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
+      </div>
+    </li>
   </ol>
   <div class="container-fluid">
     <div class="card">

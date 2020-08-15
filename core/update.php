@@ -166,6 +166,20 @@ if($tbl=='orders'&&$col=='status'&&$da=='archived'){
     ':id'=>$id
   ]);
 }
+if($tbl=='orders'&&$col=='status'&&$da=='paid'){
+	$q=$db->prepare("SELECT uid,total FROM `".$prefix."orders` WHERE id=:id");
+	$q->execute([':id'=>$id]);
+	$r=$q->fetch(PDO::FETCH_ASSOC);
+	$s=$db->prepare("SELECT spent FROM `".$prefix."login` WHERE id=:uid");
+	$s->execute([':uid'=>$r['uid']]);
+	$ru=$s->fetch(PDO::FETCH_ASSOC);
+	$ru['spent']=$ru['spent']+$r['total'];
+	$s=$db->prepare("UPDATE `".$prefix."login` SET spent=:spent WHERE id=:uid");
+	$s->execute([
+		':spent'=>$ru['spent'],
+		':uid'=>$r['uid']
+	]);
+}
 if(is_null($e[2])){
 	if($tbl=='orders'&&$col=='due_ti'){?>
 	window.top.window.$("#due_ti").val(`<?php echo date($config['dateFormat'],$da);?>`);

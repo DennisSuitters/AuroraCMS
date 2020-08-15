@@ -14,6 +14,7 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.19 Add Save All button.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -23,6 +24,7 @@
     <li class="breadcrumb-menu">
       <div class="btn-group" role="group">
         <a class="btn btn-ghost-normal info" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
+        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
   </ol>

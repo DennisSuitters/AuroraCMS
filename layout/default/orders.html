@@ -113,6 +113,13 @@
 									<td class="text-right"><strong><print order="gst"></strong></td>
 								</tr>
 							</gst>
+							<discountRange>
+								<tr>
+									<td colspan="2" class="d-none d-sm-table-cell">&nbsp;</td>
+									<td colspan="3" class="text-right"><strong><print discount="method"></strong></td>
+									<td class="text-right"><strong><print discount="total"></strong></td>
+								</tr>
+							</discountRange>
 							<tr>
 								<td colspan="1" class="text-right d-none d-sm-table-cell"></td>
 								<td colspan="4" class="text-right align-middle">
@@ -136,6 +143,20 @@
 								<td colspan="4" class="text-right"><strong>Total</strong></td>
 								<td class="text-right border-2 border-top border-bottom border-black font-weight-bold"><strong><print order="total"></strong></td>
 							</tr>
+							<orderDeduction>
+								<deductionItems>
+									<tr>
+										<td class="d-none d-sm-table-cell"></td>
+										<td colspan="4" class="align-middle text-right"><print deduction="title"> on <print deduction="date"></td>
+										<td class="align-middle text-right"><strong><print deduction="cost"></strong></td>
+									</tr>
+								</deductionItems>
+								<tr>
+									<td class="d-none d-sm-table-cell"></td>
+									<td colspan="4" class="text-right"><strong>Total</strong></td>
+									<td class="text-right border-2 border-top border-bottom border-black"><strong><print deduction="total"></strong></td>
+								</tr>
+							</orderDeduction>
 							<tr>
 								<td></td>
 								<td colspan="5" class="">Estimated Dimensions: <print dimensions></td>

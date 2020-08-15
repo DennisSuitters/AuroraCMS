@@ -2,13 +2,13 @@
 <block include="header.html">
 <block inbed="content">
 	<pagenotes>
-		<section class="row">
+		<section class="row mt-5">
 			<article class="col-11">
       	<print page="notes">
 			</article>
 		</section>
   </pagenotes>
-	<section class="row">
+	<section class="row mt-5">
 		<item>
 			<article class="card col-12 col-sm-8">
 				<json-ld>
@@ -152,23 +152,21 @@
 		<contentitems>
 				<section class="col-12 col-sm-8 order-2 order-sm-1">
 				<items>
-					<article class="col-12 col-sm-4 m-0 p-0">
-						<div class="card m-2">
-							<a class="card-image" href="<print content=linktitle>">
-								<img src="<print content=thumb>" alt="<print content=imageALT>">
-							</a>
-							<div class="card-header">
-								<div class="title"><h2 class="h4"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
-								<div class="card-subtitle"><print content="category_1">&nbsp;</div>
-							</div>
-							<div class="card-body">
-								<print content="notes">
-							</div>
-							<div class="corner-ribbon big top-right text-uppercase font-weight-bold shadow"><print content="quantity"></div>
-							<div class="corner-ribbon small top-right success text-uppercase font-weight-bold shadow"><print content="cost"></div>
-							<div class="card-footer">
+					<article class="card col-12 col-sm-5 mt-0 mr-4 mb-4 ml-0 p-0">
+						<a class="card-image" href="<print content=linktitle>">
+							<img src="<print content=thumb>" alt="<print content=imageALT>">
+						</a>
+						<div class="card-header">
+							<div class="title"><h2 class="h4"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
+							<div class="card-subtitle"><print content="category_1">&nbsp;</div>
+						</div>
+						<div class="card-body">
+							<print content="notes">
+						</div>
+						<div class="corner-ribbon big top-right text-uppercase font-weight-bold shadow"><print content="quantity"></div>
+						<div class="corner-ribbon small top-right success text-uppercase font-weight-bold shadow"><print content="cost"></div>
+						<div class="card-footer">
 								<a class="btn" href="<print content=linktitle>" role="button">View</a>
-							</div>
 						</div>
 					</article>
 				</items>

@@ -23,6 +23,9 @@ choices
   `flag` tinytext
   `title` varchar(60)
   `value` int(4)
+  `f` DECIMAL(10,2)
+  `t` DECIMAL(10,2)
+  `cost` DECIMAL(10,2)
   `tis` int(10)
   `tie` int(10)
   `ti` int(10)
@@ -75,8 +78,8 @@ config
     22  Display Address Details
     23  Display Email
     24  Display Phone Numbers
-    25
-    26
+    25  Archive Bookings when Converted to Invoice
+    26  Enable Discount Range
     27
     28
     29
@@ -608,6 +611,7 @@ orders
   `postageOption` tinytext COLLATE utf8_bin NOT NULL,
   `postageCost` decimal(6,2) NOT NULL,
   `recurring` int(1) NOT NULL,
+  `total` DECIMAL(10,2) NOT NULL,
   `ti` int(10) UNSIGNED NOT NULL,
   `eti` bigint(20) NOT NULL
 

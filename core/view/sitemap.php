@@ -7,18 +7,55 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.17 Add SQL for rank fetching data.
  * @changes    v0.0.18 Reformat source for legibility.
  * @changes    v0.0.18 Fix typing errors in script.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
+if(stristr($html,'<breadcrumb>')){
+ preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
+ $breaditem=$matches[1];
+ preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
+ $breadcurrent=$matches[1];
+ $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","'.$config['business'].'":"Home"}},';
+ $breadit=preg_replace([
+   '/<active>/',
+   '/<print breadcrumb=[\"\']?url[\"\']?>/',
+   '/<print breadcrumb=[\"\']?title[\"\']?>/'
+ ],[
+   '',
+   URL,
+   'Home'
+ ],$breaditem);
+ $breaditems=$breadit;
+ $breadit=preg_replace([
+   '/<print breadcrumb=[\"\']?title[\"\']?>/'
+ ],[
+   $page['title']
+ ],$breadcurrent);
+ $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.$page['contentType'].'","name":"'.ucfirst($page['contentType']).'"}},';
+ $breaditems.=$breadit;
+ $html=preg_replace([
+   '/<[\/]?breadcrumb>/',
+   '/<json-ld-breadcrumb>/',
+   '~<breaditems>.*?<\/breaditems>~is',
+   '~<breadcurrent>.*?<\/breadcurrent>~is'
+ ],[
+   '',
+   $jsonld.']}</script>',
+   $breaditems,
+   ''
+ ],$html);
+}
+
 $html=preg_replace('/<print page=[\"\']?notes[\"\']?>/',rawurldecode($page['notes']),$html);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType!='' AND internal!='1' AND status='published' AND rank<=:rank ORDER BY contentType ASC, ti DESC");
+$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY `contentType` ASC, `ti` DESC");
 $s->execute([
 	':rank'=>$_SESSION['rank']
 ]);

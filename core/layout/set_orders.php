@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -22,6 +22,7 @@
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  * @changes    v0.0.19 Add Save All button.
  * @changes    v0.0.19 Add Discount Range editor.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  * https://auspost.com.au/forms/pacpcs-registration.html
  * https://github.com/fontis/auspost-api-php
  */?>
@@ -62,33 +63,33 @@
           </div>
         </form>
         <div id="postoption">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' AND uid=0 ORDER BY title ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">Code</div>
-              </div>
-              <input type="text" id="c<?php echo$rs['id'];?>" class="form-control" name="code" value="<?php echo$rs['type'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">title</div>
-              </div>
-              <input type="text" id="t<?php echo$rs['id'];?>" class="form-control" name="service" value="<?php echo$rs['title'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">Cost</div>
-              </div>
-              <input type="text" id="v<?php echo$rs['id'];?>" class="form-control" name="cost" value="<?php echo$rs['value']!=0?$rs['value']:'';?>" readonly>
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' AND `uid`=0 ORDER BY `title` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Code</div>
+                </div>
+                <input type="text" id="c<?php echo$rs['id'];?>" class="form-control" name="code" value="<?php echo$rs['type'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">title</div>
+                </div>
+                <input type="text" id="t<?php echo$rs['id'];?>" class="form-control" name="service" value="<?php echo$rs['title'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">Cost</div>
+                </div>
+                <input type="text" id="v<?php echo$rs['id'];?>" class="form-control" name="cost" value="<?php echo$rs['value']!=0?$rs['value']:'';?>" readonly>
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
         <hr>
         <legend>Australia Post</legend>
@@ -155,36 +156,35 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           </div>
         </form>
         <div id="discountrange">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND uid=0 ORDER BY t ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">From &#36;</div>
-              </div>
-              <input type="number" class="form-control" value="<?php echo$rs['f'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">To &#36;</div>
-              </div>
-              <input type="number" class="form-control" value="<?php echo$rs['t'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">Method</div>
-              </div>
-              <input type="text" class="form-control" value="<?php echo$rs['value']==2?'&#37; Off':'&#36; Off';?>" readonly>
-              <input type="number" class="form-control" value="<?php echo$rs['cost'];?>" readonly>
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `uid`=0 ORDER BY `t` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">From &#36;</div>
+                </div>
+                <input type="number" class="form-control" value="<?php echo$rs['f'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">To &#36;</div>
+                </div>
+                <input type="number" class="form-control" value="<?php echo$rs['t'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">Method</div>
+                </div>
+                <input type="text" class="form-control" value="<?php echo$rs['value']==2?'&#37; Off':'&#36; Off';?>" readonly>
+                <input type="number" class="form-control" value="<?php echo$rs['cost'];?>" readonly>
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
-
         <hr>
         <legend>Banking</legend>
         <div class="row">
@@ -231,9 +231,9 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         <legend>PayPal</legend>
         <div class="form-group">
           <label for="payPalClientID">Client ID</label>
-<?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
-          <div class="form-text small text-muted float-right">You will need to a PayPal Business Account to get a Client ID.</div>
-<?php }?>
+          <?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
+            <div class="form-text small text-muted float-right">You will need to a PayPal Business Account to get a Client ID.</div>
+          <?php }?>
           <div class="input-group">
             <input type="text" id="payPalClientID" class="form-control textinput" value="<?php echo$config['payPalClientID'];?>" data-dbid="1" data-dbt="config" data-dbc="payPalClientID" placeholder="Enter a PayPal Client ID...">
             <div class="input-group-append">

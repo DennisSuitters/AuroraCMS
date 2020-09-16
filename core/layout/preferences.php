@@ -77,4 +77,5 @@ if($args[0]==''){?>
       </div>
     </div>
   </main>
-<?php }else include'core'.DS.'layout'.DS.'pref_'.$args[0].'.php';
+<?php }else
+  include'core'.DS.'layout'.DS.'pref_'.$args[0].'.php';

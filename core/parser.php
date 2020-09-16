@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Adjust file check folder
@@ -16,6 +16,8 @@
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.12 Fix Output Parser not parsing some elements.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Add parsing primary category only.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $doc=new DOMDocument();
 if($show=='item'){
@@ -58,8 +60,10 @@ foreach($tags as$tag){
 	if($tag->hasAttribute('author')){
 		$attribute='author';
 		$r['uid']=isset($r['uid'])?$r['uid']:0;
-		$sa=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-		$sa->execute([':id'=>$r['uid']]);
+		$sa=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+		$sa->execute([
+			':id'=>$r['uid']
+		]);
 		$author=$sa->fetch(PDO::FETCH_ASSOC);
 	}
 	if($tag->hasAttribute('comments'))
@@ -117,6 +121,12 @@ foreach($tags as$tag){
 			if($_SESSION['rank']>$userrank)
 				$parsing.=$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by <strong>'.$r['login_user'].'</strong>';
 			else
+				$container=$parsing='';
+			break;
+		case'category':
+			if(isset($r['category_1'])&&$r['category_1']!=''){
+				$parsing.=' <a href="'.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
+			}else
 				$container=$parsing='';
 			break;
 		case'categories':
@@ -186,9 +196,8 @@ foreach($tags as$tag){
 			$parsing.=$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']);
 		case'cover':
 			if($attribute=='page'){
-				$coverchk=basename($page['cover']);
-				if($page['cover']!=''&&file_exists('media'.DS.$coverchk))
-					$parsing.='<img class="'.$class.'" src="'.$page['cover'].'">';
+				if($page['cover']!=''&&file_exists('media'.DS.basename($page['cover'])))
+					$parsing.='<img class="'.$class.'" src="media'.DS.basename($page['cover']).'">';
 				elseif($page['coverURL']!='')
 					$parsing.='<img class="'.$class.'" src="'.$page['coverURL'].'">';
 				else
@@ -196,36 +205,29 @@ foreach($tags as$tag){
 			}
 			break;
 		case'thumb':
-			$filechk=basename($r['file']);
-			$thumbchk=basename($r['thumb']);
-			if(stristr('thumbs',$r['thumb']))
-				$thumbfolder='media'.DS.'thumbs';
+			if($r['thumb']!=''&&(file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))))
+				$parsing.='<img src="media'.DS.'thumbs'.DS.basename($r['thumb']).'" alt="'.$r['title'].'">';
+			elseif($r['file']!=''&&(file_exists('media'.DS.'thumbs'.DS.basename($r['file']))))
+				$parsing.='<img src="media'.DS.'thumbs'.DS.basename($r['file']).'" alt="'.$r['title'].'">';
 			else
-				$thumbfolder='media';
-			if($r['thumb']!=''&&(file_exists($thumbfolder.DS.$thumbchk)||file_exists('..'.DS.'..'.DS.$thumbfolder.DS.$thumbchk)))
-				$parsing.='<img src="'.$r['thumb'].'" alt="'.$r['title'].'">';
-			elseif($r['file']!=''&&(file_exists('media'.DS.$filechk)||file_exists('..'.DS.'..'.DS.'media'.DS.$filechk)))
-				$parsing.='<img src="'.$r['file'].'" alt="'.$r['title'].'">';
-			else
-				$parsing.=NOIMAGE;
+				$parsing.=NOIMAGESM;
 			break;
 		case'image':
 			if(isset($r['file'])&&$r['file']!=''){
-				$filechk=basename($r['file']);
-				$parsing.=$r['file']!=''&&(file_exists('media'.DS.$filechk)||file_exists('..'.DS.'..'.DS.'media'.DS.$filechk))?'<img class="'.$class.'" src="'.$r['file'].'" alt="'.$r['title'].'">':'';
+				$parsing.=$r['file']!=''&&(file_exists('media'.DS.basename($r['file'])))?'<img class="'.$class.'" src="media'.DS.basename($r['file']).'" alt="'.$r['title'].'">':'';
 			}elseif(isset($r['fileURL'])&&$r['fileURL']!='')
 				$parsing.=$r['fileURL'];
 			else
 				$parsing.=NOIMAGE;
 			break;
 		case'imageURL':
+		case'fileURL':
 			$parsing.=$r['fileURL'];
 		case'avatar':
 			$parsing.='<img class="'.$class.'" src="';
 			if($attribute=='author'){
-				$author['avatar']=basename($author['avatar']);
-				if($author['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$author['avatar']))
-					$parsing.='media'.DS.'avatar'.DS.$author['avatar'].'"';
+				if($author['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($author['avatar'])))
+					$parsing.='media'.DS.'avatar'.DS.basename($author['avatar']).'"';
 				elseif(isset($author['gravatar'])&&$author['gravatar']!=''){
 					if(stristr($author['avatar'],'@'))
 						$parsing.='http://gravatar.com/avatar/'.md5($author['gravatar']).'"';
@@ -246,8 +248,10 @@ foreach($tags as$tag){
 			}
 			if($attribute=='comments'){
 				if($rc['uid']!=0){
-					$scu=$db->prepare("SELECT avatar,gravatar FROM `".$prefix."login` WHERE id=:rcuid");
-					$scu->execute([':rcuid'=>$rc['uid']]);
+					$scu=$db->prepare("SELECT `avatar`,`gravatar` FROM `".$prefix."login` WHERE `id`=:rcuid");
+					$scu->execute([
+						':rcuid'=>$rc['uid']
+					]);
 					$rcu=$scu->fetch(PDO::FETCH_ASSOC);
 					$rc['avatar']=$rcu['avatar'];
 					$rc['gravatar']=$rcu['gravatar'];
@@ -311,8 +315,10 @@ foreach($tags as$tag){
 			break;
 		case'social':
 			if($attribute=='author'){
-				$sa =$db->prepare("SELECT * FROM `".$prefix."choices` WHERE uid=:uid AND contentType='social'");
-				$sa->execute([':uid'=>$r['uid']]);
+				$sa =$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='social'");
+				$sa->execute([
+					':uid'=>$r['uid']
+				]);
 				while($sr=$sa->fetch(PDO::FETCH_ASSOC))
 					$parsing.='<a href="'.$sr['url'].'" aria-label="'.ucfirst($sr['icon']).'">'.($type=='icon'?'<'.$theme['settings']['icon_container'].' class="'.$class.'">'.frontsvg('i-social-'.$sr['icon']).'</'.$theme['settings']['icon_container'].'>':$sr['title'].' ').'</a>';
 			}

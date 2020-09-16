@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.11 Fix unlogged in users accessing Settings page.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $rank=0;
 $show='';
@@ -21,8 +22,10 @@ $currentPassHidden=$matchPassHidden=$successHidden=$success=$theme['settings']['
 $successShow=$theme['settings']['settings_show'];
 $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
 if(isset($_SESSION['uid'])&&$_SESSION['uid']>0){
-	$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-	$s->execute([':id'=>$_SESSION['uid']]);
+	$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+	$s->execute([
+		':id'=>$_SESSION['uid']
+	]);
 	$user=$s->fetch(PDO::FETCH_ASSOC);
 }
 if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$user['rank']>0)){
@@ -30,7 +33,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']==''){
 			$password=filter_input(INPUT_POST,'newPass',FILTER_SANITIZE_STRING);
 			$hash=password_hash($password,PASSWORD_DEFAULT);
-			$su=$db->prepare("UPDATE `".$prefix."login` SET password=:hash WHERE id=:id");
+			$su=$db->prepare("UPDATE `".$prefix."login` SET `password`=:hash WHERE `id`=:id");
 			$su->execute([
 				':hash'=>$hash,
 				':id'=>$user['id']
@@ -51,7 +54,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		$state=filter_input(INPUT_POST,'state',FILTER_SANITIZE_STRING);
 		$postcode=filter_input(INPUT_POST,'postcode',FILTER_SANITIZE_STRING);
 		$country=filter_input(INPUT_POST,'country',FILTER_SANITIZE_STRING);
-		$s=$db->prepare("UPDATE `".$prefix."login` SET email=:email,name=:name,url=:url,business=:business,phone=:phone,mobile=:mobile,address=:address,suburb=:suburb,city=:city,state=:state,postcode=:postcode,country=:country WHERE id=:id");
+		$s=$db->prepare("UPDATE `".$prefix."login` SET `email`=:email,`name`=:name,`url`=:url,`business`=:business,`phone`=:phone,`mobile`=:mobile,`address`=:address,`suburb`=:suburb,`city`=:city,`state`=:state,`postcode`=:postcode,`country`=:country WHERE `id`=:id");
 		$s->execute([
 			':email'=>$email,
 			':name'=>$name,
@@ -69,8 +72,10 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		]);
 		$e=$db->errorInfo();
 		if(is_null($e[2])){
-			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-			$s->execute([':id'=>$user['id']]);
+			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+			$s->execute([
+				':id'=>$user['id']
+			]);
 			$user=$s->fetch(PDO::FETCH_ASSOC);
 			if(stristr($html,'<success accountHidden>'))
 				$html=str_replace('<success accountHidden>',$theme['settings']['settings_show'],$html);

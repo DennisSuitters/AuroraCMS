@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Fix AutoPublishing
@@ -15,6 +15,7 @@
  * @changes    v0.0.10 Move other platform security checks so they only check when enabled.
  * @changes    v0.0.17 Add rank selection to menu retrieval query.
  * @changes    v0.0.17 Fix Swap Memory calculation when None is used.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 define('UNICODE','UTF-8');
 $getcfg=true;
@@ -23,11 +24,15 @@ if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))
 	$config['theme']=$_GET['theme'];
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-$s=$db->prepare("UPDATE `".$prefix."content` SET status='published' WHERE status='autopublish' AND pti<:pti");
-$s->execute([':pti'=>time()]);
+$s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
+$s->execute([
+	':pti'=>time()
+]);
 if($config['php_options'][6]==1){
-	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE ti<:ti");
-	$s->execute([':ti'=>time()-2592000]);
+	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `ti`<:ti");
+	$s->execute([
+		':ti'=>time()-2592000
+	]);
 }
 if($config['php_options'][5]==1){
 	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login')||stristr($_SERVER['REQUEST_URI'],'wp-content')||stristr($_SERVER['REQUEST_URI'],'wp-plugin')||(isset($_GET['author']) && $_GET['author']!='')){
@@ -62,19 +67,28 @@ if(file_exists(THEME.DS.'images'.DS.'favicon.png')){
 	define('FAVICON','core'.DS.'images'.DS.'favicon.png');
 	define('FAVICONTYPE','image/png');
 }
-if(file_exists(THEME.DS.'images'.DS.'noimage.png'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage.gif'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage.jpg'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.jpg');
+if(file_exists(THEME.DS.'images'.DS.'noimage-md.png'))
+	define('NOIMAGE',THEME.DS.'images'.DS.'noimage-md.png');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage-md.gif'))
+	define('NOIMAGE',THEME.DS.'images'.DS.'noimage-md.gif');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage-md.jpg'))
+	define('NOIMAGE',THEME.DS.'images'.DS.'noimage-md.jpg');
 else
-	define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
-define('ADMINNOIMAGE','core'.DS.'images'.DS.'noimage.png');
-if(file_exists(THEME.DS.'images'.DS.'noavatar.png'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar.gif'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.gif');
+	define('NOIMAGE','core'.DS.'images'.DS.'noimage-md.jpg');
+if(file_exists(THEME.DS.'images'.DS.'noimage-sm.png'))
+	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.png');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage-sm.gif'))
+	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.gif');
+elseif(file_exists(THEME.DS.'images'.DS.'noimage-sm.jpg'))
+	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.jpg');
+else
+	define('NOIMAGESM','core'.DS.'images'.DS.'noimage-sm.jpg');
+define('ADMINNOIMAGE','core'.DS.'images'.DS.'noimage-md.jpg');
+define('ADMINNOIMAGEMD','core'.DS.'images'.DS.'noimage-sm.jpg');
+if(file_exists(THEME.DS.'images'.DS.'noavatar-md.png'))
+	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar-md.png');
+elseif(file_exists(THEME.DS.'images'.DS.'noavatar-md.gif'))
+	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar-md.gif');
 elseif(file_exists(THEME.DS.'images'.DS.'noavatar.jpg'))
 	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.jpg');
 else
@@ -627,8 +641,10 @@ $routes=[
 	'logout'=>['front','logout'],
   ''=>['front','index']
 ];
-$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE active=1 AND rank<=:rank");
-$s->execute([':rank'=>$_SESSION['rank']]);
+$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `active`=1 AND `rank`<=:rank");
+$s->execute([
+	':rank'=>$_SESSION['rank']
+]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
 	if(method_exists('front',$r['contentType']))
 		$routes[$r['contentType']]=['front',$r['contentType']];

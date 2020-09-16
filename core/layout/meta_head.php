@@ -38,41 +38,41 @@
     <link rel="alternate" media="handheld" href="<?php echo URL;?>">
     <link rel="alternate" hreflang="<?php echo$config['language'];?>" href="<?php echo URL;?>">
     <link rel="manifest" href="<?php echo URL.'core'.DS.'manifestadmin.php';?>">
-    <link rel="icon" href="<?php echo URL.$favicon;?>">
-    <link rel="apple-touch-icon" href="<?php echo URL.$favicon;?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'bootstrap.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery-ui.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'elfinder'.DS.'css'.DS.'elfinder.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'fullcalendar.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.simplecolorpicker.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'i.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'codemirror.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'daterangepicker.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'summernote.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'style.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo URL.'core'.DS.'css'.DS.'aurora.css';?>">
-<?php if(file_exists(THEME.DS.'css'.DS.'admin.css'))echo'<link rel="stylesheet" type="text/css" href="'.THEME.DS.'css'.DS.'admin.css">';?>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery-ui.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'summernote.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-save-button.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-classes.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-checkbox.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'codemirror.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'plugin'.DS.'elfinder'.DS.'elfinder.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'elfinder'.DS.'js'.DS.'elfinder.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'aurora.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.simplecolorpicker.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'moment.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'fullcalendar.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>
-    <script src="<?php echo URL.'core'.DS.'js'.DS.'js.js';?>"></script>
+    <link rel="icon" href="<?php echo$favicon;?>">
+    <link rel="apple-touch-icon" href="<?php echo$favicon;?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'bootstrap.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'jquery-ui.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'elfinder'.DS.'css'.DS.'elfinder.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'fullcalendar.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'jquery.simplecolorpicker.css';?>">
+    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'i.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'codemirror.css';?>">
+    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'daterangepicker.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'summernote.min.css';?>">
+    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
+    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'style.css';?>">
+    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'aurora.css';?>">
+    <?php if(file_exists(THEME.DS.'css'.DS.'admin.css'))echo'<link rel="stylesheet" type="text/css" href="'.THEME.DS.'css'.DS.'admin.css">';?>
+    <script src="<?php echo'core'.DS.'js'.DS.'jquery.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'jquery-ui.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'summernote.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-save-button.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-classes.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-checkbox.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'codemirror.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'plugin'.DS.'elfinder'.DS.'elfinder.js';?>"></script>
+    <script src="<?php echo'core'.DS.'elfinder'.DS.'js'.DS.'elfinder.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'aurora.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'jquery.simplecolorpicker.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'moment.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'fullcalendar.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>
+    <script src="<?php echo'core'.DS.'js'.DS.'js.js';?>"></script>
     <!--[if lt IE 9]>
     	<script type="text/javascript" src="libs/flashcanvas.js"></script>
   	<![endif]-->
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
-<?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div><div class="developmentbottom"></div>';?>
+  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
+  <?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div><div class="developmentbottom"></div>';?>

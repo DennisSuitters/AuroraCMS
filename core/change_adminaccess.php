@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 $getcfg=true;
@@ -22,8 +23,10 @@ if($adminfolder==''){?>
   window.top.window.toastr["error"]("Folder must NOT be blank!<br>Change not saved!");
 <?php
 }else{
-  $s=$db->prepare("SELECT id FROM menu WHERE file LIKE :file");
-  $s->execute([':file'=>$adminfolder]);
+  $s=$db->prepare("SELECT `id` FROM `".$prefix."menu` WHERE `file` LIKE :file");
+  $s->execute([
+    ':file'=>$adminfolder
+  ]);
   if($s->rowCount()>0){?>
     window.top.window.$('#adminfolder').addClass('is-invalid');
     window.top.window.toastr["error"]("Folder must NOT be the same as an already existing Page!<br>Change not saved!");

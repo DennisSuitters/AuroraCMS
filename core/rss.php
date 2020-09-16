@@ -7,14 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.2
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 header('Content-Type:application/rss+xml;charset=ISO-8859-1');
 require'db.php';
-$config=$db->query("SELECT seoTitle,seoCaption FROM config WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `seoTitle`,`seoCaption` FROM `".$prefix."config"` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($args[0]==''||$args[0]=='index')$args[0]='%_%';
 $ti=time();
 echo'<?xml version="1.0"?>';?>
@@ -29,10 +30,12 @@ echo'<?xml version="1.0"?>';?>
     <ttl>60</ttl>
 <?php $deffiletype=image_type_to_mime_type(exif_imagetype(FAVICON));
 $deflength=filesize(FAVICON);
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND status='published' AND internal!='1' ORDER BY ti DESC LIMIT 25");
-$s->execute([':contentType'=>$args[0]]);
+$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status`='published' AND `internal`!='1' ORDER BY `ti` DESC LIMIT 25");
+$s->execute([
+  ':contentType'=>$args[0]
+]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
-  $img=URL.FAVICON;
+  $img=FAVICON;
   $filetype=$deffiletype;
   $length=$deflength;
   if($r['contentType']!='gallery'){
@@ -57,11 +60,11 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
     }
   }else{
     if(file_exists('media'.DS.$r['thumb'])){
-      $img=URL.DS.'media'.DS.$r['thumb'];
+      $img='media'.DS.$r['thumb'];
       $filetype=image_type_to_mime_type(exif_imagetype('media'.DS.$r['thumb']));
       $length=filesize('media'.DS.$r['thumb']);
     }else{
-      $img=URL.DS.'media'.DS.$r['file'];
+      $img='media'.DS.$r['file'];
       $filetype=image_type_to_mime_type(exif_imagetype('media'.DS.$r['file']));
       $length=filesize('media'.DS.$r['file']);
     }

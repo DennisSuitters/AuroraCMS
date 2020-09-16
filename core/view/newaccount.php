@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -32,7 +33,7 @@ if($config['php_options'][3]==1&&$config['php_APIkey']!=''){
     $sc=$db->prepare("SELECT id FROM iplist WHERE ip=:ip");
     $sc->execute([':ip'=>$ip]);
     if($sc->rowCount()<1){
-      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,ti) VALUES (:ip,:oti,:ti)");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`ti`) VALUES (:ip,:oti,:ti)");
       $s->execute([
         ':ip'=>$ip,
         ':oti'=>$ti,
@@ -52,10 +53,12 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
       $spam=TRUE;
     }
     if($config['spamfilter'][1]==1&&$spam==TRUE){
-      $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-      $sc->execute([':ip'=>$ip]);
+      $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+      $sc->execute([
+        ':ip'=>$ip
+      ]);
       if($sc->rowCount()<1){
-        $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,ti) VALUES (:ip,:oti,:ti)");
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`ti`) VALUES (:ip,:oti,:ti)");
         $s->execute([
           ':ip'=>$ip,
           ':oti'=>$ti,
@@ -68,8 +71,10 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
     if(isset($_POST['terms'])&&$_POST['terms']=='yes'){
       define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url']);
       if($username!=''){
-        $s=$db->prepare("SELECT username FROM `".$prefix."login` WHERE username=:username LIMIT 1");
-        $s->execute([':username'=>$username]);
+        $s=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:username LIMIT 1");
+        $s->execute([
+          ':username'=>$username
+        ]);
         $r=$s->fetch(PDO::FETCH_ASSOC);
         if($s->rowCount()>0)
           $notification.=$theme['settings]']['signup_erroruserexists'];
@@ -78,7 +83,7 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
           $password=substr(str_shuffle($chars),0,8);
           $hash=password_hash($password,PASSWORD_DEFAULT);
           $activate=md5(time());
-          $us=$db->prepare("INSERT INTO `".$prefix."login` (username,password,email,hash,activate,active,ti) VALUES (:username,:password,:email,:hash,:activate,:active,:ti)");
+          $us=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`username`,`password`,`email`,`hash`,`activate`,`active`,`ti`) VALUES (:username,:password,:email,:hash,:activate,:active,:ti)");
           $us->execute([
             ':username'=>$username,
             ':password'=>$hash,

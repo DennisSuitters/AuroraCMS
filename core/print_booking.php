@@ -7,16 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
 include'tcpdf'.DS.'tcpdf.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$id
+]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $r['notes']=preg_replace([
     '/<input type="checkbox" checked="checked">/',
@@ -26,16 +29,22 @@ $r['notes']=preg_replace([
     '<img class="checkbox" src="../core/images/checkbox.png">',
   ],$r['notes']);
 $bookingid='booking'.$r['id'];
-$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-$s->execute([':id'=>$r['cid']]);
+$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$r['cid']
+]);
 $c=$s->fetch(PDO::FETCH_ASSOC);
 if($r['rid']!=0){
-  $sql=$db->prepare("SELECT id,contentType,code,title,assoc FROM `".$prefix."content` WHERE id=:id");
-  $sql->execute([':id'=>$r['rid']]);
+  $sql=$db->prepare("SELECT `id`,`contentType`,`code`,`title`,`assoc` FROM `".$prefix."content` WHERE `id`=:id");
+  $sql->execute([
+    ':id'=>$r['rid']
+  ]);
   $srv=$sql->fetch(PDO::FETCH_ASSOC);
 }else $srv='';
-$st=$db->prepare("SELECT id,username,name FROM `".$prefix."login` WHERE id=:uid");
-$st->execute([':uid'=>$r['uid']]);
+$st=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:uid");
+$st->execute([
+  ':uid'=>$r['uid']
+]);
 $rt=$st->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 $pdf=new TCPDF(PDF_PAGE_ORIENTATION,PDF_UNIT,PDF_PAGE_FORMAT,true,'UTF-8',false);

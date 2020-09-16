@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Fix Toastr Notifications.
@@ -18,8 +18,10 @@ echo'<script>window.top.window.$("#notification").html("");';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-$s=$db->prepare("SELECT file FROM ".$prefix."$t WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT `file` FROM ".$prefix."$t WHERE `id`=:id");
+$s->execute([
+  ':id'=>$id
+]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 if($r['file']!=''){
   switch($c){
@@ -50,7 +52,7 @@ if($r['file']!=''){
     default:
       $out='nothing';
   }
-  $s=$db->prepare("UPDATE ".$prefix."$t SET $c=:out WHERE id=:id");
+  $s=$db->prepare("UPDATE ".$prefix."$t SET `".$c."`=:out WHERE `id`=:id");
   $s->execute([
     ':id'=>$id,
     ':out'=>$out

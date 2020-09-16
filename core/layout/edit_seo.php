@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.17
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -18,8 +19,10 @@ function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('..'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
 }
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$s=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `id`=:id");
+$s->execute([
+	':id'=>$id
+]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <div class="form-group row">
   <label for="title" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>

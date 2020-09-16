@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
@@ -20,9 +20,12 @@
  * @changes    v0.0.11 Update Password change interaction.
  * @changes    v0.0.19 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  * @changes    v0.0.19 Add Save All button.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
 */
-$q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-$q->execute([':id'=>$args[1]]);
+$q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+$q->execute([
+  ':id'=>$args[1]
+]);
 $r=$q->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -96,7 +99,6 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
           </div>
-
           <div role="tabpanel" class="tab-pane" id="account-images">
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <div class="form-group">
@@ -129,173 +131,182 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
           </div>
-<?php /* Proofs */ ?>
           <div id="account-proofs" class="tab-pane" role="tabpanel">
             <div id="mi" class="row">
-<?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='proofs' AND uid=:id ORDER BY ord ASC");
-$sm->execute([':id'=>$r['id']]);
-while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-  if(file_exists('media/thumbs/'.substr(basename($rm['file']),0,-4).'.png'))$thumb='media/thumbs/'.substr(basename($rm['file']),0,-4).'.png';
-  else$thumb=ADMINNOIMAGE;?>
-              <div id="mi_<?php echo$rm['id'];?>" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0">
-                <div class="card bg-dark m-0">
-                  <img src="<?php echo$thumb;?>" class="card-img" alt="Proof <?php echo$rm['id'];?>">
-                  <div id="card-title<?php echo$rm['id'];?>" class="card-footer"><?php echo$rm['title'];?></div>
+              <?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='proofs' AND `uid`=:id ORDER BY `ord` ASC");
+              $sm->execute([
+                ':id'=>$r['id']
+              ]);
+              while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
+                if(file_exists('media/thumbs/'.substr(basename($rm['file']),0,-4).'.png'))
+                  $thumb='media/thumbs/'.substr(basename($rm['file']),0,-4).'.png';
+                else
+                  $thumb=ADMINNOIMAGE;?>
+                <div id="mi_<?php echo$rm['id'];?>" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0">
+                  <div class="card bg-dark m-0">
+                    <img src="<?php echo$thumb;?>" class="card-img" alt="Proof <?php echo$rm['id'];?>">
+                    <div id="card-title<?php echo$rm['id'];?>" class="card-footer"><?php echo$rm['title'];?></div>
+                  </div>
+                  <div class="controls btn-group">
+                    <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"><?php svg('edit');?></a>
+                    <?php $scn=$sccn=0;
+                    $sc=$db->prepare("SELECT COUNT(`rid`) as cnt FROM `".$prefix."comments` WHERE `rid`=:rid AND `contentType`='proofs'");
+                    $sc->execute([
+                      ':rid'=>$rm['id']
+                    ]);
+                    $scn=$sc->fetch(PDO::FETCH_ASSOC);
+                    $scc=$db->prepare("SELECT COUNT(`rid`) as cnt FROM `".$prefix."comments` WHERE `rid`=:rid AND `status`!='approved'");
+                    $scc->execute([
+                      ':rid'=>$rm['id']
+                    ]);
+                    $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
+                    <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" data-title="'.$sccn['cnt'].' New Comments"':'');?> aria-label="View Comments"><?php svg('comments').'&nbsp;'.$scn['cnt'];?></a>
+                    <?php echo$user['options'][5]==1?'<span class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</span>':'';?>
+                  </div>
                 </div>
-                <div class="controls btn-group">
-                  <a class="btn btn-secondary btn-sm" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"><?php svg('edit');?></a>
-<?php $scn=$sccn=0;
-  $sc=$db->prepare("SELECT COUNT(rid) as cnt FROM `".$prefix."comments` WHERE rid=:rid AND contentType='proofs'");
-  $sc->execute([':rid'=>$rm['id']]);
-  $scn=$sc->fetch(PDO::FETCH_ASSOC);
-  $scc=$db->prepare("SELECT COUNT(rid) as cnt FROM `".$prefix."comments` WHERE rid=:rid AND status!='approved'");
-  $scc->execute([':rid'=>$rm['id']]);
-  $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
-                  <a class="btn btn-secondary btn-sm<?php echo$sccn['cnt']>0?' btn-success':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" data-title="'.$sccn['cnt'].' New Comments"':'');?> aria-label="View Comments"><?php svg('comments').'&nbsp;'.$scn['cnt'];?></a>
-                  <?php echo$user['options'][5]==1?'<span class="handle btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</span>':'';?>
-                </div>
-              </div>
-<?php }?>
+              <?php }?>
             </div>
-<?php if($user['options'][1]==1){?>
-            <script>
-              $('#mi').sortable({
-                items:".media-gallery",
-                placeholder:".ghost",
-                helper:fixWidthHelper,
-                update:function(e,ui){
-                  var order=$("#mi").sortable("serialize");
-                  $.ajax({
-                    type:"POST",
-                    dataType:"json",
-                    url:"core/reorderproofs.php",
-                    data:order
+            <?php if($user['options'][1]==1){?>
+              <script>
+                $('#mi').sortable({
+                  items:".media-gallery",
+                  placeholder:".ghost",
+                  helper:fixWidthHelper,
+                  update:function(e,ui){
+                    var order=$("#mi").sortable("serialize");
+                    $.ajax({
+                      type:"POST",
+                      dataType:"json",
+                      url:"core/reorderproofs.php",
+                      data:order
+                    });
+                  }
+                }).disableSelection();
+                function fixWidthHelper(e,ui){
+                  ui.children().each(function(){
+                    $(this).width($(this).width());
                   });
+                  return ui;
                 }
-              }).disableSelection();
-              function fixWidthHelper(e,ui){
-                ui.children().each(function(){
-                  $(this).width($(this).width());
-                });
-                return ui;
-              }
-            </script>
-<?php }?>
+              </script>
+            <?php }?>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-social">
-<?php if($user['options'][0]==1||$user['options'][5]==1){?>
-            <form target="sp" method="post" action="core/add_data.php">
-              <div class="form-group row">
-                <input type="hidden" name="user" value="<?php echo$r['id'];?>">
-                <input type="hidden" name="act" value="add_social">
-                <div class="input-group col-sm-12">
-                  <label for="icon" class="input-group-text">Network</label>
-                  <select id="icon" class="form-control" name="icon">
-                    <option value="">Select a Social Network...</option>
-                    <option value="500px">500px</option>
-                    <option value="aboutme">About Me</option>
-                    <option value="airbnb">AirBNB</option>
-                    <option value="amazon">Amazon</option>
-                    <option value="behance">Behance</option>
-                    <option value="bitcoin">Bitcoin</option>
-                    <option value="blogger">Blogger</option>
-                    <option value="buffer">Buffer</option>
-                    <option value="cargo">Cargo</option>
-                    <option value="codepen">Codepen</option>
-                    <option value="coroflot">Coroflot</option>
-                    <option value="creattica">Creattica</option>
-                    <option value="delicious">Delcicious</option>
-                    <option value="deviantart">DeviantArt</option>
-                    <option value="diaspora">Diaspora</option>
-                    <option value="digg">Digg</option>
-                    <option value="discord">Discord</option>
-                    <option value="discourse">Discourse</option>
-                    <option value="disqus">Disqus</option>
-                    <option value="dribbble">Dribbble</option>
-                    <option value="dropbox">Dropbox</option>
-                    <option value="envato">Envato</option>
-                    <option value="etsy">Etsy</option>
-                    <option value="facebook">Facebook</option>
-                    <option value="feedburner">Feedburner</option>
-                    <option value="flickr">Flickr</option>
-                    <option value="forrst">Forrst</option>
-                    <option value="github">GitHub</option>
-                    <option value="gitlab">GitLab</option>
-                    <option value="google-plus">Google+</option>
-                    <option value="gravatar">Gravatar</option>
-                    <option value="hackernews">Hackernews</option>
-                    <option value="icq">ICQ</option>
-                    <option value="instagram">Instagram</option>
-                    <option value="kickstarter">Kickstarter</option>
-                    <option value="last-fm">Last FM</option>
-                    <option value="lego">Lego</option>
-                    <option value="linkedin">Linkedin</option>
-                    <option value="lynda">Lynda</option>
-                    <option value="massroots">Massroots</option>
-                    <option value="medium">Medium</option>
-                    <option value="myspace">MySpace</option>
-                    <option value="netlify">Netlify</option>
-                    <option value="ovh">OVH</option>
-                    <option value="paypal">Paypal</option>
-                    <option value="periscope">Periscope</option>
-                    <option value="picasa">Picasa</option>
-                    <option value="pinterest">Pinterest</option>
-                    <option value="play-store">Play Store</option>
-                    <option value="quora">Quora</option>
-                    <option value="redbubble">Red Bubble</option>
-                    <option value="reddit">Reddit</option>
-                    <option value="sharethis">Sharethis</option>
-                    <option value="skype">Skype</option>
-                    <option value="snapchat">Snapchat</option>
-                    <option value="soundcloud">Soundcloud</option>
-                    <option value="stackoverflow">Stackoverflow</option>
-                    <option value="steam">Steam</option>
-                    <option value="stumbleupon">StumbleUpon</option>
-                    <option value="tsu">TSU</option>
-                    <option value="tumblr">Tumblr</option>
-                    <option value="twitch">Twitch</option>
-                    <option value="twitter">Twitter</option>
-                    <option value="ubiquiti">Ubiquiti</option>
-                    <option value="unsplash">Unsplash</option>
-                    <option value="vimeo">Vimeo</option>
-                    <option value="vine">Vine</option>
-                    <option value="whatsapp">Whatsapp</option>
-                    <option value="wikipedia">Wikipedia</option>
-                    <option value="windows-store">Windows Store</option>
-                    <option value="xbox-live">Xbox Live</option>
-                    <option value="yahoo">Yahoo</option>
-                    <option value="yelp">Yelp</option>
-                    <option value="youtube">YouTube</option>
-                    <option value="zerply">Zerply</option>
-                    <option value="zune">Zune</option>
-                  </select>
-                  <label for="socialurl" class="input-group-text">URL</label>
-                  <input type="text" id="socialurl" class="form-control" name="url" value="" placeholder="Enter a URL...">
-                  <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('plus');?></button></div>
-                </div>
-              </div>
-            </form>
-<?php }?>
-            <div id="social">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=:uid ORDER BY icon ASC");
-$ss->execute([':uid'=>$r['id']]);
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-              <div id="l_<?php echo$rs['id'];?>" class="form-group row">
-                <div class="input-group col-sm-12">
-                  <div class="input-group-text"><span class="libre-social" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon']);?></span></div>
-                  <input type="text" class="form-control" value="<?php echo$rs['url'];?>" readonly>
-<?php if($user['options'][0]==1||$user['options'][5]==1){?>
-                  <div class="input-group-append">
-                    <form target="sp" action="core/purge.php" role="form">
-                      <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                      <input type="hidden" name="t" value="choices">
-                      <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                    </form>
+            <?php if($user['options'][0]==1||$user['options'][5]==1){?>
+              <form target="sp" method="post" action="core/add_data.php">
+                <div class="form-group row">
+                  <input type="hidden" name="user" value="<?php echo$r['id'];?>">
+                  <input type="hidden" name="act" value="add_social">
+                  <div class="input-group col-sm-12">
+                    <label for="icon" class="input-group-text">Network</label>
+                    <select id="icon" class="form-control" name="icon">
+                      <option value="">Select a Social Network...</option>
+                      <option value="500px">500px</option>
+                      <option value="aboutme">About Me</option>
+                      <option value="airbnb">AirBNB</option>
+                      <option value="amazon">Amazon</option>
+                      <option value="behance">Behance</option>
+                      <option value="bitcoin">Bitcoin</option>
+                      <option value="blogger">Blogger</option>
+                      <option value="buffer">Buffer</option>
+                      <option value="cargo">Cargo</option>
+                      <option value="codepen">Codepen</option>
+                      <option value="coroflot">Coroflot</option>
+                      <option value="creattica">Creattica</option>
+                      <option value="delicious">Delcicious</option>
+                      <option value="deviantart">DeviantArt</option>
+                      <option value="diaspora">Diaspora</option>
+                      <option value="digg">Digg</option>
+                      <option value="discord">Discord</option>
+                      <option value="discourse">Discourse</option>
+                      <option value="disqus">Disqus</option>
+                      <option value="dribbble">Dribbble</option>
+                      <option value="dropbox">Dropbox</option>
+                      <option value="envato">Envato</option>
+                      <option value="etsy">Etsy</option>
+                      <option value="facebook">Facebook</option>
+                      <option value="feedburner">Feedburner</option>
+                      <option value="flickr">Flickr</option>
+                      <option value="forrst">Forrst</option>
+                      <option value="github">GitHub</option>
+                      <option value="gitlab">GitLab</option>
+                      <option value="google-plus">Google+</option>
+                      <option value="gravatar">Gravatar</option>
+                      <option value="hackernews">Hackernews</option>
+                      <option value="icq">ICQ</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="kickstarter">Kickstarter</option>
+                      <option value="last-fm">Last FM</option>
+                      <option value="lego">Lego</option>
+                      <option value="linkedin">Linkedin</option>
+                      <option value="lynda">Lynda</option>
+                      <option value="massroots">Massroots</option>
+                      <option value="medium">Medium</option>
+                      <option value="myspace">MySpace</option>
+                      <option value="netlify">Netlify</option>
+                      <option value="ovh">OVH</option>
+                      <option value="paypal">Paypal</option>
+                      <option value="periscope">Periscope</option>
+                      <option value="picasa">Picasa</option>
+                      <option value="pinterest">Pinterest</option>
+                      <option value="play-store">Play Store</option>
+                      <option value="quora">Quora</option>
+                      <option value="redbubble">Red Bubble</option>
+                      <option value="reddit">Reddit</option>
+                      <option value="sharethis">Sharethis</option>
+                      <option value="skype">Skype</option>
+                      <option value="snapchat">Snapchat</option>
+                      <option value="soundcloud">Soundcloud</option>
+                      <option value="stackoverflow">Stackoverflow</option>
+                      <option value="steam">Steam</option>
+                      <option value="stumbleupon">StumbleUpon</option>
+                      <option value="tsu">TSU</option>
+                      <option value="tumblr">Tumblr</option>
+                      <option value="twitch">Twitch</option>
+                      <option value="twitter">Twitter</option>
+                      <option value="ubiquiti">Ubiquiti</option>
+                      <option value="unsplash">Unsplash</option>
+                      <option value="vimeo">Vimeo</option>
+                      <option value="vine">Vine</option>
+                      <option value="whatsapp">Whatsapp</option>
+                      <option value="wikipedia">Wikipedia</option>
+                      <option value="windows-store">Windows Store</option>
+                      <option value="xbox-live">Xbox Live</option>
+                      <option value="yahoo">Yahoo</option>
+                      <option value="yelp">Yelp</option>
+                      <option value="youtube">YouTube</option>
+                      <option value="zerply">Zerply</option>
+                      <option value="zune">Zune</option>
+                    </select>
+                    <label for="socialurl" class="input-group-text">URL</label>
+                    <input type="text" id="socialurl" class="form-control" name="url" value="" placeholder="Enter a URL...">
+                    <div class="input-group-append"><button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('plus');?></button></div>
                   </div>
-<?php }?>
                 </div>
-              </div>
-<?php }?>
+              </form>
+            <?php }?>
+            <div id="social">
+              <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=:uid ORDER BY `icon` ASC");
+              $ss->execute([
+                ':uid'=>$r['id']
+              ]);
+              while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+                <div id="l_<?php echo$rs['id'];?>" class="form-group row">
+                  <div class="input-group col-sm-12">
+                    <div class="input-group-text"><span class="libre-social" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon']);?></span></div>
+                    <input type="text" class="form-control" value="<?php echo$rs['url'];?>" readonly>
+                    <?php if($user['options'][0]==1||$user['options'][5]==1){?>
+                      <div class="input-group-append">
+                        <form target="sp" action="core/purge.php" role="form">
+                          <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                          <input type="hidden" name="t" value="choices">
+                          <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        </form>
+                      </div>
+                    <?php }?>
+                  </div>
+                </div>
+              <?php }?>
             </div>
           </div>
           <div role="tabpanel" class="tab-pane" id="account-profile">
@@ -454,107 +465,109 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
                     </div>
                   </div>
                 </div>
-<?php if($user['options'][5]==1){?>
-                <legend>Add an Entry</legend>
-                <form target="sp" method="post" action="core/add_career.php">
-                  <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                  <div class="form-group row">
-                    <div class="col-4">
-                      <input type="text" class="form-control" value="" name="title" placeholder="Title..." required aria-required="true" aria-label="Career Title">
-                    </div>
-                    <div class="col-4">
-                      <input type="text" class="form-control" value="" name="business" placeholder="Business..." required aria-required="true" aria-label="Career Business">
-                    </div>
-                    <div class="col-2">
-                      <input type="text" id="ctis" class="form-control" value="" name="tis" placeholder="Date Start..." autocomplete="off">
-                      <input type="hidden" id="ctisx" name="tisx" value="0">
-                    </div>
-                    <div class="col-2">
-                      <input type="text" id="ctie" class="form-control" value="" name="tie" placeholder="Date End..." autocomplete="off">
-                      <input type="hidden" id="ctiex" name="tiex" value="0">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <div class="col">
-                      <textarea name="da" class="cnote" required aria-required="true" aria-label="Career Notes"></textarea>
-                    </div>
-                    <div class="col-1">
-                      <button type="submit" class="btn btn-secondary add" aria-label="Add Career" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
-                    </div>
-                  </div>
-                </form>
-                <script>
-                  $('#ctis').daterangepicker({
-                    singleDatePicker:true,
-                    linkedCalendars:false,
-                    autoUpdateInput:false,
-                    showDropdowns:true,
-                    showCustomRangeLabel:false,
-                    timePicker:false,
-                    startDate:"<?php echo date($config['dateFormat'],time());?>",
-                    locale:{
-                      format:'MMM Do,YYYY h:mm A'
-                    }
-                  },function(start){
-                    $('#ctisx').val(start.unix());
-                  });
-                  $('#ctis').on('apply.daterangepicker',function(start,picker){
-                    $('#ctis').val(picker.startDate.format('YYYY-MMM'));
-                  });
-                  $('#ctie').daterangepicker({
-                    singleDatePicker:true,
-                    linkedCalendars:false,
-                    autoUpdateInput:false,
-                    showDropdowns:true,
-                    showCustomRangeLabel:false,
-                    timePicker:false,
-                    startDate:"<?php echo date($config['dateFormat'],time());?>",
-                    locale:{
-                      format:'MMM Do,YYYY h:mm A'
-                    }
-                  },function(start){
-                    $('#ctiex').val(start.unix());
-                  });
-                  $('#ctie').on('apply.daterangepicker',function(start,picker){
-                    $('#ctie').val(picker.startDate.format('YYYY-MMM'));
-                  });
-                  $('.cnote').summernote({
-                    toolbar:[],
-                    placeholder:'Enter Notes...'
-                  });
-                </script>
-                <hr>
-<?php }?>
-                <div id="careers">
-<?php $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='career' AND cid=:cid ORDER BY tis ASC");
-$sc->execute([':cid'=>$user['id']]);
-while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
-                  <div id="l_<?php echo$rc['id'];?>">
+                <?php if($user['options'][5]==1){?>
+                  <legend>Add an Entry</legend>
+                  <form target="sp" method="post" action="core/add_career.php">
+                    <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <div class="form-group row">
                       <div class="col-4">
-                        <input type="text" class="form-control" value="<?php echo$rc['title'];?>" readonly>
+                        <input type="text" class="form-control" value="" name="title" placeholder="Title..." required aria-required="true" aria-label="Career Title">
                       </div>
                       <div class="col-4">
-                        <input type="text" class="form-control" value="<?php echo$rc['business'];?>" readonly>
+                        <input type="text" class="form-control" value="" name="business" placeholder="Business..." required aria-required="true" aria-label="Career Business">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" value="<?php echo $rc['tis']==0?'Current':date('Y-M',$rc['tis']);?>" readonly>
+                        <input type="text" id="ctis" class="form-control" value="" name="tis" placeholder="Date Start..." autocomplete="off">
+                        <input type="hidden" id="ctisx" name="tisx" value="0">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" value="<?php echo $rc['tie']==0?'Current':date('Y-M',$rc['tie']);?>" readonly>
+                        <input type="text" id="ctie" class="form-control" value="" name="tie" placeholder="Date End..." autocomplete="off">
+                        <input type="hidden" id="ctiex" name="tiex" value="0">
                       </div>
                     </div>
                     <div class="form-group row">
                       <div class="col">
-                        <div class="form-control"><?php echo$rc['notes'];?></div>
+                        <textarea name="da" class="cnote" required aria-required="true" aria-label="Career Notes"></textarea>
                       </div>
                       <div class="col-1">
-                        <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn btn-secondary trash" onclick="purge(`'.$rc['id'].'`,`content`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                        <button type="submit" class="btn btn-secondary add" aria-label="Add Career" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
                       </div>
                     </div>
-                    <hr>
-                  </div>
-<?php }?>
+                  </form>
+                  <script>
+                    $('#ctis').daterangepicker({
+                      singleDatePicker:true,
+                      linkedCalendars:false,
+                      autoUpdateInput:false,
+                      showDropdowns:true,
+                      showCustomRangeLabel:false,
+                      timePicker:false,
+                      startDate:"<?php echo date($config['dateFormat'],time());?>",
+                      locale:{
+                        format:'MMM Do,YYYY h:mm A'
+                      }
+                    },function(start){
+                      $('#ctisx').val(start.unix());
+                    });
+                    $('#ctis').on('apply.daterangepicker',function(start,picker){
+                      $('#ctis').val(picker.startDate.format('YYYY-MMM'));
+                    });
+                    $('#ctie').daterangepicker({
+                      singleDatePicker:true,
+                      linkedCalendars:false,
+                      autoUpdateInput:false,
+                      showDropdowns:true,
+                      showCustomRangeLabel:false,
+                      timePicker:false,
+                      startDate:"<?php echo date($config['dateFormat'],time());?>",
+                      locale:{
+                        format:'MMM Do,YYYY h:mm A'
+                      }
+                    },function(start){
+                      $('#ctiex').val(start.unix());
+                    });
+                    $('#ctie').on('apply.daterangepicker',function(start,picker){
+                      $('#ctie').val(picker.startDate.format('YYYY-MMM'));
+                    });
+                    $('.cnote').summernote({
+                      toolbar:[],
+                      placeholder:'Enter Notes...'
+                    });
+                  </script>
+                  <hr>
+                <?php }?>
+                <div id="careers">
+                  <?php $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='career' AND `cid`=:cid ORDER BY `tis` ASC");
+                  $sc->execute([
+                    ':cid'=>$user['id']
+                  ]);
+                  while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
+                    <div id="l_<?php echo$rc['id'];?>">
+                      <div class="form-group row">
+                        <div class="col-4">
+                          <input type="text" class="form-control" value="<?php echo$rc['title'];?>" readonly>
+                        </div>
+                        <div class="col-4">
+                          <input type="text" class="form-control" value="<?php echo$rc['business'];?>" readonly>
+                        </div>
+                        <div class="col-2">
+                          <input type="text" class="form-control" value="<?php echo $rc['tis']==0?'Current':date('Y-M',$rc['tis']);?>" readonly>
+                        </div>
+                        <div class="col-2">
+                          <input type="text" class="form-control" value="<?php echo $rc['tie']==0?'Current':date('Y-M',$rc['tie']);?>" readonly>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col">
+                          <div class="form-control"><?php echo$rc['notes'];?></div>
+                        </div>
+                        <div class="col-1">
+                          <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn btn-secondary trash" onclick="purge(`'.$rc['id'].'`,`content`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                  <?php }?>
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="profile-edu" aria-labelledby="profile-edu">
@@ -565,112 +578,113 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                   </div>
                   <label for="bio_options3" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable</label>
                 </div>
-<?php if($user['options'][5]==1||$user['options'][0]==1){?>
-                <legend>Add an Entry</legend>
-                <form target="sp" method="post" action="core/add_education.php">
-                  <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                  <div class="form-group row">
-                    <div class="col-4">
-                      <input type="text" class="form-control" value="" name="title" placeholder="Title..." required aria-required="true" aria-label="Title">
-                    </div>
-                    <div class="col-4">
-                      <input type="text" class="form-control" value="" name="business" placeholder="Institute..." required aria-required="true" aria-label="Institute">
-                    </div>
-                    <div class="col-2">
-                      <input type="text" id="etis" class="form-control" value="" name="tis" placeholder="Date Start..." autocomplete="off">
-                      <input type="hidden" id="etisx" name="tisx" value="0">
-                    </div>
-                    <div class="col-2">
-                      <input type="text" id="etie" class="form-control" value="" name="tie" placeholder="Date End..." autocomplete="off">
-                      <input type="hidden" id="etiex" name="tiex" value="0">
-                    </div>
-                  </div>
-                  <div class="form-group row">
-                    <div class="col">
-                      <textarea name="da" class="enote" required aria-required="true"></textarea>
-                    </div>
-                    <div class="col-1">
-                      <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
-                    </div>
-                  </div>
-                </form>
-                <script>
-                  $('#etis').daterangepicker({
-                    singleDatePicker:true,
-                    linkedCalendars:false,
-                    autoUpdateInput:false,
-                    showDropdowns:true,
-                    showCustomRangeLabel:false,
-                    timePicker:false,
-                    startDate:"<?php echo date($config['dateFormat'],time());?>",
-                    locale:{
-                      format:'MMM Do,YYYY h:mm A'
-                    }
-                  },function(start){
-                    $('#etisx').val(start.unix());
-                  });
-                  $('#etis').on('apply.daterangepicker',function(start,picker){
-                    $('#etis').val(picker.startDate.format('YYYY-MMM'));
-                  });
-                  $('#etie').daterangepicker({
-                    singleDatePicker:true,
-                    linkedCalendars:false,
-                    autoUpdateInput:false,
-                    showDropdowns:true,
-                    showCustomRangeLabel:false,
-                    timePicker:false,
-                    startDate:"<?php echo date($config['dateFormat'],time());?>",
-                    locale:{
-                      format:'MMM Do,YYYY h:mm A'
-                    }
-                  },function(start){
-                    $('#etiex').val(start.unix());
-                  });
-                  $('#etie').on('apply.daterangepicker',function(start,picker){
-                    $('#etie').val(picker.startDate.format('YYYY-MMM'));
-                  });
-                  $('.enote').summernote({
-                    toolbar:[],
-                    placeholder:'Enter Notes...'
-                  });
-                </script>
-                <hr>
-<?php }?>
-                <div id="education">
-<?php $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='education' AND cid=:cid ORDER BY tis ASC");
-$sc->execute([':cid'=>$user['id']]);
-while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
-                  <div id="l_<?php echo$rc['id'];?>">
+                <?php if($user['options'][5]==1||$user['options'][0]==1){?>
+                  <legend>Add an Entry</legend>
+                  <form target="sp" method="post" action="core/add_education.php">
+                    <input type="hidden" name="id" value="<?php echo$r['id'];?>">
                     <div class="form-group row">
                       <div class="col-4">
-                        <input type="text" class="form-control" value="<?php echo$rc['title'];?>" readonly>
+                        <input type="text" class="form-control" value="" name="title" placeholder="Title..." required aria-required="true" aria-label="Title">
                       </div>
                       <div class="col-4">
-                        <input type="text" class="form-control" value="<?php echo$rc['business'];?>" readonly>
+                        <input type="text" class="form-control" value="" name="business" placeholder="Institute..." required aria-required="true" aria-label="Institute">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" value="<?php echo $rc['tis']==0?'Current':date('Y-M',$rc['tis']);?>" readonly>
+                        <input type="text" id="etis" class="form-control" value="" name="tis" placeholder="Date Start..." autocomplete="off">
+                        <input type="hidden" id="etisx" name="tisx" value="0">
                       </div>
                       <div class="col-2">
-                        <input type="text" class="form-control" value="<?php echo $rc['tie']==0?'Current':date('Y-M',$rc['tie']);?>" readonly>
+                        <input type="text" id="etie" class="form-control" value="" name="tie" placeholder="Date End..." autocomplete="off">
+                        <input type="hidden" id="etiex" name="tiex" value="0">
                       </div>
                     </div>
                     <div class="form-group row">
                       <div class="col">
-                        <div class="form-control" readonly><?php echo$rc['notes'];?></div>
+                        <textarea name="da" class="enote" required aria-required="true"></textarea>
                       </div>
                       <div class="col-1">
-                        <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn btn-secondary trash" onclick="purge(`'.$rc['id'].'`,`content`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                        <button type="submit" class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
                       </div>
                     </div>
-                    <hr>
-                  </div>
-<?php }?>
+                  </form>
+                  <script>
+                    $('#etis').daterangepicker({
+                      singleDatePicker:true,
+                      linkedCalendars:false,
+                      autoUpdateInput:false,
+                      showDropdowns:true,
+                      showCustomRangeLabel:false,
+                      timePicker:false,
+                      startDate:"<?php echo date($config['dateFormat'],time());?>",
+                      locale:{
+                        format:'MMM Do,YYYY h:mm A'
+                      }
+                    },function(start){
+                      $('#etisx').val(start.unix());
+                    });
+                    $('#etis').on('apply.daterangepicker',function(start,picker){
+                      $('#etis').val(picker.startDate.format('YYYY-MMM'));
+                    });
+                    $('#etie').daterangepicker({
+                      singleDatePicker:true,
+                      linkedCalendars:false,
+                      autoUpdateInput:false,
+                      showDropdowns:true,
+                      showCustomRangeLabel:false,
+                      timePicker:false,
+                      startDate:"<?php echo date($config['dateFormat'],time());?>",
+                      locale:{
+                        format:'MMM Do,YYYY h:mm A'
+                      }
+                    },function(start){
+                      $('#etiex').val(start.unix());
+                    });
+                    $('#etie').on('apply.daterangepicker',function(start,picker){
+                      $('#etie').val(picker.startDate.format('YYYY-MMM'));
+                    });
+                    $('.enote').summernote({
+                      toolbar:[],
+                      placeholder:'Enter Notes...'
+                    });
+                  </script>
+                  <hr>
+                <?php }?>
+                <div id="education">
+                  <?php $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='education' AND `cid`=:cid ORDER BY `tis` ASC");
+                  $sc->execute([
+                    ':cid'=>$user['id']
+                  ]);
+                  while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
+                    <div id="l_<?php echo$rc['id'];?>">
+                      <div class="form-group row">
+                        <div class="col-4">
+                          <input type="text" class="form-control" value="<?php echo$rc['title'];?>" readonly>
+                        </div>
+                        <div class="col-4">
+                          <input type="text" class="form-control" value="<?php echo$rc['business'];?>" readonly>
+                        </div>
+                        <div class="col-2">
+                          <input type="text" class="form-control" value="<?php echo $rc['tis']==0?'Current':date('Y-M',$rc['tis']);?>" readonly>
+                        </div>
+                        <div class="col-2">
+                          <input type="text" class="form-control" value="<?php echo $rc['tie']==0?'Current':date('Y-M',$rc['tie']);?>" readonly>
+                        </div>
+                      </div>
+                      <div class="form-group row">
+                        <div class="col">
+                          <div class="form-control" readonly><?php echo$rc['notes'];?></div>
+                        </div>
+                        <div class="col-1">
+                          <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn btn-secondary trash" onclick="purge(`'.$rc['id'].'`,`content`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>':'';?>
+                        </div>
+                      </div>
+                      <hr>
+                    </div>
+                  <?php }?>
                 </div>
               </div>
             </div>
           </div>
-<?php /* Messages */ ?>
           <div role="tabpanel" class="tab-pane" id="account-messages">
             <div class="form-group">
               <label for="email_signature">Email Signature</label>
@@ -681,41 +695,55 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               </div>
             </div>
           </div>
-<?php /* Settings */ ?>
           <div role="tabpanel" class="tab-pane" id="account-settings">
+<?php /*            <div class="form-group">
+              <label for="theme">Administration Theme</label>
+              <select id="theme" class="form-control" onchange="update('<?php echo$r['id'];?>','login','theme',$(this).val());setTheme($(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="theme"<?php echo$user['options'][5]==1?'':' disabled';?>>
+                <option value="none">Default</option>
+                <option value="scifi"<?php echo$r['theme']=='scifi'?' selected':'';?>>SciFi</option>
+              </select>
+            </div>
+            <script>
+              function setTheme(theme){
+                $('body').removeClass('scifi');
+                $('body').addClass(theme);
+                document.cookie = 'theme=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            		Cookies.set('theme',theme,{expires:14});
+              }
+            </script> */ ?>
             <div class="form-group">
               <label for="timezone">Timezone</label>
               <div class="input-group">
                 <select id="timezone" class="form-control" onchange="update('<?php echo$r['id'];?>','login','timezone',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="timezone"<?php echo$user['options'][5]==1?'':' disabled';?>>
                   <option value="default">System Default</option>
-<?php               $o=array(
-                      'Australia/Perth'      => "(GMT+08:00) Perth",
-                      'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
-                      'Australia/Darwin'     => "(GMT+09:30) Darwin",
-                      'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
-                      'Australia/Canberra'   => "(GMT+10:00) Canberra",
-                      'Australia/Hobart'     => "(GMT+10:00) Hobart",
-                      'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
-                      'Australia/Sydney'     => "(GMT+10:00) Sydney"
-                    );
-                    foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
+                  <?php $o=[
+                    'Australia/Perth'      => "(GMT+08:00) Perth",
+                    'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
+                    'Australia/Darwin'     => "(GMT+09:30) Darwin",
+                    'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
+                    'Australia/Canberra'   => "(GMT+10:00) Canberra",
+                    'Australia/Hobart'     => "(GMT+10:00) Hobart",
+                    'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
+                    'Australia/Sydney'     => "(GMT+10:00) Sydney"
+                  ];
+                  foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
                 </select>
               </div>
             </div>
-<?php if($user['id']==$r['id']||$user['options'][5]==1){?>
-            <form target="sp" method="post" action="core/update.php" onsubmit="$('.page-block').addClass('d-block');">
-              <div class="form-group">
-                <label for="password">Password</label>
-                <div class="input-group">
-                  <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                  <input type="hidden" name="t" value="login">
-                  <input type="hidden" name="c" value="password">
-                  <input type="password" id="password" class="form-control" name="da" value="" placeholder="Enter a  New Password..." onkeyup="$('#passButton').addClass('btn-danger');">
-                  <div class="input-group-append"><button id="passButton" type="submit" class="btn btn-secondary">Update Password</button></div>
+            <?php if($user['id']==$r['id']||$user['options'][5]==1){?>
+              <form target="sp" method="post" action="core/update.php" onsubmit="$('.page-block').addClass('d-block');">
+                <div class="form-group">
+                  <label for="password">Password</label>
+                  <div class="input-group">
+                    <input type="hidden" name="id" value="<?php echo$r['id'];?>">
+                    <input type="hidden" name="t" value="login">
+                    <input type="hidden" name="c" value="password">
+                    <input type="password" id="password" class="form-control" name="da" value="" placeholder="Enter a  New Password..." onkeyup="$('#passButton').addClass('btn-danger');">
+                    <div class="input-group-append"><button id="passButton" type="submit" class="btn btn-secondary">Update Password</button></div>
+                  </div>
                 </div>
-              </div>
-            </form>
-<?php }?>
+              </form>
+            <?php }?>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="active" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0"<?php echo($r['active'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
@@ -814,86 +842,86 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               </div>
               <label for="options8" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">System Utilization Viewing</label>
             </div>
-<?php if($user['rank']>899){?>
-            <legend>Media Permissions</legend>
-<?php if($user['rank']==1000){?>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options17" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="17"<?php echo($r['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options17" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Allow this Administrator to change below Permissions</label>
+            <?php if($user['rank']>899){?>
+              <legend>Media Permissions</legend>
+              <?php if($user['rank']==1000){?>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options17" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="17"<?php echo($r['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options17" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Allow this Administrator to change below Permissions</label>
+                </div>
+              <?php }
+              if($r['options'][17]==1||$user['rank']==1000){?>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options16" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="16"<?php echo($r['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options16" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Hide Folders</label>
+                </div>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options10" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="10"<?php echo($r['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options10" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Create Folders</label>
+                </div>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options11" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="11"<?php echo($r['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options11" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Read Files</label>
+                </div>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options12" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="12"<?php echo($r['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options12" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Write Files</label>
+                </div>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options13" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="13"<?php echo($r['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options13" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Extract Archives</label>
+                </div>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options14" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="14"<?php echo($r['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options14" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Create Archives</label>
+                </div>
+                <div class="form-group row">
+                  <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+                    <label class="switch switch-label switch-success">
+                      <input type="checkbox" id="options15" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="15"<?php echo($r['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                      <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
+                    </label>
+                  </div>
+                  <label for="options15" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Upload Files (pdf,doc,php)</label>
+                </div>
+              <?php }?>
             </div>
-<?php }
-if($r['options'][17]==1||$user['rank']==1000){?>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options16" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="16"<?php echo($r['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options16" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Hide Folders</label>
-            </div>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options10" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="10"<?php echo($r['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options10" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Create Folders</label>
-            </div>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options11" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="11"<?php echo($r['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options11" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Read Files</label>
-            </div>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options12" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="12"<?php echo($r['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options12" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Write Files</label>
-            </div>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options13" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="13"<?php echo($r['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options13" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Extract Archives</label>
-            </div>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options14" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="14"<?php echo($r['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options14" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Create Archives</label>
-            </div>
-            <div class="form-group row">
-              <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-                <label class="switch switch-label switch-success">
-                  <input type="checkbox" id="options15" class="switch-input" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="15"<?php echo($r['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <span class="switch-slider" data-checked="on" data-unchecked="off"></span>
-                </label>
-              </div>
-              <label for="options15" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Upload Files (pdf,doc,php)</label>
-            </div>
-<?php }?>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
       </div>
     </div>

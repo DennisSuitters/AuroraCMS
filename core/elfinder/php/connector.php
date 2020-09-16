@@ -20,9 +20,11 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].DS);
 $prefix=$settings['database']['prefix'];
 $dns=((!empty($settings['database']['driver']))?($settings['database']['driver']):'').((!empty($settings['database']['host']))?(':host='.$settings['database']['host']):'').((!empty($settings['database']['port']))?(';port='.$settings['database']['port']):'').((!empty($settings['database']['schema']))?(';dbname='.$settings['database']['schema']):'');
 $db=new PDO($dns,$settings['database']['username'],$settings['database']['password']);
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
-$s=$db->prepare("SELECT options,rank FROM `".$prefix."login` WHERE id=:id");
-$s->execute([':id'=>$uid]);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+$s=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$uid
+]);
 $user=$s->fetch(PDO::FETCH_ASSOC);
 function access($attr,$path,$data,$volume){
   return strpos(basename($path),'.')===0?!($attr=='read'||$attr=='write'):null;
@@ -31,8 +33,10 @@ $mediaEnable=$config['options'][2]==1?true:false;
 if($config['mediaMaxWidth']==0)$mediaEnable=false;
 if($config['mediaMaxHeight']==0)$mediaEnable=false;
 if($id>0&&$t=='content'&&$c=='file'){
-  $sc=$db->prepare("SELECT id,options FROM `".$prefix."content` WHERE id=:id");
-  $sc->execute([':id'=>$id]);
+  $sc=$db->prepare("SELECT `id`,`options` FROM `".$prefix."content` WHERE `id`=:id");
+  $sc->execute([
+    ':id'=>$id
+  ]);
   $rc=$sc->fetch(PDO::FETCH_ASSOC);
   if($rc['options'][3]==1)$mediaEnable=false;
 }
@@ -50,7 +54,8 @@ $folders.='index.php!';
 $opts=[
   'bind'=>[
     'upload.presave'=>[
-      'Plugin.AutoResize.onUpLoadPreSave',
+      'Plugin.MultiImages.generateMultiImages',
+      'Plugin.AutoResize.onUpLoadPreSave'
     ],
     'mkdir.pre mkfile.pre rename.pre'=>[
       'Plugin.Sanitizer.cmdPreprocess',
@@ -61,6 +66,17 @@ $opts=[
       'enable'=>true,
       'targets'=>['\\','/',':','*','?','"','<','>','|',' '],
       'replace'=>'-',
+    ],
+    'MultiImages'=>[
+      'enable' => true,
+      'images_path' => $_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.'media'.DS,
+      'imageSizes' =>  [
+        'thumbs' => [$config['mediaMaxWidthThumb'], $config['mediaMaxHeightThumb']],
+        'sm' =>  [400, 0],
+        'md' => [600, 0],
+        'lg' =>  [1000, 0],
+      ],
+      'imageQuality' => $config['mediaQuality']
     ],
     'AutoResize'=>[
       'enable'=>$mediaEnable,
@@ -80,9 +96,10 @@ $opts=[
       'driver'=>'LocalFileSystem',
       'path'=>$_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.($user['rank']<1000?'media'.DS:''),
       'URL'=>URL.($user['rank']<1000?'media'.DS:''),
+      'tmbPath'=>'',
       'tmbPath'=>$_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.'media'.DS.'thumbs'.DS,
       'tmbURL'=>URL.'media'.DS.'thumbs'.DS,
-      'tmbSize'=>$config['mediaMaxWidthThumb'],
+      'tmbSize'=>100,
       'tmbBgColor'=>'#ffffff',
       'uploadDeny'=>[
         'all',

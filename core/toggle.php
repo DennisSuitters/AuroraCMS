@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Add liveChatNotification to allowed Columns.
@@ -22,12 +22,17 @@ $col=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $ti=time();
 if(($tbl!='NaN'&&$col!='NaN')||($tbl!=''&&$col!='')){
   if(in_array($tbl,['cart','choices','comments','config','content','iplist','login','logs','media','menu','messages','orderitems','orders','rewards','subscribers','suggestions','tracker'])&&in_array($col,['active','bio_options','bookable','bookingEmailReadNotification','comingsoon','development','featured','important','internal','liveChatNotification','maintenance','method','newsletter','newslettersEmbedImages','options','orderEmailReadNotification','php_options','pin','recurring','starred','storemessages','suggestions','checklist','agreementCheck'])){
-    $q=$db->prepare("SELECT $col as c FROM `".$prefix.$tbl."` WHERE id=:id");
-    $q->execute([':id'=>$id]);
+    $q=$db->prepare("SELECT `".$col."` as c FROM `".$prefix.$tbl."` WHERE `id`=:id");
+    $q->execute([
+      ':id'=>$id
+    ]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
     $r['c'][$bit]=$r['c'][$bit]==1?0:1;
-    $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET $col=:c WHERE id=:id");
-    $q->execute([':c'=>$r['c'],':id'=>$id]);
+    $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `".$col."`=:c WHERE `id`=:id");
+    $q->execute([
+      ':c'=>$r['c'],
+      ':id'=>$id
+    ]);
   }
 }
 if($tbl!='messages'||$col!='pin')echo'<script>window.top.window.$("#'.$tbl.$col.$bit.'").remove();";</script>';

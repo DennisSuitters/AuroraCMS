@@ -7,19 +7,159 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.18 Reformat source for legiblity.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
+ * @changes    v0.0.20 Add parsing for Breadcrumbs.
  */
 $rank=0;
 $notification='';
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
+if(stristr($html,'<breadcrumb>')){
+  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
+  $breaditem=$matches[1];
+  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
+  $breadcurrent=$matches[1];
+  $jsoni=2;
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+  $breadit=preg_replace([
+    '/<print breadcrumb=[\"\']?url[\"\']?>/',
+    '/<print breadcrumb=[\"\']?title[\"\']?>/'
+  ],[
+    URL,
+    'Home'
+  ],$breaditem);
+  $breaditems=$breadit;
+  if($page['title']!=''||$args[0]!=''){
+    $breadit=preg_replace([
+      '/<print breadcrumb=[\"\']?url[\"\']?>/',
+      '/<print breadcrumb=[\"\']?title[\"\']?>/'
+    ],[
+      URL.'profile',
+      'Profile'
+    ],$breaditem);
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.'profile","name":"Profile"}},';
+    $breaditems.=$breadit;
+  }else{
+    $breadit=preg_replace([
+      '/<print breadcrumb=[\"\']?title[\"\']?>/'
+    ],[
+      'Profile'
+    ],$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.'profile","name":"Profile"}},';
+    $breaditems.=$breadit;
+  }
+  if(isset($args[0])&&$args[0]!=''){
+    $jsoni++;
+		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
+	    $breadit=preg_replace([
+	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
+	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
+	    ],[
+	      URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])),
+	      htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
+	    ],$breaditem);
+		}else{
+			$breadit=preg_replace([
+				'/<print breadcrumb=[\"\']?title[\"\']?>/'
+			],[
+				htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
+			],$breadcurrent);
+		}
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $breaditems.=$breadit;
+  }
+  if(isset($args[2])&&$args[2]!=''){
+    $jsoni++;
+		if($r['title']!=''||$args[2]!=''){
+    	$breadit=preg_replace([
+      	'/<print breadcrumb=[\"\']?url[\"\']?>/',
+      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
+    	],[
+      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])),
+      	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
+    	],$breaditem);
+		}else{
+			$breadit=preg_replace([
+      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
+    	],[
+      	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
+    	],$breadcurrent);
+		}
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name": "'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $breaditems.=$breadit;
+  }
+  if(isset($args[3])&&$args[3]!=''){
+    $jsoni++;
+		if($r['title']!=''||$args[3]!=''){
+    	$breadit=preg_replace([
+      	'/<print breadcrumb=[\"\']?url[\"\']?>/',
+      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
+    	],[
+      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])),
+      	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
+    	],$breaditem);
+		}else{
+			$breadit=preg_replace([
+      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
+    	],[
+      	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
+    	],$breadcurrent);
+		}
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $breaditems.=$breadit;
+  }
+  if(isset($args[4])&&$args[4]!=''){
+    $jsoni++;
+		if($r['title']!=''||$args[4]!=''){
+    	$breadit=preg_replace([
+      	'/<print breadcrumb=[\"\']?url[\"\']?>/',
+      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
+    	],[
+      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])),
+      	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
+    	],$breaditem);
+		}else{
+			$breadit=preg_replace([
+      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
+    	],[
+      	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
+    	],$breadcurrent);
+		}
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $breaditems.=$breadit;
+  }
+  if($r['title']!=''){
+    $jsoni++;
+    $breadit=preg_replace([
+      '/<print breadcrumb=[\"\']?title[\"\']?>/'
+    ],[
+      htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')
+    ],$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name": "'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}"}},}';
+    $breaditems.=$breadit;
+  }
+  $html=preg_replace([
+    '/<[\/]?breadcrumb>/',
+    '/<json-ld-breadcrumb>/',
+    '~<breaditems>.*?<\/breaditems>~is',
+    '~<breadcurrent>.*?<\/breadcurrent>~is'
+  ],[
+    '',
+    $jsonld.']}</script>',
+    $breaditems,
+    ''
+  ],$html);
+}
 if($args[0]!=''){
-  $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE LOWER(name)=LOWER(:name)");
-  $s->execute([':name'=>str_replace('-',' ',$args[0])]);
+  $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE LOWER(`name`)=LOWER(:name)");
+  $s->execute([
+    ':name'=>str_replace('-',' ',$args[0])
+  ]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($r['bio_options'][0]==1){
     if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
@@ -59,10 +199,10 @@ if($args[0]!=''){
       URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
       htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
       THEME,
-      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8').'/',
+      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',urlencode($r['name']))),ENT_QUOTES,'UTF-8').'/',
       htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['avatar'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',$r['name'])),ENT_QUOTES,'UTF-8').'/',
+      htmlspecialchars(URL.'profile/'.strtolower(str_replace(' ','-',urlencode($r['name']))),ENT_QUOTES,'UTF-8').'/',
       htmlspecialchars($r['caption'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['notes'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
@@ -84,8 +224,10 @@ if($args[0]!=''){
     	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
     	$item=$matches[1];
     	$items='';
-    	$sl=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=:uid ORDER BY icon ASC");
-      $sl->execute([':uid'=>$r['id']]);
+    	$sl=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=:uid ORDER BY `icon` ASC");
+      $sl->execute([
+        ':uid'=>$r['id']
+      ]);
     	if($sl->rowCount()>0){
     		while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
     			$build=$item;
@@ -111,8 +253,10 @@ if($args[0]!=''){
         preg_match('/<item>([\w\W]*?)<\/item>/',$career,$matches);
         $item=$matches[1];
         $items='';
-        $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='career' AND cid=:cid ORDER BY tis ASC");
-        $ss->execute([':cid'=>$r['id']]);
+        $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='career' AND `cid`=:cid ORDER BY `tis` ASC");
+        $ss->execute([
+          ':cid'=>$r['id']
+        ]);
         if($ss->rowCount()>0){
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
             $build=$item;
@@ -149,8 +293,10 @@ if($args[0]!=''){
         preg_match('/<item>([\w\W]*?)<\/item>/',$education,$matches);
         $item=$matches[1];
         $items='';
-        $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='education' AND cid=:cid ORDER BY tis ASC");
-        $ss->execute([':cid'=>$r['id']]);
+        $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='education' AND `cid`=:cid ORDER BY `tis` ASC");
+        $ss->execute([
+          ':cid'=>$r['id']
+        ]);
         if($ss->rowCount()>0){
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
             $build=$item;
@@ -212,8 +358,10 @@ if($args[0]!=''){
       preg_match('/<item>([\w\W]*?)<\/item>/',$profilecontent,$matches);
       $item=$matches[1];
       $items='';
-      $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType='article' AND uid=:uid AND status='published' ORDER BY ti DESC LIMIT 5");
-      $ss->execute([':uid'=>$r['id']]);
+      $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='article' AND `uid`=:uid AND `status`='published' ORDER BY `ti` DESC LIMIT 5");
+      $ss->execute([
+        ':uid'=>$r['id']
+      ]);
       if($ss->rowCount()>0){
         while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
           if($rs['fileURL']!=''&&$rs['file']=='')
@@ -320,7 +468,7 @@ if($args[0]!=''){
     THEME,
     URL.'profile/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
   ],$html);
-  $s=$db->prepare("SELECT * FROM login WHERE bio_options LIKE '1%' ORDER BY name ASC");
+  $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `bio_options` LIKE '1%' ORDER BY `name` ASC");
   $s->execute();
   if($s->rowCount()>0){
     if(stristr($html,'<items')){

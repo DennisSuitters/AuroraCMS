@@ -2,11 +2,11 @@
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/), [Bootstrap](http://getbootstrap.com/), and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
 #### Version
-We are currently at v0.0.19
+We are currently at v0.0.20
 
 ### FAQ
 - Why no Plugins?
-  - Anybody who's worked on or developed any kind of Content Mangement System in any Programming Language knows that Plugins are a potential security problem. Plugins are something that because third parties can build them, end up being out of the control of the developer, especially if the Plugin Maker disregards the conventions set by the project.
+  - Anybody who's worked on or developed any kind of Content Management System in any Programming Language knows that Plugins are a potential security problem. Plugins are something that because third parties can build them, end up being out of the control of the developer, especially if the Plugin Maker disregards the conventions set by the project.
 - Update Cycle.
   - As at the moment there is only one person working on the project, updates are as they get time to do them.
 
@@ -15,16 +15,19 @@ We are currently at v0.0.19
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
 - Custom Pages.
-- Articles
-- Portfolio
-- Events
-- News
-- Testimonials
-- Inventory
-- Services
-- Gallery
-- Client Proofs
-- Messages
+- Articles.
+- Portfolio.
+- Events.
+- News.
+- Testimonials.
+  - Approval before before public display.
+- Inventory.
+  - Quick View Option for Inventory.
+  - Product Reviews and Approval before public display.
+- Services.
+- Gallery.
+- Client Proofs.
+- Messages.
 - Newsletters.
 - Bookings.
   - Convert booking to invoice.
@@ -40,9 +43,10 @@ We are currently at v0.0.19
   - Australia Post API Integration for Calculating Postage Costs.
   - Add deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
   - Rewards with percentage or value off, date period available, quantity usage.
-  - Discount Range Calculation depending on Account Spenditure.
+  - Discount Range Calculation depending on Account Expenditure.
 - Media.
   - Upload and manage various types of files for addition into content using elFinder.
+  - Auto resizing, makes thumbnails and Large, Medium and Small versions of images for use with srcset.
 - Featured Content.
   - Can use Content Items as Featured Content, or Images and HTML Templates uploaded into the `media/carousel/` folder. Which then will get sorted, and number of items displayed depending on the settings attributes in the `featured.html` template file.
 - Accounts.
@@ -54,7 +58,7 @@ We are currently at v0.0.19
 - Client Proofs and Commenting.
 - Easy Theme Selector.
   - Themes are built in such a way that changes in Administration are carried over to other themes. However, this will also depend on the features built into the theme selected.
-- Front End Theme Engine using HTML Style Markup, the use of any CSS or Javascript Framework.
+- Front End Theme Engine using HTML Style Markup, the use of any CSS or JavaScript Framework.
 - Administration uses jQuery, Modified Bootstrap, iCONS, and other jQuery Addons.
 - Activity Fingerprint Analysis Logs of Previous Content Changes with Undo, and who made the changes. Examine Content Inputs with Draggable Popover with Undoing.
 - Suggestions Editor to allow Administrators and Content Editor to make Editing Suggestions with Reasons, and Click Adding of Suggestions.
@@ -70,8 +74,9 @@ We are currently at v0.0.19
   - Blacklist IP's that try to access WordPress based files or attempt WordPress.
   - Developer "Lock Down", this stops accounts lower than the developer from taking the website out of "maintenance" or "Coming Soon" modes.
 - Page and Visitor Tracking for Analytics.
+  - Records visit counts per IP, stores IP and Browser Information, with option of clearing data.
 - Progressive Web Application (PWA) Service Worker for Offline Pages.
-- GDPR Privacy Notice Compliancy.
+- GDPR Privacy Notice Compliance.
   - For those providing Services and or Products to Countries that require Privacy Cookie Consent.
 - Website Voice service. Ability to add a text to speech reader for visually impaired visitors.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
@@ -91,6 +96,8 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - PHP > 7.0 - Must have PDO, and Password Compat support. If you have tried AuroraCMS with a higher version, please report your experiences.
 - Works with PHP 7+. Please make sure PHP Libraries are installed before reporting Issues.
 - mod_rewrite or rewrite.
+- mbstring.
+- xml functions.
 - GD-Image & Imagemagick- AuroraCMS will work without them, but things like Order PDF Viewing, Thumbnails, and image resizing won't work.
 - mail services - Are needed for mail notification sending, Orders Sending and for the Newsletters.
 

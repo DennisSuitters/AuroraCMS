@@ -7,23 +7,26 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.11 Fix formatting of password reset email layouts.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
 if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
   $eml=filter_input(INPUT_POST,'rst',FILTER_SANITIZE_STRING);
-  $s=$db->prepare("SELECT id,name,email FROM `".$prefix."login` WHERE email=:email LIMIT 1");
-  $s->execute([':email'=>$eml]);
+  $s=$db->prepare("SELECT `id`,`name`,`email` FROM `".$prefix."login` WHERE `email`=:email LIMIT 1");
+  $s->execute([
+    ':email'=>$eml
+  ]);
   $c=$s->fetch(PDO::FETCH_ASSOC);
   if($s->rowCount()>0){
     $chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&";
     $password=substr(str_shuffle($chars),0,8);
     $hash=password_hash($password,PASSWORD_DEFAULT);
-    $us=$db->prepare("UPDATE `".$prefix."login` SET password=:password WHERE id=:id");
+    $us=$db->prepare("UPDATE `".$prefix."login` SET `password`=:password WHERE `id`=:id");
     $us->execute([
       ':password'=>$hash,
       ':id'=>$c['id']

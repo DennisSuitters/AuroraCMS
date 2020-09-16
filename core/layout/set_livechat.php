@@ -62,19 +62,19 @@
           </div>
           <label for="options14" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Facebook Messenger</label>
         </div>
-<?php if($config['messengerFBCode']==''){?>
-        <div class="form-group row">
-          <div class="alert alert-info">
-            To find your Page ID and fully enable Messenger:<br>
-            1. From News Feed, click Pages in the left side menu.<br>
-            2. Click your Page name to go to your Page.<br>
-            3. Click About in the left column. If you don't see About in the left column, click See More.<br>
-            4. Scroll down to find your Page ID below More Info, copy the ID, then place in the Page ID textbox below, and save.<br>
-            5. Before Messenger will work, you must "Whitelist" your Websites domain name. In the your pages "Settings", go to the "Advanced Messaging" Tab.<br>
-            6. Scroll down to find "White-listed Domains", and enter your domain name including the https:// protocol.
+        <?php if($config['messengerFBCode']==''){?>
+          <div class="form-group row">
+            <div class="alert alert-info">
+              To find your Page ID and fully enable Messenger:<br>
+              1. From News Feed, click Pages in the left side menu.<br>
+              2. Click your Page name to go to your Page.<br>
+              3. Click About in the left column. If you don't see About in the left column, click See More.<br>
+              4. Scroll down to find your Page ID below More Info, copy the ID, then place in the Page ID textbox below, and save.<br>
+              5. Before Messenger will work, you must "Whitelist" your Websites domain name. In the your pages "Settings", go to the "Advanced Messaging" Tab.<br>
+              6. Scroll down to find "White-listed Domains", and enter your domain name including the https:// protocol.
+            </div>
           </div>
-        </div>
-<?php }?>
+        <?php }?>
         <div class="form-group">
           <label for="messengerFBCode">Page ID</label>
           <div class="input-group">

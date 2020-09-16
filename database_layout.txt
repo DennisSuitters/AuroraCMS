@@ -58,7 +58,7 @@ config
     2   Image Resizing
     3   Account Sign Ups
     4   Enable Tooltips
-    5
+    5   Enable Quick for Products
     6
     7   Display Payment Options Template Block
     8   Display GDPR Banner

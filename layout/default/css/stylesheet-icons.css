@@ -1,9 +1,10 @@
 /* stylesheet v0.9 - iCons - https://github.com/DiemenDesign/stylesheet */
 
 .i {
-  display: inline-block;
-  width: 1em;
-  height: 1em;
+  display: table-cell;
+  width: 14px;
+  height: 14px;
+  line-height: 28px;
   vertical-align: -5%;
   text-rendering: auto;
   fill: currentColor;
@@ -12,7 +13,7 @@
 
 .i svg {
   width: 14px !important;
-  height:14px !important; }
+  height: 14px !important; }
 
 .i-lg svg {
   width: 28px !important;
@@ -38,11 +39,52 @@
   width: 1.28571429em;
   text-align: center; }
 
-.i-white {
+.i-color-black {
+  fill: #000; }
+
+.i-color-white {
   fill: #fff; }
 
-.i-red {
-  fill: #f00; }
+.i-color-danger {
+  fill: var(--danger-color); }
+
+.i-color-dark {
+  fill: var(--dark-color); }
+
+.i-color-default {
+  fill: var(--default-color); }
+
+.i-color-info {
+  fill: var(--info-color); }
+
+.i-color-light {
+  fill: var(--light-color); }
+
+.i-color-primary {
+  fill: var(--primary-color); }
+
+.i-color-secondary {
+  fill: var(--secondary-color); }
+
+.i-color-success {
+  fill: var(--success-color); }
+
+.i-color-warning {
+  fill: var(--warning-color); }
+
+.i-spin {
+  animation-name: i-spin;
+  animation-duration: 1000ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear; }
+
+@keyframes i-spin {
+  from {
+    transform:rotate(0); }
+
+  to {
+    transform:rotate(360deg); }
+}
 
 .i-social {
   position: relative;

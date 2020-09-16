@@ -7,25 +7,29 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.13
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.13 Fix wrond hidden class on items.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if($user['options'][4]==1){
   $uid=isset($_SESSION['uid'])?$_SESSION['uid']:$uid=0;
   $error=0;
   $ti=time();
   $oid='';
-  if(isset($args[1]))$id=$args[1];
+  if(isset($args[1]))
+    $id=$args[1];
   if($args[0]=='duplicate'){
-    $sd=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
-    $sd->execute([':id'=>$id]);
+    $sd=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+    $sd->execute([
+      ':id'=>$id
+    ]);
     $rd=$sd->fetch(PDO::FETCH_ASSOC);
-    $s=$db->prepare("INSERT INTO `".$prefix."orders` (cid,uid,contentType,due_ti,notes,status,recurring,ti) VALUES (:cid,:uid,:contentType,:due_ti,:notes,:status,:recurring,:ti)");
+    $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`contentType`,`due_ti`,`notes`,`status`,`recurring`,`ti`) VALUES (:cid,:uid,:contentType,:due_ti,:notes,:status,:recurring,:ti)");
     $s->execute([
       ':cid'=>$rd['cid'],
       ':uid'=>$uid,
@@ -40,12 +44,14 @@ if($user['options'][4]==1){
     if($rd['qid']!=''){
       $rd['qid']='Q'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
       $qid_ti=$ti+$config['orderPayti'];
-    }else$qid_ti=0;
+    }else
+      $qid_ti=0;
     if($rd['iid']!=''){
       $rd['iid']='I'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
       $iid_ti=$ti+$config['orderPayti'];
-    }else$iid_ti=0;
-    $s=$db->prepare("UPDATE `".$prefix."orders` SET qid=:qid,qid_ti=:qid_ti,iid=:iid,iid_ti=:iid_ti WHERE id=:id");
+    }else
+      $iid_ti=0;
+    $s=$db->prepare("UPDATE `".$prefix."orders` SET `qid`=:qid,`qid_ti`=:qid_ti,`iid`=:iid,`iid_ti`=:iid_ti WHERE `id`=:id");
     $s->execute([
       ':qid'=>$rd['qid'],
       ':qid_ti'=>$qid_ti,
@@ -53,10 +59,12 @@ if($user['options'][4]==1){
       ':iid_ti'=>$iid_ti,
       ':id'=>$iid
     ]);
-    $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid");
-    $s->execute(array(':oid'=>$id));
+    $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid");
+    $s->execute([
+      ':oid'=>$id
+    ]);
     while($r=$s->fetch(PDO::FETCH_ASSOC)){
-      $so=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,title,quantity,cost,status,ti) VALUES (:oid,:iid,:title,:quantity,:cost,:status,:ti)");
+      $so=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,:quantity,:cost,:status,:ti)");
       $so->execute([
         ':oid'=>$iid,
         ':iid'=>$r['iid'],
@@ -68,7 +76,7 @@ if($user['options'][4]==1){
       ]);
     }
     $aid='A'.date("ymd",$ti).sprintf("%06d",$id,6);
-    $s=$db->prepare("UPDATE `".$prefix."orders` SET aid=:aid,aid_ti=:aid_ti WHERE id=:id");
+    $s=$db->prepare("UPDATE `".$prefix."orders` SET `aid`=:aid,`aid_ti`=:aid_ti WHERE `id`=:id");
     $s->execute([
       ':aid'=>$aid,
       ':aid_ti'=>$ti,
@@ -77,11 +85,11 @@ if($user['options'][4]==1){
     $args[0]='all';
   }
   if($args[0]=='addquote'||$args[0]=='addinvoice'){
-    $r=$db->query("SELECT MAX(id) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
+    $r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
     $dti=$ti+$config['orderPayti'];
     if($args[0]=='addquote'){
       $oid='Q'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-      $q=$db->prepare("INSERT INTO `".$prefix."orders` (uid,qid,qid_ti,due_ti,status) VALUES (:uid,:qid,:qid_ti,:due_ti,'pending')");
+      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`qid`,`qid_ti`,`due_ti`,`status`) VALUES (:uid,:qid,:qid_ti,:due_ti,'pending')");
       $q->execute([
         ':uid'=>$uid,
         ':qid'=>$oid,
@@ -91,7 +99,7 @@ if($user['options'][4]==1){
     }
     if($args[0]=='addinvoice'){
       $oid='I'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-      $s=$db->prepare("INSERT INTO `".$prefix."orders` (uid,iid,iid_ti,due_ti,status) VALUES (:uid,:iid,:iid_ti,:due_ti,'pending')");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:iid,:iid_ti,:due_ti,'pending')");
       $s->execute([
         ':uid'=>$uid,
         ':iid'=>$oid,
@@ -102,13 +110,15 @@ if($user['options'][4]==1){
     $id=$db->lastInsertId();
     $e=$db->errorInfo();
     $args[0]='edit';?>
-<script>history.replaceState('','','<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$id;?>');</script>
-<?php }
+    <script>history.replaceState('','','<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$id;?>');</script>
+  <?php }
   if($args[0]=='to_invoice'){
-    $q=$db->prepare("SELECT qid FROM `".$prefix."orders` WHERE id=:id");
-    $q->execute(array(':id'=>$id));
+    $q=$db->prepare("SELECT `qid` FROM `".$prefix."orders` WHERE `id`=:id");
+    $q->execute([
+      ':id'=>$id
+    ]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
-    $q=$db->prepare("UPDATE `".$prefix."orders` SET iid=:iid,iid_ti=:iid_ti,qid='',qid_ti='0' WHERE id=:id");
+    $q=$db->prepare("UPDATE `".$prefix."orders` SET `iid`=:iid,`iid_ti`=:iid_ti,`qid`='',`qid_ti`='0' WHERE `id`=:id");
     $q->execute([
       ':iid'=>'I'.date("ymd",$ti).sprintf("%06d",$id,6),
       ':iid_ti'=>$ti,
@@ -117,129 +127,137 @@ if($user['options'][4]==1){
     if(file_exists('..'.DS.'media'.DS.'order'.DS.$r['qid'].'.pdf'))unlink('..'.DS.'media'.DS.'orders'.DS.$r['qid'].'.pdf');
     $args[0]='invoices';
   }
-  if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_orders.php';
-  elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_orders.php';
+  if($args[0]=='settings')
+    include'core'.DS.'layout'.DS.'set_orders.php';
+  elseif($args[0]=='edit')
+    include'core'.DS.'layout'.DS.'edit_orders.php';
   else{
     if($args[0]=='all'||$args[0]==''){
       $sort="all";
       if($user['rank']==300){
-        $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE aid='' AND cid=:cid ORDER BY ti DESC");
-        $s->execute([':cid'=>$user['id']]);
+        $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `aid`='' AND `cid`=:cid ORDER BY `ti` DESC");
+        $s->execute([
+          ':cid'=>$user['id']
+        ]);
       }else{
-        $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE aid='' ORDER BY ti DESC");
+        $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `aid`='' ORDER BY `ti` DESC");
         $s->execute();
       }
     }
     if($args[0]=='quotes'){
-      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE qid!='' AND iid='' AND aid='' ORDER BY ti DESC");
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`!='' AND `iid`='' AND `aid`='' ORDER BY `ti` DESC");
       $s->execute();
     }
     if($args[0]=='invoices'){
-      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE qid='' AND iid!='' ORDER BY ti DESC");
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`='' AND `iid`!='' ORDER BY `ti` DESC");
       $s->execute();
     }
     if($args[0]=='archived'){
-      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE aid!='' ORDER BY ti DESC");
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `aid`!='' ORDER BY `ti` DESC");
       $s->execute();
     }
     if($args[0]=='pending'){
-      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE status='pending' ORDER BY ti DESC");
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `status`='pending' ORDER BY `ti` DESC");
       $s->execute();
     }
     if($args[0]=='recurring'){
-      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE recurring='1' ORDER BY ti DESC");
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `recurring`='1' ORDER BY `ti` DESC");
       $s->execute();
     }?>
-<main id="content" class="main">
-  <ol class="breadcrumb shadow">
-    <li class="breadcrumb-item"><?php if(isset($args[0])&&$args[0]!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>';else echo'Orders';?></li>
-    <li class="breadcrumb-item active"><?php echo$args[0]!=''?ucfirst($args[0]):'All';?></li>
-    <li class="breadcrumb-menu">
-      <div class="btn-group">
-<?php if($args[0]!=''){
-        if($user['options'][4]==1){
-          if($args[0]=='quotes')echo'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/orders/addquote" data-tooltip="tooltip" data-placement="left" data-title="Add Quote" role="button" aria-label="Add">'.svg2('add').'</a>';
-          if($args[0]=='invoices')echo'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" data-tooltip="tooltip" data-placement="left" data-title="Add Invoice" role="button" aria-label="Add">'.svg2('add').'</a>';
-        }
-      }?>
-      </div>
-    </li>
-  </ol>
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
-        <div id="notifications" role="alert"></div>
-        <div class="table-responsive">
-          <table id="stupidtable" class="table table-condensed table-hover">
-            <thead>
-              <tr>
-                <th>Order</th>
-                <th>Client</th>
-                <th>Date</th>
-                <th>Status</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-<?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
-  if($r['due_ti']<$ti){
-    $us=$db->prepare("UPDATE `".$prefix."orders` SET status='overdue' WHERE id=:id");
-    $us->execute([':id'=>$r['id']]);
-    $r['status']='overdue';
-  }
-  $cs=$db->prepare("SELECT username,name,email,business FROM `".$prefix."login` WHERE id=:id");
-  $cs->execute([':id'=>$r['cid']]);
-  $c=$cs->fetch(PDO::FETCH_ASSOC);?>
-              <tr id="l_<?php echo$r['id'];?>">
-                <td>
-                  <a href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?php echo$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
-                </td>
-                <td>
-                  <?php echo$c['username'].($c['name']!=''?' ['.$c['name'].']':'').':'.($c['name']!=''&&$c['business']!=''?'<br>':'').($c['business']!=''?$c['business']:'');?>
-                </td>
-                <td>
-                  <?php echo' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
-                  <small>Due: <?php echo date($config['dateFormat'],$r['due_ti']);?></small>
-                </td>
-                <td>
-                  <span class="badge badge-<?php echo($ti>$r['due_ti'])||($r['status']=='overdue')?'danger"':'info';?>"><?php echo ucfirst($r['status']);?></span>
-                </td>
-                <td id="controls_<?php echo$r['id'];?>">
-                  <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                    <div class="btn-group radius-right" role="group" aria-label="Item Controls">
-<?php if($user['options'][0]==1){
-                      echo$r['qid']!=''&&$r['aid']==''?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" data-tooltip="tooltip" data-title="Convert to Invoice..." aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
-                      echo$r['aid']==''?'<button class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\')" data-tooltip="tooltip" data-title="Archive" aria-label="Archive">'.svg2('archive').'</button>':'';
-}?>
-                      <button class="btn btn-secondary" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
-                      <?php echo$c['email']!=''?'<button class="btn btn-secondary" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');" data-tooltip="tooltip" data-title="Email Order" aria-label="Email Order">'.svg2('email-send').'</button>':'';
-                      echo$user['options'][0]==1?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" data-tooltip="tooltip" data-title="Duplicate" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
-                      <a class="btn btn-secondary<?php echo$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></a>
-<?php if($user['options'][0]==1){?>
-                      <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
-                      <button class="btn btn-secondary rounded-right trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                      <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
-<?php }?>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-<?php }?>
-            </tbody>
-          </table>
+    <main id="content" class="main">
+      <ol class="breadcrumb shadow">
+        <li class="breadcrumb-item"><?php if(isset($args[0])&&$args[0]!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>';else echo'Orders';?></li>
+        <li class="breadcrumb-item active"><?php echo$args[0]!=''?ucfirst($args[0]):'All';?></li>
+        <li class="breadcrumb-menu">
+          <div class="btn-group">
+            <?php if($args[0]!=''){
+              if($user['options'][4]==1){
+                if($args[0]=='quotes')echo'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/orders/addquote" data-tooltip="tooltip" data-placement="left" data-title="Add Quote" role="button" aria-label="Add">'.svg2('add').'</a>';
+                if($args[0]=='invoices')echo'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" data-tooltip="tooltip" data-placement="left" data-title="Add Invoice" role="button" aria-label="Add">'.svg2('add').'</a>';
+              }
+            }?>
+          </div>
+        </li>
+      </ol>
+      <div class="container-fluid">
+        <div class="card">
+          <div class="card-body">
+            <div id="notifications" role="alert"></div>
+            <div class="table-responsive">
+              <table id="stupidtable" class="table table-condensed table-hover">
+                <thead>
+                  <tr>
+                    <th>Order</th>
+                    <th>Client</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
+                    if($r['due_ti']<$ti){
+                      $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id");
+                      $us->execute([
+                        ':id'=>$r['id']
+                      ]);
+                      $r['status']='overdue';
+                    }
+                    $cs=$db->prepare("SELECT `username`,`name`,`email`,`business` FROM `".$prefix."login` WHERE `id`=:id");
+                    $cs->execute([
+                      ':id'=>$r['cid']
+                    ]);
+                    $c=$cs->fetch(PDO::FETCH_ASSOC);?>
+                    <tr id="l_<?php echo$r['id'];?>">
+                      <td>
+                        <a href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?php echo$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
+                      </td>
+                      <td>
+                        <?php echo$c['username'].($c['name']!=''?' ['.$c['name'].']':'').':'.($c['name']!=''&&$c['business']!=''?'<br>':'').($c['business']!=''?$c['business']:'');?>
+                      </td>
+                      <td>
+                        <?php echo' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
+                        <small>Due: <?php echo date($config['dateFormat'],$r['due_ti']);?></small>
+                      </td>
+                      <td>
+                        <span class="badge badge-<?php echo($ti>$r['due_ti'])||($r['status']=='overdue')?'danger"':'info';?>"><?php echo ucfirst($r['status']);?></span>
+                      </td>
+                      <td id="controls_<?php echo$r['id'];?>">
+                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                          <div class="btn-group radius-right" role="group" aria-label="Item Controls">
+                            <?php if($user['options'][0]==1){
+                              echo$r['qid']!=''&&$r['aid']==''?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" data-tooltip="tooltip" data-title="Convert to Invoice..." aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
+                              echo$r['aid']==''?'<button class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\')" data-tooltip="tooltip" data-title="Archive" aria-label="Archive">'.svg2('archive').'</button>':'';
+                            }?>
+                            <button class="btn btn-secondary" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
+                            <?php echo$c['email']!=''?'<button class="btn btn-secondary" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');" data-tooltip="tooltip" data-title="Email Order" aria-label="Email Order">'.svg2('email-send').'</button>':'';
+                            echo$user['options'][0]==1?'<a class="btn btn-secondary'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" data-tooltip="tooltip" data-title="Duplicate" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
+                            <a class="btn btn-secondary<?php echo$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></a>
+                            <?php if($user['options'][0]==1){?>
+                              <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
+                              <button class="btn btn-secondary rounded-right trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                              <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                            <?php }?>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php }?>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-</main>
+    </main>
 <?php }
-}else{?>
-<main id="content" class="main">
-  <ol class="breadcrumb shadow">
-    <li class="breadcrumb-item"><strong>Orders</strong></li>
-  </ol>
-  <div class="container-fluid">
-    <div class="alert alert-info" role="alert">You don't have permissions to View this Area!</div>
-  </div>
-</main>
+  }else{?>
+    <main id="content" class="main">
+      <ol class="breadcrumb shadow">
+        <li class="breadcrumb-item"><strong>Orders</strong></li>
+      </ol>
+      <div class="container-fluid">
+        <div class="alert alert-info" role="alert">You don't have permissions to View this Area!</div>
+      </div>
+    </main>
 <?php }

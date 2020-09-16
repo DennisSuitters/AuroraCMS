@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
@@ -15,6 +15,7 @@
  * @changes    v0.0.10 Fix typo's causing errors.
  * @changes    v0.0.10 Fix missing SQL Field when storing bad actors.
  * @changes    v0.0.15 Add Ratings.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -33,10 +34,12 @@ if($act=='add_test'){
     if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
       $blacklisted=$theme['settings']['blacklist'];
       $spam=TRUE;
-      $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-      $sc->execute([':ip'=>$ip]);
+      $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+      $sc->execute([
+        ':ip'=>$ip
+      ]);
       if($sc->rowCount()<1){
-        $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
         $s->execute([
           ':ip'=>$ip,
           ':oti'=>$ti,
@@ -66,10 +69,12 @@ if($act=='add_test'){
         $spam=TRUE;
       }
       if($config['spamfilter'][1]==1&&$spam==TRUE){
-        $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-  			$sc->execute([':ip'=>$ip]);
+        $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+  			$sc->execute([
+          ':ip'=>$ip
+        ]);
   			if($sc->rowCount()<1){
-  	      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+  	      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
   	      $s->execute([
 	          ':ip'=>$ip,
 	          ':oti'=>$ti,
@@ -81,7 +86,7 @@ if($act=='add_test'){
     }
     if($spam==FALSE){
       if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-        $q=$db->prepare("INSERT INTO `".$prefix."content` (contentType,ip,title,email,name,business,notes,status,review,ti) VALUES ('testimonials',:ip,:title,:email,:name,:business,:notes,'unapproved',:review,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`contentType`,`ip`,`title`,`email`,`name`,`business`,`notes`,`status`,`review`,`ti`) VALUES ('testimonials',:ip,:title,:email,:name,:business,:notes,'unapproved',:review,:ti)");
         $q->execute([
           ':ip'=>$ip,
           ':title'=>$name.' - '.$business,

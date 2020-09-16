@@ -1,27 +1,5 @@
 /* stylesheet v0.9 - Forms - https://github.com/DiemenDesign/stylesheet */
 
-:root {
-  --form-border-color: #ced4da;
-  --form-border-color-hover: #007bff;
-  --form-color: #495057;
-  --form-placeholder-color: #999;
-  --form-focus-color: #495057;
-  --form-focus-border-color: #8bbafe;
-  --form-focus-shadow: rgba(13, 110, 253, .25);
-  --form-required-color: #dc3545;
-  --form-required-border-color: #dc3545;
-  --form-focus-required-shadow: rgba(253, 110, 13, .25);
-  --form-valid-color: #28a745;
-  --form-valid-border-color: #28a745;
-  --form-valid-shadow: rgba(40, 167, 69, .25);
-};
-
-@media (prefers-color-scheme: dark) {
-  :root {
-
-  };
-}
-
 button,
 .btn,
 [role="button"],
@@ -39,7 +17,7 @@ input:disabled {
 
 [role="button"][disabled]:hover,
 button[disabled]:hover,
-.btn[disabled]:hover, {
+.btn[disabled]:hover {
   -webkit-filter: none;
           filter: none; }
 
@@ -47,8 +25,9 @@ button[disabled]:hover,
 button,
 .btn {
   -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   display: inline-block;
   vertical-align: middle;
   transition: color .15s ease-in-out,
@@ -126,7 +105,7 @@ textarea {
   border: var(--border-width) var(--border-style) var(--form-border-color);
   border-radius: var(--border-radius);
   background-clip: padding-box;
-  background-color: transparent;
+  background-color: var(--form-background-color);
   padding: .375rem .75rem;
   width: 100%;
   color: var(--form-color);
@@ -147,7 +126,7 @@ textarea:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem var(--form-focus-shadow);
   border-color: var(--form-focus-border-color);
-  background-color: transparent;
+  background-color: var(--form-background-color-hover);
   color: var(--form-color); }
 
 input[readonly],
@@ -366,8 +345,8 @@ output {
 
 progress {
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   vertical-align: baseline;
   border: 1px solid var(--border-color);
   border-radius: var(--border-radius);
@@ -432,7 +411,9 @@ input[type="date"],
 input[type="time"],
 input[type="datetime-local"],
 input[type="month"] {
-  -webkit-appearance: textfield; }
+  -webkit-appearance: textfield;
+     -moz-appearance: textfield;
+          appearance: textfield; }
 
 input[type="color"] {
   min-height: calc(1.5em + .75rem + 2px); }
@@ -440,13 +421,14 @@ input[type="color"] {
 input[type="checkbox"],
 input[type="radio"] {
   -webkit-appearance: auto;
-  -moz-appearance: auto;
-  appearance: auto;
+     -moz-appearance: auto;
+          appearance: auto;
   -webkit-print-color-adjust: exact;
   color-adjust: exact;
   -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   display: inline-block;
   flex-shrink: 0;
   vertical-align: middle;
@@ -514,8 +496,8 @@ input[type="checkbox"]:indeterminate {
 input[type="checkbox"]:disabled,
 input[type="radio"]:disabled {
   -webkit-filter: none;
+          filter: none;
   opacity: .5;
-  filter: none;
   pointer-events: none; }
 
 input[type="checkbox"][disabled],
@@ -526,9 +508,10 @@ input[type="radio"]:disabled ~ label {
 
 input[type="range"] {
   -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
+     -moz-appearance: none;
+          appearance: none;
   box-shadow: none;
+  cursor: ew-resize;
   border: 0;
   background-color: transparent;
   padding: 0;
@@ -538,17 +521,21 @@ input[type="range"] {
 input[type="range"]:focus {
   outline: none;
   box-shadow: none;
+  cursor: ew-resize;
   border: 0; }
 
 input[type="range"]:focus::-webkit-slider-thumb {
+  cursor: ew-resize;
   box-shadow: 0 0 0 1px #fff,
               0 0 0 .2rem rgba(13, 110, 253, .25); }
 
 input[type="range"]:focus::-moz-range-thumb {
+  cursor: ew-resize;
   box-shadow: 0 0 0 1px #fff,
               0 0 0 .2rem rgba(13, 110, 253, .25); }
 
 input[type="range"]:focus::-ms-thumb {
+  cursor: ew-resize;
   box-shadow: 0 0 0 1px #fff,
               0 0 0 .2rem rgba(13, 110, 253, .25); }
 
@@ -556,8 +543,9 @@ input[type="range"]::-moz-focus-outer {
   border: 0; }
 
 input[type="range"]::-webkit-slider-thumb {
+  cursor: ew-resize;
   -webkit-appearance: none;
-  appearance: none;
+          appearance: none;
   -webkit-transition: background-color .15s ease-in-out,
                       border-color .15s ease-in-out,
                       box-shadow .15s ease-in-out;
@@ -573,15 +561,17 @@ input[type="range"]::-webkit-slider-thumb {
 
 @media (prefers-reduced-motion: reduce) {
   input[type="range"]::-webkit-slider-thumb {
+    cursor: ew-resize;
     -webkit-transition: none;
-    transition: none; }
+            transition: none; }
 }
 
 input[type="range"]::-webkit-slider-thumb:active {
+  cursor: ew-resize;
   background-color: var(--button-background-color); }
 
 input[type="range"]::-webkit-slider-runnable-track {
-  cursor: pointer;
+  cursor: ew-resize;
   border-color: transparent;
   border-radius: var(--border-radius);
   background-color: var(--border-color);
@@ -590,8 +580,9 @@ input[type="range"]::-webkit-slider-runnable-track {
   color: transparent; }
 
 input[type="range"]::-moz-range-thumb {
+  cursor: ew-resize;
   -moz-appearance: none;
-  appearance: none;
+       appearance: none;
   -moz-transition: background-color .15s ease-in-out,
                    border-color .15s ease-in-out,
                    box-shadow .15s ease-in-out;
@@ -606,15 +597,17 @@ input[type="range"]::-moz-range-thumb {
 
 @media (prefers-reduced-motion: reduce) {
   input[type="range"]::-moz-range-thumb {
+    cursor: ew-resize;
     -moz-transition: none;
-    transition: none; }
+         transition: none; }
 }
 
 input[type="range"]::-moz-range-thumb:active {
+  cursor: ew-resize;
   background-color: var(--button-background-color); }
 
 input[type="range"]::-moz-range-track {
-  cursor: pointer;
+  cursor: ew-resize;
   border-color: transparent;
   border-radius: var(--border-radius);
   background-color: var(--border-color);
@@ -623,13 +616,14 @@ input[type="range"]::-moz-range-track {
   color: transparent; }
 
 input[type="range"]::-ms-thumb {
+  cursor: ew-resize;
   appearance: none;
   -ms-transition: background-color .15s ease-in-out,
                   border-color .15s ease-in-out,
                   box-shadow .15s ease-in-out;
-  transition: background-color .15s ease-in-out,
-              border-color .15s ease-in-out,
-              box-shadow .15s ease-in-out;
+      transition: background-color .15s ease-in-out,
+                  border-color .15s ease-in-out,
+                  box-shadow .15s ease-in-out;
   margin-top: 0;
   margin-right: .2rem;
   margin-left: .2rem;
@@ -641,15 +635,17 @@ input[type="range"]::-ms-thumb {
 
 @media (prefers-reduced-motion: reduce) {
   input[type="range"]::-ms-thumb {
+    cursor: ew-resize;
     -ms-transition: none;
-    transition: none; }
+        transition: none; }
 }
 
 input[type="range"]::-ms-thumb:active {
+  cursor: ew-resize;
   background-color: var(button-background-color-hover); }
 
 input[type="range"]::-ms-track {
-  cursor: pointer;
+  cursor: ew-resize;
   border-width: .5rem;
   border-color: transparent;
   background-color: transparent;
@@ -670,12 +666,15 @@ input[type="range"]:disabled {
   pointer-events: none; }
 
 input[type="range"]:disabled::-webkit-slider-thumb {
+  cursor: ew-resize;
   background-color: var(button-background-color); }
 
 input[type="range"]:disabled::-moz-range-thumb {
+  cursor: ew-resize;
   background-color: var(button-background-color); }
 
 input[type="range"]:disabled::-ms-thumb {
+  cursor: ew-resize;
   background-color: var(button-background-color); }
 
 input[type="file"] {
@@ -726,6 +725,8 @@ textarea {
 
 [type="search"] {
   -webkit-appearance: textfield;
+     -moz-appearance: textfield;
+          appearance: textfield;
   outline-offset: -2px;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0; }
@@ -735,13 +736,15 @@ textarea {
   border-bottom-left-radius: 0; }
 
 ::-webkit-search-decoration {
-  -webkit-appearance: none; }
+  -webkit-appearance: none;
+          appearance: none; }
 
 ::-webkit-color-swatch-wrapper {
   padding: 0; }
 
 ::-webkit-file-upload-button {
   -webkit-appearance: button;
+          appearance: button;
   font: inherit; }
 
 input:required,

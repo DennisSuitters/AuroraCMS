@@ -24,19 +24,19 @@ define('UNICODE','UTF-8');?>
     <input type="hidden" name="id" value="<?php echo$id;?>">
     <input type="hidden" name="t" value="<?php echo$t;?>">
     <input type="hidden" name="c" value="<?php echo$c;?>">
-<?php if($c!='notes'){?>
-    <div class="form-group">
-      <label for="suggestedit">Suggested Edit</label>
-      <div class="input-group">
-        <input id="suggestedit" class="form-control" name="da" value="" placeholder="Enter a Suggestion...">
+    <?php if($c!='notes'){?>
+      <div class="form-group">
+        <label for="suggestedit">Suggested Edit</label>
+        <div class="input-group">
+          <input id="suggestedit" class="form-control" name="da" value="" placeholder="Enter a Suggestion...">
+        </div>
       </div>
-    </div>
-<?php }else{?>
-    <div class="form-group">
-      <div class="alert alert-info" role="alert">Edit the content within the Editor before adding this suggestion, just don't save the content.</div>
-      <textarea id="suggestda" name="da" class="d-none"></textarea>
-    </div>
-<?php }?> 
+    <?php }else{?>
+      <div class="form-group">
+        <div class="alert alert-info" role="alert">Edit the content within the Editor before adding this suggestion, just don't save the content.</div>
+        <textarea id="suggestda" name="da" class="d-none"></textarea>
+      </div>
+    <?php }?>
     <div class="form-group">
       <label for="suggestreason">Reason</label>
       <div class="input-group">
@@ -49,9 +49,9 @@ define('UNICODE','UTF-8');?>
   </form>
 </div>
 <script>
-<?php if($c=='notes'){?>
-  $('#suggestda').html($('#notes').summernote('code'));
-<?php }?>
+  <?php if($c=='notes'){?>
+    $('#suggestda').html($('#notes').summernote('code'));
+  <?php }?>
   $("#suggestionsform").submit(function(){
     $.post($(this).attr("action"),$(this).serialize(),function(data){
       $("#suggestions_add").html(data);

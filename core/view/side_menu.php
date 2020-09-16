@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Display Items according to primary documents category.
@@ -20,6 +20,8 @@
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.16 Add parsing for Sort Field.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Add parsing for side menu shopping cart.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
@@ -103,9 +105,11 @@ if(file_exists(THEME.DS.'side_menu.html')){
 					$sideTemp=preg_replace('~<size>.*?<\/size>~is','',$sideTemp);
 			}
 			if(stristr($sideTemp,'<brand>')){
-				if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
-					$sb=$db->prepare("SELECT id,title,url,icon FROM `".$prefix."choices` WHERE contentType='brand' AND id=:id");
-					$sb->execute([':id'=>$r['brand']]);
+				if($r['brand']!=0){
+					$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
+					$sb->execute([
+						':id'=>$r['brand']
+					]);
 					$rb=$sb->fetch(PDO::FETCH_ASSOC);
 					$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
 					$sideTemp=preg_replace([
@@ -119,8 +123,10 @@ if(file_exists(THEME.DS.'side_menu.html')){
 					$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
 			}
 			if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
-				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE rid=:id ORDER BY title ASC");
-				$scq->execute([':id'=>$r['id']]);
+				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
+				$scq->execute([
+					':id'=>$r['id']
+				]);
 				if($scq->rowCount()>0){
 					$choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
 					while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
@@ -195,6 +201,39 @@ if(file_exists(THEME.DS.'side_menu.html')){
 				$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 		}
 	}
+		$cq=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
+		$cq->execute([
+			':si'=>SESSIONID
+		]);
+		if($cq->rowCount()>0){
+			$cartitem=$cartage='';
+			while($cr=$cq->fetch(PDO::FETCH_ASSOC)){
+				$cs=$db->prepare("SELECT * from `".$prefix."content` WHERE `id`=:id");
+				$cs->execute([
+					':id'=>$cr['iid']
+				]);
+				$ci=$cs->fetch(PDO::FETCH_ASSOC);
+				$cartitem=$theme['settings']['cartage_menu'];
+				if($ci['thumb']=='')$ci['thumb']=NOIMAGE;
+				$cartitem=preg_replace([
+					'/<print cartageitem=[\"\']?thumb[\"\']?>/',
+					'/<print cartageitem=[\"\']?title[\"\']?>/',
+					'/<print cartageitem=[\"\']?quantity[\"\']?>/'
+				],[
+					$ci['thumb'],
+					$ci['title'],
+					$cr['quantity']
+				],$cartitem);
+				$cartage.=$cartitem;
+			}
+			$sideTemp=preg_replace([
+				'/<cartageitems>/'
+			],[
+				$cartage
+			],$sideTemp);
+		}else
+			$sideTemp=preg_replace('/<cartagedisplay>/','d-none',$sideTemp);
+
 	preg_match('/<item>([\w\W]*?)<\/item>/',$sideTemp,$matches);
 	$outside=$matches[1];
 	$show='';
@@ -233,7 +272,7 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		}else
 			$contentType='';
 	}
-	$r=$db->query("SELECT * FROM `".$prefix."menu` WHERE id=17")->fetch(PDO::FETCH_ASSOC);
+	$r=$db->query("SELECT * FROM `".$prefix."menu` WHERE `id`=17")->fetch(PDO::FETCH_ASSOC);
 	if($r['active'][0]==1)
 		$sideTemp=preg_replace('/<[\/]?newsletters>/','',$sideTemp);
 	else
@@ -241,14 +280,16 @@ if(file_exists(THEME.DS.'side_menu.html')){
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 	$insides=$matches[1];
 	if(isset($sidecat)&&$sidecat!=''){
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND category_1 LIKE :cat AND internal=0 AND status='published' ORDER BY featured DESC, ti DESC $show");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published' ORDER BY `featured` DESC, `ti` DESC $show");
 		$s->execute([
 			':contentType'=>$contentType,
 			':cat'=>$sidecat
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE :contentType AND internal='0' AND status='published' ORDER BY featured DESC, ti DESC $show");
-		$s->execute([':contentType'=>$contentType]);
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' ORDER BY `featured` DESC, `ti` DESC $show");
+		$s->execute([
+			':contentType'=>$contentType
+		]);
 	}
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){

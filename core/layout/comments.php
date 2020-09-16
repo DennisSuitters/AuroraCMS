@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options
  * @changes    v0.0.4 Fix Tooltips
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.11 Add check for Nonexistent user emails.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -37,57 +38,56 @@
                     </tr>
                   </thead>
                   <tbody id="l_comments">
-<?php
-  $s=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE contentType='article' AND status='unapproved'");
-  $s->execute();
-  $scnt=$s->rowCount();
-  while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    $su=$db->prepare("SELECT id,username,name,rank FROM `".$prefix."login` WHERE id=:uid");
-    $su->execute([':uid'=>$r['uid']]);?>
-                    <tr id="l_<?php echo$r['id'];?>">
-                      <td class="">
-<?php if($su->rowCount()==1){
-  $ru=$su->fetch(PDO::FETCH_ASSOC);
-  echo$ru['username'].($ru['name']!=''?':'.$ru['name']:'').'<br><small><small>'.rank($ru['rank']).'</small></small>';
-}else echo isset($ru['email'])&&$ru['email']!=''?'<a href="mailto:'.$ru['email'].'">'.$ru['email'].'</a>':'Nonexistent User';?>
-                      </td>
-                      <td class="small"><?php echo strip_tags($r['notes']);?></td>
-                      <td class="">
-<?php $sc=$db->prepare("SELECT id,title FROM `".$prefix."content` WHERE id=:id");
-  $sc->execute([':id'=>$r['rid']]);
-  $rc=$sc->fetch(PDO::FETCH_ASSOC);
-  echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab-content-comments">'.$rc['title'].'</a>';?>
-                      </td>
-                      <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
-                      <td class="align-top">
-                        <div id="controls-<?php echo$r['id'];?>" class="btn-group float-right">
-<?php if($user['options'][0]==1){
-  $scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
-  $scc->execute([':ip'=>$r['ip']]);
-  if($scc->rowCount()<1){?>
-                          <form id="blacklist<?php echo$r['id'];?>" class="d-inline-block" target="sp" method="post" action="core/add_commentblacklist.php">
-                            <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                            <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add IP to Blacklist" aria-label="Add IP to Blacklist"><?php svg('security');?></button>
-                          </form>
-<?php }?>
-                          <button id="approve_<?php echo$r['id'];?>" class="btn btn-secondary btn-sm add<?php echo$r['status']!='unapproved'?' hidden':'';?>" onclick="update('<?php echo$r['id'];?>','comments','status','approved')" data-tooltip="tooltip" data-title="Approve" aria-label="Approve"><?php svg('approve');?></button>
-                          <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','comments')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-<?php }?>
-                        </div>
-                      </td>
-                    </tr>
-<?php }
-if($scnt>20){?>
-                    <tr id="more_20">
-                      <td colspan="5">
-                        <div class="form-group">
-                          <div class="input-group">
-                            <button class="btn btn-secondary btn-block" onclick="more('comments','20','<?php echo(isset($args[1])&&$args[1]!=''?$args[1]:'');?>');">More</button>
+                    <?php $s=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='article' AND `status`='unapproved'");
+                    $s->execute();
+                    $scnt=$s->rowCount();
+                    while($r=$s->fetch(PDO::FETCH_ASSOC)){
+                      $su=$db->prepare("SELECT `id`,`username`,`name`,`rank` FROM `".$prefix."login` WHERE `id`=:uid");
+                      $su->execute([':uid'=>$r['uid']]);?>
+                      <tr id="l_<?php echo$r['id'];?>">
+                        <td class="">
+                          <?php if($su->rowCount()==1){
+                            $ru=$su->fetch(PDO::FETCH_ASSOC);
+                            echo$ru['username'].($ru['name']!=''?':'.$ru['name']:'').'<br><small><small>'.rank($ru['rank']).'</small></small>';
+                          }else echo isset($ru['email'])&&$ru['email']!=''?'<a href="mailto:'.$ru['email'].'">'.$ru['email'].'</a>':'Nonexistent User';?>
+                        </td>
+                        <td class="small"><?php echo strip_tags($r['notes']);?></td>
+                        <td>
+                          <?php $sc=$db->prepare("SELECT `id`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+                          $sc->execute([':id'=>$r['rid']]);
+                          $rc=$sc->fetch(PDO::FETCH_ASSOC);
+                          echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab-content-comments">'.$rc['title'].'</a>';?>
+                        </td>
+                        <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                        <td class="align-top">
+                          <div id="controls-<?php echo$r['id'];?>" class="btn-group float-right">
+                            <?php if($user['options'][0]==1){
+                              $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+                              $scc->execute([':ip'=>$r['ip']]);
+                              if($scc->rowCount()<1){?>
+                                <form id="blacklist<?php echo$r['id'];?>" class="d-inline-block" target="sp" method="post" action="core/add_commentblacklist.php">
+                                  <input type="hidden" name="id" value="<?php echo$r['id'];?>">
+                                  <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add IP to Blacklist" aria-label="Add IP to Blacklist"><?php svg('security');?></button>
+                                </form>
+                              <?php }?>
+                              <button id="approve_<?php echo$r['id'];?>" class="btn btn-secondary btn-sm add<?php echo$r['status']!='unapproved'?' hidden':'';?>" onclick="update('<?php echo$r['id'];?>','comments','status','approved')" data-tooltip="tooltip" data-title="Approve" aria-label="Approve"><?php svg('approve');?></button>
+                              <button class="btn btn-secondary btn-sm trash" onclick="purge('<?php echo$r['id'];?>','comments')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                            <?php }?>
                           </div>
-                        </div>
-                      </td>
-                    </tr>
-<?php }?>
+                        </td>
+                      </tr>
+                    <?php }
+                    if($scnt>20){?>
+                      <tr id="more_20">
+                        <td colspan="5">
+                          <div class="form-group">
+                            <div class="input-group">
+                              <button class="btn btn-secondary btn-block" onclick="more('comments','20','<?php echo(isset($args[1])&&$args[1]!=''?$args[1]:'');?>');">More</button>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    <?php }?>
                   </tbody>
                 </table>
               </div>

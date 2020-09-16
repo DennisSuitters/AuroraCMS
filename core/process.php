@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
@@ -27,10 +27,12 @@
  * @changes    v0.0.11 Add login.html parsing to display Terms of Service in Modal.
  * @changes    v0.0.11 Add logged in info alert.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
+ * @changes    v0.0.20 Adjust where development information is parsed into DOM.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 if(file_exists(THEME.DS.'theme.ini'))$theme=parse_ini_file(THEME.DS.'theme.ini',TRUE);
 else{
   echo'A Website Theme has not been set.';
@@ -44,14 +46,16 @@ $favicon=$shareImage=FAVICON;
 $noimage=NOIMAGE;
 $noavatar=NOAVATAR;
 if($view=='page'){
-  $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE contentType=:contentType AND LOWER(title)=LOWER(:title)");
+  $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType AND LOWER(`title`)=LOWER(:title)");
   $sp->execute([
     ':contentType'=>$view,
     ':title'=>str_replace('-',' ',$args[0])
   ]);
 }else{
-  $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE contentType=:contentType");
-  $sp->execute([':contentType'=>$view]);
+  $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType");
+  $sp->execute([
+    ':contentType'=>$view
+  ]);
 }
 $page=$sp->fetch(PDO::FETCH_ASSOC);
 $seoTitle=$page['seoTitle'];
@@ -59,14 +63,18 @@ $metaRobots=$page['metaRobots'];
 $seoCaption=$page['seoCaption'];
 $seoDescription=$page['seoDescription'];
 $seoKeywords=$page['seoKeywords'];
-$pu=$db->prepare("UPDATE `".$prefix."menu` SET views=views+1 WHERE id=:id");
-$pu->execute([':id'=>$page['id']]);
+$pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1 WHERE `id`=:id");
+$pu->execute([
+  ':id'=>$page['id']
+]);
 if(isset($act)&&$act=='logout')require'core'.DS.'login.php';
 include'core'.DS.'cart_quantity.php';
 $status=isset($_SESSON['rank'])&&$_SESSION['rank']>699?"%":"published";
 if($config['php_options'][4]==1){
-  $sb=$db->prepare("SELECT * FROM `".$prefix."iplist` WHERE ip=:ip");
-  $sb->execute([':ip'=>$ip]);
+  $sb=$db->prepare("SELECT * FROM `".$prefix."iplist` WHERE `ip`=:ip");
+  $sb->execute([
+    ':ip'=>$ip
+  ]);
   if($sb->rowCount()>0){
     $sbr=$sb->fetch(PDO::FETCH_ASSOC);
     echo'The IP "<strong>'.$ip.'</strong>" has been Blacklisted for suspicious activity.';
@@ -185,7 +193,7 @@ $head=preg_replace([
   $view,
   URL.'rss/'.$rss.'/',
   $view=='inventory'?'product':$view,
-  stristr($shareImage,'noimage')?URL.FAVICON:$shareImage,
+  stristr($shareImage,'noimage')?FAVICON:$shareImage,
   FAVICON,
   microid($config['email'],$canonical),
   isset($r['name'])?$r['name']:$config['business'],
@@ -215,8 +223,10 @@ if($view=='login'){
     ],'',$content);
   }else{
     if(stristr($content,'<print page="terms-of-service">')){
-      $cs=$db->prepare("SELECT notes FROM `".$prefix."menu` WHERE LOWER(title)=LOWER(:title) AND active=1");
-      $cs->execute([':title'=>'terms of service']);
+      $cs=$db->prepare("SELECT notes FROM `".$prefix."menu` WHERE LOWER(`title`)=LOWER(:title) AND `active`=1");
+      $cs->execute([
+        ':title'=>'terms of service'
+      ]);
       $cp=$cs->fetch(PDO::FETCH_ASSOC);
       $content=preg_replace([
         '~<loggedin>.*?<\/loggedin>~is',
@@ -230,7 +240,13 @@ if($view=='login'){
     }
   }
 }
-if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1)$content.='<div class="developmentbottom">Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>';
+if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1){
+  $head=preg_replace([
+    '/<div class="development"><\/div>/'
+  ],[
+    '<div class="development"><br>Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>'
+  ],$head);
+}
 $content=preg_replace(['/<serviceworker>/'],[($config['options'][18]==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
 print$head.$content;
 if($config['options'][11]==1){
@@ -249,7 +265,7 @@ if($config['options'][11]==1){
       !stristr($current_page,'*.gif')||
       !stristr($current_page,'*.svg')
     ){
-      $s=$db->prepare("INSERT INTO `".$prefix."tracker` (pid,urlDest,urlFrom,userAgent,ip,browser,os,sid,ti) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`ip`,`browser`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
       $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
       $s->execute([
         ':pid'=>isset($page['id'])?$page['id']:0,

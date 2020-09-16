@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 $getcfg=true;
@@ -18,8 +19,10 @@ require'db.php';
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
 $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
-$s=$db->prepare("SELECT id,file,thumb FROM `".$prefix."content` WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT `id`,`file`,`thumb` FROM `".$prefix."content` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$id
+]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 include'zebra_image.php';
 $image=new Zebra_Image();
@@ -92,16 +95,16 @@ if($process==true){
     }
   }else{
     if($act=='thumb'){
-      $s=$db->prepare("UPDATE content SET thumb=:thumb WHERE id=:id");
+      $s=$db->prepare("UPDATE `".$prefix."content` SET `thumb`=:thumb WHERE `id`=:id");
       $s->execute([
-        ':thumb'=>URL.'media'.DS.$imgdest,
+        ':thumb'=>'media'.DS.$imgdest,
         ':id'=>$id
       ]);?>
   window.top.window.$('#thumbimage').attr('src','<?php echo'media'.DS.$imgdest.'?'.time();?>');
-  window.top.window.$('#thumb').val('<?php echo URL.'media'.DS.$imgdest.'?'.time();?>');
+  window.top.window.$('#thumb').val('<?php echo'media'.DS.$imgdest.'?'.time();?>');
 <?php } else {?>
   window.top.window.$('#fileimage').attr('src','<?php echo'media'.DS.$imgdest.'?'.time();?>');
-  window.top.window.$('#file').val('<?php echo URL.'media'.DS.$imgdest.'?'.time();?>');
+  window.top.window.$('#file').val('<?php echo'media'.DS.$imgdest.'?'.time();?>');
 <?php }
   }
 }

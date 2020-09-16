@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -17,7 +17,7 @@
 if(stristr($html,'<events')){
 	preg_match('/<events>([\w\W]*?)<\/events>/',$html,$matches);
 	$event=$matches[1];
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE 'events' AND internal!='1' AND status='published' AND rank<=:rank ORDER BY ti DESC LIMIT 2");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE 'events' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY `ti` DESC LIMIT 2");
 	$s->execute([
 		':rank'=>$_SESSION['rank']
 	]);
@@ -48,7 +48,7 @@ if(stristr($html,'<events')){
 if(stristr($html,'<news')){
 	preg_match('/<news>([\w\W]*?)<\/news>/',$html,$matches);
 	$news=$matches[1];
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE contentType LIKE 'news' AND internal!='1' AND status='published' ORDER BY ti DESC LIMIT 2");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE 'news' AND `internal`!='1' AND `status`='published' ORDER BY `ti` DESC LIMIT 2");
 	$s->execute();
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){

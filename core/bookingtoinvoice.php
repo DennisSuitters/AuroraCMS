@@ -7,25 +7,30 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
 $id=isset($_GET['id'])?$_GET['id']:0;
 $ti=time();
 if($id>0){
-  $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-  $s->execute([':id'=>$id]);
+  $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+  $s->execute([
+    ':id'=>$id
+  ]);
   $ro=$s->fetch(PDO::FETCH_ASSOC);
-  $s=$db->prepare("SELECT id FROM `".$prefix."login` WHERE email=:email");
-  $s->execute([':email'=>$ro['email']]);
+  $s=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `email`=:email");
+  $s->execute([
+    ':email'=>$ro['email']
+  ]);
   if($s->rowCount()>0){
-    $r=$db->query("SELECT MAX(id) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
+    $r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
     $dti=$ti+$config['orderPayti'];
     $oid='I'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-    $q=$db->prepare("INSERT INTO `".$prefix."orders` (uid,cid,iid,iid_ti,due_ti,status) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
+    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
     $q->execute([
       ':uid'=>$ro['uid'],
       ':cid'=>$ro['cid'],
@@ -34,11 +39,13 @@ if($id>0){
       ':due_ti'=>$dti
     ]);
     $qid=$db->lastInsertId();
-    $os=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-    $os->execute([':id'=>$ro['rid']]);
+    $os=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+    $os->execute([
+      ':id'=>$ro['rid']
+    ]);
     if($os->rowCount()>0){
       while($oi=$os->fetch(PDO::FETCH_ASSOC)){
-        $s=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,cid,title,quantity,cost,status,ti) VALUES (:oid,:cid,:title,:quantity,:cost,:status,:ti)");
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:cid,:title,:quantity,:cost,:status,:ti)");
         $s->execute([
           ':oid'=>$qid,
           ':cid'=>$ro['uid'],
@@ -57,7 +64,7 @@ if($id>0){
 <?php
     }
   }else{
-    $su=$db->prepare("INSERT INTO `".$prefix."login` (username,rank,email,name,business,address,suburb,city,state,postcode,country,ti) VALUES (:username,:rank,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:ti)");
+    $su=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`username`,`rank`,`email`,`name`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`country`,`ti`) VALUES (:username,:rank,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:ti)");
     $uname=explode(' ',$ro['name']);
     $su->execute([
       ':username'=>$uname[0].$ti,
@@ -74,10 +81,10 @@ if($id>0){
       ':ti'=>$ti
     ]);
     $uid=$db->lastInsertId();
-    $r=$db->query("SELECT MAX(id) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
+    $r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
     $dti=$ti+$config['orderPayti'];
     $oid='I'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-    $q=$db->prepare("INSERT INTO `".$prefix."orders` (uid,cid,iid,iid_ti,due_ti,status) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
+    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
     $q->execute([
       ':uid'=>$uid,
       ':cid'=>$ro['cid'],
@@ -86,11 +93,13 @@ if($id>0){
       ':due_ti'=>$dti
     ]);
     $qid=$db->lastInsertId();
-    $os=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-    $os->execute([':id'=>$ro['rid']]);
+    $os=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+    $os->execute([
+      ':id'=>$ro['rid']
+    ]);
     if($os->rowCount()>0){
       $oi=$os->fetch(PDO::FETCH_ASSOC);
-      $s=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,cid,title,quantity,cost,status,ti) VALUES (:oid,:cid,:title,:quantity,:cost,:status,:ti)");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:cid,:title,:quantity,:cost,:status,:ti)");
       $s->execute([
         ':oid'=>$qid,
         ':cid'=>$ro['cid'],
@@ -108,8 +117,10 @@ if($id>0){
 <?php }
   }
   if($config['options'][25]==1){
-    $s=$db->prepare("UPDATE `".$prefix."content` SET status='archived' WHERE id=:id");
-    $s->execute([':id'=>$id]);?>
+    $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='archived' WHERE `id`=:id");
+    $s->execute([
+      ':id'=>$id
+    ]);?>
 <script>
   window.top.window.toastr["success"]("Booking Archived!");
   window.top.window.$('#l_<?php echo$id;?>').addClass('animated zoomOut');

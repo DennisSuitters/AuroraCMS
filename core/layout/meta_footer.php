@@ -20,38 +20,38 @@
  * @changes    v0.0.15 Enable CodeMirror to be used with editor.
  */?>
 <script>
-var unsaved=false;
-window.onbeforeunload=function(e){
-  if(unsaved)return'You have unsaved changes. Do you ant to leave this page and discard your changes or stay on this page?';
-}
-<?php if($config['idleTime']!=0){?>
-  $(document).ready(function(){
-    idleTimer=null;
-    idleState=false;
-    idleWait=<?php echo$config['idleTime']*60000;?>;
-    $(document).on('mousemove scroll keyup keypress mousedown mouseup mouseover',function(){
-      clearTimeout(idleTimer);
+  var unsaved=false;
+  window.onbeforeunload=function(e){
+    if(unsaved)return'You have unsaved changes. Do you ant to leave this page and discard your changes or stay on this page?';
+  }
+  <?php if($config['idleTime']!=0){?>
+    $(document).ready(function(){
+      idleTimer=null;
       idleState=false;
-      idleTimer=setTimeout(function(){
-        idleState=true;
-        unsaved=false;
-        document.location.href="<?php echo URL.$settings['system']['admin'].'/logout';?>";
-      },idleWait);
+      idleWait=<?php echo$config['idleTime']*60000;?>;
+      $(document).on('mousemove scroll keyup keypress mousedown mouseup mouseover',function(){
+        clearTimeout(idleTimer);
+        idleState=false;
+        idleTimer=setTimeout(function(){
+          idleState=true;
+          unsaved=false;
+          document.location.href="<?php echo URL.$settings['system']['admin'].'/logout';?>";
+        },idleWait);
+      });
+      $("body").trigger("mousemove");
+      $('select[name="colorpicker"]').simplecolorpicker({theme: 'regularfont'});
     });
-    $("body").trigger("mousemove");
-    $('select[name="colorpicker"]').simplecolorpicker({theme: 'regularfont'});
-  });
-  $(function(){
-    var hash=window.location.hash;
-    hash && $('ul.nav a[href="'+hash+'"]').tab('show');
-    $('.nav-tabs a').click(function (e){
-      $(this).tab('show');
-      var scrollmem=$('body').scrollTop();
-      window.location.hash=this.hash;
-      $('html,body').scrollTop(scrollmem);
+    $(function(){
+      var hash=window.location.hash;
+      hash && $('ul.nav a[href="'+hash+'"]').tab('show');
+      $('.nav-tabs a').click(function (e){
+        $(this).tab('show');
+        var scrollmem=$('body').scrollTop();
+        window.location.hash=this.hash;
+        $('html,body').scrollTop(scrollmem);
+      });
     });
-  });
-<?php }?>
+  <?php }?>
   $('#seoTitle').keyup(function(){
   	var length=$(this).val().length;
   	var max=70;
@@ -87,70 +87,70 @@ window.onbeforeunload=function(e){
   		$("#seoDescriptioncnt").removeClass('text-danger');
   	}
   });
-<?php if(isset($r['pti'])&&$user['options'][1]==1){?>
-  $('#pti').daterangepicker({
-    singleDatePicker:true,
-    linkedCalendars:false,
-    autoUpdateInput:true,
-    showDropdowns:true,
-    showCustomRangeLabel:false,
-    timePicker:true,
-    startDate:"<?php echo date($config['dateFormat'],$r['pti']!=0?$r['pti']:time());?>",
-    locale:{
-      format:'MMM Do,YYYY h:mm A'
-    }
-  },function(start){
-    $('#ptix').val(start.unix());
-  });
-<?php }
-if(isset($r['tis'])&&($user['options'][2]==1||$user['options'][1]==1)){?>
-  $('#tis').daterangepicker({
-    singleDatePicker:true,
-    linkedCalendars:false,
-    autoUpdateInput:true,
-    showDropdowns:true,
-    showCustomRangeLabel:false,
-    timePicker:true,
-    startDate:"<?php echo date($config['dateFormat'],$r['tis']!=0?$r['tis']:time());?>",
-    locale:{
-      format:'MMM Do,YYYY h:mm A'
-    }
-  },function(start){
-    $('#tisx').val(start.unix());
-  });
-<?php }
-if(isset($r['tie'])&&($user['options'][2]==1||$user['options'][1]==1)){?>
-  $('#tie').daterangepicker({
-    singleDatePicker:true,
-    linkedCalendars:false,
-    autoUpdateInput:true,
-    showDropdowns:true,
-    showCustomRangeLabel:false,
-    timePicker:true,
-    startDate:"<?php echo date($config['dateFormat'],$r['tie']!=0?$r['tie']:time());?>",
-    locale:{
-      format:'MMM Do,YYYY h:mm A'
-    }
-  },function(start){
-    $('#tiex').val(start.unix());
-  });
-<?php }
-if(isset($r['due_ti'])){?>
-  $('#due_ti').daterangepicker({
-    singleDatePicker:true,
-    linkedCalendars:false,
-    autoUpdateInput:true,
-    showDropdowns:true,
-    showCustomRangeLabel:false,
-    timePicker:true,
-    startDate:"<?php echo date($config['dateFormat'],$r['due_ti']!=0?$r['due_ti']:time());?>",
-    locale:{
-      format:'MMM Do,YYYY h:mm A'
-    }
-  },function(start){
-    $('#due_tix').val(start.unix());
-  });
-<?php }?>
+  <?php if(isset($r['pti'])&&$user['options'][1]==1){?>
+    $('#pti').daterangepicker({
+      singleDatePicker:true,
+      linkedCalendars:false,
+      autoUpdateInput:true,
+      showDropdowns:true,
+      showCustomRangeLabel:false,
+      timePicker:true,
+      startDate:"<?php echo date($config['dateFormat'],$r['pti']!=0?$r['pti']:time());?>",
+      locale:{
+        format:'MMM Do,YYYY h:mm A'
+      }
+    },function(start){
+      $('#ptix').val(start.unix());
+    });
+  <?php }
+  if(isset($r['tis'])&&($user['options'][2]==1||$user['options'][1]==1)){?>
+    $('#tis').daterangepicker({
+      singleDatePicker:true,
+      linkedCalendars:false,
+      autoUpdateInput:true,
+      showDropdowns:true,
+      showCustomRangeLabel:false,
+      timePicker:true,
+      startDate:"<?php echo date($config['dateFormat'],$r['tis']!=0?$r['tis']:time());?>",
+      locale:{
+        format:'MMM Do,YYYY h:mm A'
+      }
+    },function(start){
+      $('#tisx').val(start.unix());
+    });
+  <?php }
+  if(isset($r['tie'])&&($user['options'][2]==1||$user['options'][1]==1)){?>
+    $('#tie').daterangepicker({
+      singleDatePicker:true,
+      linkedCalendars:false,
+      autoUpdateInput:true,
+      showDropdowns:true,
+      showCustomRangeLabel:false,
+      timePicker:true,
+      startDate:"<?php echo date($config['dateFormat'],$r['tie']!=0?$r['tie']:time());?>",
+      locale:{
+        format:'MMM Do,YYYY h:mm A'
+      }
+    },function(start){
+      $('#tiex').val(start.unix());
+    });
+  <?php }
+  if(isset($r['due_ti'])){?>
+    $('#due_ti').daterangepicker({
+      singleDatePicker:true,
+      linkedCalendars:false,
+      autoUpdateInput:true,
+      showDropdowns:true,
+      showCustomRangeLabel:false,
+      timePicker:true,
+      startDate:"<?php echo date($config['dateFormat'],$r['due_ti']!=0?$r['due_ti']:time());?>",
+      locale:{
+        format:'MMM Do,YYYY h:mm A'
+      }
+    },function(start){
+      $('#due_tix').val(start.unix());
+    });
+  <?php }?>
   $('.save').click(function(e){
 	 	e.preventDefault();
 	 	var l=Ladda.create(this);
@@ -183,222 +183,219 @@ if(isset($r['due_ti'])){?>
     });
 	 	return false;
 	});
-<?php
-  if($view=='media'||$args[0]=='edit'){?>
-  $.widget.bridge('uibutton',$.ui.button);
-  $.widget.bridge('uitooltip',$.ui.tooltip);
-<?php }
-  if($config['options'][4]==0){?>
-  $().tooltip('disable');
-<?php }else{?>
-  $('body').tooltip({
-    selector:'[data-tooltip="tooltip"]',
-    container:"body"
-  });
-<?php }
-  if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'||($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view')){?>
-  function elfinderDialog(id,t,c){
-    var fm=$('<div class="shadow light"/>').dialogelfinder({
-      url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>?id="+id+"&t="+t+"&c="+c,
-      lang:'en',
-      width:840,
-      height:450,
-      destroyOnClose:true,
-      useBrowserHistory:false,
-      getFileCallback:function(file,fm){
-        if(id>0||c=='attachments'){
-          if(c=='mediafile'){
-            var urls=$.each(file,function(i,f){return f.url;});
-            $('#'+c).val(urls);
-          }else{
-            $('#'+c).val(file.url);
-            $('#save'+c).addClass('btn-danger');
-          }
-          if(t=='content'&&c=='file'){
-            $('#thumb').val(file.tmb);
-            $('#savethumb').addClass('btn-danger');
-          }
-          if(t=='content'&&c=='fileDepth'){
-            $('#savefileDepth').addClass('btn-danger');
-          }
-          if(t=='category'){
-
-          }else if(t!='media'||t!='category'){
-            if(t=='config'&&c=='php_honeypot'){
-              $('#php_honeypot_link').html('<a target="_blank" href="'+file.url+'">'+file.url+'</a>');
-            }else{
-              if(t=='menu'&&c=='cover'){
-                coverUpdate(id,t,c,file.url);
-                $('#'+c+'image').attr('src',file.url);
+  <?php if($view=='media'||$args[0]=='edit'){?>
+    $.widget.bridge('uibutton',$.ui.button);
+    $.widget.bridge('uitooltip',$.ui.tooltip);
+  <?php }
+    if($config['options'][4]==0){?>
+      $().tooltip('disable');
+  <?php }else{?>
+    $('body').tooltip({
+      selector:'[data-tooltip="tooltip"]',
+      container:"body"
+    });
+  <?php }
+    if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'||($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view')){?>
+      function elfinderDialog(id,t,c){
+        var fm=$('<div class="shadow light"/>').dialogelfinder({
+          url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>?id="+id+"&t="+t+"&c="+c,
+          lang:'en',
+          width:840,
+          height:450,
+          destroyOnClose:true,
+          useBrowserHistory:false,
+          getFileCallback:function(file,fm){
+            if(id>0||c=='attachments'){
+              if(c=='mediafile'){
+                var urls=$.each(file,function(i,f){return f.url;});
+                $('#'+c).val(urls);
               }else{
-                $('#'+c+'image').attr('src',file.url);
+                $('#'+c).val(file.url);
+                $('#save'+c).addClass('btn-danger');
+              }
+              if(t=='content'&&c=='file'){
+                var thumb = file.url.replace(/^.*[\\\/]/, '');
+                var thumbpath = file.url.replace(thumb,'')+"thumbs/"+thumb;
+                $('#thumb').val(thumbpath);
+                $('#thumbimage').attr('src',thumbpath);
+                $('#savethumb').addClass('btn-danger');
+              }
+              if(t=='content'&&c=='fileDepth'){
+                $('#savefileDepth').addClass('btn-danger');
+              }
+              if(t=='category'){
+
+              }else if(t!='media'||t!='category'){
+                if(t=='config'&&c=='php_honeypot'){
+                  $('#php_honeypot_link').html('<a target="_blank" href="'+file.url+'">'+file.url+'</a>');
+                }else{
+                  if(t=='menu'&&c=='cover'){
+                    coverUpdate(id,t,c,file.url);
+                    $('#'+c+'image').attr('src',file.url);
+                  }else{
+                    $('#'+c+'image').attr('src',file.url);
+                  }
+                }
+              }
+              if(t=='messages'&&c=='attachments'){
+                var path_splitted=file.url.split('.');
+                var fileExt=path_splitted.pop();
+                var filename="core/images/i-file.svg";
+                if(fileExt=="jpg"||fileExt=="jpeg"||fileExt=="png"||fileExt=="gif"||fileExt=="bmp"||fileExt=="webp"||fileExt=="svg"){
+                  filename=file.url;
+                }
+                if(fileExt=="pdf"){
+                  filename='core/images/i-file-pdf.svg';
+                }
+                if(fileExt=="zip"||fileExt=="zipx"||fileExt=="tar"||fileExt=="gz"||fileExt=="rar"||fileExt=="7zip"||fileExt=="7z"||fileExt=="bz2"){
+                  filename='core/images/i-file-archive.svg';
+                }
+                if(fileExt=="doc"||fileExt=="docx"||fileExt=="xls"){
+                  filename="core/images/i-file-docs.svg";
+                }
+                var timestamp = $.now();
+                $('#attachments').append('<a id="a_'+timestamp+'" target="_blank" class="card col-2 p-0" href="'+file.url+'" data-title="'+file.url.replace(/^.*[\\\/]/,'')+'"><img class="card-img-top bg-white" src="'+filename+'" alt="'+file.url+'"><span class="card-footer text-truncate p-0 pl-1 pr-1 small">'+file.url.replace(/^.*[\\\/]/,'')+'</span><span class="attbuttons"><button class="btn btn-secondary trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('trash');?></button></span></a>');
+                var atts=$('#atts').val();
+                if(atts!='')atts+=',';
+                atts+=file.url;
+                $('#atts').val(atts);
+              }
+            }else{
+              if(file.url.match(/\.(jpeg|jpg|gif|png)$/)){
+                <?php if($view=='messages'){?>
+                  $('#bod').summernote('editor.insertImage',file.url);
+                <?php }else{?>
+                  $('.summernote').summernote('editor.insertImage',file.url);
+                <?php }?>
+              }else{
+                <?php if($view=='messages'){?>
+                  $('#bod').summernote('createLink',{
+                    text:file.name,
+                    url:file.url,
+                    newWindow:true
+                  });
+                  <?php }else{?>
+                    $('.summernote').summernote('createLink',{
+                      text:file.name,
+                      url:file.url,
+                      newWindow:true
+                    });
+                  <?php }?>
+                }
+              }
+            },
+            commandsOptions:{
+              getfile:{
+                onlyURL:c=='mediafile'?true:false,
+                folders:c=='mediafile'?false:true,
+                multiple:c=='mediafile'?true:false,
+                oncomplete:"close"
               }
             }
-          }
-          if(t=='messages'&&c=='attachments'){
-            var path_splitted=file.url.split('.');
-            var fileExt=path_splitted.pop();
-            var filename="core/images/i-file.svg";
-            if(fileExt=="jpg"||fileExt=="jpeg"||fileExt=="png"||fileExt=="gif"||fileExt=="bmp"||fileExt=="webp"||fileExt=="svg"){
-              filename=file.url;
-            }
-            if(fileExt=="pdf"){
-              filename='core/images/i-file-pdf.svg';
-            }
-            if(fileExt=="zip"||fileExt=="zipx"||fileExt=="tar"||fileExt=="gz"||fileExt=="rar"||fileExt=="7zip"||fileExt=="7z"||fileExt=="bz2"){
-              filename='core/images/i-file-archive.svg';
-            }
-            if(fileExt=="doc"||fileExt=="docx"||fileExt=="xls"){
-              filename="core/images/i-file-docs.svg";
-            }
-            var timestamp = $.now();
-            $('#attachments').append('<a id="a_'+timestamp+'" target="_blank" class="card col-2 p-0" href="'+file.url+'" data-title="'+file.url.replace(/^.*[\\\/]/,'')+'"><img class="card-img-top bg-white" src="'+filename+'" alt="'+file.url+'"><span class="card-footer text-truncate p-0 pl-1 pr-1 small">'+file.url.replace(/^.*[\\\/]/,'')+'</span><span class="attbuttons"><button class="btn btn-secondary trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('trash');?></button></span></a>');
-            var atts=$('#atts').val();
-            if(atts!='')atts+=',';
-            atts+=file.url;
-            $('#atts').val(atts);
-          }
-        }else{
-          if(file.url.match(/\.(jpeg|jpg|gif|png)$/)){
-<?php if($view=='messages'){?>
-            $('#bod').summernote('editor.insertImage',file.url);
-<?php }else{?>
-            $('.summernote').summernote('editor.insertImage',file.url);
-<?php }?>
-          }else{
-<?php if($view=='messages'){?>
-            $('#bod').summernote('createLink',{
-              text:file.name,
-              url:file.url,
-              newWindow:true
-            });
-<?php }else{?>
-            $('.summernote').summernote('createLink',{
-              text:file.name,
-              url:file.url,
-              newWindow:true
-            });
-<?php }?>
-          }
+          }).dialogelfinder('instance');
         }
-      },
-      commandsOptions: {
-        getfile: {
-          onlyURL: c=='mediafile'?true:false,
-          folders: c=='mediafile'?false:true,
-          multiple: c=='mediafile'?true:false,
-          oncomplete: "close"
-        }
-      }
-    }).dialogelfinder('instance');
-  }
-<?php }
-  if($view=='seo'||$view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
-  $().ready(function(){
-    var fm=$('#elfinder').elfinder({
-      url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>",
-      lang:'en',
-      width:'85vw',
-      height:$(window).height()-102,
-      resizeable:false,
-      commandsOptions: {
-        getfile: {
-          open : {
-            selectAction : 'getfile'
+      <?php }
+      if($view=='seo'||$view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
+        $().ready(function(){
+          var fm=$('#elfinder').elfinder({
+            url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>",
+            lang:'en',
+            width:'85vw',
+            height:$(window).height()-102,
+            resizeable:false,
+            commandsOptions:{
+              getfile:{
+                open:{
+                  selectAction:'getfile'
+                },
+                preference:{
+                  selectActions:['getfile','edit/download','resize/edit/download','download','quicklook']
+                },
+              }
+            },
+            getFileCallback:function(file,elFinderInstance){
+              var url=file.url;
+              $.fancybox.open({src:url});
+            }
+          }).elfinder('instance');
+          var $elfinder=$('#elfinder').elfinder();
+          $(window).resize(function(){
+            resizeTimer=setTimeout(function(){
+              var h=parseInt($(window).height())-102;
+              if(h!=parseInt($('#elfinder').height())){
+                fm.resize('100%',h);
+              }
+            },200);
+            resizeTimer && clearTimeout(resizeTimer);
+          });
+        });
+      <?php }?>
+      document.addEventListener("DOMContentLoaded",function(event){
+      <?php if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings')){?>
+        $('.summernote').summernote({
+          codemirror:{
+            lineNumbers:true,
+            lineWrapping:true,
+            theme:'base16-dark',
           },
-          preference : {
-            selectActions : ['getfile', 'edit/download', 'resize/edit/download', 'download', 'quicklook']
+          isNotSplitEdgePoint:true,
+          height:300,
+          tabsize:2,
+          styleTags:[
+            'p',
+            {title:'Blockquote',tag:'blockquote',className:'blockquote',value:'blockquote'},
+            'pre',
+            'h2',
+            'h3',
+            'h4',
+            'h5',
+            'h6'
+          ],
+          popover:{
+            image:[
+              ['custom',['picture','imageShapes','captionIt']],
+              ['imagesize',['imageSize100','imageSize50','imageSize25']],
+              ['float',['floatLeft','floatRight','floatNone']],
+              ['remove',['removeMedia']],
+            ],
+            link:[
+              ['link',['linkDialogShow','unlink']],
+            ],
+            air:[
+              ['font',['bold','underline','clear']],
+              ['para',['ul','paragraph']],
+              ['table',['table']],
+              ['insert',['media','link','picture']]
+            ]
           },
-
-        }
-      },
-      getFileCallback : function(file, elFinderInstance) {
-        var url = file.url;
-        $.fancybox.open({src: url});
-      }
-    }).elfinder('instance');
-    var $elfinder=$('#elfinder').elfinder();
-    $(window).resize(function(){
-      resizeTimer=setTimeout(function(){
-        var h=parseInt($(window).height())-102;
-        if(h!=parseInt($('#elfinder').height())){
-          fm.resize('100%',h);
-        }
-      },200);
-      resizeTimer && clearTimeout(resizeTimer);
-    });
-  });
-<?php }?>
-  document.addEventListener("DOMContentLoaded",function(event){
-<?php if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings')){?>
-    $('.summernote').summernote({
-      codemirror:{
-        lineNumbers:true,
-        lineWrapping:true,
-        theme:'base16-dark',
-      },
-      isNotSplitEdgePoint:true,
-      height:300,
-      tabsize:2,
-      styleTags: [
-        'p',
-          { title: 'Blockquote', tag: 'blockquote', className: 'blockquote', value: 'blockquote' },
-        'pre',
-        'h2',
-        'h3',
-        'h4',
-        'h5',
-        'h6'
-      ],
-      popover:{
-        image:
-          [
-            ['custom',['picture','imageShapes','captionIt']],
-            ['imagesize',['imageSize100','imageSize50','imageSize25']],
-            ['float',['floatLeft','floatRight','floatNone']],
-            ['remove',['removeMedia']],
-          ],
-        link:
-          [
-            ['link',['linkDialogShow','unlink']],
-          ],
-        air:
-          [
-            ['font',['bold','underline','clear']],
-            ['para',['ul','paragraph']],
+          lang:'en-US',
+          toolbar:[
+            ['save',['save']],
+            ['style',['style']],
+            ['font',['bold','italic','underline','clear']],
+            ['para',['ul','ol','paragraph']],
             ['table',['table']],
-            ['insert',['media','link','picture']]
-          ]
-      },
-      lang:'en-US',
-      toolbar:
-        [
-          ['save',['save']],
-          ['style',['style']],
-          ['font',['bold','italic','underline','clear']],
-          ['para',['ul','ol','paragraph']],
-          ['table',['table']],
-          ['insert',['elfinder','video','link','hr','checkbox']],
-          ['view',['fullscreen','codeview']],
-          ['help',['help']]
-        ],
-        callbacks:{
-          onInit:function(){
-            $('body > .note-popover').appendTo(".note-editing-area");
+            ['insert',['elfinder','video','link','hr','checkbox']],
+            ['view',['fullscreen','codeview']],
+            ['help',['help']]
+          ],
+          callbacks:{
+            onInit:function(){
+              $('body > .note-popover').appendTo(".note-editing-area");
+            }
           }
-        }
-    });
-<?php }?>
-$.fn.ogni=function(f,t){var i=0;function recurse(list){var el=list.shift();f.apply(el,[i++,el])||setTimeout(function(){list.length&&recurse(list)},t)}this.length&&recurse(this.toArray());return this}
-    $(".saveall").on({
-      click:function(event){
-        event.preventDefault();
-        if($('.unsaved').length>0)$('.page-block').addClass('d-block');
-        $(".unsaved").ogni(function(event){
-            var id = $(this).data("dbid");
-            var t = $(this).data("dbt");
-            var c = $(this).data("dbc");
-            var da = $(this).val();
+        });
+      <?php }?>
+      $.fn.ogni=function(f,t){var i=0;function recurse(list){var el=list.shift();f.apply(el,[i++,el])||setTimeout(function(){list.length&&recurse(list)},t)}this.length&&recurse(this.toArray());return this}
+      $(".saveall").on({
+        click:function(event){
+          event.preventDefault();
+          if($('.unsaved').length>0)$('.page-block').addClass('d-block');
+          $(".unsaved").ogni(function(event){
+            var id=$(this).data("dbid");
+            var t=$(this).data("dbt");
+            var c=$(this).data("dbc");
+            var da=$(this).val();
             $(this).removeClass('unsaved');
             $.ajax({
               type:"GET",
@@ -415,72 +412,68 @@ $.fn.ogni=function(f,t){var i=0;function recurse(list){var el=list.shift();f.app
             });
             $('#save'+c).removeClass('btn-danger');
             if($('.unsaved').length===0)$('.page-block').removeClass('d-block');
-        },1000);
-      }
-    });
-    $(".textinput").on({
-    	blur:function(event){
-    		event.preventDefault();
-    	},
-    	keydown:function(event){
-    		var id=$(this).data("dbid");
-    		if(event.keyCode==46||event.keyCode==8){
-    			$(this).trigger('keypress');
-    		}
-    	},
-    	keyup:function(event){
-    		if(event.which==9){
-    			var id=$(this).data("dbid");
-    			var da=$(this).val();
-    			$(this).trigger('keypress');
-    			$(this).next("input").focus();
+          },1000);
+        }
+      });
+      $(".textinput").on({
+        blur:function(event){
+          event.preventDefault();
+        },
+        keydown:function(event){
+          var id=$(this).data("dbid");
+          if(event.keyCode==46||event.keyCode==8){
+            $(this).trigger('keypress');
+          }
+        },
+        keyup:function(event){
+          if(event.which==9){
+            var id=$(this).data("dbid");
+            var da=$(this).val();
+            $(this).trigger('keypress');
+            $(this).next("input").focus();
+            unsaved=true;
+          }
+        },
+        keypress:function(event){
+          var save=$(this).data("dbc");
+          $('#save'+save).addClass('btn-danger');
+          $('.saveall').addClass('btn-danger');
+          $('#'+save).addClass('unsaved');
           unsaved=true;
-    		}
-    	},
-    	keypress:function(event){
-        var save=$(this).data("dbc");
-        $('#save'+save).addClass('btn-danger');
-        $('.saveall').addClass('btn-danger');
-        $('#'+save).addClass('unsaved');
-        unsaved=true;
-    		if(event.which==13){
-    			event.preventDefault();
-    		}
-    	},
-    	change:function(event){
-        var save=$(this).data("dbc");
-        $('#'+save).addClass('unsaved');
-        $('#save'+save).addClass('btn-danger');
-        unsaved=true;
-    	}
-    });
-    $(document).on(
-    	'click','#content input[type=checkbox]',
-    	{},
-    	function(event){
-    		var id=$(this).data("dbid");
-    		if('#home input[type=checkbox]'){
-    			$('#actions').toggleClass('hidden');
-    		}else{
-    			$('#actions').toggleClass('hidden');
-  		   }
-//    		if(id=='checkboxtoggle'){
-    			if(this.checked){
-    				$('.switchinput').each(function(){
-    					this.checked=true;
+          if(event.which==13){
+            event.preventDefault();
+          }
+        },
+        change:function(event){
+          var save=$(this).data("dbc");
+          $('#'+save).addClass('unsaved');
+          $('#save'+save).addClass('btn-danger');
+          unsaved=true;
+        }
+      });
+      $(document).on(
+        'click','#content input[type=checkbox]',
+        {},function(event){
+          var id=$(this).data("dbid");
+          if('#home input[type=checkbox]'){
+            $('#actions').toggleClass('hidden');
+          }else{
+            $('#actions').toggleClass('hidden');
+          }
+          if(this.checked){
+            $('.switchinput').each(function(){
+              this.checked=true;
               $(this).attr("aria-checked","true");
-    				});
-    			}else{
-    				$('.switchinput').each(function(){
-    					this.checked=false;
+            });
+          }else{
+            $('.switchinput').each(function(){
+              this.checked=false;
               $(this).attr("aria-checked","false");
     				});
     			}
-//    		}else{
     			var t=$(this).data("dbt");
     			var c=$(this).data("dbc");
     			var b=$(this).data("dbb");
-//   			var a=$(this).data("dba");
           $.ajax({
             type:"GET",
             url:"core/toggle.php",
@@ -492,7 +485,6 @@ $.fn.ogni=function(f,t){var i=0;function recurse(list){var el=list.shift();f.app
             }
           }).done(function(msg){
         });
-//    		}
     	}
     );
     setInterval(function(){

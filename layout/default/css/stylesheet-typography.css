@@ -1,26 +1,40 @@
 /* stylesheet v0.9 - Typography - https://github.com/DiemenDesign/stylesheet */
 
-hr {
+hr,
+.note-editable hr {
   margin: 1rem 0;
   border: 0;
   background-color: #e9e9e9;
   height: 1px; }
 
-hr:not([size]) {
+hr:not([size]),
+.note-editable hr:not([size]) {
   height: 1px; }
 
 h1,
+.note-editable h1,
 .h1,
+.note-editable .h1,
 h2,
+.note-editable h2,
 .h2,
+.note-editable .h2,
 h3,
+.note-editable h3,
 .h3,
+.note-editable .h3,
 h4,
+.note-editable h4,
 .h4,
+.note-editable .h4,
 h5,
+.note-editable h5,
 .h5,
+.note-editable .h5,
 h6,
-.h6 {
+.note-editable h6,
+.h6,
+.note-editable .h6 {
   margin-top: 0;
   margin-bottom: .5rem;
   font-family: var(--font);
@@ -28,56 +42,79 @@ h6,
   line-height: 1.2; }
 
 h1,
-.h1 {
+.note-editable h1,
+.h1,
+.note-editable .h1 {
   font-size: calc(1.375rem + 1.5vw); }
 
 h2,
-.h2 {
+.note-editable h2,
+.h2,
+.note-editable .h2 {
   font-size: calc(1.325rem + .9vw); }
 
 h3,
-.h3 {
+.note-editable h3,
+.h3,
+.note-editable .h3 {
   font-size: calc(1.3rem + .6vw); }
 
 h4,
-.h4 {
+.note-editable h4,
+.h4,
+.note-editable .h4 {
   font-size: calc(1.275rem + .3vw); }
 
 h5,
-.h5 {
+.note-editable h5,
+.h5,
+.note-editable .h5 {
   font-size: 1.25rem; }
 
 h6,
-.h6 {
+.note-editable h6,
+.h6,
+.note-editable .h6 {
   font-size: 1rem; }
 
 @media (min-width: 1200px) {
   h1,
-  .h1 {
+  .note-editable h1,
+  .h1,
+  .note-editable .h1 {
     font-size: 2.5rem; }
 
   h2,
-  .h2 {
+  .note-editable h2,
+  .h2,
+  .note-editable .h2 {
     font-size: 2rem; }
 
   h3,
-  .h3 {
+  .note-editable h3,
+  .h3,
+  .note-editable h3 {
     font-size: 1.75rem; }
 
   h4,
-  .h4 {
+  .note-editable h4,
+  .h4,
+  .note-editable .h4 {
     font-size: 1.5rem; }
 }
 
-blockquote {
+blockquote,
+.note-editable blockquote {
   margin-left: 0;
   border-left: .1rem solid var(--border-color);
   padding: .4rem .8rem; }
 
-blockquote p:last-child {
+blockquote p:last-child,
+.note-editable blockquote p:last-child {
   margin-bottom: 0; }
 
-p {
+p,
+.note-editable p {
   margin-top: 0;
   margin-bottom: 1rem;
   font-style: normal;
@@ -87,43 +124,58 @@ p {
   line-height: 1.25; }
 
 ol,
-ul {
+.note-editable ol,
+ul,
+.note-editable ul {
   padding-left: 2rem; }
 
 ol,
+.note-editable ol,
 ul,
-dl {
+.note-editable ul,
+dl,
+.note-editable dl {
   margin-top: 0;
   margin-bottom: 1rem; }
 
 ol ol,
+.note-editable ol ol,
 ul ul,
+.note-editable ul ul,
 ol ul,
-ul ol {
+.note-editable ol ul,
+ul ol,
+.note-editable ul ol {
   margin-bottom: 0; }
 
-dt {
+dt,
+.note-editable dt {
   font-weight: 700; }
 
-dd {
+dd,
+.note-editable dd {
   margin-bottom: .5rem;
   margin-left: 0; }
 
-figure {
+figure,
+.note-editable figure {
   display: inline-block;
   margin: 0;
   padding: 0; }
 
-figure img {
+figure img,
+.note-editable figure img {
   margin-bottom: .5rem;
   max-width: 100%;
   line-height: 1; }
 
-figcaption {
-  color: var(--figure-caption-color);
+figcaption,
+.note-editable figcaption {
+  color: var(--figcaption-color);
   font-size: .875em; }
 
-.img-thumbnail {
+.img-thumbnail,
+.note-editable .img-thumbnail {
   padding: .25rem;
   background-color: #fff;
   border: var(--border-width) var(--border-style) var(--border-color);
@@ -131,16 +183,19 @@ figcaption {
   max-width: 100%;
   height: auto; }
 
-a {
+a,
+.note-editable a {
   background-color: transparent;
   color: var(--link-color);
   text-decoration: none; }
 
-a:hover {
+a:hover,
+.note-editable a:hover {
   color: var(--link-color-hover);
   text-decoration: underline; }
 
-.stretched-link::after {
+.stretched-link::after,
+.note-editable .stretched-link:after {
   position: absolute;
   top: 0;
   right: 0;
@@ -150,7 +205,9 @@ a:hover {
   content: ""; }
 
 abbr[title],
-abbr[data-original-title] {
+.note-editable abbr[title],
+abbr[data-original-title],
+.note-editable abbr[data-original-title] {
   cursor: help;
   border-bottom: none;
   -webkit-text-decoration: underline dotted;
@@ -159,148 +216,194 @@ abbr[data-original-title] {
           text-decoration-skip-ink: none; }
 
 b,
-strong {
+.note-editable b,
+strong,
+.note-editable strong {
   font-weight: 700; }
 
-mark {
+mark,
+.note-editable mark {
   background-color: var(--mark-background-color);
   padding: .2rem; }
 
-small {
+small,
+.note-editable small {
   font-size: 80%; }
 
 sub,
-sup {
+.note-editable sub,
+sup,
+.note-editable sup {
   position: relative;
   vertical-align: baseline;
   font-size: 75%;
   line-height: 0; }
 
-sub {
+sub,
+.note-editable sub {
   bottom:-.25em; }
 
-sup {
+sup,
+.note-editable sup {
   top: -.5em; }
 
-.text-truncate {
+.text-truncate,
+.note-editable .text-truncate {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap; }
 
-.text-muted {
+.text-muted,
+.note-editable .text-muted {
   color: var(--color-muted) !important; }
 
-.align-baseline {
+.align-baseline,
+.note-editable .align-baseline {
   vertical-align: baseline !important; }
 
-.align-top {
+.align-top,
+.note-editable .align-top {
   vertical-align: top !important; }
 
-.align-middle {
+.align-middle,
+.note-editable .align-middle {
   vertical-align: middle !important; }
 
-.align-bottom {
+.align-bottom,
+.note-editable .align-bottom {
   vertical-align: bottom !important; }
 
-.align-text-bottom {
+.align-text-bottom,
+.note-editable .align-text-bottom {
   vertical-align: text-bottom !important; }
 
-.align-text-top {
+.align-text-top,
+.note-editable .align-text-top {
   vertical-align: text-top !important; }
 
-.text-lowercase {
+.text-lowercase,
+.note-editable .text-lowercase {
   text-transform: lowercase !important; }
 
-.text-uppercase {
+.text-uppercase,
+.note-editable .text-uppercase {
   text-transform: uppercase !important; }
 
-.text-capitalize {
+.text-capitalize,
+.note-editable .text-capitalize {
   text-transform: capitalize !important; }
 
-.text-left {
+.text-left,
+.note-editable .text-left {
   text-align: left !important; }
 
-.text-center {
+.text-center,
+.note-editable .text-center {
   text-align: center !important; }
 
-.text-right {
+.text-right,
+.note-editable .text-right {
   text-align: right !important; }
 
-.text-wrap {
+.text-wrap,
+.note-editable .text-wrap {
   white-space: normal !important; }
 
-.text-nowrap {
+.text-nowrap,
+.note-editable .text-nowrap {
   white-space: nowrap !important; }
 
-.text-decoration-none {
+.text-decoration-none,
+.note-editable .text-decoration-none {
   text-decoration: none !important; }
 
-.text-decoration-underline {
+.text-decoration-underline,
+.note-editable .text-decoration-underline {
   text-decoration: underline !important; }
 
-.text-decoration-line-through {
+.text-decoration-line-through,
+.note-editable .text-decoration-line-through {
   text-decoration: line-through !important; }
 
-.text-decoration-wavy {
+.text-decoration-wavy,
+.note-editable .text-decoration-wavy {
   text-decoration-style: wavy var(--text-decoration-wave-color); }
 
-.font-italic {
+.font-italic,
+.note-editable .font-italic {
   font-style: italic !important; }
 
-.font-normal {
+.font-normal,
+.note-editable .font-normal {
   font-style: normal !important; }
 
-.font-weight-light {
+.font-weight-light,
+.note-editable .font-weight-light {
   font-weight: 300 !important; }
 
-.font-weight-lighter {
+.font-weight-lighter,
+.note-editable .font-weight-lighter {
   font-weight: lighter !important; }
 
-.font-weight-normal {
+.font-weight-normal,
+.note-editable .font-weight-normal {
   font-weight: 400 !important; }
 
-.font-weight-bold {
+.font-weight-bold,
+.note-editable .font-weight-bold {
   font-weight: 700 !important; }
 
-.font-weight-bolder {
+.font-weight-bolder,
+.note-editable .font-weight-bolder {
   font-weight: 900 !important; }
 
-.text-break {
+.text-break,
+.note-editable .text-break {
   word-wrap: break-word !important;
   word-break: break-word !important; }
 
-.text-2x {
+.text-2x,
+.note-editable .text-2x {
   font-size: -webkit-calc(100% * 1.2);
   font-size: -calc(100% * 1.2); }
 
-.text-3x {
+.text-3x,
+.note-editable .text-3x {
   font-size: -webkit-calc(100% * 1.5);
   font-size: -calc(100% * 1.5); }
 
-.text-4x {
+.text-4x,
+.note-editable .text-4x {
   font-size: -webkit-calc(100% * 1.75);
   font-size: -calc(100% * 1.75); }
 
-.text-5x {
+.text-5x,
+.note-editable .text-5x {
   font-size: -webkit-calc(100% * 2);
   font-size: -calc(100% * 2); }
 
-.ellipsis {
+.ellipsis,
+.note-editable .ellipsis {
   text-overflow: ellipsis !important; }
 
-.clip {
+.clip,
+.note-editable .clip {
   text-overflow: clip !important; }
 
-.list-unstyled {
+.list-unstyled,
+.note-editable .list-unstyled {
   padding-left: 0;
   list-style: none; }
 
-.list-inline {
+.list-inline,
+.note-editable .list-inline {
   padding-left: 0;
   list-style: none; }
 
-.list-inline-item {
+.list-inline-item,
+.note-editable .list-inline-item {
   display: inline-block; }
 
-.list-inline-item:not(:last-child) {
+.list-inline-item:not(:last-child),
+.note-editable .list-inline-item:not(:last-child) {
   margin-right: .5rem; }

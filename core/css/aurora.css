@@ -1,6 +1,114 @@
 /* AuroraCMS Additions */
 @font-face{font-family:"AMC";src:url("../images/amc.ttf")}
+@font-face{font-family:"Titillium Web";src:url("../images/titilliumweb-400.ttf")}
+@font-face{font-family:"Electrolize";src:url("../images/electrolize.ttf")}
 body.aurora{background:url(../images/loginbg-dark.jpeg) no-repeat center center fixed;background-size:cover;height:100%}
+body.scifi * {
+  color: #26dafd;
+  font-family: "Titillium Web", "sans-serif";
+  line-height: 1; }
+
+body.scifi {
+  background-color: #000;
+  background-image: url(../images/scifi-glow.png), url(../images/scifi-background.jpg);
+  background-repeat: repeat,no-repeat;
+  background-position: top left,center center;
+  background-attachment: fixed, fixed;
+  background-size: auto, cover;
+  height:100%; }
+
+body.scifi header {
+  border-style: solid;
+  border-color: #029dbb;
+  border-width: 0 0 4px;
+  background-color: rgba(2, 17, 20, 0.8);
+}
+
+body.scifi .card {
+  border-radius:0;
+  border: 1px solid #029dbb;
+  box-shadow: 0 0 4px rgba(2,157,187,0.65);
+  background-color: rgba(2,17,20,0.65); }
+
+body.scifi .card:before{
+  content:'';
+  position:absolute;
+  top:-2px;
+  left:-2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background:
+    linear-gradient(to right, #26dafd 2px, transparent 2px) 0 0,
+    linear-gradient(to right, #26dafd 2px, transparent 2px) 0 100%,
+    linear-gradient(to left, #26dafd 2px, transparent 2px) 100% 0,
+    linear-gradient(to left, #26dafd 2px, transparent 2px) 100% 100%,
+    linear-gradient(to bottom, #26dafd 2px, transparent 2px) 0 0,
+    linear-gradient(to bottom, #26dafd 2px, transparent 2px) 100% 0,
+    linear-gradient(to top, #26dafd 2px, transparent 2px) 0 100%,
+    linear-gradient(to top, #26dafd 2px, transparent 2px) 100% 100%;
+
+  background-repeat: no-repeat;
+  background-size: 20px 20px; }
+
+body.scifi .card-header,
+body.scifi .card-footer {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+body.scifi input,
+body.scifi .input-group-text {
+  color: #acf9fb;
+  cursor: pointer;
+  transition: color 250ms ease-out;
+  text-shadow: 0 0 4px rgba(172,249,251,0.65);
+  text-decoration: none;
+  border-radius:0;
+  border: 1px solid #029dbb;
+  box-shadow: 0 0 4px rgba(2, 157, 187, 0.65);
+  background-color: rgba(6, 43, 45, 0.65);
+  transition: background-color 250ms ease-in; }
+
+body.scifi input:hover,
+body.scifi input:focus {
+    background-color: rgba(6, 43, 45, 0.5); }
+
+body.scifi .btn-secondary {
+  color: #acf9fb;
+  cursor: pointer;
+  transition: color 250ms ease-out;
+  text-shadow: 0 0 4px rgba(172,249,251,0.65);
+  text-decoration: none;
+  border-radius:0;
+  border: 1px solid #029dbb;
+  box-shadow: 0 0 4px rgba(2, 157, 187, 0.65);
+  background-color: rgba(6, 43, 45, 0.65);
+  transition: background-color 250ms ease-in; }
+
+body.scifi .btn-secondary:before {
+  content:'';
+  position:absolute;
+  top:-1px;
+  left:-1px;
+  width: calc(100% + 2px);
+  height: calc(100% + 2px);
+  background:
+    linear-gradient(to right, #acf9fb 1px, transparent 1px) 0 0,
+    linear-gradient(to right, #acf9fb 1px, transparent 1px) 0 100%,
+    linear-gradient(to left, #acf9fb 1px, transparent 1px) 100% 0,
+    linear-gradient(to left, #acf9fb 1px, transparent 1px) 100% 100%,
+    linear-gradient(to bottom, #acf9fb 1px, transparent 1px) 0 0,
+    linear-gradient(to bottom, #acf9fb 1px, transparent 1px) 100% 0,
+    linear-gradient(to top, #acf9fb 1px, transparent 1px) 0 100%,
+    linear-gradient(to top, #acf9fb 1px, transparent 1px) 100% 100%;
+  background-repeat: no-repeat;
+  background-size: 10px 10px; }
+
+body.scifi .btn-secondary:hover,
+body.scifi .btn-secondary:focus {
+    background-color: rgba(6, 43, 45, 0.5);
+}
+
 body.aurora .container{height:90vh}
 body.amc *{font-family:amc;font-size:7px}
 .card.aurora,

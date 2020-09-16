@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -27,10 +28,12 @@ if($config['php_options'][3]==1&&$config['php_APIkey']!=''){
   if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
     $blacklisted=$theme['settings']['blacklist'];
     $spam=TRUE;
-    $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-    $sc->execute([':ip'=>$ip]);
+    $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+    $sc->execute([
+      ':ip'=>$ip
+    ]);
     if($sc->rowCount()<1){
-      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,ti) VALUES (:ip,:oti,:ti)");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`ti`) VALUES (:ip,:oti,:ti)");
       $s->execute([
         ':ip'=>$ip,
         ':oti'=>$ti,
@@ -54,10 +57,12 @@ if($_POST['emailtrap']=='none'){
       $spam=TRUE;
     }
     if($config['spamfilter'][1]==1&&$spam==TRUE){
-      $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-      $sc->execute([':ip'=>$ip]);
+      $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+      $sc->execute([
+        ':ip'=>$ip
+      ]);
       if($sc->rowCount()<1){
-        $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,ti) VALUES (:ip,:oti,:ti)");
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`ti`) VALUES (:ip,:oti,:ti)");
         $s->execute([
           ':ip'=>$ip,
           ':oti'=>$ti,
@@ -68,10 +73,12 @@ if($_POST['emailtrap']=='none'){
   }
   if($spam==FALSE){
     if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-      $q=$db->prepare("SELECT id FROM `".$prefix."subscribers` WHERE email=:email");
-      $q->execute([':email'=>$email]);
+      $q=$db->prepare("SELECT `id` FROM `".$prefix."subscribers` WHERE `email`=:email");
+      $q->execute([
+        ':email'=>$email
+      ]);
       if($q->rowCount()<1){
-        $q=$db->prepare("INSERT INTO `".$prefix."subscribers` (email,hash,ti) VALUES (:email,:hash,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."subscribers` (`email`,`hash`,`ti`) VALUES (:email,:hash,:ti)");
         $q->execute([
           ':email'=>$email,
           ':hash'=>md5($email),

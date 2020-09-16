@@ -7,15 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
@@ -25,7 +26,7 @@ function svg2($svg,$class=null,$size=null){
 $t=filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $c=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $b=filter_input(INPUT_GET,'b',FILTER_SANITIZE_STRING);
-$s=$db->prepare("SELECT * FROM `".$prefix."tracker` WHERE LOWER(browser) LIKE LOWER(:b) ORDER BY ti DESC LIMIT $c,20");
+$s=$db->prepare("SELECT * FROM `".$prefix."tracker` WHERE LOWER(`browser`) LIKE LOWER(:b) ORDER BY `ti` DESC LIMIT $c,20");
 $s->execute([
 	':b'=>'%'.strtolower($b).'%'
 ]);

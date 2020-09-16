@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Permissions Options.
@@ -16,12 +16,17 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.18 Add extra editing fields for Job accounting.
  * @changes    v0.0.19 Add Save All button.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$id
+]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-$sr=$db->prepare("SELECT contentType FROM `".$prefix."content` where id=:id");
-$sr->execute([':id'=>$r['rid']]);
+$sr=$db->prepare("SELECT `contentType` FROM `".$prefix."content` where `id`=:id");
+$sr->execute([
+  ':id'=>$r['rid']
+]);
 $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -31,9 +36,9 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
       <div class="btn-group" role="group">
         <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
         <a href="#" class="btn btn-ghost-normal" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></a>
-<?php if($user['options'][0]==1||$user['options'][2]==1){?>
-        <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-placement="left" data-title="Email Booking" aria-label="Email"><?php svg('email-send');?></a>
-<?php }?>
+        <?php if($user['options'][0]==1||$user['options'][2]==1){?>
+          <a href="#" class="btn btn-ghost-normal info" onclick="$('#sp').load('core/email_booking.php?id=<?php echo$r['id'];?>');return false;" data-tooltip="tooltip" data-placement="left" data-title="Email Booking" aria-label="Email"><?php svg('email-send');?></a>
+        <?php }?>
         <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
       </div>
     </li>
@@ -85,12 +90,10 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
                 <div class="input-group col-12 col-sm-10">
                   <select id="cid" class="form-control" onchange="changeClient($(this).val(),<?php echo$r['id'];?>,'booking');" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cid"<?php echo$user['options'][2]==0?' disabled':'';?>>
                     <option value="0"<?php echo$r['cid']=='0'?' selected':'';?>>Select an Account Client...</option>
-<?php $q=$db->query("SELECT id,business,username,name FROM `".$prefix."login` WHERE status!='delete' AND status!='suspended' AND active!='0' AND id!='0'");
-if($q->rowCount()>0){
-  while($rs=$q->fetch(PDO::FETCH_ASSOC)){
-    echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['cid']?' selected="selected"':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business']:'').'</option>';
-  }
-}?>
+                    <?php $q=$db->query("SELECT `id`,`business`,`username`,`name` FROM `".$prefix."login` WHERE `status`!='delete' AND `status`!='suspended' AND `active`!='0' AND `id`!='0'");
+                    if($q->rowCount()>0){
+                      while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['cid']?' selected="selected"':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business']:'').'</option>';
+                    }?>
                   </select>
                 </div>
               </div>
@@ -101,12 +104,10 @@ if($q->rowCount()>0){
                 <div class="input-group col-12 col-sm-8">
                   <select id="cid2" class="form-control" onchange="changeClient($(this).val(),<?php echo$r['id'];?>,'noaccount');" data-dbt="content" data-dbc="cid"<?php echo$user['options'][2]==0?' disabled':'';?>>
                     <option value="0"<?php echo$r['cid']=='0'?' selected':'';?>>Select Client without Account...</option>
-<?php $q=$db->query("SELECT id,business,name FROM `".$prefix."content` WHERE contentType='booking'");
-if($q->rowCount()>0){
-  while($rs=$q->fetch(PDO::FETCH_ASSOC)){
-    echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['cid']?' selected="selected"':'').'>'.$rs['business'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business']:'').'</option>';
-  }
-}?>
+                    <?php $q=$db->query("SELECT `id`,`business`,`name` FROM `".$prefix."content` WHERE `contentType`='booking'");
+                    if($q->rowCount()>0){
+                      while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['cid']?' selected="selected"':'').'>'.$rs['business'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business']:'').'</option>';
+                    }?>
                   </select>
                 </div>
               </div>
@@ -209,9 +210,10 @@ if($q->rowCount()>0){
             <div class="input-group col-12 col-sm-11">
               <select id="rid" class="form-control" name="rid" onchange="update('<?php echo$r['id'];?>','content','rid',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rid"<?php echo$user['options'][2]==0?' disabled':'';?>>
                 <option value="0">Select an Item...</option>
-<?php $sql=$db->query("SELECT id,contentType,code,title,assoc FROM `".$prefix."content` WHERE bookable='1' AND title!='' AND status='published' AND internal!='1' ORDER BY code ASC, title ASC");
-while($row=$sql->fetch(PDO::FETCH_ASSOC))
-  echo'<option value="'.$row['id'].'"'.($r['rid']==$row['id']?' selected':'').'>'.ucfirst($row['contentType']).':'.$row['code'].':'.$row['title'].'</option>';?>
+                <?php $sql=$db->query("SELECT `id`,`contentType`,`code`,`title`,`assoc` FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC,`title` ASC");
+                if($sql->rowCount()>0){
+                  while($row=$sql->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$row['id'].'"'.($r['rid']==$row['id']?' selected':'').'>'.ucfirst($row['contentType']).':'.$row['code'].':'.$row['title'].'</option>';?>
+                }?>
               </select>
             </div>
           </div>
@@ -233,18 +235,18 @@ while($row=$sql->fetch(PDO::FETCH_ASSOC))
               </div>
             </div>
           </div>
-<?php if($config['bookingAgreement']!=''){?>
-          <div class="form-inline row">
-            <div class="input-group col-12 col-sm-11 offset-sm-1">
-              <div class="input-group-text w-10">
-                <input id="agreementCheck" type="checkbox" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="agreementCheck" data-dbb="0"<?php echo$r['agreementCheck'][0]==1?' checked aria-checked="true"':' aria-checked="fale"';?>>
+          <?php if($config['bookingAgreement']!=''){?>
+            <div class="form-inline row">
+              <div class="input-group col-12 col-sm-11 offset-sm-1">
+                <div class="input-group-text w-10">
+                  <input id="agreementCheck" type="checkbox" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="agreementCheck" data-dbb="0"<?php echo$r['agreementCheck'][0]==1?' checked aria-checked="true"':' aria-checked="fale"';?>>
+                </div>
+                <label for="agreementCheck" class="input-group-text col text-wrap">
+                  <?php echo$config['bookingAgreement'];?>
+                </label>
               </div>
-              <label for="agreementCheck" class="input-group-text col text-wrap">
-                <?php echo$config['bookingAgreement'];?>
-              </label>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
           <div class="form-group row">
             <label for="signature" class="col-form-label col-12 col-sm-1 px-0">Signature</label>
             <div class="input-group col-12 col-sm-11">
@@ -261,12 +263,11 @@ while($row=$sql->fetch(PDO::FETCH_ASSOC))
                 <div class="input-group col-12 col-sm-10">
                   <select id="tech" class="form-control" onchange="update('<?php echo$r['id'];?>','content','uid',$(this).val());" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="uid"<?php echo$user['options'][2]==0?' disabled':'';?>>
                     <option value="0">Select a Technician</option>
-<?php $st=$db->prepare("SELECT id,username,name FROM `".$prefix."login` WHERE rank>499 ORDER BY name ASC");
-$st->execute();
-if($st->rowCount()>0){
-while($rt=$st->fetch(PDO::FETCH_ASSOC))
-echo'<option value="'.$rt['id'].'"'.($rt['id']==$r['uid']?' selected':'').'>'.$rt['username'].'['.$r['name'].']</option>';
-}?>
+                    <?php $st=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `rank`>499 ORDER BY `name` ASC");
+                    $st->execute();
+                    if($st->rowCount()>0){
+                      while($rt=$st->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rt['id'].'"'.($rt['id']==$r['uid']?' selected':'').'>'.$rt['username'].'['.$r['name'].']</option>';
+                    }?>
                   </select>
                 </div>
               </div>
@@ -286,9 +287,6 @@ echo'<option value="'.$rt['id'].'"'.($rt['id']==$r['uid']?' selected':'').'>'.$r
     </div>
   </div>
 </main>
-<?php /*
-stockStatus for signature
-*/?>
 <script src="core/js/jSignature.min.js"></script>
 <script>
   function saveSignature(id,t,c){
@@ -317,37 +315,35 @@ stockStatus for signature
         c:c,
         da:''
       }
-    }).done(function(msg){
-
-    });
+    }).done(function(msg){});
   }
-  $(document).ready(function() {
-    (function (factory) {
-      if (typeof define === 'function' && define.amd) {
-        define(['jquery'], factory);
-      } else if (typeof module === 'object' && module.exports) {
-        module.exports = factory(require('jquery'));
-      } else {
+  $(document).ready(function(){
+    (function(factory){
+      if(typeof define==='function'&&define.amd){
+        define(['jquery'],factory);
+      }else if(typeof module==='object'&&module.exports){
+        module.exports=factory(require('jquery'));
+      }else{
         factory(window.jQuery);
       }
-    }(function ($) {
-      $.extend($.summernote.plugins, {
-        'checkbox': function (context) {
-          var self = this;
-          var ui = $.summernote.ui;
-          this.createCheckbox = function () {
-            var elem = document.createElement('input');
-            elem.type = "checkbox";
+    }(function($){
+      $.extend($.summernote.plugins,{
+        'checkbox':function(context){
+          var self=this;
+          var ui=$.summernote.ui;
+          this.createCheckbox=function(){
+            var elem=document.createElement('input');
+            elem.type="checkbox";
               return elem;
           }
-          this.initialize = function () {
-            var layoutInfo = context.layoutInfo;
-            var $editor = layoutInfo.editor;
-            $editor.click(function (event) {
-              if (event.target.type && event.target.type == 'checkbox') {
-                var checked = $(event.target).is(':checked');
-                $(event.target).attr('checked', checked);
-                context.invoke('insertText', '');
+          this.initialize=function(){
+            var layoutInfo =context.layoutInfo;
+            var $editor=layoutInfo.editor;
+            $editor.click(function(event){
+              if (event.target.type&&event.target.type=='checkbox'){
+                var checked=$(event.target).is(':checked');
+                $(event.target).attr('checked',checked);
+                context.invoke('insertText','');
               }
             });
           };
@@ -375,5 +371,4 @@ stockStatus for signature
     $("#signature").jSignature("importData",'<?php echo$r['signature'];?>');
 <?php }?>
   });
-
 </script>

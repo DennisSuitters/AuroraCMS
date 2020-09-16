@@ -7,17 +7,18 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
 $dbprefix=isset($_POST['dbprefix'])?filter_input(INPUT_POST,'dbprefix',FILTER_SANITIZE_STRING):'';
 $dbprefix=trim($dbprefix);
 require'db.php';
-$config=$db->query("SELECT language FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `language` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($settings['database']['prefix']!=$dbprefix){
   $result=$db->query("SHOW TABLES FROM `".$settings['database']['schema']."` LIKE '%".$settings['database']['prefix']."%'");
   $renamed=$failed=0;

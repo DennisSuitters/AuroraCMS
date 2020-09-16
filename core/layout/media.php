@@ -15,32 +15,34 @@
  * @changes    v0.0.11 Update var offset.
  * @changes    v0.0.15 Add directive to edit media items.
  */
-if($args[0]=='settings')include'core'.DS.'layout'.DS.'set_media.php';
-elseif($args[0]=='edit')include'core'.DS.'layout'.DS.'edit_media.php';
+if($args[0]=='settings')
+  include'core'.DS.'layout'.DS.'set_media.php';
+elseif($args[0]=='edit')
+  include'core'.DS.'layout'.DS.'edit_media.php';
 else{?>
-<main id="content" class="main">
-  <ol class="breadcrumb m-0">
-    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-    <li class="breadcrumb-item active">Media</li>
-  </ol>
-<?php if($user['options'][0]==1){?>
-  <div class="container m-0 p-0">
-    <div class="row m-0 p-0">
-      <div class="card col m-0 p-0">
-        <div class="card-body m-0 p-0">
-          <div id="elfinder" style="width:50vw;height:40vh;"></div>
+  <main id="content" class="main">
+    <ol class="breadcrumb m-0">
+      <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+      <li class="breadcrumb-item active">Media</li>
+    </ol>
+    <?php if($user['options'][0]==1){?>
+      <div class="container m-0 p-0">
+        <div class="row m-0 p-0">
+          <div class="card col m-0 p-0">
+            <div class="card-body m-0 p-0">
+              <div id="elfinder" style="width:50vw;height:40vh;"></div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
-<?php }else{?>
-  <div class="container">
-    <div class="row">
-      <div class="col mt-5">
-        <div class="alert alert-info" role="alert">You Don't Have Permissions To Use This Area</div>
+    <?php }else{?>
+      <div class="container">
+        <div class="row">
+          <div class="col mt-5">
+            <div class="alert alert-info" role="alert">You Don't Have Permissions To Use This Area</div>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-<?php }?>
-</main>
+    <?php }?>
+  </main>
 <?php }

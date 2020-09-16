@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Related Item Categories Checkbox
@@ -16,6 +16,8 @@
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.16 Add Brand/Manufacturer Items.
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
+ * @changes    v0.0.20 Add toggle option for Product Quick View.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -43,6 +45,12 @@
             <label class="switch switch-label switch-success"><input type="checkbox" id="options10" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10"<?php echo$config['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
           </div>
           <label for="options10" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Display Similar Category if no Related Content items are selected</label>
+        </div>
+        <div class="form-group row">
+          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+            <label class="switch switch-label switch-success"><input type="checkbox" id="options5" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5"<?php echo$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+          </div>
+          <label for="options5" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Quick View for Products</label>
         </div>
         <div class="form-group">
           <label for="showItems">Item Count</label>
@@ -84,35 +92,35 @@
           </div>
         </form>
         <div id="category">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='category' ORDER BY url ASC, title ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">Category</div>
-              </div>
-              <input type="text" id="cat<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" readonly>
-              <div class="input-group-prepend">
-                <div class="input-group-text">Content</div>
-              </div>
-              <input type="text" id="ct<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">Image</div>
-              </div>
-              <div class="input-group-append">
-                <?php echo$rs['icon']!=''&&file_exists('media'.DS.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-fancybox="lightbox"><img id="thumbimage" src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?>
-              </div>
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `url` ASC,`title` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Category</div>
+                </div>
+                <input type="text" id="cat<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" readonly>
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Content</div>
+                </div>
+                <input type="text" id="ct<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">Image</div>
+                </div>
+                <div class="input-group-append">
+                  <?php echo$rs['icon']!=''&&file_exists('media'.DS.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-fancybox="lightbox"><img id="thumbimage" src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?>
+                </div>
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
         <hr>
         <legend>Brands</legend>
@@ -137,35 +145,35 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
           </div>
         </form>
         <div id="brand">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='brand' ORDER BY title ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <div class="input-group-text">Brand</div>
-              </div>
-              <input type="text" id="title<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">URL</div>
-              </div>
-              <input type="text" id="url<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
-              <div class="input-group-append">
-                <div class="input-group-text">Image</div>
-              </div>
-              <div class="input-group-append">
-                <?php echo$rs['icon']!=''&&file_exists('media'.DS.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-lightbox="lightbox"><img id="thumbimage" src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?>
-              </div>
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='brand' ORDER BY `title` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="input-group-text">Brand</div>
+                </div>
+                <input type="text" id="title<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">URL</div>
+                </div>
+                <input type="text" id="url<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
+                <div class="input-group-append">
+                  <div class="input-group-text">Image</div>
+                </div>
+                <div class="input-group-append">
+                  <?php echo$rs['icon']!=''&&file_exists('media'.DS.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-lightbox="lightbox"><img id="thumbimage" src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img id="thumbimage" src="core/images/noimage.png" alt="No Image">';?>
+                </div>
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
         <hr>
       </div>

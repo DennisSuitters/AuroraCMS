@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Change table prefix.
  * @changes    v0.0.4 Add Timezone Option.
+ * @changes    v0.0.20 Fix Typo's.
  */?>
 <!DOCTYPE HTML>
 <html lang="en" id="AuroraCMS">
@@ -45,146 +46,146 @@
 				<div class="card-body">
 					<div id="step1">
 						<div id="dbinfo"></div>
-<?php $error=0;
-if(version_compare(phpversion(),'7.0','<'))echo'<div class="alert alert-danger" role="alert">AuroraCMS was built using PHP v7.0, your installed version is lower. While AuroraCMS may operate on your system, some functionality may not work or be available. We recommend using PHP 7.3 if available on you\'re services!</div>';
-if(extension_loaded('pdo')){
-	if(empty(PDO::getAvailableDrivers())){
-		$error=1;
-		echo'<div class="alert alert-danger" role="alert">Great PDO is Installed and Active, but there are no Databse Drivers Installed!</div>';
-	}
-}else{
-	$error=1;
-	echo'<div class="alert alert-danger" role="alert">AuroraCMS uses PDO for Database Interaction, please Install or Enable PDO!</div>';
-}
-if(file_exists('core/config.ini')&&!is_writable('core/config.ini')){
-	$error=1;
-	echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, but is not writeable. There is two ways to fix this, either make <code>core/config.ini</code> writable, or remove the file!</div>';
-}
-if(!isset($_SERVER['HTTP_MOD_REWRITE'])){
-	$error=1;
-	echo'<div class="alert alert-danger" role="alert"><code>mod_rewrite</code> must be available and enabled for AuroraCMS to function correctly!</div>';
-}
-if(!extension_loaded('gd')&&!function_exists('gd_info')){
-	$error=1;
-	echo'<div class="alert alert-danger" role="alert">GD-Image is NOT Installed or Enabled!</div>';
-}
-echo(!function_exists('exif_read_data')?'<div class="alert alert-info" role="alert">EXIF Functions are NOT enabled or installed. While not Mandatory, some features won\'t work.</div>':'');
-echo($error==1?'<div class="alert alert-danger" role="alert">Please fix the above Issue\'s outlined within the Red Sections, then Refresh the page to Check Again.</div>':'');
-if($error==0){?>
-						<h4 class="card-title">Database Settings</h4>
-						<form target="sp" method="post" action="core/installer.php">
-							<input type="hidden" name="emailtrap" value="none">
-							<input type="hidden" name="act" value="step1">
-							<div class="form-group">
-								<label for="dbtype">Type</label>
-								<select id="dbtype" name="dbtype" class="form-control">
-<?php	foreach(PDO::getAvailableDrivers() as$DRIVER)echo'<option value="'.$DRIVER.'">'.strtoupper($DRIVER).'</option>';?>
-								</select>
-							</div>
-							<div class="form-group">
-								<label for="dbhost">Host</label>
-								<input id="dbhost" name="dbhost" type="text" class="form-control" value="localhost" placeholder="Enter a Host..." required>
-							</div>
-							<div class="form-group">
-								<label for="dbport">Port</label>
-								<input id="dbport" name="dbport" type="text" class="form-control" value="" placeholder="Enter a Port Number, or leave Blank for Default...">
-							</div>
-							<div class="form-group">
-								<label for="dbprefix">Table Prefix</label>
-								<input id="dbprefix" name="dbprefix" type="text" class="form-control" value="aurora_" placeholder="Enter a Table Prefix...">
-							</div>
-							<div class="form-group">
-								<label for="dbschema">Schema</label>
-								<input id="dbschema" name="dbschema" type="text" class="form-control" value="" placeholder="Enter a Database Schema/Name..." required>
-							</div>
-							<div class="form-group">
-								<label for="dbusername">Username</label>
-								<input id="dbusername" name="dbusername" type="text" class="form-control" value="" placeholder="Enter Database Username..." required>
-							</div>
-							<div class="form-group">
-								<label for="dbpassword">Password</label>
-								<input id="dbpassword" name="dbpassword" type="password" class="form-control" value="" placeholder="Enter Database Password..." required>
-							</div>
-							<div class="float-right">
-								<button type="submit" class="btn btn-success btn-lg" aria-label="Go to Next Step">Next</button>
-							</div>
-						</form>
-					</div>
-					<div id="step2" class="d-none">
-						<h4 class="card-title">System Settings</h4>
-						<form target="sp" method="post" action="core/installer.php">
-							<input type="hidden" name="emailtrap" value="none">
-							<input type="hidden" name="act" value="step2">
-							<div class="form-group">
-								<label for="sysurl">Site URL</label>
-								<input id="sysurl" name="sysurl" type="text" class="form-control" value="" placeholder="Enter URL Folder if Site isn't in Domain Root...">
-							</div>
-							<div class="form-group">
-								<label for="sysadmin">Administration Folder</label>
-								<input id="sysadmin" name="sysadmin" type="text" class="form-control" value="" placeholder="Enter Administration Page Folder...">
-								<div class="help-text small">Leave blank to use default: \"admin\". e.g. http://www.sitename.com/admin/</div>
-							</div>
-							<div class="form-group">
-								<label for="aTheme">Theme</label>
-								<select id="aTheme" class="form-control" name="aTheme">
-<?php foreach(new DirectoryIterator('layout') as$folder){
-    if($folder->isDOT())continue;
-    if($folder->isDir()){
-      $theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
-									<option value="<?php echo$folder;?>"<?php echo(stristr($folder,'default')?' selected':'');?>><?php echo$theme['title'];?></option>
-<?php }
-}?>
-								</select>
-							</div>
-							<div class="float-right">
-								<button type="submit" class="btn btn-success btn-lg" onclick="$('#block').css({'display':'block'});" role="button" aria-label="Go to Next Step">Next</button>
-							</div>
-						</form>
-					</div>
-					<div id="step3" class="d-none">
-						<h4 class="card-title">Developer Account Settings</h4>
-						<form target="sp" method="post" action="core/installer.php">
-							<input type="hidden" name="emailtrap" value="none">
-							<input type="hidden" name="act" value="step3">
-							<div class="form-group">
-								<label for="aname">Name</label>
-								<input id="aname" name="aname" type="text" class="form-control" value="" placeholder="Enter a Name..." required>
-							</div>
-							<div class="form-group">
-								<label for="aemail">Email</label>
-								<input id="aemail" name="aemail" type="text" class="form-control" value="" placeholder="Enter an Email..." required>
-							</div>
-							<div class="form-group">
-								<label for="ausername">Username</label>
-								<input id="ausername" name="ausername" type="text" class="form-control" value="" placeholder="Enter a Username..." required>
-							</div>
-							<div class="form-group">
-								<label for="apassword">Password</label>
-								<input id="apassword" name="apassword" type="password" class="form-control" value="" placeholder="Enter a Password..." required>
-							</div>
-							<div class="form-group">
-								<label for="atimezone">Timezone</label>
-								<select id="atimezone" name="atimezone" class="form-control">
-									<option value="default">System Default</option>
-<?php             $o=array(
-	                  'Australia/Perth'      => "(GMT+08:00) Perth",
-	                  'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
-	                  'Australia/Darwin'     => "(GMT+09:30) Darwin",
-	                  'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
-	                  'Australia/Canberra'   => "(GMT+10:00) Canberra",
-	                  'Australia/Hobart'     => "(GMT+10:00) Hobart",
-	                  'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
-	                  'Australia/Sydney'     => "(GMT+10:00) Sydney"
-	                );
-	                foreach($o as$tz=>$label)echo'<option value="'.$tz.'">'.$label.'</option>';?>
-								</select>
-							</div>
-							<div class="float-right">
-								<button type="submit" class="btn btn-success btn-lg" role="button" aria-label="Go to Next Step">Next</button>
+						<?php $error=0;
+						if(version_compare(phpversion(),'7.0','<'))echo'<div class="alert alert-danger" role="alert">AuroraCMS was built using PHP v7.0, your installed version is lower. While AuroraCMS may operate on your system, some functionality may not work or be available. We recommend using PHP 7.3 if available on you\'re services!</div>';
+						if(extension_loaded('pdo')){
+							if(empty(PDO::getAvailableDrivers())){
+								$error=1;
+								echo'<div class="alert alert-danger" role="alert">Great PDO is Installed and Active, but there are no Database Drivers Installed!</div>';
+							}
+						}else{
+							$error=1;
+							echo'<div class="alert alert-danger" role="alert">AuroraCMS uses PDO for Database Interaction, please Install or Enable PDO!</div>';
+						}
+						if(file_exists('core/config.ini')&&!is_writable('core/config.ini')){
+							$error=1;
+							echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, but is not writeable. There is two ways to fix this, either make <code>core/config.ini</code> writable, or remove the file!</div>';
+						}
+						if(!isset($_SERVER['HTTP_MOD_REWRITE'])){
+							$error=1;
+							echo'<div class="alert alert-danger" role="alert"><code>mod_rewrite</code> must be available and enabled for AuroraCMS to function correctly!</div>';
+						}
+						if(!extension_loaded('gd')&&!function_exists('gd_info')){
+							$error=1;
+							echo'<div class="alert alert-danger" role="alert">GD-Image is NOT Installed or Enabled!</div>';
+						}
+						echo(!function_exists('exif_read_data')?'<div class="alert alert-info" role="alert">EXIF Functions are NOT enabled or installed. While not Mandatory, some features won\'t work.</div>':'');
+						echo($error==1?'<div class="alert alert-danger" role="alert">Please fix the above Issue\'s outlined within the Red Sections, then Refresh the page to Check Again.</div>':'');
+						if($error==0){?>
+							<h4 class="card-title">Database Settings</h4>
+							<form target="sp" method="post" action="core/installer.php">
+								<input type="hidden" name="emailtrap" value="none">
+								<input type="hidden" name="act" value="step1">
+								<div class="form-group">
+									<label for="dbtype">Type</label>
+									<select id="dbtype" name="dbtype" class="form-control">
+										<?php	foreach(PDO::getAvailableDrivers() as$DRIVER)echo'<option value="'.$DRIVER.'">'.strtoupper($DRIVER).'</option>';?>
+									</select>
+								</div>
+								<div class="form-group">
+									<label for="dbhost">Host</label>
+									<input id="dbhost" name="dbhost" type="text" class="form-control" value="localhost" placeholder="Enter a Host..." required>
+								</div>
+								<div class="form-group">
+									<label for="dbport">Port</label>
+									<input id="dbport" name="dbport" type="text" class="form-control" value="" placeholder="Enter a Port Number, or leave Blank for Default...">
+								</div>
+								<div class="form-group">
+									<label for="dbprefix">Table Prefix</label>
+									<input id="dbprefix" name="dbprefix" type="text" class="form-control" value="aurora_" placeholder="Enter a Table Prefix...">
+								</div>
+								<div class="form-group">
+									<label for="dbschema">Schema</label>
+									<input id="dbschema" name="dbschema" type="text" class="form-control" value="" placeholder="Enter a Database Schema/Name..." required>
+								</div>
+								<div class="form-group">
+									<label for="dbusername">Username</label>
+									<input id="dbusername" name="dbusername" type="text" class="form-control" value="" placeholder="Enter Database Username..." required>
+								</div>
+								<div class="form-group">
+									<label for="dbpassword">Password</label>
+									<input id="dbpassword" name="dbpassword" type="password" class="form-control" value="" placeholder="Enter Database Password..." required>
+								</div>
+								<div class="float-right">
+									<button type="submit" class="btn btn-success btn-lg" aria-label="Go to Next Step">Next</button>
+								</div>
+							</form>
+						</div>
+						<div id="step2" class="d-none">
+							<h4 class="card-title">System Settings</h4>
+							<form target="sp" method="post" action="core/installer.php">
+								<input type="hidden" name="emailtrap" value="none">
+								<input type="hidden" name="act" value="step2">
+								<div class="form-group">
+									<label for="sysurl">Site URL</label>
+									<input id="sysurl" name="sysurl" type="text" class="form-control" value="" placeholder="Enter URL Folder if Site isn't in Domain Root...">
+								</div>
+								<div class="form-group">
+									<label for="sysadmin">Administration Folder</label>
+									<input id="sysadmin" name="sysadmin" type="text" class="form-control" value="" placeholder="Enter Administration Page Folder...">
+									<div class="help-text small">Leave blank to use default: \"admin\". e.g. http://www.sitename.com/admin/</div>
+								</div>
+								<div class="form-group">
+									<label for="aTheme">Theme</label>
+									<select id="aTheme" class="form-control" name="aTheme">
+										<?php foreach(new DirectoryIterator('layout') as$folder){
+    									if($folder->isDOT())continue;
+    									if($folder->isDir()){
+      									$theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
+												<option value="<?php echo$folder;?>"<?php echo(stristr($folder,'default')?' selected':'');?>><?php echo$theme['title'];?></option>
+											<?php }
+										}?>
+									</select>
+								</div>
+								<div class="float-right">
+									<button type="submit" class="btn btn-success btn-lg" onclick="$('#block').css({'display':'block'});" role="button" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
-					</div>
-<?php }?>
+						</div>
+						<div id="step3" class="d-none">
+							<h4 class="card-title">Developer Account Settings</h4>
+							<form target="sp" method="post" action="core/installer.php">
+								<input type="hidden" name="emailtrap" value="none">
+								<input type="hidden" name="act" value="step3">
+								<div class="form-group">
+									<label for="aname">Name</label>
+									<input id="aname" name="aname" type="text" class="form-control" value="" placeholder="Enter a Name..." required>
+								</div>
+								<div class="form-group">
+									<label for="aemail">Email</label>
+									<input id="aemail" name="aemail" type="text" class="form-control" value="" placeholder="Enter an Email..." required>
+								</div>
+								<div class="form-group">
+									<label for="ausername">Username</label>
+									<input id="ausername" name="ausername" type="text" class="form-control" value="" placeholder="Enter a Username..." required>
+								</div>
+								<div class="form-group">
+									<label for="apassword">Password</label>
+									<input id="apassword" name="apassword" type="password" class="form-control" value="" placeholder="Enter a Password..." required>
+								</div>
+								<div class="form-group">
+									<label for="atimezone">Timezone</label>
+									<select id="atimezone" name="atimezone" class="form-control">
+										<option value="default">System Default</option>
+										<?php $o=array(
+		                  'Australia/Perth'      => "(GMT+08:00) Perth",
+		                  'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
+		                  'Australia/Darwin'     => "(GMT+09:30) Darwin",
+		                  'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
+		                  'Australia/Canberra'   => "(GMT+10:00) Canberra",
+		                  'Australia/Hobart'     => "(GMT+10:00) Hobart",
+		                  'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
+		                  'Australia/Sydney'     => "(GMT+10:00) Sydney"
+	                	);
+	                	foreach($o as$tz=>$label)echo'<option value="'.$tz.'">'.$label.'</option>';?>
+									</select>
+								</div>
+								<div class="float-right">
+									<button type="submit" class="btn btn-success btn-lg" role="button" aria-label="Go to Next Step">Next</button>
+								</div>
+							</form>
+						</div>
+					<?php }?>
 					<div id="step4" class="d-none">
 						<div class="well">
 							<div class="alert alert-success text-center" role="alert">Installation Complete!<br>Website is Ready to use!</div>

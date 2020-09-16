@@ -38,7 +38,7 @@
       <a class="nav-link" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false" data-tooltip="tooltip" data-placement="left" data-title="Notifications"><?php svg('bell');?><span id="nav-stat" class="badge badge-pill badge-danger"><?php echo($navStat>0?$navStat:'');?></span></a>
       <div id="nav-stat-list" class="dropdown-menu dropdown-menu-right dropdown-menu-lg shadow">
         <div class="dropdown-header text-center"><strong>Notifications</strong></div>
-<?php   echo$nc['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/content">'.svg2('comments').' Comments<span id="nav-nc" class="badge badge-info">'.$nc['cnt'].'</span></a>':'';
+        <?php echo$nc['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/content">'.svg2('comments').' Comments<span id="nav-nc" class="badge badge-info">'.$nc['cnt'].'</span></a>':'';
         echo$nr['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/content">'.svg2('review').' Reviews<span id="nav-nr" class="badge badge-info">'.$nr['cnt'].'</span></a>':'';
         echo$nm['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/messages">'.svg2('inbox').' Messages<span id="nav-nm" class="badge badge-info">'.$nm['cnt'].'</span></a>':'';
         echo$po['cnt']>0?'<a class="dropdown-item" href="'.URL.$settings['system']['admin'].'/orders/pending">'.svg2('order').' Orders<span id="nav-po" class="badge badge-info">'.$po['cnt'].'</span></a>':'';

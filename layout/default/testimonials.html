@@ -1,6 +1,21 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="testimonials">
+	<breadcrumb>
+		<section class="row mt-3 mb-0">
+			<nav class="col-12 col-sm-11">
+				<ol class="breadcrumb">
+					<json-ld-breadcrumb>
+					<breaditems>
+						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+					</breaditems>
+					<breadcurrent>
+						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+					</breadcurrent>
+				</ol>
+			</nav>
+		</section>
+	</breadcrumb>
 	<pagenotes>
 	  <section class="row mt-5">
 			<article class="col-11">
@@ -12,7 +27,7 @@
 		<article class="col-11 col-sm-5 m-0 p-0">
 			<items>
 				<blockquote class="testimonials">
-					<img src="<print content=avatar>" alt="<print content=name>">
+					<img src="<print content=avatar>" loading="lazy" alt="<print content=name>">
 					<footer>
 						<h3 itemprop="author"><print content="name"></h3>
 						<h5><print content="business"></h5>

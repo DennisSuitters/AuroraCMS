@@ -109,7 +109,8 @@
 
   [class^="col-sm-"],
   .col-sm-auto {
-    flex: 0 0 auto; width: auto; }
+    flex: 0 0 auto;
+    width: auto; }
 
   .col-sm-1 {
     width: 8.333333%; }
@@ -154,7 +155,8 @@
 
   [class^="col-md-"],
   .col-md-auto {
-    flex: 0 0 auto; width: auto; }
+    flex: 0 0 auto;
+    width: auto; }
 
   .col-md-1 {
     width: 8.333333%; }
@@ -198,7 +200,8 @@
 
   [class^="col-lg-"],
   .col-lg-auto {
-    flex: 0 0 auto; width: auto; }
+    flex: 0 0 auto;
+    width: auto; }
 
   .col-lg-1 {
     width: 8.333333%; }
@@ -242,7 +245,8 @@
 
   [class^="col-xl-"],
   .col-xl-auto {
-    flex: 0 0 auto; width: auto; }
+    flex: 0 0 auto;
+    width: auto; }
 
   .col-xl-1 {
     width: 8.333333%; }
@@ -286,7 +290,8 @@
 
   [class^="col-xxl-"],
   .col-xxl-auto {
-    flex: 0 0 auto; width: auto; }
+    flex: 0 0 auto;
+    width: auto; }
 
   .col-xxl-1 {
     width: 8.333333%; }

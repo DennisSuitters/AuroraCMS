@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -30,10 +31,12 @@ if($act=='add_booking'){
     if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
       $blacklisted=$theme['settings']['blacklist'];
 			$spam=TRUE;
-			$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-			$sc->execute([':ip'=>$ip]);
+			$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+			$sc->execute([
+				':ip'=>$ip
+			]);
 			if($sc->rowCount()<1){
-	      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+	      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 	      $s->execute([
           ':ip'=>$ip,
           ':oti'=>$ti,
@@ -70,10 +73,12 @@ if($act=='add_booking'){
 				$spam=TRUE;
 			}
 			if($config['spamfilter'][1]==1&&$spam==TRUE){
-				$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-				$sc->execute([':ip'=>$ip]);
+				$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+				$sc->execute([
+					':ip'=>$ip
+				]);
 				if($sc->rowCount()<1){
-					$s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+					$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 					$s->execute([
 						':ip'=>$ip,
 						':oti'=>$ti,
@@ -87,12 +92,15 @@ if($act=='add_booking'){
 			if(filter_var($email,FILTER_VALIDATE_EMAIL)){
 				$tis=$tis==0?$ti:strtotime($tis.$tim);
 				if($rid!=0){
-					$s=$db->prepare("SELECT id,tie FROM `".$prefix."content` WHERE id=:id");
-					$s->execute([':id'=>$rid]);
+					$s=$db->prepare("SELECT `id`,`tie` FROM `".$prefix."content` WHERE `id`=:id");
+					$s->execute([
+						':id'=>$rid
+					]);
 					$r=$s->fetch(PDO::FETCH_ASSOC);
 					$tie=$r['tie'];
-				}else$tie=0;
-				$q=$db->prepare("INSERT INTO `".$prefix."content` (rid,contentType,name,email,business,address,suburb,city,state,postcode,phone,notes,status,tis,tie,ti) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
+				}else
+					$tie=0;
+				$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`notes`,`status`,`tis`,`tie`,`ti`) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
 				$q->execute([
 					':rid'=>$rid,
 					':contentType'=>'booking',
@@ -131,8 +139,10 @@ if($act=='add_booking'){
 						$mail->Subject=$subject;
 						$msg='Booking Date: '.date($config['dateFormat'],$tis).'<br />';
 						if($rid!=0){
-							$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-							$s->execute([':id'=>$rid]);
+							$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+							$s->execute([
+								':id'=>$rid
+							]);
 							$r=$s->fetch(PDO::FETCH_ASSOC);
 							$msg.='Booked: '.ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title'];
 						}

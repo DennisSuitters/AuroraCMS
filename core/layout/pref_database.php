@@ -36,9 +36,9 @@
         <legend>Database Backup/Restore</legend>
         <div id="backup" name="backup">
           <div id="backup_info">
-<?php $tid=$ti-2592000;
-if($config['backup_ti']<$tid)
-  echo$config['backup_ti']==0?'<div class="alert alert-info" role="alert">A Backup has yet to be performed.</div>':'<div class="alert alert-danger" role="alert">It has been more than 30 days since a Backup has been performed.</div>';?>
+            <?php $tid=$ti-2592000;
+            if($config['backup_ti']<$tid)
+              echo$config['backup_ti']==0?'<div class="alert alert-info" role="alert">A Backup has yet to be performed.</div>':'<div class="alert alert-danger" role="alert">It has been more than 30 days since a Backup has been performed.</div>';?>
           </div>
           <form target="sp" method="post" action="core/backup.php">
             <div class="form-group">
@@ -50,18 +50,18 @@ if($config['backup_ti']<$tid)
             </div>
           </form>
           <div id="backups" class="form-group">
-<?php foreach(glob("media".DS."backup".DS."*") as$file){
-  $filename=basename($file);
-  $filename=rtrim($filename,'.sql.gz');?>
-            <div id="l_<?php echo$filename;?>" class="form-group">
-              <div class="input-group">
-                <a class="btn btn-secondary col" href="<?php echo$file;?>">Click to Download <?php echo ltrim($file,'media'.DS.'backup'.DS);?></a>
-                <div class="input-group-append">
-                  <button class="btn btn-secondary trash" onclick="removeBackup('<?php echo$filename;?>')" aria-label="Delete"><?php svg('trash');?></button>
+            <?php foreach(glob("media".DS."backup".DS."*") as$file){
+              $filename=basename($file);
+              $filename=rtrim($filename,'.sql.gz');?>
+              <div id="l_<?php echo$filename;?>" class="form-group">
+                <div class="input-group">
+                  <a class="btn btn-secondary col" href="<?php echo$file;?>">Click to Download <?php echo ltrim($file,'media'.DS.'backup'.DS);?></a>
+                  <div class="input-group-append">
+                    <button class="btn btn-secondary trash" onclick="removeBackup('<?php echo$filename;?>')" aria-label="Delete"><?php svg('trash');?></button>
+                  </div>
                 </div>
               </div>
-            </div>
-<?php }?>
+            <?php }?>
           </div>
           <form target="sp" method="post" enctype="multipart/form-data" action="core/restorebackup.php">
             <div class="form-group">

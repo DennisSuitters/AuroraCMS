@@ -7,13 +7,49 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
+ * @changes    v0.0.20 Add parsing for Breadcrumbs.
  */
+if(stristr($html,'<breadcrumb>')){
+ preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
+ $breaditem=$matches[1];
+ preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
+ $breadcurrent=$matches[1];
+ $jsoni=2;
+ $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+ $breadit=preg_replace([
+   '/<print breadcrumb=[\"\']?url[\"\']?>/',
+   '/<print breadcrumb=[\"\']?title[\"\']?>/'
+ ],[
+   URL,
+   'Home'
+ ],$breaditem);
+ $breaditems=$breadit;
+ $breadit=preg_replace([
+   '/<print breadcrumb=[\"\']?title[\"\']?>/'
+ ],[
+   htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
+ ],$breadcurrent);
+ $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}},';
+ $breaditems.=$breadit;
+ $html=preg_replace([
+   '/<[\/]?breadcrumb>/',
+   '/<json-ld-breadcrumb>/',
+   '~<breaditems>.*?<\/breaditems>~is',
+   '~<breadcurrent>.*?<\/breadcurrent>~is'
+ ],[
+   '',
+   $jsonld.']}</script>',
+   $breaditems,
+   ''
+ ],$html);
+}
 if($page['notes']!=''){
 	$html=preg_replace([
 		'/<print page=[\"\']?notes[\"\']?>/',
@@ -29,7 +65,7 @@ if(stristr($html,'<hours>')){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
 		$htmlHours=$matches[1];
 		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='hours'");
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours'");
 		if($s->rowCount()>0){
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
 				$buildHours=$htmlHours;
@@ -40,7 +76,7 @@ if(stristr($html,'<hours>')){
 					else{
 						$hourFromH=substr($r['tis'],0,2);
 						$hourFromM=substr($r['tis'],3,4);
-						$hourFrom=($hourFromH < 12 ? ltrim($hourFromH,'0') . ($hourFromM > 0 ? $hourFromM : '' ).'am' : $hourFromH - 12 . ($hourFromM > 0 ? $hourFromM : '') . 'pm');
+						$hourFrom=($hourFromH<12?ltrim($hourFromH,'0').($hourFromM>0?$hourFromM:'').'am':$hourFromH - 12 .($hourFromM>0?$hourFromM:'').'pm');
 					}
 				}else
 					$hourFrom='';
@@ -51,7 +87,7 @@ if(stristr($html,'<hours>')){
 					else{
 						$hourToH=substr($r['tie'],0,2);
 						$hourToM=substr($r['tie'],3,4);
-						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
+						$hourTo=($hourToH<12?ltrim($hourToH,'0').($hourToM>0?$hourToM:'').'am':$hourToH - 12 .($hourToM>0?$hourToM:'').'pm');
 					}
 				}else
 					$hourTo='';
@@ -65,8 +101,8 @@ if(stristr($html,'<hours>')){
 					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])),
 					($r['password']==$r['username']?'':'-'.ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
 					$hourFrom,
-					($r['tie']>0?'-' . $hourTo : ''),
-					($r['title']!=''?ucfirst($r['title']):'')
+					($r['tie']>0?'-'.$hourTo:''),
+					($r['title']!=''?htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'):'')
 				],$buildHours);
 				$hoursItems.=$buildHours;
 			}
@@ -78,8 +114,13 @@ if(stristr($html,'<hours>')){
 				'',
 				$hoursItems,
 			],$html);
-	}else
-		$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
+	}else{
+		$html=preg_replace([
+      '~<hours>.*?<\/hours>~is'
+    ],[
+      ''
+    ],$html,1);
+  }
 }
 if(stristr($html,'<email>')){
 	if($config['options'][23]==1){
@@ -90,8 +131,13 @@ if(stristr($html,'<email>')){
 			'',
 			'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
 		],$html);
-	}else
-		$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
+	}else{
+		$html=preg_replace([
+      '~<email>.*?<\/email>~is'
+    ],[
+      ''
+    ],$html,1);
+  }
 }
 if(stristr($html,'<contact>')){
 	if($config['options'][22]==1){
@@ -110,8 +156,13 @@ if(stristr($html,'<contact>')){
 			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
 			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
 		],$html);
-	}else
-		$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
+	}else{
+		$html=preg_replace([
+      '~<contact>.*?<\/contact>~is'
+    ],[
+      ''
+    ],$html,1);
+  }
 }
 if(stristr($html,'<phone>')){
 	if($config['options'][24]==1){
@@ -124,10 +175,15 @@ if(stristr($html,'<phone>')){
 			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
 			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
 		],$html);
-	}else
-		$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
+	}else{
+		$html=preg_replace([
+      '~<phone>.*?<\/phone>~is'
+    ],[
+      ''
+    ],$html,1);
+  }
 }
-$s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='subject' ORDER BY title ASC");
+$s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
 $s->execute();
 if($s->rowCount()>0){
 	$html=preg_replace([

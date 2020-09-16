@@ -7,19 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Add parsing for Breadcrumbs.
  */
 $rank=0;
 $notification='';
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 $html=str_replace('<print view>',$view,$html);
-$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE contentType=:contentType AND LOWER(title)=LOWER(:title)");
+$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType AND LOWER(`title`)=LOWER(:title)");
 $s->execute([
   ':contentType'=>$view,
   ':title'=>str_replace('-',' ',$args[0])
@@ -86,6 +87,39 @@ if(preg_match('/<print page=[\"\']?cover[\"\']?>/',$html)){
   ],[
     $coverHTML,
     htmlspecialchars($r['fileALT'],ENT_QUOTES,'UTF-8')
+  ],$html);
+}
+if(stristr($html,'<breadcrumb>')){
+  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
+  $breaditem=$matches[1];
+  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
+  $breadcurrent=$matches[1];
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+  $breadit=preg_replace([
+    '/<print breadcrumb=[\"\']?url[\"\']?>/',
+    '/<print breadcrumb=[\"\']?title[\"\']?>/'
+  ],[
+    URL,
+    'Home'
+  ],$breaditem);
+  $breaditems=$breadit;
+  $breadit=preg_replace([
+    '/<print breadcrumb=[\"\']?title[\"\']?>/'
+  ],[
+    htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
+  ],$breadcurrent);
+  $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}},';
+  $breaditems.=$breadit;
+  $html=preg_replace([
+    '/<[\/]?breadcrumb>/',
+    '/<json-ld-breadcrumb>/',
+    '~<breaditems>.*?<\/breaditems>~is',
+    '~<breadcurrent>.*?<\/breadcurrent>~is'
+  ],[
+    '',
+    $jsonld.']}</script>',
+    $breaditems,
+    ''
   ],$html);
 }
 $html=preg_replace([

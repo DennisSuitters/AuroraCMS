@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.18 Add functionality to retreive client information from content table and bookings.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 require_once'db.php';
@@ -34,17 +35,21 @@ if($id==0){
   ];
 }else{
   if($w=='booking'){
-    $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-    $q->execute([':id'=>$id]);
+    $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+    $q->execute([
+      ':id'=>$id
+    ]);
     $c=$q->fetch(PDO::FETCH_ASSOC);
   }
   if($w=='noaccount'){
-    $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-    $q->execute([':id'=>$id]);
+    $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+    $q->execute([
+      ':id'=>$id
+    ]);
     $c=$q->fetch(PDO::FETCH_ASSOC);
   }
 }
-$q=$db->prepare("UPDATE `".$prefix."content` SET  cid=:cid,business=:business,name=:name,address=:address,suburb=:suburb,state=:state,city=:city,postcode=:postcode,email=:email,phone=:phone,mobile=:mobile WHERE id=:id");
+$q=$db->prepare("UPDATE `".$prefix."content` SET  `cid`=:cid,`business`=:business,`name`=:name,`address`=:address,`suburb`=:suburb,`state`=:state,`city`=:city,`postcode`=:postcode,`email`=:email,`phone`=:phone,`mobile`=:mobile WHERE `id`=:id");
 $q->execute([
   ':cid'=>$id,
   ':business'=>$c['business'],

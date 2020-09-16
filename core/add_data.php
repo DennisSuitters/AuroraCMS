@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -19,6 +19,8 @@
  * @changes    v0.0.15 Add Edit Media information button.
  * @changes    v0.0.17 Add Business Hours.
  * @changes    v0.0.19 Improve Business Hours item Layout, and rebind Drag to Reorder.
+ * @changes    v0.0.20 Add Media Views to added Media Items.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -51,7 +53,7 @@ if($act!=''){
 			$tis=filter_input(INPUT_POST,'tisx',FILTER_SANITIZE_STRING);
 			$tie=filter_input(INPUT_POST,'tiex',FILTER_SANITIZE_STRING);
 			if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
-				$q=$db->prepare("INSERT INTO `".$prefix."rewards` (code,title,method,value,quantity,tis,tie,ti) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
+				$q=$db->prepare("INSERT IGNORE INTO `".$prefix."rewards` (`code`,`title`,`method`,`value`,`quantity`,`tis`,`tie`,`ti`) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
 				$q->execute([
 	        ':code'=>$code,
 	        ':title'=>$title,
@@ -93,7 +95,7 @@ if($act!=''){
     case'add_dashrss':
       $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
       if(filter_var($url,FILTER_VALIDATE_URL)){
-        $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,contentType,url,ti) VALUES (:uid,'dashrss',:url,'0')");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`url`,`ti`) VALUES (:uid,'dashrss',:url,'0')");
         $q->execute([
           ':uid'=>$uid,
           ':url'=>$url
@@ -133,7 +135,7 @@ echo'<div id="l_'.$id.'" class="form-group">'.
         if($icon=='none'||$url==''){?>
   window.top.window.toastr["error"]("Not all Fields were filled in!");
 <?php   }else{
-          $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,contentType,icon,url) VALUES (:uid,'social',:icon,:url)");
+          $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`icon`,`url`) VALUES (:uid,'social',:icon,:url)");
           $q->execute([
             ':uid'=>kses($user,array()),
             ':icon'=>$icon,
@@ -170,7 +172,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
 				$timefrom=filter_input(INPUT_POST,'timefrom',FILTER_SANITIZE_NUMBER_INT);
 				$timeto=filter_input(INPUT_POST,'timeto',FILTER_SANITIZE_NUMBER_INT);
 	      $info=filter_input(INPUT_POST,'info',FILTER_SANITIZE_STRING);
-        $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,contentType,username,password,tis,tie,title) VALUES (0,'hours',:f,:t,:tis,:tie,:info)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`username`,`password`,`tis`,`tie`,`title`) VALUES (0,'hours',:f,:t,:tis,:tie,:info)");
         $q->execute([
           ':f'=>$from,
           ':t'=>$to,
@@ -257,7 +259,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       if($ttl==''){?>
 	window.top.window.toastr["error"]("Not all Fields were filled in!");
 <?php }else{
-        $q=$db->prepare("INSERT INTO `".$prefix."choices` (uid,rid,contentType,title,ti) VALUES (:uid,:rid,'option',:title,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`rid`,`contentType`,`title`,`ti`) VALUES (:uid,:rid,'option',:title,:ti)");
         $q->execute([
           ':uid'=>$uid,
           ':rid'=>$rid,
@@ -268,27 +270,31 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
         $e=$db->errorInfo();
         if(is_null($e[2])){?>
 	window.top.window.$('#itemoptions').append('<?php
-echo'<div id="l_'.$id.'" class="form-group">'.
+echo'<div id="l_'.$id.'" class="form-group row">'.
 			'<div class="input-group col-12">'.
-				'<span class="input-group-addon">Option</span>'.
+				'<div class="input-group-prepend">'.
+					'<div class="input-group-text">Option</div>'.
+				'</div>'.
 				'<form target="sp" method="post">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
 					'<input type="hidden" name="t" value="choices">'.
 					'<input type="hidden" name="c" value="title">'.
 					'<input type="text" class="form-control" name="da" value="'.$ttl.'" placeholder="Enter an Option...">'.
 				'</form>'.
-				'<span class="input-group-addon">Quantity</span>'.
+				'<div class="input-group-append">'.
+					'<div class="input-group-text">Quantity</div>'.
+				'</div>'.
 				'<form target="sp" method="post">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
 					'<input type="hidden" name="t" value="choices">'.
 					'<input type="hidden" name="c" value="ti">'.
 					'<input type="text" class="form-control" name="da" value="'.$qty.'" placeholder="Quantity">'.
 				'</form>'.
-				'<div class="input-group-btn">'.
+				'<div class="input-group-append">'.
 					'<form target="sp" action="core/purge.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
 						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 					'</form>'.
 				'</div>'.
 			'</div>'.
@@ -306,12 +312,12 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 	window.top.window.toastr["warning"]("Item can't be related to itself!");
 <?php	}else{
 				if($rid!=0){
-				  $s=$db->prepare("SELECT id FROM `".$prefix."choices` WHERE contentType='related' AND rid=:rid");
+				  $s=$db->prepare("SELECT `id` FROM `".$prefix."choices` WHERE `contentType`='related' AND `rid`=:rid");
 				  $s->execute([
 				    ':rid'=>$rid
 				  ]);
 				  if($s->rowCount()==0){
-				    $ss=$db->prepare("INSERT INTO `".$prefix."choices` (uid,rid,contentType,ti) VALUES (:id,:rid,'related',:ti)");
+				    $ss=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`rid`,`contentType`,`ti`) VALUES (:id,:rid,'related',:ti)");
 				    $ss->execute([
 				      ':id'=>$id,
 				      ':rid'=>$rid,
@@ -320,8 +326,10 @@ echo'<div id="l_'.$id.'" class="form-group">'.
 						$id=$db->lastInsertId();
 						$e=$db->errorInfo();
 						if(is_null($e[2])){
-							$si=$db->prepare("SELECT id,contentType,title FROM `".$prefix."content` WHERE id=:id");
-							$si->execute([':id'=>$rid]);
+							$si=$db->prepare("SELECT `id`,`contentType`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+							$si->execute([
+								':id'=>$rid
+							]);
 							$ri=$si->fetch(PDO::FETCH_ASSOC);?>
 		window.top.window.$('#relateditems').append('<?php
 echo'<div id="l_'.$id.'" class="form-group row">'.
@@ -354,7 +362,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       if($sub==''){?>
   window.top.window.toastr["error"]("Not all Fields were filled in!");
 <?php }else{
-        $q=$db->prepare("INSERT INTO `".$prefix."choices` (contentType,title,url) VALUES ('subject',:title,:url)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`contentType`,`title`,`url`) VALUES ('subject',:title,:url)");
         $q->execute([
           ':title'=>kses($sub,array()),
           ':url'=>kses($eml,array())
@@ -386,10 +394,12 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       break;
     case'make_client':
       $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-      $q=$db->prepare("SELECT name,email,phone FROM `".$prefix."messages` WHERE id=:id");
-      $q->execute([':id'=>$id]);
+      $q=$db->prepare("SELECT `name`,`email`,`phone` FROM `".$prefix."messages` WHERE `id`=:id");
+      $q->execute([
+				':id'=>$id
+			]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
-      $q=$db->prepare("INSERT INTO `".$prefix."login` (name,email,phone,ti) VALUES (:name,:email,:phone,:ti)");
+      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`name`,`email`,`phone`,`ti`) VALUES (:name,:email,:phone,:ti)");
       $q->execute([
         ':name'=>$r['name'],
         ':email'=>$r['email'],
@@ -407,15 +417,17 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
       $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
       if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-        $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE email=:email");
-        $q->execute([':email'=>$email]);
+        $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `email`=:email");
+        $q->execute([
+					':email'=>$email
+				]);
         $c=$q->fetch(PDO::FETCH_ASSOC);
         $cid=$c['id']!=0?$c['id']:0;
         $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
         $contentType=filter_input(INPUT_POST,'contentType',FILTER_SANITIZE_STRING);
         $da=filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING);
         $status='approved';
-        $q=$db->prepare("INSERT INTO `".$prefix."comments` (contentType,rid,uid,cid,ip,name,email,notes,status,ti) VALUES (:contentType,:rid,:uid,:cid,:ip,:name,:email,:notes,:status,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."comments` (`contentType`,`rid`,`uid`,`cid`,`ip`,`name`,`email`,`notes`,`status`,`ti`) VALUES (:contentType,:rid,:uid,:cid,:ip,:name,:email,:notes,:status,:ti)");
         $q->execute([
           ':contentType'=>$contentType,
           ':rid'=>$rid,
@@ -486,9 +498,9 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
 							$fn=$col.'_'.$id.'.gif';
 						if($act=='add_tstavatar'){
 							$fn='tst'.$fn;
-							$q=$db->prepare("UPDATE `".$prefix."content` SET file=:avatar WHERE id=:id");
+							$q=$db->prepare("UPDATE `".$prefix."content` SET `file`=:avatar WHERE `id`=:id");
 						}else
-							$q=$db->prepare("UPDATE `".$prefix."login` SET avatar=:avatar WHERE id=:id");
+							$q=$db->prepare("UPDATE `".$prefix."login` SET `avatar`=:avatar WHERE `id`=:id");
 						$q->execute([
 							':avatar'=>'avatar'.$fn,
 							':id'=>$id
@@ -516,7 +528,7 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
         if($t=='pages'||$t=='content'){
 					$file_list=explode(',',$fu);
 					foreach($file_list as $file){
-	          $q=$db->prepare("INSERT INTO `".$prefix."media` (rid,pid,file,ti) VALUES (:rid,:pid,:file,:ti)");
+	          $q=$db->prepare("INSERT IGNORE INTO `".$prefix."media` (`rid`,`pid`,`file`,`ti`) VALUES (:rid,:pid,:file,:ti)");
 	          $q->execute([
 							':rid'=>$rid,
 	            ':pid'=>$id,
@@ -524,7 +536,7 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
 	            ':ti'=>time()
 	          ]);
 	          $iid=$db->lastInsertId();
-	          $q=$db->prepare("UPDATE `".$prefix."media` SET ord=:ord WHERE id=:id");
+	          $q=$db->prepare("UPDATE `".$prefix."media` SET `ord`=:ord WHERE `id`=:id");
 	          $q->execute([
 	            ':id'=>$iid,
 	            ':ord'=>$iid+1
@@ -537,6 +549,7 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
 			'</a>'.
 			'<div class="btn-group float-right">'.
 				'<div class="handle btn btn-secondary btn-xs" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
+				'<div class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Viewed 0 times">'.svg2('view').' &nbsp;0</div>'.
 				'<a class="btn btn-secondary btn-xs" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
 				'<button class="btn btn-secondary trash btn-xs" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 			'</div>'.
@@ -551,8 +564,10 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
       $oid=filter_input(INPUT_GET,'oid',FILTER_SANITIZE_NUMBER_INT);
       $iid=filter_input(INPUT_GET,'iid',FILTER_SANITIZE_NUMBER_INT);
       if($iid!=0){
-        $q=$db->prepare("SELECT title,cost FROM `".$prefix."content` WHERE id=:id");
-        $q->execute([':id'=>$iid]);
+        $q=$db->prepare("SELECT `title`,`cost` FROM `".$prefix."content` WHERE `id`=:id");
+        $q->execute([
+					':id'=>$iid
+				]);
         $r=$q->fetch(PDO::FETCH_ASSOC);
 				if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
       }else{
@@ -561,7 +576,7 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
           'cost'=>0
         ];
       }
-      $q=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,title,quantity,cost,ti) VALUES (:oid,:iid,:title,'1',:cost,:ti)");
+      $q=$db->prepare("INSERT INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:ti)");
       $q->execute([
         ':oid'=>$oid,
         ':iid'=>$iid,
@@ -575,8 +590,10 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
       $q->execute([':oid'=>$oid]);?>
   window.top.window.$('#updateorder').html('<?php
       while($oi=$q->fetch(PDO::FETCH_ASSOC)){
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-        $s->execute([':id'=>$oi['iid']]);
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+        $s->execute([
+					':id'=>$oi['iid']
+				]);
         $i=$s->fetch(PDO::FETCH_ASSOC);
         echo'<tr>'.
 							'<td class="text-left">'.$i['code'].'<div class="visible-xs">'.$i['title'].'</div></td>'.

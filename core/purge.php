@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.5 Add Removal of Live Chat conversations.
  * @changes    v0.0.15 Add Removal of Cart items.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -23,20 +24,26 @@ $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filt
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
 if($id!=0&&$tbl!='logs'&&$tbl!='livechat'){
-  $s=$db->prepare("SELECT * FROM ".$prefix.$tbl." WHERE id=:id");
-  $s->execute([':id'=>$id]);
+  $s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
+  $s->execute([
+    ':id'=>$id
+  ]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($tbl=='config'||$tbl=='login')$r['contentType']='';
   $nda='';
   foreach($r as$o)$nda.=$o.'|';
 }
 if($tbl=='suggestions'){
-  $s=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE id=:id");
-  $s->execute([':id'=>$id]);
+  $s=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE `id`=:id");
+  $s->execute([
+    ':id'=>$id
+  ]);
   if($s->rowCount()==1){
     $r=$s->fetch(PDO::FETCH_ASSOC);
-    $ss=$db->prepare("UPDATE ".$prefix.$r['t']." SET suggestions=0 WHERE id=:id");
-    $ss->execute([':id'=>$r['rid']]);
+    $ss=$db->prepare("UPDATE `".$prefix.$r['t']."` SET `suggestions`=0 WHERE `id`=:id");
+    $ss->execute([
+      ':id'=>$r['rid']
+    ]);
   }
 }
 if($id==0&&$tbl=='iplist'){
@@ -60,27 +67,35 @@ if($id==0&&$tbl=='cart'){
   $id='cart';
 }
 if($id==0&&$tbl=='pageviews'){
-  $q=$db->query("UPDATE menu SET views='0'");
+  $q=$db->query("UPDATE `".$prefix."menu` SET `views`='0'");
   $q->execute();
   $id='';
 }
 if($id==0&&$tbl=='contentviews'){
-  $q=$db->prepare("UPDATE content SET views='0' WHERE contentType=:contentType");
-  $q->execute([':contentType'=>$col]);
+  $q=$db->prepare("UPDATE `".$prefix."content` SET `views`='0' WHERE `contentType`=:contentType");
+  $q->execute([
+    ':contentType'=>$col
+  ]);
   $id='';
 }
 if($tbl=='orders'){
-  $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE oid=:oid");
-  $q->execute([':oid'=>$id]);
+  $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `oid`=:oid");
+  $q->execute([
+    ':oid'=>$id
+  ]);
 }
 if($id!=0&&$id!='activity'){
-  $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE id=:id");
-  $q->execute([':id'=>$id]);
+  $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
+  $q->execute([
+    ':id'=>$id
+  ]);
   if($tbl=='media')$el='media_items_';
 }
 if($tbl=='livechat'){
-  $q=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE sid=:sid");
-  $q->execute([':sid'=>$col]);?>
+  $q=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE `sid`=:sid");
+  $q->execute([
+    ':sid'=>$col
+  ]);?>
   window.top.window.$('#l_<?php echo$id;?>').removeClass('active');
   window.top.window.$('#l_<?php echo$id;?>').remove();
   window.top.window.$('#chatTitle').html('&nbsp;');

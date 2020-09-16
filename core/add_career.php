@@ -7,14 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 include'sanitise.php';
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
@@ -30,7 +31,7 @@ if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
 if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%3E%3C/p%3E','',$da);
 $si=session_id();
 $ti=time();
-$s=$db->prepare("INSERT INTO `".$prefix."content` (cid,contentType,title,business,notes,tis,tie,ti) VALUES (:cid,'career',:title,:business,:notes,:tis,:tie,:ti)");
+$s=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`cid`,`contentType`,`title`,`business`,`notes`,`tis`,`tie`,`ti`) VALUES (:cid,'career',:title,:business,:notes,:tis,:tie,:ti)");
 $s->execute([
   ':cid'=>$id,
   ':title'=>$title,

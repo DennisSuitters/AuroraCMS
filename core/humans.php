@@ -7,15 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.7
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.7 Fix old CMS references.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 header("Content-Type:text/plain");
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 require'core'.DS.'db.php';
-$config=$db->query("SELECT development,seoTitle,theme FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `development`,`seoTitle`,`theme` FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $theme=parse_ini_file('layout'.DS.$config['theme'].DS.'theme.ini',true);
 $siteTitle=$config['seoTitle']!=''?$config['seoTitle']:URL;
 $themeTitle=$theme['title'];

@@ -1,4 +1,22 @@
-### v0.0.19
+### v0.0.20
+- Fix elFinder not returning the correct thumbnail filename.
+- Fix content editing not displaying Images and Thumbnails correctly.
+- Allow Image Uploading for Coming Soon and Maintenance pages.
+- Add Media Views to added Media Items and Views adding for front end.
+- Adjust Fancybox front end with vars() from stylesheet to make theming easier.
+- Add parsing primary category only.
+- Fix Development Information Bar insertion point.
+- Add markup and functionality for Side Menu Shopping Cart display that updates with refresh the page.
+- Add Quick View to Inventory where multiple items are displayed.
+- Add check for "mbstring".
+- Fix SQL Reserved Word usage.
+- Add toggle option for Product Quick View.
+- Create elFinder plugin that utilizes "ZebraImage" to resize multiple images for responsive use of srcset.
+- Add parsing for srcset "SM", "MD", and "LG" images.
+- Adjust elFinder to create and use thumbnails of the same type of uploaded images.
+- Add parsing for Breadcrumbs.
+
+##### v0.0.19
 - Add Star Rating option for Editing Testimonials.
 - Fix Business Hours Selections to clear values.
 - Improve Business Hours editing, added Drag to Reorder.

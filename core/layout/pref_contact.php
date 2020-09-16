@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
@@ -17,6 +17,7 @@
  * @changes    v0.0.19 Add Drag to Reorder Business Hours items.
  * @changes    v0.0.19 Change Select for Additional Info to Text Input with Datalist.
  * @changes    v0.0.19 Add Save All button.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -128,79 +129,79 @@
             </div>
           </form>
           <div id="hours">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='hours' ORDER BY ord ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-            <div id="l_<?php echo$rs['id'];?>" class="form-group row px-0 item">
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pr-xl-0">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">From</div>
+            <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
+            $ss->execute();
+            while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+              <div id="l_<?php echo$rs['id'];?>" class="form-group row px-0 item">
+                <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pr-xl-0">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">From</div>
+                  </div>
+                  <input type="text" class="form-control" value="<?php echo ucfirst($rs['username']);?>" readonly>
                 </div>
-                <input type="text" class="form-control" value="<?php echo ucfirst($rs['username']);?>" readonly>
-              </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">To</div>
+                <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">To</div>
+                  </div>
+                  <input type="text" class="form-control" value="<?php echo ucfirst($rs['password']);?>" readonly>
                 </div>
-                <input type="text" class="form-control" value="<?php echo ucfirst($rs['password']);?>" readonly>
-              </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">Time From</div>
+                <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">Time From</div>
+                  </div>
+                  <input type="text" class="form-control" value="<?php echo $rs['tis'];?>" readonly>
                 </div>
-                <input type="text" class="form-control" value="<?php echo $rs['tis'];?>" readonly>
-              </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">Time To</div>
+                <div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">Time To</div>
+                  </div>
+                  <input type="text" class="form-control" value="<?php echo $rs['tie'];?>" readonly>
                 </div>
-                <input type="text" class="form-control" value="<?php echo $rs['tie'];?>" readonly>
-              </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-3 px-xl-0">
-                <div class="input-group-prepend">
-                  <div class="input-group-text">Additional Info</div>
+                <div class="input-group col-12 col-md-6 col-lg-4 col-xl-3 px-xl-0">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">Additional Info</div>
+                  </div>
+                  <input type="text" class="form-control" value="<?php echo $rs['title'];?>" readonly>
                 </div>
-                <input type="text" class="form-control" value="<?php echo $rs['title'];?>" readonly>
-              </div>
-              <div class="input-group col-12 col-md-6 col-lg-4 col-xl-1 pl-xl-0">
-                <div class="btn-group">
-                  <div class="btn btn-secondary" data-tooltip="tooltip" data-title="Drag to Reorder"><?php echo svg('drag');?></div>
-                  <form target="sp" action="core/purge.php">
-                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                    <input type="hidden" name="t" value="choices">
-                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php echo svg('trash');?></button>
-                  </form>
+                <div class="input-group col-12 col-md-6 col-lg-4 col-xl-1 pl-xl-0">
+                  <div class="btn-group">
+                    <div class="btn btn-secondary" data-tooltip="tooltip" data-title="Drag to Reorder"><?php echo svg('drag');?></div>
+                    <form target="sp" action="core/purge.php">
+                      <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                      <input type="hidden" name="t" value="choices">
+                      <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php echo svg('trash');?></button>
+                    </form>
+                  </div>
                 </div>
               </div>
-            </div>
-<?php }?>
+            <?php }?>
             <div class="ghost hidden"></div>
           </div>
-<?php if($user['options'][1]==1){?>
-          <script>
-            $('#hours').sortable({
-              items:"div.item",
-              placeholder:".ghost",
-              helper:fixWidthHelper,
-              axis:"y",
-              update:function(e,ui){
-                var order=$("#hours").sortable("serialize");
-                $.ajax({
-                  type:"POST",
-                  dataType:"json",
-                  url:"core/reorderhours.php",
-                  data:order
+          <?php if($user['options'][1]==1){?>
+            <script>
+              $('#hours').sortable({
+                items:"div.item",
+                placeholder:".ghost",
+                helper:fixWidthHelper,
+                axis:"y",
+                update:function(e,ui){
+                  var order=$("#hours").sortable("serialize");
+                  $.ajax({
+                    type:"POST",
+                    dataType:"json",
+                    url:"core/reorderhours.php",
+                    data:order
+                  });
+                }
+              }).disableSelection();
+              function fixWidthHelper(e,ui){
+                ui.children().each(function(){
+                  $(this).width($(this).width());
                 });
+                return ui;
               }
-            }).disableSelection();
-            function fixWidthHelper(e,ui){
-              ui.children().each(function(){
-                $(this).width($(this).width());
-              });
-              return ui;
-            }
-          </script>
-<?php }?>
+            </script>
+          <?php }?>
         </fieldset>
         <hr>
         <div class="form-group row">

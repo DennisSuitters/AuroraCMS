@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $rank=0;
 $notification='';
@@ -22,7 +23,7 @@ if(stristr($html,'<items')){
   }
   $html=preg_replace('/<settings.*>/','',$html);
   $counti=1;
-  $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE status='published' AND internal!='1' ORDER BY rand()");
+  $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `status`='published' AND `internal`!='1' ORDER BY rand()");
   $s->execute();
   preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
   $item=$matches[1];
@@ -32,8 +33,10 @@ if(stristr($html,'<items')){
     $filechk=$noimage;
     $thumbchk=$noimage;
     if($r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
-    $sr=$db->prepare("SELECT active FROM `".$prefix."menu` WHERE contentType=:contentType");
-    $sr->execute([':contentType'=>$r['contentType']]);
+    $sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
+    $sr->execute([
+      ':contentType'=>$r['contentType']
+    ]);
     $pr=$sr->fetch(PDO::FETCH_ASSOC);
     if($pr['active']!=1)continue;
     if($r['status']!=$status)continue;
@@ -51,8 +54,10 @@ if(stristr($html,'<items')){
         $shareImage=URL.NOIMAGE;
     }
     if($si==1)$si++;
-    $su=$db->prepare("SELECT id,username,name FROM login WHERE id=:id");
-    $su->execute([':id'=>$r['uid']]);
+    $su=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
+    $su->execute([
+      ':id'=>$r['uid']
+    ]);
     $ua=$su->fetch(PDO::FETCH_ASSOC);
     $items=preg_replace([
       '/<print content=[\"\']?thumb[\"\']?>/',

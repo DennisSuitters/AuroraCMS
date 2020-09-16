@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.4
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Session Options var for handling User Permissions.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(!isset($act))
   $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
@@ -23,8 +24,10 @@ if($act=='logout'){
 }elseif($act=='login'||(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)){
   $username=isset($_POST['username'])?filter_input(INPUT_POST,'username',FILTER_SANITIZE_STRING):$_SESSION['username'];
   $password=isset($_POST['password'])?filter_input(INPUT_POST,'password',FILTER_SANITIZE_STRING):$_SESSION['password'];
-  $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE username=:username AND activate='' AND active='1' LIMIT 1");
-  $q->execute([':username'=>$username]);
+  $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username AND `activate`='' AND `active`='1' LIMIT 1");
+  $q->execute([
+    ':username'=>$username
+  ]);
   $user=$q->fetch(PDO::FETCH_ASSOC);
   if($user['id']!=0){
     if(password_verify($password,$user['password'])){
@@ -51,7 +54,7 @@ if($act=='logout'){
   $_SESSION['options']=0;
 }
 if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
-  $q=$db->prepare("UPDATE `".$prefix."login` SET lti=:lti,userAgent=:userAgent,userIP=:userIP WHERE id=:id");
+  $q=$db->prepare("UPDATE `".$prefix."login` SET `lti`=:lti,`userAgent`=:userAgent,`userIP`=:userIP WHERE `id`=:id");
   $q->execute([
     ':lti'=>time(),
     ':id'=>$_SESSION['uid'],

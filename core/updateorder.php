@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.19 Add process to add entry that deducts values.
  * @changes    v0.0.19 Add Discount Range Calculation.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -43,8 +44,10 @@ else
 	define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
 if($act=='additem'){
 	if($da!=0){
-		$q=$db->prepare("SELECT title,cost,rCost FROM `".$prefix."content` WHERE id=:id");
-		$q->execute([':id'=>$da]);
+		$q=$db->prepare("SELECT `title`,`cost`,`rCost` FROM `".$prefix."content` WHERE `id`=:id");
+		$q->execute([
+			':id'=>$da
+		]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
 		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
 		if($r['rCost']!=0)$r['cost']=$r['rCost'];
@@ -61,7 +64,7 @@ if($act=='additem'){
 			'status'=>''
     ];
   }
-	$q=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,title,quantity,cost,status,ti) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
+	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
 	$q->execute([
     ':oid'=>$id,
     ':iid'=>$da,
@@ -72,10 +75,12 @@ if($act=='additem'){
   ]);
 }
 if($act=='title'){
-  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE id=:id");
-  $ss->execute([':id'=>$id]);
+  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
+  $ss->execute([
+		':id'=>$id
+	]);
   $r=$ss->fetch(PDO::FETCH_ASSOC);
-  $s=$db->prepare("UPDATE `".$prefix."orderitems` SET title=:title WHERE id=:id");
+  $s=$db->prepare("UPDATE `".$prefix."orderitems` SET `title`=:title WHERE `id`=:id");
   $s->execute([
     ':id'=>$id,
     ':title'=>$da
@@ -83,14 +88,18 @@ if($act=='title'){
   $id=$r['oid'];
 }
 if($act=='quantity'||$act=='trash'){
-  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE id=:id");
-  $ss->execute([':id'=>$id]);
+  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
+  $ss->execute([
+		':id'=>$id
+	]);
   $r=$ss->fetch(PDO::FETCH_ASSOC);
   if($da==0){
-    $s=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE id=:id");
-    $s->execute([':id'=>$id]);
+    $s=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
+    $s->execute([
+			':id'=>$id
+		]);
   }else{
-    $s=$db->prepare("UPDATE `".$prefix."orderitems` SET quantity=:quantity WHERE id=:id");
+    $s=$db->prepare("UPDATE `".$prefix."orderitems` SET `quantity`=:quantity WHERE `id`=:id");
     $s->execute([
       ':quantity'=>$da,
       ':id'=>$id
@@ -99,10 +108,12 @@ if($act=='quantity'||$act=='trash'){
   $id=$r['oid'];
 }
 if($act=='cost'){
-  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE id=:id");
-  $ss->execute([':id'=>$id]);
+  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
+  $ss->execute([
+		':id'=>$id
+	]);
   $r=$ss->fetch(PDO::FETCH_ASSOC);
-  $s=$db->prepare("UPDATE `".$prefix."orderitems` SET cost=:cost WHERE id=:id");
+  $s=$db->prepare("UPDATE `".$prefix."orderitems` SET `cost`=:cost WHERE `id`=:id");
   $s->execute([
     ':cost'=>$da,
     ':id'=>$id
@@ -110,10 +121,12 @@ if($act=='cost'){
   $id=$r['oid'];
 }
 if($act=='reward'){
-  $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE code=:code");
-  $sr->execute([':code'=>$da]);
+  $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `code`=:code");
+  $sr->execute([
+		':code'=>$da
+	]);
   $reward=$sr->fetch(PDO::FETCH_ASSOC);
-  $s=$db->prepare("UPDATE `".$prefix."orders` SET rid=:rid WHERE id=:id");
+  $s=$db->prepare("UPDATE `".$prefix."orders` SET `rid`=:rid WHERE `id`=:id");
   $s->execute([
     ':rid'=>$reward['id'],
     ':id'=>$id
@@ -128,24 +141,34 @@ if($act=='addpostoption'){
 			'value'=>0
 		];
 	}else{
-		$sc=$db->prepare("SELECT id,type,title,value FROM `".$prefix."choices` WHERE contentType='postoption' AND id=:id");
-		$sc->execute([':id'=>$da]);
+		$sc=$db->prepare("SELECT `id`,`type`,`title`,`value` FROM `".$prefix."choices` WHERE `contentType`='postoption' AND `id`=:id");
+		$sc->execute([
+			':id'=>$da
+		]);
 		$rc=$sc->fetch(PDO::FETCH_ASSOC);
 	}
 	if($config['austPostAPIKey']!=''&&stristr($rc['type'],'AUS_')){
 		$apiKey=$config['austPostAPIKey'];
 		$totalweight=$weight=$dimW=$dimL=$dimH=0;
-		$os=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
-		$os->execute([':id'=>$id]);
+		$os=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+		$os->execute([
+			':id'=>$id
+		]);
 		$oir=$os->fetch(PDO::FETCH_ASSOC);
-		$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
-		$su->execute([':uid'=>$oir['uid']]);
+		$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
+		$su->execute([
+			':uid'=>$oir['uid']
+		]);
 		$ru=$su->fetch(PDO::FETCH_ASSOC);
-		$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:id");
-		$si->execute([':id'=>$id]);
+		$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:id");
+		$si->execute([
+			':id'=>$id
+		]);
 		while($ri=$si->fetch(PDO::FETCH_ASSOC)){
-			$sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:sid");
-			$sc->execute([':sid'=>$ri['iid']]);
+			$sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:sid");
+			$sc->execute([
+				':sid'=>$ri['iid']
+			]);
 			while($i=$sc->fetch(PDO::FETCH_ASSOC)){
 				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 				$weight=$weight+($i['weight']*$ri['quantity']);
@@ -190,7 +213,7 @@ if($act=='addpostoption'){
 			];
 		}
 	}
-	$s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageOption=:postageOption, postageCost=:postagCost WHERE id=:id");
+	$s=$db->prepare("UPDATE `".$prefix."orders` SET `postageCode`=:postageCode,`postageOption`=:postageOption,`postageCost`=:postagCost WHERE `id`=:id");
 	$s->execute([
 		':id'=>$id,
 		':postageCode'=>$rc['id'],
@@ -199,7 +222,7 @@ if($act=='addpostoption'){
 	]);
 }
 if($act=='postoption'){
-	$s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageOption=:postageOption WHERE id=:id");
+	$s=$db->prepare("UPDATE `".$prefix."orders` SET `postageCode`=:postageCode,`postageOption`=:postageOption WHERE `id`=:id");
 	$s->execute([
 		':postageCode'=>0,
 		':postageOption'=>$da,
@@ -207,26 +230,34 @@ if($act=='postoption'){
 	]);
 }
 if($act=='postcost'){
-  $s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageCost=:postageCost WHERE id=:id");
+  $s=$db->prepare("UPDATE `".$prefix."orders` SET `postageCode`=:postageCode,`postageCost`=:postageCost WHERE `id`=:id");
   $s->execute([
 		':postageCode'=>0,
     ':postageCost'=>$da,
     ':id'=>$id
   ]);
 }
-$s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+$s->execute([
+	':id'=>$id
+]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='neg' ORDER BY ti ASC,title ASC");
-$si->execute([':oid'=>$r['id']]);
+$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `ti` ASC,`title` ASC");
+$si->execute([
+	':oid'=>$r['id']
+]);
 $total=0;
 $html='';
 while($oi=$si->fetch(PDO::FETCH_ASSOC)){
-  $is=$db->prepare("SELECT id,thumb,file,fileURL,code,title FROM `".$prefix."content` WHERE id=:id");
-  $is->execute([':id'=>$oi['iid']]);
+  $is=$db->prepare("SELECT `id`,`thumb`,`file`,`fileURL`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+  $is->execute([
+		':id'=>$oi['iid']
+	]);
   $i=$is->fetch(PDO::FETCH_ASSOC);
-  $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
-  $sc->execute([':id'=>$oi['cid']]);
+  $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+  $sc->execute([
+		':id'=>$oi['cid']
+	]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
 	$image='';
 	if($i['thumb']!=''&&file_exists('..'.DS.'media'.DS.basename($i['thumb'])))
@@ -264,8 +295,10 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
 				'</tr>';
   if($oi['iid']!=0)$total=$total+($oi['cost']*$oi['quantity']);
 }
-$sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE id=:rid");
-$sr->execute([':rid'=>$r['rid']]);
+$sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
+$sr->execute([
+	':rid'=>$r['rid']
+]);
 $reward=$sr->fetch(PDO::FETCH_ASSOC);
   $html.='<tr>'.
 					'<td colspan="3" class="text-right align-middle"><strong>Rewards Code</strong></td>'.
@@ -278,7 +311,7 @@ $reward=$sr->fetch(PDO::FETCH_ASSOC);
 									'<input type="hidden" name="t" value="orders">'.
 									'<input type="hidden" name="c" value="rid">'.
 									'<input type="text" id="rewardselect" class="form-control" name="da" value="'.($sr->rowCount()==1?$reward['code']:'').'">';
-$ssr=$db->prepare("SELECT * FROM `".$prefix."rewards` ORDER BY code ASC, title ASC");
+$ssr=$db->prepare("SELECT * FROM `".$prefix."rewards` ORDER BY `code` ASC,`title` ASC");
 $ssr->execute();
 if($ssr->rowCount()>0){
 					$html.='<div class="input-group-append">'.
@@ -315,14 +348,14 @@ if($ssr->rowCount()>0){
 							'<td>&nbsp;</td>'.
 						'</tr>';
 			if($config['options'][26]==1){
-				$us=$db->prepare("SELECT spent FROM `".$prefix."login` WHERE id=:uid");
+				$us=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
 				$us->execute([
 					':uid'=>$r['uid']
 				]);
 				if($us->rowCount()>0){
 					$usr=$us->fetch(PDO::FETCH_ASSOC);
 					if($usr['spent']>0){
-						$sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+						$sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
 						$sd->execute([
 					  	':f'=>$usr['spent'],
 					  	':t'=>$usr['spent']
@@ -384,8 +417,10 @@ if($ssr->rowCount()>0){
 							'<td class="total text-right border-top"><strong>'.$total.'</strong></td>'.
 							'<td>&nbsp;</td>'.
 						'</tr>';
-$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status='neg' ORDER BY ti ASC");
-$sn->execute([':oid'=>$r['id']]);
+$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
+$sn->execute([
+	':oid'=>$r['id']
+]);
 if($sn->rowCount()>0){
 	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
 					$html.='<tr><td colspan="2" class="small align-middle">'.

@@ -7,15 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT language FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `language` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
@@ -51,12 +52,12 @@ if(empty($tables)){
 }else
 	$tables=is_array($tables)?$tables:explode(',',$tables);
 foreach($tables as$table){
-	$result=$db->query('SELECT * FROM '.$table);
+	$result=$db->query("SELECT * FROM `".$table."`");
 	$num_fields=$result->columnCount();
 	$num_rows=$result->rowCount();
 	$return="";
 	$return.="DROP TABLE IF EXISTS `".$table."`;";
-	$pstm2=$db->query("SHOW CREATE TABLE ".$table);
+	$pstm2=$db->query("SHOW CREATE TABLE `".$table."`");
 	$row2=$pstm2->fetch(PDO::FETCH_NUM);
 	$ifnotexists=str_replace('CREATE TABLE','CREATE TABLE IF NOT EXISTS',$row2[1]);
 	$return.="\n\n".$ifnotexists.";\n\n";
@@ -67,7 +68,7 @@ foreach($tables as$table){
 	$return="";
 	if($num_rows){
 		$return="INSERT INTO `".$table."` (";
-		$pstm3=$db->query("SHOW COLUMNS FROM ".$table);
+		$pstm3=$db->query("SHOW COLUMNS FROM `".$table."`");
 		$count=0;
 		$type=array();
 		while($rows=$pstm3->fetch(PDO::FETCH_NUM)){
@@ -118,8 +119,10 @@ if(file_exists('..'.DS.'media'.DS.'backup'.DS.$file)){
   $fileid=str_replace(DS,'',$fileid);
 	$filename=basename($file);
   $ti=time();
-  $q=$db->prepare("UPDATE `".$prefix."config` SET backup_ti=:backup_ti WHERE id='1'");
-  $q->execute([':backup_ti'=>$ti]);?>
+  $q=$db->prepare("UPDATE `".$prefix."config` SET `backup_ti`=:backup_ti WHERE `id`='1'");
+  $q->execute([
+		':backup_ti'=>$ti
+	]);?>
   window.top.window.$('#backups').append(`<?php echo'<div id="l_'.$fileid.'" class="form-group row"><label class="col-form-label col-sm-2">&nbsp;</label><div class="input-group col-sm-10"><a class="btn btn-secondary col" href="media/backup/'.$file.'">Click to Download '.$file.'</a><div class="input-group-append"><button class="btn btn-secondary trash" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\')" aria-label="Delete">'.svg2('trash').'</button></div></div></div>';?>`);
   window.top.window.$('#alert_backup').addClass('d-none');
 <?php }else{?>

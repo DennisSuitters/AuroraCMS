@@ -7,25 +7,28 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.5
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('..'.DS.'core'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
 }
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $sid=$_POST['sid'];
-$s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE who!='admin' GROUP BY sid ORDER BY ti ASC");
+$s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
 $s->execute();
 if($s->rowCount()>0){
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     echo'<span id="l_'.$r['id'].'" class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" data-sid="'.$r['sid'].'" data-chatname="'.$r['name'].'" data-chatemail="'.$r['email'].'">'.
           '<span class="btn-group float-right">';
-		$scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
-		$scc->execute([':ip'=>$r['ip']]);
+		$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+		$scc->execute([
+			':ip'=>$r['ip']
+		]);
 		if($scc->rowCount()<1){
           	echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_blacklist.php">'.
               '<input type="hidden" name="id" value="'.$r['id'].'">'.

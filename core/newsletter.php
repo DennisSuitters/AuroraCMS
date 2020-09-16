@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 $getcfg=true;
@@ -21,10 +22,12 @@ define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$s=$db->prepare("SELECT title,notes FROM `".$prefix."content` WHERE id=:id");
-$s->execute([':id'=>$id]);
+$s=$db->prepare("SELECT `title`,`notes` FROM `".$prefix."content` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$id
+]);
 $news=$s->fetch(PDO::FETCH_ASSOC);
-$u=$db->prepare("UPDATE `".$prefix."content` SET status=:status,tis=:tis WHERE id=:id");
+$u=$db->prepare("UPDATE `".$prefix."content` SET `status`=:status,`tis`=:tis WHERE `id`=:id");
 $u->execute([
   ':status'=>'published',
   ':tis'=>time(),
@@ -61,7 +64,7 @@ if($config['email']!=''){
   $sendDelay=$config['newslettersSendDelay']!=''||$config['newslettersSendDelay']==0?$config['newslettersSendDelay']:1;
   ignore_user_abort(true);
   set_time_limit(300);
-  $s=$db->prepare("SELECT DISTINCT email,hash FROM `".$prefix."subscribers` UNION SELECT DISTINCT email,hash FROM `".$prefix."login` WHERE newsletter=1");
+  $s=$db->prepare("SELECT DISTINCT `email`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1");
   $s->execute();
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     if(($sendCount % $betweenDelay)==0)sleep($sendDelay);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.6 Add Email Notifications and Status.
@@ -20,10 +20,12 @@ include'class.projecthoneypot.php';
 include'class.spamfilter.php';
 $theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $ti=time();
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($config['chatAutoRemove']!=0){
-	$s=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE ti < :ti");
-	$s->execute([':ti'=>$ti - $config['chatAutoRemove']]);
+	$s=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE `ti`<:ti");
+	$s->execute([
+		':ti'=>$ti-$config['chatAutoRemove']
+	]);
 }
 define('THEME','layout'.DS.$config['theme']);
 if(file_exists(THEME.DS.'images'.DS.'noavatar.png')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.png');
@@ -43,8 +45,10 @@ $ua=$who=='page'?$_SERVER['HTTP_USER_AGENT']:'admin';
 $spam=FALSE;
 $blacklisted='';
 if($message != "" && $message != "|*|*|*|*|*|"){
-	$q=$db->prepare("SELECT id FROM `".$prefix."livechat` WHERE who='admin' AND notes=:notes");
-	$q->execute([':notes'=>'Hello, how can we assist you?']);
+	$q=$db->prepare("SELECT `id` FROM `".$prefix."livechat` WHERE `who`='admin' AND `notes`=:notes");
+	$q->execute([
+		':notes'=>'Hello, how can we assist you?'
+	]);
 	if($q->rowCount()==0){
 		if($who=='page'){
 			if($config['spamfilter'][0]==1&&$spam==FALSE&&$ip!='admin'){
@@ -54,10 +58,12 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 					$blacklisted=$theme['settings']['blacklist'];
 					$spam=TRUE;
 					if($config['spamfilter'][1]==1){
-						$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-						$sc->execute([':ip'=>$ip]);
+						$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+						$sc->execute([
+							':ip'=>$ip
+						]);
 						if($sc->rowCount()<1){
-							$s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+							$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 							$s->execute([
 								':ip'=>$ip,
 								':oti'=>$ti,
@@ -71,7 +77,7 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 			}
 		}
 		if($spam==FALSE){
-		  $s=$db->prepare("INSERT INTO `".$prefix."livechat` (aid,sid,who,name,email,notes,ip,user_agent,status,ti) VALUES (:aid,:sid,:who,:name,:email,:notes,:ip,:ua,:status,:ti)");
+		  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."livechat` (`aid`,`sid`,`who`,`name`,`email`,`notes`,`ip`,`user_agent`,`status`,`ti`) VALUES (:aid,:sid,:who,:name,:email,:notes,:ip,:ua,:status,:ti)");
 		  $s->execute([
 		    ':aid'=>$aid,
 		    ':sid'=>$sid,
@@ -93,10 +99,12 @@ if($message == "|*|*|*|*|*|"){
 		if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
 			$blacklisted=$theme['settings']['blacklist'];
 			$spam=TRUE;
-			$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-			$sc->execute([':ip'=>$ip]);
+			$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+			$sc->execute([
+				':ip'=>$ip
+			]);
 			if($sc->rowCount()<1){
-				$s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+				$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 				$s->execute([
 					':ip'=>$ip,
 					':oti'=>$ti,
@@ -113,10 +121,12 @@ if($message == "|*|*|*|*|*|"){
 		if($result){
 			$blacklisted=$theme['settings']['blacklist'];
 			$spam=TRUE;
-			$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-			$sc->execute([':ip'=>$ip]);
+			$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+			$sc->execute([
+				':ip'=>$ip
+			]);
 			if($sc->rowCount()<1){
-				$s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+				$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 				$s->execute([
 					':ip'=>$ip,
 					':oti'=>$ti,
@@ -129,11 +139,13 @@ if($message == "|*|*|*|*|*|"){
 	}
 	if($spam==FALSE){
 		$cuati=time()-1440;
-		$cua=$db->prepare("SELECT id FROM `".$prefix."login` WHERE rank>699 AND active=1 AND lti>:lti");
-		$cua->execute([':lti'=>$cuati]);
+		$cua=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND `lti`>:lti");
+		$cua->execute([
+			':lti'=>$cuati
+		]);
 		if($cua->rowCount()<1){
 			require'class.phpmailer.php';
-			$sa=$db->prepare("SELECT id,username,name,email FROM `".$prefix."login` WHERE rank>699 AND active=1 AND liveChatNotification=1");
+			$sa=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND liveChatNotification=1");
 			$sa->execute();
 			echo'<div class="alert alert-info">There are currently no operators available to answer your queries, however you may leave a message here so a representative can get back to you.</div>';
 			if($sa->rowCount()>0){
@@ -170,8 +182,10 @@ if($message == "|*|*|*|*|*|"){
 			echo'</div>';
 		}else{
 			if($message != ''){
-				$s=$db->prepare("SELECT sid FROM `".$prefix."livechat` WHERE sid=:sid");
-				$s->execute([':sid'=>$sid]);
+				$s=$db->prepare("SELECT `sid` FROM `".$prefix."livechat` WHERE `sid`=:sid");
+				$s->execute([
+					':sid'=>$sid
+				]);
 				if($s->rowCount()<1)echo'available';
 			}
 		}
@@ -179,23 +193,32 @@ if($message == "|*|*|*|*|*|"){
 }
 if($spam==FALSE){
 	if($seen=='seen'){
-		$scc=$db->prepare("UPDATE `".$prefix."livechat` SET status=:seen WHERE sid=:sid");
-		$scc->execute([':seen'=>$seen,':sid'=>$sid]);
+		$scc=$db->prepare("UPDATE `".$prefix."livechat` SET `status`=:seen WHERE `sid`=:sid");
+		$scc->execute([
+			':seen'=>$seen,
+			':sid'=>$sid
+		]);
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE sid=:sid ORDER BY ti ASC");
-	$s->execute([':sid'=>$sid]);
+	$s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `sid`=:sid ORDER BY `ti` ASC");
+	$s->execute([
+		':sid'=>$sid
+	]);
 	if($s->rowCount()>0){
 	  while($r=$s->fetch(PDO::FETCH_ASSOC)){
 			if($r['who']!='admin'){
-				$scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
-	      $scc->execute([':ip'=>$r['ip']]);
+				$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+	      $scc->execute([
+					':ip'=>$r['ip']
+				]);
 	      if($scc->rowCount()>0)header('Location:'.$_SERVER['PHP_SELF']);
 			}
 	    if($r['notes']=='|*|*|*|*|*|')continue;
 	    echo'<ul><li class="'.$r['who'].'">';
 	    if($r['aid']!=0){
-	      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:aid");
-	      $su->execute([':aid'=>$r['aid']]);
+	      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:aid");
+	      $su->execute([
+					':aid'=>$r['aid']
+				]);
 	      $ru=$su->fetch(PDO::FETCH_ASSOC);
 		    echo'<img class="bg-white" src="';
 				if($ru['avatar']!='')echo'media'.DS.'avatar'.DS.basename($ru['avatar']);

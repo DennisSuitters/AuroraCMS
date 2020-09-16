@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
@@ -17,17 +17,23 @@ echo'<script>';
 $getcfg=true;
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-$q->execute([':id'=>$id]);
+$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+$q->execute([
+  ':id'=>$id
+]);
 $r=$q->fetch(PDO::FETCH_ASSOC);
 $r['notes']=rawurldecode($r['notes']);
-$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-$s->execute([':id'=>$r['cid']]);
+$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$r['cid']
+]);
 $c=$s->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 if($c['email']!=''){
-  $si=$db->prepare("SELECT code,title FROM `".$prefix."content` WHERE id=:id");
-  $si->execute([':id'=>$r['rid']]);
+  $si=$db->prepare("SELECT `code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+  $si->execute([
+    ':id'=>$r['rid']
+  ]);
   $i=$si->fetch(PDO::FETCH_ASSOC);
   require'class.phpmailer.php';
   $mail=new PHPMailer;

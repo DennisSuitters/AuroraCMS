@@ -212,19 +212,11 @@ function imageUpdate(id,t,c,da){
 			da:da
 		}
 	}).done(function(msg){
-		if(t=='login'&&c=='avatar'&&da==''){
-			$('.img-avatar').attr('src','core/images/i-noavatar.svg');
-		}else{
-      if(c=='file'||c=='thumb'||c=='fileDepth'){
-        $('#'+c).val('');
-      }
-			if(da==''){
-				$('#'+c).html('');
-			}else{
-				$('#'+c).html('<img src="media/'+da+'">');
-			}
-		}
-	})
+    if(da==''){
+      $('#'+c).val('');
+      $('#'+c+'image').attr('src','core/images/noimage.png');
+    }
+	});
 }
 function insertAtCaret(aId,t) {
 	var ta=document.getElementById(aId);

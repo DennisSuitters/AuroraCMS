@@ -8,7 +8,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,12 +17,16 @@ if(session_status()==PHP_SESSION_NONE){
   session_start();
   define('SESSIONID',session_id());
 }
-if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('core'.DS.'config.ini'))$settings=parse_ini_file('core'.DS.'config.ini',TRUE);
-elseif(file_exists('config.ini'))$settings=parse_ini_file('config.ini',TRUE);
+if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))
+  $settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('..'.DS.'core'.DS.'config.ini'))
+  $settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('core'.DS.'config.ini'))
+  $settings=parse_ini_file('core'.DS.'config.ini',TRUE);
+elseif(file_exists('config.ini'))
+  $settings=parse_ini_file('config.ini',TRUE);
 else{
-  require(ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php');
+  require ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php';
   die();
 }
 $prefix=$settings['database']['prefix'];
@@ -33,7 +37,7 @@ try{
 //  $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
   $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
   if(isset($getcfg)&&$getcfg==true){
-    $config=$db->query("SELECT * FROM `".$prefix."config` WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+    $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
     date_default_timezone_set($config['timezone']);
     if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
       if(!defined('PROTOCOL'))define('PROTOCOL','https://');

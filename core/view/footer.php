@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -18,6 +18,7 @@
  * @changes    v0.0.16 Reduce preg_replace parsing strings.
  * @changes    v0.0.18 Reformat source for legibility.
  * @changes    v0.0.18 Fix Footer Theme URL Parsing.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 	$link='<li><a href="logout/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Logout</a></li>';
@@ -37,7 +38,7 @@ if(stristr($html,'<hours>')){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
 		$htmlHours=$matches[1];
 		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='hours'");
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours'");
 		if($s->rowCount()>0){
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
 				$buildHours=$htmlHours;
@@ -80,12 +81,12 @@ if(stristr($html,'<hours>')){
 			}
 		}
 		$html=preg_replace([
-				'/<[\/]?hours>/',
-				'~<buildHours>.*?<\/buildHours>~is'
-			],[
-				'',
-				$hoursItems,
-			],$html);
+			'/<[\/]?hours>/',
+			'~<buildHours>.*?<\/buildHours>~is'
+		],[
+			'',
+			$hoursItems,
+		],$html);
 	}else
 		$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
 }
@@ -159,11 +160,11 @@ $html=preg_replace([
 	htmlspecialchars($config['seoDescription'],ENT_QUOTES,'UTF-8'),
 	$config['abn']!=''?htmlspecialchars('ABN '.$config['abn'],ENT_QUOTES,'UTF-8'):'',
 	isset($theme['hosting'])&&$theme['hosting']!=''?'Hosting by <a target="_blank" href="'.$theme['hosting_url'].'">'.$theme['hosting'].'</a><br>':'',
-	$config['php_options'][0]==1?' Protected by <a href="http://www.projecthoneypot.org?rf=113735"><img src="'.URL.'layout/'.$config['theme'].'/images/phpot.gif" alt="Stop Spam Harvesters, Join Project Honey Pot"></a><br>':'',
+	$config['php_options'][0]==1?' Protected by <a href="http://www.projecthoneypot.org?rf=113735"><img src="layout/'.$config['theme'].'/images/phpot.gif" alt="Stop Spam Harvesters, Join Project Honey Pot"></a><br>':'',
 	$config['php_options'][0]==1&&$config['php_options'][2]==1&&$config['php_quicklink']!=''?$config['php_quicklink']:''
 ],$html);
 if(stristr($html,'<subjectText>')){
-	$s=$db >prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='subject' ORDER BY title ASC");
+	$s=$db >prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
 	$s->execute();
 	if($s->rowCount()>0){
 		$html=preg_replace([
@@ -181,8 +182,10 @@ if(stristr($html,'<subjectText>')){
 	}
 }
 if(stristr($html,'<buildMenu')){
-	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE menu = 'footer' AND mid = 0 AND active = 1 AND rank <= :rank ORDER BY ord ASC");
-	$s->execute([':rank'=>$_SESSION['rank']]);
+	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='footer' AND `mid`=0 AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
+	$s->execute([
+		':rank'=>$_SESSION['rank']
+	]);
 	preg_match('/<buildMenu>([\w\W]*?)<\/buildMenu>/',$html,$matches);
 	$htmlMenu=$matches[1];
 	$menu='';
@@ -227,7 +230,7 @@ if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];
 	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType = 'social' AND uid = 0 ORDER BY icon ASC");
+	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
 	if($s->rowCount()>0){
 		while($r=$s->fetch(PDO::FETCH_ASSOC)){
 			$buildSocial=$htmlSocial;

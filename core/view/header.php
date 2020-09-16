@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -21,10 +21,13 @@
  * @changes    v0.0.18 Reformat source for legibility.
  * @changes    v0.0.18 Add parsing for Cart for mobile devices.
  * @changes    v0.0.19 Add "ORDER BY ord ASC" to Business Hours SQL.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
-	$su=$db->prepare("SELECT avatar,gravatar,rank,name FROM `".$prefix."login` WHERE id=:uid");
-	$su->execute([':uid'=>$_SESSION['uid']]);
+	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name` FROM `".$prefix."login` WHERE `id`=:uid");
+	$su->execute([
+		':uid'=>$_SESSION['uid']
+	]);
 	$user=$su->fetch(PDO::FETCH_ASSOC);
 	$html=$view=='proofs'||$view=='proof'?preg_replace('/<print active=[\"\']?proofs[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?proofs[\"\']?>/','',$html);
 	$html=$view=='orders'||$view=='order'?preg_replace('/<print active=[\"\']?orders[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?orders[\"\']?>/','',$html);
@@ -89,8 +92,10 @@ if(stristr($html,'<buildMenu')){
 	}else
 		$menuLogin='';
 	$htmlMenu='';
-	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE menu = 'head' AND mid = 0 AND active = 1 AND rank <= :rank ORDER BY ord ASC");
-	$s->execute([':rank'=>$_SESSION['rank']]);
+	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='head' AND `mid`=0 AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
+	$s->execute([
+		':rank'=>$_SESSION['rank']
+	]);
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$menuURL='';
 		if($r['contentType']!='index'){
@@ -126,7 +131,7 @@ if(stristr($html,'<buildMenu')){
 			}
 		}else
 			$menuURL.=URL;
-		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE mid = :id AND  active = 1 AND rank <= :rank ORDER BY ord ASC");
+		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=:id AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
 		$sm->execute([
 			':id'=>$r['id'],
 			':rank'=>$_SESSION['rank']
@@ -198,10 +203,14 @@ if(stristr($html,'<buildMenu')){
 		$cart='';
 		if($r['contentType']=='cart'){
 			$dti=$ti-86400;
-			$crtq=$db->prepare("DELETE FROM `".$prefix."cart` WHERE ti<:ti");
-			$crtq->execute([':ti'=>$dti]);
-			$crtq=$db->prepare("SELECT SUM(quantity) as quantity FROM `".$prefix."cart` WHERE si = :si");
-			$crtq->execute([':si'=>SESSIONID]);
+			$crtq=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `ti`<:ti");
+			$crtq->execute([
+				':ti'=>$dti
+			]);
+			$crtq=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
+			$crtq->execute([
+				':si'=>SESSIONID
+			]);
 			$crtr=$crtq->fetch(PDO::FETCH_ASSOC);
 			$cart=$theme['settings']['cart_menu'];
 			$cart=preg_replace('/<print cart=[\"\']?quantity[\"\']?>/',$crtr['quantity'],$cart);
@@ -233,7 +242,7 @@ if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];
 	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType = 'social' AND uid = 0 ORDER BY icon ASC");
+	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
 	if($s->rowCount()>0){
 		while($r=$s->fetch(PDO::FETCH_ASSOC)){
 			$buildSocial=$htmlSocial;
@@ -260,8 +269,10 @@ if(stristr($html,'<buildSocial')){
 }
 if(isset($_GET['activate'])&&$_GET['activate']!=''){
 	$activate=filter_input(INPUT_GET,'activate',FILTER_SANITIZE_STRING);
-	$sa=$db->prepare("UPDATE `".$prefix."login` SET active='1',activate='',rank='100' WHERE activate=:activate");
-	$sa->execute([':activate'=>$activate]);
+	$sa=$db->prepare("UPDATE `".$prefix."login` SET `active`='1',`activate`='',`rank`='100' WHERE `activate`=:activate");
+	$sa->execute([
+		':activate'=>$activate
+	]);
 	$html=$sa->rowCount()>0?str_replace('<activation>',$theme['settings']['activation_success'],$html):str_replace('<activation>',$theme['settings']['activation_error'],$html);
 }else
 	$html=str_replace('<activation>','',$html);
@@ -270,7 +281,7 @@ if(stristr($html,'<hours>')){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
 		$htmlHours=$matches[1];
 		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='hours' ORDER BY ord ASC");
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
 		if($s->rowCount()>0){
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
 				$buildHours=$htmlHours;

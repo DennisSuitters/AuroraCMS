@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
@@ -15,6 +15,7 @@
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.10 Relabel "Screen against WordPress Attacks" to "Screen Against Attacks".
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -62,11 +63,11 @@
             </div>
             <hr>
             <h4>Project Honey Pot</h4>
-<?php if($config['php_APIkey']==''){?>
-            <div class="form-group">
-              <div class="well">We recommend signing up to Project Honey Pot to take full advantage of protecting your website from spammers, and in turn help Project Honey Pot protect other sites. You can find more information at <a target="_blank" href="http://www.projecthoneypot.org?rf=113735">Project Honey Pot</a>.</div>
-            </div>
-<?php }?>
+            <?php if($config['php_APIkey']==''){?>
+              <div class="form-group">
+                <div class="well">We recommend signing up to Project Honey Pot to take full advantage of protecting your website from spammers, and in turn help Project Honey Pot protect other sites. You can find more information at <a target="_blank" href="http://www.projecthoneypot.org?rf=113735">Project Honey Pot</a>.</div>
+              </div>
+            <?php }?>
             <div class="form-group row">
               <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
                 <label class="switch switch-label switch-success"><input type="checkbox" id="php_options0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0"<?php echo$config['php_options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
@@ -171,7 +172,7 @@
                   </div>
                 </div>
                 <div class="form-group" style="margin-top:-15px">
-<?php $code=file_get_contents($fileDefault);?>
+                  <?php $code=file_get_contents($fileDefault);?>
                   <textarea id="code" name="code"><?php echo$code;?></textarea>
                 </div>
               </form>
@@ -220,23 +221,23 @@
                   </tr>
                 </thead>
                 <tbody id="l_iplist">
-<?php $s=$db->prepare("SELECT * FROM `".$prefix."iplist` ORDER BY ti DESC");
-$s->execute();
-while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                  <tr id="l_<?php echo$r['id'];?>">
-                    <td class="text-center small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
-                    <td class="text-center small"><?php echo date($config['dateFormat'],$r['oti']);?></td>
-                    <td class="text-center small"><?php echo'<strong>'.$r['ip'].'</strong>';?></td>
-                    <td class="text-left small"><?php echo$r['reason'];?></td>
-                    <td id="controls_<?php echo$r['id'];?>">
-                      <div class="btn-group float-right">
-                        <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
-                        <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','iplist');return false;" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
-                      </div>
-                    </td>
-                  </tr>
-<?php }?>
+                  <?php $s=$db->prepare("SELECT * FROM `".$prefix."iplist` ORDER BY `ti` DESC");
+                  $s->execute();
+                  while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr id="l_<?php echo$r['id'];?>">
+                      <td class="text-center small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                      <td class="text-center small"><?php echo date($config['dateFormat'],$r['oti']);?></td>
+                      <td class="text-center small"><?php echo'<strong>'.$r['ip'].'</strong>';?></td>
+                      <td class="text-left small"><?php echo$r['reason'];?></td>
+                      <td id="controls_<?php echo$r['id'];?>">
+                        <div class="btn-group float-right">
+                          <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
+                          <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
+                          <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','iplist');return false;" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php }?>
                 </tbody>
               </table>
             </div>
@@ -257,22 +258,22 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   </tr>
                 </thead>
                 <tbody id="l_whitelist">
-<?php $s=$db->prepare("SELECT * FROM `".$prefix."whitelist` ORDER BY ti DESC");
-$s->execute();
-while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                  <tr id="l_<?php echo$r['id'];?>">
-                    <td class="text-center small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
-                    <td class="text-center small"><?php echo$r['email'];?></td>
-                    <td class="text-center small"><?php echo'<strong>'.$r['ip'].'</strong>';?></td>
-                    <td id="controls_<?php echo$r['id'];?>">
-                      <div class="btn-group float-right">
-                        <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
-                        <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
-                      </div>
-                    </td>
-                  </tr>
-<?php }?>
+                  <?php $s=$db->prepare("SELECT * FROM `".$prefix."whitelist` ORDER BY `ti` DESC");
+                  $s->execute();
+                  while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr id="l_<?php echo$r['id'];?>">
+                      <td class="text-center small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                      <td class="text-center small"><?php echo$r['email'];?></td>
+                      <td class="text-center small"><?php echo'<strong>'.$r['ip'].'</strong>';?></td>
+                      <td id="controls_<?php echo$r['id'];?>">
+                        <div class="btn-group float-right">
+                          <a class="btn btn-secondary" target="_blank" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
+                          <a class="btn btn-secondary" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
+                          <button class="btn btn-secondary trash" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php }?>
                 </tbody>
               </table>
             </div>

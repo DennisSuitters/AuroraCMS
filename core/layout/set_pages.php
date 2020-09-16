@@ -31,13 +31,13 @@
     <div class="card">
       <div class="card-body">
         <legend>Website Voice</legend>
-<?php if($config['wv_site_id']==''){?>
-        <div class="alert alert-info">
-          <a target="_blank" class="alert-link" href="https://websitevoice.com/convert-text-to-audio-free">Website Voice</a> allows you to add a narrator to your Website to allow visually impaired visitors and those who wish to listen to your content read to them.<br>
-          To full-enable Website Voice, visit the link above and sign-up for free. You can optionally pay for the service to enable extra features.<br>
-          Once signed-up copy and paste the <code>WV_SITE_ID</code> into the field below, and enable the option. The Service will be automatically added to your site pages.
-        </div>
-<?php }?>
+        <?php if($config['wv_site_id']==''){?>
+          <div class="alert alert-info">
+            <a target="_blank" class="alert-link" href="https://websitevoice.com/convert-text-to-audio-free">Website Voice</a> allows you to add a narrator to your Website to allow visually impaired visitors and those who wish to listen to your content read to them.<br>
+            To full-enable Website Voice, visit the link above and sign-up for free. You can optionally pay for the service to enable extra features.<br>
+            Once signed-up copy and paste the <code>WV_SITE_ID</code> into the field below, and enable the option. The Service will be automatically added to your site pages.
+          </div>
+        <?php }?>
         <div class="form-group row">
           <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options16" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16"<?php echo$config['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
@@ -52,77 +52,77 @@
           </div>
         </div>
         <hr>
-<?php if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini')){
-  echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
-}else{?>
-        <form target="sp" method="post" action="core/updatetheme.php">
-          <div class="input-group">
-            <label for="fileEditSelect" class="input-group-text">File:</label>
-            <select id="filesEditSelect" class="custom-select" name="file">
-<?php $fileDefault=($user['rank']==1000?'meta_head.html':'meta_head.html');
-  $files=array();
-  foreach(glob("layout".DS.$config['theme'].DS."*.{html}",GLOB_BRACE)as$file){
-    echo'<option value="'.$file.'"';
-    if(stristr($file,$fileDefault)){
-      echo' selected';
-      $fileDefault=$file;
-    }
-    echo'>'.basename($file).'</option>';
-  }
-  foreach(glob("media".DS."carousel".DS."*.{html}",GLOB_BRACE)as$file){
-    echo'<option value="'.$file.'"';
-    if(stristr($file,$fileDefault)){
-      echo' selected';
-      $fileDefault=$file;
-    }
-    echo'>'.basename($file).' (Carousel)</option>';
-  }?>
-            </select>
-            <div class="input-group-append">
-              <button id="filesEditLoad" class="btn btn-secondary">Load</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="input-group card-header p-2 mb-0">
-              <button id="codeSave" class="btn btn-secondary" onclick="populateTextarea();$(this).removeClass('btn-danger');" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save"><?php svg('save');?></button>
-            </div>
-          </div>
-          <div class="form-group" style="margin-top:-15px">
-<?php $code=file_get_contents($fileDefault);?>
-            <textarea id="code" name="code"><?php echo$code;?></textarea>
-          </div>
-        </form>
-      </div>
-      <script>
-        $(document).ready(function (){
-          var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
-            lineNumbers:true,
-            lineWrapping:true,
-            mode:"text/html",
-            theme:"base16-dark",
-            autoRefresh:true
-          });
-          var charWidth=editor.defaultCharWidth(),basePadding=4;
-          editor.refresh();
-          editor.on('change',function(cMirror){
-            $('#codeSave').addClass('btn-danger');
-          });
-          $('#filesEditLoad').on({
-            click:function(event){
-              event.preventDefault();
-              var url=$('#filesEditSelect').val();
-              $.ajax({
-                url:url+'?<?php echo time();?>',
-                dataType:"text",
-                success:function(data){
-                  editor.setValue(data);
+        <?php if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini')){
+          echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
+        }else{?>
+          <form target="sp" method="post" action="core/updatetheme.php">
+            <div class="input-group">
+              <label for="fileEditSelect" class="input-group-text">File:</label>
+              <select id="filesEditSelect" class="custom-select" name="file">
+                <?php $fileDefault=($user['rank']==1000?'meta_head.html':'meta_head.html');
+                $files=array();
+                foreach(glob("layout".DS.$config['theme'].DS."*.{html}",GLOB_BRACE)as$file){
+                  echo'<option value="'.$file.'"';
+                  if(stristr($file,$fileDefault)){
+                    echo' selected';
+                    $fileDefault=$file;
+                  }
+                  echo'>'.basename($file).'</option>';
                 }
-              });
-            }
+                foreach(glob("media".DS."carousel".DS."*.{html}",GLOB_BRACE)as$file){
+                  echo'<option value="'.$file.'"';
+                  if(stristr($file,$fileDefault)){
+                    echo' selected';
+                    $fileDefault=$file;
+                  }
+                  echo'>'.basename($file).' (Carousel)</option>';
+                }?>
+              </select>
+              <div class="input-group-append">
+                <button id="filesEditLoad" class="btn btn-secondary">Load</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <div class="input-group card-header p-2 mb-0">
+                <button id="codeSave" class="btn btn-secondary" onclick="populateTextarea();$(this).removeClass('btn-danger');" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save"><?php svg('save');?></button>
+              </div>
+            </div>
+            <div class="form-group" style="margin-top:-15px">
+              <?php $code=file_get_contents($fileDefault);?>
+              <textarea id="code" name="code"><?php echo$code;?></textarea>
+            </div>
+          </form>
+        </div>
+        <script>
+          $(document).ready(function (){
+            var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
+              lineNumbers:true,
+              lineWrapping:true,
+              mode:"text/html",
+              theme:"base16-dark",
+              autoRefresh:true
+            });
+            var charWidth=editor.defaultCharWidth(),basePadding=4;
+            editor.refresh();
+            editor.on('change',function(cMirror){
+              $('#codeSave').addClass('btn-danger');
+            });
+            $('#filesEditLoad').on({
+              click:function(event){
+                event.preventDefault();
+                var url=$('#filesEditSelect').val();
+                $.ajax({
+                  url:url+'?<?php echo time();?>',
+                  dataType:"text",
+                  success:function(data){
+                    editor.setValue(data);
+                  }
+                });
+              }
+            });
           });
-        });
-      </script>
-<?php }?>
+        </script>
+      <?php }?>
     </div>
   </div>
 </main>

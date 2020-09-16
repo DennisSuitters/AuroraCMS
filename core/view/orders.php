@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.8 Add PayPal Parser.
@@ -17,6 +17,7 @@
  * @changes    v0.0.18 Reformat source for legibility.
  * @changes    v0.0.18 https://auspost.com.au/developers/docs
  * @changes    v0.0.19 Add calculating payment deductions.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 require'core/puconverter.php';
@@ -33,8 +34,10 @@ else{
     $items=$matches[1];
     $output='';
     $zebra=1;
-    $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE cid=:cid AND status!='archived' ORDER BY ti DESC");
-    $s->execute([':cid'=>$_SESSION['uid']]);
+    $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `cid`=:cid AND `status`!='archived' ORDER BY `ti` DESC");
+    $s->execute([
+      ':cid'=>$_SESSION['uid']
+    ]);
     while($r=$s->fetch(PDO::FETCH_ASSOC)){
       $item=$items;
       $item=preg_replace([
@@ -61,8 +64,10 @@ else{
     if(isset($_POST['act'])=='postupdate'){  // https://developers.auspost.com.au/apis/pac/tutorial/domestic-parcel
       $oid=filter_input(INPUT_POST,'oid',FILTER_SANITIZE_NUMBER_INT);
       $postoption=filter_input(INPUT_POST,'postoption',FILTER_SANITIZE_STRING);
-      $sp=$db->prepare("SELECT id,type,title,value FROM `".$prefix."choices` WHERE id=:id");
-      $sp->execute([':id'=>$postoption]);
+      $sp=$db->prepare("SELECT `id`,`type`,`title`,`value` FROM `".$prefix."choices` WHERE `id`=:id");
+      $sp->execute([
+        ':id'=>$postoption
+      ]);
       if($sp->rowCount()>0){
         $post=$sp->fetch(PDO::FETCH_ASSOC);
       }else{
@@ -76,14 +81,20 @@ else{
       if($config['austPostAPIKey']!=''&&stristr($post['type'],'AUS_')){
         $apiKey=$config['austPostAPIKey'];
         $totalWeight=$weight=$dimW=$dimL=$dimH=0;
-        $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
-        $su->execute([':uid'=>$_SESSION['uid']]);
+        $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
+        $su->execute([
+          ':uid'=>$_SESSION['uid']
+        ]);
         $ru=$su->fetch(PDO::FETCH_ASSOC);
-        $si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:id");
-        $si->execute([':id'=>$oid]);
+        $si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:id");
+        $si->execute([
+          ':id'=>$oid
+        ]);
         while($ri=$si->fetch(PDO::FETCH_ASSOC)){
-          $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:sid");
-          $sc->execute([':sid'=>$ri['iid']]);
+          $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:sid");
+          $sc->execute([
+            ':sid'=>$ri['iid']
+          ]);
           while($i=$sc->fetch(PDO::FETCH_ASSOC)){
             if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
     				$weight=$weight+($i['weight']*$ri['quantity']);
@@ -119,7 +130,7 @@ else{
           'value'=>isset($priceJSON['postage_result']['total_cost'])?$priceJSON['postage_result']['total_cost']:0
         ];
       }
-      $s=$db->prepare("UPDATE `".$prefix."orders` SET postageCode=:postageCode, postageOption=:postageOption, postageCost=:postageCost WHERE id=:id");
+      $s=$db->prepare("UPDATE `".$prefix."orders` SET `postageCode`=:postageCode,`postageOption`=:postageOption,`postageCost`=:postageCost WHERE `id`=:id");
       $s->execute([
         ':postageCode'=>$post['id'],
         ':postageOption'=>$post['title'],
@@ -130,15 +141,17 @@ else{
     preg_match('/<items>([\w\W]*?)<\/items>/',$order,$matches);
     $orderItem=$matches[1];
     $order=preg_replace('~<items>.*?<\/items>~is','<orderitems>',$order,1);
-    $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE qid=:id OR iid=:id AND status!='archived' AND uid=:uid");
+    $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`=:id OR `iid`=:id AND `status`!='archived' AND `uid`=:uid");
     $s->execute([
       ':id'=>$args[0],
       ':uid'=>$_SESSION['uid']
     ]);
     if($s->rowCount()>0){
       $r=$s->fetch(PDO::FETCH_ASSOC);
-      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
-      $su->execute([':uid'=>$_SESSION['uid']]);
+      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
+      $su->execute([
+        ':uid'=>$_SESSION['uid']
+      ]);
       $ru=$su->fetch(PDO::FETCH_ASSOC);
       $order=$r['iid_ti']>0?preg_replace('/<print order=[\"\']?date[\"\']?>/',date($config['dateFormat'],$r['iid_ti']),$order):preg_replace('/<print order=[\"\']?date[\"\']?>/',date($config['dateFormat'],$r['qid_ti']),$order);
       $order=preg_replace([
@@ -200,17 +213,23 @@ else{
         date($config['dateFormat'],$r['due_ti']),
         htmlspecialchars($r['status'],ENT_QUOTES,'UTF-8'),
       ],$order);
-      $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='neg' ORDER BY ti ASC");
-      $ois->execute([':oid'=>$r['id']]);
+      $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `ti` ASC");
+      $ois->execute([
+        ':oid'=>$r['id']
+      ]);
       $outitems='';
       $total=$weight=$totalWeight=$dimW=$dimL=$dimH=0;
       $zebra=1;
       while($oir=$ois->fetch(PDO::FETCH_ASSOC)){
-        $is=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-				$is->execute([':id'=>$oir['iid']]);
+        $is=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+				$is->execute([
+          ':id'=>$oir['iid']
+        ]);
 				$i=$is->fetch(PDO::FETCH_ASSOC);
-        $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
-        $sc->execute([':id'=>$oir['cid']]);
+        $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+        $sc->execute([
+          ':id'=>$oir['cid']
+        ]);
         $c=$sc->fetch(PDO::FETCH_ASSOC);
         $item=$orderItem;
         $item=preg_replace([
@@ -253,8 +272,10 @@ else{
         'W: '.$dimW.'cm X L: '.$dimL.'cm X H: '.$dimH.'cm',
         $weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':'')
       ],$order);
-      $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE id=:id");
-      $sr->execute([':id'=>$r['rid']]);
+      $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:id");
+      $sr->execute([
+        ':id'=>$r['rid']
+      ]);
       if($sr->rowCount()>0){
         $reward=$sr->fetch(PDO::FETCH_ASSOC);
         if($reward['method']==1)$total=$total-$reward['value'];
@@ -297,7 +318,7 @@ else{
 
       if($ru['spent']>0&&$config['options'][26]==1){
         if(stristr($order,'<discountRange>')){
-          $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+          $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
           $sd->execute([
             ':f'=>$ru['spent'],
             ':t'=>$ru['spent']
@@ -326,7 +347,7 @@ else{
         $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order);
 
       $option='<option value="0">'.($r['postageCode']==0?($r['postageOption']!=''?$r['postageOption']:'Nothing Selected'):'Nothing Selected').'</option>';
-      $sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' ORDER BY title ASC");
+      $sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
       $sco->execute();
       if($sco->rowCount()>0){
         while($rco=$sco->fetch(PDO::FETCH_ASSOC)){

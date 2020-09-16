@@ -1,0 +1,236 @@
+/* stylesheet v0.9 - Vars - https://github.com/DiemenDesign/stylesheet */
+
+:root {
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-size: 1rem;
+  --body-background-color: #fafafa;
+  --color: #000;
+  --color-muted: #6c757d;
+  --link-color: #0044ff;
+  --link-color-hover: #0056C4;
+  --text-decoration-wave-color: #f00;
+  --content-background-color: #920de90b;
+  --content-border-color: #007bff;
+  --box-shadow-x: .05rem;
+  --box-shadow-y: .07rem;
+  --box-shadow-spread: .075rem;
+  --box-shadow-color: rgba(0, 0, 0, .07);
+  --border-radius: .25rem;
+  --border-color: #e9e9e9;
+  --border-width: 1px;
+  --border-style: solid;
+  --mark-background-color: #ff0;
+  --figcaption-color: #888;
+
+  --header-background-color: #fff;
+  --header-color: #000;
+
+  --address-background-color: #fff;
+  --address-color: #000;
+
+  --footer-background-color: #fff;
+  --footer-color: #000;
+
+  --menu-background-color: #fff;
+  --menu-background-color-hover: #ddd;
+  --menu-background-color-active: #ccc;
+  --menu-button-color: #fff;
+  --menu-button-color-hover: #f5f5f5;
+  --menu-button-background-color: #007bff;
+  --menu-button-background-color-hover: #0069d9;
+  --menu-button-border-color: #007bff;
+  --menu-button-border-color-hover: #0069d9;
+  --menu-button-border-width: 1px;
+  --menu-button-border-width-hover: 1px;
+  --menu-button-border-style: solid;
+  --menu-button-border-color: #007bff;
+  --menu-button-border-color-hover: #007bff;
+  --menu-button-border-radius: .25rem;
+  --menu-color: #444;
+  --menu-color-active: #000;
+  --menu-link-color: #444;
+  --menu-link-color-hover: #666;
+  --menu-link-color-active: #000;
+  --menu-dropdown-background-color: #fff;
+  --menu-dropdown-border-color: #e9e9e9;
+
+  --button-color: #fff;
+  --button-color-hover: #f5f5f5;
+  --button-background-color: #000;
+  --button-background-color-hover: #aaa;
+  --button-border-color: #000;
+  --button-border-color-hover: #aaa;
+
+  --table-background-color: #fff;
+  --table-color: #000;
+  --table-head-background-color: #000;
+  --table-head-color: #fff;
+  --table-border-color: #e9e9e9;
+  --table-zebra-background: #f4f4f4;
+
+  --danger-background-color: #f8d7da;
+  --danger-border-color: #f5c6cb;
+  --danger-color: #721c24;
+  --danger-color-contrast: #fff;
+  --danger-link: #491217;
+  --dark-background-color: #d6d8d9;
+  --dark-border-color: #c6c8ca;
+  --dark-color: #1b1e21;
+  --dark-color-contrast: #fff;
+  --dark-link: #040505;
+  --default-background-color: #ddd;
+  --default-border-color: #ced4da;
+  --default-color: #000;
+  --default-color-contrast: #fff;
+  --default-link: #000;
+  --info-background-color: #d1ecf1;
+  --info-border-color: #bee5eb;
+  --info-color: #0c5460;
+  --info-color-contrast: #fff;
+  --info-link: #062c33;
+  --light-background-color: #fefefe;
+  --light-border-color: #fdfdfe;
+  --light-color: #818182;
+  --light-color-contrast: #fff;
+  --light-link: #686868;
+  --primary-background-color: #cfe2ff;
+  --primary-border-color: #bbd6fe;
+  --primary-color: #073984;
+  --primary-color-contrast: #fff;
+  --primary-link: #042454;
+  --secondary-background-color: #e2e3e5;
+  --secondary-border-color: #d6d8db;
+  --secondary-color: #383d41;
+  --secondary-color-contrast: #fff;
+  --secondary-link: #202326;
+  --success-background-color: #d4edda;
+  --success-border-color: #c3e6cb;
+  --success-color: #15572f;
+  --success-color-contrast: #fff;
+  --success-link: #0b2e13;
+  --warning-background-color: #fff3cd;
+  --warning-border-color: #ffeeba;
+  --warning-color: #856404;
+  --warning-color-contrast: #fff;
+  --warning-link: #533f03;
+
+  --justify-important: center;
+  --justify-normal: left;
+
+  --spacing-1: .25rem !important;
+  --spacing-2: .5rem !important;
+  --spacing-3: 1rem !important;
+  --spacing-4: 1.5rem !important;
+  --spacing-5: 3rem !important;
+  --gutter-x: 1.5rem;
+  --gutter-y: 0;
+
+  --form-border-color: #ced4da;
+  --form-border-color-hover: #007bff;
+  --form-background-color: #fff;
+  --form-background-color-hover: #fff;
+  --form-color: #495057;
+  --form-placeholder-color: #999;
+  --form-focus-color: #495057;
+  --form-focus-border-color: #8bbafe;
+  --form-focus-shadow: rgba(13, 110, 253, .25);
+  --form-required-color: #dc3545;
+  --form-required-border-color: #dc3545;
+  --form-focus-required-shadow: rgba(253, 110, 13, .25);
+  --form-valid-color: #28a745;
+  --form-valid-border-color: #28a745;
+  --form-valid-shadow: rgba(40, 167, 69, .25);
+
+  --code-background-color: #f8f9fa;
+  --code-color: #000;
+  --code-border-color: #e9e9e9;
+
+  --tooltip-background-color: #000;
+  --tooltip-color: #fff;
+  --tooltip-border-radius: .25rem;
+
+  --badge-background-color: #5755d9;
+  --badge-color: #fff;
+
+  --card-background-color: #fff;
+  --card-header-background-color: transparent;
+  --card-link-color: #000;
+  --card-link-color-hover: #08f;
+  --card-border-width: 1px;
+  --card-border-style: solid;
+  --card-border-radius: .25rem;
+  --card-border-color: #e9e9e9;
+  --card-figcaption-background-color: rgba(0, 0, 0, .5);
+  --card-figcaption-color: #fff;
+  --card-body-lines: 3;
+  --width-card: 285px;
+  --width-card-medium: 460px;
+  --width-card-wide: 800px;
+  --width-content: 100%;
+
+  --list-group-background-color: #fff;
+  --list-group-background-hover: #f8f9fa;
+  --list-group-background-active: #e9ecef;
+  --list-group-background-disabled: #888;
+  --list-group-color: #495057;
+  --list-group-color-hover: #495057;
+  --list-group-color-active: #212529;
+  --list-group-color-disabled: #000;
+
+  --dialog-backdrop-color: rgba(0, 0, 0, .9);
+  --dialog-background-color: #fff;
+  --dialog-border-color: #e9e9e9;
+  --dialog-border-radius: .25rem;
+  --dialog-min-width: 460px;
+  --dialog-max-width: 800px;
+
+  --search-item-info-color: #000;
+  --search-item-link-color: #00f;
+  --search-item-link-color-hover: #00f;
+  --search-item-url-color: #080;
+
+  --slidertron-height: 400px;
+  --slidertron-background-color: #ddd;
+
+  --jumbotron-background-color: #ddd;
+};
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --body-background-color: #333;
+    --color: #f7f7f7;
+    --color-muted: #aaa;
+    --link-color: #007bff;
+    --link-color-hover: #0056b3;
+    --content-background-color: #555;
+    --content-border-color: #007bff;
+    --box-shadow-color: #bbbbbb10;
+    --border-color: #444;
+
+    --menu-background-color: #343a40;
+    --menu-background-color-hover: #454b51;
+    --menu-background-color-active: #454b51;
+    --menu-color: #fff;
+    --menu-color-active: ;
+    --menu-link-color: #ffffff80;
+    --menu-link-color-hover: #ffffff40;
+    --menu-link-color-active: #fff;
+    --menu-dropdown-background-color: #343a40;
+    --menu-dropdown-border-color: #666;
+
+    --table-background-color: #444;
+    --table-color: #fff;
+    --table-head-background-color: #000;
+    --table-head-color: #fff;
+    --table-border-color: #666;
+    --table-zebra-background: #555;
+
+    --code-background-color: #222;
+    --code-color: #fff;
+    --code-border-color: #666;
+
+    --jumbotron-background-color: #222;
+
+  };
+}

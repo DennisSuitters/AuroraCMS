@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Fix Toastr Notifications.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 $getcfg=true;
@@ -20,8 +21,10 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
 if(isset($_SESSION['uid'])&&$_SESSION['uid']!=0){
-  $su=$db->prepare("SELECT email_signature FROM `".$prefix."login` WHERE id=:uid");
-  $su->execute([':uid'=>$_SESSION['uid']]);
+  $su=$db->prepare("SELECT `email_signature` FROM `".$prefix."login` WHERE `id`=:uid");
+  $su->execute([
+    ':uid'=>$_SESSION['uid']
+  ]);
   $user=$su->fetch(PDO::FETCH_ASSOC);
 }
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
@@ -36,8 +39,10 @@ $msgbody=$body;
 if($to!=''){
   require'class.phpmailer.php';
   if($id!=0){
-    $ms=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE id=:id");
-    $ms->execute([':id'=>$id]);
+    $ms=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `id`=:id");
+    $ms->execute([
+      ':id'=>$id
+    ]);
     if($ms->rowCount()>0)$mr=$ms->fetch(PDO::FETCH_ASSOC);
   }
   $mail=new PHPMailer;
@@ -57,8 +62,10 @@ if($to!=''){
     $msgbody=$body;
     $subject='Fw: '.$subject;
   }
-  $fs=$db->prepare("SELECT id,name,email,business FROM `".$prefix."login` WHERE email=:email");
-  $fs->execute([':email'=>$from]);
+  $fs=$db->prepare("SELECT `id`,`name`,`email`,`business` FROM `".$prefix."login` WHERE `email`=:email");
+  $fs->execute([
+    ':email'=>$from
+  ]);
   if($fs->rowCount()>0){
     $fr=$fs->fetch(PDO::FETCH_ASSOC);
     $fr['name']!=''?$fr['name']:$fr['business'];
@@ -68,8 +75,10 @@ if($to!=''){
   $mto=explode(",",$to);
   if(isset($mto[1])&&$mto[1]!=''){
     foreach($mto as $to2){
-      $ts=$db->prepare("SELECT id,name,email,business FROM `".$prefix."login` WHERE email=:email");
-      $ts->execute([':email'=>$to2]);
+      $ts=$db->prepare("SELECT `id`,`name`,`email`,`business` FROM `".$prefix."login` WHERE `email`=:email");
+      $ts->execute([
+        ':email'=>$to2
+      ]);
       if($ts->rowCount()>0){
         $tr=$ts->fetch(PDO::FETCH_ASSOC);
         $toname=$tr['name']!=''?$tr['name']:$tr['business'];
@@ -98,7 +107,7 @@ if($to!=''){
   }
   $mail->Body=$body;
   if($mail->Send()){
-    $s=$db->prepare("INSERT INTO `".$prefix."messages` (folder,to_email,to_name,from_email,from_name,subject,status,notes_html,attachments,email_date,ti) VALUES ('sent',:to_email,:to_name,:from_email,:from_name,:subject,'read',:notes_html,:attachments,:email_date,:ti)");
+    $s=$db->prepare("INSERT IGNORE INTO `".$prefix."messages` (`folder`,`to_email`,`to_name`,`from_email`,`from_name`,`subject`,`status`,`notes_html`,`attachments`,`email_date`,`ti`) VALUES ('sent',:to_email,:to_name,:from_email,:from_name,:subject,'read',:notes_html,:attachments,:email_date,:ti)");
     $ti=time();
     $s->execute([
       ':to_email'=>$to,

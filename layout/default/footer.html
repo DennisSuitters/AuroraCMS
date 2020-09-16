@@ -1,13 +1,13 @@
 </main>
 <footer class="row border-top mt-5 px-2 py-4">
-	<aside class="col-12 col-sm-3 mt-1 mt-sm-2 pt-4 text-center">
-		<img src="layout/default/images/logo.png" alt="<print config=business>"><br>
+	<aside class="col-12 col-sm-4 col-lg-3 mt-1 mt-sm-2 pt-4 text-center">
+		<img class="mx-auto" src="layout/default/images/logo.png" alt="<print config=business>"><br>
 		<small>&copy; <print year>. <print config="abn"></small><br>
 		<small>Website Design by <a href="<print theme=creator_url>"><print theme="creator"></a></small>
 	</aside>
-	<aside class="col-12 col-sm-3">
+	<aside class="col-12 col-md-4 col-lg-3">
 		<h3 class="m-0 mt-4">Extras</h3>
-		<ul class="list-unstyled pl-0 pl-sm-3 text-center text-sm-left">
+		<ul class="list-unstyled pl-0 pl-sm-3 text-center text-md-left">
 			<buildMenu>
 				<li><a href="<print menu=url>"><print menu="title"></a><menuCart></li>
 			</buildMenu>
@@ -15,9 +15,9 @@
 			<administration>
 		</ul>
 	</aside>
-	<aside class="col-12 col-sm-3">
+	<aside class="col-12 col-md-4 col-lg-3">
 		<h3 class="m-0 mt-4">Social Links</h3>
-		<div class="text-center text-sm-left pl-0 pl-sm-3">
+		<div class="text-center text-md-left pl-0 pl-sm-3">
 			<buildSocial>
 				<a class="i i-social i-2x" href="<print sociallink>" aria-label="<print rel=label>"><print socialicon></a>
 			</buildSocial>
@@ -27,7 +27,7 @@
 		</div>
 		<paymentoptions>
 			<h3 class="m-0 mt-4">Payment Options</h3>
-			<div class="text-center text-sm-left pl-0 pl-sm-3">
+			<div class="text-center text-md-left pl-0 pl-sm-3">
 				<img src="layout/default/images/paypal.svg" width="100" alt="PayPal"><br>
 				<img src="layout/default/images/cards/visa.png" alt="Visa">
 				<img src="layout/default/images/cards/mastercard.png" alt="Mastercard">
@@ -35,7 +35,7 @@
 			</div>
 		</paymentoptions>
 	</aside>
-	<aside class="col-12 col-sm-3">
+	<aside class="col-12 col-lg-3">
 		<label for="footersearch" class="h3 m-0 mt-4">Search</label>
 		<form class="row m-0" method="post" action="search">
 			<input id="footersearch" class="col-9" type="search" name="search" placeholder="Enter a Search Term...">

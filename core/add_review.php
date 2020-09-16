@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -27,10 +28,12 @@ if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
   $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
   if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
     $blacklisted=$theme['settings']['blacklist'];
-    $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-    $sc->execute([':ip'=>$ip]);
+    $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+    $sc->execute([
+      ':ip'=>$ip
+    ]);
     if($sc->rowCount()<1){
-      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
       $s->execute([
         ':ip'=>$ip,
         ':oti'=>$ti,
@@ -59,10 +62,12 @@ if($_POST['emailtrap']=='none'){
       $spam=TRUE;
     }
     if($config['spamfilter'][1]==1&&$spam==TRUE&&$ip!='127.0.0.1'){
-      $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-      $sc->execute([':ip'=>$ip]);
+      $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+      $sc->execute([
+        ':ip'=>$ip
+      ]);
       if($sc->rowCount()<1){
-        $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
         $s->execute([
           ':ip'=>$ip,
           ':oti'=>$ti,
@@ -74,7 +79,7 @@ if($_POST['emailtrap']=='none'){
   }
   if($spam==FALSE){
     if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-      $q=$db->prepare("INSERT INTO `".$prefix."comments` (contentType,rid,ip,email,name,notes,cid,status,ti) VALUES ('review',:rid,:ip,:email,:name,:notes,:cid,'unapproved',:ti)");
+      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."comments` (`contentType`,`rid`,`ip`,`email`,`name`,`notes`,`cid`,`status`,`ti`) VALUES ('review',:rid,:ip,:email,:name,:notes,:cid,'unapproved',:ti)");
       $q->execute([
         ':rid'=>$id,
         ':ip'=>$ip,

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Make sure all links end with /
@@ -71,7 +71,7 @@ if($cT=='all'||$cT=='mixed'||$cT=='folder'){
 	}
 }
 if($cT!='folder'){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE file!='' OR thumb!='' AND featured='1' AND internal!='1' AND status='published' AND contentType LIKE :contentType AND rank<=:rank ORDER BY $order $limit");
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `file`!='' OR `thumb`!='' AND `featured`='1' AND internal!='1' AND `status`='published' AND `contentType` LIKE :contentType AND `rank`<=:rank ORDER BY $order $limit");
 	$s->execute([
 		':contentType'=>$contentType,
 		':rank'=>$_SESSION['rank']

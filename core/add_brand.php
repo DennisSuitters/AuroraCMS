@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.16
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 define('ADMINNOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
 function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('svg'.DS.$svg.'.svg').'</i>';
@@ -22,7 +23,7 @@ $title=filter_var($_POST['brandtitle'],FILTER_SANITIZE_STRING);
 $url=isset($_POST['brandurl'])?filter_input(INPUT_POST,'brandurl',FILTER_SANITIZE_STRING):'';
 $icon=isset($_POST['brandicon'])?filter_input(INPUT_POST,'brandicon',FILTER_SANITIZE_STRING):'';
 if($title!=''){
-  $s=$db->prepare("INSERT INTO `".$prefix."choices` (contentType,icon,url,title) VALUES ('brand',:icon,:url,:title)");
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`contentType`,`icon`,`url`,`title`) VALUES ('brand',:icon,:url,:title)");
   $s->execute([
 		':url'=>$url,
 		':icon'=>$icon,

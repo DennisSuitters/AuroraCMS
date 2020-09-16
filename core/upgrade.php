@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 ini_set('max_execution_time',60);
 require'db.php';
-$config=$db->query("SELECT language,update_url,development FROM config WHERE id=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `language`,`update_url`,`development` FROM config WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($config['development']==1){
   error_reporting(E_ALL);
   ini_set('display_errors','On');
@@ -125,6 +126,8 @@ if($found==true){
   echo'window.top.window.$(`#update`).append(`<div class="alert alert-danger" role="alert">Could not find latest Update!</div>`);';
   }
 }
-$su=$db->prepare("UPDATE config SET uti=:uti WHERE id='1'");
-$su->execute([':uti'=>time()]);
+$su=$db->prepare("UPDATE `".$prefix."config` SET `uti`=:uti WHERE `id`='1'");
+$su->execute([
+  ':uti'=>time()
+]);
 echo'</script>';

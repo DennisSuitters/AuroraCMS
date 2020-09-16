@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Add Page Editing.
@@ -16,6 +16,7 @@
  * @changes    v0.0.16 Add sold calculation and database update.
  * @changes    v0.0.18 Reformat source for legibility.
  * @changes    v0.0.18 Add function to accept quantity changes from front end.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 require'core'.DS.'puconverter.php';
@@ -37,11 +38,13 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 	$qid=filter_input(INPUT_POST,'qid',FILTER_SANITIZE_NUMBER_INT);
 	$qty=filter_input(INPUT_POST,'qty',FILTER_SANITIZE_NUMBER_INT);
 	if($qty==0){
-		$s=$db->prepare("DELETE FROM `".$prefix."cart` WHERE id=:id");
-		$s->execute([':id'=>$qid]);
+		$s=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `id`=:id");
+		$s->execute([
+			':id'=>$qid
+		]);
 	}
 	if($qty>0){
-		$s=$db->prepare("UPDATE `".$prefix."cart` SET quantity=:quantity WHERE id=:id");
+		$s=$db->prepare("UPDATE `".$prefix."cart` SET `quantity`=:quantity WHERE `id`=:id");
 		$s->execute([
 			':quantity'=>$qty,
 			':id'=>$qid
@@ -55,8 +58,10 @@ if($args[0]=='confirm'){
 		$postoption=filter_input(INPUT_POST,'postoption',FILTER_SANITIZE_STRING);
 		$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 		if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-			$s=$db->prepare("SELECT id,status FROM `".$prefix."login` WHERE email=:email");
-			$s->execute([':email'=>$email]);
+			$s=$db->prepare("SELECT `id`,`status` FROM `".$prefix."login` WHERE `email`=:email");
+			$s->execute([
+				':email'=>$email
+			]);
 			if($s->rowCount()>0){
 				$ru=$s->fetch(PDO::FETCH_ASSOC);
 				if($ru['status']=='delete'||$ru['status']=='disabled')
@@ -74,7 +79,7 @@ if($args[0]=='confirm'){
 				$country=isset($_POST['country'])?filter_input(INPUT_POST,'country',FILTER_SANITIZE_STRING):'';
 				$phone=isset($_POST['phone'])?filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING):'';
 				$username=explode('@',$email);
-				$q=$db->prepare("INSERT INTO `".$prefix."login` (username,password,email,name,business,address,suburb,city,state,postcode,country,phone,status,active,language,timezone,rank,ti) VALUES (:username,:password,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:phone,'','1',:language,'default','200',:ti)");
+				$q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`username`,`password`,`email`,`name`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`country`,`phone`,`status`,`active`,`language`,`timezone`,`rank`,`ti`) VALUES (:username,:password,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:phone,'','1',:language,'default','200',:ti)");
 				$chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 	    	$pass=substr(str_shuffle($chars),0,8);
 				$password=password_hash($pass,PASSWORD_DEFAULT);
@@ -95,7 +100,7 @@ if($args[0]=='confirm'){
 					':ti'=>$ti
 				]);
 				$uid=$db->lastInsertId();
-				$q=$db->prepare("UPDATE `".$prefix."login` SET username=:username WHERE id=:id");
+				$q=$db->prepare("UPDATE `".$prefix."login` SET `username`=:username WHERE `id`=:id");
 				$q->execute([
 					':id'=>$uid,
 					':username'=>$username[0].$uid
@@ -114,9 +119,11 @@ if($args[0]=='confirm'){
 					if($mail->Send()){}
 				}
 			}
-			$r=$db->query("SELECT MAX(id) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
-			$sr=$db->prepare("SELECT id,quantity,tis,tie FROM `".$prefix."rewards` WHERE code=:code");
-			$sr->execute([':code'=>$rewards]);
+			$r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
+			$sr=$db->prepare("SELECT `id`,`quantity`,`tis`,`tie` FROM `".$prefix."rewards` WHERE `code`=:code");
+			$sr->execute([
+				':code'=>$rewards
+			]);
 			if($sr->rowCount()>0){
 				$reward=$sr->fetch(PDO::FETCH_ASSOC);
 				if(!$reward['tis']>$ti&&!$reward['tie']<$ti)
@@ -124,7 +131,7 @@ if($args[0]=='confirm'){
 				if($reward['quantity']<1)
 					$reward['id']=0;
 				else{
-					$sr=$db->prepare("UPDATE `".$prefix."rewards` SET quantity=:quantity WHERE code=:code");
+					$sr=$db->prepare("UPDATE `".$prefix."rewards` SET `quantity`=:quantity WHERE `code`=:code");
 					$sr->execute([
 						':quantity'=>$rewards['quantity']-1,
 						':code'=>$rewards
@@ -134,7 +141,7 @@ if($args[0]=='confirm'){
 				$reward['id']=0;
 			$dti=$ti+$config['orderPayti'];
 			$qid='Q'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-			$q=$db->prepare("INSERT INTO `".$prefix."orders` (cid,uid,qid,qid_ti,due_ti,rid,status,postOption,ti) VALUES (:cid,:uid,:qid,:qid_ti,:due_ti,:rid,'pending',:postoption,:ti)");
+			$q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`qid`,`qid_ti`,`due_ti`,`rid`,`status`,`postOption`,`ti`) VALUES (:cid,:uid,:qid,:qid_ti,:due_ti,:rid,'pending',:postoption,:ti)");
 			$q->execute([
 				':cid'=>$uid,
 				':uid'=>(isset($uid)?$uid:0),
@@ -146,21 +153,25 @@ if($args[0]=='confirm'){
 				':ti'=>$ti
 			]);
 			$oid=$db->lastInsertId();
-			$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE si=:si");
-			$s->execute([':si'=>SESSIONID]);
+			$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si");
+			$s->execute([
+				':si'=>SESSIONID
+			]);
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
-				$si=$db->prepare("SELECT title,quantity,sold FROM `".$prefix."content` WHERE id=:id");
-				$si->execute([':id'=>$r['iid']]);
+				$si=$db->prepare("SELECT `title`,`quantity`,`sold` FROM `".$prefix."content` WHERE `id`=:id");
+				$si->execute([
+					':id'=>$r['iid']
+				]);
 				$i=$si->fetch(PDO::FETCH_ASSOC);
 				$quantity=$i['quantity']-$r['quantity'];
 				$sold=$i['quantity']+$r['quantity'];
-				$qry=$db->prepare("UPDATE `".$prefix."content` SET quantity=:quantity, sold=:sold WHERE id=:id");
+				$qry=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`sold`=:sold WHERE `id`=:id");
 				$qry->execute([
 					':quantity'=>$quantity,
 					':sold'=>$sold,
 					':id'=>$r['iid']
 				]);
-				$sq=$db->prepare("INSERT INTO `".$prefix."orderitems` (oid,iid,cid,title,quantity,cost,ti) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:ti)");
+				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`ti`) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:ti)");
 				$sq->execute([
 					':oid'=>$oid,
 					':iid'=>$r['iid'],
@@ -171,9 +182,11 @@ if($args[0]=='confirm'){
 					':ti'=>$ti
 				]);
 			}
-			$q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE si=:si");
-			$q->execute([':si'=>SESSIONID]);
-			$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+			$q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `si`=:si");
+			$q->execute([
+				':si'=>SESSIONID
+			]);
+			$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 			if($config['email']!=''){
 				$mail=new PHPMailer;
 				$mail->isSendmail();
@@ -195,8 +208,10 @@ if($args[0]=='confirm'){
 }else{
 	$total=0;
 	if(stristr($html,'<items')){
-		$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE si=:si ORDER BY ti DESC");
-		$s->execute([':si'=>SESSIONID]);
+		$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
+		$s->execute([
+			':si'=>SESSIONID
+		]);
 		preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 		$cartloop=$matches[1];
 		$cartitems='';
@@ -205,11 +220,15 @@ if($args[0]=='confirm'){
 			$totalWeight=$weight=$dimW=$dimL=$dimH=0;
 			while($ci=$s->fetch(PDO::FETCH_ASSOC)){
 				$cartitem=$cartloop;
-				$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-				$si->execute([':id'=>$ci['iid']]);
+				$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+				$si->execute([
+					':id'=>$ci['iid']
+				]);
 				$i=$si->fetch(PDO::FETCH_ASSOC);
-				$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
-				$sc->execute([':id'=>$ci['cid']]);
+				$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+				$sc->execute([
+					':id'=>$ci['cid']
+				]);
 				$c=$sc->fetch(PDO::FETCH_ASSOC);
 				if($i['thumb']!='')
 					$image=$i['thumb'];
@@ -269,7 +288,7 @@ if($args[0]=='confirm'){
 				$weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''),
 				$total
 			],$html);
-			$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='postoption' ORDER BY title ASC");
+			$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
 			$sco->execute();
 			$option='<option value="1000">Australia Post Regular Post</option>'. // AUS_PARCEL_REGULAR
 							'<option value="1001">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS

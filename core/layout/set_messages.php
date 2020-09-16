@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.2 Add Option to not store messages.
@@ -52,25 +52,25 @@
           </div>
         </form>
         <div id="subjects">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='subject' ORDER BY title ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group row">
-            <div class="input-group">
-              <div class="input-group-text">Subject</div>
-              <input type="text" id="sub<?php echo$r['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" onchange="update('<?php echo$rs['id'];?>','subject','title',$(this).val());">
-              <div class="input-group-text">Email</div>
-              <input type="text" class="form-control" value="<?php echo$rs['url'];?>" onchange="update('<?php echo$rs['id'];?>','subject','url',$(this).val());">
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group row">
+              <div class="input-group">
+                <div class="input-group-text">Subject</div>
+                <input type="text" id="sub<?php echo$r['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" onchange="update('<?php echo$rs['id'];?>','subject','title',$(this).val());">
+                <div class="input-group-text">Email</div>
+                <input type="text" class="form-control" value="<?php echo$rs['url'];?>" onchange="update('<?php echo$rs['id'];?>','subject','url',$(this).val());">
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
         <hr>
         <legend>Webmail</legend>
@@ -138,45 +138,47 @@ while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
         </script>
         <hr>
         <div id="mailboxes">
-<?php $sm=$db->prepare("SELECT * FROM choices WHERE contentType='mailbox' AND uid=:uid ORDER BY url");
-$sm->execute([':uid'=>$user['id']]);
-while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rm['id'];?>" class="form-group row">
-            <div class="input-group">
-              <label for="type<?php echo$rm['id'];?>" class="input-group-text">Type</label>
-              <select id="type<?php echo$rm['id'];?>" class="form-control" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`type`,$(this).val());">
-                <option value="imap"<?php echo$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
-                <option value="pop3"<?php echo$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
-              </select>
-              <label for="port<?php echo$rm['id'];?>" class="input-group-text">Port</label>
-              <input type="text" id="port<?php echo$rm['id'];?>" class="form-control" value="<?php echo$rm['port'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`port`,$(this).val());">
-              <label for="flag<?php echo$rm['id'];?>" class="input-group-text">Flag</label>
-              <select id="flag" class="form-control" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`flag`,$(this).val());">
-                <option value="novalidate-cert"<?php echo$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
-                <option value="validate-cert"<?php echo$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
-                <option value="norsh"<?php echo$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
-                <option value="ssl"<?php echo$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
-                <option value="notls"<?php echo$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
-                <option value="tls"<?php echo$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
-              </select>
-            </div>
-            <div class="input-group">
-              <label for="url<?php echo$rm['id'];?>" class="input-group-text">Server</label>
-              <input type="text" id="url<?php echo$rm['id'];?>" class="form-control" name="url" value="<?php echo$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`url`,$(this).val());">
-              <label for="mailusr<?php echo$rm['id'];?>" class="input-group-text">Username</label>
-              <input type="text" id="mailusr<?php echo$rm['id'];?>" class="form-control" name="mailusr" value="<?php echo$rm['username'];?>" placeholder="Enter a Username..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`username`,$(this).val());">
-              <label for="mailpwd<?php echo$rm['id'];?>" class="input-group-text">Password</label>
-              <input type="text" id="mailpwd<?php echo$rm['id'];?>" class="form-control" name="mailpwd" value="<?php echo$rm['password'];?>" placeholder="Enter a Password..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`password`,$(this).val());">
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rm['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $sm=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='mailbox' AND `uid`=:uid ORDER BY `url`");
+          $sm->execute([
+            ':uid'=>$user['id']
+          ]);
+          while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rm['id'];?>" class="form-group row">
+              <div class="input-group">
+                <label for="type<?php echo$rm['id'];?>" class="input-group-text">Type</label>
+                <select id="type<?php echo$rm['id'];?>" class="form-control" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`type`,$(this).val());">
+                  <option value="imap"<?php echo$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
+                  <option value="pop3"<?php echo$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
+                </select>
+                <label for="port<?php echo$rm['id'];?>" class="input-group-text">Port</label>
+                <input type="text" id="port<?php echo$rm['id'];?>" class="form-control" value="<?php echo$rm['port'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`port`,$(this).val());">
+                <label for="flag<?php echo$rm['id'];?>" class="input-group-text">Flag</label>
+                <select id="flag" class="form-control" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`flag`,$(this).val());">
+                  <option value="novalidate-cert"<?php echo$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
+                  <option value="validate-cert"<?php echo$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
+                  <option value="norsh"<?php echo$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
+                  <option value="ssl"<?php echo$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
+                  <option value="notls"<?php echo$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
+                  <option value="tls"<?php echo$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="url<?php echo$rm['id'];?>" class="input-group-text">Server</label>
+                <input type="text" id="url<?php echo$rm['id'];?>" class="form-control" name="url" value="<?php echo$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`url`,$(this).val());">
+                <label for="mailusr<?php echo$rm['id'];?>" class="input-group-text">Username</label>
+                <input type="text" id="mailusr<?php echo$rm['id'];?>" class="form-control" name="mailusr" value="<?php echo$rm['username'];?>" placeholder="Enter a Username..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`username`,$(this).val());">
+                <label for="mailpwd<?php echo$rm['id'];?>" class="input-group-text">Password</label>
+                <input type="text" id="mailpwd<?php echo$rm['id'];?>" class="form-control" name="mailpwd" value="<?php echo$rm['password'];?>" placeholder="Enter a Password..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`password`,$(this).val());">
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rm['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
         <hr>
         <legend>AutoReply Email</legend>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Add Change to Unpublished when Content is moved to future date in Scheduler.
@@ -15,12 +15,13 @@
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
  * @changes    v0.0.11 Add Password remove Page Block, and reset Password Update button colour.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 include'sanitise.php';
 function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
@@ -56,14 +57,16 @@ if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%
 $si=session_id();
 $ti=time();
 if($col!='messengerFBCode'){
-	$s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE id=:id");
-	$s->execute([':id'=>$id]);
+	$s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
+	$s->execute([
+		':id'=>$id
+	]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
 	$oldda=$r[$col];
 }
 if($tbl=='content'&&$col=='status'&&$da=='published'){
 	if($ti>time())$status='unpublished';else$status='published';
-  $q=$db->prepare("UPDATE `".$prefix."content` SET status=:status WHERE id=:id");
+  $q=$db->prepare("UPDATE `".$prefix."content` SET `status`=:status WHERE `id`=:id");
   $q->execute([
 		':status'=>$status,
     ':id' =>$id
@@ -71,8 +74,11 @@ if($tbl=='content'&&$col=='status'&&$da=='published'){
 }
 if($tbl=='content'&&$col=='title'){
 	$slug=sluggify($da);
-	$ss=$db->prepare("UPDATE `".$prefix.$tbl."` SET urlSlug=:slug WHERE id=:id");
-	$ss->execute([':id'=>$id,':slug'=>$slug]);
+	$ss=$db->prepare("UPDATE `".$prefix.$tbl."` SET `urlSlug`=:slug WHERE `id`=:id");
+	$ss->execute([
+		':id'=>$id,
+		':slug'=>$slug
+	]);
 }
 if($tbl=='config'||$tbl=='login'||$tbl=='orders'||$tbl=='orderitems'||$tbl=='messages')$r['contentType']='';
 $log=[
@@ -92,8 +98,10 @@ $log=[
 if($r['contentType']=='booking')$log['view']=$r['contentType'].'s';
 if(isset($_SESSION['uid'])){
   $uid=(int)$_SESSION['uid'];
-  $q=$db->prepare("SELECT rank,username,name FROM `".$prefix."login` WHERE id=:id");
-  $q->execute([':id'=>$uid]);
+  $q=$db->prepare("SELECT `rank`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
+  $q->execute([
+		':id'=>$uid
+	]);
   $u=$q->fetch(PDO::FETCH_ASSOC);
   $login_user=$u['name']!=''?$u['name']:$u['username'];
   $log['uid']=$uid;
@@ -111,7 +119,7 @@ if($tbl=='login'&&$col=='password'){
   $log['newda']='';
 }
 if($tbl=='content'||$tbl=='menu'){
-  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET eti=:ti,login_user=:login_user WHERE id=:id");
+  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `eti`=:ti,`login_user`=:login_user WHERE `id`=:id");
   $q->execute([
     'ti'=>$ti,
     ':login_user'=>$login_user,
@@ -119,37 +127,41 @@ if($tbl=='content'||$tbl=='menu'){
   ]);
 }
 if($tbl=='seo'){
-  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET ti=:ti WHERE id=:id");
+  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `ti`=:ti WHERE `id`=:id");
   $q->execute([
     'ti'=>$ti,
     ':id'=>$id
   ]);
 }
 if($tbl=='login'&&$col=='username'){
-  $uc1=$db->prepare("SELECT username FROM `".$prefix."login` WHERE username=:da");
-  $uc1->execute([':da'=>$da]);
+  $uc1=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:da");
+  $uc1->execute([
+		':da'=>$da
+	]);
   if($uc1->rowCount()<1){
-    $q=$db->prepare("UPDATE `".$prefix."login` SET username=:da WHERE id=:id");
+    $q=$db->prepare("UPDATE `".$prefix."login` SET `username`=:da WHERE `id`=:id");
     $q->execute([
       ':da'=>$da,
       ':id'=>$id
     ]);?>
 	window.top.window.$('#uerror').addClass('d-none');
 <?php }else{
-    $uc2=$db->prepare("SELECT username FROM `".$prefix."login` WHERE id=:id");
-    $uc2->execute([':id'=>$id]);
+    $uc2=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `id`=:id");
+    $uc2->execute([
+			':id'=>$id
+		]);
     $uc=$uc2->fetch(PDO::FETCH_ASSOC);?>
 	window.top.window.$('#uerror').removeClass('d-none');
 <?php }
 }else{
-  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET $col=:da WHERE id=:id");
+  $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `".$col."`=:da WHERE `id`=:id");
   $q->execute([
     ':da'=>$da,
     ':id'=>$id
   ]);
 }
 if($tbl=='login'&&$col=='email'){
-	$h=$db->prepare("UPDATE `".$prefix."login` SET hash=:hash WHERE id=:id");
+	$h=$db->prepare("UPDATE `".$prefix."login` SET `hash`=:hash WHERE `id`=:id");
 	$h->execute([
     ':hash'=>md5($da),
     ':id'=>$id
@@ -157,9 +169,9 @@ if($tbl=='login'&&$col=='email'){
 }
 $e=$db->errorInfo();
 if($tbl=='orders'&&$col=='status'&&$da=='archived'){
-  $r=$db->query("SELECT MAX(id) as id FROM `".$prefix."orders`")->fetch();
+  $r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch();
   $oid=strtoupper('A').date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-  $q=$db->prepare("UPDATE `".$prefix."orders` SET aid=:aid,aid_ti=:aid_ti WHERE id=:id");
+  $q=$db->prepare("UPDATE `".$prefix."orders` SET `aid`=:aid,`aid_ti`=:aid_ti WHERE `id`=:id");
   $q->execute([
     ':aid'=>$oid,
     ':aid_ti'=>$ti,
@@ -167,14 +179,18 @@ if($tbl=='orders'&&$col=='status'&&$da=='archived'){
   ]);
 }
 if($tbl=='orders'&&$col=='status'&&$da=='paid'){
-	$q=$db->prepare("SELECT uid,total FROM `".$prefix."orders` WHERE id=:id");
-	$q->execute([':id'=>$id]);
+	$q=$db->prepare("SELECT `uid`,`total` FROM `".$prefix."orders` WHERE `id`=:id");
+	$q->execute([
+		':id'=>$id
+	]);
 	$r=$q->fetch(PDO::FETCH_ASSOC);
-	$s=$db->prepare("SELECT spent FROM `".$prefix."login` WHERE id=:uid");
-	$s->execute([':uid'=>$r['uid']]);
+	$s=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
+	$s->execute([
+		':uid'=>$r['uid']
+	]);
 	$ru=$s->fetch(PDO::FETCH_ASSOC);
 	$ru['spent']=$ru['spent']+$r['total'];
-	$s=$db->prepare("UPDATE `".$prefix."login` SET spent=:spent WHERE id=:uid");
+	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent WHERE `id`=:uid");
 	$s->execute([
 		':spent'=>$ru['spent'],
 		':uid'=>$r['uid']
@@ -197,12 +213,16 @@ if(is_null($e[2])){
 	if($tbl=='orderitems'||$tbl=='cart'){
     if($tbl=='cart'&&$col=='quantity'){
       if($da==0){
-        $q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE id=:id");
-        $q->execute([':id'=>$id]);
+        $q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `id`=:id");
+        $q->execute([
+					':id'=>$id
+				]);
         $cnt='';
       }
-      $q=$db->prepare("SELECT SUM(quantity) as quantity FROM `".$prefix."cart` WHERE si=:si");
-      $q->execute([':si'=>$si]);
+      $q=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
+      $q->execute([
+				':si'=>$si
+			]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
       $cnt=$r['quantity'];
       if($r['quantity']==0)
@@ -210,27 +230,37 @@ if(is_null($e[2])){
 	window.top.window.$('#cart').html('<?php echo$cnt;?>');
 <?php	}
       if($tbl=='orderitems'){
-        $q=$db->prepare("SELECT oid FROM `".$prefix."orderitems` WHERE id=:id");
-        $q->execute([':id'=>$id]);
+        $q=$db->prepare("SELECT `oid` FROM `".$prefix."orderitems` WHERE `id`=:id");
+        $q->execute([
+					':id'=>$id
+				]);
         $iid=$q->fetch(PDO::FETCH_ASSOC);
       }
       if($tbl=='orderitems'&&$col=='quantity'&&$da==0){
-        $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE id=:id");
-        $q->execute([':id'=>$id]);
+        $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
+        $q->execute([
+					':id'=>$id
+				]);
       }
       $total=0;
       $content=$html='';
       if($tbl=='cart'){
-        $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE si=:si ORDER BY ti DESC");
-        $q->execute([':si'=>$si]);
+        $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
+        $q->execute([
+					':si'=>$si
+				]);
       }
       if($tbl=='orderitems'){
-        $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid ORDER BY ti ASC,title ASC");
-        $q->execute([':oid'=>$iid['oid']]);
+        $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid ORDER BY `ti` ASC,`title` ASC");
+        $q->execute([
+					':oid'=>$iid['oid']
+				]);
       }
       while($oi=$q->fetch(PDO::FETCH_ASSOC)){
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-        $s->execute([':id'=>$oi['iid']]);
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+        $s->execute([
+					':id'=>$oi['iid']
+				]);
         $i=$s->fetch(PDO::FETCH_ASSOC);
         $html.='<tr>'.
                 '<td class="text-left">'.$i['code'].'</td>'.
@@ -271,8 +301,10 @@ if(is_null($e[2])){
 <?php }
     	if($tbl=='login'&&$col=='gravatar'){
         if($da==''){
-          $sav=$db->prepare("SELECT avatar FROM `".$prefix."login` WHERE id=:id");
-          $sav->execute([':id'=>$id]);
+          $sav=$db->prepare("SELECT `avatar` FROM `".$prefix."login` WHERE `id`=:id");
+          $sav->execute([
+						':id'=>$id
+					]);
           $av=$sav->fetch(PDO::FETCH_ASSOC);
           if($av['avatar']!=''&&file_exists('..'.DS.'media'.DS.'avatar'.DS.$av['avatar']))$avatar='media'.DS.'avatar'.DS.$av['avatar'];
 					else$avatar='images'.DS.'noavatar.jpg';
@@ -302,7 +334,7 @@ if(is_null($e[2])){
 <?php }
 echo'</script>';
 if($config['options'][12]==1){
-	$s=$db->prepare("INSERT INTO `".$prefix."logs` (uid,rid,username,name,view,contentType,refTable,refColumn,oldda,newda,action,ti) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
+	$s=$db->prepare("INSERT IGNORE INTO `".$prefix."logs` (`uid`,`rid`,`username`,`name`,`view`,`contentType`,`refTable`,`refColumn`,`oldda`,`newda`,`action`,`ti`) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
 	$s->execute([
 	  ':uid'=>$log['uid'],
 	  ':rid'=>$log['rid'],

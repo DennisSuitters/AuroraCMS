@@ -7,15 +7,18 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
-$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-$q->execute([':id'=>$args[1]]);
+$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+$q->execute([
+  ':id'=>$args[1]
+]);
 $r=$q->fetch(PDO::FETCH_ASSOC);?>
 <main id="content" class="main">
   <ol class="breadcrumb">

@@ -1,13 +1,28 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="profile">
+  <breadcrumb>
+		<section class="row mt-3 mb-0">
+			<nav class="col-12 col-sm-11">
+				<ol class="breadcrumb">
+					<json-ld-breadcrumb>
+					<breaditems>
+						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+					</breaditems>
+					<breadcurrent>
+						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+					</breadcurrent>
+				</ol>
+			</nav>
+		</section>
+	</breadcrumb>
   <profile>
-    <section class="row">
+    <section class="row mt-5">
       <aside class="col-12 col-sm-2">
         <div class="profile-menu">
           <div class="photo">
             <h1 class="name d-block d-sm-none"><print user="name"></h1>
-            <img src="<print user=image>" alt="<print user=name>">
+            <img src="<print user=image>" loading="lazy" alt="<print user=name>">
             <div class="description d-block d-md-none"><print user="caption"></div>
           </div>
           <div class="profile-nav">
@@ -95,7 +110,7 @@
               <item>
                 <div class="row mt-5">
                   <div class="col-12 col-sm-4 pr-sm-5 mb-3">
-                    <a href="<print content=link>"><img class="img-responsive" src="<print content=image>" alt="<print content=title>"></a>
+                    <a href="<print content=link>"><img class="img-responsive" src="<print content=image>" loading="lazy" alt="<print content=title>"></a>
                   </div>
                   <div class="col-12 col-sm-8">
                     <h3 class="mt-0"><a href="<print content=link>"><print content="title"></a></h3>
@@ -154,7 +169,7 @@
         <article class="col-6 col-sm-2">
           <div class="card">
             <a href="<print user=link>">
-              <img class="img-fluid" src="<print user=image>" alt="<print user=name>">
+              <img class="img-fluid" src="<print user=image>" loading="lazy" alt="<print user=name>">
             </a>
             <h4 class="text-center"><print user="name"></h4>
           </div>

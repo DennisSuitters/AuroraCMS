@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
@@ -15,6 +15,7 @@
  * @changes    v0.0.19 Fix database references.
  * @changes    v0.0.19 Add Deductions to pdf output.
  * @changes    v0.0.19 Add Discount Range Calculation.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -22,12 +23,16 @@ include'tcpdf'.DS.'tcpdf.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $w=filter_input(INPUT_GET,'w',FILTER_SANITIZE_STRING);
 $act=filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
-$q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE id=:id");
-$q->execute([':id'=>$id]);
+$q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+$q->execute([
+  ':id'=>$id
+]);
 $r=$q->fetch(PDO::FETCH_ASSOC);
 $r['notes']=rawurldecode($r['notes']);
-$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
-$s->execute([':id'=>$r['cid']]);
+$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+$s->execute([
+  ':id'=>$r['cid']
+]);
 $c=$s->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 if($r['qid']!='')$oid=$r['qid'];
@@ -114,14 +119,20 @@ $html.='<table class="table">'.
 $i=13;
 $ot=$st=$pwc=0;
 $zeb=1;
-$s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status!='delete' AND status!='neg'");
-$s->execute([':oid'=>$id]);
+$s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='delete' AND `status`!='neg'");
+$s->execute([
+  ':oid'=>$id
+]);
 while($ro=$s->fetch(PDO::FETCH_ASSOC)){
-	$si=$db->prepare("SELECT code,title FROM `".$prefix."content` WHERE id=:id");
-	$si->execute([':id'=>$ro['iid']]);
+	$si=$db->prepare("SELECT `code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+	$si->execute([
+    ':id'=>$ro['iid']
+  ]);
 	$i=$si->fetch(PDO::FETCH_ASSOC);
-	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
-	$sc->execute([':id'=>$ro['cid']]);
+	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+	$sc->execute([
+    ':id'=>$ro['cid']
+  ]);
 	$ch=$sc->fetch(PDO::FETCH_ASSOC);
   $st=$ro['cost']*$ro['quantity'];
 	$html.='<tr'.($zeb==1?' style="background-color:#f4f4f4;"':' style="backgroound-color:#fff;"').'>'.
@@ -138,8 +149,10 @@ while($ro=$s->fetch(PDO::FETCH_ASSOC)){
 }
 $html.='</tbody>'.
         '<tfoot>';
-$sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE id=:rid");
-$sr->execute([':rid'=>$r['rid']]);
+$sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
+$sr->execute([
+  ':rid'=>$r['rid']
+]);
 if($sr->rowCount()>0){
 	$reward=$sr->fetch(PDO::FETCH_ASSOC);
 	$html.='<tr style="background-color:#f0f0f0">'.
@@ -172,14 +185,14 @@ if($config['gst']>0){
 }
 
 if($config['options'][26]==1){
-  $us=$db->prepare("SELECT spent FROM `".$prefix."login` WHERE id=:uid");
+  $us=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
   $us->execute([
     ':uid'=>$r['uid']
   ]);
   if($us->rowCount()>0){
     $usr=$us->fetch(PDO::FETCH_ASSOC);
     if($usr['spent']>0){
-      $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='discountrange' AND f < :f AND t > :t");
+      $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
       $sd->execute([
         ':f'=>$usr['spent'],
         ':t'=>$usr['spent']
@@ -214,8 +227,10 @@ $html.='<tr style="background-color:#f0f0f0">'.
           '<td class="col-75 text-right"><strong>Total</strong></td>'.
           '<td class="col-75 text-right '.$r['status'].'"><strong>'.$ot.'</strong></td>'.
         '</tr>';
-$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid AND status='neg' ORDER BY ti ASC");
-$sn->execute([':oid'=>$r['id']]);
+$sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
+$sn->execute([
+  ':oid'=>$r['id']
+]);
 if($sn->rowCount()>0){
 	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
     $html.='<tr style="background-color:#f4f4f4;">'.

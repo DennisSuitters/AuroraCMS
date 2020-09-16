@@ -35,14 +35,14 @@
   <div class="container-fluid">
     <div class="card">
       <div class="card-body">
-<?php if($user['rank']>999){?>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options17" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="17"<?php echo$config['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+        <?php if($user['rank']>999){?>
+          <div class="form-group row">
+            <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+              <label class="switch switch-label switch-success"><input type="checkbox" id="options17" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="17"<?php echo$config['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            </div>
+            <label for="options17" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Developer Lock Down</label>
           </div>
-          <label for="options17" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Developer Lock Down</label>
-        </div>
-<?php }?>
+        <?php }?>
         <div class="form-group row">
           <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
             <label class="switch switch-label switch-success"><input type="checkbox" id="options8" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="8"<?php echo$config['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
@@ -56,137 +56,137 @@
           </div>
           <label for="options18" class="col-form-label col-2 col-sm-3 col-md-4 col-lg-3 col-xl-5">Enable Offline Page (PWA).</label>
         </div>
-<?php if($user['rank']>999){?>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="development0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0"<?php echo$config['development'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="development0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Development Mode</label>
-        </div>
-<?php if(file_exists('media'.DS.'cache'.DS.'error.log')){?>
-        <div id="l_0">
+        <?php if($user['rank']>999){?>
           <div class="form-group row">
-            <label for="error_log" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Error Log</label>
-            <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-              <div class="input-group-btn">
-                <button class="btn btn-secondary" onclick="$('#logview').toggleClass('d-none');$('#logfile').load('media/cache/error.log?<?php echo time();?>');">View Logs</button>
-                <button class="btn btn-secondary trash" onclick="purge('0','errorlog')" aria-label="Purge"><?php svg('purge');?></button>
+            <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+              <label class="switch switch-label switch-success"><input type="checkbox" id="development0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0"<?php echo$config['development'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            </div>
+            <label for="development0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Development Mode</label>
+          </div>
+          <?php if(file_exists('media'.DS.'cache'.DS.'error.log')){?>
+            <div id="l_0">
+              <div class="form-group row">
+                <label for="error_log" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Error Log</label>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                  <div class="input-group-btn">
+                    <button class="btn btn-secondary" onclick="$('#logview').toggleClass('d-none');$('#logfile').load('media/cache/error.log?<?php echo time();?>');">View Logs</button>
+                    <button class="btn btn-secondary trash" onclick="purge('0','errorlog')" aria-label="Purge"><?php svg('purge');?></button>
+                  </div>
+                </div>
+              </div>
+              <div id="logview" class="form-group d-none">
+                <div class=" col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></div>
+                <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
+                  <div class="well col-12"><small id="logfile" style="white-space:pre"></small></div>
+                </div>
+              </div>
+            </div>
+          <?php }
+        }?>
+        <?php if($user['rank']==1000||$config['options'][17]==0){?>
+          <div class="form-group row">
+            <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+              <label class="switch switch-label switch-success"><input type="checkbox" id="comingsoon0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0"<?php echo$config['comingsoon'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            </div>
+            <label for="comingsoon0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Coming Soon Mode</label>
+          </div>
+          <div class="form-group row">
+            <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+              <label class="switch switch-label switch-success"><input type="checkbox" id="maintenance0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0"<?php echo$config['maintenance'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            </div>
+            <label for="maintenance0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Maintenance Mode</label>
+          </div>
+          <div class="form-group row">
+            <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+              <label class="switch switch-label switch-success"><input type="checkbox" id="options12" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="12"<?php echo$config['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            </div>
+            <label for="options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Admin Activity Tracking</label>
+          </div>
+          <div class="form-group row">
+            <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
+              <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4"<?php echo$config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+            </div>
+            <label for="options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Tooltips</label>
+          </div>
+          <div class="form-group">
+            <label for="uti_freq">Update Frequency</label>
+            <div class="input-group">
+              <select id="uti_freq" class="form-control" onchange="update('1','config','uti_freq',$(this).val());">
+                <option value="0"<?php echo$config['uti_freq']==0?' selected':'';?>>Never</option>
+                <option value="3600"<?php echo$config['uti_freq']==3600?' selected':'';?>>Hourly</option>
+                <option value="84600"<?php echo$config['uti_freq']==84600?' selected':'';?>>Daily</option>
+                <option value="604800"<?php echo$config['uti_freq']==604800?' selected':'';?>>Weekly</option>
+                <option value="2629743"<?php echo$config['uti_freq']==2629743?' selected':'';?>>Monthly</option>
+              </select>
+              <div class="input-group-append">
+                <button class="btn btn-secondary" onclick="$('#updatecheck').removeClass('hidden').load('core/layout/updatecheck.php');">Check Now</button>
               </div>
             </div>
           </div>
-          <div id="logview" class="form-group d-none">
-            <div class=" col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2"></div>
-            <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-              <div class="well col-12"><small id="logfile" style="white-space:pre"></small></div>
+          <div id="updatecheck" class="form-group d-none">
+            <div class="input-group">
+              <div class="col alert alert-warning" role="alert"><?php svg('spinner','animated infinite spin').' Checking for new updates!';?></div>
             </div>
           </div>
-        </div>
-<?php }
-}?>
-<?php if($user['rank']==1000||$config['options'][17]==0){?>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="comingsoon0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0"<?php echo$config['comingsoon'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="comingsoon0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Coming Soon Mode</label>
-        </div>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="maintenance0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0"<?php echo$config['maintenance'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="maintenance0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Maintenance Mode</label>
-        </div>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options12" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="12"<?php echo$config['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Admin Activity Tracking</label>
-        </div>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options4" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4"<?php echo$config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="options4" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Enable Tooltips</label>
-        </div>
-        <div class="form-group">
-          <label for="uti_freq">Update Frequency</label>
-          <div class="input-group">
-            <select id="uti_freq" class="form-control" onchange="update('1','config','uti_freq',$(this).val());">
-              <option value="0"<?php echo$config['uti_freq']==0?' selected':'';?>>Never</option>
-              <option value="3600"<?php echo$config['uti_freq']==3600?' selected':'';?>>Hourly</option>
-              <option value="84600"<?php echo$config['uti_freq']==84600?' selected':'';?>>Daily</option>
-              <option value="604800"<?php echo$config['uti_freq']==604800?' selected':'';?>>Weekly</option>
-              <option value="2629743"<?php echo$config['uti_freq']==2629743?' selected':'';?>>Monthly</option>
-            </select>
-            <div class="input-group-append">
-              <button class="btn btn-secondary" onclick="$('#updatecheck').removeClass('hidden').load('core/layout/updatecheck.php');">Check Now</button>
+          <div class="form-group">
+            <label for="update_url">Update URL</label>
+            <div class="input-group">
+              <input type="text" id="update_url" class="form-control textinput" value="<?php echo$config['update_url'];?>" data-dbid="1" data-dbt="config" data-dbc="update_url" placeholder="Enter an Update URL...">
+              <div class="input-group-append">
+                <button id="saveupdate_url" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="update_url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
             </div>
           </div>
-        </div>
-        <div id="updatecheck" class="form-group d-none">
-          <div class="input-group">
-            <div class="col alert alert-warning" role="alert"><?php svg('spinner','animated infinite spin').' Checking for new updates!';?></div>
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="update_url">Update URL</label>
-          <div class="input-group">
-            <input type="text" id="update_url" class="form-control textinput" value="<?php echo$config['update_url'];?>" data-dbid="1" data-dbt="config" data-dbc="update_url" placeholder="Enter an Update URL...">
-            <div class="input-group-append">
-              <button id="saveupdate_url" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="update_url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <div class="form-group">
+            <label for="idleTime">Idle Timeout</label>
+            <div class="form-text small text-muted float-right">'0' Disables Idle Timeout.</div>
+            <div class="input-group">
+              <input type="text" id="idleTime" class="form-control textinput" value="<?php echo$config['idleTime'];?>" data-dbid="1" data-dbt="config" data-dbc="idleTime" placeholder="Enter a Time in Minutes...">
+              <div class="input-group-text">Minutes</div>
+              <div class="input-group-append">
+                <button id="saveidleTime" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="idleTime" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="idleTime">Idle Timeout</label>
-          <div class="form-text small text-muted float-right">'0' Disables Idle Timeout.</div>
-          <div class="input-group">
-            <input type="text" id="idleTime" class="form-control textinput" value="<?php echo$config['idleTime'];?>" data-dbid="1" data-dbt="config" data-dbc="idleTime" placeholder="Enter a Time in Minutes...">
-            <div class="input-group-text">Minutes</div>
-            <div class="input-group-append">
-              <button id="saveidleTime" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="idleTime" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <div class="form-group">
+            <label for="dateFormat">Date/Time Format</label>
+            <div class="form-text small text-muted float-right">For information on Date Format Characters click <a target="_blank" href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">here</a>.</div>
+            <div class="input-group">
+              <input type="text" id="dateFormat" class="form-control textinput" value="<?php echo$config['dateFormat'];?>" data-dbid="1" data-dbt="config" data-dbc="dateFormat" placeholder="Enter a Date/Time Format...">
+              <div class="input-group-text"><?php echo date($config['dateFormat'],time());?></div>
+              <div class="input-group-append">
+                <button id="savedateFormat" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="dateFormat" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="dateFormat">Date/Time Format</label>
-          <div class="form-text small text-muted float-right">For information on Date Format Characters click <a target="_blank" href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">here</a>.</div>
-          <div class="input-group">
-            <input type="text" id="dateFormat" class="form-control textinput" value="<?php echo$config['dateFormat'];?>" data-dbid="1" data-dbt="config" data-dbc="dateFormat" placeholder="Enter a Date/Time Format...">
-            <div class="input-group-text"><?php echo date($config['dateFormat'],time());?></div>
-            <div class="input-group-append">
-              <button id="savedateFormat" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="dateFormat" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <div class="form-group">
+            <label for="timezone">Timezone</label>
+            <div class="input-group">
+              <select id="timezone" class="form-control" onchange="update('1','config','timezone',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="timezone">
+                <?php function get_timezones(){
+                  $o=array();
+                  $t_zones=timezone_identifiers_list();
+                  foreach($t_zones as$a){
+                    $t='';
+                    try{
+                      $zone=new DateTimeZone($a);
+                      $seconds=$zone->getOffset(new DateTime("now",$zone));
+                      $hours=sprintf("%+02d",intval($seconds/3600));
+                      $minutes=sprintf("%02d",($seconds%3600)/60);
+                      $t=$a." [ $hours:$minutes ]" ;
+                      $o[$a]=$t;
+                    }
+                    catch(Exception $e){}
+                  }
+                  ksort($o);
+                  return$o;
+                }
+                $o=get_timezones();
+                foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$config['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
+              </select>
             </div>
           </div>
-        </div>
-        <div class="form-group">
-          <label for="timezone">Timezone</label>
-          <div class="input-group">
-            <select id="timezone" class="form-control" onchange="update('1','config','timezone',$(this).val());" data-dbid="1" data-dbt="config" data-dbc="timezone">
-<?php      function get_timezones(){
-              $o=array();
-              $t_zones=timezone_identifiers_list();
-              foreach($t_zones as$a){
-              $t='';
-              try{
-                $zone=new DateTimeZone($a);
-                $seconds=$zone->getOffset(new DateTime("now",$zone));
-                $hours=sprintf("%+02d",intval($seconds/3600));
-                $minutes=sprintf("%02d",($seconds%3600)/60);
-                $t=$a." [ $hours:$minutes ]" ;
-                $o[$a]=$t;
-              }
-              catch(Exception $e){}
-              }
-              ksort($o);
-              return$o;
-            }
-            $o=get_timezones();
-            foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$config['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
-            </select>
-          </div>
-        </div>
-<?php }?>
+        <?php }?>
       </div>
     </div>
   </div>

@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add Reason to Blacklist
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -29,10 +30,12 @@ if($act=='add_comment'){
     $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
     if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
       $blacklisted=$theme['settings']['blacklist'];
-			$sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-			$sc->execute([':ip'=>$ip]);
+			$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+			$sc->execute([
+        ':ip'=>$ip
+      ]);
 			if($sc->rowCount()<1){
-	      $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+	      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 	      $s->execute([
           ':ip'=>$ip,
           ':oti'=>$ti,
@@ -61,10 +64,12 @@ if($act=='add_comment'){
         $spam=TRUE;
       }
       if($config['spamfilter'][1]==1&&$spam==TRUE&&$ip!='127.0.0.1'){
-        $sc=$db->prepare("SELECT id FROM `".$prefix."iplist` WHERE ip=:ip");
-        $sc->execute([':ip'=>$ip]);
+        $sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+        $sc->execute([
+          ':ip'=>$ip
+        ]);
         if($sc->rowCount()<1){
-          $s=$db->prepare("INSERT INTO `".$prefix."iplist` (ip,oti,reason,ti) VALUES (:ip,:oti,:reason,:ti)");
+          $s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
           $s->execute([
             ':ip'=>$ip,
             ':oti'=>$ti,
@@ -76,8 +81,10 @@ if($act=='add_comment'){
     }
     if($spam==FALSE){
       if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-        $q=$db->prepare("SELECT id,name,email,avatar,gravatar FROM `".$prefix."login` WHERE email=:email");
-        $q->execute([':email'=>$email]);
+        $q=$db->prepare("SELECT `id`,`name`,`email`,`avatar`,`gravatar` FROM `".$prefix."login` WHERE email=:email");
+        $q->execute([
+          ':email'=>$email
+        ]);
         $u=$q->fetch(PDO::FETCH_ASSOC);
         if($u['email']==''){
           $u=[
@@ -88,7 +95,7 @@ if($act=='add_comment'){
             'gravatar'=>''
           ];
         }
-        $q=$db->prepare("INSERT INTO `".$prefix."comments` (contentType,rid,uid,ip,avatar,gravatar,email,name,notes,status,ti) VALUES (:contentType,:rid,:uid,:ip,:avatar,:gravatar,:email,:name,:notes,:status,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."comments` (`contentType`,`rid`,`uid`,`ip`,`avatar`,`gravatar`,`email`,`name`,`notes`,`status`,`ti`) VALUES (:contentType,:rid,:uid,:ip,:avatar,:gravatar,:email,:name,:notes,:status,:ti)");
         $q->execute([
           ':contentType'=>$contentType,
           ':rid'=>$rid,
@@ -106,8 +113,10 @@ if($act=='add_comment'){
         $e=$db->errorInfo();
         if(is_null($e[2])){
           if($config['email']!=''){
-            $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-            $q->execute([':id'=>$rid]);
+            $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+            $q->execute([
+              ':id'=>$rid
+            ]);
             $r=$q->fetch(PDO::FETCH_ASSOC);
             require'class.phpmailer.php';
             $mail=new PHPMailer;

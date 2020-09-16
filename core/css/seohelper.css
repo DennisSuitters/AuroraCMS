@@ -9,8 +9,6 @@ head {
   background-color: #2b3035; }
 
 head.metashow {
-  margin-top: 38px;
-  margin-bottom: -38px;
   max-height: 1200px;
   transition: max-height .5s ease-in; }
 
@@ -84,7 +82,7 @@ title::after {
 
 nav.account-menu {
   z-index: 1021 !important;
-  position: fixed !important;
+  position: relative !important;
   width: 100% !important;
   height: 50px !important;
   background: #000 !important;
@@ -96,13 +94,16 @@ nav.account-menu ul {
 
 nav.account-menu ul li {
   margin: 0 !important;
-  padding: .1rem .75rem !important; }
+  padding: .1rem .75rem !important;
+  line-height: 1rem !important;
+  vertical-align: middle !important;}
 
 nav.account-menu ul li a {
   font-family: Arial !important;
-  font-size: 1.2rem !important;
+  font-size: 16px !important;
   font-weight: 700 !important ;
-  color: #aaa !important; }
+  color: #aaa !important;
+  text-transform: none !important; }
 
 nav.account-menu ul li a:hover {
   color: #ddd !important;
@@ -145,42 +146,15 @@ nav.account-menu #accountavatar {
   max-height: 32px;
   border-radius: 5px; }
 
-body.depth *,
-body.depth * *,
-body.depth * * *,
-body.depth * * * *,
-body.depth * * * * *,
-body.depth * * * * * *,
-body.depth * * * * * * *,
-body.depth * * * * * * * *,
-body.depth * * * * * * * * *,
-body.depth * * * * * * * * * * {
-  background-color: rgba(255, 0, 0, .1); }
-
 div.development {
   position: relative;
   height: 48px;
-  background-color: #2f353a!important;
-  background-image: linear-gradient(
-                                    45deg, #000 25%,rgba(255, 255, 0, .15) 25%,
-                                    rgba(255, 255, 0, .15) 50%,
-                                    #000 50%,
-                                    #000 75%,
-                                    rgba(255, 255, 0, .15) 75%,
-                                    rgba(255, 255, 0, .15) 100%);
-  background-size: 56.57px 56.57px; }
-
-div.developmentbottom {
-  position: absolute;
-  top: 24px;
-  right: 0;
-  bottom: auto;
-  left: 0;
-  text-align: right;
-  padding: 2px 5px;
-  color: #fff;
   font-family: sans-serif;
-  font-size: 14px; }
+  font-size: 14px;
+  color: #fff;
+  background-color: #000 !important;
+  padding-right: 10px;
+  text-align: right;}
 
 div.development:after {
   content: 'Breakpoint Width > ALL (max-width:575.98px)';

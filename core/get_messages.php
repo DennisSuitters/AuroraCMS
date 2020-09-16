@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.10
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -20,8 +21,10 @@ function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
 $uid=$_SESSION['uid'];
-$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:uid");
-$su->execute([':uid'=>$uid]);
+$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
+$su->execute([
+	':uid'=>$uid
+]);
 $user=$su->fetch(PDO::FETCH_ASSOC);
 $mhtml=$blacklisted='';
 include'imapreader/Email.php';
@@ -60,15 +63,18 @@ $folder='INBOX';
 $status='unread';
 $tis=time();
 if($config['message_check_interval']!=0){
-  $sm=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE uid=:uid AND contentType='mailbox' AND ti<:ti ORDER BY url ASC");
+  $sm=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='mailbox' AND `ti`<:ti ORDER BY `url` ASC");
   $sm->execute([
     ':uid'=>$user['id'],
     ':ti'=>time()-$config['message_check_interval']
   ]);
   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
     try{
-      $ss=$db->prepare("UPDATE `".$prefix."choices` SET ti=:ti WHERE id=:id");
-      $ss->execute([':id'=>$rm['id'],':ti'=>time()]);
+      $ss=$db->prepare("UPDATE `".$prefix."choices` SET `ti`=:ti WHERE `id`=:id");
+      $ss->execute([
+				':id'=>$rm['id'],
+				':ti'=>time()
+			]);
       $imap=new Reader('{'.$rm['url'].':'.$rm['port'].'/'.$rm['flag'].'}', $rm['username'], $rm['password'], '../media/email/');
       if($rm['ti']==0)$imap->all()->get();
       else$imap->limit(10)->unread()->get();
@@ -90,7 +96,7 @@ if($config['message_check_interval']!=0){
         if($email->isDeleted()){$status='trash';}
 				$emailHTML=$email->html()!=''?$email->html():$email->plain();
 				if(is_base64_string($emailHTML))$emailHTML=base64_decode($emailHTML);
-        $s=$db->prepare("INSERT INTO `".$prefix."messages` (mid,folder,to_email,to_name,from_email,subject,status,notes_html,attachments,email_date,size,ti) VALUES (:mid,:folder,:to_email,:to_name,:from_email,:subject,:status,:notes_html,:attachments,:email_date,:size,:ti)");
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."messages` (`mid`,`folder`,`to_email`,`to_name`,`from_email`,`subject`,`status`,`notes_html`,`attachments`,`email_date`,`size`,`ti`) VALUES (:mid,:folder,:to_email,:to_name,:from_email,:subject,:status,:notes_html,:attachments,:email_date,:size,:ti)");
         $s->execute([
           ':mid'=>$email->id(),
           ':folder'=>$folder,
@@ -112,22 +118,29 @@ if($config['message_check_interval']!=0){
 		}
   }
 	$fol=isset($_GET['folder'])?$_GET['folder']:'INBOX';
-  $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE folder=:folder AND ti>:tis ORDER BY ti DESC, subject ASC");
-  $s->execute([':tis'=>$tis,':folder'=>$fol]);
+  $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `folder`=:folder AND `ti`>:tis ORDER BY `ti` DESC, `subject` ASC");
+  $s->execute([
+		':tis'=>$tis,
+		':folder'=>$fol
+	]);
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     echo'<li id="l_'.$r['id'].'" class="message animated fadeIn unread">'.
 					'<div class="actions">'.
 						'<div class="btn-group-vertical">';
-      $scc=$db->prepare("SELECT email FROM `".$prefix."whitelist` WHERE email=:email");
-      $scc->execute([':email'=>$r['from_email']]);
+      $scc=$db->prepare("SELECT `email` FROM `".$prefix."whitelist` WHERE `email`=:email");
+      $scc->execute([
+				':email'=>$r['from_email']
+			]);
       if($scc->rowCount()<1){
 		  		echo'<form id="whitelist'.$r['id'].'" target="sp" method="post" action="core/add_messagewhitelist.php">'.
 								'<input type="hidden" name="id" value="'.$r['id'].'">'.
 								'<button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add to Whitelist" aria-label="Add to Whitelist"><i class="i"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="M 1.8659929,3.0963517 C 4.8143266,1.3677616 6.9839148,0.99927167 6.9839148,0.99927167 c 0,0 0.0023,3.5e-4 0.0055,9.6003e-4 0.0033,-6.1003e-4 0.0055,-9.6003e-4 0.0055,-9.6003e-4 0,0 -0.011,12.00000033 0,12.00000033 -0.0019,-3.5e-4 -0.0036,-9.6e-4 -0.0055,-10e-4 -0.0019,3.5e-4 -0.0036,9.6e-4 -0.0055,10e-4 C 1.4751699,11.823072 1.8659929,3.0963517 1.8659929,3.0963517 Z M 6.9835418,1.7402516 c -0.4826472,0.10437 -2.1774312,0.53826 -4.3878043,1.7781601 0.0096,1.61164 0.285353,7.7100603 4.3878043,8.7349403 l 0,-10.5131004 z M 12.123424,3.09708 C 9.1750899,1.36849 7.0055019,1 7.0055019,1 c 0,0 -0.0023,3.5e-4 -0.0055,9.6e-4 C 6.9967019,1.00035 6.9945019,1 6.9945019,1 c 0,0 0.011,12 0,12 0.0019,-3.5e-4 0.0036,-9.6e-4 0.0055,-10e-4 0.0019,3.5e-4 0.0036,9.6e-4 0.0055,10e-4 C 12.514247,11.8238 12.123424,3.09708 12.123424,3.09708 Z M 7.0058749,1.74098 c 0.482647,0.10437 2.177431,0.53826 4.3878041,1.77816 -0.0096,1.61164 -0.285353,7.71006 -4.3878041,8.73494 l 0,-10.5131 z"/></svg></i></button>'.
 							'</form>';
 		}
-  	$scc=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE ip=:ip");
-    $scc->execute([':ip'=>$r['ip']]);
+  	$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+    $scc->execute([
+			':ip'=>$r['ip']
+		]);
     if($scc->rowCount()<1){
 		  		echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_messageblacklist.php" style="display:inline-block;">'.
 								'<input type="hidden" name="id" value="'.$r['id'].'">';
@@ -152,8 +165,8 @@ if($config['message_check_interval']!=0){
 						'<span class="description d-block text-wrap">'.strip_html_tags($r['notes_html']).'</span>'.
 					'</a>'.
 				'</li>';
-		$ur=$db->query("SELECT COUNT(status) AS cnt FROM `".$prefix."messages` WHERE status='unread' AND folder='INBOX'")->fetch(PDO::FETCH_ASSOC);
-		$sp=$db->query("SELECT COUNT(folder) AS cnt FROM `".$prefix."messages` WHERE folder='spam' AND status='unread'")->fetch(PDO::FETCH_ASSOC);
+		$ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
+		$sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);
 		echo'<script>';
 			if($ur['cnt']>0)echo'$(`#unreadbadge`).html("'.$ur['cnt'].'");';
 			if($sp['cnt']>0)echo'$(`#spambadge`).html("'.$sp['cnt'].'");';

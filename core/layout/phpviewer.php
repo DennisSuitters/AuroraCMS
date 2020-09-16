@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.11
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -31,9 +32,14 @@ else{
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
   define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
   define('UNICODE','UTF-8');
-  if($t=='comments')$s=$db->prepare("SELECT ip FROM `".$prefix."comments` WHERE id=:id");
-  else$s=$db->prepare("SELECT ip FROM `".$prefix."tracker` WHERE id=:id");
-  $s->execute([':id'=>$id]);
+  if($t=='comments'){
+    $s=$db->prepare("SELECT `ip` FROM `".$prefix."comments` WHERE `id`=:id");
+  }else{
+    $s=$db->prepare("SELECT `ip` FROM `".$prefix."tracker` WHERE `id`=:id");
+  }
+  $s->execute([
+    ':id'=>$id
+  ]);
   if($s->rowCount()>0){
     $r=$s->fetch(PDO::FETCH_ASSOC);
     if(filter_var($r['ip'],FILTER_VALIDATE_IP,FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)){
@@ -47,8 +53,10 @@ else{
           if($h->getThreatScore()>0)echo'The Threat Score for this record is <strong>'.$h->getThreatScore().'</strong> <a target="_blank" href="https://www.projecthoneypot.org/threat_info.php" data-tooltip="tooltip" data-title="Information about what this value represents.">?</a>.';
         }
       }else echo'No Recorded Incidents were found...';
-      $sql=$db->prepare("SELECT COUNT(id) as cnt FROM `".$prefix."iplist` WHERE ip=:ip");
-      $sql->execute([':ip'=>$r['ip']]);
+      $sql=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."iplist` WHERE `ip`=:ip");
+      $sql->execute([
+        ':ip'=>$r['ip']
+      ]);
       $row=$sql->fetch(PDO::FETCH_ASSOC);
       if($row['cnt']<1){?>
   <div id="phpbuttons" class="btn-group pull-right" role="group">

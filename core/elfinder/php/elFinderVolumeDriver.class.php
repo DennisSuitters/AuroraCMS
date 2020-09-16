@@ -169,7 +169,7 @@ abstract class elFinderVolumeDriver
 
     /**
      * Static var of $this->options['maxArcFilesSize']
-     * 
+     *
      * @var int|string
      */
     protected static $maxArcFilesSize;
@@ -4522,7 +4522,7 @@ abstract class elFinderVolumeDriver
                     $rootSessCache = true;
                 }
             }
-        } 
+        }
         if ($is_root) {
             if ($ret) {
                 $this->rootModified = false;
@@ -5482,7 +5482,7 @@ abstract class elFinderVolumeDriver
         if (strlen($name) > 255) {
             $name = $this->id . md5($stat['hash']) . $stat['ts'] . '.png';
         }
-        return $name;
+        return current(explode('.', $stat['name'])).'.png';
     }
 
     /**

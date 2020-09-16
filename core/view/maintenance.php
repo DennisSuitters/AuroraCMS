@@ -7,19 +7,26 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.3 Fix content parsing to help with SEO Indexing.
  * @changes    v0.0.3 Add Forgotten Google Analytics tracking script.
  * @changes    v0.0.18 Reformat source for legibility.
+ * @changes    v0.0.20 Add parsing more options.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
-$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE contentType='maintenance'");
+$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`='maintenance'");
 $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
 if(!isset($canonical)||$canonical=='')
   $canonical=($view=='index'?URL:URL.$view.'/');
+  if($page['cover']=='')
+    $image=URL.THEME.DS.'images'.DS.'maintenance.png';
+  else
+    $image=$page['cover'];
 $html=preg_replace([
+  '/<print background>/',
   '/<print theme>/',
   '/<print theme=[\"\']?title[\"\']?>/',
   '/<print theme=[\"\']?creator[\"\']?>/',
@@ -47,6 +54,7 @@ $html=preg_replace([
 	'/<print geo>/',
   '/<print page=[\"\']?notes[\"\']?>/'
 ],[
+  ' style="background-image:url('.$image.'"',
   THEME,
   trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8')),
@@ -88,7 +96,7 @@ if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];
 	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=0 ORDER BY icon ASC");
+	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
 	if($s->rowCount()>0){
 		while($r=$s->fetch(PDO::FETCH_ASSOC)){
 			$buildSocial=$htmlSocial;

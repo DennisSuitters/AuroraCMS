@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.0.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.4 Fix Tooltips.
  * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
  * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
  * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
+ * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */?>
 <main id="content" class="main">
   <ol class="breadcrumb">
@@ -127,25 +128,25 @@
           </div>
         </form>
         <div id="social">
-<?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE contentType='social' AND uid=0 ORDER BY icon ASC");
-$ss->execute();
-while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-          <div id="l_<?php echo$rs['id'];?>" class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
-              </div>
-              <input type="text" id="icon<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
-              <div class="input-group-append">
-                <form target="sp" action="core/purge.php">
-                  <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                  <input type="hidden" name="t" value="choices">
-                  <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                </form>
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rs['id'];?>" class="form-group">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
+                </div>
+                <input type="text" id="icon<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
+                <div class="input-group-append">
+                  <form target="sp" action="core/purge.php">
+                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
+                    <input type="hidden" name="t" value="choices">
+                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                  </form>
+                </div>
               </div>
             </div>
-          </div>
-<?php }?>
+          <?php }?>
         </div>
       </div>
     </div>

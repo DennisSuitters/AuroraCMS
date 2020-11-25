@@ -7,16 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Add Page Editing.
- * @changes    v0.0.14 Fix incorrect number of items returned from database.
- * @changes    v0.0.15 Add Star Rating parser.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
- * @changes    v0.0.20 Add parsing for Breadcrumbs.
  */
 if(stristr($html,'<settings')){
 	preg_match('/<settings.*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
@@ -30,146 +23,34 @@ if(stristr($html,'<breadcrumb>')){
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","'.$config['business'].'":"Home"}},';
-  $breadit=preg_replace([
-    '/<active>/',
-    '/<print breadcrumb=[\"\']?url[\"\']?>/',
-    '/<print breadcrumb=[\"\']?title[\"\']?>/'
-  ],[
-    '',
-    URL,
-    'Home'
-  ],$breaditem);
-  $breaditems=$breadit;
-  if($r['title']!=''||$args[0]!=''){
-    $breadit=preg_replace([
-      '/<print breadcrumb=[\"\']?url[\"\']?>/',
-      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-    ],[
-      URL.$page['contentType'],
-      ucfirst($page['title'])
-    ],$breaditem);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.$page['contentType'].'","name":"'.ucfirst($page['contentType']).'"}},';
-    $breaditems.=$breadit;
-  }else{
-    $breadit=preg_replace([
-      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-    ],[
-      $page['title']
-    ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.$page['contentType'].'","name":"'.ucfirst($page['contentType']).'"}},';
-    $breaditems.=$breadit;
-  }
-  if(isset($args[0])&&$args[0]!=''){
-    $jsoni++;
-		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
-	    $breadit=preg_replace([
-	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
-	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-	    ],[
-	      URL.$page['contentType'].'/'.str_replace(' ','-',$args[0]),
-	      ucfirst($args[0])
-	    ],$breaditem);
-		}else{
-			$breadit=preg_replace([
-				'/<print breadcrumb=[\"\']?title[\"\']?>/'
-			],[
-				ucfirst($args[0])
-			],$breadcurrent);
-		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.$page['contentType'].'/'.str_replace(' ','-',$args[0]).'","name":"'.ucfirst($args[0]).'"}"}},';
-    $breaditems.=$breadit;
-  }
-  if(isset($args[2])&&$args[2]!=''){
-    $jsoni++;
-		if($r['title']!=''||$args[2]!=''){
-    	$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?url[\"\']?>/',
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	URL.$page['contentType'].'/'.str_replace(' ','-',$args[1]).'/'.str_replace(' ','-',$args[2]),
-      	ucfirst($args[2])
-    	],$breaditem);
-		}else{
-			$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	ucfirst($args[2])
-    	],$breadcurrent);
-		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.$page['contentType'].'/'.str_replace(' ','-',$args[1]).'/'.str_replace(' ','-',$args[2]).'","name": "'.ucfirst($args[2]).'"}"}},';
-    $breaditems.=$breadit;
-  }
-  if(isset($args[3])&&$args[3]!=''){
-    $jsoni++;
-		if($r['title']!=''||$args[3]!=''){
-    	$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?url[\"\']?>/',
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	URL.$page['contentType'].'/'.str_replace(' ','-',$args[1]).'/'.str_replace(' ','-',$args[2]).'/'.str_replace(' ','-',$args[3]),
-      	ucfirst($args[3])
-    	],$breaditem);
-		}else{
-			$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	ucfirst($args[3])
-    	],$breadcurrent);
-		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.$page['contentType'].'/'.str_replace(' ','-',$args[1]).'/'.str_replace(' ','-',$args[2]).'/'.str_replace(' ','-',$args[3]).'","name": "'.ucfirst($args[3]).'"}"}},';
-    $breaditems.=$breadit;
-  }
-  if(isset($args[4])&&$args[4]!=''){
-    $jsoni++;
-		if($r['title']!=''||$args[4]!=''){
-    	$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?url[\"\']?>/',
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	URL.$page['contentType'].'/'.str_replace(' ','-',$args[1]).'/'.str_replace(' ','-',$args[2]).'/'.str_replace(' ','-',$args[3]).'/'.str_replace(' ','-',$args[4]),
-      	ucfirst($args[4])
-    	],$breaditem);
-		}else{
-			$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	ucfirst($args[4])
-    	],$breadcurrent);
-		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.$page['contentType'].'/'.str_replace(' ','-',$args[1]).'/'.str_replace(' ','-',$args[2]).'/'.str_replace(' ','-',$args[3]).'/'.str_replace(' ','-',$args[4]).'","name": "'.ucfirst($args[4]).'"}"}},';
-    $breaditems.=$breadit;
-  }
-  if($r['title']!=''){
-    $jsoni++;
-    $breadit=preg_replace([
-      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-    ],[
-      ucfirst($r['title'])
-    ],$breadcurrent);
-    $jsonld.='{'.
-      '"@type":"ListItem",'.
-      '"position":'.$jsoni.','.
-      '"item":{'.
-        '"@id":"'.URL.$page['contentType'].'/'.$r['urlSlug'].'",'.
-        '"name": "'.$r['title'].'"}"}'.
-      '},'.
-      '}';
-    $breaditems.=$breadit;
-  }
-  $html=preg_replace([
-    '/<[\/]?breadcrumb>/',
-    '/<json-ld-breadcrumb>/',
-    '~<breaditems>.*?<\/breaditems>~is',
-    '~<breadcurrent>.*?<\/breadcurrent>~is'
-  ],[
-    '',
-    $jsonld.']}</script>',
-    $breaditems,
-    ''
-  ],$html);
+	$jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+	$breadit=preg_replace([
+		'/<print breadcrumb=[\"\']?url[\"\']?>/',
+		'/<print breadcrumb=[\"\']?title[\"\']?>/'
+	],[
+		URL,
+		'Home'
+	],$breaditem);
+	$breaditems=$breadit;
+	$breadit=preg_replace([
+		'/<print breadcrumb=[\"\']?title[\"\']?>/'
+	],[
+		htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
+	],$breadcurrent);
+	$jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
+	$breaditems.=$breadit;
+	$html=preg_replace([
+		'/<[\/]?breadcrumb>/',
+		'/<json-ld-breadcrumb>/',
+		'~<breaditems>.*?<\/breaditems>~is',
+		'~<breadcurrent>.*?<\/breadcurrent>~is'
+	],[
+		'',
+		$jsonld.']}</script>',
+		$breaditems,
+		''
+	],$html);
 }
-
 
 $html=preg_replace('~<settings.*?>~is','',$html);
 if($page['notes']!=''){

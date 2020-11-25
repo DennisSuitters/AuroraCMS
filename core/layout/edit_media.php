@@ -7,236 +7,199 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.17 Add SEO Helper buttons.
- * @changes    v0.0.19 Add Save All button.
- * @changes    v0.0.20 Add Image Thumbnail.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `id`=:id");
 $s->execute([
   ':id'=>$args[1]
 ]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
-<main id="content" class="main">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Media</a></li>
-    <li class="breadcrumb-item"><?php echo$user['options'][1]==1?'Edit':'View';?></li>
-    <li class="breadcrumb-menu">
-      <div class="btn-group" role="group" aria-label="">
-        <a class="btn btn-ghost-normal add" href="<?php echo $_SERVER['HTTP_REFERER'];?>#tab-<?php if(stristr($_SERVER['HTTP_REFERER'],'content')){echo'content';}else{echo'pages';}?>-media" data-tooltip="tooltip" data-placement="left" data-title="Back" role="button" aria-label="Back"><?php svg('back');?></a>
-        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
+<main>
+  <section id="content">
+    <div class="content-title-wrapper mb-0">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('content','i-3x');?></div>
+          <div>Media Edit</div>
+          <div class="content-title-actions">
+            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php echo svg('save');?></a>
+          </div>
+        </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Media</a></li>
+          <li class="breadcrumb-item active"><?php echo$user['options'][1]==1?'Edit':'View';?></li>
+          <li class="breadcrumb-item active"><?php echo$r['title'];?></li>
+        </ol>
       </div>
-    </li>
-  </ol>
-  <div class="container-fluid row">
-    <div class="card col-12">
-      <div class="card-body">
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow p-3">
         <div class="row">
-          <div class="col-12 col-sm-10 order-2 order-sm-1">
-            <div class="form-group row">
-              <label for="title">Title</label>
-              <div class="input-group">
-                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Title Information"><button class="btn btn-secondary seohelper" data-type="title" aria-label="SEO Title Information"><?php svg('seo');?></button></div>
-                <input type="text" id="title" class="form-control textinput" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="title" data-bs="btn-danger"<?php echo$user['options'][1]==1?' placeholder="Media Item Title...."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savetitle" class="btn btn-secondary save" data-dbid="title" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
-              </div>
+          <div class="col-12 col-md-10 order-1 order-md-1 mb-4 mb-md-0">
+            <label for="title">Title</label>
+            <div class="form-row">
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" data-title="SEO Title Information" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <input class="textinput" id="title" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="title" data-bs="trash" type="text" value="<?php echo$r['title'];?>"<?php echo$user['options'][1]==1?' placeholder="Media Item Title...."':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
-            <div class="form-group row">
-              <label for="exifFilename">Image ALT</label>
-              <div class="input-group">
-                <div class="input-group-prepend" data-tooltip="tooltip" data-title="SEO Image Alt Information"><button class="btn btn-secondary seohelper" data-type="alt" aria-label="SEO Image Alt Information"><?php svg('seo');?></button></div>
-                <input type="text" id="fileALT" class="form-control textinput" value="<?php echo$r['fileALT'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="fileALT"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="savefileALT" class="btn btn-secondary save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
-              </div>
+            <label for="exifFilename">Image ALT</label>
+            <div class="form-row">
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=alt" data-tooltip="tooltip" data-title="SEO Image Alt Information" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
+              <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-dbid="fileALT" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
           </div>
-          <div class="col-12 col-sm-2 order-1 order-sm-2 mb-4 mb-sm-0">
-            <?php $bname=preg_replace('/\\.[^.\\s]{3,4}$/','',basename($r['file'])).'.png';
-            if(file_exists('media/thumbs/'.$bname))
-              $thumb='/media/thumbs/'.$bname;
+          <div class="col-12 col-md-2 order-1 order-md-2 mb-4 mb-md-0">
+            <?php if(file_exists('media/sm/'.basename($r['file'])))
+              $thumb='media/sm/'.basename($r['file']);
             else
               $thumb=NOIMAGE;?>
-            <a data-fancybox="media" class="card bg-dark m-0" href="<?php echo$r['file'];?>">
-              <img src="<?php echo$thumb;?>" class="card-img" alt="Media <?php echo$r['id'];?>">
+            <a class="card bg-dark m-2" data-fancybox="media" href="<?php echo$r['file'];?>">
+              <img src="<?php echo$thumb;?>" alt="Media <?php echo$r['id'];?>">
             </a>
           </div>
         </div>
-        <div class="form-group row">
-          <label for="tags">Tags</label>
-          <div class="input-group">
-            <input type="text" id="tags" class="form-control textinput" value="<?php echo$r['tags'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="tags"<?php echo$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetags" class="btn btn-secondary save" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <label for="tags">Tags</label>
+        <div class="form-row">
+          <input class="textinput" id="tags" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="tags" type="text" value="<?php echo$r['tags'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="savetags" data-dbid="tags" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-        <div class="form-group row">
-          <label for="ti">Created</label>
-          <div class="input-group">
-            <input type="text" id="ti" class="form-control" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
-          </div>
+        <label for="ti">Created</label>
+        <div class="form-row">
+          <input id="ti" type="text" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
         </div>
-        <div class="form-group row">
-          <label for="views">Views</label>
-          <div class="input-group">
-            <input type="number" id="views" class="form-control textinput" value="<?php echo$r['views'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="views"<?php echo$user['options'][1]==1?'':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append"><button class="btn btn-secondary trash" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`media`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'</button></div><div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveviews" class="btn btn-secondary save" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <label for="views">Views</label>
+        <div class="form-row">
+          <input class="textinput" id="views" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="views" type="number" value="<?php echo$r['views'];?>"<?php echo$user['options'][1]==1?'':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" data-title="Clear" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`media`,`views`,`0`);">'.svg2('eraser').'</button>'.
+          '<button class="save" id="saveviews" data-dbid="views" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-        <div class="form-group row">
-          <label for="category_1">Category One</label>
-          <div class="input-group">
-            <input id="category_1" list="category_1_options" type="text" class="form-control textinput" value="<?php echo$r['category_1'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_1"<?php echo$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
-            <?php if($user['options'][1]==1){
-              $sc=$db->query("SELECT DISTINCT `category_1` FROM `".$prefix."media` WHERE `category_1`!='' ORDER BY `category_1` ASC");
-              if($sc->rowCount()>0){
-                echo'<datalist id="category_1_options">';
-                while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
-                echo'</datalist>';
-              }
-              echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_1" class="btn btn-secondary save" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
-            }?>
-          </div>
+        <label for="category_1">Category One</label>
+        <div class="form-row">
+          <input class="textinput" id="category_1" list="category_1_options" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_1" type="text" value="<?php echo$r['category_1'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
+          <?php if($user['options'][1]==1){
+            $sc=$db->query("SELECT DISTINCT `category_1` FROM `".$prefix."media` WHERE `category_1`!='' ORDER BY `category_1` ASC");
+            if($sc->rowCount()>0){
+              echo'<datalist id="category_1_options">';
+              while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
+              echo'</datalist>';
+            }
+            echo'<button class="save" id="savecategory_1" data-dbid="category_1" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>';
+          }?>
         </div>
-        <div class="form-group row">
-          <label for="category_2">Category Two</label>
-          <div class="input-group">
-            <input id="category_2" list="category_2_options" type="text" class="form-control textinput" value="<?php echo$r['category_2'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_2"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
-            <?php if($user['options'][1]==1){
-              $sc=$db->query("SELECT DISTINCT `category_2` FROM `".$prefix."content` WHERE `category_2`!='' ORDER BY `category_2` ASC");
-              if($sc->rowCount()>0){
-                echo'<datalist id="category_2_options">';
-                while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_2'].'"/>';
-                echo'</datalist>';
-              }
-              echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_2" class="btn btn-secondary save" data-dbid="category_2" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
-            }?>
-          </div>
+        <label for="category_2">Category Two</label>
+        <div class="form-row">
+          <input class="textinput" id="category_2" list="category_2_options" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_2" type="text" value="<?php echo$r['category_2'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
+          <?php if($user['options'][1]==1){
+            $sc=$db->query("SELECT DISTINCT `category_2` FROM `".$prefix."content` WHERE `category_2`!='' ORDER BY `category_2` ASC");
+            if($sc->rowCount()>0){
+              echo'<datalist id="category_2_options">';
+              while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_2'].'"/>';
+              echo'</datalist>';
+            }
+            echo'<button class="save" id="savecategory_2" data-dbid="category_2" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>';
+          }?>
         </div>
-        <div class="form-group row">
-          <label for="category_3">Category Three</label>
-          <div class="input-group">
-            <input id="category_3" list="category_3_options" type="text" class="form-control textinput" value="<?php echo$r['category_3'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_3"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
-            <?php if($user['options'][1]==1){
-              $sc=$db->query("SELECT DISTINCT `category_3` FROM `".$prefix."media` WHERE `category_3`!='' ORDER BY `category_3` ASC");
-              if($sc->rowCount()>0){
-                echo'<datalist id="category_3_options">';
-                while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_3'].'"/>';
-                echo'</datalist>';
-              }
-              echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_3" class="btn btn-secondary save" data-dbid="category_3" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
-            }?>
-          </div>
+        <label for="category_3">Category Three</label>
+        <div class="form-row">
+          <input class="textinput" id="category_3" list="category_3_options" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_3" type="text" value="<?php echo$r['category_3'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
+          <?php if($user['options'][1]==1){
+            $sc=$db->query("SELECT DISTINCT `category_3` FROM `".$prefix."media` WHERE `category_3`!='' ORDER BY `category_3` ASC");
+            if($sc->rowCount()>0){
+              echo'<datalist id="category_3_options">';
+              while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_3'].'"/>';
+              echo'</datalist>';
+            }
+            echo'<button class="save" id="savecategory_3" data-dbid="category_3" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>';
+          }?>
         </div>
-        <div class="form-group row">
-          <label for="category_4">Category Four</label>
-          <div class="input-group">
-            <input id="category_4" list="category_4_options" type="text" class="form-control textinput" value="<?php echo$r['category_4'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_4"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
-            <?php if($user['options'][1]==1){
-              $sc=$db->query("SELECT DISTINCT `category_4` FROM `".$prefix."media` WHERE `category_4`!='' ORDER BY `category_4` ASC");
-              if($sc->rowCount()>0){
-                echo'<datalist id="category_4_options">';
-                while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_4'].'"/>';
-                echo'</datalist>';
-              }
-              echo'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savecategory_4" class="btn btn-secondary save" data-dbid="category_4" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>';
-            }?>
-          </div>
+        <label for="category_4">Category Four</label>
+        <div class="form-row">
+          <input class="textinput" id="category_4" list="category_4_options" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="category_4" type="text" value="<?php echo$r['category_4'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
+          <?php if($user['options'][1]==1){
+            $sc=$db->query("SELECT DISTINCT `category_4` FROM `".$prefix."media` WHERE `category_4`!='' ORDER BY `category_4` ASC");
+            if($sc->rowCount()>0){
+              echo'<datalist id="category_4_options">';
+              while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_4'].'"/>';
+              echo'</datalist>';
+            }
+            echo'<button class="save" id="savecategory_4" data-dbid="category_4" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>';
+          }?>
         </div>
-        <fieldset class="control-fieldset">
-          <legend class="control-legend">EXIF Information</legend>
-          <div class="form-group row">
-            <label for="exifFilename">Original Filename</label>
-            <div class="input-group">
-              <input type="text" id="exifFilename" class="form-control textinput" value="<?php echo$r['exifFilename'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifFilename"<?php echo$user['options'][1]==1?' placeholder="Original Filename..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save" aria-label="Save"><button id="saveexifFilename" class="btn btn-secondary save" data-dbid="exifFilename" data-style="zoom-in">'.svg2('save').'</button></div>':'';?>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="exifCamera">Camera</label>
-            <div class="input-group">
-              <input type="text" id="exifCamera" class="form-control textinput" value="<?php echo$r['exifCamera'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifCamera"<?php echo$user['options'][1]==1?' placeholder="Enter a Camera"':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifCamera" class="btn btn-secondary save" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-            </div>
-          </div>
-        <div class="form-group row">
-          <label for="exifLens">Lens</label>
-          <div class="input-group">
-            <input type="text" id="exifLens" class="form-control textinput" value="<?php echo$r['exifLens'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifLens"<?php echo$user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifLens" class="btn btn-secondary save" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <legend class="mt-3">EXIF Information</legend>
+        <label for="exifFilename">Original Filename</label>
+        <div class="form-row">
+          <input class="textinput" id="exifFilename" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifFilename" type="text" value="<?php echo$r['exifFilename'];?>"<?php echo$user['options'][1]==1?' placeholder="Original Filename..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-dbid="exifFilename" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-        <div class="form-group row">
-          <label for="exifAperture">Aperture</label>
-          <div class="input-group">
-            <input type="text" id="exifAperture" class="form-control textinput" value="<?php echo$r['exifAperture'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifAperture"<?php echo$user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifAperture" class="btn btn-secondary save" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <label for="exifCamera">Camera</label>
+        <div class="form-row">
+          <input class="textinput" id="exifCamera" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifCamera" type="text" value="<?php echo$r['exifCamera'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Camera"':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-dbid="exifCamera" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-        <div class="form-group row">
-          <label for="exifFocalLength">Focal Length</label>
-          <div class="input-group">
-            <input type="text" id="exifFocalLength" class="form-control textinput" value="<?php echo$r['exifFocalLength'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifFocalLength"<?php echo$user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifFocalLength" class="btn btn-secondary save" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <label for="exifLens">Lens</label>
+        <div class="form-row">
+          <input class="textinput" id="exifLens" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifLens" type="text" value="<?php echo$r['exifLens'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifLens" data-dbid="exifLens" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-        <div class="form-group row">
-          <label for="exifShutterSpeed">Shutter Speed</label>
-          <div class="input-group">
-            <input type="text" id="exifShutterSpeed" class="form-control textinput" value="<?php echo$r['exifShutterSpeed'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifShutterSpeed"<?php echo$user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifShutterSpeed" class="btn btn-secondary save" data-dbid="exifShutterSpeed" data-style="zoom-in" role="button" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <label for="exifAperture">Aperture</label>
+        <div class="form-row">
+          <input class="textinput" id="exifAperture" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifAperture" type="text" value="<?php echo$r['exifAperture'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-dbid="exifAperture" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-        <div class="form-group row">
-          <label for="exifISO">ISO</label>
-          <div class="input-group">
-            <input type="text" id="exifISO" class="form-control textinput" value="<?php echo$r['exifISO'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifISO"<?php echo$user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly';?>>
-            <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifISO" class="btn btn-secondary save" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-          </div>
+        <label for="exifFocalLength">Focal Length</label>
+        <div class="form-row">
+          <input class="textinput" id="exifFocalLength" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifFocalLength" type="text" value="<?php echo$r['exifFocalLength'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-dbid="exifFocalLength" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
         </div>
-          <div class="form-group row">
-            <label for="exifti">Taken</label>
-            <div class="input-group">
-              <input type="text" id="exifti" class="form-control textinput" value="<?php echo$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifti"<?php echo$user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveexifti" class="btn btn-secondary save" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-            </div>
-          </div>
-        </fieldset>
-        <fieldset class="control-fieldset">
-          <legend class="control-legend">Image Attribution</legend>
-          <div class="form-group row">
-            <label for="attributionImageName">Name</label>
-            <div class="input-group">
-              <input type="text" id="attributionImageName" list="attributionImageName_option" class="form-control textinput" value="<?php echo$r['attributionImageName'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="attributionImageName"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
-              <?php if($user['options'][1]==1){
-                $s=$db->query("SELECT DISTINCT `attributionImageName` AS name FROM `".$prefix."media` UNION SELECT DISTINCT `name` AS name FROM `".$prefix."content` UNION SELECT DISTINCT `name` AS name FROM `".$prefix."login` ORDER BY `name` ASC");
-                if($s->rowCount()>0){
-                  echo'<datalist id="attributionImageName_option">';
-                  while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['name'].'"/>';
-                  echo'</datalist>';
-                }
-              }
-              echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageName" class="btn btn-secondary save" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-            </div>
-          </div>
-          <div class="form-group row">
-            <label for="attributionImageURL">URL</label>
-            <div class="input-group">
-              <input type="text" id="attributionImageURL" list="attributionImageURL_option" class="form-control textinput" value="<?php echo$r['attributionImageURL'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="attributionImageURL"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
-              <?php if($user['options'][1]==1){
-                $s=$db->query("SELECT DISTINCT `attributionImageURL` AS url FROM `".$prefix."media` ORDER BY `attributionImageURL` ASC");
-                if($s->rowCount()>0){
-                  echo'<datalist id="attributionImageURL_option">';
-                  while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['url'].'"/>';
-                  echo'</datalist>';
-                }
-              }
-              echo$user['options'][1]==1?'<div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="saveattributionImageURL" class="btn btn-secondary save" data-dbid="attributionImageURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button></div>':'';?>
-            </div>
-          </div>
-        </fieldset>
+        <label for="exifShutterSpeed">Shutter Speed</label>
+        <div class="form-row">
+          <input class="textinput" id="exifShutterSpeed" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifShutterSpeed" type="text" value="<?php echo$r['exifShutterSpeed'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-dbid="exifShutterSpeed" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
+        </div>
+        <label for="exifISO">ISO</label>
+        <div class="form-row">
+          <input class="textinput" id="exifISO" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifISO" type="text" value="<?php echo$r['exifISO'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifISO" data-dbid="exifISO" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
+        </div>
+        <label for="exifti">Taken</label>
+        <div class="form-row">
+          <input class="textinput" id="exifti" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="exifti" type="text" value="<?php echo$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"<?php echo$user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
+          <?php echo$user['options'][1]==1?'<button class="save" id="saveexifti" data-dbid="exifti" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
+        </div>
+        <legend class="mt-3">Image Attribution</legend>
+        <label for="attributionImageName">Name</label>
+        <div class="form-row">
+          <input class="textinput" id="attributionImageName" list="attributionImageName_option" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="attributionImageName" type="text" value="<?php echo$r['attributionImageName'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
+          <?php if($user['options'][1]==1){
+            $s=$db->query("SELECT DISTINCT `attributionImageName` AS name FROM `".$prefix."media` UNION SELECT DISTINCT `name` AS name FROM `".$prefix."content` UNION SELECT DISTINCT `name` AS name FROM `".$prefix."login` ORDER BY `name` ASC");
+            if($s->rowCount()>0){
+              echo'<datalist id="attributionImageName_option">';
+              while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['name'].'"/>';
+              echo'</datalist>';
+            }
+          }
+          echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-dbid="attributionImageName" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
+        </div>
+        <label for="attributionImageURL">URL</label>
+        <div class="form-row">
+          <input class="textinput" id="attributionImageURL" list="attributionImageURL_option" data-dbid="<?php echo$r['id'];?>" data-dbt="media" data-dbc="attributionImageURL" type="text" value="<?php echo$r['attributionImageURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
+          <?php if($user['options'][1]==1){
+            $s=$db->query("SELECT DISTINCT `attributionImageURL` AS url FROM `".$prefix."media` ORDER BY `attributionImageURL` ASC");
+            if($s->rowCount()>0){
+              echo'<datalist id="attributionImageURL_option">';
+              while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['url'].'"/>';
+              echo'</datalist>';
+            }
+          }
+          echo$user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-dbid="attributionImageURL" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
+        </div>
+        <?php include'core/layout/footer.php';?>
       </div>
     </div>
-  </div>
+  </section>
 </main>

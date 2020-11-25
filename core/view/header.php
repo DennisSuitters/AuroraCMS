@@ -7,21 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Make sure all links end with /
- * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.11 Remove unneeded URL forward slash for extra pages in menu.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.17 Add check for rank access for menu items.
- * @changes    v0.0.17 Fix dropdown menu creation adding wrong link element.
- * @changes    v0.0.17 Add parsing for Business Hours.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.18 Add parsing for Cart for mobile devices.
- * @changes    v0.0.19 Add "ORDER BY ord ASC" to Business Hours SQL.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name` FROM `".$prefix."login` WHERE `id`=:uid");

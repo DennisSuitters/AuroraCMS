@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.10 Fix Toastr Notifications.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 $getcfg=true;
@@ -20,7 +18,8 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $adminfolder=isset($_POST['adminfolder'])?filter_input(INPUT_POST,'adminfolder',FILTER_SANITIZE_STRING):'';
 if($adminfolder==''){?>
   window.top.window.$('#adminfolder').addClass('is-invalid');
-  window.top.window.toastr["error"]("Folder must NOT be blank!<br>Change not saved!");
+  window.top.window.toastr["info"]("Folder must NOT be blank!");
+  window.top.window.toastr["error"]("Change not saved!");
 <?php
 }else{
   $s=$db->prepare("SELECT `id` FROM `".$prefix."menu` WHERE `file` LIKE :file");
@@ -29,7 +28,8 @@ if($adminfolder==''){?>
   ]);
   if($s->rowCount()>0){?>
     window.top.window.$('#adminfolder').addClass('is-invalid');
-    window.top.window.toastr["error"]("Folder must NOT be the same as an already existing Page!<br>Change not saved!");
+    window.top.window.toastr["info"]("Folder must NOT be the same as an already existing Page!");
+    window.top.window.toastr["error"]("Change not saved!");
 <?php }elseif($adminfolder==$settings['system']['admin']){
   $htmladmin='<a href="'.URL.$settings['system']['admin'].'">'.URL.'</a>';?>
   window.top.window.$('#adminaccess').html(`<?php echo$htmladmin;?>`);

@@ -52,6 +52,7 @@
       context.memo('button.videoAttributes',function(){
         var button=ui.button({
           contents:options.videoAttributes.icon,
+          container:options.container,
           tooltip:lang.videoAttributes.tooltip,
           click:function(e){
             context.invoke('videoAttributes.show');

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Split Item Parsing from main Content in view/
 */
 $html=preg_replace([
   '~<contentitems>.*?<\/contentitems>~is',
@@ -38,9 +37,9 @@ $ua=$us->fetch(PDO::FETCH_ASSOC);
 if($r['fileURL']!='')
   $shareImage=$r['fileURL'];
 elseif($r['file']!='')
-  $shareImage=$r['file'];
+  $shareImage=rawurldecode($r['file']);
 elseif($r['thumb']!='')
-  $shareImage=$r['thumb'];
+  $shareImage=rawurldecode($r['thumb']);
 else
   $shareImage=URL.NOIMAGE;
 $canonical=URL.$view.'/'.$r['urlSlug'].'/';
@@ -98,7 +97,7 @@ if(stristr($html,'<breadcrumb>')){
         htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8')
       ],$breadcurrent);
     }
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'","name":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'","name":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'"}},';
     $breaditems.=$breadit;
   }
   if($r['category_2']!=''){
@@ -118,7 +117,7 @@ if(stristr($html,'<breadcrumb>')){
         htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8')
       ],$breadcurrent);
     }
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'/'.str_replace(' ','-',urlencode($r['category_2'])).'","name":"'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'/'.str_replace(' ','-',urlencode($r['category_2'])).'","name":"'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'"}},';
     $breaditems.=$breadit;
   }
   if($r['category_3']!=''){
@@ -138,7 +137,7 @@ if(stristr($html,'<breadcrumb>')){
         htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8')
       ],$breadcurrent);
     }
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'/'.str_replace(' ','-',urlencode($r['category_2'])).'/'.str_replace(' ','-',urlencode($r['category_3'])).'","name":"'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'/'.str_replace(' ','-',urlencode($r['category_2'])).'/'.str_replace(' ','-',urlencode($r['category_3'])).'","name":"'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'"}},';
     $breaditems.=$breadit;
   }
   if($r['category_4']!=''){
@@ -158,7 +157,7 @@ if(stristr($html,'<breadcrumb>')){
         htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8')
       ],$breadcurrent);
     }
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'/'.str_replace(' ','-',urlencode($r['category_2'])).'/'.str_replace(' ','-',urlencode($r['category_3'])).'/'.str_replace(' ','-',urlencode($r['category_4'])).'","name": "'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($r['category_1'])).'/'.str_replace(' ','-',urlencode($r['category_2'])).'/'.str_replace(' ','-',urlencode($r['category_3'])).'/'.str_replace(' ','-',urlencode($r['category_4'])).'","name": "'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'"}},';
     $breaditems.=$breadit;
   }
   $jsoni++;
@@ -168,7 +167,7 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}"}},}]}</script>';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}}]}</script>';
     $breaditems.=$breadit;
   }
   $html=preg_replace([
@@ -191,6 +190,7 @@ if(stristr($html,'<cover>')){
       '<img src="'.$r['fileURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">'
     ],$html);
   }elseif($r['file']){
+    $r['file']=rawurldecode($r['file']);
     $html=preg_replace([
       '/<[\/]?cover>/',
       '/<print page=[\"\']?coverItem[\"\']?>/'
@@ -198,7 +198,8 @@ if(stristr($html,'<cover>')){
       '',
       '<img srcset="'.($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file']).' '.$config['mediaMaxWidth'].'w,':'').($r['file']!=''&&file_exists('media'.DS.'lg'.DS.basename($r['file']))?'media'.DS.'lg'.DS.basename($r['file']).' 1000w,':'').($r['file']!=''&&file_exists('media'.DS.'md'.DS.basename($r['file']))?'media'.DS.'md'.DS.basename($r['file']).' 600w,':'').($r['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['file']))?'media'.DS.'sm'.DS.basename($r['file']).' 400w':'').'" src="'.$r['file'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">'
     ],$html);
-  }elseif($page['cover']){
+  }elseif($page['file']){
+    $page['file']=rawurldecode($page['file']);
     $html=preg_replace([
       '/<[\/]?cover>/',
       '/<print page=[\"\']?coverItem[\"\']?>/'
@@ -225,7 +226,7 @@ if($r['videoURL']!=''){
     '~<360viewer>.*?<\/360viewer>~is'
   ],'',$html);
   if($r['videoURL']!=''){
-    $cover=basename($r['videoURL']);
+    $cover=basename(rawurldecode($r['videoURL']));
     if(stristr($r['videoURL'],'youtu')){
       preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$r['videoURL'],$vidMatch);
       $videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($r['options'][4]==1?'autoplay=1&':'').($r['options'][5]==1?'loop=1&':'').($page['options'][6]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
@@ -242,6 +243,7 @@ if($r['videoURL']!=''){
   }else
     $html=preg_replace('/<print content=[\"\']?video[\"\']?>/','',$html);
 }elseif($r['options'][3]==1&&$r['file']!=''){
+  $r['file']=rawurldecode($r['file']);
   $html=preg_replace([
     '/<[\/]?360viewer>/',
     '~<image>.*?<\/image>~is',
@@ -256,6 +258,7 @@ if($r['videoURL']!=''){
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
   $html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
 }elseif($r['options'][2]==1&&$r['file']!=''){
+  $r['file']=rawurldecode($r['file']);
   $html=preg_replace([
     '/<[\/]?panoramic>/',
     '~<image>.*?<\/image>~is',
@@ -270,6 +273,7 @@ if($r['videoURL']!=''){
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
   $html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
 }else{
+  $r['file']=rawurldecode($r['file']);
   $html=preg_replace([
     '~<panoramic>.*?<\/panoramic>~is',
     '~<360viewer>.*?<\/360viewer>~is',
@@ -330,6 +334,7 @@ if(stristr($html,'<item')){
       while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
         $mediaitems=$mediaitem;
         if(!file_exists('media/thumbs/'.basename($rm['file'])))continue;
+        $rm['file']=rawurldecode($rm['file']);
         $mediaitems=preg_replace([
           '/<print media=[\"\']?id[\"\']?>/',
           '/<print thumb=[\"\']?srcset[\"\']?>/',
@@ -452,6 +457,7 @@ if(stristr($html,'<item')){
         ':id'=>$r['brand']
       ]);
       $rb=$sb->fetch(PDO::FETCH_ASSOC);
+      $rb['icon']=rawurldecode($rb['icon']);
       $brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="media'.DS.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
       $item=preg_replace([
         '/<[\/]?brand>/',
@@ -575,6 +581,7 @@ if(stristr($html,'<item')){
             ':rank'=>$_SESSION['rank']
           ]);
           $ri=$si->fetch(PDO::FETCH_ASSOC);
+          $ri['thumb']=rawurldecode($ri['thumb']);
           if($ri['thumb']==''||!file_exists('media'.DS.'thumbs'.DS.basename($ri['thumb'])))$ri['thumb']=NOIMAGESM;
           $relatedQuantity='';
           if(is_numeric($ri['quantity'])&&$ri['quantity']!=0)

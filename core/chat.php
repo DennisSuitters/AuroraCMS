@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.6 Add Email Notifications and Status.
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.15 Fix Typo's.
  */
 $getcfg=true;
 require'db.php';
@@ -147,7 +144,7 @@ if($message == "|*|*|*|*|*|"){
 			require'class.phpmailer.php';
 			$sa=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND liveChatNotification=1");
 			$sa->execute();
-			echo'<div class="alert alert-info">There are currently no operators available to answer your queries, however you may leave a message here so a representative can get back to you.</div>';
+			echo'<div class="alert alert-info" role="alert">There are currently no operators available to answer your queries, however you may leave a message here so a representative can get back to you.</div>';
 			if($sa->rowCount()>0){
 				$cfgsent=0;
 				while($ra=$sa->fetch(PDO::FETCH_ASSOC)){

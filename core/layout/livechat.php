@@ -7,87 +7,96 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.6 Add Read Status.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_livechat.php';
 else{?>
-<main id="content" class="main">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item active">Live Chat</li>
-  </ol>
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
-        <div class="row chat">
-          <div class="col-3 pr-0 d-flex" style="overflow:hidden;overflow-y:auto;">
-            <div class="card chatList flex-fill">
-              <div class="card-body p-0 border-0">
-                <input id="chatactive" type="hidden" value="0">
-                <div id="chatList" class="list-group">
-                  <?php $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
-                  $s->execute();
-                  while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                    <span id="l_<?php echo$r['id'];?>" class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom bg-dark" data-sid="<?php echo$r['sid'];?>" data-chatname="<?php echo$r['name'];?>" data-chatemail="<?php echo$r['email'];?>">
-                      <span class="btn-group float-right">
-                        <?php $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-                        $scc->execute([
-                          ':ip'=>$r['ip']
-                        ]);
-                        if($scc->rowCount()<1){?>
-                          <form id="blacklist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_blacklist.php">
-                            <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                            <input type="hidden" name="t" value="livechat">
-                            <input type="hidden" name="r" value="Added Manually via Live Chat">
-                            <button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
-                          </form>
-                        <?php } ?>
-                        <form target="sp" method="GET" action="core/purge.php">
-                          <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-                          <input type="hidden" name="t" value="livechat">
-                          <input type="hidden" name="c" value="<?php echo$r['sid'];?>">
-                          <button class="btn btn-secondary btn-sm trash" onclick="javascript:clearTimeout(chatTimer);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                        </form>
-                      </span>
-                      <small><?php echo$r['name'];?></small><br>
-                      <small><?php echo$r['email'];?></small><br>
-                      <small><small><?php echo date($config['dateFormat'],$r['ti']);?></small></small>
-                      <?php echo$r['status']=='unseen'?'<span class="btn-group float-right"><span class="badge badge-danger">Unread</span></span>':'<span class="btn-group float-right"><span class="badge badge-success">Read</span></span>';?>
-                    </span>
-                  <?php }?>
-                </div>
-              </div>
-            </div>
+<main>
+  <section id="content">
+    <div class="content-title-wrapper">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('chat','i-3x');?></div>
+          <div>Live Chat</div>
+          <div class="content-title-actions">
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Live Chat Settings" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button" aria-label="Live Chat Settings">'.svg2('settings').'</a>':'';?>
           </div>
-          <div class="col pl-0">
+        </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">Live Chat</li>
+        </ol>
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow p-3">
+        <div class="row chat">
+          <input id="chatactive" type="hidden" value="0">
+          <div class="chatList card col-12 col-md-4" id="chatList">
+            <?php
+/*
+Add the below if using MYSQL 8.0 /etc/mysql/my.cnf
+ [mysqld]
+sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
+*/
+            $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
+            $s->execute();
+            while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+              <span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_<?php echo$r['id'];?>" data-sid="<?php echo$r['sid'];?>" data-chatname="<?php echo$r['name'];?>" data-chatemail="<?php echo$r['email'];?>">
+                <span class="btn-group float-right">
+                  <?php $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+                  $scc->execute([
+                    ':ip'=>$r['ip']
+                  ]);
+                  if($scc->rowCount()<1){?>
+                    <form id="blacklist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_blacklist.php">
+                      <input name="id" type="hidden" value="<?php echo$r['id'];?>">
+                      <input name="t" type="hidden" value="livechat">
+                      <input name="r" type="hidden" value="Added Manually via Live Chat">
+                      <button data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
+                    </form>
+                  <?php } ?>
+                  <form target="sp" method="get" action="core/purge.php">
+                    <input name="id" type="hidden" value="<?php echo$r['id'];?>">
+                    <input name="t" type="hidden" value="livechat">
+                    <input name="c" type="hidden" value="<?php echo$r['sid'];?>">
+                    <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><?php svg('trash');?></button>
+                  </form>
+                </span>
+                <small><?php echo$r['name'];?></small><br>
+                <small><?php echo$r['email'];?></small><br>
+                <small><small><?php echo date($config['dateFormat'],$r['ti']);?></small></small>
+                <?php echo$r['status']=='unseen'?'<span class="btn-group float-right"><small class="badger badge-danger">Unread</small></span>':'<span class="btn-group float-right"><small class="badger badge-success">Read</small></span>';?>
+              </span>
+            <?php }?>
+          </div>
+          <div class="col-12 col-md-8">
             <div class="card chatBody">
-              <div id="chatTitle" class="card-header">&nbsp;</div>
-              <div id="chatBody" class="card-body p-0">
-                <input id="chatsid" type="hidden" value="">
-                <input id="chatwho" type="hidden" value="admin">
-                <input id="chataid" type="hidden" value="<?php echo$user['id'];?>">
-                <input id="chatemail" type="hidden" value="<?php echo$user['email'];?>">
-                <input id="chatname" type="hidden" value="<?php echo $user['name']!=''?$user['name']:$user['username'];?>">
-                <div id="chatScreen" class="card-content" style="height:54vh;" data-empty="Select a Message Thread on the left!"></div>
+              <div class="card-header" id="chatTitle">&nbsp;</div>
+              <div class="card-body p-0" id="chatBody">
+                <input type="hidden" id="chatsid" value="">
+                <input type="hidden" id="chatwho" value="admin">
+                <input type="hidden" id="chataid" value="<?php echo$user['id'];?>">
+                <input type="hidden" id="chatemail" value="<?php echo$user['email'];?>">
+                <input type="hidden" id="chatname" value="<?php echo $user['name']!=''?$user['name']:$user['username'];?>">
+                <div class="card-content" style="height:54vh;" id="chatScreen" data-empty="Select a Message Thread on the left!"></div>
               </div>
               <div class="card-footer p-0 border-0">
-                <div class="input-group">
-                  <input id="chatmessage" type="text" class="form-control">
-                  <div class="input-group-append">
-                    <button id="chatButton" class="btn btn-secondary"> Send </button>
-                  </div>
+                <div class="form-row">
+                  <input id="chatmessage" type="text">
+                  <button id="chatButton"> Send </button>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <?php include'core/layout/footer.php';?>
       </div>
     </div>
-  </div>
+  </section>
 </main>
 <script>
   function updateChat(seen){

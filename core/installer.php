@@ -7,14 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Fix creation of Developer Account Insert SQL
- * @changes    v0.0.4 Add processing Timezone.
- * @changes    v0.0.8 Fix SQL error when creating Developer Account in Install.
- * @changes    v0.0.11 Update Developer Permissions when creating Developer Account.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 $error=0;
@@ -46,6 +41,7 @@ if($_POST['emailtrap']=='none'){
 		fclose($oFH);?>
 		window.top.window.$('#step1').addClass('d-none');
 		window.top.window.$('#step2').removeClass('d-none');
+		window.top.window.$('#block').removeClass('d-block');
 <?php	}
 	if($act=='step2'){
 		$config=parse_ini_file('config.ini',true);
@@ -104,6 +100,7 @@ if($_POST['emailtrap']=='none'){
 <?php }else{?>
 	window.top.window.$('#step2').addClass('d-none');
 	window.top.window.$('#step3').removeClass('d-none');
+	window.top.window.$('#block').removeClass('d-block');
 <?php }
 		}
 	}
@@ -131,6 +128,7 @@ window.top.window.alert('<?php echo$e[2];?>');
 <?php }else{?>
 	window.top.window.$('#step3').addClass('d-none');
 	window.top.window.$('#step4').removeClass('d-none');
+	window.top.window.$('#block').removeClass('d-block');
 <?php }
 	}
 }

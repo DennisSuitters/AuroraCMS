@@ -35,6 +35,7 @@
           ui.button({
             className:'dropdown-toggle',
             contents:options.imageShapes.icon+' <span class="caret"></span>',
+            container:options.container,
             tooltip:lang.imageShapes.tooltipShape,
             data:{
               toggle:'dropdown'

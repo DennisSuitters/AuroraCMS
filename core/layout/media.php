@@ -7,42 +7,45 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
- * @changes    v0.0.11 Adjust alert markup when not allowed.
- * @changes    v0.0.11 Update var offset.
- * @changes    v0.0.15 Add directive to edit media items.
  */
 if($args[0]=='settings')
   include'core'.DS.'layout'.DS.'set_media.php';
 elseif($args[0]=='edit')
   include'core'.DS.'layout'.DS.'edit_media.php';
 else{?>
-  <main id="content" class="main">
-    <ol class="breadcrumb m-0">
-      <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-      <li class="breadcrumb-item active">Media</li>
-    </ol>
+<main>
+  <section id="content" class="main">
+    <div class="content-title-wrapper mb-0">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('picture','i-3x');?></div>
+          <div>Media</div>
+          <div class="content-title-actions">
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <?php echo$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/settings" data-tooltip="tooltip" data-title="Media Settings" role="button" aria-label="Media Settings">'.svg2('settings').'</a>':'';?>
+          </div>
+        </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+          <li class="breadcrumb-item active">Media</li>
+        </ol>
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow">
     <?php if($user['options'][0]==1){?>
-      <div class="container m-0 p-0">
-        <div class="row m-0 p-0">
-          <div class="card col m-0 p-0">
-            <div class="card-body m-0 p-0">
-              <div id="elfinder" style="width:50vw;height:40vh;"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    <?php }else{?>
-      <div class="container">
         <div class="row">
-          <div class="col mt-5">
-            <div class="alert alert-info" role="alert">You Don't Have Permissions To Use This Area</div>
-          </div>
+          <div id="elfinder" style="width:100%;"></div>
         </div>
-      </div>
+    <?php }else{?>
+        <div class="alert alert-info" role="alert">You Don't Have Permissions To Use This Area</div>
     <?php }?>
-  </main>
+        <?php include'core/layout/footer.php';?>
+      </div>
+    </div>
+  </section>
+</main>
 <?php }

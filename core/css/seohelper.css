@@ -87,7 +87,10 @@ nav.account-menu {
   height: 50px !important;
   background: #000 !important;
   margin: 0 !important;
-  padding: 0 !important; }
+  padding: 0 !important;
+  font-family: Arial !important;
+  font-size: 16px !important;
+  line-height: 1.7 !important; }
 
 nav.account-menu ul {
   background-color: #000 !important; }
@@ -95,7 +98,7 @@ nav.account-menu ul {
 nav.account-menu ul li {
   margin: 0 !important;
   padding: .1rem .75rem !important;
-  line-height: 1rem !important;
+  line-height: 2 !important;
   vertical-align: middle !important;}
 
 nav.account-menu ul li a {
@@ -142,9 +145,9 @@ nav.account-menu button:hover {
   outline: none !important; }
 
 nav.account-menu #accountavatar {
-  width: 32px;
-  max-height: 32px;
-  border-radius: 5px; }
+  width: 32px !important;
+  max-height: 32px !important;
+  border-radius: 5px !important; }
 
 div.development {
   position: relative;

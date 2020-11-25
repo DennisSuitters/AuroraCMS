@@ -7,15 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.3 Add Change to Unpublished when Content is moved to future date in Scheduler.
- * @changes    v0.0.3 Add check for Administration Activity Tracking.
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.11 Add Password remove Page Block, and reset Password Update button colour.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
@@ -266,26 +260,26 @@ if(is_null($e[2])){
                 '<td class="text-left">'.$i['code'].'</td>'.
                 '<td class="text-left">'.
                   '<form target="sp" action="core/update.php">'.
-                    '<input type="hidden" name="id" value="'.$oi['id'].'">'.
-                    '<input type="hidden" name="t" value="'.$tbl.'">'.
-                    '<input type="hidden" name="c" value="title">'.
-                    '<input type="text" class="form-control" name="da" value="'.($oi['title']!=''?$oi['title']:$i['title']).'">'.
+                    '<input name="id" type="hidden" value="'.$oi['id'].'">'.
+                    '<input name="t" type="hidden" value="'.$tbl.'">'.
+                    '<input name="c" type="hidden" value="title">'.
+                    '<input name="da" type="text" value="'.($oi['title']!=''?$oi['title']:$i['title']).'">'.
                   '</form>'.
                 '</td>'.
                 '<td class="col-md-1 text-center">'.
-                  ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="quantity"><input class="form-control text-center" name="da" value="'.$oi['quantity'].'"></form>':'').
+                  ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="quantity"><input class="text-center" name="da" value="'.$oi['quantity'].'"></form>':'').
                 '</td>'.
                 '<td class="col-md-1 text-right">'.
-                  ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="cost"><input class="form-control text-center" name="da" value="'.$oi['cost'].'"></form>':'').
+                  ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="cost"><input class="text-center" name="da" value="'.$oi['cost'].'"></form>':'').
                 '</td>'.
                 '<td class="text-right">'.($oi['iid'] != 0?$oi['cost']*$oi['quantity']:'').'</td>'.
                 '<td class="text-right">'.
                   '<form target="sp" action="core/update.php">'.
-                    '<input type="hidden" name="id" value="'.$oi['id'].'">'.
-                    '<input type="hidden" name="t" value="orderitems">'.
-                    '<input type="hidden" name="c" value="quantity">'.
-                    '<input type="hidden" name="da" value="0">'.
-                    '<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+                    '<input name="id" type="hidden" value="'.$oi['id'].'">'.
+                    '<input name="t" type="hidden" value="orderitems">'.
+                    '<input name="c" type="hidden" value="quantity">'.
+                    '<input name="da" type="hidden" value="0">'.
+                    '<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
                   '</form>'.
                 '</td>'.
               '</tr>';

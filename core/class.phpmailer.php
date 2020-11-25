@@ -109,22 +109,15 @@ class PHPMailer {
   const CRLF = "\r\n";
   const MAX_LINE_LENGTH = 998;
   public function __construct($exceptions = null) {
-    if ($exceptions !== null)
-      $this -> exceptions = (boolean)$exceptions;
+    if ($exceptions !== null)$this -> exceptions = (boolean)$exceptions;
     $this -> Debugoutput = (strpos(PHP_SAPI, 'cli') !== false ? 'echo' : 'html');
   }
   public function __destruct() {
     $this -> smtpClose();
   }
   private function mailPassthru($to, $subject, $body, $header, $params) {
-    if (ini_get('mbstring.func_overload') & 1)
-      $subject = $this -> secureHeader($subject);
-    else
-      $subject = $this -> encodeHeader($this -> secureHeader($subject));
-    if (ini_get('safe_mode') || !$this -> UseSendmailOptions || is_null($params))
-      $result = @mail($to, $subject, $body, $header);
-    else
-      $result = @mail($to, $subject, $body, $header, $params);
+    if (ini_get('mbstring.func_overload') & 1)$subject = $this -> secureHeader($subject);else$subject = $this -> encodeHeader($this -> secureHeader($subject));
+    if (ini_get('safe_mode') || !$this -> UseSendmailOptions || is_null($params))$result = @mail($to, $subject, $body, $header);else$result = @mail($to, $subject, $body, $header, $params);
     return $result;
   }
   protected function edebug($str) {
@@ -147,10 +140,7 @@ class PHPMailer {
     }
   }
   public function isHTML($isHtml = true) {
-    if ($isHtml)
-      $this -> ContentType = 'text/html';
-    else
-      $this -> ContentType = 'text/plain';
+    if ($isHtml)$this -> ContentType = 'text/html';else$this -> ContentType = 'text/plain';
   }
   public function isSMTP() {
     $this -> Mailer = 'smtp';
@@ -160,18 +150,12 @@ class PHPMailer {
   }
   public function isSendmail() {
     $ini_sendmail_path = ini_get('sendmail_path');
-    if (!stristr($ini_sendmail_path, 'sendmail'))
-      $this -> Sendmail = '/usr/sbin/sendmail';
-    else
-      $this -> Sendmail = $ini_sendmail_path;
+    if (!stristr($ini_sendmail_path, 'sendmail'))$this -> Sendmail = '/usr/sbin/sendmail';else$this -> Sendmail = $ini_sendmail_path;
     $this -> Mailer = 'sendmail';
   }
   public function isQmail() {
     $ini_sendmail_path = ini_get('sendmail_path');
-    if (!stristr($ini_sendmail_path, 'qmail'))
-      $this -> Sendmail = '/var/qmail/bin/qmail-inject';
-    else
-      $this -> Sendmail = $ini_sendmail_path;
+    if (!stristr($ini_sendmail_path, 'qmail'))$this -> Sendmail = '/var/qmail/bin/qmail-inject';else$this -> Sendmail = $ini_sendmail_path;
     $this -> Mailer = 'qmail';
   }
   public function addAddress($address, $name = '') {
@@ -193,8 +177,7 @@ class PHPMailer {
       $error_message = $this -> lang('invalid_address') . " (addAnAddress $kind): $address";
       $this -> setError($error_message);
       $this -> edebug($error_message);
-      if ($this -> exceptions)
-        throw new phpmailerException($error_message);
+      if ($this -> exceptions)throw new phpmailerException($error_message);
       return false;
     }
     $params = array($kind, $address, $name);
@@ -219,16 +202,14 @@ class PHPMailer {
       $error_message = $this -> lang('Invalid recipient kind: ') . $kind;
       $this -> setError($error_message);
       $this -> edebug($error_message);
-      if ($this -> exceptions)
-        throw new phpmailerException($error_message);
+      if ($this -> exceptions)throw new phpmailerException($error_message);
       return false;
     }
     if (!$this -> validateAddress($address)) {
       $error_message = $this -> lang('invalid_address') . " (addAnAddress $kind): $address";
       $this -> setError($error_message);
       $this -> edebug($error_message);
-      if ($this -> exceptions)
-        throw new phpmailerException($error_message);
+      if ($this -> exceptions)throw new phpmailerException($error_message);
       return false;
     }
     if ($kind != 'Reply-To') {

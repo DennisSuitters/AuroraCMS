@@ -34,6 +34,7 @@
       context.memo('button.captionIt',function(){
         var button=ui.button({
           contents:options.captionIt.icon,
+          container:options.container,
           tooltip:lang.captionIt.tooltip,
           click:function(){
             var img=$($editable.data('target'));

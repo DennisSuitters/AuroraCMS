@@ -7,13 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.15 Fix reference to SVG2 function.
- * @changes    v0.0.18 Add Code for Postal Services lookup API's.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -33,23 +29,5 @@ if($t!=''){
 	]);
   if($v==0)$v='';
   $id=$db->lastInsertId();
-echo'<script>'.
-  'window.top.window.$("#postoption").append(`<div id="l_'.$id.'" class="form-group row">'.
-		'<div class="input-group col">'.
-			'<span class="input-group-text">Code</span>'.
-			'<input type="text" class="form-control" name="service" value="'.$c.'" readonly>'.
-			'<span class="input-group-text">Title</span>'.
-			'<input type="text" class="form-control" name="service" value="'.$t.'" readonly>'.
-			'<span class="input-group-text">Cost</span>'.
-			'<input type="text" class="form-control" name="cost" value="'.$v.'" readonly>'.
-			'<div class="input-group-append">'.
-				'<form target="sp" action="core/purge.php">'.
-					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<input type="hidden" name="t" value="choices">'.
-					'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete"" aria-label="Delete">'.svg2('trash').'</button>'.
-				'</form>'.
-			'</div>'.
-		'</div>'.
-	'</div>`);'.
-'</script>';
+echo'<script>window.top.window.$("#postoption").append(`<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Code</div><input name="service" type="text" value="'.$c.'" readonly><div class="input-text">Title</div><input name="service" type="text" value="'.$t.'" readonly><div class="input-text">Cost</div><input name="cost" type="text" value="'.$v.'" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete">'.svg2('trash').'</button></form></div>`);</script>';
 }

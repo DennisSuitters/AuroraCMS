@@ -7,146 +7,133 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.19
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
- * @changes    v0.0.19 Add Choices for Bookings.
- * @changes    v0.0.19 Add option to Archive Bookings when converted to Invoice.
  */?>
-<main id="content" class="main position-relative">
-  <ol class="breadcrumb shadow">
-    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/bookings';?>">Bookings</a></li>
-    <li class="breadcrumb-item active">Settings</li>
-    <li class="breadcrumb-menu">
-      <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
-        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
-      </div>
-    </li>
-  </ol>
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options25" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25"<?php echo$config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="options25" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Archive Bookings when Converted to Invoice</label>
+ <main>
+   <section id="content">
+     <div class="content-title-wrapper mb-0">
+       <div class="content-title">
+         <div class="content-title-heading">
+           <div class="content-title-icon"><?php svg('calendar','i-3x');?></div>
+           <div>Bookings Settings</div>
+           <div class="content-title-actions">
+             <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+             <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+             <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+           </div>
+         </div>
+         <ol class="breadcrumb">
+           <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/bookings';?>">Bookings</a></li>
+           <li class="breadcrumb-item active">Settings</li>
+         </ol>
+       </div>
+     </div>
+     <div class="container-fluid p-0">
+       <div class="card border-radius-0 shadow p-3">
+         <div class="row mt-3">
+          <input id="options25" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25" type="checkbox"<?php echo$config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="options25">Archive Bookings when Converted to Invoice</label>
         </div>
-        <legend>Booking Agreement Template</legend>
-        <div class="form-group">
-          <div class="input-group p-0">
-            <form method="post" target="sp" action="core/update.php" class="w-100">
-              <input type="hidden" name="id" value="1">
-              <input type="hidden" name="t" value="config">
-              <input type="hidden" name="c" value="bookingAgreement">
-              <textarea id="bookingNoteLayout" class="form-control summernote" name="da"><?php echo rawurldecode($config['bookingAgreement']);?></textarea>
-            </form>
-          </div>
+        <legend class="mt-3">Booking Agreement Template</legend>
+        <div class="form-row">
+          <form class="w-100" method="post" target="sp" action="core/update.php">
+            <input name="id" type="hidden" value="1">
+            <input name="t" type="hidden" value="config">
+            <input name="c" type="hidden" value="bookingAgreement">
+            <textarea class="summernote" id="bookingNoteLayout" name="da"><?php echo rawurldecode($config['bookingAgreement']);?></textarea>
+          </form>
         </div>
-        <hr>
-        <legend>Booking Notes Template</legend>
-        <div class="form-group">
-          <div class="input-group p-0">
-            <form method="post" target="sp" action="core/update.php" class="w-100">
-              <input type="hidden" name="id" value="1">
-              <input type="hidden" name="t" value="config">
-              <input type="hidden" name="c" value="bookingNoteTemplate">
-              <textarea id="bookingNoteLayout" class="form-control summernote" name="da"><?php echo rawurldecode($config['bookingNoteTemplate']);?></textarea>
-            </form>
-          </div>
+        <legend class="mt-3">Booking Notes Template</legend>
+        <div class="form-row">
+          <form class="w-100" method="post" target="sp" action="core/update.php">
+            <input name="id" type="hidden" value="1">
+            <input name="t" type="hidden" value="config">
+            <input name="c" type="hidden" value="bookingNoteTemplate">
+            <textarea class="summernote" id="bookingNoteLayout" name="da"><?php echo rawurldecode($config['bookingNoteTemplate']);?></textarea>
+          </form>
         </div>
-        <hr>
-        <legend>Email Layout</legend>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="bookingEmailReadNotification" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="bookingEmailReadNotification" data-dbb="0"<?php echo$config['bookingEmailReadNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="bookingEmailReadNotification" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Read Reciept</label>
+        <legend class="mt-3">Email Layout</legend>
+        <div class="row">
+          <input id="bookingEmailReadNotification" data-dbid="1" data-dbt="config" data-dbc="bookingEmailReadNotification" data-dbb="0" type="checkbox"<?php echo$config['bookingEmailReadNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="bookingEmailReadNotification">Read Reciept</label>
         </div>
-        <div class="form-group">
+        <div class="form-row mt-3">
           <label for="bookingEmailSubject">Subject</label>
-          <div class="form-text small text-muted float-right">Tokens:
+          <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingEmailSubject','{business}');return false;">{business}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingEmailSubject','{name}');return false;">{name}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingEmailSubject','{first}');return false;">{first}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingEmailSubject','{last}');return false;">{last}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingEmailSubject','{date}');return false;">{date}</a>
-          </div>
-          <div class="input-group">
-            <input type="text" id="bookingEmailSubject" class="form-control textinput" value="<?php echo$config['bookingEmailSubject'];?>" data-dbid="1" data-dbt="config" data-dbc="bookingEmailSubject">
-            <div class="input-group-append"><button id="savebookingEmailSubject" class="btn btn-secondary save" data-tooltip="tooltip" data-placement="top" data-title="Save" data-dbid="bookingEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
-          </div>
+          </small>
         </div>
-        <div class="form-group">
-          <div class="input-group card-header p-0">
-            <div class="col-12 small text-muted text-right">Tokens:
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{business}');return false;">{business}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{date}');return false;">{date}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{service}');return false;">{service}</a>
-            </div>
-            <form method="post" target="sp" action="core/update.php" class="w-100">
-              <input type="hidden" name="id" value="1">
-              <input type="hidden" name="t" value="config">
-              <input type="hidden" name="c" value="bookingEmailLayout">
-              <textarea id="bookingEmailLayout" class="form-control summernote" name="da"><?php echo rawurldecode($config['bookingEmailLayout']);?></textarea>
-            </form>
-          </div>
+        <div class="form-row">
+          <input class="textinput" id="bookingEmailSubject" data-dbid="1" data-dbt="config" data-dbc="bookingEmailSubject" type="text" value="<?php echo$config['bookingEmailSubject'];?>">
+          <button class="save" id="savebookingEmailSubject" data-tooltip="tooltip" data-title="Save" data-dbid="bookingEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <hr>
-        <legend>AutoReply Email</legend>
-        <div class="form-group">
+        <div class="form-row mt-3">
+          <small class="form-text small text-muted text-right">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{business}');return false;">{business}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{date}');return false;">{date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#bookingEmailLayout').summernote('insertText','{service}');return false;">{service}</a>
+          </small>
+        </div>
+        <div class="form-row">
+          <form class="w-100" method="post" target="sp" action="core/update.php">
+            <input name="id" type="hidden" value="1">
+            <input name="t" type="hidden" value="config">
+            <input name="c" type="hidden" value="bookingEmailLayout">
+            <textarea class="summernote" id="bookingEmailLayout" name="da"><?php echo rawurldecode($config['bookingEmailLayout']);?></textarea>
+          </form>
+        </div>
+        <legend class="mt-3">AutoReply Email</legend>
+        <div class="form-row">
           <label for="bookingAutoReplySubject">Subject</label>
-          <div class="form-text small text-muted float-right">Tokens:
+          <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingAutoReplySubject','{business}');return false;">{business}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingAutoReplySubject','{name}');return false;">{name}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingAutoReplySubject','{first}');return false;">{first}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingAutoReplySubject','{last}');return false;">{last}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bookingAutoReplySubject','{date}');return false;">{date}</a>
-          </div>
-          <div class="input-group">
-            <input type="text" id="bookingAutoReplySubject" class="form-control textinput" value="<?php echo$config['bookingAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="bookingAutoReplySubject">
-            <div class="input-group-append"><button id="savebookingAutoReplySubject" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="bookingAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
-          </div>
+          </small>
         </div>
-        <div class="form-group">
-          <label for="bookingAttachment">File Attachment</label>
-          <div class="input-group">
-            <input type="text" id="bookingAttachment" class="form-control" name="feature_image" value="<?php echo$config['bookingAttachment'];?>" data-dbid="1" data-dbt="config" data-dbc="bookingsAttachment" readonly>
-            <div class="input-group-append">
-              <button class="btn btn-secondary" onclick="elfinderDialog('1','config','bookingAttachment');" data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager"><?php svg('browse-media');?></button>
-              <button class="btn btn-secondary trash" onclick="coverUpdate('1','config','bookingAttachment','');" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-            </div>
-          </div>
+        <div class="form-row">
+          <input class="textinput" id="bookingAutoReplySubject" data-dbid="1" data-dbt="config" data-dbc="bookingAutoReplySubject" type="text" value="<?php echo$config['bookingAutoReplySubject'];?>">
+          <button class="save" id="savebookingAutoReplySubject" data-tooltip="tooltip" data-title="Save" data-dbid="bookingAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <div class="form-group">
-          <div class="input-group card-header p-0">
-            <div class="col-12 small text-muted text-right">Tokens:
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{business}');return false;">{business}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{date}');return false;">{date}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{service}');return false;">{service}</a>
-            </div>
-            <form method="post" target="sp" action="core/update.php" class="w-100">
-              <input type="hidden" name="id" value="1">
-              <input type="hidden" name="t" value="config">
-              <input type="hidden" name="c" value="bookingAutoReplyLayout">
-              <textarea id="orderEmailLayout" class="form-control summernote" name="da"><?php echo rawurldecode($config['bookingAutoReplyLayout']);?></textarea>
-            </form>
-          </div>
+        <label for="bookingAttachment">File Attachment</label>
+        <div class="form-row">
+          <input id="bookingAttachment" name="feature_image" data-dbid="1" data-dbt="config" data-dbc="bookingsAttachment" type="text" value="<?php echo$config['bookingAttachment'];?>" readonly>
+          <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','bookingAttachment');"><?php svg('browse-media');?></button>
+          <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="coverUpdate('1','config','bookingAttachment','');"><?php svg('trash');?></button>
         </div>
+        <div class="form-row mt-3">
+          <small class="form-text text-right">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{business}');return false;">{business}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{date}');return false;">{date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{service}');return false;">{service}</a>
+          </small>
+        </div>
+        <div class="form-row">
+          <form class="w-100" method="post" target="sp" action="core/update.php">
+            <input name="id" type="hidden" value="1">
+            <input name="t" type="hidden" value="config">
+            <input name="c" type="hidden" value="bookingAutoReplyLayout">
+            <textarea class="summernote" id="orderEmailLayout" name="da"><?php echo rawurldecode($config['bookingAutoReplyLayout']);?></textarea>
+          </form>
+        </div>
+        <?php include'core/layout/footer.php';?>
       </div>
     </div>
-  </div>
+  </section>
 </main>

@@ -1,5 +1,6 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
+- Fix Breadcrumb Parser, investigate Google Console for errors.
 - Content, investigate a better method of using images when parsing themes.
 - Installation checks for cURL, and Zip, it was discovered that the updates were failing due to zip and cURL not being installed on some installations causing updates to fail but not reporting errors in logs
 - Add clear tables data when installing

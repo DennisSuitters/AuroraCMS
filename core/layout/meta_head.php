@@ -7,17 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Add test in Administration Header to test if admin.css exists,
  *             and add if it does. This is for the WYSIWYG Editor to make text
  *             look the same in the Editor as it does on the Main Site.
- * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
- * @changes    v0.0.10 Fix missing manifestadmin.json.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.11 Fix display of number of Notifications in Title.
- * @changes    v0.0.15 Add Summernote plugin summernote-classes.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -40,22 +35,14 @@
     <link rel="manifest" href="<?php echo URL.'core'.DS.'manifestadmin.php';?>">
     <link rel="icon" href="<?php echo$favicon;?>">
     <link rel="apple-touch-icon" href="<?php echo$favicon;?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'bootstrap.min.css';?>">
+    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'style.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'jquery-ui.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'elfinder'.DS.'css'.DS.'elfinder.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'fullcalendar.min.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'jquery.simplecolorpicker.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'i.css';?>">
     <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'codemirror.css';?>">
     <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'daterangepicker.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'summernote.min.css';?>">
-    <link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'jquery.fancybox.min.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'style.css';?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'aurora.css';?>">
-    <?php if(file_exists(THEME.DS.'css'.DS.'admin.css'))echo'<link rel="stylesheet" type="text/css" href="'.THEME.DS.'css'.DS.'admin.css">';?>
     <script src="<?php echo'core'.DS.'js'.DS.'jquery.min.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'jquery-ui.min.js';?>"></script>
-    <script src="<?php echo'core'.DS.'js'.DS.'bootstrap.min.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'summernote.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-save-button.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'plugin'.DS.'summernote'.DS.'summernote-classes.js';?>"></script>
@@ -74,5 +61,5 @@
     	<script type="text/javascript" src="libs/flashcanvas.js"></script>
   	<![endif]-->
   </head>
-  <body class="app header-fixed sidebar-fixed aside-menu-fixed sidebar-lg-show<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
+  <body class="<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
   <?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div><div class="developmentbottom"></div>';?>

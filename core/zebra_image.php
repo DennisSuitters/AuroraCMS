@@ -54,15 +54,13 @@ class Zebra_Image {
       if (is_array($filter)) {
         foreach ($filter as $arguments)
         if (defined('IMG_FILTER_' . strtoupper($arguments[0]))) {
-          if (!@call_user_func_array('imagefilter', array_merge(array($target_identifier, constant('IMG_FILTER_' . strtoupper($arguments[0]))), array_slice($arguments, 1))))
-            trigger_error('Invalid arguments used for "' . strtoupper($arguments[0]) . '" filter', E_USER_WARNING);
+          if (!@call_user_func_array('imagefilter', array_merge(array($target_identifier, constant('IMG_FILTER_' . strtoupper($arguments[0]))), array_slice($arguments, 1))))trigger_error('Invalid arguments used for "' . strtoupper($arguments[0]) . '" filter', E_USER_WARNING);
         } else trigger_error('Filter "' . strtoupper($arguments[0]) . '" is not available', E_USER_WARNING);
       } elseif (defined('IMG_FILTER_' . strtoupper($filter))) {
         $arguments = func_get_args();
-        if (!@call_user_func_array('imagefilter', array_merge(array($target_identifier, constant('IMG_FILTER_' . strtoupper($filter))), array_slice($arguments, 1))))
-          trigger_error('Invalid arguments used for "' . strtoupper($arguments[0]) . '" filter', E_USER_WARNING);
+        if (!@call_user_func_array('imagefilter', array_merge(array($target_identifier, constant('IMG_FILTER_' . strtoupper($filter))), array_slice($arguments, 1))))trigger_error('Invalid arguments used for "' . strtoupper($arguments[0]) . '" filter', E_USER_WARNING);
       } else trigger_error('Filter "' . strtoupper($filter) . '" is not available', E_USER_WARNING);
-          return $this->_write_image($target_identifier);
+      return $this->_write_image($target_identifier);
     }
     return false;
   }
@@ -303,9 +301,8 @@ class Zebra_Image {
         if ($angle % 90 === 0) $angle += 0.001;
         $angle = -$angle;
         if ($background_color == -1) {
-          if ($this->target_type === 'png' || $this->target_type === 'webp') {
-            $background_color = imagecolorallocatealpha($this->source_identifier, 0, 0, 0, 127);
-          } elseif ($this->target_type === 'gif') {
+          if ($this->target_type === 'png' || $this->target_type === 'webp')$background_color = imagecolorallocatealpha($this->source_identifier, 0, 0, 0, 127);
+          elseif ($this->target_type === 'gif') {
             if ($this->source_type == IMAGETYPE_GIF && $this->source_transparent_color_index >= 0) {
               $background_color = imagecolorallocate(
                 $this->source_identifier,
@@ -317,9 +314,7 @@ class Zebra_Image {
               $background_color = imagecolorallocate($this->source_identifier, 255, 255, 255);
               imagecolortransparent($this->source_identifier, $background_color);
             }
-          } else {
-            $background_color = imagecolorallocate($this->source_identifier, 255, 255, 255);
-          }
+          } else$background_color = imagecolorallocate($this->source_identifier, 255, 255, 255);
         } else {
           $background_color = $this->_hex2rgb($background_color);
           $background_color = imagecolorallocate(
@@ -330,12 +325,12 @@ class Zebra_Image {
           );
         }
         $target_identifier = imagerotate($this->source_identifier, $angle, $background_color);
-        if ($use_existing_source) {
-          $this->source_identifier = $target_identifier;
-          $this->source_width = imagesx($target_identifier);
-          $this->source_height = imagesy($target_identifier);
+        if($use_existing_source){
+          $this->source_identifier=$target_identifier;
+          $this->source_width=imagesx($target_identifier);
+          $this->source_height=imagesy($target_identifier);
           return true;
-        } else return $this->_write_image($target_identifier);
+        }else return$this->_write_image($target_identifier);
     }
    return false;
   }
@@ -366,8 +361,7 @@ class Zebra_Image {
       switch ($this->source_type) {
         case IMAGETYPE_GIF:
           $identifier = imagecreatefromgif($this->source_path);
-          if (($this->source_transparent_color_index = imagecolortransparent($identifier)) >= 0)
-            $this->source_transparent_color = @imagecolorsforindex($identifier, $this->source_transparent_color_index);
+          if (($this->source_transparent_color_index = imagecolortransparent($identifier)) >= 0)$this->source_transparent_color = @imagecolorsforindex($identifier, $this->source_transparent_color_index);
           break;
         case IMAGETYPE_JPEG:
           $identifier = imagecreatefromjpeg($this->source_path);
@@ -392,7 +386,7 @@ class Zebra_Image {
         }
       }
       if ($this->preserve_time) $this->source_image_time = filemtime($this->source_path);
-        $this->source_identifier = $identifier;
+      $this->source_identifier = $identifier;
       if ($this->auto_handle_exif_orientation && $this->source_type === IMAGETYPE_JPEG)
         if (!function_exists('exif_read_data')) {
           $this->error = 9;
@@ -551,12 +545,12 @@ class Zebra_Image {
         return false;
     }
     $disabled_functions = @ini_get('disable_functions');
-    if ($disabled_functions === '' || strpos('chmod', $disabled_functions) === false) {
+    if($disabled_functions === '' || strpos('chmod', $disabled_functions) === false)
       chmod($this->target_path, intval($this->chmod_value, 8));
-    } else $this->error = 8;
-    if ($this->preserve_time && isset($this->source_image_time)) {
+    else
+      $this->error = 8;
+    if($this->preserve_time && isset($this->source_image_time))
       @touch($this->target_path, $this->source_image_time);
-    }
     imagedestroy($this->source_identifier);
     imagedestroy($identifier);
     return true;

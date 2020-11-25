@@ -7,16 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.1 Adjust Links Layout Items
- * @changes    v0.0.2 Add Permissions Options
- * @changes    v0.0.4 Fix Tooltips
- * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.17 Fix Thumbnail Display.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $rank=0;
 $show='categories';
@@ -116,195 +109,217 @@ else{
           $s->execute();
         }
       }?>
-      <main id="content" class="main">
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-          <?php if($args[1]!='')echo'<li class="breadcrumb-item active">'.ucfirst($args[1]).(in_array($args[1],array('article','service'))?'s':'').'</li>';?>
-          <li class="breadcrumb-menu">
-            <div class="btn-group" role="group">
-              <?php if($args[1]!='')echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" data-tooltip="tooltip" data-placement="left" data-title="Add '.ucfirst($args[1]).'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
-            </div>
-          </li>
-        </ol>
-        <div class="container-fluid">
-          <?php if($args[0]==''){?>
-            <div class="row">
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/media';?>" aria-label="Go to Media Page">
-                <span class="card">
-                  <span class="card-header h5">Media</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('picture','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/pages';?>" aria-label="Go to Pages">
-                <span class="card">
-                  <span class="card-header h5">Pages</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('content','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="Go to Scheduler">
-                <span class="card">
-                  <span class="card-header h5">Scheduler</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('calendar-time','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/article';?>" aria-label="Go to Articles">
-                <span class="card">
-                  <span class="card-header h5">Articles</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('content','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/portfolio';?>" aria-label="Go to Portfolio">
-                <span class="card">
-                  <span class="card-header h5">Portfolio</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('portfolio','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/events';?>" aria-label="Go to Events">
-                <span class="card">
-                  <span class="card-header h5">Events</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('calendar','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/news';?>" aria-label="Go to News">
-                <span class="card">
-                  <span class="card-header h5">News</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('email-read','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>" aria-label="Go to Testimonials">
-                <span class="card">
-                  <span class="card-header h5">Testimonials</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('testimonial','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/inventory';?>" aria-label="Go to Inventory">
-                <span class="card">
-                  <span class="card-header h5">Inventory</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('shipping','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/rewards';?>" aria-label="Go to Rewards">
-                <span class="card">
-                  <span class="card-header h5">Rewards</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('credit-card','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/service';?>" aria-label="Go to Services">
-                <span class="card">
-                  <span class="card-header h5">Services</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('service','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/content/type/proofs';?>" aria-label="Go to Proofs">
-                <span class="card">
-                  <span class="card-header h5">Proofs</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('proof','i-5x');?></span>
-                </span>
-              </a>
-              <a class="preferences col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-0" href="<?php echo URL.$settings['system']['admin'].'/newsletters';?>" aria-label="Go to Newsletters">
-                <span class="card">
-                  <span class="card-header h5">Newsletters</span>
-                  <span class="card-body card-text text-center pt-0"><?php svg('newspaper','i-5x');?></span>
-                </span>
-              </a>
-            </div>
-          <?php }else{?>
-            <div class="card">
-              <div class="card-body">
-                <table class="table table-condensed table-striped table-hover">
-                  <thead>
-                    <tr>
-                      <th></th>
-                      <th class="col">Title</th>
-                      <th class="col">Code</th>
-                      <th class="col text-center d-none d-sm-table-cell">Comments</th>
-                      <th class="col text-center d-none d-sm-table-cell">Reviews</th>
-                      <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options'][1]==1?' <button class="btn btn-secondary btn-xs" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All">'.svg2('eraser').'</button>':'';?></th>
-                      <th class="col"></th>
-                    </tr>
-                  </thead>
-                  <tbody id="listtype" class="list" data-t="menu" data-c="ord">
-                    <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                      <tr id="l_<?php echo$r['id'];?>" class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>">
-                        <td class="align-middle">
-                          <?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb'])))
-                            echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
-                          elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
-                            echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
-                          elseif($r['fileURL']!='')
-                            echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
-                          else echo'';?>
-                        </td>
-                        <td class="align-middle">
-                          <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="table-thumb" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
-                          <?php if($user['options'][1]==1){
-                            echo$r['suggestions']==1?'<span data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
-                            if($r['contentType']=='proofs'){
-                              $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-                              $sp->execute([
-                                ':id'=>$r['uid']
-                              ]);
-                              $sr=$sp->fetch(PDO::FETCH_ASSOC);?>
-                              <div class="small">Belongs to <a href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?php echo$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
-                            <?php }
-                          }
-                          echo'<br><small class="text-muted">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
-                        </td>
-                        <td class="align-middle small"><small><?php echo$r['code'];?></small></td>
-                        <td class="text-center align-middle d-none d-sm-table-cell">
-                          <?php           if($r['contentType']=='article'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='proofs'){
-                            $sc=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `rid`=:id AND `contentType`=:contentType");
-                            $sc->execute([
-                              ':id'=>$r['id'],
-                              ':contentType'=>$r['contentType']
-                            ]);
-                            $cnt=$sc->fetch(PDO::FETCH_ASSOC);
-                            $scc=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `rid`=:id AND `contentType`=:contentType AND `status`='unapproved'");
-                            $scc->execute([
-                              ':id'=>$r['id'],
-                              'contentType'=>$r['contentType']
-                            ]);
-                            $sccc=$scc->rowCount($scc);
-                            echo'<a class="btn btn-secondary'.($sccc>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-comments" data-tooltip="tooltip" data-title="'.$sccc.' New Comments" role="button" aria-label="New Comments">'.svg2('comments').'&nbsp;&nbsp;'.$cnt['cnt'].'</a>';
-                          }?>
-                        </td>
-                        <td class="text-center align-middle d-none d-sm-table-cell">
-                          <?php $sr=$db->prepare("SELECT COUNT(`id`) as num,SUM(`cid`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid");
-                          $sr->execute([
-                            ':rid'=>$r['id']
-                          ]);
-                          $rr=$sr->fetch(PDO::FETCH_ASSOC);
-                          $srr=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`!='approved'");
-                          $srr->execute([
-                            ':rid'=>$r['id']
-                          ]);
-                          $src=$srr->rowCount($srr);
-                          echo$rr['num']>0?'<a class="btn btn-secondary'.($src>0?' btn-success':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip" data-title="'.$src.' New Reviews':'').' role="button" aria-label="New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
-                        </td>
-                        <td class="text-center align-middle d-none d-sm-table-cell">
-                          <?php echo$user['options'][1]==1?'<button class="btn btn-secondary trash" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);" data-tooltip="tooltip" data-title="Clear" aria-label="Clear">'.svg2('eraser').'&nbsp;&nbsp;<span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
-                        </td>
-                        <td id="controls_<?php echo$r['id'];?>" class="align-middle">
-                          <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                            <div class="btn-group" role="group" aria-label="Item Controls">
-                              <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                              <?php if($user['options'][0]==1){?>
-                                <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
-                                <button class="btn btn-secondary rounded-right trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                                <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
-                              <?php }?>
-                            </div>
-                          </div>
-                        </td>
-                      </tr>
-                    <?php }?>
-                  </tbody>
-                </table>
+    <main>
+      <section id="content">
+        <div class="content-title-wrapper mb-0">
+          <div class="content-title">
+            <div class="content-title-heading">
+              <div class="content-title-icon"><?php svg('content','i-3x');?></div>
+              <div>Content</div>
+              <div class="content-title-actions">
+                <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+                <?php echo$user['options'][7]==1?' <a class="btn" data-tooltip="tooltip" data-title="Content Settings" href="'.URL.$settings['system']['admin'].'/content/settings" role="button" aria-label="Content Settings">'.svg2('settings').'</a>':'';
+                if($args[1]!='')echo$user['options'][0]==1?' <a class="btn add" data-tooltip="tooltip" data-title="Add '.ucfirst($args[1]).'" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
               </div>
             </div>
-          <?php }?>
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+              <?php if($args[1]!='')echo'<li class="breadcrumb-item active">'.ucfirst($args[1]).(in_array($args[1],array('article','service'))?'s':'').'</li>';?>
+            </ol>
+          </div>
         </div>
-      </main>
+        <div class="container-fluid p-0">
+          <div class="card border-radius-0 shadow overflow-visible">
+            <?php if($args[0]==''){?>
+              <div class="row p-3">
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/media';?>" aria-label="Go to Media Page">
+                  <span class="h5">Media</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('picture','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/pages';?>" aria-label="Go to Pages">
+                  <span class="h5">Pages</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('content','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="Go to Scheduler">
+                  <span class="h5">Scheduler</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('calendar-time','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/article';?>" aria-label="Go to Articles">
+                  <span class="h5">Articles</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('content','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/portfolio';?>" aria-label="Go to Portfolio">
+                  <span class="h5">Portfolio</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('portfolio','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/events';?>" aria-label="Go to Events">
+                  <span class="h5">Events</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('calendar','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/news';?>" aria-label="Go to News">
+                  <span class="h5">News</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('email-read','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>" aria-label="Go to Testimonials">
+                  <span class="h5">Testimonials</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('testimonial','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/inventory';?>" aria-label="Go to Inventory">
+                  <span class="h5">Inventory</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('shipping','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/rewards';?>" aria-label="Go to Rewards">
+                  <span class="h5">Rewards</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('credit-card','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/service';?>" aria-label="Go to Services">
+                  <span class="h5">Services</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('service','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/content/type/proofs';?>" aria-label="Go to Proofs">
+                  <span class="h5">Proofs</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('proof','i-5x');?></span>
+                </a>
+                <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?php echo URL.$settings['system']['admin'].'/newsletters';?>" aria-label="Go to Newsletters">
+                  <span class="h5">Newsletters</span>
+                  <span class="p-0">
+                    <span class="text-3x">&nbsp;</span>
+                  </span>
+                  <span class="icon"><?php svg('newspaper','i-5x');?></span>
+                </a>
+              </div>
+            <?php }else{?>
+              <table class="table-zebra">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th class="col">Title</th>
+                    <th class="col">Code</th>
+                    <th class="col text-center d-none d-sm-table-cell">Comments</th>
+                    <th class="col text-center d-none d-sm-table-cell">Reviews</th>
+                    <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options'][1]==1?' <button class="trash" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);">'.svg2('eraser').'</button>':'';?></th>
+                    <th class="col"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+                    <tr class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>" id="l_<?php echo$r['id'];?>">
+                      <td class="align-middle">
+                        <?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb'])))
+                          echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
+                        elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
+                          echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
+                        elseif($r['fileURL']!='')
+                          echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="avatar" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
+                        else echo'<img class="avatar" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';?>
+                      </td>
+                      <td class="align-middle">
+                        <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="avatar" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
+                        <?php if($user['options'][1]==1){
+                          echo$r['suggestions']==1?'<span data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
+                          if($r['contentType']=='proofs'){
+                            $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+                            $sp->execute([
+                              ':id'=>$r['uid']
+                            ]);
+                            $sr=$sp->fetch(PDO::FETCH_ASSOC);?>
+                            <div class="small">Belongs to <a href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?php echo$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
+                          <?php }
+                        }
+                        echo'<br><small class="text-muted">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
+                      </td>
+                      <td class="align-middle small"><small><?php echo$r['code'];?></small></td>
+                      <td class="text-center align-middle d-none d-sm-table-cell">
+                        <?php           if($r['contentType']=='article'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='proofs'){
+                          $sc=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `rid`=:id AND `contentType`=:contentType");
+                          $sc->execute([
+                            ':id'=>$r['id'],
+                            ':contentType'=>$r['contentType']
+                          ]);
+                          $cnt=$sc->fetch(PDO::FETCH_ASSOC);
+                          $scc=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `rid`=:id AND `contentType`=:contentType AND `status`='unapproved'");
+                          $scc->execute([
+                            ':id'=>$r['id'],
+                            'contentType'=>$r['contentType']
+                          ]);
+                          $sccc=$scc->rowCount($scc);
+                          echo'<a class="btn'.($sccc>0?' add':'').'" data-tooltip="tooltip" data-title="'.$sccc.' New Comments" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-comments" role="button" aria-label="New Comments">'.$cnt['cnt'].'</a>';
+                        }?>
+                      </td>
+                      <td class="text-center align-middle d-none d-sm-table-cell">
+                        <?php $sr=$db->prepare("SELECT COUNT(`id`) as num,SUM(`cid`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid");
+                        $sr->execute([
+                          ':rid'=>$r['id']
+                        ]);
+                        $rr=$sr->fetch(PDO::FETCH_ASSOC);
+                        $srr=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`!='approved'");
+                        $srr->execute([
+                          ':rid'=>$r['id']
+                        ]);
+                        $src=$srr->rowCount($srr);
+                        echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip" data-title="'.$src.' New Reviews':'').' role="button" aria-label="New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
+                      </td>
+                      <td class="text-center align-middle d-none d-sm-table-cell">
+                        <?php echo$user['options'][1]==1?'<button class="btn trash" data-tooltip="tooltip" data-title="Clear" aria-label="Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+                      </td>
+                      <td class="align-middle" id="controls_<?php echo$r['id'];?>">
+                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                          <div class="btn-group" role="group" aria-label="Item Controls">
+                            <a class="btn" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                            <?php if($user['options'][0]==1){?>
+                              <button class="btn <?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Restore" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
+                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
+                              <button class="btn trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
+                            <?php }?>
+                          </div>
+                        </div>
+                      </td>
+                    </tr>
+                  <?php }?>
+                </tbody>
+              </table>
+            <?php }?>
+            <?php include'core/layout/footer.php';?>
+          </div>
+        </div>
+      </section>
+    </main>
     <?php }
     if($show=='item')include'core'.DS.'layout'.DS.'edit_content.php';
   }

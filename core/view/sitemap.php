@@ -7,27 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Make sure all links end with /
- * @changes    v0.0.17 Add SQL for rank fetching data.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.18 Fix typing errors in script.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(stristr($html,'<breadcrumb>')){
  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
  $breaditem=$matches[1];
  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
  $breadcurrent=$matches[1];
- $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","'.$config['business'].'":"Home"}},';
+ $jsoni=2;
+ $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
  $breadit=preg_replace([
-   '/<active>/',
    '/<print breadcrumb=[\"\']?url[\"\']?>/',
    '/<print breadcrumb=[\"\']?title[\"\']?>/'
  ],[
-   '',
    URL,
    'Home'
  ],$breaditem);
@@ -35,9 +29,9 @@ if(stristr($html,'<breadcrumb>')){
  $breadit=preg_replace([
    '/<print breadcrumb=[\"\']?title[\"\']?>/'
  ],[
-   $page['title']
+   htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
  ],$breadcurrent);
- $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.$page['contentType'].'","name":"'.ucfirst($page['contentType']).'"}},';
+ $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
  $breaditems.=$breadit;
  $html=preg_replace([
    '/<[\/]?breadcrumb>/',

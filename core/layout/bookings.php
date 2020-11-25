@@ -7,16 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
- * @changes    v0.0.4 Fix Tooltips
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.18 Add extra status indicators and sorting.
- * @changes    v0.0.18 Fix Cookies for toggling between Table and Calendar views not sticking.
- * @changes    v0.0.19 Add Print Booking Button.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if($view=='add'){
   $ti=time();
@@ -57,221 +50,171 @@ else{
   $s->execute();
   $s2=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='booking'".$bookSearch.$bookStatus.$sortOrder);
   $s2->execute();?>
-  <main id="content" class="main">
-    <ol class="breadcrumb shadow">
-      <li class="breadcrumb-item active">Bookings <?php echo isset($args[0])&&$args[0]!=''?' / '.$args[0]:'';?></li>
-      <li class="breadcrumb-menu">
-        <div class="btn-group" role="group">
-          <?php echo$user['options'][2]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/add/bookings" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
-          <a href="#" class="btn btn-ghost-normal info<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" onclick="toggleCalendar();return false;" data-tooltip="tooltip" data-placement="left" data-title="Switch to Table View" role="button" aria-label="Switch to Table View"><?php svg('table');?></a>
-          <a href="#" class="btn btn-ghost-normal info<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>" onclick="toggleCalendar();return false;" data-tooltip="tooltip" data-placement="left" data-title="Switch to Calendar View" role="button" aria-label="Switch to Calendar View"><?php svg('calendar');?></a>
+<main>
+  <section id="content">
+    <div class="content-title-wrapper">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('calendar','i-3x');?></div>
+          <div>Bookings</div>
+          <div class="content-title-actions">
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Bookings Settings" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings">'.svg2('settings').'</a>':'';?>
+            <button class="<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="tooltip" data-title="Switch to Table View" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><?php svg('table');?></button>
+            <button class="<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>" data-tooltip="tooltip" data-title="Switch to Calendar View" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><?php svg('calendar');?></button>
+            <?php echo$user['options'][2]==1?'<a class="btn add" data-tooltip="tooltip" data-title="Add" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+          </div>
         </div>
-      </li>
-    </ol>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="card col">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-12 col-sm-6">
-                <small>Legend:
-                  <a class="badge badge-secondary" href="<?php echo URL.$settings['system']['admin'].'/bookings/';?>" data-tooltip="tooltip" data-title="All Bookings">All</a>
-                  <a class="badge badge-danger" href="<?php echo URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" data-tooltip="tooltip" data-title="Bookings that have NOT been Confirmed">Unconfirmed</a>
-                  <a class="badge badge-success" href="<?php echo URL.$settings['system']['admin'].'/bookings/confirmed';?>" data-tooltip="tooltip" data-title="Bookings that have been Confirmed">Confirmed</a>
-                  <a class="badge badge-warning" href="<?php echo URL.$settings['system']['admin'].'/bookings/in-progress';?>" data-tooltip="tooltip" data-title="Booking that is in Progress">In Progress</a>
-                  <a class="badge badge-info" href="<?php echo URL.$settings['system']['admin'].'/bookings/complete';?>" data-tooltip="tooltip" data-title="Booking that is Complete">Complete</a>
-                  <a class="badge badge-secondary" href="<?php echo URL.$settings['system']['admin'].'/bookings/archived';?>" data-tooltip="tooltip" data-title="Booking that is Archived">Archived</a>
-                </small>
-              </div>
-              <div class="col-12 col-sm-6">
-                <form method="post" class="form-inline float-center float-sm-right" action="">
-                  <div class="input-group input-group-sm">
-                    <small class="input-group-prepend">
-                      <small class="input-group-text">Find</small>
-                    </small>
-                    <input id="booksearch" name="booksearch" class="form-control form-control-sm" value="<?php echo(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
-                    <div class="input-group-append">
-                      <select id="bookingsort" class="form-control form-control-sm" name="booksort">
-                        <option value="">Select Display Order</option>
-                        <option value="new"<?php echo(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
-                        <option value="old"<?php echo(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
-                      </select>
-                    </div>
-                    <div class="input-group-btn">
-                      <button type="submit" class="btn btn-secondary btn-sm">Go</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">Bookings <?php echo isset($args[0])&&$args[0]!=''?' / '.$args[0]:'';?></li>
+        </ol>
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow overflow-visible">
+        <div class="row p-3">
+          <div class="col-12 col-sm-6">
+            <small>Legend:
+              <a class="badger badge-secondary" data-tooltip="tooltip" data-title="View All Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/';?>" aria-label="View All Bookings">All</a>
+              <a class="badger badge-danger" data-tooltip="tooltip" data-title="View Unconfirmed Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
+              <a class="badger badge-success" data-tooltip="tooltip" data-title="View Confirmed Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/confirmed';?>" aria-label="View Confirmed Bookings">Confirmed</a>
+              <a class="badger badge-warning" data-tooltip="tooltip" data-title="View In Progress Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/in-progress';?>" aria-label="View In Progress Bookings">In Progress</a>
+              <a class="badger badge-info" data-tooltip="tooltip" data-title="View Complete Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/complete';?>" aria-label="View Complete Bookings">Complete</a>
+              <a class="badger badge-secondary" data-tooltip="tooltip" data-title="View Archived Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/archived';?>" aria-label="View Archived Bookings">Archived</a>
+            </small>
           </div>
-          <div id="calendar-view" class="<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>">
-            <div id="calendar"></div>
+          <div class="col-12 col-sm-6">
+            <form class="form-row" method="post" action="">
+              <input id="booksearch" name="booksearch" value="<?php echo(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
+              <select id="bookingsort" name="booksort">
+                <option value="">Select Display Order</option>
+                <option value="new"<?php echo(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
+                <option value="old"<?php echo(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
+              </select>
+              <button type="submit">Go</button>
+            </form>
           </div>
-          <div id="table-view" class="table-responsive<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>">
-            <table class="table table-condensed table-striped table-hover">
-              <thead>
-                <tr>
-                  <th class="w-75 d-table-cell d-sm-none"></th>
-                  <th class="w-5 d-none d-sm-table-cell">Created</th>
-                  <th class="w-5 d-none d-sm-table-cell">Start/End</th>
-                  <th class="d-none d-sm-table-cell">Details</th>
-                  <th class="w-5"></th>
-                </tr>
-              </thead>
-              <tbody id="bookings">
-                <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                  $eColor='bg-danger';
-                  if($r['status']=='confirmed')
-                    $eColor='bg-success';
-                  elseif($r['status']=='in-progress')
-                    $eColor='bg-warning text-dark';
-                  elseif($r['status']=='complete')
-                    $eColor='bg-info text-dark';
-                  elseif($r['status']=='archived')
-                    $eColor='bg-secondary';?>
-                  <tr id="l_<?php echo$r['id'];?>" class="<?php echo$eColor;?>">
-                    <td class="d-table-cell d-sm-none">
-                      <?php echo date($config['dateFormat'],$r['ti']).'<br>Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: ' . date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>Business: '.$r['business']:'').($r['name']!=''?'<br>Name: '.$r['name']:'').($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
-                    </td>
-                    <td class="d-none d-sm-table-cell"><?php echo date($config['dateFormat'],$r['ti']);?></td>
-                    <td class="d-none d-sm-table-cell"><?php echo date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?date($config['dateFormat'], $r['tie']):'');?></td>
-                    <td class="d-none d-sm-table-cell"><?php echo ($r['business']!=''?'Business: '.$r['business'].'<br>':'').($r['name']!=''?'Name: '.$r['name'].'<br>':'').($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?></td>
-                    <td id="controls_<?php echo$r['id'];?>">
-                      <div clss="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                        <div class="btn-group" role="group" aria-label="Item Controls">
-                          <a class="btn btn-secondary" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
-                          <button class="btn btn-secondary" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>
-                          <button class="btn btn-secondary" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');" data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice"><?php svg('bookingtoinvoice');?></button>
-                          <?php if($user['options'][0]==1){?>
-                            <button class="btn btn-secondary<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished')" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore"><?php svg('untrash');?></button>
-                            <button class="btn btn-secondary rounded-right trash<?php echo($r['status']=='delete'?' d-none':'');?>" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                            <button class="btn btn-secondary rounded-right trash<?php echo($r['status']!='delete'?' d-none':'');?>" onclick="purge('<?php echo $r['id'];?>','content')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
-                          <?php }?>
-                        </div>
+        </div>
+        <div class="row p-3<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" id="calendar-view">
+          <div id="calendar"></div>
+        </div>
+        <table class="table-zebra<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>">
+          <thead>
+              <tr>
+                <th class="d-table-cell d-sm-none"></th>
+                <th class="d-none d-sm-table-cell">Created</th>
+                <th class="d-none d-sm-table-cell">Start/End</th>
+                <th class="d-none d-sm-table-cell">Details</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="bookings">
+              <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
+                $eColor='bg-danger';
+                if($r['status']=='confirmed')
+                  $eColor='bg-success';
+                elseif($r['status']=='in-progress')
+                  $eColor='bg-warning text-dark';
+                elseif($r['status']=='complete')
+                  $eColor='bg-info text-dark';
+                elseif($r['status']=='archived')
+                  $eColor='bg-secondary';?>
+                <tr class="<?php echo$eColor;?>" id="l_<?php echo$r['id'];?>">
+                  <td class="d-table-cell d-sm-none">
+                    <?php echo date($config['dateFormat'],$r['ti']).'<br>Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: ' . date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>Business: '.$r['business']:'').($r['name']!=''?'<br>Name: '.$r['name']:'').($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
+                  </td>
+                  <td class="d-none d-sm-table-cell"><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                  <td class="d-none d-sm-table-cell"><?php echo date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?date($config['dateFormat'], $r['tie']):'');?></td>
+                  <td class="d-none d-sm-table-cell"><?php echo ($r['business']!=''?'Business: '.$r['business'].'<br>':'').($r['name']!=''?'Name: '.$r['name'].'<br>':'').($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?></td>
+                  <td class="align-middle" id="controls_<?php echo$r['id'];?>">
+                    <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                      <div class="btn-group" role="group" aria-label="Item Controls">
+                        <a class="btn" data-tooltip="tooltip" data-title="Edit" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                        <button data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>
+                        <button data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>
+                        <?php if($user['options'][0]==1){?>
+                          <button class="<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
+                          <button class="trash<?php echo($r['status']=='delete'?' d-none':'');?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
+                          <button class="trash<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo $r['id'];?>','content');"><?php svg('purge');?></button>
+                        <?php }?>
                       </div>
-                    </td>
-                  </tr>
-                <?php }?>
-              </tbody>
-            </table>
-          </div>
+                    </div>
+                  </td>
+                </tr>
+              <?php }?>
+            </tbody>
+          </table>
+          <?php include'core/layout/footer.php';?>
         </div>
       </div>
     </div>
-  </main>
-  <script>
-    <?php if($args[0]!='add'||$args[0]!='edit'){?>
-      var $contextMenu=$("#contextMenu");
-      $('#calendar').fullCalendar({
-        header:{
-          left:'prev,next',
+  </section>
+</main>
+<script>
+  <?php if($args[0]!='add'||$args[0]!='edit'){?>
+    document.addEventListener('DOMContentLoaded',function(){
+      var calendarEl=document.getElementById('calendar');
+      var calendar=new FullCalendar.Calendar(calendarEl,{
+        expandRows:true,
+        headerToolbar:{
+          left:'prev today',
           center:'title',
-          right:'month,basicWeek,basicDay'
+          right:'dayGridMonth,today next',
         },
-        eventLimit:true,
-        selectable:true,
+        initialView:'dayGridMonth',
+        navLinks:true,
         <?php if($user['options'][2]==1){?>editable:true,<?php }?>
-        height:$(window).height()*0.83,
-        eventRender:function(event,element){
-          element.bind('dblclick',function(){
-            window.location="<?php echo$settings['system']['admin'];?>/bookings/edit/"+event.id;
-          });
-        },
+        height:'auto',
+        selectable:false,
+        nowIndicator:true,
+        dayMaxEvents:true,
         events:[
           <?php while($r=$s2->fetch(PDO::FETCH_ASSOC)){
-            $eColor='#f86c6b'; // bg-danger
+            $eColor='danger';
             if($r['status']=='confirmed')
-             $eColor='#4dbd74'; // bg-success
+             $eColor='success';
             elseif($r['status']=='in-progress')
-              $eColor='#ffc107'; // bg-warning
+              $eColor='warning';
             elseif($r['status']=='complete')
-              $eColor='#63c2de'; // bg-info
+              $eColor='info';
             elseif($r['status']=='archived')
-              $eColor='#73818f'; // bg-secondary?>
-            {
-              id:'<?php echo$r['id'];?>',
-              title:`<?php echo($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?>`,
-              start:'<?php echo date("Y-m-d H:i:s",$r['tis']);?>',
-              <?php echo$r['tie']>$r['tis']?'eventend: \''.date("Y-m-d H:i:s",$r['tie']).'\',':'';?>
-              allDay:false,
-              color:'<?php echo$eColor;?>',
-              description:'<?php echo($r['business']!=''?'Business: '.$r['business'].'<br>':'').($r['name']!=''?'Name: '.$r['name'].'<br>':'').($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?>',
-              status:'<?php echo$r['status'];?>',
-            },
+              $eColor='secondary';?>
+          {
+            id:'<?php echo$r['id'];?>',
+            title:`<?php echo($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?>`,
+            start:'<?php echo date("Y-m-d H:i:s",$r['tis']);?>',
+            <?php echo$r['tie']>$r['tis']?'end: \''.date("Y-m-d H:i:s",$r['tie']).'\',':'';?>
+            allDay:false,
+            customHtml:`<div class="badger badge-<?php echo$eColor;?> events-layer text-left"><?php echo($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?>` +
+              '<div class="events-buttons" role="toolbar" aria-label="Item Toolbar Controls">' +
+                '<div class="btn-group" role="group" aria-label="Item Controls">' +
+<?php if($user['options'][2]==1){?>
+                  `<button class="btn" id="prbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>` +
+                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" href="<?php echo$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>' +
+                  `<button class="btn" id="bibut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>` +
+                  `<button class="btn trash" id="delbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?php svg('trash');?></button>` +
+<?php }else{?>
+                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="View" href="<?php echo$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" aria-label="View"><?php svg('view');?></a>' +
+<?php }?>
+                `</div>` +
+              `</div>` +
+            `</div>`
+          },
           <?php	}?>
         ],
-        eventMouseover:function(event,domEvent,view){
-          var layer='<div id="events-layer" class="btn-group float-right">';
-          <?php if($user['options'][2]==1){?>
-            layer+=`<button id="prbut`+event.id+`" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order"><?php svg('print');?></button>`;
-            layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Edit" aria-label="Edit"><?php svg('edit');?></button>';
-            layer+='<button id="bibut'+event.id+'" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice"><?php svg('bookingtoinvoice');?></button>';
-            layer+='<button id="delbut'+event.id+'" class="btn btn-secondary btn-xs trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button></div>';
-          <?php }else{?>
-            layer+='<button id="edbut'+event.id+'" class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="View" aria-label="View"><?php svg('view');?></button>';
-          <?php }?>
-          var content="Start: "+$.fullCalendar.moment(event.start).format('HH:mm');
-          <?php echo$r['tie']>$r['tis']?'content+=\'<br>End: \'+$.fullCalendar.moment(event.eventend).format(\'HH:mm\');':'';?>
-          if(event.description!='')content+='<br>'+event.description;
-          var el=$(this);
-          el.append(layer);
-          if(event.eventend!=''||event.eventend!=null||event.eventend!=0){
-            var eventEndClass='eventEnd';
-            if(event.status=='confirmed')eventEndClass='eventEndConfirmed';
-            $('[data-date="'+moment(event.eventend).format('YYYY-MM-DD')+'"]').addClass(eventEndClass);
-          }
-          $("#prbut"+event.id).click(function(){
-            $('#sp').load('core/print_booking.php?id='+event.id);
-          });
-          $("#bibut"+event.id).click(function(){
-            $('#sp').load('core/bookingtoinvoice.php?id='+event.id);
-            <?php if($config['options'][25]==1){?>
-              $('#calendar').fullCalendar('removeEvents',event.id);
-              window.top.window.purge(event.id,"content");
-              window.top.window.$(el).remove();
-              window.top.window.$(".popover").remove();
-            <?php }?>
-          });
-          $("#delbut"+event.id).click(function(){
-            $('#calendar').fullCalendar('removeEvents',event.id);
-            window.top.window.purge(event.id,"content");
-            window.top.window.$(el).remove();
-            window.top.window.$(".popover").remove();
-          });
-          $("#edbut"+event.id).click(function(){
-            window.location="<?php echo$settings['system']['admin'];?>/bookings/edit/"+event.id;
-          });
-          $(this).popover({
-            title:event.title,
-            placement:"top",
-            html:true,
-            container:"body",
-            content:content,
-          }).popover("show");
+        eventContent:function(eventInfo){
+          return{html:eventInfo.event.extendedProps.customHtml}
         },
-        eventMouseout:function(event){
-          $("#events-layer").remove();
-          $(this).not(event).popover("hide");
-          var eventEndClass='eventEnd';
-          if(event.status=='confirmed')eventEndClass='eventEndConfirmed';
-          $('[data-date="'+moment(event.eventend).format('YYYY-MM-DD')+'"]').removeClass(eventEndClass);
-          $('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
-        },
-        dayClick:function(date,jsEvent,view){
-          if(view.name=='month'||view.name=='basicWeek'){
-            $('#calendar').fullCalendar('changeView','basicDay');
-            $('#calendar').fullCalendar('gotoDate',date);
-          }
-        },
-        eventDrop:function(event){
-          updateButtons(event.id,"content","tis",event.start.unix());
+        eventDrop:function(eventInfo){
+          update(eventInfo.event.id,"content","tis",(eventInfo.event.start.getTime() / 1000));
         },
       });
-      $(window).resize(function(){
-        var calHeight=$(window).height()*0.83;
-        $('#calendar').fullCalendar('option','height',calHeight);
-      });
-    <?php }?>
-  </script>
+      calendar.render();
+      function deleteEvent(id){
+        var event=calendar.getEventById(id);
+        event.remove();
+      }
+    });
+<?php } ?>
+</script>
 <?php }

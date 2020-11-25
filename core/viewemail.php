@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 require'db.php';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -22,7 +21,7 @@ if($id!=0){
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($r['notes_html']=='')$r['notes_html']=$r['notes_plain'];
   if($r['notes_html']=='')$r['notes_html']=$r['notes_raw'];
-  if(is_base64_string($r['notes_html']))$r['notes_html']=base64_decode($r['notes_html']);
+//  if(is_base64_string($r['notes_html']))$r['notes_html']=base64_decode($r['notes_html']);
   print quoted_printable_decode($r['notes_html']);
 }
 function is_base64_string($s){

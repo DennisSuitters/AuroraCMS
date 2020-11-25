@@ -7,124 +7,110 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Option to not store messages.
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.17 Fix WYSIWYG Editor Layout.
- * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  */?>
-<main id="content" class="main">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
-    <li class="breadcrumb-item active">Settings</li>
-    <li class="breadcrumb-menu">
-      <div class="btn-group" role="group">
-        <a class="btn btn-ghost-normal add" href="<?php echo$_SERVER['HTTP_REFERER'];?>" data-tooltip="tooltip" data-placement="left" data-title="Back" aria-label="Back"><?php svg('back');?></a>
-        <a href="#" class="btn btn-ghost-normal saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></a>
-      </div>
-    </li>
-  </ol>
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
-        <legend>Contact Form</legend>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="storemessages0" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0"<?php echo$config['storemessages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+<main>
+  <section id="content">
+    <div class="content-title-wrapper mb-0">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
+          <div>Messages Settings</div>
+          <div class="content-title-actions">
+            <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
-          <label for="storemessages0" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Store Contact Form Messages</label>
         </div>
-        <div class="help-block small text-muted text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?php echo URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</div>
-        <form target="sp" method="post" action="core/add_data.php">
-          <input type="hidden" name="act" value="add_subject">
-          <div class="form-group row">
-            <div class="input-group">
-              <label for="sub" class="input-group-text">Subject</label>
-              <input type="text" id="sub" class="form-control" name="sub" value="" placeholder="Enter a Subject...">
-              <label for="eml" class="input-group-text">Email</label>
-              <input type="text" id="eml" class="form-control" name="eml" value="" placeholder="Enter an Email...">
-              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
-            </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
+          <li class="breadcrumb-item active">Settings</li>
+        </ol>
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow p-3">
+        <legend class="mt-3">Contact Form</legend>
+        <div class="row">
+          <input id="storemessages0" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?php echo$config['storemessages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="storemessages0">Store Contact Form Messages</label>
+        </div>
+        <div class="form-row mt-3">
+          <small class="form-text text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?php echo URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</small>
+        </div>
+        <form target="sp" method="post" action="core/add_subject.php">
+          <div class="form-row">
+            <div class="input-text">Subject</div>
+            <input id="sub" name="sub" type="text" value="" placeholder="Enter a Subject...">
+            <div class="input-text">Email</div>
+            <input id="eml" name="eml" type="text" value="" placeholder="Enter an Email...">
+            <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
         <div id="subjects">
           <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
           $ss->execute();
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-            <div id="l_<?php echo$rs['id'];?>" class="form-group row">
-              <div class="input-group">
-                <div class="input-group-text">Subject</div>
-                <input type="text" id="sub<?php echo$r['id'];?>" class="form-control" value="<?php echo$rs['title'];?>" onchange="update('<?php echo$rs['id'];?>','subject','title',$(this).val());">
-                <div class="input-group-text">Email</div>
-                <input type="text" class="form-control" value="<?php echo$rs['url'];?>" onchange="update('<?php echo$rs['id'];?>','subject','url',$(this).val());">
-                <div class="input-group-append">
-                  <form target="sp" action="core/purge.php">
-                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                    <input type="hidden" name="t" value="choices">
-                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                  </form>
-                </div>
-              </div>
+            <div class="form-row mt-1" id="l_<?php echo$rs['id'];?>">
+              <div class="input-text">Subject</div>
+              <input id="sub<?php echo$r['id'];?>" type="text" value="<?php echo$rs['title'];?>" onchange="update('<?php echo$rs['id'];?>','subject','title',$(this).val());">
+              <div class="input-text">Email</div>
+              <input type="text" value="<?php echo$rs['url'];?>" onchange="update('<?php echo$rs['id'];?>','subject','url',$(this).val());">
+              <form target="sp" action="core/purge.php">
+                <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
+                <input name="t" type="hidden" value="choices">
+                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+              </form>
             </div>
           <?php }?>
         </div>
         <hr>
-        <legend>Webmail</legend>
-        <div class="form-group">
-          <label for="message_check_interval">Check for new Messages every</label>
-          <div class="input-group">
-            <select id="message_check_interval" class="form-control" onchange="update('1','config','message_check_interval',$(this).val());">
-              <option value="0"<?php echo$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
-              <option value="1"<?php echo$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
-              <option value="300"<?php echo$config['message_check_interval']==300?' selected="selected"':'';?>>5 Minutes</option>
-              <option value="600"<?php echo$config['message_check_interval']==600?' selected="selected"':'';?>>10 Minutes</option>
-              <option value="900"<?php echo$config['message_check_interval']==900?' selected="selected"':'';?>>15 Minutes</option>
-              <option value="1800"<?php echo$config['message_check_interval']==1800?' selected="selected"':'';?>>30 Minutes</option>
-              <option value="3600"<?php echo$config['message_check_interval']==3600?' selected="selected"':'';?>>1 Hour</option>
-            </select>
-          </div>
+        <legend class="mt-3">Webmail</legend>
+        <label for="message_check_interval">Check for new Messages every</label>
+        <div class="form-row">
+          <select id="message_check_interval" onchange="update('1','config','message_check_interval',$(this).val());">
+            <option value="0"<?php echo$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
+            <option value="1"<?php echo$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
+            <option value="300"<?php echo$config['message_check_interval']==300?' selected="selected"':'';?>>5 Minutes</option>
+            <option value="600"<?php echo$config['message_check_interval']==600?' selected="selected"':'';?>>10 Minutes</option>
+            <option value="900"<?php echo$config['message_check_interval']==900?' selected="selected"':'';?>>15 Minutes</option>
+            <option value="1800"<?php echo$config['message_check_interval']==1800?' selected="selected"':'';?>>30 Minutes</option>
+            <option value="3600"<?php echo$config['message_check_interval']==3600?' selected="selected"':'';?>>1 Hour</option>
+          </select>
         </div>
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options9" class="switch-input" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9"<?php echo$user['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
-          </div>
-          <label for="options9" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Delete Messages When Retrieved</label>
+        <div class="row mt-3">
+          <input id="options9" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9" type="checkbox"<?php echo$user['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="options9">Delete Messages When Retrieved</label>
         </div>
-        <h4>Mailboxes</h4>
+        <legend class="mt-3">Mailboxes</legend>
         <form target="sp" method="post" action="core/add_mailbox.php">
-          <input type="hidden" name="uid" value="<?php echo$user['id'];?>">
-          <div class="form-group row">
-            <div class="input-group">
-              <label for="type" class="input-group-text">Type</label>
-              <select id="type" class="form-control" name="t" onchange="changePort($(this).val());">
-                <option value="imap">IMAP</option>
-                <option value="pop3">POP3</option>
-              </select>
-              <label for="port" class="input-group-text">Port</label>
-              <input type="text" id="port" class="form-control" name="port" value="143">
-              <label for="flag" class="input-group-text">Flag</label>
-              <select id="flag" class="form-control" name="f">
-                <option value="novalidate-cert">novalidate-cert</option>
-                <option value="validate-cert">validate-cert</option>
-                <option value="norsh">norsh</option>
-                <option value="ssl">ssl</option>
-                <option value="notls">notls</option>
-                <option value="tls">tls</option>
-              </select>
-            </div>
-            <div class="input-group">
-              <label for="url" class="input-group-text">Server</label>
-              <input type="text" id="url" class="form-control" name="url" value="" placeholder="Enter a Server">
-              <label for="mailusr" class="input-group-text">Username</label>
-              <input type="text" id="mailusr" class="form-control" name="mailusr" value="" placeholder="Enter a Username...">
-              <label for="mailpwd" class="input-group-text">Password</label>
-              <input type="text" id="mailpwd" class="form-control" name="mailpwd" value="" placeholder="Enter a Password">
-              <div class="input-group-append"><button class="btn btn-secondary add" type="submit" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button></div>
-            </div>
+          <input name="uid" type="hidden" value="<?php echo$user['id'];?>">
+          <div class="form-row">
+            <div class="input-text">Type</div>
+            <select id="type" name="t" onchange="changePort($(this).val());">
+              <option value="imap">IMAP</option>
+              <option value="pop3">POP3</option>
+            </select>
+            <div class="input-text">Port</div>
+            <input id="port" name="port" type="text" value="143">
+            <div class="input-text">Flag</div>
+            <select id="flag" name="f">
+              <option value="novalidate-cert">novalidate-cert</option>
+              <option value="validate-cert">validate-cert</option>
+              <option value="norsh">norsh</option>
+              <option value="ssl">ssl</option>
+              <option value="notls">notls</option>
+              <option value="tls">tls</option>
+            </select>
+            <div class="input-text">Server</div>
+            <input id="url" name="url" type="text" value="" placeholder="Enter a Server">
+            <div class="input-text">Username</div>
+            <input id="mailusr" name="mailusr" type="text" value="" placeholder="Enter a Username...">
+            <div class="input-text">Password</div>
+            <input id="mailpwd" name="mailpwd" type="text" value="" placeholder="Enter a Password">
+            <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
         <script>
@@ -136,96 +122,84 @@
             }
           }
         </script>
-        <hr>
         <div id="mailboxes">
           <?php $sm=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='mailbox' AND `uid`=:uid ORDER BY `url`");
           $sm->execute([
             ':uid'=>$user['id']
           ]);
           while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
-            <div id="l_<?php echo$rm['id'];?>" class="form-group row">
-              <div class="input-group">
-                <label for="type<?php echo$rm['id'];?>" class="input-group-text">Type</label>
-                <select id="type<?php echo$rm['id'];?>" class="form-control" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`type`,$(this).val());">
-                  <option value="imap"<?php echo$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
-                  <option value="pop3"<?php echo$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
-                </select>
-                <label for="port<?php echo$rm['id'];?>" class="input-group-text">Port</label>
-                <input type="text" id="port<?php echo$rm['id'];?>" class="form-control" value="<?php echo$rm['port'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`port`,$(this).val());">
-                <label for="flag<?php echo$rm['id'];?>" class="input-group-text">Flag</label>
-                <select id="flag" class="form-control" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`flag`,$(this).val());">
-                  <option value="novalidate-cert"<?php echo$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
-                  <option value="validate-cert"<?php echo$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
-                  <option value="norsh"<?php echo$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
-                  <option value="ssl"<?php echo$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
-                  <option value="notls"<?php echo$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
-                  <option value="tls"<?php echo$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
-                </select>
-              </div>
-              <div class="input-group">
-                <label for="url<?php echo$rm['id'];?>" class="input-group-text">Server</label>
-                <input type="text" id="url<?php echo$rm['id'];?>" class="form-control" name="url" value="<?php echo$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`url`,$(this).val());">
-                <label for="mailusr<?php echo$rm['id'];?>" class="input-group-text">Username</label>
-                <input type="text" id="mailusr<?php echo$rm['id'];?>" class="form-control" name="mailusr" value="<?php echo$rm['username'];?>" placeholder="Enter a Username..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`username`,$(this).val());">
-                <label for="mailpwd<?php echo$rm['id'];?>" class="input-group-text">Password</label>
-                <input type="text" id="mailpwd<?php echo$rm['id'];?>" class="form-control" name="mailpwd" value="<?php echo$rm['password'];?>" placeholder="Enter a Password..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`password`,$(this).val());">
-                <div class="input-group-append">
-                  <form target="sp" action="core/purge.php">
-                    <input type="hidden" name="id" value="<?php echo$rm['id'];?>">
-                    <input type="hidden" name="t" value="choices">
-                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                  </form>
-                </div>
-              </div>
+            <div class="form-row mt-1" id="l_<?php echo$rm['id'];?>">
+              <div class="input-text">Type</div>
+              <select id="type<?php echo$rm['id'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`type`,$(this).val());">
+                <option value="imap"<?php echo$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
+                <option value="pop3"<?php echo$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
+              </select>
+              <div class="input-text">Port</div>
+              <input id="port<?php echo$rm['id'];?>" type="text" value="<?php echo$rm['port'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`port`,$(this).val());">
+              <div class="input-text">Flag</div>
+              <select id="flag" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`flag`,$(this).val());">
+                <option value="novalidate-cert"<?php echo$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
+                <option value="validate-cert"<?php echo$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
+                <option value="norsh"<?php echo$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
+                <option value="ssl"<?php echo$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
+                <option value="notls"<?php echo$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
+                <option value="tls"<?php echo$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
+              </select>
+              <div class="input-text">Server</div>
+              <input id="url<?php echo$rm['id'];?>" name="url" type="text" value="<?php echo$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`url`,$(this).val());">
+              <div class="input-text">Username</div>
+              <input id="mailusr<?php echo$rm['id'];?>" name="mailusr" type="text" value="<?php echo$rm['username'];?>" placeholder="Enter a Username..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`username`,$(this).val());">
+              <div class="input-text">Password</div>
+              <input id="mailpwd<?php echo$rm['id'];?>" name="mailpwd" type="text" value="<?php echo$rm['password'];?>" placeholder="Enter a Password..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`password`,$(this).val());">
+              <form target="sp" action="core/purge.php">
+                <input name="id" type="hidden" value="<?php echo$rm['id'];?>">
+                <input name="t" type="hidden" value="choices">
+                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+              </form>
             </div>
           <?php }?>
         </div>
         <hr>
-        <legend>AutoReply Email</legend>
-        <div class="form-group">
+        <legend class="mt-3">AutoReply Email</legend>
+        <div class="form-row">
           <label for="contactAutoReplySubject">Subject</label>
-          <div class="form-text small text-muted float-right">Tokens:
+          <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{business}');return false;">{business}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('contactAutoReplySubject','{date}');return false;">{date}</a>
-          </div>
-          <div class="input-group">
-            <input type="text" id="contactAutoReplySubject" class="form-control textinput" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-            <div class="input-group-append">
-              <button id="savecontactAutoReplySubject" class="btn btn-secondary save" data-tooltip="tooltip" data-title="Save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
-            </div>
-          </div>
+          </small>
         </div>
-        <div class="form-group">
-          <div class="input-group card-header p-0">
-            <div class="col-12 form-text small text-muted text-right">Tokens:
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{name}');return false;">{name}</a>
-              <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{subject}');return false;">{subject}</a>
-            </div>
-            <form method="post" target="sp" action="core/update.php" class="w-100">
-              <input type="hidden" name="id" value="1">
-              <input type="hidden" name="t" value="config">
-              <input type="hidden" name="c" value="contactAutoReplyLayout">
-              <textarea id="contactAutoReplyLayout" class="form-control summernote" name="da"><?php echo rawurldecode($config['contactAutoReplyLayout']);?></textarea>
-            </form>
-          </div>
+        <div class="form-row">
+          <input class="textinput" id="contactAutoReplySubject" type="text" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
+          <button class="save" id="savecontactAutoReplySubject" data-tooltip="tooltip" data-title="Save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+        </div>
+        <div class="form-row mt-3">
+          <small class="form-text text-right">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{business}');return false;">{business}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{date}');return false;">{date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#contactAutoReplyLayout').summernote('insertText','{subject}');return false;">{subject}</a>
+          </small>
+        </div>
+        <div class="form-row">
+          <form class="w-100" method="post" target="sp" action="core/update.php">
+            <input name="id" type="hidden" value="1">
+            <input name="t" type="hidden" value="config">
+            <input name="c" type="hidden" value="contactAutoReplyLayout">
+            <textarea class="summernote" id="contactAutoReplyLayout" name="da"><?php echo rawurldecode($config['contactAutoReplyLayout']);?></textarea>
+          </form>
         </div>
         <hr>
-        <legend>Email Signature</legend>
-        <div role="tabpanel" class="tab-pane" id="account-messages">
-          <div class="form-group">
-            <div class="input-group card-header p-0">
-              <form method="post" target="sp" action="core/update.php" class="w-100">
-                <input type="hidden" name="id" value="1">
-                <input type="hidden" name="t" value="config">
-                <input type="hidden" name="c" value="email_signature">
-                <textarea id="email_signature" class="form-control summernote" name="da"><?php echo rawurldecode($config['email_signature']);?></textarea>
-              </form>
-            </div>
-          </div>
+        <legend class="mt-3">Email Signature</legend>
+        <div class="form-row">
+          <form class="w-100" method="post" target="sp" action="core/update.php">
+            <input name="id" type="hidden" value="1">
+            <input name="t" type="hidden" value="config">
+            <input name="c" type="hidden" value="email_signature">
+            <textarea class="summernote" id="email_signature" name="da"><?php echo rawurldecode($config['email_signature']);?></textarea>
+          </form>
         </div>
+        <?php include'core/layout/footer.php';?>
       </div>
     </div>
-  </div>
+  </section>
 </main>

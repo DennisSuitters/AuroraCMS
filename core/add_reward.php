@@ -1,0 +1,49 @@
+<?php
+/**
+ * AuroraCMS - Copyright (C) Diemen Design 2019
+ *
+ * @category   Administration - Core - Add Career
+ * @package    core/add_career.php
+ * @author     Dennis Suitters <dennis@diemen.design>
+ * @copyright  2014-2019 Diemen Design
+ * @license    http://opensource.org/licenses/MIT  MIT License
+ * @version    0.1.0
+ * @link       https://github.com/DiemenDesign/AuroraCMS
+ * @notes      This PHP Script is designed to be executed using PHP 7+
+ */
+if(session_status()==PHP_SESSION_NONE)session_start();
+require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
+include'sanitise.php';
+function svg($svg,$class=null,$size=null){
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+}
+$code=filter_input(INPUT_POST,'code',FILTER_SANITIZE_STRING);
+$title=filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING);
+$method=filter_input(INPUT_POST,'method',FILTER_SANITIZE_NUMBER_INT);
+$value=filter_input(INPUT_POST,'value',FILTER_SANITIZE_NUMBER_INT);
+$quantity=filter_input(INPUT_POST,'quantity',FILTER_SANITIZE_NUMBER_INT);
+$tis=filter_input(INPUT_POST,'tisx',FILTER_SANITIZE_STRING);
+$tie=filter_input(INPUT_POST,'tiex',FILTER_SANITIZE_STRING);
+echo'<script>';
+if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
+	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."rewards` (`code`,`title`,`method`,`value`,`quantity`,`tis`,`tie`,`ti`) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
+	$q->execute([
+		':code'=>$code,
+		':title'=>$title,
+		':method'=>$method,
+		':value'=>$value,
+		':quantity'=>$quantity,
+		':tis'=>$tis,
+		':tie'=>$tie,
+		':ti'=>$ti
+	]);
+	$id=$db->lastInsertId();
+	$e=$db->errorInfo();
+	if(is_null($e[2])){?>
+window.top.window.$('#rewards').append('<?php echo'<tr id="l_'.$id.'"><td class="small text-center">'.$code.'</td><td class="small text-center">'.$title.'</td><td class="small text-center">'.($method==0?'% Off':'$ Off').'</td><td class="small text-center">'.$value.'</td><td class="small text-center">'.$quantity.'</td><td class="small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td><td class="small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td><td><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="rewards"><button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete">'.svg('trash').'</button></form></td></tr>';?>');
+<?php }else
+	echo'window.top.window.toastr["error"]("There was an issue adding the Reward!");';
+}else
+	echo'window.top.window.toastr["error"]("Some required fields are empty!");';
+echo'</script>';

@@ -7,20 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.10 Fix Rewards Display Layout.
- * @changes    v0.0.10 Fix Toastr Notifications.
- * @changes    v0.0.11 Fix Rewards Date/Time Picker value retrieval.
- * @changes    v0.0.12 Fix Multiple Media Adding.
- * @changes    v0.0.15 Fix truncating file extensions for 3 or 4 character length extensions.
- * @changes    v0.0.15 Add Edit Media information button.
- * @changes    v0.0.17 Add Business Hours.
- * @changes    v0.0.19 Improve Business Hours item Layout, and rebind Drag to Reorder.
- * @changes    v0.0.20 Add Media Views to added Media Items.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -44,354 +33,6 @@ if($act!=''){
   $error=0;
   $ti=time();
   switch($act){
-		case'add_reward':
-			$code=filter_input(INPUT_POST,'code',FILTER_SANITIZE_STRING);
-			$title=filter_input(INPUT_POST,'title',FILTER_SANITIZE_STRING);
-			$method=filter_input(INPUT_POST,'method',FILTER_SANITIZE_NUMBER_INT);
-			$value=filter_input(INPUT_POST,'value',FILTER_SANITIZE_NUMBER_INT);
-			$quantity=filter_input(INPUT_POST,'quantity',FILTER_SANITIZE_NUMBER_INT);
-			$tis=filter_input(INPUT_POST,'tisx',FILTER_SANITIZE_STRING);
-			$tie=filter_input(INPUT_POST,'tiex',FILTER_SANITIZE_STRING);
-			if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
-				$q=$db->prepare("INSERT IGNORE INTO `".$prefix."rewards` (`code`,`title`,`method`,`value`,`quantity`,`tis`,`tie`,`ti`) VALUES (:code,:title,:method,:value,:quantity,:tis,:tie,:ti)");
-				$q->execute([
-	        ':code'=>$code,
-	        ':title'=>$title,
-	        ':method'=>$method,
-	        ':value'=>$value,
-	        ':quantity'=>$quantity,
-	        ':tis'=>$tis,
-	        ':tie'=>$tie,
-	        ':ti'=>$ti
-	      ]);
-				$id=$db->lastInsertId();
-				$e=$db->errorInfo();
-				if(is_null($e[2])){?>
-		window.top.window.$('#rewards').append('<?php
-	echo'<tr id="l_'.$id.'">'.
-				'<td class="small text-center">'.$code.'</td>'.
-				'<td class="small text-center">'.$title.'</td>'.
-				'<td class="small text-center">'.($method==0?'% Off':'$ Off').'</td>'.
-				'<td class="small text-center">'.$value.'</td>'.
-				'<td class="small text-center">'.$quantity.'</td>'.
-				'<td class="small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td>'.
-				'<td class="small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td>'.
-				'<td>'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="rewards">'.
-						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-					'</form>'.
-				'</td>'.
-			'</tr>';?>
-	');
-<?php	}else{?>
-	 window.top.window.toastr["error"]("There was an issue adding the Reward!");
-<?php }
-}else{?>
-	window.top.window.toastr["error"]("Some required fields are empty!");
-<?php }
-			break;
-    case'add_dashrss':
-      $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
-      if(filter_var($url,FILTER_VALIDATE_URL)){
-        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`url`,`ti`) VALUES (:uid,'dashrss',:url,'0')");
-        $q->execute([
-          ':uid'=>$uid,
-          ':url'=>$url
-        ]);
-        $id=$db->lastInsertId();
-        $e=$db->errorInfo();
-        if(is_null($e[2])){?>
-  window.top.window.$('#rss').append('<?php
-echo'<div id="l_'.$id.'" class="form-group">'.
-			'<div class="input-group col-12">'.
-				'<div class="input-group-addon">URL</div>'.
-				'<form target="sp" method="post" action="core/update.php">'.
-					'<input type="hidden" name="t" value="choices">'.
-					'<input type="hidden" name="c" value="url">'.
-					'<input type="text"class="form-control" name="da" value="'.$url.'" placeholder="Enter a URL...">'.
-				'</form>'.
-				'<div class="input-group-btn">'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-					'</form>'.
-				'</div>'.
-			'</div>'.
-		'</div>';?>
-');
-<?php   }else{?>
-  window.top.window.toastr["error"]("There was an issue adding the RSS URL!");
-<?php   }
-      }
-      break;
-    case'add_social':
-      $user=filter_input(INPUT_POST,'user',FILTER_SANITIZE_NUMBER_INT);
-      $icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
-      $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
-      if(filter_var($url,FILTER_VALIDATE_URL)){
-        if($icon=='none'||$url==''){?>
-  window.top.window.toastr["error"]("Not all Fields were filled in!");
-<?php   }else{
-          $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`icon`,`url`) VALUES (:uid,'social',:icon,:url)");
-          $q->execute([
-            ':uid'=>kses($user,array()),
-            ':icon'=>$icon,
-            ':url'=>kses($url,array())
-          ]);
-          $id=$db->lastInsertId();
-          $e=$db->errorInfo();
-          if(is_null($e[2])){?>
-  window.top.window.$('#social').append(`<?php
-echo'<div id="l_'.$id.'" class="form-group row">'.
-			'<div class="input-group col-12">'.
-				'<div class="input-group-text" data-tooltip="tooltip" data-title="'.ucfirst($icon).'"><span class="social" aria-label="'.ucfirst($icon).'">'.svg2('social-'.$icon).'</span></div>'.
-				'<input type="text" class="form-control" value="'.$url.'" placeholder="Enter a URL..." readonly>'.
-				'<div class="input-group-append">'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-					'</form>'.
-				'</div>'.
-			'</div>'.
-		'</div>';?>`);
-<?php     }else{?>
-  window.top.window.toastr["error"]("There was an issue adding the Social Networking Link!");
-<?php     }
-      	}
-      }else{?>
-  window.top.window.toastr["error"]("The URL entered is not valid!");
-<?php }
-      break;
-			case'add_hours':
-	      $from=filter_input(INPUT_POST,'from',FILTER_SANITIZE_STRING);
-	      $to=filter_input(INPUT_POST,'to',FILTER_SANITIZE_STRING);
-				$timefrom=filter_input(INPUT_POST,'timefrom',FILTER_SANITIZE_NUMBER_INT);
-				$timeto=filter_input(INPUT_POST,'timeto',FILTER_SANITIZE_NUMBER_INT);
-	      $info=filter_input(INPUT_POST,'info',FILTER_SANITIZE_STRING);
-        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`username`,`password`,`tis`,`tie`,`title`) VALUES (0,'hours',:f,:t,:tis,:tie,:info)");
-        $q->execute([
-          ':f'=>$from,
-          ':t'=>$to,
-          ':tis'=>$timefrom,
-					':tie'=>$timeto,
-					':info'=>$info
-        ]);
-        $id=$db->lastInsertId();
-        $e=$db->errorInfo();
-        if(is_null($e[2])){?>
-	  window.top.window.$('#hours').append(`<?php
-	echo'<div id="l_'.$id.'" class="form-group row px-0 item">'.
-				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 pr-xl-0">'.
-					'<div class="input-group-prepend">'.
-						'<div class="input-group-text">From</div>'.
-					'</div>'.
-					'<input type="text" class="form-control" value="'.ucfirst($from).'" readonly>'.
-				'</div>'.
-				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">'.
-					'<div class="input-group-prepend">'.
-						'<div class="input-group-text">To</div>'.
-					'</div>'.
-					'<input type="text" class="form-control" value="'.ucfirst($to).'" readonly>'.
-				'</div>'.
-				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">'.
-					'<div class="input-group-prepend">'.
-						'<div class="input-group-text">Time From</div>'.
-					'</div>'.
-					'<input type="text" class="form-control" value="'.$timefrom.'" readonly>'.
-				'</div>'.
-				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-2 px-xl-0">'.
-					'<div class="input-group-prepend">'.
-						'<div class="input-group-text">Time From</div>'.
-					'</div>'.
-					'<input type="text" class="form-control" value="'.$timeto.'" readonly>'.
-				'</div>'.
-				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-3 px-xl-0">'.
-					'<div class="input-group-prepend">'.
-						'<div class="input-group-text">Additional Info</div>'.
-					'</div>'.
-					'<input type="text" class="form-control" value="'.$info.'" readonly>'.
-				'</div>'.
-				'<div class="input-group col-12 col-md-6 col-lg-4 col-xl-1 pl-xl-0">'.
-					'<div class="btn-group">'.
-						'<div class="btn btn-secondary" data-tooltip="tooltip" data-title="Drag to Reorder">'.svg2('drag').'</div>'.
-							'<form target="sp" action="core/purge.php">'.
-								'<input type="hidden" name="id" value="'.$id.'">'.
-								'<input type="hidden" name="t" value="choices">'.
-								'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-							'</form>'.
-						'</div>'.
-					'</div>'.
-				'</div>'.
-			'</div>';?>`);
-			$('#hours').sortable({
-				items:"div.item",
-				placeholder:".ghost",
-				helper:fixWidthHelper,
-				axis:"y",
-				update:function(e,ui){
-					var order=$("#hours").sortable("serialize");
-					$.ajax({
-						type:"POST",
-						dataType:"json",
-						url:"core/reorderhours.php",
-						data:order
-					});
-				}
-			}).disableSelection();
-			function fixWidthHelper(e,ui){
-				ui.children().each(function(){
-					$(this).width($(this).width());
-				});
-				return ui;
-			}
-<?php   }else{?>
-	  window.top.window.toastr["error"]("There was an issue adding the Hours Data!");
-<?php   }
-	      break;
-		case'add_option':
-      $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
-      $ttl=filter_input(INPUT_POST,'ttl',FILTER_SANITIZE_STRING);
-			$qty=filter_input(INPUT_POST,'qty',FILTER_SANITIZE_NUMBER_INT);
-      if($ttl==''){?>
-	window.top.window.toastr["error"]("Not all Fields were filled in!");
-<?php }else{
-        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`rid`,`contentType`,`title`,`ti`) VALUES (:uid,:rid,'option',:title,:ti)");
-        $q->execute([
-          ':uid'=>$uid,
-          ':rid'=>$rid,
-          ':title'=>kses($ttl,array()),
-          ':ti'=>$qty
-        ]);
-        $id=$db->lastInsertId();
-        $e=$db->errorInfo();
-        if(is_null($e[2])){?>
-	window.top.window.$('#itemoptions').append('<?php
-echo'<div id="l_'.$id.'" class="form-group row">'.
-			'<div class="input-group col-12">'.
-				'<div class="input-group-prepend">'.
-					'<div class="input-group-text">Option</div>'.
-				'</div>'.
-				'<form target="sp" method="post">'.
-					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<input type="hidden" name="t" value="choices">'.
-					'<input type="hidden" name="c" value="title">'.
-					'<input type="text" class="form-control" name="da" value="'.$ttl.'" placeholder="Enter an Option...">'.
-				'</form>'.
-				'<div class="input-group-append">'.
-					'<div class="input-group-text">Quantity</div>'.
-				'</div>'.
-				'<form target="sp" method="post">'.
-					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<input type="hidden" name="t" value="choices">'.
-					'<input type="hidden" name="c" value="ti">'.
-					'<input type="text" class="form-control" name="da" value="'.$qty.'" placeholder="Quantity">'.
-				'</form>'.
-				'<div class="input-group-append">'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-					'</form>'.
-				'</div>'.
-			'</div>'.
-		'</div>';?>
-');
-<?php   }else{?>
-	window.top.window.toastr["error"]("There was an issue adding the Data!");
-<?php   }
-      }
-      break;
-		case'add_related':
-			$id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-			$rid=isset($_POST['rid'])?filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'rid',FILTER_SANITIZE_NUMBER_INT);
-			if($id==$rid){?>
-	window.top.window.toastr["warning"]("Item can't be related to itself!");
-<?php	}else{
-				if($rid!=0){
-				  $s=$db->prepare("SELECT `id` FROM `".$prefix."choices` WHERE `contentType`='related' AND `rid`=:rid");
-				  $s->execute([
-				    ':rid'=>$rid
-				  ]);
-				  if($s->rowCount()==0){
-				    $ss=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`rid`,`contentType`,`ti`) VALUES (:id,:rid,'related',:ti)");
-				    $ss->execute([
-				      ':id'=>$id,
-				      ':rid'=>$rid,
-				      ':ti'=>time()
-				    ]);
-						$id=$db->lastInsertId();
-						$e=$db->errorInfo();
-						if(is_null($e[2])){
-							$si=$db->prepare("SELECT `id`,`contentType`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-							$si->execute([
-								':id'=>$rid
-							]);
-							$ri=$si->fetch(PDO::FETCH_ASSOC);?>
-		window.top.window.$('#relateditems').append('<?php
-echo'<div id="l_'.$id.'" class="form-group row">'.
-		'<div class="input-group col-12">'.
-			'<input type="text" class="form-control" value="'.ucfirst($ri['contentType']).': '.$ri['title'].'" readonly>'.
-			'<div class="input-group-append">'.
-				'<form target="sp" action="core/purge.php">'.
-					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<input type="hidden" name="t" value="choices">'.
-					'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-				'</form>'.
-			'</div>'.
-		'</div>'.
-	'</div>';?>
-');
-<?php   			}else{?>
-		window.top.window.toastr["error"]("There was an issue adding the Data!");
-<?php   		}
-			  	}else{?>
-	window.top.window.toastr["warning"]("Item is already related!");
-<?php			}
-				}else{?>
-	window.top.window.toastr["warning"]("You need to select in Item to Relate!");
-<?php		}
-			}
-			break;
-    case'add_subject':
-      $sub=filter_input(INPUT_POST,'sub',FILTER_SANITIZE_STRING);
-      $eml=filter_input(INPUT_POST,'eml',FILTER_SANITIZE_STRING);
-      if($sub==''){?>
-  window.top.window.toastr["error"]("Not all Fields were filled in!");
-<?php }else{
-        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`contentType`,`title`,`url`) VALUES ('subject',:title,:url)");
-        $q->execute([
-          ':title'=>kses($sub,array()),
-          ':url'=>kses($eml,array())
-				]);
-        $id=$db->lastInsertId();
-        $e=$db->errorInfo();
-        if(is_null($e[2])){?>
-  window.top.window.$('#subjects').append('<?php
-echo'<div id="l_'.$id.'" class="form-group row">'.
-			'<div class="input-group">'.
-				'<div class="input-group-text">Subject</div>'.
-				'<input id="sub'.$id.'" type="text" class="form-control" name="da" value="'.$sub.'">'.
-				'<div class="input-group-text">Email</div>'.
-				'<input id="eml'.$id.'" type="text" class="form-control" name="da" value="'.$eml.'">'.
-				'<div class="input-group-append">'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="choices">'.
-						'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-					'</form>'.
-				'</div>'.
-			'</div>'.
-		'</div>';?>
-');
-<?php   }else{?>
-  window.top.window.toastr["error"]("There was an issue adding the Data!");
-<?php   }
-      }
-      break;
     case'make_client':
       $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
       $q=$db->prepare("SELECT `name`,`email`,`phone` FROM `".$prefix."messages` WHERE `id`=:id");
@@ -452,23 +93,7 @@ echo'<div id="l_'.$id.'" class="form-group row">'.
             elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))
 							$avatar=$c['gravatar'];
 					}?>
-	  window.top.window.$('#comments').append('<?php
-echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
-			'<div class="media-left img-rounded col-1" style="margin:10px 15px;">'.
-				'<img class="media-object img-fluid" alt="User" src="'.$avatar.'">'.
-			'</div>'.
-			'<div class="media-body">'.
-				'<div class="well">'.
-					'<div id="controls-'.$id.'" class="btn-group btn-comments">'.
-						'<button class="btn btn-default btn-sm trash" onclick="purge(`'.$id.'`,`comments`);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-					'</div>'.
-					'<h6 class="media-heading">'.$name.'</h6>'.
-					'<time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.
-					$da.
-				'</div>'.
-			'</div>'.
-		'</div>';?>
-');
+	  window.top.window.$('#comments').append('<?php echo'<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd"><div class="col-1"><img style="max-width:64px;height:64px;" alt="User" src="'.$avatar.'"></div><div class="col-9"><h6 class="media-heading">'.$name.'</h6><time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.$da.'</div><div class="col-2 text-right align-top" id="controls-'.$id.'"><form target="sp" method="post" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="comments"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></form></div></div>';?>');
 <?php   }else{?>
   window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   }
@@ -519,47 +144,6 @@ echo'<div id="l_'.$id.'" class="media animated zoomIn">'.
         }
       }
 			break;
-    case'add_media':
-      $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-			$rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
-      $t=filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING);
-      $fu=filter_input(INPUT_POST,'fu',FILTER_SANITIZE_STRING);
-      if($fu!=''){
-        if($t=='pages'||$t=='content'){
-					$file_list=explode(',',$fu);
-					foreach($file_list as $file){
-	          $q=$db->prepare("INSERT IGNORE INTO `".$prefix."media` (`rid`,`pid`,`file`,`ti`) VALUES (:rid,:pid,:file,:ti)");
-	          $q->execute([
-							':rid'=>$rid,
-	            ':pid'=>$id,
-	            ':file'=>$file,
-	            ':ti'=>time()
-	          ]);
-	          $iid=$db->lastInsertId();
-	          $q=$db->prepare("UPDATE `".$prefix."media` SET `ord`=:ord WHERE `id`=:id");
-	          $q->execute([
-	            ':id'=>$iid,
-	            ':ord'=>$iid+1
-	          ]);
-						$thumb='media/thumbs/'.preg_replace('/\\.[^.\\s]{3,4}$/','',basename($file)).'.png';?>
-  window.top.window.$('#mi').append('<?php
-echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 position-relative p-0 m-1 mt-0 animated zoomIn">'.
-			'<a data-fancybox="media" class="card bg-dark m-0" href="'.$file.'">'.
-				'<img src="'.$thumb.'" class="card-img"  alt="Media '.$iid.'">'.
-			'</a>'.
-			'<div class="btn-group float-right">'.
-				'<div class="handle btn btn-secondary btn-xs" onclick="return false;" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</div>'.
-				'<div class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Viewed 0 times">'.svg2('view').' &nbsp;0</div>'.
-				'<a class="btn btn-secondary btn-xs" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
-				'<button class="btn btn-secondary trash btn-xs" onclick="purge(`'.$iid.'`,`media`)" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-			'</div>'.
-		'</div>';?>
-');
-	window.top.window.$().fancybox({selector:'[data-fancybox="media"]'});
-<?php }
-				}
-      }
-      break;
     case'add_orderitem':
       $oid=filter_input(INPUT_GET,'oid',FILTER_SANITIZE_NUMBER_INT);
       $iid=filter_input(INPUT_GET,'iid',FILTER_SANITIZE_NUMBER_INT);
@@ -598,16 +182,16 @@ echo'<div id="mi_'.$iid.'" class="media-gallery d-inline-block col-6 col-sm-2 po
         echo'<tr>'.
 							'<td class="text-left">'.$i['code'].'<div class="visible-xs">'.$i['title'].'</div></td>'.
 							'<td class="text-left hidden-xs">'.$i['title'].'</td>'.
-							'<td class="col-md-1 text-center">'.($oi['iid']!=0?'<form target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="quantity"><input class="form-control text-center" name="da" value="'.$oi['quantity'].'"></form>':'').'</td>'.
-							'<td class="col-md-1 text-right">'.($oi['iid']!=0?'<form target="sp" action="core/update.php"><input type="hidden" name="id" value="'.$oi['id'].'"><input type="hidden" name="t" value="orderitems"><input type="hidden" name="c" value="cost"><input class="form-control text-center" name="da" value="'.$oi['cost'].'"></form>':'').'</td>'.
+							'<td class="col-md-1 text-center">'.($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="quantity"><input class="text-center" name="da" value="'.$oi['quantity'].'"></form>':'').'</td>'.
+							'<td class="col-md-1 text-right">'.($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="cost"><input class="text-center" name="da" value="'.$oi['cost'].'"></form>':'').'</td>'.
 							'<td class="text-right">'.($oi['iid']!=0?$oi['cost']*$oi['quantity']:'').'</td>'.
 							'<td class="text-right">'.
 								'<form target="sp" action="core/update.php">'.
-									'<input type="hidden" name="id" value="'.$oi['id'].'">'.
-									'<input type="hidden" name="t" value="orderitems">'.
-									'<input type="hidden" name="c" value="quantity">'.
-									'<input type="hidden" name="da" value="0">'.
-									'<button class="btn btn-default trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+									'<input name="id" type="hidden" value="'.$oi['id'].'">'.
+									'<input name="t" type="hidden" value="orderitems">'.
+									'<input name="c" type="hidden" value="quantity">'.
+									'<input name="da" type="hidden" value="0">'.
+									'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
 								'</form>'.
 							'</td>'.
 						'</tr>';

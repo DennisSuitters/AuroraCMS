@@ -7,15 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.3 Fix AutoPublishing
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.10 Move other platform security checks so they only check when enabled.
- * @changes    v0.0.17 Add rank selection to menu retrieval query.
- * @changes    v0.0.17 Fix Swap Memory calculation when None is used.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 define('UNICODE','UTF-8');
 $getcfg=true;
@@ -83,8 +77,8 @@ elseif(file_exists(THEME.DS.'images'.DS.'noimage-sm.jpg'))
 	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.jpg');
 else
 	define('NOIMAGESM','core'.DS.'images'.DS.'noimage-sm.jpg');
-define('ADMINNOIMAGE','core'.DS.'images'.DS.'noimage-md.jpg');
-define('ADMINNOIMAGEMD','core'.DS.'images'.DS.'noimage-sm.jpg');
+define('ADMINNOIMAGE','core'.DS.'images'.DS.'noimage-sm.jpg');
+define('ADMINNOIMAGEMD','core'.DS.'images'.DS.'noimage-md.jpg');
 if(file_exists(THEME.DS.'images'.DS.'noavatar-md.png'))
 	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar-md.png');
 elseif(file_exists(THEME.DS.'images'.DS.'noavatar-md.gif'))
@@ -93,7 +87,7 @@ elseif(file_exists(THEME.DS.'images'.DS.'noavatar.jpg'))
 	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.jpg');
 else
 	define('NOAVATAR','core'.DS.'images'.DS.'noavatar.jpg');
-define('ADMINNOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
+define('ADMINNOAVATAR','core'.DS.'images'.DS.'noavatar.jpg');
 require'login.php';
 function rank($txt){
 	if($txt==0)return'visitor';
@@ -129,6 +123,35 @@ function frontsvg($svg){
 	else
 		return'No Such File: '.$svg;
 }
+function currentSeason($out='echo') {
+	$day=date("z");
+	$hour=date("G");
+	$seasons = [
+  	  1=>"summer",
+  	 60=>"autumn",
+  	154=>"winter",
+  	246=>"spring",
+		276=>"Halloween",
+		306=>"spring",
+  	336=>"summer",
+		350=>"xmas",
+		361=>"summer",
+  	365=>"summer",
+  ];
+	if($day>0&&$day<60)$season="summer";
+	if($day>59&&$day<154)$season="autumn";
+	if($day>153&&$day<246)$season="winter";
+	if($day>246&&$day<336)$season="spring";
+	if($day>335&&$day<366)$season="summer";
+	if($day>275&&$day<306)$season="halloween";
+	if($day>349&&$day<361)$season="xmas";
+	if(!file_exists('media/seasons/'.$season.'.jpg'))$season="aurora";
+	if($hour>22||$hour<6)$season="aurora";
+	if($out=='return')
+		return $season;
+	else
+		echo $season;
+}
 function microid($identity,$service,$algorithm='sha1'){
 	$microid=substr($identity,0,strpos($identity,':'))."+".substr($service,0,strpos($service,':')).":".strtolower($algorithm).":";
 	if(function_exists('hash')){
@@ -158,7 +181,28 @@ function _ago($time){
 		$fromTime=$time;
 		$timeDiff=floor(abs(time()-$fromTime)/60);
 		if($timeDiff<2)
-			$timeDiff='Just Now';
+			$timeDiff='Online Now';
+		elseif($timeDiff>2&&$timeDiff<60)
+			$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
+		elseif($timeDiff>60&&$timeDiff<120)
+			$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
+		elseif($timeDiff<1440)
+			$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
+		elseif($timeDiff>1440&&$timeDiff<2880)
+			$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
+		elseif($timeDiff>2880)
+			$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
+	}
+	return$timeDiff;
+}
+function _agologgedin($time){
+	if($time==0)
+		$timeDiff='Has Never Logged In';
+	else{
+		$fromTime=$time;
+		$timeDiff=floor(abs(time()-$fromTime)/60);
+		if($timeDiff<2)
+			$timeDiff='Online Now';
 		elseif($timeDiff>2&&$timeDiff<60)
 			$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
 		elseif($timeDiff>60&&$timeDiff<120)

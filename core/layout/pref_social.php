@@ -7,38 +7,39 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */?>
-<main id="content" class="main">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-    <li class="breadcrumb-item active">Social Networking</li>
-  </ol>
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
-        <div class="form-group row">
-          <div class="input-group col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">
-            <label class="switch switch-label switch-success"><input type="checkbox" id="options9" class="switch-input" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="9"<?php echo$config['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>><span class="switch-slider" data-checked="on" data-unchecked="off"></span></label>
+<main>
+  <section id="content">
+    <div class="content-title-wrapper">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('user-group','i-3x');?></div>
+          <div>Preferences - Social</div>
+          <div class="content-title-actions">
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
           </div>
-          <label for="options9" class="col-form-label col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">Show RSS Feed Icon</label>
         </div>
-        <form target="sp" method="post" action="core/add_data.php">
-          <input type="hidden" name="user" value="0">
-          <input type="hidden" name="act" value="add_social">
-          <div class="form-group">
-            <div class="input-group">
-              <div class="input-group-prepend">
-                <label for="icon" class="input-group-text">Network</label>
-              </div>
-              <select id="icon" class="form-control" name="icon">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+          <li class="breadcrumb-item active">Social Networking</li>
+        </ol>
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow p-3">
+        <div class="row mt-3">
+          <input id="options9" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="9" type="checkbox"<?php echo$config['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="options9">Show RSS Feed Icon</label>
+        </div>
+        <form class="row" target="sp" method="post" action="core/add_social.php">
+          <input name="user" type="hidden" value="0">
+          <div class="col-12 col-md-3">
+            <label for="icon">Network</label>
+            <div class="form-row">
+              <select id="icon" name="icon">
                 <option value="">Select a Social Network...</option>
                 <option value="500px">500px</option>
                 <option value="aboutme">About Me</option>
@@ -117,38 +118,50 @@
                 <option value="zerply">Zerply</option>
                 <option value="zune">Zune</option>
               </select>
-              <div class="input-group-append">
-                <label for="url" class="input-group-text">URL</label>
-              </div>
-              <input type="text" id="url" class="form-control" name="url" value="" placeholder="Enter a URL...">
-              <div class="input-group-append">
-                <button class="btn btn-secondary add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
-              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-8">
+            <label for="url">URL</label>
+            <div class="form-row">
+              <input id="url" name="url" type="text" value="" placeholder="Enter a URL...">
+            </div>
+          </div>
+          <div class="col-12 col-md-1">
+            <label>&nbsp;</label>
+            <div class="form-row">
+              <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
             </div>
           </div>
         </form>
-        <div id="social">
+        <div class="mt-3" id="social">
           <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
           $ss->execute();
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-            <div id="l_<?php echo$rs['id'];?>" class="form-group">
-              <div class="input-group">
-                <div class="input-group-prepend">
-                  <label for="icon<?php echo$rs['id'];?>" class="input-group-text" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><span class="i-social"><?php svg('social-'.$rs['icon']);?></span></label>
+            <div class="row mt-1" id="l_<?php echo$rs['id'];?>">
+              <div class="col-12 col-md-3">
+                <div class="form-row">
+                  <div class="input-text col-12" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon'],'i-social');?>&nbsp;&nbsp;<?php echo ucfirst($rs['icon']);?></div>
                 </div>
-                <input type="text" id="icon<?php echo$rs['id'];?>" class="form-control" value="<?php echo$rs['url'];?>" readonly>
-                <div class="input-group-append">
+              </div>
+              <div class="col-12 col-md-8">
+                <div class="form-row">
+                  <input type="text" value="<?php echo$rs['url'];?>" readonly>
+                </div>
+              </div>
+              <div class="col-12 col-md-1">
+                <div class="form-row">
                   <form target="sp" action="core/purge.php">
-                    <input type="hidden" name="id" value="<?php echo$rs['id'];?>">
-                    <input type="hidden" name="t" value="choices">
-                    <button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
+                    <input name="t" type="hidden" value="choices">
+                    <button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete"><?php svg('trash');?></button>
                   </form>
                 </div>
               </div>
             </div>
           <?php }?>
         </div>
+        <?php include'core/layout/footer.php';?>
       </div>
     </div>
-  </div>
+  </section>
 </main>

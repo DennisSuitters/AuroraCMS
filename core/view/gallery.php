@@ -7,22 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Add Page Editing.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.17 Add SQL for rank fetching data.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
- * @changes    v0.0.20 Add parsing for Breadcrumbs.
  */
 if(stristr($html,'<breadcrumb>')){
  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
  $breaditem=$matches[1];
  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
  $breadcurrent=$matches[1];
- $jsoni=2;
+ $jsoni=1;
  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
  $breadit=preg_replace([
    '/<print breadcrumb=[\"\']?url[\"\']?>/',
@@ -38,7 +32,8 @@ if(stristr($html,'<breadcrumb>')){
  ],[
    htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
  ],$breadcurrent);
- $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}"}},}';
+ $jsonld.='{'.
+   '"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}]}</script>';
  $breaditems.=$breadit;
  $html=preg_replace([
    '/<[\/]?breadcrumb>/',
@@ -47,7 +42,7 @@ if(stristr($html,'<breadcrumb>')){
    '~<breadcurrent>.*?<\/breadcurrent>~is'
  ],[
    '',
-   $jsonld.']}</script>',
+   $jsonld,
    $breaditems,
    ''
  ],$html);

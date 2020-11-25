@@ -42,9 +42,9 @@
       context.memo('button.save',function () {
         var button = ui.button({
           contents: options.save.icon,
-          container: 'body',
+          container: options.container,
           tooltip:  lang.save.tooltip,
-          click:function (e) {
+          click: function (e) {
             e.preventDefault();
             $('.page-block').addClass('d-block');
             var noteText = $note.summernote('code');

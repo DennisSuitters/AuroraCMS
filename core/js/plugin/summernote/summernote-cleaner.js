@@ -74,6 +74,7 @@
         context.memo('button.cleaner',function(){
           var button=ui.button({
             contents:options.cleaner.icon,
+            container:options.container,
             tooltip:lang.cleaner.tooltip,
             click:function(){
               if($note.summernote('createRange').toString()){

@@ -7,15 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Split Item Parsing from main Content in view/
 */
 $contentType=$view;
 $html=preg_replace('~<item>.*?<\/item>~is','',$html,1);
 if(stristr($html,'<settings')){
-	$matches=preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
+	preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
 	$count=$matches[0];
 	$html=preg_replace('~<settings.*?>~is','',$html,1);
 }else
@@ -25,7 +24,7 @@ $html=preg_replace([
 	'/<print content=[\"\']?category[\"\']?>/'
 ],[
 	$view,
-	$args[0]!=''?html_entity_decode($args[0]):''
+	isset($args[0])?($args[0]!=''?html_entity_decode($args[0]):''):''
 ],$html);
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
@@ -50,7 +49,7 @@ if(stristr($html,'<breadcrumb>')){
       URL.urlencode($page['contentType']),
       htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
     ],$breaditem);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}},';
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
     $breaditems.=$breadit;
   }else{
     $breadit=preg_replace([
@@ -58,7 +57,7 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}},';
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[0])&&$args[0]!=''){
@@ -78,7 +77,7 @@ if(stristr($html,'<breadcrumb>')){
 				htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
 			],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[2])&&$args[2]!=''){
@@ -98,7 +97,7 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[3])&&$args[3]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[3])&&$args[3]!=''){
@@ -118,7 +117,7 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[4])&&$args[4]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[4])&&$args[4]!=''){
@@ -138,7 +137,7 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}}'.($r['title']!=''?',':'');
     $breaditems.=$breadit;
   }
   if($r['title']!=''){
@@ -148,7 +147,7 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}"}},}';
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}}';
     $breaditems.=$breadit;
   }
   $html=preg_replace([
@@ -166,7 +165,7 @@ if(stristr($html,'<breadcrumb>')){
 if(stristr($html,'<cover>')){
 	$iscover=false;
 	if($page['coverVideo']!=''){
-		$cover=basename($page['coverVideo']);
+		$cover=basename(rawurldecode($page['coverVideo']));
 		if(stristr($page['coverVideo'],'youtu')){
 			preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$page['coverVideo'],$vidMatch);
 			$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
@@ -227,6 +226,7 @@ if(stristr($html,'<mediaitems')){
 		while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
 			$mediaitems=$mediaitem;
 			if(!file_exists('media'.DS.'thumbs'.DS.basename($rm['file'])))continue;
+			$rm['file']=rawurldecode($rm['file']);
 			$mediaitems=preg_replace([
 				'/<print thumb=[\"\']?srcset[\"\']?>/',
 				'/<print lightbox=[\"\']?srcset[\"\']?>/',
@@ -340,6 +340,7 @@ if(stristr($html,'<categories')){
 		$catoutput='';
 		while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
 			$catitems=$catitem;
+			$rc['icon']=rawurldecode($rc['icon']);
 			$catitems=preg_replace([
 				'/<print thumb=[\"\']?srcset[\"\']?>/',
 				'/<print category=[\"\']?thumb[\"\']?>/',
@@ -388,8 +389,8 @@ if(stristr($html,'<items')){
 		$itemQuantity='';
 		if(is_numeric($r['quantity']))
 			$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
-		$r['file']=trim($r['file']);
-		$r['thumb']=trim($r['thumb']);
+		$r['file']=trim(rawurldecode($r['file']));
+		$r['thumb']=trim(rawurldecode($r['thumb']));
 		$items=preg_replace([
 			$r['contentType']=='inventory'&&$config['options'][5]==1?'/<[\/]?quickview>/':'~<quickview>.*?<\/quickview>~is',
 			'/<print content=srcset>/',

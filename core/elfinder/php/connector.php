@@ -55,7 +55,8 @@ $opts=[
   'bind'=>[
     'upload.presave'=>[
       'Plugin.MultiImages.generateMultiImages',
-      'Plugin.AutoResize.onUpLoadPreSave'
+      'Plugin.AutoResize.onUpLoadPreSave',
+      'Plugin.Sanitizer.onUpLoadPreSave',
     ],
     'mkdir.pre mkfile.pre rename.pre'=>[
       'Plugin.Sanitizer.cmdPreprocess',
@@ -64,7 +65,7 @@ $opts=[
   'plugin'=>[
     'Sanitizer'=>[
       'enable'=>true,
-      'targets'=>['\\','/',':','*','?','"','<','>','|',' '],
+      'targets'=>['\\','/',':','*','?','"','<','>','|',' ','_','\'','"'],
       'replace'=>'-',
     ],
     'MultiImages'=>[

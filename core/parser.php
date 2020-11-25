@@ -7,17 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Adjust file check folder
- * @changes    v0.0.4 Add Page Editing
- * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.12 Fix Output Parser not parsing some elements.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.20 Add parsing primary category only.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $doc=new DOMDocument();
 if($show=='item'){

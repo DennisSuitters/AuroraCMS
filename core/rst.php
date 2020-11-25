@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.11 Fix formatting of password reset email layouts.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -65,9 +63,9 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
     ],$layout);
   	$mail->Body=($msg=''?$msg:'Hello '.($c['name']!=''?$name[0]:$c['username']).',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
   	$mail->AltBody=($msg=''?$msg:'Hello '.$name[0].',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
-  	if($mail->Send())echo'<div class="alert alert-success text-center">Check your Email!</div>';
-    else echo'<div class="alert alert-danger text-center">Problem Sending Email!</div>';
-  }else echo'<div class="alert alert-danger text-center">No Account Found!</div>';
+  	if($mail->Send())echo'<div class="alert alert-success text-center" role="alert">Check your Email!</div>';
+    else echo'<div class="alert alert-danger text-center" role="alert">Problem Sending Email!</div>';
+  }else echo'<div class="alert alert-danger text-center" role="alert">No Account Found!</div>';
 }else{
   $r=rand(0,10);
   switch($r){
@@ -82,5 +80,5 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
     default:
       $out='Go Away!';
   }
-  echo'<div class="alert alert-danger">'.$out.'</div>';
+  echo'<div class="alert alert-danger" role="alert">'.$out.'</div>';
 }

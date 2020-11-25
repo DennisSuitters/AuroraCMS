@@ -7,154 +7,73 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.15
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.1 Move Settings Links into Menu.
- * @changes    v0.0.2 Add Permissions Options
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.5 Add Live Chat to Menu
- * @changes    v0.0.11 Fix String Offset line 150
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.15 Add Preferences Cart to Menu.
- * @changes    v0.0.15 Remove System Resource Information, moved to Dashboard.
  */?>
-<div id="sidebar" class="sidebar">
-  <nav class="sidebar-nav">
-    <ul class="nav">
-      <li class="nav-item<?php echo($view=='dashboard'?' active':'');?>">
-        <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/dashboard';?>"><?php svg('dashboard','nav-icon');?> Dashboard</a>
-      </li>
-      <li class="nav-item<?php echo($view=='livechat'?' active':'');?>">
-        <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/livechat';?>"><?php svg('chat','nav-icon');?> Live Chat</a>
-        <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/livechat/settings" data-tooltip="tooltip" data-title="Live Chat Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-      </li>
-      <li class="nav-item nav-dropdown<?php echo($view=='media'||$view=='pages'||$view=='content'||$view=='rewards'||$view=='newsletters'?' open':'');?>">
-        <a class="nav-link nav-dropdown-toggle" href="<?php echo URL.$settings['system']['admin'].'/content';?>"><?php svg('content','nav-icon');?> Content</a>
-        <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/content/settings" data-tooltip="tooltip" data-title="Content Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-        <ul class="nav-dropdown-items">
+<aside class="border-right" id="sidebar">
+  <nav>
+    <ul>
+      <li class="<?php echo($view=='dashboard'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/dashboard';?>"><?php svg('dashboard','i-2x mr-4');?> Dashboard</a></li>
+      <li class="<?php echo($view=='livechat'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/livechat';?>"><?php svg('chat','i-2x mr-4');?> Live Chat</a></li>
+      <li class="<?php echo($view=='media'||$view=='pages'||$view=='content'||$view=='rewards'?' open':'');?>">
+        <a class="opener" href="<?php echo URL.$settings['system']['admin'].'/content';?>"><?php svg('content','i-2x mr-4');?> Content</a>
+        <span class="arrow<?php echo($view=='media'||$view=='pages'||$view=='content'||$view=='rewards'||$view=='newsletters'?' open':'');?>"><?php svg('arrow-up');?></span>
+        <ul>
           <?php if($user['options'][0]==1){?>
-            <li class="nav-item">
-              <a class="nav-link<?php echo($view=='media'?' active':'');?>" href="<?php echo URL.$settings['system']['admin'].'/media';?>"><?php svg('picture','nav-icon ml-2');?> Media</a>
-              <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/media/settings" data-tooltip="tooltip" data-title="Media Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-            </li>
+            <li class="<?php echo($view=='media'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/media';?>"><?php svg('picture','i-2x mr-4');?> Media</a></li>
           <?php }?>
-          <li class="nav-item">
-            <a class="nav-link<?php echo($view=='pages'?' active':'');?>" href="<?php echo URL.$settings['system']['admin'].'/pages';?>"><?php svg('content','nav-icon ml-2');?> Pages</a>
-            <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/pages/settings" data-tooltip="tooltip" data-title="Pages Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>"><?php svg('calendar-time','nav-icon ml-2');?> Scheduler</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-article" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/article';?>"><?php svg('content','nav-icon ml-2');?> Articles</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-portfolio" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/portfolio';?>"><?php svg('portfolio','nav-icon ml-2');?> Portfolio</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-events" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/events';?>"><?php svg('calendar','nav-icon ml-2');?> Events</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-news" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/news';?>"><?php svg('email-read','nav-icon ml-2');?> News</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-testimonials" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>"><?php svg('testimonial','nav-icon ml-2');?> Testimonials</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-inventory" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/inventory';?>"><?php svg('shipping','nav-icon ml-2');?> Inventory</a></li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/rewards';?>"><?php svg('credit-card','nav-icon ml-2');?> Rewards</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-service" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/service';?>"><?php svg('service','nav-icon ml-2');?> Services</a>
-          </li>
-          <li class="nav-item">
-            <a id="menu-proofs" class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/content/type/proofs';?>"><?php svg('proof','nav-icon ml-2');?> Proofs</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/newsletters';?>"><?php svg('newspaper','nav-icon ml-2');?> Newsletters</a>
-            <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/newsletters/settings" data-tooltip="tooltip" data-title="Newsletters Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-          </li>
+          <li class="<?php echo($view=='pages'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/pages';?>"><?php svg('content','i-2x mr-4');?> Pages</a></li>
+          <li class="<?php echo($args[0]=='scheduler'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>"><?php svg('calendar-time','i-2x mr-4');?> Scheduler</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='article'?' active':'');?>"><a id="menu-article" href="<?php echo URL.$settings['system']['admin'].'/content/type/article';?>"><?php svg('content','i-2x mr-4');?> Articles</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='portfolio'?' active':'');?>"><a id="menu-portfolio" href="<?php echo URL.$settings['system']['admin'].'/content/type/portfolio';?>"><?php svg('portfolio','i-2x mr-4');?> Portfolio</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='events'?' active':'');?>"><a id="menu-events" href="<?php echo URL.$settings['system']['admin'].'/content/type/events';?>"><?php svg('calendar','i-2x mr-4');?> Events</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='news'?' active':'');?>"><a id="menu-news" href="<?php echo URL.$settings['system']['admin'].'/content/type/news';?>"><?php svg('email-read','i-2x mr-4');?> News</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='testimonials'?' active':'');?>"><a id="menu-testimonials" href="<?php echo URL.$settings['system']['admin'].'/content/type/testimonials';?>"><?php svg('testimonial','i-2x mr-4');?> Testimonials</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='inventory'?' active':'');?>"><a id="menu-inventory" href="<?php echo URL.$settings['system']['admin'].'/content/type/inventory';?>"><?php svg('shipping','i-2x mr-4');?> Inventory</a></li>
+          <li class="<?php echo($view=='rewards'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/rewards';?>"><?php svg('credit-card','i-2x mr-4');?> Rewards</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='service'?' active':'');?>"><a id="menu-service" href="<?php echo URL.$settings['system']['admin'].'/content/type/service';?>"><?php svg('service','i-2x mr-4');?> Services</a></li>
+          <li class="<?php echo(isset($args[1])&&$args[1]=='proofs'?' active':'');?>"><a id="menu-proofs" href="<?php echo URL.$settings['system']['admin'].'/content/type/proofs';?>"><?php svg('proof','i-2x mr-4');?> Proofs</a></li>
         </ul>
       </li>
       <?php if($user['options'][3]==1){?>
-        <li class="nav-item">
-          <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/messages';?>"><?php svg('inbox','nav-icon');?> Messages</a>
-          <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" data-title="Messages Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-        </li>
+        <li class="<?php echo($view=='messages'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/messages';?>"><?php svg('inbox','i-2x mr-4');?> Messages</a></li>
       <?php }?>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/bookings';?>"><?php svg('calendar','nav-icon');?> Bookings</a>
-        <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/bookings/settings" data-tooltip="tooltip" data-title="Bookings Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-      </li>
+      <li class="<?php echo($view=='newsletters'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/newsletters';?>"><?php svg('newspaper','i-2x mr-4');?> Newsletters</a></li>
+      <li class="<?php echo($view=='bookings'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/bookings';?>"><?php svg('calendar','i-2x mr-4');?> Bookings</a></li>
       <?php if($user['options'][4]==1){?>
-        <li class="nav-item nav-dropdown">
-          <a class="nav-link nav-dropdown-toggle" href="<?php echo URL.$settings['system']['admin'].'/orders';?>"><?php svg('order','nav-icon');?> Orders</a>
-          <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/orders/settings" data-tooltip="tooltip" data-title="Orders Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/orders';?>"><?php svg('order-quote','nav-icon ml-2');?> All</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/orders/quotes';?>"><?php svg('order-quote','nav-icon ml-2');?> Quotes</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/orders/invoices';?>"><?php svg('order-invoice','nav-icon ml-2');?> Invoices</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/orders/pending';?>"><?php svg('order-pending','nav-icon ml-2');?> Pending</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/orders/recurring';?>"><?php svg('order-recurring','nav-icon ml-2');?> Recurring</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/orders/archived';?>"><?php svg('order-archived','nav-icon ml-2');?> Archived</a>
-            </li>
+        <li class="<?php echo$view=='orders'?' open':'';?>">
+          <a class="opener" href="<?php echo URL.$settings['system']['admin'].'/orders';?>"><?php svg('order','i-2x mr-4');?> Orders</a>
+          <span class="arrow<?php echo$view=='orders'?' open':'';?>"><?php svg('arrow-up');?></span>
+          <ul>
+            <li class="<?php echo($view=='orders'&&$args[0]==''?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders';?>"><?php svg('order-quote','i-2x mr-4');?> All</a></li>
+            <li class="<?php echo($args[0]=='quotes'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/quotes';?>"><?php svg('order-quote','i-2x mr-4');?> Quotes</a></li>
+            <li class="<?php echo($args[0]=='invoices'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/invoices';?>"><?php svg('order-invoice','i-2x mr-4');?> Invoices</a></li>
+            <li class="<?php echo($args[0]=='pending'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/pending';?>"><?php svg('order-pending','i-2x mr-4');?> Pending</a></li>
+            <li class="<?php echo($args[0]=='recurring'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/recurring';?>"><?php svg('order-recurring','i-2x mr-4');?> Recurring</a></li>
+            <li class="<?php echo($args[0]=='archived'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/archived';?>"><?php svg('order-archived','i-2x mr-4');?> Archived</a></li>
           </ul>
         </li>
       <?php }?>
-      <li class="nav-item">
-        <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/accounts';?>"><?php svg('users','nav-icon');?> Accounts</a>
-        <?php echo$user['options'][7]==1?'<a class="nav-settings" href="'.URL.$settings['system']['admin'].'/accounts/settings" data-tooltip="tooltip" data-title="Accounts Settings" data-placement="right">'.svg2('settings','nav-icon').'</a>':'';?>
-      </li>
+      <li class="<?php echo($view=='accounts'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/accounts';?>"><?php svg('users','i-2x mr-4');?> Accounts</a></li>
       <?php if($user['options'][7]==1){?>
-        <li class="nav-item nav-dropdown">
-          <a class="nav-link nav-dropdown-toggle" href="<?php echo URL.$settings['system']['admin'].'/preferences';?>"><?php svg('settings','nav-icon');?> Preferences</a>
-          <ul class="nav-dropdown-items">
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/theme';?>"><?php svg('theme','nav-icon ml-2');?> Theme</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/contact';?>"><?php svg('address-card','nav-icon ml-2');?> Contact</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/social';?>"><?php svg('user-group','nav-icon ml-2');?> Social</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/interface';?>"><?php svg('sliders','nav-icon ml-2');?> Interface</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/seo';?>"><?php svg('plugin-seo','nav-icon ml-2');?> SEO</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>"><?php svg('activity','nav-icon ml-2');?> Activity</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker';?>"><?php svg('tracker','nav-icon ml-2');?> Tracker</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/cart';?>"><?php svg('shop-cart','nav-icon ml-2');?> Cart</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/security';?>"><?php svg('security','nav-icon ml-2');?> Security</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?php echo URL.$settings['system']['admin'].'/preferences/database';?>"><?php svg('database','nav-icon ml-2');?> Database</a></li>
+        <li class="<?php echo($view=='preferences'?' open':'');?>">
+          <a class="opener" href="<?php echo URL.$settings['system']['admin'].'/preferences';?>"><?php svg('settings','i-2x mr-4');?> Preferences</a>
+          <span class="arrow<?php echo($view=='preferences'?' open':'');?>"><?php svg('arrow-up');?></span>
+          <ul>
+            <li class="<?php echo($args[0]=='theme'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/theme';?>"><?php svg('theme','i-2x mr-4');?> Theme</a></li>
+            <li class="<?php echo($args[0]=='contact'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/contact';?>"><?php svg('address-card','i-2x mr-4');?> Contact</a></li>
+            <li class="<?php echo($args[0]=='social'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/social';?>"><?php svg('user-group','i-2x mr-4');?> Social</a></li>
+            <li class="<?php echo($args[0]=='interface'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/interface';?>"><?php svg('sliders','i-2x mr-4');?> Interface</a></li>
+            <li class="<?php echo($args[0]=='seo'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/seo';?>"><?php svg('plugin-seo','i-2x mr-4');?> SEO</a></li>
+            <li class="<?php echo($args[0]=='activity'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/activity';?>"><?php svg('activity','i-2x mr-4');?> Activity</a></li>
+            <li class="<?php echo($args[0]=='tracker'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/tracker';?>"><?php svg('tracker','i-2x mr-4');?> Tracker</a></li>
+            <li class="<?php echo($args[0]=='cart'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/cart';?>"><?php svg('shop-cart','i-2x mr-4');?> Cart</a></li>
+            <li class="<?php echo($args[0]=='security'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/security';?>"><?php svg('security','i-2x mr-4');?> Security</a></li>
+            <li class="<?php echo($args[0]=='database'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/preferences/database';?>"><?php svg('database','i-2x mr-4');?> Database</a></li>
           </ul>
         </li>
       <?php }?>
     </ul>
   </nav>
-  <div class="sidebar-minimizer"></div>
-</div>
+</aside>

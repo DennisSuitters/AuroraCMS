@@ -7,16 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Add Page Editing.
- * @changes    v0.0.15 Fix creating new accounts and sending new account details.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.16 Add sold calculation and database update.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.18 Add function to accept quantity changes from front end.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 require'core'.DS.'puconverter.php';
@@ -29,8 +22,7 @@ if($page['notes']!=''){
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else $html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 $notification='';
 $ti=time();
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;

@@ -27,7 +27,7 @@ $html=preg_replace([
 ],[
   URL,
   $config['business'].' - Administration - AuroraCMS',
-  'data:'.mime_content_type('..'.DS.'images'.DS.'loginbg-dark.jpeg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'loginbg-dark.jpeg')),
+  '',
  'data:'.mime_content_type('..'.DS.'images'.DS.'auroracms-white.svg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'auroracms-white.svg'))
 ],$html);
 ?>

@@ -7,17 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Permissions Options
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.15 Remove Options from Account Creation so database default is used.
- * @changes    v0.0.15 Fix Timezone not being added to Account Creation.
- * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
+ * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
+ * Back, Fullscreen, Settings, Print, Email, Send, Add, SaveAll
  */
 if($args[0]=='add'){
   $type=filter_input(INPUT_GET,'type',FILTER_SANITIZE_STRING);
@@ -70,69 +64,69 @@ else{
       ]);
     }
   }?>
-  <main id="content" class="main">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item active">Accounts</li>
-      <li class="breadcrumb-menu">
-        <div class="btn-group" role="group">
-          <?php echo$user['options'][0]==1?'<a class="btn btn-ghost-normal add" href="'.URL.$settings['system']['admin'].'/accounts/add" data-tooltip="tooltip" data-placement="left" data-title="Add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
-        </div>
-      </li>
-    </ol>
-    <div class="container-fluid">
-      <div class="card">
-        <div class="card-body">
-          <div class="table-responsive">
-            <table class="table table-sm table-striped table-hover">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th>Username/Name</th>
-                  <th class="text-center d-none d-sm-table-cell">Last Login</th>
-                  <th class="text-center d-none d-sm-table-cell">Rank</th>
-                  <th class="text-center d-none d-sm-table-cell">Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                  <tr id="l_<?php echo$r['id'];?>">
-                    <td class="align-middle">
-                      <img class="img-fluid img-circle bg-white" style="max-width:32px;height:32px;" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
-                      elseif($r['gravatar']!='')echo$r['gravatar'];
-                      else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
-                    </td>
-                    <td class="align-middle">
-                      <a href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['name']==''?$r['username']:$r['name'];?>"><?php echo$r['username'].':'.$r['name'];?></a>
-                      <div class="small text-muted d-block d-sm-none">
-                        Last Login: <?php echo _ago($r['lti']);?><br>
-                        Rank: <?php echo ucfirst(rank($r['rank']));?><br>
-                        Status: <?php echo$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?>
-                      </div>
-                      <?php echo$user['rank']==1000?'<div class="small text-muted">IP: '.$r['userIP'].'<br>'.$r['userAgent'].'</div>':'';?>
-                    </td>
-                    <td class="text-center align-middle d-none d-sm-table-cell"<?php echo$r['lti']!=0&&$user['rank']==1000?' data-tooltip="tooltip" title="'.date($config['dateFormat'],$r['lti']).'""':'';?>><?php echo _ago($r['lti']);?></td>
-                    <td class="text-center align-middle d-none d-sm-table-cell"><?php echo ucfirst(rank($r['rank']));?></td>
-                    <td class="text-center align-middle d-none d-sm-table-cell"><?php echo$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
-                    <td id="controls_<?php echo$r['id'];?>" class="align-top align-sm-middle">
-                      <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                        <div class="btn-group" role="group" aria-label="Item Controls">
-                          <a class="btn btn-secondary" href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" data-title="Edit" role="button" aria-label="Edit"><?php svg('edit');?></a>
-                          <?php if($user['options'][0]==1){?>
-                            <button class="btn btn-secondary<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished')" data-tooltip="tooltip" data-title="Restore" aria-label="Restore"><?php svg('untrash');?></button>
-                            <button class="btn btn-secondary rounded-right trash<?php echo$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
-                            <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','login')" data-tooltip="tooltip" data-title="Purge" aria-label="Purge"><?php svg('purge');?></button>
-                          <?php }?>
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                <?php }?>
-              </tbody>
-            </table>
+<main>
+  <section id="content">
+    <div class="content-title-wrapper mb-0">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('users','i-3x');?></div>
+          <div>Accounts</div>
+          <div class="content-title-actions">
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Accounts Settings" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" aria-label="Accounts Settings">'.svg2('settings').'</a>':'&nbsp;';
+            echo$user['options'][0]==1?'&nbsp;<a class="btn add" data-tooltip="tooltip" data-title="Add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add">'.svg2('add').'</a>':'&nbsp;';?>
           </div>
         </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item active">Accounts</li>
+        </ol>
       </div>
     </div>
-  </main>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow">
+        <table class="table-zebra">
+          <thead>
+            <tr>
+              <th></th>
+              <th>Username/Name</th>
+              <th class="text-center d-none d-sm-table-cell">Rank</th>
+              <th class="text-center d-none d-sm-table-cell">Status</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+              <tr id="l_<?php echo$r['id'];?>">
+                <td class="align-middle">
+                  <img class="avatar" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
+                  elseif($r['gravatar']!='')echo$r['gravatar'];
+                  else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
+                </td>
+                <td class="align-middle">
+                  <a href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['name']==''?$r['username']:$r['name'];?>"><?php echo$r['username'].':'.$r['name'];?></a><br>
+                  <small class="text-muted"><small><?php echo _agologgedin($r['lti']);?></small></small>
+                </td>
+                <td class="text-center align-middle d-none d-sm-table-cell"><?php echo ucfirst(rank($r['rank']));?></td>
+                <td class="text-center align-middle d-none d-sm-table-cell"><?php echo$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
+                <td class="align-middle" id="controls_<?php echo$r['id'];?>">
+                  <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                    <div class="btn-group" role="group" aria-label="Item Controls">
+                      <a class="btn" data-tooltip="tooltip" data-title="Edit" href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                      <?php if($user['options'][0]==1){?>
+                        <button class="<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Restore" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished');"><?php svg('untrash');?></button>
+                        <button class="trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete');"><?php svg('trash');?></button>
+                        <button class="trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','login');"><?php svg('purge');?></button>
+                      <?php }?>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            <?php }?>
+          </tbody>
+        </table>
+        <?php include'core/layout/footer.php';?>
+      </div>
+    </div>
+  </section>
+</main>
 <?php }

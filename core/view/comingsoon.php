@@ -7,13 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.3 Fix content parsing to help with SEO Indexing.
- * @changes    v0.0.3 Add Forgotten Google Analytics tracking script.
- * @changes    v0.0.20 Add parsing more options.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`='comingsoon'");
 $s->execute();

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -32,33 +31,6 @@ if($f!=''&&$t!=''&&$v!=0){
 	]);
   if($v==0)$v='';
   $id=$db->lastInsertId();
-echo'<script>'.
-  'window.top.window.$("#discountrange").append(`<div id="l_'.$id.'" class="form-group">'.
-		'<div class="input-group">'.
-			'<div class="input-group-prepend">'.
-				'<div class="input-group-text">From &#36;</div>'.
-			'</div>'.
-			'<input type="number" class="form-control" value="'.$f.'" readonly>'.
-			'<div class="input-group-append">'.
-				'<div class="input-group-text">To &#36;</div>'.
-			'</div>'.
-			'<input type="number" class="form-control" value="'.$t.'" readonly>'.
-			'<div class="input-group-append">'.
-				'<div class="input-group-text">Method</div>'.
-			'</div>'.
-			'<input type="text" class="form-control" value="'.($m==2?'&#37; Off':'&#36; Off').'" readonly>'.
-			'<div class="input-group-append">'.
-				'<div class="input-group-text">Value</div>'.
-			'</div>'.
-			'<input type="number" class="form-control" value="'.$v.'" readonly>'.
-			'<div class="input-group-append">'.
-				'<form target="sp" action="core/purge.php">'.
-					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<input type="hidden" name="t" value="choices">'.
-					'<button class="btn btn-secondary trash" data-tooltip="tooltip" data-title="Delete"" aria-label="Delete">'.svg2('trash').'</button>'.
-				'</form>'.
-			'</div>'.
-		'</div>'.
-	'</div>`);'.
-'</script>';
-}
+echo'<script>window.top.window.$("#discountrange").append(`<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">From &#36;</div><input type="number" value="'.$f.'" readonly><div class="input-text">To &#36;</div><input type="number" value="'.$t.'" readonly><div class="input-text">Method</div><input type="text" value="'.($m==2?'&#37; Off':'&#36; Off').'" readonly><div class="input-text">Value</div><input type="number" value="'.$v.'" readonly><form target="sp" action="core/purge.php"><input type="hidden" name="id" value="'.$id.'"><input type="hidden" name="t" value="choices"><button type="submit" class="trash" data-tooltip="tooltip" data-title="Delete"" aria-label="Delete">'.svg2('trash').'</button></form></div>`);</script>';
+}else
+	echo'<script>window.top.window.toastr["error"]("Not all data was entered");</script>';

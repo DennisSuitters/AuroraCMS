@@ -7,78 +7,72 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.18
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.7 Fix Width Formatting for better responsiveness.
- * @changes    v0.0.18 Adjust Editable Fields for transitioning to new Styling and better Mobile Device layout.
  */?>
-<main id="content" class="main">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-    <li class="breadcrumb-item active">Database</li>
-  </ol>
-  <div class="container-fluid">
-    <div class="card">
-      <div class="card-body">
+<main>
+  <section id="content">
+    <div class="content-title-wrapper">
+      <div class="content-title">
+        <div class="content-title-heading">
+          <div class="content-title-icon"><?php svg('database','i-3x');?></div>
+          <div>Preferences - Database</div>
+          <div class="content-title-actions">
+            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+          </div>
+        </div>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+          <li class="breadcrumb-item active">Database</li>
+        </ol>
+      </div>
+    </div>
+    <div class="container-fluid p-0">
+      <div class="card border-radius-0 shadow p-3">
         <legend>Database Options</legend>
         <form target="sp" method="post" action="core/changeprefix.php">
-          <div class="form-group">
-            <label for="prefix">Table Prefix</label>
-            <div class="input-group">
-              <input type="text" id="prefix" class="form-control textinput" name="dbprefix" value="<?php echo$prefix;?>" placeholder="Enter a Table Prefix...">
-              <div class="input-group-append">
-                <button type="submit" class="btn btn-secondary" onclick="$('body').append('<div id=blocker><div></div></div>');">Update</button>
-              </div>
-            </div>
+          <label for="prefix">Table Prefix</label>
+          <div class="form-row">
+            <input class="textinput" id="prefix" name="dbprefix" type="text" value="<?php echo$prefix;?>" placeholder="Enter a Table Prefix...">
+            <button type="submit" onclick="$('body').append('<div id=blocker><div></div></div>');">Update</button>
           </div>
         </form>
-        <legend>Database Backup/Restore</legend>
+        <legend class="mt-3">Database Backup/Restore</legend>
         <div id="backup" name="backup">
           <div id="backup_info">
             <?php $tid=$ti-2592000;
-            if($config['backup_ti']<$tid)
-              echo$config['backup_ti']==0?'<div class="alert alert-info" role="alert">A Backup has yet to be performed.</div>':'<div class="alert alert-danger" role="alert">It has been more than 30 days since a Backup has been performed.</div>';?>
+            if($config['backup_ti']<$tid)echo$config['backup_ti']==0?'<div class="alert alert-info" role="alert">A Backup has yet to be performed.</div>':'<div class="alert alert-danger" role="alert">It has been more than 30 days since a Backup has been performed.</div>';?>
           </div>
           <form target="sp" method="post" action="core/backup.php">
-            <div class="form-group">
+            <div class="form-row">
               <label>Backup</label>
-              <div class="form-text small text-muted float-right">Note: Only the database is backed up.</div>
-              <div class="input-group">
-                <button type="submit" class="btn btn-secondary btn-block">Perform Backup</button>
-              </div>
+              <small class="form-text text-right">Note: Only the database is backed up.</text>
+            </div>
+            <div class="form-row">
+              <button class="btn-block" type="submit">Perform Backup</button>
             </div>
           </form>
-          <div id="backups" class="form-group">
+          <div id="backups">
             <?php foreach(glob("media".DS."backup".DS."*") as$file){
               $filename=basename($file);
               $filename=rtrim($filename,'.sql.gz');?>
-              <div id="l_<?php echo$filename;?>" class="form-group">
-                <div class="input-group">
-                  <a class="btn btn-secondary col" href="<?php echo$file;?>">Click to Download <?php echo ltrim($file,'media'.DS.'backup'.DS);?></a>
-                  <div class="input-group-append">
-                    <button class="btn btn-secondary trash" onclick="removeBackup('<?php echo$filename;?>')" aria-label="Delete"><?php svg('trash');?></button>
-                  </div>
-                </div>
+              <div id="l_<?php echo$filename;?>" class="form-row mt-1">
+                <a class="btn col-12" href="<?php echo$file;?>">Click to Download <?php echo ltrim($file,'media'.DS.'backup'.DS);?></a>
+                <button class="trash" aria-label="Delete" onclick="removeBackup('<?php echo$filename;?>');"><?php svg('trash');?></button>
               </div>
             <?php }?>
           </div>
           <form target="sp" method="post" enctype="multipart/form-data" action="core/restorebackup.php">
-            <div class="form-group">
-              <label>Restore</label>
-              <div class="input-group">
-                <div class="custom-file col">
-                  <input id="restorefu" type="file" class="custom-file-input" name="fu" accept="application/sql">
-                  <label class="custom-file-label" for="resturefu">Choose File</label>
-                </div>
-                <div class="input-group-append">
-                  <button type="submit" class="btn btn-secondary">Restore</button>
-                </div>
-              </div>
+            <label>Restore</label>
+            <div class="form-row">
+              <input class="custom-file-input" id="restorefu" type="file" name="fu" accept="application/sql">
+              <button type="submit">Restore</button>
             </div>
           </form>
         </div>
+        <?php include'core/layout/footer.php';?>
       </div>
     </div>
-  </div>
+  </section>
 </main>

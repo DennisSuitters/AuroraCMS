@@ -8,7 +8,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,6 +16,13 @@ if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(session_status()==PHP_SESSION_NONE){
   session_start();
   define('SESSIONID',session_id());
+}
+if(!isset($_SERVER['SCRIPT_URI'])){
+  $_SERVER['SCRIPT_URI']=(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'?'https://':'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
+  $pos=strrpos($_SERVER['SCRIPT_URI'],'/');
+  if($pos!==false){
+    $_SERVER['SCRIPT_URI']=substr($_SERVER['SCRIPT_URI'],0,$pos+1);
+  }
 }
 if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))
   $settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);

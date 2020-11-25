@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.10 Fix Toastr Notifications.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -123,7 +121,7 @@ if(file_exists('..'.DS.'media'.DS.'backup'.DS.$file)){
   $q->execute([
 		':backup_ti'=>$ti
 	]);?>
-  window.top.window.$('#backups').append(`<?php echo'<div id="l_'.$fileid.'" class="form-group row"><label class="col-form-label col-sm-2">&nbsp;</label><div class="input-group col-sm-10"><a class="btn btn-secondary col" href="media/backup/'.$file.'">Click to Download '.$file.'</a><div class="input-group-append"><button class="btn btn-secondary trash" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\')" aria-label="Delete">'.svg2('trash').'</button></div></div></div>';?>`);
+  window.top.window.$('#backups').append(`<?php echo'<div id="l_'.$fileid.'" class="form-group row"><label class="col-form-label col-sm-2">&nbsp;</label><div class="input-group col-sm-10"><a class="btn col" href="media/backup/'.$file.'">Click to Download '.$file.'</a><div class="input-group-append"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button></div></div></div>';?>`);
   window.top.window.$('#alert_backup').addClass('d-none');
 <?php }else{?>
 	window.top.window.toastr["error"]("There was an issue adding the Data!");

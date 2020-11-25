@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.0.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -24,22 +23,22 @@ $s->execute([
 	':id'=>$id
 ]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
-<div class="form-group row">
-  <label for="title" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">Title</label>
-  <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-    <input type="text" id="title" class="form-control textinput2" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="seo" data-dbc="title" placeholder="Enter a Title...">
-    <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savetitle" class="btn btn-secondary save2" data-dbid="title" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
-  </div>
-</div>
-<div class="form-group row">
-  <div class="input-group col-12">
-    <form target="sp" method="POST" action="core/update.php" class="w-100">
-      <input type="hidden" name="id" value="<?php echo$r['id'];?>">
-      <input type="hidden" name="t" value="seo">
-      <input type="hidden" name="c" value="notes">
-      <textarea id="notes" class="form-control summernote" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="notes" name="da" readonly><?php echo$r['notes'];?></textarea>
-    </form>
-  </div>
+<div class="fancybox-ajax">
+	<h6 class="bg-dark p-2">Edit SEO Information</h6>
+	<div class="m-3">
+		<label for="title">Title</label>
+		<div class="form-row mb-5">
+		  <input class="textinput2" id="title" data-dbid="<?php echo$r['id'];?>" data-dbt="seo" data-dbc="title" type="text" value="<?php echo$r['title'];?>" placeholder="Enter a Title...">
+		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save"><?php svg('save');?></button>
+		</div>
+		<form class="w-100" target="sp" method="post" action="core/update.php">
+		  <input name="id" type="hidden" value="<?php echo$r['id'];?>">
+		  <input name="t" type="hidden" value="seo">
+		  <input name="c" type="hidden" value="notes">
+		  <textarea class="summernote" id="notes" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="notes" name="da" readonly><?php echo$r['notes'];?></textarea>
+		  </form>
+		</div>
+	</div>
 </div>
 <script>
   $('.summernote').summernote({

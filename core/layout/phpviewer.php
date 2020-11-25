@@ -7,19 +7,18 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.4 Fix Tooltips.
- * @changes    v0.0.11 Prepare for PHP7.4 Compatibility. Remove {} in favour [].
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
 require'..'.DS.'db.php';
 include'..'.DS.'class.projecthoneypot.php';
 $idh=time();
-echo'<div id="phpviewer'.$idh.'">';
+echo'<div class="fancybox-ajax">'.
+      '<h6 class="bg-dark p-2">Project Honey Pot IP Checker</h6>'.
+      '<div id="phpviewer'.$idh.'">';
 if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
 else{
   function svg($svg,$class=null,$size=null){
@@ -59,11 +58,11 @@ else{
       ]);
       $row=$sql->fetch(PDO::FETCH_ASSOC);
       if($row['cnt']<1){?>
-  <div id="phpbuttons" class="btn-group pull-right" role="group">
+  <div class="btn-group pull-right" id="phpbuttons" role="group">
     <form id="blacklist<?php echo$idh;?>" method="post" action="core/add_blacklist.php">
-      <input type="hidden" name="id" value="<?php echo$id;?>">
-      <input type="hidden" name="t" value="<?php echo$t;?>">
-      <button class="btn btn-secondary btn-xs" data-tooltip="tooltip" data-title="Add Oringinators IP to Blacklist" aria-label="Add"><?php echo svg2('security');?></button>
+      <input name="id" type="hidden" value="<?php echo$id;?>">
+      <input name="t" type="hidden" value="<?php echo$t;?>">
+      <button data-tooltip="tooltip" data-title="Add Oringinators IP to Blacklist" aria-label="Add"><?php echo svg2('security');?></button>
     </form>
   </div>
   </div>
@@ -82,3 +81,4 @@ else{
     }else echo'The IP Recorded isn\'t valid.';
   }else echo'No Results Found.';
 }
+echo'</div>';

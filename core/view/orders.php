@@ -7,17 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.8 Add PayPal Parser.
- * @changes    v0.0.15 Fix incorrect variable $r['postageCost'] line 182
- * @changes    v0.0.15 Add GST Calculation and Template Parser.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.18 https://auspost.com.au/developers/docs
- * @changes    v0.0.19 Add calculating payment deductions.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
 require'core/puconverter.php';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -40,16 +40,16 @@ if($id==0){
   $q->execute([
     ':id'=>$id
   ]);
-  $c=$q->fetch(PDO::FETCH_ASSOC);
+  $client=$q->fetch(PDO::FETCH_ASSOC);
 }?>
-  window.top.window.$('#client_business').val('<?php echo$c['username'].($c['name']!=''?' ['.$c['name'].']':'').($c['business']!=''?' -> '.$c['business']:'');?>');
-  window.top.window.$('#address').val('<?php echo$c['address'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#suburb').val('<?php echo$c['suburb'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#state').val('<?php echo$c['state'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#city').val('<?php echo$c['city'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#postcode').val('<?php echo$c['postcode'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#email').val('<?php echo$c['email'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#phone').val('<?php echo$c['phone'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#mobile').val('<?php echo$c['mobile'];?>').data("dbid",<?php echo$c['id'];?>);
+  window.top.window.$('#to').html(`<?php echo'<strong>'.$client['username'].($client['name']!=''?' ['.$client['name'].']':'').'<br>'.
+    ($client['business']!=''?' -> '.$client['business'].'<br>':'').'</strong>'.
+    '<small>'.
+      ($client['email']!=''?'Email: '.$client['email'].'<br>':'').
+      ($client['phone']!=''?'Phone: '.$client['phone'].'<br>':'').
+      ($client['mobile']!=''?'Mobile: '.$client['mobile'].'<br>':'').
+      $client['address'].', '.$client['suburb'].', '.$client['city'].'<br>'.
+      $client['state'].', '.($client['postcode']!=0?', '.$client['postcode']:'').
+    '</small>';?>`);
 <?php
 echo'</script>';

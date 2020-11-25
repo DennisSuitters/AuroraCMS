@@ -7,41 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Add Related Content Processing
- * @changes    v0.0.2 Make sure all links end with /
- * @changes    v0.0.3 Add parsing of <print view>
- * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
- * @changes    v0.0.4 Adjust SQL for Related Items so only Published Content is selected.
- * @changes    v0.0.4 Add Front End Editing.
- * @changes    v0.0.7 Add Parsing for RRP and Reduced Cost Prices.
- * @changes    v0.0.8 Fix missing SQL prefix from SQL Query at line 326
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.11 Add parsing for Inventory Item status.
- * @changes    v0.0.12 Fix showing stock status.
- * @changes    v0.0.12 Add Parsing for Panoramic Photo.
- * @changes    v0.0.14 Fix Index/Home page not showing Category images.
- * @changes    v0.0.14 Adjust Template Category select to allow selecting up to 4 different categories.
- * @changes    v0.0.14 Fix displaying just Categories when using Shop by Category.
- * @changes    v0.0.15 Fix parsing in of comments correctly.
- * @changes    v0.0.16 Add parsing for Weight, Size, Brand and Condition.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.16 Add parsing for Sort Form selection.
- * @changes    v0.0.17 Add parsing video coverVideo, determines if YouTube, Vimeo or Server.
- * @changes    v0.0.17 Add option to enable 360 Viewer Images for content items.
- * @changes    v0.0.17 Add SQL for rank fetching data.
- * @changes    v0.0.18 Reformat source for legibility.
- * @changes    v0.0.18 Fix Content Item Parser not removing all unneeded template items.
- * @changes    v0.0.18 Fix Sort Ordering which was opposite order than expected.
- * @changes    v0.0.18 Fix Multiple Content Items not using Thumbnails.
- * @changes    v0.0.19 Fix broken images fallback.
- * @changes    v0.0.20 Fix broken images for media items.
- * @changes    v0.0.20 Add Quick View parsing for Inventory items.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
- * @changes    v0.0.20 Add parsing for srcset images.
- * @changes    v0.0.20 Add parsing for Breadcrumbs.
  */
 $rank=0;
 $notification='';
@@ -127,7 +95,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		':rank'=>$_SESSION['rank']
 	]);
 	$show='categories';
-}elseif(isset($args[0])&&strlen($args[0])==4){
+}elseif(isset($args[0])&&strlen($args[0])==4&&is_numeric($args[0])){
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `ti`>:ti AND `rank`<=:rank ORDER BY `ti` ASC");
 	$tim=strtotime('01-Jan-'.$args[0]);
 	$s->execute([

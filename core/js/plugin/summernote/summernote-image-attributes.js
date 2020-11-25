@@ -331,6 +331,7 @@
       context.memo('button.imageAttributes',function(){
         var button=ui.button({
           contents:options.imageAttributes.icon,
+          container:options.container,
           tooltip:lang.imageAttributes.tooltip,
           click:function(e){
             context.invoke('imageAttributes.show');

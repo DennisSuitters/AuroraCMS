@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 $getcfg=true;
 require'db.php';
@@ -23,32 +22,15 @@ $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP 
 $s->execute();
 if($s->rowCount()>0){
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    echo'<span id="l_'.$r['id'].'" class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" data-sid="'.$r['sid'].'" data-chatname="'.$r['name'].'" data-chatemail="'.$r['email'].'">'.
-          '<span class="btn-group float-right">';
+    echo'<span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_'.$r['id'].'" data-sid="'.$r['sid'].'" data-chatname="'.$r['name'].'" data-chatemail="'.$r['email'].'"><span class="btn-group float-right">';
 		$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
 		$scc->execute([
 			':ip'=>$r['ip']
 		]);
 		if($scc->rowCount()<1){
-          	echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_blacklist.php">'.
-              '<input type="hidden" name="id" value="'.$r['id'].'">'.
-							'<input type="hidden" name="t" value="livechat">'.
-							'<input type="hidden" name="r" value="Added Manually via Live Chat">'.
-              '<button class="btn btn-secondary btn-sm" data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist">'.svg2('security').'</button>'.
-            '</form>';
+    	echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_blacklist.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="r" type="hidden" value="Added Manually via Live Chat"><button data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist">'.svg2('security').'</button></form>';
 		}
-      	echo'<form target="sp" method="GET" action="core/purge.php">'.
-              '<input type="hidden" name="id" value="'.$r['id'].'">'.
-              '<input type="hidden" name="t" value="livechat">'.
-              '<input type="hidden" name="c" value="'.$r['sid'].'">'.
-              '<button class="btn btn-secondary btn-sm trash" onclick="javascript:clearTimeout(chatTimer);" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
-            '</form>'.
-          '</span>'.
-          '<small>'.$r['name'].'</small><br>'.
-          '<small>'.$r['email'].'</small><br>'.
-          '<small><small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.
-					($r['status']=='unseen'?'<span class="btn-group float-right"><span class="badge badge-danger">Unread</span></span>':'<span class="btn-group float-right"><span class="badge badge-success">Read</span></span>').
-        '</span>';
+  	echo'<form target="sp" method="get" action="core/purge.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="c" type="hidden" value="'.$r['sid'].'"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);">'.svg2('trash').'</button></form></span><small>'.$r['name'].'</small><br><small>'.$r['email'].'</small><br><small><small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.($r['status']=='unseen'?'<span class="btn-group float-right"><small class="badger badge-danger">Unread</small></span>':'<span class="btn-group float-right"><small class="badger badge-success">Read</small></span>').'</span>';
   }
 }?>
 <script>

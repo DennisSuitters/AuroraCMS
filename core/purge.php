@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.5 Add Removal of Live Chat conversations.
- * @changes    v0.0.15 Add Removal of Cart items.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -89,8 +86,10 @@ if($id!=0&&$id!='activity'){
   $q->execute([
     ':id'=>$id
   ]);
-  if($tbl=='media')$el='media_items_';
-}
+  if($tbl=='media')$el='media_items_';?>
+  window.top.window.$('#l_<?php echo$id;?>').addClass('zoom-out');
+  window.top.window.setTimeout(function(){window.top.window.$('#l_<?php echo$id;?>').remove();},500);
+<?php }
 if($tbl=='livechat'){
   $q=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE `sid`=:sid");
   $q->execute([
@@ -101,7 +100,6 @@ if($tbl=='livechat'){
   window.top.window.$('#chatTitle').html('&nbsp;');
   window.top.window.$('#chatScreen').html('');
   window.top.window.$('#chatsid,#chataid,#chatemail,#chatname').val('');
-  window.top.window.$('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
 <?php }
 if($tbl=='errorlog'){
   unlink('..'.DS.'media'.DS.'cache'.DS.'error.log');
@@ -109,8 +107,7 @@ if($tbl=='errorlog'){
   $id=0;
 }
 if($tbl=='choices'){?>
-  window.top.window.$('#l_<?php echo$id;?>').addClass('animated zoomOut');
+  window.top.window.$('#l_<?php echo$id;?>').addClass('zoom-out');
   window.top.window.setTimeout(function(){window.top.window.$('#l_<?php echo$id;?>').remove();},500);
-  window.top.window.$('[data-tooltip="tooltip"], .tooltip').tooltip('hide');
 <?php }
 echo'</script>';

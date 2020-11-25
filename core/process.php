@@ -7,28 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.2 Fix Meta-Title from using Old Default (no longer used),
- *             and only use content Title first, then Page Title if Content empty.
- * @changes    v0.0.2 Add check if Visitor Tracking is Enabled.
- * @changes    v0.0.2 Make sure all links end with /
- * @changes    v0.0.3 Add Check if shareImage is no image and replace with FavIcon.
- * @changes    v0.0.3 Fix Image for JSON-LD Schema to fall back to Favicon.
- * @changes    v0.0.4 Adjust Visitor Tracking Option.
- * @changes    v0.0.4 Add Front End Editing.
- * @changes    v0.0.4 Fix Tracking Acquisition.
- * @changes    v0.0.5 Add check if User Agent isn't set, or User Agent is
- *             Google Speed Insight and don't render Google Analytics Code if us.
- * @changes    v0.0.7 Add Development Tools to assist with Theme Development.
- * @changes    v0.0.10 Replace {} to [] for PHP7.4 Compatibilty.
- * @changes    v0.0.10 Add PHP Version to Developer Display and move to top of page.
- * @changes    v0.0.11 Add login.html parsing to display Terms of Service in Modal.
- * @changes    v0.0.11 Add logged in info alert.
- * @changes    v0.0.16 Reduce preg_replace parsing strings.
- * @changes    v0.0.20 Adjust where development information is parsed into DOM.
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 require'core'.DS.'db.php';
 if(isset($headerType))header($headerType);
@@ -146,7 +127,11 @@ if($seoKeywords==''){
   else$seoKeywords=$page['seoKeywords'];
 }
 $rss='';
-if($args[0]!='index'||$args[0]!='bookings'||$args[0]!='contactus'||$args[0]!='cart'||$args[0]!='proofs'||$args[0]!='settings'||$args[0]!='accounts'){}else{$rss=$view;}
+if(isset($args[0])){
+  if($args[0]!='index'||$args[0]!='bookings'||$args[0]!='contactus'||$args[0]!='cart'||$args[0]!='proofs'||$args[0]!='settings'||$args[0]!='accounts'){}else{
+    $rss=$view;
+  }
+}
 $head=preg_replace([
   '/<print config=[\"\']?business[\"\']?>/',
   '/<print theme=[\"\']?title[\"\']?>/',

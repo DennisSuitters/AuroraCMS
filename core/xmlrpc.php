@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.20
+ * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -27,10 +26,11 @@ $s->execute([
 ]);
 if($s->rowCount()<1){
   $r=$s->fetch(PDO::FETCH_ASSOC);
-  $sql=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`ti`) VALUES (:ip,:oti,:ti)");
+  $sql=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
   $sql->execute([
     ':ip'=>$ip,
     ':oti'=>$ti,
+    ':reason'=>'IP Added due to accessing xmlrpc'
     ':ti'=>time()
   ]);
 }

@@ -34,7 +34,7 @@ if($ttl==''||$qty==''){?>
 	$id=$db->lastInsertId();
 	$e=$db->errorInfo();
 	if(is_null($e[2])){?>
-	window.top.window.$('#itemoptions').append('<?php echo'<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Option</div><input type="text" name="da" value="'.$ttl.'" readonly><div class="input-text">Quantity</div><input name="da" type="text" value="'.$qty.'" placeholder="Quantity" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg('trash').'</button></form></div>';?>');
+	window.top.window.$('#itemoptions').append('<?php echo'<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Option</div><input type="text" name="da" value="'.$ttl.'" readonly><div class="input-text">Quantity</div><input name="da" type="text" value="'.$qty.'" placeholder="Quantity" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg('trash').'</button></form></div>';?>');
 <?php }else{?>
 	window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php }

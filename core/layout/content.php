@@ -117,9 +117,8 @@ else{
               <div class="content-title-icon"><?php svg('content','i-3x');?></div>
               <div>Content</div>
               <div class="content-title-actions">
-                <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-                <?php echo$user['options'][7]==1?' <a class="btn" data-tooltip="tooltip" data-title="Content Settings" href="'.URL.$settings['system']['admin'].'/content/settings" role="button" aria-label="Content Settings">'.svg2('settings').'</a>':'';
-                if($args[1]!='')echo$user['options'][0]==1?' <a class="btn add" data-tooltip="tooltip" data-title="Add '.ucfirst($args[1]).'" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+                <?php echo$user['options'][7]==1?' <a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings" role="button" aria-label="Content Settings">'.svg2('settings').'</a>':'';
+                if($args[1]!='')echo$user['options'][0]==1?' <a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" aria-label="Add '.ucfirst($args[1]).'">'.svg2('add').'</a>':'';?>
               </div>
             </div>
             <ol class="breadcrumb">
@@ -233,7 +232,7 @@ else{
                     <th class="col">Code</th>
                     <th class="col text-center d-none d-sm-table-cell">Comments</th>
                     <th class="col text-center d-none d-sm-table-cell">Reviews</th>
-                    <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options'][1]==1?' <button class="trash" data-tooltip="tooltip" data-title="Clear All" aria-label="Clear All" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);">'.svg2('eraser').'</button>':'';?></th>
+                    <th class="col text-center d-none d-sm-table-cell">Views<?php echo$user['options'][1]==1?' <button class="trash" data-tooltip="tooltip" aria-label="Clear All" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);">'.svg2('eraser').'</button>':'';?></th>
                     <th class="col"></th>
                   </tr>
                 </thead>
@@ -252,7 +251,7 @@ else{
                       <td class="align-middle">
                         <a href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?php echo$r['title'];?>"><?php echo $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="avatar" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                         <?php if($user['options'][1]==1){
-                          echo$r['suggestions']==1?'<span data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
+                          echo$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
                           if($r['contentType']=='proofs'){
                             $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
                             $sp->execute([
@@ -279,7 +278,7 @@ else{
                             'contentType'=>$r['contentType']
                           ]);
                           $sccc=$scc->rowCount($scc);
-                          echo'<a class="btn'.($sccc>0?' add':'').'" data-tooltip="tooltip" data-title="'.$sccc.' New Comments" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-comments" role="button" aria-label="New Comments">'.$cnt['cnt'].'</a>';
+                          echo($cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-comments" role="button" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].'</a>':'');
                         }?>
                       </td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
@@ -293,19 +292,20 @@ else{
                           ':rid'=>$r['id']
                         ]);
                         $src=$srr->rowCount($srr);
-                        echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip" data-title="'.$src.' New Reviews':'').' role="button" aria-label="New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
+                        echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip"':'').' role="button" aria-label="'.$src.' New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
                       </td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
-                        <?php echo$user['options'][1]==1?'<button class="btn trash" data-tooltip="tooltip" data-title="Clear" aria-label="Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
+                        <?php echo$user['options'][1]==1?'<button class="btn trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>
                       </td>
                       <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <a class="btn" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' title="View" aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                            <?php if($r['status']=='published'){?><button data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['metaDescription']?$r['metaDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button><?php }?>
+                            <a class="btn" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="btn <?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Restore" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
-                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
-                              <button class="btn trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
+                              <button class="btn add <?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
+                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
+                              <button class="btn trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
                             <?php }?>
                           </div>
                         </div>

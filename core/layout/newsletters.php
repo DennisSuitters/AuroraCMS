@@ -37,9 +37,8 @@ else{
             <div class="content-title-icon"><?php svg('newspaper','i-3x');?></div>
             <div>Newsletters</div>
             <div class="content-title-actions">
-              <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-              <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Newsletters Settings" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" aria-label="Newsletters Settings">'.svg2('settings').'</a>':'';?>
-              <?php echo$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" data-title="Add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+              <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" aria-label="Newsletters Settings">'.svg2('settings').'</a>':'';?>
+              <?php echo$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
             </div>
           </div>
           <ol class="breadcrumb">
@@ -76,12 +75,12 @@ else{
                       <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Send Newsletters" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
-                            <a class="btn" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' data-title="Edit" aria-label="Edit"':' data-title="View" aria-label="View"';?> href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                            <?php echo$user['options'][1]==1?'<button class="btn" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
+                            <a class="btn" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?> href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="<?php echo$r['status']!='delete'?' hidden':'';?>" data-tooltip="tooltip" data-title="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');" aria-label="Restore"><?php svg('untrash');?></button>
-                              <button class="trash<?php echo$r['status']=='delete'?' hidden':'';?>" data-tooltip="tooltip" data-title="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');" aria-label="Delete"><?php svg('trash');?></button>
-                              <button class="trash<?php echo$r['status']!='delete'?' hidden':'';?>" data-tooltip="tooltip" data-title="Purge" onclick="purge('<?php echo$r['id'];?>','content');" aria-label="Purge"><?php svg('purge');?></button>
+                              <button class="btn<?php echo$r['status']!='delete'?' hidden':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');" aria-label="Restore"><?php svg('untrash');?></button>
+                              <button class="btn trash<?php echo$r['status']=='delete'?' hidden':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');" aria-label="Delete"><?php svg('trash');?></button>
+                              <button class="btn trash<?php echo$r['status']!='delete'?' hidden':'';?>" data-tooltip="tooltip" onclick="purge('<?php echo$r['id'];?>','content');" aria-label="Purge"><?php svg('purge');?></button>
                             <?php }?>
                           </div>
                         </div>
@@ -130,7 +129,7 @@ else{
                       <td class="align-middle">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php echo$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`subscribers`);">'.svg2('trash').'</button>':'';?>
+                            <?php echo$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`subscribers`);">'.svg2('trash').'</button>':'';?>
                           </div>
                         </div>
                       </td>

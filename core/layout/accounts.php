@@ -72,9 +72,8 @@ else{
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Accounts</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Accounts Settings" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" aria-label="Accounts Settings">'.svg2('settings').'</a>':'&nbsp;';
-            echo$user['options'][0]==1?'&nbsp;<a class="btn add" data-tooltip="tooltip" data-title="Add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add">'.svg2('add').'</a>':'&nbsp;';?>
+            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" aria-label="Accounts Settings">'.svg2('settings').'</a>':'&nbsp;';
+            echo$user['options'][0]==1?'&nbsp;<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add">'.svg2('add').'</a>':'&nbsp;';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -111,11 +110,11 @@ else{
                 <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                     <div class="btn-group" role="group" aria-label="Item Controls">
-                      <a class="btn" data-tooltip="tooltip" data-title="Edit" href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                      <a class="btn" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
                       <?php if($user['options'][0]==1){?>
-                        <button class="<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Restore" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished');"><?php svg('untrash');?></button>
-                        <button class="trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete');"><?php svg('trash');?></button>
-                        <button class="trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','login');"><?php svg('purge');?></button>
+                        <button class="btn<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','login','status','unpublished');"><?php svg('untrash');?></button>
+                        <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','login','status','delete');"><?php svg('trash');?></button>
+                        <button class="btn trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','login');"><?php svg('purge');?></button>
                       <?php }?>
                     </div>
                   </div>

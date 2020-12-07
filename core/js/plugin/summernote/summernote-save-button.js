@@ -44,6 +44,7 @@
           contents: options.save.icon,
           container: options.container,
           tooltip:  lang.save.tooltip,
+          placement: options.placement,
           click: function (e) {
             e.preventDefault();
             $('.page-block').addClass('d-block');
@@ -70,7 +71,7 @@
               $('#textReadingLevel').val(stats[2]);
             });
             if(options.airMode==false){
-              $editor.find('.note-save button').removeClass('bg-danger');
+              $editor.find('.note-save button').removeClass('btn-danger');
             }else{
               $('.note-editor').css({'border-color':'#ddd'});
             }
@@ -82,7 +83,7 @@
         'summernote.change':function (we, e) {
           unsaved = true;
           if(options.airMode==false){
-            $editor.find('.note-save button').addClass('bg-danger');
+            $editor.find('.note-save button').addClass('btn-danger');
           }else{
             $('.note-editor').css({'border-color':'#f00'});
           }
@@ -101,7 +102,7 @@
             }
             unsaved = false;
             if(options.airMode==false){
-              $editor.find('.note-save button').removeClass('bg-danger');
+              $editor.find('.note-save button').removeClass('btn-danger');
             }else{
               $('.note-editor').css({'border-color':'#ddd'});
             }

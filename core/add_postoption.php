@@ -29,5 +29,5 @@ if($t!=''){
 	]);
   if($v==0)$v='';
   $id=$db->lastInsertId();
-echo'<script>window.top.window.$("#postoption").append(`<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Code</div><input name="service" type="text" value="'.$c.'" readonly><div class="input-text">Title</div><input name="service" type="text" value="'.$t.'" readonly><div class="input-text">Cost</div><input name="cost" type="text" value="'.$v.'" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete">'.svg2('trash').'</button></form></div>`);</script>';
+echo'<script>window.top.window.$("#postoption").append(`<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Code</div><input name="service" type="text" value="'.$c.'" readonly><div class="input-text">Title</div><input name="service" type="text" value="'.$t.'" readonly><div class="input-text">Cost</div><input name="cost" type="text" value="'.$v.'" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button></form></div>`);</script>';
 }

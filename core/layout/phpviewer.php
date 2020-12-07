@@ -49,7 +49,7 @@ else{
           if($h->isCommentSpammer()==1)echo'a Comment Spammer';
           if($h->isHarvester()==1)echo'an Email Harvester';
           if($h->isSearchEngine()==1)echo', but could be a Search Engine.<br>';else echo'.<br>';
-          if($h->getThreatScore()>0)echo'The Threat Score for this record is <strong>'.$h->getThreatScore().'</strong> <a target="_blank" href="https://www.projecthoneypot.org/threat_info.php" data-tooltip="tooltip" data-title="Information about what this value represents.">?</a>.';
+          if($h->getThreatScore()>0)echo'The Threat Score for this record is <strong>'.$h->getThreatScore().'</strong> <a target="_blank" href="https://www.projecthoneypot.org/threat_info.php" data-tooltip="tooltip" aria-label="Information about what this value represents.">?</a>.';
         }
       }else echo'No Recorded Incidents were found...';
       $sql=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."iplist` WHERE `ip`=:ip");
@@ -62,7 +62,7 @@ else{
     <form id="blacklist<?php echo$idh;?>" method="post" action="core/add_blacklist.php">
       <input name="id" type="hidden" value="<?php echo$id;?>">
       <input name="t" type="hidden" value="<?php echo$t;?>">
-      <button data-tooltip="tooltip" data-title="Add Oringinators IP to Blacklist" aria-label="Add"><?php echo svg2('security');?></button>
+      <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><?php echo svg2('security');?></button>
     </form>
   </div>
   </div>

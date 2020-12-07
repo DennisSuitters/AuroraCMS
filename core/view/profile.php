@@ -20,7 +20,21 @@ if(stristr($html,'<breadcrumb>')){
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+  $jsonld='<script type="application/ld+json">'.
+    '{'.
+      '"@context":"http://schema.org",'.
+      '"@type":"BreadcrumbList",'.
+      '"itemListElement":'.
+      '['.
+        '{'.
+          '"@type":"ListItem",'.
+          '"position":1,'.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.'",'.
+              '"name":"Home"'.
+            '}'.
+        '},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -37,7 +51,15 @@ if(stristr($html,'<breadcrumb>')){
       URL.'profile',
       'Profile'
     ],$breaditem);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.'profile","name":"Profile"}},';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":2,'.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.'profile",'.
+              '"name":"Profile"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }else{
     $breadit=preg_replace([
@@ -45,7 +67,15 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       'Profile'
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.'profile","name":"Profile"}},';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":2,'.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.'profile",'.
+              '"name":"Profile"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }
   if(isset($args[0])&&$args[0]!=''){
@@ -65,7 +95,15 @@ if(stristr($html,'<breadcrumb>')){
 				htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
 			],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":'.$jsoni.','.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'",'.
+              '"name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }
   if(isset($args[2])&&$args[2]!=''){
@@ -85,7 +123,15 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name": "'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":'.$jsoni.','.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'",'.
+              '"name": "'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }
   if(isset($args[3])&&$args[3]!=''){
@@ -105,7 +151,15 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":'.$jsoni.','.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'",'.
+              '"name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }
   if(isset($args[4])&&$args[4]!=''){
@@ -125,7 +179,15 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}"}},';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":'.$jsoni.','.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'",'.
+              '"name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }
   if($r['title']!=''){
@@ -135,7 +197,15 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name": "'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}"}},}';
+    $jsonld.='{'.
+          '"@type":"ListItem",'.
+          '"position":'.$jsoni.','.
+          '"item":'.
+            '{'.
+              '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
+              '"name": "'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"'.
+            '}'.
+        '},';
     $breaditems.=$breadit;
   }
   $html=preg_replace([

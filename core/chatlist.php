@@ -28,9 +28,9 @@ if($s->rowCount()>0){
 			':ip'=>$r['ip']
 		]);
 		if($scc->rowCount()<1){
-    	echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_blacklist.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="r" type="hidden" value="Added Manually via Live Chat"><button data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist">'.svg2('security').'</button></form>';
+    	echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_blacklist.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="r" type="hidden" value="Added Manually via Live Chat"><button data-tooltip="tooltip" aria-label="Add to Blacklist">'.svg2('security').'</button></form>';
 		}
-  	echo'<form target="sp" method="get" action="core/purge.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="c" type="hidden" value="'.$r['sid'].'"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);">'.svg2('trash').'</button></form></span><small>'.$r['name'].'</small><br><small>'.$r['email'].'</small><br><small><small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.($r['status']=='unseen'?'<span class="btn-group float-right"><small class="badger badge-danger">Unread</small></span>':'<span class="btn-group float-right"><small class="badger badge-success">Read</small></span>').'</span>';
+  	echo'<form target="sp" method="get" action="core/purge.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="c" type="hidden" value="'.$r['sid'].'"><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);">'.svg2('trash').'</button></form></span><small>'.$r['name'].'</small><br><small>'.$r['email'].'</small><br><small><small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.($r['status']=='unseen'?'<span class="btn-group float-right"><small class="badger badge-danger">Unread</small></span>':'<span class="btn-group float-right"><small class="badger badge-success">Read</small></span>').'</span>';
   }
 }?>
 <script>

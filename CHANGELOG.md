@@ -4,3 +4,7 @@
 - Add Seasonal changes to Login and Administration Header.
 - Fix HTML Attributes Order for consistency, which also allowed fixing missed classes when deprecating Bootstrap.
 - Fix issue with categories where any category was only characters the parser would think it was for a year date value and throw errors crashing the whole site, adding a check that the value is numeric fixed the issue.
+- Remove popper.min.js and moment.min.js as they are no longer required.
+- Update Summernote to SkunkWorks version that we are helping to update.
+- Update Summernote plugins to reflect the new changes to ToolTips and Button creation in SkunkWorks version.
+- Make Tooltips work on `aria-label` rather than using `data-title`, reducing double up on textual information when the same is already provided for screen readers.

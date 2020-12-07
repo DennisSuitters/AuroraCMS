@@ -35,7 +35,7 @@ window.top.window.toastr["error"]("Not all Fields were filled in!");
 		$e=$db->errorInfo();
 		if(is_null($e[2])){?>
 <script>
-	window.top.window.$('#social').append('<div id="l_<?php echo$id;?>" class="row mt-1"><div class="col-12 col-md-3"><div class="form-row"><div class="input-text col-12" data-tooltip="tooltip" data-title="<?php echo ucfirst($icon);?>" aria-label="<?php echo ucfirst($icon);?>"><?php svg('social-'.$icon,'i-social');?>&nbsp;&nbsp;<?php echo ucfirst($icon);?></div></div></div><div class="col-12 col-md-8"><div class="form-row"><input type="text" value="<?php echo$url;?>" readonly></div></div><div class="col-12 col-md-1"><div class="form-row"><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="<?php echo$id;?>"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete"><?php svg('trash');?></button></form></div></div></div>');
+	window.top.window.$('#social').append('<div id="l_<?php echo$id;?>" class="row mt-1"><div class="col-12 col-md-3"><div class="form-row"><div class="input-text col-12" data-tooltip="tooltip" aria-label="<?php echo ucfirst($icon);?>"><?php svg('social-'.$icon,'i-social');?>&nbsp;&nbsp;<?php echo ucfirst($icon);?></div></div></div><div class="col-12 col-md-8"><div class="form-row"><input type="text" value="<?php echo$url;?>" readonly></div></div><div class="col-12 col-md-1"><div class="form-row"><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="<?php echo$id;?>"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php svg('trash');?></button></form></div></div></div>');
 </script>
 <?php }
 	}

@@ -19,8 +19,7 @@
           <div class="content-title-icon"><?php svg('address-card','i-3x');?></div>
           <div>Preferences - Contact</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php echo svg('save');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></a>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -114,8 +113,8 @@
           <div class="col-12 col-md-1">
             <label>&nbsp;</label>
             <div class="form-row">
-              <button class="trash" data-tooltip="tooltip" data-title="Clear Values" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><?php svg('eraser');?></button>
-              <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+              <button class="trash" data-tooltip="tooltip" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><?php svg('eraser');?></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
             </div>
           </div>
         </form>
@@ -154,7 +153,7 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete"><?php echo svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php echo svg('trash');?></button>
                     &nbsp;&nbsp;<?php svg('drag','handle');?>
                   </form>
                 </div>
@@ -216,21 +215,21 @@
             <label for="business">Business</label>
             <div class="form-row">
               <input class="textinput" id="business" data-dbid="1" data-dbt="config" data-dbc="business" type="text" value="<?php echo$config['business'];?>" placeholder="Enter a Business...">
-              <button class="save" id="savebusiness" data-tooltip="tooltip" data-title="Save" data-dbid="business" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savebusiness" data-tooltip="tooltip" data-dbid="business" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-4 pr-md-2">
             <label for="abn">ABN</label>
             <div class="form-row">
               <input class="textinput" id="abn" data-dbid="1" data-dbt="config" data-dbc="abn" type="text" value="<?php echo$config['abn'];?>" placeholder="Enter an ABN...">
-              <button class="save" id="saveabn" data-tooltip="tooltip" data-title="Save" data-dbid="abn" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="saveabn" data-tooltip="tooltip" data-dbid="abn" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div id="emailHasError" class="col-12 col-md-4">
             <label for="email">Email</label>
             <div class="form-row">
               <input class="textinput" id="email" data-dbid="1" data-dbt="config" data-dbc="email" type="text" value="<?php echo$config['email'];?>" placeholder="Enter an Email...">
-              <button class="save" id="saveemail" data-tooltip="tooltip" data-title="Save" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="saveemail" data-tooltip="tooltip" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
@@ -239,56 +238,56 @@
             <label for="phone">Phone</label>
             <div class="form-row">
               <input class="textinput" id="phone" data-dbid="1" data-dbt="config" data-dbc="phone" type="text" value="<?php echo$config['phone'];?>" placeholder="Enter a Phone...">
-              <button class="save" id="savephone" data-tooltip="tooltip" data-title="Save" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savephone" data-tooltip="tooltip" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-6 pl-md-1">
             <label for="mobile">Mobile</label>
             <div class="form-row">
               <input class="textinput" id="mobile" data-dbid="1" data-dbt="config" data-dbc="mobile" type="text" value="<?php echo$config['mobile'];?>" placeholder="Enter a Mobile...">
-              <button class="save" id="savemobile" data-tooltip="tooltip" data-title="Save" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savemobile" data-tooltip="tooltip" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
         <label for="address" class="">Address</label>
         <div class="form-row">
           <input class="textinput" id="address" data-dbid="1" data-dbt="config" data-dbc="address" type="text" value="<?php echo$config['address'];?>" placeholder="Enter an Address...">
-          <button class="save" id="saveaddress" data-tooltip="tooltip" data-title="Save" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="saveaddress" data-tooltip="tooltip" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="row">
           <div class="col-12 col-md-3 pr-md-1">
             <label for="suburb">Suburb</label>
             <div class="form-row">
               <input class="textinput" id="suburb" data-dbid="1" data-dbt="config" data-dbc="suburb" type="text" value="<?php echo$config['suburb'];?>" placeholder="Enter a Suburb...">
-              <button class="save" id="savesuburb" data-tooltip="tooltip" data-title="Save" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savesuburb" data-tooltip="tooltip" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1 pr-md-1">
             <label for="city">City</label>
             <div class="form-row">
               <input class="textinput" id="city" data-dbid="1" data-dbt="config" data-dbc="city" type="text" value="<?php echo$config['city'];?>" placeholder="Enter a City...">
-              <button class="save" id="savecity" data-tooltip="tooltip" data-title="Save" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savecity" data-tooltip="tooltip" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1 pr-md-1">
             <label for="state">State</label>
             <div class="form-row">
               <input class="textinput" id="state" data-dbid="1" data-dbt="config" data-dbc="state" type="text" value="<?php echo$config['state'];?>" placeholder="Enter a State...">
-              <button class="save" id="savestate" data-tooltip="tooltip" data-title="Save" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savestate" data-tooltip="tooltip" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1">
             <label for="postcode">Postcode</label>
             <div class="form-row">
               <input class="textinput" id="postcode" data-dbid="1" data-dbt="config" data-dbc="postcode" type="text" value="<?php echo$config['postcode']!=0?$config['postcode']:'';?>" placeholder="Enter a Postcode...">
-              <button class="save" id="savepostcode" data-tooltip="tooltip" data-title="Save" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savepostcode" data-tooltip="tooltip" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
         <label for="country">Country</label>
         <div class="form-row">
           <input class="textinput" id="country" data-dbid="1" data-dbt="config" data-dbc="country" type="text" value="<?php echo$config['country'];?>" placeholder="Enter a Country...">
-          <button class="save" id="savecountry" data-tooltip="tooltip" data-title="Save" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <?php include'core/layout/footer.php';?>
       </div>

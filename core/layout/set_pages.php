@@ -19,9 +19,8 @@
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Page Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" onclick="toggleFullscreen();" aria-label"Toggle Fullscreen"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -48,7 +47,7 @@
         <label for="update_url">WV_SITE_ID</label>
         <div class="form-row">
           <input class="textinput" id="wv_site_id" data-dbid="1" data-dbt="config" data-dbc="wv_site_id" type="text" value="<?php echo$config['wv_site_id'];?>" placeholder="Enter Website Voice ID...">
-          <button class="save" id="savewv_site_id" data-dbid="wv_site_id" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savewv_site_id" data-dbid="wv_site_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
         <?php if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini')){
@@ -80,7 +79,7 @@
               <button id="filesEditLoad">Load</button>
             </div>
             <div class="wysiwyg-toolbar">
-              <button id="codeSave" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save" onclick="populateTextarea();"><?php svg('save');?></button>
+              <button id="codeSave" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><?php svg('save');?></button>
             </div>
             <div class="form-row">
               <?php $code=file_get_contents($fileDefault);?>

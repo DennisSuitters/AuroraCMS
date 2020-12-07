@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('calendar-time','i-3x');?></div>
           <div>Scheduler</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
@@ -33,17 +31,17 @@
         <div class="row p-3">
           <div class="col-12 col-md-4">
             <small>Legend:
-              <span class="badger badge-success" data-tooltip="tooltip" data-title="Content items that have already been Published." aria-label="Content items that have already been Published.">Published</span>
-              <span class="badger badge-danger" data-tooltip="tooltip" data-title="Content items that have NOT been Published." aria-label="Content items that have NOT been Published.">Unpublished</span>
-              <span class="badger badge-warning" data-tooltip="tooltip" data-title="Content items that are set to AutoPublish." aria-label="Content items that are set to AutoPublish.">AutoPublish</span>
+              <span class="badger badge-success" data-tooltip="tooltip" aria-label="Content items that have already been Published.">Published</span>
+              <span class="badger badge-danger" data-tooltip="tooltip" aria-label="Content items that have NOT been Published.">Unpublished</span>
+              <span class="badger badge-warning" data-tooltip="tooltip" aria-label="Content items that are set to AutoPublish.">AutoPublish</span>
             </small>
           </div>
           <div class="col-12 col-md-8 text-right">
             <small>View:
-              <a class="badger badge-<?php echo !isset($args[1])?'success':'secondary';?>" data-tooltip="tooltip" data-title="Display All Content." href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="All">All</a>&nbsp;
+              <a class="badger badge-<?php echo !isset($args[1])?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="Display All Content">All</a>&nbsp;
               <?php $s=$db->query("SELECT DISTINCT(`contentType`) as contentType FROM `".$prefix."content` WHERE `contentType`!='booking' ORDER BY `contentType` ASC");
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <a class="badger badge-<?php echo isset($args[1])&&$args[1]==$r['contentType']?'success':'secondary';?>" data-tooltip="tooltip" data-title="Display <?php echo ucfirst($r['contentType']);?> Items." href="<?php echo URL.$settings['system']['admin'].'/content/scheduler/'.$r['contentType'];?>" aria-label="<?php echo ucfirst($r['contentType']);?>"><?php echo ucfirst($r['contentType']);?></a>&nbsp;
+                <a class="badger badge-<?php echo isset($args[1])&&$args[1]==$r['contentType']?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler/'.$r['contentType'];?>" aria-label="Display <?php echo ucfirst($r['contentType']);?> Items"><?php echo ucfirst($r['contentType']);?></a>&nbsp;
               <?php }?>
             </small>
           </div>
@@ -97,10 +95,10 @@ $s->execute([
               '<div class="events-buttons" role="toolbar" aria-label="Item Toolbar Controls">' +
                 '<div class="btn-group" role="group" aria-label="Item Controls">' +
 <?php if($user['options'][2]==1){?>
-                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" href="<?php echo$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit"><?php svg('edit');?></a>' +
-                  `<button class="btn trash" id="delbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?php svg('trash');?></button>` +
+                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit"><?php svg('edit');?></a>' +
+                  `<button class="btn trash" id="delbut<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?php svg('trash');?></button>` +
 <?php }else{?>
-                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="View" href="<?php echo$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="View"><?php svg('view');?></a>' +
+                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="View"><?php svg('view');?></a>' +
 <?php }?>
                 '</div>' +
               '</div>' +

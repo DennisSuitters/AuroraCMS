@@ -76,6 +76,7 @@
             contents:options.cleaner.icon,
             container:options.container,
             tooltip:lang.cleaner.tooltip,
+            placement:options.placement,
             click:function(){
               if($note.summernote('createRange').toString()){
                 var text=cleanText($note.summernote('createRange').toString(),options.cleaner.newline);

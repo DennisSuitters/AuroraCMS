@@ -43,10 +43,10 @@ if($fu!=''){
 window.top.window.$('#mi').append('<?php
 echo'<div class="card stats col-6 col-md-3 m-1 swing-in-top-fwd" id="mi_'.$iid.'">'.
 	'<div class="btn-group float-right">'.
-		'<div class="handle btn" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg('drag').'</div>'.
-		'<div class="btn" data-tooltip="tooltip" data-title="Viewed 0 times">'.svg('view').' &nbsp;0</div>'.
+		'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg('drag').'</div>'.
+		'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times">'.svg('view').' &nbsp;0</div>'.
 		'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg('edit').'</a>'.
-		'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge(`'.$iid.'`,`media`);">'.svg('trash').'</button>'.
+		'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$iid.'`,`media`);">'.svg('trash').'</button>'.
 		'</div>'.
 		'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'">'.
 			'<img src="'.$thumb.'" alt="Media '.$iid.'">'.

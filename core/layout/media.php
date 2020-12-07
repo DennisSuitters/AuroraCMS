@@ -24,8 +24,7 @@ else{?>
           <div class="content-title-icon"><?php svg('picture','i-3x');?></div>
           <div>Media</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <?php echo$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/settings" data-tooltip="tooltip" data-title="Media Settings" role="button" aria-label="Media Settings">'.svg2('settings').'</a>':'';?>
+            <?php echo$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/settings" data-tooltip="tooltip" role="button" aria-label="Media Settings">'.svg2('settings').'</a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">

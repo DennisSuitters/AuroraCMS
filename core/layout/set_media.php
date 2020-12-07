@@ -19,9 +19,8 @@
          <div class="content-title-icon"><?php svg('users','i-3x');?></div>
          <div>Media Settings</div>
          <div class="content-title-actions">
-           <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-           <button data-tooltip="tooltip" data-title="Toggle Fullscreen" onclick="toggleFullscreen();" aria-label"Toggle Fullscreen"><?php svg('fullscreen');?></button>
-           <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+           <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+           <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
          </div>
        </div>
        <ol class="breadcrumb">
@@ -44,14 +43,14 @@
            <label for="mediaMaxWidth">Max Width</label>
            <div class="form-row">
              <input class="textinput" id="mediaMaxWidth" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidth" type="text" value="<?php echo$config['mediaMaxWidth'];?>">
-             <button class="save" id="savemediaMaxWidth" data-tooltip="tooltip" data-placement="top" data-title="Save" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <button class="save" id="savemediaMaxWidth" data-tooltip="tooltip" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
          <div class="col-12 col-md-6 pl-md-1">
            <label for="mediaMaxHeight">Max Height</label>
            <div class="form-row">
              <input class="textinput" id="mediaMaxHeight" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeight" type="text" value="<?php echo$config['mediaMaxHeight'];?>">
-             <button class="save" id="savemediaMaxHeight" data-tooltip="tooltip" data-title="Save" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <button class="save" id="savemediaMaxHeight" data-tooltip="tooltip" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
        </div>
@@ -60,21 +59,21 @@
            <label for="mediaMaxWidthThumb">Max Thumb Width</label>
            <div class="form-row">
              <input class="textinput" id="mediaMaxWidthThumb" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidthThumb" type="text" value="<?php echo$config['mediaMaxWidthThumb'];?>">
-             <button class="save" id="savemediaMaxWidthThumb" data-tooltip="tooltip" data-title="Save" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <button class="save" id="savemediaMaxWidthThumb" data-tooltip="tooltip" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
          <div class="col-12 col-md-6 pl-md-1">
            <label for="mediaMaxHeightThumb">Max Thumb Height</label>
            <div class="form-row">
              <input class="textinput" id="mediaMaxHeightThumb" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeightThumb" type="text" value="<?php echo$config['mediaMaxHeightThumb'];?>">
-             <button class="save" id="savemediaMaxHeightThumb" data-tooltip="tooltip" data-title="Save" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <button class="save" id="savemediaMaxHeightThumb" data-tooltip="tooltip" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
        </div>
        <label for="mediaQuality">Image Quality</label>
        <div class="form-row">
          <input class="textinput" id="mediaQuality" data-dbid="1" data-dbt="config" data-dbc="mediaQuality" type="text" value="<?php echo$config['mediaQuality'];?>">
-         <button class="save" id="savemediaQuality" data-tooltip="tooltip" data-title="Save" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+         <button class="save" id="savemediaQuality" data-tooltip="tooltip" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
        </div>
        <?php include'core/layout/footer.php';?>
      </div>

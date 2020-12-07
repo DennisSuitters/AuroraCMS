@@ -19,9 +19,8 @@
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Newsletters Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" onclick="toggleFullscreen();" aria-label"Toggle Fullscreen"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -44,7 +43,7 @@
         </div>
         <div class="form-row mt-3">
           <input class="textinput" id="newslettersSendMax" type="text" value="<?php echo$config['newslettersSendMax'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendMax">
-          <button class="save" id="savenewslettersSendMax" data-tooltip="tooltip" data-title="Save" data-dbid="newslettersSendMax" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savenewslettersSendMax" data-tooltip="tooltip" data-dbid="newslettersSendMax" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
           <label for="newslettersSendDelay">Send&nbsp;Delay</label>
@@ -52,7 +51,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="newslettersSendDelay" data-dbid="1" data-dbt="config" data-dbc="newslettersSendDelay" type="text" value="<?php echo$config['newslettersSendDelay'];?>">
-          <button class="save" id="savenewslettersSendDelay" data-tooltip="tooltip" data-placement="top" data-title="Save" data-dbid="newslettersSendDelay" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savenewslettersSendDelay" data-tooltip="tooltip" data-placement="top" data-dbid="newslettersSendDelay" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
         <legend class="mt-3">Opt Out Message</legend>

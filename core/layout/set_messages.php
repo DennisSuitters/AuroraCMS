@@ -19,9 +19,8 @@
           <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
           <div>Messages Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -46,7 +45,7 @@
             <input id="sub" name="sub" type="text" value="" placeholder="Enter a Subject...">
             <div class="input-text">Email</div>
             <input id="eml" name="eml" type="text" value="" placeholder="Enter an Email...">
-            <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
         <div id="subjects">
@@ -61,7 +60,7 @@
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
               </form>
             </div>
           <?php }?>
@@ -110,7 +109,7 @@
             <input id="mailusr" name="mailusr" type="text" value="" placeholder="Enter a Username...">
             <div class="input-text">Password</div>
             <input id="mailpwd" name="mailpwd" type="text" value="" placeholder="Enter a Password">
-            <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
         <script>
@@ -154,7 +153,7 @@
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?php echo$rm['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
               </form>
             </div>
           <?php }?>
@@ -170,7 +169,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="contactAutoReplySubject" type="text" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-          <button class="save" id="savecontactAutoReplySubject" data-tooltip="tooltip" data-title="Save" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savecontactAutoReplySubject" data-tooltip="tooltip" data-dbid="contactAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
           <small class="form-text text-right">Tokens:

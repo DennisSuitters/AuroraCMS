@@ -121,7 +121,7 @@ if(file_exists('..'.DS.'media'.DS.'backup'.DS.$file)){
   $q->execute([
 		':backup_ti'=>$ti
 	]);?>
-  window.top.window.$('#backups').append(`<?php echo'<div id="l_'.$fileid.'" class="form-group row"><label class="col-form-label col-sm-2">&nbsp;</label><div class="input-group col-sm-10"><a class="btn col" href="media/backup/'.$file.'">Click to Download '.$file.'</a><div class="input-group-append"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button></div></div></div>';?>`);
+  window.top.window.$('#backups').append(`<?php echo'<div id="l_'.$fileid.'" class="form-group row"><label class="col-form-label col-sm-2">&nbsp;</label><div class="input-group col-sm-10"><a class="btn col" href="media/backup/'.$file.'">Click to Download '.$file.'</a><div class="input-group-append"><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button></div></div></div>';?>`);
   window.top.window.$('#alert_backup').addClass('d-none');
 <?php }else{?>
 	window.top.window.toastr["error"]("There was an issue adding the Data!");

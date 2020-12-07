@@ -41,7 +41,7 @@ if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
 	$id=$db->lastInsertId();
 	$e=$db->errorInfo();
 	if(is_null($e[2])){?>
-window.top.window.$('#rewards').append('<?php echo'<tr id="l_'.$id.'"><td class="small text-center">'.$code.'</td><td class="small text-center">'.$title.'</td><td class="small text-center">'.($method==0?'% Off':'$ Off').'</td><td class="small text-center">'.$value.'</td><td class="small text-center">'.$quantity.'</td><td class="small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td><td class="small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td><td><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="rewards"><button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete">'.svg('trash').'</button></form></td></tr>';?>');
+window.top.window.$('#rewards').append('<?php echo'<tr id="l_'.$id.'"><td class="small text-center">'.$code.'</td><td class="small text-center">'.$title.'</td><td class="small text-center">'.($method==0?'% Off':'$ Off').'</td><td class="small text-center">'.$value.'</td><td class="small text-center">'.$quantity.'</td><td class="small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td><td class="small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td><td><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="rewards"><button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg('trash').'</button></form></td></tr>';?>');
 <?php }else
 	echo'window.top.window.toastr["error"]("There was an issue adding the Reward!");';
 }else

@@ -19,8 +19,7 @@
           <div class="content-title-icon"><?php svg('security','i-3x');?></div>
           <div>Preferences - Security</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields"><?php echo svg('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -84,15 +83,15 @@
             <label for="php_APIkey">PHP API Key</label>
             <div class="form-row">
               <input class="textinput" id="php_APIkey" data-dbid="1" data-dbt="config" data-dbc="php_APIkey" type="text" value="<?php echo$config['php_APIkey'];?>" placeholder="Enter a Project Honey Pot API Key...">
-              <button class="save" id="savephp_APIkey" data-dbid="php_APIkey" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savephp_APIkey" data-dbid="php_APIkey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
             </div>
             <label for="php_honeypot">Honey Pot</label>
             <div class="form-row">
               <div class="input-text col-12" id="php_honeypot_link">
                 <?php echo$config['php_honeypot']!=''?'<a target="_blank" href="'.$config['php_honeypot'].'">'.$config['php_honeypot'].'</a>':'Honey Pot File Not Uploaded...';?>
               </div>
-              <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','php_honeypot');"><?php svg('browse-media');?></button>
-              <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('1','config','php_honeypot','');"><?php svg('trash');?></button>
+              <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','php_honeypot');"><?php svg('browse-media');?></button>
+              <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('1','config','php_honeypot','');"><?php svg('trash');?></button>
             </div>
             <div class="row mt-3">
               <input id="php_options2" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2" type="checkbox"<?php echo$config['php_options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
@@ -103,7 +102,7 @@
               <input name="t" type="hidden" value="config">
               <input name="c" type="hidden" value="php_quicklink">
               <div class="wysiwyg-toolbar col-12">
-                <button id="php_quicklink_save" data-tooltip="tooltip" data-placement="bottom" data-title="Save" type="submit" aria-label="Save"><?php svg('save');?></button>
+                <button id="php_quicklink_save" data-tooltip="tooltip" data-placement="bottom" type="submit" aria-label="Save"><?php svg('save');?></button>
               </div>
               <div class="form-row col-12">
                 <textarea style="height:100px" id="php_quicklink" name="da" onkeyup="$('#php_quicklink_save').addClass('btn-danger');"><?php echo $config['php_quicklink'];?></textarea>
@@ -142,7 +141,7 @@
                 <button id="filesEditLoad">Load</button>
               </div>
               <div class="wysiwyg-toolbar">
-                <button id="codeSave" data-tooltip="tooltip" data-placement="bottom" data-title="Save" aria-label="Save" onclick="populateTextarea();"><?php svg('save');?></button>
+                <button id="codeSave" data-tooltip="tooltip" data-placement="bottom" aria-label="Save" onclick="populateTextarea();"><?php svg('save');?></button>
               </div>
               <div class="row col-12">
                 <?php $code=file_get_contents($fileDefault);?>
@@ -186,7 +185,7 @@
                   <th class="text-center">Reason</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="trash" data-tooltip="tooltip" data-title="Purge All" aria-label="Purge All" onclick="purge('0','iplist');return false;"><?php svg('purge');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><?php svg('purge');?></button>
                     </div>
                   </th>
                 </tr>
@@ -202,9 +201,9 @@
                     <td class="text-left small"><?php echo$r['reason'];?></td>
                     <td id="controls_<?php echo$r['id'];?>">
                       <div class="btn-group float-right">
-                        <a class="btn" target="_blank" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
-                        <a class="btn" target="_blank" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="trash" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','iplist');return false;"><?php svg('purge');?></button>
+                        <a class="btn" target="_blank" data-tooltip="tooltip" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
+                        <a class="btn" target="_blank" data-tooltip="tooltip" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','iplist');return false;"><?php svg('purge');?></button>
                       </div>
                     </td>
                   </tr>
@@ -221,7 +220,7 @@
                   <th class="text-center">IP</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="trash" data-tooltip="tooltip" data-title="Purge All" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><?php svg('purge');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><?php svg('purge');?></button>
                     </div>
                   </th>
                 </tr>
@@ -236,9 +235,9 @@
                     <td class="text-center small"><?php echo'<strong>'.$r['ip'].'</strong>';?></td>
                     <td id="controls_<?php echo$r['id'];?>">
                       <div class="btn-group float-right">
-                        <a class="btn" target="_blank" data-tooltip="tooltip" data-title="Lookup IP using Project Honey Pot (Opens in New Page)." href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
-                        <a class="btn" target="_blank" data-tooltip="tooltip" data-title="Lookup IP using IP Address Finder .com (Opens in New Page)." href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="trash" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;"><?php svg('purge');?></button>
+                        <a class="btn" target="_blank" data-tooltip="tooltip" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
+                        <a class="btn" target="_blank" data-tooltip="tooltip" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;"><?php svg('purge');?></button>
                       </div>
                     </td>
                   </tr>

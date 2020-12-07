@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('user-group','i-3x');?></div>
           <div>Preferences - Social</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
@@ -129,7 +127,7 @@
           <div class="col-12 col-md-1">
             <label>&nbsp;</label>
             <div class="form-row">
-              <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
             </div>
           </div>
         </form>
@@ -140,7 +138,7 @@
             <div class="row mt-1" id="l_<?php echo$rs['id'];?>">
               <div class="col-12 col-md-3">
                 <div class="form-row">
-                  <div class="input-text col-12" data-tooltip="tooltip" data-title="<?php echo ucfirst($rs['icon']);?>" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon'],'i-social');?>&nbsp;&nbsp;<?php echo ucfirst($rs['icon']);?></div>
+                  <div class="input-text col-12" data-tooltip="tooltip" aria-label="<?php echo ucfirst($rs['icon']);?>"><?php svg('social-'.$rs['icon'],'i-social');?>&nbsp;&nbsp;<?php echo ucfirst($rs['icon']);?></div>
                 </div>
               </div>
               <div class="col-12 col-md-8">
@@ -153,7 +151,7 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php svg('trash');?></button>
                   </form>
                 </div>
               </div>

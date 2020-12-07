@@ -36,6 +36,7 @@
           contents:options.captionIt.icon,
           container:options.container,
           tooltip:lang.captionIt.tooltip,
+          placement:options.placement,
           click:function(){
             var img=$($editable.data('target'));
             var titleText=img.attr('title'),

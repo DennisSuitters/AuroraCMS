@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('comments','i-3x');?></div>
           <div>Comments</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item active">Comments</li>
@@ -70,11 +68,11 @@
                         if($scc->rowCount()<1){?>
                           <form class="d-inline-block" id="blacklist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_commentblacklist.php">
                             <input name="id" type="hidden" value="<?php echo$r['id'];?>">
-                            <button data-tooltip="tooltip" data-title="Add IP to Blacklist" aria-label="Add IP to Blacklist"><?php svg('security');?></button>
+                            <button data-tooltip="tooltip" aria-label="Add IP to Blacklist"><?php svg('security');?></button>
                           </form>
                         <?php }?>
-                        <button class="add<?php echo$r['status']!='unapproved'?' hidden':'';?>" id="approve_<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Approve" aria-label="Approve" onclick="update('<?php echo$r['id'];?>','comments','status','approved');"><?php svg('approve');?></button>
-                        <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','comments');"><?php svg('trash');?></button>
+                        <button class="add<?php echo$r['status']!='unapproved'?' hidden':'';?>" id="approve_<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Approve" onclick="update('<?php echo$r['id'];?>','comments','status','approved');"><?php svg('approve');?></button>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','comments');"><?php svg('trash');?></button>
                       <?php }?>
                     </div>
                   </div>

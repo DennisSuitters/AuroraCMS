@@ -679,6 +679,12 @@ nav[role="menubar"] ul li.active {
   width: 100%;
   color: var(--default-color); }
 
+.alert.alert-full {
+  border-radius: 0;
+  border: 0;
+  border-bottom-width: var(--border-width);
+  margin: 0; }
+
 .alert header {
   background-color: transparent;
   color: inherit; }

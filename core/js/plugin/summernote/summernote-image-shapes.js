@@ -37,6 +37,7 @@
             contents:options.imageShapes.icon+' <span class="caret"></span>',
             container:options.container,
             tooltip:lang.imageShapes.tooltipShape,
+            placement:options.placement,
             data:{
               toggle:'dropdown'
             }

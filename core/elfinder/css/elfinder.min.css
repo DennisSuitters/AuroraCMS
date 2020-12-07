@@ -764,7 +764,7 @@ ul.elfinder-help-integrations a:hover {
 	min-height: 4ex; }
 
 .ui-front {
-	z-index: 100; }
+	z-index: 2000; }
 
 div.elfinder *,
 div.elfinder :after,

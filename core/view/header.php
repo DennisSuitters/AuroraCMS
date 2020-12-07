@@ -21,12 +21,17 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$html=$view=='orders'||$view=='order'?preg_replace('/<print active=[\"\']?orders[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?orders[\"\']?>/','',$html);
 	$html=$view=='settings'?preg_replace('/<print active=[\"\']?settings[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?settings[\"\']?>/','',$html);
 	if(preg_match('/<print user=[\"\']?avatar[\"\']?>/',$html)){
-		if(isset($user)&&$user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$user['avatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.$user['avatar'],$html);
+		if(isset($user)&&$user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$user['avatar']))
+			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.$user['avatar'],$html);
 		elseif(isset($user)&&$user['gravatar']!=''){
-			if(stristr('@',$user['gravatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
-			elseif(stristr('gravatar.com/avatar/'))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$user['gravatar'],$html);
-			else$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
-		}else$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
+			if(stristr('@',$user['gravatar']))
+				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
+			elseif(stristr('gravatar.com/avatar/'))
+				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$user['gravatar'],$html);
+			else
+				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
+		}else
+			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
 	}
 	if($user['rank']>399){
 		$html=preg_replace([
@@ -51,11 +56,16 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		str_replace(' ','-',$user['name']),
 		''
 	],$html);
-	if(isset($_SESSION['options'])&&$_SESSION['options'][6]==1)$html=preg_replace('/<[\/]?seohelper>/','',$html);
-	else$html=preg_replace('~<seohelper>.*?<\/seohelper>~is','',$html,1);
-	if($config['development'][0]==1&&$_SESSION['rank']>899)$html=preg_replace('/<[\/]?development>/','',$html);
-	else$html=preg_replace('~<development>.*?<\/development>~is','',$html,1);
-}else$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
+	if(isset($_SESSION['options'])&&$_SESSION['options'][6]==1)
+		$html=preg_replace('/<[\/]?seohelper>/','',$html);
+	else
+		$html=preg_replace('~<seohelper>.*?<\/seohelper>~is','',$html,1);
+	if($config['development'][0]==1&&$_SESSION['rank']>899)
+		$html=preg_replace('/<[\/]?development>/','',$html);
+	else
+		$html=preg_replace('~<development>.*?<\/development>~is','',$html,1);
+}else
+	$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
 $html=preg_replace([
 	'/<print view>/',
 	'/<print config=[\"\']?seoTitle[\"\']?>/',
@@ -330,7 +340,8 @@ if(stristr($html,'<email>')){
 			'',
 			'<a href="contactus/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
 		],$html);
-	}else$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
+	}else
+		$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
 }
 if(stristr($html,'<contact>')){
 	if($config['options'][22]==1){

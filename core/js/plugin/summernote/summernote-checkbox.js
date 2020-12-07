@@ -32,6 +32,7 @@
           contents: options.checkbox.icon,
           container:  options.container,
           tooltip: lang.checkbox.tooltip,
+          placement:options.placement,
           click: function (e) {
             e.preventDefault();
             context.invoke('insertNode', self.createCheckbox());

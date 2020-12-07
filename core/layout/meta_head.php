@@ -52,7 +52,6 @@
     <script src="<?php echo'core'.DS.'elfinder'.DS.'js'.DS.'elfinder.min.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'aurora.min.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'jquery.simplecolorpicker.js';?>"></script>
-    <script src="<?php echo'core'.DS.'js'.DS.'moment.min.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'fullcalendar.min.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'daterangepicker.js';?>"></script>
     <script src="<?php echo'core'.DS.'js'.DS.'jquery.fancybox.min.js';?>"></script>

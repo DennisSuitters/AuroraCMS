@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('tracker','i-3x');?></div>
           <div>Preferences - Tracker</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
@@ -45,7 +43,7 @@
               <th class="text-center">Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="trash" data-tooltip="tooltip" data-placement="left" data-title="Purge All" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?php svg('purge');?></button>
+                  <button class="trash" data-tooltip="tooltip" data-placement="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?php svg('purge');?></button>
                 </div>
               </th>
             </tr>
@@ -66,18 +64,18 @@
                 <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?php echo trim($r['urlDest']);?></td>
                 <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?php echo trim($r['urlFrom']);?></td>
                 <td class="text-center align-middle">
-                  <a target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>"><?php echo$r['ip'];?></a>&nbsp;<button class="trash" data-tooltip="tooltip" data-title="Remove all of this IP" aria-label="Remove all of this IP" onclick="purge('<?php echo$r['ip'];?>','clearip');"><?php svg('eraser');?></button>
+                  <a target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>"><?php echo$r['ip'];?></a>&nbsp;<button class="trash" data-tooltip="tooltip" aria-label="Remove all of this IP" onclick="purge('<?php echo$r['ip'];?>','clearip');"><?php svg('eraser');?></button>
                 </td>
                 <td class="text-center align-middle"><?php echo ucfirst($r['browser']);?></td>
                 <td class="text-center align-middle"><?php echo ucfirst($r['os']);?></td>
                 <td class="text-center align-middle"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-middle">
                   <div class="btn-group float-right">
-                    <button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id=<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="View Visitor Path" aria-label="View Visitor Path"><?php svg('seo-path');?></button>
+                    <button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id=<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="View Visitor Path"><?php svg('seo-path');?></button>
                     <?php if($config['php_options'][0]==1){?>
-                      <button data-fancybox data-type="ajax" data-src="core/layout/phpviewer.php?id=<?php echo$r['id'];?>&t=tracker" data-tooltip="tooltip" data-title="Check IP with Project Honey Pot" aria-label="Check IP with Project Honey Pot"><?php svg('brand-projecthoneypot');?></button>
+                      <button data-fancybox data-type="ajax" data-src="core/layout/phpviewer.php?id=<?php echo$r['id'];?>&t=tracker" data-tooltip="tooltip" aria-label="Check IP with Project Honey Pot"><?php svg('brand-projecthoneypot');?></button>
                     <?php }?>
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','tracker');"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','tracker');"><?php svg('trash');?></button>
                   </div>
                 </td>
               </tr>

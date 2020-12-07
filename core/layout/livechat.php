@@ -22,8 +22,7 @@ else{?>
           <div class="content-title-icon"><?php svg('chat','i-3x');?></div>
           <div>Live Chat</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Live Chat Settings" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button" aria-label="Live Chat Settings">'.svg2('settings').'</a>':'';?>
+            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button" aria-label="Live Chat Settings">'.svg2('settings').'</a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -56,14 +55,14 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
                       <input name="id" type="hidden" value="<?php echo$r['id'];?>">
                       <input name="t" type="hidden" value="livechat">
                       <input name="r" type="hidden" value="Added Manually via Live Chat">
-                      <button data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
+                      <button data-tooltip="tooltip" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
                     </form>
                   <?php } ?>
                   <form target="sp" method="get" action="core/purge.php">
                     <input name="id" type="hidden" value="<?php echo$r['id'];?>">
                     <input name="t" type="hidden" value="livechat">
                     <input name="c" type="hidden" value="<?php echo$r['sid'];?>">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><?php svg('trash');?></button>
                   </form>
                 </span>
                 <small><?php echo$r['name'];?></small><br>

@@ -20,10 +20,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <div class="content-title-icon"><?php svg('content','i-3x');?></div>
           <div>Content Edit</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <?php echo$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" data-title="Add '.ucfirst($r['contentType']).'" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
+            <button class="<?php echo($r['status']=='published'?'':'hidden');?>" data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['metaDescription']?$r['metaDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button>
+            <?php echo$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" role="button" aria-label="Add '.ucfirst($r['contentType']).'">'.svg2('add').'</a>':'';?>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -69,13 +69,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   ':t'=>'content',
                   ':c'=>'title'
                 ]);
-                echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
               }?>
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title"  data-tooltip="tooltip" data-title="SEO Title Information" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title"  data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
               <input class="textinput" id="title" type="text" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Generate Aussie Lorem Ipsum Title" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
-              '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-              '<button class="save" id="savetitle" data-tooltip="tooltip" data-title="Save" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
+              '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <script>
               function genurl(){
@@ -84,6 +84,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 $('#genurl').attr('href',url);
                 $('#genurl').html(url);
                 $('#google-link').text(url);
+                $("[data-social-share]").data("social-share",url);
               }
               function slugify(str){
                 str=str.replace(/[`~!@#$%^&*()_\-+=\[\]{};:'"\\|\/,.<>?\s]/g,' ').toLowerCase();
@@ -135,7 +136,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <label for="code">Code</label>
               <div class="form-row">
                 <input class="textinput" id="code" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?php echo$r['code'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="savecode" data-tooltip="tooltip" data-title="Save" data-dbid="code" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="savecode" data-tooltip="tooltip" data-dbid="code" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
             <?php }
             if($r['contentType']=='inventory'){?>
@@ -144,14 +145,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <label for="barcode">Barcode</label>
                   <div class="form-row">
                     <input class="textinput" id="barcode" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="barcode" type="text" value="<?php echo$r['barcode'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Barcode..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savebarcode" data-tooltip="tooltip" data-title="Save" data-dbid="barcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savebarcode" data-tooltip="tooltip" data-dbid="barcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 pl-md-1">
                   <label for="fccid">FCCID</label>
                   <div class="form-row">
                     <input class="textinput" id="fccid" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fccid" type="text" value="<?php echo$r['fccid'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an FCCID..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savefccid" data-tooltip="tooltip" data-title="Save" data-dbid="fccid" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savefccid" data-tooltip="tooltip" data-dbid="fccid" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                   <?php echo$user['options'][1]==1?'<div class="form-text small text-muted float-right"><a target="_blank" href="https://fccid.io/">fccid.io</a> for more information or to look up an FCC ID.</div>':'';?>
                 </div>
@@ -197,7 +198,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['name'].'"/>';
                         echo'</datalist>';
                       }
-                      echo'<button class="save" id="savename" data-tooltip="tooltip" data-title="Save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
+                      echo'<button class="save" id="savename" data-tooltip="tooltip" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                     }?>
                   </div>
                 </div>
@@ -205,14 +206,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <label for="email">Email</label>
                   <div class="form-row">
                     <input class="textinput" id="email" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="email" type="text" value="<?php echo$r['email'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Email..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="saveemail" data-tooltip="tooltip" data-title="Save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="saveemail" data-tooltip="tooltip" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-4">
                   <label for="business">Business</label>
                   <div class="form-row">
                     <input class="textinput" id="business" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business" type="text" value="<?php echo$r['business'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Business..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savebusiness" data-tooltip="tooltip" data-title="Save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savebusiness" data-tooltip="tooltip" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
               </div>
@@ -221,7 +222,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <label for="url">URL</label>
                   <div class="form-row">
                     <input class="textinput" id="url" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url" type="text" value="<?php echo$r['url'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-title="Save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 pl-md-1 p-0 pb-2">
@@ -263,7 +264,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
                       }
                       echo'</datalist>';
-                      echo'<button class="save" id="savecategory_1" data-tooltip="tooltip" data-title="Save" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
+                      echo'<button class="save" id="savecategory_1" data-tooltip="tooltip" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                     }?>
                   </div>
                 </div>
@@ -278,7 +279,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_2'].'"/>';
                         echo'</datalist>';
                       }
-                      echo'<button class="save" id="savecategory_2" data-tooltip="tooltip" data-title="Save" data-dbid="category_2" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
+                      echo'<button class="save" id="savecategory_2" data-tooltip="tooltip"  data-dbid="category_2" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                     }?>
                   </div>
                 </div>
@@ -295,7 +296,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_3'].'"/>';
                         echo'</datalist>';
                       }
-                      echo'<button class="save" id="savecategory_3" data-tooltip="tooltip" data-title="Save" data-dbid="category_3" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
+                      echo'<button class="save" id="savecategory_3" data-tooltip="tooltip"  data-dbid="category_3" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                     }?>
                   </div>
                 </div>
@@ -310,7 +311,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_4'].'"/>';
                         echo'</datalist>';
                       }
-                      echo'<button class="save" id="savecategory_4" data-tooltip="tooltip" data-title="Save" data-dbid="category_4" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
+                      echo'<button class="save" id="savecategory_4" data-tooltip="tooltip"  data-dbid="category_4" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                     }?>
                   </div>
                 </div>
@@ -323,11 +324,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
               <div class="row">
                 <div class="col-12 col-sm-3 pr-2">
-                  <label for="rrp" data-tooltip="tooltip" data-title="Recommended Retail Price">RRP</label>
+                  <label for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="rrp" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?php echo$r['rrp'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="saverrp" data-tooltip="tooltip" data-title="Save" data-dbid="rrp" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="saverrp" data-tooltip="tooltip" data-dbid="rrp" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-3 pr-md-2">
@@ -335,7 +336,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="cost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?php echo$r['cost'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savecost" data-tooltip="tooltip" data-title="Save" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savecost" data-tooltip="tooltip" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-3 pr-md-2">
@@ -343,7 +344,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="rCost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?php echo$r['rCost'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="saverCost" data-tooltip="tooltip" data-title="Save" data-dbid="rCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="saverCost" data-tooltip="tooltip" data-dbid="rCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-3">
@@ -351,7 +352,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="dCost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?php echo$r['dCost'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Distributor Cost..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savedCost" data-tooltip="tooltip" data-title="Save" data-dbid="dCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savedCost" data-tooltip="tooltip" data-dbid="dCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
               </div>
@@ -362,13 +363,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <label for="quantity">Quantity</label>
                   <div class="form-row">
                     <input class="textinput" id="quantity" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?php echo $r['quantity'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savequantity" data-tooltip="tooltip" data-title="Save" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savequantity" data-tooltip="tooltip" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 pl-md-1">
                   <label for="itemCondition">Condition</label>
                   <div class="form-row">
-                    <select id="itemCondition"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Condition"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','itemCondition',$(this).val());">
+                    <select id="itemCondition"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','itemCondition',$(this).val());">
                       <option value=""<?php echo$r['itemCondition']==''?' selected':'';?>>None</option>
                       <option value="acceptable"<?php echo$r['itemCondition']=='acceptable'?' selected':'';?>>Acceptable</option>
                       <option value="brand new"<?php echo$r['itemCondition']=='brand new'?' selected':'';?>>Brand New</option>
@@ -402,7 +403,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
               <label for="stockStatus">Stock Status</label>
               <div class="form-row">
-                <select id="stockStatus"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Stock Status"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());">
+                <select id="stockStatus"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());">
                   <option value="quantity"<?php echo$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
                   <option value="in stock"<?php echo$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
                   <option value="out of stock"<?php echo$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
@@ -415,14 +416,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <label for="weight">Weight</label>
               <div class="form-row">
                 <input class="textinput" id="weight" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="weight" type="text" value="<?php echo $r['weight'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Weight..."':' readonly';?>>
-                <select id="weightunit" onchange="update('<?php echo$r['id'];?>','content','weightunit',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Weight Unit"':' disabled';?>>
+                <select id="weightunit" onchange="update('<?php echo$r['id'];?>','content','weightunit',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Weight Unit"':' disabled';?>>
                   <option value="mg"<?php echo$r['weightunit']=='mg'?' selected':'';?>>Milligrams (mg)</option>
                   <option value="g"<?php echo$r['weightunit']=='g'?' selected':'';?>>Grams (g)</option>
                   <option value="kg"<?php echo$r['weightunit']=='kg'?' selected':'';?>>Kilograms (kg)</option>
                   <option value="lb"<?php echo$r['weightunit']=='lb'?' selected':'';?>>Pound (lb)</option>
                   <option value="t"<?php echo$r['weightunit']=='t'?' selected':'';?>>Tonne (t)</option>
                 </select>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveweight" data-tooltip="tooltip" data-title="Save" data-dbid="weight" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveweight" data-tooltip="tooltip"  data-dbid="weight" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="Size">Size</label>
               <div class="row">
@@ -430,7 +431,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="form-row">
                     <div class="input-text">Width</div>
                     <input class="textinput" id="width" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="width" type="text" value="<?php echo $r['width'];?>"<?php echo$user['options'][1]==1?' placeholder="Width"':' readonly';?>>
-                    <select id="widthunit"<?php echo$user['options'][1]==1?'  data-tooltip="tooltip" data-title="Change Width Unit"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','widthunit',$(this).val());">
+                    <select id="widthunit"<?php echo$user['options'][1]==1?'  data-tooltip="tooltip" aria-label="Change Width Unit"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','widthunit',$(this).val());">
                       <option value="um"<?php echo$r['widthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
                       <option value="mm"<?php echo$r['widthunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
                       <option value="cm"<?php echo$r['widthunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
@@ -442,14 +443,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       <option value="nm"<?php echo$r['widthunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
                       <option value="yard"<?php echo$r['widthunit']=='yd'?' selected':'';?>>Yard (yd)</option>
                     </select>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savewidth" data-dbid="width" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savewidth" data-dbid="width" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-md-4 pr-md-2">
                   <div class="form-row">
                     <div class="input-text">Height</div>
                     <input class="textinput" id="height" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="height"<?php echo$user['options'][1]==1?' placeholder="Height"':' readonly';?> type="text" value="<?php echo $r['height'];?>">
-                    <select id="heightunit"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Height Unit"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','heightunit',$(this).val());">
+                    <select id="heightunit"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Height Unit"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','heightunit',$(this).val());">
                       <option value="um"<?php echo$r['heightunit']=='um'?' selected':'';?>>Micrometre (um)</option>
                       <option value="mm"<?php echo$r['heightunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
                       <option value="cm"<?php echo$r['heightunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
@@ -461,14 +462,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       <option value="nm"<?php echo$r['heightunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
                       <option value="yard"<?php echo$r['heightunit']=='yd'?' selected':'';?>>Yard (yd)</option>
                     </select>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="saveheight" data-tooltip="tooltip" data-title="Save" data-dbid="height" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="saveheight" data-tooltip="tooltip" data-dbid="height" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-md-4">
                   <div class="form-row">
                     <div class="input-text">Length</div>
                     <input class="textinput" id="length" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="length" type="text" value="<?php echo$r['length'];?>"<?php echo$user['options'][1]==1?' placeholder="Length"':' readonly';?>>
-                    <select id="lengthunit"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Length Unit"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','lengthunit',$(this).val());">
+                    <select id="lengthunit"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Length Unit"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','lengthunit',$(this).val());">
                       <option value="um"<?php echo$r['lengthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
                       <option value="mm"<?php echo$r['lengthunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
                       <option value="cm"<?php echo$r['lengthunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
@@ -480,7 +481,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       <option value="nm"<?php echo$r['lengthunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
                       <option value="yard"<?php echo$r['lengthunit']=='yd'?' selected':'';?>>Yard (yd)</option>
                     </select>
-                    <?php echo$user['options'][1]==1?'<button class="save" id="savelength" data-tooltip="tooltip" data-title="Save" data-dbid="length" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?php echo$user['options'][1]==1?'<button class="save" id="savelength" data-tooltip="tooltip" data-dbid="length" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
               </div>
@@ -496,13 +497,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         ':t'=>'content',
                         ':c'=>'notes'
                       ]);
-                      echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</button>':'';
+                      echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</button>':'';
                     }
-                    echo'<button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=content" data-type="content" data-tooltip="tooltip" data-title="SEO Content Information" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
-                    '<button data-tooltip="tooltip" data-title="Show Element Blocks" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;">'.svg2('blocks').'</button>'.
+                    echo'<button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=content" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
+                    '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;">'.svg2('blocks').'</button>'.
                     '<input class="col-1" id="ipsumc" value="5">'.
-                    '<button data-tooltip="tooltip" data-title="Add Aussie Lorem Ipsum" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
-                    '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestions">'.svg2('idea').'</button>'.
+                    '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
+                    '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions">'.svg2('idea').'</button>'.
                   '</div>'.
                 '</div>';?>
                 <div id="notesda" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
@@ -540,12 +541,12 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <input id="av" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?php echo$r['file'];?>" readonly>
                     <input name="id" type="hidden" value="<?php echo$r['id'];?>">
                     <input name="act" type="hidden" value="add_tstavatar">
-                    <div class="btn custom-file" data-tooltip="tooltip" data-title="Browse Computer for Image" aria-label="Browse Computer for Image">
+                    <div class="btn custom-file" data-tooltip="tooltip" aria-label="Browse Computer for Image">
                       <input class="custom-file-input hidden" id="avatarfu" type="file" name="fu" onchange="form.submit()">
                       <label for="avatarfu"><?php svg('browse-computer');?></label>
                     </div>
                     <img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['file']))?'media'.DS.'avatar'.DS.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="imageUpdate('<?php echo$r['id'];?>','content','file','');"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate('<?php echo$r['id'];?>','content','file','');"><?php svg('trash');?></button>
                   </div>
                 </form>
               <?php }else{?>
@@ -561,17 +562,17 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-row">
                 <input class="textinput" id="fileURL" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileURL" type="text" value="<?php echo$r['fileURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
                 <?php echo$r['fileURL']!=''?'<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>':'<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
-                <?php echo$user['options'][1]==1?'<button class="save" id="savefileURL" data-tooltip="tooltip" data-title="Save" data-dbid="fileURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="savefileURL" data-tooltip="tooltip" data-dbid="fileURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="file">Image</label>
               <div class="form-row">
                 <input class="textinput" id="file" type="text" value="<?php echo$r['file'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="file" readonly>
                 <?php if($user['options'][1]==1){?>
-                  <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');"><?php svg('browse-media');?></button>
+                  <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');"><?php svg('browse-media');?></button>
                 <?php }
                 echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
-                echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);">'.svg2('trash').'</button>'.
-                '<button class="save" id="savefile" data-tooltip="tooltip" data-title="Save" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);">'.svg2('trash').'</button>'.
+                '<button class="save" id="savefile" data-tooltip="tooltip" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <div class="form-row mt-3">
                 <input id="options2" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2" type="checkbox"<?php echo($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
@@ -586,24 +587,24 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <div class="form-row">
                 <input class="textinput" id="thumb" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="thumb" type="text" value="<?php echo$r['thumb'];?>">
                 <?php if($user['options'][1]==1){?>
-                  <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"><?php svg('browse-media');?></button>
+                  <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"><?php svg('browse-media');?></button>
                 <?php }
                 echo$r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
-                echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);">'.svg2('trash').'</button>'.
-                '<button class="save" id="savethumb" data-tooltip="tooltip" data-title="Save" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);">'.svg2('trash').'</button>'.
+                '<button class="save" id="savethumb" data-tooltip="tooltip" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifFilename">Image ALT</label>
               <div class="form-row">
-                <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=alt" data-type="alt" data-tooltip="tooltip" data-title="SEO Image Alt Information" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
+                <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=alt" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
                 <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" data-title="Save" aria-label="Save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button>':'';?>
               </div>
               <label for="coverVideo">Video URL</label>
               <div class="form-row">
                 <input class="textinput" id="videoURL" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="videoURL" type="text" value="<?php echo$r['videoURL'];?>">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`videoURL`);">'.svg2('browse-media').'</button>'.
-                '<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`content`,`videoURL`,``);">'.svg2('trash').'</button>'.
-                '<button class="save" id="savevideoURL" data-tooltip="tooltip" data-title="Save" data-dbid="videoURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`videoURL`);">'.svg2('browse-media').'</button>'.
+                '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`content`,`videoURL`,``);">'.svg2('trash').'</button>'.
+                '<button class="save" id="savevideoURL" data-tooltip="tooltip" data-dbid="videoURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <div class="row mt-3">
                 <input id="options4" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="4" type="checkbox"<?php echo$r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
@@ -623,57 +624,57 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <?php echo$user['options'][1]==1?'<small class="form-text text-right">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</small>':'';?>
               </div>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifFilename" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFilename" type="text" value="<?php echo$r['exifFilename'];?>"<?php echo$user['options'][1]==1?' placeholder="Original Filename..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-tooltip="tooltip" data-title="Save"data-dbid="exifFilename" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-tooltip="tooltip" data-dbid="exifFilename" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifCamera">Camera</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifCamera" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifCamera" type="text" value="<?php echo$r['exifCamera'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Camera"':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-tooltip="tooltip" data-title="Save" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-tooltip="tooltip" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifLens">Lens</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);">'.svg2('magic').'</button>':'';?>
                 <input type="text" id="exifLens" class="textinput" value="<?php echo$r['exifLens'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifLens"<?php echo$user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifLens" data-tooltip="tooltip" data-title="Save" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifLens" data-tooltip="tooltip" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifAperture">Aperture</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifAperture" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifAperture" type="text" value="<?php echo$r['exifAperture'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-tooltip="tooltip" data-title="Save" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-tooltip="tooltip" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifFocalLength">Focal Length</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifFocalLength" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFocalLength" type="text" value="<?php echo$r['exifFocalLength'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-tooltip="tooltip" data-title="Save" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-tooltip="tooltip" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifShutterSpeed">Shutter Speed</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifShutterSpeed" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifShutterSpeed" type="text" value="<?php echo$r['exifShutterSpeed'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-tooltip="tooltip" data-title="Save" data-dbid="exifShutterSpeed" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-tooltip="tooltip" data-dbid="exifShutterSpeed" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifISO">ISO</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifISO" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifISO" type="text" value="<?php echo$r['exifISO'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifISO" data-tooltip="tooltip" data-title="Save" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifISO" data-tooltip="tooltip" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifti">Taken</label>
               <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" data-title="Get EXIF Information" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);">'.svg2('magic').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifti" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifti" type="text" value="<?php echo$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"<?php echo$user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifti" data-tooltip="tooltip" data-title="Save" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifti" data-tooltip="tooltip" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <legend class="mt-3">Image Attribution</legend>
               <label for="attributionImageTitle">Title</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageTitle" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle" type="text" value="<?php echo$r['attributionImageTitle'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveattributionImageTitle" data-tooltip="tooltip" data-title="Save" data-dbid="attributionImageTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php echo$user['options'][1]==1?'<button class="save" id="saveattributionImageTitle" data-tooltip="tooltip" data-dbid="attributionImageTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="attributionImageName">Name</label>
               <div class="form-row">
@@ -686,7 +687,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     echo'</datalist>';
                   }
                 }
-                echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-tooltip="tooltip" data-title="Save" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-tooltip="tooltip" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="attributionImageURL">URL</label>
               <div class="form-row">
@@ -699,7 +700,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     echo'</datalist>';
                   }
                 }
-                echo$user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-tooltip="tooltip" data-title="Save" data-dbid="attributionImageURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                echo$user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-tooltip="tooltip" data-dbid="attributionImageURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
           <?php }?>
           </div>
@@ -712,8 +713,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <input name="rid" type="hidden" value="<?php echo$r['id'];?>">
                 <input name="t" type="hidden" value="content">
                 <input id="mediafile" name="fu" type="text" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
-                <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','media','mediafile');return false;"><?php svg('browse-media');?></button>
-                <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add" type="submit"><?php svg('add');?></button>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','media','mediafile');return false;"><?php svg('browse-media');?></button>
+                <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><?php svg('add');?></button>
               </form>
             <?php }?>
             <div class="row mt-3" id="mi">
@@ -730,10 +731,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="card stats col-6 col-md-3 m-1" id="mi_<?php echo$rm['id'];?>">
                     <?php if($user['options'][1]==1){?>
                       <div class="btn-group float-right">
-                        <div class="handle btn" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item"><?php svg('drag');?></div>
-                        <div class="btn" data-tooltip="tooltip" data-title="Viewed <?php echo$rm['views'];?> times" aria-label="Viewed <?php echo$rm['views'];?> times"><?php svg('view');echo' '.$rm['views'];?></div>
-                        <a class="btn" data-tooltip="tooltip" data-title="Edit" href="<?php echo URL.$settings['system']['admin'].'/media/edit/'.$rm['id'];?>" aria-label="Edit"><?php svg('edit');?></a>
-                        <button class="btn trash" onclick="purge('<?php echo$rm['id'];?>','media')" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><?php svg('drag');?></div>
+                        <div class="btn" data-tooltip="tooltip" aria-label="Viewed <?php echo$rm['views'];?> times"><?php svg('view');echo' '.$rm['views'];?></div>
+                        <a class="btn" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/media/edit/'.$rm['id'];?>" aria-label="Edit"><?php svg('edit');?></a>
+                        <button class="btn trash" onclick="purge('<?php echo$rm['id'];?>','media')" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                       </div>
                     <?php }?>
                     <a data-fancybox="media" data-type="image" data-caption="<?php echo($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?php echo$rm['file'];?>">
@@ -779,7 +780,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <input name="ttl" type="text" value="" placeholder="Title">
                   <div class="input-text">Quantity</div>
                   <input name="qty" type="text" value="" placeholder="Quantity">
-                  <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+                  <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
                 </div>
               </form>
             <?php }?>
@@ -799,7 +800,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       <form target="sp" action="core/purge.php">
                         <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                         <input name="t" type="hidden" value="choices">
-                        <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                       </form>
                     <?php }?>
                   </div>
@@ -844,11 +845,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         if($scc->rowCount()<1){?>
                           <form class="d-inline-block" id="blacklist<?php echo$rc['id'];?>" target="sp" method="post" action="core/add_commentblacklist.php">
                             <input name="id" type="hidden" value="<?php echo$rc['id'];?>">
-                            <button data-tooltip="tooltip" data-title="Add IP to Blacklist" aria-label="Add IP to Blacklist"><?php echo svg2('security');?></button>
+                            <button data-tooltip="tooltip" aria-label="Add IP to Blacklist"><?php echo svg2('security');?></button>
                           </form>
                         <?php   }?>
-                        <button class="add<?php echo$rc['status']!='unapproved'?' hidden':'';?>" id="approve_<?php echo$rc['id'];?>" data-tooltip="tooltip" data-title="Approve" onclick="update('<?php echo$rc['id'];?>','comments','status','approved');" aria-label="Approve"><?php svg('approve');?></button>
-                        <button class="trash" data-tooltip="tooltip" data-title="Delete" onclick="purge('<?php echo$rc['id'];?>','comments');" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="add<?php echo$rc['status']!='unapproved'?' hidden':'';?>" id="approve_<?php echo$rc['id'];?>" data-tooltip="tooltip" onclick="update('<?php echo$rc['id'];?>','comments','status','approved');" aria-label="Approve"><?php svg('approve');?></button>
+                        <button class="trash" data-tooltip="tooltip" onclick="purge('<?php echo$rc['id'];?>','comments');" aria-label="Delete"><?php svg('trash');?></button>
                       </div>
                     <?php }?>
                     <hr>
@@ -892,8 +893,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="media-body well p-1 p-sm-3 border-top border-dark">
                     <?php if($user['options'][1]==1){?>
                       <div class="btn-group float-right" id="controls-<?php echo$rr['id'];?>" role="group">
-                        <button class="<?php echo$rr['status']=='approved'?' hidden':'';?>" id="approve_<?php echo$rr['id'];?>" data-tooltip="tooltip" data-title="Approve" onclick="update('<?php echo$rr['id'];?>','comments','status','approved');" aria-label="Approve"><?php svg('approve');?></button>
-                        <button class="trash" data-tooltip="tooltip" data-title="Delete" onclick="purge('<?php echo$rr['id'];?>','comments');" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="<?php echo$rr['status']=='approved'?' hidden':'';?>" id="approve_<?php echo$rr['id'];?>" data-tooltip="tooltip" onclick="update('<?php echo$rr['id'];?>','comments','status','approved');" aria-label="Approve"><?php svg('approve');?></button>
+                        <button class="trash" data-tooltip="tooltip" onclick="purge('<?php echo$rr['id'];?>','comments');" aria-label="Delete"><?php svg('trash');?></button>
                       </div>
                     <?php }?>
                     <h6 class="media-heading">
@@ -924,11 +925,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 ]);
                 if($sr->rowCount()>0){?>
                   <div class="form-row">
-                    <select id="schemaType" name="rid"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Select a Content Item to Relate to this one..."':' disabled';?> aria-label="SchemaType">
+                    <select id="schemaType" name="rid"<?php echo$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> aria-label="Select a Content Item to Relate to this one...">
                       <option value="0">Select a Content Item to Relate to this one...</option>
                       <?php while($rr=$sr->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rr['id'].'">'.$rr['contentType'].': '.$rr['title'].'</option>';?>
                       </select>
-                      <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+                      <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
                     </div>
                 <?php }?>
               </form>
@@ -950,7 +951,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <form target="sp" action="core/purge.php">
                       <input name="id" type="hidden" value="<?php echo$rr['id'];?>">
                       <input name="t" type="hidden" value="choices">
-                      <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                     </form>
                   <?php }?>
                 </div>
@@ -964,17 +965,17 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <label for="views">Views</label>
             <div class="form-row">
               <input class="textinput" id="views" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?php echo$r['views'];?>"<?php echo$user['options'][1]==1?'':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" data-title="Clear" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);">'.svg2('eraser').'</button>'.
-              '<button class="save" id="saveviews" data-tooltip="tooltip" data-title="Save" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);">'.svg2('eraser').'</button>'.
+              '<button class="save" id="saveviews" data-tooltip="tooltip" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <div class="form-row mt-3">
               <label for="metaRobots">Meta&nbsp;Robots</label>
               <?php if($user['options'][1]==1){?>
-                <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" data-title="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-title="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-title="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-title="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-title="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-title="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-title="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-title="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-title="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-title="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-title="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
+                <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
               <?php }?>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metarobots" data-tooltip="tooltip" data-title="SEO Meta Robots Information" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metarobots" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button>
               <?php if($user['options'][1]==1){
                 if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -983,16 +984,16 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     ':t'=>'content',
                     ':c'=>'metaRobots'
                   ]);
-                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=metaRobots" data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=metaRobots" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }
               }?>
               <input class="textinput" id="metaRobots" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="metaRobots" type="text" value="<?php echo$r['metaRobots'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Meta Robots Option (Left empty the default will be `index,follow`)..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=metaRobots" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-              '<button class="save" id="savemetaRobots" data-tooltip="tooltip" data-title="Save" data-dbid="metaRobots" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=metaRobots" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save" id="savemetaRobots" data-tooltip="tooltip" data-dbid="metaRobots" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <label for="schemaType">Schema Type</label>
             <div class="form-row">
-              <select id="schemaType"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Schema for Microdata Content"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());">
+              <select id="schemaType"<?php echo$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> aria-label="Schema for Microdata Content" onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());">
                 <option value="blogPosting"<?php echo$r['schemaType']=='blogPosting'?' selected':'';?>>blogPosting for Articles</option>
                 <option value="Product"<?php echo$r['schemaType']=='Product'?' selected':'';?>>Product for Inventory</option>
                 <option value="Service"<?php echo$r['schemaType']=='Service'?' selected':'';?>>Service for Services</option>
@@ -1004,13 +1005,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </select>
             </div>
             <div class="card google-result mt-3 p-3 overflow-visible">
-              <div id="google-title" data-tooltip="tooltip" data-placement="left" data-title="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
+              <div id="google-title" data-tooltip="left" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
                 <?php echo($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
               </div>
               <div id="google-link">
                 <?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>
               </div>
-              <div id="google-description" data-tooltip="tooltip" data-placement="left" data-title="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
+              <div id="google-description" data-tooltip="left" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
                 <?php if($r['seoDescription']!='')
                   echo$r['seoDescription'];
                 else
@@ -1022,7 +1023,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <small class="form-text text-right">The recommended character count for Title\'s is 70.</small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" data-title="SEO Title Information" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
               <?php $cntc=70-strlen($r['seoTitle']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -1033,7 +1034,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <span class="text-success<?php echo$cnt<0?' text-danger':'';?>" id="seoTitlecnt"><?php echo$cnt;?></span>
               </div>
               <?php if($user['options'][1]==1){?>
-                <button data-tooltip="tooltip" data-title="Remove Stop Words" aria-label="Remove Stop Words" onclick="removeStopWords('seoTitle',$('#seoTitle').val());"><?php svg('magic');?></button>
+                <button data-tooltip="tooltip" aria-label="Remove Stop Words" onclick="removeStopWords('seoTitle',$('#seoTitle').val());"><?php svg('magic');?></button>
                 <?php if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
                   $ss->execute([
@@ -1041,19 +1042,19 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     ':t'=>'content',
                     ':c'=>'seoTitle'
                   ]);
-                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=seoTitle" data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=seoTitle" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }
               }?>
               <input class="textinput" id="seoTitle" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoTitle" type="text" value="<?php echo$r['seoTitle'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Meta Title..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoTitle" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-              '<button class="save" id="saveseoTitle" data-tooltip="tooltip" data-title="Save" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoTitle" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save" id="saveseoTitle" data-tooltip="tooltip" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <div class="form-row mt-3">
               <label for="seoCaption">Meta&nbsp;Caption</label>
               <small class="form-text text-right">The recommended character count for Captions is 100.</small>
             </div>
             <div class="form-row mt-3">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metacaption" data-tooltip="tooltip" data-title="SEO Meta Caption Information" aria-label="SEO Meta Caption Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metacaption" data-tooltip="tooltip" aria-label="SEO Meta Caption Information"><?php svg('seo');?></button>
               <?php $cntc=100-strlen($r['seoCaption']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -1071,19 +1072,19 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     ':t'=>'content',
                     ':c'=>'seoCaption'
                   ]);
-                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=seoCaption" data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=seoCaption" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }
               }?>
               <input class="textinput" id="seoCaption" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoCaption" type="text" value="<?php echo$r['seoCaption'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Meta Caption..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoCaption" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-              '<button class="save" id="saveseoCaption" data-tooltip="tooltip" title="Save" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoCaption" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save" id="saveseoCaption" data-tooltip="tooltip" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <div class="form-row mt-3">
               <label for="seoDescription">Meta&nbsp;Description</label>
               <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metadescription" data-tooltip="tooltip" data-title="SEO Meta Description Information" aria-label="SEO Meta Description Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metadescription" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?php svg('seo');?></button>
               <?php $cntc=160-strlen($r['seoDescription']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -1101,23 +1102,23 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     ':t'=>'content',
                     ':c'=>'seoDescription'
                   ]);
-                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=seoDescription" data-tooltip="tooltip" data-title="Editing Suggestions" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=seoDescription" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }
               }?>
               <input class="textinput" id="seoDescription" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoDescription" type="text" value="<?php echo$r['seoDescription'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Meta Description..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoDescription" data-tooltip="tooltip" data-title="Add Suggestion" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-              '<button class="save" id="saveseoDescription" data-tooltip="tooltip" data-title="Save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoDescription" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save" id="saveseoDescription" data-tooltip="tooltip" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <label for="seoKeywords">Keywords</label>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=keywords" data-tooltip="tooltip" data-title="SEO Keywords Information" aria-label="SEO Keywords Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=keywords" data-tooltip="tooltip" aria-label="SEO Keywords Information"><?php svg('seo');?></button>
               <input class="textinput" id="seoKeywords" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoKeywords" type="text" value="<?php echo$r['seoKeywords'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter Keywords..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button class="save" id="saveseoKeywords" data-tooltip="tooltip" data-title="Save" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button class="save" id="saveseoKeywords" data-tooltip="tooltip" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <label for="tags">Tags</label>
             <div class="form-row">
               <input class="textinput" id="tags" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?php echo$r['tags'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
-              <?php echo$user['options'][1]==1?'<button class="save" id="savetags" data-tooltip="tooltip" data-title="Save" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][1]==1?'<button class="save" id="savetags" data-tooltip="tooltip" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
           </div>
         <?php }?>
@@ -1127,7 +1128,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <div class="col-12 col-sm-6 pr-md-1">
                 <label for="status">Status</label>
                 <div class="form-row">
-                  <select id="status"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change Status"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());">
+                  <select id="status"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());changeShareStatus($(this).val());">
                     <option value="unpublished"<?php echo$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
                     <option value="autopublish"<?php echo$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                     <option value="published"<?php echo$r['status']=='published'?' selected':'';?>>Published</option>
@@ -1135,6 +1136,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </select>
                 </div>
               </div>
+              <script>
+                function changeShareStatus(status){
+                  if(status==='published'){
+                    $("[data-social-share]").removeClass('hidden').data("social-share",$('#genurl').attr('href'));
+                  }else{
+                    $("[data-social-share]").addClass('hidden');
+                  }
+                }
+              </script>
               <div class="col-12 col-sm-6 pl-md-1">
                 <label for="rank">Access</label>
                 <div class="form-row">
@@ -1157,7 +1167,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <div class="col-12 col-sm-6 pr-md-1">
                 <label for="contentType">contentType</label>
                 <div class="form-row">
-                  <select id="contentType"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" data-title="Change the Type of Content this Item belongs to."':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());">
+                  <select id="contentType"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change the Type of Content this Item belongs to."':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());">
                     <option value="article"<?php echo$r['contentType']=='article'?' selected':'';?>>Article</option>
                     <option value="portfolio"<?php echo$r['contentType']=='portfolio'?' selected':'';?>>Portfolio</option>
                     <option value="events"<?php echo$r['contentType']=='events'?' selected':'';?>>Event</option>

@@ -45,11 +45,10 @@ else{?>
             <div class="content-title-icon"><?php svg('order','i-3x');?></div>
             <div>Edit Order <?php echo$r['qid'].$r['iid'];?></div>
             <div class="content-title-actions">
-              <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-              <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-              <button data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');return false;"><?php svg('print');?></button>
-              <button data-tooltip="tooltip" data-title="Email Order" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></a>
-              <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
+              <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
+              <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');return false;"><?php svg('print');?></button>
+              <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></a>
+              <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
             </div>
           </div>
           <ol class="breadcrumb">
@@ -82,7 +81,7 @@ else{?>
                 <?php if($r['status']=='archived')
                   echo'<input type="text" value="Archived" readonly>';
                 else{?>
-                  <select id="status" data-tooltip="tooltip" data-title="Change Order Status" aria-label="Order Status" onchange="update('<?php echo$r['id'];?>','orders','status',$(this).val());">
+                  <select id="status" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?php echo$r['id'];?>','orders','status',$(this).val());">
                     <option value="pending"<?php echo$r['status']=='pending'?' selected':'';?>>Pending</option>
                     <option value="overdue"<?php echo$r['status']=='overdue'?' selected':'';?>>Overdue</option>
                     <option value="cancelled"<?php echo$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
@@ -124,7 +123,7 @@ else{?>
               <?php if($r['status']!='archived'){?>
                 <div class="form-row">
                   <div class="input-text">Client</div>
-                  <select id="changeClient" data-tooltip="tooltip" data-title="Select a Client..." onchange="changeClient($(this).val(),'<?php echo$r['id'];?>');">
+                  <select id="changeClient" data-tooltip="tooltip" aria-label="Select a Client..." onchange="changeClient($(this).val(),'<?php echo$r['id'];?>');">
                     <option value="0"<?php echo($r['cid']=='0'?' selected':'');?>>None</option>
                     <?php $q=$db->query("SELECT `id`,`business`,`username`,`name` FROM `".$prefix."login` WHERE `status`!='delete' AND `status`!='suspended' AND `id`!='0'");
                     if($q->rowCount()>0){
@@ -141,7 +140,7 @@ else{?>
                 <input name="t" type="hidden" value="orderitems">
                 <input name="c" type="hidden" value="">
                 <div class="input-text">Inventory/Services</div>
-                <select name="da" data-tooltip="tooltip" data-title="Select Product, Service or Empty Entry">
+                <select name="da" data-tooltip="tooltip" aria-label="Select Product, Service or Empty Entry">
                   <option value="0">Add Empty Entry...</option>
                   <option value="neg">Add Deducation Entry...</option>
                   <?php $s=$db->query("SELECT `id`,`contentType`,`code`,`cost`,`title` FROM `".$prefix."content` WHERE `contentType`='inventory' OR `contentType`='service' OR `contentType`='events' ORDER BY `code` ASC");
@@ -149,7 +148,7 @@ else{?>
                     while($i=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$i['id'].'">'.ucfirst(rtrim($i['contentType'],'s')).$i['code'].':$'.$i['cost'].':'.$i['title'].'</option>';
                   }?>
                 </select>
-                <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+                <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
               </form>
               <div class="row">
                 <small class="form-text text-muted">Note: Adding or removing items does not recalculate Postage Costs, you will need to do that manually with the selection below</small>
@@ -163,7 +162,7 @@ else{?>
                   <input name="t" type="hidden" value="orders">
                   <input name="c" type="hidden" value="postageOption">
                   <div class="input-text">Postage Options</div>
-                  <select name="da" data-tooltip="tooltip" data-title="Select Postage Option or Empty Entry" onchange="$('.page-block').addClass('d-block');this.form.submit();">
+                  <select name="da" data-tooltip="tooltip" aria-label="Select Postage Option or Empty Entry" onchange="$('.page-block').addClass('d-block');this.form.submit();">
                     <option value="0">Clear Postage Option and Cost</option>
                     <?php while($rp=$sp->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rp['id'].'">'.$rp['title'].($rp['value']>0?' : $'.$rp['value']:'').'</option>';?>
                   </select>
@@ -259,7 +258,7 @@ else{?>
                         <input name="t" type="hidden" value="orderitems">
                         <input name="c" type="hidden" value="quantity">
                         <input name="da" type="hidden" value="0">
-                        <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                       </form>
                     </td>
                   </tr>
@@ -408,7 +407,7 @@ else{?>
                             '<input name="t" type="hidden" value="orderitems">'.
                             '<input name="c" type="hidden" value="quantity">'.
                             '<input name="da" type="hidden" value="0">'.
-                            '<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+                            '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
                           '</form>'.
                         '</td>'.
                       '</tr>';

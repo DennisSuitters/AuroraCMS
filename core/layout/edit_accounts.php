@@ -24,9 +24,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Edit Account <?php echo$r['username'];?>:<?php echo$r['name'];?></div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -81,7 +80,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 <label for="username">Username</label>
                 <div class="form-row">
                   <input class="textinput" id="username" type="text" value="<?php echo$r['username'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                  <?php echo$user['options'][5]==1?'<button class="save" id="saveusername" data-tooltip="tooltip" data-title="Save" data-dbid="username" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <?php echo$user['options'][5]==1?'<button class="save" id="saveusername" data-tooltip="tooltip" data-dbid="username" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
@@ -89,7 +88,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 <label for="email">Email</label>
                 <div class="form-row">
                   <input class="textinput" id="email" type="text" value="<?php echo$r['email'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                  <?php echo$user['options'][5]==1?'<button class="save" id="saveemail" data-tooltip="tooltip" data-title="Save" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <?php echo$user['options'][5]==1?'<button class="save" id="saveemail" data-tooltip="tooltip" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                 </div>
               </div>
             </div>
@@ -99,7 +98,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-row">
               <div class="input-text">$</div>
               <input class="textinput" id="spent" type="number" value="<?php echo$r['spent'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="spent"<?php echo$user['options'][5]==1?'':' readonly';?>>
-              <?php echo$user['options'][5]==1?'<button class="save" id="savespent" data-tooltip="tooltip" data-title="Save" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][5]==1?'<button class="save" id="savespent" data-tooltip="tooltip" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
           </div>
 <?php /* Tab 2 Images */ ?>
@@ -110,8 +109,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <?php if($user['options'][5]==1){?>
                 <input name="id" type="hidden" value="<?php echo$r['id'];?>">
                 <input name="act" type="hidden" value="add_avatar">
-                <div class="btn" data-tooltip="tooltip" data-title="Browse Computer for Files.">
-                  <label for="avatarfu" aria-label="Browse Computer for Files."><?php svg('browse-computer');?>
+                <div class="btn">
+                  <label for="avatarfu" data-tooltip="tooltip" aria-label="Browse Computer for Files."><?php svg('browse-computer');?>
                     <input class="hidden" id="avatarfu" name="fu" type="file" onchange="form.submit();">
                   </label>
                 </div>
@@ -119,7 +118,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <img class="img-avatar" style="border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
               elseif($r['gravatar']!='')echo$r['gravatar'];
               else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
-              <?php echo$user['options'][5]==1?'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);">'.svg2('trash').'</button>':'';?>
+              <?php echo$user['options'][5]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);">'.svg2('trash').'</button>':'';?>
             </form>
             <div class="form-row mt-3">
               <label for="gravatar">Gravatar</label>
@@ -127,7 +126,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="form-row">
               <input class="textinput" id="gravatar" type="text" value="<?php echo$r['gravatar'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-              <?php echo$user['options'][5]==1?'<button class="save" id="savegravatar" data-tooltip="tooltip" data-title="Save" data-dbid="gravatar" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?php echo$user['options'][5]==1?'<button class="save" id="savegravatar" data-tooltip="tooltip" data-dbid="gravatar" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
           </div>
 <?php /* Tab 3 Proofs */ ?>
@@ -156,8 +155,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                       ':rid'=>$rm['id']
                     ]);
                     $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
-                    <a class="btn<?php echo$sccn['cnt']>0?' add':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" data-title="'.$sccn['cnt'].' New Comments"':'');?> aria-label="View Comments"><?php svg('comments').'&nbsp;'.$scn['cnt'];?></a>
-                    <?php echo$user['options'][5]==1?'<span class="btn handle" data-tooltip="tooltip" data-title="Drag to ReOrder this item" aria-label="Drag to ReOrder this item">'.svg2('drag').'</span>':'';?>
+                    <a class="btn<?php echo$sccn['cnt']>0?' add':'';?>" href="<?php echo URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?php echo($sccn['cnt']>0?' data-tooltip="tooltip" aria-label="'.$sccn['cnt'].' New Comments"':'');?> aria-label="View Comments"><?php svg('comments').'&nbsp;'.$scn['cnt'];?></a>
+                    <?php echo$user['options'][5]==1?'<span class="btn handle" data-tooltip="tooltip" aria-label="Drag to ReOrder this item">'.svg2('drag').'</span>':'';?>
                   </div>
                   <a data-fancybox="media" data-type="image" data-caption="<?php echo($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?php echo$rm['file'];?>">
                     <img src="<?php echo$thumb;?>" alt="Media <?php echo$rm['id'];?>">
@@ -280,7 +279,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 </select>
                 <div class="input-text">URL</div>
                 <input id="socialurl" name="url" type="text" value="" placeholder="Enter a URL...">
-                <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('plus');?></button>
+                <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('plus');?></button>
               </form>
             <?php }?>
             <div class="mt-3" id="social">
@@ -295,7 +294,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   <?php if($user['options'][0]==1||$user['options'][5]==1){?>
                     <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                   <?php }?>
                 </form>
               <?php }?>
@@ -331,35 +330,35 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                     <label for="name">Name</label>
                     <div class="form-row">
                       <input class="textinput" id="name" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="name" type="text" value="<?php echo$r['name'];?>" placeholder="Enter a Name..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savename" data-tooltip="tooltip" data-title="Save" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savename" data-tooltip="tooltip" data-dbid="name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md-6 pl-md-2">
                     <label for="business">Business</label>
                     <div class="form-row">
                       <input class="textinput" id="business" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="business" type="text" value="<?php echo$r['business'];?>" placeholder="Enter a Business..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savebusiness" data-tooltip="tooltip" data-title="Save" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savebusiness" data-tooltip="tooltip" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                 </div>
                 <label for="url">URL</label>
                 <div class="form-row">
                   <input class="textinput" id="url" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="url" type="text" value="<?php echo$r['url'];?>" placeholder="Enter a URL..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                  <?php echo$user['options'][5]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-title="Save" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <?php echo$user['options'][5]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                 </div>
                 <div class="row">
                   <div class="col-12 col-md-6 pr-md-2">
                     <label for="phone">Phone</label>
                     <div class="form-row">
                       <input class="textinput" id="phone" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="phone" type="text" value="<?php echo$r['phone'];?>" placeholder="Enter a Phone..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savephone" data-tooltip="tooltip" data-title="Save" data-dbid="phone" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savephone" data-tooltip="tooltip" data-dbid="phone" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md-6 pl-md-2">
                     <label for="mobile">Mobile</label>
                     <div class="form-row">
                       <input class="textinput" id="mobile" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="mobile" type="text" value="<?php echo$r['mobile'];?>" placeholder="Enter a Mobile..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                    <?php echo$user['options'][5]==1?'<button class="save" id="savemobile" data-tooltip="tooltip" data-title="Save" data-dbid="mobile" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savemobile" data-tooltip="tooltip" data-dbid="mobile" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                 </div>
@@ -368,14 +367,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                     <label for="address">Address</label>
                     <div class="form-row">
                       <input class="textinput" id="address" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="address" type="text" value="<?php echo$r['address'];?>" placeholder="Enter an Address..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="saveaddress" data-tooltip="tooltip" data-title="Save" data-dbid="address" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="saveaddress" data-tooltip="tooltip" data-dbid="address" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md-6 pl-md-2">
                     <label for="suburb">Suburb</label>
                     <div class="form-row">
                       <input class="textinput" id="suburb" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="suburb" type="text" value="<?php echo$r['suburb'];?>" placeholder="Enter a Suburb..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savesuburb" data-tooltip="tooltip" data-title="Save" data-dbid="suburb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savesuburb" data-tooltip="tooltip" data-dbid="suburb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                 </div>
@@ -384,14 +383,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                     <label for="city">City</label>
                     <div class="form-row">
                       <input class="textinput" id="city" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="city" type="text" value="<?php echo$r['city'];?>" placeholder="Enter a City..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savecity" data-tooltip="tooltip" data-title="Save" data-dbid="city" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savecity" data-tooltip="tooltip" data-dbid="city" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md-6 pl-md-2">
                     <label for="state">State</label>
                     <div class="form-row">
                       <input class="textinput" id="state" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="state" type="text" value="<?php echo$r['state'];?>" placeholder="Enter a State..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savestate" data-tooltip="tooltip" data-title="Save" data-dbid="state" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savestate" data-tooltip="tooltip" data-dbid="state" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                 </div>
@@ -400,21 +399,21 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                     <label for="postcode">Postcode</label>
                     <div class="form-row">
                       <input class="textinput" id="postcode" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="postcode" type="text" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" placeholder="Enter a Postcode..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savepostcode" data-tooltip="tooltip" data-title="Save" data-dbid="postcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savepostcode" data-tooltip="tooltip" data-dbid="postcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md-6 pl-md-2">
                     <label for="country">Country</label>
                     <div class="form-row">
                       <input class="textinput" id="country" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="country" type="text" value="<?php echo$r['country'];?>" placeholder="Enter a Country..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                      <?php echo$user['options'][5]==1?'<button class="save" id="savecountry" data-tooltip="tooltip" data-title="Save" data-dbid="country" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?php echo$user['options'][5]==1?'<button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                     </div>
                   </div>
                 </div>
                 <label for="caption">Caption</label>
                 <div class="form-row">
                   <input class="textinput" id="caption" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="caption" type="text" value="<?php echo$r['caption'];?>" placeholder="Enter a Caption..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                  <?php echo$user['options'][5]==1?'<button class="save" id="savecaption" data-tooltip="tooltip" data-title="Save" data-dbid="caption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <?php echo$user['options'][5]==1?'<button class="save" id="savecaption" data-tooltip="tooltip" data-dbid="caption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                 </div>
                 <div class="form-row mt-3">
                   <label for="caption">Description</label>
@@ -422,7 +421,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 </div>
                 <div class="form-row">
                   <input class="textinput" id="seoDescription" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="seoDescription" type="text" value="<?php echo$r['seoDescription'];?>" placeholder="Enter a Description..."<?php echo$user['options'][5]==1?'':' readonly';?>>
-                  <?php echo$user['options'][5]==1?'<button class="save" id="saveseoDescription" data-tooltip="tooltip" data-title="Save" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <?php echo$user['options'][5]==1?'<button class="save" id="saveseoDescription" data-tooltip="tooltip" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                 </div>
                 <label for="notes">About</label>
                 <div class="row">
@@ -494,7 +493,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                         <textarea id="career-notes" name="da" required aria-required="true" aria-label="Career Notes"></textarea>
                       </div>
                       <div class="col-12 col-md-1">
-                        <button class="btn-block add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add Career"><?php svg('add');?></button>
+                        <button class="btn-block add" data-tooltip="tooltip" type="submit" aria-label="Add Career"><?php svg('add');?></button>
                       </div>
                     </div>
                   </form>
@@ -547,7 +546,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                           </div>
                         </div>
                         <div class="col-12 col-md-1">
-                          <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn-block trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge(`'.$rc['id'].'`,`content`);">'.svg2('trash').'</button>':'';?>
+                          <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn-block trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$rc['id'].'`,`content`);">'.svg2('trash').'</button>':'';?>
                         </div>
                       </div>
                       <hr>
@@ -600,7 +599,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                         <textarea id="edu-notes" name="da" required aria-required="true"></textarea>
                       </div>
                       <div class="col-12 col-md-1">
-                        <button class="btn-block add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+                        <button class="btn-block add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
                       </div>
                     </div>
                   </form>
@@ -661,7 +660,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                           </div>
                         </div>
                         <div class="col-12 col-md-1">
-                          <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn-block trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge(`'.$rc['id'].'`,`content`);">'.svg2('trash').'</button>':'';?>
+                          <?php echo$user['options'][5]==1||$user['options'][0]==1?'<button class="btn-block trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$rc['id'].'`,`content`);">'.svg2('trash').'</button>':'';?>
                         </div>
                         <hr>
                       </div>

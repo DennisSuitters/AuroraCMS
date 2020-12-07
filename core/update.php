@@ -279,7 +279,7 @@ if(is_null($e[2])){
                     '<input name="t" type="hidden" value="orderitems">'.
                     '<input name="c" type="hidden" value="quantity">'.
                     '<input name="da" type="hidden" value="0">'.
-                    '<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+                    '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
                   '</form>'.
                 '</td>'.
               '</tr>';

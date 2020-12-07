@@ -62,7 +62,7 @@
           </form>
           <form class="d-none" id="panel-rst" target="rstfeedback" method="post" action="core/rst.php" accept-charset="UTF-8">
             <input name="emailtrap" type="hidden" value="none">
-            <div class="row mt-3" data-tooltip="tooltip" data-title="Enter Email Associcated With Account">
+            <div class="row mt-3" data-tooltip="tooltip" aria-label="Enter Email Associcated With Account">
               <input id="rst" name="rst" type="text" value="" autocomplete="off" placeholder="Enter an Email..." required aria-required="true" aria-label="Enter Email Associated with Account">
             </div>
             <div class="row mt-4">
@@ -71,7 +71,7 @@
             <div class="form-row" id="rstfeedback"></div>
           </form>
           <div class="row mt-4">
-            <button data-tooltip="tooltip" data-title="Click to show Password Reset Field" aria-label="Reset Password" onclick="$('#login,#panel-rst,.btn-message').toggleClass('d-none');"><span class="btn-message">Reset Password</span><span class="btn-message d-none">I remembered, take me back to Login</span></button>
+            <button data-tooltip="tooltip" aria-label="Click ti show Password Reset form" onclick="$('#login,#panel-rst,.btn-message').toggleClass('d-none');"><span class="btn-message">Reset Password</span><span class="btn-message d-none">I remembered, take me back to Login</span></button>
           </div>
           <div class="row mt-5 text-center">
             <a href="<?php echo URL;?>">&larr; Back to <?php echo$config['business']!=''?$config['business']:'Main Site';?></a>

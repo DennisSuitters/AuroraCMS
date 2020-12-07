@@ -41,8 +41,7 @@ if($args[0]!='compose'){
           <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
           <div>Messages Edit</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
+            <a class="btn" data-tooltip="tooltip" data-placement="left" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -109,7 +108,7 @@ if($args[0]!='compose'){
               </div>
               <label>Attachments</label>
               <div class="form-row">
-                <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','messages','attachments');return false;"><?php svg('browse-media');?></button>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','messages','attachments');return false;"><?php svg('browse-media');?></button>
               </div>
               <div id="attachments">
                 <?php if($r['attachments']!=''){
@@ -130,9 +129,9 @@ if($args[0]!='compose'){
                     <div class="form-row mt-1" id="a_<?php echo$ti;?>">
                       <img src="<?php echo$attimg;?>" alt="<?php echo basename($attachment);?>">
                       <div class="input-text col-12">
-                        <a data-title="<?php echo basename($attachment);?>" target="_blank" href="<?php echo$attachment;?>"><?php echo basename($attachment);?></a>
+                        <a aria-label="<?php echo basename($attachment);?>" target="_blank" href="<?php echo$attachment;?>"><?php echo basename($attachment);?></a>
                       </div>
-                      <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="attRemove('<?php echo$ti;?>');return false;"><?php svg('trash');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="attRemove('<?php echo$ti;?>');return false;"><?php svg('trash');?></button>
                     </div>
                   <?php }
                 }?>

@@ -58,11 +58,10 @@ else{
           <div class="content-title-icon"><?php svg('calendar','i-3x');?></div>
           <div>Bookings</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" data-title="Bookings Settings" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings">'.svg2('settings').'</a>':'';?>
-            <button class="<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="tooltip" data-title="Switch to Table View" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><?php svg('table');?></button>
-            <button class="<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>" data-tooltip="tooltip" data-title="Switch to Calendar View" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><?php svg('calendar');?></button>
-            <?php echo$user['options'][2]==1?'<a class="btn add" data-tooltip="tooltip" data-title="Add" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+            <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings">'.svg2('settings').'</a>':'';?>
+            <button class="<?php echo(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><?php svg('table');?></button>
+            <button class="<?php echo(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><?php svg('calendar');?></button>
+            <?php echo$user['options'][2]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -75,12 +74,12 @@ else{
         <div class="row p-3">
           <div class="col-12 col-sm-6">
             <small>Legend:
-              <a class="badger badge-secondary" data-tooltip="tooltip" data-title="View All Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/';?>" aria-label="View All Bookings">All</a>
-              <a class="badger badge-danger" data-tooltip="tooltip" data-title="View Unconfirmed Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
-              <a class="badger badge-success" data-tooltip="tooltip" data-title="View Confirmed Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/confirmed';?>" aria-label="View Confirmed Bookings">Confirmed</a>
-              <a class="badger badge-warning" data-tooltip="tooltip" data-title="View In Progress Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/in-progress';?>" aria-label="View In Progress Bookings">In Progress</a>
-              <a class="badger badge-info" data-tooltip="tooltip" data-title="View Complete Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/complete';?>" aria-label="View Complete Bookings">Complete</a>
-              <a class="badger badge-secondary" data-tooltip="tooltip" data-title="View Archived Bookings" href="<?php echo URL.$settings['system']['admin'].'/bookings/archived';?>" aria-label="View Archived Bookings">Archived</a>
+              <a class="badger badge-secondary" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/bookings/';?>" aria-label="View All Bookings">All</a>
+              <a class="badger badge-danger" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
+              <a class="badger badge-success" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/bookings/confirmed';?>" aria-label="View Confirmed Bookings">Confirmed</a>
+              <a class="badger badge-warning" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/bookings/in-progress';?>" aria-label="View In Progress Bookings">In Progress</a>
+              <a class="badger badge-info" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/bookings/complete';?>" aria-label="View Complete Bookings">Complete</a>
+              <a class="badger badge-secondary" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/bookings/archived';?>" aria-label="View Archived Bookings">Archived</a>
             </small>
           </div>
           <div class="col-12 col-sm-6">
@@ -129,13 +128,13 @@ else{
                   <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
-                        <a class="btn" data-tooltip="tooltip" data-title="Edit" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
-                        <button data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>
-                        <button data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>
+                        <a class="btn" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/bookings/edit/<?php echo$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
+                        <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>
+                        <button class="btn" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>
                         <?php if($user['options'][0]==1){?>
-                          <button class="<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" data-title="Restore" role="button" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
-                          <button class="trash<?php echo($r['status']=='delete'?' d-none':'');?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
-                          <button class="trash<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" data-title="Purge" aria-label="Purge" onclick="purge('<?php echo $r['id'];?>','content');"><?php svg('purge');?></button>
+                          <button class="btn<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" role="button" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
+                          <button class="btn trash<?php echo($r['status']=='delete'?' d-none':'');?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
+                          <button class="btn trash<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo $r['id'];?>','content');"><?php svg('purge');?></button>
                         <?php }?>
                       </div>
                     </div>
@@ -189,12 +188,12 @@ else{
               '<div class="events-buttons" role="toolbar" aria-label="Item Toolbar Controls">' +
                 '<div class="btn-group" role="group" aria-label="Item Controls">' +
 <?php if($user['options'][2]==1){?>
-                  `<button class="btn" id="prbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Print Order" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>` +
-                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Edit" href="<?php echo$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>' +
-                  `<button class="btn" id="bibut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Copy Booking to Invoice" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>` +
-                  `<button class="btn trash" id="delbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?php svg('trash');?></button>` +
+                  `<button class="btn" id="prbut<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>` +
+                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>' +
+                  `<button class="btn" id="bibut<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>` +
+                  `<button class="btn trash" id="delbut<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?php svg('trash');?></button>` +
 <?php }else{?>
-                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" data-title="View" href="<?php echo$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" aria-label="View"><?php svg('view');?></a>' +
+                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" aria-label="View"><?php svg('view');?></a>' +
 <?php }?>
                 `</div>` +
               `</div>` +

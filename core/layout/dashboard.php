@@ -22,9 +22,7 @@ else{
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('dashboard','i-3x');?></div>
           <div>Dashboard</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item active">Dashboard</li>

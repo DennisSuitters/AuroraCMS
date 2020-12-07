@@ -67,8 +67,7 @@ if($user['options'][3]==1){
               <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
               <div>Messages</div>
               <div class="content-title-actions">
-                <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-                <?php echo$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" data-title="Messages Settings" aria-label="Messages Settings">'.svg2('settings').'</a>':'';?>
+                <?php echo$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" aria-label="Messages Settings">'.svg2('settings').'</a>':'';?>
               </div>
             </div>
             <ol class="breadcrumb">
@@ -149,7 +148,7 @@ if($user['options'][3]==1){
                                 if($scc->rowCount()<1){?>
                                   <form id="whitelist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
                                     <input name="id" type="hidden" value="<?php echo$r['id'];?>">
-                                    <button data-tooltip="tooltip" data-title="Add to Whitelist" aria-label="Add to Whitelist"><?php echo svg2('whitelist');?></button>
+                                    <button data-tooltip="tooltip" aria-label="Add to Whitelist"><?php echo svg2('whitelist');?></button>
                                   </form>
                                 <?php }
                                 $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
@@ -159,11 +158,11 @@ if($user['options'][3]==1){
                                 if($scc->rowCount()<1){?>
                                   <form id="blacklist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messageblacklist.php">
                                     <input name="id" type="hidden" value="<?php echo$r['id'];?>">
-                                    <button data-tooltip="tooltip" data-title="Add to Blacklist" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
+                                    <button data-tooltip="tooltip" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
                                   </form>
                                 <?php }?>
-                                <button data-tooltip="tooltip" data-title="Move to Spam Folder" aria-label="Move to Spam Folder" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');"><?php svg('email-spam');?></button>
-                                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','messages')"><?php svg('trash');?></button>
+                                <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');"><?php svg('email-spam');?></button>
+                                <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','messages')"><?php svg('trash');?></button>
                               <?php }?>
                             </div>
                           </div>

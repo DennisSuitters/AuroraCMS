@@ -1,14 +1,14 @@
 /*!
- *
+ * 
  * Super simple wysiwyg editor v0.8.18
  * https://summernote.org
- *
- *
+ * 
+ * 
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
- *
- * Date: 2020-07-13T04:14Z
- *
+ * 
+ * Date: 2020-11-30T12:11Z
+ * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -227,114 +227,6 @@ var renderer_Renderer = /*#__PURE__*/function () {
     };
   }
 });
-// CONCATENATED MODULE: ./src/js/ui/TooltipUI.js
-function TooltipUI_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function TooltipUI_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function TooltipUI_createClass(Constructor, protoProps, staticProps) { if (protoProps) TooltipUI_defineProperties(Constructor.prototype, protoProps); if (staticProps) TooltipUI_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-var TooltipUI_TooltipUI = /*#__PURE__*/function () {
-  function TooltipUI($node, options) {
-    TooltipUI_classCallCheck(this, TooltipUI);
-
-    this.$node = $node;
-    this.options = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.extend({}, {
-      title: '',
-      target: options.container,
-      trigger: 'hover focus',
-      placement: 'bottom'
-    }, options); // create tooltip node
-
-    this.$tooltip = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(['<div class="note-tooltip">', '<div class="note-tooltip-arrow"></div>', '<div class="note-tooltip-content"></div>', '</div>'].join('')); // define event
-
-    if (this.options.trigger !== 'manual') {
-      var showCallback = this.show.bind(this);
-      var hideCallback = this.hide.bind(this);
-      var toggleCallback = this.toggle.bind(this);
-      this.options.trigger.split(' ').forEach(function (eventName) {
-        if (eventName === 'hover') {
-          $node.off('mouseenter mouseleave');
-          $node.on('mouseenter', showCallback).on('mouseleave', hideCallback);
-        } else if (eventName === 'click') {
-          $node.on('click', toggleCallback);
-        } else if (eventName === 'focus') {
-          $node.on('focus', showCallback).on('blur', hideCallback);
-        }
-      });
-    }
-  }
-
-  TooltipUI_createClass(TooltipUI, [{
-    key: "show",
-    value: function show() {
-      var $node = this.$node;
-      var offset = $node.offset();
-      var targetOffset = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(this.options.target).offset();
-      offset.top -= targetOffset.top;
-      offset.left -= targetOffset.left;
-      var $tooltip = this.$tooltip;
-      var title = this.options.title || $node.attr('title') || $node.data('title');
-      var placement = this.options.placement || $node.data('placement');
-      $tooltip.addClass(placement);
-      $tooltip.find('.note-tooltip-content').text(title);
-      $tooltip.appendTo(this.options.target);
-      var nodeWidth = $node.outerWidth();
-      var nodeHeight = $node.outerHeight();
-      var tooltipWidth = $tooltip.outerWidth();
-      var tooltipHeight = $tooltip.outerHeight();
-
-      if (placement === 'top') {
-        $tooltip.css({
-          top: offset.top - tooltipHeight,
-          left: offset.left + (nodeWidth / 2 - tooltipWidth / 2)
-        });
-      } else if (placement === 'right') {
-        $tooltip.css({
-          top: offset.top + (nodeHeight / 2 - tooltipHeight / 2),
-          left: offset.left + nodeWidth
-        });
-      } else if (placement === 'bottom') {
-        $tooltip.css({
-          top: offset.top + nodeHeight,
-          left: offset.left + (nodeWidth / 2 - tooltipWidth / 2)
-        });
-      } else if (placement === 'left') {
-        $tooltip.css({
-          top: offset.top + (nodeHeight / 2 - tooltipHeight / 2),
-          left: offset.left - tooltipWidth
-        });
-      }
-
-      $tooltip.addClass('note-in');
-    }
-  }, {
-    key: "hide",
-    value: function hide() {
-      var _this = this;
-
-      this.$tooltip.removeClass('note-in');
-      setTimeout(function () {
-        _this.$tooltip.remove();
-      }, 200);
-    }
-  }, {
-    key: "toggle",
-    value: function toggle() {
-      if (this.$tooltip.hasClass('note-in')) {
-        this.hide();
-      } else {
-        this.show();
-      }
-    }
-  }]);
-
-  return TooltipUI;
-}();
-
-/* harmony default export */ var ui_TooltipUI = (TooltipUI_TooltipUI);
 // CONCATENATED MODULE: ./src/js/ui/DropdownUI.js
 function DropdownUI_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -479,29 +371,24 @@ var ModalUI_ModalUI = /*#__PURE__*/function () {
 
 
 
-
 var editor = renderer.create('<div class="note-editor note-frame"></div>');
 var toolbar = renderer.create('<div class="note-toolbar" role="toolbar"></div>');
+var viewportArea = renderer.create('<div class="note-viewport-area"></div>');
 var editingArea = renderer.create('<div class="note-editing-area"></div>');
 var codable = renderer.create('<textarea class="note-codable" aria-multiline="true"></div>');
 var ui_editable = renderer.create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"></div>');
-var statusbar = renderer.create(['<div class="note-statusbar" role="status">', '<output class="note-status-output" aria-live="polite"></output>', '<div class="note-resizebar" aria-label="resize">', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '<div class="note-powered"><a href="https://summernote.org/">Powered by Summernote</a></div>', '</div>', '</div>'].join(''));
+var statusbar = renderer.create(['<div class="note-statusbar" role="status">', '<output class="note-status-output" aria-live="polite"></output>', '<div class="note-resizebar" aria-label="resize">', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '</div>', '</div>'].join(''));
 var airEditor = renderer.create('<div class="note-editor note-airframe"></div>');
 var airEditable = renderer.create(['<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"></div>', '<output class="note-status-output" role="status" aria-live="polite"></output>'].join(''));
 var buttonGroup = renderer.create('<div class="note-btn-group">');
 var ui_button = renderer.create('<button type="button" class="note-btn" tabindex="-1">', function ($node, options) {
   // set button type
-  if (options && options.tooltip) {
-    $node.attr({
-      'aria-label': options.tooltip
-    });
-    $node.data('_lite_tooltip', new ui_TooltipUI($node, {
-      title: options.tooltip,
-      container: options.container
-    })).on('click', function (e) {
-      external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(e.currentTarget).data('_lite_tooltip').hide();
-    });
-  }
+  $node.attr({
+    'aria-label': options.tooltip
+  });
+  $node.attr({
+    'data-tooltip': options.placement
+  });
 
   if (options.contents) {
     $node.html(options.contents);
@@ -517,6 +404,18 @@ var ui_button = renderer.create('<button type="button" class="note-btn" tabindex
     $node.addClass('note-codeview-keep');
   }
 });
+var ui_text = renderer.create('<div class="note-txt">', function ($node, options) {
+  $node.attr({
+    'aria-label': options.tooltip
+  });
+  $node.attr({
+    'data-tooltip': options.placement
+  });
+
+  if (options.contents) {
+    $node.html(options.contents);
+  }
+});
 var dropdown = renderer.create('<div class="note-dropdown-menu" role="list">', function ($node, options) {
   var markup = Array.isArray(options.items) ? options.items.map(function (item) {
     var value = typeof item === 'string' ? item : item.value || '';
@@ -528,6 +427,11 @@ var dropdown = renderer.create('<div class="note-dropdown-menu" role="list">', f
   $node.html(markup).attr({
     'aria-label': options.title
   });
+
+  if (options.dropUp) {
+    $node.addClass('up');
+  }
+
   $node.on('click', '> .note-dropdown-item', function (event) {
     var $a = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(this);
     var item = $a.data('item');
@@ -555,6 +459,11 @@ var dropdownCheck = renderer.create('<div class="note-dropdown-menu note-check" 
   $node.html(markup).attr({
     'aria-label': options.title
   });
+
+  if (options.dropUp) {
+    $node.addClass('up');
+  }
+
   $node.on('click', '> .note-dropdown-item', function (event) {
     var $a = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(this);
     var item = $a.data('item');
@@ -597,6 +506,7 @@ var palette = renderer.create('<div class="note-color-palette"></div>', function
 
   for (var row = 0, rowSize = options.colors.length; row < rowSize; row++) {
     var eventName = options.eventName;
+    var tipPlacement = options.placement;
     var colors = options.colors[row];
     var colorsName = options.colorsName[row];
     var buttons = [];
@@ -604,18 +514,13 @@ var palette = renderer.create('<div class="note-color-palette"></div>', function
     for (var col = 0, colSize = colors.length; col < colSize; col++) {
       var color = colors[col];
       var colorName = colorsName[col];
-      buttons.push(['<button type="button" class="note-btn note-color-btn"', 'style="background-color:', color, '" ', 'data-event="', eventName, '" ', 'data-value="', color, '" ', 'data-title="', colorName, '" ', 'aria-label="', colorName, '" ', 'data-toggle="button" tabindex="-1"></button>'].join(''));
+      buttons.push(['<button type="button" class="note-btn note-color-btn"', 'style="background-color:', color, '" ', 'data-event="', eventName, '" ', 'data-value="', color, '" ', 'data-tooltip="', tipPlacement, '"', 'aria-label="', colorName, '" ', 'data-toggle="button" tabindex="-1"></button>'].join(''));
     }
 
     contents.push('<div class="note-color-row">' + buttons.join('') + '</div>');
   }
 
   $node.html(contents.join(''));
-  $node.find('.note-color-btn').each(function () {
-    external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(this).data('_lite_tooltip', new ui_TooltipUI(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(this), {
-      container: options.container
-    }));
-  });
 });
 
 var colorDropdownButton = function colorDropdownButton() {
@@ -630,7 +535,7 @@ var dialog = renderer.create('<div class="note-modal" aria-hidden="false" tabind
   $node.attr({
     'aria-label': options.title
   });
-  $node.html(['<div class="note-modal-content">', options.title ? '<div class="note-modal-header"><button type="button" class="note-close" aria-label="Close" aria-hidden="true"><i class="note-icon-close"></i></button><h4 class="note-modal-title">' + options.title + '</h4></div>' : '', '<div class="note-modal-body">' + options.body + '</div>', options.footer ? '<div class="note-modal-footer">' + options.footer + '</div>' : '', '</div>'].join(''));
+  $node.html(['<div class="note-modal-content">', '<div class="note-modal-header">', '<button type="button" class="note-close" data-tooltip="' + options.placement + '" aria-label="Close" aria-hidden="true"><i class="note-icon-close"></i></button>', '<h4 class="note-modal-title">' + options.title + '</h4>', '</div>', '<div class="note-modal-body">' + options.body + '</div>', options.footer ? '<div class="note-modal-footer">' + options.footer + '</div>' : '', '</div>'].join(''));
   $node.data('modal', new ui_ModalUI($node, options));
 });
 
@@ -668,6 +573,7 @@ var ui = function ui(options) {
     editor: editor,
     toolbar: toolbar,
     editingArea: editingArea,
+    viewportArea: viewportArea,
     codable: codable,
     editable: ui_editable,
     statusbar: statusbar,
@@ -675,6 +581,7 @@ var ui = function ui(options) {
     airEditable: airEditable,
     buttonGroup: buttonGroup,
     button: ui_button,
+    text: ui_text,
     dropdown: dropdown,
     dropdownCheck: dropdownCheck,
     dropdownButton: dropdownButton,
@@ -736,12 +643,13 @@ var ui = function ui(options) {
       return $dialog.find('.note-modal-body');
     },
     createLayout: function createLayout($note) {
-      var $editor = (options.airMode ? airEditor([editingArea([codable(), airEditable()])]) : options.toolbarPosition === 'bottom' ? editor([editingArea([codable(), ui_editable()]), toolbar(), statusbar()]) : editor([toolbar(), editingArea([codable(), ui_editable()]), statusbar()])).render();
+      var $editor = (options.airMode ? airEditor([editingArea([codable(), airEditable()])]) : options.toolbarPosition === 'bottom' ? editor([editingArea([codable(), viewportArea([ui_editable()])]), toolbar(), statusbar()]) : editor([toolbar(), editingArea([codable(), viewportArea([ui_editable()])]), statusbar()])).render();
       $editor.insertAfter($note);
       return {
         note: $note,
         editor: $editor,
         toolbar: $editor.find('.note-toolbar'),
+        viewportArea: $editor.find('note-viewport-area'),
         editingArea: $editor.find('.note-editing-area'),
         editable: $editor.find('.note-editable'),
         codable: $editor.find('.note-codable'),
@@ -796,18 +704,31 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.exten
       dragImageHere: 'Drag image or text here',
       dropImage: 'Drop image or Text',
       selectFromFiles: 'Select from files',
+      fileNote: 'Select from files after filling in below fields.',
       maximumFileSize: 'Maximum file size',
       maximumFileSizeError: 'Maximum file size exceeded.',
       url: 'Image URL',
       remove: 'Remove Image',
-      original: 'Original'
+      original: 'Original',
+      fileBrowser: 'File Browser',
+      title: 'Title',
+      alt: 'Alt',
+      "class": 'Class'
     },
     video: {
       video: 'Video',
       videoLink: 'Video Link',
       insert: 'Insert Video',
       url: 'Video URL',
-      providers: '(YouTube, Vimeo, Vine, Instagram, DailyMotion or Youku)'
+      providers: '(YouTube, Google Drive, Vimeo, Vine, Instagram, DailyMotion or Youku)',
+      note: 'Note: Not all options are available with all services...',
+      suggested: 'Show Suggested videos when the video finishes',
+      controls: 'Show player controls',
+      autoplay: 'Autoplay',
+      loop: 'Loop',
+      aspect: 'Aspect Ratio',
+      captions: 'Show Captions',
+      quality: 'Video Quality'
     },
     link: {
       link: 'Link',
@@ -815,7 +736,9 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.exten
       unlink: 'Unlink',
       edit: 'Edit',
       textToDisplay: 'Text to display',
-      url: 'To what URL should this link go?',
+      url: 'Link URL',
+      title: 'Title',
+      rel: 'Choose a Rel option to use',
       openInNewWindow: 'Open in new window',
       useProtocol: 'Use default protocol'
     },
@@ -843,6 +766,11 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.exten
       h4: 'Header 4',
       h5: 'Header 5',
       h6: 'Header 6'
+    },
+    zoom: {
+      "in": 'Zoom in',
+      value: 'Zoom value',
+      out: 'Zoom out'
     },
     lists: {
       unordered: 'Unordered list',
@@ -2190,7 +2118,7 @@ function isVisiblePoint(point) {
   var leftNode = point.node.childNodes[point.offset - 1];
   var rightNode = point.node.childNodes[point.offset];
 
-  if ((!leftNode || isVoid(leftNode)) && (!rightNode || isVoid(rightNode))) {
+  if ((!leftNode || isVoid(leftNode)) && (!rightNode || isVoid(rightNode)) || isTable(rightNode)) {
     return true;
   }
 
@@ -3038,6 +2966,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.fn.ex
     options.langInfo = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.extend(true, {}, external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summernote.lang['en-US'], external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summernote.lang[options.lang]);
     options.icons = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.extend(true, {}, external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summernote.options.icons, options.icons);
     options.tooltip = options.tooltip === 'auto' ? !env.isSupportTouch : options.tooltip;
+    options.placement = options.placement;
     this.each(function (idx, note) {
       var $note = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(note);
 
@@ -4405,7 +4334,17 @@ var Style_Style = /*#__PURE__*/function () {
       var onlyPartialContains = !!(options && options.onlyPartialContains);
 
       if (rng.isCollapsed()) {
-        return [rng.insertNode(dom.create(nodeName))];
+        if (rng.so > 0) {
+          rng.so -= 1; // extend of 1 : if contain NBSP_INVISIBLE : do nothing, else insert empty node
+
+          if (rng.toString().charCodeAt(0).toString(16) !== "feff") {
+            rng.so += 1;
+            return [rng.insertNode(dom.create(nodeName))];
+          } // Normal functionning
+
+        } else {
+          return [rng.insertNode(dom.create(nodeName))];
+        }
       }
 
       var pred = dom.makePredByNodeName(nodeName);
@@ -5855,6 +5794,8 @@ var Editor_Editor = /*#__PURE__*/function () {
     this.createLink = this.wrapCommand(function (linkInfo) {
       var linkUrl = linkInfo.url;
       var linkText = linkInfo.text;
+      var linkTitle = linkInfo.title;
+      var linkRel = linkInfo.rel;
       var isNewWindow = linkInfo.isNewWindow;
       var checkProtocol = linkInfo.checkProtocol;
 
@@ -5895,6 +5836,8 @@ var Editor_Editor = /*#__PURE__*/function () {
 
       external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.each(anchors, function (idx, anchor) {
         external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('href', linkUrl);
+        external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('title', linkTitle);
+        external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('rel', linkRel);
 
         if (isNewWindow) {
           external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('target', '_blank');
@@ -6466,6 +6409,9 @@ var Editor_Editor = /*#__PURE__*/function () {
           $image.css('width', Math.min(_this3.$editable.width(), $image.width()));
         }
 
+        if (external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('.note-image-title').length > 0) $image.attr('title', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('.note-image-title').val());
+        if (external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('.note-image-alt').length > 0) $image.attr('alt', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('.note-image-alt').val());
+        if (external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('.note-image-class').length > 0) $image.attr('class', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('.note-image-class').val());
         $image.show();
 
         _this3.getLastRange().insertNode($image[0]);
@@ -6546,11 +6492,13 @@ var Editor_Editor = /*#__PURE__*/function () {
         }
 
         if ($target && $target.length) {
+          var currentRange = this.createRange();
+          var $parent = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()([currentRange.sc, currentRange.ec]).closest(tagName); // remove class added for current formatBlock
+
+          $parent.removeClass();
           var className = $target[0].className || '';
 
           if (className) {
-            var currentRange = this.createRange();
-            var $parent = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()([currentRange.sc, currentRange.ec]).closest(tagName);
             $parent.addClass(className);
           }
         }
@@ -6632,7 +6580,9 @@ var Editor_Editor = /*#__PURE__*/function () {
       var linkInfo = {
         range: rng,
         text: rng.toString(),
-        url: $anchor.length ? $anchor.attr('href') : ''
+        url: $anchor.length ? $anchor.attr('href') : '',
+        title: $anchor.length ? $anchor.attr('title') : '',
+        rel: $anchor.length ? $anchor.attr('rel') : ''
       }; // When anchor exists,
 
       if ($anchor.length) {
@@ -6641,6 +6591,30 @@ var Editor_Editor = /*#__PURE__*/function () {
       }
 
       return linkInfo;
+    }
+    /**
+       * returns image info
+       *
+       * @return {Object}
+       * @return {WrappedRange} return.range
+       * @return {String} return.text
+       */
+
+  }, {
+    key: "getImageInfo",
+    value: function getImageInfo() {
+      var rng = this.getLastRange().expand(dom.isImg); // Get the first anchor on range(for edit).
+
+      var $image = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(lists.head(rng.nodes(dom.isImg)));
+      var imageInfo = {
+        range: rng,
+        text: rng.toString(),
+        src: $image.length ? $image.attr('src') : '',
+        title: $image.length ? $image.attr('title') : '',
+        alt: $image.length ? $image.attr('alt') : '',
+        "class": $image.length ? $image.attr('class') : ''
+      };
+      return imageInfo;
     }
   }, {
     key: "addRow",
@@ -6771,7 +6745,8 @@ var Editor_Editor = /*#__PURE__*/function () {
 
   }, {
     key: "normalizeContent",
-    value: function normalizeContent() {//    this.$editable[0].normalize();
+    value: function normalizeContent() {
+      this.$editable[0].normalize();
     }
   }]);
 
@@ -7656,7 +7631,7 @@ var AutoReplace_AutoReplace = /*#__PURE__*/function () {
     this.previousKeydownCode = null;
     this.events = {
       'summernote.keyup': function summernoteKeyup(we, event) {
-        if (!e.isDefaultPrevented()) {
+        if (!event.isDefaultPrevented()) {
           _this.handleKeyup(event);
         }
       },
@@ -7849,12 +7824,14 @@ var Buttons_Buttons = /*#__PURE__*/function () {
   }, {
     key: "button",
     value: function button(o) {
-      if (!this.options.tooltip && o.tooltip) {
-        delete o.tooltip;
-      }
-
       o.container = this.options.container;
       return this.ui.button(o);
+    }
+  }, {
+    key: "text",
+    value: function text(o) {
+      o.container = this.options.container;
+      return this.ui.text(o);
     }
   }, {
     key: "initialize",
@@ -7896,6 +7873,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-current-color-button',
           contents: this.ui.icon(this.options.icons.font + ' note-recent-color'),
           tooltip: tooltip,
+          placement: this.options.placement,
           click: function click(e) {
             var $button = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(e.currentTarget);
 
@@ -7933,12 +7911,13 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'dropdown-toggle',
           contents: this.ui.dropdownButtonContents('', this.options),
           tooltip: this.lang.color.more,
+          placement: this.placement,
           data: {
             toggle: 'dropdown'
           }
         }), this.ui.dropdown({
-          items: (backColor ? ['<div class="note-palette">', '<div class="note-palette-title">' + this.lang.color.background + '</div>', '<div>', '<button type="button" class="note-color-reset" data-event="backColor" data-value="transparent">', this.lang.color.transparent, '</button>', '</div>', '<div class="note-holder" data-event="backColor"><!-- back colors --></div>', '<div>', '<button type="button" class="note-color-select" data-event="openPalette" data-value="backColorPicker">', this.lang.color.cpSelect, '</button>', '<input type="color" id="backColorPicker" class="note-btn note-color-select-btn" value="' + this.options.colorButton.backColor + '" data-event="backColorPalette">', '</div>', '<div class="note-holder-custom" id="backColorPalette" data-event="backColor"></div>', '</div>'].join('') : '') + (foreColor ? ['<div class="note-palette">', '<div class="note-palette-title">' + this.lang.color.foreground + '</div>', '<div>', '<button type="button" class="note-color-reset" data-event="removeFormat" data-value="foreColor">', this.lang.color.resetToDefault, '</button>', '</div>', '<div class="note-holder" data-event="foreColor"><!-- fore colors --></div>', '<div>', '<button type="button" class="note-color-select" data-event="openPalette" data-value="foreColorPicker">', this.lang.color.cpSelect, '</button>', '<input type="color" id="foreColorPicker" class="note-btn note-color-select-btn" value="' + this.options.colorButton.foreColor + '" data-event="foreColorPalette">', '</div>', // Fix missing Div, Commented to find easily if it's wrong
-          '<div class="note-holder-custom" id="foreColorPalette" data-event="foreColor"></div>', '</div>'].join('') : ''),
+          dropUp: this.options.toolbarPosition === 'bottom' ? this.options.toolbarBottomDropUp ? true : this.options.dropUp : this.options.dropUp,
+          items: (backColor ? ['<div class="note-palette">', '<div class="note-palette-title">' + this.lang.color.background + '</div>', '<div>', '<button type="button" class="note-color-reset" data-event="backColor" data-value="transparent">', this.lang.color.transparent, '</button>', '</div>', '<div class="note-holder" data-event="backColor"><!-- back colors --></div>', '<div>', '<button type="button" class="note-color-select" data-event="openPalette" data-value="backColorPicker-' + this.options.id + '">' + this.lang.color.cpSelect + '</button>', '<input type="color" id="backColorPicker-' + this.options.id + '" class="note-btn note-color-select-btn" value="' + this.options.colorButton.backColor + '" data-event="backColorPalette-' + this.options.id + '">', '</div>', '<div class="note-holder-custom" id="backColorPalette-' + this.options.id + '" data-event="backColor"></div>', '</div>'].join('') : '') + (foreColor ? ['<div class="note-palette">', '<div class="note-palette-title">' + this.lang.color.foreground + '</div>', '<div>', '<button type="button" class="note-color-reset" data-event="removeFormat" data-value="foreColor">', this.lang.color.resetToDefault, '</button>', '</div>', '<div class="note-holder" data-event="foreColor"><!-- fore colors --></div>', '<div>', '<button type="button" class="note-color-select" data-event="openPalette" data-value="foreColorPicker-' + this.options.id + '">' + this.lang.color.cpSelect + '</button>', '<input type="color" id="foreColorPicker-' + this.options.id + '" class="note-btn note-color-select-btn" value="' + this.options.colorButton.foreColor + '" data-event="foreColorPalette-' + this.options.id + '">', '</div>', '<div class="note-holder-custom" id="foreColorPalette-' + this.options.id + '" data-event="foreColor"></div>', '</div>'].join('') : ''),
           callback: function callback($dropdown) {
             $dropdown.find('.note-holder').each(function (idx, item) {
               var $holder = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(item);
@@ -7947,7 +7926,8 @@ var Buttons_Buttons = /*#__PURE__*/function () {
                 colorsName: _this.options.colorsName,
                 eventName: $holder.data('event'),
                 container: _this.options.container,
-                tooltip: _this.options.tooltip
+                tooltip: _this.options.tooltip,
+                placement: _this.options.placement
               }).render());
             });
             /* TODO: do we have to record recent custom colors within cookies? */
@@ -7960,7 +7940,8 @@ var Buttons_Buttons = /*#__PURE__*/function () {
                 colorsName: customColors,
                 eventName: $holder.data('event'),
                 container: _this.options.container,
-                tooltip: _this.options.tooltip
+                tooltip: _this.options.tooltip,
+                placement: _this.options.placement
               }).render());
             });
             $dropdown.find('input[type=color]').each(function (idx, item) {
@@ -8014,6 +7995,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents(_this2.ui.icon(_this2.options.icons.magic), _this2.options),
           tooltip: _this2.lang.style.style,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
@@ -8021,6 +8003,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-style',
           items: _this2.options.styleTags,
           title: _this2.lang.style.style,
+          dropUp: _this2.options.toolbarPosition === 'bottom' ? _this2.options.toolbarBottomDropUp ? true : _this2.options.dropUp : _this2.options.dropUp,
           template: function template(item) {
             // TBD: need to be simplified
             if (typeof item === 'string') {
@@ -8048,6 +8031,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
             className: 'note-btn-style-' + item,
             contents: '<div data-value="' + item + '">' + item.toUpperCase() + '</div>',
             tooltip: _this2.lang.style[item],
+            placement: _this2.options.placement,
             click: _this2.context.createInvokeHandler('editor.formatBlock')
           }).render();
         });
@@ -8062,6 +8046,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-bold',
           contents: _this2.ui.icon(_this2.options.icons.bold),
           tooltip: _this2.lang.font.bold + _this2.representShortcut('bold'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.bold')
         }).render();
       });
@@ -8070,6 +8055,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-italic',
           contents: _this2.ui.icon(_this2.options.icons.italic),
           tooltip: _this2.lang.font.italic + _this2.representShortcut('italic'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.italic')
         }).render();
       });
@@ -8078,6 +8064,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-underline',
           contents: _this2.ui.icon(_this2.options.icons.underline),
           tooltip: _this2.lang.font.underline + _this2.representShortcut('underline'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.underline')
         }).render();
       });
@@ -8085,6 +8072,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.eraser),
           tooltip: _this2.lang.font.clear + _this2.representShortcut('removeFormat'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('editor.removeFormat')
         }).render();
       });
@@ -8093,6 +8081,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-strikethrough',
           contents: _this2.ui.icon(_this2.options.icons.strikethrough),
           tooltip: _this2.lang.font.strikethrough + _this2.representShortcut('strikethrough'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.strikethrough')
         }).render();
       });
@@ -8101,6 +8090,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-superscript',
           contents: _this2.ui.icon(_this2.options.icons.superscript),
           tooltip: _this2.lang.font.superscript,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.superscript')
         }).render();
       });
@@ -8109,6 +8099,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-subscript',
           contents: _this2.ui.icon(_this2.options.icons.subscript),
           tooltip: _this2.lang.font.subscript,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.subscript')
         }).render();
       });
@@ -8132,6 +8123,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents('<span class="note-current-fontname"></span>', _this2.options),
           tooltip: _this2.lang.font.name,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
@@ -8140,6 +8132,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           checkClassName: _this2.options.icons.menuCheck,
           items: _this2.options.fontNames.filter(_this2.isFontInstalled.bind(_this2)),
           title: _this2.lang.font.name,
+          dropUp: _this2.options.toolbarPosition === 'bottom' ? _this2.options.toolbarBottomDropUp ? true : _this2.options.dropUp : _this2.options.dropUp,
           template: function template(item) {
             return '<span style="font-family: ' + env.validFontName(item) + '">' + item + '</span>';
           },
@@ -8151,6 +8144,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents('<span class="note-current-fontsize"></span>', _this2.options),
           tooltip: _this2.lang.font.size,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
@@ -8159,6 +8153,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           checkClassName: _this2.options.icons.menuCheck,
           items: _this2.options.fontSizes,
           title: _this2.lang.font.size,
+          dropUp: _this2.options.toolbarPosition === 'bottom' ? _this2.options.toolbarBottomDropUp ? true : _this2.options.dropUp : _this2.options.dropUp,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.fontSize')
         })]).render();
       });
@@ -8167,6 +8162,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents('<span class="note-current-fontsizeunit"></span>', _this2.options),
           tooltip: _this2.lang.font.sizeunit,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
@@ -8175,6 +8171,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           checkClassName: _this2.options.icons.menuCheck,
           items: _this2.options.fontSizeUnits,
           title: _this2.lang.font.sizeunit,
+          dropUp: _this2.options.toolbarPosition === 'bottom' ? _this2.options.toolbarBottomDropUp ? true : _this2.options.dropUp : _this2.options.dropUp,
           click: _this2.context.createInvokeHandlerAndUpdateState('editor.fontSizeUnit')
         })]).render();
       });
@@ -8191,6 +8188,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.unorderedlist),
           tooltip: _this2.lang.lists.unordered + _this2.representShortcut('insertUnorderedList'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('editor.insertUnorderedList')
         }).render();
       });
@@ -8198,37 +8196,44 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.orderedlist),
           tooltip: _this2.lang.lists.ordered + _this2.representShortcut('insertOrderedList'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('editor.insertOrderedList')
         }).render();
       });
       var justifyLeft = this.button({
         contents: this.ui.icon(this.options.icons.alignLeft),
         tooltip: this.lang.paragraph.left + this.representShortcut('justifyLeft'),
+        placement: this.options.placement,
         click: this.context.createInvokeHandler('editor.justifyLeft')
       });
       var justifyCenter = this.button({
         contents: this.ui.icon(this.options.icons.alignCenter),
         tooltip: this.lang.paragraph.center + this.representShortcut('justifyCenter'),
+        placement: this.options.placement,
         click: this.context.createInvokeHandler('editor.justifyCenter')
       });
       var justifyRight = this.button({
         contents: this.ui.icon(this.options.icons.alignRight),
         tooltip: this.lang.paragraph.right + this.representShortcut('justifyRight'),
+        placement: this.options.placement,
         click: this.context.createInvokeHandler('editor.justifyRight')
       });
       var justifyFull = this.button({
         contents: this.ui.icon(this.options.icons.alignJustify),
         tooltip: this.lang.paragraph.justify + this.representShortcut('justifyFull'),
+        placement: this.options.placement,
         click: this.context.createInvokeHandler('editor.justifyFull')
       });
       var outdent = this.button({
         contents: this.ui.icon(this.options.icons.outdent),
         tooltip: this.lang.paragraph.outdent + this.representShortcut('outdent'),
+        placement: this.options.placement,
         click: this.context.createInvokeHandler('editor.outdent')
       });
       var indent = this.button({
         contents: this.ui.icon(this.options.icons.indent),
         tooltip: this.lang.paragraph.indent + this.representShortcut('indent'),
+        placement: this.options.placement,
         click: this.context.createInvokeHandler('editor.indent')
       });
       this.context.memo('button.justifyLeft', func.invoke(justifyLeft, 'render'));
@@ -8242,10 +8247,12 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents(_this2.ui.icon(_this2.options.icons.alignLeft), _this2.options),
           tooltip: _this2.lang.paragraph.paragraph,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
-        }), _this2.ui.dropdown([_this2.ui.buttonGroup({
+        }), _this2.ui.dropdown([// For the life of me I can't work out where to add:- dropUp: (this.options.toolbarPosition === 'bottom' ? (this.options.toolbarBottomDropUp ? true : this.options.dropUp ) : this.options.dropUp),
+        _this2.ui.buttonGroup({
           className: 'note-align',
           children: [justifyLeft, justifyCenter, justifyRight, justifyFull]
         }), _this2.ui.buttonGroup({
@@ -8258,6 +8265,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents(_this2.ui.icon(_this2.options.icons.textHeight), _this2.options),
           tooltip: _this2.lang.font.height,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
@@ -8266,6 +8274,8 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           checkClassName: _this2.options.icons.menuCheck,
           className: 'note-dropdown-line-height',
           title: _this2.lang.font.height,
+          placement: _this2.options.placement,
+          dropUp: _this2.options.toolbarPosition === 'bottom' ? _this2.options.toolbarBottomDropUp ? true : _this2.options.dropUp : _this2.options.dropUp,
           click: _this2.context.createInvokeHandler('editor.lineHeight')
         })]).render();
       });
@@ -8274,12 +8284,14 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-dropdown-toggle',
           contents: _this2.ui.dropdownButtonContents(_this2.ui.icon(_this2.options.icons.table), _this2.options),
           tooltip: _this2.lang.table.table,
+          placement: _this2.options.placement,
           data: {
             toggle: 'dropdown'
           }
         }), _this2.ui.dropdown({
           title: _this2.lang.table.table,
           className: 'note-table',
+          dropUp: _this2.options.toolbarPosition === 'bottom' ? _this2.options.toolbarBottomDropUp ? true : _this2.options.dropUp : _this2.options.dropUp,
           items: ['<div class="note-dimension-picker">', '<div class="note-dimension-picker-mousecatcher" data-event="insertTable" data-value="1x1"></div>', '<div class="note-dimension-picker-highlighted"></div>', '<div class="note-dimension-picker-unhighlighted"></div>', '</div>', '<div class="note-dimension-display">1 x 1</div>'].join('')
         })], {
           callback: function callback($node) {
@@ -8295,6 +8307,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.link),
           tooltip: _this2.lang.link.link + _this2.representShortcut('linkDialog.show'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('linkDialog.show')
         }).render();
       });
@@ -8302,6 +8315,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.picture),
           tooltip: _this2.lang.image.image,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('imageDialog.show')
         }).render();
       });
@@ -8309,6 +8323,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.video),
           tooltip: _this2.lang.video.video,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('videoDialog.show')
         }).render();
       });
@@ -8316,6 +8331,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.minus),
           tooltip: _this2.lang.hr.insert + _this2.representShortcut('insertHorizontalRule'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('editor.insertHorizontalRule')
         }).render();
       });
@@ -8324,7 +8340,34 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-fullscreen note-codeview-keep',
           contents: _this2.ui.icon(_this2.options.icons.arrowsAlt),
           tooltip: _this2.lang.options.fullscreen,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('fullscreen.toggle')
+        }).render();
+      });
+      this.context.memo('button.zoomIn', function () {
+        return _this2.button({
+          className: 'note-btn-zoom-in',
+          contents: _this2.ui.icon(_this2.options.icons.zoomIn),
+          tooltip: _this2.lang.zoom["in"],
+          placement: _this2.options.placement,
+          click: _this2.context.createInvokeHandler('zoom.in')
+        }).render();
+      });
+      this.context.memo('text.zoomValue', function () {
+        return _this2.text({
+          className: 'note-txt-zoom-value',
+          contents: '100%',
+          tooltip: _this2.lang.zoom.value,
+          placement: _this2.options.placement
+        }).render();
+      });
+      this.context.memo('button.zoomOut', function () {
+        return _this2.button({
+          className: 'note-btn-zoom-out',
+          contents: _this2.ui.icon(_this2.options.icons.zoomOut),
+          tooltip: _this2.lang.zoom.out,
+          placement: _this2.options.placement,
+          click: _this2.context.createInvokeHandler('zoom.out')
         }).render();
       });
       this.context.memo('button.codeview', function () {
@@ -8332,6 +8375,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn-codeview note-codeview-keep',
           contents: _this2.ui.icon(_this2.options.icons.code),
           tooltip: _this2.lang.options.codeview,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('codeview.toggle')
         }).render();
       });
@@ -8339,6 +8383,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.redo),
           tooltip: _this2.lang.history.redo + _this2.representShortcut('redo'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('editor.redo')
         }).render();
       });
@@ -8346,6 +8391,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.undo),
           tooltip: _this2.lang.history.undo + _this2.representShortcut('undo'),
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('editor.undo')
         }).render();
       });
@@ -8353,6 +8399,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this2.button({
           contents: _this2.ui.icon(_this2.options.icons.question),
           tooltip: _this2.lang.options.help,
+          placement: _this2.options.placement,
           click: _this2.context.createInvokeHandler('helpDialog.show')
         }).render();
       });
@@ -8375,6 +8422,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: '<span class="note-fontsize-10">100%</span>',
           tooltip: _this3.lang.image.resizeFull,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.resize', '1')
         }).render();
       });
@@ -8382,6 +8430,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: '<span class="note-fontsize-10">50%</span>',
           tooltip: _this3.lang.image.resizeHalf,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.resize', '0.5')
         }).render();
       });
@@ -8389,6 +8438,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: '<span class="note-fontsize-10">25%</span>',
           tooltip: _this3.lang.image.resizeQuarter,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.resize', '0.25')
         }).render();
       });
@@ -8396,6 +8446,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: _this3.ui.icon(_this3.options.icons.rollback),
           tooltip: _this3.lang.image.resizeNone,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.resize', '0')
         }).render();
       }); // Float Buttons
@@ -8404,6 +8455,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: _this3.ui.icon(_this3.options.icons.floatLeft),
           tooltip: _this3.lang.image.floatLeft,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.floatMe', 'left')
         }).render();
       });
@@ -8411,6 +8463,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: _this3.ui.icon(_this3.options.icons.floatRight),
           tooltip: _this3.lang.image.floatRight,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.floatMe', 'right')
         }).render();
       });
@@ -8418,6 +8471,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: _this3.ui.icon(_this3.options.icons.rollback),
           tooltip: _this3.lang.image.floatNone,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.floatMe', 'none')
         }).render();
       }); // Remove Buttons
@@ -8426,6 +8480,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this3.button({
           contents: _this3.ui.icon(_this3.options.icons.trash),
           tooltip: _this3.lang.image.remove,
+          placement: _this3.options.placement,
           click: _this3.context.createInvokeHandler('editor.removeMedia')
         }).render();
       });
@@ -8439,6 +8494,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this4.button({
           contents: _this4.ui.icon(_this4.options.icons.link),
           tooltip: _this4.lang.link.edit,
+          placement: _this4.options.placement,
           click: _this4.context.createInvokeHandler('linkDialog.show')
         }).render();
       });
@@ -8446,6 +8502,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
         return _this4.button({
           contents: _this4.ui.icon(_this4.options.icons.unlink),
           tooltip: _this4.lang.link.unlink,
+          placement: _this4.options.placement,
           click: _this4.context.createInvokeHandler('editor.unlink')
         }).render();
       });
@@ -8467,6 +8524,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.rowAbove),
           tooltip: _this5.lang.table.addRowAbove,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.addRow', 'top')
         }).render();
       });
@@ -8475,6 +8533,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.rowBelow),
           tooltip: _this5.lang.table.addRowBelow,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.addRow', 'bottom')
         }).render();
       });
@@ -8483,6 +8542,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.colBefore),
           tooltip: _this5.lang.table.addColLeft,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.addCol', 'left')
         }).render();
       });
@@ -8491,6 +8551,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.colAfter),
           tooltip: _this5.lang.table.addColRight,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.addCol', 'right')
         }).render();
       });
@@ -8499,6 +8560,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.rowRemove),
           tooltip: _this5.lang.table.delRow,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.deleteRow')
         }).render();
       });
@@ -8507,6 +8569,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.colRemove),
           tooltip: _this5.lang.table.delCol,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.deleteCol')
         }).render();
       });
@@ -8515,6 +8578,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           className: 'note-btn',
           contents: _this5.ui.icon(_this5.options.icons.trash),
           tooltip: _this5.lang.table.delTable,
+          placement: _this5.options.placement,
           click: _this5.context.createInvokeHandler('editor.deleteTable')
         }).render();
       });
@@ -8535,6 +8599,12 @@ var Buttons_Buttons = /*#__PURE__*/function () {
 
           if (btn) {
             $group.append(typeof btn === 'function' ? btn(this.context) : btn);
+          }
+
+          var txt = this.context.memo('text.' + buttons[idx]);
+
+          if (txt) {
+            $group.append(typeof txt === 'function' ? txt(this.context) : txt);
           }
         }
 
@@ -8883,19 +8953,20 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
     key: "initialize",
     value: function initialize() {
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = ['<div class="note-form-group">', "<label for=\"note-dialog-link-txt-".concat(this.options.id, "\" class=\"note-form-label\">").concat(this.lang.link.textToDisplay, "</label>"), "<input id=\"note-dialog-link-txt-".concat(this.options.id, "\" class=\"note-link-text note-form-control note-input\" type=\"text\">"), '</div>', '<div class="note-form-group">', "<label for=\"note-dialog-link-url-".concat(this.options.id, "\" class=\"note-form-label\">").concat(this.lang.link.url, "</label>"), "<input id=\"note-dialog-link-url-".concat(this.options.id, "\" class=\"note-link-url note-form-control note-input\" type=\"text\" value=\"http://\">"), '</div>', !this.options.disableLinkTarget ? external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+      var body = ["<label for=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.url + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-link-url note-input\" type=\"text\" value=\"http://\">", '</div>', "<label for=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.textToDisplay + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-link-text note-input\" type=\"text\">", '</div>', '<label for="note-dialog-link-title-' + this.options.id + '" class="note-form-label">' + this.lang.link.title + '</label>', '<div class="note-form-group">', '<input id="note-dialog-link-title' + this.options.id + '" class="note-linke-title note-input" type="text">', '</div>', "<label for=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.rel + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-link-rel note-input\">", "<option value=\"\">Nothing</option>", "<option value=\"alternate\">Alternate</option>", "<option value=\"author\">Author</option>", "<option value=\"bookmark\">Bookmark</option>", "<option value=\"external\">External</option>", "<option value=\"Help\">Help</option>", "<option value=\"license\">License</option>", "<option value=\"next\">Next</option>", "<option value=\"nofollow\">NoFollow</option>", "<option value=\"noreferrer\">NoReferrer</option>", "<option value=\"noopener\">NoOperner</option>", "<option value=\"prev\">Prev</option>", "<option value=\"search\">Search</option>", "<option value=\"tag\">Tag</option>", "</select>", '</div>', !this.options.disableLinkTarget ? external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-new-window-' + this.options.id,
         id: 'note-checkbox-open-in-new-window-' + this.options.id,
         className: 'note-checkbox-open-in-new-window',
         text: this.lang.link.openInNewWindow,
         checked: true
       }).render()).html() : '', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-link-use-protocol-' + this.options.id,
         id: 'note-checkbox-use-protocol-' + this.options.id,
         className: 'note-checkbox-use-protocol',
         text: this.lang.link.useProtocol,
         checked: true
       }).render()).html()].join('');
-      var buttonClass = 'note-btn note-btn-primary note-link-btn';
-      var footer = "<input type=\"button\" href=\"#\" class=\"".concat(buttonClass, "\" value=\"").concat(this.lang.link.insert, "\" disabled>");
+      var footer = "<input type=\"button\" href=\"#\" class=\"note-btn note-btn-primary note-link-btn\" value=\"" + this.lang.link.insert + "\" disabled>";
       this.$dialog = this.ui.dialog({
         className: 'note-link-dialog',
         title: this.lang.link.insert,
@@ -8942,9 +9013,13 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
       var _this = this;
 
       return external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.Deferred(function (deferred) {
+        var $linkUrl = _this.$dialog.find('.note-link-url');
+
         var $linkText = _this.$dialog.find('.note-link-text');
 
-        var $linkUrl = _this.$dialog.find('.note-link-url');
+        var $linkTitle = _this.$dialog.find('.note-link-title');
+
+        var $linkRel = _this.$dialog.find('.note-link-rel');
 
         var $linkBtn = _this.$dialog.find('.note-link-btn');
 
@@ -8976,6 +9051,8 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
 
             _this.toggleLinkBtn($linkBtn, $linkText, $linkUrl);
           }).val(linkInfo.url);
+          $linkTitle.val(linkInfo.title);
+          $linkRel.val(linkInfo.rel);
 
           if (!env.isSupportTouch) {
             $linkUrl.trigger('focus');
@@ -8997,6 +9074,8 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
               range: linkInfo.range,
               url: $linkUrl.val(),
               text: $linkText.val(),
+              title: $linkTitle.val(),
+              rel: $linkRel.val(),
               isNewWindow: $openInNewWindow.is(':checked'),
               checkProtocol: $useProtocol.is(':checked')
             });
@@ -9179,13 +9258,12 @@ var ImageDialog_ImageDialog = /*#__PURE__*/function () {
       if (this.options.maximumImageFileSize) {
         var unit = Math.floor(Math.log(this.options.maximumImageFileSize) / Math.log(1024));
         var readableSize = (this.options.maximumImageFileSize / Math.pow(1024, unit)).toFixed(2) * 1 + ' ' + ' KMGTP'[unit] + 'B';
-        imageLimitation = "<small>".concat(this.lang.image.maximumFileSize + ' : ' + readableSize, "</small>");
+        imageLimitation = "<small>" + this.lang.image.maximumFileSize + "' : '" + readableSize + "</small>";
       }
 
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = ['<div class="note-form-group note-group-select-from-files">', '<label for="note-dialog-image-file-' + this.options.id + '" class="note-form-label">' + this.lang.image.selectFromFiles + '</label>', '<input id="note-dialog-image-file-' + this.options.id + '" class="note-image-input note-form-control note-input" ', ' type="file" name="files" accept="image/*" multiple="multiple">', imageLimitation, '</div>', '<div class="note-group-image-url">', '<label for="note-dialog-image-url-' + this.options.id + '" class="note-form-label">' + this.lang.image.url + '</label>', '<input id="note-dialog-image-url-' + this.options.id + '" class="note-image-url note-form-control note-input" type="text">', '</div>'].join('');
-      var buttonClass = 'note-btn note-btn-primary note-image-btn';
-      var footer = "<input type=\"button\" href=\"#\" class=\"".concat(buttonClass, "\" value=\"").concat(this.lang.image.insert, "\" disabled>");
+      var body = [this.options.disableUpload === false ? '<label for="note-dialog-image-file-' + this.options.id + '" class="note-form-label">' + this.lang.image.selectFromFiles + '</label>' + '<div class="note-form-group">' + '<input id="note-dialog-image-file-' + this.options.id + '" class="note-image-input note-input" type="file" name="files" accept="' + this.options.acceptImageFileTypes + '" multiple="multiple">' + imageLimitation + '<div class="note-form-help">' + this.lang.image.fileNote + '</div>' + '</div>' : '', '<label for="note-dialog-image-url-' + this.options.id + '" class="note-form-label">' + this.lang.image.url + '</label>', '<div class="note-form-group">', '<input id="note-dialog-image-url-' + this.options.id + '" class="note-image-url note-input" type="text">', this.options.fileExplorer !== '' ? '<button class="note-btn note-btn-primary" onclick="' + this.options.fileExplorer + '(`note-dialog-image-url-' + this.options.id + '`);">' + this.lang.image.fileBrowser + '</button>' : '', '</div>', "<label for=\"note-dialog-image-title-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image.title + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-title-" + this.options.id + "\" class=\"note-image-title note-input\" type=\"text\">", '</div>', "<label for=\"note-dialog-image-alt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image.alt + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-alt-" + this.options.id + "\" class=\"note-image-alt note-input\" type=\"text\">", '</div>', "<label for=\"note-dialog-image-class-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image["class"] + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-class-" + this.options.id + "\" class=\"note-image-class note-input\" type=\"text\">", '</div>'].join('');
+      var footer = "<input type=\"button\" href=\"#\" class=\"note-btn note-btn-primary note-image-btn\" value=\"" + this.lang.image.insert + "\" disabled>";
       this.$dialog = this.ui.dialog({
         title: this.lang.image.insert,
         fade: this.options.dialogsFade,
@@ -9209,34 +9287,6 @@ var ImageDialog_ImageDialog = /*#__PURE__*/function () {
         }
       });
     }
-  }, {
-    key: "show",
-    value: function show() {
-      var _this = this;
-
-      this.context.invoke('editor.saveRange');
-      this.showImageDialog().then(function (data) {
-        // [workaround] hide dialog before restore range for IE range focus
-        _this.ui.hideDialog(_this.$dialog);
-
-        _this.context.invoke('editor.restoreRange');
-
-        if (typeof data === 'string') {
-          // image url
-          // If onImageLinkInsert set,
-          if (_this.options.callbacks.onImageLinkInsert) {
-            _this.context.triggerEvent('image.link.insert', data);
-          } else {
-            _this.context.invoke('editor.insertImage', data);
-          }
-        } else {
-          // array of files
-          _this.context.invoke('editor.insertImagesOrCallback', data);
-        }
-      }).fail(function () {
-        _this.context.invoke('editor.restoreRange');
-      });
-    }
     /**
      * show image dialog
      *
@@ -9247,24 +9297,30 @@ var ImageDialog_ImageDialog = /*#__PURE__*/function () {
   }, {
     key: "showImageDialog",
     value: function showImageDialog() {
-      var _this2 = this;
+      var _this = this;
 
       return external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.Deferred(function (deferred) {
-        var $imageInput = _this2.$dialog.find('.note-image-input');
+        var $imageInput = _this.$dialog.find('.note-image-input');
 
-        var $imageUrl = _this2.$dialog.find('.note-image-url');
+        var $imageUrl = _this.$dialog.find('.note-image-url');
 
-        var $imageBtn = _this2.$dialog.find('.note-image-btn');
+        var $imageTitle = _this.$dialog.find('.note-image-title');
 
-        _this2.ui.onDialogShown(_this2.$dialog, function () {
-          _this2.context.triggerEvent('dialog.shown'); // Cloning imageInput to clear element.
+        var $imageAlt = _this.$dialog.find('.note-image-alt');
+
+        var $imageClass = _this.$dialog.find('.note-image-class');
+
+        var $imageBtn = _this.$dialog.find('.note-image-btn');
+
+        _this.ui.onDialogShown(_this.$dialog, function () {
+          _this.context.triggerEvent('dialog.shown'); // Cloning imageInput to clear element.
 
 
           $imageInput.replaceWith($imageInput.clone().on('change', function (event) {
             deferred.resolve(event.target.files || event.target.value);
           }).val(''));
           $imageUrl.on('input paste propertychange', function () {
-            _this2.ui.toggleBtn($imageBtn, $imageUrl.val());
+            _this.ui.toggleBtn($imageBtn, $imageUrl.val());
           }).val('');
 
           if (!env.isSupportTouch) {
@@ -9276,10 +9332,10 @@ var ImageDialog_ImageDialog = /*#__PURE__*/function () {
             deferred.resolve($imageUrl.val());
           });
 
-          _this2.bindEnterKey($imageUrl, $imageBtn);
+          _this.bindEnterKey($imageUrl, $imageBtn);
         });
 
-        _this2.ui.onDialogHidden(_this2.$dialog, function () {
+        _this.ui.onDialogHidden(_this.$dialog, function () {
           $imageInput.off();
           $imageUrl.off();
           $imageBtn.off();
@@ -9289,7 +9345,40 @@ var ImageDialog_ImageDialog = /*#__PURE__*/function () {
           }
         });
 
-        _this2.ui.showDialog(_this2.$dialog);
+        _this.ui.showDialog(_this.$dialog);
+      });
+    }
+    /**
+     * @param {Object} layoutInfo
+     */
+
+  }, {
+    key: "show",
+    value: function show() {
+      var _this2 = this;
+
+      var imageInfo = this.context.invoke('editor.getImageInfo');
+      this.context.invoke('editor.saveRange');
+      this.showImageDialog(imageInfo).then(function (data) {
+        // [workaround] hide dialog before restore range for IE range focus
+        _this2.ui.hideDialog(_this2.$dialog);
+
+        _this2.context.invoke('editor.restoreRange');
+
+        if (typeof data === 'string') {
+          // image url
+          // If onImageLinkInsert set,
+          if (_this2.options.callbacks.onImageLinkInsert) {
+            _this2.context.triggerEvent('image.link.insert', data);
+          } else {
+            _this2.context.invoke('editor.insertImage', data);
+          }
+        } else {
+          // array of files
+          _this2.context.invoke('editor.insertImagesOrCallback', data);
+        }
+      }).fail(function () {
+        _this2.context.invoke('editor.restoreRange');
       });
     }
   }]);
@@ -9532,9 +9621,38 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
     key: "initialize",
     value: function initialize() {
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = ['<div class="note-form-group">', "<label for=\"note-dialog-video-url-".concat(this.options.id, "\" class=\"note-form-label\">").concat(this.lang.video.url, " <small class=\"text-muted\">").concat(this.lang.video.providers, "</small></label>"), "<input id=\"note-dialog-video-url-".concat(this.options.id, "\" class=\"note-video-url note-form-control note-input\" type=\"text\">"), '</div>'].join('');
-      var buttonClass = 'note-btn note-btn-primary note-video-btn';
-      var footer = "<input type=\"button\" href=\"#\" class=\"".concat(buttonClass, "\" value=\"").concat(this.lang.video.insert, "\" disabled>");
+      var body = ["<label for=\"note-dialog-video-url-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.video.url + " <small class=\"text-muted\">" + this.lang.video.providers + "</small></label>", '<div class="note-form-group">', "<input id=\"note-dialog-video-url-" + this.options.id + "\" class=\"note-video-url note-input\" type=\"text\">", '</div>', '<div class="note-form-help">' + this.lang.video.note + '</div>', "<label for=\"note-dialog-video-aspect-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.video.aspect + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-video-aspect-" + this.options.id + "\" class=\"note-video-aspect note-input\">", '<option value="16-9">16:9</option>', '<option value="4-3">4:3</option>', '<option value="1-1">1:1</option>', '</select>', '</div>', "<label for=\"note-dialog-video-quality-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.video.quality + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-video-quality-" + this.options.id + "\" class=\"note-video-quality note-input\">", '<option value="auto"">Auto</option>', '<option value="240p">240p</option>', '<option value="360p">360p</option>', '<option value="480p">480p</option>', '<option value="720p">720p</option>', '<option value="1080p">1080p</option>', '</select>', '</div>', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-video-captions-' + this.options.id,
+        id: 'note-dialog-video-captions-' + this.options.id,
+        className: 'note-video-captions',
+        text: this.lang.video.captions,
+        checked: true
+      }).render()).html(), external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-video-suggested-' + this.options.id,
+        id: 'note-dialog-video-suggested-' + this.options.id,
+        className: 'note-video-suggested',
+        text: this.lang.video.suggested,
+        checked: true
+      }).render()).html(), external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-video-controls-' + this.options.id,
+        id: 'note-dialog-video-controls-' + this.options.id,
+        className: 'note-video-controls',
+        text: this.lang.video.controls,
+        checked: true
+      }).render()).html(), external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-video-autoplay-' + this.options.id,
+        id: 'note-dialog-video-autoplay-' + this.options.id,
+        className: 'note-video-autoplay',
+        text: this.lang.video.autoplay,
+        checked: true
+      }).render()).html(), external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        "for": 'note-dialog-video-loop-' + this.options.id,
+        id: 'note-dialog-video-loop-' + this.options.id,
+        className: 'note-video-loop',
+        text: this.lang.video.loop,
+        checked: true
+      }).render()).html()].join('');
+      var footer = "<input type=\"button\" href=\"#\" class=\"note-btn note-btn-primary note-video-btn\" value=\"" + this.lang.video.insert + "\" disabled>";
       this.$dialog = this.ui.dialog({
         title: this.lang.video.insert,
         fade: this.options.dialogsFade,
@@ -9565,6 +9683,8 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
       var ytRegExp = /\/\/(?:(?:www|m)\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w|-]{11})(?:(?:[\?&]t=)(\S+))?$/;
       var ytRegExpForStart = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/;
       var ytMatch = url.match(ytRegExp);
+      var gdRegExp = /(?:\.|\/\/)drive\.google\.com\/file\/d\/(.[a-zA-Z0-9_-]*)\/view/;
+      var gdMatch = url.match(gdRegExp);
       var igRegExp = /(?:www\.|\/\/)instagram\.com\/p\/(.[a-zA-Z0-9_-]*)/;
       var igMatch = url.match(igRegExp);
       var vRegExp = /\/\/vine\.co\/v\/([a-zA-Z0-9]+)/;
@@ -9588,6 +9708,25 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
       var fbRegExp = /(?:www\.|\/\/)facebook\.com\/([^\/]+)\/videos\/([0-9]+)/;
       var fbMatch = url.match(fbRegExp);
       var $video;
+      var urlVars = '';
+      var $videoAspect = this.$dialog.find('.note-video-aspect');
+      var $videoQuality = this.$dialog.find('.note-video-quality');
+      var $videoSuggested = this.$dialog.find('.note-video-suggested input[type=checkbox]');
+      var $videoCaptions = this.$dialog.find('.note-video-captions input[type=checkbox]');
+      var $videoControls = this.$dialog.find('.note-video-controls input[type=checkbox]');
+      var $videoAutoplay = this.$dialog.find('.note-video-autoplay input[type=checkbox]');
+      var $videoLoop = this.$dialog.find('.note-video-loop input[type=checkbox]');
+      var selectVideoAspect = $videoAspect.val();
+      var selectVideoQuality = $videoQuality.val();
+      var checkVideoSuggested = $videoSuggested.is(':checked');
+      var checkVideoCaptions = $videoCaptions.is(':checked');
+      var checkVideoControls = $videoControls.is(':checked');
+      var checkVideoAutoplay = $videoAutoplay.is(':checked');
+      var checkVideoLoop = $videoLoop.is(':checked');
+      var vWidth = 788.54;
+      var vHeight = 443;
+      if (selectVideoAspect == '4-3') vWidth = 589.19;
+      if (selectVideoAspect == '1-1') vWidth = 443;
 
       if (ytMatch && ytMatch[1].length === 11) {
         var youtubeId = ytMatch[1];
@@ -9603,24 +9742,41 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
           }
         }
 
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', '//www.youtube.com/embed/' + youtubeId + (start > 0 ? '?start=' + start : '')).attr('width', '640').attr('height', '360');
+        if (checkVideoSuggested) urlVars += (start > 0 ? '&' : '') + 'rel=1';
+        if (checkVideoControls) urlVars += (urlVars.length > 0 ? '&' : '') + 'controls=1';
+        if (checkVideoCaptions) urlVars += (urlVars.length > 0 ? '&' : '') + 'cc_load_policy=1';
+        if (checkVideoAutoplay) urlVars += (urlVars.length > 0 ? '&' : '') + 'autoplay=1';
+        if (checkVideoLoop) urlVars += (urlVars.length > 0 ? '&' : '') + 'loop=1';
+        if (selectVideoQuality == '240p') urlVars += (urlVars.length > 0 ? '&' : '') + 'vq=small';
+        if (selectVideoQuality == '360p') urlVars += (urlVars.length > 0 ? '&' : '') + 'vq=medium';
+        if (selectVideoQuality == '480p') urlVars += (urlVars.length > 0 ? '&' : '') + 'vq=large';
+        if (selectVideoQuality == '720p') urlVars += (urlVars.length > 0 ? '&' : '') + 'vq=hd720';
+        if (selectVideoQuality == '1080p') urlVars += (urlVars.length > 0 ? '&' : '') + 'vq=hd1080';
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe allowfullscreen>').attr('frameborder', 0).attr('src', '//www.youtube.com/embed/' + youtubeId + '?' + (start > 0 ? '?start=' + start : '') + (urlVars > 0 ? urlVars : '')).attr('width', vWidth).attr('height', vHeight);
+      } else if (gdMatch && gdMatch[0].length) {
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', 'https://drive.google.com/file/d/' + gdMatch[1] + '/preview').attr('width', vWidth).attr('height', vHeight);
       } else if (igMatch && igMatch[0].length) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', 'https://instagram.com/p/' + igMatch[1] + '/embed/').attr('width', '612').attr('height', '710').attr('scrolling', 'no').attr('allowtransparency', 'true');
+        // Instagram
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', 'https://instagram.com/p/' + igMatch[1] + '/embed/').attr('width', vWidth).attr('height', vHeight).attr('scrolling', 'no').attr('allowtransparency', 'true');
       } else if (vMatch && vMatch[0].length) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', vMatch[0] + '/embed/simple').attr('width', '600').attr('height', '600').attr('class', 'vine-embed');
+        // Vine
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', vMatch[0] + '/embed/simple').attr('width', vWidth).attr('height', vHeight).attr('class', 'vine-embed');
       } else if (vimMatch && vimMatch[3].length) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('src', '//player.vimeo.com/video/' + vimMatch[3]).attr('width', '640').attr('height', '360');
+        // Vimeo
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('src', '//player.vimeo.com/video/' + vimMatch[3]).attr('width', vWidth).attr('height', vHeight);
       } else if (dmMatch && dmMatch[2].length) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', '//www.dailymotion.com/embed/video/' + dmMatch[2]).attr('width', '640').attr('height', '360');
+        // Dailymotion
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', '//www.dailymotion.com/embed/video/' + dmMatch[2]).attr('width', vWidth).attr('height', vHeight);
       } else if (youkuMatch && youkuMatch[1].length) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('height', '498').attr('width', '510').attr('src', '//player.youku.com/embed/' + youkuMatch[1]);
+        // Youku
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('width', vWidth).attr('height', vHeight).attr('src', '//player.youku.com/embed/' + youkuMatch[1]);
       } else if (qqMatch && qqMatch[1].length || qqMatch2 && qqMatch2[2].length) {
         var vid = qqMatch && qqMatch[1].length ? qqMatch[1] : qqMatch2[2];
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('height', '310').attr('width', '500').attr('src', 'https://v.qq.com/txp/iframe/player.html?vid=' + vid + '&amp;auto=0');
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('width', vWidth).attr('height', vHeight).attr('src', 'https://v.qq.com/txp/iframe/player.html?vid=' + vid + '&amp;auto=0');
       } else if (mp4Match || oggMatch || webmMatch) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<video controls>').attr('src', url).attr('width', '640').attr('height', '360');
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<video controls>').attr('src', url).attr('width', vWidth).attr('height', vHeight);
       } else if (fbMatch && fbMatch[0].length) {
-        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(fbMatch[0]) + '&show_text=0&width=560').attr('width', '560').attr('height', '301').attr('scrolling', 'no').attr('allowtransparency', 'true');
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe>').attr('frameborder', 0).attr('src', 'https://www.facebook.com/plugins/video.php?href=' + encodeURIComponent(fbMatch[0]) + '&show_text=0&width=' + vWidth).attr('width', vWidth).attr('height', vHeight).attr('scrolling', 'no').attr('allowtransparency', 'true');
       } else {
         // this is not a known video link. Now what, Cat? Now what?
         return false;
@@ -9764,10 +9920,10 @@ var HelpDialog_HelpDialog = /*#__PURE__*/function () {
       return Object.keys(keyMap).map(function (key) {
         var command = keyMap[key];
         var $row = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div><div class="note-help-list-item"></div></div>');
-        $row.append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<label><kbd>' + key + '</kdb></label>').css({
-          'width': 180,
-          'margin-right': 10
-        })).append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<span/>').html(_this.context.memo('help.' + command) || command));
+        $row.append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<label class="note-help"><kbd class="note-help">' + key + '</kdb></label>').css({
+          'width': 150,
+          'margin-right': 5
+        })).append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<span class="note-help"/>').html(_this.context.memo('help.' + command) || command));
         return $row.html();
       }).join('');
     }
@@ -9954,7 +10110,6 @@ function HintPopover_createClass(Constructor, protoProps, staticProps) { if (pro
 
 
 
-
 var POPOVER_DIST = 5;
 
 var HintPopover_HintPopover = /*#__PURE__*/function () {
@@ -10012,7 +10167,7 @@ var HintPopover_HintPopover = /*#__PURE__*/function () {
         _this2.replace();
       });
       this.$popover.on('mousedown', function (event) {
-        e.preventDefault();
+        event.preventDefault();
       });
     }
   }, {
@@ -10079,21 +10234,28 @@ var HintPopover_HintPopover = /*#__PURE__*/function () {
           if (rangeCompute > 0) {
             this.lastWordRange.so += rangeCompute;
           }
-        }
+        } // Insert text in existing span or tag to keep style
 
-        this.lastWordRange.insertNode(node);
 
-        if (this.options.hintSelect === 'next') {
-          var blank = document.createTextNode('');
-          external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(node).after(blank);
-          range.createFromNodeBefore(blank).select();
+        if (typeof node === 'string') {
+          this.lastWordRange.select();
+          document.execCommand('insertText', false, node); // Classic Insert Node
         } else {
-          range.createFromNodeAfter(node).select();
+          this.lastWordRand.insertNode(node);
+
+          if (this.options.hintSelect === 'next') {
+            var blank = document.createTextNode('');
+            external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(node).after(blank);
+            range.createFromNodeBefore(blank).select();
+          } else {
+            range.createFromNodeAfter(node).select();
+          }
         }
 
         this.lastWordRange = null;
         this.hide();
         this.context.invoke('editor.focus');
+        this.context.triggerEvent('change', this.$editable.html(), this.$editable);
       }
     }
   }, {
@@ -10102,11 +10264,6 @@ var HintPopover_HintPopover = /*#__PURE__*/function () {
       var hint = this.hints[$item.data('index')];
       var item = $item.data('item');
       var node = hint.content ? hint.content(item) : item;
-
-      if (typeof node === 'string') {
-        node = dom.createText(node);
-      }
-
       return node;
     }
   }, {
@@ -10255,7 +10412,49 @@ var HintPopover_HintPopover = /*#__PURE__*/function () {
 }();
 
 
+// CONCATENATED MODULE: ./src/js/base/module/Zoom.js
+function Zoom_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function Zoom_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function Zoom_createClass(Constructor, protoProps, staticProps) { if (protoProps) Zoom_defineProperties(Constructor.prototype, protoProps); if (staticProps) Zoom_defineProperties(Constructor, staticProps); return Constructor; }
+
+var Zoom = /*#__PURE__*/function () {
+  function Zoom(context) {
+    Zoom_classCallCheck(this, Zoom);
+
+    this.context = context;
+    this.$editable = context.layoutInfo.editable;
+    this.zoom = 1;
+  }
+
+  Zoom_createClass(Zoom, [{
+    key: "in",
+    value: function _in() {
+      this.zoom += 0.1;
+      this.setZoom();
+    }
+  }, {
+    key: "out",
+    value: function out() {
+      this.zoom -= 0.1;
+      this.setZoom();
+    }
+  }, {
+    key: "setZoom",
+    value: function setZoom() {
+      this.$editable.css('transform', "scale(".concat(this.zoom, ")"));
+      this.context.layoutInfo.toolbar.find('.note-txt-zoom-value').html(Math.trunc(this.zoom * 100) + '%');
+      this.context.invoke('editor.restoreRange');
+    }
+  }]);
+
+  return Zoom;
+}();
+
+
 // CONCATENATED MODULE: ./src/js/base/settings.js
+
 
 
 
@@ -10317,16 +10516,22 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
       'tablePopover': TablePopover_TablePopover,
       'videoDialog': VideoDialog_VideoDialog,
       'helpDialog': HelpDialog_HelpDialog,
-      'airPopover': AirPopover_AirPopover
+      'airPopover': AirPopover_AirPopover,
+      'zoom': Zoom
     },
     buttons: {},
     lang: 'en-US',
     followingToolbar: false,
     toolbarPosition: 'top',
+    // top|bottom
     otherStaticBar: '',
+    dropUp: false,
+    // false uses default dropdown.
+    toolbarBottomDropUp: true,
+    // true|false If toolbarPosition = 'buttom' this will override dropUp.
     // toolbar
     codeviewKeepButton: false,
-    toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'codeview', 'help']]],
+    toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'zoomOut', 'zoomValue', 'zoomIn', 'codeview', 'help']]],
     // popover
     popatmouse: true,
     popover: {
@@ -10351,6 +10556,8 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     shortcuts: true,
     textareaAutoSync: true,
     tooltip: 'auto',
+    placement: 'top',
+    // none|top|right|bottom|left
     container: null,
     maxTextLength: 0,
     blockquoteBreakingLevel: 2,
@@ -10390,7 +10597,12 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     // By default, dialogs are attached in container.
     dialogsInBody: false,
     dialogsFade: false,
+    disableUpload: false,
+    // true|false Disables display of upload option in ImageDialog.
+    fileExplorer: '',
+    // If set with the Javascript function name, and button in ImageDialog.js will be shown, which also parses in the ID of the #note-dialog-image-url so the function can return the URL of the selected file for insertion. Note, only the function name is required for eg 'elfinderDialog'.
     maximumImageFileSize: null,
+    acceptImageFileTypes: "image/*",
     callbacks: {
       onBeforeCommand: null,
       onBlur: null,
@@ -10530,7 +10742,9 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
       'underline': 'note-icon-underline',
       'undo': 'note-icon-undo',
       'unorderedlist': 'note-icon-unorderedlist',
-      'video': 'note-icon-video'
+      'video': 'note-icon-video',
+      'zoomIn': 'note-icon-add',
+      'zoomOut': 'note-icon-remove'
     }
   }
 });
@@ -10550,3 +10764,4 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
 
 /******/ });
 });
+//# sourceMappingURL=summernote.js.map

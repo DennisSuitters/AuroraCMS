@@ -765,18 +765,6 @@ header nav.horizontal li a {
     transition: .3s ease-in; }
 }
 
-#content.fullscreen {
-  position: absolute;
-  width: 100% !important;
-  height: 100% !important;
-  margin: 0 !important;
-  top: 0 !important;
-  right: 0 !important;
-  bottom: 0 !important;
-  left: 0 !important;
-  border-radius: 0;
-  transition: .3s ease-in; }
-
 .content-title-wrapper {
   position: relative;
   display: flex;

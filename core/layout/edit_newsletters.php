@@ -24,10 +24,9 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Edit Account <?php echo$r['username'];?>:<?php echo$r['name'];?></div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Send Newsletters" aria-label="Send Newsletters" onclick="$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
+            <button data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -44,7 +43,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         <label for="title">Subject</label>
         <div class="form-row">
           <input class="textinput" id="title" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" type="text" value="<?php echo$r['title'];?>" placeholder="Enter a Subject..." onkeyup="$('#titleupdate').text($(this).val());">
-          <button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
         </div>
         <label for="ti">Created</label>
         <div class="form-row">

@@ -44,7 +44,7 @@ window.top.window.toastr["warning"]("Item can't be related to itself!");
 					':id'=>$rid
 				]);
 				$ri=$si->fetch(PDO::FETCH_ASSOC);?>
-window.top.window.$('#relateditems').append('<?php echo'<div id="l_'.$id.'" class="form-row mt-1"><input type="text" value="'.ucfirst($ri['contentType']).': '.$ri['title'].'" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg('trash').'</button></form></div>';?>');
+window.top.window.$('#relateditems').append('<?php echo'<div id="l_'.$id.'" class="form-row mt-1"><input type="text" value="'.ucfirst($ri['contentType']).': '.$ri['title'].'" readonly><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg('trash').'</button></form></div>';?>');
 <?php }else{?>
 window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php }

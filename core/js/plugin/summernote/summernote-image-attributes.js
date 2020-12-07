@@ -333,6 +333,7 @@
           contents:options.imageAttributes.icon,
           container:options.container,
           tooltip:lang.imageAttributes.tooltip,
+          placement:options.placement,
           click:function(e){
             context.invoke('imageAttributes.show');
           }

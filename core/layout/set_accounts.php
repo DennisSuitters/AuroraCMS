@@ -19,9 +19,8 @@
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Accounts Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -34,7 +33,7 @@
       <div class="card border-radius-0 shadow p-3">
         <div class="row">
           <input id="options3" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="3" type="checkbox"<?php echo$config['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options3" data-tooltip="tooltip" data-title="Allow Users to Create Accounts.">Allow Account Sign Ups</label>
+          <label for="options3" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Allow Account Sign Ups</label>
         </div>
         <hr>
         <legend>Password Reset Email Layout</legend>
@@ -44,7 +43,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="passwordResetSubject" data-dbid="1" data-dbt="config" data-dbc="passwordResetSubject" type="text" value="<?php echo$config['passwordResetSubject'];?>">
-          <button class="save" id="savepasswordResetSubject" data-tooltip="tooltip" data-title="Save" data-dbid="passwordResetSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savepasswordResetSubject" data-tooltip="tooltip" data-dbid="passwordResetSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
           <label for="passwordResetLayout">Layout</label>
@@ -74,7 +73,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="accountActivationSubject" data-dbid="1" data-dbt="config" data-dbc="accountActivationSubject" type="text" value="<?php echo$config['accountActivationSubject'];?>">
-          <button class="save" id="saveaccountActivationSubject" data-tooltip="tooltip" data-title="Save" data-dbid="accountActivationSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="saveaccountActivationSubject" data-tooltip="tooltip" data-dbid="accountActivationSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
           <label for="accountActivationLayout">Layout</label>

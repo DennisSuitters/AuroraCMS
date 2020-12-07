@@ -29,7 +29,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 		<label for="title">Title</label>
 		<div class="form-row mb-5">
 		  <input class="textinput2" id="title" data-dbid="<?php echo$r['id'];?>" data-dbt="seo" data-dbc="title" type="text" value="<?php echo$r['title'];?>" placeholder="Enter a Title...">
-		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" data-title="Save" aria-label="Save"><?php svg('save');?></button>
+		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
 		</div>
 		<form class="w-100" target="sp" method="post" action="core/update.php">
 		  <input name="id" type="hidden" value="<?php echo$r['id'];?>">

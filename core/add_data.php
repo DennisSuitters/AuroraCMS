@@ -93,7 +93,7 @@ if($act!=''){
             elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))
 							$avatar=$c['gravatar'];
 					}?>
-	  window.top.window.$('#comments').append('<?php echo'<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd"><div class="col-1"><img style="max-width:64px;height:64px;" alt="User" src="'.$avatar.'"></div><div class="col-9"><h6 class="media-heading">'.$name.'</h6><time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.$da.'</div><div class="col-2 text-right align-top" id="controls-'.$id.'"><form target="sp" method="post" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="comments"><button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button></form></div></div>';?>');
+	  window.top.window.$('#comments').append('<?php echo'<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd"><div class="col-1"><img style="max-width:64px;height:64px;" alt="User" src="'.$avatar.'"></div><div class="col-9"><h6 class="media-heading">'.$name.'</h6><time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.$da.'</div><div class="col-2 text-right align-top" id="controls-'.$id.'"><form target="sp" method="post" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="comments"><button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button></form></div></div>';?>');
 <?php   }else{?>
   window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   }
@@ -191,7 +191,7 @@ if($act!=''){
 									'<input name="t" type="hidden" value="orderitems">'.
 									'<input name="c" type="hidden" value="quantity">'.
 									'<input name="da" type="hidden" value="0">'.
-									'<button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete">'.svg2('trash').'</button>'.
+									'<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
 								'</form>'.
 							'</td>'.
 						'</tr>';

@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('review','i-3x');?></div>
           <div>Reviews</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item active">Reviews</li>
@@ -66,9 +64,9 @@
                 </td>
                 <td class="small"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-top">
-                  <div id="controls-<?php echo$r['id'];?>" class="btn-group float-right">
-                    <button id="approve_<?php echo$r['id'];?>" class="btn<?php echo$r['status']=='approved'?' hidden':'';?>" data-tooltip="tooltip" data-title="Approve" onclick="update('<?php echo$r['id'];?>','comments','status','approved');" aria-label="Approve"><?php svg('approve');?></button>
-                    <button class="btn trash" data-tooltip="tooltip" data-title="Delete" onclick="purge('<?php echo$r['id'];?>','comments');" aria-label="Delete"><?php svg('trash');?></button>
+                  <div class="btn-group float-right" id="controls-<?php echo$r['id'];?>">
+                    <button class="btn<?php echo$r['status']=='approved'?' hidden':'';?>" id="approve_<?php echo$r['id'];?>" data-tooltip="tooltip" onclick="update('<?php echo$r['id'];?>','comments','status','approved');" aria-label="Approve"><?php svg('approve');?></button>
+                    <button class="btn trash" data-tooltip="tooltip" onclick="purge('<?php echo$r['id'];?>','comments');" aria-label="Delete"><?php svg('trash');?></button>
                   </div>
                 </td>
               </tr>

@@ -19,9 +19,8 @@
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Live Chat Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -70,12 +69,12 @@
         <label for="messengerFBCode">Page ID</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBCode" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" type="text" value="<?php echo$config['messengerFBCode'];?>" placeholder="Enter Page ID...">
-          <button class="save" id="savemessengerFBCode" data-tooltip="tooltip" data-title="Save" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savemessengerFBCode" data-tooltip="tooltip" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <label for="messengerFBGreeting">Greeting</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBGreeting" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" type="text" value="<?php echo$config['messengerFBGreeting'];?>" placeholder="Enter Greeting...">
-          <button class="save" id="savemessengerFBGreeting" data-tooltip="tooltip" data-title="Save" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savemessengerFBGreeting" data-tooltip="tooltip" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <label for="messengerFBColor">Colour</label>
         <div class="form-row">

@@ -19,9 +19,8 @@
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Content Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -44,7 +43,7 @@
         <label for="showItems">Item Count</label>
         <div class="form-row">
           <input class="textinput" id="showItems" data-dbid="1" data-dbt="config" data-dbc="showItems" type="text" value="<?php echo$config['showItems'];?>" placeholder="Enter Item Count...">
-          <button class="save" id="saveshowItems" data-tooltip="tooltip" data-title="Save" data-dbid="showItems" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="saveshowItems" data-tooltip="tooltip" data-dbid="showItems" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="row mt-3">
           <input id="options5" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?php echo$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
@@ -73,8 +72,8 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].
               <label for="icon">&nbsp;</label>
               <div class="form-row">
                 <input id="icon" name="icon" type="hidden" value="" readonly>
-                <button data-tooltip="tooltip" data-title="Open Media Manager" onclick="elfinderDialog('1','category','icon');return false;" aria-label="Add Image via Media Manager"><?php svg('browse-media');?></button>
-                <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+                <button data-tooltip="tooltip" onclick="elfinderDialog('1','category','icon');return false;" aria-label="Open Media Manager"><?php svg('browse-media');?></button>
+                <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
               </div>
             </div>
           </div>
@@ -100,7 +99,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                   </form>
                 </div>
               </div>
@@ -126,8 +125,8 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].
               <label for="brandicon">&nbsp;</label>
               <div class="form-row">
                 <input id="brandicon" name="brandicon" type="hidden" value="" readonly>
-                <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Add Image via Media Manager" onclick="elfinderDialog('1','brand','brandicon');return false;"><?php svg('browse-media');?></button>
-                <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','brand','brandicon');return false;"><?php svg('browse-media');?></button>
+                <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
               </div>
             </div>
           </div>
@@ -153,7 +152,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php svg('trash');?></button>
                   </form>
                 </div>
               </div>

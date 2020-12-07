@@ -12,7 +12,7 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <header class="<?php currentSeason();?>">
-  <a class="brand" href=""><img src="core/images/auroracms-white.svg" alt="AuroraCMS"></a>
+  <a class="brand" href="<?php echo URL.$settings['system']['admin'];?>/"><img src="core/images/auroracms-white.svg" alt="AuroraCMS"></a>
   <nav>
     <ul class="nav-left">
       <li>
@@ -31,12 +31,12 @@
         </form>
       </li>
       <li id="searchbtn">
-        <button data-tooltip="left" data-title="Search" onclick="$('#searchbox').toggleClass('show');return false;"><?php svg('search');?></button>
+        <button data-tooltip="left" aria-label="Search" onclick="$('#searchbox').toggleClass('show');return false;"><?php svg('search');?></button>
       </li>
     </ul>
   </nav>
   <div class="account" id="account">
-    <a class="img-avatar" data-tooltip="tooltip" data-title="Account" href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>"><img class="img-avatar" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar']))) echo'media'.DS.'avatar'.DS.basename($user['avatar']);
+    <a class="img-avatar" href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>" aria-label="Account"><img class="img-avatar" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar']))) echo'media'.DS.'avatar'.DS.basename($user['avatar']);
     elseif($user['gravatar']!=''){
       if(stristr($user['gravatar'],'@')) echo'http://gravatar.com/avatar/'.md5($user['gravatar']);
       elseif(stristr($user['gravatar'],'gravatar.com/avatar/')) echo$user['gravatar'];
@@ -62,7 +62,7 @@
   </div>
   <nav class="horizontal" id="notifications">
     <ul>
-      <li data-tooltip="right" data-title="Notifications">
+      <li data-tooltip="right" aria-label="Notifications">
         <input id="notification-checkbox" type="checkbox">
         <label class="badge ml-4" data-badge="<?php echo($navStat>0?$navStat:'');?>" for="notification-checkbox"><?php svg('bell','i-2x');?></label>
         <ul id="nav-stat-list">
@@ -77,10 +77,10 @@
           echo$nou['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts">'.svg2('users').' Active Users<span class="badger badge-primary">'.$nou['cnt'].'</span></a></li>':'';?>
         </ul>
       </li>
-      <li data-tooltip="right" data-title="View Site">
+      <li data-tooltip="right" aria-label="View Site">
         <a href="<?php echo URL;?>"><?php svg('browser-general','i-2x');?></a>
       </li>
-      <li data-tooltip="right" data-title="Logout">
+      <li data-tooltip="right" aria-label="Logout">
         <a href="<?php echo URL.$settings['system']['admin'].'/logout';?>"><?php svg('sign-out','i-2x');?></a>
       </li>
     </ul>

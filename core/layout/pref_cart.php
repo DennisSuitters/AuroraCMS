@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('shop-cart','i-3x');?></div>
           <div>Preferences - Cart</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
@@ -41,7 +39,7 @@
               <th>Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="trash" data-tooltip="tooltip" data-title="Purge All" aria-label="Purge All" onclick="purge('0','cart');return false;"><?php svg('purge');?></button>
+                  <button class="trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','cart');return false;"><?php svg('purge');?></button>
                 </div>
               </th>
             </tr>
@@ -63,7 +61,7 @@
                 <td class="text-center align-middle"><?php echo$r['cost'];?></td>
                 <td class="text-center align-middle"><?php echo date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-middle">
-                  <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','cart');"><?php svg('trash');?></button>
+                  <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','cart');"><?php svg('trash');?></button>
                 </td>
               </tr>
             <?php }?>

@@ -32,7 +32,7 @@ window.top.window.toastr["error"]("Not all Fields were filled in!");
 	$id=$db->lastInsertId();
 	$e=$db->errorInfo();
 	if(is_null($e[2])){?>
-window.top.window.$('#subjects').append('<?php echo'<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Subject</div><input id="sub'.$id.'" name="da" type="text" value="'.$sub.'"><div class="input-text">Email</div><input id="eml'.$id.'" name="da" type="text" value="'.$eml.'"><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" data-title="Delete" type="submit" aria-label="Delete">'.svg2('trash').'</button></form></div>';?>');
+window.top.window.$('#subjects').append('<?php echo'<div id="l_'.$id.'" class="form-row mt-1"><div class="input-text">Subject</div><input id="sub'.$id.'" name="da" type="text" value="'.$sub.'"><div class="input-text">Email</div><input id="eml'.$id.'" name="da" type="text" value="'.$eml.'"><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button></form></div>';?>');
 <?php   }else{?>
 window.top.window.toastr["error"]("There was an issue adding the Data!");
 <?php   }

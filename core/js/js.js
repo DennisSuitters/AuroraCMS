@@ -82,6 +82,21 @@ function toggleCalendar(){
 	}
 	return false;
 }
+function escapeHtml(string){
+  var entityMap={
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;",
+    "/":"&#x2F;",
+    "`":"&#x60;",
+    "=":"&#x3D;"
+  };
+  return String(string).replace(/[&<>"'`=\/]/g,function(s){
+    return entityMap[s];
+  });
+}
 function updateButtons(id,t,c,da){
   $.ajax({
 		type:"GET",
@@ -334,12 +349,6 @@ function loadMore(l,is,ie,action,lang){
 //		$('.page-block').removeClass('d-block');
 	})
 }
-function toggleFullscreen(){
-  document.getElementById('content').classList.toggle('fullscreen');
-  document.getElementById('notification-checkbox').checked=false;
-  return false;
-}
-
 var phrases=[
 " A cold one","A few stubbies short of a six-pack","A few sandwiches short of a picnic","Accadacca","Ace ","Aerial pingpong ","Ambo ","Amber fluid ","and","also","Ankle biter ","Apples ","Arvo ","As busy as a ","As cross as a","As cunning as a","As dry as a","As stands out like ","Aussie Rules Footy ","Aussie salute","Avo ","Avos "
 ,"Back of Bourke ","Bail ","Bail out ","Banana bender","Barbie","Barbie ","Barrack ","Bastard ","Bastards ","Bathers ","Battler ","Bazza","Bail up ","Beauty ","Better than a ham sandwich","Better than a kick up the backside ","Big Smoke ","Bikie","Billabong ","Billy ","Bingle ","Bities","Bitzer","Bizzo ","Blimey ","Blind ","Bloke","bloody","Bloody ","Bloody oath ","Bloody ripper ","Blow in the bag ","Blowie ","Bludger ","Blue ","Bluey","Boardies","Bodgy ","Bog standard ","Bogan","Bogged ","Boil-over ","Bonza","Bonzer ","Boogie board ","Booze","Booze bus","Boozer ","Bottle-o ","Bottlo","Bounce ","Bradman","Brass razoo","Brekkie ","Brickie ","Brisvegas ","Brizzie","Brolly","Bruce","Brumby ","Buck's night ","Buckley's chance ","Budgie smugglers ","Buggered","Built like a","Bull bar ","Bundy ","Bunyip ","Burk","Burk ","Bush","Bush bash ","Bush oyster ","Bush telly ","Bushie","Bushman's handkerchief ","Bushranger ","Butcher "

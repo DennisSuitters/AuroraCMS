@@ -19,9 +19,8 @@
            <div class="content-title-icon"><?php svg('calendar','i-3x');?></div>
            <div>Bookings Settings</div>
            <div class="content-title-actions">
-             <a class="btn" data-tooltip="tooltip" data-placement="left" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-             <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-             <button class="saveall" data-tooltip="tooltip" data-placement="left" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+             <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
            </div>
          </div>
          <ol class="breadcrumb">
@@ -71,7 +70,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="bookingEmailSubject" data-dbid="1" data-dbt="config" data-dbc="bookingEmailSubject" type="text" value="<?php echo$config['bookingEmailSubject'];?>">
-          <button class="save" id="savebookingEmailSubject" data-tooltip="tooltip" data-title="Save" data-dbid="bookingEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savebookingEmailSubject" data-tooltip="tooltip" data-dbid="bookingEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
           <small class="form-text small text-muted text-right">Tokens:
@@ -105,13 +104,13 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="bookingAutoReplySubject" data-dbid="1" data-dbt="config" data-dbc="bookingAutoReplySubject" type="text" value="<?php echo$config['bookingAutoReplySubject'];?>">
-          <button class="save" id="savebookingAutoReplySubject" data-tooltip="tooltip" data-title="Save" data-dbid="bookingAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savebookingAutoReplySubject" data-tooltip="tooltip" data-dbid="bookingAutoReplySubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <label for="bookingAttachment">File Attachment</label>
         <div class="form-row">
           <input id="bookingAttachment" name="feature_image" data-dbid="1" data-dbt="config" data-dbc="bookingsAttachment" type="text" value="<?php echo$config['bookingAttachment'];?>" readonly>
-          <button data-tooltip="tooltip" data-title="Open Media Manager" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','bookingAttachment');"><?php svg('browse-media');?></button>
-          <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete" onclick="coverUpdate('1','config','bookingAttachment','');"><?php svg('trash');?></button>
+          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','bookingAttachment');"><?php svg('browse-media');?></button>
+          <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate('1','config','bookingAttachment','');"><?php svg('trash');?></button>
         </div>
         <div class="form-row mt-3">
           <small class="form-text text-right">Tokens:

@@ -11,7 +11,6 @@ This is a quick list of things what need to be fixed or worked on to help those 
   - Fix Attribution Styling
 - Inventory
   - Customer/Contact List
-  - Prices for Distributors
   - Add Coming Soon for Products
   - Add Archived status for content
 - Bookings

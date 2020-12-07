@@ -21,9 +21,8 @@
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
           <div>Orders Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-title="Back" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -43,7 +42,7 @@
             <input id="t" name="t" type="text" value="" placeholder="Enter an Option...">
             <div class="input-text">Cost</div>
             <input id="v" name="v" type="text" value="" placeholder="Enter Cost...">
-            <button class="add" data-tooltip="tooltip" data-title="Add" aria-label="Add"><?php svg('add');?></button>
+            <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
         <div id="postoption">
@@ -60,7 +59,7 @@
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
               </form>
             </div>
           <?php }?>
@@ -73,7 +72,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="austPostAPIKey" data-dbid="1" data-dbt="config" data-dbc="austPostAPIKey" type="text" value="<?php echo$config['austPostAPIKey'];?>" placeholder="Enter your Australia Post API Code...">
-          <button class="save" id="saveaustPostAPIKey" data-tooltip="tooltip" data-title="Save" data-dbid="austPostAPIKey" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="saveaustPostAPIKey" data-tooltip="tooltip" data-dbid="austPostAPIKey" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <legend class="mt-3">Payment Options</legend>
         <div class="row">
@@ -83,7 +82,7 @@
         <label for="gst">GST</label>
         <div class="form-row">
           <input class="textinput" id="gst" data-dbid="1" data-dbt="config" data-dbc="gst" type="number" value="<?php echo$config['gst'];?>" placeholder="Enter a GST Value...">
-          <button class="save" id="savegst" data-tooltip="tooltip" data-title="Save" data-dbid="gst" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savegst" data-tooltip="tooltip" data-dbid="gst" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
         <legend>Account Discount Ranges</legend>
@@ -104,7 +103,7 @@
             </select>
             <div class="input-text">Value</div>
             <input id="v" name="v" type="number" value="" placeholder="Enter Cost...">
-            <button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button>
+            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
         <div class="mt-1" id="discountrange">
@@ -123,7 +122,7 @@
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
               </form>
             </div>
           <?php }?>
@@ -135,14 +134,14 @@
             <label for="bank">Bank</label>
             <div class="form-row">
               <input class="textinput" id="bank" data-dbid="1" data-dbt="config" data-dbc="bank" type="text" value="<?php echo$config['bank'];?>" placeholder="Enter Bank...">
-              <button class="save" id="savebank" data-tooltip="tooltip" data-title="Save" data-dbid="bank" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savebank" data-tooltip="tooltip" data-dbid="bank" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-sm-6 pl-md-1">
             <label for="bankAccountName">Account Name</label>
             <div class="form-row">
               <input class="textinput" id="bankAccountName" data-dbid="1" data-dbt="config" data-dbc="bankAccountName" type="text" value="<?php echo$config['bankAccountName'];?>" placeholder="Enter an Account Name...">
-              <button class="save" id="savebankAccountName" data-tooltip="tooltip" data-title="Save" data-dbid="bankAccountName" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savebankAccountName" data-tooltip="tooltip" data-dbid="bankAccountName" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
@@ -151,14 +150,14 @@
             <label for="bankAccountNumber">Account Number</label>
             <div class="form-row">
               <input class="textinput" id="bankAccountNumber" data-dbid="1" data-dbt="config" data-dbc="bankAccountNumber" type="text" value="<?php echo$config['bankAccountNumber'];?>" placeholder="Enter an Account Number...">
-              <button class="save" id="savebankAccountNumber" data-tooltip="tooltip" data-title="Save" data-dbid="bankAccountNumber" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savebankAccountNumber" data-tooltip="tooltip" data-dbid="bankAccountNumber" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-sm-6 pl-md-1">
             <label for="bankBSB">BSB</label>
             <div class="form-row">
               <input class="textinput" id="bankBSB" data-dbid="1" data-dbt="config" data-dbc="bankBSB" type="text" value="<?php echo$config['bankBSB'];?>" placeholder="Enter a BSB...">
-              <button class="save" id="savebankBSB" data-tooltip="tooltip" data-title="Save" data-dbid="bankBSB" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+              <button class="save" id="savebankBSB" data-tooltip="tooltip" data-dbid="bankBSB" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
@@ -172,20 +171,20 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="payPalClientID" data-dbid="1" data-dbt="config" data-dbc="payPalClientID" type="text" value="<?php echo$config['payPalClientID'];?>" placeholder="Enter a PayPal Client ID...">
-          <button class="save" id="savepayPalClientID" data-tooltip="tooltip" data-title="Save" data-dbid="payPalClientID" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="savepayPalClientID" data-tooltip="tooltip" data-dbid="payPalClientID" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
 <?php /*
         <div class="form-group row">
           <label for="payPalSecret" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">PayPal Secret</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
             <input type="text" id="payPalSecret" class="form-control textinput" value="<?php echo$config['payPalSecret'];?>" data-dbid="1" data-dbt="config" data-dbc="payPalSecret" placeholder="Enter a PayPal Secret...">
-            <div class="input-group-append" data-tooltip="tooltip" data-title="Save"><button id="savepayPalSecret" class="btn btn-secondary save" data-dbid="payPalSecret" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
+            <div class="input-group-append" data-tooltip="tooltip"><button id="savepayPalSecret" class="btn btn-secondary save" data-dbid="payPalSecret" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button></div>
           </div>
         </div>
         <div class="form-group row">
           <label for="ipn" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">IPN</label>
           <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
-            <input type="text" id="ipn" class="form-control" value="Not Yet Implemented" readonly data-tooltip="tooltip" data-title="Not Yet Implemented">
+            <input type="text" id="ipn" class="form-control" value="Not Yet Implemented" readonly data-tooltip="tooltip" aria-label="Not Yet Implemented">
           </div>
         </div> */ ?>
         <hr>
@@ -237,7 +236,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="orderEmailSubject" data-dbid="1" data-dbt="config" data-dbc="orderEmailSubject" type="text" value="<?php echo$config['orderEmailSubject'];?>">
-          <button class="save" id="saveorderEmailSubject" data-tooltip="tooltip" data-title="Save" data-dbid="orderEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <button class="save" id="saveorderEmailSubject" data-tooltip="tooltip" data-dbid="orderEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
           <label for="orderEmailLayout">Layout</label>

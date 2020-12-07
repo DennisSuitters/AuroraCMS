@@ -18,9 +18,7 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('credit-card','i-3x');?></div>
           <div>Reviews</div>
-          <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-          </div>
+          <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
@@ -66,7 +64,7 @@
                     <input id="tie" name="tie" type="date" value="" onchange="$(`#tiex`).val(getTimestamp(`tie`));">
                     <input id="tiex" name="tiex" type="hidden" value="<?php echo time();?>">
                   </td>
-                  <td><button class="add" data-tooltip="tooltip" data-title="Add" type="submit" aria-label="Add"><?php svg('add');?></button></td>
+                  <td><button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button></td>
                 </tr>
             </form>
           <?php }?>
@@ -86,7 +84,7 @@
                     <form target="sp" action="core/purge.php">
                       <input name="id" type="hidden" value="<?php echo$r['id'];?>">
                       <input name="t" type="hidden" value="rewards">
-                      <button class="trash" data-tooltip="tooltip" data-title="Delete" aria-label="Delete"><?php svg('trash');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
                     </form>
                   <?php }?>
                 </td>

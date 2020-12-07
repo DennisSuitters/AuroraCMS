@@ -58,6 +58,7 @@
             contents:options.seo.icon,
             container:options.container,
             tooltip:lang.seo.tooltip,
+            placement:options.placement,
             data:{
               toggle:'dropdown'
             }

@@ -35,18 +35,18 @@ if($s->rowCount()>0){
           '<td class="text-wrap align-middle" style="min-width:200px;max-width:250px;">'.trim($r['urlFrom']).'</td>'.
           '<td class="text-center align-middle">'.
             '<a target="_blank" href="http://www.ipaddress-finder.com/?ip='.$r['ip'].'">'.$r['ip'].'</a>'.
-            '<button class="trash" data-tooltip="tooltip" data-title="Remove all of this IP" onclick="purge(`'.$r['ip'].'`,`clearip`)" aria-label="Remove all of this IP">'.svg2('eraser').'</button>'.
+            '<button class="trash" data-tooltip="tooltip" onclick="purge(`'.$r['ip'].'`,`clearip`)" aria-label="Remove all of this IP">'.svg2('eraser').'</button>'.
           '</td>'.
           '<td class="text-center align-middle">'.ucfirst($r['browser']).'</td>'.
           '<td class="text-center align-middle">'.ucfirst($r['os']).'</td>'.
           '<td class="text-center align-middle">'.date($config['dateFormat'],$r['ti']).'</td>'.
           '<td class="align-middle">'.
             '<div class="btn-group float-right">'.
-              '<button class="pathviewer" data-tooltip="tooltip" data-title="View Visitor Path" data-toggle="popover" data-dbid="'.$r['id'].'" aria-label="aria_view">'.svg2('seo-path').'</button>';
+              '<button class="pathviewer" data-tooltip="tooltip" data-toggle="popover" data-dbid="'.$r['id'].'" aria-label="View Visitor Path">'.svg2('seo-path').'</button>';
     if($config['php_options'][0]==1){
-      echo'<button class="phpviewer" data-tooltip="tooltip" data-title="Check IP with Project Honey Pot" data-toggle="popover" data-dbid="'.$r['id'].'" data-dbt="tracker" aria-label="aria_check">'.svg2('brand-projecthoneypot').'</button>';
+      echo'<button class="phpviewer" data-tooltip="tooltip" data-toggle="popover" data-dbid="'.$r['id'].'" data-dbt="tracker" aria-label="Check IP with Project Honey Pot">'.svg2('brand-projecthoneypot').'</button>';
     }
-              echo'<button class="trash" onclick="purge(`'.$r['id'].'`,`tracker`)" data-tooltip="tooltip" data-title="Delete" aria-label="aria_delete">'.svg2('trash').'</button>'.
+              echo'<button class="trash" onclick="purge(`'.$r['id'].'`,`tracker`)" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
             '</div>'.
           '</td>'.
         '</tr>';

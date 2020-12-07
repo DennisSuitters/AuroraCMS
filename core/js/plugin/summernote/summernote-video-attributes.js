@@ -54,6 +54,7 @@
           contents:options.videoAttributes.icon,
           container:options.container,
           tooltip:lang.videoAttributes.tooltip,
+          placement:options.placement,
           click:function(e){
             context.invoke('videoAttributes.show');
           }

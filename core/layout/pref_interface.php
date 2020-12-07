@@ -19,8 +19,7 @@
           <div class="content-title-icon"><?php svg('sliders','i-3x');?></div>
           <div>Preferences - Interface</div>
           <div class="content-title-actions">
-            <button data-tooltip="tooltip" data-title="Toggle Fullscreen" aria-label"Toggle Fullscreen" onclick="toggleFullscreen();"><?php svg('fullscreen');?></button>
-            <button class="saveall" data-tooltip="tooltip" data-title="Save All Edited Fields"><?php echo svg('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -85,7 +84,7 @@
           <label for="update_url">Update URL</label>
           <div class="form-row">
             <input id="update_url" class="textinput" data-dbid="1" data-dbt="config" data-dbc="update_url" type="text" value="<?php echo$config['update_url'];?>" placeholder="Enter an Update URL...">
-            <button class="save" id="saveupdate_url" data-tooltip="tooltip" data-title="Save" data-dbid="update_url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            <button class="save" id="saveupdate_url" data-tooltip="tooltip" data-dbid="update_url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
           </div>
           <div class="form-row mt-3">
             <label for="idleTime">Idle&nbsp;Timeout</label>
@@ -94,7 +93,7 @@
           <div class="form-row">
             <input class="textinput" id="idleTime" data-dbid="1" data-dbt="config" data-dbc="idleTime" type="text" value="<?php echo$config['idleTime'];?>" placeholder="Enter a Time in Minutes...">
             <div class="input-text">Minutes</div>
-            <button class="save" id="saveidleTime" data-tooltip="tooltip" data-title="Save" data-dbid="idleTime" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            <button class="save" id="saveidleTime" data-tooltip="tooltip" data-dbid="idleTime" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
           </div>
           <div class="form-row mt-3">
             <label for="dateFormat">Date/Time Format</label>
@@ -103,7 +102,7 @@
           <div class="form-row">
             <input class="textinput" id="dateFormat" data-dbid="1" data-dbt="config" data-dbc="dateFormat" type="text" value="<?php echo$config['dateFormat'];?>" placeholder="Enter a Date/Time Format...">
             <div class="input-text"><?php echo date($config['dateFormat'],time());?></div>
-            <button class="save" id="savedateFormat" data-tooltip="tooltip" data-title="Save" data-dbid="dateFormat" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+            <button class="save" id="savedateFormat" data-tooltip="tooltip" data-dbid="dateFormat" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
           </div>
           <label for="timezone">Timezone</label>
           <div class="form-row">

@@ -16,7 +16,7 @@
 					<table class="border-0">
 						<thead class="border-0">
 							<tr>
-								<th class="w-25 d-none d-sm-table-cell border-0"></th>
+								<th class="w-10 d-none d-sm-table-cell border-0"></th>
 								<th colspan="6" class="small border-0">
 									<span class="text-muted">Code : </span>Title<span class="text-muted"> : Choices</span>
 								</th>
@@ -34,7 +34,7 @@
 							<items>
 								<tr class="<print zebra>">
 									<td class="d-none d-sm-table-cell align-middle border-0 p-0 pt-1 pl-1">
-										<img src="<print content=image>" class="m-0" loading="lazy" alt="<print content=title>">
+										<img src="<print content=image>" class="m-0" loading="lazy" width="100%" alt="<print content=title>">
 									</td>
 									<td colspan="6" class="small align-middle border-0">
 										<print content="code"><print content="title"><print choice>
@@ -52,7 +52,7 @@
 										<form method="post" action="<print carturl>#cart">
 											<div class="form-group row">
 												<input type="hidden" name="qid" value="<print cart=id>">
-												<input type="number" class="form-control form-control-sm col-4 ml-auto text-center" name="qty" value="<print cart=quantity>" onchange="this.form.submit();">
+												<input type="number" class="w-100 ml-auto text-center" name="qty" value="<print cart=quantity>" onchange="this.form.submit();">
 											</div>
 										</form>
 									</td>

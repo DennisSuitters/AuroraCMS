@@ -37,7 +37,7 @@
   margin: 200px 40px 40px 40px !important; }
 
 .comingsoon main p,
-.maintenance main p{
+.maintenance main p {
   line-height: 1.25 !important;
   font-weight: 300 !important;
   font-style: normal !important;
@@ -130,7 +130,6 @@ nav ul li a:hover {
 nav ul li.active {
   border-radius: 5px;
   background: #eee; }
-
 
 .cart {
   display: inline-block;
@@ -379,6 +378,7 @@ address [role="button"] {
   width: 24px;
   height: 24px;
   border-radius: 50%;
+  padding-top: 4px;
   text-align: center;
   text-indent: 0;
   border: 1px solid #e9e9e9;

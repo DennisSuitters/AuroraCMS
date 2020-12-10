@@ -401,19 +401,85 @@ nav[role="menubar"] ul li.active {
   min-height: 100%; }
 
 /* Jumbotron */
+.jumboside .jumbo {
+  width: 50%; }
+
+.jumbo:not(:last-child) {
+  width: 50; }
+
+@media (max-width: 768px) {
+  .jumboside .jumbo {
+    width: 100% !important; }
+}
+
 .jumbotron {
+  z-index: -1;
   display: block;
+  position: relative;
+  width: 100%;
+  height: 100vh;
   margin: 0;
+  padding: 0;
   border-radius: 0;
   background-color: var(--jumbotron-background-color);
-  padding: 0;
-  padding-right: 0;
-  padding-left: 0;
-  text-align: center; }
+  object-fit: contain;
+  overflow: hidden;
+  -webkit-box-shadow: inset 0 -30px 30px -30px rgba(0, 0, 0, .5);
+  -moz-box-shadow: inset 0 -30px 30px -30px rgba(0, 0, 0, .5);
+  box-shadow: inset 0 -30px 30px -30px rgba(0, 0, 0, .5); }
 
+.jumbotron img {
+  z-index: -1;
+  position: absolute;
+  min-width: 100%;
+  min-height: 100vh;
+  top: 50%;
+  left: 50%;
+  transform: translate3d(-50%,-50%,0);
+  object-fit: cover; }
+
+.jumbotron h1,
+.jumbotron h2,
+.jumbotron h3,
+.jumbotron h4,
+.jumbotron h5,
+.jumbotron h6,
 .jumbotron p {
+  z-index: 2;
   display: block; }
 
+.jumbotron video,
+.jumbotron iframe {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: auto;
+  min-width: 100%;
+  min-height: 100%;
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #000;
+  z-index: 1; }
+
+.jumbotron figcaption,
+.card-image figcaption {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  font-family: var(--font);
+  font-size: 1rem;
+  background-color: var(--card-figcaption-background-color);
+  color: var(--card-figcaption-color);
+  padding: .25rem .5rem;
+  border-top-right-radius: .5rem; }
+
+.jumbotron figcaption {
+  bottom: 0; }
+
+figcaption:empty,
 .jumbotron:empty {
   display: none; }
 
@@ -500,10 +566,8 @@ nav[role="menubar"] ul li.active {
   flex: 1 1 auto;
   overflow: hidden; }
 
-.card img {
-  width: 100%; }
-
 .card .card-image img {
+  z-index: -1;
   height: 12rem;
   -o-object-fit: cover;
      object-fit: cover; }

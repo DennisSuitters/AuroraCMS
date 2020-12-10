@@ -7,7 +7,7 @@
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
  * 
- * Date: 2020-11-30T12:11Z
+ * Date: 2020-12-08T10:53Z
  * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -564,6 +564,10 @@ var ui_checkbox = renderer.create('<div class="note-checkbox"></div>', function 
 });
 
 var icon = function icon(iconClassName, tagName) {
+  if (iconClassName.match(/^</)) {
+    return iconClassName;
+  }
+
   tagName = tagName || 'i';
   return '<' + tagName + ' class="' + iconClassName + '"></' + tagName + '>';
 };
@@ -10531,7 +10535,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     // true|false If toolbarPosition = 'buttom' this will override dropUp.
     // toolbar
     codeviewKeepButton: false,
-    toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'zoomOut', 'zoomValue', 'zoomIn', 'codeview', 'help']]],
+    toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname', 'fontsize']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'zoomOut', 'zoomValue', 'zoomIn', 'codeview', 'help']]],
     // popover
     popatmouse: true,
     popover: {

@@ -1,17 +1,19 @@
 	<aside class="col-12 col-sm-3 order-1 order-sm-2">
 		<sort>
 			<div class="card col-11 col-sm-12 mx-auto mb-3">
-				<form method="POST" action="">
-					<input type="hidden" name="act" value="sort">
-					<label for="sort" class="h3">Sort Items</label>
-					<div class="row">
-						<select id="sort" class="col-9" name="sort">
-							<option value="">Select a Sort Option</option>
-							<sortOptions>
-						</select>
-						<button class="col-3" type="submit">Sort</button>
-					</div>
-				</form>
+				<div class="card-body my-4">
+					<form method="POST" action="">
+						<input type="hidden" name="act" value="sort">
+						<label for="sort" class="h3">Sort Items</label>
+						<div class="row">
+							<select id="sort" class="col-9" name="sort">
+								<option value="">Select a Sort Option</option>
+								<sortOptions>
+							</select>
+							<button class="col-3" type="submit">Sort</button>
+						</div>
+					</form>
+				</div>
 			</div>
 		</sort>
 		<controls>

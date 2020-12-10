@@ -8,7 +8,6 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Add ability to upload and update themes.
 - content
   - Check price display in ribbons
-  - Fix Attribution Styling
 - Inventory
   - Customer/Contact List
   - Add Coming Soon for Products

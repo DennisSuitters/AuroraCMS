@@ -73,9 +73,19 @@ else{
   else{
     if($show=='categories'){
       if($args[0]=='type'){
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+        if(isset($args[2])&&($args[2]=='archived'||$args[2]=='unpublished'||$args[2]=='autopublish'||$args[2]=='published'||$args[2]=='delete'||$args[2]=='all')){
+          if($args[2]=='all'){
+            $getStatus=" ";
+          }else{
+            $getStatus=" AND `status`='".$args[2]."' ";
+          }
+        }else{
+          $getStatus=" AND `status`!='archived'";
+        }
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
         $s->execute([
-          ':contentType'=>$args[1]
+          ':contentType'=>$args[1],
+
         ]);
       }else{
         if(isset($args[3])){
@@ -238,7 +248,7 @@ else{
                 </thead>
                 <tbody>
                   <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                    <tr class="<?php if($r['status']=='delete')echo' danger';elseif($r['status']!='published')echo' warning';?>" id="l_<?php echo$r['id'];?>">
+                    <tr class="<?php if($r['status']=='delete')echo' bg-danger';elseif($r['status']!='published')echo' bg-warning';?>" id="l_<?php echo$r['id'];?>">
                       <td class="align-middle">
                         <?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb'])))
                           echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -314,6 +324,17 @@ else{
                   <?php }?>
                 </tbody>
               </table>
+              <div class="col-12 mt-0 text-right">
+                <small>View:
+                  <a class="badger badge-<?php echo$args[2]==''?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>" aria-label="Display Default View">Default</a>&nbsp;
+                  <a class="badger badge-<?php echo$args[2]=='all'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/all" aria-label="Display All Content">All</a>&nbsp;
+                  <a class="badger badge-<?php echo$args[2]=='published'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/published" aria-label="Display Published Items">Published</a>&nbsp;
+                  <a class="badger badge-<?php echo$args[2]=='autopublish'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
+                  <a class="badger badge-<?php echo$args[2]=='unpublished'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
+                  <a class="badger badge-<?php echo$args[2]=='delete'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
+                  <a class="badger badge-<?php echo$args[2]=='archived'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/archived" aria-label="Display Archived Items">Archived</a>&nbsp;
+                </small>
+              </div>
             <?php }?>
             <?php include'core/layout/footer.php';?>
           </div>

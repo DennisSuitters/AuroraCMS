@@ -21,7 +21,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <div>Content Edit</div>
           <div class="content-title-actions">
             <a class="btn" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-            <button class="<?php echo($r['status']=='published'?'':'hidden');?>" data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['metaDescription']?$r['metaDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button>
+            <button class="<?php echo($r['status']=='published'?'':'hidden');?>" data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button>
             <?php echo$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" role="button" aria-label="Add '.ucfirst($r['contentType']).'">'.svg2('add').'</a>':'';?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
@@ -1133,6 +1133,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <option value="autopublish"<?php echo$r['status']=='autopublish'?' selected':'';?>>AutoPublish</option>
                     <option value="published"<?php echo$r['status']=='published'?' selected':'';?>>Published</option>
                     <option value="delete"<?php echo$r['status']=='delete'?' selected':'';?>>Delete</option>
+                    <option value="archived"<?php echo$r['status']=='archived'?' selected':'';?>>Archived</option>
                   </select>
                 </div>
               </div>
@@ -1196,6 +1197,12 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
             </div>
+            <?php if($r['contentType']=='inventory'){?>
+              <div class="row mt-3">
+                <input id="coming0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?php echo($r['coming'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <label for="coming0">Coming Soon</label>
+              </div>
+            <?php }?>
             <?php if($r['contentType']!='proofs'){?>
               <div class="row mt-3<?php echo$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
                 <input id="featured0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0" type="checkbox"<?php echo($r['featured'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
@@ -1207,7 +1214,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <label for="internal0">Internal</label>
             </div>
             <?php if($r['contentType']=='service'){?>
-              <div class="row">
+              <div class="row mt-3">
                 <input id="bookable0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0" type="checkbox"<?php echo($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                 <label for="bookable0">Bookable</label>
               </div>

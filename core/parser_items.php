@@ -387,8 +387,12 @@ if(stristr($html,'<items')){
 		]);
 		$ua=$su->fetch(PDO::FETCH_ASSOC);
 		$itemQuantity='';
-		if(is_numeric($r['quantity']))
-			$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
+		if($r['coming'][0]==1&&$r['contentType']=='inventory'){
+			$itemQuantity.='<div class="quantity">Coming Soon</div>';
+		}else{
+			if(is_numeric($r['quantity']))
+				$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
+		}
 		$r['file']=trim(rawurldecode($r['file']));
 		$r['thumb']=trim(rawurldecode($r['thumb']));
 		$items=preg_replace([

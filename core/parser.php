@@ -148,12 +148,16 @@ foreach($tags as$tag){
 							$parsing.='<div class="sold">';
 						$parsing.=$r['rrp']!=0?'<span class="rrp" title="Recommended Retail Price">RRP &#36;'.htmlspecialchars($r['rrp'],ENT_QUOTES,'UTF-8').'</span>':'';
 						$parsing.='<span class="cost'.($r['rCost']!=0?' strike':'').'">';
-						if(is_numeric($r['cost']))
-							$parsing.='&#36;';
-						$parsing.=htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
-						$parsing.=$r['rCost']!=0?'<span class="reduced">&#36;'.htmlspecialchars($r['rCost'],ENT_QUOTES,'UTF-8').'</span>':'';
-						if($r['stockStatus']=='sold out')
-							$parsing.='</div>';
+						if($r['coming'][0]==1){
+							$parsing.='Coming Soon';
+						}else{
+							if(is_numeric($r['cost']))
+								$parsing.='&#36;';
+								$parsing.=htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
+								$parsing.=$r['rCost']!=0?'<span class="reduced">&#36;'.htmlspecialchars($r['rCost'],ENT_QUOTES,'UTF-8').'</span>':'';
+								if($r['stockStatus']=='sold out')
+								$parsing.='</div>';
+						}
 					}else
 						$parsing.='<span class="cost">'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
 					if($r['contentType']=='service'||$r['contentType']=='events'&&$r['bookable']==1){

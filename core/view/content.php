@@ -26,20 +26,21 @@ if($view=='newsletters'){
 		$notification=$theme['settings']['notification_unsubscribe'];
 	}
 }
-if(isset($_POST['act'])=='sort'){
+if(isset($_POST['act'])=='sort')
 	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
-	$sortOrder=" ORDER BY ";
-	if($sort=="")$sortOrder.="`ti` DESC ";
-	if($sort=="new")$sortOrder.="`ti` DESC ";
-	if($sort=="old")$sortOrder.="`ti` ASC ";
-	if($sort=="namea")$sortOrder.="`title` ASC ";
-	if($sort=="namez")$sortOrder.="`title` DESC ";
-	if($sort=="best")$sortOrder.="`sold` DESC ";
-	if($sort=="view")$sortOrder.="`views` DESC ";
-	if($sort=="priceh")$sortOrder.="`cost` DESC ";
-	if($sort=="pricel")$sortOrder.="`cost` ASC ";
-}else
-	$sortOrder="";
+else
+	$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
+
+$sortOrder=" ORDER BY ";
+if($sort=="")$sortOrder.="`ti` DESC ";
+if($sort=="new")$sortOrder.="`ti` DESC ";
+if($sort=="old")$sortOrder.="`ti` ASC ";
+if($sort=="namea")$sortOrder.="`title` ASC ";
+if($sort=="namez")$sortOrder.="`title` DESC ";
+if($sort=="best")$sortOrder.="`sold` DESC ";
+if($sort=="view")$sortOrder.="`views` DESC ";
+if($sort=="priceh")$sortOrder.="`cost` DESC ";
+if($sort=="pricel")$sortOrder.="`cost` ASC ";
 if($view=='page')
 	$show='';
 elseif($view=='search'){

@@ -40,6 +40,16 @@
           <input id="options10" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10" type="checkbox"<?php echo$config['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="options10">Display Similar Category if no Related Content items are selected</label>
         </div>
+        <label for="defaultOrder">Default Order for Content Items</label>
+        <div class="form-row">
+          <select id="defaultOrder" data-dbid="1" data-dbt="config" data-dbc="defaultOrder" onchange="update('1','config','defaultOrder',$(this).val());"<?php echo$user['options'][1]==1?'':' disabled';?>>
+            <option value="new"<?php echo$config['defaultOrder']=='new'?' selected':'';?>>Newest</option>
+            <option value="old"<?php echo$config['defaultOrder']=='old'?' selected':'';?>>Oldest</option>
+            <option value="namea"<?php echo$config['defaultOrder']=='namea'?' selected':'';?>>Name: A-Z</option>
+            <option value="namez"<?php echo$config['defaultOrder']=='namez'?' selected':'';?>>Name: Z-A</option>
+            <option value="view"<?php echo$config['defaultOrder']=='view'?' selected':'';?>>Most viewed</option>
+          </select>
+        </div>
         <label for="showItems">Item Count</label>
         <div class="form-row">
           <input class="textinput" id="showItems" data-dbid="1" data-dbt="config" data-dbc="showItems" type="text" value="<?php echo$config['showItems'];?>" placeholder="Enter Item Count...">

@@ -1,25 +1,19 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
-- Fix Breadcrumb Parser, investigate Google Console for errors.
-- Content, investigate a better method of using images when parsing themes.
+- Fix Breadcrumb Parser, investigate Google Console for errors
+- Content, investigate a better method of using images when parsing themes
 - Installation checks for cURL, and Zip, it was discovered that the updates were failing due to zip and cURL not being installed on some installations causing updates to fail but not reporting errors in logs
 - Add clear tables data when installing
-- Fix update core system.
-- Add ability to upload and update themes.
-- content
-  - Check price display in ribbons
+- Fix update core system
+- Add ability to upload and update themes
 - Inventory
   - Customer/Contact List
-  - Add Coming Soon for Products
-  - Add Archived status for content
-- Bookings
-  - Revisit, add Job list.
 - Orders
-  - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways).
+  - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways)
 - Import Catalogue from CSV
 - Import databases from other systems (WordPress, CubeCart, osCommerce, PrestaShop, etc.)
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.
-- Make SEO and Instructional video offsite (github).
-- Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q).
-- Create Free Templates.
-- Testing, and Bug Squashing, as per the usual with ongoing projects.
+- Make SEO and Instructional video offsite (github)
+- Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q)
+- Create Free Templates
+- Testing, and Bug Squashing, as per the usual with ongoing projects

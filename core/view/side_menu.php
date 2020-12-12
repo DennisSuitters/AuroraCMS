@@ -18,12 +18,15 @@ if(file_exists(THEME.DS.'side_menu.html')){
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 		$sideCost='';
 		if($r['options'][0]==1){
-			if($r['stockStatus']=='sold out')
-				$sideCost.='<div class="sold">';
-			$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
-			$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
-			if($r['stockStatus']=='sold out')
-				$sideCost.='</div>';
+			if($r['coming'][0]!=1){
+				if($r['stockStatus']=='sold out')
+					$sideCost.='<div class="sold">';
+				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
+				$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+				if($r['stockStatus']=='sold out')
+					$sideCost.='</div>';
+			}else
+				$sideCost.='<div class="sold"><span class="cost">Coming Soon</span></div>';
 		}
 		if($r['stockStatus']=='out of stock')
 			$r['quantity']=0;
@@ -40,95 +43,105 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		],$sideTemp);
 		$sideQuantity='';
 		if($r['contentType']=='inventory'){
-			$sideTemp=preg_replace([
-				'/<[\/]?quantity>/',
-				'/<print content=[\"\']?quantity[\"\']?>/',
-				'/<print content=[\"\']?stock[\"\']?>/'
-			],[
-				'',
-				($r['quantity']==0?'out of stock':$r['quantity']),
-				($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
-			],$sideTemp);
-			if($r['stockStatus']=='sold out')
-				$sideQuantity='<div class="quantity">Sold Out</div>';
-			$sideTemp=preg_replace(['/<print content=[\"\']?quantity[\"\']?>/'],$sideQuantity,$sideTemp);
-			if(stristr($sideTemp,'<condition>')){
-				if($r['itemCondition']!=''){
-					$sideTemp=preg_replace([
-						'/<[\/]?condition>/',
-						'/<print content=[\"\']?condition[\"\']?>/'
-					],[
-						'',
-						$r['itemCondition'],
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<condition>.*?<\/condition>~is','',$sideTemp);
-			}
-			if(stristr($sideTemp,'<weight>')){
-				if($r['weight']!=''){
-					$sideTemp=preg_replace([
-						'/<[\/]?weight>/',
-						'/<print content=[\"\']?weight[\"\']?>/'
-					],[
-						'',
-						$r['weight'].$r['weightunit'],
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<weight>.*?<\/weight>~is','',$sideTemp);
-			}
-			if(stristr($sideTemp,'<size>')){
-				if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
-					$sideTemp=preg_replace([
-						'/<[\/]?size>/',
-						'/<print content=[\"\']?width[\"\']?>/',
-						'/<print content=[\"\']?height[\"\']?>/',
-						'/<print content=[\"\']?length[\"\']?>/'
-					],[
-						'',
-						$r['width'].$r['widthunit'],
-						$r['height'].$r['heightunit'],
-						$r['length'].$r['lengthunit']
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<size>.*?<\/size>~is','',$sideTemp);
-			}
-			if(stristr($sideTemp,'<brand>')){
-				if($r['brand']!=0){
-					$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
-					$sb->execute([
-						':id'=>$r['brand']
-					]);
-					$rb=$sb->fetch(PDO::FETCH_ASSOC);
-					$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
-					$sideTemp=preg_replace([
-						'/<[\/]?brand>/',
-						'/<print brand>/',
-					],[
-						'',
-						$brand,
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
-			}
-			if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
-				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
-				$scq->execute([
-					':id'=>$r['id']
-				]);
-				if($scq->rowCount()>0){
-					$choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
-					while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
-						if($rcq['ti']==0)continue;
-						$choices.='<option value="'.$rcq['id'].'">'.$rcq['title'].':'.$rcq['ti'].'</option>';
+			if($r['coming'][0]!=1){
+				$sideTemp=preg_replace([
+					'/<[\/]?quantity>/',
+					'/<print content=[\"\']?quantity[\"\']?>/',
+					'/<print content=[\"\']?stock[\"\']?>/'
+				],[
+					'',
+					($r['quantity']==0?'out of stock':$r['quantity']),
+					($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
+				],$sideTemp);
+				if($r['stockStatus']=='sold out')
+					$sideQuantity='<div class="quantity">Sold Out</div>';
+				$sideTemp=preg_replace(['/<print content=[\"\']?quantity[\"\']?>/'],$sideQuantity,$sideTemp);
+				if(stristr($sideTemp,'<condition>')){
+					if($r['itemCondition']!=''){
+						$sideTemp=preg_replace([
+							'/<[\/]?condition>/',
+							'/<print content=[\"\']?condition[\"\']?>/'
+						],[
+							'',
+							$r['itemCondition'],
+						],$sideTemp);
+					}else
+						$sideTemp=preg_replace('~<condition>.*?<\/condition>~is','',$sideTemp);
 					}
-					$choices.='</select>';
-					$sideTemp=str_replace('<choices>',$choices,$sideTemp);
-				}else
-					$sideTemp=str_replace('<choices>','',$sideTemp);
+					if(stristr($sideTemp,'<weight>')){
+						if($r['weight']!=''){
+							$sideTemp=preg_replace([
+								'/<[\/]?weight>/',
+								'/<print content=[\"\']?weight[\"\']?>/'
+							],[
+								'',
+								$r['weight'].$r['weightunit'],
+							],$sideTemp);
+						}else
+							$sideTemp=preg_replace('~<weight>.*?<\/weight>~is','',$sideTemp);
+					}
+					if(stristr($sideTemp,'<size>')){
+						if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
+							$sideTemp=preg_replace([
+								'/<[\/]?size>/',
+								'/<print content=[\"\']?width[\"\']?>/',
+								'/<print content=[\"\']?height[\"\']?>/',
+								'/<print content=[\"\']?length[\"\']?>/'
+							],[
+								'',
+								$r['width'].$r['widthunit'],
+								$r['height'].$r['heightunit'],
+								$r['length'].$r['lengthunit']
+							],$sideTemp);
+						}else
+							$sideTemp=preg_replace('~<size>.*?<\/size>~is','',$sideTemp);
+					}
+					if(stristr($sideTemp,'<brand>')){
+						if($r['brand']!=0){
+							$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
+							$sb->execute([
+								':id'=>$r['brand']
+							]);
+							$rb=$sb->fetch(PDO::FETCH_ASSOC);
+							$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
+							$sideTemp=preg_replace([
+								'/<[\/]?brand>/',
+								'/<print brand>/',
+							],[
+								'',
+								$brand,
+							],$sideTemp);
+						}else
+							$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
+					}
+					if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
+						$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
+						$scq->execute([
+							':id'=>$r['id']
+						]);
+						if($scq->rowCount()>0){
+							$choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
+							while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
+								if($rcq['ti']==0)continue;
+								$choices.='<option value="'.$rcq['id'].'">'.$rcq['title'].':'.$rcq['ti'].'</option>';
+							}
+							$choices.='</select>';
+							$sideTemp=str_replace('<choices>',$choices,$sideTemp);
+						}else
+							$sideTemp=str_replace('<choices>','',$sideTemp);
+					}else{
+						$sideTemp=preg_replace([
+							'<choices>',
+							'~<inventory>.*?<\/inventory>~is'
+						],
+						'',
+						$sideTemp);
+					}
 			}else
-				$sideTemp=preg_replace(['<choices>','~<inventory>.*?<\/inventory>~is'],'',$sideTemp);
+				$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
 		}else
 			$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
+
 		if($r['contentType']=='service'||$r['contentType']=='events'){
 			if($r['bookable']==1){
 				if(stristr($sideTemp,'<service>')){
@@ -149,7 +162,7 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
 			if(stristr($sideTemp,'<inventory>')){
 				$sideTemp=preg_replace([
-					'/<[\/]?inventory>/',
+					($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/'),
 					'~<service>.*?<\/service>~is'
 				],'',$sideTemp);
 			}elseif(stristr($sideTemp,'<inventory>')&&$r['contentType']!='inventory')

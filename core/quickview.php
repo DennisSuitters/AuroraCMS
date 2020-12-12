@@ -71,12 +71,16 @@ if(file_exists('..'.DS.THEME.DS.'quickview.html')){
     if($r['file']=='')$r['file']=NOIMAGE;
     $sideCost='';
 		if($r['options'][0]==1){
-			if($r['stockStatus']=='sold out')
-				$sideCost.='<div class="sold">';
-			$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
-			$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
-			if($r['stockStatus']=='sold out')
-				$sideCost.='</div>';
+			if($r['coming'][0]==1){
+				$sideCost.='<div class="sold">Coming Soon</div>';
+			}else{
+				if($r['stockStatus']=='sold out')
+					$sideCost.='<div class="sold">';
+				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
+				$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+				if($r['stockStatus']=='sold out')
+					$sideCost.='</div>';
+			}
 		}
     if($r['stockStatus']=='out of stock')$r['quantity']=0;
     if($r['stockStatus']=='pre-order')$r['quantity']=0;
@@ -127,13 +131,14 @@ if(file_exists('..'.DS.THEME.DS.'quickview.html')){
       '/<print brand>/',
       '/<print content=[\"\']?title[\"\']?>/',
       '/<print content=[\"\']?notes[\"\']?>/',
-			'/<print URLENCODED_URL>/'
+			'/<print URLENCODED_URL>/',
+			($r['coming'][0]==1?'~<addToCart>.*?<\/addToCart>~is':'/<[\/]?addTocart>/')
     ],[
       $r['file'],
 			$r['fileALT'],
       $r['id'],
-      ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])),
-      $r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']),
+      ($r['coming'][0]!=1?($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])):''),
+      ($r['coming'][0]!=1?($r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])):''),
       $sideCost,
 			$choices,
 			'',
@@ -148,7 +153,8 @@ if(file_exists('..'.DS.THEME.DS.'quickview.html')){
       $brand,
       $r['title'],
       $r['notes'],
-			urlencode(URL.$r['contentType'].'/'.$r['urlSlug'])
+			urlencode(URL.$r['contentType'].'/'.$r['urlSlug']),
+			''
     ],$html);
     print $html;
   }else

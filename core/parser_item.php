@@ -394,13 +394,13 @@ if(stristr($html,'<item')){
   }else{
     $item=preg_replace([
       '~<service.*?>.*?<\/service>~is',
-      '/<[\/]?inventory>/'
+      ($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')
     ],'',$item,1);
   }
   $address=$edit=$contentQuantity='';
   if(isset($r['contentType'])&&($r['contentType']=='inventory')){
     $item=preg_replace([
-      '/<[\/]?quantity>/',
+      ($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
       '/<print content=[\"\']?quantity[\"\']?>/',
       '/<print content=[\"\']?stock[\"\']?>/'
     ],[
@@ -452,13 +452,22 @@ if(stristr($html,'<item')){
   }
   if(stristr($item,'<brand>')){
     if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
-      $sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
+      $sb=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
       $sb->execute([
         ':id'=>$r['brand']
       ]);
       $rb=$sb->fetch(PDO::FETCH_ASSOC);
       $rb['icon']=rawurldecode($rb['icon']);
-      $brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="media'.DS.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
+      $brand='';
+      if(isset($rb['url'])){
+        $brand=$rb['url']!=''?'<a href="'.$rb['url'].'">':'';
+      }
+      if(isset($rb['title'])){
+        $brand.=$rb['icon']==''?$rb['title']:'<img src="media'.DS.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
+      }
+      if(isset($rb['url'])){
+        $brand.=$rb['url']!=''?'</a>':'';
+      }
       $item=preg_replace([
         '/<[\/]?brand>/',
         '/<print brand>/',

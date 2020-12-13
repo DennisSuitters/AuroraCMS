@@ -59,7 +59,7 @@ We are currently at v0.1.0
 - Easy Theme Selector.
   - Themes are built in such a way that changes in Administration are carried over to other themes. However, this will also depend on the features built into the theme selected.
 - Front End Theme Engine using HTML Style Markup, the use of any CSS or JavaScript Framework.
-- Administration uses jQuery, Modified Bootstrap, iCONS, and other jQuery Addons.
+- Administration uses jQuery, iCONS, and other jQuery Addons.
 - Activity Fingerprint Analysis Logs of Previous Content Changes with Undo, and who made the changes. Examine Content Inputs with Draggable Popover with Undoing.
 - Suggestions Editor to allow Administrators and Content Editor to make Editing Suggestions with Reasons, and Click Adding of Suggestions.
 - SEO Information.
@@ -117,7 +117,6 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
   - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
 - [CodeMirror](https://github.com/codemirror/CodeMirror)
 - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
-  - fullcalendar-bootstrap-theme (Unreleased, but within AuroraCMS, WIP)
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer)
 - [TCPDF](http://www.tcpdf.org/)
 - [Zebra_Image](https://github.com/stefangabos/Zebra_Image)

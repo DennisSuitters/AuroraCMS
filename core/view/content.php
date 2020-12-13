@@ -191,13 +191,12 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 		]);
 	}
 }
+if($view=='testimonials')$show='';
 if($show=='categories'){
-	require_once'core/parser_items.php';
+	require'core/parser_items.php';
 }
-if($view=='testimonials')
-	$show='';
 if($show=='item'){
-	require_once'core/parser_item.php';
+	require'core/parser_item.php';
 }
 if($view=='login'){
 	$html=preg_replace('/<print url>/',URL,$html,1);

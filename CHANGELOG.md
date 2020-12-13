@@ -16,3 +16,4 @@
 - Fix Brand parser throwing errors.
 - Add Coming Soon checkable options to Inventory items.
 - Add 'archive' option to Content Item status, and view by status in Administration.
+- Fixed issue where multiple contentType were not displayed, changed require_once to require, fixed the issue.

@@ -310,7 +310,7 @@ else{
                       <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php if($r['status']=='published'){?><button data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['metaDescription']?$r['metaDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button><?php }?>
+                            <?php if($r['status']=='published'){?><button data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button><?php }?>
                             <a class="btn" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                             <?php if($user['options'][0]==1){?>
                               <button class="btn add <?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
@@ -326,13 +326,13 @@ else{
               </table>
               <div class="col-12 mt-0 text-right">
                 <small>View:
-                  <a class="badger badge-<?php echo$args[2]==''?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>" aria-label="Display Default View">Default</a>&nbsp;
-                  <a class="badger badge-<?php echo$args[2]=='all'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/all" aria-label="Display All Content">All</a>&nbsp;
-                  <a class="badger badge-<?php echo$args[2]=='published'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/published" aria-label="Display Published Items">Published</a>&nbsp;
-                  <a class="badger badge-<?php echo$args[2]=='autopublish'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
-                  <a class="badger badge-<?php echo$args[2]=='unpublished'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
-                  <a class="badger badge-<?php echo$args[2]=='delete'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
-                  <a class="badger badge-<?php echo$args[2]=='archived'?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/archived" aria-label="Display Archived Items">Archived</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]==''?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>" aria-label="Display Default View">Default</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='all'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/all" aria-label="Display All Content">All</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='published'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/published" aria-label="Display Published Items">Published</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='autopublish'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='unpublished'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='delete'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
+                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='archived'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/archived" aria-label="Display Archived Items">Archived</a>&nbsp;
                 </small>
               </div>
             <?php }?>

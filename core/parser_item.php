@@ -173,6 +173,7 @@ if(stristr($html,'<breadcrumb>')){
   $html=preg_replace([
     '/<[\/]?breadcrumb>/',
     '/<json-ld-breadcrumb>/',
+    '~<breadcurrent>.*?<\/breadcurrent>~is',
     '~<breaditems>.*?<\/breaditems>~is'
   ],[
     '',
@@ -709,10 +710,12 @@ if(stristr($html,'<item')){
         $commentsHTML=preg_replace('~<items>.*?<\/items>~is',$comments,$commentsHTML,1);
         $commentsHTML=$r['options'][1]==1?preg_replace('/<\/?comment>/','',$commentsHTML):preg_replace('~<comment>.*?<\/comment>~is','',$commentsHTML,1);
         $commentsHTML=preg_replace('~<items>.*?<\/items>~is','',$commentsHTML,1);
-        $item=preg_replace('~<comments>~is',$commentsHTML,$item,1);
+        $item=preg_replace('/<comments>/',$commentsHTML,$item,1);
       }else
         $item.='Comments for this post is Enabled, but no <strong>"'.THEME.DS.'comments.html"</strong> template file exists';
-    }
-  }
+    }else
+      $item=preg_replace('/<comments>/','',$item,1);
+  }else
+    $item=preg_replace('/<comments>/','',$item,1);
   $html=preg_replace('~<item>.*?<\/item>~is',$item,$html,1);
 }

@@ -368,9 +368,7 @@ if(stristr($html,'<items')){
 	$output='';
 	$si=1;
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
-		if($view=='search'){
-			if($r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
-		}
+		if($view=='search'&&$r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
 		$sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
 		$sr->execute([
 			':contentType'=>$r['contentType']
@@ -417,7 +415,8 @@ if(stristr($html,'<items')){
 			'/<print content=[\"\']?quantity[\"\']?>/',
 			'/<print content=[\"\']?notes[\"\']?>/'
 		],[
-			'','srcset="'.($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'media'.DS.'thumbs'.DS.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').($r['thumb']!=''&&file_exists('media'.DS.'md'.DS.basename($r['thumb']))?'media'.DS.'md'.DS.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').($r['thumb']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['thumb']))?'media'.DS.'sm'.DS.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+			'',
+			'srcset="'.($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'media'.DS.'thumbs'.DS.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').($r['thumb']!=''&&file_exists('media'.DS.'md'.DS.basename($r['thumb']))?'media'.DS.'md'.DS.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').($r['thumb']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['thumb']))?'media'.DS.'sm'.DS.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
 			($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'media'.DS.'thumbs'.DS.basename($r['thumb']):NOIMAGESM),
 			($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file']):NOIMAGE),
 			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),

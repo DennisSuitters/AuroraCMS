@@ -7,7 +7,7 @@
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
  * 
- * Date: 2020-12-08T10:53Z
+ * Date: 2020-12-12T15:45Z
  * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -7281,6 +7281,7 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
     this.$codable = context.layoutInfo.codable;
     this.$window = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(window);
     this.$scrollbar = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('html, body');
+    this.$scrollval = this.$scrollbar.css('overflow');
 
     this.onResize = function () {
       _this.resizeTo({
@@ -7320,7 +7321,7 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
           h: this.$editable.data('orgHeight')
         });
         this.$editable.css('maxHeight', this.$editable.css('orgMaxHeight'));
-        this.$scrollbar.css('overflow', 'visible');
+        this.$scrollbar.css('overflow', this.$scrollval);
       }
 
       this.context.invoke('toolbar.updateFullscreen', this.isFullscreen());
@@ -8622,8 +8623,6 @@ var Buttons_Buttons = /*#__PURE__*/function () {
   }, {
     key: "updateCurrentStyle",
     value: function updateCurrentStyle($container) {
-      var _this6 = this;
-
       var $cont = $container || this.$toolbar;
       var styleInfo = this.context.invoke('editor.currentStyle');
       this.updateBtnStates($cont, {
@@ -8681,20 +8680,22 @@ var Buttons_Buttons = /*#__PURE__*/function () {
 
       if (styleInfo['line-height']) {
         var lineHeight = styleInfo['line-height'];
-        $cont.find('.note-dropdown-line-height li a').each(function (idx, item) {
-          // always compare with string to avoid creating another func.
-          var isChecked = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(item).data('value') + '' === lineHeight + '';
-          _this6.className = isChecked ? 'checked' : '';
+        $cont.find('.note-dropdown-line-height a').each(function (idx, item) {
+          var $item = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(item); // always compare with string to avoid creating another func.
+
+          var isChecked = $item.data('value') + '' === lineHeight + '';
+          $item.toggleClass('checked', isChecked); //        this.className = isChecked ? 'checked' : '';
         });
+        $cont.find('.note-current-line-height').text(lineHeight);
       }
     }
   }, {
     key: "updateBtnStates",
     value: function updateBtnStates($container, infos) {
-      var _this7 = this;
+      var _this6 = this;
 
       external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.each(infos, function (selector, pred) {
-        _this7.ui.toggleBtnActive($container.find(selector), pred());
+        _this6.ui.toggleBtnActive($container.find(selector), pred());
       });
     }
   }, {

@@ -47,7 +47,7 @@ else{?>
             <div class="content-title-actions">
               <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
               <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');return false;"><?php svg('print');?></button>
-              <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></a>
+              <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></button>
               <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
             </div>
           </div>

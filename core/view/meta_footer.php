@@ -18,7 +18,7 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     $footer=preg_replace([
       '/<panorama>/'
     ],[
-      '<script src="core/js/jquery.paver.min.js"></script>'.
+      '<script src="core/js/paver/jquery.paver.min.js"></script>'.
       '<script>$(function(){$(".panorama").paver();});</script>'
     ],$footer);
   }else
@@ -33,14 +33,8 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
       $footer=preg_replace('/<chatscript>/','',$footer);
   }else
     $footer=preg_replace('/<chatscript>/','',$footer,1);
-  if($config['options'][8]==1)
-    $footer=preg_replace('/<gdpr>/','<link rel="stylesheet" type="text/css" href="core/css/gdpr.css"><script src="core/js/gdpr.js"></script><script>gdprCookieNotice({locale:`en`,timeout:500,expiration:30,domain:`'.getDomain(URL).'`,implicit:true,statement:`'.URL.'page/Privacy-Policy/`,performance:[`JSESSIONID`],analytics:[`ga`]});</script>',$footer);
-  else
-    $footer=preg_replace('~<gdpr>~is','',$footer,1);
-  if($config['options'][8]==1)
-    $footer=preg_replace('/<websitevoice>/',($config['wv_site_id']!=''?'<script async src="https://widget.websitevoice.com/'.$config['wv_site_id'].'"></script><script>window.wvData=window.wvData||{};function wvtag(a,b){wvData[a]=b;}wvtag(`id`,`'.$config['wv_site_id'].'`);</script>':''),$footer);
-  else
-    $footer=preg_replace('~<websitevoice>~is','',$footer,1);
+  $footer=preg_replace('/<gdpr>/',($config['options'][8]==1?'<link rel="stylesheet" type="text/css" href="core/js/gdpr/gdpr.css"><script src="core/js/gdpr/gdpr.js"></script><script>gdprCookieNotice({locale:`en`,timeout:500,expiration:30,domain:`'.getDomain(URL).'`,implicit:true,statement:`'.URL.'page/Privacy-Policy/`,performance:[`JSESSIONID`],analytics:[`ga`]});</script>':''),$footer);
+  $footer=preg_replace('/<websitevoice>/',($config['wv_site_id']!=''&&$config['options'][16]==1?'<script async src="https://widget.websitevoice.com/'.$config['wv_site_id'].'"></script><script>window.wvData=window.wvData||{};function wvtag(a,b){wvData[a]=b;}wvtag(`id`,`'.$config['wv_site_id'].'`);</script>':''),$footer);
 }else
   $footer='You MUST include a meta_footer template';
 $content.=$footer;

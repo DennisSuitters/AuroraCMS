@@ -33,7 +33,7 @@ if($c['email']!=''){
     ':id'=>$r['rid']
   ]);
   $i=$si->fetch(PDO::FETCH_ASSOC);
-  require'class.phpmailer.php';
+  require'phpmailer/class.phpmailer.php';
   $mail=new PHPMailer;
   $mail->isSendmail();
   $toname=$c['name'];

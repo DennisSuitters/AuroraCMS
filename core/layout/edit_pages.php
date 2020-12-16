@@ -22,7 +22,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
       <div class="content-title">
         <div class="content-title-heading">
           <div class="content-title-icon"><?php svg('users','i-3x');?></div>
-          <div>Edit Account <?php echo$r['username'];?>:<?php echo$r['name'];?></div>
+          <div>Edit Page: <?php echo$r['title'];?></div>
           <div class="content-title-actions">
             <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>

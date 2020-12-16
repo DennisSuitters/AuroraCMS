@@ -28,7 +28,7 @@
 		<link rel="icon" href="core/images/favicon.png">
 		<link rel="apple-touch-icon" href="core/images/favicon.png">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-		<link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'style.css';?>">
+		<link rel="stylesheet" type="text/css" href="core/css/style.css">
 	</head>
 	<body class="flex-row">
 		<main class="container">
@@ -205,8 +205,8 @@
 					</div>
 				</div>
 			</div>
-			<script src="core/js/jquery.min.js"></script>
-			<script src="core/js/js.js"></script>
+			<script src="core/js/jquery/jquery.min.js"></script>
+			<script src="core/js/aurora.min.js"></script>
 			<script>
 				function isValid(){
 					if($(this).valid()){

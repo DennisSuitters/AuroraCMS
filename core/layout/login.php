@@ -35,7 +35,7 @@
     <link rel="alternate" hreflang="<?php echo$config['language'];?>" href="<?php echo URL;?>">
     <link rel="icon" href="<?php echo$favicon;?>">
     <link rel="apple-touch-icon" href="<?php echo URL.$favicon;?>">
-    <Link rel="stylesheet" type="text/css" href="<?php echo'core'.DS.'css'.DS.'style.css';?>">
+    <Link rel="stylesheet" type="text/css" href="core/css/style.css">
   </head>
   <body class="<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}?>">
     <main>
@@ -43,7 +43,7 @@
         <div class="col-12 col-md-6 p-0 m-0 vert-shadow d-none d-md-block <?php currentSeason();?>">
           <time class="logindate mr-3" datetime="<?php echo date("Y-m-d\TH:i:s");?>"><?php echo date($config['dateFormat']);?></time>
         </div>
-        <div class="col-12 col-md-6 mt-5 p-5">
+        <div class="col-12 col-md-6 p-5">
           <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
           <img class="login-logo m-4" src="core/images/auroracms.svg" alt="AuroraCMS">
           <form id="login" method="post" action="<?php echo (requestSameDomain()==true?$_SERVER['HTTP_REFERER']:rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
@@ -82,8 +82,8 @@
         </div>
       </div>
     </main>
-    <script src="<?php echo'core'.DS.'js'.DS.'jquery.min.js';?>"></script>
-    <script src="<?php echo'core'.DS.'js'.DS.'js.js';?>"></script>
+    <script src="core/js/jquery/jquery.min.js"></script>
+    <script src="core/js/aurora.min.js"></script>
     <script>
       if('serviceWorker' in navigator){
         window.addEventListener('load',()=>{

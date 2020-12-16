@@ -8,9 +8,9 @@
 @import url('stylesheet-forms.css');
 @import url('stylesheet-xtras.css');
 @import url('stylesheet-icons.css');
-@import url('summernote.min.css');
-@import url('fancybox.css');
-@import url('fullcalendar.min.css');
+@import url('../js/summernote/summernote.min.css');
+@import url('../js/fancybox/fancybox.css');
+@import url('../js/fullcalendar/fullcalendar.min.css');
 
 .aurora,
 .winter,

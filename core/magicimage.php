@@ -22,7 +22,7 @@ $s->execute([
   ':id'=>$id
 ]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-include'zebra_image.php';
+include'zebraimage/zebra_image.php';
 $image=new Zebra_Image();
 $image->auto_handle_exif_orientation=false;
 if($act=='thumb'){

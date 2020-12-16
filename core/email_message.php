@@ -35,7 +35,7 @@ $atts=filter_input(INPUT_POST,'atts',FILTER_SANITIZE_STRING);
 $body=(isset($_POST['bod'])?$_POST['bod']:'').'<br>'.($user['email_signature']!=''?$user['email_signature']:$config['email_signature']).'<br>';
 $msgbody=$body;
 if($to!=''){
-  require'class.phpmailer.php';
+  require'phpmailer/class.phpmailer.php';
   if($id!=0){
     $ms=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `id`=:id");
     $ms->execute([

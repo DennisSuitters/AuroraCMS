@@ -27,7 +27,7 @@ $mhtml=$blacklisted='';
 include'imapreader/Email.php';
 include'imapreader/EmailAttachment.php';
 include'imapreader/Reader.php';
-include'class.spamfilter.php';
+include'spamfilter/class.spamfilter.php';
 function strip_html_tags($t,$l=400){
   $t=preg_replace([
     '@<head[^>]*?>.*?</head>@siu',

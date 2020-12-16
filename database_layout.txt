@@ -67,7 +67,7 @@ config
     11  Enable Visitor Tracking
     12  Enable Administration Acivity Tracking
     13  Enable Chat
-    14  Facebook Messenger insted of Integrated Chat
+    14  Facebook Messenger instead of Integrated Chat
     15  Email Chat Notifications to Nominated Accounts
     16  Enable Website Voice Service
     17  Lock Down Developer Options

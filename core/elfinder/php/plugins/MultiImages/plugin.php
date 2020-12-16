@@ -1,6 +1,6 @@
 <?php
 
-require '../../zebra_image.php';
+require '../../zebraimage/zebra_image.php';
 
 class elFinderPluginMultiImages extends elFinderPlugin {
   private $options = [];

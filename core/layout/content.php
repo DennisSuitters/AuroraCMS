@@ -326,7 +326,7 @@ else{
               </table>
               <div class="col-12 mt-0 text-right">
                 <small>View:
-                  <a class="badger badge-<?php echo(isset($args[2])&&$args[2]==''?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>" aria-label="Display Default View">Default</a>&nbsp;
+                  <a class="badger badge-<?php echo(!isset($args[2])?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>" aria-label="Display Default View">Default</a>&nbsp;
                   <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='all'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/all" aria-label="Display All Content">All</a>&nbsp;
                   <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='published'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/published" aria-label="Display Published Items">Published</a>&nbsp;
                   <a class="badger badge-<?php echo(isset($args[2])&&$args[2]=='autopublish'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/type/'.$args[1];?>/autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;

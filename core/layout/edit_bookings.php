@@ -240,7 +240,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
     </div>
   </section>
 </main>
-<script src="core/js/jSignature.min.js"></script>
+<script src="core/js/jSignature/jSignature.min.js"></script>
 <script>
   function saveSignature(id,t,c){
     var datapair = $("#signature").jSignature("getData", "default");

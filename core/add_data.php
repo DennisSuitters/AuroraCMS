@@ -14,7 +14,7 @@
 $getcfg=true;
 require'db.php';
 echo'<script>';
-include'zebra_image.php';
+include'zebraimage/zebra_image.php';
 include'sanitise.php';
 define('THEME','..'.DS.'layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');

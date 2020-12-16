@@ -13,8 +13,8 @@
  */
 $getcfg=true;
 require'db.php';
-include'class.projecthoneypot.php';
-include'class.spamfilter.php';
+include'projecthoneypot/class.projecthoneypot.php';
+include'spamfilter/class.spamfilter.php';
 $theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $error=0;
 $notification=$blacklisted='';
@@ -119,7 +119,7 @@ if($act=='add_booking'){
 				$e=$db->errorInfo();
 				if(is_null($e[2])){
 					if($config['email']!=''){
-						require'class.phpmailer.php';
+						require'phpmailer/class.phpmailer.php';
 						$mail=new PHPMailer;
 						$mail->isSendmail();
 						$mail->SetFrom($email,$name);

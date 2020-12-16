@@ -13,7 +13,7 @@
  */
 $getcfg=true;
 require'db.php';
-include'tcpdf'.DS.'tcpdf.php';
+include'tcpdf/tcpdf.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 $s->execute([

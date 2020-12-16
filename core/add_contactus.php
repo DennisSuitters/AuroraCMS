@@ -13,8 +13,8 @@
  */
 $getcfg=true;
 require'db.php';
-include'class.projecthoneypot.php';
-include'class.spamfilter.php';
+include'projecthoneypot/class.projecthoneypot.php';
+include'spamfilter/class.spamfilter.php';
 $theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $error=0;
 $notification=$blacklisted='';
@@ -106,7 +106,7 @@ if($act=='add_message'){
         }
 				if($config['email']!=''){
 					if($error==0){
-						require'class.phpmailer.php';
+						require'phpmailer/class.phpmailer.php';
 						$mail=new PHPMailer;
             $mail->isSendmail();
   					$mail->SetFrom($email, $name);
@@ -129,7 +129,7 @@ if($act=='add_message'){
 						$toname=$email;
 						$mail2->AddAddress($email);
 						$mail2->IsHTML(true);
-						$subject=isset($config['contactAutoReplySubject'])&&$config['contactAutoReplySubject']=''?$config['contactAutoReplySubject']:'contact_autoreplysubject';
+						$subject=isset($config['contactAutoReplySubject'])&&$config['contactAutoReplySubject']=''?$config['contactAutoReplySubject']:'{business} Contact Confirmation on {date}';
 						$subject=str_replace([
 							'{business}',
 							'{date}'
@@ -138,7 +138,7 @@ if($act=='add_message'){
 							date($config['dateFormat'],$ti)
 						],$subject);
 						$mail2->Subject=$subject;
-						$msg2=isset($config['contactAutoReplyLayout'])&&$config['contactAutoReplyLayout']!=''?rawurldecode($config['contactAutoReplyLayout']):'contact_autoreplylayout';
+						$msg2=isset($config['contactAutoReplyLayout'])&&$config['contactAutoReplyLayout']!=''?rawurldecode($config['contactAutoReplyLayout']):'<p>Hi {first},</p><p>Thank you for contacting {business}, someone will get back to you ASAP.</p><p>Kind Regards,</p><p>{business}</p><p><br></p>';
 						$n=explode(' ',$name);
 						$namefirst=$n[0];
 						$namelast=end($n);

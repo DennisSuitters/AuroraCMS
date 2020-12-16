@@ -31,7 +31,7 @@ $u->execute([
   ':tis'=>time(),
   ':id'=>$id
 ]);
-include'class.phpmailer.php';
+include'phpmailer/class.phpmailer.php';
 if($config['email']!=''){
   $mail=new PHPMailer;
   $body=rawurldecode($news['notes']);

@@ -17,3 +17,6 @@
 - Add Coming Soon checkable options to Inventory items.
 - Add 'archive' option to Content Item status, and view by status in Administration.
 - Fixed issue where multiple contentType were not displayed, changed require_once to require, fixed the issue.
+- ReOrganized the Stylesheets,JavaScript/jQuery, and PHP scripts for better management and cull unused scripts.
+- Remove Unneeded files from external libraries, and minify/uglify source to reduce footprint.
+- Update other projects PHP Classes and minified to save space.

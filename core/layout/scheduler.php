@@ -88,7 +88,7 @@ $s->execute([
             $eColor='secondary';?>
           {
             id:'<?php echo$r['id'];?>',
-            title:`<?php echo ucfirst($r['contentType']).`:&nbsp;`.$r['title'];?>`,
+            title:`<?php echo ucfirst($r['contentType']).`: `.$r['title'];?>`,
             start:`<?php echo date("Y-m-d H:i:s",$r['pti']);?>`,
             allDay:true,
             customHtml:`<div class="badger badge-<?php echo$eColor;?> events-layer text-left" data-contentType="<?php echo ucfirst($r['contentType']);?>"><?php echo$r['title'];?>` +

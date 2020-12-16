@@ -12,9 +12,9 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($args[0])&&$args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_dashboard.php';
+  include'core/layout/set_dashboard.php';
 else{
-  include'core'.DS.'class.parsedown.php';?>
+  include'core/parsedown/class.parsedown.php';?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">

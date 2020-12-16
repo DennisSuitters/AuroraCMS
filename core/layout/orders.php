@@ -158,6 +158,10 @@ if($user['options'][4]==1){
     if($args[0]=='recurring'){
       $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `recurring`='1' ORDER BY `ti` DESC");
       $s->execute();
+    }
+    if($args[0]=='overdue'){
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `status`='overdue' ORDER BY `ti` DESC");
+      $s->execute();
     }?>
     <main>
       <section id="content">
@@ -167,7 +171,7 @@ if($user['options'][4]==1){
               <div class="content-title-icon"><?php svg('order','i-3x');?></div>
               <div>Orders</div>
               <div class="content-title-actions">
-                <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" aria="Orders Settings">'.svg2('settings').'</a>':'';?>
+                <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" aria-label="Orders Settings">'.svg2('settings').'</a>':'';?>
                 <?php if($args[0]!=''){
                   if($user['options'][4]==1){
                     if($args[0]=='quotes')echo'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" aria-label="Add Quote">'.svg2('add').'</a>';
@@ -183,7 +187,7 @@ if($user['options'][4]==1){
           </div>
         </div>
         <div class="container-fluid p-0">
-          <div class="card border-radius-0 shadow">
+          <div class="card border-radius-0 overflow-visible shadow">
             <div id="notifications" role="alert"></div>
             <table class="table-zebra" id="stupidtable">
               <thead>
@@ -246,6 +250,17 @@ if($user['options'][4]==1){
                 <?php }?>
               </tbody>
             </table>
+            <div class="col-12 mt-0 text-right">
+              <small>View:
+                <a class="badger badge-<?php echo(!isset($args[0])?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders" aria-label="Display All Orders">All</a>&nbsp;
+                <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='quotes'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/quotes" aria-label="Display Quote Orders">Quotes</a>&nbsp;
+                <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='invoices'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/invoices" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
+                <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='pending'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/pending" aria-label="Display Pending Orders">Pending</a>&nbsp;
+                <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='recurring'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/recurring" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
+                <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='overdue'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/overdue" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
+                <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='archived'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/archived" aria-label="Display Archived Items">Archived</a>&nbsp;
+              </small>
+            </div>
             <?php include'core/layout/footer.php';?>
           </div>
         </div>

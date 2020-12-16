@@ -13,8 +13,8 @@
  */
 $getcfg=true;
 require'db.php';
-include'class.projecthoneypot.php';
-include'class.spamfilter.php';
+include'projecthoneypot/class.projecthoneypot.php';
+include'spamfilter/class.spamfilter.php';
 $theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $ti=time();
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -141,7 +141,7 @@ if($message == "|*|*|*|*|*|"){
 			':lti'=>$cuati
 		]);
 		if($cua->rowCount()<1){
-			require'class.phpmailer.php';
+			require'phpmailer/class.phpmailer.php';
 			$sa=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND liveChatNotification=1");
 			$sa->execute();
 			echo'<div class="alert alert-info" role="alert">There are currently no operators available to answer your queries, however you may leave a message here so a representative can get back to you.</div>';

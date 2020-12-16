@@ -13,7 +13,7 @@
  */
 $getcfg=true;
 require'db.php';
-include'tcpdf'.DS.'tcpdf.php';
+require'tcpdf/tcpdf.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $w=filter_input(INPUT_GET,'w',FILTER_SANITIZE_STRING);
 $act=filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
@@ -276,7 +276,7 @@ echo'<script>';
 if($act=='print'){?>
 	window.top.window.open('media/orders/<?php echo$oid;?>.pdf','_blank');
 <?php }else{
-	require'class.phpmailer.php';
+	require'phpmailer/class.phpmailer.php';
 	$mail=new PHPMailer;
 	$mail->isSendmail();
 	$toname=$c['name']!=''?$c['name']:$c['business'];

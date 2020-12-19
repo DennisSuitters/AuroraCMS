@@ -182,10 +182,7 @@ if(stristr($html,'<buildMenu')){
 	$menu='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$buildMenu=$htmlMenu;
-		if($view==$r['contentType']||$view==$r['contentType'].'s')
-			$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu);
-		else
-			$buildMenu=preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
+		$buildMenu=$view==$r['contentType']||$view==$r['contentType'].'s'?preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu):preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
 		if($r['contentType']!='index'){
 			if(isset($r['url'][0])&&$r['url'][0]=='#')
 				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),$buildMenu);

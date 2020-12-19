@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -23,14 +22,17 @@ $s->execute([
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $tbl=$r['t'];
 $col=$r['c'];
-if($col=='notes'){?>
-  if(window.top.window.$('.summernote')){
-    window.top.window.$('.summernote').summernote('code','<?php echo rawurldecode($r['notes']);?>');
-  }
-<?php }else{?>
-  if(window.top.window.$('#<?php echo$col;?>')){
-    window.top.window.$('#<?php echo$col;?>').val('<?php echo$r['notes'];?>');
-    window.top.window.$('#save<?php echo$col;?>').addClass('btn-danger');
-  }
-<?php }
-echo'</script>';
+if($col=='notes'){
+  echo'<script>';
+    'if(window.top.window.$(".summernote")){'.
+      'window.top.window.$(".summernote").summernote("code",`'.rawurldecode($r['notes']).'`);'.
+    '}'.
+  '</script>';
+}else{
+  echo'<script>';
+    'if(window.top.window.$("#'.$col.'")){'.
+    'window.top.window.$("#'.$col.'").val(`'.$r['notes'].'`);'.
+    'window.top.window.$("#save'.$col.'").addClass("btn-danger");'.
+    '}'.
+  '</script>';
+}

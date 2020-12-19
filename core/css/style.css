@@ -245,6 +245,20 @@ header nav ul.ml-auto {
   margin-top: 40px;
   margin-right: 50px; }
 
+@media (max-width: 360px) {
+  header .brand {
+    position: absolute;
+    top: 25px;
+    left: 28px; }
+
+  header .brand img {
+    width: 300px; }
+
+  header nav ul.nav-left {
+    margin-top: 60px;
+    margin-left: 310px; }
+}
+
 header nav ul li a {
   color: #fff; }
 
@@ -668,6 +682,29 @@ header nav.horizontal li a {
   -webkit-animation: swing-in-top-fwd .5s cubic-bezier(.175, .885, .320, 1.275) both;
 	        animation: swing-in-top-fwd .5s cubic-bezier(.175, .885, .320, 1.275) both; }
 
+@media (max-width: 360px) {
+  html, body {
+    overflow-x:none!important ;
+  }
+  header .account {
+    width: 360px; }
+
+  header nav.horizontal {
+    left: 66px;
+    width: 360px; }
+
+  #sidebar {
+    width: 360px; }
+
+  #sidebar nav a {
+    width: 360px; }
+
+  #sidebar nav ul li ul {
+    width: 360px;
+    height: auto; }
+
+}
+
 .messages-menu { }
 
 .messages-menu .btn {
@@ -732,7 +769,7 @@ header nav.horizontal li a {
   transition: .3s ease-in; }
 
 #content.navsmall {
-  margin-left: 240px; }
+  margin-left: 360px; }
 
 @media (max-width: 361px) {
   #sidebar.navsmall {
@@ -761,7 +798,7 @@ header nav.horizontal li a {
     transition: .3s ease-in; }
 
   #sidebar.navsmall {
-    margin-left: -240px;
+    margin-left: -360px;
     transition: .3s ease-in; }
 }
 

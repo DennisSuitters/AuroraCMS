@@ -145,7 +145,7 @@ if(stristr($html,'<items')){
         $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
       $items=preg_replace('/<[\/]?controls>/','',$items);
     }
-    require'core'.DS.'parser.php';
+    require'core/parser.php';
     $output.=$items;
     $counti++;
     if($counti>$count)break;
@@ -163,7 +163,7 @@ $html=preg_replace([
   '~<item>.*?<\/item>~is',
   '/<[\/]?items>/'
 ],'',$html);
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $seoTitle='404 Error'.($config['business']!=''?' - '.$config['business']:'');
 $metaRobots='index,follow';
 $seoCaption='';

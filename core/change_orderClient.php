@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $oid=filter_input(INPUT_GET,'oid',FILTER_SANITIZE_NUMBER_INT);
@@ -41,15 +40,15 @@ if($id==0){
     ':id'=>$id
   ]);
   $client=$q->fetch(PDO::FETCH_ASSOC);
-}?>
-  window.top.window.$('#to').html(`<?php echo'<strong>'.$client['username'].($client['name']!=''?' ['.$client['name'].']':'').'<br>'.
-    ($client['business']!=''?' -> '.$client['business'].'<br>':'').'</strong>'.
-    '<small>'.
-      ($client['email']!=''?'Email: '.$client['email'].'<br>':'').
-      ($client['phone']!=''?'Phone: '.$client['phone'].'<br>':'').
-      ($client['mobile']!=''?'Mobile: '.$client['mobile'].'<br>':'').
-      $client['address'].', '.$client['suburb'].', '.$client['city'].'<br>'.
-      $client['state'].', '.($client['postcode']!=0?', '.$client['postcode']:'').
-    '</small>';?>`);
-<?php
-echo'</script>';
+}
+echo'<script'.
+      'window.top.window.$("#to").html(`<strong>'.$client['username'].($client['name']!=''?' ['.$client['name'].']':'').'<br>'.
+        ($client['business']!=''?' -> '.$client['business'].'<br>':'').'</strong>'.
+        '<small>'.
+          ($client['email']!=''?'Email: '.$client['email'].'<br>':'').
+          ($client['phone']!=''?'Phone: '.$client['phone'].'<br>':'').
+          ($client['mobile']!=''?'Mobile: '.$client['mobile'].'<br>':'').
+          $client['address'].', '.$client['suburb'].', '.$client['city'].'<br>'.
+          $client['state'].', '.($client['postcode']!=0?', '.$client['postcode']:'').
+        '</small>`);'.
+    '</script>';

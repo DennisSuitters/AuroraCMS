@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-define('DS',DIRECTORY_SEPARATOR);
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'id',FILTER_SANITIZE_STRING);
-unlink('..'.DS.'media'.DS.'backup'.DS.$id.'.sql.gz');
+unlink('../media/backup/'.$id.'.sql.gz');
 echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';

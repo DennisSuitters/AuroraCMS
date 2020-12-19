@@ -13,7 +13,7 @@
  */
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
-require'..'.DS.'..'.DS.'core'.DS.'db.php';
+require'../db.php';
 define('SESSIONID',session_id());
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -114,7 +114,7 @@ if(stristr($html,'<items>')){
         $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
       $items=preg_replace('/<[\/]?controls>/','',$items);
     }
-    require'..'.DS.'parser.php';
+    require'../parser.php';
     $output.=$items;
   }
 $html=$output;

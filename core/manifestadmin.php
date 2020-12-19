@@ -16,7 +16,7 @@ $getcfg=true;
 require'db.php';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-define('FAVICON','images'.DS.'favicon.png');
+define('FAVICON','images/favicon.png');
 define('FAVICONTYPE','image/png');
 echo json_encode([
   "name"=>'AuroraCMS',

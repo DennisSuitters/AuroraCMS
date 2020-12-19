@@ -221,10 +221,7 @@ if(stristr($html,'<buildMenu')){
 		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 			$menuLogin='';
 		else{
-			if($config['options'][3]==0)
-				$menuLogin=preg_replace('~<signup>.*?<\/signup>~is','',$menuLogin,1);
-			else
-				$menuLogin=preg_replace('/<[\/]?signup>/','',$menuLogin);
+			$menuLogin=preg_replace($config['options'][3]==0?'~<signup>.*?<\/signup>~is':'/<[\/]?signup>/','',$menuLogin);
 			$htmlMenu.=$menuLogin;
 		}
 	}

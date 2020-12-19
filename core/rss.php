@@ -13,20 +13,20 @@
  */
 header('Content-Type:application/rss+xml;charset=ISO-8859-1');
 require'db.php';
-$config=$db->query("SELECT `seoTitle`,`seoCaption` FROM `".$prefix."config"` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `seoTitle`,`seoCaption` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($args[0]==''||$args[0]=='index')$args[0]='%_%';
 $ti=time();
-echo'<?xml version="1.0"?>';?>
-<rss version="2.0">
-  <channel>
-    <title><?php echo$config['seoTitle'];?></title>
-    <description><?php echo$config['seoCaption'];?></description>
-    <link><?php echo URL;?></link>
-    <copyright>Copyright <?php echo date('Y',$ti).' '.$config['seoTitle'];?></copyright>
-    <generator>AuroraCMS - https://github.com/DiemenDesign/AuroraCMS</generator>
-    <pubDate><?php echo strftime("%a, %d %b %Y %T %Z",$ti);?></pubDate>
-    <ttl>60</ttl>
-<?php $deffiletype=image_type_to_mime_type(exif_imagetype(FAVICON));
+echo'<?xml version="1.0"?>'.
+  '<rss version="2.0">'.
+    '<channel>'.
+      '<title>'.$config['seoTitle'].'</title>'.
+      '<description>'.$config['seoCaption'].'</description>'.
+      '<link>'.URL.'</link>'.
+      '<copyright>Copyright '.date('Y',$ti).' '.$config['seoTitle'].'</copyright>'.
+      '<generator>AuroraCMS - https://github.com/DiemenDesign/AuroraCMS</generator>'.
+      '<pubDate>'.strftime("%a, %d %b %Y %T %Z",$ti).'</pubDate>'.
+      '<ttl>60</ttl>';
+$deffiletype=image_type_to_mime_type(exif_imagetype(FAVICON));
 $deflength=filesize(FAVICON);
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status`='published' AND `internal`!='1' ORDER BY `ti` DESC LIMIT 25");
 $s->execute([
@@ -37,16 +37,16 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
   $filetype=$deffiletype;
   $length=$deflength;
   if($r['contentType']!='gallery'){
-    if($r['thumb']!=''&&file_exists('media'.DS.$r['thumb'])&&!stristr('http',$r['thumb'])){
+    if($r['thumb']!=''&&file_exists('media/'.$r['thumb'])&&!stristr('http',$r['thumb'])){
       $img=$r['thumb'];
       $filetype=image_type_to_mime_type(exif_imagetype($r['thumb']));
       $file=basename($r['thumb']);
-      $length=filesize('media'.DS.$file);
-    }elseif($r['file']&&file_exists('media'.DS.$r['file'])&&!stristr('http',$r['file'])){
+      $length=filesize('media/'.$file);
+    }elseif($r['file']&&file_exists('media/'.$r['file'])&&!stristr('http',$r['file'])){
       $img=$r['file'];
       $filetype=image_type_to_mime_type(exif_imagetype($r['file']));
       $file=basename($r['file']);
-      $length=filesize('media'.DS.$file);
+      $length=filesize('media/'.$file);
     }else{
       $match=preg_match('/(src=["\'](.*?)["\'])/',rawurldecode($r['notes']),$match);
       $split=preg_split('/["\']/',$match[0]);
@@ -57,23 +57,23 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
       }
     }
   }else{
-    if(file_exists('media'.DS.$r['thumb'])){
-      $img='media'.DS.$r['thumb'];
-      $filetype=image_type_to_mime_type(exif_imagetype('media'.DS.$r['thumb']));
-      $length=filesize('media'.DS.$r['thumb']);
+    if(file_exists('media/'.$r['thumb'])){
+      $img='media/'.$r['thumb'];
+      $filetype=image_type_to_mime_type(exif_imagetype('media/'.$r['thumb']));
+      $length=filesize('media/'.$r['thumb']);
     }else{
-      $img='media'.DS.$r['file'];
-      $filetype=image_type_to_mime_type(exif_imagetype('media'.DS.$r['file']));
-      $length=filesize('media'.DS.$r['file']);
+      $img='media/'.$r['file'];
+      $filetype=image_type_to_mime_type(exif_imagetype('media/'.$r['file']));
+      $length=filesize('media/'.$r['file']);
     }
-  }?>
-    <item>
-      <title><?php echo$r['title'].' - '.ucfirst($r['contentType']).' - '.$config['seoTitle'];?></title>
-      <description><?php echo($r['seoCaption']==""?strip_tags(rawurldecode($r['notes'])):$r['seoCaption']);?></description>
-      <link><?php echo URL.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['title'])).'/';?></link>
-      <pubDate><?php echo strftime("%a, %d %b %Y %T %Z",$r['ti']);?></pubDate>
-      <enclosure url="<?php echo$img;?>" length="<?php echo$length;?>" type="<?php echo$filetype;?>"/>
-    </item>
-<?php }?>
-  </channel>
-</rss>
+  }
+  echo'<item>'.
+    '<title>'.$r['title'].' - '.ucfirst($r['contentType']).' - '.$config['seoTitle'].'</title>'.
+    '<description>'.($r['seoCaption']==""?strip_tags(rawurldecode($r['notes'])):$r['seoCaption']).'</description>'.
+    '<link>'.URL.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['title'])).'/'.'</link>'.
+    '<pubDate>'.strftime("%a, %d %b %Y %T %Z",$r['ti']).'</pubDate>'.
+    '<enclosure url="'.$img.'" length="'.$length.'" type="'.$filetype.'"/>'.
+  '</item>';
+}
+echo'</channel>'.
+'</rss>';

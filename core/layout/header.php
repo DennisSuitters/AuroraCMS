@@ -23,7 +23,7 @@
         </a>
       </li>
     </ul>
-    <ul class="ml-auto">
+    <ul class="ml-auto d-none d-md-block">
       <li id="searchbox">
         <form class="form-row" method="post" action="<?php echo URL.$settings['system']['admin'].'/search';?>">
           <input name="s" type="text" placeholder="What are you looking for?">

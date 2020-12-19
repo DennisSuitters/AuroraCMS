@@ -14,8 +14,8 @@
 $getcfg=true;
 require'db.php';
 echo'<script>';
-include'zebraimage/zebra_image.php';
-include'sanitise.php';
+require'zebraimage/zebra_image.php';
+require'sanitise.php';
 define('THEME','..'.DS.'layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');
@@ -48,11 +48,10 @@ if($act!=''){
         ':ti'=>$ti
       ]);
       $e=$db->errorInfo();
-      if(is_null($e[2])){?>
-  window.top.window.toastr["success"]("Contact added as Client");
-<?php }else{?>
-  window.top.window.toastr["error"]("There was an issue adding the Data!");
-<?php }
+      if(is_null($e[2]))
+  			echo'window.top.window.toastr["success"]("Contact added as Client");';
+			else
+  			echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
       break;
     case'add_comment':
       $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
@@ -92,14 +91,28 @@ if($act!=''){
 							$avatar='http://gravatar.com/avatar/'.md5($c['gravatar']);
             elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))
 							$avatar=$c['gravatar'];
-					}?>
-	  window.top.window.$('#comments').append('<?php echo'<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd"><div class="col-1"><img style="max-width:64px;height:64px;" alt="User" src="'.$avatar.'"></div><div class="col-9"><h6 class="media-heading">'.$name.'</h6><time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.$da.'</div><div class="col-2 text-right align-top" id="controls-'.$id.'"><form target="sp" method="post" action="core/purge.php"><input name="id" type="hidden" value="'.$id.'"><input name="t" type="hidden" value="comments"><button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button></form></div></div>';?>');
-<?php   }else{?>
-  window.top.window.toastr["error"]("There was an issue adding the Data!");
-<?php   }
-      }else{?>
-  window.top.window.toastr["error"]("The Email enter is not valid!");
-<?php }
+					}
+	  			echo'window.top.window.$("#comments").append(`<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd">'.
+						'<div class="col-1">'.
+							'<img style="max-width:64px;height:64px;" alt="User" src="'.$avatar.'">'.
+						'</div>'.
+						'<div class="col-9">'.
+							'<h6 class="media-heading">'.$name.'</h6>'.
+							'<time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.
+							$da.
+						'</div>'.
+						'<div class="col-2 text-right align-top" id="controls-'.$id.'">'.
+							'<form target="sp" method="post" action="core/purge.php">'.
+								'<input name="id" type="hidden" value="'.$id.'">'.
+								'<input name="t" type="hidden" value="comments">'.
+								'<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+							'</form>'.
+						'</div>'.
+					'</div>`);';
+   			}else
+  				echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
+      }else
+  			echo'window.top.window.toastr["error"]("The Email enter is not valid!");';
       break;
     case'add_avatar':
 		case'add_tstavatar':
@@ -135,11 +148,10 @@ if($act!=''){
             $image->target_path='..'.DS.'media'.DS.'avatar'.DS.'avatar'.$fn;
             $image->resize(150,150,ZEBRA_IMAGE_CROP_CENTER);
             rename($tp,'..'.DS.'media'.DS.'avatar'.DS.'avatar'.$fn);
-						if($act=='add_tstavatar'){?>
-	window.top.window.$('#tstavatar').attr('src','media/avatar/avatar<?php echo$fn.'?'.time();?>');
-<?php 			}else{?>
-  window.top.window.$('.img-avatar').attr('src','media/avatar/avatar<?php echo$fn.'?'.time();?>');
-<?php 			}
+						if($act=='add_tstavatar')
+							echo'window.top.window.$("#tstavatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
+ 						else
+  						echo'window.top.window.$(".img-avatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
 					}
         }
       }
@@ -171,8 +183,8 @@ if($act!=''){
       $total=0;
       $html='';
       $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE oid=:oid ORDER BY ti ASC,title ASC");
-      $q->execute([':oid'=>$oid]);?>
-  window.top.window.$('#updateorder').html('<?php
+      $q->execute([':oid'=>$oid]);
+  		echo'window.top.window.$("#updateorder").html(`';
       while($oi=$q->fetch(PDO::FETCH_ASSOC)){
         $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
         $s->execute([
@@ -203,8 +215,8 @@ if($act!=''){
 				'<td class="text-right"><strong>'.$total.'</strong></td>'.
 				'<td role="cell">&nbsp;</td>'.
 			'</tr>';
-  ?>');
-<?php break;
+  	echo'`);';
+		break;
   }
 }
 echo'</script>';

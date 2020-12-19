@@ -21,7 +21,7 @@ if(!isset($_COOKIE['theme'])){
   setcookie("theme","",time()+(60*60*24*14));
   $_COOKIE['theme']='';
 }
-require'core'.DS.'db.php';
+require'core/db.php';
 if(isset($_GET['previous']))header("location:".$_GET['previous']);
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $ti=time();
@@ -33,21 +33,10 @@ $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentTy
 $sp->execute([
   ':contentType'=>$view
 ]);
-include'core'.DS.'login.php';
+require'core/login.php';
 if($_SESSION['rank']>399){
-  if(isset($_SESSION['rank'])){
-    if($_SESSION['rank']==100)$rankText='Subscriber';
-    if($_SESSION['rank']==200)$rankText='Member';
-    if($_SESSION['rank']==300)$rankText='Client';
-    if($_SESSION['rank']==400)$rankText='Contributor';
-    if($_SESSION['rank']==500)$rankText='Author';
-    if($_SESSION['rank']==600)$rankText='Editor';
-    if($_SESSION['rank']==700)$rankText='Moderator';
-    if($_SESSION['rank']==800)$rankText='Manager';
-    if($_SESSION['rank']==900)$rankText='Administrator';
-    if($_SESSION['rank']==1000)$rankText='Developer';
-  }else
-    $rankText='Visitor';
+  if(isset($_SESSION['rank']))
+    $rankText=rank($_SESSION['rank']);
   $nous=$db->prepare("SELECT COUNT(`id`) AS cnt FROM `".$prefix."login` WHERE `lti`>:lti AND `rank`!=1000");
   $nous->execute([
     ':lti'=>time()-300
@@ -61,16 +50,16 @@ if($_SESSION['rank']>399){
   $nu=$db->query("SELECT COUNT(`id`) AS cnt FROM `".$prefix."login` WHERE `activate`!='' AND `active`=0")->fetch(PDO::FETCH_ASSOC);
   $nt=$db->query("SELECT COUNT(`id`) AS cnt FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `status`!='published'")->fetch(PDO::FETCH_ASSOC);
   $navStat=$nc['cnt']+$nr['cnt']+$nm['cnt']+$po['cnt']+$nb['cnt']+$nu['cnt']+$nt['cnt'];
-  require'core'.DS.'layout'.DS.'meta_head.php';
-  require'core'.DS.'layout'.DS.'header.php';
-  require'core'.DS.'layout'.DS.'sidebar.php';
+  require'core/layout/meta_head.php';
+  require'core/layout/header.php';
+  require'core/layout/sidebar.php';
   if($view=='add'){
     if($args[0]=='bookings')
-      require'core'.DS.'layout'.DS.'bookings.php';
+      require'core/layout/bookings.php';
     else
-      require'core'.DS.'layout'.DS.'content.php';
+      require'core/layout/content.php';
   }else
-    require'core'.DS.'layout'.DS.$view.'.php';
-  require'core'.DS.'layout'.DS.'meta_footer.php';
+    require'core/layout/'.$view.'.php';
+  require'core/layout/meta_footer.php';
 }else
-  require'core'.DS.'layout'.DS.'login.php';
+  require'core/layout/login.php';

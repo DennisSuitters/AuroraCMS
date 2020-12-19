@@ -32,16 +32,16 @@ if($s->rowCount()>0){
 		}
   	echo'<form target="sp" method="get" action="core/purge.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="c" type="hidden" value="'.$r['sid'].'"><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);">'.svg2('trash').'</button></form></span><small>'.$r['name'].'</small><br><small>'.$r['email'].'</small><br><small><small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.($r['status']=='unseen'?'<span class="btn-group float-right"><small class="badger badge-danger">Unread</small></span>':'<span class="btn-group float-right"><small class="badger badge-success">Read</small></span>').'</span>';
   }
-}?>
-<script>
-$(".chatListItem").removeClass('active');
-$('[data-sid="<?php echo$sid;?>"]').addClass('active');
-$(".chatListItem").click(function(e){
-  $('#chatsid').val($(this).data('sid'));
-  $('#chatactive').val($(this).data('sid'));
-  $('#chatTitle').html('Chat with <span id="chatTitleName">'+$(this).data('chatname')+'</span> <small id="chatTitleEmail"><a href="mailto:'+$(this).data('chatemail')+'">&lt;'+$(this).data('chatemail')+'&gt;</a></small>');
-  $(".chatListItem").removeClass('active');
-  $(this).addClass('active');
-  updateChat('seen');
-});
-</script>
+}
+echo'<script>'.
+	'$(".chatListItem").removeClass("active");'.
+	'$(`[data-sid="'.$sid.'"]`).addClass("active");'.
+	'$(".chatListItem").click(function(e){'.
+  	'$("#chatsid").val($(this).data("sid"));'.
+  	'$("#chatactive").val($(this).data("sid"));'.
+  	'$("#chatTitle").html(`Chat with <span id="chatTitleName">`+$(this).data("chatname")+`</span> <small id="chatTitleEmail"><a href="mailto:`+$(this).data("chatemail")+`">&lt;`+$(this).data("chatemail")+`&gt;</a></small>`);'.
+  	'$(".chatListItem").removeClass("active");'.
+  	'$(this).addClass("active");'.
+  	'updateChat("seen");'.
+	'});'.
+'</script>';

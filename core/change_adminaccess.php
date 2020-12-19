@@ -11,52 +11,55 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 $getcfg=true;
 require'db.php';
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $adminfolder=isset($_POST['adminfolder'])?filter_input(INPUT_POST,'adminfolder',FILTER_SANITIZE_STRING):'';
-if($adminfolder==''){?>
-  window.top.window.$('#adminfolder').addClass('is-invalid');
-  window.top.window.toastr["info"]("Folder must NOT be blank!");
-  window.top.window.toastr["error"]("Change not saved!");
-<?php
+if($adminfolder==''){
+  echo'<script>'.
+    'window.top.window.$("#adminfolder").addClass("is-invalid");'.
+    'window.top.window.toastr["info"]("Folder must NOT be blank!");'.
+    'window.top.window.toastr["error"]("Change not saved!");'.
+  '</script>';
 }else{
   $s=$db->prepare("SELECT `id` FROM `".$prefix."menu` WHERE `file` LIKE :file");
   $s->execute([
     ':file'=>$adminfolder
   ]);
-  if($s->rowCount()>0){?>
-    window.top.window.$('#adminfolder').addClass('is-invalid');
-    window.top.window.toastr["info"]("Folder must NOT be the same as an already existing Page!");
-    window.top.window.toastr["error"]("Change not saved!");
-<?php }elseif($adminfolder==$settings['system']['admin']){
-  $htmladmin='<a href="'.URL.$settings['system']['admin'].'">'.URL.'</a>';?>
-  window.top.window.$('#adminaccess').html(`<?php echo$htmladmin;?>`);
-  window.top.window.$('#adminfolder').removeClass('is-invalid');
-  window.top.window.toastr["info"]("Administration Access Folder Still The Same!");
-<?php }else{
-  $txt='[database]'.PHP_EOL.
-       'prefix = '.$settings['database']['prefix'].PHP_EOL.
-       'driver = '.$settings['database']['driver'].PHP_EOL.
-       'host = '.$settings['database']['host'].PHP_EOL.
-       (isset($settings['database']['port'])==''?';port = 3306'.PHP_EOL:'port = '.$settings['database']['port'].PHP_EOL).
-       'schema = '.$settings['database']['schema'].PHP_EOL.
-       'username = '.$settings['database']['username'].PHP_EOL.
-       'password = '.$settings['database']['password'].PHP_EOL.
-       '[system]'.PHP_EOL.
-       'version = '.time().PHP_EOL.
-       'url = '.$settings['system']['url'].PHP_EOL.
-       'admin = '.$adminfolder.PHP_EOL;
-  if(file_exists('config.ini'))
-    unlink('config.ini');
-  $oFH=fopen("config.ini",'w');
-  fwrite($oFH,$txt);
-  fclose($oFH);
-  $htmladmin='<a href="'.URL.$adminfolder.'">'.URL.'</a>';?>
-  window.top.window.$('#adminfolder').addClass('is-valid');
-  window.top.window.$('#adminaccess').html(`<?php echo$htmladmin;?>`);
-  window.top.window.toastr["success"]("Administration Access Folder Updated!");
-<?php }
+  if($s->rowCount()>0){
+    echo'<script>'.
+      'window.top.window.$("#adminfolder").addClass("is-invalid");'.
+      'window.top.window.toastr["info"]("Folder must NOT be the same as an already existing Page!");'.
+      'window.top.window.toastr["error"]("Change not saved!")'.
+    '</script>';
+  }elseif($adminfolder==$settings['system']['admin']){
+    echo'<script>'.
+      'window.top.window.$("#adminaccess").html(`<a href="'.URL.$settings['system']['admin'].'">'.URL.'</a>`);'.
+      'window.top.window.$("#adminfolder").removeClass("is-invalid");'.
+      'window.top.window.toastr["info"]("Administration Access Folder Still The Same!");'.
+    '</script>';
+  }else{
+    $txt='[database]'.PHP_EOL.
+      'prefix = '.$settings['database']['prefix'].PHP_EOL.
+      'driver = '.$settings['database']['driver'].PHP_EOL.
+      'host = '.$settings['database']['host'].PHP_EOL.
+      (isset($settings['database']['port'])==''?';port = 3306'.PHP_EOL:'port = '.$settings['database']['port'].PHP_EOL).
+      'schema = '.$settings['database']['schema'].PHP_EOL.
+      'username = '.$settings['database']['username'].PHP_EOL.
+      'password = '.$settings['database']['password'].PHP_EOL.
+      '[system]'.PHP_EOL.
+      'version = '.time().PHP_EOL.
+      'url = '.$settings['system']['url'].PHP_EOL.
+      'admin = '.$adminfolder.PHP_EOL;
+    if(file_exists('config.ini'))
+      unlink('config.ini');
+    $oFH=fopen("config.ini",'w');
+    fwrite($oFH,$txt);
+    fclose($oFH);
+    echo'<script>'.
+      'window.top.window.$("#adminaccess").html(`<a href="'.URL.$adminfolder.'">'.URL.'</a>`);'.
+      'window.top.window.$("#adminfolder").addClass("is-valid");'.
+      'window.top.window.toastr["success"]("Administration Access Folder Updated!");'.
+    '</script>';
+  }
 }
-echo'</script>';

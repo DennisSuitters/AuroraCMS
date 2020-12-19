@@ -11,10 +11,11 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core'.DS.'db.php';
+require'core/db.php';
 if(isset($headerType))header($headerType);
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-if(file_exists(THEME.DS.'theme.ini'))$theme=parse_ini_file(THEME.DS.'theme.ini',TRUE);
+if(file_exists(THEME.DS.'theme.ini'))
+  $theme=parse_ini_file(THEME.DS.'theme.ini',TRUE);
 else{
   echo'A Website Theme has not been set.';
   die();
@@ -22,7 +23,7 @@ else{
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $ti=time();
 $show=$html=$head=$content=$foot='';
-$css=THEME.DS.'css'.DS;
+$css=THEME.'/css/';
 $favicon=$shareImage=FAVICON;
 $noimage=NOIMAGE;
 $noavatar=NOAVATAR;
@@ -48,8 +49,9 @@ $pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1 WHERE `id`=:id"
 $pu->execute([
   ':id'=>$page['id']
 ]);
-if(isset($act)&&$act=='logout')require'core'.DS.'login.php';
-include'core'.DS.'cart_quantity.php';
+if(isset($act)&&$act=='logout')
+  require'core/login.php';
+require'core/cart_quantity.php';
 $status=isset($_SESSON['rank'])&&$_SESSION['rank']>699?"%":"published";
 if($config['php_options'][4]==1){
   $sb=$db->prepare("SELECT * FROM `".$prefix."iplist` WHERE `ip`=:ip");
@@ -63,20 +65,25 @@ if($config['php_options'][4]==1){
   }
 }
 if($config['comingsoon'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
-    if(file_exists(THEME.DS.'comingsoon.html'))$template=file_get_contents(THEME.DS.'comingsoon.html');
+    if(file_exists(THEME.'/comingsoon.html'))
+      $template=file_get_contents(THEME.DS.'comingsoon.html');
     else{
-      include'core'.DS.'layout'.DS.'comingsoon.php';
+      require'core/view/comingsoon.php';
       die();
     }
 }elseif($config['maintenance'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
-  if(file_exists(THEME.DS.'maintenance.html'))$template=file_get_contents(THEME.DS.'maintenance.html');
+  if(file_exists(THEME.'/maintenance.html'))
+    $template=file_get_contents(THEME.'/maintenance.html');
   else{
-  	include'core'.DS.'layout'.DS.'maintenance.php';
+  	require'core/view/maintenance.php';
     die();
   }
-}elseif(file_exists(THEME.DS.$view.'.html'))$template=file_get_contents(THEME.DS.$view.'.html');
-elseif(file_exists(THEME.DS.'default.html'))$template=file_get_contents(THEME.DS.'default.html');
-else$template=file_get_contents(THEME.DS.'content.html');
+}elseif(file_exists(THEME.'/'.$view.'.html'))
+  $template=file_get_contents(THEME.'/'.$view.'.html');
+elseif(file_exists(THEME.'/default.html'))
+  $template=file_get_contents(THEME.'/default.html');
+else
+  $template=file_get_contents(THEME.'/content.html');
 $newDom=new DOMDocument();
 @$newDom->loadHTML($template);
 $tag=$newDom->getElementsByTagName('block');
@@ -85,52 +92,73 @@ foreach($tag as$tag1){
   $inbed=$tag1->getAttribute('inbed');
   if($include!=''){
     $include=rtrim($include,'.html');
-    $html=file_exists(THEME.DS.$include.'.html')?file_get_contents(THEME.DS.$include.'.html'):'';
-    if(file_exists(THEME.'view'.DS.$include.'.php'))include THEME.'view'.DS.$include.'.php';
-    elseif(file_exists('core'.DS.'view'.DS.$include.'.php')) include'core'.DS.'view'.DS.$include.'.php';
-    else include'core'.DS.'view'.DS.'content.php';
+    $html=file_exists(THEME.'/'.$include.'.html')?file_get_contents(THEME.'/'.$include.'.html'):'';
+    if(file_exists(THEME.'view/'.$include.'.php'))
+      require THEME.'view/'.$include.'.php';
+    elseif(file_exists('core/view/'.$include.'.php'))
+      require'core/view/'.$include.'.php';
+    else
+      require'core/view/content.php';
     $req=$include;
   }
   if($inbed!=''){
     preg_match('/<block inbed="'.$inbed.'">([\w\W]*?)<\/block>/',$template,$matches);
     $html=isset($matches[1])?$matches[1]:'';
-    if($view=='cart')$inbed='cart';
-    if($view=='sitemap')$inbed='sitemap';
-    if($view=='settings')$inbed='settings';
-    if($view=='page')$inbed='page';
-    if(file_exists(THEME.'view'.DS.$inbed.'.php'))include THEME.'view'.DS.$inbed.'.php';
-    elseif(file_exists('core'.DS.'view'.DS.$inbed.'.php'))include'core'.DS.'view'.DS.$inbed.'.php';
-    else include'core'.DS.'view'.DS.'content.php';
+    if($view=='cart')
+      $inbed='cart';
+    if($view=='sitemap')
+      $inbed='sitemap';
+    if($view=='settings')
+      $inbed='settings';
+    if($view=='page')
+      $inbed='page';
+    if(file_exists(THEME.'view/'.$inbed.'.php'))
+      require THEME.'view/'.$inbed.'.php';
+    elseif(file_exists('core/view/'.$inbed.'.php'))
+      require'core/view/'.$inbed.'.php';
+    else
+      require'core/view/content.php';
     $req=$inbed;
   }
 }
-if(!isset($contentTime))$contentTime=($page['eti']>$config['ti']?$page['eti']:$config['ti']);
-if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
+if(!isset($contentTime))
+  $contentTime=($page['eti']>$config['ti']?$page['eti']:$config['ti']);
+if(!isset($canonical)||$canonical=='')
+  $canonical=($view=='index'?URL:URL.$view.'/');
 if($seoTitle==''){
-  if($page['seoTitle']=='')$seoTitle=$page['title'];
-  else$seoTitle=$page['seoTitle'];
+  if($page['seoTitle']=='')
+    $seoTitle=$page['title'];
+  else
+    $seoTitle=$page['seoTitle'];
 }
-if($seoTitle=='')$seoTitle.=$view=='index'?'Home':'';
+if($seoTitle=='')
+  $seoTitle.=$view=='index'?'Home':'';
 $seoTitle.=$view=='index'?' | '.$config['business']:'';
 if($metaRobots==''){
-  if($page['metaRobots']=='')$metaRobots=$config['metaRobots'];
-  elseif(in_array($view,['proofs','orders','settings'],true))$metaRobots='noindex,nofollow';
-  else$metaRobots=$page['metaRobots'];
+  if($page['metaRobots']=='')
+    $metaRobots=$config['metaRobots'];
+  elseif(in_array($view,['proofs','orders','settings'],true))
+    $metaRobots='noindex,nofollow';
+  else
+    $metaRobots=$page['metaRobots'];
 }
 if($seoCaption=='')$seoCaption=$page['seoCaption'];
 if($seoDescription==''){
-  if($page['seoDescription']=='')$seoDescription=substr(strip_tags($page['notes']),0,160);
-  else$seoDescription=$page['seoDescription'];
+  if($page['seoDescription']=='')
+    $seoDescription=substr(strip_tags($page['notes']),0,160);
+  else
+    $seoDescription=$page['seoDescription'];
 }
 if($seoKeywords==''){
-  if($page['seoKeywords']=='')$seoKeywords=$config['seoKeywords'];
-  else$seoKeywords=$page['seoKeywords'];
+  if($page['seoKeywords']=='')
+    $seoKeywords=$config['seoKeywords'];
+  else
+    $seoKeywords=$page['seoKeywords'];
 }
 $rss='';
 if(isset($args[0])){
-  if($args[0]!='index'||$args[0]!='bookings'||$args[0]!='contactus'||$args[0]!='cart'||$args[0]!='proofs'||$args[0]!='settings'||$args[0]!='accounts'){}else{
+  if($args[0]!='index'||$args[0]!='bookings'||$args[0]!='contactus'||$args[0]!='cart'||$args[0]!='proofs'||$args[0]!='settings'||$args[0]!='accounts'){}else
     $rss=$view;
-  }
 }
 $head=preg_replace([
   '/<print config=[\"\']?business[\"\']?>/',
@@ -196,10 +224,10 @@ $head=preg_replace([
   (isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<link rel="stylesheet" type="text/css" href="core/css/seohelper.css">':'')
 ],$head);
 if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
-  if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false){
+  if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false)
     $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
-  }
-}else$head=str_replace('<google_analytics>','',$head);
+}else
+  $head=str_replace('<google_analytics>','',$head);
 if($view=='login'){
   if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
     $content=preg_replace([
@@ -232,23 +260,28 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']==1000&&$config['development']==1)
     '<div class="development"><br>Page Views: '.$page['views'].' | Memory Used: '.size_format(memory_get_usage()).' | Process Time: '.elapsed_time().' | PHPv'.(float)PHP_VERSION.'</div>'
   ],$head);
 }
-$content=preg_replace(['/<serviceworker>/'],[($config['options'][18]==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')],$content);
+$content=preg_replace(
+  '/<serviceworker>/',
+  ($config['options'][18]==1?'<script>if(`serviceWorker` in navigator){window.addEventListener(`load`,()=>{navigator.serviceWorker.register(`core/js/service-worker.php`,{scope:`/`}).then((reg)=>{console.log(`[AuroraCMS] Service worker registered.`,reg);});});}</script>':'')
+  ,$content
+);
 print$head.$content;
 if($config['options'][11]==1){
   $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&$_SESSION['current_page']!=$current_page)){
-    if(!stristr($current_page,'core/*')||
-      !stristr($current_page,'admin/*')||
-      !stristr($current_page,'layout/*')||
-      !stristr($current_page,'media/*')||
-      !stristr($current_page,'*.js')||
-      !stristr($current_page,'*.css')||
-      !stristr($current_page,'*.map')||
-      !stristr($current_page,'*.jpg')||
-      !stristr($current_page,'*.jpeg')||
-      !stristr($current_page,'*.png')||
-      !stristr($current_page,'*.gif')||
-      !stristr($current_page,'*.svg')
+    if(!stristr($current_page,'core/')||
+      !stristr($current_page,'admin/')||
+      !stristr($current_page,'layout/')||
+      !stristr($current_page,'media/')||
+      !stristr($current_page,'.js')||
+      !stristr($current_page,'.css')||
+      !stristr($current_page,'.map')||
+      !stristr($current_page,'.jpg')||
+      !stristr($current_page,'.jpeg')||
+      !stristr($current_page,'.png')||
+      !stristr($current_page,'.gif')||
+      !stristr($current_page,'.svg')||
+      !stristr($current_page,'.webp')
     ){
       $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`ip`,`browser`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
       $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';

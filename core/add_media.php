@@ -14,14 +14,13 @@
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-function svg($svg,$class=null,$size=null){
+function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
 $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
 $t=filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING);
 $fu=filter_input(INPUT_POST,'fu',FILTER_SANITIZE_STRING);
-echo'<script>';
 if($fu!=''){
 	if($t=='pages'||$t=='content'){
 		$file_list=explode(',',$fu);
@@ -39,22 +38,21 @@ if($fu!=''){
 				':id'=>$iid,
 				':ord'=>$iid+1
 			]);
-			$thumb='media/sm/'.basename($file);?>
-window.top.window.$('#mi').append('<?php
-echo'<div class="card stats col-6 col-md-3 m-1 swing-in-top-fwd" id="mi_'.$iid.'">'.
-	'<div class="btn-group float-right">'.
-		'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg('drag').'</div>'.
-		'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times">'.svg('view').' &nbsp;0</div>'.
-		'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg('edit').'</a>'.
-		'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$iid.'`,`media`);">'.svg('trash').'</button>'.
-		'</div>'.
-		'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'">'.
-			'<img src="'.$thumb.'" alt="Media '.$iid.'">'.
-		'</a>'.
-	'</div>';?>
-');
-window.top.window.$().fancybox({selector:'[data-fancybox="media"]'});
-<?php }
+			$thumb='media/sm/'.basename($file);
+			echo'<script>'.
+						'window.top.window.$("#mi").append(`<div class="card stats col-6 col-md-3 m-1 swing-in-top-fwd" id="mi_'.$iid.'">'.
+							'<div class="btn-group float-right">'.
+								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg2('drag').'</div>'.
+								'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times">'.svg2('view').' &nbsp;0</div>'.
+								'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
+								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$iid.'`,`media`);">'.svg2('trash').'</button>'.
+							'</div>'.
+							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'">'.
+								'<img src="'.$thumb.'" alt="Media '.$iid.'">'.
+							'</a>'.
+						'</div>`);'.
+						'window.top.window.$().fancybox({selector:`[data-fancybox="media"]`});'.
+					'</script>';
+		}
 	}
 }
-echo'</script>';

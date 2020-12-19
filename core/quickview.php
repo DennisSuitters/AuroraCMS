@@ -16,19 +16,19 @@ $getcfg=true;
 require'db.php';
 if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))
 $config['theme']=$_GET['theme'];
-define('THEME','layout'.DS.$config['theme']);
+define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-if(file_exists('..'.DS.THEME.DS.'images'.DS.'noimage.png'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.png');
-elseif(file_exists('..'.DS.THEME.DS.'images'.DS.'noimage.gif'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.gif');
-elseif(file_exists('..'.DS.THEME.DS.'images'.DS.'noimage.jpg'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage.jpg');
+if(file_exists('../'.THEME.'/images/noimage.png'))
+	define('NOIMAGE',THEME.'/images/noimage.png');
+elseif(file_exists('../'.THEME.'/images/noimage.gif'))
+	define('NOIMAGE',THEME.'/images/noimage.gif');
+elseif(file_exists('../'.THEME.'/images/noimage.jpg'))
+	define('NOIMAGE',THEME.'/images/noimage.jpg');
 else
-	define('NOIMAGE','core'.DS.'images'.DS.'noimage.jpg');
+	define('NOIMAGE','core/images/noimage.jpg');
 $id=isset($_GET['id'])?$_GET['id']:'';
-if(file_exists('..'.DS.THEME.DS.'quickview.html')){
-  $html=file_get_contents('..'.DS.THEME.DS.'quickview.html');
+if(file_exists('../'.THEME.'/quickview.html')){
+  $html=file_get_contents('../'.THEME.'/quickview.html');
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
   $s->execute([
 		':id'=>$id
@@ -82,8 +82,8 @@ if(file_exists('..'.DS.THEME.DS.'quickview.html')){
 					$sideCost.='</div>';
 			}
 		}
-    if($r['stockStatus']=='out of stock')$r['quantity']=0;
-    if($r['stockStatus']=='pre-order')$r['quantity']=0;
+    if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre-order')
+			$r['quantity']=0;
 		$choices='';
 		if(stristr($html,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
 			$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");

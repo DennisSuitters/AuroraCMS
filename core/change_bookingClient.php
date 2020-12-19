@@ -11,8 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
-require_once'db.php';
+require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $bid=filter_input(INPUT_GET,'bid',FILTER_SANITIZE_NUMBER_INT);
 $w=filter_input(INPUT_GET,'w',FILTER_SANITIZE_STRING);
@@ -61,16 +60,16 @@ $q->execute([
   ':phone'=>$c['phone'],
   ':mobile'=>$c['mobile'],
   ':id'=>$bid
-]);?>
-  window.top.window.$('#business').val('<?php echo$c['business'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#name').val('<?php echo$c['name'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#address').val('<?php echo$c['address'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#suburb').val('<?php echo$c['suburb'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#state').val('<?php echo$c['state'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#city').val('<?php echo$c['city'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#postcode').val('<?php echo$c['postcode'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#email').val('<?php echo$c['email'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#phone').val('<?php echo$c['phone'];?>').data("dbid",<?php echo$c['id'];?>);
-  window.top.window.$('#mobile').val('<?php echo$c['mobile'];?>').data("dbid",<?php echo$c['id'];?>);
-<?php
-echo'</script>';
+]);
+echo'<script>'.
+  'window.top.window.$("#business").val("'.$c['business'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#name").val("'.$c['name'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#address").val("'.$c['address'].'").data("dbid","'.$c['id'].'");'.
+  'window.top.window.$("#suburb").val("'.$c['suburb'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#state").val("'.$c['state'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#city").val("'.$c['city'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#postcode").val("'.$c['postcode'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#email").val("'.$c['email'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#phone").val("'.$c['phone'].'").data("dbid",'.$c['id'].');'.
+  'window.top.window.$("#mobile").val("'.$c['mobile'].'").data("dbid",'.$c['id'].');'.
+'</script>';

@@ -16,10 +16,7 @@ if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-include'sanitise.php';
-function svg($svg,$class=null,$size=null){
-	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
-}
+require'sanitise.php';
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
@@ -89,7 +86,8 @@ $log=[
   'action'=>'update',
   'ti'=>$ti
 ];
-if($r['contentType']=='booking')$log['view']=$r['contentType'].'s';
+if($r['contentType']=='booking')
+	$log['view']=$r['contentType'].'s';
 if(isset($_SESSION['uid'])){
   $uid=(int)$_SESSION['uid'];
   $q=$db->prepare("SELECT `rank`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
@@ -137,16 +135,16 @@ if($tbl=='login'&&$col=='username'){
     $q->execute([
       ':da'=>$da,
       ':id'=>$id
-    ]);?>
-	window.top.window.$('#uerror').addClass('d-none');
-<?php }else{
+    ]);
+		echo'<script>window.top.window.$("#uerror").addClass("d-none");</script>';
+	}else{
     $uc2=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `id`=:id");
     $uc2->execute([
 			':id'=>$id
 		]);
-    $uc=$uc2->fetch(PDO::FETCH_ASSOC);?>
-	window.top.window.$('#uerror').removeClass('d-none');
-<?php }
+    $uc=$uc2->fetch(PDO::FETCH_ASSOC);
+		echo'<script>window.top.window.$("#uerror").removeClass("d-none");</script>';
+	}
 }else{
   $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `".$col."`=:da WHERE `id`=:id");
   $q->execute([
@@ -191,19 +189,18 @@ if($tbl=='orders'&&$col=='status'&&$da=='paid'){
 	]);
 }
 if(is_null($e[2])){
-	if($tbl=='orders'&&$col=='due_ti'){?>
-	window.top.window.$("#due_ti").val(`<?php echo date($config['dateFormat'],$da);?>`);
-<?php }
+	if($tbl=='orders'&&$col=='due_ti')
+		echo'<script>window.top.window.$("#due_ti").val(`'.date($config['dateFormat'],$da).'`);</script>';
 	if($tbl=='content'&&$col=='file'&&$da==''){
-		if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.jpeg'))unlink('..'.DS.'media'.DS.'file_'.$id.'.jpeg');
-    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.jpg'))unlink('..'.DS.'media'.DS.'file_'.$id.'.jpg');
-    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.png'))unlink('..'.DS.'media'.DS.'file_'.$id.'.png');
-    if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.gif'))unlink('..'.DS.'media'.DS.'file_'.$id.'.gif');
-		if(file_exists('..'.DS.'media'.DS.'file_'.$id.'.tif'))unlink('..'.DS.'media'.DS.'file_'.$id.'.tif');
+		if(file_exists('../media/file_'.$id.'.jpeg'))unlink('../media/file_'.$id.'.jpeg');
+    if(file_exists('../media/file_'.$id.'.jpg'))unlink('../media/file_'.$id.'.jpg');
+    if(file_exists('../media/file_'.$id.'.png'))unlink('../media/file_'.$id.'.png');
+    if(file_exists('../media/file_'.$id.'.gif'))unlink('../media/file_'.$id.'.gif');
+		if(file_exists('../media/file_'.$id.'.tif'))unlink('../media/file_'.$id.'.tif');
 	}
-	if($tbl=='config'&&$col=='php_honeypot'){?>
-	window.top.window.$('#php_honeypot_link').html('<?php echo($da!=''?'<a target="_blank" href="'.$da.'">'.$da.'</a>':'Honey Pot File Not Uploaded');?>');
-<?php }
+	if($tbl=='config'&&$col=='php_honeypot'){
+		echo'<script>window.top.window.$("#php_honeypot_link").html(`'.($da!=''?'<a target="_blank" href="'.$da.'">'.$da.'</a>':'Honey Pot File Not Uploaded').'`);</script>';
+	}
 	if($tbl=='orderitems'||$tbl=='cart'){
     if($tbl=='cart'&&$col=='quantity'){
       if($da==0){
@@ -219,114 +216,117 @@ if(is_null($e[2])){
 			]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
       $cnt=$r['quantity'];
-      if($r['quantity']==0)
-				$cnt='';?>
-	window.top.window.$('#cart').html('<?php echo$cnt;?>');
-<?php	}
-      if($tbl=='orderitems'){
-        $q=$db->prepare("SELECT `oid` FROM `".$prefix."orderitems` WHERE `id`=:id");
-        $q->execute([
-					':id'=>$id
-				]);
-        $iid=$q->fetch(PDO::FETCH_ASSOC);
-      }
-      if($tbl=='orderitems'&&$col=='quantity'&&$da==0){
-        $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
-        $q->execute([
-					':id'=>$id
-				]);
-      }
-      $total=0;
-      $content=$html='';
-      if($tbl=='cart'){
-        $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
-        $q->execute([
-					':si'=>$si
-				]);
-      }
-      if($tbl=='orderitems'){
-        $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid ORDER BY `ti` ASC,`title` ASC");
-        $q->execute([
-					':oid'=>$iid['oid']
-				]);
-      }
-      while($oi=$q->fetch(PDO::FETCH_ASSOC)){
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-        $s->execute([
-					':id'=>$oi['iid']
-				]);
-        $i=$s->fetch(PDO::FETCH_ASSOC);
-        $html.='<tr>'.
-                '<td class="text-left">'.$i['code'].'</td>'.
-                '<td class="text-left">'.
-                  '<form target="sp" action="core/update.php">'.
-                    '<input name="id" type="hidden" value="'.$oi['id'].'">'.
-                    '<input name="t" type="hidden" value="'.$tbl.'">'.
-                    '<input name="c" type="hidden" value="title">'.
-                    '<input name="da" type="text" value="'.($oi['title']!=''?$oi['title']:$i['title']).'">'.
-                  '</form>'.
-                '</td>'.
-                '<td class="col-md-1 text-center">'.
-                  ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="quantity"><input class="text-center" name="da" value="'.$oi['quantity'].'"></form>':'').
-                '</td>'.
-                '<td class="col-md-1 text-right">'.
-                  ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="cost"><input class="text-center" name="da" value="'.$oi['cost'].'"></form>':'').
-                '</td>'.
-                '<td class="text-right">'.($oi['iid'] != 0?$oi['cost']*$oi['quantity']:'').'</td>'.
-                '<td class="text-right">'.
-                  '<form target="sp" action="core/update.php">'.
-                    '<input name="id" type="hidden" value="'.$oi['id'].'">'.
-                    '<input name="t" type="hidden" value="orderitems">'.
-                    '<input name="c" type="hidden" value="quantity">'.
-                    '<input name="da" type="hidden" value="0">'.
-                    '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
-                  '</form>'.
-                '</td>'.
-              '</tr>';
-        if($oi['iid']!=0)$total=$total+($oi['cost']*$oi['quantity']);
-      }
+      if($r['quantity']==0){
+				$cnt='';
+				echo'<script>window.top.window.$("#cart").html(`'.$cnt.'`);</script>';
+			}
+		}
+    if($tbl=='orderitems'){
+      $q=$db->prepare("SELECT `oid` FROM `".$prefix."orderitems` WHERE `id`=:id");
+      $q->execute([
+				':id'=>$id
+			]);
+      $iid=$q->fetch(PDO::FETCH_ASSOC);
+    }
+    if($tbl=='orderitems'&&$col=='quantity'&&$da==0){
+      $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
+      $q->execute([
+				':id'=>$id
+			]);
+    }
+    $total=0;
+    $content=$html='';
+    if($tbl=='cart'){
+      $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
+      $q->execute([
+				':si'=>$si
+			]);
+    }
+    if($tbl=='orderitems'){
+      $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid ORDER BY `ti` ASC,`title` ASC");
+      $q->execute([
+				':oid'=>$iid['oid']
+			]);
+    }
+    while($oi=$q->fetch(PDO::FETCH_ASSOC)){
+      $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+      $s->execute([
+				':id'=>$oi['iid']
+			]);
+      $i=$s->fetch(PDO::FETCH_ASSOC);
       $html.='<tr>'.
-              '<td colspan="3">&nbsp;</td>'.
-              '<td class="text-right"><strong>Total</strong></td>'.
-              '<td class="text-right"><strong>'.$total.'</strong></td>'.
-              '<td role="cell"></td>'.
-            '</tr>';?>
-	window.top.window.$('#updateorder').html('<?php echo $html;?>');
-<?php }
-    	if($tbl=='login'&&$col=='gravatar'){
-        if($da==''){
-          $sav=$db->prepare("SELECT `avatar` FROM `".$prefix."login` WHERE `id`=:id");
-          $sav->execute([
-						':id'=>$id
-					]);
-          $av=$sav->fetch(PDO::FETCH_ASSOC);
-          if($av['avatar']!=''&&file_exists('..'.DS.'media'.DS.'avatar'.DS.$av['avatar']))$avatar='media'.DS.'avatar'.DS.$av['avatar'];
-					else$avatar='images'.DS.'noavatar.jpg';
-        }else$avatar=$da;?>
-	window.top.window.$('#avatar').attr('src','<?php echo$avatar.'?'.time();?>');
-<?php	}
-	}?>
-	window.top.window.$('.page-block').removeClass('d-block');
-<?php
-	if($col=='status'){
-		if($da=='archived'){?>
-	window.top.window.$('#l_<?php echo$id;?>').slideUp(500,function(){$(this).remove()});
-<?php }
-		if($tbl!='comments'||$da=='delete'||$da==''){?>
-	window.top.window.$('#controls_<?php echo$id;?> button.btn').toggleClass('d-none');
-  window.top.window.$('#l_<?php echo$id;?>').removeClass('danger');
-<?php }
-		if($da=='delete'){?>
-	window.top.window.$('#l_<?php echo$id;?>').addClass('danger');
-<?php }else{?>
-	window.top.window.$('#l_<?php echo$id;?>').removeClass('danger');
-<?php }
+	      '<td class="text-left">'.$i['code'].'</td>'.
+	      '<td class="text-left">'.
+	        '<form target="sp" action="core/update.php">'.
+	          '<input name="id" type="hidden" value="'.$oi['id'].'">'.
+	          '<input name="t" type="hidden" value="'.$tbl.'">'.
+	          '<input name="c" type="hidden" value="title">'.
+	          '<input name="da" type="text" value="'.($oi['title']!=''?$oi['title']:$i['title']).'">'.
+	        '</form>'.
+	      '</td>'.
+        '<td class="col-md-1 text-center">'.
+          ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="quantity"><input class="text-center" name="da" value="'.$oi['quantity'].'"></form>':'').
+        '</td>'.
+        '<td class="col-md-1 text-right">'.
+          ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="cost"><input class="text-center" name="da" value="'.$oi['cost'].'"></form>':'').
+        '</td>'.
+        '<td class="text-right">'.($oi['iid'] != 0?$oi['cost']*$oi['quantity']:'').'</td>'.
+        '<td class="text-right">'.
+          '<form target="sp" action="core/update.php">'.
+            '<input name="id" type="hidden" value="'.$oi['id'].'">'.
+            '<input name="t" type="hidden" value="orderitems">'.
+            '<input name="c" type="hidden" value="quantity">'.
+            '<input name="da" type="hidden" value="0">'.
+            '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+          '</form>'.
+        '</td>'.
+      '</tr>';
+      if($oi['iid']!=0)$total=$total+($oi['cost']*$oi['quantity']);
+    }
+    $html.='<tr>'.
+      '<td colspan="3">&nbsp;</td>'.
+      '<td class="text-right"><strong>Total</strong></td>'.
+      '<td class="text-right"><strong>'.$total.'</strong></td>'.
+      '<td role="cell"></td>'.
+    '</tr>';
+		echo'<script>window.top.window.$("#updateorder").html(`'.$html.'`);</script>';
 	}
-	if($col=='password'){?>
-	window.top.window.$('#passButton').removeClass('btn-danger');
-	window.top.window.$('.page-block').removeClass('d-block');
-<?php }
-echo'</script>';
+	if($tbl=='login'&&$col=='gravatar'){
+    if($da==''){
+      $sav=$db->prepare("SELECT `avatar` FROM `".$prefix."login` WHERE `id`=:id");
+      $sav->execute([
+				':id'=>$id
+			]);
+      $av=$sav->fetch(PDO::FETCH_ASSOC);
+      if($av['avatar']!=''&&file_exists('..'.DS.'media'.DS.'avatar'.DS.$av['avatar']))
+				$avatar='media'.DS.'avatar'.DS.$av['avatar'];
+			else
+				$avatar='images'.DS.'noavatar.jpg';
+    }else{
+			$avatar=$da;
+			echo'<script>window.top.window.$("#avatar").attr("src",`'.$avatar.'?'.time().'`);</script>';
+		}
+	}
+}
+echo'<script>window.top.window.$(".page-block").removeClass("d-block");</script>';
+if($col=='status'){
+	if($da=='archived')
+		echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';
+	if($tbl!='comments'||$da=='delete'||$da=='')
+		echo'<script>'.
+			'window.top.window.$("#controls_'.$id.' button.btn").toggleClass("d-none");'.
+  		'window.top.window.$("#l_'.$id.'").removeClass("danger");'.
+		'</script>';
+	if($da=='delete')
+		echo'<script>window.top.window.$("#l_'.$id.'").addClass("danger");</script>';
+	else
+		echo'<script>window.top.window.$("#l_'.$id.'").removeClass("danger");</script>';
+}
+if($col=='password')
+	echo'<script>'.
+		'window.top.window.$("#passButton").removeClass("btn-danger");'.
+		'window.top.window.$(".page-block").removeClass("d-block");'.
+	'</script>';
 if($config['options'][12]==1){
 	$s=$db->prepare("INSERT IGNORE INTO `".$prefix."logs` (`uid`,`rid`,`username`,`name`,`view`,`contentType`,`refTable`,`refColumn`,`oldda`,`newda`,`action`,`ti`) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
 	$s->execute([

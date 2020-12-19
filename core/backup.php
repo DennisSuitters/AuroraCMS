@@ -11,13 +11,9 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT `language` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-function svg($svg,$class=null,$size=null){
-	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
-}
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
@@ -27,10 +23,10 @@ $compression=true;
 $nowtimename=time();
 if($compression){
 	$file=date('y-d-m',time()).'-'.$nowtimename.'.sql.gz';
-	$zp=gzopen('..'.DS.'media'.DS.'backup'.DS.$file,"w9");
+	$zp=gzopen('../media/backup/'.$file,"w9");
 }else{
 	$file=date('y-d-m',time()).'-'.$nowtimename.'.sql';
-	$handle=fopen('..'.DS.'media'.DS.'backup'.DS.$file,'a+');
+	$handle=fopen('../media/backup/'.$file,'a+');
 }
 $numtypes=[
 	'tinyint',
@@ -111,8 +107,8 @@ if($compression)
 	gzclose($zp);
 else
 	fclose($handle);
-if(file_exists('..'.DS.'media'.DS.'backup'.DS.$file)){
-  chmod('..'.DS.'media'.DS.'backup'.DS.$file,0777);
+if(file_exists('../media/backup/'.$file)){
+  chmod('../media/backup/'.$file,0777);
   $fileid=str_replace('.','',$file);
   $fileid=str_replace(DS,'',$fileid);
 	$filename=basename($file);
@@ -120,10 +116,19 @@ if(file_exists('..'.DS.'media'.DS.'backup'.DS.$file)){
   $q=$db->prepare("UPDATE `".$prefix."config` SET `backup_ti`=:backup_ti WHERE `id`='1'");
   $q->execute([
 		':backup_ti'=>$ti
-	]);?>
-  window.top.window.$('#backups').append(`<?php echo'<div id="l_'.$fileid.'" class="form-group row"><label class="col-form-label col-sm-2">&nbsp;</label><div class="input-group col-sm-10"><a class="btn col" href="media/backup/'.$file.'">Click to Download '.$file.'</a><div class="input-group-append"><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button></div></div></div>';?>`);
-  window.top.window.$('#alert_backup').addClass('d-none');
-<?php }else{?>
-	window.top.window.toastr["error"]("There was an issue adding the Data!");
-<?php }?>
-</script>
+	]);
+  echo'<script>'.
+		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-group row">'.
+			'<label class="col-form-label col-sm-2">&nbsp;</label>'.
+			'<div class="input-group col-sm-10">'.
+				'<a class="btn col" href="media/backup/'.$file.'">Click to Download '.$file.'</a>'.
+				'<div class="input-group-append">'.
+					'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button>'.
+				'</div>'.
+			'</div>'.
+		'</div>`);'.
+  	'window.top.window.$("#alert_backup").addClass("d-none");'.
+	'</script>';
+}else{
+	echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';
+}

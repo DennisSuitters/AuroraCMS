@@ -33,4 +33,5 @@ if($s->rowCount()>0){
     ':ti'=>time()
   ]);
   echo'IP Added to Blacklist!';
-}else echo'IP already exists in the Blacklist!';
+}else
+  echo'IP already exists in the Blacklist!';

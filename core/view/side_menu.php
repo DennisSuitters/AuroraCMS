@@ -11,6 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+$sideTemp='';
 if(file_exists(THEME.DS.'side_menu.html')){
 	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
 	if($show=='item')
@@ -141,7 +142,6 @@ if(file_exists(THEME.DS.'side_menu.html')){
 				$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
 		}else
 			$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
-
 		if($r['contentType']=='service'||$r['contentType']=='events'){
 			if($r['bookable']==1){
 				if(stristr($sideTemp,'<service>')){
@@ -202,39 +202,38 @@ if(file_exists(THEME.DS.'side_menu.html')){
 				$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 		}
 	}
-		$cq=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
-		$cq->execute([
-			':si'=>SESSIONID
-		]);
-		if($cq->rowCount()>0){
-			$cartitem=$cartage='';
-			while($cr=$cq->fetch(PDO::FETCH_ASSOC)){
-				$cs=$db->prepare("SELECT * from `".$prefix."content` WHERE `id`=:id");
-				$cs->execute([
-					':id'=>$cr['iid']
-				]);
-				$ci=$cs->fetch(PDO::FETCH_ASSOC);
-				$cartitem=$theme['settings']['cartage_menu'];
-				if($ci['thumb']=='')$ci['thumb']=NOIMAGE;
-				$cartitem=preg_replace([
-					'/<print cartageitem=[\"\']?thumb[\"\']?>/',
-					'/<print cartageitem=[\"\']?title[\"\']?>/',
-					'/<print cartageitem=[\"\']?quantity[\"\']?>/'
-				],[
-					$ci['thumb'],
-					$ci['title'],
-					$cr['quantity']
-				],$cartitem);
-				$cartage.=$cartitem;
-			}
-			$sideTemp=preg_replace([
-				'/<cartageitems>/'
+	$cq=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
+	$cq->execute([
+		':si'=>SESSIONID
+	]);
+	if($cq->rowCount()>0){
+		$cartitem=$cartage='';
+		while($cr=$cq->fetch(PDO::FETCH_ASSOC)){
+			$cs=$db->prepare("SELECT * from `".$prefix."content` WHERE `id`=:id");
+			$cs->execute([
+				':id'=>$cr['iid']
+			]);
+			$ci=$cs->fetch(PDO::FETCH_ASSOC);
+			$cartitem=$theme['settings']['cartage_menu'];
+			if($ci['thumb']=='')$ci['thumb']=NOIMAGE;
+			$cartitem=preg_replace([
+				'/<print cartageitem=[\"\']?thumb[\"\']?>/',
+				'/<print cartageitem=[\"\']?title[\"\']?>/',
+				'/<print cartageitem=[\"\']?quantity[\"\']?>/'
 			],[
-				$cartage
-			],$sideTemp);
-		}else
-			$sideTemp=preg_replace('/<cartagedisplay>/','d-none',$sideTemp);
-
+				$ci['thumb'],
+				$ci['title'],
+				$cr['quantity']
+			],$cartitem);
+			$cartage.=$cartitem;
+		}
+		$sideTemp=preg_replace([
+			'/<cartageitems>/'
+		],[
+			$cartage
+		],$sideTemp);
+	}else
+		$sideTemp=preg_replace('/<cartagedisplay>/','d-none',$sideTemp);
 	preg_match('/<item>([\w\W]*?)<\/item>/',$sideTemp,$matches);
 	$outside=$matches[1];
 	$show='';
@@ -274,10 +273,7 @@ if(file_exists(THEME.DS.'side_menu.html')){
 			$contentType='';
 	}
 	$r=$db->query("SELECT * FROM `".$prefix."menu` WHERE `id`=17")->fetch(PDO::FETCH_ASSOC);
-	if($r['active'][0]==1)
-		$sideTemp=preg_replace('/<[\/]?newsletters>/','',$sideTemp);
-	else
-		$sideTemp=preg_replace('/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
+	$sideTemp=preg_replace($r['active'][0]==1?'/<[\/]?newsletters>/':'/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 	$insides=$matches[1];
 	if(isset($sidecat)&&$sidecat!=''){
@@ -302,16 +298,12 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		$items=$inside;
 		$time='<time datetime="'.date('Y-m-d',$r['ti']).'">'.date($config['dateFormat'],$r['ti']).'</time>';
 		if($r['contentType']=='events'||$r['contentType']=='news'){
-			if($r['tis']!=0){$time='<time datetime="'.date('Y-m-d',$r['tis']).'">'.date('dS M H:i',$r['tis']).'</time>';
+			if($r['tis']!=0){
+				$time='<time datetime="'.date('Y-m-d',$r['tis']).'">'.date('dS M H:i',$r['tis']).'</time>';
 				if($r['tie']!=0)
 					$time.=' &rarr; <time datetime="'.date('Y-m-d',$r['tie']).'">'.date('dS M H:i',$r['tie']).'</time>';
 			}
 		}
-		if(file_exists('media/thumbs/'.basename($r['thumb'])))
-			$sideImage='<img src="'.$r['thumb'].'" alt="'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"/>';
-		else
-			$sideImage='';
-		$caption=$r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags(rawurldecode($r['notes'])),0,100).'...';
 		$items=preg_replace([
 			'/<print link>/',
 			'/<print content=[\"\']?schemaType[\"\']?>/',
@@ -326,8 +318,8 @@ if(file_exists(THEME.DS.'side_menu.html')){
 			date('Y-m-d',$r['ti']),
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 			$time,
-			$sideImage,
-			htmlspecialchars($caption,ENT_QUOTES,'UTF-8')
+			file_exists('media/thumbs/'.basename($r['thumb']))?'<img src="'.$r['thumb'].'" alt="'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'">':'',
+			$r['seoCaption']!=''?htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'):substr(strip_tags(rawurldecode($r['notes'])),0,100).'...'
 		],$items);
 		$output.=$items;
 	}
@@ -339,6 +331,5 @@ if(file_exists(THEME.DS.'side_menu.html')){
 		'',
 	],$outside,1);
 	$sideTemp=preg_replace('~<item>.*?<\/item>~is',$outside,$sideTemp,1);
-}else
-	$sideTemp='';
+}
 $content.=$sideTemp;

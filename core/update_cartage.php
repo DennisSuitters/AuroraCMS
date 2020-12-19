@@ -15,17 +15,17 @@ if(session_status()==PHP_SESSION_NONE)session_start();
 $getcfg=true;
 require'db.php';
 define('SESSIONID',session_id());
-define('THEME','..'.DS.'layout'.DS.$config['theme']);
-if(file_exists('layout'.DS.$config['theme'].DS.'images'.DS.'noimage.png'))
-	define('NOIMAGE','layout'.DS.$config['theme'].DS.'images'.DS.'noimage.png');
-elseif(file_exists('layout'.DS.$config['theme'].DS.'images'.DS.'noimage.gif'))
-	define('NOIMAGE','layout'.DS.$config['theme'].DS.'images'.DS.'noimage.gif');
-elseif(file_exists('layout'.DS.$config['theme'].DS.'images'.DS.'noimage.jpg'))
-	define('NOIMAGE','layout'.DS.$config['theme'].DS.'images'.DS.'noimage.jpg');
+define('THEME','../layout/'.$config['theme']);
+if(file_exists('layout/'.$config['theme'].'/images/noimage.png'))
+	define('NOIMAGE','layout/'.$config['theme'].'/images/noimage.png');
+elseif(file_exists('layout/'.$config['theme'].'/images/noimage.gif'))
+	define('NOIMAGE','layout/'.$config['theme'].'/images/noimage.gif');
+elseif(file_exists('layout/'.$config['theme'].'/images/noimage.jpg'))
+	define('NOIMAGE','layout/'.$config['theme'].'/images/noimage.jpg');
 else
-	define('NOIMAGE','core'.DS.'images'.DS.'noimage.png');
+	define('NOIMAGE','core/images/noimage.png');
 define('UNICODE','UTF-8');
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $cq=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
 $cq->execute([
 	':si'=>SESSIONID

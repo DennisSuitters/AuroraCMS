@@ -28,5 +28,8 @@ if($s->rowCount()>0){
     ':reason'=>'IP Manually from Comments',
     ':ti'=>time()
   ]);
-  echo'<script>window.top.window.$("#blacklist'.$id.'").addClass("hidden");window.top.window.toastr["success"]("Comment IP Added to Blacklist!");</script>';
+  echo'<script>'.
+        'window.top.window.$("#blacklist'.$id.'").addClass("hidden");'.
+        'window.top.window.toastr["success"]("Comment IP Added to Blacklist!");'.
+      '</script>';
 }

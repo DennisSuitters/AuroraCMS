@@ -89,7 +89,21 @@ if(stristr($html,'<breadcrumb>')){
   $breaditem=$matches[1];
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
-  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+  $jsonld='<script type="application/ld+json">'.
+    '{'.
+      '"@context":"http://schema.org",'.
+      '"@type":"BreadcrumbList",'.
+      '"itemListElement":'.
+        '['.
+          '{'.
+            '"@type":"ListItem",'.
+            '"position":1,'.
+            '"item":'.
+              '{'.
+                '"@id":"'.URL.'",'.
+                '"name":"Home"'.
+              '}'.
+          '},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -103,7 +117,15 @@ if(stristr($html,'<breadcrumb>')){
   ],[
     htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
   ],$breadcurrent);
-  $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
+  $jsonld.='{'.
+    '"@type":"ListItem",'.
+    '"position":2,'.
+    '"item":'.
+      '{'.
+        '"@id":"'.URL.urlencode($page['contentType']).'",'.
+        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
+      '}'.
+  '}';
   $breaditems.=$breadit;
   $html=preg_replace([
     '/<[\/]?breadcrumb>/',
@@ -142,7 +164,7 @@ $html=preg_replace([
   ''
 ],$html);
 $items=$html;
-include'core'.DS.'parser.php';
+require'core/parser.php';
 $html=$items;
 $seoTitle=empty($r['seoTitle'])?trim(htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')):htmlspecialchars($r['seoTitle'],ENT_QUOTES,'UTF-8');
 $metaRobots=!empty($r['metaRobots'])?htmlspecialchars($r['metaRobots'],ENT_QUOTES,'UTF-8'):'index,follow';

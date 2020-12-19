@@ -88,13 +88,19 @@ else{
             ':sid'=>$ri['iid']
           ]);
           while($i=$sc->fetch(PDO::FETCH_ASSOC)){
-            if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+            if($i['weightunit']!='kg')
+              $i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
     				$weight=$weight+($i['weight']*$ri['quantity']);
-    				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
-    				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
-    				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
-    				if($i['width']>$dimW)$dimW=$i['width'];
-    				if($i['length']>$dimL)$dimL=$i['length'];
+    				if($i['widthunit']!='cm')
+              $i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+    				if($i['lengthunit']!='cm')
+              $i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+    				if($i['heightunit']!='cm')
+              $i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+    				if($i['width']>$dimW)
+              $dimW=$i['width'];
+    				if($i['length']>$dimL)
+              $dimL=$i['length'];
     				$dimH=$dimH+($i['height']*$ri['quantity']);
           }
         }
@@ -246,13 +252,19 @@ else{
           htmlspecialchars($oir['cost']*$oir['quantity'],ENT_QUOTES,'UTF-8')
         ],$item);
         $total=$total+($oir['cost']*$oir['quantity']);
-        if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+        if($i['weightunit']!='kg')
+          $i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 				$weight=(int)$weight+((int)$i['weight']*(int)$oir['quantity']);
-				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
-				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
-				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
-				if($i['width']>$dimW)$dimW=$i['width'];
-				if($i['length']>$dimL)$dimL=$i['length'];
+				if($i['widthunit']!='cm')
+          $i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+				if($i['lengthunit']!='cm')
+          $i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+				if($i['heightunit']!='cm')
+          $i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+				if($i['width']>$dimW)
+          $dimW=$i['width'];
+				if($i['length']>$dimL)
+          $dimL=$i['length'];
 				$dimH=(int)$dimH+((int)$i['height']*(int)$oir['quantity']);
         $outitems.=$item;
         $zebra=$zebra==2?$zebra=1:$zebra=2;
@@ -270,8 +282,7 @@ else{
       ]);
       if($sr->rowCount()>0){
         $reward=$sr->fetch(PDO::FETCH_ASSOC);
-        if($reward['method']==1)$total=$total-$reward['value'];
-        else$total=($total*((100-$reward['value'])/100));
+        $total=$reward['method']==1?$total-$reward['value']:($total*((100-$reward['value'])/100));
         $total=number_format((float)$total, 2, '.', '');
         $order=preg_replace([
           '/<print rewards=[\"\']?code[\"\']?>/',
@@ -307,7 +318,6 @@ else{
           ''
         ],$order);
       }
-
       if($ru['spent']>0&&$config['options'][26]==1){
         if(stristr($order,'<discountRange>')){
           $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
@@ -317,10 +327,7 @@ else{
           ]);
           if($sd->rowCount()>0){
             $rd=$sd->fetch(PDO::FETCH_ASSOC);
-            if($rd['value']==2)
-              $total=$total*($rd['cost']/100);
-            else
-              $total=$total-$rd['cost'];
+            $total=$rd['total']==2?$total*($rd['cost']/100):$total-$rd['cost'];
             $total=number_format((float)$total, 2, '.', '');
             $order=preg_replace([
               '/<[\/]?discountRange>/',
@@ -337,14 +344,11 @@ else{
           $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order);
       }else
         $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order);
-
       $option='<option value="0">'.($r['postageCode']==0?($r['postageOption']!=''?$r['postageOption']:'Nothing Selected'):'Nothing Selected').'</option>';
       $sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
       $sco->execute();
       if($sco->rowCount()>0){
-        while($rco=$sco->fetch(PDO::FETCH_ASSOC)){
-          $option.='<option value="'.$rco['id'].'"'.($r['postageCode']==$rco['id']?' selected':'').'>'.$rco['title'].'</option>';
-        }
+        while($rco=$sco->fetch(PDO::FETCH_ASSOC))$option.='<option value="'.$rco['id'].'"'.($r['postageCode']==$rco['id']?' selected':'').'>'.$rco['title'].'</option>';
       }
       $order=preg_replace([
         '/<print orderurl>/',
@@ -368,7 +372,6 @@ else{
         $r['id'],
         $outitems
       ],$order);
-
       if(stristr($order,'<orderDeduction>')){
         preg_match('/<orderDeduction>([\w\W]*?)<\/orderDeduction>/',$order,$matches);
         $deductionHTML=$matches[1];
@@ -403,12 +406,11 @@ else{
         }
         $order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is',$deductionHTML,$order);
       }
-
       $html=preg_replace('~<order>~is',$order,$html,1);
-      if(stristr($html,'<print paypal>')&&$r['iid']==''&&$r['status']!='paid'){
-        $html=preg_replace([
-          '/<print paypal>/'
-        ],[
+      $html=preg_replace([
+        '/<print paypal>/'
+      ],[
+        (stristr($html,'<print paypal>')&&$r['iid']==''&&$r['status']!='paid'?
           '<div id="paypal-button-container"></div>'.
           '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script>'.
           '<script>'.
@@ -434,8 +436,9 @@ else{
                 '});'.
               '}'.
             '}).render("#paypal-button-container");'.
-          '</script>',
-
+          '</script>':
+        ''),
+      ],$html);
 /*          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
           '<div id="paypal-button-container"></div>'.
           '<script>paypal.Buttons({'.
@@ -487,9 +490,6 @@ else{
               '},'.
             '}).render(`#paypal-button-container`);'.
           '</script>', */
-        ],$html);
-      }else
-        $html=str_replace('<print paypal>','',$html);
     }else
       $html=preg_replace('~<order>~is','',$html,1);
   }else

@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 $getcfg=true;
 require'db.php';
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -22,7 +21,7 @@ $s->execute([
   ':id'=>$id
 ]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-include'zebraimage/zebra_image.php';
+require'zebraimage/zebra_image.php';
 $image=new Zebra_Image();
 $image->auto_handle_exif_orientation=false;
 if($act=='thumb'){
@@ -39,9 +38,9 @@ if($act=='thumb'){
     $height=$config['mediaMaxHeightThumb'];
     $process=true;
   }else{
-    $process=false;?>
-  window.top.window.toastr["error"]("The file set as the Thumbnail does not exist on the server!");
-<?php }
+    $process=false;
+    echo'<script>window.top.window.toastr["error"]("The file set as the Thumbnail does not exist on the server!");</script>';
+  }
 }
 if($act=='file'){
   if($r['file']=='')$process=false;
@@ -63,33 +62,33 @@ if($process==true){
   $image->handle_exif_orientation_tag=true;
   if(!$image->resize($width,$height,ZEBRA_IMAGE_CROP_CENTER)){
     switch($image->error){
-      case 1:?>
-  window.top.window.toastr["error"]("Source file could not be found!");
-<?php   break;
-      case 2:?>
-  window.top.window.toastr["error"]("Source file is not readable!");
-<?php   break;
-      case 3:?>
-  window.top.window.toastr["error"]("Could not write target file!");
-<?php   break;
-      case 4:?>
-  window.top.window.toastr["error"]("Unsupported source file format!");
-<?php   break;
-      case 5:?>
-  window.top.window.toastr["error"]("Unsupported target file format!");
-<?php   break;
-      case 6:?>
-  window.top.window.toastr["error"]("Unsupported target file format!");
-<?php   break;
-      case 7:?>
-  window.top.window.toastr["error"]("GD Library is not installed!");
-<?php   break;
-      case 8:?>
-  window.top.window.toastr["error"]("`chmod` command is disabled via server configuration!");
-<?php   break;
-      case 9:?>
-  window.top.window.toastr["error"]("`exif_read_data` function is not available!");
-<?php   break;
+      case 1:
+        echo'<script>window.top.window.toastr["error"]("Source file could not be found!");</script>';
+      break;
+      case 2:
+        echo'<script>window.top.window.toastr["error"]("Source file is not readable!");</script>';
+        break;
+      case 3:
+        echo'<script>window.top.window.toastr["error"]("Could not write target file!");</script>';
+        break;
+      case 4:
+        echo'<script>window.top.window.toastr["error"]("Unsupported source file format!");</script>';
+        break;
+      case 5:
+        echo'<script>window.top.window.toastr["error"]("Unsupported target file format!");</script>';
+        break;
+      case 6:
+        echo'<script>window.top.window.toastr["error"]("Unsupported target file format!");</script>';
+        break;
+      case 7:
+        echo'<script>window.top.window.toastr["error"]("GD Library is not installed!");</script>';
+        break;
+      case 8:
+        echo'<script>window.top.window.toastr["error"]("`chmod` command is disabled via server configuration!");</script>';
+        break;
+      case 9:
+        echo'<script>window.top.window.toastr["error"]("`exif_read_data` function is not available!");</script>';
+        break;
     }
   }else{
     if($act=='thumb'){
@@ -97,13 +96,16 @@ if($process==true){
       $s->execute([
         ':thumb'=>'media'.DS.$imgdest,
         ':id'=>$id
-      ]);?>
-  window.top.window.$('#thumbimage').attr('src','<?php echo'media'.DS.$imgdest.'?'.time();?>');
-  window.top.window.$('#thumb').val('<?php echo'media'.DS.$imgdest.'?'.time();?>');
-<?php } else {?>
-  window.top.window.$('#fileimage').attr('src','<?php echo'media'.DS.$imgdest.'?'.time();?>');
-  window.top.window.$('#file').val('<?php echo'media'.DS.$imgdest.'?'.time();?>');
-<?php }
+      ]);
+      echo'<script>'.
+        'window.top.window.$("#thumbimage").attr("src","media/'.$imgdest.'?'.time().'");'.
+        'window.top.window.$("#thumb").val("media/'.$imgdest.'?'.time().'");'.
+      '</script>';
+    }else{
+      echo'<script>'.
+        'window.top.window.$("#fileimage").attr("src","media/'.$imgdest.'?'.time().'");'.
+        'window.top.window.$("#file").val("media/'.$imgdest.'?'.time().'");'.
+      '</script>';
+    }
   }
 }
-echo'</script>';

@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 $error=0;
 $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):'';
 if($_POST['emailtrap']=='none'){
@@ -35,14 +34,17 @@ if($_POST['emailtrap']=='none'){
 				 'version = '.time().PHP_EOL.
 				 'url = '.PHP_EOL.
 				 'admin = '.PHP_EOL;
-		if(file_exists('config.ini'))unlink('config.ini');
+		if(file_exists('config.ini'))
+			unlink('config.ini');
 		$oFH=fopen("config.ini",'w');
 		fwrite($oFH,$txt);
-		fclose($oFH);?>
-		window.top.window.$('#step1').addClass('d-none');
-		window.top.window.$('#step2').removeClass('d-none');
-		window.top.window.$('#block').removeClass('d-block');
-<?php	}
+		fclose($oFH);
+		echo'<script>'.
+			'window.top.window.$("#step1").addClass("d-none");'.
+			'window.top.window.$("#step2").removeClass("d-none");'.
+			'window.top.window.$("#block").removeClass("d-block");'.
+		'</script>';
+	}
 	if($act=='step2'){
 		$config=parse_ini_file('config.ini',true);
 		$sysurl=isset($_POST['sysurl'])?filter_input(INPUT_POST,'sysurl',FILTER_SANITIZE_STRING):'';
@@ -68,9 +70,9 @@ if($_POST['emailtrap']=='none'){
 		fclose($oFH);
 		require'db.php';
 		if(!isset($db)){
-			$error=1;?>
-	window.top.window.$('#dbsuccess').html('<div class="alert alert-danger" role="alert">Database Connection Error!</div>');
-<?php }
+			$error=1;
+			echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);</script>';
+		}
 		if($error==0){
 			$prefix=$settings['database']['prefix'];
 			$sql=file_get_contents('aurora.sql');
@@ -85,9 +87,9 @@ if($_POST['emailtrap']=='none'){
 				],$sql);
 			$q=$db->exec($sql);
 			$e=$db->errorInfo();
-			if(is_null($e[2])){?>
-	window.top.window.$('#dbsuccess').html('<div class="alert alert-success" role="alert">Database Import Succeeded!</div>');
-<?php	}
+			if(is_null($e[2])){
+				echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-success" role="alert">Database Import Succeeded!</div>`);</script>';
+			}
 			require'db.php';
 			$prefix=$settings['database']['prefix'];
 			$sql=$db->prepare("UPDATE `".$prefix."config` SET `theme`=:theme,`maintenance`=1 WHERE `id`=1");
@@ -95,13 +97,15 @@ if($_POST['emailtrap']=='none'){
 				':theme'=>$aTheme
 			]);
 			$e=$db->errorInfo();
-			if(!is_null($e[2])){?>
-	window.top.window.alert('<?php echo$e[2];?>');
-<?php }else{?>
-	window.top.window.$('#step2').addClass('d-none');
-	window.top.window.$('#step3').removeClass('d-none');
-	window.top.window.$('#block').removeClass('d-block');
-<?php }
+			if(!is_null($e[2])){
+				echo'<script>window.top.window.alert(`'.$e[2].'`);</script>';
+			}else{
+				echo'<script>'.
+					'window.top.window.$("#step2").addClass("d-none");'.
+					'window.top.window.$("#step3").removeClass("d-none");'.
+					'window.top.window.$("#block").removeClass("d-block");'.
+				'</script>';
+			}
 		}
 	}
 	if($act=='step3'){
@@ -123,13 +127,14 @@ if($_POST['emailtrap']=='none'){
 			':ti'=>time()
 		]);
 		$e=$db->errorInfo();
-		if(!is_null($e[2])){?>
-window.top.window.alert('<?php echo$e[2];?>');
-<?php }else{?>
-	window.top.window.$('#step3').addClass('d-none');
-	window.top.window.$('#step4').removeClass('d-none');
-	window.top.window.$('#block').removeClass('d-block');
-<?php }
+		if(!is_null($e[2])){
+			echo'<script>window.top.window.alert(`'.$e[2].'`);</script>';
+		}else{
+			echo'<script>'.
+				'window.top.window.$("#step3").addClass("d-none");'.
+				'window.top.window.$("#step4").removeClass("d-none");'.
+				'window.top.window.$("#block").removeClass("d-block");'.
+			'</script>';
+		}
 	}
 }
-echo'</script>';

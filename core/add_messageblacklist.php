@@ -33,7 +33,7 @@ if($s->rowCount()>0){
     ':ti'=>time()
   ]);
   echo'<script>'.
-    'window.top.window.$("#blacklist'.$id.'").addClass("d-none");'.
-    'window.top.window.toastr["success"]("IP Added to Blacklist!");'.
-  '</script>';
+        'window.top.window.$("#blacklist'.$id.'").addClass("d-none");'.
+        'window.top.window.toastr["success"]("IP Added to Blacklist!");'.
+      '</script>';
 }

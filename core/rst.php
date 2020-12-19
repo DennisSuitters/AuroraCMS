@@ -29,7 +29,7 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
       ':password'=>$hash,
       ':id'=>$c['id']
     ]);
-    require'class.phpmailer.php';
+    require'phpmailer/class.phpmailer.php';
   	$mail=new PHPMailer;
   	$mail->isSendmail();
   	$toname=$c['name'];
@@ -63,9 +63,12 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
     ],$layout);
   	$mail->Body=($msg=''?$msg:'Hello '.($c['name']!=''?$name[0]:$c['username']).',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
   	$mail->AltBody=($msg=''?$msg:'Hello '.$name[0].',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
-  	if($mail->Send())echo'<div class="alert alert-success text-center" role="alert">Check your Email!</div>';
-    else echo'<div class="alert alert-danger text-center" role="alert">Problem Sending Email!</div>';
-  }else echo'<div class="alert alert-danger text-center" role="alert">No Account Found!</div>';
+  	if($mail->Send())
+      echo'<div class="alert alert-success text-center" role="alert">Check your Email!</div>';
+    else
+      echo'<div class="alert alert-danger text-center" role="alert">Problem Sending Email!</div>';
+  }else
+    echo'<div class="alert alert-danger text-center" role="alert">No Account Found!</div>';
 }else{
   $r=rand(0,10);
   switch($r){

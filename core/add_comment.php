@@ -13,8 +13,8 @@
  */
 $getcfg=true;
 require'db.php';
-include'projecthoneypot/class.projecthoneypot.php';
-include'spamfilter/class.spamfilter.php';
+require'projecthoneypot/class.projecthoneypot.php';
+require'spamfilter/class.spamfilter.php';
 $theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $error=0;
 $notification=$blacklisted='';
@@ -129,10 +129,13 @@ if($act=='add_comment'){
                  'Comment: '.$notes;
             $mail->Body=$msg;
             $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
-            if($mail->Send())$notification=$theme['settings']['comment_success'];
-            else$notification=$theme['settings']['comment_error'];
+            if($mail->Send())
+              $notification=$theme['settings']['comment_success'];
+            else
+              $notification=$theme['settings']['comment_error'];
           }
-        }else$notification=$theme['settings']['comment_error'];
+        }else
+          $notification=$theme['settings']['comment_error'];
       }
     }
   }

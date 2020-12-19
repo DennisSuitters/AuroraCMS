@@ -13,11 +13,11 @@
  */
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
-require_once'..'.DS.'db.php';
+require'../db.php';
 $theme=parse_ini_file('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $notification=$blacklisted='';
-include'..'.DS.'class.projecthoneypot.php';
-include'..'.DS.'class.spamfilter.php';
+require'../projecthoneypot/class.projecthoneypot.php';
+require'../spamfilter/class.spamfilter.php';
 $error=0;
 $notification=$blacklisted='';
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
@@ -100,7 +100,7 @@ if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
             ':active'=>0,
             ':ti'=>time()
           ]);
-          include'..'.DS.'class.phpmailer.php';
+          require'../phpmailer/class.phpmailer.php';
           $mail=new PHPMailer;
         	$mail->isSendmail();
         	$toname=$username;

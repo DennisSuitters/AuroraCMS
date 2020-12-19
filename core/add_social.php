@@ -13,18 +13,18 @@
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-include'sanitise.php';
+require'sanitise.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-function svg($svg,$class=null,$size=null){
-	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+function svg2($svg,$class=null,$size=null){
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
 }
 $user=filter_input(INPUT_POST,'user',FILTER_SANITIZE_NUMBER_INT);
 $icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
 $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
 if(filter_var($url,FILTER_VALIDATE_URL)){
-	if($icon=='none'||$url==''){?>
-window.top.window.toastr["error"]("Not all Fields were filled in!");
-<?php   }else{
+	if($icon=='none'||$url==''){
+		echo'<script>window.top.window.toastr["error"]("Not all Fields were filled in!");</script>';
+	}else{
 		$q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`icon`,`url`) VALUES (:uid,'social',:icon,:url)");
 		$q->execute([
 			':uid'=>kses($user,array()),
@@ -33,10 +33,30 @@ window.top.window.toastr["error"]("Not all Fields were filled in!");
 		]);
 		$id=$db->lastInsertId();
 		$e=$db->errorInfo();
-		if(is_null($e[2])){?>
-<script>
-	window.top.window.$('#social').append('<div id="l_<?php echo$id;?>" class="row mt-1"><div class="col-12 col-md-3"><div class="form-row"><div class="input-text col-12" data-tooltip="tooltip" aria-label="<?php echo ucfirst($icon);?>"><?php svg('social-'.$icon,'i-social');?>&nbsp;&nbsp;<?php echo ucfirst($icon);?></div></div></div><div class="col-12 col-md-8"><div class="form-row"><input type="text" value="<?php echo$url;?>" readonly></div></div><div class="col-12 col-md-1"><div class="form-row"><form target="sp" action="core/purge.php"><input name="id" type="hidden" value="<?php echo$id;?>"><input name="t" type="hidden" value="choices"><button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php svg('trash');?></button></form></div></div></div>');
-</script>
-<?php }
+		if(is_null($e[2])){
+			echo'<script>'.
+						'window.top.window.$("#social").append(`<div id="l_'.$id.'" class="row mt-1">'.
+							'<div class="col-12 col-md-3">'.
+								'<div class="form-row">'.
+									'<div class="input-text col-12" data-tooltip="tooltip" aria-label="'.ucfirst($icon).'">'.svg2('social-'.$icon,'i-social').'&nbsp;&nbsp;'.ucfirst($icon).'</div>'.
+								'</div>'.
+							'</div>'.
+							'<div class="col-12 col-md-8">'.
+								'<div class="form-row">'.
+									'<input type="text" value="'.$url.'" readonly>'.
+								'</div>'.
+							'</div>'.
+							'<div class="col-12 col-md-1">'.
+								'<div class="form-row">'.
+									'<form target="sp" action="core/purge.php">'.
+										'<input name="id" type="hidden" value="'.$id.'">'.
+										'<input name="t" type="hidden" value="choices">'.
+										'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button>'.
+									'</form>'.
+								'</div>'.
+							'</div>'.
+						'</div>`);'.
+					'</script>';
+		}
 	}
 }

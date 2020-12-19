@@ -16,10 +16,7 @@ $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
 if(!isset($canonical)||$canonical=='')
   $canonical=($view=='index'?URL:URL.$view.'/');
-  if($page['cover']=='')
-    $image=URL.THEME.DS.'images'.DS.'maintenance.png';
-  else
-    $image=$page['cover'];
+$image=$page['cover']==''?$image=URL.THEME.DS.'images'.DS.'maintenance.png':$image=$page['cover'];
 $html=preg_replace([
   '/<print background>/',
   '/<print theme>/',
@@ -83,10 +80,7 @@ $html=preg_replace([
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
   $page['notes']
 ],$html);
-if($config['ga_tracking']!='')
-  $html=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$html);
-else
-  $html=str_replace('<google_analytics>','',$html);
+$html=$config['ga_tracking']!=''?str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$html):str_replace('<google_analytics>','',$html);
 if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];

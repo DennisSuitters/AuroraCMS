@@ -32,4 +32,5 @@ if(($tbl!='NaN'&&$col!='NaN')||($tbl!=''&&$col!='')){
     ]);
   }
 }
-if($tbl!='messages'||$col!='pin')echo'<script>window.top.window.$("#'.$tbl.$col.$bit.'").remove();";</script>';
+if($tbl!='messages'||$col!='pin')
+  echo'<script>window.top.window.$("#'.$tbl.$col.$bit.'").remove();";</script>';

@@ -13,9 +13,9 @@
  */
 $getcfg=true;
 require'db.php';
-include'projecthoneypot/class.projecthoneypot.php';
-include'spamfilter/class.spamfilter.php';
-$theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
+require'projecthoneypot/class.projecthoneypot.php';
+require'spamfilter/class.spamfilter.php';
+$theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $ti=time();
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($config['chatAutoRemove']!=0){
@@ -24,12 +24,16 @@ if($config['chatAutoRemove']!=0){
 		':ti'=>$ti-$config['chatAutoRemove']
 	]);
 }
-define('THEME','layout'.DS.$config['theme']);
-if(file_exists(THEME.DS.'images'.DS.'noavatar.png')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar.gif')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar.jpg')) define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.jpg');
-else define('NOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
-define('ADMINNOAVATAR','core'.DS.'images'.DS.'i-noavatar.svg');
+define('THEME','layout/'.$config['theme']);
+if(file_exists(THEME.'/images/noavatar.png'))
+	define('NOAVATAR',THEME.'/images/noavatar.png');
+elseif(file_exists(THEME.'/images/noavatar.gif'))
+	define('NOAVATAR',THEME.'/images/noavatar.gif');
+elseif(file_exists(THEME.'/images/noavatar.jpg'))
+	define('NOAVATAR',THEME.'/images/noavatar.jpg');
+else
+	define('NOAVATAR','core/images/i-noavatar.svg');
+define('ADMINNOAVATAR','core/images/i-noavatar.svg');
 $aid=isset($_POST['aid'])?$_POST['aid']:0;
 $sid=isset($_POST['sid'])?$_POST['sid']:0;
 $who=isset($_POST['who'])?$_POST['who']:'none';
@@ -220,12 +224,17 @@ if($spam==FALSE){
 		    echo'<img class="bg-white" src="';
 				if($ru['avatar']!='')echo'media'.DS.'avatar'.DS.basename($ru['avatar']);
 	      elseif($ru['gravatar']!=''){
-	        if(stristr($ru['gravatar'],'@'))echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);
-	        elseif(stristr($ru['gravatar'],'gravatar.com/avatar/'))echo$ru['gravatar'];
-	        else echo ADMINNOAVATAR;
-	      }else echo ADMINNOAVATAR;
+	        if(stristr($ru['gravatar'],'@'))
+						echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);
+	        elseif(stristr($ru['gravatar'],'gravatar.com/avatar/'))
+						echo$ru['gravatar'];
+	        else
+						echo ADMINNOAVATAR;
+	      }else
+					echo ADMINNOAVATAR;
 				echo'">';
-	    }else echo'<img class="bg-white" src="'.NOAVATAR.'">';
+	    }else
+				echo'<img class="bg-white" src="'.NOAVATAR.'">';
       echo'<p><small class="d-block">'.$r['name'].' <small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.$r['notes'].'</p></li></ul>';
 	  }
 	}

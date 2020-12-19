@@ -8,6 +8,7 @@ This is a quick list of things what need to be fixed or worked on to help those 
   - Customer/Contact List
 - Orders
   - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways)
+- Integrate Open Street Maps for Location Mapping information. (Google Maps can eventually cost money depending in data used).
 - Import Catalogue from CSV
 - Import databases from other systems (WordPress, CubeCart, osCommerce, PrestaShop, etc.)
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.

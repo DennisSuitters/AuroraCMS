@@ -12,17 +12,15 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $theme=parse_ini_file(THEME.DS.'theme.ini',true);
-require'core'.DS.'puconverter.php';
-require'core'.DS.'class.phpmailer.php';
-if($page['notes']!=''){
-	$html=preg_replace([
-		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<[\/]?pagenotes>/'
-	],[
-		rawurldecode($page['notes']),
-		''
-	],$html);
-}else $html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+require'core/puconverter.php';
+require'core/phpmailer/class.phpmailer.php';
+$html=preg_replace([
+	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+	'/<print page=[\"\']?notes[\"\']?>/'
+],[
+	'',
+	rawurldecode($page['notes'])
+],$html);
 $notification='';
 $ti=time();
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
@@ -259,13 +257,19 @@ if($args[0]=='confirm'){
 				],$cartitem);
 				$total=$total+($ci['cost']*$ci['quantity']);
 				$cartitems.=$cartitem;
-				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+				if($i['weightunit']!='kg')
+					$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 				$weight=$weight+($i['weight']*$ci['quantity']);
-				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
-				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
-				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
-				if($i['width']>$dimW)$dimW=$i['width'];
-				if($i['length']>$dimL)$dimL=$i['length'];
+				if($i['widthunit']!='cm')
+					$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+				if($i['lengthunit']!='cm')
+					$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+				if($i['heightunit']!='cm')
+					$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+				if($i['width']>$dimW)
+					$dimW=$i['width'];
+				if($i['length']>$dimL)
+					$dimL=$i['length'];
 				$dimH=$dimH+($i['height']*$ci['quantity']);
 				$zebra=$zebra==2?$zebra=1:$zebra=2;
 			}
@@ -296,10 +300,7 @@ if($args[0]=='confirm'){
 				'',
 				''
 			],$html);
-			if(isset($user['rank'])&&$user['rank']>0)
-				$html=preg_replace('~<loggedin>.*?<\/loggedin>~is','',$html,1);
-			else
-				$html=preg_replace('/<[\/]?loggedin>/','',$html);
+			$html=preg_replace(isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/','',$html);
 		}else
 			$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
 	}

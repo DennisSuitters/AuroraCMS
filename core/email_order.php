@@ -61,14 +61,22 @@ $html='<style>'.
       '</style>'.
       '<body>';
 $pdflogo='';
-if(file_exists('..'.DS.'media'.DS.'orderheading.png'))$pdflogo='..'.DS.'media'.DS.'orderheading.png';
-elseif(file_exists('..'.DS.'media'.DS.'orderheading.jpg'))$pdflogo='..'.DS.'media'.DS.'orderheading.jpg';
-elseif(file_exists('..'.DS.'media'.DS.'orderheading.gif'))$pdflogo='..'.DS.'media'.DS.'orderheading.gif';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.png'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.png';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.jpg'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.jpg';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.gif'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'orderheading.gif';
-else$pdflogo='';
-if($pdflogo!='')$html.='<table class="table"><tr><td style="text-align:right"><img src="'.$pdflogo.'"></td></tr></table>';
+if(file_exists('../media/orderheading.png'))
+  $pdflogo='../media/orderheading.png';
+elseif(file_exists('../media/orderheading.jpg'))
+  $pdflogo='../media/orderheading.jpg';
+elseif(file_exists('../media/orderheading.gif'))
+  $pdflogo='../media/orderheading.gif';
+elseif(file_exists('../layout/'.$config['theme'].'/images/orderheading.png'))
+  $pdflogo='../layout/'.$config['theme'].'/images/orderheading.png';
+elseif(file_exists('../layout/'.$config['theme'].'/images/orderheading.jpg'))
+  $pdflogo='../layout/'.$config['theme'].'/images/orderheading.jpg';
+elseif(file_exists('../layout/'.$config['theme'].'/images/orderheading.gif'))
+  $pdflogo='../layout/'.$config['theme'].'/images/orderheading.gif';
+else
+  $pdflogo='';
+if($pdflogo!='')
+  $html.='<table class="table"><tr><td style="text-align:right"><img src="'.$pdflogo.'"></td></tr></table>';
 $html.='<table class="table">'.
           '<tr>'.
             '<td>'.
@@ -273,9 +281,9 @@ $pdf->writeHTML($html,true,false,true,false,'');
 $pdf->Output(__DIR__.DS.'..'.DS.'media'.DS.'orders'.DS.$oid.'.pdf','F');
 chmod('..' .DS.'media'.DS.'orders'.DS.$oid.'.pdf',0777);
 echo'<script>';
-if($act=='print'){?>
-	window.top.window.open('media/orders/<?php echo$oid;?>.pdf','_blank');
-<?php }else{
+if($act=='print'){
+	echo'<script>window.top.window.open("media/orders/'.$oid;.'.pdf","_blank");</script>';
+}else{
 	require'phpmailer/class.phpmailer.php';
 	$mail=new PHPMailer;
 	$mail->isSendmail();
@@ -327,13 +335,12 @@ if($act=='print'){?>
   ],$msg);
 	$mail->Body=$msg;
 	$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-	$mail->AddAttachment('..'.DS.'media'.DS.'orders'.DS.$oid.'.pdf');
+	$mail->AddAttachment('../media/orders/'.$oid.'.pdf');
 	if($mail->Send()){
-    $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'The Order to {business} was Sent Successfully!');?>
-window.top.window.toastr["success"]("<?php echo$alertmsg;?>");
-<?php }else{
-    $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'There was an issue sending the Order to {business}!');?>
-window.top.window.toastr["error"]("<?php echo$alertmsg;?>");
-<?php }
+    $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'The Order to {business} was Sent Successfully!');
+    echo'<script>window.top.window.toastr["success"](`'.$alertmsg.'`);</script>';
+  }else{
+    $alertmsg=str_replace('{business}',$c['business']!=''?$c['business']:$c['name'],'There was an issue sending the Order to {business}!');
+    echo'<script>window.top.window.toastr["error"](`'.$alertmsg.'`);</script>';
+  }
 }
-echo'</script>';

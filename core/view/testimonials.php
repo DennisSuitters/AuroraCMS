@@ -16,14 +16,27 @@ if(stristr($html,'<settings')){
 	$count=isset($matches[1])&&$matches[1]!=0?$matches[1]:$config['showItems'];
 }else
 	$count=$config['showItems'];
-
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
   $breaditem=$matches[1];
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-	$jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+	$jsonld='<script type="application/ld+json">'.
+		'{'.
+			'"@context":"http://schema.org",'.
+			'"@type":"BreadcrumbList",'.
+			'"itemListElement":'.
+				'['.
+					'{'.
+						'"@type":"ListItem",'.
+						'"position":1,'.
+						'"item":'.
+							'{'.
+								'"@id":"'.URL.'",'.
+								'"name":"Home"'.
+							'}'.
+					'},';
 	$breadit=preg_replace([
 		'/<print breadcrumb=[\"\']?url[\"\']?>/',
 		'/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -37,7 +50,15 @@ if(stristr($html,'<breadcrumb>')){
 	],[
 		htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
 	],$breadcurrent);
-	$jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
+	$jsonld.='{'.
+		'"@type":"ListItem",'.
+		'"position":2,'.
+		'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'",'.
+				'"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+	'}';
 	$breaditems.=$breadit;
 	$html=preg_replace([
 		'/<[\/]?breadcrumb>/',
@@ -51,33 +72,32 @@ if(stristr($html,'<breadcrumb>')){
 		''
 	],$html);
 }
-
-$html=preg_replace('~<settings.*?>~is','',$html);
-if($page['notes']!=''){
-	$html=preg_replace([
-		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<[\/]?pagenotes>/'
-	],[
-		rawurldecode($page['notes']),
-		''
-	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+$html=preg_replace([
+	'~<settings.*?>~is',
+	'/<print page=[\"\']?notes[\"\']?>/',
+	($page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is')
+],[
+	'',
+	rawurldecode($page['notes']),
+	''
+],$html);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
-$sqltest="SELECT * FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `status`='published' ORDER BY `ti` DESC".($count!='all'?" LIMIT 0,".$count:"");
-$s=$db->query($sqltest);
+$st="SELECT * FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `status`='published' ORDER BY `ti` DESC".($count!='all'?" LIMIT 0,".$count:"");
+$s=$db->query($st);
 $i=0;
 $items=$testitems='';
 if($s->rowCount()>0){
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+		if($r['notes']=='')continue;
 		$items=$item;
-		$items=$i==0?preg_replace('/<print content=[\"\']?active[\"\']?>/',' active', $items):preg_replace('/<print content=[\"\']?active[\"\']?>/','',$items);
 		$items=preg_replace([
+			'/<print content=[\"\']?active[\"\']?>/',
 			'/<print content=[\"\']?schemaType[\"\']?>/',
 			'/<print config=[\"\']?title[\"\']?>/',
 			'/<print datePub>/'
 		],[
+			($i==0?' active':''),
 			$r['schemaType'],
 			htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),
 			date('Y-d-m',$r['ti'])
@@ -108,7 +128,38 @@ if($s->rowCount()>0){
 		}
 		$jsonld='';
 		if(stristr($items,'<json-ld-testimonial>')){
-			$jsonld='<script type="application/ld+json">{"@context":"https://schema.org/","@type":"Review","itemReviewed":{"@type":"localBusiness","image":"'.THEME.'/images/logo.png'.'","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","telephone":"'.($config['phone']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'","address":{"@type":"PostalAddress","streetAddress":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').'","addressLocality":"'.htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8').'","addressRegion":"'.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').'","postalCode":"'.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'","addressCountry":"'.htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8').'"}},"author":"'.($r['name']!=''?htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'):'Anonymous').($r['name']!=''&&$r['business']!=''?' : ':'').($r['business']!=''?htmlspecialchars($r['business'],ENT_QUOTES,'UTF-8'):'').'","datePublished":"'.date('Y-m-d',$r['ti']).'","reviewBody":"'.htmlspecialchars(strip_tags(rawurldecode($r['notes'])),ENT_QUOTES,'UTF-8').'","reviewRating":{"@type":"Rating","bestRating":"5","ratingValue":"5","worstRating":"1"}}</script>';
+			$jsonld='<script type="application/ld+json">'.
+				'{'.
+					'"@context":"https://schema.org/",'.
+					'"@type":"Review",'.
+					'"itemReviewed":'.
+						'{'.
+							'"@type":"localBusiness",'.
+							'"image":"'.THEME.'/images/logo.png'.'",'.
+							'"name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'",'.
+							'"telephone":"'.($config['phone']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'",'.
+							'"address":'.
+								'{'.
+									'"@type":"PostalAddress",'.
+									'"streetAddress":"'.htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8').'",'.
+									'"addressLocality":"'.htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8').'",'.
+									'"addressRegion":"'.htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8').'",'.
+									'"postalCode":"'.htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8').'",'.
+									'"addressCountry":"'.htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8').'"'.
+								'}'.
+						'},'.
+						'"author":"'.($r['name']!=''?htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'):'Anonymous').($r['name']!=''&&$r['business']!=''?' : ':'').($r['business']!=''?htmlspecialchars($r['business'],ENT_QUOTES,'UTF-8'):'').'",'.
+						'"datePublished":"'.date('Y-m-d',$r['ti']).'",'.
+						'"reviewBody":"'.htmlspecialchars(strip_tags(rawurldecode($r['notes'])),ENT_QUOTES,'UTF-8').'",'.
+						'"reviewRating":'.
+							'{'.
+								'"@type":"Rating",'.
+								'"bestRating":"5",'.
+								'"ratingValue":"'.$r['rating'].'",'.
+								'"worstRating":"1"'.
+							'}'.
+				'}'.
+			'</script>';
 		}
 		$items=preg_replace([
 			'/<print content=[\"\']?notes[\"\']?>/',
@@ -137,9 +188,13 @@ if($s->rowCount()>0){
 		$i++;
 	}
 }
-if($i>0)$html=preg_replace('/<[\/]?controls>/','',$html);
-else$html=preg_replace('~<controls>.*?<\/controls>~is','',$html,1);
-$html=preg_replace('~<items>.*?<\/items>~is',$testitems,$html,1);
+$html=preg_replace([
+	($i>0?'/<[\/]?controls>/':'~<controls>.*?<\/controls>~is'),
+	'~<items>.*?<\/items>~is'
+],[
+	'',
+	$testitems
+],$html,1);
 $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
 $s->execute();
 if($s->rowCount()>0){

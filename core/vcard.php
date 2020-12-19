@@ -12,8 +12,11 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
-include'class.vcard.php';
-if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443)define('PROTOCOL','https://');else define('PROTOCOL','http://');
+require'class.vcard.php';
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443)
+  define('PROTOCOL','https://');
+else
+  define('PROTOCOL','http://');
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $username=isset($_GET['u'])?filter_input(INPUT_GET,'u',FILTER_SANITIZE_STRING):0;
 if($username!= 0){

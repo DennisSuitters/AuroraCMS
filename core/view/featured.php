@@ -42,15 +42,11 @@ if($cT=='all'||$cT=='mixed'||$cT=='folder'){
 		foreach(glob('media'.DS.'carousel'.DS.'*.*')as$file){
 			$fileinfo=pathinfo($file);
 			$filetime=filemtime($file);
-			if($file=='.')continue;
-			if($file=='..')continue;
+			if($file=='.'||$file='..')continue;
 			$filename=basename($file,'.'.$fileinfo['extension']);
-			if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'){
+			if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'||$fileinfo['extension']=='webp'){
 				if(!in_array('media'.DS.'carousel'.DS.$filename.'.html',$featuredfiles)){
-					if(file_exists('media'.DS.'carousel'.DS.$filename.'.html'))
-						$filehtml=file_get_contents('media'.DS.'carousel'.DS.$filename.'.html');
-					else
-						$filehtml='';
+					$filehtml=file_exists('media'.DS.'carousel'.DS.$filename.'.html')?file_get_contents('media'.DS.'carousel'.DS.$filename.'.html'):'';
 					$featuredfiles[]=[
 						'contentType'=>'carousel',
 						'thumb'=>'',
@@ -110,23 +106,19 @@ $arrowsNext='';
 if($ii>0){
 	foreach($featuredfiles as$key=>$r){
 		$item=$it;
-		if($i==0)
-			$indicators.='<input checked id="slide'.($i+1).'" name="slides" type="radio">';
-		else
-			$indicators.='<input id="slide'.($i+1).'" name="slides" type="radio">';
+		$indicators.=$i==0?'<input checked id="slide'.($i+1).'" name="slides" type="radio">':'<input id="slide'.($i+1).'" name="slides" type="radio">';
 		$arrowsprev.='<label class="slider-arrow prev" for="slide'.($i+1).'"></label>';
 		$arrowsnext.='<label class="slider-arrow next" for="slide'.($i+1).'"></label>';
-		if($r['link']=='nolink')
-			$item=preg_replace('~<link>.*?<\/link>~is','',$item,1);
-		else{
-			$item=preg_replace([
+		$item=$r['link']=='nolink'?
+			preg_replace('~<link>.*?<\/link>~is','',$item,1)
+		:
+			preg_replace([
 				'/<[\/]?link>/',
 				'/<print link>/'
 			],[
 				'',
 				$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
 			],$item);
-		}
 		$item=preg_replace('/<print content=[\"\']?title[\"\']?>/',$r['title'],$item);
 		if(preg_match('/<print content=[\"\']?thumb[\"\']?>/',$item)){
 			if($r['thumb']!='')
@@ -148,12 +140,12 @@ if($ii>0){
 		}
 		if(preg_match('/<print content=[\"\']?image[\"\']?>/',$item)){
 			$item=$r['file']!=''?preg_replace([
-					'/<print content=[\"\']?image[\"\']?>/',
-					'/<print cnt>/'
-				],[
-					htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'),
-					$i+1
-				],$item):preg_replace('/<print content=[\"\']?image[\"\']?>/','',$item);
+				'/<print content=[\"\']?image[\"\']?>/',
+				'/<print cnt>/'
+			],[
+				htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'),
+				$i+1
+			],$item):preg_replace('/<print content=[\"\']?image[\"\']?>/','',$item);
 		}
 		$item=$r['link']=='nolink'?preg_replace('/<print content=[\"\']?title[\"\']?>/','<span class="hidden">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</span>',$item):preg_replace('/<print content=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$item);
 		if($r['contentType']=='carousel')

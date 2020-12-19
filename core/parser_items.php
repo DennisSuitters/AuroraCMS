@@ -32,7 +32,21 @@ if(stristr($html,'<breadcrumb>')){
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+  $jsonld='<script type="application/ld+json">'.
+	'{'.
+		'"@context":"http://schema.org",'.
+		'"@type":"BreadcrumbList",'.
+		'"itemListElement":'.
+		'['.
+		'{'.
+			'"@type":"ListItem",'.
+			'"position":1,'.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.'",'.
+				'"name":"Home"'.
+			'}'.
+		'},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -49,7 +63,15 @@ if(stristr($html,'<breadcrumb>')){
       URL.urlencode($page['contentType']),
       htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
     ],$breaditem);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":2,'.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'",'.
+				'"name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}'.(isset($args[0])&&$args[0]!=''?',':'');
     $breaditems.=$breadit;
   }else{
     $breadit=preg_replace([
@@ -57,7 +79,15 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":2,'.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'",'.
+				'"name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}'.(isset($args[0])&&$args[0]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[0])&&$args[0]!=''){
@@ -77,7 +107,15 @@ if(stristr($html,'<breadcrumb>')){
 				htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
 			],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":'.$jsoni.','.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'",'.
+				'"name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}'.(isset($args[2])&&$args[2]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[2])&&$args[2]!=''){
@@ -97,7 +135,15 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[3])&&$args[3]!=''?',':'');
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":'.$jsoni.','.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'",'.
+				'"name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}'.(isset($args[3])&&$args[3]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[3])&&$args[3]!=''){
@@ -117,7 +163,15 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[4])&&$args[4]!=''?',':'');
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":'.$jsoni.','.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'",'.
+				'"name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}'.(isset($args[4])&&$args[4]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[4])&&$args[4]!=''){
@@ -137,7 +191,15 @@ if(stristr($html,'<breadcrumb>')){
       	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
     	],$breadcurrent);
 		}
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}}'.($r['title']!=''?',':'');
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":'.$jsoni.','.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'",'.
+				'"name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}'.($r['title']!=''?',':'');
     $breaditems.=$breadit;
   }
   if($r['title']!=''){
@@ -147,7 +209,15 @@ if(stristr($html,'<breadcrumb>')){
     ],[
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')
     ],$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}}';
+    $jsonld.='{'.
+			'"@type":"ListItem",'.
+			'"position":'.$jsoni.','.
+			'"item":'.
+			'{'.
+				'"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
+				'"name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"'.
+			'}'.
+		'}';
     $breaditems.=$breadit;
   }
   $html=preg_replace([
@@ -204,7 +274,15 @@ if(stristr($html,'<cover>')){
 				'/<print page=[\"\']?coverItem[\"\']?>/'
 			],[
 				'',
-				(file_exists('media'.DS.$cover)?'<img srcset="'.(file_exists('media'.DS.basename($cover))?'media'.DS.'lg'.DS.$cover.' '.$config['mediaMaxWidth'].'w,':'').(file_exists('media'.DS.'lg'.DS.basename($cover))?'media'.DS.'lg'.DS.$cover.' 1000w,':'').(file_exists('media'.DS.'md'.DS.basename($cover))?'media'.DS.'md'.DS.$cover.' 600w,':'').(file_exists('media'.DS.'sm'.DS.basename($cover))?'media'.DS.'sm'.DS.$cover.' 400w,':'').(file_exists('media'.DS.'thumbs'.DS.basename($cover))?'media'.DS.'thumbs'.DS.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').'" src="media'.DS.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image"><figcaption>'.($figcaption!=''?$figcaption:($page['fileALT']!=''?$page['fileALT']:'')).'</figcaption>':'')
+				(file_exists('media'.DS.$cover)?'<img srcset="'.
+					(file_exists('media'.DS.basename($cover))?'media'.DS.'lg'.DS.$cover.' '.$config['mediaMaxWidth'].'w,':'').
+					(file_exists('media'.DS.'lg'.DS.basename($cover))?'media'.DS.'lg'.DS.$cover.' 1000w,':'').
+					(file_exists('media'.DS.'md'.DS.basename($cover))?'media'.DS.'md'.DS.$cover.' 600w,':'').
+					(file_exists('media'.DS.'sm'.DS.basename($cover))?'media'.DS.'sm'.DS.$cover.' 400w,':'').
+					(file_exists('media'.DS.'thumbs'.DS.basename($cover))?'media'.DS.'thumbs'.DS.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
+				'" src="media'.DS.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image"><figcaption>'.
+					($figcaption!=''?$figcaption:($page['fileALT']!=''?$page['fileALT']:'')).
+				'</figcaption>':'')
 			],$html);
 			$iscover=true;
 		}
@@ -253,8 +331,14 @@ if(stristr($html,'<mediaitems')){
 				'/<print media=[\"\']?caption[\"\']?>/',
 				'/<print media=[\"\']?description[\"\']?>/'
 			],[
-				' srcset="'.(file_exists('media'.DS.'thumbs'.DS.basename($rm['file']))?'media'.DS.'thumbs'.DS.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').(file_exists('media'.DS.'md'.DS.basename($rm['file']))?'media'.DS.'md'.DS.basename($rm['file']).' 600w,':'').(file_exists('media'.DS.'sm'.DS.basename($rm['file']))?'media'.DS.'sm'.DS.basename($rm['file']).' 400w':'').'" ',
-				(file_exists('media'.DS.basename($rm['file']))?'media'.DS.basename($rm['file']).' '.$config['mediaMaxWidth'].'w,':'').(file_exists('media'.DS.'lg'.DS.basename($rm['file']))?'media'.DS.'lg'.DS.basename($rm['file']).' 1000w,':'').(file_exists('media'.DS.'md'.DS.basename($rm['file']))?'media'.DS.'md'.DS.basename($rm['file']).' 600w,':'').(file_exists('media'.DS.'sm'.DS.basename($rm['file']))?'media'.DS.'sm'.DS.basename($rm['file']).' 400w':''),
+				' srcset="'.
+					(file_exists('media'.DS.'thumbs'.DS.basename($rm['file']))?'media'.DS.'thumbs'.DS.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
+					(file_exists('media'.DS.'md'.DS.basename($rm['file']))?'media'.DS.'md'.DS.basename($rm['file']).' 600w,':'').
+					(file_exists('media'.DS.'sm'.DS.basename($rm['file']))?'media'.DS.'sm'.DS.basename($rm['file']).' 400w':'').'" ',
+				(file_exists('media'.DS.basename($rm['file']))?'media'.DS.basename($rm['file']).' '.$config['mediaMaxWidth'].'w,':'').
+					(file_exists('media'.DS.'lg'.DS.basename($rm['file']))?'media'.DS.'lg'.DS.basename($rm['file']).' 1000w,':'').
+					(file_exists('media'.DS.'md'.DS.basename($rm['file']))?'media'.DS.'md'.DS.basename($rm['file']).' 600w,':'').
+					(file_exists('media'.DS.'sm'.DS.basename($rm['file']))?'media'.DS.'sm'.DS.basename($rm['file']).' 400w':''),
 				($rm['file']!=''&&file_exists('media'.DS.'thumbs'.basename($rm['file']))?'media'.DS.'thumbs'.DS.basename($rm['file']):NOIMAGESM),
 				($rm['file']!=''&&file_exists('media'.DS.basename($rm['file']))?'media'.DS.basename($rm['file']):NOIMAGE),
 				htmlspecialchars(($rm['title']!=''?$rm['title']:$r['title'].': Image '.$rm['id']),ENT_QUOTES,'UTF-8'),
@@ -294,15 +378,18 @@ if(stristr($html,'<sort>')){
 	if($show=='item')
 		$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
 	elseif($view=='inventory'||$view=='service'||$view=='article'||$view=='news'||$view=='events'||$view=='portfolio'||$view=='gallery'){
-		$sortOptions='';
+		$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option>'.
+								 '<option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option>'.
+								 '<option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option>'.
+								 '<option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option>'.
+								 '<option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
 		if($view=='inventory')
-			$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="best"'.(isset($sort)&&$sort=='best'?' selected':'').'>Best Selling</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option><option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option><option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
+			$sortOptions='<option value="best"'.(isset($sort)&&$sort=='best'?' selected':'').'>Best Selling</option>'.
+									 '<option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option>'.
+									 '<option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
 		if($view=='service')
-			$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option><option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option><option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
-		if($view=='article'||$view=='news'||$view=='events')
-			$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
-		if($view=='portfolio'||$view=='gallery')
-			$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
+			$sortOptions='<option value="priceh"'.(isset($sort)&&$sort=='priceh'?' selected':'').'>Price: High to low</option>'.
+									 '<option value="pricel"'.(isset($sort)&&$sort=='pricel'?' selected':'').'>Price: Low to High</option>';
 		$html=preg_replace([
 			'/<[\/]?sort>/',
 			'/<sortOptions>/'
@@ -320,16 +407,13 @@ $html=preg_replace([
 	htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
 	$notification
 ],$html);
-if($page['notes']!=''){
-	$html=preg_replace([
-		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<[\/]?pagenotes>/'
-	],[
-		rawurldecode($page['notes']),
-		''
-	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+$html=preg_replace([
+	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+	'/<print page=[\"\']?notes[\"\']?>/'
+],[
+	'',
+	rawurldecode($page['notes'])
+],$html);
 $html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
 if(stristr($html,'<categories')){
 	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `title` ASC");
@@ -349,7 +433,10 @@ if(stristr($html,'<categories')){
 				'/<print category=[\"\']?title[\"\']?>/',
 				'/<print category=[\"\']?category[\"\']?>/'
 			],[
-				'srcset="'.($rc['icon']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($rc['icon']))?'media'.DS.'thumbs'.DS.basename($rc['icon']).' '.$config['mediaMaxWidthThumb'].'w,':'').($rc['icon']!=''&&file_exists('media'.DS.'sm'.DS.basename($rc['icon']))?'media'.DS.'sm'.DS.basename($rc['icon']).' 400w,':'').($rc['icon']!=''&&file_exists('media'.DS.'md'.DS.basename($rc['icon']))?'media'.DS.'md'.DS.basename($rc['icon']).' 600w':'').'" ',
+				'srcset="'.
+					($rc['icon']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($rc['icon']))?'media'.DS.'thumbs'.DS.basename($rc['icon']).' '.$config['mediaMaxWidthThumb'].'w,':'').
+					($rc['icon']!=''&&file_exists('media'.DS.'sm'.DS.basename($rc['icon']))?'media'.DS.'sm'.DS.basename($rc['icon']).' 400w,':'').
+					($rc['icon']!=''&&file_exists('media'.DS.'md'.DS.basename($rc['icon']))?'media'.DS.'md'.DS.basename($rc['icon']).' 600w':'').'" ',
 				($rc['icon']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($rc['icon']))?$rc['icon']:NOIMAGESM),
 				htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
 				URL.$rc['url'].'/category/'.str_replace(' ','-',$rc['title']).'/',
@@ -416,7 +503,10 @@ if(stristr($html,'<items')){
 			'/<print content=[\"\']?notes[\"\']?>/'
 		],[
 			'',
-			'srcset="'.($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'media'.DS.'thumbs'.DS.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').($r['thumb']!=''&&file_exists('media'.DS.'md'.DS.basename($r['thumb']))?'media'.DS.'md'.DS.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').($r['thumb']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['thumb']))?'media'.DS.'sm'.DS.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+			'srcset="'.
+				($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'media'.DS.'thumbs'.DS.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
+				($r['thumb']!=''&&file_exists('media'.DS.'md'.DS.basename($r['thumb']))?'media'.DS.'md'.DS.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').
+				($r['thumb']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['thumb']))?'media'.DS.'sm'.DS.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
 			($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'media'.DS.'thumbs'.DS.basename($r['thumb']):NOIMAGESM),
 			($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file']):NOIMAGE),
 			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),

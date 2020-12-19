@@ -20,7 +20,7 @@ $nous->execute([
 ]);
 $nou=$nous->fetch(PDO::FETCH_ASSOC);
 $nc=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."comments` WHERE `contentType`!='review' AND `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);
-$nr=$db->query("SELECT COUNT(`id`) AS cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND  `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);
+$nr=$db->query("SELECT COUNT(`id`) AS cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);
 $nm=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread'")->fetch(PDO::FETCH_ASSOC);
 $po=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."orders` WHERE `status`='pending'")->fetch(PDO::FETCH_ASSOC);
 $nb=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."content` WHERE `contentType`='booking' AND `status`!='confirmed'")->fetch(PDO::FETCH_ASSOC);

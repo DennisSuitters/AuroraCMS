@@ -11,9 +11,8 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-define('DS',DIRECTORY_SEPARATOR);
 $file=$_POST['file'];
 $code=$_POST['code'];
-$fp=fopen('..'.DS.$file,'w');
+$fp=fopen('../'.$file,'w');
 fwrite($fp,$code);
 fclose($fp);

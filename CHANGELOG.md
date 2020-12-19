@@ -20,3 +20,4 @@
 - ReOrganized the Stylesheets,JavaScript/jQuery, and PHP scripts for better management and cull unused scripts.
 - Remove Unneeded files from external libraries, and minify/uglify source to reduce footprint.
 - Update other projects PHP Classes and minified to save space.
+- Modify Styling for better Mobile Responsiveness in Administration area.

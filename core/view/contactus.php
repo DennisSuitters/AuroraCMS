@@ -12,38 +12,60 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(stristr($html,'<breadcrumb>')){
- preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
- $breaditem=$matches[1];
- preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
- $breadcurrent=$matches[1];
- $jsoni=2;
- $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
- $breadit=preg_replace([
-   '/<print breadcrumb=[\"\']?url[\"\']?>/',
-   '/<print breadcrumb=[\"\']?title[\"\']?>/'
- ],[
-   URL,
-   'Home'
- ],$breaditem);
- $breaditems=$breadit;
- $breadit=preg_replace([
-   '/<print breadcrumb=[\"\']?title[\"\']?>/'
- ],[
-   htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
- ],$breadcurrent);
- $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
- $breaditems.=$breadit;
- $html=preg_replace([
-   '/<[\/]?breadcrumb>/',
-   '/<json-ld-breadcrumb>/',
-   '~<breaditems>.*?<\/breaditems>~is',
-   '~<breadcurrent>.*?<\/breadcurrent>~is'
- ],[
-   '',
-   $jsonld.']}</script>',
-   $breaditems,
-   ''
- ],$html);
+  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
+  $breaditem=$matches[1];
+  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
+  $breadcurrent=$matches[1];
+  $jsoni=2;
+  $jsonld='<script type="application/ld+json">'.
+    '{'.
+      '"@context":"http://schema.org",'.
+      '"@type":"BreadcrumbList",'.
+      '"itemListElement":'.
+        '['.
+          '{'.
+            '"@type":"ListItem",'.
+            '"position":1,'.
+            '"item":'.
+              '{'.
+                '"@id":"'.URL.'",'.
+                '"name":"Home"'.
+              '}'.
+          '},';
+  $breadit=preg_replace([
+    '/<print breadcrumb=[\"\']?url[\"\']?>/',
+    '/<print breadcrumb=[\"\']?title[\"\']?>/'
+  ],[
+    URL,
+    'Home'
+  ],$breaditem);
+  $breaditems=$breadit;
+  $breadit=preg_replace([
+    '/<print breadcrumb=[\"\']?title[\"\']?>/'
+  ],[
+    htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
+  ],$breadcurrent);
+  $jsonld.='{'.
+    '"@type":"ListItem",'.
+    '"position":2,'.
+    '"item":'.
+      '{'.
+        '"@id":"'.URL.urlencode($page['contentType']).'",'.
+        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
+      '}'.
+  '}';
+  $breaditems.=$breadit;
+  $html=preg_replace([
+    '/<[\/]?breadcrumb>/',
+    '/<json-ld-breadcrumb>/',
+    '~<breaditems>.*?<\/breaditems>~is',
+    '~<breadcurrent>.*?<\/breadcurrent>~is'
+  ],[
+    '',
+    $jsonld.']}</script>',
+    $breaditems,
+    ''
+  ],$html);
 }
 if($page['notes']!=''){
 	$html=preg_replace([
@@ -103,12 +125,12 @@ if(stristr($html,'<hours>')){
 			}
 		}
 		$html=preg_replace([
-				'/<[\/]?hours>/',
-				'~<buildHours>.*?<\/buildHours>~is'
-			],[
-				'',
-				$hoursItems,
-			],$html);
+			'/<[\/]?hours>/',
+			'~<buildHours>.*?<\/buildHours>~is'
+		],[
+			'',
+			$hoursItems,
+		],$html);
 	}else{
 		$html=preg_replace([
       '~<hours>.*?<\/hours>~is'
@@ -118,65 +140,41 @@ if(stristr($html,'<hours>')){
   }
 }
 if(stristr($html,'<email>')){
-	if($config['options'][23]==1){
-		$html=preg_replace([
-			'/<[\/]?email>/',
-			'/<print config=[\"\']?email[\"\']?>/'
-		],[
-			'',
-			'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
-		],$html);
-	}else{
-		$html=preg_replace([
-      '~<email>.*?<\/email>~is'
-    ],[
-      ''
-    ],$html,1);
-  }
+	$html=preg_replace([
+		$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
+		'/<print config=[\"\']?email[\"\']?>/'
+	],[
+		'',
+		'<a href="contactus">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
+	],$html);
 }
 if(stristr($html,'<contact>')){
-	if($config['options'][22]==1){
-		$html=preg_replace([
-			'/<[\/]?contact>/',
-			'/<print config=[\"\']?business[\"\']?>/',
-			'/<print config=[\"\']?address[\"\']?>/',
-			'/<print config=[\"\']?suburb[\"\']?>/',
-			'/<print config=[\"\']?postcode[\"\']?>/',
-			'/<print config=[\"\']?country[\"\']?>/',
-		],[
-			'',
-			htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
-			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
-		],$html);
-	}else{
-		$html=preg_replace([
-      '~<contact>.*?<\/contact>~is'
-    ],[
-      ''
-    ],$html,1);
-  }
+	$html=preg_replace([
+		$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
+		'/<print config=[\"\']?business[\"\']?>/',
+		'/<print config=[\"\']?address[\"\']?>/',
+		'/<print config=[\"\']?suburb[\"\']?>/',
+		'/<print config=[\"\']?postcode[\"\']?>/',
+		'/<print config=[\"\']?country[\"\']?>/',
+	],[
+		'',
+		htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
+		htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
+		htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
+		$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
+		htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
+	],$html);
 }
 if(stristr($html,'<phone>')){
-	if($config['options'][24]==1){
-		$html=preg_replace([
-			'/<[\/]?phone>/',
-			'/<print config=[\"\']?phone[\"\']?>/',
-			'/<print config=[\"\']?mobile[\"\']?>/'
-		],[
-			'',
-			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
-			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
-		],$html);
-	}else{
-		$html=preg_replace([
-      '~<phone>.*?<\/phone>~is'
-    ],[
-      ''
-    ],$html,1);
-  }
+	$html=preg_replace([
+		$config['options'][24]==1?'/<[\/]?phone>/':'~<phone>.*?<\/phone>~is',
+		'/<print config=[\"\']?phone[\"\']?>/',
+		'/<print config=[\"\']?mobile[\"\']?>/'
+	],[
+		'',
+		$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
+		$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
+	],$html);
 }
 $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
 $s->execute();
@@ -194,5 +192,5 @@ if($s->rowCount()>0){
 		'/<[\/]?subjectText>/'
 	],'',$html);
 }
-require'core'.DS.'parser.php';
+require'core/parser.php';
 $content.=$html;

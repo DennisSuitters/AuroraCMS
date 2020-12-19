@@ -16,7 +16,7 @@ $getcfg=true;
 require'db.php';
 if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))
 	$config['theme']=$_GET['theme'];
-define('THEME','layout'.DS.$config['theme']);
+define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
 $s->execute([
@@ -31,63 +31,63 @@ if($config['php_options'][6]==1){
 if($config['php_options'][5]==1){
 	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login')||stristr($_SERVER['REQUEST_URI'],'wp-content')||stristr($_SERVER['REQUEST_URI'],'wp-plugin')||(isset($_GET['author']) && $_GET['author']!='')){
 		echo'You know, not every fecking Website uses WordPress!<br>';
-		require'core'.DS.'xmlrpc.php';
+		require'core/xmlrpc.php';
 		die();
 	}
 	if(stristr($_SERVER['REQUEST_URI'],'magento')){
 		echo'Nope NOT Magento!<br>';
-		require'core'.DS.'xmlrpc.php';
+		require'core/xmlrpc.php';
 		die();
 	}
 	if(stristr($_SERVER['REQUEST_URI'],'.aspx')){
 		echo'Nope doesn\'t run on ASP, blergh!<br>Damn it! Now I have to get the taste of Microsoft out of my interpreter!<br>';
-		require'core'.DS.'xmlrpc.php';
+		require'core/xmlrpc.php';
 		die();
 	}
 }
-if(file_exists(THEME.DS.'images'.DS.'favicon.png')){
-	define('FAVICON',THEME.DS.'images'.DS.'favicon.png');
+if(file_exists(THEME.'/images/favicon.png')){
+	define('FAVICON',THEME.'/images/favicon.png');
 	define('FAVICONTYPE','image/png');
-}elseif(file_exists(THEME.DS.'images'.DS.'favicon.gif')){
-	define('FAVICON',THEME.DS.'images'.DS.'favicon.gif');
+}elseif(file_exists(THEME.'/images/favicon.gif')){
+	define('FAVICON',THEME.'/images/favicon.gif');
 	define('FAVICONTYPE','image/gif');
-}elseif(file_exists(THEME.DS.'images'.DS.'favicon.jpg')){
-	define('FAVICON',THEME.DS.'images'.DS.'favicon.jpg');
+}elseif(file_exists(THEME.'/images/favicon.jpg')){
+	define('FAVICON',THEME.'/images/favicon.jpg');
 	define('FAVICONTYPE','image/jpg');
-}elseif(file_exists(THEME.DS.'images'.DS.'favicon.ico')){
-	define('FAVICON',THEME.DS.'images'.DS.'favicon.ico');
+}elseif(file_exists(THEME.'/images/favicon.ico')){
+	define('FAVICON',THEME.'/images/favicon.ico');
 	define('FAVICONTYPE','image/ico');
 }else{
-	define('FAVICON','core'.DS.'images'.DS.'favicon.png');
+	define('FAVICON','core/images/favicon.png');
 	define('FAVICONTYPE','image/png');
 }
-if(file_exists(THEME.DS.'images'.DS.'noimage-md.png'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage-md.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage-md.gif'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage-md.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage-md.jpg'))
-	define('NOIMAGE',THEME.DS.'images'.DS.'noimage-md.jpg');
+if(file_exists(THEME.'/images/noimage-md.png'))
+	define('NOIMAGE',THEME.'/images/noimage-md.png');
+elseif(file_exists(THEME.'/images/noimage-md.gif'))
+	define('NOIMAGE',THEME.'/images/noimage-md.gif');
+elseif(file_exists(THEME.'/images/noimage-md.jpg'))
+	define('NOIMAGE',THEME.'/images/noimage-md.jpg');
 else
-	define('NOIMAGE','core'.DS.'images'.DS.'noimage-md.jpg');
-if(file_exists(THEME.DS.'images'.DS.'noimage-sm.png'))
-	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage-sm.gif'))
-	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noimage-sm.jpg'))
-	define('NOIMAGESM',THEME.DS.'images'.DS.'noimage-sm.jpg');
+	define('NOIMAGE','core/images/noimage-md.jpg');
+if(file_exists(THEME.'/images/noimage-sm.png'))
+	define('NOIMAGESM',THEME.'/images/noimage-sm.png');
+elseif(file_exists(THEME.'/images/noimage-sm.gif'))
+	define('NOIMAGESM',THEME.'/images/noimage-sm.gif');
+elseif(file_exists(THEME.'/images/noimage-sm.jpg'))
+	define('NOIMAGESM',THEME.'/images/noimage-sm.jpg');
 else
-	define('NOIMAGESM','core'.DS.'images'.DS.'noimage-sm.jpg');
-define('ADMINNOIMAGE','core'.DS.'images'.DS.'noimage-sm.jpg');
-define('ADMINNOIMAGEMD','core'.DS.'images'.DS.'noimage-md.jpg');
-if(file_exists(THEME.DS.'images'.DS.'noavatar-md.png'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar-md.png');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar-md.gif'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar-md.gif');
-elseif(file_exists(THEME.DS.'images'.DS.'noavatar.jpg'))
-	define('NOAVATAR',THEME.DS.'images'.DS.'noavatar.jpg');
+	define('NOIMAGESM','core/images/noimage-sm.jpg');
+define('ADMINNOIMAGE','core/images/noimage-sm.jpg');
+define('ADMINNOIMAGEMD','core/images/noimage-md.jpg');
+if(file_exists(THEME.'/images/noavatar-md.png'))
+	define('NOAVATAR',THEME.'/images/noavatar-md.png');
+elseif(file_exists(THEME.'/images/noavatar-md.gif'))
+	define('NOAVATAR',THEME.'/images/noavatar-md.gif');
+elseif(file_exists(THEME.'/images/noavatar.jpg'))
+	define('NOAVATAR',THEME.'/images/noavatar.jpg');
 else
-	define('NOAVATAR','core'.DS.'images'.DS.'noavatar.jpg');
-define('ADMINNOAVATAR','core'.DS.'images'.DS.'noavatar.jpg');
+	define('NOAVATAR','core/images/noavatar.jpg');
+define('ADMINNOAVATAR','core/images/noavatar.jpg');
 require'login.php';
 function rank($txt){
 	if($txt==0)return'visitor';
@@ -112,14 +112,14 @@ function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
 }
 function frontsvg($svg){
-	if(file_exists(THEME.DS.'svg'.DS.$svg.'.svg'))
-		return file_get_contents(THEME.DS.'svg'.DS.$svg.'.svg');
-	elseif(file_exists('..'.DS.THEME.'svg'.DS.$svg.'.svg'))
-		return file_get_contents('..'.DS.THEME.DS.'svg'.DS.$svg.'.svg');
-	elseif(file_exists('..'.DS.THEME.'svg'.DS.$svg.'.svg'))
-		return file_get_contents('..'.DS.THEME.'svg'.DS.$svg.'.svg');
-	elseif(file_exists('..'.DS.'..'.DS.THEME.'svg'.DS.$svg.'.svg'))
-		return file_get_contents('..'.DS.'..'.DS.THEME.'svg'.DS.$svg.'.svg');
+	if(file_exists(THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents(THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../../'.THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents('../../'.THEME.'/svg/'.$svg.'.svg');
 	else
 		return'No Such File: '.$svg;
 }
@@ -138,15 +138,24 @@ function currentSeason($out='echo') {
 		361=>"summer",
   	365=>"summer",
   ];
-	if($day>0&&$day<60)$season="summer";
-	if($day>59&&$day<154)$season="autumn";
-	if($day>153&&$day<246)$season="winter";
-	if($day>246&&$day<336)$season="spring";
-	if($day>335&&$day<366)$season="summer";
-	if($day>275&&$day<306)$season="halloween";
-	if($day>349&&$day<361)$season="xmas";
-	if(!file_exists('media/seasons/'.$season.'.jpg'))$season="aurora";
-	if($hour>22||$hour<6)$season="aurora";
+	if($day>0&&$day<60)
+		$season="summer";
+	if($day>59&&$day<154)
+		$season="autumn";
+	if($day>153&&$day<246)
+		$season="winter";
+	if($day>246&&$day<336)
+		$season="spring";
+	if($day>335&&$day<366)
+		$season="summer";
+	if($day>275&&$day<306)
+		$season="halloween";
+	if($day>349&&$day<361)
+		$season="xmas";
+	if(!file_exists('media/seasons/'.$season.'.jpg'))
+		$season="aurora";
+	if($hour>22||$hour<6)
+		$season="aurora";
 	if($out=='return')
 		return $season;
 	else
@@ -240,10 +249,10 @@ function elapsed_time($b=0,$e=0){
 		$b=number_format($td,3).'s';
   return trim($b);
 }
-function size_format($B, $D=2){
-    $S='kMGTPEZY';
-    $F=floor((strlen($B) - 1) / 3);
-    return @sprintf("%.{$D}f", $B / pow(1024, $F)) . ' ' . @$S[$F-1] . 'B';
+function size_format($B,$D=2){
+  $S='kMGTPEZY';
+  $F=floor((strlen($B) - 1) / 3);
+  return @sprintf("%.{$D}f",$B / pow(1024, $F)).' '.@$S[$F-1].'B';
 }
 function tomoment($f){
   $r=['d'=>'DD','D'=>'ddd','j'=>'D','l'=>'dddd','N'=>'E','S'=>'o','w'=>'e','z'=>'DDD','W'=>'W','F'=>'MMMM','m'=>'MM','M'=>'MMM','n'=>'M','t'=>'','L'=>'','o'=>'YYYY','Y'=>'YYYY','y'=>'YY','a'=>'a','A'=>'A','B'=>'','g'=>'h','G'=>'H','h'=>'hh','H'=>'HH','i'=>'mm','s'=>'ss','u'=>'SSS','e'=>'zz','I'=>'','O'=>'','P'=>'','T'=>'','Z'=>'','c'=>'','r'=>'','U'=>'X'];

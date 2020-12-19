@@ -13,8 +13,8 @@
  */
 $getcfg=true;
 require'db.php';
-include'projecthoneypot/class.projecthoneypot.php';
-include'spamfilter/class.spamfilter.php';
+require'projecthoneypot/class.projecthoneypot.php';
+require'spamfilter/class.spamfilter.php';
 $theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
 $error=0;
 $notification=$blacklisted='';

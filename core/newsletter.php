@@ -11,14 +11,13 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 $getcfg=true;
 require'db.php';
-define('THEME','..'.DS.'layout'.DS.$config['theme']);
+define('THEME','../layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT `title`,`notes` FROM `".$prefix."content` WHERE `id`=:id");
 $s->execute([
@@ -31,7 +30,7 @@ $u->execute([
   ':tis'=>time(),
   ':id'=>$id
 ]);
-include'phpmailer/class.phpmailer.php';
+require'phpmailer/class.phpmailer.php';
 if($config['email']!=''){
   $mail=new PHPMailer;
   $body=rawurldecode($news['notes']);
@@ -52,7 +51,7 @@ if($config['email']!=''){
         $arr=parse_url($m[1]);
         if(!isset($arr['host'])||!isset($arr['path']))continue;
         $imgname=basename($m[1]);
-        $mail->addEmbeddedImage('..'.DS.'media'.DS.$imgname,$imgid,$imgname);
+        $mail->addEmbeddedImage('../media/'.$imgname,$imgid,$imgname);
         $body=str_replace($img,'<img alt="" src="cid:'.$imgid.'" style="border:none"/>',$body);
       }
     }
@@ -75,14 +74,16 @@ if($config['email']!=''){
       $sendCount++;
     }
   }
-  if(!empty($mail->ErrorInfo)){?>
-    window.top.window.toastr("error")("<?php echo$mail->ErrorInfo;?>");
-    window.top.window.$('#block').css({'display':'none'});
-<?php }else{?>
-    window.top.window.toastr["success"]("Newsletters Sent Successfully!");
-    window.top.window.$('#block').css({'display':'none'});
-<?php }
-}else{?>
-  window.top.window.toastr("error")("No system Email has been set!");
-<?php }
-echo'</script>';
+  if(!empty($mail->ErrorInfo)){
+    echo'<script>'.
+          'window.top.window.toastr("error")("'.$mail->ErrorInfo.'");'.
+          'window.top.window.$("#block").css({"display":"none"});'.
+        '</script>';
+  }else{
+    echo'<script>'.
+      'window.top.window.toastr["success"]("Newsletters Sent Successfully!");'.
+      'window.top.window.$("#block").css({"display":"none"})'.
+    '</script>';
+  }
+}else
+  echo'<script>window.top.window.toastr("error")("No system Email has been set!");</script>';

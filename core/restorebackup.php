@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo"<script>window.top.window.$('#backup_info').html('');";
 $getcfg=true;
 require'db.php';
 $fu=$_FILES['fu'];
@@ -22,11 +21,16 @@ if(isset($_FILES['fu'])){
     if(stristr($file,'.sql.gz'))$sql=gzinflate(substr($sql,10,-8));
     $q=$db->exec($sql);
     $e=$db->errorInfo();
-    if(is_null($e[2])){?>
-  window.top.window.toastr["success"]("Resture from Backup Successfull!");
-<?php }else{?>
-  window.top.window.toastr["error"]("There was an issue Restoring the Backup!<br><?php echo$e[2];?>");
-<?php }
+    if(is_null($e[2])){
+      echo'<script>'.
+        'window.top.window.$("#backup_info").html("");'.
+        'window.top.window.toastr["success"]("Resture from Backup Successfull!");'.
+      '</script>';
+    }else{
+      echo'<script>'.
+        'window.top.window.$("#backup_info").html("");'.
+        'window.top.window.toastr["error"]("There was an issue Restoring the Backup!<br>'.$e[2].'");'.
+      '</script>';
+    }
   }
 }
-echo'</script>';

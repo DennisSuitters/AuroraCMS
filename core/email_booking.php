@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 $getcfg=true;
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -81,13 +80,12 @@ if($c['email']!=''){
   $mail->Body=$msg;
   $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
   if($mail->Send()){
-    $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'The Booking to {business} was Sent Successfully!');?>
-window.top.window.toastr["success"]("<?php echo$alertmsg;?>");
-<?php }else{
-    $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'There was an issue sending the Order to {business}!');?>
-window.top.window.toastr["error"]("<?php echo$alertmsg;?>");
-  <?php }
-}else{?>
-window.top.window.toastr["info"]("<?php echo'Client Email has not been set!';?>");
-<?php }
-echo'</script>';
+    $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'The Booking to {business} was Sent Successfully!');
+    echo'<script>window.top.window.toastr["success"](`'.$alertmsg.'`);</script>';
+  }else{
+    $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'There was an issue sending the Order to {business}!');
+    echo'<script>window.top.window.toastr["error"](`'.$alertmsg.'`);</script>';
+  }
+}else{
+  echo'<script>window.top.window.toastr["info"](`Client Email has not been set!`");</script>';
+}

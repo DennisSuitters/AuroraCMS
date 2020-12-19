@@ -28,14 +28,14 @@ if($show=='item'){
 		$parse='';
 }
 $parse=preg_replace([
-		'/<print content=[\"\']?id[\"\']?>/',
-		'/<print content=[\"\']?schemaType[\"\']?>/'
-	],[
-		isset($r['id'])?$r['id']:$page['id'],
-		isset($r['schemaType'])?htmlentities($r['schemaType'],ENT_QUOTES,'UTF-8'):htmlentities($page['schemaType'],ENT_QUOTES,'UTF-8')
-	],$parse);
+	'/<print content=[\"\']?id[\"\']?>/',
+	'/<print content=[\"\']?schemaType[\"\']?>/'
+],[
+	isset($r['id'])?$r['id']:$page['id'],
+	isset($r['schemaType'])?htmlentities($r['schemaType'],ENT_QUOTES,'UTF-8'):htmlentities($page['schemaType'],ENT_QUOTES,'UTF-8')
+],$parse);
 if(preg_match('/<author>([\w\W]*?)<\/author>/',$parse)&&$view=='article'&&$r['uid']!=0)
-	$parse=str_replace(['<author>','</author>'],'',$parse);
+	$parse=preg_replace('/<[\/]?author>/','',$parse);
 else
 	$parse=preg_replace('~<author>.*?<\/author>~is','',$parse,1);
 $tags=$doc->getElementsByTagName('print');
@@ -116,9 +116,9 @@ foreach($tags as$tag){
 				$container=$parsing='';
 			break;
 		case'category':
-			if(isset($r['category_1'])&&$r['category_1']!=''){
+			if(isset($r['category_1'])&&$r['category_1']!='')
 				$parsing.=' <a href="'.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
-			}else
+			else
 				$container=$parsing='';
 			break;
 		case'categories':

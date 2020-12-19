@@ -74,70 +74,44 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 				':id'=>$user['id']
 			]);
 			$user=$s->fetch(PDO::FETCH_ASSOC);
-			if(stristr($html,'<success accountHidden>'))
-				$html=str_replace('<success accountHidden>',$theme['settings']['settings_show'],$html);
-			if(stristr($html,'<error accountHidden>'))
-				$html=str_replace('<error accountHidden>',$theme['settings']['settings_hidden'],$html);
+			$html=str_replace([
+				'<success accountHidden>',
+				'<error accountHidden>'
+			],[
+				$theme['settings']['settings_show'],
+				$theme['settings']['settings_hidden']
+			],$html);
 		}else{
-			if(stristr($html,'<success accountHidden>'))
-				$html=str_replace('<success accountHidden>',$theme['settings']['settings_hidden'],$html);
-			if(stristr($html,'<error accountHidden>'))
-				$html=str_replace('<error accountHidden>',$theme['settings']['settings_show'],$html);
+			$html=str_replace([
+				'<success accountHidden>',
+				'<error accountHidden>'
+			],[
+				$theme['settings']['settings_hidden'],
+				$theme['settings']['settings_show']
+			],$html);
 		}
 	}else{
-		if(stristr($html,'<success accountHidden>'))
-			$html=str_replace('<success accountHidden>',$theme['settings']['settings_hidden'],$html);
-		if(stristr($html,'<error accountHidden>'))
-			$html=str_replace('<error accountHidden>',$theme['settings']['settings_hidden'],$html);
+		$html=str_replace([
+			'<success accountHidden>',
+			'<error accountHidden>'
+		],[
+			$theme['settings']['settings_hidden'],
+			$theme['settings']['settings_hidden']
+		],$html);
 	}
-	if(stristr($html,'<error currentPassCSS>'))
-		$html=str_replace('<error currentPassCSS>',$currentPassCSS,$html);
-	if(stristr($html,'<error currentPassHidden>'))
-		$html=str_replace('<error currentPassHidden>',$currentPassHidden,$html);
-	if(stristr($html,'<error matchPassCSS>'))
-		$html=str_replace('<error matchPassCSS>',$matchPassCSS,$html);
-	if(stristr($html,'<error matchPassHidden>'))
-		$html=str_replace('<error matchPassHidden>',$matchPassHidden,$html);
-	if(stristr($html,'<success passUpdated>'))
-		$html=str_replace('<success passUpdated>',$success,$html);
-	$rank='Visitor';
-	switch($user['rank']){
-		case 100:
-			$rank='Subscriber';
-			break;
-		case 200:
-			$rank='Member';
-			break;
-		case 300:
-			$rank='Client';
-			break;
-		case 400:
-			$rank='Contributor';
-			break;
-		case 500:
-			$rank='Moderator';
-			break;
-		case 600:
-			$rank='Author';
-			break;
-		case 700:
-			$rank='Editor';
-			break;
-		case 800:
-			$rank='Manager';
-			break;
-		case 900:
-			$rank='Administrator';
-			break;
-		case 1000:
-			$rank='Developer';
-			break;
-		default:
-			$rank='Visitor';
-			break;
-	}
-	if($user['postcode']==0)
-		$user['postcode']='';
+	$html=str_replace([
+		'<error currentPassCSS>',
+		'<error currentPassHidden>',
+		'<error matchPassCSS>',
+		'<error matchPassHidden>',
+		'<success passUpdated>'
+	],[
+		$currentPassCSS,
+		$currentPassHidden,
+		$matchPassCSS,
+		$matchPassHidden,
+		$success
+	],$html);
 	$html=preg_replace([
 		'/<print user=[\"\']?gravatar[\"\']?>/',
 		'/<print user=[\"\']?ti[\"\']?>/',
@@ -160,7 +134,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['gravatar'],ENT_QUOTES,'UTF-8'),
 		date($config['dateFormat'],$user['ti']),
 		htmlspecialchars($user['username'],ENT_QUOTES,'UTF-8'),
-		$rank,
+		ucfirst(rank($user['rank'])),
 		htmlspecialchars($user['id'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['email'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['name'],ENT_QUOTES,'UTF-8'),
@@ -172,11 +146,10 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['suburb'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['city'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['state'],ENT_QUOTES,'UTF-8'),
-		htmlspecialchars($user['postcode'],ENT_QUOTES,'UTF-8'),
+		$user['postcode']==0?'':htmlspecialchars($user['postcode'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
 	],$html);
 }else{
-	$html='';
 	if(file_exists(THEME.DS.'noaccess.html'))
 		$html=file_get_contents(THEME.DS.'noaccess.html');
 }

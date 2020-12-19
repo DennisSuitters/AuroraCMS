@@ -13,7 +13,7 @@
  */
 $getcfg=true;
 require'db.php';
-include'tcpdf/tcpdf.php';
+require'tcpdf/tcpdf.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 $s->execute([
@@ -21,12 +21,12 @@ $s->execute([
 ]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $r['notes']=preg_replace([
-    '/<input type="checkbox" checked="checked">/',
-    '/<input type="checkbox">/'
-  ],[
-    '<img class="checkbox" src="../core/images/checkbox-checked.png">',
-    '<img class="checkbox" src="../core/images/checkbox.png">',
-  ],$r['notes']);
+  '/<input type="checkbox" checked="checked">/',
+  '/<input type="checkbox">/'
+],[
+  '<img class="checkbox" src="../core/images/checkbox-checked.png">',
+  '<img class="checkbox" src="../core/images/checkbox.png">',
+],$r['notes']);
 $bookingid='booking'.$r['id'];
 $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 $s->execute([
@@ -39,7 +39,8 @@ if($r['rid']!=0){
     ':id'=>$r['rid']
   ]);
   $srv=$sql->fetch(PDO::FETCH_ASSOC);
-}else $srv='';
+}else
+  $srv='';
 $st=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:uid");
 $st->execute([
   ':uid'=>$r['uid']
@@ -82,14 +83,22 @@ $html='<style>'.
       '</style>'.
       '<body>';
 $pdflogo='';
-if(file_exists('..'.DS.'media'.DS.'bookingheading.png'))$pdflogo='..'.DS.'media'.DS.'bookingheading.png';
-elseif(file_exists('..'.DS.'media'.DS.'bookingheading.jpg'))$pdflogo='..'.DS.'media'.DS.'bookingheading.jpg';
-elseif(file_exists('..'.DS.'media'.DS.'bookingheading.gif'))$pdflogo='..'.DS.'media'.DS.'bookingheading.gif';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'bookingheading.png'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'bookingheading.png';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'bookingheading.jpg'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'bookingheading.jpg';
-elseif(file_exists('..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'bookingheading.gif'))$pdflogo='..'.DS.'layout'.DS.$config['theme'].DS.'images'.DS.'bookingheading.gif';
-else$pdflogo='';
-if($pdflogo!='')$html.='<table class="table"><tr><td style="text-align:right"><img src="'.$pdflogo.'"></td></tr></table>';
+if(file_exists('../media/bookingheading.png'))
+  $pdflogo='../media/bookingheading.png';
+elseif(file_exists('../media/bookingheading.jpg'))
+  $pdflogo='../media/bookingheading.jpg';
+elseif(file_exists('../media/bookingheading.gif'))
+  $pdflogo='../media/bookingheading.gif';
+elseif(file_exists('../layout/'.$config['theme'].'/images/bookingheading.png'))
+  $pdflogo='../layout/'.$config['theme'].'/images/bookingheading.png';
+elseif(file_exists('../layout/'.$config['theme'].'/images/bookingheading.jpg'))
+  $pdflogo='../layout/'.$config['theme'].'/images/bookingheading.jpg';
+elseif(file_exists('../layout/'.$config['theme'].'/images/bookingheading.gif'))
+  $pdflogo='../layout/'.$config['theme'].'/images/bookingheading.gif';
+else
+  $pdflogo='';
+if($pdflogo!='')
+  $html.='<table class="table"><tr><td style="text-align:right"><img src="'.$pdflogo.'"></td></tr></table>';
 $html.='<table class="table">'.
           '<tr>'.
             '<td class="col-33">'.
@@ -187,6 +196,5 @@ $html.='<table class="table">'.
         '</table>'.
   '</body>';
 $pdf->writeHTML($html,true,false,true,false,'');
-$pdf->Output(__DIR__.DS.'..'.DS.'media'.DS.'orders'.DS.$bookingid.'.pdf','F');
-//chmod('..' .DS.'media'.DS.'orders'.DS.$bookingid.'.pdf',0777);
+$pdf->Output(__DIR__.'/../media/orders/'.$bookingid.'.pdf','F');
 echo'<script>window.top.window.open(`media/orders/'.$bookingid.'.pdf`,`_blank`);</script>';

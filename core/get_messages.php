@@ -24,10 +24,10 @@ $su->execute([
 ]);
 $user=$su->fetch(PDO::FETCH_ASSOC);
 $mhtml=$blacklisted='';
-include'imapreader/Email.php';
-include'imapreader/EmailAttachment.php';
-include'imapreader/Reader.php';
-include'spamfilter/class.spamfilter.php';
+require'imapreader/Email.php';
+require'imapreader/EmailAttachment.php';
+require'imapreader/Reader.php';
+require'spamfilter/class.spamfilter.php';
 function strip_html_tags($t,$l=400){
   $t=preg_replace([
     '@<head[^>]*?>.*?</head>@siu',
@@ -73,26 +73,33 @@ if($config['message_check_interval']!=0){
 				':ti'=>time()
 			]);
       $imap=new Reader('{'.$rm['url'].':'.$rm['port'].'/'.$rm['flag'].'}', $rm['username'], $rm['password'], '../media/email/');
-      if($rm['ti']==0)$imap->all()->get();
-      else$imap->limit(10)->unread()->get();
-      foreach($imap->emails() as $email){
+      if($rm['ti']==0)
+				$imap->all()->get();
+      else
+				$imap->limit(10)->unread()->get();
+      foreach($imap->emails() as$email){
         $folder='INBOX';
         $status='unread';
         if($config['spamfilter'][0]==1){
           $filter=new SpamFilter();
           $result=$filter->check_email($email->fromEmail());
-          if($result)$folder='spam';
+          if($result)
+						$folder='spam';
           $result=$filter->check_text($email->subject().' '.($email->html()!=''?$email->html():$email->plain()));
-          if($result)$folder='spam';
+          if($result)
+						$folder='spam';
         }
         $attachments='';
         if($email->hasAttachments()){
-          foreach($email->attachments() as $attachment)$attachments.=($attachments!=''?',':'').$attachment->filePath();
+          foreach($email->attachments() as$attachment)$attachments.=($attachments!=''?',':'').$attachment->filePath();
         }
-        if($email->isAnswered()){$status='read';}
-        if($email->isDeleted()){$status='trash';}
+        if($email->isAnswered())
+					$status='read';
+        if($email->isDeleted())
+					$status='trash';
 				$emailHTML=$email->html()!=''?$email->html():$email->plain();
-				if(is_base64_string($emailHTML))$emailHTML=base64_decode($emailHTML);
+				if(is_base64_string($emailHTML))
+					$emailHTML=base64_decode($emailHTML);
         $s=$db->prepare("INSERT IGNORE INTO `".$prefix."messages` (`mid`,`folder`,`to_email`,`to_name`,`from_email`,`subject`,`status`,`notes_html`,`attachments`,`email_date`,`size`,`ti`) VALUES (:mid,:folder,:to_email,:to_name,:from_email,:subject,:status,:notes_html,:attachments,:email_date,:size,:ti)");
         $s->execute([
           ':mid'=>$email->id(),
@@ -108,7 +115,8 @@ if($config['message_check_interval']!=0){
           ':size'=>$email->size(),
           ':ti'=>time()
         ]);
-        if($user['options'][9]==1)$imap->deleteEmail($email->id());
+        if($user['options'][9]==1)
+					$imap->deleteEmail($email->id());
       }
     }catch(Exception $e){
 			echo'<script>window.top.window.$("#allmessages").html(`<div class="alert alert-danger">'.$e->getMessage().'</div>`);</script>';
@@ -165,8 +173,10 @@ if($config['message_check_interval']!=0){
 		$ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
 		$sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);
 		echo'<script>';
-			if($ur['cnt']>0)echo'$(`#unreadbadge`).html("'.$ur['cnt'].'");';
-			if($sp['cnt']>0)echo'$(`#spambadge`).html("'.$sp['cnt'].'");';
+			if($ur['cnt']>0)
+				echo'$(`#unreadbadge`).html("'.$ur['cnt'].'");';
+			if($sp['cnt']>0)
+				echo'$(`#spambadge`).html("'.$sp['cnt'].'");';
 		echo'</script>';
   }
 }

@@ -37,7 +37,7 @@ if($s->rowCount()>0){
 		':id'=>$id
 	]);
   echo'<script>'.
-		'window.top.window.$("#whitelist'.$id.'").addClass("d-none");'.
-		'window.top.window.toastr["success"]("IP Added to Whitelist!");'.
-	'</script>';
+				'window.top.window.$("#whitelist'.$id.'").addClass("d-none");'.
+				'window.top.window.toastr["success"]("IP Added to Whitelist!");'.
+			'</script>';
 }

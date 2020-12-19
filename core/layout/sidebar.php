@@ -51,6 +51,7 @@
             <li class="<?php echo($args[0]=='invoices'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/invoices';?>"><?php svg('order-invoice','i-2x mr-4');?> Invoices</a></li>
             <li class="<?php echo($args[0]=='pending'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/pending';?>"><?php svg('order-pending','i-2x mr-4');?> Pending</a></li>
             <li class="<?php echo($args[0]=='recurring'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/recurring';?>"><?php svg('order-recurring','i-2x mr-4');?> Recurring</a></li>
+            <li class="<?php echo($args[0]=='overdue'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/overdue';?>"><?php svg('order-pending','i-2x mr-4');?> Overdue</a></li>
             <li class="<?php echo($args[0]=='archived'?' active':'');?>"><a href="<?php echo URL.$settings['system']['admin'].'/orders/archived';?>"><?php svg('order-archived','i-2x mr-4');?> Archived</a></li>
           </ul>
         </li>

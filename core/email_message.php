@@ -11,10 +11,9 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 $getcfg=true;
 require'db.php';
-define('THEME','..'.DS.'layout'.DS.$config['theme']);
+define('THEME','../layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
@@ -69,7 +68,8 @@ if($to!=''){
     $fr['name']!=''?$fr['name']:$fr['business'];
     $fr['email']!=''?$fr['email']:$config['email'];
     $mail->SetFrom($fr['email'],$fr['name']);
-  }else$mail->AddReplyTo($from,$config['business']);
+  }else
+    $mail->AddReplyTo($from,$config['business']);
   $mto=explode(",",$to);
   if(isset($mto[1])&&$mto[1]!=''){
     foreach($mto as $to2){
@@ -81,9 +81,11 @@ if($to!=''){
         $tr=$ts->fetch(PDO::FETCH_ASSOC);
         $toname=$tr['name']!=''?$tr['name']:$tr['business'];
         $mail->AddAddress($tr['email'],$toname);
-      }else$mail->AddAddress($to2);
+      }else
+        $mail->AddAddress($to2);
     }
-  }else$mail->AddAddress($to);
+  }else
+    $mail->AddAddress($to);
   if($atts!=''){
     $attachments=explode(",",$atts);
     foreach($attachments as $attachment)$mail->addAttachment('..'.DS.'media'.DS.basename($attachment));
@@ -99,7 +101,7 @@ if($to!=''){
       $arr=parse_url($m[1]);
       if(!isset($arr['host'])||!isset($arr['path']))continue;
       $imgname=basename($m[1]);
-      $mail->addEmbeddedImage('..'.DS.'media'.DS.$imgname,$imgid);
+      $mail->addEmbeddedImage('../media/'.$imgname,$imgid);
       $body=str_replace($img,'<img alt="" src="cid:'.$imgid.'" style="border:none"/>',$body);
     }
   }
@@ -119,12 +121,9 @@ if($to!=''){
       ':ti'=>$ti
     ]);
   }
-  if(!empty($mail->ErrorInfo)){?>
-    window.top.window.toastr["error"]("<?php echo$mail->ErrorInfo;?>");
-<?php
-    exite();
-  }else{?>
-    window.top.window.location.href='<?php echo ADMINURL;?>messages/';
-<?php }
+  if(!empty($mail->ErrorInfo)){
+    echo'<script>window.top.window.toastr["error"](`'.$mail->ErrorInfo.'`);</script>';
+    exit();
+  }else
+    echo'<script>window.top.window.location.href="'.ADMINURL.'"messages/";</script>';
 }
-echo'</script>';

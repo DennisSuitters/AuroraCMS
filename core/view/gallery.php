@@ -12,40 +12,62 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(stristr($html,'<breadcrumb>')){
- preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
- $breaditem=$matches[1];
- preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
- $breadcurrent=$matches[1];
- $jsoni=1;
- $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
- $breadit=preg_replace([
+  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
+  $breaditem=$matches[1];
+  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
+  $breadcurrent=$matches[1];
+  $jsoni=1;
+  $jsonld='<script type="application/ld+json">'.
+    '{'.
+      '"@context":"http://schema.org",'.
+      '"@type":"BreadcrumbList",'.
+      '"itemListElement":'.
+        '['.
+          '{'.
+            '"@type":"ListItem",'.
+            '"position":1,'.
+            '"item":'.
+              '{'.
+                '"@id":"'.URL.'",'.
+                '"name":"Home"'.
+              '}'.
+          '},';
+  $breadit=preg_replace([
    '/<print breadcrumb=[\"\']?url[\"\']?>/',
    '/<print breadcrumb=[\"\']?title[\"\']?>/'
- ],[
+  ],[
    URL,
    'Home'
- ],$breaditem);
- $breaditems=$breadit;
- $jsoni++;
- $breadit=preg_replace([
+  ],$breaditem);
+  $breaditems=$breadit;
+  $jsoni++;
+  $breadit=preg_replace([
    '/<print breadcrumb=[\"\']?title[\"\']?>/'
- ],[
+  ],[
    htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
- ],$breadcurrent);
- $jsonld.='{'.
-   '"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}]}</script>';
- $breaditems.=$breadit;
- $html=preg_replace([
-   '/<[\/]?breadcrumb>/',
-   '/<json-ld-breadcrumb>/',
-   '~<breaditems>.*?<\/breaditems>~is',
-   '~<breadcurrent>.*?<\/breadcurrent>~is'
- ],[
-   '',
-   $jsonld,
-   $breaditems,
-   ''
- ],$html);
+  ],$breadcurrent);
+  $jsonld.='{'.
+    '"@type":"ListItem",'.
+    '"position":'.$jsoni.','.
+    '"item":'.
+      '{'.
+        '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
+        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
+      '}'.
+    '}'.
+  ']}</script>';
+  $breaditems.=$breadit;
+  $html=preg_replace([
+    '/<[\/]?breadcrumb>/',
+    '/<json-ld-breadcrumb>/',
+    '~<breaditems>.*?<\/breaditems>~is',
+    '~<breadcurrent>.*?<\/breadcurrent>~is'
+  ],[
+    '',
+    $jsonld,
+    $breaditems,
+    ''
+  ],$html);
 }
 if($page['notes']!=''){
 	$html=preg_replace([
@@ -55,13 +77,8 @@ if($page['notes']!=''){
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else{
-	$html=preg_replace([
-    '~<pagenotes>.*?<\/pagenotes>~is'
-  ],[
-    ''
-  ],$html,1);
-}
+}else
+	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 $gals='';
 if(stristr($html,'<items')){
   preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
@@ -73,6 +90,7 @@ if(stristr($html,'<items')){
 	]);
   $output='';
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
+    if(!file_exists('media/thumbs/'.basename($r['file'])))continue;
     $items=$gal;
     $items=preg_replace([
 			'/<print thumb=[\"\']?srcset[\"\']?>/',
@@ -95,13 +113,9 @@ if(stristr($html,'<items')){
       htmlspecialchars($r['attributionImageName'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['attributionImageURL'],ENT_QUOTES,'UTF-8')
     ],$items);
-    if($r['attributionImageName']!=''&&$r['attributionImageURL']!=''){
-      $items=preg_replace('/<[\/]?attribution>/','',$items);
-    }else
-			$items=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
+    $items=$r['attributionImageName']!=''&&$r['attributionImageURL']!=''?preg_replace('/<[\/]?attribution>/','',$items):preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
     $output.=$items;
   }
 	$gals=preg_replace('~<items>.*?<\/items>~is',$output,$html,1);
-}else
-	$gals='';
+}
 $content.=$gals;

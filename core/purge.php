@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
 $getcfg=false;
 require'db.php';
@@ -86,28 +85,33 @@ if($id!=0&&$id!='activity'){
   $q->execute([
     ':id'=>$id
   ]);
-  if($tbl=='media')$el='media_items_';?>
-  window.top.window.$('#l_<?php echo$id;?>').addClass('zoom-out');
-  window.top.window.setTimeout(function(){window.top.window.$('#l_<?php echo$id;?>').remove();},500);
-<?php }
+  if($tbl=='media')$el='media_items_';
+  echo'<script>'.
+    'window.top.window.$("#l_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.setTimeout(function(){window.top.window.$("#l_'.$id.'").remove();},500);'.
+  '</script>';
+}
 if($tbl=='livechat'){
   $q=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE `sid`=:sid");
   $q->execute([
     ':sid'=>$col
-  ]);?>
-  window.top.window.$('#l_<?php echo$id;?>').removeClass('active');
-  window.top.window.$('#l_<?php echo$id;?>').remove();
-  window.top.window.$('#chatTitle').html('&nbsp;');
-  window.top.window.$('#chatScreen').html('');
-  window.top.window.$('#chatsid,#chataid,#chatemail,#chatname').val('');
-<?php }
+  ]);
+  echo'<script>'.
+    'window.top.window.$("#l_'.$id.'").removeClass("active");'.
+    'window.top.window.$("#l_'.$id.'").remove();'.
+    'window.top.window.$("#chatTitle").html("&nbsp;");'.
+    'window.top.window.$("#chatScreen").html("");'.
+    'window.top.window.$("#chatsid,#chataid,#chatemail,#chatname").val("");'.
+  '</script>';
+}
 if($tbl=='errorlog'){
-  unlink('..'.DS.'media'.DS.'cache'.DS.'error.log');
+  unlink('../media/cache/error.log');
   $el='l_';
   $id=0;
 }
-if($tbl=='choices'){?>
-  window.top.window.$('#l_<?php echo$id;?>').addClass('zoom-out');
-  window.top.window.setTimeout(function(){window.top.window.$('#l_<?php echo$id;?>').remove();},500);
-<?php }
-echo'</script>';
+if($tbl=='choices'){
+  echo'<script>'.
+    'window.top.window.$("#l_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.setTimeout(function(){window.top.window.$("#l_'.$id.'").remove();},500);'.
+  '</script>';
+}

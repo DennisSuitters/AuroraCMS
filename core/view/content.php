@@ -30,7 +30,6 @@ if(isset($_POST['act'])=='sort')
 	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
 else
 	$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
-
 $sortOrder=" ORDER BY ";
 if($sort=="")$sortOrder.="`ti` DESC ";
 if($sort=="new")$sortOrder.="`ti` DESC ";
@@ -192,12 +191,10 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 	}
 }
 if($view=='testimonials')$show='';
-if($show=='categories'){
+if($show=='categories')
 	require'core/parser_items.php';
-}
-if($show=='item'){
+if($show=='item')
 	require'core/parser_item.php';
-}
 if($view=='login'){
 	$html=preg_replace('/<print url>/',URL,$html,1);
 	if($config['options'][3]==1)

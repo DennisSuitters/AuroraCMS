@@ -565,6 +565,46 @@ if(stristr($html,'<item')){
       $item=str_replace('<choices>','',$item);
   }else
     $item=str_replace('<choices>','',$item);
+  if(stristr($item,'<map>')){
+    $item=preg_replace([
+      ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
+      '/<map>/'
+    ],[
+      ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?
+        '<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css">'.
+        '<script src="core/js/leaflet/leaflet.js"></script>'.
+        '<script>'.
+          'var map=L.map("map").setView(['.$r['geo_position'].'],13);'.
+          'L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{'.
+            'attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,'.
+            'maxZoom:18,'.
+            'id:"mapbox/streets-v11",'.
+            'tileSize:512,'.
+            'zoomOffset:-1,'.
+            'accessToken:`'.$config['mapapikey'].'`'.
+        '}).addTo(map);'.
+        'var myIcon=L.icon({'.
+          'iconUrl:`'.URL.'core/js/leaflet/images/marker-icon.png`,'.
+          'iconSize:[38,95],'.
+          'iconAnchor:[22,94],'.
+          'popupAnchor:[-3,-76],'.
+          'shadowUrl:`'.URL.'core/js/leaflet/images/marker-shadow.png`,'.
+          'shadowSize:[68,95],'.
+          'shadowAnchor:[22,94]'.
+        '});'.
+        'var marker=L.marker(['.$r['geo_position'].'],{draggable:false}).addTo(map);'.
+        ($r['title']==''?'':
+          'var popupHtml=`<strong>'.$r['title'].'</strong>'.
+            ($r['address']==''?'':'<br><small>'.$r['address'].'<br>'.$r['suburb'].', '.$r['city'].', '.$r['state'].', '.$r['postcode'].',<br>'.$r['country'].'</small>').'`;'.
+          'marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();'
+        ).
+        'marker.off("click");'.
+        '</script>'
+      :''
+      ),
+      ''
+    ],$item);
+  }
   if(stristr($item,'<json-ld>')){
     $r['schemaType']=isset($r['schemaType'])?$r['schemaType']:$page['schemaType'];
     $r['notes']=isset($r['notes'])?$r['notes']:$page['notes'];
@@ -878,7 +918,7 @@ if(stristr($html,'<item')){
     '',
     '',
     '',
-    $view
+    $view,
   ],$html);
   if($view=='article'||$view=='events'||$view=='news'||$view=='proofs'){
     $sc=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`=:contentType AND `rid`=:rid AND `status`!='unapproved' ORDER BY `ti` ASC");
@@ -889,7 +929,7 @@ if(stristr($html,'<item')){
     if($sc->rowCount()>0||$r['options'][1]==1){
       if(file_exists(THEME.DS.'comments.html')){
         $comments=$commentsHTML='';
-        $commentsHTML=file_get_contents(THEME.DS.'comments.html');
+        $commentsHTML=file_get_contents(THEME.'/comments.html');
         $commentsHTML=preg_replace([
           '/<print content=[\"\']?id[\"\']?>/',
           '/<print content=[\"\']?contentType[\"\']?>/',
@@ -904,7 +944,7 @@ if(stristr($html,'<item')){
           $comment=$matches[1];
           $rc['notes']=htmlspecialchars(strip_tags(rawurldecode($rc['notes'])),ENT_QUOTES,'UTF-8');
           $comment=preg_replace('/<print comments=[\"\']?datetime[\"\']?>/',date('Y-m-d',$rc['ti']),$comment,1);
-          require'core'.DS.'parser.php';
+          require'core/parser.php';
           $comments.=$comment;
         }
         $commentsHTML=preg_replace('~<items>.*?<\/items>~is',$comments,$commentsHTML,1);

@@ -176,6 +176,12 @@ if(stristr($html,'<phone>')){
 		$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
 	],$html);
 }
+if(stristr($html,'<map>')){
+  $html=preg_replace(
+    $config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<[\/]?map>/':'~<map>.*?<\/map>~is',
+    '',
+    $html);
+}
 $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
 $s->execute();
 if($s->rowCount()>0){

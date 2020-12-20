@@ -289,6 +289,49 @@ if(stristr($html,'<cover>')){
 	}
 	$html=preg_replace('~<cover>.*?<\/cover>~is','',$html,1);
 }
+if(stristr($html,'<map>')){
+	$html=preg_replace([
+		($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
+		'/<map>/'
+	],[
+		($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?
+			'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css">'.
+			'<script src="core/js/leaflet/leaflet.js"></script>'.
+			'<script>'.
+				'var map=L.map("map",{zoomControl:false}).setView(['.$config['geo_position'].'],13);'.
+				'L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'", {'.
+					'attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,'.
+					'id:"mapbox/streets-v11",'.
+					'tileSize:512,'.
+					'zoomOffset:-1,'.
+					'accessToken:`'.$config['mapapikey'].'`,'.
+				'}).addTo(map);'.
+				'var myIcon=L.icon({'.
+					'iconUrl:`'.URL.'core/js/leaflet/images/marker-icon.png`,'.
+					'iconSize:[38,95],'.
+					'iconAnchor:[22,94],'.
+					'popupAnchor:[-3,-76],'.
+					'shadowUrl:`'.URL.'core/js/leaflet/images/marker-shadow.png`,'.
+					'shadowSize:[68,95],'.
+					'shadowAnchor:[22,94]'.
+				'});'.
+				'var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.
+				($config['business']==''?'':
+					'var popupHtml=`<strong>'.$config['business'].'</strong>'.
+						($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;'.
+					'marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();'
+				).
+				'map.dragging.disable();'.
+    		'map.touchZoom.disable();'.
+    		'map.doubleClickZoom.disable();'.
+    		'map.scrollWheelZoom.disable();'.
+				'marker.off("click");'.
+			'</script>'
+		:''
+		),
+		''
+	],$html);
+}
 if(stristr($html,'<mediaitems')){
 	$sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `pid`=:pid AND `rid`=0 AND `rank`<=:rank ORDER BY `ord` ASC");
 	$sm->execute([

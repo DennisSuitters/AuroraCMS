@@ -21,3 +21,5 @@
 - Remove Unneeded files from external libraries, and minify/uglify source to reduce footprint.
 - Update other projects PHP Classes and minified to save space.
 - Modify Styling for better Mobile Responsiveness in Administration area.
+- Add Open Street Map to Preferences/Contact in Administration for updating Location, and checkbox for enabling Map display on Front End.
+- Add Parser to display maps on Front End.

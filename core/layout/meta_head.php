@@ -40,6 +40,7 @@
     <link rel="stylesheet" type="text/css" href="core/elfinder/css/elfinder.min.css">
     <link rel="stylesheet" type="text/css" href="core/js/simplecolorpicker/jquery.simplecolorpicker.css">
     <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css">
+    <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css">
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.js"></script>
@@ -52,6 +53,7 @@
     <script src="core/js/simplecolorpicker/jquery.simplecolorpicker.js"></script>
     <script src="core/js/fullcalendar/fullcalendar.min.js"></script>
     <script src="core/js/fancybox/jquery.fancybox.min.js"></script>
+    <script src="core/js/leaflet/leaflet.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
   <body class="<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">

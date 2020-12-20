@@ -80,7 +80,7 @@ config
     24  Display Phone Numbers
     25  Archive Bookings when Converted to Invoice
     26  Enable Discount Range
-    27
+    27  Enable Map Display on Pages.
     28
     29
     30
@@ -163,6 +163,7 @@ config
   `seo_alexaverification` tinytext
   `seo_domainverify` tinytext
   `seo_pinterestverify` tinytext
+  `mapapikey` varchar(128)
   `geo_region` tinytext
   `geo_placename` tinytext
   `geo_position` tinytext
@@ -214,7 +215,7 @@ content
     4 Video Autoplay
     5 Video Loop
     6 Video Controls
-    7
+    7 Show Map
   `rank` int(4)
   `rid` bigint(20)
   `uid` bigint(20)
@@ -308,6 +309,8 @@ content
   `suggestions` int(1) NOT NULL,
   `checklist` varchar(16)
   `active` tinyint(1) UNSIGNED NOT NULL,
+  `coming` tinint(1) NOT NULL DEFAULT(0),
+  `geo_position` TINYTEXT NOT NULL,
   `pin` tinyint(1) NOT NULL,
   `tis` int(10) UNSIGNED NOT NULL,
   `tie` int(10) UNSIGNED NOT NULL,

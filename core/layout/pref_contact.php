@@ -289,7 +289,149 @@
           <input class="textinput" id="country" data-dbid="1" data-dbt="config" data-dbc="country" type="text" value="<?php echo$config['country'];?>" placeholder="Enter a Country...">
           <button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <label for="mapapikey">Map Box API Key</label>
+        <div class="form-row">
+          <input class="textinput" id="mapapikey" data-dbid="1" data-dbt="config" data-dbc="mapapikey" type="text" value="<?php echo$config['mapapikey'];?>" placeholder="Enter an API Key from Map Box...">
+          <button class="save" id="savemapapikey" data-tooltip="tooltip" data-dbid="mapapikey" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+        </div>
+        <div class="col-12 mt-3">
+          <div class="row">
+            <input id="options27" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="27" type="checkbox"<?php echo$config['options'][27]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="options27">Enable Map Display</label>
+          </div>
+        </div>
+<?php if($config['mapapikey']==''){?>
+        <div class="col-12">
+          There is currently no Map API Key entered above, to allow Maps to be displayed on pages.<br>
+          Maps are displayed with the help of the Leaflet addon for it's ease of use.<br>
+          To obtain an API Key to access Mapping, please register at <a href="https://account.mapbox.com/access-tokens/">Map Box</a>.
+        </div>
+<?php }else{?>
+        <div class="col-12">
+          <div class="form-text">Drag the map marker to update your Location.</div>
+        </div>
+        <div class="col-12">
+          <div class="row" style="height:600px;" id="map"></div>
+        </div>
+        <script>
+        <?php if($config['geo_position']==''){?>
+          navigator.geolocation.getCurrentPosition(
+            function(position){
+              var map=L.map('map').setView([position.coords.latitude,position.coords.longitude],13);
+              L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=<?php echo$config['mapapikey'];?>', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: '<?php echo$config['mapapikey'];?>'
+              }).addTo(map);
+              var myIcon = L.icon({
+                iconUrl: '<?php echo URL;?>core/js/leaflet/images/marker-icon.png',
+                iconSize: [38, 95],
+                iconAnchor: [22, 94],
+                popupAnchor: [-3, -76],
+                shadowUrl: '<?php echo URL;?>core/js/leaflet/images/marker-shadow.png',
+                shadowSize: [68, 95],
+                shadowAnchor: [22, 94]
+              });
+              var marker=L.marker([position.coords.latitude,position.coords.longitude],{draggable:true,}).addTo(map);
+              window.top.window.toastr["info"]("Best location guess has been made from your browser location API!");
+              window.top.window.toastr["info"]("Reposition the marker to update your address coordinates!");
+              var popupHtml = `<strong>` +
+                `<?php echo($config['business']!=''?$config['business']:'<mark>Fill in Business Field above</mark>');?>` +
+              `</strong>` +
+              `<small>` +
+                `<?php echo($config['address']!=''?'<br>'.$config['address'].',<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country']:'');?>` +
+              `</small>`;
+              marker.bindPopup(popupHtml).openPopup();
+              marker.on('dragend', function(event){
+                var marker = event.target;
+                var position = marker.getLatLng();
+                update('1','config','geo_position',position.lat + ',' + position.lng);
+                window.top.window.toastr["success"]("Map Marker position updated!");
+                marker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
+                map.panTo(new L.LatLng(position.lat, position.lng))
+              });
+            },
+            function(){
+              var map=L.map('map').setView([-24.287,136.406], 4);
+              L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=<?php echo$config['mapapikey'];?>', {
+                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                maxZoom: 18,
+                id: 'mapbox/streets-v11',
+                tileSize: 512,
+                zoomOffset: -1,
+                accessToken: '<?php echo$config['mapapikey'];?>'
+              }).addTo(map);
+              var myIcon = L.icon({
+                iconUrl: '<?php echo URL;?>core/js/leaflet/images/marker-icon.png',
+                iconSize: [38, 95],
+                iconAnchor: [22, 94],
+                popupAnchor: [-3, -76],
+                shadowUrl: '<?php echo URL;?>core/js/leaflet/images/marker-shadow.png',
+                shadowSize: [68, 95],
+                shadowAnchor: [22, 94]
+              });
+              var marker=L.marker([-24.287,136.406],{draggable:true,}).addTo(map);
+              window.top.window.toastr["info"]("Unable to get your location via browser, location has been set so you can choose!");
+              window.top.window.toastr["info"]("Reposition the marker to update your address coordinates!");
+              var popupHtml = `<strong>` +
+                `<?php echo($config['business']!=''?$config['business']:'<mark>Fill in Business Field above</mark>');?>` +
+              `</strong>` +
+              `<small>` +
+                `<?php echo($config['address']!=''?'<br>'.$config['address'].',<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country']:'');?>` +
+              `</small>`;
+              marker.bindPopup(popupHtml).openPopup();
+              marker.on('dragend', function(event){
+                var marker = event.target;
+                var position = marker.getLatLng();
+                update('1','config','geo_position',position.lat + ',' + position.lng);
+                window.top.window.toastr["success"]("Map Marker position updated!");
+                marker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
+                map.panTo(new L.LatLng(position.lat, position.lng))
+              });
+            }
+          );
+        <?php }else{?>
+          var map = L.map('map').setView([<?php echo$config['geo_position'];?>], 13);
+          L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=<?php echo$config['mapapikey'];?>', {
+            attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+            maxZoom: 18,
+            id: 'mapbox/streets-v11',
+            tileSize: 512,
+            zoomOffset: -1,
+            accessToken: '<?php echo$config['mapapikey'];?>'
+          }).addTo(map);
+          var myIcon = L.icon({
+            iconUrl: '<?php echo URL;?>core/js/leaflet/images/marker-icon.png',
+            iconSize: [38, 95],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76],
+            shadowUrl: '<?php echo URL;?>core/js/leaflet/images/marker-shadow.png',
+            shadowSize: [68, 95],
+            shadowAnchor: [22, 94]
+          });
+          var marker=L.marker([<?php echo$config['geo_position'];?>],{draggable:true,}).addTo(map);
+          var popupHtml = `<strong>` +
+            `<?php echo($config['business']!=''?$config['business']:'<mark>Fill in Business Field above</mark>');?>` +
+          `</strong>` +
+          `<small>` +
+            `<?php echo($config['address']!=''?'<br>'.$config['address'].',<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country']:'');?>` +
+          `</small>`;
+          marker.bindPopup(popupHtml).openPopup();
+          marker.on('dragend', function(event){
+            var marker = event.target;
+            var position = marker.getLatLng();
+            update('1','config','geo_position',position.lat + ',' + position.lng);
+            window.top.window.toastr["success"]("Map Marker position updated!");
+            marker.setLatLng(new L.LatLng(position.lat, position.lng),{draggable:'true'});
+            map.panTo(new L.LatLng(position.lat, position.lng))
+          });
+        <?php }?>
+        </script>
+<?php }?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

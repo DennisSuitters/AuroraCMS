@@ -319,6 +319,9 @@ address [role="button"] {
   margin: 0;
   text-align: center; }
 
+#map {
+  height: 400px; }
+
 /* Chat */
 .chat {
   position: fixed !important;

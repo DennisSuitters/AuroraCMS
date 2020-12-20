@@ -79,6 +79,8 @@ We are currently at v0.1.0
 - GDPR Privacy Notice Compliance.
   - For those providing Services and or Products to Countries that require Privacy Cookie Consent.
 - Website Voice service. Ability to add a text to speech reader for visually impaired visitors.
+- Open Street Maps via the Leaflet JavaScript library.
+  - Address location Map can be displayed on Home Page, Contact Us, and Event Items.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
   - [summernote-cleaner](https://github.com/DiemenDesign/summernote-cleaner)
   - [summernote-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
@@ -122,7 +124,6 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - [Zebra_Image](https://github.com/stefangabos/Zebra_Image)
 - [kses](https://github.com/RichardVasquez/kses)
 - [elFinder](https://github.com/Studio-42/elFinder)
-  - [elFinder-bootstrap-theme](https://github.com/DiemenDesign/LibreICONS/tree/master/themes/elFinder)
 
 ### Tested on:
 - CentOS Linux 7.2.1511 with Webmin 1.791
@@ -154,6 +155,5 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [K9FineDining](https://k9finedining.com/)
 - [Live Lightly Centre](https://www.livelightlycentre.com.au/)
 - [Lovely Gardens](https://www.lovelygardens.com.au/)
-- [Powerline Automotive Services](https://www.powerlineauto.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)
 - [Raycraft Entertainment](https://www.entertainme.net.au/)

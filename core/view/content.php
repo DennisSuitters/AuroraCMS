@@ -15,7 +15,7 @@ $rank=0;
 $notification='';
 $show='categories';
 $status='published';
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $itemCount=$config['showItems'];
 if($view=='newsletters'){
 	if($args[0]=='unsubscribe'&&isset($args[1])){

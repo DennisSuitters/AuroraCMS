@@ -13,7 +13,7 @@
  */
 $rank=0;
 $notification='';
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $html=str_replace('<print view>',$view,$html);
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType AND LOWER(`title`)=LOWER(:title)");
 $s->execute([
@@ -45,7 +45,7 @@ if(stristr($html,'<print page=cover>')){
     $cover=basename($r['cover']);
     $coverLink='';
     if(isset($r['cover'])&&$r['cover']!='')
-      $coverLink.='media'.DS.$cover;
+      $coverLink.='media/'.$cover;
     elseif($r['coverURL']!='')
       $coverLink.=$r['coverURL'];
     $html=preg_replace('/<print page=[\"\']?cover[\"\']?>/','background-image:url('.htmlspecialchars($coverLink,ENT_QUOTES,'UTF-8').');',$html);
@@ -57,7 +57,7 @@ if(preg_match('/<print page=[\"\']?cover[\"\']?>/',$html)){
     $cover=basename($r['cover']);
     list($width,$height)=getimagesize($r['cover']);
     $coverHTML='<img src="';
-    if(file_exists('media'.DS.$cover))
+    if(file_exists('media/'.$cover))
       $coverHTML.=htmlspecialchars($r['cover'],ENT_QUOTES,'UTF-8');
     elseif($r['coverURL']!='')
       $coverHTML.=htmlspecialchars($r['coverURL'],ENT_QUOTES,'UTF-8');

@@ -120,7 +120,7 @@
   <?php  if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'||($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view')){?>
       function elfinderDialog(id,t,c){
         var fm=$('<div class="shadow light"/>').dialogelfinder({
-          url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>?id="+id+"&t="+t+"&c="+c,
+          url:"<?php echo URL.'/core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
           lang:'en',
           width:840,
           height:450,
@@ -217,7 +217,7 @@
       if($view=='seo'||$view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
         $().ready(function(){
           var fm=$('#elfinder').elfinder({
-            url:"<?php echo URL.DS.'core'.DS.'elfinder'.DS.'php'.DS.'connector.php';?>",
+            url:"<?php echo URL.'/core/elfinder/php/connector.php';?>",
             lang:'en',
             width:'85vw',
             height:$(window).height()-102,
@@ -457,8 +457,6 @@
         }
       });
     });
-
-
   });
   if('serviceWorker' in navigator){
     window.addEventListener('load',()=>{
@@ -469,6 +467,166 @@
       });
     });
   }
+<?php if($config['options'][28]==1){?>
+  clippy.load({name: 'Clippy', path: 'core/js/clippy/agents/'}, function(agent){
+    agent.show();
+<?php
+    if(isset($clippy)){
+      foreach($clippy as $clip){
+        echo$clip;
+      }
+    }?>
+
+    $('.saveall').click(function(){
+      if($(this).hasClass('btn-danger')){
+        agent.stop();
+        agent.play('Save');
+      }
+    });
+
+    $('.print').click(function(){
+      agent.stop();
+      agent.play('Print');
+    });
+
+    $('.email').click(function(){
+      agent.stop();
+      agent.play('SendMail');
+    });
+
+    $('.archive').click(function(){
+      agent.stop();
+      agent.play('Save');
+    });
+
+    $('.purge').click(function(){
+      agent.stop();
+      agent.play('EmptyTrash');
+    });
+
+    var agentRestore=0;
+    $('.restore').mouseover(function(){
+      if(agentRestore==0){
+        agent.stop();
+        agent.speak(`The Restore button will revert changed content back to what it was before this activity was recorded.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B`);
+        agentRestore=1;
+        setTimeout(function(){
+          agentRestore=0;
+        }, 1200000);
+      }
+    });
+
+    $("#seoTitle").click(function(){
+      agent.stop();
+      agent.stopCurrent();
+      var text=$(this).val();
+      if(text.length == 0){
+        agent.speak("It is best to not leave the SEO Title empty, this is the text used for the Title of your pages, and should contain Keywords related to the page content, and recommended to be about 70 characters long.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");
+      }
+      if(text.length < 70 && text.length !=0){
+        agent.speak("Remember to use Keywords that are relevant to the content of the page, and try not to exceed the 70 characters suggested length.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
+      }
+      if(text.length > 70){
+        agent.speak("You have exceeded the recommended character length of 70 characters. Remember to include keywords relevant to the page they title is for.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
+      }
+      agent.play("Writing");
+    });
+    $("#seoDescription").click(function(){
+      agent.stop();
+      agent.stopCurrent();
+      var text=$(this).val();
+      if(text.length == 0){
+        agent.speak("It is best to not leave the SEO Description empty, this is the text used for the Description of your pages, which Google will hopefully use for your search description, and should contain Keywords related to the page, and is recommended to be about 160 characters long.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");
+      }
+      if(text.length < 160 && text.length !=0){
+        agent.speak("Use Keywords that are relevant to the content of the page, and remember this is what we hope Google will use in the search description for the page in it's results, and try not exceed the 160 character length recommendation.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
+      }
+      if(text.length > 160){
+        agent.speak("You have exceeded the recommended character length of 160 characters. Remember to use relevant keywords to the page, and hope that Google will use this in it's search results.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
+      }
+      agent.play("Writing");
+    });
+<?php
+$seoarr='';
+if($view=='content'||$view=='pages'&&$args[0]=='edit'){
+  $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`=:cT ORDER BY rand() LIMIT 1,10");
+  $sc->execute([':cT'=>'clippy']);
+  if($sc->rowCount()>0){
+    while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
+      echo'var seo'.$rc['id'].' = function(){'.
+        ($rc['type']!='none'&&$rc['title']=='before'?'agent.play(`'.$rc['type'].'`);':'').
+        'agent.speak("SEO Tip: '.addslashes(html_entity_decode(str_replace(['&#39;'],["'"],$rc['notes']))).'\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'.
+        ($rc['type']!='none'&&$rc['title']=='after'?'agent.play(`'.$rc['type'].'`);':'').
+      '};';
+      $seoarr.='seo'.$rc['id'].',';
+    }
+  }
+}else{?>
+    $("#at").change(function(){
+      agent.stop();
+      agent.stopCurrent();
+      agent.play($("#at").val());
+    });
+<?php }?>
+    var animate1 = function(){
+      agent.play('Pleased');
+      agent.speak("Hmmm.... yes indeed.");
+    }
+
+    var animate2 = function(){
+      agent.play('Hearing_1');
+    }
+
+    var animate3 = function(){
+      agent.play('CheckingSomething');
+    }
+
+    var animate4 = function(){
+      agent.play('EmptyTrash');
+    }
+
+    var animate4 = function(){
+      agent.play('GetAttention');
+    }
+
+    var animate4 = function(){
+      agent.play('GetTechy');
+    }
+
+    var animate5 = function(){
+      agent.play('GetWizardly');
+    }
+
+    var animate6 = function(){
+      agent.play('IdleRopePile');
+    }
+
+    var animate7 = function(){
+      agent.play('IdleSnooze');
+    }
+
+    var animate8 = function(){
+      agent.play('Searching');
+    }
+
+    var arr = [
+<?php echo$seoarr;?>
+      animate1,
+      animate2,
+      animate3,
+      animate4,
+      animate5,
+      animate6,
+      animate7,
+      animate8,
+    ];
+
+    window.setInterval(function(){
+      var fun = arr[Math.floor(Math.random()*arr.length)];
+      fun();
+    }, 60000);
+  });
+<?php }?>
 </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
 <?php /*    <div class="modal fade" id="editseo" tabindex="-1" role="dialog">

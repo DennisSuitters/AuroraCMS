@@ -74,7 +74,7 @@ $search=isset($_POST['s'])?$_POST['s']:'%';?>
             </div>
           <?php }?>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

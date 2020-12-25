@@ -22,7 +22,7 @@ else{
 	}
 	$link='<li><a href="login/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Login'.$link_x.'</a></li>';
 }
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Administration</a></li>',$html):str_replace('<administration>','',$html);
 if(stristr($html,'<hours>')){
 	if($config['options'][19]==1){

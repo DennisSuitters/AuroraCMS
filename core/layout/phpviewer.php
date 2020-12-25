@@ -13,19 +13,16 @@
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
-require'..'.DS.'db.php';
-include'..'.DS.'class.projecthoneypot.php';
+require'../db.php';
+require'../projecthoneypot/class.projecthoneypot.php';
 $idh=time();
 echo'<div class="fancybox-ajax">'.
       '<h6 class="bg-dark p-2">Project Honey Pot IP Checker</h6>'.
       '<div id="phpviewer'.$idh.'">';
 if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
 else{
-  function svg($svg,$class=null,$size=null){
-  	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('..'.'..'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
-  }
   function svg2($svg,$class=null,$size=null){
-  	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('..'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
+  	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('../images/i-'.$svg.'.svg').'</i>';
   }
   $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);

@@ -24,7 +24,7 @@ if(isset($_SESSION['uid'])&&$_SESSION['uid']!=0){
   ]);
   $user=$su->fetch(PDO::FETCH_ASSOC);
 }
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
 $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
 $subject=filter_input(INPUT_POST,'subject',FILTER_SANITIZE_STRING);
@@ -88,7 +88,7 @@ if($to!=''){
     $mail->AddAddress($to);
   if($atts!=''){
     $attachments=explode(",",$atts);
-    foreach($attachments as $attachment)$mail->addAttachment('..'.DS.'media'.DS.basename($attachment));
+    foreach($attachments as $attachment)$mail->addAttachment('../media/'.basename($attachment));
   }
   $mail->Subject=$subject;
   preg_match_all('/<img.*?>/',$body,$matches);

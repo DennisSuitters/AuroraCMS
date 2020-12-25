@@ -14,7 +14,7 @@
 $rank=0;
 $show='categories';
 if($args[0]=='scheduler')
-  include'core'.DS.'layout'.DS.'scheduler.php';
+  require'core/layout/scheduler.php';
 else{
   if($view=='add'){
     $stockStatus='none';
@@ -69,7 +69,7 @@ else{
     $show='item';
   }
   if($args[0]=='settings')
-    include'core'.DS.'layout'.DS.'set_content.php';
+    require'core/layout/set_content.php';
   else{
     if($show=='categories'){
       if($args[0]=='type'){
@@ -250,9 +250,9 @@ else{
                   <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <tr class="<?php if($r['status']=='delete')echo' bg-danger';elseif($r['status']!='published')echo' bg-warning';?>" id="l_<?php echo$r['id'];?>">
                       <td class="align-middle">
-                        <?php if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb'])))
+                        <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))
                           echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
-                        elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
+                        elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))
                           echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
                         elseif($r['fileURL']!='')
                           echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="avatar" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
@@ -315,7 +315,7 @@ else{
                             <?php if($user['options'][0]==1){?>
                               <button class="btn add <?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
                               <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
-                              <button class="btn trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
+                              <button class="btn purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
                             <?php }?>
                           </div>
                         </div>
@@ -336,12 +336,12 @@ else{
                 </small>
               </div>
             <?php }?>
-            <?php include'core/layout/footer.php';?>
+            <?php require'core/layout/footer.php';?>
           </div>
         </div>
       </section>
     </main>
     <?php }
-    if($show=='item')include'core'.DS.'layout'.DS.'edit_content.php';
+    if($show=='item')require'core/layout/edit_content.php';
   }
 }

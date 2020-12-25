@@ -75,7 +75,7 @@
          <input class="textinput" id="mediaQuality" data-dbid="1" data-dbt="config" data-dbc="mediaQuality" type="text" value="<?php echo$config['mediaQuality'];?>">
          <button class="save" id="savemediaQuality" data-tooltip="tooltip" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
        </div>
-       <?php include'core/layout/footer.php';?>
+       <?php require'core/layout/footer.php';?>
      </div>
    </div>
  </section>

@@ -12,10 +12,13 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_media.php';
+  require'core/layout/set_media.php';
 elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_media.php';
-else{?>
+  require'core/layout/edit_media.php';
+else{
+  $clippy=array(
+    0=>'agent.play("GetArtsy");'
+  );?>
 <main>
   <section id="content" class="main">
     <div class="content-title-wrapper mb-0">
@@ -42,7 +45,7 @@ else{?>
     <?php }else{?>
         <div class="alert alert-info" role="alert">You Don't Have Permissions To Use This Area</div>
     <?php }?>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

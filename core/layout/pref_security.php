@@ -129,7 +129,7 @@
                 <select id="filesEditSelect" name="file">
                   <?php $fileDefault=($user['rank']==1000?'index.txt':'index.txt');
                   $files=array();
-                  foreach(glob("core".DS."blacklists".DS."*.{txt}",GLOB_BRACE)as$file){
+                  foreach(glob("core/blacklists/*.{txt}",GLOB_BRACE)as$file){
                     echo'<option value="'.$file.'"';
                     if(stristr($file,$fileDefault)){
                       echo' selected="selected"';
@@ -185,7 +185,7 @@
                   <th class="text-center">Reason</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><?php svg('purge');?></button>
+                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><?php svg('purge');?></button>
                     </div>
                   </th>
                 </tr>
@@ -203,7 +203,7 @@
                       <div class="btn-group float-right">
                         <a class="btn" target="_blank" data-tooltip="tooltip" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
                         <a class="btn" target="_blank" data-tooltip="tooltip" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','iplist');return false;"><?php svg('purge');?></button>
+                        <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','iplist');return false;"><?php svg('purge');?></button>
                       </div>
                     </td>
                   </tr>
@@ -220,7 +220,7 @@
                   <th class="text-center">IP</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><?php svg('purge');?></button>
+                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><?php svg('purge');?></button>
                     </div>
                   </th>
                 </tr>
@@ -237,7 +237,7 @@
                       <div class="btn-group float-right">
                         <a class="btn" target="_blank" data-tooltip="tooltip" href="https://www.projecthoneypot.org/ip_<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?php echo svg2('brand-projecthoneypot');?></a>
                         <a class="btn" target="_blank" data-tooltip="tooltip" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>" role="button" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?php echo svg2('search');?></a>
-                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;"><?php svg('purge');?></button>
+                        <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','whitelist');return false;"><?php svg('purge');?></button>
                       </div>
                     </td>
                   </tr>
@@ -246,7 +246,7 @@
             </table>
           </div>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

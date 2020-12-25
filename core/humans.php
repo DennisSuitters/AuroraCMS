@@ -15,7 +15,7 @@ header("Content-Type:text/plain");
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 require'core/db.php';
 $config=$db->query("SELECT `development`,`seoTitle`,`theme` FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-$theme=parse_ini_file('layout'.DS.$config['theme'].DS.'theme.ini',true);
+$theme=parse_ini_file('layout/'.$config['theme'].'/theme.ini',true);
 $siteTitle=$config['seoTitle']!=''?$config['seoTitle']:URL;
 $themeTitle=$theme['title'];
 $themeCreator=$theme['creator'];

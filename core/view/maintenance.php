@@ -16,7 +16,7 @@ $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
 if(!isset($canonical)||$canonical=='')
   $canonical=($view=='index'?URL:URL.$view.'/');
-$image=$page['cover']==''?$image=URL.THEME.DS.'images'.DS.'maintenance.png':$image=$page['cover'];
+$image=$page['cover']==''?$image=URL.THEME.'/images/maintenance.png':$image=$page['cover'];
 $html=preg_replace([
   '/<print background>/',
   '/<print theme>/',

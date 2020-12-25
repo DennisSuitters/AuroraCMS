@@ -15,7 +15,7 @@ $getcfg=true;
 require'db.php';
 require'projecthoneypot/class.projecthoneypot.php';
 require'spamfilter/class.spamfilter.php';
-$theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
+$theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $error=0;
 $notification=$blacklisted='';
 $ti=time();
@@ -163,7 +163,7 @@ if($act=='add_booking'){
 						$mail2->SetFrom($config['email'], $config['business']);
 						$toname=$email;
 						$mail2->AddAddress($email);
-						if($config['bookingAttachment']!='')$mail2->AddAttachment('..'.DS.'media'.DS.basename($config['bookingAttachment']));
+						if($config['bookingAttachment']!='')$mail2->AddAttachment('../media/'.basename($config['bookingAttachment']));
 						$mail2->IsHTML(true);
 						$namee=explode(' ',$name);
 						$subject=isset($config['bookingAutoReplySubject'])&&$config['bookingAutoReplySubject']!=''?$config['bookingAutoReplySubject']:'Booking Confirmation from {business}';

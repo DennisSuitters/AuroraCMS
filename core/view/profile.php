@@ -13,7 +13,7 @@
  */
 $rank=0;
 $notification='';
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
   $breaditem=$matches[1];
@@ -125,8 +125,8 @@ if($args[0]!=''){
   ]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($r['bio_options'][0]==1){
-    if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
-      $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
+    if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
+      $r['avatar']='media/avatar/'.basename($r['avatar']);
     else
       $r['avatar']=NOAVATAR;
     $name=explode(' ',$r['name']);
@@ -439,8 +439,8 @@ if($args[0]!=''){
       $item=$matches[1];
       $items='';
       while($r=$s->fetch(PDO::FETCH_ASSOC)){
-        if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))
-          $r['avatar']='media'.DS.'avatar'.DS.basename($r['avatar']);
+        if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
+          $r['avatar']='media/avatar/'.basename($r['avatar']);
         elseif($r['gravatar']!='')
           $r['avatar']=$r['gravatar'];
         else

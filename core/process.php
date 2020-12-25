@@ -14,8 +14,8 @@
 require'core/db.php';
 if(isset($headerType))header($headerType);
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-if(file_exists(THEME.DS.'theme.ini'))
-  $theme=parse_ini_file(THEME.DS.'theme.ini',TRUE);
+if(file_exists(THEME.'/theme.ini'))
+  $theme=parse_ini_file(THEME.'/theme.ini',TRUE);
 else{
   echo'A Website Theme has not been set.';
   die();
@@ -66,7 +66,7 @@ if($config['php_options'][4]==1){
 }
 if($config['comingsoon'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
     if(file_exists(THEME.'/comingsoon.html'))
-      $template=file_get_contents(THEME.DS.'comingsoon.html');
+      $template=file_get_contents(THEME.'/comingsoon.html');
     else{
       require'core/view/comingsoon.php';
       die();

@@ -45,9 +45,9 @@ function is_base64_string($s){
 }
 if($user['options'][3]==1){
   if($args[0]=='settings')
-    include'core'.DS.'layout'.DS.'set_messages.php';
+    require'core/layout/set_messages.php';
   elseif($args[0]=='view'||$args[0]=='compose')
-    include'core'.DS.'layout'.DS.'edit_messages.php';
+    require'core/layout/edit_messages.php';
   else{
     $folder="INBOX";
     if(isset($args[0])){
@@ -162,7 +162,7 @@ if($user['options'][3]==1){
                                   </form>
                                 <?php }?>
                                 <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');"><?php svg('email-spam');?></button>
-                                <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','messages')"><?php svg('trash');?></button>
+                                <button class="purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','messages')"><?php svg('trash');?></button>
                               <?php }?>
                             </div>
                           </div>
@@ -173,7 +173,7 @@ if($user['options'][3]==1){
                 </table>
               </div>
             </div>
-            <?php include'core/layout/footer.php';?>
+            <?php require'core/layout/footer.php';?>
           </div>
         </div>
       </section>

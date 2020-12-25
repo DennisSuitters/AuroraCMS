@@ -29,7 +29,7 @@ if($args[0]=='add'){
   <script>history.replaceState('','','<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$args[1];?>');</script>
 <?php }
 if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_pages.php';
+  require'core/layout/set_pages.php';
 else{
   if($args[0]=='edit')
     $show='item';
@@ -75,7 +75,7 @@ else{
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <tr class="item subsortable" id="l_<?php echo$r['id'];?>">
                   <td>
-                    <?php if($r['cover']!=''&&file_exists('media'.DS.basename($r['cover']))){
+                    <?php if($r['cover']!=''&&file_exists('media/'.basename($r['cover']))){
                       echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['cover'].'"><img class="img-rounded" style="max-width:32px;height:32px;" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
                     }?>
                   </td>
@@ -170,8 +170,9 @@ else{
                   <td id="controls_<?php echo$r['id'];?>" class="">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
+                        <?php if($r['active']==1){?><button data-social-share="<?php echo URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?>" data-social-desc="<?php echo $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button><?php }?>
                         <a class="btn" href="<?php echo URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" role="button" aria-label="Edit"':' data-tooltip="tooltip" role="button" aria-label="View"';?>"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                        <?php echo$user['options'][0]==1&&$r['contentType']=='page'?'<button class="btn trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');">'.svg2('trash').'</button>':'';?>
+                        <?php echo$user['options'][0]==1&&$r['contentType']=='page'?'<button class="btn purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');">'.svg2('trash').'</button>':'';?>
                       </div>
                     </div>
                   </td>
@@ -229,7 +230,7 @@ else{
               </tr>
             </tbody>
           </table>
-          <?php include'core/layout/footer.php';?>
+          <?php require'core/layout/footer.php';?>
         </div>
       </div>
     </section>
@@ -263,4 +264,4 @@ else{
 <?php }
 }
 if($show=='item')
-  include'core'.DS.'layout'.DS.'edit_pages.php';
+  require'core/layout/edit_pages.php';

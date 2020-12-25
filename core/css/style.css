@@ -12,6 +12,25 @@
 @import url('../js/fancybox/fancybox.css');
 @import url('../js/fullcalendar/fullcalendar.min.css');
 
+.highlighterror {
+  position: relative !important;
+  overflow: visible; }
+
+.highlighterror:after {
+  content:'';
+  position: absolute !important;
+  width: 140%;
+  height: 150%;
+  top: -8px !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: -11px !important;
+  background-color:transparent;
+  background-image:url(../images/highlighterror.png);
+  background-repeat:no-repeat;
+  background-position: center;
+  background-size: 100% 100%; }
+
 .aurora,
 .winter,
 .spring,

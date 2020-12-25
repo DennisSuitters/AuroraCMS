@@ -16,7 +16,7 @@ require'db.php';
 require'sanitise.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
 $sub=filter_input(INPUT_POST,'sub',FILTER_SANITIZE_STRING);
 $eml=filter_input(INPUT_POST,'eml',FILTER_SANITIZE_STRING);

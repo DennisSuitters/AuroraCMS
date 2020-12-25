@@ -13,7 +13,7 @@
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
-require'..'.DS.'db.php';
+require'../db.php';
 $idh=time();
 echo'<div id="pathviewer'.$idh.'" class="table-responsive">';
 define('URL', PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');

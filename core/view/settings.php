@@ -13,7 +13,7 @@
  */
 $rank=0;
 $show='';
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $currentPassCSS=$matchPassCSS='';
 $currentPassHidden=$matchPassHidden=$successHidden=$success=$theme['settings']['settings_hidden'];
 $successShow=$theme['settings']['settings_show'];
@@ -150,7 +150,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
 	],$html);
 }else{
-	if(file_exists(THEME.DS.'noaccess.html'))
-		$html=file_get_contents(THEME.DS.'noaccess.html');
+	if(file_exists(THEME.'/noaccess.html'))
+		$html=file_get_contents(THEME.'/noaccess.html');
 }
 $content.=$html;

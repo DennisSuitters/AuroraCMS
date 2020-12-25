@@ -92,7 +92,7 @@
             <textarea class="summernote" id="accountActivationLayout" name="da"><?php echo rawurldecode($config['accountActivationLayout']);?></textarea>
           </form>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

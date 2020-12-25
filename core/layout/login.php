@@ -77,7 +77,7 @@
             <a href="<?php echo URL;?>">&larr; Back to <?php echo$config['business']!=''?$config['business']:'Main Site';?></a>
           </div>
           <div class="row mt-4">
-            <?php include'core/layout/footer.php';?>
+            <?php require'core/layout/footer.php';?>
           </div>
         </div>
       </div>

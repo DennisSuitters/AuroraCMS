@@ -32,15 +32,16 @@
     <base href="<?php echo URL;?>">
     <link rel="alternate" media="handheld" href="<?php echo URL;?>">
     <link rel="alternate" hreflang="<?php echo$config['language'];?>" href="<?php echo URL;?>">
-    <link rel="manifest" href="<?php echo URL.'core'.DS.'manifestadmin.php';?>">
+    <link rel="manifest" href="<?php echo URL.'core/manifestadmin.php';?>">
     <link rel="icon" href="<?php echo$favicon;?>">
     <link rel="apple-touch-icon" href="<?php echo$favicon;?>">
-    <Link rel="stylesheet" type="text/css" href="core/css/style.css">
-    <link rel="stylesheet" type="text/css" href="core/js/jquery/jquery-ui.min.css">
-    <link rel="stylesheet" type="text/css" href="core/elfinder/css/elfinder.min.css">
-    <link rel="stylesheet" type="text/css" href="core/js/simplecolorpicker/jquery.simplecolorpicker.css">
-    <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css">
-    <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css">
+    <Link rel="stylesheet" type="text/css" href="core/css/style.css" media="all">
+    <link rel="stylesheet" type="text/css" href="core/js/jquery/jquery-ui.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="core/elfinder/css/elfinder.min.css" media="all">
+    <link rel="stylesheet" type="text/css" href="core/js/simplecolorpicker/jquery.simplecolorpicker.css" media="all">
+    <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css" media="all">
+    <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css" media="all">
+    <link rel="stylesheet" type="text/css" href="core/js/clippy/build/clippy.css" media="all">
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.js"></script>
@@ -54,6 +55,7 @@
     <script src="core/js/fullcalendar/fullcalendar.min.js"></script>
     <script src="core/js/fancybox/jquery.fancybox.min.js"></script>
     <script src="core/js/leaflet/leaflet.js"></script>
+    <script src="core/js/clippy/build/clippy.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
   <body class="<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">

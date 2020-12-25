@@ -222,7 +222,7 @@ if($spam==FALSE){
 				]);
 	      $ru=$su->fetch(PDO::FETCH_ASSOC);
 		    echo'<img class="bg-white" src="';
-				if($ru['avatar']!='')echo'media'.DS.'avatar'.DS.basename($ru['avatar']);
+				if($ru['avatar']!='')echo'media/avatar/'.basename($ru['avatar']);
 	      elseif($ru['gravatar']!=''){
 	        if(stristr($ru['gravatar'],'@'))
 						echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);

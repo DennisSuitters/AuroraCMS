@@ -25,7 +25,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <div>Edit Account <?php echo$r['username'];?>:<?php echo$r['name'];?></div>
           <div class="content-title-actions">
             <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
-            <button data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></a>
+            <button class="email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$('#sp').load('core/newsletter.php?id=<?php echo$r['id'];?>&act=');return false;"><?php svg('email-send');?></button>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php echo svg('save');?></button>
           </div>
         </div>
@@ -66,7 +66,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <textarea class="summernote" id="notes" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?php echo rawurldecode($r['notes']);?></textarea>
           </form>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

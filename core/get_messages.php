@@ -15,7 +15,7 @@ $getcfg=true;
 require'db.php';
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 function svg($svg,$class=null,$size=null){
-	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
 $uid=$_SESSION['uid'];
 $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
@@ -55,7 +55,7 @@ function strip_html_tags($t,$l=400){
   $t=trim(preg_replace('/[\t\n\r\s]+/',' ',$t));
   return substr($t,0,$l);
 }
-$theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
+$theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $folder='INBOX';
 $status='unread';
 $tis=time();

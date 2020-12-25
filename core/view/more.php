@@ -15,13 +15,13 @@ $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 require'../db.php';
 define('SESSIONID',session_id());
-define('THEME','layout'.DS.$config['theme']);
+define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $contentType=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $view=isset($_POST['v'])?filter_input(INPUT_POST,'v',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'v',FILTER_SANITIZE_STRING);
 $show='categories';
 $i=isset($_POST['i'])?filter_input(INPUT_POST,'i',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'i',FILTER_SANITIZE_NUMBER_INT);
-$html=file_exists('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.$view.'.html')?file_get_contents('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.$view.'.html'):file_get_contents('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.'content.html');
+$html=file_exists('../../layout/'.$config['theme'].'/'.$view.'.html')?file_get_contents('../../layout/'.$config['theme'].'/'.$view.'.html'):file_get_contents('../../layout/'.$config['theme'].'/content.html');
 $itemCount=$config['showItems'];
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank ORDER BY `ti` DESC LIMIT $i,$itemCount");
 $s->execute([
@@ -57,15 +57,15 @@ if(stristr($html,'<items>')){
     if($si==1){
       $filechk=basename($r['file']);
       $thumbchk=basename($r['thumb']);
-      if($r['file']!=''&&file_exists('media'.DS.$filechk))
+      if($r['file']!=''&&file_exists('media/'.$filechk))
         $shareImage=$r['file'];
-      elseif($r['thumb']!=''&&file_exists('media'.DS.$thumbchk))
+      elseif($r['thumb']!=''&&file_exists('media/'.$thumbchk))
         $shareImage=$r['thumb'];
       $si++;
     }
     if(preg_match('/<print content=[\"\']?thumb[\"\']?>/',$items)){
       $r['thumb']=str_replace(URL,'',$r['thumb']);
-      $items=$r['thumb']?preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$items):preg_replace('/<print content=[\"\']?thumb[\"\']?>/','layout'.DS.$config['theme'].DS.'images'.DS.'noimage.jpg',$items);
+      $items=$r['thumb']?preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$items):preg_replace('/<print content=[\"\']?thumb[\"\']?>/','layout/'.$config['theme'].'/images/noimage.jpg',$items);
     }
     $items=preg_replace('/<print content=[\"\']?alttitle[\"\']?>/',$r['title'],$items);
     $r['notes']=strip_tags($r['notes']);

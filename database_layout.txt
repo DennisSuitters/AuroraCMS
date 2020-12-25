@@ -81,7 +81,7 @@ config
     25  Archive Bookings when Converted to Invoice
     26  Enable Discount Range
     27  Enable Map Display on Pages.
-    28
+    28  Enable Assistance.
     29
     30
     31

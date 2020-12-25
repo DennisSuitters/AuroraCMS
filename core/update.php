@@ -11,14 +11,13 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<script>';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 require'sanitise.php';
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
 function sluggify($url){
 	$url=strtolower($url);
@@ -298,10 +297,10 @@ if(is_null($e[2])){
 				':id'=>$id
 			]);
       $av=$sav->fetch(PDO::FETCH_ASSOC);
-      if($av['avatar']!=''&&file_exists('..'.DS.'media'.DS.'avatar'.DS.$av['avatar']))
-				$avatar='media'.DS.'avatar'.DS.$av['avatar'];
+      if($av['avatar']!=''&&file_exists('../media/avatar/'.$av['avatar']))
+				$avatar='media/avatar/'.$av['avatar'];
 			else
-				$avatar='images'.DS.'noavatar.jpg';
+				$avatar='images/noavatar.jpg';
     }else{
 			$avatar=$da;
 			echo'<script>window.top.window.$("#avatar").attr("src",`'.$avatar.'?'.time().'`);</script>';

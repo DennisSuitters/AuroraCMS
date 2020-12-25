@@ -42,7 +42,7 @@ if(!defined('FAVICON144')){
   }elseif(file_exists(THEME.'/images/favicon-144.gif')){
     define('FAVICON144',THEME.'/images/favicon-144.gif');
     define('FAVICON144TYPE','image/gif');
-  }elseif(file_exists(THEME.DS.'images/favicon-144.jpg')){
+  }elseif(file_exists(THEME.'/images/favicon-144.jpg')){
     define('FAVICON144',THEME.'/images/favicon-144.jpg');
     define('FAVICON144TYPE','image/jpg');
   }elseif(file_exists(THEME.'/images/favicon-144.ico')){

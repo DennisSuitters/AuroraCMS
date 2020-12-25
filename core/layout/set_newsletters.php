@@ -68,7 +68,7 @@
             <textarea class="summernote" id="optOutLayout" name="da"><?php echo rawurldecode($config['newslettersOptOutLayout']);?></textarea>
           </form>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

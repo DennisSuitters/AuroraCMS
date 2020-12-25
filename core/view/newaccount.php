@@ -14,7 +14,7 @@
 $getcfg=true;
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 require'../db.php';
-$theme=parse_ini_file('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
+$theme=parse_ini_file('../../layout/'.$config['theme'].'/theme.ini',true);
 $notification=$blacklisted='';
 require'../projecthoneypot/class.projecthoneypot.php';
 require'../spamfilter/class.spamfilter.php';

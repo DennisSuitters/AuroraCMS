@@ -28,16 +28,16 @@
     </div>
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow">
-        <?php echo'<div class="alert alert-danger'.(file_exists(THEME.DS.'theme.ini')?' hidden':'').'" id="notheme" role="alert">A Website Theme has not been set.</div>';?>
+        <?php echo'<div class="alert alert-danger'.(file_exists(THEME.'/theme.ini')?' hidden':'').'" id="notheme" role="alert">A Website Theme has not been set.</div>';?>
         <table class="table-zebra">
           <tbody class="theme-chooser" id="preference-theme">
             <?php $folders=preg_grep('/^([^.])/',scandir("layout"));
             foreach($folders as$folder){
-              if(!file_exists('layout'.DS.$folder.DS.'theme.ini'))continue;
-              $theme=parse_ini_file('layout'.DS.$folder.DS.'theme.ini',true);?>
+              if(!file_exists('layout/'.$folder.'/theme.ini'))continue;
+              $theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
               <tr class="theme<?php echo$config['theme']==$folder?' theme-selected':'';?>" data-theme="<?php echo$folder;?>">
                 <td class="col-3 col-md-1">
-                  <img src="<?php if(file_exists('layout'.DS.$folder.DS.'theme.jpg'))echo'layout'.DS.$folder.DS.'theme.jpg';elseif(file_exists('layout'.DS.$folder.DS.'theme.png'))echo'layout'.DS.$folder.DS.'theme.png';else echo ADMINNOIMAGE;?>" alt="<?php echo $theme['title'];?>">
+                  <img src="<?php if(file_exists('layout/'.$folder.'/theme.jpg'))echo'layout/'.$folder.'/theme.jpg';elseif(file_exists('layout/'.$folder.'/theme.png'))echo'layout/'.$folder.'/theme.png';else echo ADMINNOIMAGE;?>" alt="<?php echo $theme['title'];?>">
                 </td>
                 <td class="col-9 col-md-11">
                   <h4><?php echo isset($theme['title'])&&$theme['title']!=''?$theme['title']:'No Title Assigned';?></h4>
@@ -49,7 +49,7 @@
             <?php }?>
           </tbody>
         </table>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
     <script>

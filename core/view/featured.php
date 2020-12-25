@@ -38,15 +38,15 @@ $items='';
 $fi=0;
 $featuredfiles=array();
 if($cT=='all'||$cT=='mixed'||$cT=='folder'){
-	if(file_exists('media'.DS.'carousel'.DS)){
-		foreach(glob('media'.DS.'carousel'.DS.'*.*')as$file){
+	if(file_exists('media/carousel/')){
+		foreach(glob('media/carousel/*.*')as$file){
 			$fileinfo=pathinfo($file);
 			$filetime=filemtime($file);
 			if($file=='.'||$file='..')continue;
 			$filename=basename($file,'.'.$fileinfo['extension']);
 			if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'||$fileinfo['extension']=='webp'){
-				if(!in_array('media'.DS.'carousel'.DS.$filename.'.html',$featuredfiles)){
-					$filehtml=file_exists('media'.DS.'carousel'.DS.$filename.'.html')?file_get_contents('media'.DS.'carousel'.DS.$filename.'.html'):'';
+				if(!in_array('media/carousel/'.$filename.'.html',$featuredfiles)){
+					$filehtml=file_exists('media/carousel/'.$filename.'.html')?file_get_contents('media/carousel/'.$filename.'.html'):'';
 					$featuredfiles[]=[
 						'contentType'=>'carousel',
 						'thumb'=>'',
@@ -71,7 +71,7 @@ if($cT!='folder'){
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		if($r['featured']!=1||$r['internal']==1)continue;
 		$filechk=basename($r['file']);
-		if(file_exists('media'.DS.$filechk)){
+		if(file_exists('media/'.$filechk)){
 			$featuredfiles[]=[
 				'contentType'=>$r['contentType'],
 				'thumb'=>$r['thumb'],

@@ -200,10 +200,10 @@ else{?>
                   ]);
                   $c=$sc->fetch(PDO::FETCH_ASSOC);
                   $image='';
-                  if($i['thumb']!=''&&file_exists('media'.DS.basename($i['thumb'])))
-                    $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['thumb']).'" alt="'.$i['title'].'">';
-                  elseif($i['file']!=''&&file_exists('media'.DS.basename($i['file'])))
-                    $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media'.DS.basename($i['file']).'" alt="'.$i['title'].'">';
+                  if($i['thumb']!=''&&file_exists('media/'.basename($i['thumb'])))
+                    $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['thumb']).'" alt="'.$i['title'].'">';
+                  elseif($i['file']!=''&&file_exists('media/'.basename($i['file'])))
+                    $image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['file']).'" alt="'.$i['title'].'">';
                   elseif($i['fileURL']!='')
                     $image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
                   else
@@ -434,7 +434,7 @@ else{?>
               <?php }else
                 echo'<div class="well">'.$r['notes'].'</div>';?>
             </div>
-            <?php include'core/layout/footer.php';?>
+            <?php require'core/layout/footer.php';?>
           </div>
         </div>
       </section>

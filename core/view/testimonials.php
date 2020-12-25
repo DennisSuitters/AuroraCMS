@@ -109,18 +109,18 @@ if($s->rowCount()>0){
 					':id'=>$r['cid']
 				]);
 				$ru=$su->fetch(PDO::FETCH_ASSOC);
-				if($ru['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$ru['avatar']))
-					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.$ru['avatar'],$items);
-				elseif($r['file']&&file_exists('media'.DS.'avatar'.DS.basename($r['file'])))
-					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.basename($r['file']),$items);
+				if($ru['avatar']!=''&&file_exists('media/avatar/'.$ru['avatar']))
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media/avatar/'.$ru['avatar'],$items);
+				elseif($r['file']&&file_exists('media/avatar/'.basename($r['file'])))
+					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media/avatar/'.basename($r['file']),$items);
 				elseif(stristr($ru['gravatar'],'@'))
 					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($ru['gravatar']),$items);
 				elseif(stristr($ru['gravatar'],'gravatar.com'))
 					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$ru['gravatar'],$items);
 				else
 					$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$noavatar,$items);
-			}elseif($r['file']&&file_exists('media'.DS.'avatar'.DS.basename($r['file'])))
-				$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.basename($r['file']),$items);
+			}elseif($r['file']&&file_exists('media/avatar/'.basename($r['file'])))
+				$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/','media/avatar/'.basename($r['file']),$items);
 			elseif($r['file']!='')
 				$items=preg_replace('/<print content=[\"\']?avatar[\"\']?>/',$r['file'],$items);
 			else

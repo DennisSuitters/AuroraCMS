@@ -261,10 +261,10 @@ if(stristr($html,'<cover>')){
     ],[
       '',
       '<img srcset="'.
-        ($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file']).' '.$config['mediaMaxWidth'].'w,':'').
-        ($r['file']!=''&&file_exists('media'.DS.'lg'.DS.basename($r['file']))?'media'.DS.'lg'.DS.basename($r['file']).' 1000w,':'').
-        ($r['file']!=''&&file_exists('media'.DS.'md'.DS.basename($r['file']))?'media'.DS.'md'.DS.basename($r['file']).' 600w,':'').
-        ($r['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['file']))?'media'.DS.'sm'.DS.basename($r['file']).' 400w':'').
+        ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w,':'').
+        ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').
+        ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':'').
+        ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':'').
       '" src="'.$r['file'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">'
     ],$html);
   }elseif($page['file']){
@@ -275,10 +275,10 @@ if(stristr($html,'<cover>')){
     ],[
       '',
       '<img srcset="'.
-        ($page['file']!=''&&file_exists('media'.DS.basename($page['file']))?'media'.DS.basename($page['file']).' '.$config['mediaMaxWidth'].'w,':'').
-        ($page['file']!=''&&file_exists('media'.DS.'lg'.DS.basename($page['file']))?'media'.DS.'lg'.DS.basename($page['file']).' 1000w,':'').
-        ($page['file']!=''&&file_exists('media'.DS.'md'.DS.basename($page['file']))?'media'.DS.'md'.DS.basename($page['file']).' 600w,':'').
-        ($page['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($page['file']))?'media'.DS.'sm'.DS.basename($page['file']).' 400w':'').
+        ($page['file']!=''&&file_exists('media/'.basename($page['file']))?'media/'.basename($page['file']).' '.$config['mediaMaxWidth'].'w,':'').
+        ($page['file']!=''&&file_exists('media/lg/'.basename($page['file']))?'media/lg/'.basename($page['file']).' 1000w,':'').
+        ($page['file']!=''&&file_exists('media/md/'.basename($page['file']))?'media/md/'.basename($page['file']).' 600w,':'').
+        ($page['file']!=''&&file_exists('media/sm/'.basename($page['file']))?'media/sm/'.basename($page['file']).' 400w':'').
       '" src="'.$page['file'].'" alt="'.($page['fileALT']!=''?$page['fileALT']:$page['attributionImageTitle']).'">'
     ],$html);
   }elseif($page['coverURL']){
@@ -326,7 +326,7 @@ if($r['videoURL']!=''){
   ],'',$html);
   if($r['fileURL'])
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-  elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))
+  elseif($r['file']&&file_exists('media/'.basename($r['file'])))
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
   else
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
@@ -341,7 +341,7 @@ if($r['videoURL']!=''){
   ],'',$html);
   if($r['fileURL'])
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-  elseif($r['file']&&file_exists('media'.DS.basename($r['file'])))
+  elseif($r['file']&&file_exists('media/'.basename($r['file'])))
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
   else
     $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
@@ -359,7 +359,7 @@ if($r['videoURL']!=''){
     ],[
       $r['fileURL']
     ],$html);
-  }elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file']))){
+  }elseif($r['file']!=''&&file_exists('media/'.basename($r['file']))){
     $caption='';
     if($r['attributionImageTitle']!='')$caption.=$r['attributionImageTitle'];
     if($r['attributionImageName']!=''){
@@ -377,11 +377,11 @@ if($r['videoURL']!=''){
     ],[
       '',
       'srcset="'.
-        ($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file'].' '.$config['mediaMaxWidth'].'w,'):'').
-        ($r['file']!=''&&file_exists('media'.DS.'lg'.DS.basename($r['file']))?'media'.DS.'lg'.DS.basename($r['file'].' 1000w,'):'').
-        ($r['file']!=''&&file_exists('media'.DS.'md'.DS.basename($r['file']))?'media'.DS.'md'.DS.basename($r['file'].' 600w,'):'').
-        ($r['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($r['file']))?'media'.DS.'sm'.DS.basename($r['file'].' 400w'):'').'" ',
-      ($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file']):NOIMAGE),
+        ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file'].' '.$config['mediaMaxWidth'].'w,'):'').
+        ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file'].' 1000w,'):'').
+        ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file'].' 600w,'):'').
+        ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file'].' 400w'):'').'" ',
+      ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
       $caption,
       htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8')
     ],$html);
@@ -420,14 +420,14 @@ if(stristr($html,'<item')){
         ],[
           $rm['id'],
           'srcset="'.
-            ($rm['file']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($rm['file']))?'media'.DS.'thumbs'.DS.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
-            ($rm['file']!=''&&file_exists('media'.DS.'md'.DS.basename($rm['file']))?'media'.DS.'md'.DS.basename($rm['file']).' 600w,':'').
-            ($rm['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($rm['file']))?'media'.DS.'sm'.DS.basename($rm['file']).' 400w':'').'" ',
-          ($rm['file']!=''&&file_exists('media'.DS.basename($rm['file']))?'media'.DS.basename($rm['file']).' '.$config['mediaMaxWidth'].'w, ':'').
-            ($rm['file']!=''&&file_exists('media'.DS.'lg'.DS.basename($rm['file']))?'media'.DS.'lg'.DS.basename($rm['file']).' 1000w,':'').
-            ($rm['file']!=''&&file_exists('media'.DS.'md'.DS.basename($rm['file']))?'media'.DS.'md'.DS.basename($rm['file']).' 600w,':'').
-            ($rm['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($rm['file']))?'media'.DS.'sm'.DS.basename($rm['file']).' 400w':''),
-          ($rm['file']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($rm['file']))?'media'.DS.'thumbs'.DS.basename($rm['file']):NOIMAGESM),
+            ($rm['file']!=''&&file_exists('media/thumbs/'.basename($rm['file']))?'media/thumbs/'.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
+            ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
+            ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':'').'" ',
+          ($rm['file']!=''&&file_exists('media/'.basename($rm['file']))?'media/'.basename($rm['file']).' '.$config['mediaMaxWidth'].'w, ':'').
+            ($rm['file']!=''&&file_exists('media/lg/'.basename($rm['file']))?'media/lg/'.basename($rm['file']).' 1000w,':'').
+            ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
+            ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':''),
+          ($rm['file']!=''&&file_exists('media/thumbs/'.basename($rm['file']))?'media/thumbs/'.basename($rm['file']):NOIMAGESM),
           $rm['file'],
           htmlspecialchars(($rm['title']!=''?$rm['title']:$r['title'].': Image '.$rm['id']),ENT_QUOTES,'UTF-8'),
           htmlspecialchars(($rm['fileALT']!=''?$rm['fileALT']:basename($rm['file'])),ENT_QUOTES,'UTF-8'),
@@ -535,7 +535,7 @@ if(stristr($html,'<item')){
       if(isset($rb['url']))
         $brand=$rb['url']!=''?'<a href="'.$rb['url'].'">':'';
       if(isset($rb['title']))
-        $brand.=$rb['icon']==''?$rb['title']:'<img src="media'.DS.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
+        $brand.=$rb['icon']==''?$rb['title']:'<img src="media/'.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
       if(isset($rb['url']))
         $brand.=$rb['url']!=''?'</a>':'';
       $item=preg_replace([
@@ -663,7 +663,7 @@ if(stristr($html,'<item')){
       '"image":'.
       '{'.
         '"@type":"ImageObject",'.
-        '"url":"'.($r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'media/'.basename($r['file']).'"':FAVICON).'"'.
+        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).'"':FAVICON).'"'.
       '},'.
       '"description":"'.
         ($seoDescription!=''?htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8'):htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8')).'",'.
@@ -726,7 +726,7 @@ if(stristr($html,'<item')){
       '"image":'.
       '{'.
         '"@type":"ImageObject",'.
-        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media'.DS.basename($r['file']).'"':FAVICON).'"'.
+        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).'"':FAVICON).'"'.
       '},'.
       '"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'",'.
       '"genre":"'.
@@ -818,8 +818,8 @@ if(stristr($html,'<item')){
             '/<print related=[\"\']?quantity[\"\']?>/'
           ],[
             URL.$ri['contentType'].'/'.$ri['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
-            'srcset="'.($ri['file']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($ri['thumb']))?'media'.DS.'thumbs'.DS.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media'.DS.'md'.DS.basename($ri['thumb']))?'media'.DS.'md'.DS.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media'.DS.'sm'.DS.basename($ri['thumb']))?'media'.DS.'sm'.DS.basename($ri['thumb']).' 400w':'').'" ',
-            ($ri['file']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($ri['thumb']))?'media'.DS.'thumbs'.DS.$ri['thumb']:NOIMAGESM),
+            'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" ',
+            ($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.$ri['thumb']:NOIMAGESM),
             htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'),
             htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'),
             $ri['contentType'],
@@ -854,7 +854,7 @@ if(stristr($html,'<item')){
           '"itemReviewed":'.
           '{'.
             '"@type":"Product",'.
-            '"image":"'.(file_exists('media'.DS.basename($r['file']))?'media'.DS.basename($r['file']):FAVICON).'",'.
+            '"image":"'.(file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'",'.
             '"name":"'.$r['title'].'"'.
           '},'.
           '"reviewRating":'.
@@ -927,7 +927,7 @@ if(stristr($html,'<item')){
       ':rid'=>$r['id']
     ]);
     if($sc->rowCount()>0||$r['options'][1]==1){
-      if(file_exists(THEME.DS.'comments.html')){
+      if(file_exists(THEME.'/comments.html')){
         $comments=$commentsHTML='';
         $commentsHTML=file_get_contents(THEME.'/comments.html');
         $commentsHTML=preg_replace([
@@ -952,7 +952,7 @@ if(stristr($html,'<item')){
         $commentsHTML=preg_replace('~<items>.*?<\/items>~is','',$commentsHTML,1);
         $item=preg_replace('/<comments>/',$commentsHTML,$item,1);
       }else
-        $item.='Comments for this post is Enabled, but no <strong>"'.THEME.DS.'comments.html"</strong> template file exists';
+        $item.='Comments for this post is Enabled, but no <strong>"'.THEME.'/comments.html"</strong> template file exists';
     }else
       $item=preg_replace('/<comments>/','',$item,1);
   }else

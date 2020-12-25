@@ -10,7 +10,8 @@
  * @version    0.1.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- */?>
+ */
+$clippy=array();?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
@@ -153,7 +154,7 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php echo svg('trash');?></button>
+                    <button class="purge trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?php echo svg('trash');?></button>
                     &nbsp;&nbsp;<?php svg('drag','handle');?>
                   </form>
                 </div>
@@ -209,6 +210,19 @@
           </div>
         </div>
         <div class="alert alert-danger<?php echo$config['business']!=''?' hidden':'';?>" id="businessErrorBlock" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Bookings will NOT function currectly.</div>
+        <?php if($config['business']==''){
+          $clippy[]='agent.play("GetAttention");';
+          $clippy[]='agent.speak("I notice the Business Name has not been set! Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+          $clippy[]='$("[for=business]").addClass("highlighterror");';
+        }
+        if($config['email']==''){
+          if($config['business']!='')
+            $clippy[]='agent.play("GetAttention");';
+          else
+            $clippy[]='agent.play("LookRight");';
+          $clippy[]='agent.speak("I notice the Email has not been set! Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+          $clippy[]='$("[for=email]").addClass("highlighterror");';
+        }?>
         <div class="alert alert-danger<?php echo$config['email']!=''?' hidden':'';?>" id="emailErrorBlock" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly.</div>
         <div class="row mt-3">
           <div class="col-12 col-md-4 pr-md-2" id="businessHasError">
@@ -225,7 +239,7 @@
               <button class="save" id="saveabn" data-tooltip="tooltip" data-dbid="abn" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
-          <div id="emailHasError" class="col-12 col-md-4">
+          <div class="col-12 col-md-4" id="emailHasError">
             <label for="email">Email</label>
             <div class="form-row">
               <input class="textinput" id="email" data-dbid="1" data-dbt="config" data-dbc="email" type="text" value="<?php echo$config['email'];?>" placeholder="Enter an Email...">

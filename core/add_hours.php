@@ -15,7 +15,7 @@ if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
 $from=filter_input(INPUT_POST,'from',FILTER_SANITIZE_STRING);
 $to=filter_input(INPUT_POST,'to',FILTER_SANITIZE_STRING);
@@ -63,7 +63,7 @@ echo'<script>'.
 						'<form target="sp" action="core/purge.php">'.
 							'<input name="id" type="hidden" value="'.$id.'">'.
 							'<input name="t" type="hidden" value="choices">'.
-							'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button>&nbsp;&nbsp;'.svg2('drag','handle').
+							'<button class="purge trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button>&nbsp;&nbsp;'.svg2('drag','handle').
 						'</form>'.
 					'</div>'.
 				'</div>'.

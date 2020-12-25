@@ -24,50 +24,64 @@
 		</section>
 	</pagenotes>
 	<section class="row mt-5">
-		<article id="booking" class="col-11 col-sm-6 m-0 p-0">
-			<form id="bookingform" class="card p-3" method="post" action="core/add_booking.php">
+		<article class="col-11 col-sm-6 m-0 p-0" id="booking">
+			<form class="card p-3" id="bookingform" method="post" action="core/add_booking.php">
 				<input type="hidden" name="emailtrap" value="none">
 				<input type="hidden" name="act" value="add_booking">
 				<div class="alert alert-danger" role="alert">Highlighted Fields are Required</div>
 				<label for="email">Email</label>
-				<input type="email" id="email" class="form-control is-invalid" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
+				<input type="email" id="email" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
 				<div class="requirements alert alert-danger">
 					Must be a valid email address.
 				</div>
 				<label for="name">Name</label>
-				<input type="text" id="name" class="form-control is-invalid" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
+				<input type="text" id="name" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
 				<div class="requirements alert alert-danger">
 					A Name is required.
 				</div>
 				<label for="business">Business</label>
-				<input type="text" id="business" class="form-control" name="business" value="" placeholder="Enter a Business...">
+				<input type="text" id="business" name="business" value="" placeholder="Enter a Business...">
 				<label for="phone">Phone</label>
-				<input type="tel" id="phone" class="form-control" name="phone" value="" placeholder="Enter a Phone Number...">
+				<input type="tel" id="phone" name="phone" value="" placeholder="Enter a Phone Number...">
 				<label for="address">Address</label>
-				<input type="text" id="address" class="form-control" name="address" value="" placeholder="Enter an Address...">
+				<input type="text" id="address" name="address" value="" placeholder="Enter an Address...">
 				<label for="suburb">Suburb</label>
-				<input type="text" id="suburb" class="form-control" name="suburb" value="" placeholder="Enter a Suburb...">
+				<input type="text" id="suburb" name="suburb" value="" placeholder="Enter a Suburb...">
 				<label for="city">City</label>
-				<input type="text" id="city" class="form-control" name="city" value="" placeholder="Enter a City...">
+				<input type="text" id="city" name="city" value="" placeholder="Enter a City...">
 				<label for="state">State</label>
-				<input type="text" id="state" class="form-control" name="state" value="" placeholder="Enter a State...">
+				<input type="text" id="state" name="state" value="" placeholder="Enter a State...">
 				<label for="postcode">Postcode</label>
-				<input type="text" id="postcode" class="form-control" name="postcode" value="" placeholder="Enter a Postcode...">
+				<input type="text" id="postcode" name="postcode" value="" placeholder="Enter a Postcode...">
 				<label for="date">Date</label>
-				<input type="date" id="date" class="form-control" name="tis" min="<print currentdate>" value="<print currentdate>">
+				<input type="date" id="date" name="tis" min="<print currentdate>" value="<print currentdate>">
 				<label for="time">Time</label>
-				<input type="time" id="time" class="form-control" name="tim">
+				<input type="time" id="time" name="tim">
 				<bookservices>
 					<label for="rid">Event/Service</label>
-					<select id="rid" class="form-control" name="rid">
+					<select id="rid" name="rid">
 						<option value="0">Select an Item...</option>
 						<serviceoptions>
 					</select>
+					<items>
+						<label class="card">
+							<input type="hidden" name="rid" value="<print id>">
+								<figure class="card-image">
+									<a href="<print content=linktitle>">
+										<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
+									</a>
+								</figure>
+								<div class="card-header">
+									<div class="card-title"><h2 class="h4"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
+									<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
+								</div>
+						</label>
+					</items>
 				</bookservices>
 				<label for="notes">Notes</label>
 				<textarea id="notes" name="notes" placeholder="Enter some Notes..."></textarea>
 				<div class="text-right">
-					<button type="submit" class="">Make Booking</button>
+					<button type="submit">Make Booking</button>
 				</div>
 			</form>
 		</article>

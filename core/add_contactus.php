@@ -15,7 +15,7 @@ $getcfg=true;
 require'db.php';
 require'projecthoneypot/class.projecthoneypot.php';
 require'spamfilter/class.spamfilter.php';
-$theme=parse_ini_file('..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
+$theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $error=0;
 $notification=$blacklisted='';
 $ti=time();

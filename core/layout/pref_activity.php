@@ -38,7 +38,7 @@
                 <th class="col-7"></th>
                 <th class="col-2">
                   <div class="btn-group float-right">
-                    <button class="trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><?php svg('purge');?></button>
+                    <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><?php svg('purge');?></button>
                   </div>
                 </th>
               </tr>
@@ -68,7 +68,7 @@
                 if($r['action']=='update')$action.=' <span class="badger badge-success">Updated</span><br>';
                 if($r['action']=='purge')$action.=' <span class="badger badge-danger">Purged</span><br>';
                 if(isset($c['title'])&&$c['title']!='')$action.='<strong>Title:</strong> '.$c['title'].'<br>'.($r['action']=='update'?'<strong>Table:</strong> '.$r['refTable'].'<br>':'').'<strong>Column:</strong> '.$r['refColumn'].'<br>'.'<strong>Data:</strong>'.strip_tags(rawurldecode(substr($r['oldda'],0,300))).'<br>'.'<strong>Changed To:</strong>'.strip_tags(rawurldecode(substr($r['newda'],0,300))).'<br>';
-                if(isset($u['avatar'])&&$u['avatar']!='')$image=file_exists('media'.DS.'avatar'.DS.basename($u['avatar']))?'media'.DS.'avatar'.DS.basename($u['avatar']):NOAVATAR;
+                if(isset($u['avatar'])&&$u['avatar']!='')$image=file_exists('media/avatar/'.basename($u['avatar']))?'media/avatar/'.basename($u['avatar']):NOAVATAR;
                 elseif(isset($u['gravatar'])&&$u['gravatar']!='')$image=$u['gravatar'];
                 else$image=NOAVATAR;?>
                 <tr id="l_<?php echo$r['id'];?>">
@@ -78,7 +78,7 @@
                   <td class="align-top" id="controls_<?php echo$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
-                        <?php echo$r['action']=='update'?'<button data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');">'.svg2('undo').'</button>':'';?>
+                        <?php echo$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');">'.svg2('undo').'</button>':'';?>
                         <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','logs');"><?php svg('trash');?></button>
                       </div>
                     </div>
@@ -87,8 +87,8 @@
               <?php }?>
             </tbody>
           </table>
-        <?php }?>
-        <?php include'core/layout/footer.php';?>
+        <?php }
+        require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

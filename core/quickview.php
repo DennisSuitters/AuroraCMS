@@ -14,7 +14,7 @@
 define('UNICODE','UTF-8');
 $getcfg=true;
 require'db.php';
-if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))
+if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))
 $config['theme']=$_GET['theme'];
 define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');

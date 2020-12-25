@@ -36,7 +36,7 @@
     </ul>
   </nav>
   <div class="account" id="account">
-    <a class="img-avatar" href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>" aria-label="Account"><img class="img-avatar" src="<?php if($user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($user['avatar']))) echo'media'.DS.'avatar'.DS.basename($user['avatar']);
+    <a class="img-avatar" href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>" aria-label="Account"><img class="img-avatar" src="<?php if($user['avatar']!=''&&file_exists('media/avatar/'.basename($user['avatar'])))echo'media/avatar/'.basename($user['avatar']);
     elseif($user['gravatar']!=''){
       if(stristr($user['gravatar'],'@')) echo'http://gravatar.com/avatar/'.md5($user['gravatar']);
       elseif(stristr($user['gravatar'],'gravatar.com/avatar/')) echo$user['gravatar'];

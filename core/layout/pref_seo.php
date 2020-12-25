@@ -91,26 +91,29 @@
           <button class="save" id="saveseo_pinterestverify" data-tooltip="tooltip" data-dbid="seo_pinterestverify" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
-        <legend>GEO Location</legend>
-        <label for="geo_region">Region</label>
+        <legend>Default SEO Fallback Information</legend>
+        <div class="form-text text-muted small">The Fallback Information will be used on pages when the relevant Fields in the Content is empty.</div>
+        <label for="seoTitle">SEO Title</label>
         <div class="form-row">
-          <input class="textinput" id="geo_region" data-dbid="1" data-dbt="config" data-dbc="geo_region" type="text" value="<?php echo$config['geo_region'];?>" placeholder="Enter Region...">
-          <button class="save" id="savegeo_region" data-tooltip="tooltip" data-dbid="geo_region" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="seoTitle" data-dbid="1" data-dbt="config" data-dbc="seoTitle" type="text" value="<?php echo$config['seoTitle'];?>" placeholder="Enter SEO Title...">
+          <button class="save" id="saveseoTitle" data-tooltip="tooltip" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="geo_placename">Placename</label>
+        <label for="seoDescription">SEO Description</label>
         <div class="form-row">
-          <input class="textinput" id="geo_placename" data-dbid="1" data-dbt="config" data-dbc="geo_placename" type="text" value="<?php echo$config['geo_placename'];?>" placeholder="Enter a Placename...">
-          <button class="save" id="savegeo_placename" data-tooltip="tooltip" data-dbid="geo_placename" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="seoDescription" data-dbid="1" data-dbt="config" data-dbc="seoDescription" type="text" value="<?php echo$config['seoDescription'];?>" placeholder="Enter an SEO Description...">
+          <button class="save" id="saveseoDescription" data-tooltip="tooltip" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="geo_position">Position</label>
+<?php /*
+        <label for="seoCaption">SEO Caption</label>
         <div class="form-row">
-          <input class="textinput" id="geo_position" data-dbid="1" data-dbt="config" data-dbc="geo_position" type="text" value="<?php echo$config['geo_position'];?>" placeholder="Enter a Position...">
-          <button class="save" id="savegeo_position" data-tooltip="tooltip" data-dbid="geo_position" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="seoCaption" data-dbid="1" data-dbt="config" data-dbc="seoCaption" type="text" value="<?php echo$config['seoCaption'];?>" placeholder="Enter an SEO Caption...">
+          <button class="save" id="saveseoCaption" data-tooltip="tooltip" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
+*/ ?>
         <?php if($user['rank']>899){?>
         </div>
         <div class="tab1-2 border-top p-3" role="tabpanel">
-          <?php $sh=$db->query("SELECT * FROM `".$prefix."seo` ORDER BY `ti` DESC");
+          <?php $sh=$db->query("SELECT * FROM `".$prefix."seo` WHERE `contentType`='all' ORDER BY `ti` DESC");
           while($rh=$sh->fetch(PDO::FETCH_ASSOC)){?>
             <details>
               <summary>
@@ -133,10 +136,163 @@
               </div>
             </details>
           <?php }?>
+          <legend>Assitant Random SEO Tips</legend>
+          <form class="row" target="sp" method="post" action="core/add_clippyseo.php">
+            <input name="user" type="hidden" value="0">
+            <input name="act" type="hidden" value="add_clippyseo">
+            <div class="row">
+              <div class="col-12 col-md-6">
+                <label for="at">Animation Type </label>
+                <div class="form-row">
+                  <select id="at" name="at">
+                    <option value="none">No Animation</option>
+                    <option value="Alert">Alert</option>
+                    <option value="CheckingSomething">Checking Something</option>
+                    <option value="EmptyTrash">Empty Trash</option>
+                    <option value="Explain">Explain</option>
+                    <option value="GestureDown">Gesture Down</option>
+                    <option value="GestureLeft">Gesture Left</option>
+                    <option value="GestureRight">Gesture Right</option>
+                    <option value="GestureUp">Gesture Up</option>
+                    <option value="GetArtsy">Get Artsy</option>
+                    <option value="GetAttention">Get Attention</option>
+                    <option value="GetTechy">Get Techy</option>
+                    <option value="GetWizardly">Get Wizardly</option>
+                    <option value="GoodBye">Goodbye</option>
+                    <option value="Greeting">Greeting</option>
+                    <option value="Hearing_1">Hearing</option>
+                    <option value="Hide">Hide</option>
+                    <option value="Idle_1">Idle</option>
+                    <option value="IdleAtom">Idle Atom</option>
+                    <option value="IdleEyeBrowRaise">Idle Eyebrow Raise</option>
+                    <option value="IdleFingerTap">Idle Finger Tap</option>
+                    <option value="IdleHeadScratch">Idle Head Scratch</option>
+                    <option value="IdleRopePile">Idle Rope Pile</option>
+                    <option value="IdleSideToSide">Idle Side To Side</option>
+                    <option value="IdleSnooze">Idle Snooze</option>
+                    <option value="LookDown">Look Down</option>
+                    <option value="LookDownLeft">Look Down Left</option>
+                    <option value="LookDownRight">Look Down Right</option>
+                    <option value="LookLeft">Look Left</option>
+                    <option value="LookRight">Look Right</option>
+                    <option value="LookUp">Look Up</option>
+                    <option value="LookUpLeft">Look Up Left</option>
+                    <option value="LookUpRight">Look Up Right</option>
+                    <option value="Print">Print</option>
+                    <option value="Processing">Processing</option>
+                    <option value="RestPose">Rest Pose</option>
+                    <option value="Save">Save</option>
+                    <option value="Searching">Searching</option>
+                    <option value="SendMail">Send Mail</option>
+                    <option value="Show">Show</option>
+                    <option value="Thinking">Thinking</option>
+                    <option value="Wave">Wave</option>
+                    <option value="Writing">Writing</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="when">Before or After</label>
+                <div class="form-row">
+                  <select id="when" name="w">
+                    <option value="before">Before</option>
+                    <option value="after">After</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12">
+                <div class="form-row">
+                  <input id="ci" name="ci" placeholder="Enter SEO Tip Text...">
+                  <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
+                </div>
+              </div>
+            </div>
+          </form>
+          <hr>
+          <div id="clippyseo">
+<?php $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`=:cT");
+$sc->execute([':cT'=>'clippy']);
+while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
+            <div id="l_<?php echo$rc['id'];?>">
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <label for="at<?php echo$rc['id'];?>">Animation Type </label>
+                  <div class="form-row">
+                    <select id="at<?php echo$rc['id'];?>" onchange="update(`<?php echo$rc['id'];?>`,`seo`,`type`,$(this).val());">
+                      <option value="none"<?php echo($rc['type']=='none'?' selected':'');?>>No Animation</option>
+                      <option value="Alert"<?php echo($rc['type']=='Alert'?' selected':'');?>>Alert</option>
+                      <option value="CheckingSomething"<?php echo($rc['type']=='CheckingSomething'?' selected':'');?>>Checking Something</option>
+                      <option value="EmptyTrash"<?php echo($rc['type']=='EmptyTrash'?' selected':'');?>>Empty Trash</option>
+                      <option value="Explain"<?php echo($rc['type']=='Explain'?' selected':'');?>>Explain</option>
+                      <option value="GestureDown"<?php echo($rc['type']=='GestureDown'?' selected':'');?>>Gesture Down</option>
+                      <option value="GestureLeft"<?php echo($rc['type']=='GestureLeft'?' selected':'');?>>Gesture Left</option>
+                      <option value="GestureRight"<?php echo($rc['type']=='GestureRight'?' selected':'');?>>Gesture Right</option>
+                      <option value="GestureUp"<?php echo($rc['type']=='GestureUp'?' selected':'');?>>Gesture Up</option>
+                      <option value="GetArtsy"<?php echo($rc['type']=='GetArtsy'?' selected':'');?>>Get Artsy</option>
+                      <option value="GetAttention"<?php echo($rc['type']=='GetAttention'?' selected':'');?>>Get Attention</option>
+                      <option value="GetTechy"<?php echo($rc['type']=='GetTechy'?' selected':'');?>>Get Techy</option>
+                      <option value="GetWizardly"<?php echo($rc['type']=='GetWizardly'?' selected':'');?>>Get Wizardly</option>
+                      <option value="GoodBye"<?php echo($rc['type']=='GoodBye'?' selected':'');?>>Goodbye</option>
+                      <option value="Greeting"<?php echo($rc['type']=='Greeting'?' selected':'');?>>Greeting</option>
+                      <option value="Hearing_1"<?php echo($rc['type']=='Hearing_1'?' selected':'');?>>Hearing</option>
+                      <option value="Hide"<?php echo($rc['type']=='Hide'?' selected':'');?>>Hide</option>
+                      <option value="Idle_1"<?php echo($rc['type']=='Idle_1'?' selected':'');?>>Idle</option>
+                      <option value="IdleAtom"<?php echo($rc['type']=='IdleAtom'?' selected':'');?>>Idle Atom</option>
+                      <option value="IdleEyeBrowRaise"<?php echo($rc['type']=='IdleEyeBrowRaise'?' selected':'');?>>Idle Eyebrow Raise</option>
+                      <option value="IdleFingerTap"<?php echo($rc['type']=='IdleFingerTap'?' selected':'');?>>Idle Finger Tap</option>
+                      <option value="IdleHeadScratch"<?php echo($rc['type']=='IdleHeadScratch'?' selected':'');?>>Idle Head Scratch</option>
+                      <option value="IdleRopePile"<?php echo($rc['type']=='IdleRopePile'?' selected':'');?>>Idle Rope Pile</option>
+                      <option value="IdleSideToSide"<?php echo($rc['type']=='IdleSideToSide'?' selected':'');?>>Idle Side To Side</option>
+                      <option value="IdleSnooze"<?php echo($rc['type']=='IdleSnooze'?' selected':'');?>>Idle Snooze</option>
+                      <option value="LookDown"<?php echo($rc['type']=='LookDown'?' selected':'');?>>Look Down</option>
+                      <option value="LookDownLeft"<?php echo($rc['type']=='LookDownLeft'?' selected':'');?>>Look Down Left</option>
+                      <option value="LookDownRight"<?php echo($rc['type']=='LookDownRight'?' selected':'');?>>Look Down Right</option>
+                      <option value="LookLeft"<?php echo($rc['type']=='LookLeft'?' selected':'');?>>Look Left</option>
+                      <option value="LookRight"<?php echo($rc['type']=='LookRight'?' selected':'');?>>Look Right</option>
+                      <option value="LookUp"<?php echo($rc['type']=='LookUp'?' selected':'');?>>Look Up</option>
+                      <option value="LookUpLeft"<?php echo($rc['type']=='LookUpLeft'?' selected':'');?>>Look Up Left</option>
+                      <option value="LookUpRight"<?php echo($rc['type']=='LookUpRight'?' selected':'');?>>Look Up Right</option>
+                      <option value="Print"<?php echo($rc['type']=='Print'?' selected':'');?>>Print</option>
+                      <option value="Processing"<?php echo($rc['type']=='Processing'?' selected':'');?>>Processing</option>
+                      <option value="RestPose"<?php echo($rc['type']=='RestPose'?' selected':'');?>>Rest Pose</option>
+                      <option value="Save"<?php echo($rc['type']=='Save'?' selected':'');?>>Save</option>
+                      <option value="Searching"<?php echo($rc['type']=='Searching'?' selected':'');?>>Searching</option>
+                      <option value="SendMail"<?php echo($rc['type']=='SendMail'?' selected':'');?>>Send Mail</option>
+                      <option value="Show"<?php echo($rc['type']=='Show'?' selected':'');?>>Show</option>
+                      <option value="Thinking"<?php echo($rc['type']=='Thinking'?' selected':'');?>>Thinking</option>
+                      <option value="Wave"<?php echo($rc['type']=='Wave'?' selected':'');?>>Wave</option>
+                      <option value="Writing"<?php echo($rc['type']=='Writing'?' selected':'');?>>Writing</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <label for="when<?php echo$rc['id'];?>">Before or After</label>
+                  <div class="form-row">
+                    <select id="when<?php echo$rc['id'];?>" onchange="update(`<?php echo$rc['id'];?>`,`seo`,`title`,$(this).val());">
+                      <option value="before"<?php echo($rc['title']=='before'?' selected':'');?>>Before</option>
+                      <option value="after"<?php echo($rc['title']=='after'?' selected':'');?>>After</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  <div class="form-row">
+                    <div class="form-text"><?php echo$rc['notes'];?></div>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?php echo$rc['id'];?>`,'seo');"><?php svg('trash');?></button>
+                  </div>
+                </div>
+              </div>
+              <hr>
+            </div>
+<?php }?>
+          </div>
         </div>
       </div>
     <?php }?>
-    <?php include'core/layout/footer.php';?>
+    <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

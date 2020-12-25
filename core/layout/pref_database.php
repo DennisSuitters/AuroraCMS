@@ -48,15 +48,15 @@
               <small class="form-text text-right">Note: Only the database is backed up.</text>
             </div>
             <div class="form-row">
-              <button class="btn-block" type="submit">Perform Backup</button>
+              <button class="btn-block saveall" type="submit">Perform Backup</button>
             </div>
           </form>
           <div id="backups">
-            <?php foreach(glob("media".DS."backup".DS."*") as$file){
+            <?php foreach(glob("media/backup/*") as$file){
               $filename=basename($file);
               $filename=rtrim($filename,'.sql.gz');?>
               <div id="l_<?php echo$filename;?>" class="form-row mt-1">
-                <a class="btn col-12" href="<?php echo$file;?>">Click to Download <?php echo ltrim($file,'media'.DS.'backup'.DS);?></a>
+                <a class="btn col-12" href="<?php echo$file;?>">Click to Download <?php echo ltrim($file,'media/backup/');?></a>
                 <button class="trash" aria-label="Delete" onclick="removeBackup('<?php echo$filename;?>');"><?php svg('trash');?></button>
               </div>
             <?php }?>
@@ -69,7 +69,7 @@
             </div>
           </form>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

@@ -50,7 +50,7 @@
           <button class="save" id="savewv_site_id" data-dbid="wv_site_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
-        <?php if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini')){
+        <?php if(!file_exists('layout/'.$config['theme'].'/theme.ini')){
           echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         }else{?>
           <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('trash');">
@@ -59,7 +59,7 @@
               <select id="filesEditSelect" name="file">
                 <?php $fileDefault=($user['rank']==1000?'meta_head.html':'meta_head.html');
                 $files=array();
-                foreach(glob("layout".DS.$config['theme'].DS."*.{html}",GLOB_BRACE)as$file){
+                foreach(glob("layout/".$config['theme']."/*.{html}",GLOB_BRACE)as$file){
                   echo'<option value="'.$file.'"';
                   if(stristr($file,$fileDefault)){
                     echo' selected';
@@ -67,7 +67,7 @@
                   }
                   echo'>'.basename($file).'</option>';
                 }
-                foreach(glob("media".DS."carousel".DS."*.{html}",GLOB_BRACE)as$file){
+                foreach(glob("media/carousel/*.{html}",GLOB_BRACE)as$file){
                   echo'<option value="'.$file.'"';
                   if(stristr($file,$fileDefault)){
                     echo' selected';
@@ -86,7 +86,7 @@
               <textarea id="code" name="code"><?php echo$code;?></textarea>
             </div>
           </form>
-          <?php include'core/layout/footer.php';?>
+          <?php require'core/layout/footer.php';?>
         </div>
         <script>
           $(document).ready(function (){

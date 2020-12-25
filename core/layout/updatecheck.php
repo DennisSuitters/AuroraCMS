@@ -13,10 +13,10 @@
  * @changes    v0.0.20 Fix SQL Reserved Word usage.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
-require'..'.DS.'db.php';
+require'../db.php';
 $config=$db->query("SELECT `language`,`update_url` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($config['update_url']!=''){
-  $settings=parse_ini_file('..'.DS.'config.ini',TRUE);
+  $settings=parse_ini_file('../config.ini',TRUE);
   $gV=@file_get_contents($config['update_url'].'versions') or die();
   $update=0;
   $uL='';

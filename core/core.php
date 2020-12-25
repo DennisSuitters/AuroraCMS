@@ -14,7 +14,7 @@
 define('UNICODE','UTF-8');
 $getcfg=true;
 require'db.php';
-if(isset($_GET['theme'])&&file_exists('layout'.DS.$_GET['theme']))
+if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))
 	$config['theme']=$_GET['theme'];
 define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -104,12 +104,12 @@ function rank($txt){
 }
 function svg($svg,$class=null,$size=null){
 	if($svg=='auroracms'||$svg=='auroracms-white')
-		echo file_get_contents('core'.DS.'images'.DS.$svg.'.svg');
+		echo file_get_contents('core/images/'.$svg.'.svg');
 	else
-		echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
+		echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
 }
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core'.DS.'images'.DS.'i-'.$svg.'.svg').'</i>';
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
 }
 function frontsvg($svg){
 	if(file_exists(THEME.'/svg/'.$svg.'.svg'))
@@ -266,7 +266,10 @@ function getDomain($url){
 }
 function url_encode($str){
 	$str=trim(strtolower($str));
-	$str=str_replace(array('%2D','%2D','%2D','%2D','!','*',"'","(",")",";",":","@","&","=","+","$",",","/","?","#","[","]",' '),array(chr(149),chr(150),chr(151),chr(45),'%21','%2A',"%27","%28","%29","%3B","%3A","%40","%26","%3D","%2B","%24","%2C","%2F","%3F","%23","%5B","%5D",'-'),$str);
+	$str=str_replace(
+		array('%2D','%2D','%2D','%2D','!','*',"'","(",")",";",":","@","&","=","+","$",",","/","?","#","[","]",' '),
+		array(chr(149),chr(150),chr(151),chr(45),'%21','%2A',"%27","%28","%29","%3B","%3A","%40","%26","%3D","%2B","%24","%2C","%2F","%3F","%23","%5B","%5D",'-'),
+	$str);
 	return$str;
 }
 function sluggify($url){
@@ -286,33 +289,33 @@ function escaper($val){
 }
 class internal{
 	function humans($args=false){
-		require'core'.DS.'humans.php';
+		require'core/humans.php';
 	}
 	function sitemap($args=false){
-		require'core'.DS.'sitemap.php';
+		require'core/sitemap.php';
 	}
 	function robots($args=false){
-		require'core'.DS.'robots.php';
+		require'core/robots.php';
 	}
 	function rss($args=false){
-		require'core'.DS.'rss.php';
+		require'core/rss.php';
 	}
 	function manifest($args=false){
-		require'core'.DS.'manifest.php';
+		require'core/manifest.php';
 	}
 	function manifestadmin($args=false){
-		require'core'.DS.'manifestadmin.php';
+		require'core/manifestadmin.php';
 	}
 }
 class admin{
 	function favicon(){
-		return'core'.DS.'images'.DS.'favicon.png';
+		return'core/images/favicon.png';
 	}
 	function noimage(){
-		return'core'.DS.'images'.DS.'noimage.jpg';
+		return'core/images/noimage.jpg';
 	}
 	function noavatar(){
-		return'core'.DS.'images'.DS.'noavatar.jpg';
+		return'core/images/noavatar.jpg';
 	}
 	function accounts($args=false){
 		$view='accounts';

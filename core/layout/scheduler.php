@@ -49,7 +49,7 @@
         <div id="calendar-view" class="row p-3">
           <div id="calendar"></div>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

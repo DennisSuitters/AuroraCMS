@@ -9,12 +9,11 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Orders
   - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways)
 - Bookings
-  - Display Bookable Service Options as visually product card choices.
-- Integrate Open Street Maps for Location Mapping information. (Google Maps can eventually cost money depending in data used).
+  - Display Bookable Service Options as visual product card choices.
+- Search
+  - Store Search Queries to help with SEO potential discoveries.
 - Import Catalogue from CSV
-- Import databases from other systems (WordPress, CubeCart, osCommerce, PrestaShop, etc.)
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.
-- Make SEO and Instructional video offsite (github)
 - Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q)
 - Create Free Templates
 - Testing, and Bug Squashing, as per the usual with ongoing projects

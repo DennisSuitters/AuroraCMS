@@ -11,8 +11,8 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&file_exists(THEME.DS.'meta_footer.html')){
-  $footer=file_get_contents(THEME.DS.'meta_footer.html');
+if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&file_exists(THEME.'/meta_footer.html')){
+  $footer=file_get_contents(THEME.'/meta_footer.html');
   $footer=preg_replace('/<print theme>/',THEME,$footer);
   if($view=='index'||$view=='inventory'||$view=='article'){
     $footer=preg_replace([

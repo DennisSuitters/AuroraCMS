@@ -12,7 +12,7 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_livechat.php';
+  require'core/layout/set_livechat.php';
 else{?>
 <main>
   <section id="content">
@@ -92,7 +92,7 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
             </div>
           </div>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

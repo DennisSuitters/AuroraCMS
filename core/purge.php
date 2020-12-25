@@ -80,6 +80,13 @@ if($tbl=='orders'){
     ':oid'=>$id
   ]);
 }
+if($id!=0&&$tbl=='seo'){
+  $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
+  $q->execute([
+    ':id'=>$id
+  ]);
+  $el='l_';
+}
 if($id!=0&&$id!='activity'){
   $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $q->execute([

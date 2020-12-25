@@ -35,7 +35,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow p-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
           <label for="tab1-1">Content</label>
@@ -71,7 +71,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 ]);
                 echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
               }?>
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title"  data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md"  data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
               <input class="textinput" id="title" type="text" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
               '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
@@ -539,7 +539,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       ]);
                       echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</button>':'';
                     }
-                    echo'<button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=content" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
+                    echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
                     '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;">'.svg2('blocks').'</button>'.
                     '<input class="col-1" id="ipsumc" value="5">'.
                     '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
@@ -585,7 +585,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       <input class="custom-file-input hidden" id="avatarfu" type="file" name="fu" onchange="form.submit()">
                       <label for="avatarfu"><?php svg('browse-computer');?></label>
                     </div>
-                    <img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['file']))?'media'.DS.'avatar'.DS.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
+                    <img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
                     <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate('<?php echo$r['id'];?>','content','file','');"><?php svg('trash');?></button>
                   </div>
                 </form>
@@ -593,7 +593,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <label for="avatar">Avatar</label>
                 <div class="form-row">
                   <input id="av" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?php echo$r['file'];?>" readonly>
-                  <img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['file']))?'media'.DS.'avatar'.DS.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
+                  <img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
                 </div>
               <?php }?>
           <?php }
@@ -610,7 +610,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <?php if($user['options'][1]==1){?>
                   <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');"><?php svg('browse-media');?></button>
                 <?php }
-                echo$r['file']!=''&&file_exists('media'.DS.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
+                echo$r['file']!=''&&file_exists('media/'.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
                 echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);">'.svg2('trash').'</button>'.
                 '<button class="save" id="savefile" data-tooltip="tooltip" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
@@ -629,13 +629,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <?php if($user['options'][1]==1){?>
                   <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"><?php svg('browse-media');?></button>
                 <?php }
-                echo$r['thumb']!=''&&file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
+                echo$r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
                 echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);">'.svg2('trash').'</button>'.
                 '<button class="save" id="savethumb" data-tooltip="tooltip" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <label for="exifFilename">Image ALT</label>
               <div class="form-row">
-                <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=alt" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
+                <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
                 <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button>':'';?>
               </div>
@@ -869,7 +869,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     ]);
                     $ru=$su->fetch(PDO::FETCH_ASSOC);?>
                     <div class="col-1">
-                      <img style="max-width:64px;height:64px;" src="<?php if($ru['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$ru['avatar']))echo'media'.DS.'avatar'.DS.$ru['avatar'];elseif($ru['gravatar']!='')echo md5($ru['gravatar']);else echo ADMINNOAVATAR;?>" alt="<?php echo$rc['name'];?>">
+                      <img style="max-width:64px;height:64px;" src="<?php if($ru['avatar']!=''&&file_exists('media/avatar/'.$ru['avatar']))echo'media/avatar/'.$ru['avatar'];elseif($ru['gravatar']!='')echo md5($ru['gravatar']);else echo ADMINNOAVATAR;?>" alt="<?php echo$rc['name'];?>">
                     </div>
                     <div class="col-9">
                       <h6>Name: <?php echo$rc['name']==''?'Anonymous':$rc['name'].' &lt;'.$rc['email'].'&gt;';?></h6>
@@ -1015,7 +1015,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metarobots" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Robots.md" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button>
               <?php if($user['options'][1]==1){
                 if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -1045,13 +1045,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </select>
             </div>
             <div class="card google-result mt-3 p-3 overflow-visible">
-              <div id="google-title" data-tooltip="left" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
+              <div id="google-title" data-tooltip="tooltip" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
                 <?php echo($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
               </div>
               <div id="google-link">
                 <?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>
               </div>
-              <div id="google-description" data-tooltip="left" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
+              <div id="google-description" data-tooltip="tooltip" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
                 <?php if($r['seoDescription']!='')
                   echo$r['seoDescription'];
                 else
@@ -1063,7 +1063,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <small class="form-text text-right">The recommended character count for Title\'s is 70.</small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
               <?php $cntc=70-strlen($r['seoTitle']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -1089,6 +1089,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoTitle" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoTitle" data-tooltip="tooltip" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+<?php /*
             <div class="form-row mt-3">
               <label for="seoCaption">Meta&nbsp;Caption</label>
               <small class="form-text text-right">The recommended character count for Captions is 100.</small>
@@ -1119,12 +1120,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoCaption" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoCaption" data-tooltip="tooltip" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+*/ ?>
             <div class="form-row mt-3">
               <label for="seoDescription">Meta&nbsp;Description</label>
               <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metadescription" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?php svg('seo');?></button>
               <?php $cntc=160-strlen($r['seoDescription']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -1149,9 +1151,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoDescription" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoDescription" data-tooltip="tooltip" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+<?php /*
             <label for="seoKeywords">Keywords</label>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=keywords" data-tooltip="tooltip" aria-label="SEO Keywords Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Keywords.md" data-tooltip="tooltip" aria-label="SEO Keywords Information"><?php svg('seo');?></button>
               <input class="textinput" id="seoKeywords" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="seoKeywords" type="text" value="<?php echo$r['seoKeywords'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter Keywords..."':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button class="save" id="saveseoKeywords" data-tooltip="tooltip" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
@@ -1160,7 +1163,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <input class="textinput" id="tags" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?php echo$r['tags'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button class="save" id="savetags" data-tooltip="tooltip" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+*/ ?>
           </div>
+
         <?php }?>
 <?php /* Settings */ ?>
           <div class="tab1-9 border-top p-3" role="tabpanel">
@@ -1399,11 +1404,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 map.invalidateSize(false);
               });
             </script>
-<?php }?>
-<?php }?>
+<?php }
+}?>
           </div>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

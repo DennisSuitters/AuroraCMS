@@ -43,10 +43,10 @@ if(stristr($html,'<items')){
       $filechk=$r['fileURL'];
       $shareImage=$r['fileURL'];
     }else{
-      if($r['thumb']!=''&&file_exists('media'.DS.'thumbs'.basename($r['thumb'])))
-        $shareImage='media'.DS.'thumbs'.basename($r['thumb']);
-      elseif($r['file']!=''&&file_exists('media'.DS.basename($r['file'])))
-        $shareImage='media'.DS.basename($r['file']);
+      if($r['thumb']!=''&&file_exists('media/thumbs'.basename($r['thumb'])))
+        $shareImage='media/thumbs'.basename($r['thumb']);
+      elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))
+        $shareImage='media/'.basename($r['file']);
       else
         $shareImage=URL.NOIMAGE;
     }

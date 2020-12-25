@@ -11,7 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 require'core/puconverter.php';
 if($_SESSION['loggedin']==false)
   $html=$theme['settings']['page_not_found'];

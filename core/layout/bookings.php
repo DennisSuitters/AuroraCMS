@@ -26,9 +26,9 @@ if($view=='add'){
 }elseif(isset($args[1]))
   $id=$args[1];
 if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_bookings.php';
+  require'core/layout/set_bookings.php';
 elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_bookings.php';
+  require'core/layout/edit_bookings.php';
 else{
   $sortOrder='';
   $bookSearch=isset($_POST['booksearch'])?" AND LOWER(`name`) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%' OR LOWER(`business`) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%'":'';
@@ -143,7 +143,7 @@ else{
               <?php }?>
             </tbody>
           </table>
-          <?php include'core/layout/footer.php';?>
+          <?php require'core/layout/footer.php';?>
         </div>
       </div>
     </div>

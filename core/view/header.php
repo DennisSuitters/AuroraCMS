@@ -21,8 +21,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$html=$view=='orders'||$view=='order'?preg_replace('/<print active=[\"\']?orders[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?orders[\"\']?>/','',$html);
 	$html=$view=='settings'?preg_replace('/<print active=[\"\']?settings[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?settings[\"\']?>/','',$html);
 	if(preg_match('/<print user=[\"\']?avatar[\"\']?>/',$html)){
-		if(isset($user)&&$user['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.$user['avatar']))
-			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media'.DS.'avatar'.DS.$user['avatar'],$html);
+		if(isset($user)&&$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar']))
+			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media/avatar/'.$user['avatar'],$html);
 		elseif(isset($user)&&$user['gravatar']!=''){
 			if(stristr('@',$user['gravatar']))
 				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
@@ -299,6 +299,7 @@ if(stristr($html,'<hours>')){
 						$hourToH=substr($r['tie'],0,2);
 						$hourToM=substr($r['tie'],3,4);
 						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
+						if($hourTo=='0pm')$hourTo='12pm';
 					}
 				}else
 					$hourTo='';
@@ -309,8 +310,8 @@ if(stristr($html,'<hours>')){
 					'/<print timeto>/',
 					'/<print info>/'
 				],[
-					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])),
-					($r['password']==$r['username']?'':'-'.ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
+					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])).($r['password']==''?'':' - '),
+					($r['password']==$r['username']?'':ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
 					$hourFrom,
 					($r['tie']>0?'-' . $hourTo : ''),
 					($r['title']!=''?ucfirst($r['title']):'')

@@ -14,7 +14,7 @@
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
 require'../db.php';
-$theme=parse_ini_file('..'.DS.'..'.DS.'layout'.DS.$config['theme'].DS.'theme.ini',true);
+$theme=parse_ini_file('../../layout/'.$config['theme'].'/theme.ini',true);
 require'../projecthoneypot/class.projecthoneypot.php';
 require'../spamfilter/class.spamfilter.php';
 $error=0;

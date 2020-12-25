@@ -119,13 +119,13 @@ if($user['options'][4]==1){
       ':iid_ti'=>$ti,
       ':id'=>$id
     ]);
-    if(file_exists('..'.DS.'media'.DS.'order'.DS.$r['qid'].'.pdf'))unlink('..'.DS.'media'.DS.'orders'.DS.$r['qid'].'.pdf');
+    if(file_exists('../media/order/'.$r['qid'].'.pdf'))unlink('../media/orders/'.$r['qid'].'.pdf');
     $args[0]='invoices';
   }
   if($args[0]=='settings')
-    include'core'.DS.'layout'.DS.'set_orders.php';
+    require'core/layout/set_orders.php';
   elseif($args[0]=='edit')
-    include'core'.DS.'layout'.DS.'edit_orders.php';
+    require'core/layout/edit_orders.php';
   else{
     if($args[0]=='all'||$args[0]==''){
       $sort="all";
@@ -232,16 +232,16 @@ if($user['options'][4]==1){
                         <div class="btn-group radius-right" role="group" aria-label="Item Controls">
                           <?php if($user['options'][0]==1){
                             echo$r['qid']!=''&&$r['aid']==''?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
-                            echo$r['aid']==''?'<button class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');">'.svg2('archive').'</button>':'';
+                            echo$r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');">'.svg2('archive').'</button>':'';
                           }?>
-                          <button class="btn" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');"><?php svg('print');?></button>
-                          <?php echo$c['email']!=''?'<button data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');">'.svg2('email-send').'</button>':'';
+                          <button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?php echo$r['id'];?>&act=print');"><?php svg('print');?></button>
+                          <?php echo$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');">'.svg2('email-send').'</button>':'';
                           echo$user['options'][0]==1?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
                           <a class="btn<?php echo$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
                           <?php if($user['options'][0]==1){?>
                             <button class="btn<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','');"><?php svg('untrash');?></button>
                             <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete');"><?php svg('trash');?></button>
-                            <button class="btn btn-secondary rounded-right trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" aria-label="Purge"><?php svg('purge');?></button>
+                            <button class="btn btn-secondary rounded-right purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" aria-label="Purge"><?php svg('purge');?></button>
                           <?php }?>
                         </div>
                       </div>
@@ -261,7 +261,7 @@ if($user['options'][4]==1){
                 <a class="badger badge-<?php echo(isset($args[0])&&$args[0]=='archived'?'success':'secondary');?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'];?>/orders/archived" aria-label="Display Archived Items">Archived</a>&nbsp;
               </small>
             </div>
-            <?php include'core/layout/footer.php';?>
+            <?php require'core/layout/footer.php';?>
           </div>
         </div>
       </div>
@@ -296,7 +296,7 @@ if($user['options'][4]==1){
           <div class="card border-radius-0 shadow">
             <div class="alert alert-info" role="alert">You don't have permissions to View this Area!</div>
           </div>
-          <?php include'core/layout/footer.php';?>
+          <?php require'core/layout/footer.php';?>
         </div>
       </section>
     </main>

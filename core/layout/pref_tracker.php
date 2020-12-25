@@ -43,7 +43,7 @@
               <th class="text-center">Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="trash" data-tooltip="tooltip" data-placement="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?php svg('purge');?></button>
+                  <button class="purge trash" data-tooltip="tooltip" data-placement="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?php svg('purge');?></button>
                 </div>
               </th>
             </tr>
@@ -91,7 +91,7 @@
             <?php }?>
           </tbody>
         </table>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

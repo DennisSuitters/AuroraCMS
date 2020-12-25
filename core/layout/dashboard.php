@@ -12,9 +12,14 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($args[0])&&$args[0]=='settings')
-  include'core/layout/set_dashboard.php';
+  require'core/layout/set_dashboard.php';
 else{
-  include'core/parsedown/class.parsedown.php';?>
+  $clippy=array(
+    0=>'agent.play("Greeting");',
+    1=>'agent.speak("Hi I\'m Clippy, I\'m here to help you with using AuroraCMS to add and edit content, and to give you tips while using the CMS to help improve your Website.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");',
+    2=>'agent.speak("You can turn me off in <a href=\"'.URL.$settings['system']['admin'].'/preferences/interface#options28\">Preferences -> Interface</a>, in the Side Menu.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'
+  );
+  require'core/parsedown/class.parsedown.php';?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
@@ -32,33 +37,53 @@ else{
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow p-3">
 <?php $curHr=date('G');
-$season = currentSeason('return');
-$msg='<h5 class="welcome-message my-4">';
-if($curHr<12)
-  $msg.='Good Morning ';
-elseif($curHr<18)
-  $msg.='Good Afternoon ';
-else
-  $msg.='Good Evening ';
-$msg.=($user['name']!=''?strtok($user['name'], " "):$user['username']).'!';
-if($season!='aurora'){
-  if($season=='halloween')
-    $msg.=' Happy Halloween!';
-  elseif($season=='xmas')
-    $msg.=" Season's Greetings!";
+  $season = currentSeason('return');
+  $msg='<h5 class="welcome-message my-4">';
+  if($curHr<12)
+    $msg.='Good Morning ';
+  elseif($curHr<18)
+    $msg.='Good Afternoon ';
   else
-    $msg.=" It is currently ".ucfirst($season)."!";
-}
-$msg.=" The date is ".date($config['dateFormat']);
-$msg.="</h5>";
-echo$msg;
-        echo$config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
-        echo$config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
-        if(!file_exists('layout'.DS.$config['theme'].DS.'theme.ini'))
-          echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
-        $tid=$ti-2592000;
-        echo$config['business']==''?'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>':'';
-        echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
+    $msg.='Good Evening ';
+  $msg.=($user['name']!=''?strtok($user['name'], " "):$user['username']).'!';
+  if($season!='aurora'){
+    if($season=='halloween')
+      $msg.=' Happy Halloween!';
+    elseif($season=='xmas')
+      $msg.=" Season's Greetings!";
+    else
+      $msg.=" It is currently ".ucfirst($season)."!";
+  }
+  $msg.=" The date is ".date($config['dateFormat']);
+  $msg.="</h5>";
+  echo$msg;
+  echo$config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
+  echo$config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
+  if(!file_exists('layout/'.$config['theme'].'/theme.ini'))
+    echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
+    $tid=$ti-2592000;
+    if($config['business']==''){
+      echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
+      $clippy[]='agent.play("LookUpRight");';
+      $clippy[]='agent.speak("I notice the Business Name has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/contact#business\">Preferences -> Contact</a> in the Side Menu. Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+    }
+    if($config['email']==''){
+      echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
+      $clippy[]='agent.play("LookUpRight");';
+      $clippy[]='agent.speak("I notice the Email has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/contact#email\">Preferences -> Contact</a> in the Side Menu. Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+    }
+
+    $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='clippy' ORDER BY rand() LIMIT 1");
+    $sc->execute();
+    if($sc->rowCount()>0){
+      $rc=$sc->fetch(PDO::FETCH_ASSOC);
+      echo'<div class="row">'.
+        '<div class="alert alert-info">'.
+          '<span id="seotip"><strong>Unsolicited SEO Tip:</strong> '.$rc['notes'].'</span><br>'.
+          '<a href="#" data-fancybox data-type="ajax" data-src="core/seolist.php">Read them all.</a>'.
+        '</div>'.
+      '</div>';
+    }?>
         <div class="row">
           <?php $ss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."iplist` WHERE `ti`>=:ti");
           $ss->execute([
@@ -335,7 +360,7 @@ echo$msg;
           </div>
           <?php }?>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

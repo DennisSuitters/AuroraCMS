@@ -58,23 +58,23 @@ foreach($vL as $aV){
     echo'<script>window.top.window.$("#update").append(`<div class="alert alert-info" role="alert">Update already Downloaded!...</div>`);</script>';
   }
   if($found==true){
-    $zipHandle=zip_open('..'.DS.'media'.DS.'updates'.DS.$aV.'.zip');
+    $zipHandle=zip_open('../media/updates/'.$aV.'.zip');
     $html='<ul>';
     while($aF=zip_read($zipHandle)){
       $thisFileName=zip_entry_name($aF);
       $thisFileDir=dirname($thisFileName);
       if(substr($thisFileName,-1,1)=='/')continue;
-      if(!is_dir('..'.DS.$thisFileDir)){
-        mkdir('..'.DS.$thisFileDir );
+      if(!is_dir('../'.$thisFileDir)){
+        mkdir('../'.$thisFileDir );
         $html.='<li>Created Directory '.$thisFileDir.'</li>';
       }
-      if(!is_dir('..'.DS.$thisFileName)){
+      if(!is_dir('../'.$thisFileName)){
         $html.='<li>'.$thisFileName.'...........';
         $contents=zip_entry_read($aF,zip_entry_filesize($aF));
         $updateThis='';
-        if($thisFileName=='core'.DS.'upgrade.sql'){
+        if($thisFileName=='core/upgrade.sql'){
           $prefix=$settings['database']['prefix'];
-  			  $sql=file_get_contents('core'.DS.'upgrade.sql');
+  			  $sql=file_get_contents('core/upgrade.sql');
 		      $sql=str_replace([
   					"CREATE TABLE `",
   					"INSERT INTO `",

@@ -278,11 +278,10 @@ $html.='</tfoot>'.
     '</table>'.
   '</body>';
 $pdf->writeHTML($html,true,false,true,false,'');
-$pdf->Output(__DIR__.DS.'..'.DS.'media'.DS.'orders'.DS.$oid.'.pdf','F');
-chmod('..' .DS.'media'.DS.'orders'.DS.$oid.'.pdf',0777);
-echo'<script>';
+$pdf->Output(__DIR__.'/../media/orders/'.$oid.'.pdf','F');
+chmod('../media/orders/'.$oid.'.pdf',0777);
 if($act=='print'){
-	echo'<script>window.top.window.open("media/orders/'.$oid;.'.pdf","_blank");</script>';
+	echo'<script>window.top.window.open("media/orders/'.$oid.'.pdf","_blank");</script>';
 }else{
 	require'phpmailer/class.phpmailer.php';
 	$mail=new PHPMailer;

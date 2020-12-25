@@ -37,7 +37,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow p-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input id="tab1-1" class="tab-control" name="tabs" type="radio" checked>
           <label for="tab1-1">Content</label>
@@ -61,11 +61,12 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   ]);
                   echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }?>
-                <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
+                <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
                 <input class="textinput" id="title" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="title" type="text" value="<?php echo$r['title'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?> onkeyup="genurl();$('#titleupdate').text($(this).val());">
                 <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
                 '<button class="save" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
+<?php if($r['contentType']!='index'){?>
               <script>
                 function genurl(){
                   var data=$('#title').val().toLowerCase();
@@ -74,10 +75,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   $('#genurl').html(url);
                 }
               </script>
+<?php }?>
               <label for="genurl">URL Slug</label>
               <div class="form-row">
                 <div class="input-text col-12">
-                  <a id="genurl" target="_blank" href="<?php echo URL.($r['contentType']=='page'?$r['contentType'].'/':'').strtolower(str_replace(' ','-',$r['title']));?>"><?php echo URL.($r['contentType']=='page'?$r['contentType'].'/':'').strtolower(str_replace(' ','-',$r['title']));?></a>
+                  <a id="genurl" target="_blank" href="
+                  <?php echo URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?>">
+                  <?php echo URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?></a>
                 </div>
               </div>
             <?php }?>
@@ -94,7 +98,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   ]);
                   echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" data-dbgid="notesda" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }
-                echo'<button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=content" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
+                echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
                     '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;">'.svg2('blocks').'</button>'.
                     '<input class="col-1" id="ipsumc" value="5">'.
                     '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;">'.svg2('loremipsum').'</button>'.
@@ -151,7 +155,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
               <label for="exifFilename">Image ALT</label>
               <div class="form-row">
-                <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
+                <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
                 <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Test..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" data-dbid="fileALT" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
@@ -228,8 +232,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 ]);
                 if($sm->rowCount()>0){
                   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-                    if(file_exists('media'.DS.'sm'.DS.basename($rm['file'])))
-                      $thumb='media'.DS.'sm'.DS.basename($rm['file']);
+                    if(file_exists('media/sm/'.basename($rm['file'])))
+                      $thumb='media/sm/'.basename($rm['file']);
                     else
                       $thumb=ADMINNOIMAGE;?>
                     <div class="card stats col-6 col-md-3 m-1" id="mi_<?php echo$rm['id'];?>">
@@ -285,18 +289,18 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metarobots" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Robots.md" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><?php svg('seo');?></button>
               <input class="textinput" id="metaRobots" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="metaRobots" type="text" value="<?php echo$r['metaRobots'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Meta Robots Option (Left empty the default will be `index,follow`)..."':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button class="save" id="savemetaRobots" data-tooltip="tooltip" data-dbid="metaRobots" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <div class="card google-result mt-3 p-3 overflow-visible">
-              <div id="google-title" data-tooltip="left" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
+              <div id="google-title" data-tooltip="tooltip" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
                 <?php echo$r['seoTitle'].' | '.$config['business'];?>
               </div>
               <div id="google-link">
                 <?php echo URL;?>
               </div>
-              <div id="google-description" data-tooltip="left" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
+              <div id="google-description" data-tooltip="tooltip" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences.">
                 <?php echo$r['seoDescription'];?>
               </div>
             </div>
@@ -305,7 +309,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <small class="form-text text-right">The recommended character count for Title's is 70.</small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
               <?php $cntc=70-strlen($r['seoTitle']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -327,6 +331,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=seoTitle" data-tooltip="tooltip" data-aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoTitle" data-tooltip="tooltip" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+<?php /*
             <div class="form-row mt-3">
               <label for="seoCaption">Meta&nbsp;Caption</label>
               <small class="form-text text-right">The recommended character count for Captions is 100.</small>
@@ -349,12 +354,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=seoCaption" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoCaption" data-tooltip="tooltip" data-dbid="seoCaption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+*/ ?>
             <div class="form-row mt-3">
               <label for="seoDescription">Meta&nbsp;Description</label>
               <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
             </div>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=metadescription" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?php svg('seo');?></button>
               <?php $cntc=160-strlen($r['seoDescription']);
               if($cntc<0){
                 $cnt=abs($cntc);
@@ -375,9 +381,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout.suggestions-add.php?id='.$r['id'].'&t=menu&c=seoDescription" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoDescription" data-tooltip="tooltip" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+<?php /*
             <label for="seoKeywords">Meta&nbsp;Keywords</label>
             <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=keywords" data-tooltip="tooltip" aria-label="SEO Keywords Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Keywords.md" data-tooltip="tooltip" aria-label="SEO Keywords Information"><?php svg('seo');?></button>
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
                 $ss->execute([
@@ -392,6 +399,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               '<button class="save" id="saveseoKeywords" data-tooltip="tooltip" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
           </div>
+*/ ?>
 <?php /* Settings */ ?>
           <?php if($r['contentType']!='comingsoon'&&['contentType']!='maintenance'){?>
             <div class="tab1-5 border-top p-3" role="tabpanel">
@@ -461,7 +469,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           <?php }?>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

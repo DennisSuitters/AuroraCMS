@@ -257,7 +257,7 @@
             <textarea class="summernote" id="orderEmailLayout" name="da"><?php echo rawurldecode($config['orderEmailLayout']);?></textarea>
           </form>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

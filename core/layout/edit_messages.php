@@ -117,15 +117,15 @@ if($args[0]!='compose'){
                   $attachments=explode(',',$r['attachments']);
                   foreach($attachments as$attachment){
                     $atts.=($atts!=''?',':'').$attachment;
-                    $attimg='core'.DS.'images'.DS.'i-file.svg';
+                    $attimg='core/images/i-file.svg';
                     if(preg_match("/\.(gif|png|jpg|jpeg|bmp|webp|svg)$/",$attachment))
                       $attimg=$attachment;
                     if(preg_match("/\.(pdf)$/",$attachment))
-                      $attimg='core'.DS.'images'.DS.'i-file-pdf.svg';
+                      $attimg='core/images/i-file-pdf.svg';
                     if(preg_match("/\.(zip|zipx|tar|gz|rar|7zip|7z|bz2)$/",$attachment))
-                      $attimg='core'.DS.'images'.DS.'i-file-archive.svg';
+                      $attimg='core/images/i-file-archive.svg';
                     if(preg_match("/\.(doc|docx|xls)$/",$attachment))
-                      $attimg='core'.DS.'images'.DS.'i-file-docs.svg';?>
+                      $attimg='core/images/i-file-docs.svg';?>
                     <div class="form-row mt-1" id="a_<?php echo$ti;?>">
                       <img src="<?php echo$attimg;?>" alt="<?php echo basename($attachment);?>">
                       <div class="input-text col-12">
@@ -185,7 +185,7 @@ if($args[0]!='compose'){
             });
           </script>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

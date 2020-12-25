@@ -7,7 +7,7 @@
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
  * 
- * Date: 2020-12-12T15:45Z
+ * Date: 2020-12-23T14:36Z
  * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -345,7 +345,7 @@ var ModalUI_ModalUI = /*#__PURE__*/function () {
       this.$modal.trigger('note.modal.show');
       this.$modal.off('click', '.note-close').on('click', '.note-close', this.hide.bind(this));
       this.$modal.on('keydown', function (event) {
-        if (event.which === 27) {
+        if (event.key === 'Escape' || event.key === 'Backspace') {
           event.preventDefault();
 
           _this.hide();
@@ -7215,6 +7215,7 @@ var Statusbar_Statusbar = /*#__PURE__*/function () {
     this.$document = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(document);
     this.$statusbar = context.layoutInfo.statusbar;
     this.$editable = context.layoutInfo.editable;
+    this.$codable = context.layoutInfo.codable;
     this.options = context.options;
   }
 
@@ -7234,12 +7235,19 @@ var Statusbar_Statusbar = /*#__PURE__*/function () {
 
         var editableTop = _this.$editable.offset().top - _this.$document.scrollTop();
 
+        var editableCodeTop = _this.$codable.offset().top - _this.$document.scrollTop();
+
         var onMouseMove = function onMouseMove(event) {
           var height = event.clientY - (editableTop + EDITABLE_PADDING);
+          var heightCode = event.clientY - (editableCodeTop + EDITABLE_PADDING);
           height = _this.options.minheight > 0 ? Math.max(height, _this.options.minheight) : height;
           height = _this.options.maxHeight > 0 ? Math.min(height, _this.options.maxHeight) : height;
+          heightCode = _this.options.minheight > 0 ? Math.max(heightCode, _this.options.minheight) : heightCode;
+          heightCode = _this.options.maxHeight > 0 ? Math.min(heightCode, _this.options.maxHeight) : heightCode;
 
           _this.$editable.height(height);
+
+          _this.$codable.height(heightCode);
         };
 
         _this.$document.on('mousemove', onMouseMove).one('mouseup', function () {
@@ -7281,7 +7289,7 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
     this.$codable = context.layoutInfo.codable;
     this.$window = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(window);
     this.$scrollbar = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('html, body');
-    this.$scrollval = this.$scrollbar.css('overflow');
+    this.scrollbarClassName = 'note-fullscreen-body';
 
     this.onResize = function () {
       _this.resizeTo({
@@ -7308,28 +7316,33 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
     key: "toggle",
     value: function toggle() {
       this.$editor.toggleClass('note-fullscreen');
+      var isFullscreen = this.isFullscreen();
+      this.$scrollbar.toggleClass(this.scrollbarClassName, isFullscreen);
 
-      if (this.isFullscreen()) {
+      if (isFullscreen) {
         this.$editable.data('orgHeight', this.$editable.css('height'));
         this.$editable.data('orgMaxHeight', this.$editable.css('maxHeight'));
         this.$editable.css('maxHeight', '');
         this.$window.on('resize', this.onResize).trigger('resize');
-        this.$scrollbar.css('overflow', 'hidden');
       } else {
         this.$window.off('resize', this.onResize);
         this.resizeTo({
           h: this.$editable.data('orgHeight')
         });
         this.$editable.css('maxHeight', this.$editable.css('orgMaxHeight'));
-        this.$scrollbar.css('overflow', this.$scrollval);
       }
 
-      this.context.invoke('toolbar.updateFullscreen', this.isFullscreen());
+      this.context.invoke('toolbar.updateFullscreen', isFullscreen);
     }
   }, {
     key: "isFullscreen",
     value: function isFullscreen() {
       return this.$editor.hasClass('note-fullscreen');
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.$scrollbar.removeClass(this.scrollbarClassName);
     }
   }]);
 
@@ -8684,7 +8697,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
           var $item = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(item); // always compare with string to avoid creating another func.
 
           var isChecked = $item.data('value') + '' === lineHeight + '';
-          $item.toggleClass('checked', isChecked); //        this.className = isChecked ? 'checked' : '';
+          $item.toggleClass('checked', isChecked);
         });
         $cont.find('.note-current-line-height').text(lineHeight);
       }
@@ -10536,7 +10549,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     // true|false If toolbarPosition = 'buttom' this will override dropUp.
     // toolbar
     codeviewKeepButton: false,
-    toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname', 'fontsize']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'zoomOut', 'zoomValue', 'zoomIn', 'codeview', 'help']]],
+    toolbar: [['style', ['style']], ['font', ['bold', 'underline', 'clear']], ['fontname', ['fontname']], ['color', ['color']], ['para', ['ul', 'ol', 'paragraph']], ['table', ['table']], ['insert', ['link', 'picture', 'video']], ['view', ['fullscreen', 'zoomOut', 'zoomValue', 'zoomIn', 'codeview', 'help']]],
     // popover
     popatmouse: true,
     popover: {

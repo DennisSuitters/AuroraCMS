@@ -93,10 +93,10 @@ if($args[0]==''){?>
               <span class="icon"><?php svg('database','i-5x');?></span>
             </a>
           </div>
-          <?php include'core/layout/footer.php';?>
+          <?php require'core/layout/footer.php';?>
         </div>
       </div>
     </section>
   </main>
 <?php }else
-  include'core'.DS.'layout'.DS.'pref_'.$args[0].'.php';
+  require'core/layout/pref_'.$args[0].'.php';

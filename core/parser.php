@@ -192,8 +192,8 @@ foreach($tags as$tag){
 			$parsing.=$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']);
 		case'cover':
 			if($attribute=='page'){
-				if($page['cover']!=''&&file_exists('media'.DS.basename($page['cover'])))
-					$parsing.='<img class="'.$class.'" src="media'.DS.basename($page['cover']).'">';
+				if($page['cover']!=''&&file_exists('media/'.basename($page['cover'])))
+					$parsing.='<img class="'.$class.'" src="media/'.basename($page['cover']).'">';
 				elseif($page['coverURL']!='')
 					$parsing.='<img class="'.$class.'" src="'.$page['coverURL'].'">';
 				else
@@ -201,16 +201,16 @@ foreach($tags as$tag){
 			}
 			break;
 		case'thumb':
-			if($r['thumb']!=''&&(file_exists('media'.DS.'thumbs'.DS.basename($r['thumb']))))
-				$parsing.='<img src="media'.DS.'thumbs'.DS.basename($r['thumb']).'" alt="'.$r['title'].'">';
-			elseif($r['file']!=''&&(file_exists('media'.DS.'thumbs'.DS.basename($r['file']))))
-				$parsing.='<img src="media'.DS.'thumbs'.DS.basename($r['file']).'" alt="'.$r['title'].'">';
+			if($r['thumb']!=''&&(file_exists('media/'.'thumbs/'.basename($r['thumb']))))
+				$parsing.='<img src="media/'.'thumbs/'.basename($r['thumb']).'" alt="'.$r['title'].'">';
+			elseif($r['file']!=''&&(file_exists('media/'.'thumbs/'.basename($r['file']))))
+				$parsing.='<img src="media/'.'thumbs/'.basename($r['file']).'" alt="'.$r['title'].'">';
 			else
 				$parsing.=NOIMAGESM;
 			break;
 		case'image':
 			if(isset($r['file'])&&$r['file']!=''){
-				$parsing.=$r['file']!=''&&(file_exists('media'.DS.basename($r['file'])))?'<img class="'.$class.'" src="media'.DS.basename($r['file']).'" alt="'.$r['title'].'">':'';
+				$parsing.=$r['file']!=''&&(file_exists('media/'.basename($r['file'])))?'<img class="'.$class.'" src="media/'.basename($r['file']).'" alt="'.$r['title'].'">':'';
 			}elseif(isset($r['fileURL'])&&$r['fileURL']!='')
 				$parsing.=$r['fileURL'];
 			else
@@ -222,8 +222,8 @@ foreach($tags as$tag){
 		case'avatar':
 			$parsing.='<img class="'.$class.'" src="';
 			if($attribute=='author'){
-				if($author['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($author['avatar'])))
-					$parsing.='media'.DS.'avatar'.DS.basename($author['avatar']).'"';
+				if($author['avatar']!=''&&file_exists('media/'.'avatar/'.basename($author['avatar'])))
+					$parsing.='media/'.'avatar/'.basename($author['avatar']).'"';
 				elseif(isset($author['gravatar'])&&$author['gravatar']!=''){
 					if(stristr($author['avatar'],'@'))
 						$parsing.='http://gravatar.com/avatar/'.md5($author['gravatar']).'"';
@@ -253,17 +253,17 @@ foreach($tags as$tag){
 					$rc['gravatar']=$rcu['gravatar'];
 				}
 				$rc['avatar']=basename($rc['avatar']);
-				if($rc['avatar']&&file_exists('media'.DS.'avatar'.DS.$rc['avatar']))
-					$parsing.='media'.DS.'avatar'.DS.$rc['avatar'];
+				if($rc['avatar']&&file_exists('media/'.'avatar/'.$rc['avatar']))
+					$parsing.='media/'.'avatar/'.$rc['avatar'];
 				elseif($rc['gravatar']!=''){
 					if(stristr($rc['gravatar'],'@'))
 						$parsing.='http://gravatar.com/avatar/'.md5($rc['gravatar']);
 					elseif(stristr($rc['gravatar'],'gravatar.com/avatar'))
 						$parsing.=$rc['gravatar'];
 					else
-						$parsing.=THEME.DS.'images'.DS.'noavatar.jpg';
+						$parsing.=THEME.'/images/'.'noavatar.jpg';
 				}else
-					$parsing.=THEME.DS.'images'.DS.'noavatar.jpg';
+					$parsing.=THEME.'/images/'.'noavatar.jpg';
 				$parsing.='" alt="'.($rc['name']==''?'Anonymous':$rc['name']).'"';
 			}
 			$parsing.='>';

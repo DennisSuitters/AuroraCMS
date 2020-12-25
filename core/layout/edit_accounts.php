@@ -115,7 +115,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   </label>
                 </div>
               <?php }?>
-              <img class="img-avatar" style="border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
+              <img class="img-avatar" style="border-radius:0" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
               elseif($r['gravatar']!='')echo$r['gravatar'];
               else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
               <?php echo$user['options'][5]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);">'.svg2('trash').'</button>':'';?>
@@ -836,7 +836,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
           <?php }?>
         </div>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

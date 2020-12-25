@@ -29,23 +29,13 @@ if($args[0]=='add'){
   echo'<script>/*<![CDATA[*/history.replaceState("","","'.URL.$settings['system']['admin'].'/accounts/edit/'.$args[1].'");/*]]>*/</script>';
 }
 if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_accounts.php';
+  require'core/layout/set_accounts.php';
 elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_accounts.php';
+  require'core/layout/edit_accounts.php';
 else{
   if($args[0]=='type'){
     if(isset($args[1])){
-      $rank=0;
-      if($args[1]=='subscriber')$rank=100;
-      if($args[1]=='member')$rank=200;
-      if($args[1]=='client')$rank=300;
-      if($args[1]=='contributor')$rank=400;
-      if($args[1]=='author')$rank=500;
-      if($args[1]=='editor')$rank=600;
-      if($args[1]=='moderator')$rank=700;
-      if($args[1]=='manager')$rank=800;
-      if($args[1]=='administrator')$rank=900;
-      if($args[1]=='developer')$rank=1000;
+      $rank=rank($args[1]);
     }
     $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `rank`=:rank ORDER BY `ti` DESC");
     $s->execute([
@@ -97,7 +87,7 @@ else{
             <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               <tr id="l_<?php echo$r['id'];?>">
                 <td class="align-middle">
-                  <img class="avatar" src="<?php if($r['avatar']!=''&&file_exists('media'.DS.'avatar'.DS.basename($r['avatar'])))echo'media'.DS.'avatar'.DS.basename($r['avatar']);
+                  <img class="avatar" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
                   elseif($r['gravatar']!='')echo$r['gravatar'];
                   else echo ADMINNOAVATAR;?>" alt="<?php echo$r['username'];?>">
                 </td>
@@ -123,7 +113,7 @@ else{
             <?php }?>
           </tbody>
         </table>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

@@ -67,6 +67,25 @@
             <input id="options4" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4" type="checkbox"<?php echo$config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
             <label for="options4">Enable Tooltips</label>
           </div>
+          <div class="row">
+            <input id="options28" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?php echo$config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"';?> onchange="toggleAssistant();">
+            <label for="options28">Enable Assistant</label>
+          </div>
+          <script>
+            function toggleAssistant(){
+              if($('#options28').is(':checked') === false) {
+                clippy.load('Clippy', function(agent){
+                  agent.play("Goodbye");
+                });
+              }
+              if($('#options28').is(':checked') === true) {
+                clippy.load('Clippy', function(agent){
+                  agent.show();
+                  agent.play("Greeting");
+                });
+              }
+            }
+          </script>
           <label for="uti_freq">Update Frequency</label>
           <div class="form-row">
             <select class="form-control" id="uti_freq" onchange="update('1','config','uti_freq',$(this).val());">
@@ -130,7 +149,7 @@
             </select>
           </div>
         <?php }?>
-        <?php include'core/layout/footer.php';?>
+        <?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

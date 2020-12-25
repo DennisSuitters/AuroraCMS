@@ -53,8 +53,8 @@ if($act=='file'){
   }
 }
 if($process==true){
-  $image->source_path='..'.DS.'media'.DS.$imgsrc;
-  $image->target_path='..'.DS.'media'.DS.$imgdest;
+  $image->source_path='../media/'.$imgsrc;
+  $image->target_path='../media/'.$imgdest;
   $image->jpeg_quality=100;
   $image->preserve_aspect_ratio=true;
   $image->enlarge_smaller_images=true;
@@ -94,7 +94,7 @@ if($process==true){
     if($act=='thumb'){
       $s=$db->prepare("UPDATE `".$prefix."content` SET `thumb`=:thumb WHERE `id`=:id");
       $s->execute([
-        ':thumb'=>'media'.DS.$imgdest,
+        ':thumb'=>'media/'.$imgdest,
         ':id'=>$id
       ]);
       echo'<script>'.

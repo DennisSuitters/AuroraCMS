@@ -21,9 +21,9 @@ if($args[0]=='add'){
   echo'<script>history.replaceState("","","'.URL.$settings['system']['admin'].'/newsletters/edit/'.$args[1].'");</script>';
 }
 if($args[0]=='settings')
-  include'core'.DS.'layout'.DS.'set_newsletters.php';
+  require'core/layout/set_newsletters.php';
 elseif($args[0]=='edit')
-  include'core'.DS.'layout'.DS.'edit_newsletters.php';
+  require'core/layout/edit_newsletters.php';
 else{
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ORDER BY `ti` DESC, `title` ASC");
   $s->execute([
@@ -75,12 +75,12 @@ else{
                       <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php echo$user['options'][1]==1?'<button class="btn" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
+                            <?php echo$user['options'][1]==1?'<button class="btn email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
                             <a class="btn" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?> href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="btn<?php echo$r['status']!='delete'?' hidden':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');" aria-label="Restore"><?php svg('untrash');?></button>
-                              <button class="btn trash<?php echo$r['status']=='delete'?' hidden':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');" aria-label="Delete"><?php svg('trash');?></button>
-                              <button class="btn trash<?php echo$r['status']!='delete'?' hidden':'';?>" data-tooltip="tooltip" onclick="purge('<?php echo$r['id'];?>','content');" aria-label="Purge"><?php svg('purge');?></button>
+                              <button class="btn<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');" aria-label="Restore"><?php svg('untrash');?></button>
+                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');" aria-label="Delete"><?php svg('trash');?></button>
+                              <button class="btn purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="purge('<?php echo$r['id'];?>','content');" aria-label="Purge"><?php svg('purge');?></button>
                             <?php }?>
                           </div>
                         </div>
@@ -139,8 +139,8 @@ else{
               </table>
             </div>
           </div>
-          <?php include'core/layout/footer.php';?>
-          <?php }?>
+          <?php require'core/layout/footer.php';
+          }?>
         </div>
       </div>
     </section>

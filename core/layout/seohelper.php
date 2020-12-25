@@ -13,7 +13,7 @@
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
-require_once'..'.DS.'db.php';
+require'../db.php';
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $s=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `type`=:t");
 $s->execute([

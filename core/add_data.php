@@ -16,16 +16,16 @@ require'db.php';
 echo'<script>';
 require'zebraimage/zebra_image.php';
 require'sanitise.php';
-define('THEME','..'.DS.'layout'.DS.$config['theme']);
+define('THEME','../layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');
 function svg($svg,$class=null,$size=null){
-	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images'.DS.'i-'.$svg.'.svg').'</i>';
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
-$theme=parse_ini_file(THEME.DS.'theme.ini',true);
+$theme=parse_ini_file(THEME.'/theme.ini',true);
 $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
 if($act!=''){
   $uid=isset($_SESSION['uid'])?(int)$_SESSION['uid']:0;
@@ -83,9 +83,9 @@ if($act!=''){
         $id=$db->lastInsertId();
         $e=$db->errorInfo();
         if(is_null($e[2])){
-					$avatar='core'.DS.'images'.DS.'noavatar.jpg';
-          if($c['avatar']!=''&&file_exists('..'.DS.'media'.DS.$c['avatar']))
-						$avatar='media'.DS.'avatar'.DS.$c['avatar'];
+					$avatar='core/images/noavatar.jpg';
+          if($c['avatar']!=''&&file_exists('../media/'.$c['avatar']))
+						$avatar='media/avatar/'.$c['avatar'];
           elseif($c['gravatar']!=''){
             if(stristr($c['gravatar'],'@'))
 							$avatar='http://gravatar.com/avatar/'.md5($c['gravatar']);
@@ -126,7 +126,7 @@ if($act!=''){
       if(isset($_FILES['fu'])){
         $ft=$_FILES['fu']['type'];
         if($ft=="image/jpeg"||$ft=="image/pjpeg"||$ft=="image/png"||$ft=="image/gif"){
-          $tp='..'.DS.'media'.DS.basename($_FILES['fu']['name']);
+          $tp='../media/'.basename($_FILES['fu']['name']);
           if(move_uploaded_file($_FILES['fu']['tmp_name'],$tp)){
             if($ft=="image/jpeg"||$ft=="image/pjpeg")
 							$fn=$col.'_'.$id.'.jpg';
@@ -145,9 +145,9 @@ if($act!=''){
 						]);
             $image=new Zebra_image();
             $image->source_path=$tp;
-            $image->target_path='..'.DS.'media'.DS.'avatar'.DS.'avatar'.$fn;
+            $image->target_path='../media/avatar/avatar'.$fn;
             $image->resize(150,150,ZEBRA_IMAGE_CROP_CENTER);
-            rename($tp,'..'.DS.'media'.DS.'avatar'.DS.'avatar'.$fn);
+            rename($tp,'../media/avatar/avatar'.$fn);
 						if($act=='add_tstavatar')
 							echo'window.top.window.$("#tstavatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
  						else

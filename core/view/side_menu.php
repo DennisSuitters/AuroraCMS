@@ -12,8 +12,8 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $sideTemp='';
-if(file_exists(THEME.DS.'side_menu.html')){
-	$sideTemp=file_get_contents(THEME.DS.'side_menu.html');
+if(file_exists(THEME.'/side_menu.html')){
+	$sideTemp=file_get_contents(THEME.'/side_menu.html');
 	if($show=='item')
 		$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){

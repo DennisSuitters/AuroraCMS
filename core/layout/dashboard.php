@@ -16,8 +16,8 @@ if(isset($args[0])&&$args[0]=='settings')
 else{
   $clippy=array(
     0=>'agent.play("Greeting");',
-    1=>'agent.speak("Hi I\'m Clippy, I\'m here to help you with using AuroraCMS to add and edit content, and to give you tips while using the CMS to help improve your Website.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");',
-    2=>'agent.speak("You can turn me off in <a href=\"'.URL.$settings['system']['admin'].'/preferences/interface#options28\">Preferences -> Interface</a>, in the Side Menu.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'
+    1=>'agent.speak("Hi I\'m '.($config['seoKeywords']==''?'Clippy':$config['seoKeywords']).', I\'m here to help you with using AuroraCMS to add and edit content, and to give you tips while using the CMS to help improve your Website.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");',
+    2=>'agent.speak("You can turn me off or select a different assitant in <a href=\"'.URL.$settings['system']['admin'].'/preferences/interface#options28\">Preferences -> Interface</a>.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'
   );
   require'core/parsedown/class.parsedown.php';?>
 <main>
@@ -349,7 +349,39 @@ else{
               </div>
             </div>
           </div>
-          <?php if(file_exists('CHANGELOG.md')){?>
+<?php $s=$db->prepare("SELECT DISTINCT(`keywords`) AS `keywords` FROM `".$prefix."tracker` WHERE `keywords`!='' ORDER BY keywords DESC LIMIT 0,10");
+$s->execute();
+if($s->rowCount()>0){?>
+          <div class="col-12 col-md-6 p-2">
+            <div class="card">
+              <div class="h5 m-2">Top Ten Search Keywords</div>
+              <div id="seostats-pageviews">
+                <table class="table-zebra small">
+                  <thead>
+                    <tr>
+                      <th>Keywords</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+<?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
+$sr=$db->prepare("SELECT COUNT(`keywords`) AS `cnt` FROM `".$prefix."tracker` WHERE `keywords` LIKE :keywords");
+$sr->execute([
+  ':keywords'=>$r['keywords']
+]);
+$rr=$sr->fetch(PDO::FETCH_ASSOC);?>
+                      <tr>
+                        <td class="text-truncated"><?php echo$r['keywords'];?></td>
+                        <td class="text-right"><?php echo$rr['cnt'];?></td>
+                      </tr>
+<?php }?>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+<?php }
+if(file_exists('CHANGELOG.md')){?>
           <div class="col-12 col-md-6 p-2">
             <div class="card p-2">
               <div class="h5"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a></div>

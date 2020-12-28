@@ -268,7 +268,7 @@ $content=preg_replace(
 print$head.$content;
 if($config['options'][11]==1){
   $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
-  if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&$_SESSION['current_page']!=$current_page)){
+  if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&(stristr($_SESSION['current_page'],'search')||$_SESSION['current_page']!=$current_page))){
     if(!stristr($current_page,'core/')||
       !stristr($current_page,'admin/')||
       !stristr($current_page,'layout/')||
@@ -283,13 +283,14 @@ if($config['options'][11]==1){
       !stristr($current_page,'.svg')||
       !stristr($current_page,'.webp')
     ){
-      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`ip`,`browser`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:ip,:browser,:os,:sid,:ti)");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`keywords`,`ip`,`browser`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:keywords,:ip,:browser,:os,:sid,:ti)");
       $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
       $s->execute([
         ':pid'=>isset($page['id'])?$page['id']:0,
         ':urlDest'=>$current_page,
         ':urlFrom'=>$hr,
         ':userAgent'=>$_SERVER['HTTP_USER_AGENT'],
+        ':keywords'=>isset($search)&&($search!='%'||$search!='')?ltrim(rtrim(str_replace([' ','%'],',',$search),','),','):'',
         ':ip'=>$_SERVER["REMOTE_ADDR"],
         ':browser'=>getBrowser(),
         ':os'=>getOS(),

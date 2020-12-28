@@ -5,13 +5,9 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Fix update core system
 - Add ability to upload and update themes
 - Inventory
-  - Customer/Contact List
+  - Customer/Contact List, more of a selection Widget for emails and orders.
 - Orders
   - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways)
-- Bookings
-  - Display Bookable Service Options as visual product card choices.
-- Search
-  - Store Search Queries to help with SEO potential discoveries.
 - Import Catalogue from CSV
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.
 - Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q)

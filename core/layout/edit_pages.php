@@ -398,8 +398,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=seoKeywords" data-tooltip="tooltip" data-aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="saveseoKeywords" data-tooltip="tooltip" data-dbid="seoKeywords" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
-          </div>
 */ ?>
+          </div>
 <?php /* Settings */ ?>
           <?php if($r['contentType']!='comingsoon'&&['contentType']!='maintenance'){?>
             <div class="tab1-5 border-top p-3" role="tabpanel">
@@ -423,7 +423,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <option value="900"<?php echo($r['rank']==900?' selected':'');?>>Administrator and above</option>
                   </select>
                 </div>
-                <?php if($user['rank']==1000){?>
+                <?php if($user['rank']>899){?>
                   <label for="contentType">contentType</label>
                   <div class="form-row">
                     <input class="textinput" id="contentType" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="contentType" type="text" value="<?php echo$r['contentType'];?>" placeholder="">

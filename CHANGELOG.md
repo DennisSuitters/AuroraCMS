@@ -23,3 +23,6 @@
 - Modify Styling for better Mobile Responsiveness in Administration area.
 - Add Open Street Map to Preferences/Contact in Administration for updating Location, and checkbox for enabling Map display on Front End.
 - Add Parser to display maps on Front End.
+- Virtual Assistant ????
+- Store Search Queries when Tracking is enabled.
+- Add parser to display booking service selection as styled elements for better visual experience for customers.

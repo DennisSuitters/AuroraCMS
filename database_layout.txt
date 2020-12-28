@@ -89,7 +89,7 @@ config
   `seoTitle` varchar(60)
   `seoDescription` varchar(255)
   `seoCaption` varchar(255)
-  `seoKeywords` varchar(255)
+  `seoKeywords` varchar(255) Currently being used for storing which Assistant is being used.
   `metaRobots` tinytext
   `seoRSSTitle` tinytext
   `seoRSSNotes` text

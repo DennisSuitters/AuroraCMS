@@ -69,7 +69,12 @@
           </div>
           <div class="row">
             <input id="options28" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?php echo$config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"';?> onchange="toggleAssistant();">
-            <label for="options28">Enable Assistant</label>
+            <label for="options28">Enable&nbsp;<select class="col-2 p-0" onchange="update('1','config','seoKeywords',$(this).val());">
+              <option value="Clippy"<?php echo$config['seoKeywords']=='Clippy'?' selected':'';?>>Clippy</option>
+              <option value="Genius"<?php echo$config['seoKeywords']=='Genius'?' selected':'';?>>Genius</option>
+              <option value="Links"<?php echo$config['seoKeywords']=='Links'?' selected':'';?>>Links</option>
+              <option value="Merlin"<?php echo$config['seoKeywords']=='Merlin'?' selected':'';?>>Merlin</option>
+            </select>&nbsp;Assistant</label>
           </div>
           <script>
             function toggleAssistant(){

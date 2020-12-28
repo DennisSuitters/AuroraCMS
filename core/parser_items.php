@@ -21,10 +21,12 @@ if(stristr($html,'<settings')){
 	$count=1;
 $html=preg_replace([
 	'/<print view>/',
-	'/<print content=[\"\']?category[\"\']?>/'
+	'/<print content=[\"\']?category[\"\']?>/',
+	'/<print search>/'
 ],[
 	$view,
-	isset($args[0])?($args[0]!=''?html_entity_decode($args[0]):''):''
+	isset($args[0])?($args[0]!=''?html_entity_decode($args[0]):''):'',
+	(isset($search)&&$search!=''?trim(str_replace('%',' ',$search),' '):'')
 ],$html);
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);

@@ -468,7 +468,7 @@
     });
   }
 <?php if($config['options'][28]==1){?>
-  clippy.load({name: 'Clippy', path: 'core/js/clippy/agents/'}, function(agent){
+  clippy.load({name: '<?php echo$config['seoKeywords']==''?'Clippy':$config['seoKeywords'];?>', path: 'core/js/clippy/agents/'}, function(agent){
     agent.show();
 <?php
     if(isset($clippy)){
@@ -555,7 +555,7 @@ if($view=='content'||$view=='pages'&&$args[0]=='edit'){
     while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
       echo'var seo'.$rc['id'].' = function(){'.
         ($rc['type']!='none'&&$rc['title']=='before'?'agent.play(`'.$rc['type'].'`);':'').
-        'agent.speak("SEO Tip: '.addslashes(html_entity_decode(str_replace(['&#39;'],["'"],$rc['notes']))).'\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'.
+        'agent.speak("SEO Tip: '.addslashes(html_entity_decode(str_replace(['&#39;'],["'"],$rc['notes']))).' Click <a href=\"#\" data-fancybox data-type=\"ajax\" data-src=\"core/seolist.php\">here</a> for more tips.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'.
         ($rc['type']!='none'&&$rc['title']=='after'?'agent.play(`'.$rc['type'].'`);':'').
       '};';
       $seoarr.='seo'.$rc['id'].',';

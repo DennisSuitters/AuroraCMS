@@ -72,18 +72,54 @@ $html=preg_replace([
   '',
   date('Y-m-d',time())
 ],$html);
-$sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
-if($sb->rowCount()>0){
-  $bookable='';
-  while($rb=$sb->fetch(PDO::FETCH_ASSOC))
-    $bookable.='<option value="'.$rb['id'].'"'.($rb['id']==$args[0]?' selected':'').'>'.htmlspecialchars(ucfirst($rb['contentType']),ENT_QUOTES,'UTF-8').($rb['code']!=''?':'.htmlspecialchars($rb['code'],ENT_QUOTES,'UTF-8'):'').':'.htmlspecialchars($rb['title'],ENT_QUOTES,'UTF-8').'</option>';
-  $html=preg_replace([
-    '/<serviceoptions>/',
-    '/<[\/]?bookservices>/'
-  ],[
-    $bookable,
-    ''
-  ],$html);
-}else
-  $html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
+if(stristr($html,'<items>')){
+  $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
+  if($sb->rowCount()>0){
+    preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
+    $item=$matches[1];
+    $output='';
+    while($rb=$sb->fetch(PDO::FETCH_ASSOC)){
+      $items=$item;
+      $items=preg_replace([
+        '/<print id>/',
+        '/<print content=[\"\']?thumb[\"\']?>/',
+        '/<print content=[\"\']?imageALT[\"\']?>/',
+        '/<print content=[\"\']?title[\"\']?>/'
+      ],[
+        $rb['id'],
+        ($rb['file']!=''&&file_exists('media/'.'thumbs'.basename($rb['file']))?'media/'.'thumbs/'.basename($rb['file']):NOIMAGESM),
+        ($rb['fileALT']!=''?$rb['fileeALT']:$rb['title']),
+        $rb['title']
+      ],$items);
+      $output.=$items;
+    }
+    $html=preg_replace([
+      '~<items>.*?<\/items>~is',
+      '~<serviceselect>.*?<\/serviceselect>~is',
+      '/<[\/]?bookservices>/'
+    ],[
+      $output,
+      '',
+      '',
+      ''
+    ],$html);
+  }else
+    $html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
+}else{
+  $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
+  if($sb->rowCount()>0){
+    $bookable='';
+    while($rb=$sb->fetch(PDO::FETCH_ASSOC)){
+      $bookable.='<option value="'.$rb['id'].'"'.($rb['id']==$args[0]?' selected':'').'>'.htmlspecialchars(ucfirst($rb['contentType']),ENT_QUOTES,'UTF-8').($rb['code']!=''?':'.htmlspecialchars($rb['code'],ENT_QUOTES,'UTF-8'):'').':'.htmlspecialchars($rb['title'],ENT_QUOTES,'UTF-8').'</option>';
+    }
+    $html=preg_replace([
+      '/<serviceoptions>/',
+      '/<[\/]?bookservices>/'
+    ],[
+      $bookable,
+      ''
+    ],$html);
+  }else
+    $html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
+}
 $content.=$html;

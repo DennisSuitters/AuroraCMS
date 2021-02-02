@@ -7,7 +7,7 @@
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
  * 
- * Date: 2020-12-23T14:36Z
+ * Date: 2020-12-30T05:21Z
  * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -325,14 +325,13 @@ function ModalUI_createClass(Constructor, protoProps, staticProps) { if (protoPr
 
 
 
-var ModalUI_ModalUI = /*#__PURE__*/function () {
+var ModalUI = /*#__PURE__*/function () {
   function ModalUI($node
   /*, options */
   ) {
     ModalUI_classCallCheck(this, ModalUI);
 
     this.$modal = $node;
-    this.$backdrop = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div class="note-modal-backdrop"></div>');
   }
 
   ModalUI_createClass(ModalUI, [{
@@ -340,7 +339,6 @@ var ModalUI_ModalUI = /*#__PURE__*/function () {
     value: function show() {
       var _this = this;
 
-      this.$backdrop.appendTo(document.body).show();
       this.$modal.addClass('note-open').show();
       this.$modal.trigger('note.modal.show');
       this.$modal.off('click', '.note-close').on('click', '.note-close', this.hide.bind(this));
@@ -351,12 +349,16 @@ var ModalUI_ModalUI = /*#__PURE__*/function () {
           _this.hide();
         }
       });
+      this.$modal.on('click', function (event) {
+        if (event.target.classList.contains('note-open')) {
+          _this.hide();
+        }
+      });
     }
   }, {
     key: "hide",
     value: function hide() {
       this.$modal.removeClass('note-open').hide();
-      this.$backdrop.hide();
       this.$modal.trigger('note.modal.hide');
       this.$modal.off('keydown');
     }
@@ -365,14 +367,14 @@ var ModalUI_ModalUI = /*#__PURE__*/function () {
   return ModalUI;
 }();
 
-/* harmony default export */ var ui_ModalUI = (ModalUI_ModalUI);
+/* harmony default export */ var ui_ModalUI = (ModalUI);
 // CONCATENATED MODULE: ./src/js/ui/ui.js
 
 
 
 
 var editor = renderer.create('<div class="note-editor note-frame"></div>');
-var toolbar = renderer.create('<div class="note-toolbar" role="toolbar"></div>');
+var toolbar = renderer.create('<div class="note-toolbar" role="toolbar"></div><div class="note-toolbar-wrapper"></div>');
 var viewportArea = renderer.create('<div class="note-viewport-area"></div>');
 var editingArea = renderer.create('<div class="note-editing-area"></div>');
 var codable = renderer.create('<textarea class="note-codable" aria-multiline="true"></div>');
@@ -560,7 +562,7 @@ var popover = renderer.create(['<div class="note-popover bottom">', '<div class=
   }
 });
 var ui_checkbox = renderer.create('<div class="note-checkbox"></div>', function ($node, options) {
-  $node.html(['<input type="checkbox"' + (options.id ? ' id="' + options.id + '"' : ''), options.checked ? ' checked' : '', ' aria-checked="' + (options.checked ? 'true' : 'false') + '"/>', '<label' + (options.id ? ' for="' + options.id + '"' : '') + '>', options.text ? options.text : '', '</label>'].join(''));
+  $node.html(['<input type="checkbox"' + (options.id ? ' id="' + options.id + '"' : ''), options.checked ? ' checked' : '', ' aria-checked="' + (options.checked ? 'true' : 'false') + '"/>', '<label class="note-form-label" ' + (options.id ? ' for="' + options.id + '"' : '') + '>', options.text ? options.text : '', '</label>'].join(''));
 });
 
 var icon = function icon(iconClassName, tagName) {
@@ -7214,6 +7216,7 @@ var Statusbar_Statusbar = /*#__PURE__*/function () {
 
     this.$document = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(document);
     this.$statusbar = context.layoutInfo.statusbar;
+    this.$resizer = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(".note-resizebar");
     this.$editable = context.layoutInfo.editable;
     this.$codable = context.layoutInfo.codable;
     this.options = context.options;
@@ -7229,7 +7232,7 @@ var Statusbar_Statusbar = /*#__PURE__*/function () {
         return;
       }
 
-      this.$statusbar.on('mousedown', function (event) {
+      this.$resizer.on('mousedown', function (event) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -7285,6 +7288,7 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
     this.context = context;
     this.$editor = context.layoutInfo.editor;
     this.$toolbar = context.layoutInfo.toolbar;
+    this.$statusbar = context.layoutInfo.statusbar;
     this.$editable = context.layoutInfo.editable;
     this.$codable = context.layoutInfo.codable;
     this.$window = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(window);
@@ -7293,7 +7297,7 @@ var Fullscreen_Fullscreen = /*#__PURE__*/function () {
 
     this.onResize = function () {
       _this.resizeTo({
-        h: _this.$window.height() - _this.$toolbar.outerHeight()
+        h: _this.$window.height() - _this.$toolbar.outerHeight() - 45
       });
     };
   }
@@ -8971,7 +8975,7 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
     key: "initialize",
     value: function initialize() {
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = ["<label for=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.url + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-link-url note-input\" type=\"text\" value=\"http://\">", '</div>', "<label for=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.textToDisplay + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-link-text note-input\" type=\"text\">", '</div>', '<label for="note-dialog-link-title-' + this.options.id + '" class="note-form-label">' + this.lang.link.title + '</label>', '<div class="note-form-group">', '<input id="note-dialog-link-title' + this.options.id + '" class="note-linke-title note-input" type="text">', '</div>', "<label for=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.rel + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-link-rel note-input\">", "<option value=\"\">Nothing</option>", "<option value=\"alternate\">Alternate</option>", "<option value=\"author\">Author</option>", "<option value=\"bookmark\">Bookmark</option>", "<option value=\"external\">External</option>", "<option value=\"Help\">Help</option>", "<option value=\"license\">License</option>", "<option value=\"next\">Next</option>", "<option value=\"nofollow\">NoFollow</option>", "<option value=\"noreferrer\">NoReferrer</option>", "<option value=\"noopener\">NoOperner</option>", "<option value=\"prev\">Prev</option>", "<option value=\"search\">Search</option>", "<option value=\"tag\">Tag</option>", "</select>", '</div>', !this.options.disableLinkTarget ? external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+      var body = ["<label for=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.url + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-link-url note-input\" type=\"text\" value=\"http://\">", '</div>', "<label for=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.textToDisplay + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-link-text note-input\" type=\"text\">", '</div>', '<label for="note-dialog-link-title-' + this.options.id + '" class="note-form-label">' + this.lang.link.title + '</label>', '<div class="note-form-group">', '<input id="note-dialog-link-title' + this.options.id + '" class="note-linke-title note-input" type="text">', '</div>', "<label for=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.rel + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-link-rel note-input\">", "<option value=\"noreferrer noopener\" selected>NoReferrer NoOpener (Suggested for external links that open in new tabs or windows)</option>", "<option value=\"alternate\">Alternate</option>", "<option value=\"author\">Author</option>", "<option value=\"bookmark\">Bookmark</option>", "<option value=\"external\">External</option>", "<option value=\"Help\">Help</option>", "<option value=\"license\">License</option>", "<option value=\"next\">Next</option>", "<option value=\"nofollow\">NoFollow</option>", "<option value=\"noreferrer\">NoReferrer</option>", "<option value=\"noopener\">NoOperner</option>", "<option value=\"prev\">Prev</option>", "<option value=\"search\">Search</option>", "<option value=\"tag\">Tag</option>", "</select>", '</div>', !this.options.disableLinkTarget ? external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
         "for": 'note-dialog-new-window-' + this.options.id,
         id: 'note-checkbox-open-in-new-window-' + this.options.id,
         className: 'note-checkbox-open-in-new-window',
@@ -9069,8 +9073,7 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
 
             _this.toggleLinkBtn($linkBtn, $linkText, $linkUrl);
           }).val(linkInfo.url);
-          $linkTitle.val(linkInfo.title);
-          $linkRel.val(linkInfo.rel);
+          $linkTitle.val(linkInfo.title); //        $linkRel.val(linkInfo.rel);
 
           if (!env.isSupportTouch) {
             $linkUrl.trigger('focus');
@@ -9084,6 +9087,13 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
 
           var isNewWindowChecked = linkInfo.isNewWindow !== undefined ? linkInfo.isNewWindow : _this.context.options.linkTargetBlank;
           $openInNewWindow.prop('checked', isNewWindowChecked);
+
+          if ($openInNewWindow.prop('checked')) {
+            if (linkInfo.rel) {
+              $linkRel.val(linkInfo.rel);
+            }
+          }
+
           var useProtocolChecked = linkInfo.url ? false : _this.context.options.useProtocol;
           $useProtocol.prop('checked', useProtocolChecked);
           $linkBtn.one('click', function (event) {
@@ -9280,7 +9290,7 @@ var ImageDialog_ImageDialog = /*#__PURE__*/function () {
       }
 
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = [this.options.disableUpload === false ? '<label for="note-dialog-image-file-' + this.options.id + '" class="note-form-label">' + this.lang.image.selectFromFiles + '</label>' + '<div class="note-form-group">' + '<input id="note-dialog-image-file-' + this.options.id + '" class="note-image-input note-input" type="file" name="files" accept="' + this.options.acceptImageFileTypes + '" multiple="multiple">' + imageLimitation + '<div class="note-form-help">' + this.lang.image.fileNote + '</div>' + '</div>' : '', '<label for="note-dialog-image-url-' + this.options.id + '" class="note-form-label">' + this.lang.image.url + '</label>', '<div class="note-form-group">', '<input id="note-dialog-image-url-' + this.options.id + '" class="note-image-url note-input" type="text">', this.options.fileExplorer !== '' ? '<button class="note-btn note-btn-primary" onclick="' + this.options.fileExplorer + '(`note-dialog-image-url-' + this.options.id + '`);">' + this.lang.image.fileBrowser + '</button>' : '', '</div>', "<label for=\"note-dialog-image-title-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image.title + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-title-" + this.options.id + "\" class=\"note-image-title note-input\" type=\"text\">", '</div>', "<label for=\"note-dialog-image-alt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image.alt + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-alt-" + this.options.id + "\" class=\"note-image-alt note-input\" type=\"text\">", '</div>', "<label for=\"note-dialog-image-class-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image["class"] + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-class-" + this.options.id + "\" class=\"note-image-class note-input\" type=\"text\">", '</div>'].join('');
+      var body = [this.options.disableUpload === false ? '<label for="note-dialog-image-file-' + this.options.id + '" class="note-form-label">' + this.lang.image.selectFromFiles + '<div class="note-form-help">' + this.lang.image.fileNote + '</div></label>' + '<div class="note-form-group">' + '<input id="note-dialog-image-file-' + this.options.id + '" class="note-image-input note-input" type="file" name="files" accept="' + this.options.acceptImageFileTypes + '" multiple="multiple">' + imageLimitation + '</div>' : '', '<label for="note-dialog-image-url-' + this.options.id + '" class="note-form-label">' + this.lang.image.url + '</label>', '<div class="note-form-group">', '<input id="note-dialog-image-url-' + this.options.id + '" class="note-image-url note-input" type="text">', this.options.fileExplorer !== '' ? '<button class="note-btn note-btn-primary" onclick="' + this.options.fileExplorer + '(`note-dialog-image-url-' + this.options.id + '`);">' + this.lang.image.fileBrowser + '</button>' : '', '</div>', "<label for=\"note-dialog-image-title-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image.title + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-title-" + this.options.id + "\" class=\"note-image-title note-input\" type=\"text\">", '</div>', "<label for=\"note-dialog-image-alt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image.alt + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-alt-" + this.options.id + "\" class=\"note-image-alt note-input\" type=\"text\">", '</div>', "<label for=\"note-dialog-image-class-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.image["class"] + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-image-class-" + this.options.id + "\" class=\"note-image-class note-input\" type=\"text\">", '</div>'].join('');
       var footer = "<input type=\"button\" href=\"#\" class=\"note-btn note-btn-primary note-image-btn\" value=\"" + this.lang.image.insert + "\" disabled>";
       this.$dialog = this.ui.dialog({
         title: this.lang.image.insert,
@@ -9909,7 +9919,7 @@ var HelpDialog_HelpDialog = /*#__PURE__*/function () {
     key: "initialize",
     value: function initialize() {
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = ['<p class="note-text-center">', '<a href="http://summernote.org/" target="_blank">Summernote 0.8.18</a> · ', '<a href="https://github.com/summernote/summernote" target="_blank">Project</a> · ', '<a href="https://github.com/summernote/summernote/issues" target="_blank">Issues</a>', '</p>'].join('');
+      var body = ['<p class="note-text-center">', '<a href="http://summernote.org/" target="_blank" rel="nopener noreferrer">Summernote 0.8.18</a> · ', '<a href="https://github.com/summernote/summernote" target="_blank" rel="nopener noreferrer">Project</a> · ', '<a href="https://github.com/summernote/summernote/issues" target="_blank" rel="nopener noreferrer">Issues</a>', '</p>'].join('');
       this.$dialog = this.ui.dialog({
         title: this.lang.options.help,
         fade: this.options.dialogsFade,
@@ -10575,7 +10585,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     textareaAutoSync: true,
     tooltip: 'auto',
     placement: 'top',
-    // none|top|right|bottom|left
+    // none|top|right|bottom|left | Needs Documenting
     container: null,
     maxTextLength: 0,
     blockquoteBreakingLevel: 2,

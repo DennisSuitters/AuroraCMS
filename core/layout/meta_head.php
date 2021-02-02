@@ -46,8 +46,11 @@
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.js"></script>
     <script src="core/js/summernote/plugin/summernote-save-button/summernote-save-button.js"></script>
+    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script>
+    <script src="core/js/summernote/plugin/summernote-image-captionit/summernote-image-captionit.js"></script>
     <script src="core/js/summernote/plugin/summernote-classes/summernote-classes.js"></script>
     <script src="core/js/summernote/plugin/summernote-checkbox/summernote-checkbox.js"></script>
+    <script src="core/js/summernote/plugin/summernote-text-findnreplace/summernote-text-findnreplace.js"></script>
     <script src="core/js/codemirror/codemirror.js"></script>
     <script src="core/js/summernote/plugin/elfinder/elfinder.js"></script>
     <script src="core/elfinder/js/elfinder.min.js"></script>

@@ -297,7 +297,6 @@ if(stristr($html,'<map>')){
 		'/<map>/'
 	],[
 		($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?
-			'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css">'.
 			'<script src="core/js/leaflet/leaflet.js"></script>'.
 			'<script>'.
 				'var map=L.map("map",{zoomControl:false}).setView(['.$config['geo_position'].'],13);'.
@@ -308,15 +307,6 @@ if(stristr($html,'<map>')){
 					'zoomOffset:-1,'.
 					'accessToken:`'.$config['mapapikey'].'`,'.
 				'}).addTo(map);'.
-				'var myIcon=L.icon({'.
-					'iconUrl:`'.URL.'core/js/leaflet/images/marker-icon.png`,'.
-					'iconSize:[38,95],'.
-					'iconAnchor:[22,94],'.
-					'popupAnchor:[-3,-76],'.
-					'shadowUrl:`'.URL.'core/js/leaflet/images/marker-shadow.png`,'.
-					'shadowSize:[68,95],'.
-					'shadowAnchor:[22,94]'.
-				'});'.
 				'var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.
 				($config['business']==''?'':
 					'var popupHtml=`<strong>'.$config['business'].'</strong>'.

@@ -31,18 +31,43 @@
   background-position: center;
   background-size: 100% 100%; }
 
+.labeldate {
+  font-weight: 400;
+  font-size: 80%;
+  color: #888; }
+
+.row,
+.form-row,
+label,
+legend {
+  position: relative; }
+
+.permalink {
+  position: absolute;
+  color: #ccc;
+  font-size: 12px;
+  top: 2px;
+  left: -22px;
+  width: 20px;
+  height: 20px; }
+
+.permalink:hover {
+  color: #000;
+  text-decoration: none; }
+
 .aurora,
 .winter,
 .spring,
 .summer,
 .autumn,
 .halloween,
-.xmas, {
+.xmas,
+.new-years, {
   border: 0;
   margin: 0;
   padding: 0;
-  height: 100vh;
-  background-size: cover; }
+  width: 100%;
+  height: 100vh;  }
 
 .aurora:before,
 .winter:before,
@@ -50,7 +75,8 @@
 .summer:before,
 .autumn:before,
 .halloween:before,
-.xmas:before {
+.xmas:before,
+.new-years:before {
   position: absolute;
   bottom: 10px;
   left: 20px;
@@ -67,43 +93,81 @@
   text-shadow: 0 0 20px #000, 0 0 15px #000, 1px 2px 10px #000; }
 
 .aurora {
-  background: transparent url(../images/aurora.jpg) no-repeat center center; }
+  background-image: url(../images/aurora.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover; }
 
 .winter {
-  background: transparent url(../../media/seasons/winter.jpg) no-repeat center center; }
+  background-image: url(../../media/seasons/winter.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover; }
 
 .winter:before {
   content: 'Winter'; }
 
 .spring {
-  background: transparent url(../../media/seasons/spring.jpg) no-repeat center center; }
+  background-image: url(../../media/seasons/spring.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover; }
 
 .spring:before {
   content: 'Spring'; }
 
 .summer {
-  background: transparent url(../../media/seasons/summer.jpg) no-repeat center center; }
+  background-image: url(../../media/seasons/summer.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover; }
 
 .summer:before {
   content: 'Summer'; }
 
 .autumn {
-  background: transparent url(../../media/seasons/autumn.jpg) no-repeat center center;  }
+  background-image: url(../../media/seasons/autumn.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover; }
 
 .autumn:before {
   content: 'Autumn'; }
 
 .halloween {
-  background: transparent url(../../media/seasons/halloween.jpg) no-repeat center center;  }
+  background-image: url(../../media/seasons/halloween.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;  }
 
 .halloween:before {
   content: 'Halloween'; }
 
 .xmas {
-  background: transparent url(../../media/seasons/xmas.jpg) no-repeat center center;  }
+  background-image: url(../../media/seasons/xmas.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;  }
 
 .xmas:before {
   content: 'Christmas'; }
+
+.new-years {
+  background-image: url(../../media/seasons/new-years.jpg);
+  background-color: transparent;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;  }
+
+.new-years:before {
+  content: 'New Years'; }
 
 .add,
 .btn-success {
@@ -216,13 +280,23 @@ header.xmas {
   background-position: center;
   background-size: cover,cover; }
 
+header.new-years {
+  background-image: linear-gradient(
+                      120deg,
+                      rgba(0, 0, 0, .8) 0%,
+                      rgba(192, 192, 192, .8) 100%), url(../../media/seasons/new-years.jpg);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover,cover; }
+
 header.aurora:before,
 header.winter:before,
 header.spring:before,
 header.summer:before,
 header.autumn:before,
 header.halloween:before,
-header.xmas:before {
+header.xmas:before,
+header.new-years:before {
   content: ''; }
 
 header .brand {
@@ -863,6 +937,13 @@ header nav.horizontal li a {
   border-radius: .25rem;
   width: 60px;
   height: 60px; }
+
+.content-title-icon img {
+  width: 100% !important;
+  height: 100% !important;
+  object-position: center;
+  object-fit: cover;
+  margin: 0; }
 
 .content-title-actions {
   margin-left: auto; }

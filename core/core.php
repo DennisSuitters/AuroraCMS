@@ -131,14 +131,14 @@ function currentSeason($out='echo') {
   	 60=>"autumn",
   	154=>"winter",
   	246=>"spring",
-		276=>"Halloween",
+		276=>"halloween",
 		306=>"spring",
   	336=>"summer",
 		350=>"xmas",
 		361=>"summer",
-  	365=>"summer",
+  	362=>"new-years",
   ];
-	if($day>0&&$day<60)
+	if($day >= 0 && $day<60)
 		$season="summer";
 	if($day>59&&$day<154)
 		$season="autumn";
@@ -146,16 +146,21 @@ function currentSeason($out='echo') {
 		$season="winter";
 	if($day>246&&$day<336)
 		$season="spring";
-	if($day>335&&$day<366)
+	if($day>335&&$day<349)
 		$season="summer";
 	if($day>275&&$day<306)
 		$season="halloween";
-	if($day>349&&$day<361)
+	if($day>349&&$day<365)
 		$season="xmas";
-	if(!file_exists('media/seasons/'.$season.'.jpg'))
-		$season="aurora";
-	if($hour>22||$hour<6)
-		$season="aurora";
+	if($day == 365)
+		$season="new-years";
+	if(!file_exists('media/seasons/'.$season.'.jpg'))$season="aurora";
+	if($season!="new-years"){
+		if($hour > 22)
+			$season="aurora";
+		if($hour < 6)
+			$season="aurora";
+	}
 	if($out=='return')
 		return $season;
 	else

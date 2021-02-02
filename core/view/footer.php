@@ -128,6 +128,7 @@ if(stristr($html,'<phone>')){
 		$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
 }
 $html=preg_replace([
+	'/<print url>/',
 	'/<print year>/',
 	'/<print config=[\"\']?business[\"\']?>/',
 	'/<print theme=[\"\']?title[\"\']?>/',
@@ -141,6 +142,7 @@ $html=preg_replace([
 	'/<print honey_pot_link>/',
 	'/<print honey_pot_quick_link>/'
 ],[
+	$_SERVER['REQUEST_URI'],
 	date('Y',time()),
 	$config['business'],
 	htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8'),

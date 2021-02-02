@@ -30,53 +30,53 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
         <div class="row">
-          <input id="options3" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="3" type="checkbox"<?php echo$config['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options3" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Allow Account Sign Ups</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#createAccounts" aria-label="PermaLink to Allow Account Signups Checkbox">&#128279;</a>':'';?>
+          <input id="createAccounts" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="3" type="checkbox"<?php echo$config['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="createAccounts" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Allow Account Sign Ups</label>
         </div>
         <hr>
-        <legend>Password Reset Email Layout</legend>
-        <div class="form-row">
-          <label for="passwordResetSubject">Subject</label>
-          <div class="form-text text-right">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret('passwordResetSubject','{business}');return false;">{business}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret('passwordResetSubject','{date}');return false;">{date}</a></div>
+        <legend id="passwordResetSection"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#passwordResetSection" aria-label="PermaLink to Password Reset Section">&#128279;</a>':'';?>Password Reset Email Layout</legend>
+        <div id="passwordResetSubject" class="form-row">
+          <label for="pwdRstSub"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#passwordResetSubject" aria-label="PermaLink to Password Reset Subject Field">&#128279;</a>':'';?>Subject</label>
+          <div class="form-text text-right">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret('pwdRstSub','{business}');return false;">{business}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret('pwdRstSub','{date}');return false;">{date}</a></div>
         </div>
         <div class="form-row">
-          <input class="textinput" id="passwordResetSubject" data-dbid="1" data-dbt="config" data-dbc="passwordResetSubject" type="text" value="<?php echo$config['passwordResetSubject'];?>">
-          <button class="save" id="savepasswordResetSubject" data-tooltip="tooltip" data-dbid="passwordResetSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="pwdRstSub" data-dbid="1" data-dbt="config" data-dbc="passwordResetSubject" type="text" value="<?php echo$config['passwordResetSubject'];?>">
+          <button class="save" id="savepwdRstSub" data-tooltip="tooltip" data-dbid="pwdRstSub" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <div class="form-row mt-3">
-          <label for="passwordResetLayout">Layout</label>
+        <div id="passwordResetLayout" class="form-row mt-3">
           <div class="form-text text-right">
             Tokens:
-            <a class="badger badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{business}');return false;">{business}</a>
-            <a class="badger badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{name}');return false;">{name}</a>
-            <a class="badger badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{first}');return false;">{first}</a>
-            <a class="badger badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{last}');return false;">{last}</a>
-            <a class="badger badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{date}');return false;">{date}</a>
-            <a class="badger badge-secondary" href="#" onclick="$('#passwordResetLayout').summernote('insertText','{password}');return false;">{password}</a>
+            <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{business}');return false;">{business}</a>
+            <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{name}');return false;">{name}</a>
+            <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{first}');return false;">{first}</a>
+            <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{last}');return false;">{last}</a>
+            <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{date}');return false;">{date}</a>
+            <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{password}');return false;">{password}</a>
           </div>
         </div>
         <div class="row">
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#passwordResetLayout" aria-label="PermaLink to Password Reset Layout">&#128279;</a>':'';?>
           <form method="post" target="sp" class="p-0" action="core/update.php">
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="passwordResetLayout">
-            <textarea class="summernote" id="passwordResetLayout" name="da"><?php echo rawurldecode($config['passwordResetLayout']);?></textarea>
+            <textarea class="summernote" id="pRL" name="da"><?php echo rawurldecode($config['passwordResetLayout']);?></textarea>
           </form>
         </div>
         <hr>
-        <legend>Sign Up Emails</legend>
-        <div class="form-row">
-          <label for="accountActivationSubject">Subject</label>
-          <div class="form-text text-right">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret('accountActivationSubject','{username}');return false;">{username}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret('accountActivationSubject','{site}');return false;">{site}</a></div>
+        <legend id="signUpSection"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#signUpSection" aria-label="PermaLink to Sign Up Section">&#128279;</a>':'';?>Sign Up Emails</legend>
+        <div id="activatationSubject" class="form-row">
+          <label for="aS"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#activationSubject" aria-label="PermaLink to Account Activation Subject Field">&#128279;</a>':'';?>Subject</label>
+          <div class="form-text text-right">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret('aS','{username}');return false;">{username}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret('aS','{site}');return false;">{site}</a></div>
         </div>
         <div class="form-row">
-          <input class="textinput" id="accountActivationSubject" data-dbid="1" data-dbt="config" data-dbc="accountActivationSubject" type="text" value="<?php echo$config['accountActivationSubject'];?>">
-          <button class="save" id="saveaccountActivationSubject" data-tooltip="tooltip" data-dbid="accountActivationSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="aS" data-dbid="1" data-dbt="config" data-dbc="accountActivationSubject" type="text" value="<?php echo$config['accountActivationSubject'];?>">
+          <button class="save" id="saveaS" data-tooltip="tooltip" data-dbid="aS" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <div class="form-row mt-3">
-          <label for="accountActivationLayout">Layout</label>
+        <div id="activationLayout" class="form-row mt-3">
           <div class="form-text text-right">Tokens:
             <a class="badger badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{username}');return false;">{username}</a>
             <a class="badger badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{password}');return false;">{password}</a>
@@ -85,6 +85,7 @@
           </div>
         </div>
         <div class="row">
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#activationLayout" aria-label="PermaLink to Activation Layout">&#128279;</a>':'';?>
           <form class="p-0" method="post" target="sp" action="core/update.php">
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">

@@ -17,8 +17,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('content','i-3x');?></div>
-          <div>Content Edit</div>
+          <div class="content-title-icon"><?php svg($r['contentType'],'i-3x');?></div>
+          <div><?php echo ucfirst($r['contentType']);?> Edit</div>
           <div class="content-title-actions">
             <a class="btn" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
             <button class="<?php echo($r['status']=='published'?'':'hidden');?>" data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button>
@@ -56,9 +56,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <input class="tab-control" id="tab1-9" name="tabs" type="radio">
           <label for="tab1-9">Settings</label>
 <?php /* Content */?>
-          <div class="tab1-1 border-top p-3" role="tabpanel">
+          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row mt-3">
-              <label for="title">Title</label>
+              <label id="<?php echo$r['contentType'];?>Title" for="title"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Title" aria-label="PermaLink to '.ucfirst($r['contentType']).' Title Field">&#128279;</a>':'';?>Title</label>
               <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible.</small>
             </div>
             <div class="form-row">
@@ -71,7 +71,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 ]);
                 echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
               }?>
-              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md"  data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?php svg('seo');?></button>
               <input class="textinput" id="title" type="text" value="<?php echo$r['title'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?php echo$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
               '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
@@ -93,28 +93,28 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 return str;
               }
             </script>
-            <label for="genurl">URL Slug</label>
+            <label id="<?php echo$r['contentType'];?>URLSlug" for="genurl"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URLSlug" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL Slug">&#128279;</a>':'';?>URL Slug</label>
             <div class="form-row">
               <div class="input-text col-12">
                 <a id="genurl" target="_blank" href="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>"><?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?></a>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-sm-6 pr-md-1">
-                <label for="ti">Created</label>
+              <div class="col-12 col-sm-6 pr-md-3">
+                <label id="<?php echo$r['contentType'];?>DateCreated" for="ti"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DateCreated" aria-label="PermaLink to '.ucfirst($r['contentType']).' Created Date">&#128279;</a>':'';?>Created</label>
                 <div class="form-row">
                   <input id="ti" type="text" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 pl-md-1">
-                <label for="pti">Published On</label>
+              <div class="col-12 col-sm-6 pl-md-3">
+                <label id="<?php echo$r['contentType'];?>PublishedDate" for="pti"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'PublishedDate" aria-label="PermaLink to '.ucfirst($r['contentType']).' Published Date Field">&#128279;</a>':'';?>Published On <span class="labeldate" id="labeldatepti">(<?php echo date($config['dateFormat'],$r['pti']);?>)</span></label>
                 <div class="form-row">
                   <input id="pti" type="datetime-local" value="<?php echo date('Y-m-d\TH:i',$r['pti']);?>" autocomplete="off"<?php echo$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`pti`,getTimestamp(`pti`));"':' readonly';?>>
                 </div>
               </div>
             </div>
             <?php if($r['contentType']=='proofs'){?>
-              <label for="cid">Client</label>
+              <label id="<?php echo$r['contentType'];?>Client" for="cid"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Client" aria-label="PermaLink to '.ucfirst($r['contentType']).' Client Field">&#128279;</a>':'';?>Client</label>
               <div class="form-row">
                 <select id="cid" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cid" onchange="update('<?php echo$r['id'];?>','content','cid',$(this).val());"<?php echo$user['options'][1]==1?'':' disabled';?>>
                   <option value="0">Select a Client</option>
@@ -125,7 +125,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </select>
               </div>
             <?php }?>
-            <label for="author">Author</label>
+            <label id="<?php echo$r['contentType'];?>Author" for="uid"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Author" aria-label="PermaLink to '.ucfirst($r['contentType']).' Author Field">&#128279;</a>':'';?>Author</label>
             <div class="form-row">
               <select id="uid" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="uid"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','uid',$(this).val());">
                 <?php $su=$db->query("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `username`!='' AND `status`!='delete' ORDER BY `username` ASC, `name` ASC");
@@ -133,7 +133,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </select>
             </div>
             <?php if($r['contentType']=='inventory'||$r['contentType']=='service'){?>
-              <label for="code">Code</label>
+              <label id="<?php echo$r['contentType'];?>Code" for="code"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Code" aria-label="PermaLink to '.ucfirst($r['contentType']).' Code Field">&#128279;</a>':'';?>Code</label>
               <div class="form-row">
                 <input class="textinput" id="code" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?php echo$r['code'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="savecode" data-tooltip="tooltip" data-dbid="code" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
@@ -141,15 +141,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }
             if($r['contentType']=='inventory'){?>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-1">
-                  <label for="barcode">Barcode</label>
+                <div class="col-12 col-sm-6 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Barcode" for="barcode"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Barcode" aria-label="PermaLink to '.ucfirst($r['contentType']).' Barcode Field">&#128279;</a>':'';?>Barcode</label>
                   <div class="form-row">
                     <input class="textinput" id="barcode" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="barcode" type="text" value="<?php echo$r['barcode'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Barcode..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="savebarcode" data-tooltip="tooltip" data-dbid="barcode" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-1">
-                  <label for="fccid">FCCID</label>
+                <div class="col-12 col-sm-6 pl-md-3">
+                  <label id="<?php echo$r['contentType'];?>FCCID" for="fccid"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'FCCID" aria-label="PermaLink to '.ucfirst($r['contentType']).' FCCID Field">&#128279;</a>':'';?>FCCID</label>
                   <div class="form-row">
                     <input class="textinput" id="fccid" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fccid" type="text" value="<?php echo$r['fccid'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an FCCID..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="savefccid" data-tooltip="tooltip" data-dbid="fccid" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
@@ -157,7 +157,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <?php echo$user['options'][1]==1?'<div class="form-text small text-muted float-right"><a target="_blank" href="https://fccid.io/">fccid.io</a> for more information or to look up an FCC ID.</div>':'';?>
                 </div>
               </div>
-              <label for="brand">Brand</label>
+              <label id="<?php echo$r['contentType'];?>Brand" for="brand"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Brand" aria-label="PermaLink to '.ucfirst($r['contentType']).' Brand Field">&#128279;</a>':'';?>Brand</label>
               <div class="form-row">
                 <select id="brand" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="brand"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','brand',$(this).val());">
                   <option value="">None</option>
@@ -170,55 +170,55 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }
             if($r['contentType']=='events'){?>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-1">
-                  <label for="tis">Event Start</label>
+                <div class="col-12 col-sm-6 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Start" for="tis"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Start" aria-label="PermaLink to '.ucfirst($r['contentType']).' Event Start Date Field">&#128279;</a>':'';?>Event Start <span class="labeldate" id="labeldatetis">(<?php echo date($config['dateFormat'],$r['tis']);?>)</span></label>
                   <div class="form-row">
                     <input id="tis" type="datetime-local" value="<?php echo($r['tis']!=0?date('Y-m-d\TH:i',$r['tis']):'');?>" autocomplete="off"<?php echo$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`tis`,getTimestamp(`tis`));"':' readonly';?>>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-1">
-                  <label for="tie">Event End</label>
+                <div class="col-12 col-sm-6 pl-md-3">
+                  <label id="<?php echo$r['contentType'];?>End" for="tie"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'End" aria-label="PermaLink to '.ucfirst($r['contentType']).' End Date Field">&#128279;</a>':'';?>Event End <span class="labeldate" id="labeldatetie">(<?php echo date($config['dateFormat'],$r['tie']);?>)</span></label>
                   <div class="form-row">
                     <input id="tie" type="datetime-local" value="<?php echo($r['tie']!=0?date('Y-m-d\TH:i',$r['tie']):'');?>" autocomplete="off"<?php echo$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`tie`,getTimestamp(`tie`));"':' readonly';?>>
                   </div>
                 </div>
               </div>
-              <label for="address" class="">Address</label>
+              <label id="<?php echo$r['contentType'];?>Address" for="address"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Address" aria-label="PermaLink to '.ucfirst($r['contentType']).' Address Field">&#128279;</a>':'';?>Address</label>
               <div class="form-row">
                 <input class="textinput" id="address" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="address" type="text" value="<?php echo$r['address'];?>" placeholder="Enter an Address...">
                 <button class="save" id="saveaddress" data-tooltip="tooltip" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
               </div>
               <div class="row">
-                <div class="col-12 col-md-3 pr-md-1">
-                  <label for="suburb">Suburb</label>
+                <div class="col-12 col-md-3 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Suburb" for="suburb"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Suburb" aria-label="PermaLink to '.ucfirst($r['contentType']).' Suburb Field">&#128279;</a>':'';?>Suburb</label>
                   <div class="form-row">
                     <input class="textinput" id="suburb" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="suburb" type="text" value="<?php echo$r['suburb'];?>" placeholder="Enter a Suburb...">
                     <button class="save" id="savesuburb" data-tooltip="tooltip" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-md-1 pr-md-1">
-                  <label for="city">City</label>
+                <div class="col-12 col-md-3 pl-md-3 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>City" for="city"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'City" aria-label="PermaLink to '.ucfirst($r['contentType']).' City Field">&#128279;</a>':'';?>City</label>
                   <div class="form-row">
                     <input class="textinput" id="city" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="city" type="text" value="<?php echo$r['city'];?>" placeholder="Enter a City...">
                     <button class="save" id="savecity" data-tooltip="tooltip" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-md-1 pr-md-1">
-                  <label for="state">State</label>
+                <div class="col-12 col-md-3 pl-md-3 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>State" for="state"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'State" aria-label="PermaLink to '.ucfirst($r['contentType']).' State Field">&#128279;</a>':'';?>State</label>
                   <div class="form-row">
                     <input class="textinput" id="state" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="state" type="text" value="<?php echo$r['state'];?>" placeholder="Enter a State...">
                     <button class="save" id="savestate" data-tooltip="tooltip" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-md-1">
-                  <label for="postcode">Postcode</label>
+                <div class="col-12 col-md-3 pl-md-3">
+                  <label id="<?php echo$r['contentType'];?>Postcode" for="postcode"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Postcode" aria-label="PermaLink to '.ucfirst($r['contentType']).' Postcode Field">&#128279;</a>':'';?>Postcode</label>
                   <div class="form-row">
                     <input class="textinput" id="postcode" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="postcode" type="text" value="<?php echo$r['postcode']!=0?$r['postcode']:'';?>" placeholder="Enter a Postcode...">
                     <button class="save" id="savepostcode" data-tooltip="tooltip" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
                   </div>
                 </div>
               </div>
-              <label for="country">Country</label>
+              <label id="<?php echo$r['contentType'];?>Country" for="country"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Country" aria-label="PermaLink to '.ucfirst($r['contentType']).' Country Field">&#128279;</a>':'';?>Country</label>
               <div class="form-row">
                 <input class="textinput" id="country" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="country" type="text" value="<?php echo$r['country'];?>" placeholder="Enter a Country...">
                 <button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
@@ -227,8 +227,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             echo$r['ip']!=''?'<div class="form-text small text-right">'.$r['ip'].'</div>':'';
             if($r['contentType']=='testimonials'){?>
               <div class="row">
-                <div class="col-12 col-sm-4 pr-md-2">
-                  <label for="name">Name</label>
+                <div class="col-12 col-sm-4 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Name" for="name"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Name" aria-label="PermaLink to '.ucfirst($r['contentType']).' Name Field">&#128279;</a>':'';?>Name</label>
                   <div class="form-row">
                     <input class="textinput" id="name" list="name_options" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="name" type="text" value="<?php echo$r['name'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
                     <?php if($user['options'][1]==1){
@@ -242,15 +242,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     }?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-4 pr-md-2">
-                  <label for="email">Email</label>
+                <div class="col-12 col-sm-4 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Email" for="email"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Email" aria-label="PermaLink to '.ucfirst($r['contentType']).' Email Field">&#128279;</a>':'';?>Email</label>
                   <div class="form-row">
                     <input class="textinput" id="email" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="email" type="text" value="<?php echo$r['email'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Email..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="saveemail" data-tooltip="tooltip" data-dbid="email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-4">
-                  <label for="business">Business</label>
+                  <label id="<?php echo$r['contentType'];?>Business" for="business"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType.'].'Business" aria-label="PermaLink to '.ucfirst($r['contentType']).' Business Field">&#128279;</a>':'';?>Business</label>
                   <div class="form-row">
                     <input class="textinput" id="business" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business" type="text" value="<?php echo$r['business'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Business..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="savebusiness" data-tooltip="tooltip" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
@@ -258,27 +258,27 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-1">
-                  <label for="url">URL</label>
+                <div class="col-12 col-sm-6 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>URL" for="url"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URL" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL Field">&#128279;</a>':'';?>URL</label>
                   <div class="form-row">
                     <input class="textinput" id="url" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="url" type="text" value="<?php echo$r['url'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-1 p-0 pb-2">
-                  <label for="rating" class="mb-0">Rating</label>
+                <div class="col-12 col-sm-6 pl-md-3 p-0 pb-2">
+                  <label id="<?php echo$r['contentType'];?>Rating" for="rating" class="mb-0"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Rating" aria-label="PermaLink to '.ucfirst($r['contentType']).' Rating Selector">&#128279;</a>':'';?>Rating</label>
                   <div class="">
                     <span class="starRating">
                       <input id="rating5" name="rating" type="radio" value="5" onclick="update('<?php echo$r['id'];?>','content','rating','5');"<?php echo$r['rating']==5?' checked':'';?>>
-                      <label for="rating5" title="Awesome!">5</label>
+                      <label for="rating5" aria-label="Awesome!">5</label>
                       <input id="rating4" name="rating" type="radio" value="4" onclick="update('<?php echo$r['id'];?>','content','rating','4');"<?php echo$r['rating']==4?' checked':'';?>>
-                      <label for="rating4" title="Great!">4</label>
+                      <label for="rating4" aria-label="Great!">4</label>
                       <input id="rating3" name="rating" type="radio" value="3" onclick="update('<?php echo$r['id'];?>','content','rating','3');"<?php echo$r['rating']==3?' checked':'';?>>
-                      <label for="rating3" title="Meh!">3</label>
+                      <label for="rating3" aria-label="Meh!">3</label>
                       <input id="rating2" name="rating" type="radio" value="2" onclick="update('<?php echo$r['id'];?>','content','rating','2');"<?php echo$r['rating']==2?' checked':'';?>>
-                      <label for="rating2" title="So So!">2</label>
+                      <label for="rating2" aria-label="So So!">2</label>
                       <input id="rating1" name="rating" type="radio" value="1" onclick="update('<?php echo$r['id'];?>','content','rating','1');"<?php echo$r['rating']==1?' checked':'';?>>
-                      <label for="rating1" title="Bad!">1</label>
+                      <label for="rating1" aria-label="Bad!">1</label>
                     </span>
                   </div>
                 </div>
@@ -286,8 +286,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }
             if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-1">
-                  <label for="category_1">Category One</label>
+                <div class="col-12 col-sm-6 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>CategoryOne" for="category_1"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'CategoryOne" aria-label="PermaLink to '.ucfirst($r['contentType']).' Category One Field">&#128279;</a>':'';?>Category One</label>
                   <div class="form-row">
                     <input class="textinput" id="category_1" list="category_1_options" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_1" type="text" value="<?php echo$r['category_1'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
                     <?php if($user['options'][1]==1){
@@ -308,8 +308,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     }?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-1">
-                  <label for="category_2">Category Two</label>
+                <div class="col-12 col-sm-6 pl-md-3">
+                  <label id="<?php echo$r['contentType'];?>CategoryTwo" for="category_2"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'CategoryTwo" aria-label="PermaLink to '.ucfirst($r['contentType']).' Category Two Field">&#128279;</a>':'';?>Category Two</label>
                   <div class="form-row">
                     <input class="textinput" id="category_2" list="category_2_options" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_2" type="text" value="<?php echo$r['category_2'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
                     <?php if($user['options'][1]==1){
@@ -325,8 +325,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-1">
-                  <label for="category_3">Category Three</label>
+                <div class="col-12 col-sm-6 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>CategoryThree" for="category_3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'CategoryThree" aria-label="PermaLink to '.ucfirst($r['contentType']).' Category Three Field">&#128279;</a>':'';?>Category Three</label>
                   <div class="form-row">
                     <input class="textinput" id="category_3" list="category_3_options" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_3" type="text" value="<?php echo$r['category_3'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
                     <?php if($user['options'][1]==1){
@@ -340,8 +340,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     }?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-1">
-                  <label for="category_4">Category Four</label>
+                <div class="col-12 col-sm-6 pl-md-3">
+                  <label id="<?php echo$r['contentType'];?>CategoryFour" for="category_4"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'CategoryFour" aria-label="PermaLink to '.ucfirst($r['contentType']).' Category Four Field">&#128279;</a>':'';?>Category Four</label>
                   <div class="form-row">
                     <input class="textinput" id="category_4" list="category_4_options" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="category_4" type="text" value="<?php echo$r['category_4'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly');?>>
                     <?php if($user['options'][1]==1){
@@ -359,28 +359,29 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }
             if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
               <div class="row mt-3">
-                <input id="options0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?php echo($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="options0">Show Cost</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCost" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Cost Checkbox">&#128279;</a>':'';?>
+                <input id="<?php echo$r['contentType'];?>showCost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?php echo($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <label for="<?php echo$r['contentType'];?>showCost">Show Cost</label>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-3 pr-2">
-                  <label for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>
+                <div class="col-12 col-sm-3 pr-3">
+                  <label id="<?php echo$r['contentType'];?>RRP" for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'RRP" aria-label="PermaLink to '.ucfirst($r['contentType']).' RRP (Recommended Retail Price) Field">&#128279;</a>':'';?>RRP</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="rrp" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?php echo$r['rrp'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="saverrp" data-tooltip="tooltip" data-dbid="rrp" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-3 pr-md-2">
-                  <label for="cost">Cost</label>
+                <div class="col-12 col-sm-3 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Cost" for="cost"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Cost" aria-label="PermaLink to '.ucfirst($r['contentType']).' Cost Field">&#128279;</a>':'';?>Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="cost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?php echo$r['cost'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="savecost" data-tooltip="tooltip" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-3 pr-md-2">
-                  <label for="rCost">Reduced Cost</label>
+                <div class="col-12 col-sm-3 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>ReducedCost" for="rCost"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ReducedCost" aria-label="PermaLink to '.ucfirst($r['contentType']).' Reduced Cost Field">&#128279;</a>':'';?>Reduced Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="rCost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?php echo$r['rCost'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
@@ -388,7 +389,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-3">
-                  <label for="rCost">Distributor Cost</label>
+                  <label id="<?php echo$r['contentType'];?>DistributorCost" for="dCost"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DistributorCost" aria-label="PermaLink to '.ucfirst($r['contentType']).' Distributor Cost Field">&#128279;</a>':'';?>Distributor Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="dCost" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?php echo$r['dCost'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Distributor Cost..."':' readonly';?>>
@@ -399,15 +400,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }
             if($r['contentType']=='inventory'){?>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-1">
-                  <label for="quantity">Quantity</label>
+                <div class="col-12 col-sm-6 pr-md-3">
+                  <label id="<?php echo$r['contentType'];?>Quantity" for="quantity"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Quantity" aria-label="PermaLink to '.ucfirst($r['contentType']).' Quantity Field">&#128279;</a>':'';?>Quantity</label>
                   <div class="form-row">
                     <input class="textinput" id="quantity" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?php echo $r['quantity'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="savequantity" data-tooltip="tooltip" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 pl-md-1">
-                  <label for="itemCondition">Condition</label>
+                  <label id="<?php echo$r['contentType'];?>ItemCondition" for="itemCondition"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ItemCondition" aria-label="PermaLink to '.ucfirst($r['contentType']).' Condition Selector">&#128279;</a>':'';?>Condition</label>
                   <div class="form-row">
                     <select id="itemCondition"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','itemCondition',$(this).val());">
                       <option value=""<?php echo$r['itemCondition']==''?' selected':'';?>>None</option>
@@ -441,7 +442,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
               </div>
-              <label for="stockStatus">Stock Status</label>
+              <label id="<?php echo$r['contentType'];?>StockStatus" for="stockStatus"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'StockStatus" aria-label="PermaLink to '.ucfirst($r['contentType']).' Stock Status Selector">&#128279;</a>':'';?>Stock Status</label>
               <div class="form-row">
                 <select id="stockStatus"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','stockStatus',$(this).val());">
                   <option value="quantity"<?php echo$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
@@ -453,7 +454,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <option value="none"<?php echo($r['stockStatus']=='none'||$r['stockStatus']=='')?' selected':'';?>>No Display</option>
                 </select>
               </div>
-              <label for="weight">Weight</label>
+              <label id="<?php echo$r['contentType'];?>Weight" for="weight"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Weight" aria-label="PermaLink to '.ucfirst($r['contentType']).' Weight Field">&#128279;</a>':'';?>Weight</label>
               <div class="form-row">
                 <input class="textinput" id="weight" data-dbid="<?php echo $r['id'];?>" data-dbt="content" data-dbc="weight" type="text" value="<?php echo $r['weight'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Weight..."':' readonly';?>>
                 <select id="weightunit" onchange="update('<?php echo$r['id'];?>','content','weightunit',$(this).val());"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Weight Unit"':' disabled';?>>
@@ -465,7 +466,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </select>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveweight" data-tooltip="tooltip"  data-dbid="weight" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="Size">Size</label>
+              <label id="<?php echo$r['contentType'];?>Size" for="size"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Size" aria-label="PermaLink to '.ucfirst($r['contentType']).' Size Fields">&#128279;</a>':'';?>Size</label>
               <div class="row">
                 <div class="col-12 col-md-4 pr-md-2">
                   <div class="form-row">
@@ -527,6 +528,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             <?php }?>
             <div class="row mt-3">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#summernote" aria-label="PermaLink to '.ucfirst($r['contentType']).' Notes">&#128279;</a>':'';?>
               <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
                   '<div class="btn-group d-flex justify-content-end">';
@@ -570,13 +572,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-text small text-muted">Edited: <?php echo$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></div>
           </div>
 <?php /* Images */ ?>
-          <div class="tab1-2 border-top p-3" role="tabpanel">
+          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
             <div id="error"></div>
             <?php if($r['contentType']=='testimonials'){?>
               <div class="alert alert-info<?php echo$r['cid']==0?' hidden':'';?>" id="tstavinfo" role="alert">Currently using the Avatar associated with the selected Client Account.</div>
               <?php if($user['options'][1]==1){?>
                 <form target="sp" method="post" action="core/add_data.php" enctype="multipart/form-data">
-                  <label for="avatar">Avatar</label>
+                  <label id="<?php echo$r['contentType'];?>Avatar" for="avatar"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Avatar" aria-label="PermaLink to '.ucfirst($r['contentType']).' Avatar">&#128279;</a>':'';?>Avatar</label>
                   <div class="form-row">
                     <input id="av" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?php echo$r['file'];?>" readonly>
                     <input name="id" type="hidden" value="<?php echo$r['id'];?>">
@@ -590,7 +592,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </form>
               <?php }else{?>
-                <label for="avatar">Avatar</label>
+                <label id="<?php echo$r['contentType'];?>Avatar" for="avatar"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Avatar" aria-label="PermaLink to '.ucfirst($r['contentType']).' Avatar">&#128279;</a>':'';?>Avatar</label>
                 <div class="form-row">
                   <input id="av" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?php echo$r['file'];?>" readonly>
                   <img id="tstavatar" src="<?php echo$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
@@ -598,125 +600,130 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
           <?php }
           if($r['contentType']!='testimonials'){?>
-            <label for="fileURL">URL</label>
+            <label id="<?php echo$r['contentType'];?>ImageURL for="fileURL"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ImageURL" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image URL Field">&#128279;</a>':'';?>URL</label>
             <div class="form-row">
-                <input class="textinput" id="fileURL" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileURL" type="text" value="<?php echo$r['fileURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
-                <?php echo$r['fileURL']!=''?'<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>':'<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
+              <input class="textinput" id="fileURL" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileURL" type="text" value="<?php echo$r['fileURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
+              <?php echo$r['fileURL']!=''?'<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>':'<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">';?>
                 <?php echo$user['options'][1]==1?'<button class="save" id="savefileURL" data-tooltip="tooltip" data-dbid="fileURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="file">Image</label>
-              <div class="form-row">
-                <input class="textinput" id="file" type="text" value="<?php echo$r['file'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="file" readonly>
-                <?php if($user['options'][1]==1){?>
-                  <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');"><?php svg('browse-media');?></button>
-                <?php }
-                echo$r['file']!=''&&file_exists('media/'.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
-                echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);">'.svg2('trash').'</button>'.
-                '<button class="save" id="savefile" data-tooltip="tooltip" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <div class="form-row mt-3">
-                <input id="options2" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2" type="checkbox"<?php echo($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="options2">&nbsp;&nbsp;Enable Panorama</label>
-              </div>
-              <div class="form-row">
-                <input id="options3" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="3" type="checkbox"<?php echo($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="options3">&nbsp;&nbsp;Enable&nbsp;360&nbsp;Viewer</label>
-                <small class="form-text text-right">Enable 360 Viewer before uploading image to avoid auto-resizing.</small>
-              </div>
-              <label for="thumb">Thumbnail</label>
-              <div class="form-row">
-                <input class="textinput" id="thumb" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="thumb" type="text" value="<?php echo$r['thumb'];?>">
-                <?php if($user['options'][1]==1){?>
-                  <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"><?php svg('browse-media');?></button>
-                <?php }
-                echo$r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
-                echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);">'.svg2('trash').'</button>'.
-                '<button class="save" id="savethumb" data-tooltip="tooltip" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="exifFilename">Image ALT</label>
-              <div class="form-row">
-                <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
-                <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="coverVideo">Video URL</label>
-              <div class="form-row">
-                <input class="textinput" id="videoURL" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="videoURL" type="text" value="<?php echo$r['videoURL'];?>">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`videoURL`);">'.svg2('browse-media').'</button>'.
-                '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`content`,`videoURL`,``);">'.svg2('trash').'</button>'.
-                '<button class="save" id="savevideoURL" data-tooltip="tooltip" data-dbid="videoURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <div class="row mt-3">
-                <input id="options4" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="4" type="checkbox"<?php echo$r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options4">AutoPlay Video</label>
-              </div>
-              <div class="row">
-                <input id="options5" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="5" type="checkbox"<?php echo$r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options5">Loop Video</label>
-              </div>
-              <div class="row">
-                <input id="options6" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="6" type="checkbox"<?php echo$r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options6">Show Controls</label>
-              </div>
-              <legend class="mt-3">EXIF Information</legend>
-              <div class="form-row">
-                <label for="exifFilename">Original&nbsp;Filename</label>
-                <?php echo$user['options'][1]==1?'<small class="form-text text-right">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</small>':'';?>
-              </div>
-              <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);">'.svg2('magic').'</button>':'';?>
-                <input class="textinput" id="exifFilename" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFilename" type="text" value="<?php echo$r['exifFilename'];?>"<?php echo$user['options'][1]==1?' placeholder="Original Filename..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-tooltip="tooltip" data-dbid="exifFilename" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="exifCamera">Camera</label>
-              <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);">'.svg2('magic').'</button>':'';?>
-                <input class="textinput" id="exifCamera" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifCamera" type="text" value="<?php echo$r['exifCamera'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Camera"':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-tooltip="tooltip" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="exifLens">Lens</label>
-              <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);">'.svg2('magic').'</button>':'';?>
-                <input type="text" id="exifLens" class="textinput" value="<?php echo$r['exifLens'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifLens"<?php echo$user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifLens" data-tooltip="tooltip" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="exifAperture">Aperture</label>
-              <div class="form-row">
-                <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);">'.svg2('magic').'</button>':'';?>
-                <input class="textinput" id="exifAperture" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifAperture" type="text" value="<?php echo$r['exifAperture'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly';?>>
-                <?php echo$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-tooltip="tooltip" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <label for="exifFocalLength">Focal Length</label>
+            </div>
+            <label id="<?php echo$r['contentType'];?>Image" for="file"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Image" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Field">&#128279;</a>':'';?>Image</label>
+            <div class="form-row">
+              <input class="textinput" id="file" type="text" value="<?php echo$r['file'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="file" readonly>
+              <?php if($user['options'][1]==1){?>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','file');"><?php svg('browse-media');?></button>
+              <?php }
+              echo$r['file']!=''&&file_exists('media/'.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
+              echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);">'.svg2('trash').'</button>'.
+              '<button class="save" id="savefile" data-tooltip="tooltip" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <div class="form-row mt-3">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options2" aria-label="PermaLink to '.$r['contentType'].' Panorama Checkbox">&#128279;</a>':'';?>
+              <input id="options2" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2" type="checkbox"<?php echo($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+              <label for="options2">&nbsp;&nbsp;Enable Panorama</label>
+            </div>
+            <div class="form-row">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options3" aria-label="PermaLink to '.$r['contentType'].' 360 Viewer Checkbox">&#128279;</a>':'';?>
+              <input id="options3" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="3" type="checkbox"<?php echo($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+              <label for="options3">&nbsp;&nbsp;Enable&nbsp;360&nbsp;Viewer</label>
+              <small class="form-text text-right">Enable 360 Viewer before uploading image to avoid auto-resizing.</small>
+            </div>
+            <label id="<?php echo$r['contentType'];?>Thumbnail" for="thumb"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Thumbnail" aria-label="PermaLink to '.ucfirst($r['contentType']).' Thumbnail Field">&#128279;</a>':'';?>Thumbnail</label>
+            <div class="form-row">
+              <input class="textinput" id="thumb" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="thumb" type="text" value="<?php echo$r['thumb'];?>">
+              <?php if($user['options'][1]==1){?>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','content','thumb');"><?php svg('browse-media');?></button>
+              <?php }
+              echo$r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
+              echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);">'.svg2('trash').'</button>'.
+              '<button class="save" id="savethumb" data-tooltip="tooltip" data-dbid="thumb" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="<?php echo$r['contentType'];?>ImageALT" for="fileALT"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ImageALT" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Alt Field">&#128279;</a>':'';?>Image ALT</label>
+            <div class="form-row">
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
+              <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="<?php echo$r['contentType'];?>VideoURL" for="videoURL"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'VideoURL" aria-label="PermaLink to '.ucfirst($r['contentType']).' Video URL Field">&#128279;</a>':'';?>Video URL</label>
+            <div class="form-row">
+              <input class="textinput" id="videoURL" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="videoURL" type="text" value="<?php echo$r['videoURL'];?>">
+              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`videoURL`);">'.svg2('browse-media').'</button>'.
+              '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`content`,`videoURL`,``);">'.svg2('trash').'</button>'.
+              '<button class="save" id="savevideoURL" data-tooltip="tooltip" data-dbid="videoURL" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <div class="row mt-3">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options4" aria-label="PermaLink to '.$r['contentType'].' Video Autoplay Checkbox">&#128279;</a>':'';?>
+              <input id="options4" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="4" type="checkbox"<?php echo$r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="options4">AutoPlay Video</label>
+            </div>
+            <div class="row">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options5" aria-label="PermaLink to '.$r['contentType'].' Video Loop Checkbox">&#128279;</a>':'';?>
+              <input id="options5" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="5" type="checkbox"<?php echo$r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="options5">Loop Video</label>
+            </div>
+            <div class="row">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options6" aria-label="PermaLink to '.$r['contentType'].' Video Show Controls Checkbox">&#128279;</a>':'';?>
+              <input id="options6" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="6" type="checkbox"<?php echo$r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="options6">Show Controls</label>
+            </div>
+            <legend class="mt-3">EXIF Information</legend>
+            <div class="form-row">
+              <label id="<?php echo$r['contentType'];?>EXIFFilename" for="exifFilename"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFFilename" aria-label="PermaLink to '.ucfirst($r['contentType']).' Original Filename Field">&#128279;</a>':'';?>Original&nbsp;Filename</label>
+              <?php echo$user['options'][1]==1?'<small class="form-text text-right">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</small>':'';?>
+            </div>
+            <div class="form-row">
+              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);">'.svg2('magic').'</button>':'';?>
+              <input class="textinput" id="exifFilename" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFilename" type="text" value="<?php echo$r['exifFilename'];?>"<?php echo$user['options'][1]==1?' placeholder="Original Filename..."':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-tooltip="tooltip" data-dbid="exifFilename" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="<?php echo$r['contentType'];?>EXIFCamera" for="exifCamera"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFCamera" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF Camera Field">&#128279;</a>':'';?>Camera</label>
+            <div class="form-row">
+              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);">'.svg2('magic').'</button>':'';?>
+              <input class="textinput" id="exifCamera" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifCamera" type="text" value="<?php echo$r['exifCamera'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Camera"':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-tooltip="tooltip" data-dbid="exifCamera" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="<?php echo$r['contentType'];?>EXIFLens" for="exifLens"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFLens" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF Lens Field">&#128279;</a>':'';?>Lens</label>
+            <div class="form-row">
+              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);">'.svg2('magic').'</button>':'';?>
+              <input type="text" id="exifLens" class="textinput" value="<?php echo$r['exifLens'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifLens"<?php echo$user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="saveexifLens" data-tooltip="tooltip" data-dbid="exifLens" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="<?php echo$r['contentType'];?>EXIFAperture" for="exifAperture"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFAperture" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF Aperture Field">&#128279;</a>':'';?>Aperture</label>
+            <div class="form-row">
+              <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);">'.svg2('magic').'</button>':'';?>
+              <input class="textinput" id="exifAperture" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifAperture" type="text" value="<?php echo$r['exifAperture'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly';?>>
+              <?php echo$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-tooltip="tooltip" data-dbid="exifAperture" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="<?php echo$r['contentType'];?>EXIFFocalLength" for="exifFocalLength"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFFocalLength" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF Focal Length Field">&#128279;</a>':'';?>Focal Length</label>
               <div class="form-row">
                 <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifFocalLength" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifFocalLength" type="text" value="<?php echo$r['exifFocalLength'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-tooltip="tooltip" data-dbid="exifFocalLength" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="exifShutterSpeed">Shutter Speed</label>
+              <label id="<?php echo$r['contentType'];?>EXIFShutterSpeed" for="exifShutterSpeed"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFShutterSpeed" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF Shutter Speed Field">&#128279;</a>':'';?>Shutter Speed</label>
               <div class="form-row">
                 <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifShutterSpeed" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifShutterSpeed" type="text" value="<?php echo$r['exifShutterSpeed'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-tooltip="tooltip" data-dbid="exifShutterSpeed" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="exifISO">ISO</label>
+              <label id="<?php echo$r['contentType'];?>EXIFISO" for="exifISO"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFISO" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF ISO Field">&#128279;</a>':'';?>ISO</label>
               <div class="form-row">
                 <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifISO" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifISO" type="text" value="<?php echo$r['exifISO'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveexifISO" data-tooltip="tooltip" data-dbid="exifISO" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="exifti">Taken</label>
+              <label id="<?php echo$r['contentType'];?>EXIFTaken" for="exifti"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EXIFTaken" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image EXIF Date Taken Field">&#128279;</a>':'';?>Taken</label>
               <div class="form-row">
                 <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);">'.svg2('magic').'</button>':'';?>
                 <input class="textinput" id="exifti" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="exifti" type="text" value="<?php echo$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"<?php echo$user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveexifti" data-tooltip="tooltip" data-dbid="exifti" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <legend class="mt-3">Image Attribution</legend>
-              <label for="attributionImageTitle">Title</label>
+              <label id="<?php echo$r['contentType'];?>AttributionImageTitle" for="attributionImageTitle"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'AttributionImageTitle" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Attribution Title Field">&#128279;</a>':'';?>Title</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageTitle" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle" type="text" value="<?php echo$r['attributionImageTitle'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveattributionImageTitle" data-tooltip="tooltip" data-dbid="attributionImageTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="attributionImageName">Name</label>
+              <label id="<?php echo$r['contentType'];?>AttributionImageName" for="attributionImageName"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'AttributionImageName" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Attribution Name Field">&#128279;</a>':'';?>Name</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageName" list="attributionImageName_option" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageName" type="text" value="<?php echo$r['attributionImageName'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
                 <?php if($user['options'][1]==1){
@@ -729,7 +736,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 }
                 echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-tooltip="tooltip" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="attributionImageURL">URL</label>
+              <label id="<?php echo$r['contentType'];?>AttributionImageURL" for="attributionImageURL"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'AttributionImageURL" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Attribution URL Field">&#128279;</a>':'';?>URL</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageURL" list="attributionImageURL_option" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="attributionImageURL" type="text" value="<?php echo$r['attributionImageURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
                 <?php if($user['options'][1]==1){
@@ -746,7 +753,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
 <?php /* Media */ ?>
           <?php if($r['contentType']!='testimonials'){?>
-          <div class="tab1-3 border-top p-3" role="tabpanel">
+          <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
             <?php if($user['options'][1]==1){?>
               <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
                 <input name="id" type="hidden" value="<?php echo$r['id'];?>">
@@ -811,7 +818,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
         <?php }?>
 <?php /* Options */ ?>
-          <div class="tab1-4 border-top p-3" role="tabpanel">
+          <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
             <?php if($user['options'][1]==1){?>
               <form target="sp" method="post" action="core/add_option.php">
                 <input name="rid" type="hidden" value="<?php echo$r['id'];?>">
@@ -849,7 +856,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
 <?php /* Comments */ ?>
-          <div class="tab1-5 border-top p-3" role="tabpanel">
+          <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
             <div class="row mt-3">
               <input id="options1" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="1" type="checkbox"<?php echo($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
               <label for="options1">Enable</label>
@@ -922,7 +929,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }?>
           </div>
 <?php /* Reviews */ ?>
-          <div class="tab1-6 border-top p-3" role="tabpanel">
+          <div class="tab1-6 border-top p-3" data-tabid="tab1-6" role="tabpanel">
             <?php $sr=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid ORDER BY `ti` DESC");
             $sr->execute([
               ':rid'=>$r['id']
@@ -1001,15 +1008,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <?php }?>
 <?php /* SEO */ ?>
         <?php if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
-          <div class="tab1-8 border-top p-3" role="tabpanel">
-            <label for="views">Views</label>
+          <div class="tab1-8 border-top p-3" data-tabid="tab1-8" role="tabpanel">
+            <label id="<?php echo$r['contentType'];?>Views" for="views"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Views" aria-label="PermaLink to '.ucfirst($r['contentType']).' Views Field">&#128279;</a>':'';?>Views</label>
             <div class="form-row">
               <input class="textinput" id="views" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?php echo$r['views'];?>"<?php echo$user['options'][1]==1?'':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);">'.svg2('eraser').'</button>'.
               '<button class="save" id="saveviews" data-tooltip="tooltip" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <div class="form-row mt-3">
-              <label for="metaRobots">Meta&nbsp;Robots</label>
+              <label id="<?php echo$r['contentType'];?>MetaRobots" for="metaRobots"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'MetaRobots" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Robots Field">&#128279;</a>':'';?>Meta&nbsp;Robots</label>
               <?php if($user['options'][1]==1){?>
                 <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
               <?php }?>
@@ -1031,7 +1038,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php echo$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=metaRobots" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
               '<button class="save" id="savemetaRobots" data-tooltip="tooltip" data-dbid="metaRobots" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
-            <label for="schemaType">Schema Type</label>
+            <label id="<?php echo$r['contentType'];?>SchemaType" for="schemaType"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SchemaType" aria-label="PermaLink to '.ucfirst($r['contentType']).' Schema Type Selector">&#128279;</a>':'';?>Schema Type</label>
             <div class="form-row">
               <select id="schemaType"<?php echo$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> aria-label="Schema for Microdata Content" onchange="update('<?php echo$r['id'];?>','content','schemaType',$(this).val());">
                 <option value="blogPosting"<?php echo$r['schemaType']=='blogPosting'?' selected':'';?>>blogPosting for Articles</option>
@@ -1044,7 +1051,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <option value="CreativeWork"<?php echo$r['schemaType']=='CreativeWork'?' selected':'';?>>CreativeWork for Portfolio/Proofs</option>
               </select>
             </div>
-            <div class="card google-result mt-3 p-3 overflow-visible">
+            <div class="card google-result mt-3 p-3 overflow-visible" id="<?php echo$r['contentType'];?>SearchResult">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SearchResult" aria-label="PermaLink to '.ucfirst($r['contentType']).' Search Result Example">&#128279;</a>':'';?>
               <div id="google-title" data-tooltip="tooltip" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
                 <?php echo($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
               </div>
@@ -1059,7 +1067,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="form-row mt-3">
-              <label for="seoTitle">Meta&nbsp;Title</label>
+              <label id="<?php echo$r['contentType'];?>SEOTitle" for="seoTitle"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SEOTitle" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Title Field">&#128279;</a>':'';?>Meta&nbsp;Title</label>
               <small class="form-text text-right">The recommended character count for Title\'s is 70.</small>
             </div>
             <div class="form-row">
@@ -1122,7 +1130,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
 */ ?>
             <div class="form-row mt-3">
-              <label for="seoDescription">Meta&nbsp;Description</label>
+              <label id="<?php echo$r['contentType'];?>SEODescription" for="seoDescription"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SEODescription" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Description Field">&#128279;</a>':'';?>Meta&nbsp;Description</label>
               <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
             </div>
             <div class="form-row">
@@ -1168,10 +1176,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 
         <?php }?>
 <?php /* Settings */ ?>
-          <div class="tab1-9 border-top p-3" role="tabpanel">
+          <div class="tab1-9 border-top p-3" data-tabid="tab1-9" role="tabpanel">
             <div class="row">
-              <div class="col-12 col-sm-6 pr-md-1">
-                <label for="status">Status</label>
+              <div class="col-12 col-sm-6 pr-md-3">
+                <label id="<?php echo$r['contentType'];?>Status" for="status"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Status" aria-label="PermaLink to '.ucfirst($r['contentType']).' Status Selector">&#128279;</a>':'';?>Status</label>
                 <div class="form-row">
                   <select id="status"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','status',$(this).val());changeShareStatus($(this).val());">
                     <option value="unpublished"<?php echo$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
@@ -1191,8 +1199,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   }
                 }
               </script>
-              <div class="col-12 col-sm-6 pl-md-1">
-                <label for="rank">Access</label>
+              <div class="col-12 col-sm-6 pl-md-3">
+                <label id="<?php echo$r['contentType'];?>Rank" for="rank"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Rank" aria-label="PermaLink to '.ucfirst($r['contentType']).' Access Selector">&#128279;</a>':'';?>Access</label>
                 <div class="form-row">
                   <select id="rank" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rank"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','rank',$(this).val());">
                     <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Visitor and above</option>
@@ -1210,8 +1218,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-sm-6 pr-md-1">
-                <label for="contentType">contentType</label>
+              <div class="col-12 col-sm-6 pr-md-3">
+                <label id="<?php echo$r['contentType'];?>ContentType" for="contentType"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ContentType" aria-label="PermaLink to '.ucfirst($r['contentType']).' Content Type Selector">&#128279;</a>':'';?>contentType</label>
                 <div class="form-row">
                   <select id="contentType"<?php echo$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change the Type of Content this Item belongs to."':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','contentType',$(this).val());">
                     <option value="article"<?php echo$r['contentType']=='article'?' selected':'';?>>Article</option>
@@ -1226,8 +1234,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </select>
                 </div>
               </div>
-              <div class="col-12 col-sm-6 pl-md-1">
-                <label for="mid">SubMenu</label>
+              <div class="col-12 col-sm-6 pl-md-3">
+                <label id="<?php echo$r['contentType'];?>SubMenu" for="mid"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SubMenu" aria-label="PermaLink to '.ucfirst($r['contentType']).' Sub Menu Selector">&#128279;</a>':'';?>SubMenu</label>
                 <div class="form-row">
                   <select id="mid"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','mid',$(this).val());">
                     <option value="0"<?php if($r['mid']==0)echo' selected';?>>None</option>
@@ -1244,31 +1252,36 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <?php if($r['contentType']=='inventory'){?>
               <div class="row mt-3">
-                <input id="coming0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?php echo($r['coming'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="coming0">Coming Soon</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#coming" aria-label="PermaLink to '.$r['contentType'].' Coming Soon Checkbox">&#128279;</a>':'';?>
+                <input id="coming" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?php echo($r['coming'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <label for="coming">Coming Soon</label>
               </div>
             <?php }?>
             <?php if($r['contentType']!='proofs'){?>
               <div class="row mt-3<?php echo$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
-                <input id="featured0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0" type="checkbox"<?php echo($r['featured'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="featured0">Featured</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Featured" aria-label="PermaLink to '.ucfirst($r['contentType']).' Featured Checkbox">&#128279;</a>':'';?>
+                <input id="<?php echo$r['contentType'];?>Featured" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0" type="checkbox"<?php echo($r['featured'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <label for="<?php echo$r['contentType'];?>Featured">Featured</label>
               </div>
             <?php }?>
             <div class="row mt-3">
-              <input id="internal0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="internal" data-dbb="0" type="checkbox"<?php echo($r['internal']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-              <label for="internal0">Internal</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Internal" aria-label="PermaLink to '.ucfirst($r['contentType']).' Internal Checkbox">&#128279;</a>':'';?>
+              <input id="<?php echo$r['contentType'];?>Internal" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="internal" data-dbb="0" type="checkbox"<?php echo($r['internal']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+              <label for="<?php echo$r['contentType'];?>Internal">Internal</label>
             </div>
             <?php if($r['contentType']=='service'){?>
               <div class="row mt-3">
-                <input id="bookable0" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0" type="checkbox"<?php echo($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="bookable0">Bookable</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Bookable" aria-label="PermaLink to '.ucfirst($r['contentType']).' Bookable Checkbox">&#128279;</a>':'';?>
+                <input id="<?php echo$r['contentType'];?>Bookable" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0" type="checkbox"<?php echo($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <label for="<?php echo$r['contentType'];?>bookable">Bookable</label>
               </div>
             <?php }?>
 <?php if($r['contentType']=='events'){?>
             <div class="col-12 mt-3">
               <div class="row">
-                <input id="options7" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="7" type="checkbox"<?php echo$r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options7">Enable Map Display</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EnableMap" aria-label="PermaLink to '.ucfirst($r['contentType']).' Enable Map Checkbox">&#128279;</a>':'';?>
+                <input id="<?php echo$r['contentType'];?>Map" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="7" type="checkbox"<?php echo$r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                <label for="<?php echo$r['contentType'];?>EnableMap">Enable Map Display</label>
               </div>
             </div>
 <?php if($config['mapapikey']==''){?>

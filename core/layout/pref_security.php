@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
           <label for="tab1-1">Settings</label>
@@ -39,11 +39,11 @@
           <label for="tab1-3">Blacklist</label>
           <input class="tab-control" id="tab1-4" name="tabs" type="radio">
           <label for="tab1-4">Whitelist</label>
-          <div class="tab1-1 border-top p-3" role="tabpanel">
+          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <legend>Administration Access Page</legend>
             <form target="sp" method="post" action="core/change_adminaccess.php">
               <div class="form-row">
-                <label for="adminfolder">Access&nbsp;Folder</label>
+                <label id="prefAdminAccess" for="adminfolder"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAdminAccess" aria-label="PermaLink to Preferences Admin Access Field">&#128279;</a>':'';?>Access&nbsp;Folder</label>
                 <small class="form-text text-right">Changing the access folder for the Administration area may log you out.</small>
               </div>
               <div class="form-row">
@@ -55,12 +55,14 @@
               </div>
             </form>
             <div class="row mt-3">
-              <inputid="php_options5" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5" type="checkbox" <?php echo$config['php_options'][5]==1?' checked':'';?>>
-              <label for="php_options5">Screen Against Attacks</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAttackScreen" aria-label="PermaLink to Preferences Screen Attacks Checkbox">&#128279;</a>':'';?>
+              <input id="prefAttackScreen" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5" type="checkbox"<?php echo$config['php_options'][5]==1?' checked':'';?>>
+              <label for="prefAttackScreen">Screen Against Attacks</label>
             </div>
             <div class="row">
-              <input id="php_options6" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6" type="checkbox"<?php echo$config['php_options'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="php_options6">30 Day Blacklist</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#pref30DayBlacklist" aria-label="PermaLink to Preferences Screen Attacks Checkbox">&#128279;</a>':'';?>
+              <input id="pref30DayBlacklist" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6" type="checkbox"<?php echo$config['php_options'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="pref30DayBlacklist">30 Day Blacklist</label>
             </div>
             <legend class="mt-3">Project Honey Pot</legend>
             <?php if($config['php_APIkey']==''){?>
@@ -69,23 +71,26 @@
               </div>
             <?php }?>
             <div class="row mt-3">
-              <input id="php_options0" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0" type="checkbox"<?php echo$config['php_options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="php_options0">Enable Monitoring</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefEnablePHP" aria-label="PermaLink to Preferences Enable Project Honey Pot Checkbox">&#128279;</a>':'';?>
+              <input id="prefEnablePHP" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0" type="checkbox"<?php echo$config['php_options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefEnablePHP">Enable Project Honey Pot</label>
             </div>
             <div class="row">
-              <input id="php_options3" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3" type="checkbox"<?php echo$config['php_options'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="php_options3">Auto Blacklist</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAutoBlacklist" aria-label="PermaLink to Preferences Auto Blacklist Checkbox">&#128279;</a>':'';?>
+              <input id="prefAutoBlacklist" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3" type="checkbox"<?php echo$config['php_options'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefAutoBlacklist">Auto Blacklist</label>
             </div>
             <div class="row">
-              <input id="php_options4" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4" type="checkbox"<?php echo$config['php_options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="php_options4">Block Blacklisted IP's</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefBlockBlacklistIP" aria-label="PermaLink to Preferences Screen Attacks Checkbox">&#128279;</a>':'';?>
+              <input id="prefBlockBlacklistIP" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4" type="checkbox"<?php echo$config['php_options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefBlockBlacklistIP">Block Blacklisted IP's</label>
             </div>
-            <label for="php_APIkey">PHP API Key</label>
+            <label id="prefPHPAPIKey" for="php_APIkey"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefPHPAPIKey" aria-label="PermaLink to Preferences Project Honey Pot API Key Field">&#128279;</a>':'';?>PHP API Key</label>
             <div class="form-row">
               <input class="textinput" id="php_APIkey" data-dbid="1" data-dbt="config" data-dbc="php_APIkey" type="text" value="<?php echo$config['php_APIkey'];?>" placeholder="Enter a Project Honey Pot API Key...">
               <button class="save" id="savephp_APIkey" data-dbid="php_APIkey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
             </div>
-            <label for="php_honeypot">Honey Pot</label>
+            <label id="prefPHPFile" for="php_honeypot"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefPHPFile" aria-label="PermaLink to Preferences Project Honey Pot File">&#128279;</a>':'';?>Honey Pot</label>
             <div class="form-row">
               <div class="input-text col-12" id="php_honeypot_link">
                 <?php echo$config['php_honeypot']!=''?'<a target="_blank" href="'.$config['php_honeypot'].'">'.$config['php_honeypot'].'</a>':'Honey Pot File Not Uploaded...';?>
@@ -94,8 +99,9 @@
               <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('1','config','php_honeypot','');"><?php svg('trash');?></button>
             </div>
             <div class="row mt-3">
-              <input id="php_options2" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2" type="checkbox"<?php echo$config['php_options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="php_options2">Quick Link</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAttackScreen" aria-label="PermaLink to Preferences Project Honey Pot Quick Link Checkbox">&#128279;</a>':'';?>
+              <input id="prefPHPQuickLink" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2" type="checkbox"<?php echo$config['php_options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefPHPQuickLink">Quick Link</label>
             </div>
             <form target="sp" method="post" action="core/update.php" onsubmit="$('#php_quicklink_save').removeClass('btn-danger');">
               <input name="id" type="hidden" value="1">
@@ -109,17 +115,19 @@
               </div>
             </form>
           </div>
-          <div class="tab1-2 border-top p-3" role="tabpanel">
+          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
             <legend>Filter Settings</legend>
             <div class="row">
-              <input id="spamfilter0" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0" type="checkbox"<?php echo$config['spamfilter'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="spamfilter0">Filter Forms</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFilterForms" aria-label="PermaLink to Preferences Filter Forms Checkbox">&#128279;</a>':'';?>
+              <input id="prefFilterForms" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0" type="checkbox"<?php echo$config['spamfilter'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefFilterForms">Filter Forms</label>
             </div>
             <div class="row">
-              <input id="spamfilter1" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="1" type="checkbox"<?php echo$config['spamfilter'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="spamfilter1">Auto Blacklist</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAutoBlacklist" aria-label="PermaLink to Preferences Auto Blacklist Checkbox">&#128279;</a>':'';?>
+              <input id="prefAutoBlacklist" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="1" type="checkbox"<?php echo$config['spamfilter'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefAutoBlacklist">Auto Blacklist</label>
             </div>
-            <legend>Filters</legend>
+            <legend id="prefFilters"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFilters" aria-label="PermaLink to Preferences Filter Forms Checkbox">&#128279;</a>':'';?>Filters</legend>
             <div class="form-row">
               <div class="help-text text-right">Any regular expression syntax can be used (without the deliminiters). All keywords are case insensitive. Lines starting with '#' are ignored.</div>
             </div>
@@ -175,7 +183,7 @@
               });
             </script>
           </div>
-          <div class="tab1-3 border-top py-3" role="tabpanel">
+          <div class="tab1-3 border-top py-3" data-tabid="tab1-3" role="tabpanel">
             <table class="table-zebra">
               <thead>
                 <tr>
@@ -211,7 +219,7 @@
               </tbody>
             </table>
           </div>
-          <div class="tab1-4 border-top py-3" role="tabpanel">
+          <div class="tab1-4 border-top py-3" data-tabid="tab1-4" role="tabpanel">
             <table class="table-zebra">
               <thead>
                 <tr>

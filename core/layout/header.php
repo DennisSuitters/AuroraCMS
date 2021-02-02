@@ -11,6 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
+<div id="back-to-top"></div>
 <header class="<?php currentSeason();?>">
   <a class="brand" href="<?php echo URL.$settings['system']['admin'];?>/"><img src="core/images/auroracms-white.svg" alt="AuroraCMS"></a>
   <nav>

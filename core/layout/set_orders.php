@@ -32,8 +32,8 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
-        <legend class="mt-3">Postage Options</legend>
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+        <legend id="postageOptions" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#postageOptions" aria-label="PermaLink to Postage Options Section">&#128279;</a>':'';?>Postage Options</legend>
         <form target="sp" method="post" action="core/add_postoption.php">
           <div class="form-row">
             <div class="input-text">Code</div>
@@ -65,30 +65,32 @@
           <?php }?>
         </div>
         <hr>
-        <legend>Australia Post</legend>
-        <div class="form-row">
-          <label for="austPostAPIKey">API&nbsp;Key</label>
+        <legend id="australiaPost"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#australiaPost" aria-label="PermaLink to Australia Post Section">&#128279;</a>':'';?>Australia Post</legend>
+        <div id="australiaPostAPIKey" class="form-row">
+          <label for="austPostAPIKey"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#australiaPostAPIKey" aria-label="PermaLink to Australia Post API Key">&#128279;</a>':'';?>API&nbsp;Key</label>
           <small class="form-text text-right">Visit <a target="_blank" href="https://auspost.com.au/forms/pacpcs-registration.html">AustPost API</a> to regsiter and get an API Key.</small>
         </div>
         <div class="form-row">
           <input class="textinput" id="austPostAPIKey" data-dbid="1" data-dbt="config" data-dbc="austPostAPIKey" type="text" value="<?php echo$config['austPostAPIKey'];?>" placeholder="Enter your Australia Post API Code...">
           <button class="save" id="saveaustPostAPIKey" data-tooltip="tooltip" data-dbid="austPostAPIKey" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <legend class="mt-3">Payment Options</legend>
+        <legend id="paymentOptions" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#paymentOptions" aria-label="PermaLink to Payment Options Section">&#128279;</a>':'';?>Payment Options</legend>
         <div class="row">
-          <input id="options7" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="7" type="checkbox"<?php echo$config['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options7">Display Payment Options Logo's (Logo's should be contained within the Template tags).</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#displayPaymentOptions" aria-label="PermaLink to Display Payment Options Checkbox">&#128279;</a>':'';?>
+          <input id="displayPaymentOptions" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="7" type="checkbox"<?php echo$config['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="displayPaymentOptions">Display Payment Options Logo's (Logo's should be contained within the Template tags).</label>
         </div>
-        <label for="gst">GST</label>
+        <label id="orderGST" for="gst"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderGST" aria-label="PermaLink to GST">&#128279;</a>':'';?>GST</label>
         <div class="form-row">
           <input class="textinput" id="gst" data-dbid="1" data-dbt="config" data-dbc="gst" type="number" value="<?php echo$config['gst'];?>" placeholder="Enter a GST Value...">
           <button class="save" id="savegst" data-tooltip="tooltip" data-dbid="gst" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
-        <legend>Account Discount Ranges</legend>
+        <legend id="discountRanges"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#discountRanges" aria-label="PermaLink to Discount Ranges Options Section">&#128279;</a>':'';?>Discount Ranges</legend>
         <div class="row">
-          <input id="options26" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="26" type="checkbox"<?php echo$config['options'][26]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options26">Discount Range Calculations.</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#discountRangeCalculations" aria-label="PermaLink to Discount Ranges Calculations Checkbox">&#128279;</a>':'';?>
+          <input id="discountRangeCalculations" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="26" type="checkbox"<?php echo$config['options'][26]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="discountRangeCalculations">Discount Range Calculations.</label>
         </div>
         <form target="sp" method="post" action="core/add_discountrange.php">
           <div class="form-row">
@@ -128,17 +130,17 @@
           <?php }?>
         </div>
         <hr>
-        <legend>Banking</legend>
+        <legend id="banking"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#banking" aria-label="PermaLink to Banking Section">&#128279;</a>':'';?>Banking</legend>
         <div class="row">
-          <div class="col-12 col-sm-6 pr-md-1">
-            <label for="bank">Bank</label>
+          <div class="col-12 col-sm-6 pr-md-3">
+            <label id="bankName" for="bank"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#bankName" aria-label="PermaLink to Bank">&#128279;</a>':'';?>Bank</label>
             <div class="form-row">
               <input class="textinput" id="bank" data-dbid="1" data-dbt="config" data-dbc="bank" type="text" value="<?php echo$config['bank'];?>" placeholder="Enter Bank...">
               <button class="save" id="savebank" data-tooltip="tooltip" data-dbid="bank" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
-          <div class="col-12 col-sm-6 pl-md-1">
-            <label for="bankAccountName">Account Name</label>
+          <div class="col-12 col-sm-6 pl-md-3">
+            <label id="accountName" for="bankAccountName"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#accountName" aria-label="PermaLink to Account Name">&#128279;</a>':'';?>Account Name</label>
             <div class="form-row">
               <input class="textinput" id="bankAccountName" data-dbid="1" data-dbt="config" data-dbc="bankAccountName" type="text" value="<?php echo$config['bankAccountName'];?>" placeholder="Enter an Account Name...">
               <button class="save" id="savebankAccountName" data-tooltip="tooltip" data-dbid="bankAccountName" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
@@ -146,15 +148,15 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-sm-6 pr-md-1">
-            <label for="bankAccountNumber">Account Number</label>
+          <div class="col-12 col-sm-6 pr-md-3">
+            <label id="accountNumber" for="bankAccountNumber"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#accountNumber" aria-label="PermaLink to Account Number">&#128279;</a>':'';?>Account Number</label>
             <div class="form-row">
               <input class="textinput" id="bankAccountNumber" data-dbid="1" data-dbt="config" data-dbc="bankAccountNumber" type="text" value="<?php echo$config['bankAccountNumber'];?>" placeholder="Enter an Account Number...">
               <button class="save" id="savebankAccountNumber" data-tooltip="tooltip" data-dbid="bankAccountNumber" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
-          <div class="col-12 col-sm-6 pl-md-1">
-            <label for="bankBSB">BSB</label>
+          <div class="col-12 col-sm-6 pl-md-3">
+            <label id="accountBSB" for="bankBSB"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#accountBSB" aria-label="PermaLink to Account BSB">&#128279;</a>':'';?>BSB</label>
             <div class="form-row">
               <input class="textinput" id="bankBSB" data-dbid="1" data-dbt="config" data-dbc="bankBSB" type="text" value="<?php echo$config['bankBSB'];?>" placeholder="Enter a BSB...">
               <button class="save" id="savebankBSB" data-tooltip="tooltip" data-dbid="bankBSB" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
@@ -162,9 +164,9 @@
           </div>
         </div>
         <hr>
-        <legend>PayPal</legend>
-        <div class="form-row">
-          <label for="payPalClientID">Client&nbsp;ID</label>
+        <legend id="paypal"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#paypal" aria-label="PermaLink to Pay Pal Section">&#128279;</a>':'';?>PayPal</legend>
+        <div id="paypalID" class="form-row">
+          <label for="payPalClientID"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#paypalID" aria-label="PermaLink to Pay Pal Client ID">&#128279;</a>':'';?>Client&nbsp;ID</label>
           <?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
             <small class="form-text text-right">You will need to a PayPal Business Account to get a Client ID.</small>
           <?php }?>
@@ -188,7 +190,7 @@
           </div>
         </div> */ ?>
         <hr>
-        <legend>Order Processing</legend>
+        <legend id="orderProcessing"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderProcessing" aria-label="PermaLink to Order Processing Section">&#128279;</a>':'';?>Order Processing</legend>
         <div class="form-row">
           <div class="input-text">Allow</div>
           <select id="orderPayti" data-dbid="1" data-dbt="config" data-dbc="orderPayti" onchange="update('1','config','orderPayti',$(this).val());">
@@ -200,14 +202,14 @@
           </select>
           <div class="input-text">for Payments</div>
         </div>
-        <div class="form-row mt-3">
-          <label for="orderEmailNotes">Order&nbsp;Notes</label>
+        <div id="orderEmailNotes" class="form-row mt-3">
+          <label for="oEN"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderEmailNotes" aria-label="PermaLink to Order Email Notes">&#128279;</a>':'';?>Order&nbsp;Notes</label>
           <small class="form-text text-right">Tokens:
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{name}');return false;">{name}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{first}');return false;">{first}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{last}');return false;">{last}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{date}');return false;">{date}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailNotes').summernote('insertText','{order_number}');return false;">{order_number}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEN').summernote('insertText','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEN').summernote('insertText','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEN').summernote('insertText','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEN').summernote('insertText','{date}');return false;">{date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEN').summernote('insertText','{order_number}');return false;">{order_number}</a>
           </small>
         </div>
         <div class="form-row">
@@ -215,38 +217,39 @@
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="orderEmailNotes">
-            <textarea class="summernote" id="orderEmailNotes" name="da"><?php echo rawurldecode($config['orderEmailNotes']);?></textarea>
+            <textarea class="summernote" id="oEN" name="da"><?php echo rawurldecode($config['orderEmailNotes']);?></textarea>
           </form>
         </div>
         <hr>
-        <legend>Email Layout</legend>
+        <legend id="emailLayout"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#emailLayout" aria-label="PermaLink to Email Layout">&#128279;</a>':'';?>Email Layout</legend>
         <div class="row">
-          <input id="orderEmailReadNotification" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" type="checkbox"<?php echo$config['orderEmailReadNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="orderEmailReadNotification">Read Reciept</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#readNotification" aria-label="PermaLink to Email Read Notification Checkbox">&#128279;</a>':'';?>
+          <input id="readNotification" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" type="checkbox"<?php echo$config['orderEmailReadNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="readNotification">Read Reciept</label>
         </div>
-        <div class="form-row mt-3">
-          <label for="orderEmailSubject">Subject</label>
+        <div id="orderEmailSubject" class="form-row mt-3">
+          <label for="oES"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderEmailSubject" aria-label="PermaLink to Order Email Subject">&#128279;</a>':'';?>Subject</label>
           <small class="form-text text-right">Tokens:
-            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{name}');return false;">{name}</a>
-            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{first}');return false;">{first}</a>
-            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{last}');return false;">{last}</a>
-            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{date}');return false;">{date}</a>
-            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('orderEmailSubject','{order_number}');return false;">{order_number}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('oES','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('oES','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('oES','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('oES','{date}');return false;">{date}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('oES','{order_number}');return false;">{order_number}</a>
           </small>
         </div>
         <div class="form-row">
-          <input class="textinput" id="orderEmailSubject" data-dbid="1" data-dbt="config" data-dbc="orderEmailSubject" type="text" value="<?php echo$config['orderEmailSubject'];?>">
-          <button class="save" id="saveorderEmailSubject" data-tooltip="tooltip" data-dbid="orderEmailSubject" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="oES" data-dbid="1" data-dbt="config" data-dbc="orderEmailSubject" type="text" value="<?php echo$config['orderEmailSubject'];?>">
+          <button class="save" id="saveoES" data-tooltip="tooltip" data-dbid="oES" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <div class="form-row mt-3">
-          <label for="orderEmailLayout">Layout</label>
+        <div id="orderEmailLayout" class="form-row mt-3">
+          <label for="oEL"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderEmailLayout" aria-label="PermaLink to Order Email Notes">&#128279;</a>':'';?>Layout</label>
           <small class="form-text text-right">Tokens:
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{name}');return false;">{name}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{first}');return false;">{first}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{last}');return false;">{last}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{date}');return false;">{date}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{order_number}');return false;">{order_number}</a>
-            <a class="badge badge-secondary" href="#" onclick="$('#orderEmailLayout').summernote('insertText','{notes}');return false;">{notes}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEL').summernote('insertText','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEL').summernote('insertText','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEL').summernote('insertText','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEL').summernote('insertText','{date}');return false;">{date}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEL').summernote('insertText','{order_number}');return false;">{order_number}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#oEL').summernote('insertText','{notes}');return false;">{notes}</a>
           </small>
         </div>
         <div class="form-row">
@@ -254,7 +257,7 @@
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="orderEmailLayout">
-            <textarea class="summernote" id="orderEmailLayout" name="da"><?php echo rawurldecode($config['orderEmailLayout']);?></textarea>
+            <textarea class="summernote" id="oEL" name="da"><?php echo rawurldecode($config['orderEmailLayout']);?></textarea>
           </form>
         </div>
         <?php require'core/layout/footer.php';?>

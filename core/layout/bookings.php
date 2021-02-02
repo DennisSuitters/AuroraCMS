@@ -113,9 +113,9 @@ else{
                 if($r['status']=='confirmed')
                   $eColor='bg-success';
                 elseif($r['status']=='in-progress')
-                  $eColor='bg-warning text-dark';
+                  $eColor='bg-warning';
                 elseif($r['status']=='complete')
-                  $eColor='bg-info text-dark';
+                  $eColor='bg-info';
                 elseif($r['status']=='archived')
                   $eColor='bg-secondary';?>
                 <tr class="<?php echo$eColor;?>" id="l_<?php echo$r['id'];?>">

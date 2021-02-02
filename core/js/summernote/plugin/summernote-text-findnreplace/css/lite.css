@@ -1,0 +1,16 @@
+#findnreplaceToolbar {
+  padding: 5px;
+  background-color: var(--note-toolbar-background-color) !important;
+  border-bottom: var(--note-toolbar-border-width) var(--note-toolbar-border-style) var(--note-toolbar-border-color);
+}
+#findnreplaceToolbar .note-form-group {
+  padding: 0;
+}
+.note-display-none {
+  display: none !important; }
+
+.note-display-block {
+  display: block !important; }
+
+mark.note-findnreplace {
+  background-color: #ff0; }

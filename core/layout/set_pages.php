@@ -31,8 +31,8 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
-        <legend class="mt-3">Website Voice</legend>
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+        <legend id="websiteVoice" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#websiteVoice" aria-label="PermaLink to Website Voice Section">&#128279;</a>':'';?>Website Voice</legend>
         <?php if($config['wv_site_id']==''){?>
           <div class="alert alert-info" role="alert">
             <a class="alert-link" target="_blank" href="https://websitevoice.com/convert-text-to-audio-free">Website Voice</a> allows you to add a narrator to your Website to allow visually impaired visitors and those who wish to listen to your content read to them.<br>
@@ -41,10 +41,11 @@
           </div>
         <?php }?>
         <div class="row">
-          <input id="options16" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16" type="checkbox"<?php echo$config['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options16">Enable Website Voice</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#enableWebsiteVoice" aria-label="PermaLink to Wenable Website Voice Checkbox">&#128279;</a>':'';?>
+          <input id="enableWebsiteVoice" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16" type="checkbox"<?php echo$config['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="enableWebsiteVoice">Enable Website Voice</label>
         </div>
-        <label for="update_url">WV_SITE_ID</label>
+        <label id="websiteVoiceID" for="update_url"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#websiteVoiceID" aria-label="PermaLink to Website Voice ID">&#128279;</a>':'';?>WV_SITE_ID</label>
         <div class="form-row">
           <input class="textinput" id="wv_site_id" data-dbid="1" data-dbt="config" data-dbc="wv_site_id" type="text" value="<?php echo$config['wv_site_id'];?>" placeholder="Enter Website Voice ID...">
           <button class="save" id="savewv_site_id" data-dbid="wv_site_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
@@ -53,6 +54,7 @@
         <?php if(!file_exists('layout/'.$config['theme'].'/theme.ini')){
           echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         }else{?>
+          <legend id="quickPageEdit"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#quickPageEdit" aria-label="PermaLink to Quick Page Edit Section">&#128279;</a>':'';?>Quick Page Edit</legend>
           <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('trash');">
             <label for="fileEditSelect">File:</label>
             <div class="form-row">

@@ -66,7 +66,7 @@ else{?>
         </div>
       </div>
       <div class="container-fluid p-0">
-        <div class="card border-radius-0 shadow p-3">
+        <div class="card border-radius-0 shadow px-4 py-3">
           <div class="row">
             <div class="col-12">
               <h4>Details</h4>

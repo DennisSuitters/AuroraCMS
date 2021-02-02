@@ -217,7 +217,13 @@ if(stristr($html,'<buildMenu')){
 		$htmlMenu.=$menuItem;
 	}
 	if($menuLogin!=''){
-		$menuLogin=preg_replace('/<print url>/',URL,$menuLogin,1);
+		$menuLogin=preg_replace([
+			'/<print url>/',
+			'/<print urlself>/'
+		],[
+			URL,
+			$_SERVER['REQUEST_URI']
+		],$menuLogin,1);
 		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
 			$menuLogin='';
 		else{
@@ -230,7 +236,7 @@ if(stristr($html,'<buildMenu')){
 		'/<print cart=[\"\']?quantity[\"\']?>/'
 	],[
 		$htmlMenu,
-		$crtr['quantity']>0?$crtr['quantity']:''
+		(isset($crtr)&&$crtr['quantity']>0?$crtr['quantity']:'')
 	],$html,1);
 }
 if(stristr($html,'<buildSocial')){

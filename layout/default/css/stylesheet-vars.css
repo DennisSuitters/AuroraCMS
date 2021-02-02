@@ -4,6 +4,8 @@
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size: 1rem;
+  --line-height: 1.5;
+  --line-clamp: 1;
   --body-background-color: #f6f8fA;
   --color: #000;
   --color-muted: #6c757d;
@@ -22,6 +24,11 @@
   --border-style: solid;
   --mark-background-color: #ff0;
   --figcaption-color: #888;
+
+  --page-progress-zindex: 2000;
+  --page-progress-height: .45em;
+  --page-progress-start-color: #09c;
+  --page-progress-end-color: #f44;
 
   --header-background-color: #4650F8;
   --header-color: #fff;
@@ -138,6 +145,8 @@
 
   --form-border-color: #ced4da;
   --form-border-color-hover: #007bff;
+  --form-background-color:#fff;
+  --form-background-color-hover:#fff;
   --form-color: #495057;
   --form-placeholder-color: #999;
   --form-focus-color: #495057;
@@ -172,7 +181,7 @@
   --card-figcaption-background-color: rgba(0, 0, 0, .5);
   --card-figcaption-color: #fff;
   --card-body-lines: 3;
-  --width-card: 225px;
+  --width-card: 300px;
   --width-card-medium: 460px;
   --width-card-wide: 800px;
   --width-content: 100%;
@@ -188,6 +197,8 @@
 
   --dialog-backdrop-color: rgba(0, 0, 0, .9);
   --dialog-background-color: #fff;
+  --dialog-header-background-color: #fff;
+  --dailog-footer-background-color: #fff;
   --dialog-color: #000;
   --dialog-border-color: #e9e9e9;
   --dialog-border-radius: .25rem;
@@ -203,43 +214,11 @@
   --slidertron-background-color: #ddd;
 
   --jumbotron-background-color: #ddd;
+
+  --starRating-color: #ffdf00;
+  --starRating-outline-width: 1px;
+  --starRating-outline-color: #888;
+
+  --chat-zindex: 1020;
+  --chat-header-color: #e9e9e9;
 };
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --body-background-color: #333;
-    --color: #f7f7f7;
-    --color-muted: #aaa;
-    --link-color: #007bff;
-    --link-color-hover: #0056b3;
-    --content-background-color: #555;
-    --content-border-color: #007bff;
-    --box-shadow-color: #bbbbbb10;
-    --border-color: #444;
-
-    --menu-background-color: #343a40;
-    --menu-background-color-hover: #454b51;
-    --menu-background-color-active: #454b51;
-    --menu-color: #fff;
-    --menu-color-active: ;
-    --menu-link-color: #ffffff80;
-    --menu-link-color-hover: #ffffff40;
-    --menu-link-color-active: #fff;
-    --menu-dropdown-background-color: #343a40;
-    --menu-dropdown-border-color: #666;
-
-    --table-background-color: #444;
-    --table-color: #fff;
-    --table-head-background-color: #000;
-    --table-head-color: #fff;
-    --table-border-color: #666;
-    --table-zebra-background: #555;
-
-    --code-background-color: #222;
-    --code-color: #fff;
-    --code-border-color: #666;
-
-    --jumbotron-background-color: #222;
-
-  };
-}

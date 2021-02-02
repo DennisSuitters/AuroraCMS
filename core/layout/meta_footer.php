@@ -163,16 +163,17 @@
                 var path_splitted=file.url.split('.');
                 var fileExt=path_splitted.pop();
                 var filename="core/images/i-file.svg";
-                if(fileExt=="jpg"||fileExt=="jpeg"||fileExt=="png"||fileExt=="gif"||fileExt=="bmp"||fileExt=="webp"||fileExt=="svg"){
+                var fileExtCheck=fileExt.toLowerCase();
+                if(fileExtCheck=="jpg"||fileExtCheck=="jpeg"||fileExtCheck=="png"||fileExtCheck=="gif"||fileExtCheck=="bmp"||fileExtCheck=="webp"||fileExtCheck=="svg"){
                   filename=file.url;
                 }
-                if(fileExt=="pdf"){
+                if(fileExtCheck=="pdf"){
                   filename='core/images/i-file-pdf.svg';
                 }
-                if(fileExt=="zip"||fileExt=="zipx"||fileExt=="tar"||fileExt=="gz"||fileExt=="rar"||fileExt=="7zip"||fileExt=="7z"||fileExt=="bz2"){
+                if(fileExtCheck=="zip"||fileExtCheck=="zipx"||fileExtCheck=="tar"||fileExtCheck=="gz"||fileExtCheck=="rar"||fileExtCheck=="7zip"||fileExtCheck=="7z"||fileExtCheck=="bz2"){
                   filename='core/images/i-file-archive.svg';
                 }
-                if(fileExt=="doc"||fileExt=="docx"||fileExt=="xls"){
+                if(fileExtCheck=="doc"||fileExtCheck=="docx"||fileExtCheck=="xls"){
                   filename="core/images/i-file-docs.svg";
                 }
                 var timestamp = $.now();
@@ -183,7 +184,7 @@
                 $('#atts').val(atts);
               }
             }else{
-              if(file.url.match(/\.(jpeg|jpg|gif|png|webp)$/)){
+              if(file.url.match(/\.(jpeg|JPEG|jpg|JPG|gif|GIF|png|PNG|webp|WEBP)$/)){
                 $('#'+id).val(file.url);
                 $('.note-image-btn').removeAttr("disabled");
               }else{
@@ -292,7 +293,8 @@
           lang:'en-US',
           toolbar:[
             ['save',['save']],
-            ['style',['style']],
+            ['find',['findnreplace']],
+            ['style',['cleaner','style']],
             ['font',['bold','italic','underline','clear']],
             ['para',['ul','ol','paragraph']],
             ['table',['table']],
@@ -408,6 +410,32 @@
         });
     	}
     );
+    if($('.tab-control').length>0){
+      $('.tab-control').on('click',function(){
+        var tab=$(this).attr('id');
+        window.location.hash = tab;
+      });
+      if (location.href.indexOf("#") != -1) {
+        var tab = window.location.hash.substr(1);
+        if(tab != '') {
+          if(!tab.includes("tab")) {
+            var clo=document.getElementById(tab);
+            var tab = clo.closest("[data-tabid]").dataset.tabid;
+          }
+          var cbarray = document.getElementsByName('tabs');
+          for(var i = 0; i < cbarray.length; i++){
+            cbarray[i].checked = false;
+          }
+          document.getElementById(tab).checked = true;
+        }else{
+          document.getElementById('tab1-1').checked = true;
+        }
+      }else{
+        if(document.getElementById('tab1-1')) {
+          document.getElementById('tab1-1').checked = true;
+        }
+      }
+    }
     setInterval(function(){
       $.get("<?php echo URL;?>/core/nav-stats.php",{},function(results){
         var stats=results.split(",");
@@ -629,21 +657,6 @@ if($view=='content'||$view=='pages'&&$args[0]=='edit'){
 <?php }?>
 </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
-<?php /*    <div class="modal fade" id="editseo" tabindex="-1" role="dialog">
-      <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">SEO Editor</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body p-4">
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div> */ ?>
     <div class="page-block">
       <div class="spinner">
         <div class="sk-chase">

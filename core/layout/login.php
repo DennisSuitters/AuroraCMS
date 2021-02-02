@@ -40,13 +40,13 @@
   <body class="<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}?>">
     <main>
       <div class="row position-relative">
-        <div class="col-12 col-md-6 p-0 m-0 vert-shadow d-none d-md-block <?php currentSeason();?>">
+        <div class="col-12 col-md-6 p-0 m-0 vert-shadow d-none d-md-block <?php $season=currentSeason();?>">
           <time class="logindate mr-3" datetime="<?php echo date("Y-m-d\TH:i:s");?>"><?php echo date($config['dateFormat']);?></time>
         </div>
         <div class="col-12 col-md-6 p-5">
           <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
           <img class="login-logo m-4" src="core/images/auroracms.svg" alt="AuroraCMS">
-          <form id="login" method="post" action="<?php echo (requestSameDomain()==true?$_SERVER['HTTP_REFERER']:rtrim($settings['system']['admin'],'/').'/dashboard');?>" accept-charset="UTF-8">
+          <form id="login" method="post" action="<?php echo(isset($_SERVER['HTTP_REFERER'])&&stristr($_SERVER['REQUEST_URI'],'logout')?$_SERVER['HTTP_REFERER']:URL.$settings['system']['admin'].'/dashboard');?>" accept-charset="UTF-8">
             <input name="act" type="hidden" value="login">
             <div class="row mt-3">
               <label for="username">Username</label>
@@ -71,7 +71,7 @@
             <div class="form-row" id="rstfeedback"></div>
           </form>
           <div class="row mt-4">
-            <button data-tooltip="tooltip" aria-label="Click ti show Password Reset form" onclick="$('#login,#panel-rst,.btn-message').toggleClass('d-none');"><span class="btn-message">Reset Password</span><span class="btn-message d-none">I remembered, take me back to Login</span></button>
+            <button data-tooltip="tooltip" aria-label="Click to show Password Reset form" onclick="$('#login,#panel-rst,.btn-message').toggleClass('d-none');"><span class="btn-message">Reset Password</span><span class="btn-message d-none">I remembered, take me back to Login</span></button>
           </div>
           <div class="row mt-5 text-center">
             <a href="<?php echo URL;?>">&larr; Back to <?php echo$config['business']!=''?$config['business']:'Main Site';?></a>

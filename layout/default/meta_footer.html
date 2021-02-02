@@ -8,5 +8,23 @@
 		<websitevoice>
 		<map>
 		<serviceworker>
+		<script>
+			$(document).ready(function(){
+				var getMax=function(){
+					return $(document).height() - $(window).height();
+				}
+				var getValue=function(){
+					return $(window).scrollTop();
+				}
+				var progressBar=$('.page-progress');
+				progressBar.attr({max:getMax()});
+				$(document).on('scroll',function(){
+					progressBar.attr({value:getValue()});
+				});
+				$(window).resize(function(){
+					progressBar.attr({max:getMax(),value:getValue()});
+				});
+			});
+		</script>
 	</body>
 </html>

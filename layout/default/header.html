@@ -3,9 +3,6 @@
 		<input class="menubar-input" type="checkbox" id="administration-menu">
 		<label class="menubar-label" for="administration-menu" onclick>Administration</label>
 		<ul role="menu">
-			<seohelper>
-				<li class="d-none d-sm-inline-block" role="menuitem"><button onclick="$('head').toggleClass('metashow');"><strong>Show Meta</strong></button></li>
-			</seohelper>
 			<li role="menuitem"><a href="proofs">Proofs</a></li>
 			<li role="menuitem"><a href="orders">Orders</a></li>
 			<li role="menuitem"><a href="settings">Settings</a></li>
@@ -113,10 +110,10 @@
 				</dropDown>
 				<menuLogin>
 					<li role="menuitem">
-						<a href="#login">Login</a>
+						<a href="<print url>login#login">Login</a>
 						<ul role="menui">
 							<li role="menuitem">
-								<form method="post" action="<print url>" class="padding-0">
+								<form method="post" action="<print urlself>" class="p-0">
 									<input type="hidden" name="act" value="login">
 									<label for="menuLoginUsername">Username</label>
 									<input type="text" id="menuLoginUsername" name="username" placeholder="Username...">

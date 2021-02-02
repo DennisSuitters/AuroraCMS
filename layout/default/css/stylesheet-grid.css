@@ -195,6 +195,9 @@
   .col-sm-8 {
     width: 66.666667%; }
 
+  .col-sm-max-8 {
+    min-width: 66.666667% !important; }
+
   .col-sm-8-5 {
     width: 70.833332; }
 

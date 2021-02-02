@@ -23,7 +23,7 @@
 			</article>
 		</section>
   </pagenotes>
-	<section class="row mt-2">
+	<section class="row mt-2 mb-5">
 		<item>
 			<article class="card col-12 col-sm-8">
 				<json-ld>
@@ -87,9 +87,9 @@
 						</div>
 					</cost>
 					<mediaitems>
-						<div class="media my-5 text-center">
+						<div class="media row my-5 text-center">
 							<mediaimages>
-								<a class="m-2" data-fancybox="media<print content=id>" data-id="<print media=id>" data-caption="<print media=caption>" href="<print media=file>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="img-thumbnail" loading="lazy" alt="<print media=title>"></a>
+								<a class="col-6 col-md-2 m-2" data-fancybox="media<print content=id>" data-id="<print media=id>" data-caption="<print media=caption>" href="<print media=file>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="img-thumbnail" loading="lazy" alt="<print media=title>"></a>
 							</mediaimages>
 						</div>
 					</mediaitems>
@@ -154,10 +154,10 @@
 										<a href="<print related=linktitle>" class="card-image">
 											<img <print thumb=srcset>src="<print related=thumb>" loading="lazy" alt="<print related=imageALT>">
 										</a>
-										<div class="card-footer d-inline-block text-center p-1 py-2">
-											<a class="stretched-link" href="<print related=linktitle>">
-												<print related="title">
-											</a>
+										<div class="card-footer d-inline-block text-center line-clamp p-1 py-2">
+											<h4 class="line-clamp">
+												<a class="stretched-link" href="<print related=linktitle>" title="<print related=title>"><print related="title"></a>
+											</h4>
 										</div>
 										<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print related="contentType"></div>
 									</article>
@@ -170,7 +170,7 @@
 		</item>
 		<settings itemCount="all">
 		<contentitems>
-				<section class="col-12 col-sm-8 order-2 order-sm-1">
+			<section class="col-12 col-sm-8 order-2 order-sm-1 mb-5">
 				<items>
 					<article class="card col-12 col-sm-5 mt-0 mr-4 mb-4 ml-0 p-0">
 						<div class="card-image">
@@ -184,7 +184,7 @@
 							</quickview>
 						</div>
 						<div class="card-header">
-							<div class="title"><h2 class="h4"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
+							<div class="title"><h2 class="h4 line-clamp"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></h2></div>
 							<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
 						</div>
 						<div class="card-body">

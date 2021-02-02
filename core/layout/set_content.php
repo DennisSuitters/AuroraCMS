@@ -30,17 +30,19 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
-        <legend>Related Content</legend>
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+        <legend id="relatedContentSection"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#relatedContentSection" aria-label="PermaLink to Content Related Content Section">&#128279;</a>':'';?>Related Content</legend>
         <div class="row">
-          <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?php echo$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options11">Enable Related Content</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableRelated" aria-label="PermaLink to Enable Related Content Checkbox">&#128279;</a>':'';?>
+          <input id="enableRelated" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?php echo$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="enableRelated">Enable Related Content</label>
         </div>
         <div class="row">
-          <input id="options10" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10" type="checkbox"<?php echo$config['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options10">Display Similar Category if no Related Content items are selected</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#displaySimilar" aria-label="PermaLink to Content Display Similar Content Checkbox">&#128279;</a>':'';?>
+          <input id="displaySimilar" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10" type="checkbox"<?php echo$config['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="displaySimilar">Display Similar Category if no Related Content items are selected</label>
         </div>
-        <label for="defaultOrder">Default Order for Content Items</label>
+        <label id="contentDefaultOrder" for="defaultOrder"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#contentDefaultOrder" aria-label="PermaLink to Content Display Order Selector">&#128279;</a>':'';?>Default Order for Content Items</label>
         <div class="form-row">
           <select id="defaultOrder" data-dbid="1" data-dbt="config" data-dbc="defaultOrder" onchange="update('1','config','defaultOrder',$(this).val());"<?php echo$user['options'][1]==1?'':' disabled';?>>
             <option value="new"<?php echo$config['defaultOrder']=='new'?' selected':'';?>>Newest</option>
@@ -50,16 +52,17 @@
             <option value="view"<?php echo$config['defaultOrder']=='view'?' selected':'';?>>Most viewed</option>
           </select>
         </div>
-        <label for="showItems">Item Count</label>
+        <label id="itemCount" for="showItems"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#itemCount" aria-label="PermaLink to Content Item Count Field">&#128279;</a>':'';?>Item Count</label>
         <div class="form-row">
           <input class="textinput" id="showItems" data-dbid="1" data-dbt="config" data-dbc="showItems" type="text" value="<?php echo$config['showItems'];?>" placeholder="Enter Item Count...">
           <button class="save" id="saveshowItems" data-tooltip="tooltip" data-dbid="showItems" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="row mt-3">
-          <input id="options5" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?php echo$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options5">Quick View for Products</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
+          <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?php echo$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="enableQuickView">Quick View for Products</label>
         </div>
-        <legend class="mt-3 mb-0">Categories</legend>
+        <legend id="categoriesSection" class="mt-3 mb-0"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#categoriesSection" aria-label="PermaLink to Categories Section">&#128279;</a>':'';?>Categories</legend>
         <form target="sp" method="POST" action="core/add_category.php">
           <div class="row">
             <div class="col-12 col-md-6">
@@ -116,7 +119,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].
             </div>
           <?php }?>
         </div>
-        <legend class="mt-3 mb-0">Brands</legend>
+        <legend id="brandSection" class="mt-3 mb-0"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#brandSection" aria-label="PermaLink to Brands Section">&#128279;</a>':'';?>Brands</legend>
         <form target="sp" method="post" action="core/add_brand.php">
           <div class="row">
             <div class="col-12 col-md-6">

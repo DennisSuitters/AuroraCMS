@@ -42,7 +42,7 @@ if($cT=='all'||$cT=='mixed'||$cT=='folder'){
 		foreach(glob('media/carousel/*.*')as$file){
 			$fileinfo=pathinfo($file);
 			$filetime=filemtime($file);
-			if($file=='.'||$file='..')continue;
+			if($file=='.'||$file=='..')continue;
 			$filename=basename($file,'.'.$fileinfo['extension']);
 			if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'||$fileinfo['extension']=='webp'){
 				if(!in_array('media/carousel/'.$filename.'.html',$featuredfiles)){
@@ -83,8 +83,7 @@ if($cT!='folder'){
 				'attributionImageName'=>$r['attributionImageName'],
 				'attributionImageURL'=>$r['attributionImageURL'],
 				'notes'=>$r['notes'],
-				'ti'=>$r['ti'
-				]
+				'ti'=>$r['ti']
 			];
 		}
 	}
@@ -101,8 +100,8 @@ $ii=count($featuredfiles);
 $i=0;
 $ci=0;
 $indicators='';
-$arrowsPrev='';
-$arrowsNext='';
+$arrowsprev='';
+$arrowsnext='';
 if($ii>0){
 	foreach($featuredfiles as$key=>$r){
 		$item=$it;
@@ -177,7 +176,7 @@ if($ii>0){
 		}
 		$items.=$item;
 		$i++;$ci++;if($ci>8)$ci=0;
-		$indicators.=$indicatorItem;
+		$indicators.=$indicators;
 	}
 }
 if($ii>1){

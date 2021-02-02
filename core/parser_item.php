@@ -571,7 +571,6 @@ if(stristr($html,'<item')){
       '/<map>/'
     ],[
       ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?
-        '<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css">'.
         '<script src="core/js/leaflet/leaflet.js"></script>'.
         '<script>'.
           'var map=L.map("map").setView(['.$r['geo_position'].'],13);'.
@@ -583,15 +582,6 @@ if(stristr($html,'<item')){
             'zoomOffset:-1,'.
             'accessToken:`'.$config['mapapikey'].'`'.
         '}).addTo(map);'.
-        'var myIcon=L.icon({'.
-          'iconUrl:`'.URL.'core/js/leaflet/images/marker-icon.png`,'.
-          'iconSize:[38,95],'.
-          'iconAnchor:[22,94],'.
-          'popupAnchor:[-3,-76],'.
-          'shadowUrl:`'.URL.'core/js/leaflet/images/marker-shadow.png`,'.
-          'shadowSize:[68,95],'.
-          'shadowAnchor:[22,94]'.
-        '});'.
         'var marker=L.marker(['.$r['geo_position'].'],{draggable:false}).addTo(map);'.
         ($r['title']==''?'':
           'var popupHtml=`<strong>'.$r['title'].'</strong>'.
@@ -622,7 +612,7 @@ if(stristr($html,'<item')){
       '"image":'.
       '{'.
         '"@type":"ImageObject",'.
-        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).'"':FAVICON).'"'.
+        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
       '},'.
       '"editor":"'.htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8').'",'.
       '"genre":"'.
@@ -801,31 +791,33 @@ if(stristr($html,'<item')){
             ':id'=>$rr['id'],
             ':rank'=>$_SESSION['rank']
           ]);
-          $ri=$si->fetch(PDO::FETCH_ASSOC);
-          $ri['thumb']=rawurldecode($ri['thumb']);
-          if($ri['thumb']==''||!file_exists('media/thumbs/'.basename($ri['thumb'])))
-            $ri['thumb']=NOIMAGESM;
-          $relatedQuantity='';
-          if(is_numeric($ri['quantity'])&&$ri['quantity']!=0)
-            $relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
-          $relateditem=preg_replace([
-            '/<print related=[\"\']?linktitle[\"\']?>/',
-            '/<print thumb=[\"\']?srcset[\"\']?>/',
-            '/<print related=[\"\']?thumb[\"\']?>/',
-            '/<print related=[\"\']?imageALT[\"\']?>/',
-            '/<print related=[\"\']?title[\"\']?>/',
-            '/<print related=[\"\']?contentType[\"\']?>/',
-            '/<print related=[\"\']?quantity[\"\']?>/'
-          ],[
-            URL.$ri['contentType'].'/'.$ri['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
-            'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" ',
-            ($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.$ri['thumb']:NOIMAGESM),
-            htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'),
-            htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'),
-            $ri['contentType'],
-            $relatedQuantity
-          ],$relateditem);
-          $relitems.=$relateditem;
+          if($si->rowCount()>0){
+            $ri=$si->fetch(PDO::FETCH_ASSOC);
+            $ri['thumb']=rawurldecode($ri['thumb']);
+            if($ri['thumb']==''||!file_exists('media/thumbs/'.basename($ri['thumb'])))
+              $ri['thumb']=NOIMAGESM;
+            $relatedQuantity='';
+            if(isset($ri['quantity'])&&is_numeric($ri['quantity'])&&$ri['quantity']!=0)
+              $relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
+            $relateditem=preg_replace([
+              '/<print related=[\"\']?linktitle[\"\']?>/',
+              '/<print thumb=[\"\']?srcset[\"\']?>/',
+              '/<print related=[\"\']?thumb[\"\']?>/',
+              '/<print related=[\"\']?imageALT[\"\']?>/',
+              '/<print related=[\"\']?title[\"\']?>/',
+              '/<print related=[\"\']?contentType[\"\']?>/',
+              '/<print related=[\"\']?quantity[\"\']?>/'
+            ],[
+              (isset($ri['contentType'])?URL.$ri['contentType'].'/'.$ri['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''):''),
+              (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" ':''),
+              (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.$ri['thumb']:NOIMAGESM),
+              (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),
+              (isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):''),
+              (isset($ri['contentType'])?$ri['contentType']:''),
+              $relatedQuantity
+            ],$relateditem);
+            $relitems.=$relateditem;
+          }
         }
         $related=preg_replace('~<relitems>.*?<\/relitems>~is',$relitems,$related,1);
         $item=preg_replace('~<related.*>.*?<\/related>~is',$related,$item,1);

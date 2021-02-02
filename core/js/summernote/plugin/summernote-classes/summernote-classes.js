@@ -35,7 +35,6 @@
        $editable = context.layoutInfo.editable,
        options = context.options,
           lang = options.langInfo;
-      $("head").append('<style>@media all{.note-classes{color:#888;font-weight:400;cursor:pointer;}.note-classes-active{color:#4c4;font-weight:700;}.note-status-output{height:auto!important;}}</style>');
       this.events = {
         'summernote.mousedown': function (we,e) {
           e.stopPropagation();

@@ -24,7 +24,7 @@
 		</section>
 	</pagenotes>
 	<section class="row mt-5">
-		<article class="col-11 col-sm-6 m-0 p-0" id="booking">
+		<article class="col-11 col-sm-6 m-0 mb-5 p-0" id="booking">
 			<form class="card p-3" id="bookingform" method="post" action="core/add_booking.php">
 				<input type="hidden" name="emailtrap" value="none">
 				<input type="hidden" name="act" value="add_booking">
@@ -59,24 +59,27 @@
 				<input type="time" id="time" name="tim">
 				<bookservices>
 					<label for="rid">Event/Service</label>
-					<select id="rid" name="rid">
-						<option value="0">Select an Item...</option>
-						<serviceoptions>
-					</select>
-					<items>
-						<label class="card">
-							<input type="hidden" name="rid" value="<print id>">
-								<figure class="card-image">
-									<a href="<print content=linktitle>">
-										<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
-									</a>
-								</figure>
-								<div class="card-header">
-									<div class="card-title"><h2 class="h4"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
-									<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
+					<serviceselect>
+						<select id="rid" name="rid">
+							<option value="0">Select an Item...</option>
+							<serviceoptions>
+						</select>
+					</serviceselect>
+					<div class="row">
+						<items>
+							<input class="service" id="rid<print id>" type="radio" name="rid" value="<print id>" hidden>
+							<label for="rid<print id>" class="col-6 p-1">
+								<div class="card service">
+									<figure class="card-image">
+										<img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
+									</figure>
+									<div class="card-header">
+										<div class="card-title h6 text-center line-clamp" title="<print content=title>"><print content="title"></div>
+									</div>
 								</div>
-						</label>
-					</items>
+							</label>
+						</items>
+					</div>
 				</bookservices>
 				<label for="notes">Notes</label>
 				<textarea id="notes" name="notes" placeholder="Enter some Notes..."></textarea>

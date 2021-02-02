@@ -31,22 +31,23 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
         <div class="form-row mt-3">
-          <input id="newslettersEmbedImages" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0" type="checkbox"<?php echo$config['newslettersEmbedImages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="newslettersEmbedImages">&nbsp;&nbsp;Embed&nbsp;Images</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#embedImages" aria-label="PermaLink to Embed Image Checkbox">&#128279;</a>':'';?>
+          <input id="embedImages" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0" type="checkbox"<?php echo$config['newslettersEmbedImages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="embedImages">&nbsp;&nbsp;Embed&nbsp;Images</label>
           <small class="form-text text-right">Enable if your hosting doesn't support remote image access.</small>
         </div>
-        <div class="form-row mt-3">
-          <label for="newslettersSendMax">Send&nbsp;Max</label>
+        <div id="sendMax" class="form-row mt-3">
+          <label for="newslettersSendMax"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendMax" aria-label="PermaLink to Send Max">&#128279;</a>':'';?>Send&nbsp;Max</label>
           <small class="form-text text-right">Maximum Emails to Send in one Instance. '0' uses the Default of '50'.</small>
         </div>
         <div class="form-row mt-3">
           <input class="textinput" id="newslettersSendMax" type="text" value="<?php echo$config['newslettersSendMax'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendMax">
           <button class="save" id="savenewslettersSendMax" data-tooltip="tooltip" data-dbid="newslettersSendMax" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <div class="form-row mt-3">
-          <label for="newslettersSendDelay">Send&nbsp;Delay</label>
+        <div id="sendDelay" class="form-row mt-3">
+          <label id="sendDelay" for="newslettersSendDelay"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendDelay" aria-label="PermaLink to Send Delay">&#128279;</a>':'';?>Send&nbsp;Delay</label>
           <small class="form-text text-right">Seconds to Delay between Email Sends. '0' uses the default of '1' second.</small>
         </div>
         <div class="form-row">
@@ -54,7 +55,7 @@
           <button class="save" id="savenewslettersSendDelay" data-tooltip="tooltip" data-placement="top" data-dbid="newslettersSendDelay" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <hr>
-        <legend class="mt-3">Opt Out Message</legend>
+        <legend id="optOutMessage" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#optOutMessage" aria-label="PermaLink to Opt Out Message">&#128279;</a>':'';?>Opt Out Message</legend>
         <div class="form-row">
           <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="$('#optOutLayout').summernote('insertText','{optOutLink}');return false;">{optOutLink}</a>

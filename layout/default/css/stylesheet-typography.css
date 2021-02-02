@@ -189,6 +189,19 @@ sup {
   text-overflow: ellipsis;
   white-space: nowrap; }
 
+.line-clamp {
+  max-height: calc(var(--line-clamp) * 1.15 * var(--line-height));
+  overflow: hidden; }
+
+@supports (-webkit-line-clamp: var(--line-clamp)) {
+  .line-clamp {
+    max-height: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--line-clamp);
+  }
+}
+
 .text-muted {
   color: var(--color-muted) !important; }
 

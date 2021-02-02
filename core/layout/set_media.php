@@ -31,49 +31,50 @@
      </div>
    </div>
    <div class="container-fluid p-0">
-     <div class="card border-radius-0 shadow p-3">
-       <legend class="mt-3">Image Processing</legend>
+     <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+       <legend id="mediaProcessing" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#mediaProcessing" aria-label="PermaLink to Enable Image Processing Checkbox">&#128279;</a>':'';?>Image Processing</legend>
        <div class="row mt-3">
-         <input id="options2" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="2" type="checkbox"<?php echo$config['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-         <label for="options2">Image Resizing</label>
+         <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#imageResizing" aria-label="PermaLink to Enable Image Resizing Checkbox">&#128279;</a>':'';?>
+         <input id="mediaResizing" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="2" type="checkbox"<?php echo$config['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+         <label for="mediaResizing">Image Resizing</label>
        </div>
        <small class="form-text text-right">Uploaded Images larger than the above size will be resized to their long edge. If either value is '0', resizing will be disabled.</small>
        <div class="row">
-         <div class="col-12 col-md-6 pr-md-1">
-           <label for="mediaMaxWidth">Max Width</label>
+         <div class="col-12 col-md-6 pr-md-3">
+           <label id="mediaMaxWidth" for="mediaMaxWidth"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#mediaMaxWidth" aria-label="PermaLink to Image Maximum Width">&#128279;</a>':'';?>Max Width</label>
            <div class="form-row">
-             <input class="textinput" id="mediaMaxWidth" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidth" type="text" value="<?php echo$config['mediaMaxWidth'];?>">
-             <button class="save" id="savemediaMaxWidth" data-tooltip="tooltip" data-dbid="mediaMaxWidth" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <input class="textinput" id="mMW" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidth" type="text" value="<?php echo$config['mediaMaxWidth'];?>">
+             <button class="save" id="savemMW" data-tooltip="tooltip" data-dbid="mMW" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
-         <div class="col-12 col-md-6 pl-md-1">
-           <label for="mediaMaxHeight">Max Height</label>
+         <div class="col-12 col-md-6 pl-md-3">
+           <label id="mediaMaxHeight" for="mediaMaxHeight"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#mediaMaxHeight" aria-label="PermaLink to Image Maximum Height">&#128279;</a>':'';?>Max Height</label>
            <div class="form-row">
-             <input class="textinput" id="mediaMaxHeight" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeight" type="text" value="<?php echo$config['mediaMaxHeight'];?>">
-             <button class="save" id="savemediaMaxHeight" data-tooltip="tooltip" data-dbid="mediaMaxHeight" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <input class="textinput" id="mMH" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeight" type="text" value="<?php echo$config['mediaMaxHeight'];?>">
+             <button class="save" id="savemMH" data-tooltip="tooltip" data-dbid="mMH" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
        </div>
        <div class="row">
-         <div class="col-12 col-md-6 pr-md-1">
-           <label for="mediaMaxWidthThumb">Max Thumb Width</label>
+         <div class="col-12 col-md-6 pr-md-3">
+           <label id="mediaMaxWidthThumb" for="mediaMaxWidthThumb"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#mediaMaxWidthThumb" aria-label="PermaLink to Image Maximum Width Thumb">&#128279;</a>':'';?>Max Thumb Width</label>
            <div class="form-row">
-             <input class="textinput" id="mediaMaxWidthThumb" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidthThumb" type="text" value="<?php echo$config['mediaMaxWidthThumb'];?>">
-             <button class="save" id="savemediaMaxWidthThumb" data-tooltip="tooltip" data-dbid="mediaMaxWidthThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <input class="textinput" id="mMWT" data-dbid="1" data-dbt="config" data-dbc="mediaMaxWidthThumb" type="text" value="<?php echo$config['mediaMaxWidthThumb'];?>">
+             <button class="save" id="savemMWT" data-tooltip="tooltip" data-dbid="mMWT" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
-         <div class="col-12 col-md-6 pl-md-1">
-           <label for="mediaMaxHeightThumb">Max Thumb Height</label>
+         <div class="col-12 col-md-6 pl-md-3">
+           <label id="mediaMaxHeightThumb" for="mediaMaxHeightThumb"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#mediaMaxHeight" aria-label="PermaLink to Image Maximum Height">&#128279;</a>':'';?>Max Thumb Height</label>
            <div class="form-row">
-             <input class="textinput" id="mediaMaxHeightThumb" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeightThumb" type="text" value="<?php echo$config['mediaMaxHeightThumb'];?>">
-             <button class="save" id="savemediaMaxHeightThumb" data-tooltip="tooltip" data-dbid="mediaMaxHeightThumb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+             <input class="textinput" id="mMHT" data-dbid="1" data-dbt="config" data-dbc="mediaMaxHeightThumb" type="text" value="<?php echo$config['mediaMaxHeightThumb'];?>">
+             <button class="save" id="savemMHT" data-tooltip="tooltip" data-dbid="mMHT" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
            </div>
          </div>
        </div>
-       <label for="mediaQuality">Image Quality</label>
+       <label id="mediaQuality" for="mediaQuality"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#mediaQuality" aria-label="PermaLink to Image Quality">&#128279;</a>':'';?>Image Quality</label>
        <div class="form-row">
-         <input class="textinput" id="mediaQuality" data-dbid="1" data-dbt="config" data-dbc="mediaQuality" type="text" value="<?php echo$config['mediaQuality'];?>">
-         <button class="save" id="savemediaQuality" data-tooltip="tooltip" data-dbid="mediaQuality" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+         <input class="textinput" id="mQ" data-dbid="1" data-dbt="config" data-dbc="mediaQuality" type="text" value="<?php echo$config['mediaQuality'];?>">
+         <button class="save" id="savemQ" data-tooltip="tooltip" data-dbid="mQ" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
        </div>
        <?php require'core/layout/footer.php';?>
      </div>

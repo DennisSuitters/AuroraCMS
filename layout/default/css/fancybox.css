@@ -327,7 +327,6 @@ body.compensate-for-scrollbar {
   z-index: 99998; }
 
 .fancybox-close-small {
-  background: transparent;
   border: 0;
   border-radius: 0;
   color: #ccc;
@@ -340,11 +339,11 @@ body.compensate-for-scrollbar {
   z-index: 401; }
 
 .fancybox-close-small:hover {
-  color: #fff;
+  color: var(--button-color-hover);
   opacity: 1; }
 
 .fancybox-slide--html .fancybox-close-small {
-  color: currentColor;
+  color: var(--button-color);
   padding: 10px;
   right: 0;
   top: 0; }
@@ -728,3 +727,7 @@ body.compensate-for-scrollbar {
   .fancybox-thumbs__list a {
     max-width: calc(100% - 10px); }
 }
+
+.fancybox-content footer {
+  background: var(--dailog-footer-background-color) !important;
+  color: var(--dialog-color) !important; }

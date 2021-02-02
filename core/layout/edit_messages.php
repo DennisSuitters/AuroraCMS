@@ -64,7 +64,7 @@ if($args[0]!='compose'){
             <a class="link mb-1" href="<?php echo URL.$settings['system']['admin'].'/messages/important';?>"><?php svg('bookmark');?> Important</a><br>
             <a class="link badge mb-1" data-badge="<?php echo$sp['cnt']>0?$sp['cnt']:'';?>" href="<?php echo URL.$settings['system']['admin'].'/messages/spam';?>"><?php svg('email-spam');?> Spam</a>
           </div>
-          <div class="col-12 col-md-10 pl-3">
+          <div class="col-12 col-md-10 pl-4">
             <form target="sp" method="post" action="core/email_message.php" enctype="multipart/form-data">
               <input name="id" type="hidden" value="<?php echo$r['id'];?>">
               <div class="row">
@@ -80,20 +80,20 @@ if($args[0]!='compose'){
                 </div>
               </div>
               <?php if($args[0]!='compose'){?>
-              <label for="ti">Created</label>
+              <label id="messageDateCreated" for="ti"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageDateCreated" aria-label="PermaLink to Message Date Created Field">&#128279;</a>':'';?>Created</label>
               <div class="form-row">
                 <input id="ti" type="text" value="<?php echo isset($r['ti'])?date($config['dateFormat'],$r['ti']):date($config['dateFormat'],time());?>" readonly>
               </div>
               <?php }?>
-              <label for="subject">Subject</label>
+              <label id="messageSubject" for="subject"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageSubject" aria-label="PermaLink to Message Subject Field">&#128279;</a>':'';?>Subject</label>
               <div class="form-row">
                 <input id="subject" name="subject" type="text" value="<?php echo$args[0]=='reply'?'Re: ':'';echo$args[0]!='compose'?$r['subject']:'';?>" placeholder="Enter a Subject" required aria-required="true">
               </div>
-              <label for="to_email">To</label>
+              <label id="messageTo" for="to_email"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageTo" aria-label="PermaLink to Message To Email Field">&#128279;</a>':'';?>To</label>
               <div class="form-row">
                 <input id="to_email" name="to_email" type="text" value="<?php echo(isset($r)&&$r['to_email']!=''?$r['to_email']:'');?>" placeholder="Enter an Email..." required aria-required="true">
               </div>
-              <label for="from_email">From</label>
+              <label id="messageFrom" for="from_email"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageFrom" aria-label="PermaLink to Message From Email Field">&#128279;</a>':'';?>From</label>
               <div class="form-row">
                 <?php if($args[0]=='compose'){?>
                   <select id="from_email" name="from_email">
@@ -106,7 +106,7 @@ if($args[0]!='compose'){
                   <input id="from_email" name="from_email" type="text" value="<?php echo$args[0]=='compose'?$user['email']:$r['from_email'];?>" required aria-required="true">
                 <?php }?>
               </div>
-              <label>Attachments</label>
+              <label id="messageAttachments" for="attachments"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageAttachments" aria-label="PermaLink to Message Attachments">&#128279;</a>':'';?>Attachments</label>
               <div class="form-row">
                 <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','messages','attachments');return false;"><?php svg('browse-media');?></button>
               </div>
@@ -146,12 +146,12 @@ if($args[0]!='compose'){
                 }
               </script>
               <?php if($args[0]!='compose'){?>
-                <label for="order_notes">Message</label>
+                <label id="messageNotes" for="notes"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageNotes" aria-label="PermaLink to Message">&#128279;</a>':'';?>Message</label>
                 <div class="form-row">
-                  <iframe id="order_notes" src="core/viewemail.php?id=<?php echo$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
+                  <iframe id="notes" src="core/viewemail.php?id=<?php echo$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
                 </div>
               <?php }?>
-              <label for="bod">Reply</label>
+              <label id="messageReply" for="bod"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageReply" aria-label="PermaLink to Message">&#128279;</a>':'';?>Reply</label>
               <div class="form-row">
                 <textarea id="bod" name="bod"></textarea>
               </div>

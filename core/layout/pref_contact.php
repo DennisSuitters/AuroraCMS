@@ -30,25 +30,28 @@ $clippy=array();?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
-        <legend>Business Hours</legend>
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+        <legend id="prefBusinessHoursSection"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessHoursSection" aria-label="PermaLink to Preferences Business Hours Section">&#128279;</a>':'';?>Business Hours</legend>
         <div class="row mt-3">
           <div class="col-12 col-md-4">
             <div class="row">
-              <input id="options19" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="19" type="checkbox"<?php echo$config['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="options19">Business Hours</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessHours" aria-label="PermaLink to Preferences Business Hours Checkbox">&#128279;</a>':'';?>
+              <input id="prefBusinessHours" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="19" type="checkbox"<?php echo$config['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefBusinessHours">Business Hours</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="row">
-              <input id="options20" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="20" type="checkbox"<?php echo$config['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="options20">Use Short Day Names</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefShortDayNames" aria-label="PermaLink to Preferences Short Day Names Checkbox">&#128279;</a>':'';?>
+              <input id="prefShortDayNames" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="20" type="checkbox"<?php echo$config['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefShortDayNames">Use Short Day Names</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="row">
-              <input id="options21" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="21" type="checkbox"<?php echo$config['options'][21]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="options21">User 24 Hour Digits</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#pref24HourDigits" aria-label="PermaLink to Preferences 24 Hour Digits Checkbox">&#128279;</a>':'';?>
+              <input id="pref24HourDigits" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="21" type="checkbox"<?php echo$config['options'][21]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="pref24HourDigits">Use 24 Hour Digits</label>
             </div>
           </div>
         </div>
@@ -98,7 +101,7 @@ $clippy=array();?>
             </div>
           </div>
           <div class="col-12 col-md-3">
-            <label for="hoursinfo">Aditional Text</label>
+            <label for="hoursinfo">Additional Text</label>
             <div class="form-row">
               <input id="hoursinfo" name="info" list="hrsinfo">
               <datalist id="hrsinfo">
@@ -189,23 +192,28 @@ $clippy=array();?>
             }
           </script>
         <?php }?>
+        <hr>
+        <legend>Business Contact Details</legend>
         <div class="row mt-5">
           <div class="col-12 col-md-4">
             <div class="row">
-              <input id="options22" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="22" type="checkbox"<?php echo$config['options'][22]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="options22">Display Address</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefDisplayAddress" aria-label="PermaLink to Preferences Display Address Checkbox">&#128279;</a>':'';?>
+              <input id="prefDisplayAddress" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="22" type="checkbox"<?php echo$config['options'][22]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefDisplayAddress">Display Address</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="row">
-              <input id="options23" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="23" type="checkbox"<?php echo$config['options'][23]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="options23">Display Email</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefDisplayEmail" aria-label="PermaLink to Preferences Display Email Checkbox">&#128279;</a>':'';?>
+              <input id="prefDisplayEmail" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="23" type="checkbox"<?php echo$config['options'][23]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefDisplayEmail">Display Email</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="row">
-              <input id="options24" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="24" type="checkbox"<?php echo$config['options'][24]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-              <label for="options24">Display Phone Numbers</label>
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefDisplayPhone" aria-label="PermaLink to Preferences Display Phone Checkbox">&#128279;</a>':'';?>
+              <input id="prefDisplayPhone" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="24" type="checkbox"<?php echo$config['options'][24]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="prefDisplayPhone">Display Phone Numbers</label>
             </div>
           </div>
         </div>
@@ -226,21 +234,21 @@ $clippy=array();?>
         <div class="alert alert-danger<?php echo$config['email']!=''?' hidden':'';?>" id="emailErrorBlock" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly.</div>
         <div class="row mt-3">
           <div class="col-12 col-md-4 pr-md-2" id="businessHasError">
-            <label for="business">Business</label>
+            <label id="prefBusinessName" for="business"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessName" aria-label="PermaLink to Preferences Business Name Field">&#128279;</a>':'';?>Business&nbsp;Name</label>
             <div class="form-row">
-              <input class="textinput" id="business" data-dbid="1" data-dbt="config" data-dbc="business" type="text" value="<?php echo$config['business'];?>" placeholder="Enter a Business...">
+              <input class="textinput" id="business" data-dbid="1" data-dbt="config" data-dbc="business" type="text" value="<?php echo$config['business'];?>" placeholder="Enter a Business Name...">
               <button class="save" id="savebusiness" data-tooltip="tooltip" data-dbid="business" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-4 pr-md-2">
-            <label for="abn">ABN</label>
+            <label id="prefABN" for="abn"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefABN" aria-label="PermaLink to Preferences ABN Field">&#128279;</a>':'';?>ABN</label>
             <div class="form-row">
               <input class="textinput" id="abn" data-dbid="1" data-dbt="config" data-dbc="abn" type="text" value="<?php echo$config['abn'];?>" placeholder="Enter an ABN...">
               <button class="save" id="saveabn" data-tooltip="tooltip" data-dbid="abn" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-4" id="emailHasError">
-            <label for="email">Email</label>
+            <label id="prefEmail" for="email"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefEmail" aria-label="PermaLink to Preferences Email Field">&#128279;</a>':'';?>Email</label>
             <div class="form-row">
               <input class="textinput" id="email" data-dbid="1" data-dbt="config" data-dbc="email" type="text" value="<?php echo$config['email'];?>" placeholder="Enter an Email...">
               <button class="save" id="saveemail" data-tooltip="tooltip" data-dbid="email" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
@@ -249,69 +257,70 @@ $clippy=array();?>
         </div>
         <div class="row">
           <div class="col-12 col-md-6 pr-md-1">
-            <label for="phone">Phone</label>
+            <label id="prefPhone" for="phone"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefPhone" aria-label="PermaLink to Preferences Phone Field">&#128279;</a>':'';?>Phone</label>
             <div class="form-row">
               <input class="textinput" id="phone" data-dbid="1" data-dbt="config" data-dbc="phone" type="text" value="<?php echo$config['phone'];?>" placeholder="Enter a Phone...">
               <button class="save" id="savephone" data-tooltip="tooltip" data-dbid="phone" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-6 pl-md-1">
-            <label for="mobile">Mobile</label>
+            <label id="prefMobile" for="mobile"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMobile" aria-label="PermaLink to Preferences Mobile Field">&#128279;</a>':'';?>Mobile</label>
             <div class="form-row">
               <input class="textinput" id="mobile" data-dbid="1" data-dbt="config" data-dbc="mobile" type="text" value="<?php echo$config['mobile'];?>" placeholder="Enter a Mobile...">
               <button class="save" id="savemobile" data-tooltip="tooltip" data-dbid="mobile" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
-        <label for="address" class="">Address</label>
+        <label id="prefAddress" for="address"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefAddress" aria-label="PermaLink to Preferences Address Field">&#128279;</a>':'';?>Address</label>
         <div class="form-row">
           <input class="textinput" id="address" data-dbid="1" data-dbt="config" data-dbc="address" type="text" value="<?php echo$config['address'];?>" placeholder="Enter an Address...">
           <button class="save" id="saveaddress" data-tooltip="tooltip" data-dbid="address" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="row">
           <div class="col-12 col-md-3 pr-md-1">
-            <label for="suburb">Suburb</label>
+            <label id="prefSuburb" for="suburb"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefSuburb" aria-label="PermaLink to Preferences Suburb Field">&#128279;</a>':'';?>Suburb</label>
             <div class="form-row">
               <input class="textinput" id="suburb" data-dbid="1" data-dbt="config" data-dbc="suburb" type="text" value="<?php echo$config['suburb'];?>" placeholder="Enter a Suburb...">
               <button class="save" id="savesuburb" data-tooltip="tooltip" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1 pr-md-1">
-            <label for="city">City</label>
+            <label id="prefCity" for="city"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefCity" aria-label="PermaLink to Preferences City Field">&#128279;</a>':'';?>City</label>
             <div class="form-row">
               <input class="textinput" id="city" data-dbid="1" data-dbt="config" data-dbc="city" type="text" value="<?php echo$config['city'];?>" placeholder="Enter a City...">
               <button class="save" id="savecity" data-tooltip="tooltip" data-dbid="city" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1 pr-md-1">
-            <label for="state">State</label>
+            <label id="prefState" for="state"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefState" aria-label="PermaLink to Preferences State Field">&#128279;</a>':'';?>State</label>
             <div class="form-row">
               <input class="textinput" id="state" data-dbid="1" data-dbt="config" data-dbc="state" type="text" value="<?php echo$config['state'];?>" placeholder="Enter a State...">
               <button class="save" id="savestate" data-tooltip="tooltip" data-dbid="state" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1">
-            <label for="postcode">Postcode</label>
+            <label id="prefPostcode" for="postcode"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefPostcode" aria-label="PermaLink to Preferences Postcode Field">&#128279;</a>':'';?>Postcode</label>
             <div class="form-row">
               <input class="textinput" id="postcode" data-dbid="1" data-dbt="config" data-dbc="postcode" type="text" value="<?php echo$config['postcode']!=0?$config['postcode']:'';?>" placeholder="Enter a Postcode...">
               <button class="save" id="savepostcode" data-tooltip="tooltip" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
             </div>
           </div>
         </div>
-        <label for="country">Country</label>
+        <label id="prefCountry" for="country"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefCountry" aria-label="PermaLink to Preferences Country Field">&#128279;</a>':'';?>Country</label>
         <div class="form-row">
           <input class="textinput" id="country" data-dbid="1" data-dbt="config" data-dbc="country" type="text" value="<?php echo$config['country'];?>" placeholder="Enter a Country...">
           <button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="mapapikey">Map Box API Key</label>
+        <label id="prefMapAPIKey" for="mapapikey"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMapAPIKey" aria-label="PermaLink to Preferences Map API Key Field">&#128279;</a>':'';?>Map Box API Key</label>
         <div class="form-row">
           <input class="textinput" id="mapapikey" data-dbid="1" data-dbt="config" data-dbc="mapapikey" type="text" value="<?php echo$config['mapapikey'];?>" placeholder="Enter an API Key from Map Box...">
           <button class="save" id="savemapapikey" data-tooltip="tooltip" data-dbid="mapapikey" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="col-12 mt-3">
           <div class="row">
-            <input id="options27" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="27" type="checkbox"<?php echo$config['options'][27]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="options27">Enable Map Display</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMapDisplay" aria-label="PermaLink to Preferences Map Display Checkbox">&#128279;</a>':'';?>
+            <input id="prefMapDisplay" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="27" type="checkbox"<?php echo$config['options'][27]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefMapDisplay">Enable Map Display</label>
           </div>
         </div>
 <?php if($config['mapapikey']==''){?>

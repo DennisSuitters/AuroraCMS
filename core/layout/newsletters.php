@@ -48,7 +48,7 @@ else{
         </div>
       </div>
       <div class="container-fluid p-0">
-        <div class="card border-radius-0 shadow p-3">
+        <div class="card border-radius-0 shadow p-3 overflow-visible">
           <div class="tabs" role="tablist">
             <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
             <label for="tab1-1">Newsletters</label>
@@ -111,6 +111,13 @@ else{
                   <?php }?>
                 </tbody>
               </table>
+              <form target="sp" method="post" action="core/add_subscribers.php">
+                <div class="form-row">
+                  <div class="input-text">Email/s</div>
+                  <input id="eml" name="emails" type="text" value="" placeholder="Enter Email/s (Comma Seperated)...">
+                  <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add Subscriber/s"><?php svg('add');?></button>
+                </div>
+              </form>
               <table class="table-zebra">
                 <thead>
                   <tr>
@@ -119,11 +126,11 @@ else{
                     <th class="col-xs-3"></th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody id="subs">
                   <?php $s=$db->prepare("SELECT `id`,`email`,`ti` FROM `".$prefix."subscribers` ORDER BY `email` ASC");
                   $s->execute();
                   while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                    <tr id="s_<?php echo$r['id'];?>" class="item">
+                    <tr id="l_<?php echo$r['id'];?>" class="item">
                       <td><?php echo$r['email'];?></td>
                       <td><?php echo date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-middle">

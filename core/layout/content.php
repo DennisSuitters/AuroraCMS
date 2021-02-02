@@ -124,8 +124,8 @@ else{
         <div class="content-title-wrapper mb-0">
           <div class="content-title">
             <div class="content-title-heading">
-              <div class="content-title-icon"><?php svg('content','i-3x');?></div>
-              <div>Content</div>
+              <div class="content-title-icon"><?php svg($args[1],'i-3x');?></div>
+              <div><?php echo ucfirst($args[1]);?></div>
               <div class="content-title-actions">
                 <?php echo$user['options'][7]==1?' <a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings" role="button" aria-label="Content Settings">'.svg2('settings').'</a>':'';
                 if($args[1]!='')echo$user['options'][0]==1?' <a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" aria-label="Add '.ucfirst($args[1]).'">'.svg2('add').'</a>':'';?>

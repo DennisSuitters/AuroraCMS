@@ -29,22 +29,22 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
         <?php if($user['rank']>899){?>
           <div class="tabs" role="tablist">
             <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
             <label for="tab1-1">Settings</label>
             <input class="tab-control" id="tab1-2" name="tabs" type="radio">
             <label for="tab1-2">Helper Information</label>
-            <div class="tab1-1 border-top p-3" role="tabpanel">
+            <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
         <?php }?>
-        <label>sitemap.xml</label>
+        <label id="prefSitemap"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefSitemap" aria-label="PermaLink to Preferences Sitemap">&#128279;</a>':'';?>sitemap.xml</label>
         <div class="form-row">
           <div class="input-text col-12">
             <a target="_blank" href="<?php echo URL.'sitemap.xml';?>"><?php echo URL.'sitemap.xml';?></a>
           </div>
         </div>
-        <label>humans.txt</label>
+        <label id="prefHumans"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefHumans" aria-label="PermaLink to Preferences Humans">&#128279;</a>':'';?>humans.txt</label>
         <div class="form-row">
           <div class="input-text col-12">
             <a id="humans" target="_blank" href="<?php echo URL.'humans.txt';?>"><?php echo URL.'humans.txt';?></a>
@@ -52,40 +52,40 @@
         </div>
         <hr>
         <legend>SEO Analytics</legend>
-        <label for="ga_verification">Google&nbsp;Verification</label>
+        <label id="prefGoogleVerification" for="ga_verification"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleVerification" aria-label="PermaLink to Preferences Google Verification Field">&#128279;</a>':'';?>Google&nbsp;Verification</label>
         <div class="form-row">
           <input class="textinput" id="ga_verification" data-dbid="1" data-dbt="config" data-dbc="ga_verification" type="text" value="<?php echo$config['ga_verification'];?>" placeholder="Enter Google Site Verification Code...">
           <button class="save" id="savega_verification" data-tooltip="tooltip" data-dbid="ga_verification" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
         <div class="form-row mt-3">
-          <label for="ga_tracking">Google&nbsp;UA&nbsp;Code</label>
+          <label id="prefGoogleUACode" for="ga_tracking"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleUACode" aria-label="PermaLink to Preferences Google UA Code Field">&#128279;</a>':'';?>Google&nbsp;UA&nbsp;Code</label>
           <small class="form-text text-right">Go to <a target="_blank" href="https://analytics.google.com/">Google Analytics</a> to setup a Google Analytics Account, and get your Page Tracking Code.<br>Only the UA code is required to enter below.</small>
         </div>
         <div class="form-row">
           <input class="textinput" id="ga_tracking" data-dbid="1" data-dbt="config" data-dbc="ga_tracking" type="text" value="<?php echo$config['ga_tracking'];?>" placeholder="Enter Google UA Code...">
           <button class="save" id="savega_tracking" data-tooltip="tooltip" data-dbid="ga_tracking" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="seo_msvalidate">Microsoft Validate</label>
+        <label id="prefMicrosoftValidate" for="seo_msvalidate"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefMicrosoftValidate" aria-label="PermaLink to Preferences Microsoft Validate Field">&#128279;</a>':'';?>Microsoft Validate</label>
         <div class="form-row">
           <input class="textinput" id="seo_msvalidate" data-dbid="1" data-dbt="config" data-dbc="seo_msvalidate" type="text" value="<?php echo$config['seo_msvalidate'];?>" placeholder="Enter Microsoft Site Validation Code...">
           <button class="save" id="saveseo_msvalidate" data-tooltip="tooltip" data-dbid="seo_msvalidate" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="seo_yandexverification">Yandex Verification</label>
+        <label id="prefYandexVerification" for="seo_yandexverification"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefYandexVerification" aria-label="PermaLink to Preferences Yandex Verification Field">&#128279;</a>':'';?>Yandex Verification</label>
         <div class="form-row">
           <input class="textinput" id="seo_yandexverification" data-dbid="1" data-dbt="config" data-dbc="seo_yandexverification" type="text" value="<?php echo$config['seo_yandexverification'];?>" placeholder="Enter Yandex Site Verification Code...">
           <button class="save" id="saveseo_yandexverification" data-tooltip="tooltip" data-dbid="seo_yandexverification" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="seo_alexaverification">Alexa Verification</label>
+        <label id="prefAlexaVerification" for="seo_alexaverification"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefAlexaVerification" aria-label="PermaLink to Preferences Alexa Verification Field">&#128279;</a>':'';?>Alexa Verification</label>
         <div class="form-row">
           <input class="textinput" id="seo_alexaverification" data-dbid="1" data-dbt="config" data-dbc="seo_alexaverification" type="text" value="<?php echo$config['seo_alexaverification'];?>" placeholder="Enter Alexa Site Verification Code...">
           <button class="save" id="saveseo_alexaverification" data-tooltip="tooltip" data-dbid="seo_alexaverification" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="seo_domainverify">Domain Verify</label>
+        <label id="prefDomainVerify" for="seo_domainverify"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefDomainVerify" aria-label="PermaLink to Preferences Domain Verify Field">&#128279;</a>':'';?>Domain Verify</label>
         <div class="form-row">
           <input class="textinput" id="seo_domainverify" data-dbid="1" data-dbt="config" data-dbc="seo_domainverify" type="text" value="<?php echo$config['seo_domainverify'];?>" placeholder="Enter Domain Verification Code...">
           <button class="save" id="saveseo_domainverify" data-tooltip="tooltip" data-dbid="seo_domainverify" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="seo_domainverify">Pinterest Verify</label>
+        <label id="prefPinterestVerify" for="seo_domainverify"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefPinterestVerify" aria-label="PermaLink to Preferences Pinterest Verify Field">&#128279;</a>':'';?>Pinterest Verify</label>
         <div class="form-row">
           <input class="textinput" id="seo_pinterestverify" data-dbid="1" data-dbt="config" data-dbc="seo_pinterestverify" type="text" value="<?php echo$config['seo_pinterestverify'];?>" placeholder="Enter Pinterest Verification Code...">
           <button class="save" id="saveseo_pinterestverify" data-tooltip="tooltip" data-dbid="seo_pinterestverify" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
@@ -93,12 +93,12 @@
         <hr>
         <legend>Default SEO Fallback Information</legend>
         <div class="form-text text-muted small">The Fallback Information will be used on pages when the relevant Fields in the Content is empty.</div>
-        <label for="seoTitle">SEO Title</label>
+        <label id="prefSEOTitle" for="seoTitle"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefSEOTitle" aria-label="PermaLink to Preferences SEO Title Field">&#128279;</a>':'';?>SEO Title</label>
         <div class="form-row">
           <input class="textinput" id="seoTitle" data-dbid="1" data-dbt="config" data-dbc="seoTitle" type="text" value="<?php echo$config['seoTitle'];?>" placeholder="Enter SEO Title...">
           <button class="save" id="saveseoTitle" data-tooltip="tooltip" data-dbid="seoTitle" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
         </div>
-        <label for="seoDescription">SEO Description</label>
+        <label id="prefSEODescription" for="seoDescription"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefSEODescription" aria-label="PermaLink to Preferences SEO Description Field">&#128279;</a>':'';?>SEO Description</label>
         <div class="form-row">
           <input class="textinput" id="seoDescription" data-dbid="1" data-dbt="config" data-dbc="seoDescription" type="text" value="<?php echo$config['seoDescription'];?>" placeholder="Enter an SEO Description...">
           <button class="save" id="saveseoDescription" data-tooltip="tooltip" data-dbid="seoDescription" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
@@ -112,7 +112,7 @@
 */ ?>
         <?php if($user['rank']>899){?>
         </div>
-        <div class="tab1-2 border-top p-3" role="tabpanel">
+        <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
           <?php $sh=$db->query("SELECT * FROM `".$prefix."seo` WHERE `contentType`='all' ORDER BY `ti` DESC");
           while($rh=$sh->fetch(PDO::FETCH_ASSOC)){?>
             <details>

@@ -14,6 +14,12 @@
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+	if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+	if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
+define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
@@ -38,17 +44,16 @@ if($fu!=''){
 				':id'=>$iid,
 				':ord'=>$iid+1
 			]);
-			$thumb='media/sm/'.basename($file);
 			echo'<script>'.
 						'window.top.window.$("#mi").append(`<div class="card stats col-6 col-md-3 m-1 swing-in-top-fwd" id="mi_'.$iid.'">'.
 							'<div class="btn-group float-right">'.
 								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg2('drag').'</div>'.
 								'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times">'.svg2('view').' &nbsp;0</div>'.
 								'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
-								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$iid.'`,`media`);">'.svg2('trash').'</button>'.
+								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'media\');">'.svg2('trash').'</button>'.
 							'</div>'.
 							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'">'.
-								'<img src="'.$thumb.'" alt="Media '.$iid.'">'.
+								'<img src="media/sm/'.basename($file).'" alt="Media '.$iid.'">'.
 							'</a>'.
 						'</div>`);'.
 						'window.top.window.$().fancybox({selector:`[data-fancybox="media"]`});'.

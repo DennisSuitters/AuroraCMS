@@ -18,8 +18,7 @@ else{
     0=>'agent.play("Greeting");',
     1=>'agent.speak("Hi I\'m '.($config['seoKeywords']==''?'Clippy':$config['seoKeywords']).', I\'m here to help you with using AuroraCMS to add and edit content, and to give you tips while using the CMS to help improve your Website.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");',
     2=>'agent.speak("You can turn me off or select a different assitant in <a href=\"'.URL.$settings['system']['admin'].'/preferences/interface#options28\">Preferences -> Interface</a>.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'
-  );
-  require'core/parsedown/class.parsedown.php';?>
+  );?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
@@ -52,26 +51,29 @@ else{
     elseif($season=='xmas')
       $msg.=" Season's Greetings!";
     else
-      $msg.=" It is currently ".ucfirst($season)."!";
+      $msg.=" It is currently ".ucwords(str_replace('-',' ',$season))."!";
   }
   $msg.=" The date is ".date($config['dateFormat']);
   $msg.="</h5>";
   echo$msg;
   echo$config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'';
   echo$config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'';
-  if(!file_exists('layout/'.$config['theme'].'/theme.ini'))
+  if(!file_exists('layout/'.$config['theme'].'/theme.ini')){
     echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
-    $tid=$ti-2592000;
-    if($config['business']==''){
-      echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
-      $clippy[]='agent.play("LookUpRight");';
-      $clippy[]='agent.speak("I notice the Business Name has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/contact#business\">Preferences -> Contact</a> in the Side Menu. Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
-    }
-    if($config['email']==''){
-      echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
-      $clippy[]='agent.play("LookUpRight");';
-      $clippy[]='agent.speak("I notice the Email has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/contact#email\">Preferences -> Contact</a> in the Side Menu. Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
-    }
+    $clippy[]='agent.play("GetAttention");';
+    $clippy[]='agent.speak("I notice that a Website Theme has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/theme\">Preferences -> Theme</a> in the Side Menu.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+  }
+  $tid=$ti-2592000;
+  if($config['business']==''){
+    echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
+    $clippy[]='agent.play("LookUpRight");';
+    $clippy[]='agent.speak("I notice the Business Name has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/contact#business\">Preferences -> Contact</a> in the Side Menu. Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+  }
+  if($config['email']==''){
+    echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
+    $clippy[]='agent.play("LookUpRight");';
+    $clippy[]='agent.speak("I notice the Email has not been set! You can do this in <a href=\"'.URL.$settings['system']['admin'].'/preferences/contact#email\">Preferences -> Contact</a> in the Side Menu. Doing so will allow Messages, Newsletters and Bookings to function correctly!\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");';
+  }
 
     $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='clippy' ORDER BY rand() LIMIT 1");
     $sc->execute();
@@ -381,7 +383,8 @@ $rr=$sr->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
 <?php }
-if(file_exists('CHANGELOG.md')){?>
+if(file_exists('CHANGELOG.md')){
+  require'core/parsedown/class.parsedown.php';?>
           <div class="col-12 col-md-6 p-2">
             <div class="card p-2">
               <div class="h5"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a></div>

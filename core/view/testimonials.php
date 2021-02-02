@@ -83,13 +83,14 @@ $html=preg_replace([
 ],$html);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
-$st="SELECT * FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `status`='published' ORDER BY `ti` DESC".($count!='all'?" LIMIT 0,".$count:"");
-$s=$db->query($st);
+$s=$db->query("SELECT * FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `status`='published' ORDER BY `ti` DESC".($count!='all'?" LIMIT 0,".$count:""));
+$s->execute();
 $i=0;
 $items=$testitems='';
 if($s->rowCount()>0){
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		if($r['notes']=='')continue;
+		if($r['rating']==0)$r['rating']=1;
 		$items=$item;
 		$items=preg_replace([
 			'/<print content=[\"\']?active[\"\']?>/',

@@ -44,7 +44,15 @@ if(file_exists('../'.THEME.'/quickview.html')){
 			]);
       $thumbsitems=$item='';
       if($sm->rowCount()>0){
+				$html=preg_replace([
+					'/<print quickviewwidth>/',
+					'/<print empty>/'
+				],[
+					' col-sm-8',
+					'col-12 col-sm m-0 p-3'
+				],$html);
         while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
+					if(basename($r['file'])==basename($rm['file']))continue;
           $item=$thumbsitem;
           $item=preg_replace([
             '/<print thumbs=[\"\']?thumb[\"\']?>/',
@@ -64,8 +72,17 @@ if(file_exists('../'.THEME.'/quickview.html')){
 					'',
 					$thumbsitems
 				],$html);
-      }else
-        $html=preg_replace('~<quickviewallthumbs>.*?<\/quickviewallthumbs>~is','',$html);
+      }else{
+        $html=preg_replace([
+					'~<quickviewallthumbs>.*?<\/quickviewallthumbs>~is',
+					'/<print quickviewwidth>/',
+					'/<print empty>/'
+				],[
+					'',
+					' col-sm-6',
+					' d-none'
+				],$html);
+			}
     }else
 			$html=preg_replace('~<quickviewallthumbs>.*?<\/quickviewallthumbs>~is','',$html);
     if($r['file']=='')$r['file']=NOIMAGE;

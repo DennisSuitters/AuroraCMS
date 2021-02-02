@@ -26,3 +26,17 @@
 - Virtual Assistant ????
 - Store Search Queries when Tracking is enabled.
 - Add parser to display booking service selection as styled elements for better visual experience for customers.
+- Add Back To Top in Administration and for Front End parsing.
+- Updated CodeMirror.
+- Add missing `country` column to content table in database.
+- Stoping Ratings hitting 0, which would throw errors for Search Engines when parsing JSON-LD Schema.
+- Tidy up and seperate some CSS for Themes, to make editing themes easier when using {stylesheet}
+- Fix Front End logging in always redirecting to Home Page.
+- Add Line Clamping to {stylesheet} to stop multiple lines for headings when using the `.line-clamp` class.
+- Add adding Newsletter Subscribers to Administration, with ability to use comma seperated list.
+- Adjust parser between elFinder and Summernote to add filenames with capitalilised extensions.
+- Add Permalinks for Administrators/Developers to link to elements to easily locate elements via links when teaching users to use the Administration area.
+- Improve the Summernote-Cleaner addon to reformat Pasted Word Documents.
+- Add Javascript to enable reading URL #'s and enable relevant Tab.
+- Add Date Format display above Date Fields and update as they change.
+- Fix position of Busy Indicator in buttons when saving fields.

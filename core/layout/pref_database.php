@@ -27,16 +27,16 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
-        <legend>Database Options</legend>
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+        <legend id="databaseOptions"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseOptions" aria-label="PermaLink to Preferences Database Options">&#128279;</a>':'';?>Database Options</legend>
         <form target="sp" method="post" action="core/changeprefix.php">
-          <label for="prefix">Table Prefix</label>
+          <label id="tablePrefix" for="prefix"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#tablePrefix" aria-label="PermaLink to Database Table Prefix Field">&#128279;</a>':'';?>Table Prefix</label>
           <div class="form-row">
             <input class="textinput" id="prefix" name="dbprefix" type="text" value="<?php echo$prefix;?>" placeholder="Enter a Table Prefix...">
             <button type="submit" onclick="$('body').append('<div id=blocker><div></div></div>');">Update</button>
           </div>
         </form>
-        <legend class="mt-3">Database Backup/Restore</legend>
+        <legend id="databaseBackupSection" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseBackupSection" aria-label="PermaLink to Preferences Database Backup/Restore">&#128279;</a>':'';?>Database Backup/Restore</legend>
         <div id="backup" name="backup">
           <div id="backup_info">
             <?php $tid=$ti-2592000;

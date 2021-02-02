@@ -7,7 +7,14 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Inventory
   - Customer/Contact List, more of a selection Widget for emails and orders.
 - Orders
+  - Add quick management options to Orders list
+  - Add Orders Quick Preview Dropdown
   - Integrate Other Payment Options look into using OmniPay (100+ Payment Gateways)
+- Content
+  - If the End Time is set, display a countdown clock, add a parser so it can appear depending on the template.
+  - Remove Tabs such as Media from displaying when editing the Home Page.
+- Search
+  - Integrate PHP's levenshtein function.
 - Import Catalogue from CSV
 - Add Content to the Wiki Pages on how to use AuroraCMS and how to create Templates.
 - Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q)

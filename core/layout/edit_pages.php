@@ -21,7 +21,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('users','i-3x');?></div>
+          <div class="content-title-icon"><?php svg('pages','i-3x');?></div>
           <div>Edit Page: <?php echo$r['title'];?></div>
           <div class="content-title-actions">
             <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
@@ -37,9 +37,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3 overflow-visible">
+      <div class="card border-radius-0 shadow px-3 py-3 overflow-visible">
         <div class="tabs" role="tablist">
-          <input id="tab1-1" class="tab-control" name="tabs" type="radio" checked>
+          <input id="tab1-1" class="tab-control" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
           <input id="tab1-2" class="tab-control" name="tabs" type="radio">
           <label for="tab1-2">Images</label>
@@ -48,9 +48,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <label for="tab1-4">SEO</label>
           <?php echo$r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
-          <div class="tab1-1 border-top p-3" role="tabpanel">
+          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-              <label for="title">Title</label>
+              <label id="pageTitle" for="title"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageTitle" aria-label="PermaLink to Page Title Field">&#128279;</a>':'';?>Title</label>
               <div class="form-row">
                 <?php if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -76,16 +76,17 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 }
               </script>
 <?php }?>
-              <label for="genurl">URL Slug</label>
+              <label id="pageURLSlug" for="urlSlug"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageURLSlug" aria-label="PermaLink to Page URL Slug">&#128279;</a>':'';?>URL Slug</label>
               <div class="form-row">
-                <div class="input-text col-12">
+                <div id="urlSlug" class="input-text col-12">
                   <a id="genurl" target="_blank" href="
                   <?php echo URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?>">
                   <?php echo URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?></a>
                 </div>
               </div>
             <?php }?>
-            <div class="row mt-3">
+            <div id="pageNotes" class="row mt-3">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'';?>
               <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
                   '<div class="btn-group d-flex justify-content-end">';
@@ -129,16 +130,16 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
 <?php /* Images */ ?>
-          <div class="tab1-2 border-top p-3" role="tabpanel">
+          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
             <legend class="mt-3">Cover</legend>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-              <label for="coverURL">URL</label>
+              <label id="pageCoverURL" for="coverURL"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverURL" aria-label="PermaLink to Page Cover Image URL Field">&#128279;</a>':'';?>Cover&nbsp;Image&nbsp;URL</label>
               <div class="form-row">
                 <input class="image" id="coverURL" type="text" value="<?php echo$r['coverURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter Cover URL..."':' readonly';?> onchange="coverUpdate('<?php echo$r['id'];?>','menu','coverURL',$(this).val());">
                 <?php echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverURL`,``);">'.svg2('trash').'</button>':'';?>
               </div>
             <?php }?>
-            <label for="cover">Image</label>
+            <label id="pageCoverImage" for="cover"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverImage" aria-label="PermaLink to Page Cover Image Field">&#128279;</a>':'';?>Image</label>
             <div class="form-row">
               <input id="cover" name="feature_image" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="cover" type="text" value="<?php echo$r['cover'];?>" readonly onchange="coverUpdate('<?php echo$r['id'];?>','menu','cover',$(this).val());">
               <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);">'.svg2('browse-media').'</button>':'';
@@ -153,13 +154,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,``);">'.svg2('trash').'</button>':'';?>
             </div>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-              <label for="exifFilename">Image ALT</label>
+              <label id="pageImageALT" for="fileALT"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageImageALT" aria-label="PermaLink to Page Cover Image ALT Field">&#128279;</a>':'';?>Image ALT</label>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?php svg('seo');?></button>
                 <input class="textinput" id="fileALT" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="fileALT" type="text" value="<?php echo$r['fileALT'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter an Image ALT Test..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" data-dbid="fileALT" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="coverVideo">Video URL</label>
+              <label id="pageVideoURL" for="coverVideo"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoURL" aria-label="PermaLink to Page Cover Video Field">&#128279;</a>':'';?>Video URL</label>
               <div class="form-row">
                 <input id="coverVideo" name="feature_image" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="coverVideo" type="text" value="<?php echo$r['coverVideo'];?>">
                 <?php echo$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`coverVideo`);">'.svg2('browse-media').'</button>'.
@@ -167,24 +168,27 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <?php echo$user['options'][1]==1?'<button class="save" id="savecoverVideo" data-tooltip="tooltip" data-dbid="coverVideo" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
               <div class="row mt-3">
-                <input id="options0" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="0" type="checkbox"<?php echo$r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options0">AutoPlay Cover Video</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoAutoplay" aria-label="PermaLink to Page Video AutoPlay Checkbox">&#128279;</a>':'';?>
+                <input id="pageVideoAutoplay" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="0" type="checkbox"<?php echo$r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                <label for="pageVideoAutoplay">AutoPlay Cover Video</label>
               </div>
               <div class="row">
-                <input id="options1" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="1" type="checkbox"<?php echo$r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options1">Loop Cover Video</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoLoop" aria-label="PermaLink to Page Cover Image">&#128279;</a>':'';?>
+                <input id="pageVideoLoop" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="1" type="checkbox"<?php echo$r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                <label for="pageVideoLoop">Loop Cover Video</label>
               </div>
               <div class="row">
-                <input id="options2" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="2" type="checkbox"<?php echo$r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label for="options2">Show Controls</label>
+                <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoControls" aria-label="PermaLink to Page Video Show Controls Checkbox">&#128279;</a>':'';?>
+                <input id="pageVideoControls" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="2" type="checkbox"<?php echo$r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                <label for="pageVideoControls">Show Controls</label>
               </div>
               <legend class="mt-3">Image Attribution</legend>
-              <label for="attributionImageTitle">Title</label>
+              <label id="pageAttributionImageTitle" for="attributionImageTitle"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAttributionImageTitle" aria-label="PermaLink to Page Image Attribution Title Field">&#128279;</a>':'';?>Title</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageTitle" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="attributionImageTitle" type="text" value="<?php echo$r['attributionImageTitle'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
                 <?php echo$user['options'][1]==1?'<button class="save" id="saveattributionImageTitle" data-tooltip="tooltip" data-dbid="attributionImageTitle" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
-              <label for="attributionImageName">Name</label>
+              <label id="pageAttributionImageName" for="attributionImageName"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAttributionImageName" aria-label="PermaLink to Page Image Attribution Name Field">&#128279;</a>':'';?>Name</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageName" list="attributionImageTitle_option" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="attributionImageName" type="text" value="<?php echo$r['attributionImageName'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
                 <?php if($user['options'][1]==1){
@@ -197,7 +201,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   echo'<button class="save" id="saveattributionImageName" data-tooltip="tooltip" data-dbid="attributionImageName" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                 }?>
               </div>
-              <label for="attributionImageURL">URL</label>
+              <label id="pageAttributionImageURL" for="attributionImageURL"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAttributionImageURL" aria-label="PermaLink to Page Image Attribution URL Field">&#128279;</a>':'';?>URL</label>
               <div class="form-row">
                 <input class="textinput" id="attributionImageURL" list="attributionImageURL_option" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="attributionImageURL" type="text" value="<?php echo$r['attributionImageURL'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
                 <?php if($user['options'][1]==1){
@@ -214,7 +218,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
 <?php /* Media */ ?>
           <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-            <div class="tab1-3 border-top p-3" role="tabpanel">
+            <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
               <?php if($user['options'][1]==1){?>
                 <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?php echo$r['id'];?>">
@@ -277,15 +281,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           <?php }?>
 <?php /* SEO */ ?>
-          <div class="tab1-4 border-top p-3" role="tabpanel">
-            <label for="views">Views</label>
+          <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
+            <label id="pageViews" for="views"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageViews" aria-label="PermaLink to Page Views Field">&#128279;</a>':'';?>Views</label>
             <div class="form-row">
               <input class="textinput" id="views" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?php echo$r['views'];?>"<?php echo$user['options'][1]==1?'':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);">'.svg2('eraser').'</button>'.
               '<button class="save" id="saveviews" data-tooltip="tooltip" data-dbid="views" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <div class="form-row mt-3">
-              <label for="metaRobots">Meta&nbsp;Robots</label>
+              <label id="pageMetaRobots" for="metaRobots"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaRobots" aria-label="PermaLink to Page Meta Robots Field">&#128279;</a>':'';?>Meta&nbsp;Robots</label>
               <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
             </div>
             <div class="form-row">
@@ -293,7 +297,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <input class="textinput" id="metaRobots" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="metaRobots" type="text" value="<?php echo$r['metaRobots'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Meta Robots Option (Left empty the default will be `index,follow`)..."':' readonly';?>>
               <?php echo$user['options'][1]==1?'<button class="save" id="savemetaRobots" data-tooltip="tooltip" data-dbid="metaRobots" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
-            <div class="card google-result mt-3 p-3 overflow-visible">
+            <div class="card google-result mt-3 p-3 overflow-visible" id="pageSearchResult">
+              <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSearchResult" aria-label="PermaLink to Page Search Result">&#128279;</a>':'';?>
               <div id="google-title" data-tooltip="tooltip" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
                 <?php echo$r['seoTitle'].' | '.$config['business'];?>
               </div>
@@ -305,7 +310,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="form-row mt-3">
-              <label for="seoTitle">Meta&nbsp;Title</label>
+              <label id="pageMetaTitle" for="seoTitle"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaTitle" aria-label="PermaLink to Page Meta Title Field">&#128279;</a>':'';?>Meta&nbsp;Title</label>
               <small class="form-text text-right">The recommended character count for Title's is 70.</small>
             </div>
             <div class="form-row">
@@ -356,7 +361,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
 */ ?>
             <div class="form-row mt-3">
-              <label for="seoDescription">Meta&nbsp;Description</label>
+              <label id="pageMetaDescription" for="seoDescription"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaDescription" aria-label="PermaLink to Page Meta Description Field">&#128279;</a>':'';?>Meta&nbsp;Description</label>
               <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
             </div>
             <div class="form-row">
@@ -402,13 +407,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
 <?php /* Settings */ ?>
           <?php if($r['contentType']!='comingsoon'&&['contentType']!='maintenance'){?>
-            <div class="tab1-5 border-top p-3" role="tabpanel">
+            <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['contentType']!='index'){?>
                 <div class="row mt-3">
-                  <input id="active<?php echo$r['id'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?php echo($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label for="active">Active</label>
+                  <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
+                  <input id="pageActive<?php echo$r['id'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?php echo($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                  <label for="pageActive">Active</label>
                 </div>
-                <label for="rank">Access</label>
+                <label id="pageAccess" for="rank"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAccess" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Access</label>
                 <div class="form-row">
                   <select id="rank" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="rank" onchange="update('<?php echo$r['id'];?>','menu','rank',$(this).val());"<?php echo$user['options'][5]==1?'':' disabled';?>>
                     <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Available to Everyone</option>
@@ -424,14 +430,22 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </select>
                 </div>
                 <?php if($user['rank']>899){?>
-                  <label for="contentType">contentType</label>
+                  <div class="form-row mt-3">
+                    <label id="pageContentType" for="contentType"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageContentType" aria-label="PermaLink to Page Content Type Field">&#128279;</a>':'';?>contentType</label>
+                    <small class="form-text text-right">
+                      <?php $sct=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
+                      $sct->execute();
+                      while($rct=$sct->fetch(PDO::FETCH_ASSOC))echo$rct['contentType'].' ';
+                      ?>
+                    </small>
+                  </div>
                   <div class="form-row">
                     <input class="textinput" id="contentType" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="contentType" type="text" value="<?php echo$r['contentType'];?>" placeholder="">
                     <button class="save" id="savecontentType" data-dbid="contentType" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
                   </div>
                 <?php }?>
                 <div class="form-row mt-3">
-                  <label for="url">URL&nbsp;Type</label>
+                  <label id="pageURLType" for="url"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageURLType" aria-label="PermaLink to Page URL Type Field">&#128279;</a>':'';?>URL&nbsp;Type</label>
                   <small class="form-text text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <code class="click" style="cursor:pointer;" onclick="$('#url').val('#<?php echo$r['contentType'];?>');update('<?php echo$r['id'];?>','menu','url',$('#url').val());"><small>#<?php echo$r['contentType'];?></small></code> to link to Anchor on same page.</small>
                 </div>
                 <div class="form-row">
@@ -441,7 +455,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
               <div class="row">
                 <div class="col-12 col-md-6 pr-md-1">
-                  <label for="menu">Menu</label>
+                  <label id="pageMenu" for="menu"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMenu" aria-label="PermaLink to Page Menu Selector">&#128279;</a>':'';?>Menu</label>
                   <div class="form-row">
                     <select id="menu"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','menu','menu',$(this).val());">
                       <option value="head"<?php echo$r['menu']=='head'?' selected':'';?>>Head</option>
@@ -451,7 +465,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
                 <div class="col-12 col-md-6 pl-md-1">
-                  <label for="mid">SubMenu</label>
+                  <label id="pageSubMenu" for="mid"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSubMenu" aria-label="PermaLink to Page SubMenu Selector">&#128279;</a>':'';?>SubMenu</label>
                   <div class="form-row">
                     <select id="mid"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','menu','mid',$(this).val());">
                       <option value="0"<?php echo$r['mid']==0?' selected':'';?>>None</option>

@@ -29,47 +29,56 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
         <?php if($user['rank']>999){?>
           <div class="row mt-3">
-            <input id="options17" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="17" type="checkbox"<?php echo$config['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="options17">Developer Lock Down</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevLock" aria-label="PermaLink to Preferences Developer Lock Checkbox">&#128279;</a>':'';?>
+            <input id="prefDevLock" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="17" type="checkbox"<?php echo$config['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefDevLock">Developer Lock Down</label>
           </div>
         <?php }?>
         <div class="row">
-          <input id="options8" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="8" type="checkbox"<?php echo$config['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options8">Display GDPR Banner.</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefGDPR" aria-label="PermaLink to Preferences GDPR Banner Checkbox">&#128279;</a>':'';?>
+          <input id="prefGDPR" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="8" type="checkbox"<?php echo$config['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="prefGDPR">Display GDPR Banner.</label>
         </div>
         <div class="row">
-          <input id="options18" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="18" type="checkbox"<?php echo$config['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="options18">Enable Offline Page (PWA).</label>
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefPWA" aria-label="PermaLink to Preferences PWA (Progressive Web Application) Checkbox">&#128279;</a>':'';?>
+          <input id="prefPWA" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="18" type="checkbox"<?php echo$config['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="prefPWA">Enable Offline Page (Progressive Web Application).</label>
         </div>
         <?php if($user['rank']>999){?>
           <div class="row">
-            <input id="development0" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0" type="checkbox"<?php echo$config['development'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="development0">Development Mode</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevMode" aria-label="PermaLink to Preferences Development Mode Checkbox">&#128279;</a>':'';?>
+            <input id="prefDevMode" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0" type="checkbox"<?php echo$config['development'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefDevMode">Development Mode</label>
           </div>
         <?php }
         if($user['rank']==1000||$config['options'][17]==0){?>
           <div class="row">
-            <input id="comingsoon0" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0" type="checkbox"<?php echo$config['comingsoon'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="comingsoon0">Coming Soon Mode</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefComingSoon" aria-label="PermaLink to Preferences Coming Soon Mode Checkbox">&#128279;</a>':'';?>
+            <input id="prefComingSoon" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0" type="checkbox"<?php echo$config['comingsoon'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefComingSoon">Coming Soon Mode</label>
           </div>
           <div class="row">
-            <input id="maintenance0" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0" type="checkbox"<?php echo$config['maintenance'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="maintenance0">Maintenance Mode</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefMaintenance" aria-label="PermaLink to Preferences Maintenance Mode Checkbox">&#128279;</a>':'';?>
+            <input id="prefMaintenance" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0" type="checkbox"<?php echo$config['maintenance'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefMaintenance">Maintenance Mode</label>
           </div>
           <div class="row">
-            <input id="options12" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="12" type="checkbox"<?php echo$config['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="options4">Admin Activity Tracking</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefAdminActivityTracking" aria-label="PermaLink to Preferences Administration Activity Tracking Checkbox">&#128279;</a>':'';?>
+            <input id="prefAdminActivityTracking" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="12" type="checkbox"<?php echo$config['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefAdminActivityTracking">Admin Activity Tracking</label>
           </div>
           <div class="row">
-            <input id="options4" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4" type="checkbox"<?php echo$config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="options4">Enable Tooltips</label>
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefTooltips" aria-label="PermaLink to Preferences Enable Tooltips Checkbox">&#128279;</a>':'';?>
+            <input id="prefTooltips" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4" type="checkbox"<?php echo$config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="prefTooltips">Enable Tooltips</label>
           </div>
           <div class="row">
-            <input id="options28" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?php echo$config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"';?> onchange="toggleAssistant();">
-            <label for="options28">Enable&nbsp;<select class="col-2 p-0" onchange="update('1','config','seoKeywords',$(this).val());">
+            <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefAssitant" aria-label="PermaLink to Preferences Enable Assitanct Checkbox">&#128279;</a>':'';?>
+            <input id="prefAssitant" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?php echo$config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"';?> onchange="toggleAssistant();">
+            <label for="prefAssistant">Enable&nbsp;<select class="col-2 p-0" onchange="update('1','config','seoKeywords',$(this).val());">
               <option value="Clippy"<?php echo$config['seoKeywords']=='Clippy'?' selected':'';?>>Clippy</option>
               <option value="Genius"<?php echo$config['seoKeywords']=='Genius'?' selected':'';?>>Genius</option>
               <option value="Links"<?php echo$config['seoKeywords']=='Links'?' selected':'';?>>Links</option>
@@ -91,6 +100,7 @@
               }
             }
           </script>
+<?php /* Fix
           <label for="uti_freq">Update Frequency</label>
           <div class="form-row">
             <select class="form-control" id="uti_freq" onchange="update('1','config','uti_freq',$(this).val());">
@@ -110,8 +120,9 @@
             <input id="update_url" class="textinput" data-dbid="1" data-dbt="config" data-dbc="update_url" type="text" value="<?php echo$config['update_url'];?>" placeholder="Enter an Update URL...">
             <button class="save" id="saveupdate_url" data-tooltip="tooltip" data-dbid="update_url" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
           </div>
+*/ ?>
           <div class="form-row mt-3">
-            <label for="idleTime">Idle&nbsp;Timeout</label>
+            <label id="prefIdleTime" for="idleTime"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefIdleTime" aria-label="PermaLink to Preferences Idle Timeout Field">&#128279;</a>':'';?>Idle&nbsp;Timeout</label>
             <small class="form-text text-right">'0' Disables Idle Timeout.</small>
           </div>
           <div class="form-row">
@@ -120,7 +131,7 @@
             <button class="save" id="saveidleTime" data-tooltip="tooltip" data-dbid="idleTime" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
           </div>
           <div class="form-row mt-3">
-            <label for="dateFormat">Date/Time Format</label>
+            <label id="prefDateFormat" for="dateFormat"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDateFormat" aria-label="PermaLink to Preferences Date Format Field">&#128279;</a>':'';?>Date/Time&nbsp;Format</label>
             <small class="form-text text-right">For information on Date Format Characters click <a target="_blank" href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">here</a>.</small>
           </div>
           <div class="form-row">
@@ -128,7 +139,7 @@
             <div class="input-text"><?php echo date($config['dateFormat'],time());?></div>
             <button class="save" id="savedateFormat" data-tooltip="tooltip" data-dbid="dateFormat" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
           </div>
-          <label for="timezone">Timezone</label>
+          <label id="prefTimezone" for="timezone"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefTimezone" aria-label="PermaLink to Preferences Timezone Selector">&#128279;</a>':'';?>Timezone</label>
           <div class="form-row">
             <select id="timezone" data-dbid="1" data-dbt="config" data-dbc="timezone" onchange="update('1','config','timezone',$(this).val());">
               <?php function get_timezones(){

@@ -17,6 +17,24 @@ require'db.php';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(!defined('THEME'))define('THEME','layout/'.$config['theme']);
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+if(!defined('FAVICON')){
+  if(file_exists(THEME.'/images/favicon.png')){
+    define('FAVICON',THEME.'/images/favicon.png');
+    define('FAVICONTYPE','image/png');
+  }elseif(file_exists(THEME.'/images/favicon.gif')){
+    define('FAVICON',THEME.'/images/favicon.gif');
+    define('FAVICONTYPE','image/gif');
+  }elseif(file_exists(THEME.'/images/favicon.jpg')){
+    define('FAVICON',THEME.'/images/favicon.jpg');
+    define('FAVICONTYPE','image/jpg');
+  }elseif(file_exists(THEME.'/images/favicon.ico')){
+    define('FAVICON',THEME.'/images/faviconico');
+    define('FAVICONTYPE','image/ico');
+  }else{
+    define('FAVICON','core/images/favicon.png');
+    define('FAVICONTYPE','image/png');
+  }
+}
 if(!defined('FAVICON128')){
   if(file_exists(THEME.'/images/favicon-128.png')){
     define('FAVICON128',THEME.'/images/favicon-128.png');
@@ -31,8 +49,8 @@ if(!defined('FAVICON128')){
     define('FAVICON128',THEME.'/images/favicon-128.ico');
     define('FAVICON128TYPE','image/ico');
   }else{
-    define('FAVICON128','core/images/favicon.png');
-    define('FAVICON128TYPE','image/png');
+    define('FAVICON128','none');
+    define('FAVICON128TYPE','none');
   }
 }
 if(!defined('FAVICON144')){
@@ -49,8 +67,8 @@ if(!defined('FAVICON144')){
     define('FAVICON144',THEME.'/images/favicon-144.ico');
     define('FAVICON144TYPE','image/ico');
   }else{
-    define('FAVICON144','core/images/favicon.png');
-    define('FAVICON144TYPE','image/png');
+    define('FAVICON144','none');
+    define('FAVICON144TYPE','none');
   }
 }
 if(!defined('FAVICON152')){
@@ -66,8 +84,9 @@ if(!defined('FAVICON152')){
   }elseif(file_exists(THEME.'/images/favicon-152.ico')){
     define('FAVICON152',THEME.'/images/favicon-152.ico');
     define('FAVICON152TYPE','image/ico');
-  }else{define('FAVICON152','core/images/favicon.png');
-    define('FAVICON152TYPE','image/png');
+  }else{
+    define('FAVICON152','none');
+    define('FAVICON152TYPE','none');
   }
 }
 if(!defined('FAVICON192')){
@@ -84,8 +103,8 @@ if(!defined('FAVICON192')){
     define('FAVICON192',THEME.'/images/favicon-192.ico');
     define('FAVICON192TYPE','image/ico');
   }else{
-    define('FAVICON192','core/images/favicon.png');
-    define('FAVICON192TYPE','image/png');
+    define('FAVICON192','none');
+    define('FAVICON192TYPE','none');
   }
 }
 if(!defined('FAVICON256')){
@@ -102,8 +121,8 @@ if(!defined('FAVICON256')){
     define('FAVICON256',THEME.'/images/favicon-256.ico');
     define('FAVICON256TYPE','image/ico');
   }else{
-    define('FAVICON256','core/images/favicon.png');
-    define('FAVICON256TYPE','image/png');
+    define('FAVICON256','none');
+    define('FAVICON256TYPE','none');
   }
 }
 if(!defined('FAVICON512')){
@@ -120,8 +139,8 @@ if(!defined('FAVICON512')){
     define('FAVICON512',THEME.'/images/favicon-512.ico');
     define('FAVICON512TYPE','image/ico');
   }else{
-    define('FAVICON512','core/images/favicon.png');
-    define('FAVICON512TYPE','image/png');
+    define('FAVICON512','none');
+    define('FAVICON512TYPE','none');
   }
 }
 echo json_encode([
@@ -134,35 +153,12 @@ echo json_encode([
   "background_color"=>'#000000',
   "theme_color"=>"#000000",
   "icons"=>[
-    [
-      "src"=>FAVICON128,
-      "sizes"=>"128x128",
-      "type"=>FAVICON128TYPE
-    ],
-    [
-      "src"=>FAVICON144,
-      "sizes"=>"144x144",
-      "type"=>FAVICON144TYPE
-    ],
-    [
-      "src"=>FAVICON152,
-      "sizes"=>"152x152",
-      "type"=>FAVICON152TYPE
-    ],
-    [
-      "src"=>FAVICON192,
-      "sizes"=>"192x192",
-      "type"=>FAVICON192TYPE
-    ],
-    [
-      "src"=>FAVICON256,
-      "sizes"=>"256x256",
-      "type"=>FAVICON256TYPE
-    ],
-    [
-      "src"=>FAVICON512,
-      "sizes"=>"512x512",
-      "type"=>FAVICON512TYPE
-    ]
+    ["src"=>FAVICON,"sizes"=>"64x64","type"=>FAVICONTYPE],
+    ["src"=>FAVICON128,"sizes"=>"128x128","type"=>FAVICON128TYPE],
+    ["src"=>FAVICON144,"sizes"=>"144x144","type"=>FAVICON144TYPE],
+    ["src"=>FAVICON152,"sizes"=>"152x152","type"=>FAVICON152TYPE],
+    ["src"=>FAVICON192,"sizes"=>"192x192","type"=>FAVICON192TYPE],
+    ["src"=>FAVICON256,"sizes"=>"256x256","type"=>FAVICON256TYPE],
+    ["src"=>FAVICON512,"sizes"=>"512x512","type"=>FAVICON512TYPE],
   ]
 ]);

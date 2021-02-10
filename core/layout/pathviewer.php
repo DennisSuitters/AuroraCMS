@@ -30,9 +30,11 @@ $s->execute([
 ]);
 if($s->rowCount()>0){
 echo'<div class="fancybox-ajax">'.
-      '<h6 class="bg-dark p-2">'.$r['title'].'</h6>'.
       '<table class="table-zebra">'.
         '<thead>'.
+          '<tr>'.
+            '<th colspan="4"><h4>Path Viewer</h4></th>'.
+          '</tr>'.
           '<tr>'.
             '<th>URL From</th>'.
             '<th>URL Dest</th>'.

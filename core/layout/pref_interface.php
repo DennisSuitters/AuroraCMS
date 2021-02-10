@@ -132,7 +132,7 @@
           </div>
           <div class="form-row mt-3">
             <label id="prefDateFormat" for="dateFormat"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDateFormat" aria-label="PermaLink to Preferences Date Format Field">&#128279;</a>':'';?>Date/Time&nbsp;Format</label>
-            <small class="form-text text-right">For information on Date Format Characters click <a target="_blank" href="http://php.net/manual/en/function.date.php#refsect1-function.date-parameters">here</a>.</small>
+            <small class="form-text text-right">For information on Date Format Characters click <a target="_blank" href="https://www.php.net/manual/en/datetime.formats.php">here</a>.</small>
           </div>
           <div class="form-row">
             <input class="textinput" id="dateFormat" data-dbid="1" data-dbt="config" data-dbc="dateFormat" type="text" value="<?php echo$config['dateFormat'];?>" placeholder="Enter a Date/Time Format...">

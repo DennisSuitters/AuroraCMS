@@ -139,6 +139,7 @@ config
   `bookingAutoReplySubject` tinytext
   `bookingAutoReplyLayout` text
   `bookingAttachment` varchar(255)
+  `bookingBuffer` INT(10) NOT NULL,
   `contactAutoReplySubject` tinytext
   `contactAutoReplyLayout` text
   `newslettersEmbedImages` int(1)
@@ -207,7 +208,7 @@ config
 content
   `id` bigint(20)
   `mid` bigint(20)
-  `options` varchar(8)
+  `options` varchar(16)
     0 Show Cost
     1 Enable Comments
     2 Enable Panorama
@@ -216,6 +217,14 @@ content
     5 Video Loop
     6 Video Controls
     7 Show Map
+    8 Newsletter match Account Tags
+    9
+    10
+    11
+    12
+    13
+    14
+    15
   `rank` int(4)
   `rid` bigint(20)
   `uid` bigint(20)
@@ -409,6 +418,7 @@ login
     31
   `username` varchar(128) COLLATE utf8_bin NOT NULL,
   `password` varchar(256) COLLATE utf8_bin NOT NULL,
+  `tags` TEXT COLLATE utf8_bin NOT NULL,
   `cover` varchar(60) COLLATE utf8_bin NOT NULL,
   `coverURL` varchar(256) COLLATE utf8_bin NOT NULL,
   `attributionImageTitle` tinytext COLLATE utf8_bin NOT NULL,
@@ -640,6 +650,7 @@ subscribers
   `id` bigint(20) NOT NULL,
   `email` varchar(255) COLLATE utf8_bin NOT NULL,
   `hash` varchar(32) COLLATE utf8_bin NOT NULL,
+  `tags` TEXT COLLATE utf8_bin NOT NULL,
   `ti` int(10) NOT NULL
 
 suggestions

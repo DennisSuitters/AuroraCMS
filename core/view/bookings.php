@@ -70,7 +70,7 @@ $html=preg_replace([
 ],[
   rawurldecode($page['notes']),
   '',
-  date('Y-m-d',time())
+  date('Y-m-dTH:i',time())
 ],$html);
 if(stristr($html,'<items>')){
   $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");

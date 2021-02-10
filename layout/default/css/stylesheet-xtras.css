@@ -1032,36 +1032,36 @@ figcaption:empty,
   text-decoration: underline; }
 
 .alert-info {
-  border-color: var(--info-border-color);
-  background-color: var(--info-background-color);
-  color: var(--info-color); }
+  border-color: var(--alert-info-border-color);
+  background-color: var(--alert-info-background-color);
+  color: var(--alert-info-color); }
 
 .alert-info a {
-  color: var(--info-link); }
+  color: var(--alert-info-link); }
 
 .alert-success {
-  border-color: var(--success-border-color);
-  background-color: var(--success-background-color);
-  color: var(--success-color); }
+  border-color: var(--alert-success-border-color);
+  background-color: var(--alert-success-background-color);
+  color: var(--alert-success-color); }
 
 .alert-success a {
-  color: var(--success-link); }
+  color: var(--alert-success-link); }
 
 .alert-warning {
-  border-color: var(--warning-border-color);
-  background-color: var(--warning-background-color);
-  color: var(--warning-color); }
+  border-color: var(--alert-warning-border-color);
+  background-color: var(--alert-warning-background-color);
+  color: var(--alert-warning-color); }
 
 .alert-warning a {
-  color: var(--warning-link); }
+  color: var(--alert-warning-link); }
 
 .alert-danger {
-  border-color: var(--danger-border-color);
-  background-color: var(--danger-background-color);
-  color: var(--danger-color); }
+  border-color: var(--alert-danger-border-color);
+  background-color: var(--alert-danger-background-color);
+  color: var(--alert-danger-color); }
 
 .alert-danger a {
-  color: var(--danger-link); }
+  color: var(--alert-danger-link); }
 
 /* Tabs */
 .tabs {

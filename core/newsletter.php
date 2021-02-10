@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Add ability to email only subscribers depending on tags per newsletter.
  */
 $getcfg=true;
 require'db.php';
@@ -19,7 +20,7 @@ define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
 $theme=parse_ini_file(THEME.'/theme.ini',true);
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$s=$db->prepare("SELECT `title`,`notes` FROM `".$prefix."content` WHERE `id`=:id");
+$s=$db->prepare("SELECT `options`,`title`,`tags`,`notes` FROM `".$prefix."content` WHERE `id`=:id");
 $s->execute([
   ':id'=>$id
 ]);
@@ -34,7 +35,7 @@ require'phpmailer/class.phpmailer.php';
 if($config['email']!=''){
   $mail=new PHPMailer;
   $body=rawurldecode($news['notes']);
-  $body=eregi_replace("[\]",'',$body);
+//  $body=preg_replace("[\]",'',$body);
   $mail->isSendmail();
   $mail->isHTML(true);
   $mail->SetFrom($config['email'],$config['business']);
@@ -61,8 +62,15 @@ if($config['email']!=''){
   $sendDelay=$config['newslettersSendDelay']!=''||$config['newslettersSendDelay']==0?$config['newslettersSendDelay']:1;
   ignore_user_abort(true);
   set_time_limit(300);
-  $s=$db->prepare("SELECT DISTINCT `email`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1");
-  $s->execute();
+  if($news['options'][8]==1){
+    $tags=explode(",",$news['tags']);
+    $tags_list=sprintf('"%s"',implode('","',$tags));
+    $s=$db->prepare("SELECT DISTINCT `email`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1 AND `tags` IN (".$tags_list.")");
+    $s->execute();
+  }else{
+    $s=$db->prepare("SELECT DISTINCT `email`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1");
+    $s->execute();
+  }
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     if(($sendCount % $betweenDelay)==0)sleep($sendDelay);
     $mail->AddAddress($r['email']);

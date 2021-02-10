@@ -264,8 +264,8 @@ body.compensate-for-scrollbar {
   padding: 0; }
 
 .fancybox-button {
-  background-color: var(--button-background-color);
-  color: var(--button-color);
+  background-color: var(--button-background-color) !important;
+  color: var(--button-color) !important;
   border: 0;
   border-radius: 0;
   box-shadow: none;

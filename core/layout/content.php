@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.1 Fix incorrect Icon being fetched when displaying Contect Type Selection Fallback. 
  */
 $rank=0;
 $show='categories';
@@ -124,7 +125,7 @@ else{
         <div class="content-title-wrapper mb-0">
           <div class="content-title">
             <div class="content-title-heading">
-              <div class="content-title-icon"><?php svg($args[1],'i-3x');?></div>
+              <div class="content-title-icon"><?php svg((isset($args[1])&&$args[1]!=''?$args[1]:'content'),'i-3x');?></div>
               <div><?php echo ucfirst($args[1]);?></div>
               <div class="content-title-actions">
                 <?php echo$user['options'][7]==1?' <a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings" role="button" aria-label="Content Settings">'.svg2('settings').'</a>':'';
@@ -238,6 +239,7 @@ else{
                 <thead>
                   <tr>
                     <th></th>
+                    <th></th>
                     <th class="col">Title</th>
                     <th class="col">Code</th>
                     <th class="col text-center d-none d-sm-table-cell">Comments</th>
@@ -248,7 +250,14 @@ else{
                 </thead>
                 <tbody>
                   <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                    <tr class="<?php if($r['status']=='delete')echo' bg-danger';elseif($r['status']!='published')echo' bg-warning';?>" id="l_<?php echo$r['id'];?>">
+                    <tr class="<?php
+                    if($r['status']=='delete'){
+                      echo' bg-danger';
+                    }elseif($r['status']=='archived'){
+                      echo' bg-info';
+                    }elseif($r['status']=='unpublished')
+                      echo' bg-warning';?>" id="l_<?php echo$r['id'];?>">
+                      <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?php echo$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('plus').svg('close','d-none');?></button></td>
                       <td class="align-middle">
                         <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))
                           echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -271,7 +280,7 @@ else{
                             <div class="small">Belongs to <a href="<?php echo URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?php echo$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
                           <?php }
                         }
-                        echo'<br><small class="text-muted">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
+                        echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
                       </td>
                       <td class="align-middle small"><small><?php echo$r['code'];?></small></td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
@@ -310,17 +319,18 @@ else{
                       <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php if($r['status']=='published'){?><button data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button><?php }?>
+                            <button class="<?php echo($r['status']=='published'?'':'d-none');?>" data-social-share="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?php echo $r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button>
                             <a class="btn" href="<?php echo URL.$settings['system']['admin'];?>/content/edit/<?php echo$r['id'];?>" role="button" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="btn add <?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
-                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
-                              <button class="btn purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
+                              <button class="btn add <?php echo$r['status']!='delete'?' d-none':'';?>" id="untrash<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
+                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" id="delete<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
+                              <button class="btn purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" id="purge<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','content');"><?php svg('purge');?></button>
                             <?php }?>
                           </div>
                         </div>
                       </td>
                     </tr>
+                    <tr class="quickedit d-none" id="quickedit<?php echo$r['id'];?>"></tr>
                   <?php }?>
                 </tbody>
               </table>

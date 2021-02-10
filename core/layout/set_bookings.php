@@ -31,18 +31,33 @@
      </div>
      <div class="container-fluid p-0">
        <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+         <label id="bufferTime" for="bookingBuffer"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/interface#bufferTime" aria-label="PermaLink to Booking Buffer Time Selector">&#128279;</a>':'';?>Buffer Time</label>
+         <div class="form-row">
+           <select id="bookingBuffer" data-dbid="1" data-dbt="config" data-dbc="bookingBuffer" onchange="update('1','config','bookingBuffer',$(this).val());">
+             <option value="0"<?php echo($config['bookingBuffer']==0?' selected':'');?>>No Buffer Time</option>
+             <option value="600"<?php echo($config['bookingBuffer']==600?' selected':'');?>>10 Minutes</option>
+             <option value="900"<?php echo($config['bookingBuffer']==900?' selected':'');?>>15 Minutes</option>
+             <option value="1800"<?php echo($config['bookingBuffer']==1800?' selected':'');?>>30 Minutes</option>
+             <option value="3600"<?php echo($config['bookingBuffer']==3600?' selected':'');?>>1 Hour</option>
+             <option value="7200"<?php echo($config['bookingBuffer']==7200?' selected':'');?>>2 Hour</option>
+             <option value="10800"<?php echo($config['bookingBuffer']==10800?' selected':'');?>>3 Hours</option>
+             <option value="21600"<?php echo($config['bookingBuffer']==21600?' selected':'');?>>6 Hours</option>
+             <option value="43200"<?php echo($config['bookingBuffer']==43200?' selected':'');?>>12 Hours</option>
+             <option value="86400"<?php echo($config['bookingBuffer']==86400?' selected':'');?>>24 Hours</option>
+           </select>
+         </div>
          <div class="row mt-3">
-          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/bookings/settings#setArchiveBookings" aria-label="PermaLink to Account Activation Layout">&#128279;</a>':'';?>
-          <input id="setArchiveBookings" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25" type="checkbox"<?php echo$config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="setArchiveBookings">Archive Bookings when Converted to Invoice</label>
-        </div>
+           <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/bookings/settings#setArchiveBookings" aria-label="PermaLink to Account Activation Layout">&#128279;</a>':'';?>
+            <input id="setArchiveBookings" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25" type="checkbox"<?php echo$config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+            <label for="setArchiveBookings">Archive Bookings when Converted to Invoice</label>
+          </div>
         <legend id="setBookingAgreementTemplate" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/bookings/settings#setBookingAgreementTemplate" aria-label="PermaLink to Booking Agreement Template">&#128279;</a>':'';?>Booking Agreement Template</legend>
         <div class="form-row">
           <form class="w-100" method="post" target="sp" action="core/update.php">
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="bookingAgreement">
-            <textarea class="summernote" id="bookingNoteLayout" name="da"><?php echo rawurldecode($config['bookingAgreement']);?></textarea>
+            <textarea class="summernote" name="da"><?php echo rawurldecode($config['bookingAgreement']);?></textarea>
           </form>
         </div>
         <hr>
@@ -52,7 +67,7 @@
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="bookingNoteTemplate">
-            <textarea class="summernote" id="bookingNoteLayout" name="da"><?php echo rawurldecode($config['bookingNoteTemplate']);?></textarea>
+            <textarea class="summernote" name="da"><?php echo rawurldecode($config['bookingNoteTemplate']);?></textarea>
           </form>
         </div>
         <hr>

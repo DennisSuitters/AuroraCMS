@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Add Tag Editing Field as well as retreiving and sorting Tags from other Content
 */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 $q->execute([
@@ -104,6 +105,33 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <input class="textinput" id="spent" type="number" value="<?php echo$r['spent'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="spent"<?php echo$user['options'][5]==1?'':' readonly';?>>
               <?php echo$user['options'][5]==1?'<button class="save" id="savespent" data-tooltip="tooltip" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+            <hr>
+            <legend role="heading">Subject Tags</legend>
+            <label id="accountTags" for="tags"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTags" aria-label="PermaLink to Tags Field">&#128279;</a>':'';?>Tags</label>
+            <div class="form-row">
+              <input class="textinput" id="tags" type="text" value="<?php echo$r['tags'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="tags"<?php echo$user['options'][5]==1?'':' readonly';?>>
+              <?php echo$user['options'][5]==1?'<button class="save" id="savetags" data-tooltip="tooltip" data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <?php if($user['options'][1]==1){
+              $tags=array();
+              $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+              if($st->rowCount()>0){
+                while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                  $tagslist=explode(",",$rt['tags']);
+                  foreach($tagslist as $t){
+                    $tgs[]=$t;
+                  }
+                }
+              }
+              $tags=array_unique($tgs);
+              asort($tags);
+              echo'<select id="tags_options" onchange="addTag($(this).val());">'.
+                '<option value="none">Clear All</option>';
+              foreach($tags as $t){
+                echo'<option value="'.$t.'">'.$t.'</option>';
+              }
+              echo'</select>';
+            }?>
           </div>
 <?php /* Tab 2 Images */ ?>
           <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">

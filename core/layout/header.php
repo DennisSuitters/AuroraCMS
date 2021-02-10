@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Fix Notification links going to incorrect pages.
  */?>
 <div id="back-to-top"></div>
 <header class="<?php currentSeason();?>">
@@ -68,8 +69,8 @@
         <label class="badge ml-4" data-badge="<?php echo($navStat>0?$navStat:'');?>" for="notification-checkbox"><?php svg('bell','i-2x');?></label>
         <ul id="nav-stat-list">
           <li class="dropdown-heading py-2">Notifications</li>
-          <?php echo$nc['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/content">'.svg2('comments').' Comments<span class="badger badge-primary">'.$nc['cnt'].'</span></a></li>':'';
-          echo$nr['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/content">'.svg2('review').' Reviews<span class="badger badge-primary">'.$nr['cnt'].'</span></a></li>':'';
+          <?php echo$nc['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/comments">'.svg2('comments').' Comments<span class="badger badge-primary">'.$nc['cnt'].'</span></a></li>':'';
+          echo$nr['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/reviews">'.svg2('review').' Reviews<span class="badger badge-primary">'.$nr['cnt'].'</span></a></li>':'';
           echo$nm['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/messages">'.svg2('inbox').' Messages<span class="badger badge-primary">'.$nm['cnt'].'</span></a></li>':'';
           echo$po['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/orders/pending">'.svg2('order').' Orders<span class="badger badge-primary">'.$po['cnt'].'</span></a></li>':'';
           echo$nb['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/bookings">'.svg2('calendar').' Bookings<span class="badger badge-primary">'.$nb['cnt'].'</span></a></li>':'';

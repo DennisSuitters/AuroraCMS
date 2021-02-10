@@ -37,11 +37,11 @@
         <form target="sp" method="post" action="core/add_postoption.php">
           <div class="form-row">
             <div class="input-text">Code</div>
-            <input id="c" name="c" type="text" value="" placeholder="Enter Code...">
+            <input name="c" type="text" value="" placeholder="Enter Code...">
             <div class="input-text">Title</div>
-            <input id="t" name="t" type="text" value="" placeholder="Enter an Option...">
+            <input name="t" type="text" value="" placeholder="Enter an Option...">
             <div class="input-text">Cost</div>
-            <input id="v" name="v" type="text" value="" placeholder="Enter Cost...">
+            <input name="v" type="text" value="" placeholder="Enter Cost...">
             <button class="add" data-tooltip="tooltip" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>
@@ -95,16 +95,16 @@
         <form target="sp" method="post" action="core/add_discountrange.php">
           <div class="form-row">
             <div class="input-text">From $</div>
-            <input id="f" name="f" type="number" value="" placeholder="Enter Code...">
+            <input name="f" type="number" value="" placeholder="Enter Code...">
             <div class="input-text">To $</div>
-            <input id="t" name="t" type="number" value="" placeholder="Enter an Option...">
+            <input name="t" type="number" value="" placeholder="Enter an Option...">
             <div class="input-text">Method</div>
-            <select id="m" name="m">
+            <select name="m">
               <option value="1">$ Off</option>
               <option value="2">&#37; Off</option>
             </select>
             <div class="input-text">Value</div>
-            <input id="v" name="v" type="number" value="" placeholder="Enter Cost...">
+            <input name="v" type="number" value="" placeholder="Enter Cost...">
             <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
           </div>
         </form>

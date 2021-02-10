@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.1 Add check if Compsing New Email contains an email set in the URL.
 */
 if($args[0]!='compose'){
   $q=$db->prepare("UPDATE `".$prefix."messages` SET `status`='read' WHERE `id`=:id");
@@ -26,7 +27,7 @@ if($args[0]!='compose'){
     'id'=>0,
     'subject'=>'',
     'to_name'=>'',
-    'to_email'=>'',
+    'to_email'=>(isset($args[1])&&$args[1]!=''?$args[1]:''),
     'from_name'=>'',
     'from_email'=>'',
     'attachments'=>'',

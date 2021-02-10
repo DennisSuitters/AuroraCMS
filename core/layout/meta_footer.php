@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Fix Notification links going to incorrect pages.
  */?>
 <script>
   $(document).on(
@@ -360,6 +361,10 @@
         keypress:function(event){
           var save=$(this).data("dbc");
           $('#save'+save).addClass('btn-danger');
+          console.log('keypress');
+//          if($('#qesave'+save).length > 0){
+            $('#qesave'+save).addClass('btn-danger');
+//          }
           $('.saveall').addClass('btn-danger');
           $('#'+save).addClass('unsaved');
           unsaved=true;
@@ -371,6 +376,10 @@
           var save=$(this).data("dbc");
           $('#'+save).addClass('unsaved');
           $('#save'+save).addClass('btn-danger');
+          console.log('change');
+//          if($('#qesave'+save).length > 0){
+            $('#qesave'+save).addClass('btn-danger');
+//          }
           unsaved=true;
         }
       });
@@ -445,8 +454,8 @@
         if(stats[0]==0)stats[0]='';
         $('#nav-nou').html(stats[2]);
         var stathtml='<li class="dropdown-heading py-2">Notifications</li>';
-        if(stats[3]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/content"><?php svg('comments');?> Comments<span class="badger badge-primary">'+stats[3]+'</span></a></li>';
-        if(stats[4]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/content"><?php svg('review');?> Reviews<span class="badger badge-primary">'+stats[4]+'</span></a></li>';
+        if(stats[3]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/comments"><?php svg('comments');?> Comments<span class="badger badge-primary">'+stats[3]+'</span></a></li>';
+        if(stats[4]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/reviews"><?php svg('review');?> Reviews<span class="badger badge-primary">'+stats[4]+'</span></a></li>';
         if(stats[5]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/messages"><?php svg('inbox');?> Messages<span class="badger badge-primary">'+stats[5]+'</span></a></li>';
         if(stats[6]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/orders/pending"><?php svg('order');?> Orders<span class="badger badge-primary">'+stats[6]+'</span></a></li>';
         if(stats[7]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/bookings"><?php svg('calendar');?> Bookings<span class="badger badge-primary">'+stats[7]+'</span></a></li>';

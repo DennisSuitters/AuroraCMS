@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Add Quick Edit to Accounts Table.
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
  * Back, Fullscreen, Settings, Print, Email, Send, Add, SaveAll
  */
@@ -72,10 +73,11 @@ else{
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow">
+      <div class="card border-radius-0 shadow overflow-visible">
         <table class="table-zebra">
           <thead>
             <tr>
+              <th></th>
               <th></th>
               <th>Username/Name</th>
               <th class="text-center d-none d-sm-table-cell">Rank</th>
@@ -86,6 +88,7 @@ else{
           <tbody>
             <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               <tr id="l_<?php echo$r['id'];?>">
+                <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?php echo$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('plus').svg('close','d-none');?></button></td>
                 <td class="align-middle">
                   <img class="avatar" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
                   elseif($r['gravatar']!='')echo$r['gravatar'];
@@ -110,6 +113,7 @@ else{
                   </div>
                 </td>
               </tr>
+              <tr class="quickedit d-none" id="quickedit<?php echo$r['id'];?>"></tr>
             <?php }?>
           </tbody>
         </table>

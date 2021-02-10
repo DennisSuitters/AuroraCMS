@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Fix mistyped variable reference.
+ * @changes    v0.1.1 Add Tag Editing Field as well as retreiving and sorting Tags from other Content
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
@@ -96,7 +98,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <label id="<?php echo$r['contentType'];?>URLSlug" for="genurl"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URLSlug" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL Slug">&#128279;</a>':'';?>URL Slug</label>
             <div class="form-row">
               <div class="input-text col-12">
-                <a id="genurl" target="_blank" href="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>"><?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?></a>
+                <a id="genurl" target="_blank" href="<?php echo URL.$r['contentType'].'/'.$r['urlSlug'];?>"><?php echo URL.$r['contentType'].'/'.$r['urlSlug'].' '.svg2('new-window');?></a>
               </div>
             </div>
             <div class="row">
@@ -250,7 +252,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-4">
-                  <label id="<?php echo$r['contentType'];?>Business" for="business"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType.'].'Business" aria-label="PermaLink to '.ucfirst($r['contentType']).' Business Field">&#128279;</a>':'';?>Business</label>
+                  <label id="<?php echo$r['contentType'];?>Business" for="business"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Business" aria-label="PermaLink to '.ucfirst($r['contentType']).' Business Field">&#128279;</a>':'';?>Business</label>
                   <div class="form-row">
                     <input class="textinput" id="business" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="business" type="text" value="<?php echo$r['business'];?>"<?php echo$user['options'][1]==1?' placeholder="Enter a Business..."':' readonly';?>>
                     <?php echo$user['options'][1]==1?'<button class="save" id="savebusiness" data-tooltip="tooltip" data-dbid="business" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
@@ -355,6 +357,33 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     }?>
                   </div>
                 </div>
+              </div>
+              <div class="row mt-3">
+                <label id="<?php echo$r['contentType'];?>tags" for="tags"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'tags" aria-label="PermaLink to '.ucfirst($r['contentType']).' Tags">&#128279;</a>':'';?>Tags</label>
+                <div class="form-row">
+                  <input class="textinput" id="tags" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?php echo$r['tags'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Tag or Select from List..."':' readonly');?>>
+                  <?php echo'<button class="save" id="savetags" data-tooltip="tooltip"  data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';?>
+                </div>
+                <?php if($user['options'][1]==1){
+                  $tags=array();
+                  $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+                  if($st->rowCount()>0){
+                    while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                      $tagslist=explode(",",$rt['tags']);
+                      foreach($tagslist as $t){
+                        $tgs[]=$t;
+                      }
+                    }
+                  }
+                  $tags=array_unique($tgs);
+                  asort($tags);
+                  echo'<select id="tags_options" onchange="addTag($(this).val());">'.
+                    '<option value="none">Clear All</option>';
+                  foreach($tags as $t){
+                    echo'<option value="'.$t.'">'.$t.'</option>';
+                  }
+                  echo'</select>';
+                }?>
               </div>
             <?php }
             if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
@@ -945,7 +974,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       </div>
                     <?php }?>
                     <h6 class="media-heading">
-                      <span class="rat d-block d-sm-inline-block">
+                      <span class="rating d-block d-sm-inline-block">
                         <span<?php echo($rr['cid']>=1?' class="set"':'');?>></span>
                         <span<?php echo($rr['cid']>=2?' class="set"':'');?>></span>
                         <span<?php echo($rr['cid']>=3?' class="set"':'');?>></span>
@@ -1203,7 +1232,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <label id="<?php echo$r['contentType'];?>Rank" for="rank"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Rank" aria-label="PermaLink to '.ucfirst($r['contentType']).' Access Selector">&#128279;</a>':'';?>Access</label>
                 <div class="form-row">
                   <select id="rank" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="rank"<?php echo$user['options'][1]==1?'':' disabled';?> onchange="update('<?php echo$r['id'];?>','content','rank',$(this).val());">
-                    <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Visitor and above</option>
+                    <option value="0"<?php echo($r['rank']==0?' selected':'');?>>Available to Everyone</option>
                     <option value="100"<?php echo($r['rank']==100?' selected':'');?>>Subscriber and above</option>
                     <option value="200"<?php echo($r['rank']==200?' selected':'');?>>Member and above</option>
                     <option value="300"<?php echo($r['rank']==300?' selected':'');?>>Client and above</option>

@@ -108,17 +108,20 @@ else{
               </tr>
             </thead>
             <tbody id="bookings">
-              <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                $eColor='bg-danger';
+              <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+                <tr class="<?php
                 if($r['status']=='confirmed')
-                  $eColor='bg-success';
-                elseif($r['status']=='in-progress')
-                  $eColor='bg-warning';
+                  echo'bg-success';
+                elseif($r['status']=='in-progess')
+                  echo'bg-warning';
                 elseif($r['status']=='complete')
-                  $eColor='bg-info';
+                  echo'bg-info';
+                elseif($r['status']=='delete')
+                  echo' bg-danger';
                 elseif($r['status']=='archived')
-                  $eColor='bg-secondary';?>
-                <tr class="<?php echo$eColor;?>" id="l_<?php echo$r['id'];?>">
+                  echo' bg-info';
+                elseif($r['status']=='unpublished')
+                  echo' bg-warning';?>" id="l_<?php echo$r['id'];?>">
                   <td class="d-table-cell d-sm-none">
                     <?php echo date($config['dateFormat'],$r['ti']).'<br>Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: ' . date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>Business: '.$r['business']:'').($r['name']!=''?'<br>Name: '.$r['name']:'').($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
                   </td>
@@ -132,9 +135,9 @@ else{
                         <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?php echo$r['id'];?>');"><?php svg('print');?></button>
                         <button class="btn" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?php echo$r['id'];?>');"><?php svg('bookingtoinvoice');?></button>
                         <?php if($user['options'][0]==1){?>
-                          <button class="btn<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" role="button" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
-                          <button class="btn trash<?php echo($r['status']=='delete'?' d-none':'');?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
-                          <button class="btn trash<?php echo($r['status']!='delete'?' d-none':'');?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo $r['id'];?>','content');"><?php svg('purge');?></button>
+                          <button class="btn<?php echo($r['status']!='delete'?' d-none':'');?>" id="untrash<?php echo$r['id'];?>" data-tooltip="tooltip" role="button" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');"><?php svg('untrash');?></button>
+                          <button class="btn trash<?php echo($r['status']=='delete'?' d-none':'');?>" id="delete<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');"><?php svg('trash');?></button>
+                          <button class="btn trash<?php echo($r['status']!='delete'?' d-none':'');?>" id="purge<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo $r['id'];?>','content');"><?php svg('purge');?></button>
                         <?php }?>
                       </div>
                     </div>

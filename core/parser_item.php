@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.1 Fix unintentional addition of extra quotes when parsing image filename in JSON+LD.
 */
 $html=preg_replace([
   '~<contentitems>.*?<\/contentitems>~is',
@@ -653,7 +654,7 @@ if(stristr($html,'<item')){
       '"image":'.
       '{'.
         '"@type":"ImageObject",'.
-        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).'"':FAVICON).'"'.
+        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
       '},'.
       '"description":"'.
         ($seoDescription!=''?htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8'):htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8')).'",'.
@@ -716,7 +717,7 @@ if(stristr($html,'<item')){
       '"image":'.
       '{'.
         '"@type":"ImageObject",'.
-        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).'"':FAVICON).'"'.
+        '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
       '},'.
       '"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'",'.
       '"genre":"'.

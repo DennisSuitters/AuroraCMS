@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.1 Add check for clashing Booking Dates.
  */
 $getcfg=true;
 require'db.php';
@@ -55,7 +56,6 @@ if($act=='add_booking'){
 		$phone=filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING);
 		$notes=filter_input(INPUT_POST,'notes',FILTER_SANITIZE_STRING);
 		$tis=filter_input(INPUT_POST,'tis',FILTER_SANITIZE_STRING);
-		$tim=filter_input(INPUT_POST,'tim',FILTER_SANITIZE_STRING);
 		$rid=isset($_POST['rid'])?filter_input(INPUT_POST,'rid',FILTER_SANITIZE_STRING):0;
 		if($config['spamfilter'][0]==1&&$spam==FALSE){
 			$filter=new SpamFilter();
@@ -87,7 +87,7 @@ if($act=='add_booking'){
 		}
 		if($spam==FALSE){
 			if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-				$tis=$tis==0?$ti:strtotime($tis.$tim);
+				$tis=$tis==0?$ti:strtotime($tis);
 				if($rid!=0){
 					$s=$db->prepare("SELECT `id`,`tie` FROM `".$prefix."content` WHERE `id`=:id");
 					$s->execute([
@@ -95,123 +95,149 @@ if($act=='add_booking'){
 					]);
 					$r=$s->fetch(PDO::FETCH_ASSOC);
 					$tie=$r['tie'];
+					if($tie==0){
+						$tie=$tis;
+					}
 				}else
-					$tie=0;
-				$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`notes`,`status`,`tis`,`tie`,`ti`) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
-				$q->execute([
-					':rid'=>$rid,
-					':contentType'=>'booking',
-					':name'=>$name,
-					':email'=>$email,
-					':business'=>$business,
-					':address'=>$address,
-					':suburb'=>$suburb,
-					':city'=>$city,
-					':state'=>$state,
-					':postcode'=>$postcode,
-					':phone'=>$phone,
-					':notes'=>$notes,
-					':status'=>'unconfirmed',
-					':tis'=>$tis,
-					':tie'=>$tie,
-					':ti'=>$ti
-				]);
-				$e=$db->errorInfo();
-				if(is_null($e[2])){
-					if($config['email']!=''){
-						require'phpmailer/class.phpmailer.php';
-						$mail=new PHPMailer;
-						$mail->isSendmail();
-						$mail->SetFrom($email,$name);
-						$toname=$config['email'];
-						$mail->AddAddress($config['email']);
-						$mail->IsHTML(true);
-						$subject=str_replace([
-							'{business}',
-							'{name}'
-						],[
-							$name,
-							$business
-						],'Booking Created by {name} for {business}');
-						$mail->Subject=$subject;
-						$msg='Booking Date: '.date($config['dateFormat'],$tis).'<br />';
-						if($rid!=0){
-							$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-							$s->execute([
-								':id'=>$rid
-							]);
-							$r=$s->fetch(PDO::FETCH_ASSOC);
-							$msg.='Booked: '.ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title'];
+					$tie=$tis;
+//				$tisday=date('l',$tis);
+//				$tist=date('HHII',$tis);
+//				$tiet=date('HHII',$tie);
+//				$sd=$db->prepare("SELECT `id`,`tis`,`tie` FROM `".$prefix."choices` WHERE `contentType`='hours' AND `username`=:tisday AND `tis` >= :tis AND `tie` <= :tie");
+//				$sd->execute([
+//					':tisday'=>strtolower($tisday),
+//					':tis'=>$tist,
+//					':tie'=>$tiet
+//				]);
+//				$sdr=$sd->fetch(PDO::FETCH_ASSOC);
+//				if($sdr['tis'] == 0 || $sdr['tis'] >= $tist || $sdr['tie'] <= $tiet){
+//					$notification=$theme['settings']['booking_error_businesshours'];
+//				}else{
+					$sc=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `tis` >= :tis AND `tie` <= :tie");
+					$sc->execute([
+						':tis'=>$tis,
+						':tie'=>$tie + $config['bookingBuffer']
+					]);
+					if($sc->rowCount()>0){
+						$notification=$theme['settings']['booking_error_time'];
+					}else{
+						$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`notes`,`status`,`tis`,`tie`,`ti`) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
+						$q->execute([
+							':rid'=>$rid,
+							':contentType'=>'booking',
+							':name'=>$name,
+							':email'=>$email,
+							':business'=>$business,
+							':address'=>$address,
+							':suburb'=>$suburb,
+							':city'=>$city,
+							':state'=>$state,
+							':postcode'=>$postcode,
+							':phone'=>$phone,
+							':notes'=>$notes,
+							':status'=>'unconfirmed',
+							':tis'=>$tis,
+							':tie'=>$tie+$config['bookingBuffer'],
+							':ti'=>$ti
+						]);
+						$e=$db->errorInfo();
+						if(is_null($e[2])){
+							if($config['email']!=''){
+								require'phpmailer/class.phpmailer.php';
+								$mail=new PHPMailer;
+								$mail->isSendmail();
+								$mail->SetFrom($email,$name);
+								$toname=$config['email'];
+								$mail->AddAddress($config['email']);
+								$mail->IsHTML(true);
+								$subject=str_replace([
+									'{business}',
+									'{name}'
+								],[
+									$name,
+									$business
+								],'Booking Created by {name} for {business}');
+								$mail->Subject=$subject;
+								$msg='Booking Date: '.date($config['dateFormat'],$tis).'<br />';
+								if($rid!=0){
+									$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+									$s->execute([
+										':id'=>$rid
+									]);
+									$r=$s->fetch(PDO::FETCH_ASSOC);
+									$msg.='Booked: '.ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title'];
+								}
+								$msg.='Name: '.$name.'<br />'.
+										'Email: '.$email.'<br />'.
+										'Business: '.$business.'<br />'.
+										'Address: '.$address.'<br />'.
+										'Suburb: '.$suburb.'<br />'.
+										'City: '.$city.'<br />'.
+										'State: '.$state.'<br />'.
+										'Postcode: '.$postcode.'<br />'.
+										'Phone: '.$phone.'<br />'.
+										'Notes: '.$notes;
+								$mail->Body=$msg;
+								$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+								if($mail->Send())$notification=$theme['settings']['booking_success'];
+							}
+							if($email!=''){
+								$mail2=new PHPMailer;
+								$mail2->isSendmail();
+								$mail2->SetFrom($config['email'], $config['business']);
+								$toname=$email;
+								$mail2->AddAddress($email);
+								if($config['bookingAttachment']!='')$mail2->AddAttachment('../media/'.basename($config['bookingAttachment']));
+								$mail2->IsHTML(true);
+								$namee=explode(' ',$name);
+								$subject=isset($config['bookingAutoReplySubject'])&&$config['bookingAutoReplySubject']!=''?$config['bookingAutoReplySubject']:'Booking Confirmation from {business}';
+								$subject=str_replace([
+									'{business}',
+									'{name}',
+									'{first}',
+									'{last}',
+									'{date}'
+								],[
+									$config['business'],
+									$name,
+									$namee[0],
+									end($namee),
+									date($config['dateFormat'],$ti)
+								],$subject);
+								$mail2->Subject=$subject;
+								$msg2=isset($config['bookingAutoReplyLayout'])&&$config['bookingAutoReplyLayout']!=''?rawurldecode($config['bookingAutoReplyLayout']):'Thank you for your Booking,<br />Someone will be in touch to confirm your Booking time.<br />Regards,<br />{business}';
+								$bookingDate=$tis!=0?date($config['dateFormat'],$tis):'';
+								$bookingService=$rid!=0?ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title']:'';
+		          	$namee=explode(' ',$name);
+								$msg2=str_replace([
+									'{business}',
+									'{name}',
+									'{first}',
+									'{last}',
+									'{date}',
+									'{booking_date}',
+									'{service}'
+								],[
+									$config['business'],
+									$name,
+									$namee[0],
+									end($namee),
+									date($config['dateFormat'],$ti),
+									$bookingDate,
+									$bookingService
+								],$msg2);
+								$mail2->Body=$msg2;
+								$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg2));
+								if($mail2->Send())
+									$notification=$theme['settings']['booking_success'];
+								else
+									$notification=$theme['settings']['booking_error'];
+								}
+							}
 						}
-						$msg.='Name: '.$name.'<br />'.
-									'Email: '.$email.'<br />'.
-									'Business: '.$business.'<br />'.
-									'Address: '.$address.'<br />'.
-									'Suburb: '.$suburb.'<br />'.
-									'City: '.$city.'<br />'.
-									'State: '.$state.'<br />'.
-									'Postcode: '.$postcode.'<br />'.
-									'Phone: '.$phone.'<br />'.
-									'Notes: '.$notes;
-						$mail->Body=$msg;
-						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-						if($mail->Send())$notification=$theme['settings']['booking_success'];
-					}
-					if($email!=''){
-						$mail2=new PHPMailer;
-						$mail2->isSendmail();
-						$mail2->SetFrom($config['email'], $config['business']);
-						$toname=$email;
-						$mail2->AddAddress($email);
-						if($config['bookingAttachment']!='')$mail2->AddAttachment('../media/'.basename($config['bookingAttachment']));
-						$mail2->IsHTML(true);
-						$namee=explode(' ',$name);
-						$subject=isset($config['bookingAutoReplySubject'])&&$config['bookingAutoReplySubject']!=''?$config['bookingAutoReplySubject']:'Booking Confirmation from {business}';
-						$subject=str_replace([
-							'{business}',
-							'{name}',
-							'{first}',
-							'{last}',
-							'{date}'
-						],[
-							$config['business'],
-							$name,
-							$namee[0],
-							end($namee),
-							date($config['dateFormat'],$ti)
-						],$subject);
-						$mail2->Subject=$subject;
-						$msg2=isset($config['bookingAutoReplyLayout'])&&$config['bookingAutoReplyLayout']!=''?rawurldecode($config['bookingAutoReplyLayout']):'Thank you for your Booking,<br />Someone will be in touch to confirm your Booking time.<br />Regards,<br />{business}';
-						$bookingDate=$tis!=0?date($config['dateFormat'],$tis):'';
-						$bookingService=$rid!=0?ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title']:'';
-	          $namee=explode(' ',$name);
-						$msg2=str_replace([
-							'{business}',
-							'{name}',
-							'{first}',
-							'{last}',
-							'{date}',
-							'{booking_date}',
-							'{service}'
-						],[
-							$config['business'],
-							$name,
-							$namee[0],
-							end($namee),
-							date($config['dateFormat'],$ti),
-							$bookingDate,
-							$bookingService
-						],$msg2);
-						$mail2->Body=$msg2;
-						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg2));
-						if($mail2->Send())
-							$notification=$theme['settings']['booking_success'];
-						else
-							$notification=$theme['settings']['booking_error'];
-					}
+//					}
 				}else
 					$notification=$theme['settings']['booking_error'];
-			}
 		}
 	}
 }

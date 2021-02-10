@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.0.1 Fix Buttons not interacting correctly.
  */
 if($user['options'][4]==1){
   $uid=isset($_SESSION['uid'])?$_SESSION['uid']:$uid=0;
@@ -225,11 +226,11 @@ if($user['options'][4]==1){
                       <small>Due: <?php echo date($config['dateFormat'],$r['due_ti']);?></small>
                     </td>
                     <td>
-                      <span class="badger badge-<?php echo($ti>$r['due_ti'])||($r['status']=='overdue')?'danger"':'info';?>"><?php echo ucfirst($r['status']);?></span>
+                      <?php echo ucfirst($r['status']);?>
                     </td>
-                    <td id="controls_<?php echo$r['id'];?>">
+                    <td class="align-middle" id="controls_<?php echo$r['id'];?>">
                       <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                        <div class="btn-group radius-right" role="group" aria-label="Item Controls">
+                        <div class="btn-group " role="group" aria-label="Item Controls">
                           <?php if($user['options'][0]==1){
                             echo$r['qid']!=''&&$r['aid']==''?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
                             echo$r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');">'.svg2('archive').'</button>':'';
@@ -239,9 +240,9 @@ if($user['options'][4]==1){
                           echo$user['options'][0]==1?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
                           <a class="btn<?php echo$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?php svg('edit');?></a>
                           <?php if($user['options'][0]==1){?>
-                            <button class="btn<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','');"><?php svg('untrash');?></button>
-                            <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete');"><?php svg('trash');?></button>
-                            <button class="btn btn-secondary rounded-right purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?php echo$r['id'];?>','orders')" data-tooltip="tooltip" aria-label="Purge"><?php svg('purge');?></button>
+                            <button class="btn add<?php echo$r['status']!='delete'?' d-none':'';?>" id="untrash<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','');"><?php svg('untrash');?></button>
+                            <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" id="delete<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?php echo$r['id'];?>','orders','status','delete');"><?php svg('trash');?></button>
+                            <button class="btn purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" id="purge<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','orders')"><?php svg('purge');?></button>
                           <?php }?>
                         </div>
                       </div>

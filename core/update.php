@@ -318,8 +318,7 @@ if($col=='status'){
 		echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';
 	if($tbl!='comments'||$da=='delete'||$da=='')
 		echo'<script>'.
-			'window.top.window.$("#controls_'.$id.' button.btn").toggleClass("d-none");'.
-  		'window.top.window.$("#l_'.$id.'").removeClass("danger");'.
+			'window.top.window.statusSet(`'.$id.'`,`'.$da.'`);'.
 		'</script>';
 	if($da=='delete')
 		echo'<script>window.top.window.$("#l_'.$id.'").addClass("danger");</script>';

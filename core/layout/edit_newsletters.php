@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.1 Add Tag Editing Field as well as retreiving and sorting Tags from other Content
+ * @changes    v0.1.1 Add Checkbox Option for matching tags to Subcribers
  */
 $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 $q->execute([
@@ -47,7 +49,39 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         </div>
         <label id="newsletterDateCreated" for="ti"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#newsletterDateCreated" aria-label="PermaLink to Newsletter Date Created Field">&#128279;</a>':'';?>Created</label>
         <div class="form-row">
-          <input id="ti" type="text" value="<?php echo date('M jS, Y g:i A',$r['ti']);?>" readonly>
+          <input id="ti" type="text" value="<?php echo date($config['dateFormat'],$r['ti']);?>" readonly>
+        </div>
+        <div class="row mt-3">
+          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#matchTags" aria-label="PermaLink to Newsletters Match Tags Checkbox">&#128279;</a>':'';?>
+          <input id="matchTags" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="8" type="checkbox"<?php echo($r['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+          <label for="matchTags">Match Tags to Subscribers</label>
+        </div>
+        <div class="row mt-3">
+          <label id="<?php echo$r['contentType'];?>tags" for="tags"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#'.$r['contentType'].'tags" aria-label="PermaLink to '.ucfirst($r['contentType']).' Tags">&#128279;</a>':'';?>Tags</label>
+          <div class="form-row">
+            <input class="textinput" id="tags" data-dbid="<?php echo$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?php echo$r['tags'];?>"<?php echo($user['options'][1]==1?' placeholder="Enter a Tag or Select from List..."':' readonly');?>>
+            <?php echo'<button class="save" id="savetags" data-tooltip="tooltip"  data-dbid="tags" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';?>
+          </div>
+          <?php if($user['options'][1]==1){
+            $tags=array();
+            $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+            if($st->rowCount()>0){
+              while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                $tagslist=explode(",",$rt['tags']);
+                foreach($tagslist as $t){
+                  $tgs[]=$t;
+                }
+              }
+            }
+            $tags=array_unique($tgs);
+            asort($tags);
+            echo'<select id="tags_options" onchange="addTag($(this).val());">'.
+              '<option value="none">Clear All</option>';
+            foreach($tags as $t){
+              echo'<option value="'.$t.'">'.$t.'</option>';
+            }
+            echo'</select>';
+          }?>
         </div>
         <label id="newsletterStatus" for="status"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#newsletterStatus" aria-label="PermaLink to Newsletter Status Selector Field">&#128279;</a>':'';?>Status</label>
         <div class="form-row">

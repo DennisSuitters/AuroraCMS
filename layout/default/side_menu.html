@@ -1,8 +1,8 @@
-	<aside class="col-12 col-sm-3 order-1 order-sm-2 mb-5">
+	<aside class="col-12 col-sm-3 order-1 order-sm-2 mt-3 mb-0 mb-sm-5 px-3 px-sm-0">
 		<sort>
-			<div class="card col-11 col-sm-12 mx-auto mb-3">
+			<div class="card mx-auto mb-3">
 				<div class="card-body my-4">
-					<form method="POST" action="">
+					<form method="post" action="">
 						<input type="hidden" name="act" value="sort">
 						<label for="sort" class="h3">Sort Items</label>
 						<div class="row">
@@ -61,10 +61,10 @@
 			</div>
 		</div>
 		<review>
-			<div id="review" class="card mb-3 p-3">
-				<form id="reviewform" class="auroraForm" data-formtype="review" method="post" action="core/add_review.php">
+			<div id="review" class="mb-3">
+				<form class="auroraForm card p-3" data-formtype="review" method="post" action="core/add_review.php">
 					<input type="hidden" name="id" value="<print content=id>">
-					<input type="hidden" name="emailtrap" value="none">
+					<input type="hidden" name="<print hash>" value="<print timecode>">
 					<h3>Add a Review</h3>
 					<label for="rating5">Rating</label>
 					<span class="starRating">
@@ -81,14 +81,15 @@
 		      </span>
 					<label for="reviewemail">Email</label>
 					<input type="email" id="reviewemail" name="email" value="" required aria-required="true">
-					<div class="requirements alert alert-danger mb-0">
-      			Must be a valid email address.
-    			</div>
+					<div class="requirements mt-3 mb-0">Must be a valid email address.</div>
 					<label for="reviewname">Name</label>
 					<input type="text" id="reviewname" name="name" value="" required aria-required="true">
+					<label for="fullname" aria-hidden="true">Full Name</label>
+					<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 					<label for="reviewtxt">Review</label>
 					<textarea id="reviewtxt" name="review"></textarea>
-					<div class="text-right margin-top-3">
+					<g-recaptcha>
+					<div class="text-right mt-3">
 						<button id="review-btn" type="submit">Add Review</button>
 					</div>
 				</form>

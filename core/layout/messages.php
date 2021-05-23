@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
 */
 function strip_html_tags($t,$l=400){
  $t=preg_replace([
@@ -64,10 +65,10 @@ if($user['options'][3]==1){
         <div class="content-title-wrapper mb-0">
           <div class="content-title">
             <div class="content-title-heading">
-              <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
+              <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
               <div>Messages</div>
               <div class="content-title-actions">
-                <?php echo$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" aria-label="Messages Settings">'.svg2('settings').'</a>':'';?>
+                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" aria-label="Messages Settings">'.svg2('settings').'</a>':'';?>
               </div>
             </div>
             <ol class="breadcrumb">
@@ -101,12 +102,12 @@ if($user['options'][3]==1){
               $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
               <div class="messages-menu col-12 col-md-2">
-                <?php echo$user['options'][0]==1?'<a class="btn mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose">Compose</a><br>':'';?>
-                <a class="link mb-1<?php echo(isset($args[0])?'':' active');?>" href="<?php echo URL.$settings['system']['admin'].'/messages';?>"><?php svg('inbox');?> Inbox</a><br>
-                <a class="link badge mb-1<?php echo(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?php echo URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?php echo$ur['cnt']>0?$ur['cnt']:'';?>"><?php svg('email');?> Unread</a><br>
-                <a class="link mb-1<?php echo(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?php echo URL.$settings['system']['admin'].'/messages/sent';?>"><?php svg('email-send');?> Sent</a><br>
-                <a class="link mb-1<?php echo(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?php echo URL.$settings['system']['admin'].'/messages/important';?>"><?php svg('bookmark');?> Important</a><br>
-                <a class="link badge mb-1<?php echo(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?php echo URL.$settings['system']['admin'].'/messages/spam';?>" data-badge="<?php echo$sp['cnt']>0?$sp['cnt']:'';?>"><?php svg('email-spam');?> Spam</a>
+                <?=$user['options'][0]==1?'<a class="btn mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose">Compose</a><br>':'';?>
+                <a class="link mb-1<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><?= svg2('inbox');?> Inbox</a><br>
+                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><?= svg2('email');?> Unread</a><br>
+                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><?= svg2('email-send');?> Sent</a><br>
+                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><?= svg2('bookmark');?> Important</a><br>
+                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>"><?= svg2('email-spam');?> Spam</a>
               </div>
               <div class="col-12 col-md-10 pl-3">
                 <div class="alert alert-warning col-12 text-center d-none" id="checkmessages">Checking for new Messages!!!</div>
@@ -124,31 +125,31 @@ if($user['options'][3]==1){
                   </thead>
                   <tbody>
                     <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                      <tr class="<?php echo($r['status']=='unread'?' font-weight-bold':' font-weight-light');?>" id="l_<?php echo$r['id'];?>">
+                      <tr class="<?=$r['status']=='unread'?' font-weight-bold':' font-weight-light';?>" id="l_<?=$r['id'];?>">
                         <td>
                           <input name="message[]" type="checkbox">
                         </td>
                         <td>
-                          <a href="<?php echo URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>">
-                            <span class="from"><?php echo$r['from_name']!=''?$r['from_name'].'<small> &lt;'.$r['from_email'].'&gt;</small>':'&lt;'.$r['from_email'].'&gt;';?></span><br>
-                            <small class="subject"><?php echo$r['subject'];?></small>
+                          <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>">
+                            <span class="from"><?=$r['from_name']!=''?$r['from_name'].'<small> &lt;'.$r['from_email'].'&gt;</small>':'&lt;'.$r['from_email'].'&gt;';?></span><br>
+                            <small class="subject"><?=$r['subject'];?></small>
                           </a>
                         </td>
                         <td>
-                          <span class="date"><?php echo date('M j \a\t G:i',$r['ti']);?></span>
+                          <span class="date"><?= date('M j \a\t G:i',$r['ti']);?></span>
                         </td>
-                        <td class="align-middle" id="controls_<?php echo$r['id'];?>">
-                          <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                            <div class="btn-group" role="group" aria-label="Item Controls">
+                        <td class="align-middle" id="controls_<?=$r['id'];?>">
+                          <div class="btn-toolbar float-right" role="toolbar">
+                            <div class="btn-group" role="group">
                               <?php if($user['options'][0]==1){
                                 $scc=$db->prepare("SELECT `email` FROM `".$prefix."whitelist` WHERE `email`=:email");
                                 $scc->execute([
                                   ':email'=>$r['from_email']
                                 ]);
                                 if($scc->rowCount()<1){?>
-                                  <form id="whitelist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
-                                    <input name="id" type="hidden" value="<?php echo$r['id'];?>">
-                                    <button data-tooltip="tooltip" aria-label="Add to Whitelist"><?php echo svg2('whitelist');?></button>
+                                  <form id="whitelist<?=$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
+                                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                                    <button data-tooltip="tooltip" aria-label="Add to Whitelist"><?= svg2('whitelist');?></button>
                                   </form>
                                 <?php }
                                 $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
@@ -156,13 +157,13 @@ if($user['options'][3]==1){
                                   ':ip'=>$r['ip']
                                 ]);
                                 if($scc->rowCount()<1){?>
-                                  <form id="blacklist<?php echo$r['id'];?>" target="sp" method="post" action="core/add_messageblacklist.php">
-                                    <input name="id" type="hidden" value="<?php echo$r['id'];?>">
-                                    <button data-tooltip="tooltip" aria-label="Add to Blacklist"><?php echo svg2('security');?></button>
+                                  <form id="blacklist<?=$r['id'];?>" target="sp" method="post" action="core/add_messageblacklist.php">
+                                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                                    <button data-tooltip="tooltip" aria-label="Add to Blacklist"><?= svg2('security');?></button>
                                   </form>
                                 <?php }?>
-                                <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?php echo$r['id'];?>','messages','folder','spam');"><?php svg('email-spam');?></button>
-                                <button class="purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','messages')"><?php svg('trash');?></button>
+                                <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?=$r['id'];?>','messages','folder','spam');"><?= svg2('email-spam');?></button>
+                                <button class="purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','messages')"><?= svg2('trash');?></button>
                               <?php }?>
                             </div>
                           </div>
@@ -183,14 +184,14 @@ if($user['options'][3]==1){
             var f=function(){
               $('#checkmessages').removeClass('d-none');
               $.ajax({
-                url:"core/get_messages.php?folder=<?php echo$folder;?>",
+                url:"core/get_messages.php?folder=<?=$folder;?>",
                 success:function(data){
                   $('#allmessages').append(data);
                   $('#checkmessages').addClass('d-none');
                 }
               });
             };
-            window.setInterval(f,<?php echo$config['message_check_interval'];?>*1000);
+            window.setInterval(f,<?=$config['message_check_interval'];?>*1000);
             f();
           });
         <?php }?>

@@ -11,7 +11,6 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$getcfg=false;
 require'db.php';
 $i=0;
 foreach($_POST['l'] as$id){

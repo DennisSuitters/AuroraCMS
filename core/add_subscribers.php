@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
@@ -22,12 +23,10 @@ function svg2($svg,$class=null,$size=null){
 }
 $emls=isset($_POST['emails'])?filter_input(INPUT_POST,'emails',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'emails',FILTER_SANITIZE_STRING);
 $emails=explode(",",$emls);
-foreach($emails as $eml){
+foreach($emails as$eml){
   if(filter_var($eml,FILTER_VALIDATE_EMAIL)){
     $q=$db->prepare("SELECT `id` FROM `".$prefix."subscribers` WHERE `email`=:email");
-    $q->execute([
-      ':email'=>$eml
-    ]);
+    $q->execute([':email'=>$eml]);
     if($q->rowCount()<1){
       $ti=time();
       $q=$db->prepare("INSERT IGNORE INTO `".$prefix."subscribers` (`email`,`hash`,`ti`) VALUES (:email,:hash,:ti)");
@@ -54,8 +53,6 @@ foreach($emails as $eml){
           '</td>'.
         '</tr>`);'.
       '</script>';
-    }else
-      echo'<script>window.top.window.toastr["error"]("&quot;'.$eml.'&quot; is already Subscribed!");</script>';
-  }else
-    echo'<script>window.top.window.toastr["error"]("&quot;'.$eml.'&quot; is not a valid email!");</script>';
+    }else echo'<script>window.top.window.toastr["error"]("&quot;'.$eml.'&quot; is already Subscribed!");</script>';
+  }else echo'<script>window.top.window.toastr["error"]("&quot;'.$eml.'&quot; is not a valid email!");</script>';
 }

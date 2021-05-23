@@ -13,10 +13,27 @@
  */
 header('Content-Type: application/javascript');
 header('Service-Worker-Allowed:/');
-$getcfg=true;
-require'../db.php';
-$config=$db->query("SELECT * FROM config WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+  if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+  if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
+if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))
+  $settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('..'.DS.'core'.DS.'config.ini'))
+  $settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('core'.DS.'config.ini'))
+  $settings=parse_ini_file('core'.DS.'config.ini',TRUE);
+elseif(file_exists('config.ini'))
+  $settings=parse_ini_file('config.ini',TRUE);
+else{
+  require ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php';
+  die();
+}
+$prefix=$settings['database']['prefix'];
+require'../db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $html=file_get_contents('..'.DS.'layout'.DS.'offline.html');
 $html=preg_replace([
@@ -29,13 +46,10 @@ $html=preg_replace([
   $config['business'].' - Administration - AuroraCMS',
   '',
  'data:'.mime_content_type('..'.DS.'images'.DS.'auroracms-white.svg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'auroracms-white.svg'))
-],$html);
-?>
-
-const CACHE="AuroraCMSv0-0-9";
-const offlineFallbackPage=`<?php echo$html;?>`;
+],$html);?>
+const CACHE=`AuroraCMSv0.1.2`;
+const offlineFallbackPage=`<?=$html;?>`;
 const offlineFallbackPages=["/",];
-
 self.addEventListener("install",function(event){
   console.log("[AuroraCMS] Install Event processing");
   event.waitUntil(
@@ -45,7 +59,6 @@ self.addEventListener("install",function(event){
     })
   );
 });
-
 self.addEventListener('fetch',event=>{
   if(event.request.method!=="GET")return;
   event.respondWith(
@@ -56,12 +69,11 @@ self.addEventListener('fetch',event=>{
     })
   )
 });
-
 self.addEventListener("refreshOffline",function(){
   const offlinePageRequest=new Request(offlineFallbackPage);
   return fetch(offlineFallbackPage).then(function(response){
     return caches.open(CACHE).then(function(cache){
-      console.log("[AuroraCMS] Offline page updated from refreshOffline event: "+response.url);
+      console.log("[AuroraCMS] Offline page updated from refreshOffline event:"+response.url);
       return cache.put(offlinePageRequest,response);
     });
   });

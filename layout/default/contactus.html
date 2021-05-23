@@ -3,7 +3,7 @@
 <block inbed="contactus">
 	<breadcrumb>
 		<section class="row mt-3 mb-0">
-			<nav class="col-12 col-sm-11">
+			<nav class="col-12">
 				<ol class="breadcrumb">
 					<json-ld-breadcrumb>
 					<breaditems>
@@ -16,15 +16,11 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<pagenotes>
-		<section class="row mt-5">
-			<article class="col-11">
-      	<print page="notes">
-			</article>
-		</section>
-  </pagenotes>
-	<section class="row my-5">
-		<article class="col-11 col-sm-5 m-0 p-0">
+	<section class="row mt-5">
+		<article class="col-12 col-sm-6 m-0 pb-0">
+			<pagenotes>
+				<div class="hidewhenempty"><print page="notes"></div>
+  		</pagenotes>
 			<hours>
 				<div class="row">
 					<div class="col-1 mr-2">
@@ -77,33 +73,34 @@
 				</div>
 			</map>
 		</article>
-		<article class="col-11 col-sm-5 m-0 p-0">
-			<form id="contactform" class="auroraForm card p-3" data-formtype="contact" method="post" action="core/add_contactus.php">
-				<input type="hidden" name="emailtrap" value="none">
+		<article id="contact" class="col-12 col-sm-6 m-0 pb-0">
+			<form class="auroraForm card p-3" data-formtype="contact" method="post" action="core/add_contactus.php">
 				<input type="hidden" name="act" value="add_message">
+				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<div class="alert alert-danger" role="alert">Highlighted Fields are Required</div>
 				<label for="contactsubject">Subject</label>
 				<subjectText>
 					<input type="text" id="contactsubject" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true">
 				</subjectText>
 				<subjectSelect>
-					<select id="contactsubject" name="subject" required>
-						<option value="">Please Select a Subject for Contacting Us</option>
+					<select id="contactsubject" name="subject" required aria-required="true">
+						<option value="">Select a Subject for Contacting Us</option>
 						<subjectOptions>
 					</select>
 				</subjectSelect>
 				<label for="contactemail">Email</label>
 				<input type="email" id="contactemail" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-				<div class="requirements alert alert-danger">
+				<div class="requirements">
 					Must be a valid email address.
 				</div>
 				<label for="contactname">Name</label>
 				<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name...">
+				<label for="fullname" aria-hidden="true">Full Name</label>
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="contacttxt">Message</label>
-				<textarea id="contacttxt" name="notes" placeholder="Enter a Message..." required></textarea>
-				<div class="text-right">
-					<button id="contact-btn" class="margin-top-3" type="submit">Send</button>
-				</div>
+				<textarea id="contacttxt" name="notes" placeholder="Enter a Message..." required aria-required="true"></textarea>
+				<g-recaptcha>
+				<button id="contact-btn" class="btn-block mt-3" type="submit">Send</button>
 			</form>
 		</article>
 	</section>

@@ -58,8 +58,8 @@ config
     2   Image Resizing
     3   Account Sign Ups
     4   Enable Tooltips
-    5   Enable Quick for Products
-    6
+    5   Enable Quick View for Products
+    6   Create Invoice from Booking Event for Payment online.
     7   Display Payment Options Template Block
     8   Display GDPR Banner
     9   Delete Messages When Retrieved / Show RSS Feed Icon
@@ -82,7 +82,7 @@ config
     26  Enable Discount Range
     27  Enable Map Display on Pages.
     28  Enable Assistance.
-    29
+    29  Create Invoice from Booking Service for Payment online.
     30
     31
   `theme` varchar(255)
@@ -188,7 +188,7 @@ config
   `php_APIkey` varchar(255)
   `php_honeypot` tinytext
   `php_quicklink` tinytext
-  `spamfilter` varchar(8)
+  `spamfilter` int(1)
   `notification_volume` int(4)
   `mediaMaxWidth` int(4)
   `mediaMaxHeight` int(4)
@@ -369,7 +369,7 @@ login
     15  elFinder Upload Files other than Images
     16  elFinder Administrator Hide Folders
     17  elFinder Allow Administrator to Administer Folders for Accounts
-    18
+    18  Do not track account IP's
     19
     20
     21

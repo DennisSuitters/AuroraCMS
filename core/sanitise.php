@@ -1,4 +1,18 @@
 <?php
+/**
+ * AuroraCMS - Copyright (C) Diemen Design 2019
+ *
+ * @category   Administration - Core - Sanitise
+ * @package    core/santisie.php
+ * @author     Dennis Suitters <dennis@diemen.design>
+ * @copyright  2014-2019 Diemen Design
+ * @license    http://opensource.org/licenses/MIT  MIT License
+ * @version    0.1.2
+ * @link       https://github.com/DiemenDesign/AuroraCMS
+ * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @notes      Modified kses from WordPress to be faster, work with PHP7+, and include HTML5 elements.
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
+ */
 function kses(
   $string,
   $allowed_html=array(
@@ -84,8 +98,7 @@ function kses(
     'mailto'
   )
 ){
-  if(get_magic_quotes_gpc())
-    $string=stripslashes($string);
+  if(get_magic_quotes_gpc())$string=stripslashes($string);
   $string=kses_no_null($string);
   $string=kses_js_entities($string);
   $string=kses_normalize_entities($string);
@@ -93,44 +106,30 @@ function kses(
   $allowed_html_fixed=kses_array_lc($allowed_html);
   return kses_split($string,$allowed_html_fixed,$allowed_protocols);
 }
-function kses_hook($string){
-  return$string;
-}
-function kses_version(){
-  return'0.2.3';
-}
-function kses_split($string,$allowed_html,$allowed_protocols){
-  return preg_replace('%(<[^>]*(>|$)|>)%',"kses_split2('\\1', \$allowed_html, ".'$allowed_protocols)',$string);
-}
+function kses_hook($string){return$string;}
+function kses_version(){return'0.2.4';}
+function kses_split($string,$allowed_html,$allowed_protocols){return preg_replace('%(<[^>]*(>|$)|>)%',"kses_split2('\\1', \$allowed_html, ".'$allowed_protocols)',$string);}
 function kses_split2($string,$allowed_html,$allowed_protocols){
   $string=kses_stripslashes($string);
-  if(substr($string,0,1)!='<')
-    return'&gt;';
-  if(!preg_match('%^<\s*(/\s*)?([a-zA-Z0-9]+)([^>]*)>?$%',$string,$matches))
-    return'';
+  if(substr($string,0,1)!='<')return'&gt;';
+  if(!preg_match('%^<\s*(/\s*)?([a-zA-Z0-9]+)([^>]*)>?$%',$string,$matches))return'';
   $slash=trim($matches[1]);
   $elem=$matches[2];
   $attrlist=$matches[3];
-  if(!@isset($allowed_html[strtolower($elem)]))
-    return'';
-  if($slash!='')
-    return"<$slash$elem>";
+  if(!@isset($allowed_html[strtolower($elem)]))return'';
+  if($slash!='')return"<$slash$elem>";
   return kses_attr("$slash$elem",$attrlist,$allowed_html,$allowed_protocols);
 }
 function kses_attr($element,$attr,$allowed_html,$allowed_protocols){
   $xhtml_slash='';
-  if(preg_match('%\s/\s*$%',$attr))
-    $xhtml_slash=' /';
-  if(@count($allowed_html[strtolower($element)])==0)
-    return"<$element$xhtml_slash>";
+  if(preg_match('%\s/\s*$%',$attr))$xhtml_slash=' /';
+  if(@count($allowed_html[strtolower($element)])==0)return"<$element$xhtml_slash>";
   $attrarr=kses_hair($attr,$allowed_protocols);
   $attr2='';
   foreach($attrarr as$arreach){
-    if(!@isset($allowed_html[strtolower($element)][strtolower($arreach['name'])]))
-      continue;
+    if(!@isset($allowed_html[strtolower($element)][strtolower($arreach['name'])]))continue;
     $current=$allowed_html[strtolower($element)][strtolower($arreach['name'])];
-    if(!is_array($current))
-      $attr2.=' '.$arreach['whole'];
+    if(!is_array($current))$attr2.=' '.$arreach['whole'];
     else{
       $ok=true;
       foreach($current as$currkey =>$currval){
@@ -139,8 +138,7 @@ function kses_attr($element,$attr,$allowed_html,$allowed_protocols){
           break;
         }
       }
-      if($ok)
-        $attr2.=' '.$arreach['whole'];
+      if($ok)$attr2.=' '.$arreach['whole'];
     }
   }
   $attr2=preg_replace('/[<>]/','',$attr2);
@@ -239,28 +237,21 @@ function kses_check_attr_val($value,$vless,$checkname,$checkvalue){
   $ok=true;
   switch(strtolower($checkname)){
     case'maxlen':
-      if(strlen($value)>$checkvalue)
-        $ok=false;
+      if(strlen($value)>$checkvalue)$ok=false;
       break;
     case'minlen':
-      if(strlen($value)<$checkvalue)
-        $ok=false;
+      if(strlen($value)<$checkvalue)$ok=false;
       break;
     case'maxval':
-      if(!preg_match('/^\s{0,6}[0-9]{1,6}\s{0,6}$/',$value))
-        $ok=false;
-      if($value>$checkvalue)
-        $ok=false;
+      if(!preg_match('/^\s{0,6}[0-9]{1,6}\s{0,6}$/',$value))$ok=false;
+      if($value>$checkvalue)$ok=false;
       break;
     case'minval':
-      if(!preg_match('/^\s{0,6}[0-9]{1,6}\s{0,6}$/',$value))
-        $ok=false;
-      if($value<$checkvalue)
-        $ok=false;
+      if(!preg_match('/^\s{0,6}[0-9]{1,6}\s{0,6}$/',$value))$ok=false;
+      if($value<$checkvalue)$ok=false;
       break;
     case'valueless':
-      if(strtolower($checkvalue)!=$vless)
-        $ok=false;
+      if(strtolower($checkvalue)!=$vless)$ok=false;
       break;
   }
   return$ok;
@@ -280,9 +271,7 @@ function kses_no_null($string){
   $string=preg_replace('/(\\\\0)+/','',$string);
   return$string;
 }
-function kses_stripslashes($string){
-  return preg_replace('%\\\\"%','"',$string);
-}
+function kses_stripslashes($string){return preg_replace('%\\\\"%','"',$string);}
 function kses_array_lc($inarray){
   $outarray=array();
   foreach($inarray as$inkey=>$inval){
@@ -295,15 +284,9 @@ function kses_array_lc($inarray){
   }
   return$outarray;
 }
-function kses_js_entities($string){
-  return preg_replace('%&\s*\{[^}]*(\}\s*;?|$)%','',$string);
-}
-function kses_html_error($string){
-  return preg_replace('/^("[^"]*("|$)|\'[^\']*(\'|$)|\S)*\s*/','',$string);
-}
-function kses_bad_protocol_once($string,$allowed_protocols){
-  return preg_replace('/^((&[^;]*;|[\sA-Za-z0-9])*)(:|&#58;|&#[Xx]3[Aa];)\s*/','kses_bad_protocol_once2("\\1",$allowed_protocols)',$string);
-}
+function kses_js_entities($string){return preg_replace('%&\s*\{[^}]*(\}\s*;?|$)%','',$string);}
+function kses_html_error($string){return preg_replace('/^("[^"]*("|$)|\'[^\']*(\'|$)|\S)*\s*/','',$string);}
+function kses_bad_protocol_once($string,$allowed_protocols){return preg_replace('/^((&[^;]*;|[\sA-Za-z0-9])*)(:|&#58;|&#[Xx]3[Aa];)\s*/','kses_bad_protocol_once2("\\1",$allowed_protocols)',$string);}
 function kses_bad_protocol_once2($string,$allowed_protocols){
   $string2=kses_decode_entities($string);
   $string2=preg_replace('/\s/','',$string2);
@@ -317,10 +300,8 @@ function kses_bad_protocol_once2($string,$allowed_protocols){
       break;
     }
   }
-  if($allowed)
-    return"$string2:";
-  else
-    return'';
+  if($allowed)return"$string2:";
+  else return'';
 }
 function kses_normalize_entities($string){
   $string=str_replace('&','&amp;',$string);
@@ -329,9 +310,7 @@ function kses_normalize_entities($string){
   $string=preg_replace('/&amp;#([Xx])0*(([0-9A-Fa-f]{2}){1,2});/','&#\\1\\2;',$string);
   return$string;
 }
-function kses_normalize_entities2($i){
-  return(($i>65535)?"&amp;#$i;":"&#$i;");
-}
+function kses_normalize_entities2($i){return(($i>65535)?"&amp;#$i;":"&#$i;");}
 function kses_decode_entities($string){
   $string=preg_replace('/&#([0-9]+);/','chr("\\1")',$string);
   $string=preg_replace('/&#[Xx]([0-9A-Fa-f]+);/e','chr(hexdec("\\1"))',$string);

@@ -7,66 +7,45 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.1
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.1.1 Fix <print url> parser only changing single instance.
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name` FROM `".$prefix."login` WHERE `id`=:uid");
-	$su->execute([
-		':uid'=>$_SESSION['uid']
-	]);
+	$su->execute([':uid'=>$_SESSION['uid']]);
 	$user=$su->fetch(PDO::FETCH_ASSOC);
 	$html=$view=='proofs'||$view=='proof'?preg_replace('/<print active=[\"\']?proofs[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?proofs[\"\']?>/','',$html);
 	$html=$view=='orders'||$view=='order'?preg_replace('/<print active=[\"\']?orders[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?orders[\"\']?>/','',$html);
 	$html=$view=='settings'?preg_replace('/<print active=[\"\']?settings[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?settings[\"\']?>/','',$html);
 	if(preg_match('/<print user=[\"\']?avatar[\"\']?>/',$html)){
-		if(isset($user)&&$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar']))
-			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media/avatar/'.$user['avatar'],$html);
+		if(isset($user)&&$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media/avatar/'.$user['avatar'],$html);
 		elseif(isset($user)&&$user['gravatar']!=''){
-			if(stristr('@',$user['gravatar']))
-				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
-			elseif(stristr('gravatar.com/avatar/'))
-				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$user['gravatar'],$html);
-			else
-				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
-		}else
-			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
-	}
-	if($user['rank']>399){
-		$html=preg_replace([
-			'/<[\/]?accountmenu>/',
-			'/<[\/]?administration>/',
-			'/<print administrationLink>/'
-		],[
-			'',
-			'',
-			URL.$settings['system']['admin'].'/'
-		],$html);
-	}else{
-		$html=preg_replace([
-			'/<[\/]?accountmenu>/',
-			'~<administration>.*?<\/administration>~is'
-		],'',$html);
+			if(stristr('@',$user['gravatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
+			elseif(stristr('gravatar.com/avatar/'))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$user['gravatar'],$html);
+			else$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
+		}else$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
 	}
 	$html=preg_replace([
+		$user['rank']>399?'/<[\/]?accountmenu>/':'/<[\/]?accountmenu>/',
+		$user['rank']>399?'/<[\/]?administration>/':'~<administration>.*?<\/administration>~is',
+		'/<print administrationLink>/',
 		'/<print user=[\"\']?name[\"\']?>/',
-		'/<[\/]?profile>/'
+		'/<[\/]?profile>/',
+		isset($_SESSION['options'])&&$_SESSION['options'][6]==1?'/<[\/]?seohelper>/':'~<seohelper>.*?<\/seohelper>~is',
+		$config['development'][0]==1&&$_SESSION['rank']>899?'/<[\/]?development>/':'~<development>.*?<\/development>~is'
 	],[
+		'',
+		'',
+		URL.$settings['system']['admin'].'/',
 		str_replace(' ','-',$user['name']),
+		'',
+		'',
 		''
 	],$html);
-	if(isset($_SESSION['options'])&&$_SESSION['options'][6]==1)
-		$html=preg_replace('/<[\/]?seohelper>/','',$html);
-	else
-		$html=preg_replace('~<seohelper>.*?<\/seohelper>~is','',$html,1);
-	if($config['development'][0]==1&&$_SESSION['rank']>899)
-		$html=preg_replace('/<[\/]?development>/','',$html);
-	else
-		$html=preg_replace('~<development>.*?<\/development>~is','',$html,1);
-}else
-	$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
+}else$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
 $html=preg_replace([
 	'/<print view>/',
 	'/<print config=[\"\']?seoTitle[\"\']?>/',
@@ -88,48 +67,26 @@ if(stristr($html,'<buildMenu')){
 	if(stristr($html,'<menuLogin')){
 		preg_match('/<menuLogin>([\w\W]*?)<\/menuLogin>/',$html,$matches);
 		$menuLogin=$matches[1];
-	}else
-		$menuLogin='';
+	}else$menuLogin='';
 	$htmlMenu='';
 	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='head' AND `mid`=0 AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
-	$s->execute([
-		':rank'=>$_SESSION['rank']
-	]);
+	$s->execute([':rank'=>$_SESSION['rank']]);
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$menuURL='';
 		if($r['contentType']!='index'){
-			if(isset($r['url'][0])&&$r['url'][0]=='#')
-				$menuURL.=URL.$r['url'].'/';
-			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))
-				$menuURL.=$r['url'];
+			if(isset($r['url'][0])&&$r['url'][0]=='#')$menuURL.=URL.$r['url'].'/';
+			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))$menuURL.=$r['url'];
 			else{
 				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
 					$r['contentType'],
-					[
-						'aboutus',
-						'article',
-						'bookings',
-						'cart',
-						'contactus',
-						'distributors',
-						'events',
-						'gallery',
-						'inventory',
-						'news',
-						'newsletters',
-						'portfolio',
-						'proofs',
-						'search',
-						'service',
-						'testimonials',
-						'tos'
-					],
+					['aboutus','article','bookings','cart','contactus','distributors',
+					'events','gallery','inventory','news','newsletters','portfolio',
+					'proofs','search','service','testimonials','tos'],
 					true)
 				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';
 			}
-		}else
-			$menuURL.=URL;
+		}else$menuURL.=URL;
 		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=:id AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
 		$sm->execute([
 			':id'=>$r['id'],
@@ -144,7 +101,7 @@ if(stristr($html,'<buildMenu')){
 			'/<print rel=[\"\']?contentType[\"\']?>/',
 			'/<print menu=[\"\']?title[\"\']?>/'
 		],[
-			$r['contentType']==$view?$theme['settings']['settings_activeClass']:'',
+			$r['contentType']==$view?$theme['settings']['activeClass']:'',
 			$menuURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
 			$r['contentType'],
 			$r['title']
@@ -155,33 +112,15 @@ if(stristr($html,'<buildMenu')){
 				$item=$subMenuItem;
 				$subURL='';
 				if($rm['contentType']!='index'){
-					if(isset($rm['url'][0])&&$rm['url'][0]=='#')
-						$subURL.=URL.$rm['url'].'/';
-					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))
-						$subURL.=$rm['url'].'/';
+					if(isset($rm['url'][0])&&$rm['url'][0]=='#')$subURL.=URL.$rm['url'].'/';
+					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))$subURL.=$rm['url'].'/';
 					else{
 						$subURL.=URL.$rm['contentType'].'/';
 						if(!in_array(
 							$rm['contentType'],
-							[
-								'aboutus',
-								'article',
-								'bookings',
-								'cart',
-								'contactus',
-								'distributors',
-								'events',
-								'gallery',
-								'inventory',
-								'news',
-								'newsletters',
-								'portfolio',
-								'proofs',
-								'search',
-								'service',
-								'testimonials',
-								'tos'
-							],
+							['aboutus','article','bookings','cart','contactus','distributors',
+							'events','gallery','inventory','news','newsletters','portfolio',
+							'proofs','search','service','testimonials','tos'],
 							true)
 						)$subURL.=str_replace(' ','-',strtolower($rm['title'])).'/';
 					}
@@ -203,13 +142,9 @@ if(stristr($html,'<buildMenu')){
 		if($r['contentType']=='cart'){
 			$dti=$ti-86400;
 			$crtq=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `ti`<:ti");
-			$crtq->execute([
-				':ti'=>$dti
-			]);
+			$crtq->execute([':ti'=>$dti]);
 			$crtq=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
-			$crtq->execute([
-				':si'=>SESSIONID
-			]);
+			$crtq->execute([':si'=>SESSIONID]);
 			$crtr=$crtq->fetch(PDO::FETCH_ASSOC);
 			$cart=$theme['settings']['cart_menu'];
 			$cart=preg_replace('/<print cart=[\"\']?quantity[\"\']?>/',$crtr['quantity'],$cart);
@@ -225,8 +160,7 @@ if(stristr($html,'<buildMenu')){
 			URL,
 			$_SERVER['REQUEST_URI']
 		],$menuLogin);
-		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
-			$menuLogin='';
+		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$menuLogin='';
 		else{
 			$menuLogin=preg_replace($config['options'][3]==0?'~<signup>.*?<\/signup>~is':'/<[\/]?signup>/','',$menuLogin);
 			$htmlMenu.=$menuLogin;
@@ -259,25 +193,20 @@ if(stristr($html,'<buildSocial')){
 			],$buildSocial);
 			$socialItems.=$buildSocial;
 		}
-	}else
-		$socialItems='';
+	}else$socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
 	if($config['options'][9]==1){
 		$html=preg_replace('/<[\/]?rss>/','',$html);
 		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'],$html):str_replace('<print rsslink>','rss',$html);
 		$html=str_replace('<print rssicon>',frontsvg('i-social-rss'),$html);
-	}else
-		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
+	}else$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
 }
 if(isset($_GET['activate'])&&$_GET['activate']!=''){
 	$activate=filter_input(INPUT_GET,'activate',FILTER_SANITIZE_STRING);
-	$sa=$db->prepare("UPDATE `".$prefix."login` SET `active`='1',`activate`='',`rank`='100' WHERE `activate`=:activate");
-	$sa->execute([
-		':activate'=>$activate
-	]);
-	$html=$sa->rowCount()>0?str_replace('<activation>',$theme['settings']['activation_success'],$html):str_replace('<activation>',$theme['settings']['activation_error'],$html);
-}else
-	$html=str_replace('<activation>','',$html);
+	$sa=$db->prepare("UPDATE `".$prefix."login` SET `active`='1',`activate`='',`rank`='200' WHERE `activate`=:activate");
+	$sa->execute([':activate'=>$activate]);
+	$html=$sa->rowCount()>0?str_replace('<activation>',preg_replace(['/<print alert>/','/<print text>/'],['success','Your Account is now Active!'],$theme['settings']['alert']),$html):str_replace('<activation>',preg_replace(['/<print alert>/','/<print text>/'],['danger','There was an Issue Activation your Account!'],$theme['settings']['alert']),$html);
+}else$html=str_replace('<activation>','',$html);
 if(stristr($html,'<hours>')){
 	if($config['options'][19]==1){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
@@ -289,27 +218,23 @@ if(stristr($html,'<hours>')){
 				$buildHours=$htmlHours;
 				if($r['tis']!=0){
 					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)
-						$hourFrom=$r['tis'];
+					if($config['options'][21]==1)$hourFrom=$r['tis'];
 					else{
 						$hourFromH=substr($r['tis'],0,2);
 						$hourFromM=substr($r['tis'],3,4);
-						$hourFrom=($hourFromH < 12 ? ltrim($hourFromH,'0') . ($hourFromM > 0 ? $hourFromM : '' ).'am' : $hourFromH - 12 . ($hourFromM > 0 ? $hourFromM : '') . 'pm');
+						$hourFrom=($hourFromH<12?ltrim($hourFromH,'0').($hourFromM>0?$hourFromM:'').'am':$hourFromH - 12 .($hourFromM>0?$hourFromM:'').'pm');
 					}
-				}else
-					$hourFrom='';
+				}else$hourFrom='';
 				if($r['tie']!=0){
 					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)
-						$hourTo=$r['tie'];
+					if($config['options'][21]==1)$hourTo=$r['tie'];
 					else{
 						$hourToH=substr($r['tie'],0,2);
 						$hourToM=substr($r['tie'],3,4);
-						$hourTo=($hourToH < 12 ? ltrim($hourToH,'0') . ($hourToM > 0 ? $hourToM : '') . 'am' : $hourToH - 12 . ($hourToM > 0 ? $hourToM: '') . 'pm');
+						$hourTo=($hourToH<12?ltrim($hourToH,'0').($hourToM>0?$hourToM:'').'am':$hourToH - 12 .($hourToM>0?$hourToM:'').'pm');
 						if($hourTo=='0pm')$hourTo='12pm';
 					}
-				}else
-					$hourTo='';
+				}else$hourTo='';
 				$buildHours=preg_replace([
 					'/<print dayfrom>/',
 					'/<print dayto>/',
@@ -320,7 +245,7 @@ if(stristr($html,'<hours>')){
 					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])).($r['password']==''?'':' - '),
 					($r['password']==$r['username']?'':ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
 					$hourFrom,
-					($r['tie']>0?'-' . $hourTo : ''),
+					($r['tie']>0?'-'.$hourTo:''),
 					($r['title']!=''?ucfirst($r['title']):'')
 				],$buildHours);
 				$hoursItems.=$buildHours;
@@ -333,53 +258,31 @@ if(stristr($html,'<hours>')){
 				'',
 				$hoursItems,
 			],$html);
-	}else
-		$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
+	}else$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
 }
-if(stristr($html,'<email>')){
-	if($config['options'][23]==1){
-		$html=preg_replace([
-			'/<[\/]?email>/',
-			'/<print config=[\"\']?email[\"\']?>/'
-		],[
-			'',
-			'<a href="contactus/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>'
-		],$html);
-	}else
-		$html=preg_replace('~<email>.*?<\/email>~is','',$html,1);
-}
-if(stristr($html,'<contact>')){
-	if($config['options'][22]==1){
-		$html=preg_replace([
-			'/<[\/]?contact>/',
-			'/<print config=[\"\']?business[\"\']?>/',
-			'/<print config=[\"\']?address[\"\']?>/',
-			'/<print config=[\"\']?suburb[\"\']?>/',
-			'/<print config=[\"\']?postcode[\"\']?>/',
-			'/<print config=[\"\']?country[\"\']?>/',
-		],[
-			'',
-			htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
-			$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8')
-		],$html);
-	}else
-		$html=preg_replace('~<contact>.*?<\/contact>~is','',$html,1);
-}
-if(stristr($html,'<phone>')){
-	if($config['options'][24]==1){
-		$html=preg_replace([
-			'/<[\/]?phone>/',
-			'/<print config=[\"\']?phone[\"\']?>/',
-			'/<print config=[\"\']?mobile[\"\']?>/'
-		],[
-			'',
-			$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
-			$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
-		],$html);
-	}else
-		$html=preg_replace('~<phone>.*?<\/phone>~is','',$html,1);
-}
+$html=preg_replace([
+	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
+	stristr($html,'<contact>')&&$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
+	stristr($html,'<phone>')&&$config['options'][24]==1?'/<[\/]?phone>/':'~<phone>.*?<\/phone>~is',
+	'/<print config=[\"\']?email[\"\']?>/',
+	'/<print config=[\"\']?business[\"\']?>/',
+	'/<print config=[\"\']?address[\"\']?>/',
+	'/<print config=[\"\']?suburb[\"\']?>/',
+	'/<print config=[\"\']?postcode[\"\']?>/',
+	'/<print config=[\"\']?country[\"\']?>/',
+	'/<print config=[\"\']?phone[\"\']?>/',
+	'/<print config=[\"\']?mobile[\"\']?>/'
+],[
+	'',
+	'',
+	'',
+	'<a href="contactus/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>',
+	htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
+	$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
+	$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
+	$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
+],$html);
 $content.=$html;

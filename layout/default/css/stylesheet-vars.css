@@ -71,6 +71,10 @@
   --button-background-color-hover: #2955c8;
   --button-background-color-active: #2955c8;
   --button-background-color-disabled: #1844b7;
+  --button-border-width: 1px;
+  --button-border-width-hover: 1px;
+  --button-border-style: solid;
+  --button-border-style-hover: solid;
   --button-border-color: #3f6ad8;
   --button-border-color-hover: #2651be;
   --button-border-color-active: #2651be;

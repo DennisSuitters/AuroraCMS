@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 define('SESSIONID',session_id());
 define('THEME','../layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -32,9 +33,7 @@ $cnt='';
 if($act=='quantity'){
   if($da==0){
     $q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `id`=:id");
-    $q->execute([
-      ':id'=>$id
-    ]);
+    $q->execute([':id'=>$id]);
   }else{
     $q=$db->prepare("UPDATE `".$prefix."cart` SET `quantity`=:quantity WHERE `id`=:id");
     $q->execute([
@@ -43,9 +42,7 @@ if($act=='quantity'){
     ]);
   }
   $q=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
-  $q->execute([
-    ':si'=>$si
-  ]);
+  $q->execute([':si'=>$si]);
   $r=$q->fetch(PDO::FETCH_ASSOC);
   $cnt=$r['quantity'];
   if($r['quantity']==0)$cnt='';
@@ -53,17 +50,12 @@ if($act=='quantity'){
   $total=0;
   $content='';
   $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
-  $q->execute([
-    ':si'=>$si
-  ]);
-  if($q->rowCount()==0){
-    echo'<script>window.top.document.getElementById("content").innerHTML=`'.$theme['settings']['cart_empty'].'`;</script>';
-  }else{
+  $q->execute([':si'=>$si]);
+  if($q->rowCount()==0)echo'<script>window.top.document.getElementById("content").innerHTML=`'.$theme['settings']['cart_empty'].'`;</script>';
+  else{
     $total=0;
     $s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
-    $s->execute([
-      ':si'=>SESSIONID
-    ]);
+    $s->execute([':si'=>SESSIONID]);
     $html=file_get_contents(THEME.'/cart.html');
     preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
     $cartloop=$matches[1];
@@ -72,9 +64,7 @@ if($act=='quantity'){
       while($ci=$s->fetch(PDO::FETCH_ASSOC)){
         $cartitem=$cartloop;
         $si=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-        $si->execute([
-          ':id'=>$ci['iid']
-        ]);
+        $si->execute([':id'=>$ci['iid']]);
         $i=$si->fetch(PDO::FETCH_A.SSOC);
         $cartitem=preg_replace([
           '/<print content=[\"\']?code[\"\']?>/',

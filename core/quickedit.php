@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.1
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Fix getting logged in User Rank and display editable fields accordingly.
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -23,13 +25,12 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+$rank=isset($_SESSION['rank'])?$_SESSION['rank']:400;
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
-//if($t=='content'||$t=='login'){
+//if($t=='content'||$t=='login'||$t=='orders'){
 	$s=$db->prepare("SELECT * FROM `".$prefix.$t."` WHERE id=:id");
-	$s->execute([
-	  ':id'=>$id
-	]);
+	$s->execute([':id'=>$id]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
 	echo'<td colspan="8">'.
 		'<div class="row">'.
@@ -225,18 +226,14 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 				if($st->rowCount()>0){
 					while($rt=$st->fetch(PDO::FETCH_ASSOC)){
 						$tagslist=explode(",",$rt['tags']);
-						foreach($tagslist as $ts){
-							$tgs[]=$ts;
-						}
+						foreach($tagslist as$ts)$tgs[]=$ts;
 					}
 				}
 				$tags=array_unique($tgs);
 				asort($tags);
 					echo'<select id="tags_options" onchange="qeaddTag(`'.$r['id'].'`,$(this).val());">'.
 							'<option value="none">Clear All</option>';
-					foreach($tags as $ts){
-							echo'<option value="'.$ts.'">'.$ts.'</option>';
-					}
+					foreach($tags as$ts)echo'<option value="'.$ts.'">'.$ts.'</option>';
 						echo'</select>'.
 					'</div>';
 			}
@@ -299,18 +296,14 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 			if($st->rowCount()>0){
 				while($rt=$st->fetch(PDO::FETCH_ASSOC)){
 					$tagslist=explode(",",$rt['tags']);
-					foreach($tagslist as $ts){
-						$tgs[]=$ts;
-					}
+					foreach($tagslist as$ts)$tgs[]=$ts;
 				}
 			}
 			$tags=array_unique($tgs);
 			asort($tags);
 				echo'<select id="tags_options" onchange="qeaddTag(`'.$r['id'].'`,$(this).val());">'.
 						'<option value="none">Clear All</option>';
-				foreach($tags as $ts){
-						echo'<option value="'.$ts.'">'.$ts.'</option>';
-				}
+				foreach($tags as$ts)echo'<option value="'.$ts.'">'.$ts.'</option>';
 					echo'</select>'.
 	    	'</div>';
 			}
@@ -378,6 +371,7 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 							'<option value="700"'.($r['rank']==700?' selected':'').'>Moderator</option>'.
 							'<option value="800"'.($r['rank']==800?' selected':'').'>Manager</option>'.
 							'<option value="900"'.($r['rank']==900?' selected':'').'>Administrator</option>'.
+							($rank==1000?'<option value="1000"'.($r['rank']==1000?' selected':'').'>Developer</option>':'').
 						'</select>'.
 					'</div>'.
 				'</div>'.
@@ -398,6 +392,26 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 				'<div class="row">'.
 					'Browser Info: '.$r['userAgent'].
 				'</div>';
+		}
+		if($t=='orders'){
+			echo'<div class="row">'.
+				'<label for="qestatus'.$r['id'].'">Status</label>'.
+				'<div class="col-12">'.
+					ucfirst($r['status']).
+				'</div>'.
+			'</div>'.
+			'<div class="row">'.
+				'<label for="qeti'.$r['id'].'">Created</label>'.
+				'<div class="col-12">'.
+					date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti'])).
+				'</div>'.
+			'</div>'.
+			'<div class="row">'.
+				'<label for="qedueti'.$r['id'].'">Due</label>'.
+				'<div class="col-12">'.
+					date($config['dateFormat'],$r['due_ti']).
+				'</div>'.
+			'</div>';
 		}
 	    echo'</div>'.
 	  '</div>'.

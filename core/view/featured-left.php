@@ -7,17 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 if(stristr($html,'<categories')){
 	preg_match('/<categories>([\w\W]*?)<\/categories>/',$html,$matches);
 	$cat=$matches[1];
 	$s=$db->prepare("SELECT DISTINCT `category_1` FROM `".$prefix."content` WHERE `contentType` LIKE 'inventory' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY `category_1` ASC");
-	$s->execute([
-		':rank'=>$_SESSION['rank']
-	]);
+	$s->execute([':rank'=>$_SESSION['rank']]);
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$items=$cat;
@@ -31,6 +30,5 @@ if(stristr($html,'<categories')){
 		$output.=$items;
 	}
 	$cats=preg_replace('~<categories>.*?<\/categories>~is',$output,$html,1);
-}else
-	$cats='';
+}else$cats='';
 $content.=$cats;

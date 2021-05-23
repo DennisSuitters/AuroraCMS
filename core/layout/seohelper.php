@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -21,11 +22,11 @@ $s->execute([
 ]);
 if($s->rowCount()>0){
   $r=$s->fetch(PDO::FETCH_ASSOC);
-  echo'<div class="fancybox-ajax m-5">';
-    echo'<h6 class="bg-dark p-2">'.$r['title'].'</h6>';
-    echo'<div class="m-3">';
-      echo$r['notes'];
-    echo'</div>';
-  echo'</div>';
+  echo'<div class="fancybox-ajax m-5">'.
+    '<h6 class="bg-dark p-2">'.$r['title'].'</h6>'.
+    '<div class="m-3">'.
+      $r['notes'].
+    '</div>'.
+  '</div>';
 }else
   echo$t.' not found';?>

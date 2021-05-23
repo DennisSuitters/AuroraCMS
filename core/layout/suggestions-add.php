@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -23,9 +24,9 @@ define('UNICODE','UTF-8');?>
   <h6 class="bg-dark p-2">Add an Editing Suggestion</h6>
   <div class="m-3" id="suggestions_add">
     <form id="suggestionsform" method="post" action="core/add_suggestion.php">
-      <input name="id" type="hidden" value="<?php echo$id;?>">
-      <input name="t" type="hidden" value="<?php echo$t;?>">
-      <input name="c" type="hidden" value="<?php echo$c;?>">
+      <input name="id" type="hidden" value="<?=$id;?>">
+      <input name="t" type="hidden" value="<?=$t;?>">
+      <input name="c" type="hidden" value="<?=$c;?>">
       <?php if($c!='notes'){?>
         <label for="suggestedit">Suggested Edit</label>
         <div class="form-row">

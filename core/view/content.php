@@ -7,29 +7,26 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Add Parsing of Google reCaptcha.
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 $rank=0;
 $notification='';
 $show='categories';
 $status='published';
-$theme=parse_ini_file(THEME.'/theme.ini',true);
 $itemCount=$config['showItems'];
 if($view=='newsletters'){
 	if($args[0]=='unsubscribe'&&isset($args[1])){
 		$s=$db->prepare("DELETE FROM `".$prefix."subscribers` WHERE `hash`=:hash");
-		$s->execute([
-			':hash'=>$args[1]
-		]);
-		$notification=$theme['settings']['notification_unsubscribe'];
+		$s->execute([':hash'=>$args[1]]);
+		$notification=preg_replace(['/<print alert>/','/<print text>/'],['success','You are now Unsubscribed from our Newletters'],$theme['settings']['alert']);
 	}
 }
-if(isset($_POST['act'])=='sort')
-	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
-else
-	$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
+if(isset($_POST['act'])=='sort')$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
+else$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
 $sortOrder=" ORDER BY ";
 if($sort=="")$sortOrder.="`ti` DESC ";
 if($sort=="new")$sortOrder.="`ti` DESC ";
@@ -40,15 +37,11 @@ if($sort=="best")$sortOrder.="`sold` DESC ";
 if($sort=="view")$sortOrder.="`views` DESC ";
 if($sort=="priceh")$sortOrder.="`cost` DESC ";
 if($sort=="pricel")$sortOrder.="`cost` ASC ";
-if($view=='page')
-	$show='';
+if($view=='page')$show='';
 elseif($view=='search'){
-	if(isset($args[0])&&$args[0]!='')
-		$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
-	elseif(isset($_POST['search'])&&$_POST['search']!='')
-		$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
-	else
-		$search='%';
+	if(isset($args[0])&&$args[0]!='')$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
+	elseif(isset($_POST['search'])&&$_POST['search']!='')$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
+	else$search='%';
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`code`) LIKE LOWER(:search) OR LOWER(`brand`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`category_1`) LIKE LOWER(:search) OR LOWER(`category_2`) LIKE LOWER(:search) OR LOWER(`category_3`) LIKE LOWER(:search) OR LOWER(`category_4`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`tags`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) AND `status`=:status AND `rank` <= :rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder));
 	$s->execute([
 		':search'=>$search,
@@ -85,8 +78,7 @@ elseif($view=='search'){
 			':rank'=>$_SESSION['rank']
 		]);
 	}
-}elseif($view=='bookings')
-	$id=(isset($args[0])?(int)$args[0]:0);
+}elseif($view=='bookings')$id=(isset($args[0])?(int)$args[0]:0);
 elseif(isset($args[1])&&strlen($args[1])==2){
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `ti`<:ti AND `rank`<=:rank ORDER BY `ti` ASC");
 	$s->execute([
@@ -158,8 +150,7 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 	if($s->rowCount()<1){
 		if($view=='proofs'){
 			$status='%';
-			if($_SESSION['loggedin']==false)
-				die();
+			if($_SESSION['loggedin']==false)die();
 		}
 		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`urlSlug`) LIKE LOWER(:urlSlug) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder));
 		$s->execute([
@@ -191,15 +182,28 @@ elseif(isset($args[1])&&strlen($args[1])==2){
 	}
 }
 if($view=='testimonials')$show='';
-if($show=='categories')
-	require'core/parser_items.php';
-if($show=='item')
-	require'core/parser_item.php';
+if($show=='categories')require'core/parser_items.php';
+if($show=='item')require'core/parser_item.php';
 if($view=='login'){
-	$html=preg_replace('/<print url>/',URL,$html,1);
-	if($config['options'][3]==1)
-		$html=preg_replace('/<\/?signup?>/','',$html);
-	else
-		$html=preg_replace('~<signup>.*?<\/signup>~is','',$html,1);
+	if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
+		$html=preg_replace([
+			'/<\/?loggedin?>/',
+			'~<loggedout>.*?<\/loggedout>~is'
+		],'',$html);
+	}else{
+		$html=preg_replace([
+			'/<\/?loggedout?>/',
+			'~<loggedin>.*?<\/loggedin>~is'
+		],'',$html);
+	}
+	$html=preg_replace([
+		'/<print url>/',
+		$config['options'][3]==1?'/<\/?signup?>/':'~<signup>.*?<\/signup>~is',
+		'/<g-recaptcha>/'
+	],[
+		URL,
+		'',
+		$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':''
+	],$html);
 }
 $content.=$html;

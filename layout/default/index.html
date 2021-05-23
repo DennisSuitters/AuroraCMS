@@ -9,20 +9,22 @@
 		<article class="col-12 col-lg-8">
 			<print page="notes">
 		</article>
-		<aside id="newsletters" class="col-12 col-lg-3 m-0">
+		<aside id="newsletters" class="col-12 col-md-3 m-0">
 			<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
-				<input type="hidden" name="emailtrap" value="none">
+				<input type="hidden" name="act" value="add_subscriber">
+				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<div class="card">
 					<fieldset class="border-0 m-0">
 						<legend class="h4">Subscribe to our Newsletters</legend>
+						<label for="fullname" aria-hidden="true">Full Name</label>
+						<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 						<label for="newslettersemail">Email</label>
 						<input type="email" id="newslettersemail" name="email" value="" required aria-required="true" placeholder="Email...">
 						<div class="requirements alert alert-danger">
 							Must be a valid email address.
 						</div>
-						<div class="text-right">
-							<button id="newsletters-btn" class="justify-content-flex-end" type="submit">Subscribe</button>
-						</div>
+						<g-recaptcha>
+						<button class="btn-block mt-3" id="newsletters-btn" type="submit">Subscribe</button>
 					</fieldset>
 				</div>
 			</form>

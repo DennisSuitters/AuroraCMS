@@ -7,30 +7,25 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-$q->execute([
-  ':id'=>$id
-]);
+$q->execute([':id'=>$id]);
 $r=$q->fetch(PDO::FETCH_ASSOC);
 $r['notes']=rawurldecode($r['notes']);
 $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-$s->execute([
-  ':id'=>$r['cid']
-]);
+$s->execute([':id'=>$r['cid']]);
 $c=$s->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 if($c['email']!=''){
   $si=$db->prepare("SELECT `code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-  $si->execute([
-    ':id'=>$r['rid']
-  ]);
+  $si->execute([':id'=>$r['rid']]);
   $i=$si->fetch(PDO::FETCH_ASSOC);
   require'phpmailer/class.phpmailer.php';
   $mail=new PHPMailer;
@@ -86,6 +81,4 @@ if($c['email']!=''){
     $alertmsg=str_replace('{business}',$r['business']!=''?$r['business']:$r['name'],'There was an issue sending the Order to {business}!');
     echo'<script>window.top.window.toastr["error"](`'.$alertmsg.'`);</script>';
   }
-}else{
-  echo'<script>window.top.window.toastr["info"](`Client Email has not been set!`");</script>';
-}
+}else echo'<script>window.top.window.toastr["info"](`Client Email has not been set!`");</script>';

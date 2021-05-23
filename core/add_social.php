@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -22,9 +23,8 @@ $user=filter_input(INPUT_POST,'user',FILTER_SANITIZE_NUMBER_INT);
 $icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
 $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
 if(filter_var($url,FILTER_VALIDATE_URL)){
-	if($icon=='none'||$url==''){
-		echo'<script>window.top.window.toastr["error"]("Not all Fields were filled in!");</script>';
-	}else{
+	if($icon=='none'||$url=='')echo'<script>window.top.window.toastr["error"]("Not all Fields were filled in!");</script>';
+	else{
 		$q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`icon`,`url`) VALUES (:uid,'social',:icon,:url)");
 		$q->execute([
 			':uid'=>kses($user,array()),

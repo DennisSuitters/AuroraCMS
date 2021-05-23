@@ -35,7 +35,7 @@ button,
               border-color .15s ease-in-out,
               box-shadow .15s ease-in-out;
   margin: 0;
-  border: var(--button-border-width) var(--button-border-style) var(--button-background-color);
+  border: var(--button-border-width) var(--button-border-style) var(--button-border-color);
   border-radius: var(--border-radius);
   background-color: var(--button-background-color);
   padding: .65rem .75rem;
@@ -52,7 +52,7 @@ button,
 button:hover,
 .btn:hover {
   cursor: pointer;
-  border: var(--button-border-width-hover) var(--button-border-style) var(--button-background-color-hover);
+  border: var(--button-border-width-hover) var(--button-border-style-hover) var(--button-border-color-hover);
   background-color: var(--button-background-color-hover);
   color: var(--button-color-hover);
   text-decoration: none; }
@@ -805,12 +805,18 @@ input:invalid:focus:not(:-ms-input-placeholder) ~ .requirements {
   max-height: 200px; }
 
 input:invalid:focus:not(:placeholder-shown) ~ .requirements {
-  border: 0 2px 2px 2px;
-  padding: 20px 30px 20px 50px;
-  max-height: 200px; }
+  position: relative;
+  border: var(--border-width) var(--border-style) transparent;
+  border-color: var(--info-border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--info-background-color);
+  padding: .75em 1.25em;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-height: 200px;
+  color: var(--info-color); }
 
 form .requirements {
-  transition: .28s;
   border: 0;
   padding:0;
   max-height: 0;

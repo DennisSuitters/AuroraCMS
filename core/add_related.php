@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,9 +19,8 @@ function svg2($svg,$class=null,$size=null){
 }
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $rid=isset($_POST['rid'])?filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'rid',FILTER_SANITIZE_NUMBER_INT);
-if($id==$rid){
-	echo'<script>window.top.window.toastr["warning"]("Item can\'t be related to itself!");</script>';
-}else{
+if($id==$rid)echo'<script>window.top.window.toastr["warning"]("Item can\'t be related to itself!");</script>';
+else{
 	if($rid!=0){
 		$s=$db->prepare("SELECT `id` FROM `".$prefix."choices` WHERE `contentType`='related' AND `uid`=:id  AND `rid`=:rid");
 		$s->execute([
@@ -39,9 +38,7 @@ if($id==$rid){
 			$e=$db->errorInfo();
 			if(is_null($e[2])){
 				$si=$db->prepare("SELECT `id`,`contentType`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-				$si->execute([
-					':id'=>$rid
-				]);
+				$si->execute([':id'=>$rid]);
 				$ri=$si->fetch(PDO::FETCH_ASSOC);
 				echo'<script>'.
 							'window.top.window.$("#relateditems").append(`<div id="l_'.$id.'" class="form-row mt-1">'.
@@ -53,13 +50,7 @@ if($id==$rid){
 								'</form>'.
 							'</div>`);'.
 						'</script>';
-			}else{
-				echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';
-			}
-		}else{
-			echo'<script>window.top.window.toastr["warning"]("Item is already related!");</script>';
-		}
-	}else{
-		echo'<script>window.top.window.toastr["warning"]("You need to select in Item to Relate!");</script>';
-	}
+			}else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';
+		}else echo'<script>window.top.window.toastr["warning"]("Item is already related!");</script>';
+	}else echo'<script>window.top.window.toastr["warning"]("You need to select in Item to Relate!");</script>';
 }

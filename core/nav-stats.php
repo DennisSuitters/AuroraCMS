@@ -7,17 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 $getcfg=true;
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $nous=$db->prepare("SELECT COUNT(`id`) AS cnt FROM `".$prefix."login` WHERE `lti`>:lti AND `rank`!=1000");
-$nous->execute([
-  ':lti'=>time()-300
-]);
+$nous->execute([':lti'=>time()-300]);
 $nou=$nous->fetch(PDO::FETCH_ASSOC);
 $nc=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."comments` WHERE `contentType`!='review' AND `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);
 $nr=$db->query("SELECT COUNT(`id`) AS cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);

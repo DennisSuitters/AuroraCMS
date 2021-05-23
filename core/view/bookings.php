@@ -7,30 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Add Parsing of Google reCaptcha.
+ * @changes    v0.1.2 Fix selection of Service/Event.
+ * @changes    v0.1.2 Fix Date to current, or Event date if selected from content item page.
+ * @changes    v0.1.2 Add parsing of hiding elements if selected from content item page.
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
   $breaditem=$matches[1];
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
-  $jsonld='<script type="application/ld+json">'.
-    '{'.
-      '"@context":"http://schema.org",'.
-      '"@type":"BreadcrumbList",'.
-      '"itemListElement":'.
-        '['.
-          '{'.
-            '"@type":"ListItem",'.
-            '"position":1,'.
-            '"item":'.
-              '{'.
-                '"@id":"'.URL.'",'.
-                '"name":"Home"'.
-              '}'.
-          '},';
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -40,16 +31,7 @@ if(stristr($html,'<breadcrumb>')){
   ],$breaditem);
   $breaditems=$breadit;
   $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-  $jsonld.='{'.
-    '"@type":"ListItem",'.
-    '"position":2,'.
-    '"item":'.
-      '{'.
-        '"@id":"'.URL.urlencode($page['contentType']).'",'.
-        '"name":"'.htmlspecialchars(ucfirst($page['title']),ENT_QUOTES,'UTF-8').'"'.
-      '}'.
-    '}'.
-  ']}</script>';
+  $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars(ucfirst($page['title']),ENT_QUOTES,'UTF-8').'"}}]}</script>';
   $breaditems.=$breadit;
   $html=preg_replace([
     '/<[\/]?breadcrumb>/',
@@ -63,15 +45,17 @@ if(stristr($html,'<breadcrumb>')){
     ''
   ],$html);
 }
+$ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $html=preg_replace([
   $page['notes']!=''?'/<print page=[\"\']?notes[\"\']?>/':'~<pagenotes>.*?<\/pagenotes>~is',
   '/<[\/]?pagenotes>/',
-  '/<print currentdate>/'
+  '/<g-recaptcha>/'
 ],[
   rawurldecode($page['notes']),
   '',
-  date('Y-m-dTH:i',time())
+  $config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''&&stristr($html,'g-recaptcha')?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':''
 ],$html);
+$eventDate=0;
 if(stristr($html,'<items>')){
   $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
   if($sb->rowCount()>0){
@@ -79,17 +63,25 @@ if(stristr($html,'<items>')){
     $item=$matches[1];
     $output='';
     while($rb=$sb->fetch(PDO::FETCH_ASSOC)){
+      if($rb['tie']>0){
+        if(time()>$rb['tie'])continue;
+      }
+      if($args[0]==$rb['id'])$eventDate=$rb['tis'];
       $items=$item;
       $items=preg_replace([
         '/<print id>/',
         '/<print content=[\"\']?thumb[\"\']?>/',
         '/<print content=[\"\']?imageALT[\"\']?>/',
-        '/<print content=[\"\']?title[\"\']?>/'
+        '/<print content=[\"\']?title[\"\']?>/',
+        '/<itemChecked>/',
+        '/<itemHidden>/'
       ],[
         $rb['id'],
         ($rb['file']!=''&&file_exists('media/'.'thumbs'.basename($rb['file']))?'media/'.'thumbs/'.basename($rb['file']):NOIMAGESM),
         ($rb['fileALT']!=''?$rb['fileeALT']:$rb['title']),
-        $rb['title']
+        $rb['title'],
+        ($args[0]==$rb['id']?'checked':''),
+        (isset($args[0])&&$args[0]!=$rb['id']?'d-none':'')
       ],$items);
       $output.=$items;
     }
@@ -103,8 +95,7 @@ if(stristr($html,'<items>')){
       '',
       ''
     ],$html);
-  }else
-    $html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
+  }else$html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
 }else{
   $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
   if($sb->rowCount()>0){
@@ -119,7 +110,13 @@ if(stristr($html,'<items>')){
       $bookable,
       ''
     ],$html);
-  }else
-    $html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
+  }else$html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
 }
+$html=preg_replace([
+  '/<print currentdate>/',
+  '/<itemreadonly>/'
+],[
+  ($eventDate>0?date('Y-m-d\TH:i',$eventDate):date('Y-m-d\TH:i',time())),
+  ($eventDate>0?'readonly':'')
+],$html);
 $content.=$html;

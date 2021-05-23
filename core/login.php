@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Add disable tracking of IP's associated with selected user accounts.
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(!isset($act))
   $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
@@ -23,9 +25,7 @@ if($act=='logout'){
   $username=isset($_POST['username'])?filter_input(INPUT_POST,'username',FILTER_SANITIZE_STRING):$_SESSION['username'];
   $password=isset($_POST['password'])?filter_input(INPUT_POST,'password',FILTER_SANITIZE_STRING):$_SESSION['password'];
   $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username AND `activate`='' AND `active`='1' LIMIT 1");
-  $q->execute([
-    ':username'=>$username
-  ]);
+  $q->execute([':username'=>$username]);
   $user=$q->fetch(PDO::FETCH_ASSOC);
   if($user['id']!=0){
     if(password_verify($password,$user['password'])){
@@ -57,6 +57,6 @@ if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
     ':lti'=>time(),
     ':id'=>$_SESSION['uid'],
     ':userAgent'=>$_SERVER['HTTP_USER_AGENT'],
-    ':userIP'=>$_SERVER['REMOTE_ADDR']
+    ':userIP'=>isset($_SERVER['REMOTE_ADDR'])?($_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR']):'127.0.0.1'
   ]);
 }

@@ -7,31 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- */
+ * @changes    v0.1.2 Add Parsing of Google reCaptcha.
+ * @changes    v0.1.2 Check over and tidy up code.
+*/
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
   $breaditem=$matches[1];
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-  $jsonld='<script type="application/ld+json">'.
-    '{'.
-      '"@context":"http://schema.org",'.
-      '"@type":"BreadcrumbList",'.
-      '"itemListElement":'.
-        '['.
-          '{'.
-            '"@type":"ListItem",'.
-            '"position":1,'.
-            '"item":'.
-              '{'.
-                '"@id":"'.URL.'",'.
-                '"name":"Home"'.
-              '}'.
-          '},';
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -45,15 +33,7 @@ if(stristr($html,'<breadcrumb>')){
   ],[
     htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
   ],$breadcurrent);
-  $jsonld.='{'.
-    '"@type":"ListItem",'.
-    '"position":2,'.
-    '"item":'.
-      '{'.
-        '"@id":"'.URL.urlencode($page['contentType']).'",'.
-        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
-      '}'.
-  '}';
+  $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
   $breaditems.=$breadit;
   $html=preg_replace([
     '/<[\/]?breadcrumb>/',
@@ -75,8 +55,7 @@ if($page['notes']!=''){
 		rawurldecode($page['notes']),
 		''
 	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+}else$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
 if(stristr($html,'<hours>')){
 	if($config['options'][19]==1){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
@@ -88,26 +67,22 @@ if(stristr($html,'<hours>')){
 				$buildHours=$htmlHours;
 				if($r['tis']!=0){
 					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)
-						$hourFrom=$r['tis'];
+					if($config['options'][21]==1)$hourFrom=$r['tis'];
 					else{
 						$hourFromH=substr($r['tis'],0,2);
 						$hourFromM=substr($r['tis'],3,4);
 						$hourFrom=($hourFromH<12?ltrim($hourFromH,'0').($hourFromM>0?$hourFromM:'').'am':$hourFromH - 12 .($hourFromM>0?$hourFromM:'').'pm');
 					}
-				}else
-					$hourFrom='';
+				}else$hourFrom='';
 				if($r['tie']!=0){
 					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)
-						$hourTo=$r['tie'];
+					if($config['options'][21]==1)$hourTo=$r['tie'];
 					else{
 						$hourToH=substr($r['tie'],0,2);
 						$hourToM=substr($r['tie'],3,4);
 						$hourTo=($hourToH<12?ltrim($hourToH,'0').($hourToM>0?$hourToM:'').'am':$hourToH - 12 .($hourToM>0?$hourToM:'').'pm');
 					}
-				}else
-					$hourTo='';
+				}else$hourTo='';
 				$buildHours=preg_replace([
 					'/<print dayfrom>/',
 					'/<print dayto>/',
@@ -177,10 +152,7 @@ if(stristr($html,'<phone>')){
 	],$html);
 }
 if(stristr($html,'<map>')){
-  $html=preg_replace(
-    $config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<[\/]?map>/':'~<map>.*?<\/map>~is',
-    '',
-    $html);
+  $html=preg_replace($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<[\/]?map>/':'~<map>.*?<\/map>~is','',$html);
 }
 $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
 $s->execute();
@@ -198,5 +170,6 @@ if($s->rowCount()>0){
 		'/<[\/]?subjectText>/'
 	],'',$html);
 }
+$html=preg_replace('/<g-recaptcha>/',$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':'',$html);
 require'core/parser.php';
 $content.=$html;

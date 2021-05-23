@@ -7,18 +7,17 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 header('Content-Type:application/rss+xml;charset=ISO-8859-1');
 require'db.php';
 $config=$db->query("SELECT `seoTitle`,`seoCaption` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($args[0]==''||$args[0]=='index')$args[0]='%_%';
 $ti=time();
-echo'<?xml version="1.0"?>'.
-  '<rss version="2.0">'.
-    '<channel>'.
+echo'<?xml version="1.0"?><rss version="2.0"><channel>'.
       '<title>'.$config['seoTitle'].'</title>'.
       '<description>'.$config['seoCaption'].'</description>'.
       '<link>'.URL.'</link>'.
@@ -29,9 +28,7 @@ echo'<?xml version="1.0"?>'.
 $deffiletype=image_type_to_mime_type(exif_imagetype(FAVICON));
 $deflength=filesize(FAVICON);
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status`='published' AND `internal`!='1' ORDER BY `ti` DESC LIMIT 25");
-$s->execute([
-  ':contentType'=>$args[0]
-]);
+$s->execute([':contentType'=>$args[0]]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
   $img=FAVICON;
   $filetype=$deffiletype;
@@ -75,5 +72,4 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
     '<enclosure url="'.$img.'" length="'.$length.'" type="'.$filetype.'"/>'.
   '</item>';
 }
-echo'</channel>'.
-'</rss>';
+echo'</channel></rss>';

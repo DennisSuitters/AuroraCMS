@@ -7,10 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.1
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Add check if Compsing New Email contains an email set in the URL.
+ * @changes    v0.1.2 Use PHP short codes where possible.
 */
 if($args[0]!='compose'){
   $q=$db->prepare("UPDATE `".$prefix."messages` SET `status`='read' WHERE `id`=:id");
@@ -39,16 +40,16 @@ if($args[0]!='compose'){
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
+          <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
           <div>Messages Edit</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-placement="left" href="<?php echo$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?php svg('back');?></a>
+            <a class="btn" data-tooltip="tooltip" data-placement="left" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
           </div>
         </div>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
-          <li class="breadcrumb-item"><?php echo$args[0]=='view'?'View':'Compose';?></li>
-          <li class="breadcrumb-item active"><strong id="titleupdate"><?php echo$r['subject'];?></strong></li>
+          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
+          <li class="breadcrumb-item"><?=$args[0]=='view'?'View':'Compose';?></li>
+          <li class="breadcrumb-item active"><strong id="titleupdate"><?=$r['subject'];?></strong></li>
         </ol>
       </div>
     </div>
@@ -58,16 +59,16 @@ if($args[0]!='compose'){
           <?php $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
           $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
           <div class="messages-menu col-12 col-md-2">
-            <a class="btn mb-2" href="<?php echo URL.$settings['system']['admin'].'/messages/compose';?>">Compose</a><br>
-            <a class="link mb-1" href="<?php echo URL.$settings['system']['admin'].'/messages';?>"><?php svg('inbox');?> Inbox</a><br>
-            <a class="link badge mb-1" href="<?php echo URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?php echo$ur['cnt']>0?$ur['cnt']:'';?>"><?php svg('email');?> Unread</a><br>
-            <a class="link mb-1" href="<?php echo URL.$settings['system']['admin'].'/messages/sent';?>"><?php svg('email-send');?> Sent</a><br>
-            <a class="link mb-1" href="<?php echo URL.$settings['system']['admin'].'/messages/important';?>"><?php svg('bookmark');?> Important</a><br>
-            <a class="link badge mb-1" data-badge="<?php echo$sp['cnt']>0?$sp['cnt']:'';?>" href="<?php echo URL.$settings['system']['admin'].'/messages/spam';?>"><?php svg('email-spam');?> Spam</a>
+            <a class="btn mb-2" href="<?= URL.$settings['system']['admin'].'/messages/compose';?>">Compose</a><br>
+            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages';?>"><?= svg2('inbox');?> Inbox</a><br>
+            <a class="link badge mb-1" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><?= svg2('email');?> Unread</a><br>
+            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><?= svg2('email-send');?> Sent</a><br>
+            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><?= svg2('bookmark');?> Important</a><br>
+            <a class="link badge mb-1" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>"><?= svg2('email-spam');?> Spam</a>
           </div>
           <div class="col-12 col-md-10 pl-4">
             <form target="sp" method="post" action="core/email_message.php" enctype="multipart/form-data">
-              <input name="id" type="hidden" value="<?php echo$r['id'];?>">
+              <input name="id" type="hidden" value="<?=$r['id'];?>">
               <div class="row">
                 <div class="col-12 text-right">
                   <div class="btn-group">
@@ -81,35 +82,35 @@ if($args[0]!='compose'){
                 </div>
               </div>
               <?php if($args[0]!='compose'){?>
-              <label id="messageDateCreated" for="ti"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageDateCreated" aria-label="PermaLink to Message Date Created Field">&#128279;</a>':'';?>Created</label>
+              <label id="messageDateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageDateCreated" aria-label="PermaLink to Message Date Created Field">&#128279;</a>':'';?>Created</label>
               <div class="form-row">
-                <input id="ti" type="text" value="<?php echo isset($r['ti'])?date($config['dateFormat'],$r['ti']):date($config['dateFormat'],time());?>" readonly>
+                <input id="ti" type="text" value="<?= isset($r['ti'])?date($config['dateFormat'],$r['ti']):date($config['dateFormat'],time());?>" readonly>
               </div>
               <?php }?>
-              <label id="messageSubject" for="subject"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageSubject" aria-label="PermaLink to Message Subject Field">&#128279;</a>':'';?>Subject</label>
+              <label id="messageSubject" for="subject"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageSubject" aria-label="PermaLink to Message Subject Field">&#128279;</a>':'';?>Subject</label>
               <div class="form-row">
-                <input id="subject" name="subject" type="text" value="<?php echo$args[0]=='reply'?'Re: ':'';echo$args[0]!='compose'?$r['subject']:'';?>" placeholder="Enter a Subject" required aria-required="true">
+                <input id="subject" name="subject" type="text" value="<?=$args[0]=='reply'?'Re: ':'';echo$args[0]!='compose'?$r['subject']:'';?>" placeholder="Enter a Subject" required aria-required="true">
               </div>
-              <label id="messageTo" for="to_email"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageTo" aria-label="PermaLink to Message To Email Field">&#128279;</a>':'';?>To</label>
+              <label id="messageTo" for="to_email"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageTo" aria-label="PermaLink to Message To Email Field">&#128279;</a>':'';?>To</label>
               <div class="form-row">
-                <input id="to_email" name="to_email" type="text" value="<?php echo(isset($r)&&$r['to_email']!=''?$r['to_email']:'');?>" placeholder="Enter an Email..." required aria-required="true">
+                <input id="to_email" name="to_email" type="text" value="<?= isset($r)&&$r['to_email']!=''?$r['to_email']:'';?>" placeholder="Enter an Email..." required aria-required="true">
               </div>
-              <label id="messageFrom" for="from_email"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageFrom" aria-label="PermaLink to Message From Email Field">&#128279;</a>':'';?>From</label>
+              <label id="messageFrom" for="from_email"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageFrom" aria-label="PermaLink to Message From Email Field">&#128279;</a>':'';?>From</label>
               <div class="form-row">
                 <?php if($args[0]=='compose'){?>
                   <select id="from_email" name="from_email">
                     <?php if($config['email']!=''){?>
-                      <option value="<?php echo$config['email'];?>"><?php echo$config['business'].' &lt;'.$config['email'].'&gt;';?></option>
+                      <option value="<?=$config['email'];?>"><?=$config['business'].' &lt;'.$config['email'].'&gt;';?></option>
                     <?php }?>
-                    <option value="<?php echo$user['email'];?>"><?php echo$user['name'].' &lt;'.$user['email'].'&gt;';?></option>
+                    <option value="<?=$user['email'];?>"><?=$user['name'].' &lt;'.$user['email'].'&gt;';?></option>
                   </select>
                 <?php }else{?>
-                  <input id="from_email" name="from_email" type="text" value="<?php echo$args[0]=='compose'?$user['email']:$r['from_email'];?>" required aria-required="true">
+                  <input id="from_email" name="from_email" type="text" value="<?=$args[0]=='compose'?$user['email']:$r['from_email'];?>" required aria-required="true">
                 <?php }?>
               </div>
-              <label id="messageAttachments" for="attachments"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageAttachments" aria-label="PermaLink to Message Attachments">&#128279;</a>':'';?>Attachments</label>
+              <label id="messageAttachments" for="attachments"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageAttachments" aria-label="PermaLink to Message Attachments">&#128279;</a>':'';?>Attachments</label>
               <div class="form-row">
-                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?php echo$r['id'];?>','messages','attachments');return false;"><?php svg('browse-media');?></button>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','messages','attachments');return false;"><?= svg2('browse-media');?></button>
               </div>
               <div id="attachments">
                 <?php if($r['attachments']!=''){
@@ -127,17 +128,17 @@ if($args[0]!='compose'){
                       $attimg='core/images/i-file-archive.svg';
                     if(preg_match("/\.(doc|docx|xls)$/",$attachment))
                       $attimg='core/images/i-file-docs.svg';?>
-                    <div class="form-row mt-1" id="a_<?php echo$ti;?>">
-                      <img src="<?php echo$attimg;?>" alt="<?php echo basename($attachment);?>">
+                    <div class="form-row mt-1" id="a_<?=$ti;?>">
+                      <img src="<?=$attimg;?>" alt="<?= basename($attachment);?>">
                       <div class="input-text col-12">
-                        <a aria-label="<?php echo basename($attachment);?>" target="_blank" href="<?php echo$attachment;?>"><?php echo basename($attachment);?></a>
+                        <a aria-label="<?= basename($attachment);?>" target="_blank" href="<?=$attachment;?>"><?= basename($attachment);?></a>
                       </div>
-                      <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="attRemove('<?php echo$ti;?>');return false;"><?php svg('trash');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="attRemove('<?=$ti;?>');return false;"><?= svg2('trash');?></button>
                     </div>
                   <?php }
                 }?>
               </div>
-              <input id="atts" name="atts" type="hidden" value="<?php echo$r['attachments'];?>">
+              <input id="atts" name="atts" type="hidden" value="<?=$r['attachments'];?>">
               <script>
                 function attRemove(id){
                   var href=$('#a_'+id+' a').attr('href');
@@ -147,12 +148,12 @@ if($args[0]!='compose'){
                 }
               </script>
               <?php if($args[0]!='compose'){?>
-                <label id="messageNotes" for="notes"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageNotes" aria-label="PermaLink to Message">&#128279;</a>':'';?>Message</label>
+                <label id="messageNotes" for="notes"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageNotes" aria-label="PermaLink to Message">&#128279;</a>':'';?>Message</label>
                 <div class="form-row">
-                  <iframe id="notes" src="core/viewemail.php?id=<?php echo$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
+                  <iframe id="notes" src="core/viewemail.php?id=<?=$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
                 </div>
               <?php }?>
-              <label id="messageReply" for="bod"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageReply" aria-label="PermaLink to Message">&#128279;</a>':'';?>Reply</label>
+              <label id="messageReply" for="bod"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageReply" aria-label="PermaLink to Message">&#128279;</a>':'';?>Reply</label>
               <div class="form-row">
                 <textarea id="bod" name="bod"></textarea>
               </div>

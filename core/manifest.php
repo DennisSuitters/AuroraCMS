@@ -12,9 +12,9 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 header('Content-Type: application/json');
-$getcfg=true;
 require'db.php';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
+$config=$db->query("SELECT * FROM config WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
 if(!defined('THEME'))define('THEME','layout/'.$config['theme']);
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 if(!defined('FAVICON')){

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
@@ -17,21 +18,7 @@ if(stristr($html,'<breadcrumb>')){
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=1;
-  $jsonld='<script type="application/ld+json">'.
-    '{'.
-      '"@context":"http://schema.org",'.
-      '"@type":"BreadcrumbList",'.
-      '"itemListElement":'.
-        '['.
-          '{'.
-            '"@type":"ListItem",'.
-            '"position":1,'.
-            '"item":'.
-              '{'.
-                '"@id":"'.URL.'",'.
-                '"name":"Home"'.
-              '}'.
-          '},';
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
   $breadit=preg_replace([
    '/<print breadcrumb=[\"\']?url[\"\']?>/',
    '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -41,21 +28,8 @@ if(stristr($html,'<breadcrumb>')){
   ],$breaditem);
   $breaditems=$breadit;
   $jsoni++;
-  $breadit=preg_replace([
-   '/<print breadcrumb=[\"\']?title[\"\']?>/'
-  ],[
-   htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
-  ],$breadcurrent);
-  $jsonld.='{'.
-    '"@type":"ListItem",'.
-    '"position":'.$jsoni.','.
-    '"item":'.
-      '{'.
-        '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
-        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
-      '}'.
-    '}'.
-  ']}</script>';
+  $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+  $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}]}</script>';
   $breaditems.=$breadit;
   $html=preg_replace([
     '/<[\/]?breadcrumb>/',
@@ -69,16 +43,13 @@ if(stristr($html,'<breadcrumb>')){
     ''
   ],$html);
 }
-if($page['notes']!=''){
-	$html=preg_replace([
-		'/<print page=[\"\']?notes[\"\']?>/',
-		'/<[\/]?pagenotes>/'
-	],[
-		rawurldecode($page['notes']),
-		''
-	],$html);
-}else
-	$html=preg_replace('~<pagenotes>.*?<\/pagenotes>~is','',$html,1);
+$html=preg_replace([
+	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?notes[\"\']?>/',
+],[
+  '',
+	rawurldecode($page['notes']),
+],$html);
 $gals='';
 if(stristr($html,'<items')){
   preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);

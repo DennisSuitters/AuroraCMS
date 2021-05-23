@@ -1,42 +1,41 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="settings">
-	<section class="row mt-5">
+	<section class="row my-5">
 		<article class="col-12 col-md-6">
 			<iframe id="sp" name="sp" class="d-none"></iframe>
 			<form class="card mx-auto" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
+				<input type="hidden" name="id" value="<print user=id>">
+				<input type="hidden" name="act" value="add_avatar">
 				<fieldset class="border-0 m-0">
 					<legend>Avatar</legend>
-					<input type="hidden" name="id" value="<print user=id>">
-					<input type="hidden" name="act" value="add_avatar">
-					<input type="file" name="fu" id="fu">
-					<label class="m-0" for="fu">Choose File</label>
-					<div class="text-right mt-3">
-						<button class="btn btn-outline-secondary">Upload</button>
+					<div class="text-center">
+						<img class="img-avatar avatar xxl" src="<print user=avatar>" alt="<print user=name>">
 					</div>
+					<input class="d-none" type="file" name="fu" id="fu">
+					<label for="fu">Choose File</label>
+					<button class="btn btn-block mt-3">Upload</button>
 				</fieldset>
 			</form>
-			<form class="card mt-5 mx-auto" method="post" action="settings">
+			<form class="card mx-auto mt-5" method="post" action="settings">
 				<fieldset class="border-0 m-0">
 					<legend>Reset Password</legend>
 					<input type="hidden" name="act" value="updatePassword">
-					<input type="hidden" name="emailtrap" value="">
+					<input type="hidden" name="emailtrap" value="none">
 					<div class="alert alert-danger<error currentPassHidden>" role="alert">The Password you entered was incorrect!</div>
 					<div class="alert alert-danger<error matchPassHidden>" role="alert">The New &amp; Confirm Passwords do NOT match!</div>
 					<div class="alert alert-success<success passUpdated>" role="alert">Password Successfully Updated!</div>
 					<label for="password">Password</label>
 					<input type="password" id="password" class="form-control" name="newPass" value="" placeholder="Enter New Password..." required aria-required="true">
-					<div class="text-right mt-3">
-						<button class="btn btn-outline-secondary" type="submit">Update Password</button>
-					</div>
+					<button class="btn btn-block mt-3" type="submit">Update Password</button>
 					<div class="form-text text-muted small">Changing Password will Sign you Out</div>
 				</fieldset>
 			</form>
-			<form class="card mt-5 mx-auto" method="post" action="settings">
+			<form class="card mx-auto mt-5" method="post" action="settings">
 				<fieldset class="border-0 m-0">
 					<legend>Account Details</legend>
 					<input type="hidden" name="act" value="updateAccount">
-					<input type="hidden" name="emailTrap" value="">
+					<input type="hidden" name="emailTrap" value="none">
 					<div class="alert alert-success<success accountHidden>" role="alert">Account Details Updated!</div>
 					<div class="alert alert-danger<error accountHidden>" role="alert">There was an Issue Updating your Account Details!</div>
 					<label for="ti">Created</label>
@@ -69,9 +68,7 @@
 					<input type="text" id="postcode" class="form-control" name="postcode" value="<print user=postcode>" placeholder="Enter a Postcode...">
 					<label for="country">Country</label>
 					<input type="text" id="country" class="form-control" name="country" value="<print user=country>" placeholder="Enter a Country...">
-					<div class="text-right mt-3">
-						<button class="btn margin-top-3 pull-right" type="submit">Update Account</button>
-					</div>
+					<button class="btn btn-block mt-3" type="submit">Update Account</button>
 				</fieldset>
 			</form>
 		</article>

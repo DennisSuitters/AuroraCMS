@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 echo'<script>';
 require'zebraimage/zebra_image.php';
 require'sanitise.php';
@@ -36,9 +37,7 @@ if($act!=''){
     case'make_client':
       $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
       $q=$db->prepare("SELECT `name`,`email`,`phone` FROM `".$prefix."messages` WHERE `id`=:id");
-      $q->execute([
-				':id'=>$id
-			]);
+      $q->execute([':id'=>$id]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
       $q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`name`,`email`,`phone`,`ti`) VALUES (:name,:email,:phone,:ti)");
       $q->execute([
@@ -48,19 +47,15 @@ if($act!=''){
         ':ti'=>$ti
       ]);
       $e=$db->errorInfo();
-      if(is_null($e[2]))
-  			echo'window.top.window.toastr["success"]("Contact added as Client");';
-			else
-  			echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
+      if(is_null($e[2]))echo'window.top.window.toastr["success"]("Contact added as Client");';
+			else echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
       break;
     case'add_comment':
       $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
       if(filter_var($email,FILTER_VALIDATE_EMAIL)){
         $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `email`=:email");
-        $q->execute([
-					':email'=>$email
-				]);
+        $q->execute([':email'=>$email]);
         $c=$q->fetch(PDO::FETCH_ASSOC);
         $cid=$c['id']!=0?$c['id']:0;
         $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
@@ -84,13 +79,10 @@ if($act!=''){
         $e=$db->errorInfo();
         if(is_null($e[2])){
 					$avatar='core/images/noavatar.jpg';
-          if($c['avatar']!=''&&file_exists('../media/'.$c['avatar']))
-						$avatar='media/avatar/'.$c['avatar'];
+          if($c['avatar']!=''&&file_exists('../media/'.$c['avatar']))$avatar='media/avatar/'.$c['avatar'];
           elseif($c['gravatar']!=''){
-            if(stristr($c['gravatar'],'@'))
-							$avatar='http://gravatar.com/avatar/'.md5($c['gravatar']);
-            elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))
-							$avatar=$c['gravatar'];
+            if(stristr($c['gravatar'],'@'))$avatar='http://gravatar.com/avatar/'.md5($c['gravatar']);
+            elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))$avatar=$c['gravatar'];
 					}
 	  			echo'window.top.window.$("#comments").append(`<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd">'.
 						'<div class="col-1">'.
@@ -109,10 +101,8 @@ if($act!=''){
 							'</form>'.
 						'</div>'.
 					'</div>`);';
-   			}else
-  				echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
-      }else
-  			echo'window.top.window.toastr["error"]("The Email enter is not valid!");';
+   			}else echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
+      }else echo'window.top.window.toastr["error"]("The Email enter is not valid!");';
       break;
     case'add_avatar':
 		case'add_tstavatar':
@@ -128,17 +118,13 @@ if($act!=''){
         if($ft=="image/jpeg"||$ft=="image/pjpeg"||$ft=="image/png"||$ft=="image/gif"){
           $tp='../media/'.basename($_FILES['fu']['name']);
           if(move_uploaded_file($_FILES['fu']['tmp_name'],$tp)){
-            if($ft=="image/jpeg"||$ft=="image/pjpeg")
-							$fn=$col.'_'.$id.'.jpg';
-            if($ft=="image/png")
-							$fn=$col.'_'.$id.'.png';
-            if($ft=="image/gif")
-							$fn=$col.'_'.$id.'.gif';
+            if($ft=="image/jpeg"||$ft=="image/pjpeg")$fn=$col.'_'.$id.'.jpg';
+            if($ft=="image/png")$fn=$col.'_'.$id.'.png';
+            if($ft=="image/gif")$fn=$col.'_'.$id.'.gif';
 						if($act=='add_tstavatar'){
 							$fn='tst'.$fn;
 							$q=$db->prepare("UPDATE `".$prefix."content` SET `file`=:avatar WHERE `id`=:id");
-						}else
-							$q=$db->prepare("UPDATE `".$prefix."login` SET `avatar`=:avatar WHERE `id`=:id");
+						}else$q=$db->prepare("UPDATE `".$prefix."login` SET `avatar`=:avatar WHERE `id`=:id");
 						$q->execute([
 							':avatar'=>'avatar'.$fn,
 							':id'=>$id
@@ -148,10 +134,8 @@ if($act!=''){
             $image->target_path='../media/avatar/avatar'.$fn;
             $image->resize(150,150,ZEBRA_IMAGE_CROP_CENTER);
             rename($tp,'../media/avatar/avatar'.$fn);
-						if($act=='add_tstavatar')
-							echo'window.top.window.$("#tstavatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
- 						else
-  						echo'window.top.window.$(".img-avatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
+						if($act=='add_tstavatar')echo'window.top.window.$("#tstavatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
+ 						else echo'window.top.window.$(".img-avatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
 					}
         }
       }
@@ -161,9 +145,7 @@ if($act!=''){
       $iid=filter_input(INPUT_GET,'iid',FILTER_SANITIZE_NUMBER_INT);
       if($iid!=0){
         $q=$db->prepare("SELECT `title`,`cost` FROM `".$prefix."content` WHERE `id`=:id");
-        $q->execute([
-					':id'=>$iid
-				]);
+        $q->execute([':id'=>$iid]);
         $r=$q->fetch(PDO::FETCH_ASSOC);
 				if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
       }else{
@@ -187,9 +169,7 @@ if($act!=''){
   		echo'window.top.window.$("#updateorder").html(`';
       while($oi=$q->fetch(PDO::FETCH_ASSOC)){
         $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-        $s->execute([
-					':id'=>$oi['iid']
-				]);
+        $s->execute([':id'=>$oi['iid']]);
         $i=$s->fetch(PDO::FETCH_ASSOC);
         echo'<tr>'.
 							'<td class="text-left">'.$i['code'].'<div class="visible-xs">'.$i['title'].'</div></td>'.

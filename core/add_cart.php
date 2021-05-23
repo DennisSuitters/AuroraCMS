@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 $iid=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -30,9 +31,7 @@ if($sc->rowCount()>0){
 }else{
   if(isset($iid)&&$iid!=0){
     $q=$db->prepare("SELECT `cost`,`rCost` FROM `".$prefix."content` WHERE `id`=:id");
-    $q->execute([
-      ':id'=>$iid
-    ]);
+    $q->execute([':id'=>$iid]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
     if(is_numeric($r['cost'])){
       if($r['cost']!=0){
@@ -50,8 +49,6 @@ if($sc->rowCount()>0){
   }
 }
 $q=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
-$q->execute([
-  ':si'=>SESSIONID
-]);
+$q->execute([':si'=>SESSIONID]);
 $r=$q->fetch(PDO::FETCH_ASSOC);
 echo$r['quantity'];

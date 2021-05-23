@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 $dbprefix=isset($_POST['dbprefix'])?filter_input(INPUT_POST,'dbprefix',FILTER_SANITIZE_STRING):'';
@@ -22,10 +23,8 @@ if($settings['database']['prefix']!=$dbprefix){
   $error='';
   while($row=$result->fetch(PDO::FETCH_NUM)){
     $table_name=$row[0];
-    if($settings['database']['prefix']!='')
-      $new_table_name=str_replace($settings['database']['prefix'],$dbprefix,$table_name);
-    else
-      $new_table_name = $dbprefix.$table_name;
+    if($settings['database']['prefix']!='')$new_table_name=str_replace($settings['database']['prefix'],$dbprefix,$table_name);
+    else$new_table_name = $dbprefix.$table_name;
     $sql=$db->query("RENAME TABLE `".$settings['database']['schema']."`.`".$table_name."` TO `".$settings['database']['schema']."`.`".$new_table_name."`");
     if($sql){
       $renamed++;
@@ -45,6 +44,7 @@ if($settings['database']['prefix']!=$dbprefix){
      'username = '.$settings['database']['username'].PHP_EOL.
      'password = '.$settings['database']['password'].PHP_EOL.
      '[system]'.PHP_EOL.
+     'devmode = '.$settings['system']['devmode'].PHP_EOL.
      'version = '.time().PHP_EOL.
      'url = '.$settings['system']['url'].PHP_EOL.
      'admin = '.$settings['system']['admin'].PHP_EOL;
@@ -53,6 +53,5 @@ if($settings['database']['prefix']!=$dbprefix){
   fwrite($oFH,$txt);
   fclose($oFH);
   echo'<script>window.top.window.toastr["error"]("'.$error.'");</script>';
-}else
-  echo'<script>window.top.window.toastr["error"]("Databse Tables are already Prefixed with `'.$dbprefix.'`"});</script>';
+}else echo'<script>window.top.window.toastr["error"]("Databse Tables are already Prefixed with `'.$dbprefix.'`"});</script>';
 echo'<script>window.top.window.$("#blocker").remove();</script>';

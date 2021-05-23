@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 $rank=0;
 $notification='';
@@ -31,9 +32,7 @@ if(stristr($html,'<items')){
     $thumbchk=$noimage;
     if($r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
     $sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
-    $sr->execute([
-      ':contentType'=>$r['contentType']
-    ]);
+    $sr->execute([':contentType'=>$r['contentType']]);
     $pr=$sr->fetch(PDO::FETCH_ASSOC);
     if($pr['active']!=1)continue;
     if($r['status']!=$status)continue;
@@ -43,18 +42,13 @@ if(stristr($html,'<items')){
       $filechk=$r['fileURL'];
       $shareImage=$r['fileURL'];
     }else{
-      if($r['thumb']!=''&&file_exists('media/thumbs'.basename($r['thumb'])))
-        $shareImage='media/thumbs'.basename($r['thumb']);
-      elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))
-        $shareImage='media/'.basename($r['file']);
-      else
-        $shareImage=URL.NOIMAGE;
+      if($r['thumb']!=''&&file_exists('media/thumbs'.basename($r['thumb'])))$shareImage='media/thumbs'.basename($r['thumb']);
+      elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))$shareImage='media/'.basename($r['file']);
+      else$shareImage=URL.NOIMAGE;
     }
     if($si==1)$si++;
     $su=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
-    $su->execute([
-      ':id'=>$r['uid']
-    ]);
+    $su->execute([':id'=>$r['uid']]);
     $ua=$su->fetch(PDO::FETCH_ASSOC);
     $items=preg_replace([
       '/<print content=[\"\']?thumb[\"\']?>/',
@@ -93,8 +87,7 @@ if(stristr($html,'<items')){
     ],$items);
     $r['notes']=strip_tags($r['notes']);
     if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){
-      if(stristr($items,'<controls>'))
-        $items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
+      if(stristr($items,'<controls>'))$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
       $controls='';
     }else{
       if(stristr($items,'<view>')){
@@ -141,8 +134,7 @@ if(stristr($html,'<items')){
           ],'',$items);
         }elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))
           $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-      }else
-        $items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+      }else$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
       $items=preg_replace('/<[\/]?controls>/','',$items);
     }
     require'core/parser.php';
@@ -157,13 +149,11 @@ if(stristr($html,'<items')){
     $output,
     ''
   ],$html,1);
-}else
-  $html=preg_replace('~<items>.*?<\/items>~is','',$html,1);
+}else$html=preg_replace('~<items>.*?<\/items>~is','',$html,1);
 $html=preg_replace([
   '~<item>.*?<\/item>~is',
   '/<[\/]?items>/'
 ],'',$html);
-$theme=parse_ini_file(THEME.'/theme.ini',true);
 $seoTitle='404 Error'.($config['business']!=''?' - '.$config['business']:'');
 $metaRobots='index,follow';
 $seoCaption='';

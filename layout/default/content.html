@@ -3,7 +3,7 @@
 <block inbed="content">
 	<breadcrumb>
 		<section class="row mt-3 mb-0">
-			<nav class="col-12 col-sm-11">
+			<nav class="col-12">
 				<ol class="breadcrumb">
 					<json-ld-breadcrumb>
 					<breaditems>
@@ -16,14 +16,7 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<pagenotes>
-		<section class="row mt-2 mb-0">
-			<article class="col-11">
-      	<print page="notes">
-			</article>
-		</section>
-  </pagenotes>
-	<section class="row mt-2 mb-5">
+	<section class="row mb-5">
 		<item>
 			<article class="card col-12 col-sm-8">
 				<json-ld>
@@ -128,7 +121,7 @@
 						<div class="card-header font-weight-bold d-flex justify-content-between">
 							<div>Review by <span class="p-author h-card"><print review="name"></span> on <time class="dt-published" datetime="<print review=datetime>"><print review="date"></time></div>
 							<data class="p-rating" value="<print review=rating>">
-								<span class="rat">
+								<span class="rating">
 									<span class="<print review=set1>"></span>
 									<span class="<print review=set2>"></span>
 									<span class="<print review=set3>"></span>
@@ -170,9 +163,12 @@
 		</item>
 		<settings itemCount="all">
 		<contentitems>
-			<section class="col-12 col-sm-8 order-2 order-sm-1 mb-5">
+			<section class="col-12 col-sm-8 order-2 order-sm-1">
+				<pagenotes>
+					<article class="col-12 m-0 pb-0 hidewhenempty"><print page="notes"></article>
+				</pagenotes>
 				<items>
-					<article class="card col-12 col-sm-5 mt-0 mr-4 mb-4 ml-0 p-0">
+					<article class="card col-12 col-sm-5">
 						<div class="card-image">
 							<a href="<print content=linktitle>">
 								<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">

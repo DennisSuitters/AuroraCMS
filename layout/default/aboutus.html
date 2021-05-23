@@ -2,7 +2,7 @@
 <block include="header.html">
 <block inbed="content">
 	<section class="row jumboside">
-		<article class="jumbo m-0 px-5">
+		<article class="jumbo m-0">
 			<breadcrumb>
 				<nav>
 					<ol class="breadcrumb">
@@ -19,17 +19,8 @@
 			<print page="notes">
 		</article>
 		<cover>
-			<picture class="jumbo jumbotron d-none d-lg-block"><print page="coverItem"></picture>
+			<picture class="jumbo jumbotron d-none d-sm-block"><print page="coverItem"></picture>
 		</cover>
-	</section>
-	<section class="row col-12 mt-5">
-		<article class="media my-2 text-center">
-			<mediaitems>
-				<mediaimages>
-					<a class="m2" href="<print media=file>" data-fancybox="gallery" data-caption="<print media=fileALT>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="img-thumbnail" loading="lazy" alt="<print media=fileALT>"></a>
-				</mediaimages>
-			</mediaitems>
-		</article>
 	</section>
 </block>
 <block include="footer.html">

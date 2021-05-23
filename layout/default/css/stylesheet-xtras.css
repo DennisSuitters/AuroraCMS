@@ -7,7 +7,7 @@
   left: 0;
   top: 0;
   width: 100%;
-  height: .45em;
+  height: var(--page-progress-height);
   -webkit-appearance: none;
      -moz-appearance: none;
           appearance: none;
@@ -367,7 +367,7 @@ nav[role="menubar"] ul li a:hover,
 nav[role="menubar"] ul li a:focus {
   color: var(--menu-link-color-hover); }
 
-nav[role="menubar"] ul li.active {
+nav[role="menubar"] ul li.active a{
   color: var(--menu-link-color-active); }
 
 @media screen and (max-width: 44em) {

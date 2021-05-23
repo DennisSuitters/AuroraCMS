@@ -7,24 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $id=isset($_GET['id'])?$_GET['id']:0;
 $ti=time();
 if($id>0){
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-  $s->execute([
-    ':id'=>$id
-  ]);
+  $s->execute([':id'=>$id]);
   $ro=$s->fetch(PDO::FETCH_ASSOC);
   $s=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `email`=:email");
-  $s->execute([
-    ':email'=>$ro['email']
-  ]);
+  $s->execute([':email'=>$ro['email']]);
   if($s->rowCount()>0){
     $r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
     $dti=$ti+$config['orderPayti'];
@@ -39,9 +36,7 @@ if($id>0){
     ]);
     $qid=$db->lastInsertId();
     $os=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-    $os->execute([
-      ':id'=>$ro['rid']
-    ]);
+    $os->execute([':id'=>$ro['rid']]);
     if($os->rowCount()>0){
       while($oi=$os->fetch(PDO::FETCH_ASSOC)){
         $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:cid,:title,:quantity,:cost,:status,:ti)");
@@ -92,9 +87,7 @@ if($id>0){
     ]);
     $qid=$db->lastInsertId();
     $os=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-    $os->execute([
-      ':id'=>$ro['rid']
-    ]);
+    $os->execute([':id'=>$ro['rid']]);
     if($os->rowCount()>0){
       $oi=$os->fetch(PDO::FETCH_ASSOC);
       $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:cid,:title,:quantity,:cost,:status,:ti)");
@@ -116,9 +109,7 @@ if($id>0){
   }
   if($config['options'][25]==1){
     $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='archived' WHERE `id`=:id");
-    $s->execute([
-      ':id'=>$id
-    ]);
+    $s->execute([':id'=>$id]);
     echo'<script>'.
       'window.top.window.toastr["success"]("Booking Archived!");'.
       'window.top.window.$("#l_'.$id.'").addClass("animated zoomOut");'.

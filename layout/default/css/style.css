@@ -14,6 +14,24 @@
 /* The below are styles specific to the theme for website they are for,
    and most likely include overrides to produce a particular effect. */
 
+[for="fullname"],
+[for="resetfullname"],
+[for="signupfullname"] {
+  border: 0 !important;
+  clip: rect(0 0 0 0) !important;
+  height: 1px !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  padding: 0 !important;
+  position: absolute !important;
+  width: 1px !important;
+  outline: none !important; }
+
+#fullname,
+#resetfullname,
+#signupfullname {
+  display: none; }
+
 .comingsoon,
 .maintenance {
   background-color: transparent;
@@ -69,6 +87,9 @@
   margin: 0 !important;
   padding: 0 !important; }
 
+.hidewhenempty:empty {
+  display: none; }
+
 .glass {
   background-color: rgba(255, 255, 255, .7);
   -webkit-backdrop-filter: blur(5px);
@@ -81,6 +102,26 @@
 
 .sticky-logo ~ .sticky-top {
   top: 75px; }
+
+@media print {
+  body * {
+    visibility: hidden; }
+
+  #section-to-print {
+    margin: 0 0 0 0;
+    position: absolute;
+    top: 0;
+    left: 0; }
+
+  #section-to-print * {
+    visibility: visible !important;  }
+
+  #section-to-print.orderstheme.col-11 {
+    width: 100%; }
+
+  #section-to-print article.col-12 {
+    width: 25%; }
+}
 
 @media (min-width: 360px) { // xs
 

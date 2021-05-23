@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -56,17 +57,17 @@ else{
       $row=$sql->fetch(PDO::FETCH_ASSOC);
       if($row['cnt']<1){?>
   <div class="btn-group pull-right" id="phpbuttons" role="group">
-    <form id="blacklist<?php echo$idh;?>" method="post" action="core/add_blacklist.php">
-      <input name="id" type="hidden" value="<?php echo$id;?>">
-      <input name="t" type="hidden" value="<?php echo$t;?>">
-      <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><?php echo svg2('security');?></button>
+    <form id="blacklist<?=$idh;?>" method="post" action="core/add_blacklist.php">
+      <input name="id" type="hidden" value="<?=$id;?>">
+      <input name="t" type="hidden" value="<?=$t;?>">
+      <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><?= svg2('security');?></button>
     </form>
   </div>
   </div>
   <script>
-    $("#blacklist<?php echo$idh;?>").submit(function(){
+    $("#blacklist<?=$idh;?>").submit(function(){
         $.post($(this).attr("action"),$(this).serialize(),function(data){
-          $('#phpviewer<?php echo$idh;?>').html(data);
+          $('#phpviewer<?=$idh;?>').html(data);
         });
         return false;
     });

@@ -7,9 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Adjust code to use ResponsiveSlides are tiny, more versatilve Content Slider.
+ * @changes    v0.1.2 Check over and tidy up code.
 */
 preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
 $html=preg_replace('~<settings.*?>~is','',$html,1);
@@ -88,44 +90,30 @@ if($cT!='folder'){
 		}
 	}
 }
-$indicators=$indicator=$featuredIndicators='';
-if($arrayOrder=='random')
-	shuffle($featuredfiles);
-elseif($arrayOrder=='asc')
-	asort($featuredfiles);
-else
-	arsort($featuredfiles);
+if($arrayOrder=='random')shuffle($featuredfiles);
+elseif($arrayOrder=='asc')asort($featuredfiles);
+else arsort($featuredfiles);
 $featuredfiles=array_slice($featuredfiles,0,$itemCount);
 $ii=count($featuredfiles);
 $i=0;
 $ci=0;
-$indicators='';
-$arrowsprev='';
-$arrowsnext='';
 if($ii>0){
+	$showCarousel=true;
 	foreach($featuredfiles as$key=>$r){
 		$item=$it;
-		$indicators.=$i==0?'<input checked id="slide'.($i+1).'" name="slides" type="radio">':'<input id="slide'.($i+1).'" name="slides" type="radio">';
-		$arrowsprev.='<label class="slider-arrow prev" for="slide'.($i+1).'"></label>';
-		$arrowsnext.='<label class="slider-arrow next" for="slide'.($i+1).'"></label>';
-		$item=$r['link']=='nolink'?
-			preg_replace('~<link>.*?<\/link>~is','',$item,1)
-		:
-			preg_replace([
-				'/<[\/]?link>/',
-				'/<print link>/'
-			],[
-				'',
-				$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
-			],$item);
-		$item=preg_replace('/<print content=[\"\']?title[\"\']?>/',$r['title'],$item);
+		$item=preg_replace([
+			$r['link']=='nolink'?'~<link>.*?<\/link>~is':'/<[\/]?link>/',
+			'/<print link>/',
+			'/<print content=[\"\']?title[\"\']?>/'
+		],[
+			'',
+			(isset($r['urlSlug'])&&$r['urlSlug']!=''?$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''):''),
+			$r['title']
+		],$item);
 		if(preg_match('/<print content=[\"\']?thumb[\"\']?>/',$item)){
-			if($r['thumb']!='')
-				$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$item);
-			elseif($r['file']!='')
-				$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['file'],$item);
-			else
-				$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/','',$item);
+			if($r['thumb']!='')$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$item);
+			elseif($r['file']!='')$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['file'],$item);
+			else$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/','',$item);
 		}
 		if(preg_match('/<print content=[\"\']?alt[\"\']?>/',$item)){
 			if($r['file']!=''){
@@ -133,32 +121,21 @@ if($ii>0){
 				$alt=$alt['filename'];
 				$alt=str_replace('-',' ',$alt);
 				$alt=ucfirst($alt);
-			}else
-				$alt=$r['title'];
+			}else$alt=$r['title'];
 			$item=preg_replace('/<print content=[\"\']?alt[\"\']?>/',htmlspecialchars($alt,ENT_QUOTES,'UTF-8'),$item);
 		}
 		if(preg_match('/<print content=[\"\']?image[\"\']?>/',$item)){
-			$item=$r['file']!=''?preg_replace([
-				'/<print content=[\"\']?image[\"\']?>/',
-				'/<print cnt>/'
-			],[
-				htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'),
-				$i+1
-			],$item):preg_replace('/<print content=[\"\']?image[\"\']?>/','',$item);
+			$item=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file']!=''?htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'):'',$item);
 		}
 		$item=$r['link']=='nolink'?preg_replace('/<print content=[\"\']?title[\"\']?>/','<span class="hidden">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</span>',$item):preg_replace('/<print content=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$item);
-		if($r['contentType']=='carousel')
-			$item=preg_replace('~<caption>.*?<\/caption>~is',$r['seoCaption'],$item,1);
+		if($r['contentType']=='carousel')$item=preg_replace('~<caption>.*?<\/caption>~is',$r['seoCaption'],$item,1);
 		else{
 			$r['notes']=strip_tags($r['notes']);
 			$pos=strpos($r['notes'],' ',300);
 			$r['notes']=substr(rawurldecode($r['notes']),0,$pos).'...';
-			if($r['seoCaption']!='')
-				$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'),$item);
-			elseif($r['notes']!='')
-				$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars(rawurldecode($r['notes']),ENT_QUOTES,'UTF-8'),$item);
-			else
-				$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/','',$item);
+			if($r['seoCaption']!='')$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'),$item);
+			elseif($r['notes']!='')$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars(rawurldecode($r['notes']),ENT_QUOTES,'UTF-8'),$item);
+			else$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/','',$item);
 			if($r['attributionImageName']!=''&&$r['attributionImageURL']!=''){
 				$item=preg_replace([
 					'/<print media=[\"\']?attributionName[\"\']?>/',
@@ -169,31 +146,13 @@ if($ii>0){
 	        htmlspecialchars($r['attributionImageURL'],ENT_QUOTES,'UTF-8'),
 					''
 				],$item);
-			}else
-				$item=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
+			}else$item=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
 			$item=$r['notes']!=''?preg_replace('/<print content=[\"\']?notes[\"\']?>/',htmlspecialchars(strip_tags(rawurldecode($r['notes'])),$item,ENT_QUOTES,'UTF-8')):preg_replace('/<print content=[\"\']?notes[\"\']?>/','',$item);
 			$item=preg_replace('/<[\/]?caption>/','',$item);
 		}
 		$items.=$item;
 		$i++;$ci++;if($ci>8)$ci=0;
-		$indicators.=$indicators;
 	}
-}
-if($ii>1){
-	$html=preg_replace([
-		'/<indicators>/',
-		'/<arrowsprev>/',
-		'/<arrowsnext>/'
-	],[
-		$indicators,
-		$arrowsprev,
-		$arrowsnext
-	],$html);
-}else{
-	$html=preg_replace([
-		'~<featuredControls>.*?<\/featuredControls>~is',
-		'/<[\/]?featuredIndicators>/'
-	],'',$html);
-}
+}else$showCarousel=false;
 $html=$i>0?preg_replace('~<items>.*?<\/items>~is',$items,$html,1):'';
 $content.=$html;

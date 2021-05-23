@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.1
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -28,14 +29,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 	<div class="m-3">
 		<label for="title">Title</label>
 		<div class="form-row mb-5">
-		  <input class="textinput2" id="title" data-dbid="<?php echo$r['id'];?>" data-dbt="seo" data-dbc="title" type="text" value="<?php echo$r['title'];?>" placeholder="Enter a Title...">
-		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?php svg('save');?></button>
+		  <input class="textinput2" id="title" data-dbid="<?=$r['id'];?>" data-dbt="seo" data-dbc="title" type="text" value="<?=$r['title'];?>" placeholder="Enter a Title...">
+		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
 		</div>
 		<form class="w-100" target="sp" method="post" action="core/update.php">
-		  <input name="id" type="hidden" value="<?php echo$r['id'];?>">
+		  <input name="id" type="hidden" value="<?=$r['id'];?>">
 		  <input name="t" type="hidden" value="seo">
 		  <input name="c" type="hidden" value="notes">
-		  <textarea class="summernote" id="notes" data-dbid="<?php echo$r['id'];?>" data-dbt="menu" data-dbc="notes" name="da" readonly><?php echo$r['notes'];?></textarea>
+		  <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes" name="da" readonly><?=$r['notes'];?></textarea>
 		  </form>
 		</div>
 	</div>

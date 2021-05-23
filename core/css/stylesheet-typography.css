@@ -1,5 +1,16 @@
 /* stylesheet v0.9 - Typography - https://github.com/DiemenDesign/stylesheet */
 
+.text-white {
+  color: white !important; }
+
+@media (max-width: 769px) {
+  .text-white {
+    color: white !important;
+  }
+  .text-md-black {
+    color: black !important; }
+}
+
 hr {
   margin: 1rem 0;
   border: 0;

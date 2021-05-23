@@ -3,7 +3,7 @@
 <block inbed="bookings">
 	<breadcrumb>
 		<section class="row mt-3 mb-0">
-			<nav class="col-12 col-sm-11">
+			<nav class="col-12">
 				<ol class="breadcrumb">
 					<json-ld-breadcrumb>
 					<breaditems>
@@ -16,29 +16,27 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<pagenotes>
-		<section class="row mt-5">
-			<article class="col-11">
-				<print page="notes">
-			</article>
-		</section>
-	</pagenotes>
-	<section class="row mt-5">
-		<article class="col-11 col-sm-6 m-0 mb-5 p-0" id="booking">
-			<form class="card p-3" id="bookingform" method="post" action="core/add_booking.php">
-				<input type="hidden" name="emailtrap" value="none">
+	<section class="row mb-5">
+		<pagenotes>
+			<article class="col-12 col-sm-6 m-0 pb-0 hidewhenempty"><print page="notes"></article>
+		</pagenotes>
+		<article id="booking" class="col-12 col-sm-6 m-0 pb-0">
+			<form class="auroraForm card p-3" data-formtype="booking" method="post" action="core/add_booking.php">
 				<input type="hidden" name="act" value="add_booking">
+				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<div class="alert alert-danger" role="alert">Highlighted Fields are Required</div>
 				<label for="email">Email</label>
 				<input type="email" id="email" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-				<div class="requirements alert alert-danger">
+				<div class="requirements mt-3 mb-0">
 					Must be a valid email address.
 				</div>
 				<label for="name">Name</label>
 				<input type="text" id="name" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
-				<div class="requirements alert alert-danger">
+				<div class="requirements mt-3 mb-0">
 					A Name is required.
 				</div>
+				<label for="fullname" aria-hidden="true">Full Name</label>
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="business">Business</label>
 				<input type="text" id="business" name="business" value="" placeholder="Enter a Business...">
 				<label for="phone">Phone</label>
@@ -54,7 +52,7 @@
 				<label for="postcode">Postcode</label>
 				<input type="text" id="postcode" name="postcode" value="" placeholder="Enter a Postcode...">
 				<label for="date">Date</label>
-				<input type="datetime-local" id="date" name="tis" min="<print currentdate>" value="<print currentdate>">
+				<input type="datetime-local" id="date" name="tis" min="<print currentdate>" value="<print currentdate>" <itemreadonly>>
 				<bookservices>
 					<label for="rid">Event/Service</label>
 					<serviceselect>
@@ -65,9 +63,9 @@
 					</serviceselect>
 					<div class="row">
 						<items>
-							<input class="service" id="rid<print id>" type="radio" name="rid" value="<print id>" hidden>
-							<label for="rid<print id>" class="col-6 p-1">
-								<div class="card service">
+							<input class="service" id="rid<print id>" type="radio" name="rid<print iphash>" value="<print id>" <itemChecked> hidden>
+							<label for="rid<print id>" class="col-6 mx-auto <itemHidden>">
+								<div class="card m-1 service">
 									<figure class="card-image">
 										<img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
 									</figure>
@@ -81,22 +79,13 @@
 				</bookservices>
 				<label for="notes">Notes</label>
 				<textarea id="notes" name="notes" placeholder="Enter some Notes..."></textarea>
+				<g-recaptcha>
 				<div class="text-right">
 					<button type="submit">Make Booking</button>
 				</div>
 			</form>
 		</article>
 	</section>
-	<script>
-		document.addEventListener("DOMContentLoaded",function(){
-			$("#bookingform").submit(function(){
-				$.post($(this).attr("action"),$(this).serialize(),function(data){
-					$("#booking").html(data);
-				});
-				return false;
-			});
-		});
-	</script>
 </block>
 <block include="footer.html">
 <block include="meta_footer.html">

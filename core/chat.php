@@ -7,32 +7,27 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
 require'projecthoneypot/class.projecthoneypot.php';
 require'spamfilter/class.spamfilter.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $ti=time();
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if($config['chatAutoRemove']!=0){
 	$s=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE `ti`<:ti");
-	$s->execute([
-		':ti'=>$ti-$config['chatAutoRemove']
-	]);
+	$s->execute([':ti'=>$ti-$config['chatAutoRemove']]);
 }
 define('THEME','layout/'.$config['theme']);
-if(file_exists(THEME.'/images/noavatar.png'))
-	define('NOAVATAR',THEME.'/images/noavatar.png');
-elseif(file_exists(THEME.'/images/noavatar.gif'))
-	define('NOAVATAR',THEME.'/images/noavatar.gif');
-elseif(file_exists(THEME.'/images/noavatar.jpg'))
-	define('NOAVATAR',THEME.'/images/noavatar.jpg');
-else
-	define('NOAVATAR','core/images/i-noavatar.svg');
+if(file_exists(THEME.'/images/noavatar.png'))define('NOAVATAR',THEME.'/images/noavatar.png');
+elseif(file_exists(THEME.'/images/noavatar.gif'))define('NOAVATAR',THEME.'/images/noavatar.gif');
+elseif(file_exists(THEME.'/images/noavatar.jpg'))define('NOAVATAR',THEME.'/images/noavatar.jpg');
+else define('NOAVATAR','core/images/i-noavatar.svg');
 define('ADMINNOAVATAR','core/images/i-noavatar.svg');
 $aid=isset($_POST['aid'])?$_POST['aid']:0;
 $sid=isset($_POST['sid'])?$_POST['sid']:0;
@@ -43,13 +38,11 @@ $message=isset($_POST['message'])?$_POST['message']:'';
 $seen=isset($_POST['seen'])?$_POST['seen']:'unseen';
 $ip=$who=='page'?$_SERVER['REMOTE_ADDR']:'admin';
 $ua=$who=='page'?$_SERVER['HTTP_USER_AGENT']:'admin';
-$spam=FALSE;
+$spam=false;
 $blacklisted='';
-if($message != "" && $message != "|*|*|*|*|*|"){
+if($message!=""&&$message!="|*|*|*|*|*|"){
 	$q=$db->prepare("SELECT `id` FROM `".$prefix."livechat` WHERE `who`='admin' AND `notes`=:notes");
-	$q->execute([
-		':notes'=>'Hello, how can we assist you?'
-	]);
+	$q->execute([':notes'=>'Hello, how can we assist you?']);
 	if($q->rowCount()==0){
 		if($who=='page'){
 			if($config['spamfilter'][0]==1&&$spam==FALSE&&$ip!='admin'){
@@ -57,12 +50,10 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 				$result=$filter->check_text($name.' '.$message);
 				if($result){
 					$blacklisted=$theme['settings']['blacklist'];
-					$spam=TRUE;
+					$spam=true;
 					if($config['spamfilter'][1]==1){
 						$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-						$sc->execute([
-							':ip'=>$ip
-						]);
+						$sc->execute([':ip'=>$ip]);
 						if($sc->rowCount()<1){
 							$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 							$s->execute([
@@ -77,7 +68,7 @@ if($message != "" && $message != "|*|*|*|*|*|"){
 				}
 			}
 		}
-		if($spam==FALSE){
+		if($spam==false){
 		  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."livechat` (`aid`,`sid`,`who`,`name`,`email`,`notes`,`ip`,`user_agent`,`status`,`ti`) VALUES (:aid,:sid,:who,:name,:email,:notes,:ip,:ua,:status,:ti)");
 		  $s->execute([
 		    ':aid'=>$aid,
@@ -99,11 +90,9 @@ if($message == "|*|*|*|*|*|"){
 		$h=new ProjectHoneyPot($ip,$config['php_APIkey']);
 		if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1){
 			$blacklisted=$theme['settings']['blacklist'];
-			$spam=TRUE;
+			$spam=true;
 			$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-			$sc->execute([
-				':ip'=>$ip
-			]);
+			$sc->execute([':ip'=>$ip]);
 			if($sc->rowCount()<1){
 				$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 				$s->execute([
@@ -116,16 +105,14 @@ if($message == "|*|*|*|*|*|"){
 			echo$blacklisted;
 		}
 	}
-	if($config['spamfilter'][0]==1&&$spam==FALSE&&$ip!='admin'){
+	if($config['spamfilter'][0]==1&&$spam==false&&$ip!='admin'){
 		$filter=new SpamFilter();
 		$result=$filter->check_email($email);
 		if($result){
 			$blacklisted=$theme['settings']['blacklist'];
-			$spam=TRUE;
+			$spam=true;
 			$sc=$db->prepare("SELECT `id` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-			$sc->execute([
-				':ip'=>$ip
-			]);
+			$sc->execute([':ip'=>$ip]);
 			if($sc->rowCount()<1){
 				$s=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
 				$s->execute([
@@ -138,12 +125,10 @@ if($message == "|*|*|*|*|*|"){
 			echo$blacklisted;
 		}
 	}
-	if($spam==FALSE){
+	if($spam==false){
 		$cuati=time()-1440;
 		$cua=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND `lti`>:lti");
-		$cua->execute([
-			':lti'=>$cuati
-		]);
+		$cua->execute([':lti'=>$cuati]);
 		if($cua->rowCount()<1){
 			require'phpmailer/class.phpmailer.php';
 			$sa=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND liveChatNotification=1");
@@ -184,15 +169,13 @@ if($message == "|*|*|*|*|*|"){
 		}else{
 			if($message != ''){
 				$s=$db->prepare("SELECT `sid` FROM `".$prefix."livechat` WHERE `sid`=:sid");
-				$s->execute([
-					':sid'=>$sid
-				]);
+				$s->execute([':sid'=>$sid]);
 				if($s->rowCount()<1)echo'available';
 			}
 		}
 	}
 }
-if($spam==FALSE){
+if($spam==false){
 	if($seen=='seen'){
 		$scc=$db->prepare("UPDATE `".$prefix."livechat` SET `status`=:seen WHERE `sid`=:sid");
 		$scc->execute([
@@ -201,40 +184,29 @@ if($spam==FALSE){
 		]);
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `sid`=:sid ORDER BY `ti` ASC");
-	$s->execute([
-		':sid'=>$sid
-	]);
+	$s->execute([':sid'=>$sid]);
 	if($s->rowCount()>0){
 	  while($r=$s->fetch(PDO::FETCH_ASSOC)){
 			if($r['who']!='admin'){
 				$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-	      $scc->execute([
-					':ip'=>$r['ip']
-				]);
+	      $scc->execute([':ip'=>$r['ip']]);
 	      if($scc->rowCount()>0)header('Location:'.$_SERVER['PHP_SELF']);
 			}
 	    if($r['notes']=='|*|*|*|*|*|')continue;
 	    echo'<ul><li class="'.$r['who'].'">';
 	    if($r['aid']!=0){
 	      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:aid");
-	      $su->execute([
-					':aid'=>$r['aid']
-				]);
+	      $su->execute([':aid'=>$r['aid']]);
 	      $ru=$su->fetch(PDO::FETCH_ASSOC);
 		    echo'<img class="bg-white" src="';
 				if($ru['avatar']!='')echo'media/avatar/'.basename($ru['avatar']);
 	      elseif($ru['gravatar']!=''){
-	        if(stristr($ru['gravatar'],'@'))
-						echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);
-	        elseif(stristr($ru['gravatar'],'gravatar.com/avatar/'))
-						echo$ru['gravatar'];
-	        else
-						echo ADMINNOAVATAR;
-	      }else
-					echo ADMINNOAVATAR;
+	        if(stristr($ru['gravatar'],'@'))echo'http://gravatar.com/avatar/'.md5($ru['gravatar']);
+	        elseif(stristr($ru['gravatar'],'gravatar.com/avatar/'))echo$ru['gravatar'];
+	        else echo ADMINNOAVATAR;
+	      }else echo ADMINNOAVATAR;
 				echo'">';
-	    }else
-				echo'<img class="bg-white" src="'.NOAVATAR.'">';
+	    }else echo'<img class="bg-white" src="'.NOAVATAR.'">';
       echo'<p><small class="d-block">'.$r['name'].' <small>'.date($config['dateFormat'],$r['ti']).'</small></small>'.$r['notes'].'</p></li></ul>';
 	  }
 	}

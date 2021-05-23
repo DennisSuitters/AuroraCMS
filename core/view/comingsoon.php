@@ -7,15 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`='comingsoon'");
 $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
-if(!isset($canonical)||$canonical=='')
-  $canonical=($view=='index'?URL:URL.$view.'/');
+if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
 $image=$page['cover']==''?URL.THEME.'/images/comingsoon.png':$page['cover'];
 $html=preg_replace([
   '/<print background>/',
@@ -44,7 +44,8 @@ $html=preg_replace([
   '/<print theme>/',
   '/<print site_verifications>/',
 	'/<print geo>/',
-  '/<print page=[\"\']?notes[\"\']?>/'
+  '/<print page=[\"\']?notes[\"\']?>/',
+  '/<google_analytics>/'
 ],[
   ' style="background-image:url('.$image.'"',
   THEME,
@@ -78,9 +79,9 @@ $html=preg_replace([
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-  $page['notes']
+  $page['notes'],
+  ($config['ga_tracking']!=''?'<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':'')
 ],$html);
-$html=($config['ga_tracking']!=''?str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$html):str_replace('<google_analytics>','',$html));
 if(stristr($html,'<buildSocial')){
 	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
 	$htmlSocial=$matches[1];
@@ -98,8 +99,7 @@ if(stristr($html,'<buildSocial')){
 			],$buildSocial);
 			$socialItems.=$buildSocial;
 		}
-	}else
-    $socialItems='';
+	}else$socialItems='';
 	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
 }
 $content.=$html;

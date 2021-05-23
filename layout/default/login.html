@@ -2,60 +2,69 @@
 <block include="header.html">
 <block inbed="content">
 	<section class="row my-5">
-		<article class="col-12 col-sm-5">
-			<div class="card p-4">
-				<form method="post" action="<print url>">
-					<h4>Login</h4>
-					<input type="hidden" name="act" value="login">
-					<label for="loginusername">Username</label>
-					<input type="text" id="loginusername" name="username" value="" placeholder="Username...">
-					<label for="loginpassword">Password</label>
-					<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="off">
-					<div class="text-right mt-3">
-						<button type="submit">Login</button>
-					</div>
-				</form>
-			</div>
-			<div class="card mt-5 p-4">
-				<form id="resetform" class="auroraForm" data-formtype="reset" method="post" action="core/view/rstform.php">
-					<h4>Reset Password</h4>
-					<input type="hidden" name="emailtrap" value="none">
-					<label for="resetemail">Email</label>
-					<input type="email" id="resetemail" name="rsteml" placeholder="Enter Account Email..." autocomplete="off" required aria-required="true">
-					<div class="requirements alert alert-danger">
-      			Must be a valid email address, and match the email you used to sign up.
-    			</div>
-					<div class="text-right mt-3">
-						<button id="reset-btn" type="submit">Reset</button>
-					</div>
-					<div id="reset"></div>
-				</form>
-			</div>
-		</article>
-		<signup>
+		<loggedin>
 			<article class="col-12 col-sm-5">
-				<div class="card p-4">
-					<form id="signupform" class="auroraForm" data-formtype="signup" method="post" action="core/view/newaccount.php">
-						<h4>Sign Up</h4>
-						<input type="hidden" name="emailtrap" value="none">
-						<label for="signupemail">Email</label>
-						<input type="email" id="signupemail" name="email" value="" placeholder="Enter an Email..." autocomplete="off" required aria-required="true">
-						<div class="requirements alert alert-danger">
-	      			Must be a valid email address.
-	    			</div>
-						<label for="signupusername">Username</label>
-						<input type="text" id="signupusername" name="username" placeholder="Enter a Username..." required aria-required="true">
-						<label for="signupterms">
-							<input type="checkbox" id="signupterms" name="terms" value="yes"> Agree to the <a href="page/Terms-of-Service">Terms Of Service</a>
-						</label>
+				<div class="alert alert-info">You are Logged In.</div>
+			</article>
+		</loggedin>
+		<loggedout>
+			<article class="col-12 col-sm-5">
+				<div class="card p-3">
+					<form method="post" action="<print url>">
+						<h4>Login</h4>
+						<input type="hidden" name="act" value="login">
+						<label for="loginusername">Username</label>
+						<input type="text" id="loginusername" name="username" value="" placeholder="Username...">
+						<label for="loginpassword">Password</label>
+						<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="off">
 						<div class="text-right mt-3">
-							<button id="signup-btn" type="submit">Sign Up</button>
+							<button type="submit">Login</button>
 						</div>
 					</form>
-					<div id="signup"></div>
+				</div>
+				<div id="reset" class="card mt-5 p-3">
+					<form class="auroraForm" data-formtype="reset" method="post" action="core/reset_password.php">
+						<h4>Reset Password</h4>
+						<input type="hidden" name="act" value="reset_password">
+						<input type="hidden" name="<print hash>" value="<print timecode>">
+						<label for="resetemail">Email</label>
+						<input type="email" id="resetemail" name="email" placeholder="Enter Account Email..." autocomplete="off" required aria-required="true">
+						<label for="resetfullname" aria-hidden="true">Full Name</label>
+						<input id="resetfullname" name="fullname<print hash>" value="" autocomplete="off">
+						<div class="requirements mt-3 mb-0">Must be a valid email address, and match the email you used to sign up.</div>
+						<g-recaptcha>
+						<div class="text-right mt-3">
+							<button id="reset-btn" type="submit">Reset</button>
+						</div>
+					</form>
 				</div>
 			</article>
-		</signup>
+			<signup>
+				<article class="col-12 col-sm-5">
+					<div id="signup" class="card p-3">
+						<form class="auroraForm" data-formtype="signup" method="post" action="core/add_account.php">
+							<h4>Sign Up</h4>
+							<input type="hidden" name="act" value="add_account">
+							<label for="signupemail">Email</label>
+							<input type="email" id="signupemail" name="email" value="" placeholder="Enter an Email..." autocomplete="off" required aria-required="true">
+							<div class="requirements mt-3 mb-0">Must be a valid email address.</div>
+							<label for="signupusername">Username</label>
+							<input type="text" id="signupusername" name="username" placeholder="Enter a Username..." required aria-required="true">
+							<label for="signupfullname" aria-hidden="true">Full Name</label>
+							<input id="signupfullname" name="fullname<print hash>" value="" autocomplete="off">
+							<div class="form-row" id="signuptermsblock">
+								<input type="checkbox" id="signupterms" name="terms" value="yes">
+								<label for="signupterms"> Agree to the <a href="page/Terms-of-Service">Terms Of Service</a></label>
+							</div>
+							<g-recaptcha>
+							<div class="text-right mt-3">
+								<button id="signup-btn" type="submit">Sign Up</button>
+							</div>
+						</form>
+					</div>
+				</article>
+			</signup>
+		</loggedout>
 	</section>
 </block>
 <block include="footer.html">

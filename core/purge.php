@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
-$getcfg=false;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
@@ -21,9 +22,7 @@ $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
 if($id!=0&&$tbl!='logs'&&$tbl!='livechat'){
   $s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
-  $s->execute([
-    ':id'=>$id
-  ]);
+  $s->execute([':id'=>$id]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($tbl=='config'||$tbl=='login')$r['contentType']='';
   $nda='';
@@ -31,15 +30,11 @@ if($id!=0&&$tbl!='logs'&&$tbl!='livechat'){
 }
 if($tbl=='suggestions'){
   $s=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE `id`=:id");
-  $s->execute([
-    ':id'=>$id
-  ]);
+  $s->execute([':id'=>$id]);
   if($s->rowCount()==1){
     $r=$s->fetch(PDO::FETCH_ASSOC);
     $ss=$db->prepare("UPDATE `".$prefix.$r['t']."` SET `suggestions`=0 WHERE `id`=:id");
-    $ss->execute([
-      ':id'=>$r['rid']
-    ]);
+    $ss->execute([':id'=>$r['rid']]);
   }
 }
 if($id==0&&$tbl=='iplist'){
@@ -69,29 +64,21 @@ if($id==0&&$tbl=='pageviews'){
 }
 if($id==0&&$tbl=='contentviews'){
   $q=$db->prepare("UPDATE `".$prefix."content` SET `views`='0' WHERE `contentType`=:contentType");
-  $q->execute([
-    ':contentType'=>$col
-  ]);
+  $q->execute([':contentType'=>$col]);
   $id='';
 }
 if($tbl=='orders'){
   $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `oid`=:oid");
-  $q->execute([
-    ':oid'=>$id
-  ]);
+  $q->execute([':oid'=>$id]);
 }
 if($id!=0&&$tbl=='seo'){
   $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
-  $q->execute([
-    ':id'=>$id
-  ]);
+  $q->execute([':id'=>$id]);
   $el='l_';
 }
 if($id!=0&&$id!='activity'){
   $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
-  $q->execute([
-    ':id'=>$id
-  ]);
+  $q->execute([':id'=>$id]);
   if($tbl=='media')$el='media_items_';
   echo'<script>'.
     'window.top.window.$("#l_'.$id.'").addClass("zoom-out");'.
@@ -100,9 +87,7 @@ if($id!=0&&$id!='activity'){
 }
 if($tbl=='livechat'){
   $q=$db->prepare("DELETE FROM `".$prefix."livechat` WHERE `sid`=:sid");
-  $q->execute([
-    ':sid'=>$col
-  ]);
+  $q->execute([':sid'=>$col]);
   echo'<script>'.
     'window.top.window.$("#l_'.$id.'").removeClass("active");'.
     'window.top.window.$("#l_'.$id.'").remove();'.

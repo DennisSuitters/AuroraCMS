@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
 */
 $contentType=$view;
 $html=preg_replace('~<item>.*?<\/item>~is','',$html,1);
@@ -17,8 +18,7 @@ if(stristr($html,'<settings')){
 	preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
 	$count=$matches[0];
 	$html=preg_replace('~<settings.*?>~is','',$html,1);
-}else
-	$count=1;
+}else$count=1;
 $html=preg_replace([
 	'/<print view>/',
 	'/<print content=[\"\']?category[\"\']?>/',
@@ -34,21 +34,7 @@ if(stristr($html,'<breadcrumb>')){
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-  $jsonld='<script type="application/ld+json">'.
-	'{'.
-		'"@context":"http://schema.org",'.
-		'"@type":"BreadcrumbList",'.
-		'"itemListElement":'.
-		'['.
-		'{'.
-			'"@type":"ListItem",'.
-			'"position":1,'.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.'",'.
-				'"name":"Home"'.
-			'}'.
-		'},';
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -65,31 +51,11 @@ if(stristr($html,'<breadcrumb>')){
       URL.urlencode($page['contentType']),
       htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
     ],$breaditem);
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":2,'.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'",'.
-				'"name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}'.(isset($args[0])&&$args[0]!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
     $breaditems.=$breadit;
   }else{
-    $breadit=preg_replace([
-      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-    ],[
-      htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
-    ],$breadcurrent);
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":2,'.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'",'.
-				'"name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}'.(isset($args[0])&&$args[0]!=''?',':'');
+    $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[0])&&$args[0]!=''){
@@ -102,22 +68,8 @@ if(stristr($html,'<breadcrumb>')){
 	      URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])),
 	      htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
 	    ],$breaditem);
-		}else{
-			$breadit=preg_replace([
-				'/<print breadcrumb=[\"\']?title[\"\']?>/'
-			],[
-				htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
-			],$breadcurrent);
-		}
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":'.$jsoni.','.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'",'.
-				'"name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}'.(isset($args[2])&&$args[2]!=''?',':'');
+		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[2])&&$args[2]!=''){
@@ -130,22 +82,8 @@ if(stristr($html,'<breadcrumb>')){
       	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])),
       	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
     	],$breaditem);
-		}else{
-			$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
-    	],$breadcurrent);
-		}
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":'.$jsoni.','.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'",'.
-				'"name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}'.(isset($args[3])&&$args[3]!=''?',':'');
+		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[3])&&$args[3]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[3])&&$args[3]!=''){
@@ -158,22 +96,8 @@ if(stristr($html,'<breadcrumb>')){
       	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])),
       	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
     	],$breaditem);
-		}else{
-			$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
-    	],$breadcurrent);
-		}
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":'.$jsoni.','.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'",'.
-				'"name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}'.(isset($args[4])&&$args[4]!=''?',':'');
+		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[4])&&$args[4]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[4])&&$args[4]!=''){
@@ -186,40 +110,14 @@ if(stristr($html,'<breadcrumb>')){
       	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])),
       	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
     	],$breaditem);
-		}else{
-			$breadit=preg_replace([
-      	'/<print breadcrumb=[\"\']?title[\"\']?>/'
-    	],[
-      	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
-    	],$breadcurrent);
-		}
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":'.$jsoni.','.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'",'.
-				'"name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}'.($r['title']!=''?',':'');
+		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}}'.($r['title']!=''?',':'');
     $breaditems.=$breadit;
   }
   if($r['title']!=''){
     $jsoni++;
-    $breadit=preg_replace([
-      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-    ],[
-      htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8')
-    ],$breadcurrent);
-    $jsonld.='{'.
-			'"@type":"ListItem",'.
-			'"position":'.$jsoni.','.
-			'"item":'.
-			'{'.
-				'"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
-				'"name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"'.
-			'}'.
-		'}';
+    $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}}';
     $breaditems.=$breadit;
   }
   $html=preg_replace([
@@ -259,10 +157,8 @@ if(stristr($html,'<cover>')){
 		$cover=basename($page['cover']);
 		if(file_exists('media/'.$cover)){
 			$coverLink='';
-			if(isset($page['cover'])&&$page['cover']!=''){
-				$coverLink.='media/'.$cover;
-			}elseif($page['coverURL']!='')
-				$coverLink.=$page['coverURL'];
+			if(isset($page['cover'])&&$page['cover']!='')$coverLink.='media/'.$cover;
+			elseif($page['coverURL']!='')$coverLink.=$page['coverURL'];
 			$figcaption='';
 			if($page['attributionImageTitle']!='')$figcaption=$page['attributionImageTitle'];
 			if($page['attributionImageName']!=''){
@@ -296,31 +192,7 @@ if(stristr($html,'<map>')){
 		($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
 		'/<map>/'
 	],[
-		($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?
-			'<script src="core/js/leaflet/leaflet.js"></script>'.
-			'<script>'.
-				'var map=L.map("map",{zoomControl:false}).setView(['.$config['geo_position'].'],13);'.
-				'L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'", {'.
-					'attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,'.
-					'id:"mapbox/streets-v11",'.
-					'tileSize:512,'.
-					'zoomOffset:-1,'.
-					'accessToken:`'.$config['mapapikey'].'`,'.
-				'}).addTo(map);'.
-				'var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.
-				($config['business']==''?'':
-					'var popupHtml=`<strong>'.$config['business'].'</strong>'.
-						($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;'.
-					'marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();'
-				).
-				'map.dragging.disable();'.
-    		'map.touchZoom.disable();'.
-    		'map.doubleClickZoom.disable();'.
-    		'map.scrollWheelZoom.disable();'.
-				'marker.off("click");'.
-			'</script>'
-		:''
-		),
+		($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'<script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map",{zoomControl:false}).setView(['.$config['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`,}).addTo(map);var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.($config['business']==''?'':'var popupHtml=`<strong>'.$config['business'].'</strong>'.($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'map.dragging.disable();map.touchZoom.disable();map.doubleClickZoom.disable();map.scrollWheelZoom.disable();marker.off("click");</script>':''),
 		''
 	],$html);
 }
@@ -406,12 +278,10 @@ if(stristr($html,'<mediaitems')){
 			$mediaoutput,
 			''
 		],$html,1);
-	}else
-		$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
+	}else$html=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$html,1);
 }
 if(stristr($html,'<sort>')){
-	if($show=='item')
-		$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
+	if($show=='item')$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
 	elseif($view=='inventory'||$view=='service'||$view=='article'||$view=='news'||$view=='events'||$view=='portfolio'||$view=='gallery'){
 		$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option>'.
 								 '<option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option>'.
@@ -432,8 +302,7 @@ if(stristr($html,'<sort>')){
 			'',
 			$sortOptions
 		],$html);
-	}else
-		$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
+	}else$html=preg_replace('~<sort>.*?<\/sort>~is','',$html);
 }
 $html=preg_replace([
 	'/<print page=[\"\']?contentType[\"\']?>/',
@@ -481,8 +350,7 @@ if(stristr($html,'<categories')){
 			$catoutput.=$catitems;
 		}
 		$html=preg_replace('~<categories>.*?<\/categories>~is',$catoutput,$html,1);
-	}else
-		$html=preg_replace('~<categories>.*?<\/categories>~is','',$html,1);
+	}else$html=preg_replace('~<categories>.*?<\/categories>~is','',$html,1);
 }
 if(stristr($html,'<items')){
 	preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
@@ -492,9 +360,7 @@ if(stristr($html,'<items')){
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		if($view=='search'&&$r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
 		$sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
-		$sr->execute([
-			':contentType'=>$r['contentType']
-		]);
+		$sr->execute([':contentType'=>$r['contentType']]);
 		$pr=$sr->fetch(PDO::FETCH_ASSOC);
 		if($pr['active']!=1)continue;
 		if($r['status']!=$status)continue;
@@ -502,13 +368,10 @@ if(stristr($html,'<items')){
 		$contentType=$r['contentType'];
 		if($si==1)$si++;
 		$su=$db->prepare("SELECT `id`,`username`,`name` FROM `login` WHERE `id`=:id");
-		$su->execute([
-			':id'=>$r['uid']
-		]);
+		$su->execute([':id'=>$r['uid']]);
 		$ua=$su->fetch(PDO::FETCH_ASSOC);
 		$itemQuantity='';
-		if($r['coming'][0]==1&&$r['contentType']=='inventory'){
-			$itemQuantity.='<div class="quantity">Coming Soon</div>';
+		if($r['coming'][0]==1&&$r['contentType']=='inventory'){$itemQuantity.='<div class="quantity">Coming Soon</div>';
 		}else{
 			if(is_numeric($r['quantity']))
 				$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
@@ -563,8 +426,7 @@ if(stristr($html,'<items')){
 		],$items); /* help */
 		$r['notes']=strip_tags($r['notes']);
 		if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){
-			if(stristr($items,'<controls>'))
-				$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
+			if(stristr($items,'<controls>'))$items=preg_replace('~<controls>.*?<\/controls>~is','',$items,1);
 			$controls='';
 		}else{
 			if(stristr($items,'<view>')){
@@ -591,28 +453,12 @@ if(stristr($html,'<items')){
 							''
 						],$items);
 					}
-				}else{
-					$items=preg_replace([
-						'/<[\/]?inventory>/',
-						'~<service.*?>.*?<\/service>~is'
-					],'',$items,1);
-				}
-			}else{
-				$items=preg_replace([
-					'/<[\/]?inventory>/',
-					'~<service.*?>.*?<\/service>~is'
-				],'',$items,1);
-			}
+				}else$items=preg_replace(['/<[\/]?inventory>/','~<service.*?>.*?<\/service>~is'],'',$items,1);
+			}else$items=preg_replace(['/<[\/]?inventory>/','~<service.*?>.*?<\/service>~is'],'',$items,1);
 			if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
-				if(stristr($items,'<inventory')){
-					$items=preg_replace([
-						'/<[\/]?inventory>/',
-						'~<service>.*?<\/service>~is'
-					],'',$items);
-				}elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))
-					$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
-			}else
-				$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+				if(stristr($items,'<inventory'))$items=preg_replace(['/<[\/]?inventory>/','~<service>.*?<\/service>~is'],'',$items);
+				elseif(stristr($items,'<inventory')&&$r['contentType']!='inventory'&&!is_numeric($r['cost']))$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
+			}else$items=preg_replace('~<inventory>.*?<\/inventory>~is','',$items,1);
 			$items=preg_replace('/<[\/]?controls>/','',$items);
 		}
 		require'core/'.'parser.php';
@@ -625,16 +471,14 @@ if(stristr($html,'<items')){
 		$output,
 		''
 	],$html,1);
-}else
-	$html=preg_replace('~<section data-content="content-items">.*?<\/section>~is','',$html,1);
+}else$html=preg_replace('~<section data-content="content-items">.*?<\/section>~is','',$html,1);
 $html=preg_replace([
 	'~<item>.*?<\/item>~is',
 	'/<[\/]?items>/',
 	'/<[\/]?contentitems>/'
 ],'',$html);
 if(stristr($html,'<more>')){
-	if($s->rowCount()<=$config['showItems'])
-		$html=preg_replace('~<more>.*?<\/more>~is','',$html,1);
+	if($s->rowCount()<=$config['showItems'])$html=preg_replace('~<more>.*?<\/more>~is','',$html,1);
 	else{
 		$html=preg_replace([
 			'/<[\/]?more>/',

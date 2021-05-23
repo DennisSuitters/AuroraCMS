@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    Fix URL Slug reference going to brokwn URL.
  */
 header('Content-type:text/xml');
 require'db.php';
@@ -30,13 +31,13 @@ if($config['comingsoon'][0]==1||$config['maintenance'][0]==1){
       '<changefreq>daily</changefreq>'.
       '<priority>0.64</priority>'.
     '</url>';
-    $s2=$db->prepare("SELECT `contentType`,`title` FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='testimonials' AND `status`='published' AND `internal`!='1' ORDER BY ti DESC");
+    $s2=$db->prepare("SELECT `contentType`,`title`,`urlSlug` FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='testimonials' AND `status`='published' AND `internal`!='1' ORDER BY ti DESC");
     $s2->execute([
       ':contentType'=>$r['contentType']
     ]);
     while($r2=$s2->fetch(PDO::FETCH_ASSOC)){
       echo'<url>'.
-        '<loc>'.URL.$r['contentType'].'/'.url_encode($r2['title']).'/'.'</loc>'.
+        '<loc>'.URL.$r['contentType'].'/'.$r2['urlSlug'].'/'.'</loc>'.
         '<changefreq>daily</changefreq>'.
         '<priority>0.64</priority>'.
       '</url>';

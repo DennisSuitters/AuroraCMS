@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -19,9 +20,7 @@ function svg($svg,$class=null,$size=null){
 }
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT `from_email` FROM `".$prefix."messages` WHERE `id`=:id");
-$s->execute([
-	':id'=>$id
-]);
+$s->execute([':id'=>$id]);
 if($s->rowCount()>0){
   $r=$s->fetch(PDO::FETCH_ASSOC);
   $address=explode("@",$r['email_from']);
@@ -33,9 +32,7 @@ if($s->rowCount()>0){
     ':ti'=>time()
   ]);
   $s=$db->prepare("UPDATE `".$prefix."messages` SET `folder`='INBOX' WHERE `id`=:id");
-  $s->execute([
-		':id'=>$id
-	]);
+  $s->execute([':id'=>$id]);
   echo'<script>'.
 				'window.top.window.$("#whitelist'.$id.'").addClass("d-none");'.
 				'window.top.window.toastr["success"]("IP Added to Whitelist!");'.

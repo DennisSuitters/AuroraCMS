@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -24,10 +25,8 @@ $tis=isset($_POST['tisx'])?filter_input(INPUT_POST,'tisx',FILTER_SANITIZE_STRING
 $tie=isset($_POST['tiex'])?filter_input(INPUT_POST,'tiex',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'tiex',FILTER_SANITIZE_STRING);
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
-if(strlen($da)<12&&$da=='<p><br></p>')
-	$da=str_replace('<p><br></p>','',$da);
-if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')
-	$da=str_replace('%3Cp%3E%3Cbr%3E%3C/p%3E','',$da);
+if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
+if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%3E%3C/p%3E','',$da);
 $si=session_id();
 $ti=time();
 $s=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`cid`,`contentType`,`title`,`business`,`notes`,`tis`,`tie`,`ti`) VALUES (:cid,'career',:title,:business,:notes,:tis,:tie,:ti)");

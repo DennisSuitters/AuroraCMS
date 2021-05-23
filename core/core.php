@@ -7,26 +7,24 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Move UNICODE define to index.php
+ * @changes    v0.1.2 Tidy up some code formatting
+ * @changes    v0.1.2 Add disable tracking of IP's associated with selected user accounts.
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-define('UNICODE','UTF-8');
-$getcfg=true;
 require'db.php';
-if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))
-	$config['theme']=$_GET['theme'];
-define('THEME','layout/'.$config['theme']);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))$config['theme']=$_GET['theme'];
+define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
-$s->execute([
-	':pti'=>time()
-]);
+$s->execute([':pti'=>time()]);
 if($config['php_options'][6]==1){
 	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `ti`<:ti");
-	$s->execute([
-		':ti'=>time()-2592000
-	]);
+	$s->execute([':ti'=>time()-2592000]);
 }
 if($config['php_options'][5]==1){
 	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login')||stristr($_SERVER['REQUEST_URI'],'wp-content')||stristr($_SERVER['REQUEST_URI'],'wp-plugin')||(isset($_GET['author']) && $_GET['author']!='')){
@@ -61,32 +59,20 @@ if(file_exists(THEME.'/images/favicon.png')){
 	define('FAVICON','core/images/favicon.png');
 	define('FAVICONTYPE','image/png');
 }
-if(file_exists(THEME.'/images/noimage-md.png'))
-	define('NOIMAGE',THEME.'/images/noimage-md.png');
-elseif(file_exists(THEME.'/images/noimage-md.gif'))
-	define('NOIMAGE',THEME.'/images/noimage-md.gif');
-elseif(file_exists(THEME.'/images/noimage-md.jpg'))
-	define('NOIMAGE',THEME.'/images/noimage-md.jpg');
-else
-	define('NOIMAGE','core/images/noimage-md.jpg');
-if(file_exists(THEME.'/images/noimage-sm.png'))
-	define('NOIMAGESM',THEME.'/images/noimage-sm.png');
-elseif(file_exists(THEME.'/images/noimage-sm.gif'))
-	define('NOIMAGESM',THEME.'/images/noimage-sm.gif');
-elseif(file_exists(THEME.'/images/noimage-sm.jpg'))
-	define('NOIMAGESM',THEME.'/images/noimage-sm.jpg');
-else
-	define('NOIMAGESM','core/images/noimage-sm.jpg');
+if(file_exists(THEME.'/images/noimage-md.png'))define('NOIMAGE',THEME.'/images/noimage-md.png');
+elseif(file_exists(THEME.'/images/noimage-md.gif'))define('NOIMAGE',THEME.'/images/noimage-md.gif');
+elseif(file_exists(THEME.'/images/noimage-md.jpg'))define('NOIMAGE',THEME.'/images/noimage-md.jpg');
+else define('NOIMAGE','core/images/noimage-md.jpg');
+if(file_exists(THEME.'/images/noimage-sm.png'))define('NOIMAGESM',THEME.'/images/noimage-sm.png');
+elseif(file_exists(THEME.'/images/noimage-sm.gif'))define('NOIMAGESM',THEME.'/images/noimage-sm.gif');
+elseif(file_exists(THEME.'/images/noimage-sm.jpg'))define('NOIMAGESM',THEME.'/images/noimage-sm.jpg');
+else define('NOIMAGESM','core/images/noimage-sm.jpg');
 define('ADMINNOIMAGE','core/images/noimage-sm.jpg');
 define('ADMINNOIMAGEMD','core/images/noimage-md.jpg');
-if(file_exists(THEME.'/images/noavatar-md.png'))
-	define('NOAVATAR',THEME.'/images/noavatar-md.png');
-elseif(file_exists(THEME.'/images/noavatar-md.gif'))
-	define('NOAVATAR',THEME.'/images/noavatar-md.gif');
-elseif(file_exists(THEME.'/images/noavatar.jpg'))
-	define('NOAVATAR',THEME.'/images/noavatar.jpg');
-else
-	define('NOAVATAR','core/images/noavatar.jpg');
+if(file_exists(THEME.'/images/noavatar-md.png'))define('NOAVATAR',THEME.'/images/noavatar-md.png');
+elseif(file_exists(THEME.'/images/noavatar-md.gif'))define('NOAVATAR',THEME.'/images/noavatar-md.gif');
+elseif(file_exists(THEME.'/images/noavatar.jpg'))define('NOAVATAR',THEME.'/images/noavatar.jpg');
+else define('NOAVATAR','core/images/noavatar.jpg');
 define('ADMINNOAVATAR','core/images/noavatar.jpg');
 require'login.php';
 function rank($txt){
@@ -103,74 +89,23 @@ function rank($txt){
 	if($txt==1000)return'developer';
 }
 function svg($svg,$class=null,$size=null){
-	if($svg=='auroracms'||$svg=='auroracms-white')
-		echo file_get_contents('core/images/'.$svg.'.svg');
-	else
-		echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
+	if($svg=='auroracms'||$svg=='auroracms-white')echo file_get_contents('core/images/'.$svg.'.svg');
+	else echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
 }
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
 }
 function frontsvg($svg){
-	if(file_exists(THEME.'/svg/'.$svg.'.svg'))
-		return file_get_contents(THEME.'/svg/'.$svg.'.svg');
-	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))
-		return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
-	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))
-		return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
-	elseif(file_exists('../../'.THEME.'/svg/'.$svg.'.svg'))
-		return file_get_contents('../../'.THEME.'/svg/'.$svg.'.svg');
-	else
-		return'No Such File: '.$svg;
-}
-function currentSeason($out='echo') {
-	$day=date("z");
-	$hour=date("G");
-	$seasons = [
-  	  1=>"summer",
-  	 60=>"autumn",
-  	154=>"winter",
-  	246=>"spring",
-		276=>"halloween",
-		306=>"spring",
-  	336=>"summer",
-		350=>"xmas",
-		361=>"summer",
-  	362=>"new-years",
-  ];
-	if($day >= 0 && $day<60)
-		$season="summer";
-	if($day>59&&$day<154)
-		$season="autumn";
-	if($day>153&&$day<246)
-		$season="winter";
-	if($day>246&&$day<336)
-		$season="spring";
-	if($day>335&&$day<349)
-		$season="summer";
-	if($day>275&&$day<306)
-		$season="halloween";
-	if($day>349&&$day<365)
-		$season="xmas";
-	if($day == 365)
-		$season="new-years";
-	if(!file_exists('media/seasons/'.$season.'.jpg'))$season="aurora";
-	if($season!="new-years"){
-		if($hour > 22)
-			$season="aurora";
-		if($hour < 6)
-			$season="aurora";
-	}
-	if($out=='return')
-		return $season;
-	else
-		echo $season;
+	if(file_exists(THEME.'/svg/'.$svg.'.svg'))return file_get_contents(THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../../'.THEME.'/svg/'.$svg.'.svg'))return file_get_contents('../../'.THEME.'/svg/'.$svg.'.svg');
+	else return'No Such File: '.$svg;
 }
 function microid($identity,$service,$algorithm='sha1'){
 	$microid=substr($identity,0,strpos($identity,':'))."+".substr($service,0,strpos($service,':')).":".strtolower($algorithm).":";
 	if(function_exists('hash')){
-		if(in_array(strtolower($algorithm),hash_algos()))
-			return$microid.=hash($algorithm,hash($algorithm,$identity).hash($algorithm,$service));
+		if(in_array(strtolower($algorithm),hash_algos()))return$microid.=hash($algorithm,hash($algorithm,$identity).hash($algorithm,$service));
 	}
 	if(function_exists('mhash')){
 		$hash_method=@constant('MHASH_'.strtoupper($algorithm));
@@ -180,8 +115,7 @@ function microid($identity,$service,$algorithm='sha1'){
 			return$microid.=bin2hex(mhash($hash_method,$identity_hash.$service_hash));
 		}
 	}
-	if(function_exists($algorithm))
-		return$microid.=$algorithm($algorithm($identity).$algorithm($service));
+	if(function_exists($algorithm))return$microid.=$algorithm($algorithm($identity).$algorithm($service));
 }
 function requestSameDomain(){
   $myDomain=$_SERVER['SCRIPT_URI'];
@@ -189,53 +123,37 @@ function requestSameDomain(){
   return parse_url($myDomain,PHP_URL_HOST)===parse_url($requestsSource,PHP_URL_HOST);
 }
 function _ago($time){
-	if($time==0)
-		$timeDiff='Never';
+	if($time==0)$timeDiff='Never';
 	else{
 		$fromTime=$time;
 		$timeDiff=floor(abs(time()-$fromTime)/60);
-		if($timeDiff<2)
-			$timeDiff='Online Now';
-		elseif($timeDiff>2&&$timeDiff<60)
-			$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
-		elseif($timeDiff>60&&$timeDiff<120)
-			$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
-		elseif($timeDiff<1440)
-			$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
-		elseif($timeDiff>1440&&$timeDiff<2880)
-			$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
-		elseif($timeDiff>2880)
-			$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
+		if($timeDiff<2)$timeDiff='Online Now';
+		elseif($timeDiff>2&&$timeDiff<60)$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
+		elseif($timeDiff>60&&$timeDiff<120)$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
+		elseif($timeDiff<1440)$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
+		elseif($timeDiff>1440&&$timeDiff<2880)$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
+		elseif($timeDiff>2880)$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
 	}
 	return$timeDiff;
 }
 function _agologgedin($time){
-	if($time==0)
-		$timeDiff='Has Never Logged In';
+	if($time==0)$timeDiff='Has Never Logged In';
 	else{
 		$fromTime=$time;
 		$timeDiff=floor(abs(time()-$fromTime)/60);
-		if($timeDiff<2)
-			$timeDiff='Online Now';
-		elseif($timeDiff>2&&$timeDiff<60)
-			$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
-		elseif($timeDiff>60&&$timeDiff<120)
-			$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
-		elseif($timeDiff<1440)
-			$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
-		elseif($timeDiff>1440&&$timeDiff<2880)
-			$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
-		elseif($timeDiff>2880)
-			$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
+		if($timeDiff<2)$timeDiff='Online Now';
+		elseif($timeDiff>2&&$timeDiff<60)$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
+		elseif($timeDiff>60&&$timeDiff<120)$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
+		elseif($timeDiff<1440)$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
+		elseif($timeDiff>1440&&$timeDiff<2880)$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
+		elseif($timeDiff>2880)$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
 	}
 	return$timeDiff;
 }
 function elapsed_time($b=0,$e=0){
-  if($b==0)
-		$b=$_SERVER["REQUEST_TIME_FLOAT"];
+  if($b==0)$b=$_SERVER["REQUEST_TIME_FLOAT"];
   $b=explode(' ',$b);
-  if($e==0)
-		$e=microtime();
+  if($e==0)$e=microtime();
   $e=explode(' ',$e);
   @$td=($e[0]+$e[1])-($b[0]+$b[1]);
   $b='';
@@ -247,11 +165,9 @@ function elapsed_time($b=0,$e=0){
 	];
   if((int)$td>30){
     foreach($tt as$u=>$ti){
-      if($ti>0)
-				$b.="$ti$u ";
+      if($ti>0)$b.="$ti$u ";
     }
-  }else
-		$b=number_format($td,3).'s';
+  }else$b=number_format($td,3).'s';
   return trim($b);
 }
 function size_format($B,$D=2){
@@ -267,7 +183,7 @@ function getDomain($url){
   $pieces=parse_url($url);
   $domain=isset($pieces['host'])?$pieces['host']:'';
   if(preg_match('/(?P<domain>[a-z0-9][a-z0-9\-]{1,63}\.[a-z\.]{2,6})$/i',$domain,$regs))return$regs['domain'];
-  return FALSE;
+  return false;
 }
 function url_encode($str){
 	$str=trim(strtolower($str));
@@ -293,35 +209,17 @@ function escaper($val){
   return str_replace(array("\\","/","\"","\n","\r","\t","\x08","\x0c"),array("\\\\","\\/","\\\"","\\n","\\r","\\t","\\f","\\b"),$val);
 }
 class internal{
-	function humans($args=false){
-		require'core/humans.php';
-	}
-	function sitemap($args=false){
-		require'core/sitemap.php';
-	}
-	function robots($args=false){
-		require'core/robots.php';
-	}
-	function rss($args=false){
-		require'core/rss.php';
-	}
-	function manifest($args=false){
-		require'core/manifest.php';
-	}
-	function manifestadmin($args=false){
-		require'core/manifestadmin.php';
-	}
+	function humans($args=false){require'core/humans.php';}
+	function sitemap($args=false){require'core/sitemap.php';}
+	function robots($args=false){require'core/robots.php';}
+	function rss($args=false){require'core/rss.php';}
+	function manifest($args=false){require'core/manifest.php';}
+	function manifestadmin($args=false){require'core/manifestadmin.php';}
 }
 class admin{
-	function favicon(){
-		return'core/images/favicon.png';
-	}
-	function noimage(){
-		return'core/images/noimage.jpg';
-	}
-	function noavatar(){
-		return'core/images/noavatar.jpg';
-	}
+	function favicon(){return'core/images/favicon.png';}
+	function noimage(){return'core/images/noimage.jpg';}
+	function noavatar(){return'core/images/noavatar.jpg';}
 	function accounts($args=false){
 		$view='accounts';
 		require'admin.php';
@@ -389,6 +287,10 @@ class admin{
 	}
 	function preferences($args=false){
 		$view='preferences';
+		require'admin.php';
+	}
+	function settings($args=false){
+		$view='settings';
 		require'admin.php';
 	}
 	function security($args=false){
@@ -562,6 +464,7 @@ $routes=[
   $settings['system']['admin'].'/rewards'=>['admin','rewards'],
 	$settings['system']['admin'].'/pages'=>['admin','pages'],
 	$settings['system']['admin'].'/preferences'=>['admin','preferences'],
+	$settings['system']['admin'].'/settings'=>['admin','settings'],
 	$settings['system']['admin'].'/reviews'=>['admin','reviews'],
 	$settings['system']['admin'].'/search'=>['admin','search'],
 	$settings['system']['admin'].'/security'=>['admin','security'],
@@ -586,14 +489,10 @@ $routes=[
   ''=>['front','index']
 ];
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `active`=1 AND `rank`<=:rank");
-$s->execute([
-	':rank'=>$_SESSION['rank']
-]);
+$s->execute([':rank'=>$_SESSION['rank']]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
-	if(method_exists('front',$r['contentType']))
-		$routes[$r['contentType']]=['front',$r['contentType']];
-  else
-		$routes[$r['contentType']]=['front','content'];
+	if(method_exists('front',$r['contentType']))$routes[$r['contentType']]=['front',$r['contentType']];
+  else$routes[$r['contentType']]=['front','content'];
 }
 $route->setRoutes($routes);
 $route->routeURL(preg_replace("|/$|","",filter_input(INPUT_GET,'url',FILTER_SANITIZE_URL)));
@@ -636,7 +535,6 @@ class router{
 		if(is_array($call)){
 			$call_obj=new $call[0]();
 			$call_obj->{$call[1]}($this->route_call_args);
-		}else
-			$call($this->route_call_args);
+		}else$call($this->route_call_args);
 	}
 }

@@ -7,12 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Add test in Administration Header to test if admin.css exists,
  *             and add if it does. This is for the WYSIWYG Editor to make text
  *             look the same in the Editor as it does on the Main Site.
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <!DOCTYPE HTML>
 <!--
@@ -28,20 +29,19 @@
     <meta name="robots" content="noindex,nofollow">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title><?php echo(isset($navStat)&&$navStat>0?'('.$navStat.') ':'');?>Administration <?php echo($config['business']!=''?' for '.$config['business']:'');?> - AuroraCMS</title>
-    <base href="<?php echo URL;?>">
-    <link rel="alternate" media="handheld" href="<?php echo URL;?>">
-    <link rel="alternate" hreflang="<?php echo$config['language'];?>" href="<?php echo URL;?>">
-    <link rel="manifest" href="<?php echo URL.'core/manifestadmin.php';?>">
-    <link rel="icon" href="<?php echo$favicon;?>">
-    <link rel="apple-touch-icon" href="<?php echo$favicon;?>">
+    <title><?=(isset($navStat)&&$navStat>0?'('.$navStat.') ':'');?>Administration <?=($config['business']!=''?' for '.$config['business']:'');?> - AuroraCMS</title>
+    <base href="<?= URL;?>">
+    <link rel="alternate" media="handheld" href="<?= URL;?>">
+    <link rel="alternate" hreflang="<?=$config['language'];?>" href="<?= URL;?>">
+    <link rel="manifest" href="<?= URL.'core/manifestadmin.php';?>">
+    <link rel="icon" href="<?=$favicon;?>">
+    <link rel="apple-touch-icon" href="<?=$favicon;?>">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/jquery/jquery-ui.min.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/elfinder/css/elfinder.min.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/simplecolorpicker/jquery.simplecolorpicker.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css" media="all">
-    <link rel="stylesheet" type="text/css" href="core/js/clippy/build/clippy.css" media="all">
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.js"></script>
@@ -58,8 +58,6 @@
     <script src="core/js/fullcalendar/fullcalendar.min.js"></script>
     <script src="core/js/fancybox/jquery.fancybox.min.js"></script>
     <script src="core/js/leaflet/leaflet.js"></script>
-    <script src="core/js/clippy/build/clippy.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
-  <body class="<?php if(isset($_COOKIE['theme'])&&$_COOKIE['theme']!=''){echo' '.$_COOKIE['theme'];}if($config['development'][0]==1&&$user['rank']>999)echo' development" data-width="" data-height="" onload="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());" onresize="$(`body`).attr(`data-width`,$(window).width());$(`body`).attr(`data-height`,$(window).height());"';?>">
-  <?php if($config['development'][0]==1&&$user['rank']>999)echo'<div class="development"></div><div class="developmentbottom"></div>';?>
+  <body class="<?= (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?' '.$_COOKIE['theme']:'';?>">

@@ -8,7 +8,7 @@
       </article>
   	</section>
   </pagenotes>
-	<section class="row mt-5">
+	<section class="row my-5">
 		<emptycart>
 			<article id="cart" name="cart" class="col-11 col-sm-5 m-0 p-0 mx-1">
 				<div class="card">
@@ -89,25 +89,21 @@
 					<div class="text-right pr-2"><small>Prices are in Australian Dollars (AUD)</small></div>
 				</div>
 			</article>
-			<article class="col-11 col-sm-5 m-0 p-0 mx-1">
+			<article class="col-11 col-sm-5 m-0 p-0 mx-1 mb-5">
 				<iframe id="sp" name="sp" class="d-none"></iframe>
 				<form class="card p-3" method="post" action="cart/confirm">
-					<input type="hidden" name="emailtrap" value="none">
+					<input type="hidden" name="<print hash>" value="<print timecode>">
 					<loggedin>
 						<h3>Create or Add to Existing Account</h3>
-						<div class="alert alert-info" role="alert">
-							If you have ordered from us previously, or already have an account, you can just enter your email below, and we will add this order using your account details.
-						</div>
-						<div class="alert alert-danger" role="alert">
-							Red Highlighted Fields are Required.
-						</div>
+						<div class="alert alert-info" role="alert">If you have ordered from us previously, or already have an account, you can just enter your email below, and we will add this order using your account details.</div>
+						<div class="alert alert-danger" role="alert">Highlighted Fields are Required.</div>
 						<label for="email">Email</label>
 						<input type="email" id="email" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-						<div class="requirements alert alert-danger">
-							Must be a valid email address.
-						</div>
+						<div class="requirements alert alert-danger">Must be a valid email address.</div>
 						<label for="name" class="mt-0">Name</label>
 						<input type="text" id="name" name="name" value="" placeholder="Enter a Name...">
+						<label for="fullname" aria-hidden="true">Full Name</label>
+						<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 						<label for="business">Business</label>
 						<input type="text" id="business" name="business" value="" placeholder="Enter a Business...">
 						<label for="phone">Phone</label>
@@ -139,12 +135,19 @@
 					<input type="text" id="rewards" name="rewards" value="" placeholder="Enter Your Rewards Code...">
 					<postageoptions>
 						<label for="postoption">Delivery Options</label>
-						<select id="postoption" name="postoption">
+						<select id="postoption" name="pid<print iphash>">
 							<postoptions>
 						</select>
-						<small>Note: Delivery prices are estimates, and may change depending on order items and location of delivery.</small><br>
+						<small>Note: Delivery prices are estimates, and may change depending on order items and location of delivery.</small>
 					</postageoptions>
-					<button type="submit" class="margin-top-3">Confirm Order</button>
+					<paymentoptions>
+						<label for="payoption">Payment Options</label>
+						<select id="payoption" name="payoption" required aria-required="true">
+							<payoptions>
+						</select>
+						<small>Note: Paymtent Option Selected may change the overall cost, which will be reflected on the Order.</small>
+					</paymentoptions>
+					<button type="submit" class="mt-3">Confirm Order</button>
 				</form>
 			</article>
 		</emptycart>

@@ -7,14 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 echo'<script>';
 if(session_status()==PHP_SESSION_NONE)session_start();
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 require'puconverter.php';
 define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -27,20 +28,14 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 $c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
 $ti=time();
-if(file_exists(THEME.'/images/noimage.png'))
-	define('NOIMAGE',THEME.'/images/noimage.png');
-elseif(file_exists(THEME.'/images/noimage.gif'))
-	define('NOIMAGE',THEME.'/images/noimage.gif');
-elseif(file_exists(THEME.'/images/noimage.jpg'))
-	define('NOIMAGE',THEME.'/images/noimage.jpg');
-else
-	define('NOIMAGE','core/images/noimage.jpg');
+if(file_exists(THEME.'/images/noimage.png'))define('NOIMAGE',THEME.'/images/noimage.png');
+elseif(file_exists(THEME.'/images/noimage.gif'))define('NOIMAGE',THEME.'/images/noimage.gif');
+elseif(file_exists(THEME.'/images/noimage.jpg'))define('NOIMAGE',THEME.'/images/noimage.jpg');
+else define('NOIMAGE','core/images/noimage.jpg');
 if($act=='additem'){
 	if($da!=0){
 		$q=$db->prepare("SELECT `title`,`cost`,`rCost` FROM `".$prefix."content` WHERE `id`=:id");
-		$q->execute([
-			':id'=>$da
-		]);
+		$q->execute([':id'=>$da]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
 		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
 		if($r['rCost']!=0)$r['cost']=$r['rCost'];
@@ -69,9 +64,7 @@ if($act=='additem'){
 }
 if($act=='title'){
   $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
-  $ss->execute([
-		':id'=>$id
-	]);
+  $ss->execute([':id'=>$id]);
   $r=$ss->fetch(PDO::FETCH_ASSOC);
   $s=$db->prepare("UPDATE `".$prefix."orderitems` SET `title`=:title WHERE `id`=:id");
   $s->execute([
@@ -82,15 +75,11 @@ if($act=='title'){
 }
 if($act=='quantity'||$act=='trash'){
   $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
-  $ss->execute([
-		':id'=>$id
-	]);
+  $ss->execute([':id'=>$id]);
   $r=$ss->fetch(PDO::FETCH_ASSOC);
   if($da==0){
     $s=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
-    $s->execute([
-			':id'=>$id
-		]);
+    $s->execute([':id'=>$id]);
   }else{
     $s=$db->prepare("UPDATE `".$prefix."orderitems` SET `quantity`=:quantity WHERE `id`=:id");
     $s->execute([
@@ -102,9 +91,7 @@ if($act=='quantity'||$act=='trash'){
 }
 if($act=='cost'){
   $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
-  $ss->execute([
-		':id'=>$id
-	]);
+  $ss->execute([':id'=>$id]);
   $r=$ss->fetch(PDO::FETCH_ASSOC);
   $s=$db->prepare("UPDATE `".$prefix."orderitems` SET `cost`=:cost WHERE `id`=:id");
   $s->execute([
@@ -114,13 +101,10 @@ if($act=='cost'){
   $id=$r['oid'];
 }
 if($act=='reward'){
-	if($da=='')
-		$reward['id']=0;
+	if($da=='')$reward['id']=0;
 	else{
   	$sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `code`=:code");
-  	$sr->execute([
-			':code'=>$da
-		]);
+  	$sr->execute([':code'=>$da]);
   	$reward=$sr->fetch(PDO::FETCH_ASSOC);
 	}
   $s=$db->prepare("UPDATE `".$prefix."orders` SET `rid`=:rid WHERE `id`=:id");
@@ -139,33 +123,23 @@ if($act=='addpostoption'){
 		];
 	}else{
 		$sc=$db->prepare("SELECT `id`,`type`,`title`,`value` FROM `".$prefix."choices` WHERE `contentType`='postoption' AND `id`=:id");
-		$sc->execute([
-			':id'=>$da
-		]);
+		$sc->execute([':id'=>$da]);
 		$rc=$sc->fetch(PDO::FETCH_ASSOC);
 	}
 	if($config['austPostAPIKey']!=''&&stristr($rc['type'],'AUS_')){
 		$apiKey=$config['austPostAPIKey'];
 		$totalweight=$weight=$dimW=$dimL=$dimH=0;
 		$os=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
-		$os->execute([
-			':id'=>$id
-		]);
+		$os->execute([':id'=>$id]);
 		$oir=$os->fetch(PDO::FETCH_ASSOC);
 		$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
-		$su->execute([
-			':uid'=>$oir['uid']
-		]);
+		$su->execute([':uid'=>$oir['uid']]);
 		$ru=$su->fetch(PDO::FETCH_ASSOC);
 		$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:id");
-		$si->execute([
-			':id'=>$id
-		]);
+		$si->execute([':id'=>$id]);
 		while($ri=$si->fetch(PDO::FETCH_ASSOC)){
 			$sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:sid");
-			$sc->execute([
-				':sid'=>$ri['iid']
-			]);
+			$sc->execute([':sid'=>$ri['iid']]);
 			while($i=$sc->fetch(PDO::FETCH_ASSOC)){
 				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 				$weight=$weight+($i['weight']*$ri['quantity']);
@@ -235,36 +209,24 @@ if($act=='postcost'){
   ]);
 }
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
-$s->execute([
-	':id'=>$id
-]);
+$s->execute([':id'=>$id]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `ti` ASC,`title` ASC");
-$si->execute([
-	':oid'=>$r['id']
-]);
+$si->execute([':oid'=>$r['id']]);
 $total=0;
 $html='';
 while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   $is=$db->prepare("SELECT `id`,`thumb`,`file`,`fileURL`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-  $is->execute([
-		':id'=>$oi['iid']
-	]);
+  $is->execute([':id'=>$oi['iid']]);
   $i=$is->fetch(PDO::FETCH_ASSOC);
   $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
-  $sc->execute([
-		':id'=>$oi['cid']
-	]);
+  $sc->execute([':id'=>$oi['cid']]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
 	$image='';
-	if($i['thumb']!=''&&file_exists('../media/'.basename($i['thumb'])))
-		$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['thumb']).'" alt="'.$i['title'].'">';
-	elseif($i['file']!=''&&file_exists('../media/'.basename($i['file'])))
-		$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['file']).'" alt="'.$i['title'].'">';
-	elseif($i['fileURL']!='')
-		$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
-	else
-		$image='';
+	if($i['thumb']!=''&&file_exists('../media/'.basename($i['thumb'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['thumb']).'" alt="'.$i['title'].'">';
+	elseif($i['file']!=''&&file_exists('../media/'.basename($i['file'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['file']).'" alt="'.$i['title'].'">';
+	elseif($i['fileURL']!='')$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
+	else$image='';
   $html.='<tr>'.
 					'<td class="text-center align-middle">'.$image.'</td>'.
     			'<td class="text-left align-middle">'.$i['code'].'</td>'.
@@ -293,9 +255,7 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   if($oi['iid']!=0)$total=$total+($oi['cost']*$oi['quantity']);
 }
 $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
-$sr->execute([
-	':rid'=>$r['rid']
-]);
+$sr->execute([':rid'=>$r['rid']]);
 $reward=$sr->fetch(PDO::FETCH_ASSOC);
   $html.='<tr>'.
 					'<td colspan="3" class="text-right align-middle"><strong>Rewards Code</strong></td>'.
@@ -341,9 +301,7 @@ if($ssr->rowCount()>0){
 						'</tr>';
 			if($config['options'][26]==1){
 				$us=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
-				$us->execute([
-					':uid'=>$r['uid']
-				]);
+				$us->execute([':uid'=>$r['uid']]);
 				if($us->rowCount()>0){
 					$usr=$us->fetch(PDO::FETCH_ASSOC);
 					if($usr['spent']>0){
@@ -354,10 +312,8 @@ if($ssr->rowCount()>0){
 						]);
 						if($sd->rowCount()>0){
 						  $rd=$sd->fetch(PDO::FETCH_ASSOC);
-						  if($rd['value']==2)
-						    $total=$total*($rd['cost']/100);
-						  else
-						    $total=$total-$rd['cost'];
+						  if($rd['value']==2)$total=$total*($rd['cost']/100);
+						  else$total=$total-$rd['cost'];
 			  			$total=number_format((float)$total, 2, '.', '');
 				$html.='<tr>'.
               	'<td colspan="6" class="text-right"><strong>Spent Discount '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off</strong></td>'.
@@ -409,9 +365,7 @@ if($ssr->rowCount()>0){
 							'<td>&nbsp;</td>'.
 						'</tr>';
 $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
-$sn->execute([
-	':oid'=>$r['id']
-]);
+$sn->execute([':oid'=>$r['id']]);
 if($sn->rowCount()>0){
 	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
 					$html.='<tr><td colspan="2" class="small align-middle">'.

@@ -7,21 +7,22 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('tracker','i-3x');?></div>
+          <div class="content-title-icon"><?= svg2('tracker','i-3x');?></div>
           <div>Preferences - Tracker</div>
           <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
           <li class="breadcrumb-item active">Tracker</li>
         </ol>
       </div>
@@ -29,8 +30,8 @@
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow overflow-visible">
         <div class="row p-3">
-          <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?php echo$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="development0">Visitor Tracking</label>
+          <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="options11" id="configoptions111">Visitor Tracking</label>
         </div>
         <table class="table-zebra">
           <thead>
@@ -43,7 +44,7 @@
               <th class="text-center">Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="purge trash" data-tooltip="tooltip" data-placement="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?php svg('purge');?></button>
+                  <button class="purge trash" data-tooltip="tooltip" data-placement="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?= svg2('purge');?></button>
                 </div>
               </th>
             </tr>
@@ -60,22 +61,22 @@
             }
             $cnt=$s->rowCount();
             while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-              <tr class="small" id="l_<?php echo$r['id'];?>" data-ip="<?php echo$r['ip'];?>">
-                <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?php echo trim($r['urlDest']);?></td>
-                <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?php echo trim($r['urlFrom']);?></td>
+              <tr class="small" id="l_<?=$r['id'];?>" data-ip="<?=$r['ip'];?>">
+                <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?= trim($r['urlDest']);?></td>
+                <td class="text-wrap align-middle" style="min-width:200px;max-width:250px;"><?= trim($r['urlFrom']);?></td>
                 <td class="text-center align-middle">
-                  <a target="_blank" href="http://www.ipaddress-finder.com/?ip=<?php echo$r['ip'];?>"><?php echo$r['ip'];?></a>&nbsp;<button class="trash" data-tooltip="tooltip" aria-label="Remove all of this IP" onclick="purge('<?php echo$r['ip'];?>','clearip');"><?php svg('eraser');?></button>
+                  <a target="_blank" href="http://www.ipaddress-finder.com/?ip=<?=$r['ip'];?>"><?=$r['ip'];?></a>&nbsp;<button class="trash" data-tooltip="tooltip" aria-label="Remove all of this IP" onclick="purge('<?=$r['ip'];?>','clearip');"><?= svg2('eraser');?></button>
                 </td>
-                <td class="text-center align-middle"><?php echo ucfirst($r['browser']);?></td>
-                <td class="text-center align-middle"><?php echo ucfirst($r['os']);?></td>
-                <td class="text-center align-middle"><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                <td class="text-center align-middle"><?= ucfirst($r['browser']);?></td>
+                <td class="text-center align-middle"><?= ucfirst($r['os']);?></td>
+                <td class="text-center align-middle"><?= date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-middle">
                   <div class="btn-group float-right">
-                    <button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id=<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="View Visitor Path"><?php svg('seo-path');?></button>
+                    <button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id=<?=$r['id'];?>" data-tooltip="tooltip" aria-label="View Visitor Path"><?= svg2('seo-path');?></button>
                     <?php if($config['php_options'][0]==1){?>
-                      <button data-fancybox data-type="ajax" data-src="core/layout/phpviewer.php?id=<?php echo$r['id'];?>&t=tracker" data-tooltip="tooltip" aria-label="Check IP with Project Honey Pot"><?php svg('brand-projecthoneypot');?></button>
+                      <button data-fancybox data-type="ajax" data-src="core/layout/phpviewer.php?id=<?=$r['id'];?>&t=tracker" data-tooltip="tooltip" aria-label="Check IP with Project Honey Pot"><?= svg2('brand-projecthoneypot');?></button>
                     <?php }?>
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','tracker');"><?php svg('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','tracker');"><?= svg2('trash');?></button>
                   </div>
                 </td>
               </tr>
@@ -84,7 +85,7 @@
               <tr id="more_20">
                 <td colspan="7">
                   <div class="form-row">
-                    <button class="btn-block" onclick="more('tracker','20','<?php echo(isset($args[1])&&$args[1]!=''?$args[1]:'');?>');">More</button>
+                    <button class="btn-block" onclick="more('tracker','20','<?=(isset($args[1])&&$args[1]!=''?$args[1]:'');?>');">More</button>
                   </div>
                 </td>
               </tr>

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if($args[0]=='add'){
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`contentType`,`status`,`ti`) VALUES ('newsletters','unpublished',:ti)");
@@ -34,15 +35,15 @@ else{
       <div class="content-title-wrapper mb-0">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?php svg('newspaper','i-3x');?></div>
+            <div class="content-title-icon"><?= svg2('newspaper','i-3x');?></div>
             <div>Newsletters</div>
             <div class="content-title-actions">
-              <?php echo$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" aria-label="Newsletters Settings">'.svg2('settings').'</a>':'';?>
-              <?php echo$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+              <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" aria-label="Newsletters Settings">'.svg2('settings').'</a>':'';?>
+              <?=$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
             </div>
           </div>
           <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
             <li class="breadcrumb-item active">Newsletters</li>
           </ol>
         </div>
@@ -68,19 +69,19 @@ else{
                 </thead>
                 <tbody>
                   <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                    <tr class="item" id="l_<?php echo$r['id'];?>">
-                      <td class="align-middle"><a href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>"><?php echo$r['title'];?></a></td>
-                      <td class="text-center align-middle"><?php echo date($config['dateFormat'],$ti);?></td>
-                      <td class="text-center align-middle"><?php echo$r['status']=='unpublished'?'Unpublished':date($config['dateFormat'],$r['tis']);?></td>
-                      <td class="align-middle" id="controls_<?php echo$r['id'];?>">
-                        <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
-                          <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php echo$user['options'][1]==1?'<button class="btn email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
-                            <a class="btn" data-tooltip="tooltip"<?php echo$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?> href="<?php echo$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?php echo$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                    <tr class="item" id="l_<?=$r['id'];?>">
+                      <td class="align-middle"><a href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>"><?=$r['title'];?></a></td>
+                      <td class="text-center align-middle"><?= date($config['dateFormat'],$ti);?></td>
+                      <td class="text-center align-middle"><?=$r['status']=='unpublished'?'Unpublished':date($config['dateFormat'],$r['tis']);?></td>
+                      <td class="align-middle" id="controls_<?=$r['id'];?>">
+                        <div class="btn-toolbar float-right" role="toolbar">
+                          <div class="btn-group" role="group">
+                            <?=$user['options'][1]==1?'<button class="btn email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
+                            <a class="btn" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?> href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="btn<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','unpublished');" aria-label="Restore"><?php svg('untrash');?></button>
-                              <button class="btn trash<?php echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?php echo$r['id'];?>','content','status','delete');" aria-label="Delete"><?php svg('trash');?></button>
-                              <button class="btn purge trash<?php echo$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="purge('<?php echo$r['id'];?>','content');" aria-label="Purge"><?php svg('purge');?></button>
+                              <button class="btn<?=$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');" aria-label="Restore"><?= svg2('untrash');?></button>
+                              <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');" aria-label="Delete"><?= svg2('trash');?></button>
+                              <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" data-tooltip="tooltip" onclick="purge('<?=$r['id'];?>','content');" aria-label="Purge"><?= svg2('purge');?></button>
                             <?php }?>
                           </div>
                         </div>
@@ -103,9 +104,9 @@ else{
                   $s->execute();
                   while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <tr>
-                      <td class="align-middle"><?php echo$r['email'];?></td>
+                      <td class="align-middle"><?=$r['email'];?></td>
                       <td class="text-right align-middle">
-                        <input id="newsletter<?php echo$r['id'];?>" data-dbid="<?php echo$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?php echo($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][0]==1?'':' disabled');?>>
+                        <input id="newsletter<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][0]==1?'':' disabled');?>>
                       </td>
                     </tr>
                   <?php }?>
@@ -115,28 +116,28 @@ else{
                 <div class="form-row">
                   <div class="input-text">Email/s</div>
                   <input id="eml" name="emails" type="text" value="" placeholder="Enter Email/s (Comma Seperated)...">
-                  <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add Subscriber/s"><?php svg('add');?></button>
+                  <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add Subscriber/s"><?= svg2('add');?></button>
                 </div>
               </form>
               <table class="table-zebra">
                 <thead>
                   <tr>
-                    <th class="col-xs-6">Email</th>
-                    <th class="col-xs-3">Date Signed Up</th>
-                    <th class="col-xs-3"></th>
+                    <th class="col-6">Email</th>
+                    <th class="col-3">Date Signed Up</th>
+                    <th class="col-3"></th>
                   </tr>
                 </thead>
                 <tbody id="subs">
                   <?php $s=$db->prepare("SELECT `id`,`email`,`ti` FROM `".$prefix."subscribers` ORDER BY `email` ASC");
                   $s->execute();
                   while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                    <tr id="l_<?php echo$r['id'];?>" class="item">
-                      <td><?php echo$r['email'];?></td>
-                      <td><?php echo date($config['dateFormat'],$r['ti']);?></td>
+                    <tr id="l_<?=$r['id'];?>" class="item">
+                      <td><?=$r['email'];?></td>
+                      <td><?= date($config['dateFormat'],$r['ti']);?></td>
                       <td class="align-middle">
                         <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" aria-label="Item Controls">
-                            <?php echo$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`subscribers`);">'.svg2('trash').'</button>':'';?>
+                            <?=$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`subscribers`);">'.svg2('trash').'</button>':'';?>
                           </div>
                         </div>
                       </td>

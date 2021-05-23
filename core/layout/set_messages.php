@@ -7,38 +7,39 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('inbox','i-3x');?></div>
+          <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
           <div>Messages Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" href="<?php echo$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?php svg('back');?></a>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?php svg('save');?></button>
+            <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?= svg2('back');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
+          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
           <li class="breadcrumb-item active">Settings</li>
         </ol>
       </div>
     </div>
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
-        <legend id="contactForm" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#contactForm" aria-label="PermaLink to Contact Form Section">&#128279;</a>':'';?>Contact Form</legend>
+        <legend id="contactForm" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#contactForm" aria-label="PermaLink to Contact Form Section">&#128279;</a>':'';?>Contact Form</legend>
         <div class="row">
-          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#storeMessages" aria-label="PermaLink to Enable Store Messages Checkbox">&#128279;</a>':'';?>
-          <input id="storeMessages" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?php echo$config['storemessages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="storeMessages">Store Contact Form Messages</label>
+          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#storeMessages" aria-label="PermaLink to Enable Store Messages Checkbox">&#128279;</a>':'';?>
+          <input id="storeMessages" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?=$config['storemessages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="storeMessages" id="configstoremessages01">Store Contact Form Messages</label>
         </div>
         <div class="form-row mt-3">
-          <small class="form-text text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?php echo URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</small>
+          <small class="form-text text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?= URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</small>
         </div>
         <form target="sp" method="post" action="core/add_subject.php">
           <div class="form-row">
@@ -46,48 +47,48 @@
             <input id="sub" name="sub" type="text" value="" placeholder="Enter a Subject...">
             <div class="input-text">Email</div>
             <input id="eml" name="eml" type="text" value="" placeholder="Enter an Email...">
-            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
+            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?= svg2('add');?></button>
           </div>
         </form>
         <div id="subjects">
           <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
           $ss->execute();
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-            <div class="form-row mt-1" id="l_<?php echo$rs['id'];?>">
+            <div class="form-row mt-1" id="l_<?=$rs['id'];?>">
               <div class="input-text">Subject</div>
-              <input id="sub<?php echo$r['id'];?>" type="text" value="<?php echo$rs['title'];?>" onchange="update('<?php echo$rs['id'];?>','subject','title',$(this).val());">
+              <input id="sub<?=$r['id'];?>" type="text" value="<?=$rs['title'];?>" onchange="update('<?=$rs['id'];?>','subject','title',$(this).val());">
               <div class="input-text">Email</div>
-              <input type="text" value="<?php echo$rs['url'];?>" onchange="update('<?php echo$rs['id'];?>','subject','url',$(this).val());">
+              <input type="text" value="<?=$rs['url'];?>" onchange="update('<?=$rs['id'];?>','subject','url',$(this).val());">
               <form target="sp" action="core/purge.php">
-                <input name="id" type="hidden" value="<?php echo$rs['id'];?>">
+                <input name="id" type="hidden" value="<?=$rs['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
               </form>
             </div>
           <?php }?>
         </div>
         <hr>
-        <legend id="webmailSection" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#webmailSection" aria-label="PermaLink to Webmail Section">&#128279;</a>':'';?>Webmail</legend>
-        <label id="messageCheckInterval" for="message_check_interval"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#messageCheckInterval" aria-label="PermaLink to Message Check Interval">&#128279;</a>':'';?>Check for new Messages every</label>
+        <legend id="webmailSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#webmailSection" aria-label="PermaLink to Webmail Section">&#128279;</a>':'';?>Webmail</legend>
+        <label id="messageCheckInterval" for="message_check_interval"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#messageCheckInterval" aria-label="PermaLink to Message Check Interval">&#128279;</a>':'';?>Check for new Messages every</label>
         <div class="form-row">
-          <select id="message_check_interval" onchange="update('1','config','message_check_interval',$(this).val());">
-            <option value="0"<?php echo$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
-            <option value="1"<?php echo$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
-            <option value="300"<?php echo$config['message_check_interval']==300?' selected="selected"':'';?>>5 Minutes</option>
-            <option value="600"<?php echo$config['message_check_interval']==600?' selected="selected"':'';?>>10 Minutes</option>
-            <option value="900"<?php echo$config['message_check_interval']==900?' selected="selected"':'';?>>15 Minutes</option>
-            <option value="1800"<?php echo$config['message_check_interval']==1800?' selected="selected"':'';?>>30 Minutes</option>
-            <option value="3600"<?php echo$config['message_check_interval']==3600?' selected="selected"':'';?>>1 Hour</option>
+          <select id="message_check_interval" onchange="update('1','config','message_check_interval',$(this).val(),'select');">
+            <option value="0"<?=$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
+            <option value="1"<?=$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
+            <option value="300"<?=$config['message_check_interval']==300?' selected="selected"':'';?>>5 Minutes</option>
+            <option value="600"<?=$config['message_check_interval']==600?' selected="selected"':'';?>>10 Minutes</option>
+            <option value="900"<?=$config['message_check_interval']==900?' selected="selected"':'';?>>15 Minutes</option>
+            <option value="1800"<?=$config['message_check_interval']==1800?' selected="selected"':'';?>>30 Minutes</option>
+            <option value="3600"<?=$config['message_check_interval']==3600?' selected="selected"':'';?>>1 Hour</option>
           </select>
         </div>
         <div class="row mt-3">
-          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#deleteRetrievedMessages" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>
-          <input id="deleteRetrievedMessages" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9" type="checkbox"<?php echo$user['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="deleteRetrievedMessages">Delete Retrieved Messages</label>
+          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#deleteRetrievedMessages" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>
+          <input id="deleteRetrievedMessages" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9" type="checkbox"<?=$user['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="deleteRetrievedMessages" id="loginoptions91">Delete Retrieved Messages</label>
         </div>
-        <legend id="mailboxes" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#mailboxes" aria-label="PermaLink to Mailboxes Section">&#128279;</a>':'';?>Mailboxes</legend>
+        <legend id="mailboxes" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#mailboxes" aria-label="PermaLink to Mailboxes Section">&#128279;</a>':'';?>Mailboxes</legend>
         <form target="sp" method="post" action="core/add_mailbox.php">
-          <input name="uid" type="hidden" value="<?php echo$user['id'];?>">
+          <input name="uid" type="hidden" value="<?=$user['id'];?>">
           <div class="form-row">
             <div class="input-text">Type</div>
             <select id="type" name="t" onchange="changePort($(this).val());">
@@ -111,7 +112,7 @@
             <input id="mailusr" name="mailusr" type="text" value="" placeholder="Enter a Username...">
             <div class="input-text">Password</div>
             <input id="mailpwd" name="mailpwd" type="text" value="" placeholder="Enter a Password">
-            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?php svg('add');?></button>
+            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?= svg2('add');?></button>
           </div>
         </form>
         <script>
@@ -129,49 +130,49 @@
             ':uid'=>$user['id']
           ]);
           while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
-            <div class="form-row mt-1" id="l_<?php echo$rm['id'];?>">
+            <div class="form-row mt-1" id="l_<?=$rm['id'];?>">
               <div class="input-text">Type</div>
-              <select id="type<?php echo$rm['id'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`type`,$(this).val());">
-                <option value="imap"<?php echo$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
-                <option value="pop3"<?php echo$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
+              <select id="type<?=$rm['id'];?>" onchange="update(`<?=$rm['id'];?>`,`choices`,`type`,$(this).val());">
+                <option value="imap"<?=$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
+                <option value="pop3"<?=$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
               </select>
               <div class="input-text">Port</div>
-              <input id="port<?php echo$rm['id'];?>" type="text" value="<?php echo$rm['port'];?>" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`port`,$(this).val());">
+              <input id="port<?=$rm['id'];?>" type="text" value="<?=$rm['port'];?>" onchange="update(`<?=$rm['id'];?>`,`choices`,`port`,$(this).val());">
               <div class="input-text">Flag</div>
-              <select id="flag" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`flag`,$(this).val());">
-                <option value="novalidate-cert"<?php echo$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
-                <option value="validate-cert"<?php echo$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
-                <option value="norsh"<?php echo$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
-                <option value="ssl"<?php echo$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
-                <option value="notls"<?php echo$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
-                <option value="tls"<?php echo$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
+              <select id="flag" onchange="update(`<?=$rm['id'];?>`,`choices`,`flag`,$(this).val(),'select');">
+                <option value="novalidate-cert"<?=$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
+                <option value="validate-cert"<?=$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
+                <option value="norsh"<?=$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
+                <option value="ssl"<?=$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
+                <option value="notls"<?=$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
+                <option value="tls"<?=$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
               </select>
               <div class="input-text">Server</div>
-              <input id="url<?php echo$rm['id'];?>" name="url" type="text" value="<?php echo$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?php echo$rm['id'];?>`,`choices`,`url`,$(this).val());">
+              <input id="url<?=$rm['id'];?>" name="url" type="text" value="<?=$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?=$rm['id'];?>`,`choices`,`url`,$(this).val());">
               <div class="input-text">Username</div>
-              <input id="mailusr<?php echo$rm['id'];?>" name="mailusr" type="text" value="<?php echo$rm['username'];?>" placeholder="Enter a Username..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`username`,$(this).val());">
+              <input id="mailusr<?=$rm['id'];?>" name="mailusr" type="text" value="<?=$rm['username'];?>" placeholder="Enter a Username..." onchange="update(`<?=$rm['id'];?>`,`choices`,`username`,$(this).val());">
               <div class="input-text">Password</div>
-              <input id="mailpwd<?php echo$rm['id'];?>" name="mailpwd" type="text" value="<?php echo$rm['password'];?>" placeholder="Enter a Password..." onchange="update(`<?php echo$rm['id'];?>`,`choices`,`password`,$(this).val());">
+              <input id="mailpwd<?=$rm['id'];?>" name="mailpwd" type="text" value="<?=$rm['password'];?>" placeholder="Enter a Password..." onchange="update(`<?=$rm['id'];?>`,`choices`,`password`,$(this).val());">
               <form target="sp" action="core/purge.php">
-                <input name="id" type="hidden" value="<?php echo$rm['id'];?>">
+                <input name="id" type="hidden" value="<?=$rm['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?php svg('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
               </form>
             </div>
           <?php }?>
         </div>
         <hr>
-        <legend id="autoreplyEmail" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyEmail" aria-label="PermaLink to AutoReply Email Section">&#128279;</a>':'';?>AutoReply Email</legend>
+        <legend id="autoreplyEmail" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyEmail" aria-label="PermaLink to AutoReply Email Section">&#128279;</a>':'';?>AutoReply Email</legend>
         <div id="autoreplySubject" class="form-row">
-          <label for="contactAutoReplySubject"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplySubject" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>Subject</label>
+          <label for="contactAutoReplySubject"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplySubject" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>Subject</label>
           <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{business}');return false;">{business}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{date}');return false;">{date}</a>
           </small>
         </div>
         <div class="form-row">
-          <input class="textinput" id="aRS" type="text" value="<?php echo$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-          <button class="save" id="saveaRS" data-tooltip="tooltip" data-dbid="aRS" data-style="zoom-in" aria-label="Save"><?php svg('save');?></button>
+          <input class="textinput" id="aRS" type="text" value="<?=$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
+          <button class="save" id="saveaRS" data-tooltip="tooltip" data-dbid="aRS" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <div id="autoreplyLayout" class="form-row mt-3">
           <small class="form-text text-right">Tokens:
@@ -182,22 +183,22 @@
           </small>
         </div>
         <div class="form-row">
-          <?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyLayout" aria-label="PermaLink to AutoReply Layout">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyLayout" aria-label="PermaLink to AutoReply Layout">&#128279;</a>':'';?>
           <form class="w-100" method="post" target="sp" action="core/update.php">
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="contactAutoReplyLayout">
-            <textarea class="summernote" id="aRL" name="da"><?php echo rawurldecode($config['contactAutoReplyLayout']);?></textarea>
+            <textarea class="summernote" id="aRL" name="da"><?= rawurldecode($config['contactAutoReplyLayout']);?></textarea>
           </form>
         </div>
         <hr>
-        <legend id="emailSignature" class="mt-3"><?php echo$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#emailSignature" aria-label="PermaLink to Email Signature">&#128279;</a>':'';?>Email Signature</legend>
+        <legend id="emailSignature" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#emailSignature" aria-label="PermaLink to Email Signature">&#128279;</a>':'';?>Email Signature</legend>
         <div class="form-row">
           <form class="w-100" method="post" target="sp" action="core/update.php">
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
             <input name="c" type="hidden" value="email_signature">
-            <textarea class="summernote" id="email_signature" name="da"><?php echo rawurldecode($config['email_signature']);?></textarea>
+            <textarea class="summernote" id="email_signature" name="da"><?= rawurldecode($config['email_signature']);?></textarea>
           </form>
         </div>
         <?php require'core/layout/footer.php';?>

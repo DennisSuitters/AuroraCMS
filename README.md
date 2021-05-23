@@ -1,16 +1,11 @@
-![AuroraCMS](core/images/auroracms.svg)
+![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-#### Version
-We are currently at v0.1.1
-
-### FAQ
-- Why no Plugins?
-  - Anybody who's worked on or developed any kind of Content Management System in any Programming Language knows that Plugins are a potential security problem. Plugins are something that because third parties can build them, end up being out of the control of the developer, especially if the Plugin Maker disregards the conventions set by the project.
-- Update Cycle.
-  - As at the moment there is only one person working on the project, updates are as they get time to do them.
+Current version is v0.1.2
 
 ### Features
+- AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
+- No Plugins. AuroraCMS does use some Third Party Script's, that are security vetted.
 - Business Hours Editor.
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
@@ -18,6 +13,7 @@ We are currently at v0.1.1
 - Articles.
 - Portfolio.
 - Events.
+  - Book Events and Invoice for immediate payment.
 - News.
 - Testimonials.
   - Approval before before public display.
@@ -38,7 +34,6 @@ We are currently at v0.1.1
   - Live Chat. Choose between the built in Live Chat, or easily integrate Facebook Messenger.
 - Orders.
   - Create quotes, invoices. Client viewing of Orders.
-  - Send PDF versions of Orders.
   - PayPal Integration for accepting PayPal and Credit Card Payments.
   - Australia Post API Integration for Calculating Postage Costs.
   - Add deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
@@ -71,7 +66,7 @@ We are currently at v0.1.1
   - 30 Day Auto-Clearance of Blacklisted IP's.
   - Site Block if visitor's IP is listed in Blacklist, saving server resources, and to hopefully stop Spammers or Email Harvester's.
   - Database Backup and ability to Prefix Table Names.
-  - Blacklist IP's that try to access WordPress based files or attempt WordPress.
+  - Blacklist IP's that try to access WordPress based files or attempt WordPress Access.
   - Developer "Lock Down", this stops accounts lower than the developer from taking the website out of "maintenance" or "Coming Soon" modes.
 - Page and Visitor Tracking for Analytics.
   - Records visit counts per IP, stores IP and Browser Information, with option of clearing data.
@@ -120,7 +115,6 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - [CodeMirror](https://github.com/codemirror/CodeMirror)
 - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer)
-- [TCPDF](http://www.tcpdf.org/)
 - [Zebra_Image](https://github.com/stefangabos/Zebra_Image)
 - [kses](https://github.com/RichardVasquez/kses)
 - [elFinder](https://github.com/Studio-42/elFinder)
@@ -144,7 +138,6 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
   - Live Testing, Suggestions, and witty Banter.
 
 ### AuroraCMS Live Sites by Diemen Design:
-- [AAA Earthworx](https://www.aaaearthworx.com.au/)
 - [Anime Excess](https://www.animeexcess.com.au/)
 - [BizzyKnits](https://www.bizzyknits.biz/)
 - [Corner Life Coach](https://corner.net.au/)
@@ -153,7 +146,6 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
 - [Hays Computer World](https://hayscomputerworld.com.au/)
 - [K9FineDining](https://k9finedining.com/)
-- [Live Lightly Centre](https://www.livelightlycentre.com.au/)
 - [Lovely Gardens](https://www.lovelygardens.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)
 - [Raycraft Entertainment](https://www.entertainme.net.au/)

@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(!defined('VERSION'))define('VERSION',trim(file_get_contents('VERSION')));
@@ -30,17 +31,12 @@ $share_image=$favicon;
 $noimage=$this->noimage();
 $noavatar=$this->noavatar();
 $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType");
-$sp->execute([
-  ':contentType'=>$view
-]);
+$sp->execute([':contentType'=>$view]);
 require'core/login.php';
 if($_SESSION['rank']>399){
-  if(isset($_SESSION['rank']))
-    $rankText=rank($_SESSION['rank']);
+  if(isset($_SESSION['rank']))$rankText=rank($_SESSION['rank']);
   $nous=$db->prepare("SELECT COUNT(`id`) AS cnt FROM `".$prefix."login` WHERE `lti`>:lti AND `rank`!=1000");
-  $nous->execute([
-    ':lti'=>time()-300
-  ]);
+  $nous->execute([':lti'=>time()-300]);
   $nou=$nous->fetch(PDO::FETCH_ASSOC);
   $nc=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."comments` WHERE `contentType`!='review' AND `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);
   $nr=$db->query("SELECT COUNT(`id`) AS cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND  `status`='unapproved'")->fetch(PDO::FETCH_ASSOC);
@@ -54,12 +50,8 @@ if($_SESSION['rank']>399){
   require'core/layout/header.php';
   require'core/layout/sidebar.php';
   if($view=='add'){
-    if($args[0]=='bookings')
-      require'core/layout/bookings.php';
-    else
-      require'core/layout/content.php';
-  }else
-    require'core/layout/'.$view.'.php';
+    if($args[0]=='bookings')require'core/layout/bookings.php';
+    else require'core/layout/content.php';
+  }else require'core/layout/'.$view.'.php';
   require'core/layout/meta_footer.php';
-}else
-  require'core/layout/login.php';
+}else require'core/layout/login.php';

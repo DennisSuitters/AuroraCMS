@@ -7,34 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 $rank=0;
 $notification='';
-$theme=parse_ini_file(THEME.'/theme.ini',true);
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
   $breaditem=$matches[1];
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
   $jsoni=2;
-  $jsonld='<script type="application/ld+json">'.
-    '{'.
-      '"@context":"http://schema.org",'.
-      '"@type":"BreadcrumbList",'.
-      '"itemListElement":'.
-      '['.
-        '{'.
-          '"@type":"ListItem",'.
-          '"position":1,'.
-          '"item":'.
-          '{'.
-            '"@id":"'.URL.'",'.
-            '"name":"Home"'.
-          '}'.
-        '},';
+  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
   $breadit=preg_replace([
     '/<print breadcrumb=[\"\']?url[\"\']?>/',
     '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -51,31 +37,11 @@ if(stristr($html,'<breadcrumb>')){
       URL.'profile',
       'Profile'
     ],$breaditem);
-    $jsonld.='{'.
-      '"@type":"ListItem",'.
-      '"position":2,'.
-      '"item":'.
-        '{'.
-          '"@id":"'.URL.'profile",'.
-          '"name":"Profile"'.
-        '}'.
-    '},';
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.'profile","name":"Profile"}},';
     $breaditems.=$breadit;
   }else{
-    $breadit=preg_replace([
-      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-    ],[
-      'Profile'
-    ],$breadcurrent);
-    $jsonld.='{'.
-      '"@type":"ListItem",'.
-      '"position":2,'.
-      '"item":'.
-        '{'.
-          '"@id":"'.URL.'profile",'.
-          '"name":"Profile"'.
-        '}'.
-    '},';
+    $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/','Profile',$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.'profile","name":"Profile"}},';
     $breaditems.=$breadit;
   }
   if(isset($args[0])&&$args[0]!=''){
@@ -88,22 +54,9 @@ if(stristr($html,'<breadcrumb>')){
 	      URL.'profile/'.str_replace(' ','-',urlencode($args[0])),
 	      htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
 	    ],$breaditem);
-		}else{
-			$breadit=preg_replace([
-				'/<print breadcrumb=[\"\']?title[\"\']?>/'
-			],[
-				htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
-			],$breadcurrent);
-		}
-    $jsonld.='{'.
-      '"@type":"ListItem",'.
-      '"position":'.$jsoni.','.
-      '"item":'.
-        '{'.
-          '"@id":"'.URL.'profile/'.str_replace(' ','-',urlencode($args[0])).'",'.
-          '"name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"'.
-        '}'.
-    '}';
+		}else
+			$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.'profile/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}';
     $breaditems.=$breadit;
   }
   $html=preg_replace([
@@ -120,15 +73,11 @@ if(stristr($html,'<breadcrumb>')){
 }
 if($args[0]!=''){
   $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE LOWER(`name`)=LOWER(:name)");
-  $s->execute([
-    ':name'=>str_replace('-',' ',$args[0])
-  ]);
+  $s->execute([':name'=>str_replace('-',' ',$args[0])]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
   if($r['bio_options'][0]==1){
-    if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
-      $r['avatar']='media/avatar/'.basename($r['avatar']);
-    else
-      $r['avatar']=NOAVATAR;
+    if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))$r['avatar']='media/avatar/'.basename($r['avatar']);
+    else$r['avatar']=NOAVATAR;
     $name=explode(' ',$r['name']);
     $html=preg_replace([
       '/<[\/]?profile>/',
@@ -188,9 +137,7 @@ if($args[0]!=''){
     	$item=$matches[1];
     	$items='';
     	$sl=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=:uid ORDER BY `icon` ASC");
-      $sl->execute([
-        ':uid'=>$r['id']
-      ]);
+      $sl->execute([':uid'=>$r['id']]);
     	if($sl->rowCount()>0){
     		while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
     			$build=$item;
@@ -201,10 +148,9 @@ if($args[0]!=''){
   					htmlspecialchars($rl['url'],ENT_QUOTES,'UTF-8'),
   					frontsvg('i-social-'.$rl['icon'])
   				],$build);
-  			$items.=$build;
+  			  $items.=$build;
     		}
-    	}else
-        $items='';
+    	}else$items='';
     	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$items,$html,1);
     }
     if(stristr($html,'<resume')){
@@ -217,17 +163,14 @@ if($args[0]!=''){
         $item=$matches[1];
         $items='';
         $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='career' AND `cid`=:cid ORDER BY `tis` ASC");
-        $ss->execute([
-          ':cid'=>$r['id']
-        ]);
+        $ss->execute([':cid'=>$r['id']]);
         if($ss->rowCount()>0){
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
             $build=$item;
             if(stristr($build,'<print icon')){
               preg_match('/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',$build,$matches);
               $icon=$matches[1];
-            }else
-              $icon='';
+            }else$icon='';
             $build=preg_replace([
               '/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',
               '/<print career=[\"\']?title[\"\']?>/',
@@ -245,11 +188,9 @@ if($args[0]!=''){
             ],$build);
             $items.=$build;
           }
-        }else
-          $items='';
+        }else$items='';
         $career=preg_replace('~<item>.*?<\/item>~is',$items,$career,1);
-      }else
-        $career='';
+      }else$career='';
       if(stristr($resume,'<education')&&$r['bio_options'][3]==1){
         preg_match('/<education>([\w\W]*?)<\/education>/',$resume,$matches);
         $education=$matches[1];
@@ -257,17 +198,14 @@ if($args[0]!=''){
         $item=$matches[1];
         $items='';
         $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='education' AND `cid`=:cid ORDER BY `tis` ASC");
-        $ss->execute([
-          ':cid'=>$r['id']
-        ]);
+        $ss->execute([':cid'=>$r['id']]);
         if($ss->rowCount()>0){
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
             $build=$item;
             if(stristr($build,'<print icon')){
               preg_match('/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',$build,$matches);
               $icon=$matches[1];
-            }else
-              $icon='';
+            }else$icon='';
             $build=preg_replace([
               '/<print icon=[\"\']?([\w\W]*?)[\"\']?>/',
               '/<print education=[\"\']?title[\"\']?>/',
@@ -285,11 +223,9 @@ if($args[0]!=''){
             ],$build);
             $items.=$build;
           }
-        }else
-          $items='';
+        }else$items='';
         $education=preg_replace('~<item>.*?<\/item>~is',$items,$education,1);
-      }else
-        $education='';
+      }else$education='';
       if($career!=''||$education!=''){
         $html=preg_replace([
           '/<print resume=[\"\']?notes[\"\']?>/',
@@ -322,15 +258,11 @@ if($args[0]!=''){
       $item=$matches[1];
       $items='';
       $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='article' AND `uid`=:uid AND `status`='published' ORDER BY `ti` DESC LIMIT 5");
-      $ss->execute([
-        ':uid'=>$r['id']
-      ]);
+      $ss->execute([':uid'=>$r['id']]);
       if($ss->rowCount()>0){
         while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-          if($rs['fileURL']!=''&&$rs['file']=='')
-            $rs['file']=$fileURL;
-          elseif($rs['fileURL']==''&&$rs['file']=='')
-            $rs['file']=NOIMAGE;
+          if($rs['fileURL']!=''&&$rs['file']=='')$rs['file']=$fileURL;
+          elseif($rs['fileURL']==''&&$rs['file']=='')$rs['file']=NOIMAGE;
           $build=$item;
           $build=preg_replace([
             '/<print content=[\"\']?image[\"\']?>/',
@@ -347,8 +279,7 @@ if($args[0]!=''){
           ],$build);
           $items.=$build;
         }
-      }else
-        $items='';
+      }else$items='';
       $profilecontent=preg_replace('~<item>.*?<\/item>~is',$items,$profilecontent,1);
       $html=preg_replace([
         '~<content>.*?<\/content>~is',
@@ -399,7 +330,7 @@ if($args[0]!=''){
     $doc=new DOMDocument();
     @$doc->loadHTML($html);
     $svgs=$doc->getElementsByTagName('icon');
-    foreach($svgs as $svg){
+    foreach($svgs as$svg){
       $icon=$svg->getAttribute('svg');
       $html=preg_replace('/<icon svg=[\"\']?'.$icon.'[\"\']?>/',frontsvg($icon),$html,1);
     }
@@ -439,12 +370,9 @@ if($args[0]!=''){
       $item=$matches[1];
       $items='';
       while($r=$s->fetch(PDO::FETCH_ASSOC)){
-        if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
-          $r['avatar']='media/avatar/'.basename($r['avatar']);
-        elseif($r['gravatar']!='')
-          $r['avatar']=$r['gravatar'];
-        else
-          $r['avatar']=NOAVATAR;
+        if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))$r['avatar']='media/avatar/'.basename($r['avatar']);
+        elseif($r['gravatar']!='')$r['avatar']=$r['gravatar'];
+        else$r['avatar']=NOAVATAR;
         $build=$item;
         $build=preg_replace([
           '/<print user=[\"\']?link[\"\']?>/',
@@ -459,8 +387,7 @@ if($args[0]!=''){
         ],$build);
         $items.=$build;
       }
-    }else
-      $items='';
+    }else$items='';
     $html=preg_replace('~<items>.*?<\/items>~is',$items,$html,1);
   }
   $content.=$html;

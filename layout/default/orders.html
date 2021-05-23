@@ -1,40 +1,41 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="orders">
-	<section class="row">
-		<article class="card col-12 col-sm-11 border-0">
-			<table class="border mb-0">
-				<thead class="d-none d-sm-table-header-group">
-					<tr>
-						<th class="text-center"><span class="d-none d-sm-block">Order #</span></th>
-						<th class="d-none d-sm-table-cell text-center">Status</th>
-						<th class="d-none d-sm-table-cell text-center">Date</th>
-						<th>&nbsp;</th>
-					</tr>
-				</thead>
-				<tbody>
-					<items>
-						<tr class="border-bottom">
-							<td class="text-center">
-								<a href="<print link>"><print order="ordernumber"></a><small class="d-block d-sm-none"><small><print order="date"><br>
-								Due: <print order="duedate"></small></small>
-							</td>
-							<td class="d-none d-sm-table-cell text-center"><print order="status"></td>
-							<td class="d-none d-sm-table-cell text-center">
-								<small><print order="date"><br>Due: <print order="duedate"></small>
-							</td>
-							<td class="text-right align-middle"><a class="btn" href="<print link>">View</a></td>
+	<orderlist>
+		<section class="row my-5">
+			<article class="card col-12 col-sm-11 border-0">
+				<table class="border mb-0">
+					<thead class="d-none d-sm-table-header-group">
+						<tr>
+							<th class="text-center"><span class="d-none d-sm-block">Order #</span></th>
+							<th class="d-none d-sm-table-cell text-center">Status</th>
+							<th class="d-none d-sm-table-cell text-center">Date</th>
+							<th>&nbsp;</th>
 						</tr>
-					</items>
-				</tbody>
-			</table>
-		</article>
-	</section>
+					</thead>
+					<tbody>
+						<items>
+							<tr class="border-bottom">
+								<td class="text-center">
+									<a href="<print link>"><print order="ordernumber"></a><small class="d-block d-sm-none"><small><print order="date"><br>
+									Due: <print order="duedate"></small></small>
+								</td>
+								<td class="d-none d-sm-table-cell text-center"><print order="status"></td>
+								<td class="d-none d-sm-table-cell text-center">
+									<small><print order="date"><br>Due: <print order="duedate"></small>
+								</td>
+								<td class="text-right align-middle"><a class="btn" href="<print link>">View</a></td>
+							</tr>
+						</items>
+					</tbody>
+				</table>
+			</article>
+		</section>
+	</orderlist>
 	<order>
-		<div class="card col-11 mx-auto mt-5 orderstheme">
+		<div class="card col-11 mx-auto my-5 p-0 orderstheme" id="section-to-print">
 			<section class="row">
-				<article class="col-sm-3 border-right">
-					<button class="float-right d-block d-sm-none" onclick="$('#sp').load('core/email_order.php?id=<print order=id>&act=print');" aria-label="Print"><i class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.76923,11.615385 h 6.46154 V 9.769235 H 3.76923 v 1.84615 z m 0,-4.61538 h 6.46154 V 4.230775 H 9.07692 q -0.28846,0 -0.49038,-0.20193 Q 8.38462,3.826925 8.38462,3.538465 V 2.384615 H 3.76923 v 4.61539 z m 8.30769,0.46154 q 0,-0.1875 -0.13702,-0.32452 -0.13702,-0.13702 -0.32452,-0.13702 -0.1875,0 -0.32451,0.13702 -0.13702,0.13702 -0.13702,0.32452 0,0.1875 0.13702,0.32452 0.13701,0.13702 0.32451,0.13702 0.1875,0 0.32452,-0.13702 0.13702,-0.13702 0.13702,-0.32452 z m 0.92308,0 v 3 q 0,0.0937 -0.0685,0.16226 -0.0685,0.0685 -0.16226,0.0685 h -1.61538 v 1.15384 q 0,0.28846 -0.20193,0.49039 -0.20192,0.20192 -0.49038,0.20192 H 3.53847 q -0.28846,0 -0.49038,-0.20192 -0.20193,-0.20193 -0.20193,-0.49039 v -1.15384 H 1.230779 q -0.09375,0 -0.162259,-0.0685 Q 1,10.555295 1,10.461545 v -3 Q 1,6.891825 1.407452,6.484375 1.814904,6.076925 2.38462,6.076925 h 0.46153 v -3.92308 q 0,-0.28846 0.20193,-0.49038 Q 3.25,1.461545 3.53846,1.461545 h 4.84616 q 0.28846,0 0.63461,0.14423 0.34615,0.14423 0.54808,0.34615 l 1.09615,1.09616 q 0.20192,0.20192 0.34616,0.54807 0.14423,0.34616 0.14423,0.63462 v 1.84615 h 0.46153 q 0.56972,0 0.97717,0.40745 Q 13,6.891825 13,7.461545 z"/></svg></i></button>
+				<article class="col-12 col-sm-4 mx-0 py-0 border-right">
 					<h4>From</h4>
 					<div class="small">
 						<print config="business"><br>
@@ -45,7 +46,7 @@
 						Mobile: <print config="mobile">
 					</div>
 				</article>
-				<article class="col-12 col-sm-3 border-right">
+				<article class="col-12 col-sm-4 mx-0 py-0 border-right">
 					<h4>To</h4>
 					<div class="small">
 						<print user="name"><br>
@@ -57,8 +58,8 @@
 						Mobile: <print user="mobile"><br>
 					</div>
 				</article>
-				<article class="col-12 col-sm-3">
-					<button class="float-right d-none d-sm-block" onclick="$('#sp').load('core/email_order.php?id=<print order=id>&act=print');" aria-label="Print"><i class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.76923,11.615385 h 6.46154 V 9.769235 H 3.76923 v 1.84615 z m 0,-4.61538 h 6.46154 V 4.230775 H 9.07692 q -0.28846,0 -0.49038,-0.20193 Q 8.38462,3.826925 8.38462,3.538465 V 2.384615 H 3.76923 v 4.61539 z m 8.30769,0.46154 q 0,-0.1875 -0.13702,-0.32452 -0.13702,-0.13702 -0.32452,-0.13702 -0.1875,0 -0.32451,0.13702 -0.13702,0.13702 -0.13702,0.32452 0,0.1875 0.13702,0.32452 0.13701,0.13702 0.32451,0.13702 0.1875,0 0.32452,-0.13702 0.13702,-0.13702 0.13702,-0.32452 z m 0.92308,0 v 3 q 0,0.0937 -0.0685,0.16226 -0.0685,0.0685 -0.16226,0.0685 h -1.61538 v 1.15384 q 0,0.28846 -0.20193,0.49039 -0.20192,0.20192 -0.49038,0.20192 H 3.53847 q -0.28846,0 -0.49038,-0.20192 -0.20193,-0.20193 -0.20193,-0.49039 v -1.15384 H 1.230779 q -0.09375,0 -0.162259,-0.0685 Q 1,10.555295 1,10.461545 v -3 Q 1,6.891825 1.407452,6.484375 1.814904,6.076925 2.38462,6.076925 h 0.46153 v -3.92308 q 0,-0.28846 0.20193,-0.49038 Q 3.25,1.461545 3.53846,1.461545 h 4.84616 q 0.28846,0 0.63461,0.14423 0.34615,0.14423 0.54808,0.34615 l 1.09615,1.09616 q 0.20192,0.20192 0.34616,0.54807 0.14423,0.34616 0.14423,0.63462 v 1.84615 h 0.46153 q 0.56972,0 0.97717,0.40745 Q 13,6.891825 13,7.461545 z"/></svg></i></button>
+				<article class="col-12 col-sm-4 mx-0 py-0 ">
+					<button class="float-right d-none d-sm-block" onclick="window.print();" aria-label="Print"><i class="i"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 3.76923,11.615385 h 6.46154 V 9.769235 H 3.76923 v 1.84615 z m 0,-4.61538 h 6.46154 V 4.230775 H 9.07692 q -0.28846,0 -0.49038,-0.20193 Q 8.38462,3.826925 8.38462,3.538465 V 2.384615 H 3.76923 v 4.61539 z m 8.30769,0.46154 q 0,-0.1875 -0.13702,-0.32452 -0.13702,-0.13702 -0.32452,-0.13702 -0.1875,0 -0.32451,0.13702 -0.13702,0.13702 -0.13702,0.32452 0,0.1875 0.13702,0.32452 0.13701,0.13702 0.32451,0.13702 0.1875,0 0.32452,-0.13702 0.13702,-0.13702 0.13702,-0.32452 z m 0.92308,0 v 3 q 0,0.0937 -0.0685,0.16226 -0.0685,0.0685 -0.16226,0.0685 h -1.61538 v 1.15384 q 0,0.28846 -0.20193,0.49039 -0.20192,0.20192 -0.49038,0.20192 H 3.53847 q -0.28846,0 -0.49038,-0.20192 -0.20193,-0.20193 -0.20193,-0.49039 v -1.15384 H 1.230779 q -0.09375,0 -0.162259,-0.0685 Q 1,10.555295 1,10.461545 v -3 Q 1,6.891825 1.407452,6.484375 1.814904,6.076925 2.38462,6.076925 h 0.46153 v -3.92308 q 0,-0.28846 0.20193,-0.49038 Q 3.25,1.461545 3.53846,1.461545 h 4.84616 q 0.28846,0 0.63461,0.14423 0.34615,0.14423 0.54808,0.34615 l 1.09615,1.09616 q 0.20192,0.20192 0.34616,0.54807 0.14423,0.34616 0.14423,0.63462 v 1.84615 h 0.46153 q 0.56972,0 0.97717,0.40745 Q 13,6.891825 13,7.461545 z"/></svg></i></button>
 					<h4>Details</h4>
 					<div class="small">
 						<strong>Order #</strong><print order="ordernumber"><br>
@@ -68,8 +69,8 @@
 					</div>
 				</article>
 			</section>
-			<section class="row mt-0">
-				<article id="ordertable" name="ordertable" class="mt-0">
+			<section class="row m-0">
+				<article id="ordertable" name="ordertable" class="p-0">
 					<table>
 						<thead>
 							<tr>
@@ -89,9 +90,8 @@
 										<print orderitem="title">
 										<print weight>
 										<print size>
-										<small class="d-inline d-sm-none"><br><print choice></small>
 									</td>
-									<td class="text-left d-none d-sm-table-cell"><print choice></td>
+									<td class="text-left"><print choice></td>
 		            	<td class="col-md-1 text-center"><print orderitem="quantity"></td>
 		            	<td class="col-md-1 text-center"><print orderitem="cost"></td>
 		            	<td class="text-right"><print orderitem="subtotal"></td>
@@ -99,8 +99,7 @@
 		        	</items>
 							<rewards>
 								<tr>
-									<td colspan="3" class="text-right d-table-cell d-sm-none"><strong>Rewards</strong></td>
-									<td colspan="2" class="text-right d-none d-sm-table-cell"><strong>Rewards</strong></td>
+									<td colspan="3" class="text-right"><strong>Rewards</strong></td>
 									<td class="text-center"><strong><print rewards="code"></strong></td>
 									<td class="text-center small"><small><print rewards="method"></small></td>
 									<td class="text-right border-top border-2 border-black"><strong><print rewards="value"></strong></td>
@@ -108,52 +107,43 @@
 							</rewards>
 							<gst>
 								<tr>
-									<td colspan="3" class="d-none d-sm-table-cell">&nbsp;</td>
-									<td colspan="2" class="text-right"><strong>GST</strong></td>
+									<td colspan="5" class="text-right"><strong>GST</strong></td>
 									<td class="text-right"><strong><print order="gst"></strong></td>
 								</tr>
 							</gst>
 							<discountRange>
 								<tr>
-									<td colspan="2" class="d-none d-sm-table-cell">&nbsp;</td>
-									<td colspan="3" class="text-right"><strong><print discount="method"></strong></td>
+									<td colspan="5" class="text-right"><strong><print discount="method"></strong></td>
 									<td class="text-right"><strong><print discount="total"></strong></td>
 								</tr>
 							</discountRange>
 							<tr>
-								<td colspan="1" class="text-right d-none d-sm-table-cell"></td>
-								<td colspan="4" class="text-right align-middle">
-									<form class="form-group row" method="POST" action="<print orderurl>#ordertable">
-										<label for="postoption" class="col-form-label col-3">Delivery Options</label>
-										<input type="hidden" name="act" value="postupdate">
-										<input type="hidden" name="oid" value="<print order=oid>">
-										<div class="input-group col-9">
-											<select id="postoption" class="form-control" name="postoption" onchange="this.form.submit();">
-												<postoptions>
-											</select>
-										</div>
-									</form>
-								</td>
+								<td colspan="2" class="text-right align-middle"><strong>Delivery Options</strong></td>
+								<td colspan="3" class="text-right align-middle"><strong></strong></td>
 								<td class="text-right align-middle"><strong><print order="post"></strong></td>
 							</tr>
+
+							<tr>
+								<td colspan="2" class="text-right align-middle"><strong>Payment Option</strong></td>
+								<td colspan="3" class="text-right align-middle"><strong></strong></td>
+								<td class="text-right align-middle"><strong<print order="payment"></strong></td>
+							</tr>
+
 						</tbody>
 						<tfoot>
 							<tr>
-								<td class="d-none d-sm-table-cell"></td>
-								<td colspan="4" class="text-right"><strong>Total</strong></td>
+								<td colspan="5" class="text-right"><strong>Total</strong></td>
 								<td class="text-right border-2 border-top border-bottom border-black font-weight-bold"><strong><print order="total"></strong></td>
 							</tr>
 							<orderDeduction>
 								<deductionItems>
 									<tr>
-										<td class="d-none d-sm-table-cell"></td>
-										<td colspan="4" class="align-middle text-right"><print deduction="title"> on <print deduction="date"></td>
+										<td colspan="5" class="align-middle text-right"><print deduction="title"> on <print deduction="date"></td>
 										<td class="align-middle text-right"><strong><print deduction="cost"></strong></td>
 									</tr>
 								</deductionItems>
 								<tr>
-									<td class="d-none d-sm-table-cell"></td>
-									<td colspan="4" class="text-right"><strong>Total</strong></td>
+									<td colspan="5" class="text-right"><strong>Total</strong></td>
 									<td class="text-right border-2 border-top border-bottom border-black"><strong><print deduction="total"></strong></td>
 								</tr>
 							</orderDeduction>
@@ -169,8 +159,8 @@
 					</table>
 				</article>
 			</section>
-			<section class="row">
-				<article class="col-12 col-sm-3 border-right">
+			<section class="row p-0 m-0 border-top">
+				<article class="col-12 col-sm-4 mx-0 border-right">
 					<div id="paymenttransaction"></div>
 					<h4>Notes:</h4>
 					<div>
@@ -179,7 +169,7 @@
 						</small>
 					</div>
 				</article>
-				<article class="col-12 col-sm-3 border-right">
+				<article class="col-12 col-sm-4 mx-0 border-right">
 					<h4>Banking Details:</h4>
 					<div>
 						<strong>Bank: </strong><print config="bank"><br>
@@ -188,7 +178,7 @@
 						<strong>Bank BSB: </strong><print config="bankBSB"><br>
 					</div>
 				</article>
-				<article class="col-12 col-sm-3">
+				<article class="col-12 col-sm-4 mx-0">
 					<h4>Pay Online:</h4>
 					<print paypal>
 				</article>

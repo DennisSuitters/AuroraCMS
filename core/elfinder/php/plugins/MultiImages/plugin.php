@@ -107,6 +107,7 @@ class elFinderPluginMultiImages extends elFinderPlugin {
         $name .= $item;
       }
     }
+    $name=str_replace(' ','-',$name);
     return $name;
   }
 }

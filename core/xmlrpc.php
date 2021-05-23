@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -17,13 +18,9 @@ $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $ti=time();
 echo'Thank you for giving the system an excuse to Blacklist your IP... <strong>'.$ip.'</strong>';
 $s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `ti`<:ti");
-$s->execute([
-  ':ti'=>time()-2592000]
-);
-$s=$db->prepare("SELECT ip FROM `".$prefix."iplist` WHERE `ip`=:ip");
-$s->execute([
-  ':ip'=>$ip
-]);
+$s->execute([':ti'=>time()-2592000]);
+$s=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
+$s->execute([':ip'=>$ip]);
 if($s->rowCount()<1){
   $r=$s->fetch(PDO::FETCH_ASSOC);
   $sql=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");

@@ -13,7 +13,7 @@
  */
 $error=0;
 $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):'';
-if($_POST['emailtrap']=='none'){
+if($_POST['emailtrap']==''){
 	if($act=='step1'){
 		$dbprefix=isset($_POST['dbprefix'])?filter_input(INPUT_POST,'dbprefix',FILTER_SANITIZE_STRING):'';
 		$dbtype=isset($_POST['dbtype'])?filter_input(INPUT_POST,'dbtype',FILTER_SANITIZE_STRING):'';
@@ -31,6 +31,7 @@ if($_POST['emailtrap']=='none'){
 				 'username = '.$dbusername.PHP_EOL.
 				 'password = '.$dbpassword.PHP_EOL.
 				 '[system]'.PHP_EOL.
+				 'devmode = false'.PHP_EOL,
 				 'version = '.time().PHP_EOL.
 				 'url = '.PHP_EOL.
 				 'admin = '.PHP_EOL;
@@ -61,6 +62,7 @@ if($_POST['emailtrap']=='none'){
 				 'username = '.$config['database']['username'].PHP_EOL.
 				 'password = '.$config['database']['password'].PHP_EOL.
 				 '[system]'.PHP_EOL.
+				 'devmode = '.$config['system']['devmode'].PHP_EOL,
 				 'version = '.time().PHP_EOL.
 				 'url = '.ltrim($sysurl).PHP_EOL.
 				 'admin = '.($sysadmin==''?'admin':$sysadmin).PHP_EOL;

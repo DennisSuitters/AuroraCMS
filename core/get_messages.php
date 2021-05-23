@@ -7,21 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 function svg($svg,$class=null,$size=null){
 	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
 $uid=$_SESSION['uid'];
 $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
-$su->execute([
-	':uid'=>$uid
-]);
+$su->execute([':uid'=>$uid]);
 $user=$su->fetch(PDO::FETCH_ASSOC);
 $mhtml=$blacklisted='';
 require'imapreader/Email.php';
@@ -73,33 +72,26 @@ if($config['message_check_interval']!=0){
 				':ti'=>time()
 			]);
       $imap=new Reader('{'.$rm['url'].':'.$rm['port'].'/'.$rm['flag'].'}', $rm['username'], $rm['password'], '../media/email/');
-      if($rm['ti']==0)
-				$imap->all()->get();
-      else
-				$imap->limit(10)->unread()->get();
+      if($rm['ti']==0)$imap->all()->get();
+      else$imap->limit(10)->unread()->get();
       foreach($imap->emails() as$email){
         $folder='INBOX';
         $status='unread';
         if($config['spamfilter'][0]==1){
           $filter=new SpamFilter();
           $result=$filter->check_email($email->fromEmail());
-          if($result)
-						$folder='spam';
+          if($result)$folder='spam';
           $result=$filter->check_text($email->subject().' '.($email->html()!=''?$email->html():$email->plain()));
-          if($result)
-						$folder='spam';
+          if($result)$folder='spam';
         }
         $attachments='';
         if($email->hasAttachments()){
           foreach($email->attachments() as$attachment)$attachments.=($attachments!=''?',':'').$attachment->filePath();
         }
-        if($email->isAnswered())
-					$status='read';
-        if($email->isDeleted())
-					$status='trash';
+        if($email->isAnswered())$status='read';
+        if($email->isDeleted())$status='trash';
 				$emailHTML=$email->html()!=''?$email->html():$email->plain();
-				if(is_base64_string($emailHTML))
-					$emailHTML=base64_decode($emailHTML);
+				if(is_base64_string($emailHTML))$emailHTML=base64_decode($emailHTML);
         $s=$db->prepare("INSERT IGNORE INTO `".$prefix."messages` (`mid`,`folder`,`to_email`,`to_name`,`from_email`,`subject`,`status`,`notes_html`,`attachments`,`email_date`,`size`,`ti`) VALUES (:mid,:folder,:to_email,:to_name,:from_email,:subject,:status,:notes_html,:attachments,:email_date,:size,:ti)");
         $s->execute([
           ':mid'=>$email->id(),
@@ -115,8 +107,7 @@ if($config['message_check_interval']!=0){
           ':size'=>$email->size(),
           ':ti'=>time()
         ]);
-        if($user['options'][9]==1)
-					$imap->deleteEmail($email->id());
+        if($user['options'][9]==1)$imap->deleteEmail($email->id());
       }
     }catch(Exception $e){
 			echo'<script>window.top.window.$("#allmessages").html(`<div class="alert alert-danger">'.$e->getMessage().'</div>`);</script>';
@@ -133,9 +124,7 @@ if($config['message_check_interval']!=0){
 					'<div class="actions">'.
 						'<div class="btn-group-vertical">';
       $scc=$db->prepare("SELECT `email` FROM `".$prefix."whitelist` WHERE `email`=:email");
-      $scc->execute([
-				':email'=>$r['from_email']
-			]);
+      $scc->execute([':email'=>$r['from_email']]);
       if($scc->rowCount()<1){
 		  		echo'<form id="whitelist'.$r['id'].'" target="sp" method="post" action="core/add_messagewhitelist.php">'.
 								'<input name="id" type="hidden" value="'.$r['id'].'">'.
@@ -143,9 +132,7 @@ if($config['message_check_interval']!=0){
 							'</form>';
 		}
   	$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-    $scc->execute([
-			':ip'=>$r['ip']
-		]);
+    $scc->execute([':ip'=>$r['ip']]);
     if($scc->rowCount()<1){
 		  		echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_messageblacklist.php" style="display:inline-block;">'.
 								'<input name="id" type="hidden" value="'.$r['id'].'">';
@@ -173,15 +160,13 @@ if($config['message_check_interval']!=0){
 		$ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
 		$sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);
 		echo'<script>';
-			if($ur['cnt']>0)
-				echo'$(`#unreadbadge`).html("'.$ur['cnt'].'");';
-			if($sp['cnt']>0)
-				echo'$(`#spambadge`).html("'.$sp['cnt'].'");';
+			if($ur['cnt']>0)echo'$(`#unreadbadge`).html("'.$ur['cnt'].'");';
+			if($sp['cnt']>0)echo'$(`#spambadge`).html("'.$sp['cnt'].'");';
 		echo'</script>';
   }
 }
 function is_base64_string($s){
-  if(($b=base64_decode($s,TRUE))===FALSE)return FALSE;
+  if(($b=base64_decode($s,true))===false)return false;
   $e=mb_detect_encoding($b);
-  if(in_array($e, array('UTF-8','ASCII')))return TRUE;else return FALSE;
+  if(in_array($e, array('UTF-8','ASCII')))return true;else return false;
 }

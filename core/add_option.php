@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -20,9 +21,8 @@ function svg2($svg,$class=null,$size=null){
 $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
 $ttl=filter_input(INPUT_POST,'ttl',FILTER_SANITIZE_STRING);
 $qty=filter_input(INPUT_POST,'qty',FILTER_SANITIZE_NUMBER_INT);
-if($ttl==''||$qty==''){
-	echo'<script>window.top.window.toastr["error"]("Not all Fields were filled in!");</script>';
-}else{
+if($ttl==''||$qty=='')echo'<script>window.top.window.toastr["error"]("Not all Fields were filled in!");</script>';
+else{
 	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`rid`,`contentType`,`title`,`ti`) VALUES (:uid,:rid,'option',:title,:ti)");
 	$q->execute([
 		':uid'=>$uid,
@@ -46,7 +46,5 @@ if($ttl==''||$qty==''){
 						'</form>'.
 					'</div>`);'.
 				'</script>';
-	}else{
-		echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';
-	}
+	}else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';
 }

@@ -1,14 +1,14 @@
 <?php
 /**
  * elFinder Plugin Normalizer
- * 
+ *
  * UTF-8 Normalizer of file-name and file-path etc.
  * nfc(NFC): Canonical Decomposition followed by Canonical Composition
  * nfkc(NFKC): Compatibility Decomposition followed by Canonical
- * 
+ *
  * This plugin require Class "Normalizer" (PHP 5 >= 5.3.0, PECL intl >= 1.0.0)
  * or PEAR package "I18N_UnicodeNormalizer"
- * 
+ *
  * ex. binding, configure on connector options
  *	$opts = array(
  *		'bind' => array(
@@ -64,7 +64,7 @@ class elFinderPluginNormalizer extends elFinderPlugin
 		'ls' => 'intersect',
 		'upload' => 'renames'
 	);
-	
+
 	public function __construct($opts) {
 		$defaults = array(
 			'enable'    => true,  // For control by volume driver
@@ -74,10 +74,10 @@ class elFinderPluginNormalizer extends elFinderPlugin
 			'lowercase' => false, // Make chars lowercase
 			'convmap'   => array()// Convert map ('FROM' => 'TO') array
 		);
-	
+
 		$this->opts = array_merge($defaults, $opts);
 	}
-	
+
 	public function cmdPreprocess($cmd, &$args, $elfinder, $volume) {
 		$opts = $this->getCurrentOpts($volume);
 		if (! $opts['enable']) {
@@ -85,7 +85,7 @@ class elFinderPluginNormalizer extends elFinderPlugin
 		}
 		$this->replaced[$cmd] = array();
 		$key = (isset($this->keyMap[$cmd]))? $this->keyMap[$cmd] : 'name';
-		
+
 		if (isset($args[$key])) {
 			if (is_array($args[$key])) {
 				foreach($args[$key] as $i => $name) {
@@ -98,7 +98,7 @@ class elFinderPluginNormalizer extends elFinderPlugin
 		}
 		return true;
 	}
-	
+
 	public function cmdPostprocess($cmd, &$result, $args, $elfinder) {
 		if ($cmd === 'ls') {
 			if (! empty($result['list']) && ! empty($this->replaced['ls'])) {
@@ -114,18 +114,18 @@ class elFinderPluginNormalizer extends elFinderPlugin
 			}
 		}
 	}
-	
+
 	// NOTE: $thash is directory hash so it unneed to process at here
 	public function onUpLoadPreSave(&$thash, &$name, $src, $elfinder, $volume) {
 		$opts = $this->getCurrentOpts($volume);
 		if (! $opts['enable']) {
 			return false;
 		}
-		
+
 		$name = $this->normalize($name, $opts);
 		return true;
 	}
-	
+
 	private function normalize($str, $opts) {
 		if ($opts['nfc'] || $opts['nfkc']) {
 			if (class_exists('Normalizer', false)) {

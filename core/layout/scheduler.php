@@ -7,21 +7,22 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('calendar-time','i-3x');?></div>
+          <div class="content-title-icon"><?= svg2('calendar-time','i-3x');?></div>
           <div>Scheduler</div>
           <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
           <li class="breadcrumb-item active">Scheduler</li>
         </ol>
       </div>
@@ -38,10 +39,10 @@
           </div>
           <div class="col-12 col-md-8 text-right">
             <small>View:
-              <a class="badger badge-<?php echo !isset($args[1])?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="Display All Content">All</a>&nbsp;
-              <?php $s=$db->query("SELECT DISTINCT(`contentType`) as contentType FROM `".$prefix."content` WHERE `contentType`!='booking' ORDER BY `contentType` ASC");
+              <a class="badger badge-<?= !isset($args[1])?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="Display All Content">All</a>&nbsp;
+              <?php $s=$db->query("SELECT DISTINCT(`contentType`) AS contentType FROM `".$prefix."content` WHERE `contentType`!='booking' ORDER BY `contentType` ASC");
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <a class="badger badge-<?php echo isset($args[1])&&$args[1]==$r['contentType']?'success':'secondary';?>" data-tooltip="tooltip" href="<?php echo URL.$settings['system']['admin'].'/content/scheduler/'.$r['contentType'];?>" aria-label="Display <?php echo ucfirst($r['contentType']);?> Items"><?php echo ucfirst($r['contentType']);?></a>&nbsp;
+                <a class="badger badge-<?= isset($args[1])&&$args[1]==$r['contentType']?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/scheduler/'.$r['contentType'];?>" aria-label="Display <?= ucfirst($r['contentType']);?> Items"><?= ucfirst($r['contentType']);?></a>&nbsp;
               <?php }?>
             </small>
           </div>
@@ -54,12 +55,10 @@
     </div>
   </section>
 </main>
-<?php
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType");
+<?php $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType");
 $s->execute([
   ':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]
-]);
-?>
+]);?>
 <script>
   document.addEventListener('DOMContentLoaded',function(){
     var calendarEl=document.getElementById('calendar');
@@ -87,22 +86,17 @@ $s->execute([
           elseif($r['status']=='archived')
             $eColor='secondary';?>
           {
-            id:'<?php echo$r['id'];?>',
-            title:`<?php echo ucfirst($r['contentType']).`: `.$r['title'];?>`,
-            start:`<?php echo date("Y-m-d H:i:s",$r['pti']);?>`,
+            id:'<?=$r['id'];?>',
+            title:`<?= ucfirst($r['contentType']).`: `.$r['title'];?>`,
+            start:`<?= date("Y-m-d H:i:s",$r['pti']);?>`,
             allDay:true,
-            customHtml:`<div class="badger badge-<?php echo$eColor;?> events-layer text-left" data-contentType="<?php echo ucfirst($r['contentType']);?>"><?php echo$r['title'];?>` +
-              '<div class="events-buttons" role="toolbar" aria-label="Item Toolbar Controls">' +
-                '<div class="btn-group" role="group" aria-label="Item Controls">' +
+            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>"><?=$r['title'];?><div class="events-buttons" role="toolbar" aria-label="Item Toolbar Controls"><div class="btn-group" role="group" aria-label="Item Controls">` +
 <?php if($user['options'][2]==1){?>
-                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit"><?php svg('edit');?></a>' +
-                  `<button class="btn trash" id="delbut<?php echo$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?php echo$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?php svg('trash');?></button>` +
+                  `<a class="btn" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit"><?= svg2('edit');?></a><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?= svg2('trash');?></button>` +
 <?php }else{?>
-                  '<a class="btn" id="edbut<?php echo$r['id'];?>" data-tooltip="tooltip" href="<?php echo$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="View"><?php svg('view');?></a>' +
+                  '<a class="btn" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="View"><?= svg2('view');?></a>' +
 <?php }?>
-                '</div>' +
-              '</div>' +
-            '</div>'
+                '</div></div></div>'
           },
         <?php	}?>
       ],

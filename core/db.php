@@ -8,11 +8,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
+if(file_exists('..'.DS.'..'.DS.'..'.DS.'VERSION')){
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('..'.DS.'..'.DS.'..'.DS.'VERSION')));
+}elseif(file_exists('..'.DS.'..'.DS.'VERSION')){
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('..'.DS.'..'.DS.'VERSION')));
+}elseif(file_exists('..'.DS.'VERSION')){
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('..'.DS.'VERSION')));
+}else{
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('VERSION')));
+}
 if(session_status()==PHP_SESSION_NONE){
   session_start();
   define('SESSIONID',session_id());
@@ -20,20 +30,14 @@ if(session_status()==PHP_SESSION_NONE){
 if(!isset($_SERVER['SCRIPT_URI'])){
   $_SERVER['SCRIPT_URI']=(isset($_SERVER['HTTPS'])&&$_SERVER['HTTPS']=='on'?'https://':'http://').$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
   $pos=strrpos($_SERVER['SCRIPT_URI'],'/');
-  if($pos!==false){
-    $_SERVER['SCRIPT_URI']=substr($_SERVER['SCRIPT_URI'],0,$pos+1);
-  }
+  if($pos!==false)$_SERVER['SCRIPT_URI']=substr($_SERVER['SCRIPT_URI'],0,$pos+1);
 }
-if(file_exists('../../core/config.ini'))
-  $settings=parse_ini_file('../../core/config.ini',TRUE);
-elseif(file_exists('../core/config.ini'))
-  $settings=parse_ini_file('../core/config.ini',TRUE);
-elseif(file_exists('core/config.ini'))
-  $settings=parse_ini_file('core/config.ini',TRUE);
-elseif(file_exists('config.ini'))
-  $settings=parse_ini_file('config.ini',TRUE);
+if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('core'.DS.'config.ini'))$settings=parse_ini_file('core'.DS.'config.ini',TRUE);
+elseif(file_exists('config.ini'))$settings=parse_ini_file('config.ini',TRUE);
 else{
-  require ROOT_DIR.'/core/layout/install.php';
+  require ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php';
   die();
 }
 $prefix=$settings['database']['prefix'];
@@ -43,29 +47,16 @@ try{
   $db->exec("set names utf8");
 //  $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
   $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
-  if(isset($getcfg)&&$getcfg==true){
-    $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-    date_default_timezone_set($config['timezone']);
-    if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
-      if(!defined('PROTOCOL'))define('PROTOCOL','https://');
-    }else{
-      if(!defined('PROTOCOL'))define('PROTOCOL','http://');
-    }
-    if($config['development']==1){
-      error_reporting(E_ALL);
-      ini_set('display_errors','On');
-    }else{
-      error_reporting(E_ALL);
-      ini_set('display_errors','Off');
-      ini_set('log_errors','On');
-      ini_set('error_log','../media/cache/error.log');
-    }
-    if(session_status()==PHP_SESSION_NONE){
-      session_start();
-      define('SESSIONID',session_id());
-    }
+  if($settings['system']['devmode']==true){
+    error_reporting(E_ALL);
+    ini_set('display_errors','On');
+  }else{
+    error_reporting(E_ALL);
+    ini_set('display_errors','Off');
+    ini_set('log_errors','On');
+    ini_set('error_log','..'.DS.'media'.DS.'cache'.DS.'error.log');
   }
 }catch(PDOException $e){
-  require'core/layout/install.php';
+  require'core'.DS.'layout'.DS.'install.php';
   die();
 }

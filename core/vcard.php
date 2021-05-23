@@ -7,23 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- */
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
+*/
 require'db.php';
 require'class.vcard.php';
-if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443)
-  define('PROTOCOL','https://');
-else
-  define('PROTOCOL','http://');
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443)define('PROTOCOL','https://');
+else define('PROTOCOL','http://');
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $username=isset($_GET['u'])?filter_input(INPUT_GET,'u',FILTER_SANITIZE_STRING):0;
-if($username!= 0){
+if($username!=0){
   $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username");
-  $s->execute([
-    ':username'=>$username
-  ]);
+  $s->execute([':username'=>$username]);
   if($s->rowCount()==1){
     $user=$s->fetch(PDO::FETCH_ASSOC);
     if($user['rank']>899)$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -44,8 +41,7 @@ if($username!= 0){
     }
     $namee=explode(' ',$user['name']);
     $card=new vCard();
-    $card->set(
-      [
+    $card->set([
         'display_name'=>$user['name'],
         'first_name'=>$namee[0],
         'last_name'=>end($namee),
@@ -84,14 +80,12 @@ if($username!= 0){
         'timezone'=>NULL,
         'sort_string'=>NULL,
         'note'=>$user['notes']
-      ]
-    );
+      ]);
   }
 }else{
   $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
   $card=new vCard();
-  $card->set(
-    [
+  $card->set([
       'display_name'=>$config['business'],
       'first_name'=>NULL,
       'last_name'=>NULL,
@@ -130,7 +124,6 @@ if($username!= 0){
       'timezone'=>NULL,
       'sort_string'=>NULL,
       'note'=>NULL
-    ]
-  );
+    ]);
 }
 $card->download();

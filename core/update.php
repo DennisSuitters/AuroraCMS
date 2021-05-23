@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Check over and tidy up code.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -48,9 +49,7 @@ $si=session_id();
 $ti=time();
 if($col!='messengerFBCode'){
 	$s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
-	$s->execute([
-		':id'=>$id
-	]);
+	$s->execute([':id'=>$id]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
 	$oldda=$r[$col];
 }
@@ -71,9 +70,7 @@ if($tbl=='content'&&$col=='title'){
 	]);
 }
 if($tbl=='content'){
-	if($col=='tis'||$col=='tie'||$col=='pti'){
-		echo"(".date($config['dateFormat'],$da).")";
-	}
+	if($col=='tis'||$col=='tie'||$col=='pti')echo"(".date($config['dateFormat'],$da).")";
 }
 if($tbl=='config'||$tbl=='login'||$tbl=='orders'||$tbl=='orderitems'||$tbl=='messages')$r['contentType']='';
 $log=[
@@ -90,14 +87,11 @@ $log=[
   'action'=>'update',
   'ti'=>$ti
 ];
-if($r['contentType']=='booking')
-	$log['view']=$r['contentType'].'s';
+if($r['contentType']=='booking')$log['view']=$r['contentType'].'s';
 if(isset($_SESSION['uid'])){
   $uid=(int)$_SESSION['uid'];
   $q=$db->prepare("SELECT `rank`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
-  $q->execute([
-		':id'=>$uid
-	]);
+  $q->execute([':id'=>$uid]);
   $u=$q->fetch(PDO::FETCH_ASSOC);
   $login_user=$u['name']!=''?$u['name']:$u['username'];
   $log['uid']=$uid;
@@ -131,9 +125,7 @@ if($tbl=='seo'){
 }
 if($tbl=='login'&&$col=='username'){
   $uc1=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:da");
-  $uc1->execute([
-		':da'=>$da
-	]);
+  $uc1->execute([':da'=>$da]);
   if($uc1->rowCount()<1){
     $q=$db->prepare("UPDATE `".$prefix."login` SET `username`=:da WHERE `id`=:id");
     $q->execute([
@@ -143,9 +135,7 @@ if($tbl=='login'&&$col=='username'){
 		echo'<script>window.top.window.$("#uerror").addClass("d-none");</script>';
 	}else{
     $uc2=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `id`=:id");
-    $uc2->execute([
-			':id'=>$id
-		]);
+    $uc2->execute([':id'=>$id]);
     $uc=$uc2->fetch(PDO::FETCH_ASSOC);
 		echo'<script>window.top.window.$("#uerror").removeClass("d-none");</script>';
 	}
@@ -176,14 +166,10 @@ if($tbl=='orders'&&$col=='status'&&$da=='archived'){
 }
 if($tbl=='orders'&&$col=='status'&&$da=='paid'){
 	$q=$db->prepare("SELECT `uid`,`total` FROM `".$prefix."orders` WHERE `id`=:id");
-	$q->execute([
-		':id'=>$id
-	]);
+	$q->execute([':id'=>$id]);
 	$r=$q->fetch(PDO::FETCH_ASSOC);
 	$s=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
-	$s->execute([
-		':uid'=>$r['uid']
-	]);
+	$s->execute([':uid'=>$r['uid']]);
 	$ru=$s->fetch(PDO::FETCH_ASSOC);
 	$ru['spent']=$ru['spent']+$r['total'];
 	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent WHERE `id`=:uid");
@@ -193,8 +179,7 @@ if($tbl=='orders'&&$col=='status'&&$da=='paid'){
 	]);
 }
 if(is_null($e[2])){
-	if($tbl=='orders'&&$col=='due_ti')
-		echo'<script>window.top.window.$("#due_ti").val(`'.date($config['dateFormat'],$da).'`);</script>';
+	if($tbl=='orders'&&$col=='due_ti')echo'<script>window.top.window.$("#due_ti").val(`'.date($config['dateFormat'],$da).'`);</script>';
 	if($tbl=='content'&&$col=='file'&&$da==''){
 		if(file_exists('../media/file_'.$id.'.jpeg'))unlink('../media/file_'.$id.'.jpeg');
     if(file_exists('../media/file_'.$id.'.jpg'))unlink('../media/file_'.$id.'.jpg');
@@ -202,22 +187,16 @@ if(is_null($e[2])){
     if(file_exists('../media/file_'.$id.'.gif'))unlink('../media/file_'.$id.'.gif');
 		if(file_exists('../media/file_'.$id.'.tif'))unlink('../media/file_'.$id.'.tif');
 	}
-	if($tbl=='config'&&$col=='php_honeypot'){
-		echo'<script>window.top.window.$("#php_honeypot_link").html(`'.($da!=''?'<a target="_blank" href="'.$da.'">'.$da.'</a>':'Honey Pot File Not Uploaded').'`);</script>';
-	}
+	if($tbl=='config'&&$col=='php_honeypot')echo'<script>window.top.window.$("#php_honeypot_link").html(`'.($da!=''?'<a target="_blank" href="'.$da.'">'.$da.'</a>':'Honey Pot File Not Uploaded').'`);</script>';
 	if($tbl=='orderitems'||$tbl=='cart'){
     if($tbl=='cart'&&$col=='quantity'){
       if($da==0){
         $q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `id`=:id");
-        $q->execute([
-					':id'=>$id
-				]);
+        $q->execute([':id'=>$id]);
         $cnt='';
       }
       $q=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
-      $q->execute([
-				':si'=>$si
-			]);
+      $q->execute([':si'=>$si]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
       $cnt=$r['quantity'];
       if($r['quantity']==0){
@@ -227,36 +206,26 @@ if(is_null($e[2])){
 		}
     if($tbl=='orderitems'){
       $q=$db->prepare("SELECT `oid` FROM `".$prefix."orderitems` WHERE `id`=:id");
-      $q->execute([
-				':id'=>$id
-			]);
+      $q->execute([':id'=>$id]);
       $iid=$q->fetch(PDO::FETCH_ASSOC);
     }
     if($tbl=='orderitems'&&$col=='quantity'&&$da==0){
       $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
-      $q->execute([
-				':id'=>$id
-			]);
+      $q->execute([':id'=>$id]);
     }
     $total=0;
     $content=$html='';
     if($tbl=='cart'){
       $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
-      $q->execute([
-				':si'=>$si
-			]);
+      $q->execute([':si'=>$si]);
     }
     if($tbl=='orderitems'){
       $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid ORDER BY `ti` ASC,`title` ASC");
-      $q->execute([
-				':oid'=>$iid['oid']
-			]);
+      $q->execute([':oid'=>$iid['oid']]);
     }
     while($oi=$q->fetch(PDO::FETCH_ASSOC)){
       $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-      $s->execute([
-				':id'=>$oi['iid']
-			]);
+      $s->execute([':id'=>$oi['iid']]);
       $i=$s->fetch(PDO::FETCH_ASSOC);
       $html.='<tr>'.
 	      '<td class="text-left">'.$i['code'].'</td>'.
@@ -298,14 +267,10 @@ if(is_null($e[2])){
 	if($tbl=='login'&&$col=='gravatar'){
     if($da==''){
       $sav=$db->prepare("SELECT `avatar` FROM `".$prefix."login` WHERE `id`=:id");
-      $sav->execute([
-				':id'=>$id
-			]);
+      $sav->execute([':id'=>$id]);
       $av=$sav->fetch(PDO::FETCH_ASSOC);
-      if($av['avatar']!=''&&file_exists('../media/avatar/'.$av['avatar']))
-				$avatar='media/avatar/'.$av['avatar'];
-			else
-				$avatar='images/noavatar.jpg';
+      if($av['avatar']!=''&&file_exists('../media/avatar/'.$av['avatar']))$avatar='media/avatar/'.$av['avatar'];
+			else$avatar='images/noavatar.jpg';
     }else{
 			$avatar=$da;
 			echo'<script>window.top.window.$("#avatar").attr("src",`'.$avatar.'?'.time().'`);</script>';
@@ -314,22 +279,12 @@ if(is_null($e[2])){
 }
 echo'<script>window.top.window.$(".page-block").removeClass("d-block");</script>';
 if($col=='status'){
-	if($da=='archived')
-		echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';
-	if($tbl!='comments'||$da=='delete'||$da=='')
-		echo'<script>'.
-			'window.top.window.statusSet(`'.$id.'`,`'.$da.'`);'.
-		'</script>';
-	if($da=='delete')
-		echo'<script>window.top.window.$("#l_'.$id.'").addClass("danger");</script>';
-	else
-		echo'<script>window.top.window.$("#l_'.$id.'").removeClass("danger");</script>';
+	if($da=='archived')echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';
+	if($tbl!='comments'||$da=='delete'||$da=='')echo'<script>window.top.window.statusSet(`'.$id.'`,`'.$da.'`);</script>';
+	if($da=='delete')echo'<script>window.top.window.$("#l_'.$id.'").addClass("danger");</script>';
+	else echo'<script>window.top.window.$("#l_'.$id.'").removeClass("danger");</script>';
 }
-if($col=='password')
-	echo'<script>'.
-		'window.top.window.$("#passButton").removeClass("btn-danger");'.
-		'window.top.window.$(".page-block").removeClass("d-block");'.
-	'</script>';
+if($col=='password')echo'<script>window.top.window.$("#passButton").removeClass("btn-danger");window.top.window.$(".page-block").removeClass("d-block");</script>';
 if($config['options'][12]==1){
 	$s=$db->prepare("INSERT IGNORE INTO `".$prefix."logs` (`uid`,`rid`,`username`,`name`,`view`,`contentType`,`refTable`,`refColumn`,`oldda`,`newda`,`action`,`ti`) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
 	$s->execute([

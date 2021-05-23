@@ -7,21 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 define('THEME','../layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
 if(isset($_SESSION['uid'])&&$_SESSION['uid']!=0){
   $su=$db->prepare("SELECT `email_signature` FROM `".$prefix."login` WHERE `id`=:uid");
-  $su->execute([
-    ':uid'=>$_SESSION['uid']
-  ]);
+  $su->execute([':uid'=>$_SESSION['uid']]);
   $user=$su->fetch(PDO::FETCH_ASSOC);
 }
 $theme=parse_ini_file(THEME.'/theme.ini',true);
@@ -37,9 +36,7 @@ if($to!=''){
   require'phpmailer/class.phpmailer.php';
   if($id!=0){
     $ms=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `id`=:id");
-    $ms->execute([
-      ':id'=>$id
-    ]);
+    $ms->execute([':id'=>$id]);
     if($ms->rowCount()>0)$mr=$ms->fetch(PDO::FETCH_ASSOC);
   }
   $mail=new PHPMailer;
@@ -60,32 +57,25 @@ if($to!=''){
     $subject='Fw: '.$subject;
   }
   $fs=$db->prepare("SELECT `id`,`name`,`email`,`business` FROM `".$prefix."login` WHERE `email`=:email");
-  $fs->execute([
-    ':email'=>$from
-  ]);
+  $fs->execute([':email'=>$from]);
   if($fs->rowCount()>0){
     $fr=$fs->fetch(PDO::FETCH_ASSOC);
     $fr['name']!=''?$fr['name']:$fr['business'];
     $fr['email']!=''?$fr['email']:$config['email'];
     $mail->SetFrom($fr['email'],$fr['name']);
-  }else
-    $mail->AddReplyTo($from,$config['business']);
+  }else$mail->AddReplyTo($from,$config['business']);
   $mto=explode(",",$to);
   if(isset($mto[1])&&$mto[1]!=''){
-    foreach($mto as $to2){
+    foreach($mto as$to2){
       $ts=$db->prepare("SELECT `id`,`name`,`email`,`business` FROM `".$prefix."login` WHERE `email`=:email");
-      $ts->execute([
-        ':email'=>$to2
-      ]);
+      $ts->execute([':email'=>$to2]);
       if($ts->rowCount()>0){
         $tr=$ts->fetch(PDO::FETCH_ASSOC);
         $toname=$tr['name']!=''?$tr['name']:$tr['business'];
         $mail->AddAddress($tr['email'],$toname);
-      }else
-        $mail->AddAddress($to2);
+      }else$mail->AddAddress($to2);
     }
-  }else
-    $mail->AddAddress($to);
+  }else$mail->AddAddress($to);
   if($atts!=''){
     $attachments=explode(",",$atts);
     foreach($attachments as $attachment)$mail->addAttachment('../media/'.basename($attachment));
@@ -124,6 +114,5 @@ if($to!=''){
   if(!empty($mail->ErrorInfo)){
     echo'<script>window.top.window.toastr["error"](`'.$mail->ErrorInfo.'`);</script>';
     exit();
-  }else
-    echo'<script>window.top.window.location.href="'.ADMINURL.'"messages/";</script>';
+  }else echo'<script>window.top.window.location.href="'.ADMINURL.'"messages/";</script>';
 }

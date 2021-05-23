@@ -227,7 +227,7 @@ nav[role="menubar"] ul li.active {
 
 [data-tooltip]:before {
   transform: translate(-50%, -5px) scale(.5);
-  z-index: 5000 !important;
+  z-index: +1 !important;
   border-radius: var(--tooltip-border-radius);
   background-color: var(--tooltip-background-color);
   padding: .25rem .5rem;

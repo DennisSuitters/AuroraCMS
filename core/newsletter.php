@@ -7,13 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.1
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.1.1 Add ability to email only subscribers depending on tags per newsletter.
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
-$getcfg=true;
 require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 define('THEME','../layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('ADMINURL',URL.$settings['system']['admin'].'/');
@@ -21,9 +22,7 @@ define('UNICODE','UTF-8');
 $theme=parse_ini_file(THEME.'/theme.ini',true);
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT `options`,`title`,`tags`,`notes` FROM `".$prefix."content` WHERE `id`=:id");
-$s->execute([
-  ':id'=>$id
-]);
+$s->execute([':id'=>$id]);
 $news=$s->fetch(PDO::FETCH_ASSOC);
 $u=$db->prepare("UPDATE `".$prefix."content` SET `status`=:status,`tis`=:tis WHERE `id`=:id");
 $u->execute([
@@ -93,5 +92,4 @@ if($config['email']!=''){
       'window.top.window.$("#block").css({"display":"none"})'.
     '</script>';
   }
-}else
-  echo'<script>window.top.window.toastr("error")("No system Email has been set!");</script>';
+}else echo'<script>window.top.window.toastr("error")("No system Email has been set!");</script>';

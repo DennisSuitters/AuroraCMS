@@ -14,7 +14,7 @@
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $i=1;
-$sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='clippy'");
+$sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='seotips'");
 $sc->execute();
 echo'<div style="width:75vw;height:75vh;overflow-y:auto;">';
 while($rc=$sc->fetch(PDO::FETCH_ASSOC)){

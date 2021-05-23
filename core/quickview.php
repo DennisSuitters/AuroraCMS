@@ -12,36 +12,27 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 define('UNICODE','UTF-8');
-$getcfg=true;
 require'db.php';
-if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))
-$config['theme']=$_GET['theme'];
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))$config['theme']=$_GET['theme'];
 define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-if(file_exists('../'.THEME.'/images/noimage.png'))
-	define('NOIMAGE',THEME.'/images/noimage.png');
-elseif(file_exists('../'.THEME.'/images/noimage.gif'))
-	define('NOIMAGE',THEME.'/images/noimage.gif');
-elseif(file_exists('../'.THEME.'/images/noimage.jpg'))
-	define('NOIMAGE',THEME.'/images/noimage.jpg');
-else
-	define('NOIMAGE','core/images/noimage.jpg');
+if(file_exists('../'.THEME.'/images/noimage.png'))define('NOIMAGE',THEME.'/images/noimage.png');
+elseif(file_exists('../'.THEME.'/images/noimage.gif'))define('NOIMAGE',THEME.'/images/noimage.gif');
+elseif(file_exists('../'.THEME.'/images/noimage.jpg'))define('NOIMAGE',THEME.'/images/noimage.jpg');
+else define('NOIMAGE','core/images/noimage.jpg');
 $id=isset($_GET['id'])?$_GET['id']:'';
 if(file_exists('../'.THEME.'/quickview.html')){
   $html=file_get_contents('../'.THEME.'/quickview.html');
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-  $s->execute([
-		':id'=>$id
-	]);
+  $s->execute([':id'=>$id]);
   if($s->rowCount()>0){
     $r=$s->fetch(PDO::FETCH_ASSOC);
     if(stristr($html,'<quickviewthumbs>')){
       preg_match('/<quickviewthumbs>([\w\W]*?)<\/quickviewthumbs>/',$html,$matches);
       $thumbsitem=$matches[1];
       $sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `rid`=:id ORDER BY `ord` ASC");
-      $sm->execute([
-				':id'=>$r['id']
-			]);
+      $sm->execute([':id'=>$r['id']]);
       $thumbsitems=$item='';
       if($sm->rowCount()>0){
 				$html=preg_replace([
@@ -83,30 +74,23 @@ if(file_exists('../'.THEME.'/quickview.html')){
 					' d-none'
 				],$html);
 			}
-    }else
-			$html=preg_replace('~<quickviewallthumbs>.*?<\/quickviewallthumbs>~is','',$html);
+    }else$html=preg_replace('~<quickviewallthumbs>.*?<\/quickviewallthumbs>~is','',$html);
     if($r['file']=='')$r['file']=NOIMAGE;
     $sideCost='';
 		if($r['options'][0]==1){
-			if($r['coming'][0]==1){
-				$sideCost.='<div class="sold">Coming Soon</div>';
-			}else{
-				if($r['stockStatus']=='sold out')
-					$sideCost.='<div class="sold">';
+			if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+			else{
+				if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
 				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
 				$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
-				if($r['stockStatus']=='sold out')
-					$sideCost.='</div>';
+				if($r['stockStatus']=='sold out')$sideCost.='</div>';
 			}
 		}
-    if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre-order')
-			$r['quantity']=0;
+    if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre-order')$r['quantity']=0;
 		$choices='';
 		if(stristr($html,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
 			$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
-			$scq->execute([
-				':id'=>$r['id']
-			]);
+			$scq->execute([':id'=>$r['id']]);
 			if($scq->rowCount()>0){
 				$choices='<select class="choices" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
 				while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
@@ -115,19 +99,14 @@ if(file_exists('../'.THEME.'/quickview.html')){
 				}
 				$choices.='</select>';
 				$html=str_replace('<choices>',$choices,$html);
-			}else
-				$html=str_replace('<choices>','',$html);
-		}else
-			$html=preg_replace('<choices>','',$html);
+			}else$html=str_replace('<choices>','',$html);
+		}else$html=preg_replace('<choices>','',$html);
 		if($r['brand']!=0){
     	$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
-    	$sb->execute([
-				':id'=>$r['brand']
-			]);
+    	$sb->execute([':id'=>$r['brand']]);
     	$rb=$sb->fetch(PDO::FETCH_ASSOC);
     	$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
-		}else
-			$brand='';
+		}else$brand='';
     $html=preg_replace([
       '/<print content=[\"\']?image[\"\']?>/',
 			'/<print content=[\"\']?imageALT[\"\']?>/',
@@ -174,7 +153,5 @@ if(file_exists('../'.THEME.'/quickview.html')){
 			''
     ],$html);
     print $html;
-  }else
-    echo 'There was an issue finding the content!';
-}else
-  echo 'Quick View template does not exist!';
+  }else echo'There was an issue finding the content!';
+}else echo'Quick View template does not exist!';

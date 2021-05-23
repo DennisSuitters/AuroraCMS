@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
@@ -36,9 +37,7 @@ if($id==0){
   ];
 }else{
   $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-  $q->execute([
-    ':id'=>$id
-  ]);
+  $q->execute([':id'=>$id]);
   $client=$q->fetch(PDO::FETCH_ASSOC);
 }
 echo'<script'.

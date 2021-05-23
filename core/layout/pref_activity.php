@@ -7,28 +7,29 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?php svg('activity','i-3x');?></div>
+          <div class="content-title-icon"><?= svg2('activity','i-3x');?></div>
           <div>Preferences - Activity</div>
           <div class="content-title-actions"></div>
         </div>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?php echo URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
           <li class="breadcrumb-item active">Activity</li>
         </ol>
       </div>
     </div>
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow overflow-visible">
-        <?php echo$config['options'][12]!=1?'<div class="alert alert-info">Administration Activity Tracking is Disabled.</div>':'';
+        <?=$config['options'][12]!=1?'<div class="alert alert-info">Administration Activity Tracking is Disabled.</div>':'';
         if($config['options'][12]==1){?>
           <table class="table-zebra">
             <thead>
@@ -38,7 +39,7 @@
                 <th class="col-7"></th>
                 <th class="col-2">
                   <div class="btn-group float-right">
-                    <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><?php svg('purge');?></button>
+                    <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><?= svg2('purge');?></button>
                   </div>
                 </th>
               </tr>
@@ -71,15 +72,15 @@
                 if(isset($u['avatar'])&&$u['avatar']!='')$image=file_exists('media/avatar/'.basename($u['avatar']))?'media/avatar/'.basename($u['avatar']):NOAVATAR;
                 elseif(isset($u['gravatar'])&&$u['gravatar']!='')$image=$u['gravatar'];
                 else$image=NOAVATAR;?>
-                <tr id="l_<?php echo$r['id'];?>">
-                  <td><img src="<?php echo$image;?>" alt="Picture"></td>
-                  <td class="small"><?php echo _ago($r['ti']).' <strong>by</strong> '.($u['name']==''?$u['username']:$u['name']);?></td>
-                  <td class="small"><?php echo$action;?></td>
-                  <td class="align-top" id="controls_<?php echo$r['id'];?>">
+                <tr id="l_<?=$r['id'];?>">
+                  <td><img src="<?=$image;?>" alt="Picture"></td>
+                  <td class="small"><?= _ago($r['ti']).' <strong>by</strong> '.($u['name']==''?$u['username']:$u['name']);?></td>
+                  <td class="small"><?=$action;?></td>
+                  <td class="align-top" id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
-                        <?php echo$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');">'.svg2('undo').'</button>':'';?>
-                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?php echo$r['id'];?>','logs');"><?php svg('trash');?></button>
+                        <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');">'.svg2('undo').'</button>':'';?>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><?= svg2('trash');?></button>
                       </div>
                     </div>
                   </td>

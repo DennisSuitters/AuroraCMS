@@ -7,9 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -20,9 +21,7 @@ $reason=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_SANITIZE_STRING):f
 if($t=='comments')$s=$db->prepare("SELECT `ip`,`ti` FROM `".$prefix."comments` WHERE `id`=:id");
 elseif($t=='tracker')$s=$db->prepare("SELECT `ip`,`ti` FROM `".$prefix."tracker` WHERE `id`=:id");
 elseif($t=='livechat')$s=$db->prepare("SELECT `ip`,`ti` FROM `".$prefix."livechat` WHERE `id`=:id");
-$s->execute([
-  ':id'=>$id
-]);
+$s->execute([':id'=>$id]);
 if($s->rowCount()>0){
   $r=$s->fetch(PDO::FETCH_ASSOC);
   $sql=$db->prepare("INSERT IGNORE INTO `".$prefix."iplist` (`ip`,`oti`,`reason`,`ti`) VALUES (:ip,:oti,:reason,:ti)");
@@ -33,5 +32,4 @@ if($s->rowCount()>0){
     ':ti'=>time()
   ]);
   echo'IP Added to Blacklist!';
-}else
-  echo'IP already exists in the Blacklist!';
+}else echo'IP already exists in the Blacklist!';

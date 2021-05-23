@@ -102,7 +102,6 @@ textarea {
   border: var(--border-width) var(--border-style) var(--form-border-color);
   border-radius: var(--border-radius);
   background-clip: padding-box;
-  background-color: transparent;
   padding: .375rem .75rem;
   width: 100%;
   color: var(--form-color);

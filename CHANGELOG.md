@@ -1,18 +1,28 @@
-### v0.1.1
-- Fix Header template parser only parsing single instance of <print url>
-- Fix Notification links going to incorrect pages.
-- Update README.md
-- Fix StarRating Stars, no longer uses images.
-- Fix mistyped variable reference.
-- Fix Fancybox Styling when used as an Informational Modal in Administration.
-- Fix unintentional addition of extra quotes when parsing image filename in JSON+LD.
-- Fix Order Page Buttons not interacting correctly.
-- Add Quick Editing for Content, Orders and Accounts.
-- Added Quick Editing Styling for inputs, and extra input functionality for inputs such as URL and Emails with clickable icons.
-- Allow determining if emails in Quick Edit should open in the built in Messenger or Compose a new email in systems Default Email Client.
-- Add Tag Editing for Accounts, Content and Newsletters in Quick Edit as well as Standard Editing.
-- Fix incorrect Icon being fetched when displaying Content Type Selection Fallback.
-- Add ability to email only subscribers depending on tags per newsletter.
-- Add Booking Date and Time check with Booking Tim Buffer to avoid Double Bookings.
-- Fix wrong link in Preferences => Interface for Date Formatting.
-- Fix Notification Colours in Administration and Default Theme.
+### v0.1.2
+- Adjust Featured Content code to use ResponsiveSlides are tiny, more versatilve Content Slider.
+- Fix Sitemap creating bad URL leading to broken pages.
+- Move UNICODE define to index.php
+- Change order of PHP ini settings in index.php
+- Tidy up some code formatting.
+- Add disable tracking of IP's associated with selected user accounts.
+- Fix getting logged in User Rank and display editable fields accordingly.
+- Add Quick Edit Dropdown to Orders.
+- Allow inlining CSS directly into page, to speed up page loading, includes checking for CSS @import and concatenates any found.
+- Start Commenting Section to make search in source a little easier.
+- Add Google reCaptcha to public facing forms that interact by sending notifications.
+- Fix and Add Security related headers.
+- Fix selection of Service/Event.
+- Fix Date to current, or Event date if selected from content item page.
+- Add parsing of hiding elements if selected from content item page.
+- Add option to Orders to email Quote/Invoice for immediate payment for Events.
+- Add checkbox for sending quotes/invoices when Event Booking is created by client.
+- Add Checkbox, Select and Date Fields activity indicator.
+- Allow Single Order to be viewed without being logged in.
+- Deprecate PDF creation in favour of emailing and opening Invoice for payment and/or printing.
+- Display Link when Event is Booked from Booking Form to allow Invoice Payment Online.
+- Force elFinder uploaded files to be lowercase filenames, and replace breaking characters including changing spaces to -
+- Adjust what Tabs are displayed depending on Page being edited.
+- Add Payment Options for Orders in the Settings pages, and add feature to Check out and Orders.
+- Use PHP short opening tag to reduce system file footprint.
+- Remove Virtual Assitant due to non-usage and to reduce CMS footprint.
+- Remove changing backgrounds, and created a space saving SVG background to reduce CMS footprint.

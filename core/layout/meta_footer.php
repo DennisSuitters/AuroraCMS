@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.1
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.1.1 Fix Notification links going to incorrect pages.
+ * @changes    v0.1.2 Add indicator for Checkbox activity.
+ * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <script>
   $(document).on(
@@ -37,14 +39,14 @@
     $(document).ready(function(){
       idleTimer=null;
       idleState=false;
-      idleWait=<?php echo$config['idleTime']*60000;?>;
+      idleWait=<?=$config['idleTime']*60000;?>;
       $(document).on('mousemove scroll keyup keypress mousedown mouseup mouseover',function(){
         clearTimeout(idleTimer);
         idleState=false;
         idleTimer=setTimeout(function(){
           idleState=true;
           unsaved=false;
-          document.location.href="<?php echo URL.$settings['system']['admin'].'/logout';?>";
+          document.location.href="<?= URL.$settings['system']['admin'].'/logout';?>";
         },idleWait);
       });
       $("body").trigger("mousemove");
@@ -121,7 +123,7 @@
   <?php  if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'||($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view')){?>
       function elfinderDialog(id,t,c){
         var fm=$('<div class="shadow light"/>').dialogelfinder({
-          url:"<?php echo URL.'/core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
+          url:"<?= URL.'/core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
           lang:'en',
           width:840,
           height:450,
@@ -137,8 +139,8 @@
                 $('#save'+c).addClass('btn-danger');
               }
               if(t=='content'&&c=='file'){
-                var thumb = file.url.replace(/^.*[\\\/]/, '');
-                var thumbpath = file.url.replace(thumb,'')+"thumbs/"+thumb;
+                var thumb=file.url.replace(/^.*[\\\/]/, '');
+                var thumbpath=file.url.replace(thumb,'')+"thumbs/"+thumb;
                 $('#thumb').val(thumbpath);
                 $('#thumbimage').attr('src',thumbpath);
                 $('#savethumb').addClass('btn-danger');
@@ -219,7 +221,7 @@
       if($view=='seo'||$view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
         $().ready(function(){
           var fm=$('#elfinder').elfinder({
-            url:"<?php echo URL.'/core/elfinder/php/connector.php';?>",
+            url:"<?= URL.'/core/elfinder/php/connector.php';?>",
             lang:'en',
             width:'85vw',
             height:$(window).height()-102,
@@ -262,8 +264,8 @@
           isNotSplitEdgePoint:true,
           height:300,
           tabsize:2,
-          disableUpload: true,
-          fileExplorer: 'elfinderDialog',
+          disableUpload:true,
+          fileExplorer:'elfinderDialog',
           styleTags:[
             'p',
             {title:'Blockquote',tag:'blockquote',className:'blockquote',value:'blockquote'},
@@ -392,20 +394,11 @@
           }else{
             $('#actions').toggleClass('hidden');
           }
-          if(this.checked){
-            $('.switchinput').each(function(){
-              this.checked=true;
-              $(this).attr("aria-checked","true");
-            });
-          }else{
-            $('.switchinput').each(function(){
-              this.checked=false;
-              $(this).attr("aria-checked","false");
-    				});
-    			}
     			var t=$(this).data("dbt");
     			var c=$(this).data("dbc");
     			var b=$(this).data("dbb");
+          $('#'+t+c+b+id).parent().find(".dot-pulse").remove();
+          $('#'+t+c+b+id).append(`<div class="dot-pulse"></div>`);
           $.ajax({
             type:"GET",
             url:"core/toggle.php",
@@ -416,37 +409,38 @@
               b:b
             }
           }).done(function(msg){
+            $('#'+t+c+b+id).parent().find(".dot-pulse").remove();
         });
     	}
     );
     if($('.tab-control').length>0){
       $('.tab-control').on('click',function(){
         var tab=$(this).attr('id');
-        window.location.hash = tab;
+        window.location.hash=tab;
       });
-      if (location.href.indexOf("#") != -1) {
-        var tab = window.location.hash.substr(1);
-        if(tab != '') {
-          if(!tab.includes("tab")) {
+      if(location.href.indexOf("#")!= -1){
+        var tab=window.location.hash.substr(1);
+        if(tab!=''){
+          if(!tab.includes("tab")){
             var clo=document.getElementById(tab);
-            var tab = clo.closest("[data-tabid]").dataset.tabid;
+            var tab=clo.closest("[data-tabid]").dataset.tabid;
           }
-          var cbarray = document.getElementsByName('tabs');
-          for(var i = 0; i < cbarray.length; i++){
-            cbarray[i].checked = false;
+          var cbarray=document.getElementsByName('tabs');
+          for(var i=0;i<cbarray.length;i++){
+            cbarray[i].checked=false;
           }
-          document.getElementById(tab).checked = true;
+          document.getElementById(tab).checked=true;
         }else{
-          document.getElementById('tab1-1').checked = true;
+          document.getElementById('tab1-1').checked=true;
         }
       }else{
-        if(document.getElementById('tab1-1')) {
-          document.getElementById('tab1-1').checked = true;
+        if(document.getElementById('tab1-1')){
+          document.getElementById('tab1-1').checked=true;
         }
       }
     }
     setInterval(function(){
-      $.get("<?php echo URL;?>/core/nav-stats.php",{},function(results){
+      $.get("<?= URL;?>/core/nav-stats.php",{},function(results){
         var stats=results.split(",");
         var navStat=$('#nav-stat').html();
         var stats=results.split(",");
@@ -454,23 +448,22 @@
         if(stats[0]==0)stats[0]='';
         $('#nav-nou').html(stats[2]);
         var stathtml='<li class="dropdown-heading py-2">Notifications</li>';
-        if(stats[3]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/comments"><?php svg('comments');?> Comments<span class="badger badge-primary">'+stats[3]+'</span></a></li>';
-        if(stats[4]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/reviews"><?php svg('review');?> Reviews<span class="badger badge-primary">'+stats[4]+'</span></a></li>';
-        if(stats[5]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/messages"><?php svg('inbox');?> Messages<span class="badger badge-primary">'+stats[5]+'</span></a></li>';
-        if(stats[6]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/orders/pending"><?php svg('order');?> Orders<span class="badger badge-primary">'+stats[6]+'</span></a></li>';
-        if(stats[7]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/bookings"><?php svg('calendar');?> Bookings<span class="badger badge-primary">'+stats[7]+'</span></a></li>';
-        if(stats[8]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/accounts"><?php svg('users');?> Users<span class="badger badge-primary">'+stats[8]+'</span></a></li>';
-        if(stats[9]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/content/type/testimonials"><?php svg('testimonial');?> Testimonials<span class="badger badge-primary">'+stats[9]+'</span></a></li>';
-        if(stats[2]>0)stathtml+='<li><a href="<?php echo URL.$settings['system']['admin'];?>/accounts"><?php svg('users');?> Active Users<span class="badger badge-primary">'+stats[2]+'</span></a></li>';
+        if(stats[3]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/comments"><?php svg('comments');?> Comments<span class="badger badge-primary">'+stats[3]+'</span></a></li>';
+        if(stats[4]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/reviews"><?php svg('review');?> Reviews<span class="badger badge-primary">'+stats[4]+'</span></a></li>';
+        if(stats[5]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/messages"><?php svg('inbox');?> Messages<span class="badger badge-primary">'+stats[5]+'</span></a></li>';
+        if(stats[6]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/orders/pending"><?php svg('order');?> Orders<span class="badger badge-primary">'+stats[6]+'</span></a></li>';
+        if(stats[7]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/bookings"><?php svg('calendar');?> Bookings<span class="badger badge-primary">'+stats[7]+'</span></a></li>';
+        if(stats[8]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/accounts"><?php svg('users');?> Users<span class="badger badge-primary">'+stats[8]+'</span></a></li>';
+        if(stats[9]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"><?php svg('testimonial');?> Testimonials<span class="badger badge-primary">'+stats[9]+'</span></a></li>';
+        if(stats[2]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/accounts"><?php svg('users');?> Active Users<span class="badger badge-primary">'+stats[2]+'</span></a></li>';
         $('#nav-stat').data('badge',stats[0]);
         $('#nav-stat-list').html(stathtml);
         if(stats[1]==0){
-          document.title='Administration <?php echo$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';
+          document.title='Administration <?=$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';
         }
-        if(stats[0]>0)document.title='('+stats[0]+') Administration<?php echo$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';
+        if(stats[0]>0)document.title='('+stats[0]+') Administration<?=$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';
       });
     },30000);
-
     $(document).on("click","[data-social-share]",function(){
       var url=$(this).data("social-share");
       var desc=$(this).data("social-desc");
@@ -504,166 +497,6 @@
       });
     });
   }
-<?php if($config['options'][28]==1){?>
-  clippy.load({name: '<?php echo$config['seoKeywords']==''?'Clippy':$config['seoKeywords'];?>', path: 'core/js/clippy/agents/'}, function(agent){
-    agent.show();
-<?php
-    if(isset($clippy)){
-      foreach($clippy as $clip){
-        echo$clip;
-      }
-    }?>
-
-    $('.saveall').click(function(){
-      if($(this).hasClass('btn-danger')){
-        agent.stop();
-        agent.play('Save');
-      }
-    });
-
-    $('.print').click(function(){
-      agent.stop();
-      agent.play('Print');
-    });
-
-    $('.email').click(function(){
-      agent.stop();
-      agent.play('SendMail');
-    });
-
-    $('.archive').click(function(){
-      agent.stop();
-      agent.play('Save');
-    });
-
-    $('.purge').click(function(){
-      agent.stop();
-      agent.play('EmptyTrash');
-    });
-
-    var agentRestore=0;
-    $('.restore').mouseover(function(){
-      if(agentRestore==0){
-        agent.stop();
-        agent.speak(`The Restore button will revert changed content back to what it was before this activity was recorded.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B`);
-        agentRestore=1;
-        setTimeout(function(){
-          agentRestore=0;
-        }, 1200000);
-      }
-    });
-
-    $("#seoTitle").click(function(){
-      agent.stop();
-      agent.stopCurrent();
-      var text=$(this).val();
-      if(text.length == 0){
-        agent.speak("It is best to not leave the SEO Title empty, this is the text used for the Title of your pages, and should contain Keywords related to the page content, and recommended to be about 70 characters long.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");
-      }
-      if(text.length < 70 && text.length !=0){
-        agent.speak("Remember to use Keywords that are relevant to the content of the page, and try not to exceed the 70 characters suggested length.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
-      }
-      if(text.length > 70){
-        agent.speak("You have exceeded the recommended character length of 70 characters. Remember to include keywords relevant to the page they title is for.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
-      }
-      agent.play("Writing");
-    });
-    $("#seoDescription").click(function(){
-      agent.stop();
-      agent.stopCurrent();
-      var text=$(this).val();
-      if(text.length == 0){
-        agent.speak("It is best to not leave the SEO Description empty, this is the text used for the Description of your pages, which Google will hopefully use for your search description, and should contain Keywords related to the page, and is recommended to be about 160 characters long.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");
-      }
-      if(text.length < 160 && text.length !=0){
-        agent.speak("Use Keywords that are relevant to the content of the page, and remember this is what we hope Google will use in the search description for the page in it's results, and try not exceed the 160 character length recommendation.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
-      }
-      if(text.length > 160){
-        agent.speak("You have exceeded the recommended character length of 160 characters. Remember to use relevant keywords to the page, and hope that Google will use this in it's search results.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B")
-      }
-      agent.play("Writing");
-    });
-<?php
-$seoarr='';
-if($view=='content'||$view=='pages'&&$args[0]=='edit'){
-  $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`=:cT ORDER BY rand() LIMIT 1,10");
-  $sc->execute([':cT'=>'clippy']);
-  if($sc->rowCount()>0){
-    while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
-      echo'var seo'.$rc['id'].' = function(){'.
-        ($rc['type']!='none'&&$rc['title']=='before'?'agent.play(`'.$rc['type'].'`);':'').
-        'agent.speak("SEO Tip: '.addslashes(html_entity_decode(str_replace(['&#39;'],["'"],$rc['notes']))).' Click <a href=\"#\" data-fancybox data-type=\"ajax\" data-src=\"core/seolist.php\">here</a> for more tips.\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B\u2006\u200B");'.
-        ($rc['type']!='none'&&$rc['title']=='after'?'agent.play(`'.$rc['type'].'`);':'').
-      '};';
-      $seoarr.='seo'.$rc['id'].',';
-    }
-  }
-}else{?>
-    $("#at").change(function(){
-      agent.stop();
-      agent.stopCurrent();
-      agent.play($("#at").val());
-    });
-<?php }?>
-    var animate1 = function(){
-      agent.play('Pleased');
-      agent.speak("Hmmm.... yes indeed.");
-    }
-
-    var animate2 = function(){
-      agent.play('Hearing_1');
-    }
-
-    var animate3 = function(){
-      agent.play('CheckingSomething');
-    }
-
-    var animate4 = function(){
-      agent.play('EmptyTrash');
-    }
-
-    var animate4 = function(){
-      agent.play('GetAttention');
-    }
-
-    var animate4 = function(){
-      agent.play('GetTechy');
-    }
-
-    var animate5 = function(){
-      agent.play('GetWizardly');
-    }
-
-    var animate6 = function(){
-      agent.play('IdleRopePile');
-    }
-
-    var animate7 = function(){
-      agent.play('IdleSnooze');
-    }
-
-    var animate8 = function(){
-      agent.play('Searching');
-    }
-
-    var arr = [
-<?php echo$seoarr;?>
-      animate1,
-      animate2,
-      animate3,
-      animate4,
-      animate5,
-      animate6,
-      animate7,
-      animate8,
-    ];
-
-    window.setInterval(function(){
-      var fun = arr[Math.floor(Math.random()*arr.length)];
-      fun();
-    }, 60000);
-  });
-<?php }?>
 </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
     <div class="page-block">
@@ -680,7 +513,7 @@ if($view=='content'||$view=='pages'&&$args[0]=='edit'){
     </div>
 <?php if($config['development']==1&&$user['rank']==1000){?>
     <script>
-      $('.developmentbottom').html('Memory Used: <?php echo size_format(memory_get_usage());?> | Process Time: <?php echo elapsed_time();?> | PHPv<?php echo (float)PHP_VERSION;?> ');
+      $('.developmentbottom').html('Memory Used: <?= size_format(memory_get_usage());?> | Process Time: <?= elapsed_time();?> | PHPv<?= (float)PHP_VERSION;?> ');
     </script>
 <?php }?>
   </body>

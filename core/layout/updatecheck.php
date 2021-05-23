@@ -40,11 +40,11 @@ if($config['update_url']!=''){
       <div class="col-form-label col-sm-2"></div>
       <div class="input-group col-sm-10">
         <div class="col alert alert-warning" role="alert">
-          <p><?php echo'Current update was on '.date('M jS, Y g:i A',$settings['system']['version']);?></p>
-          <p><?php echo$uL;?></p>
+          <p><?='Current update was on '.date('M jS, Y g:i A',$settings['system']['version']);?></p>
+          <p><?=$uL;?></p>
           <p>
             <form target="sp" method="POST" action="core/upgrade.php">
-              <input type="hidden" name="version" value="<?php echo$remoteVersion['system']['version'];?>">
+              <input type="hidden" name="version" value="<?=$remoteVersion['system']['version'];?>">
               <button type="submit" class="btn btn-success" aria-label="Do Updates">Do Updates...</button>
             </form>
           </p>

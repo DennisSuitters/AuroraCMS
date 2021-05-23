@@ -7,32 +7,30 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 $rank=0;
 $show='';
-$theme=parse_ini_file(THEME.'/theme.ini',true);
 $currentPassCSS=$matchPassCSS='';
-$currentPassHidden=$matchPassHidden=$successHidden=$success=$theme['settings']['settings_hidden'];
-$successShow=$theme['settings']['settings_show'];
+$currentPassHidden=$matchPassHidden=$successHidden=$success=$theme['settings']['hidden'];
+$successShow=$theme['settings']['show'];
 $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
 if(isset($_SESSION['uid'])&&$_SESSION['uid']>0){
 	$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-	$s->execute([
-		':id'=>$_SESSION['uid']
-	]);
+	$s->execute([':id'=>$_SESSION['uid']]);
 	$user=$s->fetch(PDO::FETCH_ASSOC);
 }
 if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$user['rank']>0)){
 	if(isset($act)&&$act=='updatePassword'){
-		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']==''){
+		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
 			$password=filter_input(INPUT_POST,'newPass',FILTER_SANITIZE_STRING);
-			$hash=password_hash($password,PASSWORD_DEFAULT);
+			$hashpwd=password_hash($password,PASSWORD_DEFAULT);
 			$su=$db->prepare("UPDATE `".$prefix."login` SET `password`=:hash WHERE `id`=:id");
 			$su->execute([
-				':hash'=>$hash,
+				':hash'=>$hashpwd,
 				':id'=>$user['id']
 			]);
 			$success='';
@@ -70,34 +68,31 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		$e=$db->errorInfo();
 		if(is_null($e[2])){
 			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-			$s->execute([
-				':id'=>$user['id']
-			]);
+			$s->execute([':id'=>$user['id']]);
 			$user=$s->fetch(PDO::FETCH_ASSOC);
 			$html=str_replace([
 				'<success accountHidden>',
 				'<error accountHidden>'
 			],[
-				$theme['settings']['settings_show'],
-				$theme['settings']['settings_hidden']
+				$theme['settings']['show'],
+				$theme['settings']['hidden']
 			],$html);
 		}else{
 			$html=str_replace([
 				'<success accountHidden>',
 				'<error accountHidden>'
 			],[
-				$theme['settings']['settings_hidden'],
-				$theme['settings']['settings_show']
+				$theme['settings']['hidden'],
+				$theme['settings']['show']
 			],$html);
 		}
 	}else{
 		$html=str_replace([
 			'<success accountHidden>',
 			'<error accountHidden>'
-		],[
-			$theme['settings']['settings_hidden'],
-			$theme['settings']['settings_hidden']
-		],$html);
+		],
+			$theme['settings']['hidden']
+		,$html);
 	}
 	$html=str_replace([
 		'<error currentPassCSS>',
@@ -113,6 +108,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		$success
 	],$html);
 	$html=preg_replace([
+		'/<print user=[\"\']?avatar[\"\']?>/',
 		'/<print user=[\"\']?gravatar[\"\']?>/',
 		'/<print user=[\"\']?ti[\"\']?>/',
 		'/<print user=[\"\']?username[\"\']?>/',
@@ -131,6 +127,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		'/<print user=[\"\']?postcode[\"\']?>/',
 		'/<print user=[\"\']?country[\"\']?>/'
 	],[
+		file_exists('media/avatar/'.$user['avatar'])?'media/avatar/'.$user['avatar']:NOAVATAR,
 		htmlspecialchars($user['gravatar'],ENT_QUOTES,'UTF-8'),
 		date($config['dateFormat'],$user['ti']),
 		htmlspecialchars($user['username'],ENT_QUOTES,'UTF-8'),
@@ -150,7 +147,6 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
 	],$html);
 }else{
-	if(file_exists(THEME.'/noaccess.html'))
-		$html=file_get_contents(THEME.'/noaccess.html');
+	if(file_exists(THEME.'/noaccess.html'))$html=file_get_contents(THEME.'/noaccess.html');
 }
 $content.=$html;

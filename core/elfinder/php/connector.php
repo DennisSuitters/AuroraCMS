@@ -47,22 +47,32 @@ if($user['rank']==900){
 }
 if($user['rank']==800)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
 if($user['rank']==700)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
-if($user['rank']==600)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|orders|';
-if($user['rank']==500)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|orders|';
-if($user['rank']==400)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|orders|';
+if($user['rank']==600)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==500)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==400)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
 $folders.='index.php!';
 $opts=[
   'bind'=>[
     'upload.presave'=>[
+      'Plugin.MyNormalizer.onUploadPreSave',
       'Plugin.MultiImages.generateMultiImages',
       'Plugin.AutoResize.onUpLoadPreSave',
       'Plugin.Sanitizer.onUpLoadPreSave',
     ],
     'mkdir.pre mkfile.pre rename.pre'=>[
+      'Plugin.MyNormalizer.onUploadPreSave',
       'Plugin.Sanitizer.cmdPreprocess',
     ]
   ],
   'plugin'=>[
+    'MyNormalizer' => [
+      'enable'    => true,
+      'nfc'       => true,
+      'nfkc'      => true,
+      'umlauts'   => false,
+      'lowercase' => true,
+      'convmap'   => []
+    ],
     'Sanitizer'=>[
       'enable'=>true,
       'targets'=>['\\','/',':','*','?','"','<','>','|',' ','_','\'','"'],
@@ -102,6 +112,11 @@ $opts=[
       'tmbURL'=>URL.'media'.DS.'thumbs'.DS,
       'tmbSize'=>100,
       'tmbBgColor'=>'#ffffff',
+      'plugin'=>[
+        'MyNormalizer'=>[
+          'ext_lowercase'=>true
+        ]
+      ],
       'uploadDeny'=>[
         'all',
       ],

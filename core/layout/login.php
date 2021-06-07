@@ -41,11 +41,10 @@
   <body class="aurora<?=(isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?' '.$_COOKIE['theme']:''?>">
     <main class="row">
       <div class="col-12 col-sm-3 mx-auto mt-0 mt-sm-5 p-5 p-sm-0">
-        <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
         <div class="m-4">
-          <img class="login-logo" src="core/images/auroracms-white.svg" alt="AuroraCMS">
-          <div class="tagline">THE AUSTRALIAN CONTENT MANAGEMENT SYSTEM</div>
+          <img class="logo" src="core/images/auroracms.svg" width="100%" alt="AuroraCMS">
         </div>
+        <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
         <form id="login" method="post" action="<?=(isset($_SERVER['HTTP_REFERER'])&&stristr($_SERVER['REQUEST_URI'],'logout')?$_SERVER['HTTP_REFERER']:URL.$settings['system']['admin'].'/dashboard');?>" accept-charset="UTF-8">
           <input name="act" type="hidden" value="login">
           <div class="row mt-3">
@@ -61,15 +60,12 @@
           </div>
         </form>
         <form class="d-none" id="panel-rst" target="rstfeedback" method="post" action="core/rst.php" accept-charset="UTF-8">
-          <input name="emailtrap" type="hidden" value="none">
-          <div class="row mt-3">
-            <label for="rst" class="text-white text-md-black">Enter Email Associated with Account</label>
-            <input id="rst" name="rst" type="email" value="" autocomplete="off" placeholder="Enter an Email..." required aria-required="true">
-          </div>
-          <div class="row mt-4">
-            <button id="rstbusy" type="submit" aria-label="Send Reset Password Email">Send</button>
-          </div>
-          <div class="form-row" id="rstfeedback"></div>
+          <input name="emailtrap" type="hidden" value="">
+          <input type="hidden" name="act" value="reset_password">
+          <label for="rst" class="text-white text-md-black">Enter Email Associated with Account</label>
+          <input id="rst" name="email" type="email" value="" autocomplete="off" placeholder="Enter an Email..." required aria-required="true">
+          <button id="rstbusy" class="btn-block mt-3" type="submit" aria-label="Send Reset Password Email">Send</button>
+          <div class="form-row mt-3 hideifempty" id="reset"></div>
         </form>
         <div class="row mt-4">
           <button onclick="$('#login,#panel-rst,.btn-message').toggleClass('d-none');"><span class="btn-message">Reset Password</span><span class="btn-message d-none">I remembered, take me back to Login</span></button>

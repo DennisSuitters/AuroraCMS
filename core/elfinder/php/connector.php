@@ -29,17 +29,9 @@ $user=$s->fetch(PDO::FETCH_ASSOC);
 function access($attr,$path,$data,$volume){
   return strpos(basename($path),'.')===0?!($attr=='read'||$attr=='write'):null;
 }
-$mediaEnable=$config['options'][2]==1?true:false;
+$mediaEnable=true;
 if($config['mediaMaxWidth']==0)$mediaEnable=false;
 if($config['mediaMaxHeight']==0)$mediaEnable=false;
-if($id>0&&$t=='content'&&$c=='file'){
-  $sc=$db->prepare("SELECT `id`,`options` FROM `".$prefix."content` WHERE `id`=:id");
-  $sc->execute([
-    ':id'=>$id
-  ]);
-  $rc=$sc->fetch(PDO::FETCH_ASSOC);
-  if($rc['options'][3]==1)$mediaEnable=false;
-}
 $folders='';
 if($user['rank']==900){
   $folders.='!^/core|layout|';
@@ -65,13 +57,13 @@ $opts=[
     ]
   ],
   'plugin'=>[
-    'MyNormalizer' => [
-      'enable'    => true,
-      'nfc'       => true,
-      'nfkc'      => true,
-      'umlauts'   => false,
-      'lowercase' => true,
-      'convmap'   => []
+    'MyNormalizer'=>[
+      'enable'    =>true,
+      'nfc'       =>true,
+      'nfkc'      =>true,
+      'umlauts'   =>false,
+      'lowercase' =>true,
+      'convmap'   =>[]
     ],
     'Sanitizer'=>[
       'enable'=>true,
@@ -79,15 +71,15 @@ $opts=[
       'replace'=>'-',
     ],
     'MultiImages'=>[
-      'enable' => true,
-      'images_path' => $_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.'media'.DS,
-      'imageSizes' =>  [
-        'thumbs' => [$config['mediaMaxWidthThumb'], $config['mediaMaxHeightThumb']],
-        'sm' =>  [400, 0],
-        'md' => [600, 0],
-        'lg' =>  [1000, 0],
+      'enable'=>true,
+      'images_path'=>$_SERVER["DOCUMENT_ROOT"].DS.$settings['system']['url'].DS.'media'.DS,
+      'imageSizes'=>[
+        'thumbs'=>[$config['mediaMaxWidthThumb'],$config['mediaMaxHeightThumb']],
+        'sm'=>[400,0],
+        'md'=>[600,0],
+        'lg'=>[1000,0],
       ],
-      'imageQuality' => $config['mediaQuality']
+      'imageQuality'=>$config['mediaQuality']
     ],
     'AutoResize'=>[
       'enable'=>$mediaEnable,

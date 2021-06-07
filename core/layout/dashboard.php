@@ -138,7 +138,7 @@ else{?>
             <?php }
           }
           if($sa['cnt']>0){?>
-            <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/security#tab-security-blacklist';?>">
+            <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/security#tab-1-3';?>">
               <span class="h5">Blacklist</span>
               <span class="p-0">
                 <span class="text-3x" id="browser-blacklist"><?=$sa['cnt'];?></span> <small><small>Added Last 7 Days</small></small>

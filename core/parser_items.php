@@ -319,7 +319,7 @@ $html=preg_replace([
 	rawurldecode($page['notes'])
 ],$html);
 $html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
-if(stristr($html,'<categories')){
+if(stristr($html,'<categories>')){
 	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `title` ASC");
 	$sc->execute();
 	if($sc->rowCount()>0){

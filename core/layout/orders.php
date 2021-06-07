@@ -22,9 +22,7 @@ if($user['options'][4]==1){
     $id=$args[1];
   if($args[0]=='duplicate'){
     $sd=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
-    $sd->execute([
-      ':id'=>$id
-    ]);
+    $sd->execute([':id'=>$id]);
     $rd=$sd->fetch(PDO::FETCH_ASSOC);
     $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`contentType`,`due_ti`,`notes`,`status`,`recurring`,`ti`) VALUES (:cid,:uid,:contentType,:due_ti,:notes,:status,:recurring,:ti)");
     $s->execute([
@@ -41,13 +39,11 @@ if($user['options'][4]==1){
     if($rd['qid']!=''){
       $rd['qid']='Q'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
       $qid_ti=$ti+$config['orderPayti'];
-    }else
-      $qid_ti=0;
+    }else$qid_ti=0;
     if($rd['iid']!=''){
       $rd['iid']='I'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
       $iid_ti=$ti+$config['orderPayti'];
-    }else
-      $iid_ti=0;
+    }else$iid_ti=0;
     $s=$db->prepare("UPDATE `".$prefix."orders` SET `qid`=:qid,`qid_ti`=:qid_ti,`iid`=:iid,`iid_ti`=:iid_ti WHERE `id`=:id");
     $s->execute([
       ':qid'=>$rd['qid'],
@@ -57,9 +53,7 @@ if($user['options'][4]==1){
       ':id'=>$iid
     ]);
     $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid");
-    $s->execute([
-      ':oid'=>$id
-    ]);
+    $s->execute([':oid'=>$id]);
     while($r=$s->fetch(PDO::FETCH_ASSOC)){
       $so=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,:quantity,:cost,:status,:ti)");
       $so->execute([
@@ -111,9 +105,7 @@ if($user['options'][4]==1){
   <?php }
   if($args[0]=='to_invoice'){
     $q=$db->prepare("SELECT `qid` FROM `".$prefix."orders` WHERE `id`=:id");
-    $q->execute([
-      ':id'=>$id
-    ]);
+    $q->execute([':id'=>$id]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
     $q=$db->prepare("UPDATE `".$prefix."orders` SET `iid`=:iid,`iid_ti`=:iid_ti,`qid`='',`qid_ti`='0' WHERE `id`=:id");
     $q->execute([
@@ -124,18 +116,14 @@ if($user['options'][4]==1){
     if(file_exists('../media/order/'.$r['qid'].'.pdf'))unlink('../media/orders/'.$r['qid'].'.pdf');
     $args[0]='invoices';
   }
-  if($args[0]=='settings')
-    require'core/layout/set_orders.php';
-  elseif($args[0]=='edit')
-    require'core/layout/edit_orders.php';
+  if($args[0]=='settings')require'core/layout/set_orders.php';
+  elseif($args[0]=='edit')require'core/layout/edit_orders.php';
   else{
     if($args[0]=='all'||$args[0]==''){
       $sort="all";
       if($user['rank']==300){
         $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `aid`='' AND `cid`=:cid ORDER BY `ti` DESC");
-        $s->execute([
-          ':cid'=>$user['id']
-        ]);
+        $s->execute([':cid'=>$user['id']]);
       }else{
         $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `aid`='' ORDER BY `ti` DESC");
         $s->execute();
@@ -218,18 +206,18 @@ if($user['options'][4]==1){
                   $c=$cs->fetch(PDO::FETCH_ASSOC);?>
                   <tr id="l_<?=$r['id'];?>">
                     <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?= svg2('plus').svg2('close','d-none');?></button></td>
-                    <td>
+                    <td class="align-middle">
                       <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     </td>
-                    <td>
+                    <td class="align-middle">
                       <?=$c['username'].($c['name']!=''?' ['.$c['name'].']':'').':'.($c['name']!=''&&$c['business']!=''?'<br>':'').($c['business']!=''?$c['business']:'');?>
                     </td>
-                    <td>
+                    <td class="align-middle">
                       <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
                       <small>Due: <?= date($config['dateFormat'],$r['due_ti']);?></small>
                     </td>
-                    <td>
-                      <?= ucfirst($r['status']);?>
+                    <td class="align-middle">
+                      <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
                     </td>
                     <td class="align-middle" id="controls_<?=$r['id'];?>">
                       <div class="btn-toolbar float-right" role="toolbar">

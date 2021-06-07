@@ -271,7 +271,8 @@ $html=preg_replace([
 	'/<print config=[\"\']?postcode[\"\']?>/',
 	'/<print config=[\"\']?country[\"\']?>/',
 	'/<print config=[\"\']?phone[\"\']?>/',
-	'/<print config=[\"\']?mobile[\"\']?>/'
+	'/<print config=[\"\']?mobile[\"\']?>/',
+	'/<print theme>/'
 ],[
 	'',
 	'',
@@ -283,6 +284,7 @@ $html=preg_replace([
 	$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
 	$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
-	$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':''
+	$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':'',
+	THEME
 ],$html);
 $content.=$html;

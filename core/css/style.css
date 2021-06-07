@@ -1,20 +1,28 @@
 @charset "UTF-8";
 
 @import url('stylesheet-vars.css');
-@import url('stylesheet.css');
+@import url('stylesheet-base.css');
 @import url('stylesheet-typography.css');
 @import url('stylesheet-helpers.css');
 @import url('stylesheet-grid.css');
 @import url('stylesheet-forms.css');
-@import url('stylesheet-xtras.css');
+@import url('stylesheet-xtras-admin.css');
 @import url('stylesheet-icons.css');
 @import url('../js/summernote/summernote.min.css');
 @import url('../js/fancybox/fancybox.css');
 @import url('../js/fullcalendar/fullcalendar.min.css');
+@import url('stylesheet-aurora.css');
+@import url('stylesheet-print.css');
 
 .tasmanian {
   width: 50px;
   height: auto;
+}
+
+.logo {
+  color: #fff !important;
+  fill: currentColor !important;
+  width: 100%;
 }
 
 .aurora {

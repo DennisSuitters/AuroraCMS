@@ -12,11 +12,11 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    v0.0.1 Fix incorrect Icon being fetched when displaying Contect Type Selection Fallback.
  * @changes    v0.1.2 Use PHP short codes where possible.
+ * @changes    v0.1.2 Tidy up Source.
  */
 $rank=0;
 $show='categories';
-if($args[0]=='scheduler')
-  require'core/layout/scheduler.php';
+if($args[0]=='scheduler')require'core/layout/scheduler.php';
 else{
   if($view=='add'){
     $stockStatus='none';
@@ -65,28 +65,19 @@ else{
   }
   if($args[0]=='edit'){
     $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-    $s->execute([
-      ':id'=>$args[1]
-    ]);
+    $s->execute([':id'=>$args[1]]);
     $show='item';
   }
-  if($args[0]=='settings')
-    require'core/layout/set_content.php';
+  if($args[0]=='settings')require'core/layout/set_content.php';
   else{
     if($show=='categories'){
       if($args[0]=='type'){
         if(isset($args[2])&&($args[2]=='archived'||$args[2]=='unpublished'||$args[2]=='autopublish'||$args[2]=='published'||$args[2]=='delete'||$args[2]=='all')){
-          if($args[2]=='all')
-            $getStatus=" ";
-          else
-            $getStatus=" AND `status`='".$args[2]."' ";
-        }else
-          $getStatus=" AND `status`!='archived'";
+          if($args[2]=='all')$getStatus=" ";
+          else$getStatus=" AND `status`='".$args[2]."' ";
+        }else$getStatus=" AND `status`!='archived'";
         $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
-        $s->execute([
-          ':contentType'=>$args[1],
-
-        ]);
+        $s->execute([':contentType'=>$args[1],]);
       }else{
         if(isset($args[3])){
           $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
@@ -111,9 +102,7 @@ else{
           ]);
         }elseif(isset($args[0])){
           $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` ASC,`title` ASC");
-          $s->execute([
-            ':category_1'=>str_replace('-',' ',$args[0])
-          ]);
+          $s->execute([':category_1'=>str_replace('-',' ',$args[0])]);
         }else{
           $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
           $s->execute();
@@ -239,48 +228,40 @@ else{
                     <th></th>
                     <th></th>
                     <th class="col">Title</th>
-                    <th class="col">Code</th>
+                    <th class="col text-center">Code</th>
                     <th class="col text-center d-none d-sm-table-cell">Comments</th>
                     <th class="col text-center d-none d-sm-table-cell">Reviews</th>
-                    <th class="col text-center d-none d-sm-table-cell">Views<?=$user['options'][1]==1?' <button class="trash" data-tooltip="tooltip" aria-label="Clear All" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);">'.svg2('eraser').'</button>':'';?></th>
+                    <th class="col text-center d-none d-sm-table-cell">Views<?=$user['options'][1]==1?' <button class="btn-sm trash" data-tooltip="tooltip" aria-label="Clear All" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`contentviews`,`'.$args[1].'`);">'.svg2('eraser').'</button>':'';?></th>
                     <th class="col"></th>
                   </tr>
                 </thead>
                 <tbody>
                   <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <tr class="<?php
-                    if($r['status']=='delete'){
-                      echo' bg-danger';
-                    }elseif($r['status']=='archived'){
-                      echo' bg-info';
-                    }elseif($r['status']=='unpublished')
-                      echo' bg-warning';?>" id="l_<?=$r['id'];?>">
+                    if($r['status']=='delete')echo' bg-danger';
+                    elseif($r['status']=='archived')echo' bg-info';
+                    elseif($r['status']=='unpublished')echo' bg-warning';?>" id="l_<?=$r['id'];?>">
                       <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('plus').svg('close','d-none');?></button></td>
                       <td class="align-middle">
-                        <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))
-                          echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
-                        elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))
-                          echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
-                        elseif($r['fileURL']!='')
-                          echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="avatar" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
+                        <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
+                        elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img class="avatar" src="'.$r['file'].'" alt="'.$r['title'].'"></a>';
+                        elseif($r['fileURL']!='')echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['fileURL'].'"><img class="avatar" src="'.$r['fileURL'].'" alt="'.$r['title'].'"></a>';
                         else echo'<img class="avatar" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';?>
                       </td>
                       <td class="align-middle">
-                        <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="avatar" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
+                        <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img class="avatar" src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                         <?php if($user['options'][1]==1){
                           echo$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
                           if($r['contentType']=='proofs'){
                             $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-                            $sp->execute([
-                              ':id'=>$r['uid']
-                            ]);
+                            $sp->execute([':id'=>$r['uid']]);
                             $sr=$sp->fetch(PDO::FETCH_ASSOC);?>
-                            <div class="small">Belongs to <a href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?=$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
+                            <div class="small">Belongs to <a href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" data-tooltip="tooltip" aria-label="View Proofs"><?=$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
                           <?php }
                         }
                         echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
                       </td>
-                      <td class="align-middle small"><small><?=$r['code'];?></small></td>
+                      <td class="align-middle text-center small"><small><?=$r['code'];?></small></td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
                         <?php           if($r['contentType']=='article'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='proofs'){
                           $sc=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `rid`=:id AND `contentType`=:contentType");
@@ -300,14 +281,10 @@ else{
                       </td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
                         <?php $sr=$db->prepare("SELECT COUNT(`id`) as num,SUM(`cid`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid");
-                        $sr->execute([
-                          ':rid'=>$r['id']
-                        ]);
+                        $sr->execute([':rid'=>$r['id']]);
                         $rr=$sr->fetch(PDO::FETCH_ASSOC);
                         $srr=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`!='approved'");
-                        $srr->execute([
-                          ':rid'=>$r['id']
-                        ]);
+                        $srr->execute([':rid'=>$r['id']]);
                         $src=$srr->rowCount($srr);
                         echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip"':'').' role="button" aria-label="'.$src.' New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
                       </td>

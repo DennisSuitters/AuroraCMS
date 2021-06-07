@@ -20,13 +20,14 @@ if(file_exists(THEME.'/side_menu.html')){
 	if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 		$sideCost='';
-		if($r['options'][0]==1){
-			if($r['coming'][0]!=1){
+		if($r['options'][0]==1||$r['cost']!=''){
+			if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+			else{
 				if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
-				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
+				$sideCost.=$r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'';
 				$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
 				if($r['stockStatus']=='sold out')$sideCost.='</div>';
-			}else$sideCost.='<div class="sold"><span class="cost">Coming Soon</span></div>';
+			}
 		}
 		if($r['stockStatus']=='out of stock')$r['quantity']=0;
 		if($r['stockStatus']=='pre-order')$r['quantity']=0;
@@ -40,10 +41,9 @@ if(file_exists(THEME.'/side_menu.html')){
 			$r['id']
 		],$sideTemp);
 		$sideQuantity='';
-		if($r['contentType']=='inventory'){
-			if($r['coming'][0]!=1){
+		if(isset($r['contentType'])&&$r['contentType']=='inventory'){
 				$sideTemp=preg_replace([
-					'/<[\/]?quantity>/',
+					($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
 					'/<print content=[\"\']?quantity[\"\']?>/',
 					'/<print content=[\"\']?stock[\"\']?>/'
 				],[
@@ -125,7 +125,6 @@ if(file_exists(THEME.'/side_menu.html')){
 					'',
 					$sideTemp);
 				}
-			}else$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
 		}else$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
 		if($r['contentType']=='service'||$r['contentType']=='events'){
 			if($r['bookable']==1){

@@ -16,6 +16,10 @@ function getClient(email){
 	$('#sp').load('core/get_client.php?email='+email);
 }
 document.addEventListener("DOMContentLoaded",function(){
+	$('.auroraForm').click(function(e){
+		const formType=$(this).data('formtype');
+		$('#'+formType+'-btn').removeAttr('disabled');
+	});
 	$('.auroraForm').submit(function(e){
 		const formType=$(this).data('formtype');
 		const formButtonText=$('#'+formType+'-btn').html();

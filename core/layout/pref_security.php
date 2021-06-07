@@ -162,7 +162,7 @@
                   foreach(glob("core/blacklists/*.{txt}",GLOB_BRACE)as$file){
                     echo'<option value="'.$file.'"';
                     if(stristr($file,$fileDefault)){
-                      echo' selected="selected"';
+                      echo' selected';
                       $fileDefault=$file;
                     }
                     echo'>'.basename($file).'</option>';

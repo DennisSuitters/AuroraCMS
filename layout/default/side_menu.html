@@ -17,12 +17,12 @@
 			</div>
 		</sort>
 		<controls>
-			<div class="card mb-3 d-none d-sm-block">
-				<div class="card-body my-4">
+			<div class="card mb-3 d-none d-sm-block text-center">
+				<div class="card-body my-4 no-clamp">
 					<quantity>
-						<div class="content-quantity text-center"><print content="quantity"> <print content="stock"></div>
+						<div class="content-quantity"><print content="quantity"> <print content="stock"></div>
 					</quantity>
-					<div class="price text-center"><print content="cost"></div>
+					<div class="price"><print content="cost"></div>
 					<div class="row text-right">
 						<service>
 							<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
@@ -90,7 +90,7 @@
 					<textarea id="reviewtxt" name="review"></textarea>
 					<g-recaptcha>
 					<div class="text-right mt-3">
-						<button id="review-btn" type="submit">Add Review</button>
+						<button id="review-btn" type="submit" disabled="disabled">Add Review</button>
 					</div>
 				</form>
 			</div>

@@ -18,17 +18,12 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
   $footer=file_get_contents(THEME.'/meta_footer.html');
   $footer=preg_replace([
     '/<print theme>/',
-    '/<progressbar>/',
-    '/<panorama>/',
     '/<carousel>/',
     '/<gdpr>/',
-    '/<websitevoice>/',
     '/<map>/',
     '/<g-recaptchascript>/'
   ],[
     THEME,
-    stristr($head,'page-progress')?'<script>$(document).ready(function(){var getMax=function(){return $(document).height()-$(window).height();};var getValue=function(){return $(window).scrollTop();};var progressBar=$(".page-progress");progressBar.attr({max:getMax()});$(document).on("scroll",function(){progressBar.attr({value:getValue()});});$(window).resize(function(){progressBar.attr({max:getMax(),value:getValue()});});});</script>':'',
-    $view=='index'||$view=='inventory'||$view=='article'?'<script src="core/js/paver/jquery.paver.min.js"></script><script>$(function(){$(".panorama").paver();});</script>':'',
     isset($showCarousel)&&$showCarousel==true?
       '<script src="core/js/responsiveslides/responsiveslides.min.js"></script>'.
       '<script>'.
@@ -53,10 +48,9 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
           '});'.
         '});'.
       '</script>':'',
-    $config['options'][8]==1?'<link rel="stylesheet" type="text/css" href="core/js/gdpr/gdpr.css"><script src="core/js/gdpr/gdpr.js"></script><script>gdprCookieNotice({locale:`en`,timeout:500,expiration:30,domain:`'.getDomain(URL).'`,implicit:true,statement:`'.URL.'page/Privacy-Policy/`,performance:[`JSESSIONID`],analytics:[`ga`]});</script>':'',
-    $config['wv_site_id']!=''&&$config['options'][16]==1?'<script src="https://widget.websitevoice.com/'.$config['wv_site_id'].'"></script><script>window.wvData=window.wvData||{};function wvtag(a,b){wvData[a]=b;}wvtag(`id`,`'.$config['wv_site_id'].'`);</script>':'',
-    $config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''&&$view=='contactus'?'<script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$config['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.($config['business']==''?'':'var popupHtml=`<strong>'.$config['business'].'</strong>'.($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':'',
-    $config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<script src="https://www.google.com/recaptcha/api.js"></script><script>function resizeReCaptcha(){var width=$(".g-recaptcha" ).parent().width();if(width<302){var scale=width/302;}else{var scale=1;}$(".g-recaptcha").css("transform","scale("+scale+")");$(".g-recaptcha").css("-webkit-transform","scale("+scale+")");$(".g-recaptcha").css("transform-origin","0 0");$(".g-recaptcha").css("-webkit-transform-origin","0 0");};$(document).ready(function(){$(window).on("resize",function(){resizeReCaptcha();});resizeReCaptcha();});</script>':''
+    $config['options'][8]==1?'<link rel="stylesheet" type="text/css" href="core/js/gdpr/gdpr.css"><script defer async src="core/js/gdpr/gdpr.js"></script><script>gdprCookieNotice({locale:`en`,timeout:500,expiration:30,domain:`'.getDomain(URL).'`,implicit:true,statement:`'.URL.'page/Privacy-Policy/`,performance:[`JSESSIONID`],analytics:[`ga`]});</script>':'',
+    $config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''&&$view=='contactus'?'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css"><script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$config['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.($config['business']==''?'':'var popupHtml=`<strong>'.$config['business'].'</strong>'.($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':'',
+    stristr($html,'<g-recaptchascript>')&&$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<script defer async src="https://www.google.com/recaptcha/api.js"></script><script>function resizeReCaptcha(){var width=$(".g-recaptcha" ).parent().width();if(width<302){var scale=width/302;}else{var scale=1;}$(".g-recaptcha").css("transform","scale("+scale+")");$(".g-recaptcha").css("-webkit-transform","scale("+scale+")");$(".g-recaptcha").css("transform-origin","0 0");$(".g-recaptcha").css("-webkit-transform-origin","0 0");};$(document).ready(function(){$(window).on("resize",function(){resizeReCaptcha();});resizeReCaptcha();});</script>':''
   ],$footer);
   if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
     if($config['options'][13]==1){

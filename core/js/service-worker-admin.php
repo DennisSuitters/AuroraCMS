@@ -19,14 +19,10 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }else{
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
-if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))
-  $settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('..'.DS.'core'.DS.'config.ini'))
-  $settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('core'.DS.'config.ini'))
-  $settings=parse_ini_file('core'.DS.'config.ini',TRUE);
-elseif(file_exists('config.ini'))
-  $settings=parse_ini_file('config.ini',TRUE);
+if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
+elseif(file_exists('core'.DS.'config.ini'))$settings=parse_ini_file('core'.DS.'config.ini',TRUE);
+elseif(file_exists('config.ini'))$settings=parse_ini_file('config.ini',TRUE);
 else{
   require ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php';
   die();
@@ -45,7 +41,7 @@ $html=preg_replace([
   URL,
   $config['business'].' - Administration - AuroraCMS',
   '',
- 'data:'.mime_content_type('..'.DS.'images'.DS.'auroracms-white.svg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'auroracms-white.svg'))
+ 'data:'.mime_content_type('..'.DS.'images'.DS.'auroracms.svg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'auroracms.svg'))
 ],$html);?>
 const CACHE=`AuroraCMSv0.1.2`;
 const offlineFallbackPage=`<?=$html;?>`;

@@ -40,7 +40,7 @@
               <th>Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','cart');return false;"><?= svg2('purge');?></button>
+                  <button class="btn-sm purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','cart');return false;"><?= svg2('purge');?></button>
                 </div>
               </th>
             </tr>

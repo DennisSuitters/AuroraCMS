@@ -32,15 +32,15 @@
 				<input type="hidden" name="ct" value="<print content=contentType>">
 				<label for="commentemail">Email</label>
 				<input type="email" id="commentemail" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-				<div class="requirements">Must be a valid email address.</div>
+				<div class="requirements alert alert-danger">Must be a valid email address.</div>
 				<label for="commentname" class="mt-0">Name</label>
 				<input type="text" id="commentname" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
 				<label for="fullname" aria-hidden="true">Full Name</label>
-				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off">
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="commenttxt">Comment</label>
 				<textarea id="commenttxt" name="notes" placeholder="Enter a Comment..." required></textarea>
 				<g-recaptcha>
-				<button id="comment-btn" class="btn-block mt-3 mb-3" type="submit">Add Comment</button>
+				<button id="comment-btn" class="btn-block mt-3 mb-3" type="submit" disabled="disabled">Add Comment</button>
 			</form>
 		</div>
 	</comment>

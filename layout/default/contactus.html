@@ -90,9 +90,7 @@
 				</subjectSelect>
 				<label for="contactemail">Email</label>
 				<input type="email" id="contactemail" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-				<div class="requirements">
-					Must be a valid email address.
-				</div>
+				<div class="requirements alert alert-danger">Must be a valid email address.</div>
 				<label for="contactname">Name</label>
 				<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name...">
 				<label for="fullname" aria-hidden="true">Full Name</label>
@@ -100,7 +98,7 @@
 				<label for="contacttxt">Message</label>
 				<textarea id="contacttxt" name="notes" placeholder="Enter a Message..." required aria-required="true"></textarea>
 				<g-recaptcha>
-				<button id="contact-btn" class="btn-block mt-3" type="submit">Send</button>
+				<button id="contact-btn" class="btn-block mt-3" type="submit" disabled="disabled">Send</button>
 			</form>
 		</article>
 	</section>

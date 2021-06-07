@@ -14,19 +14,18 @@
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
-$cat=isset($_POST['cat'])?filter_input(INPUT_POST['cat'],FILTER_SANITIZE_STRING):'';
-$ct=isset($_POST['ct'])?filter_input(INPUT_POST,'ct',FILTER_SANITIZE_STRING):'';
-$icon=isset($_POST['icon'])?filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING):'';
+$icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
+$ct=filter_input(INPUT_POST,'ct',FILTER_SANITIZE_STRING);
+$cat=filter_input(INPUT_POST,'cat',FILTER_SANITIZE_STRING);
 if($cat!=''){
-  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`contentType`,`icon`,`url`,`title`) VALUES ('category',:icon,:c,:t)");
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`contentType`,`icon`,`url`,`title`) VALUES ('category',:icon,:url,:title)");
   $s->execute([
-		':c'=>$ct,
 		':icon'=>$icon,
-		':t'=>$cat
+		':url'=>$ct,
+		':title'=>$cat
 	]);
   $id=$db->lastInsertId();
 	echo'<script>'.
@@ -46,7 +45,7 @@ if($cat!=''){
 							($icon!=''?
 								'<a data-fancybox="lightbox" href="'.$icon.'"><img src="'.$icon.'" alt="Thumbnail"></a>'
 							:
-								'<img src="core/images/noimage-sm.jpg" alt="No Image">'.
+								'<img src="core/images/noimage-sm.jpg" alt="No Image">'
 							).
 							'<form target="sp" action="core/purge.php">'.
 								'<input name="id" type="hidden" value="'.$id.'">'.

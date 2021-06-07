@@ -1,16 +1,5 @@
 /* stylesheet v0.9 - Typography - https://github.com/DiemenDesign/stylesheet */
 
-.text-white {
-  color: white !important; }
-
-@media (max-width: 769px) {
-  .text-white {
-    color: white !important;
-  }
-  .text-md-black {
-    color: black !important; }
-}
-
 hr {
   margin: 1rem 0;
   border: 0;
@@ -127,7 +116,7 @@ figure {
 
 figure img {
   margin-bottom: .5rem;
-  max-width: 100%;
+  width: 100%;
   line-height: 1; }
 
 figcaption {
@@ -199,6 +188,19 @@ sup {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap; }
+
+.line-clamp {
+  max-height: calc(var(--line-clamp) * 1.15 * var(--line-height));
+  overflow: hidden; }
+
+@supports (-webkit-line-clamp: var(--line-clamp)) {
+  .line-clamp {
+    max-height: none;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--line-clamp);
+  }
+}
 
 .text-muted {
   color: var(--color-muted) !important; }

@@ -56,7 +56,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row mt-3">
               <label id="<?=$r['contentType'];?>Title" for="title"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Title" aria-label="PermaLink to '.ucfirst($r['contentType']).' Title Field">&#128279;</a>':'';?>Title</label>
-              <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible.</small>
+              <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible. This Title is also used For H1 Headings on pages.</small>
             </div>
             <div class="form-row">
               <?php if($user['options'][1]==1){
@@ -401,6 +401,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
+<?php if($r['cost']==0)$gst=0;
+else{
+  $gst=$r['cost']*($config['gst']/100);
+  $gst=$r['cost']+$gst;
+  $gst=number_format((float)$gst,2,'.','');
+}?>
+                    <div id="gstcost" class="input-text<?=$config['gst']==0?' d-none':'';?>" data-gst="Incl. GST"><?=$gst;?></div>
                     <?=$user['options'][1]==1?'<button class="save" id="savecost" data-tooltip="tooltip" data-dbid="cost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
@@ -409,6 +416,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="rCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?=$r['rCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
+<?php if($r['cost']==0)$gst=0;
+else{
+  $gst=$r['rCost']*($config['gst']/100);
+  $gst=$r['rCost']+$gst;
+  $gst=number_format((float)$gst,2,'.','');
+}?>
+                    <div id="gstrCost" class="input-text<?=$config['gst']==0?' d-none':'';?>" data-gst="Incl. GST"><?=$gst;?></div>
                     <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-tooltip="tooltip" data-dbid="rCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
@@ -639,17 +653,6 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               echo$r['file']!=''&&file_exists('media/'.basename($r['file']))?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
               echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);">'.svg2('trash').'</button>'.
               '<button class="save" id="savefile" data-tooltip="tooltip" data-dbid="file" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-            </div>
-            <div class="form-row mt-3">
-              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options2" aria-label="PermaLink to '.$r['contentType'].' Panorama Checkbox">&#128279;</a>':'';?>
-              <input id="options2" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-              <label for="options2" id="contentoptions2<?=$r['id'];?>">&nbsp;&nbsp;Enable&nbsp;Panorama</label>
-            </div>
-            <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options3" aria-label="PermaLink to '.$r['contentType'].' 360 Viewer Checkbox">&#128279;</a>':'';?>
-              <input class="ml-2" id="options3" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-              <label for="options3" id="contentoptions3<?=$r['id'];?>">&nbsp;&nbsp;Enable&nbsp;360&nbsp;Viewer</label>
-              <small class="form-text text-right">Enable 360 Viewer before uploading image to avoid auto-resizing.</small>
             </div>
             <label id="<?=$r['contentType'];?>Thumbnail" for="thumb"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Thumbnail" aria-label="PermaLink to '.ucfirst($r['contentType']).' Thumbnail Field">&#128279;</a>':'';?>Thumbnail</label>
             <div class="form-row">

@@ -15,6 +15,11 @@ header('Content-Type: application/json');
 require'db.php';
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $config=$db->query("SELECT * FROM config WHERE id='1'")->fetch(PDO::FETCH_ASSOC);
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+  if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+  if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
 if(!defined('THEME'))define('THEME','layout/'.$config['theme']);
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 if(!defined('FAVICON')){

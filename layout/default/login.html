@@ -14,9 +14,9 @@
 						<h4>Login</h4>
 						<input type="hidden" name="act" value="login">
 						<label for="loginusername">Username</label>
-						<input type="text" id="loginusername" name="username" value="" placeholder="Username...">
+						<input type="text" id="loginusername" name="username" value="" placeholder="Username..." autocomplete="username">
 						<label for="loginpassword">Password</label>
-						<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="off">
+						<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="current-password">
 						<div class="text-right mt-3">
 							<button type="submit">Login</button>
 						</div>
@@ -30,11 +30,11 @@
 						<label for="resetemail">Email</label>
 						<input type="email" id="resetemail" name="email" placeholder="Enter Account Email..." autocomplete="off" required aria-required="true">
 						<label for="resetfullname" aria-hidden="true">Full Name</label>
-						<input id="resetfullname" name="fullname<print hash>" value="" autocomplete="off">
-						<div class="requirements mt-3 mb-0">Must be a valid email address, and match the email you used to sign up.</div>
+						<input id="resetfullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
+						<div class="requirements alert alert-danger">Must be a valid email address, and match the email you used to sign up.</div>
 						<g-recaptcha>
 						<div class="text-right mt-3">
-							<button id="reset-btn" type="submit">Reset</button>
+							<button id="reset-btn" type="submit" disabled="disabled">Reset</button>
 						</div>
 					</form>
 				</div>
@@ -45,20 +45,21 @@
 						<form class="auroraForm" data-formtype="signup" method="post" action="core/add_account.php">
 							<h4>Sign Up</h4>
 							<input type="hidden" name="act" value="add_account">
+							<input type="hidden" name="<print hash>" value="<print timecode>">
 							<label for="signupemail">Email</label>
 							<input type="email" id="signupemail" name="email" value="" placeholder="Enter an Email..." autocomplete="off" required aria-required="true">
 							<div class="requirements mt-3 mb-0">Must be a valid email address.</div>
 							<label for="signupusername">Username</label>
 							<input type="text" id="signupusername" name="username" placeholder="Enter a Username..." required aria-required="true">
 							<label for="signupfullname" aria-hidden="true">Full Name</label>
-							<input id="signupfullname" name="fullname<print hash>" value="" autocomplete="off">
+							<input id="signupfullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 							<div class="form-row" id="signuptermsblock">
 								<input type="checkbox" id="signupterms" name="terms" value="yes">
 								<label for="signupterms"> Agree to the <a href="page/Terms-of-Service">Terms Of Service</a></label>
 							</div>
 							<g-recaptcha>
 							<div class="text-right mt-3">
-								<button id="signup-btn" type="submit">Sign Up</button>
+								<button id="signup-btn" type="submit" disabled="disabled">Sign Up</button>
 							</div>
 						</form>
 					</div>

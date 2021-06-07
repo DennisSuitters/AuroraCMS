@@ -64,12 +64,12 @@
           <label for="enableQuickView" id="configoptions51">Quick View for Products</label>
         </div>
         <legend id="categoriesSection" class="mt-3 mb-0"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#categoriesSection" aria-label="PermaLink to Categories Section">&#128279;</a>':'';?>Categories</legend>
-        <form target="sp" method="POST" action="core/add_category.php">
+        <form target="sp" method="post" action="core/add_category.php">
           <div class="row">
             <div class="col-12 col-md-6">
               <label for="cat">Category</label>
               <div class="form-row">
-                <input id="cat" name="cat" type="text" placeholder="Enter a Category..." required aria-required="true">
+                <input id="cat" name="cat" type="text" placeholder="Enter or Select a Category..." required aria-required="true">
               </div>
             </div>
             <div class="col-12 col-md-5">
@@ -93,7 +93,7 @@
           </div>
         </form>
         <div id="category">
-          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `url` ASC,`title` ASC");
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `contentType` ASC,`title` ASC");
           $ss->execute();
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <div id="l_<?=$rs['id'];?>" class="row mt-1">

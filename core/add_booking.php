@@ -18,6 +18,11 @@
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+  if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+  if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
 require'projecthoneypot/class.projecthoneypot.php';
 require'spamfilter/class.spamfilter.php';
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');

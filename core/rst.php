@@ -14,23 +14,13 @@
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-$theme=pars_inti_file('../layout/'.$config['theme'].'/theme.ini',true);
+require'projecthoneypot/class.projecthoneypot.php';
+require'spamfilter/class.spamfilter.php';
+$theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $ti=time();
 $not=['spammer'=>false,'target'=>'reset','element'=>'','action'=>'','class'=>'','text'=>'','reason'=>''];
-$ip=$_SERVER('REMOVE_ADDR')=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR';
+$ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $hash=md5($ip);
-if($config['reCaptchaServer']!=''){
-  if(isset($_POST['g-recaptcha-response'])){
-    $captcha=$_POST['g-recaptcha-response'];
-    if(!$captcha)
-      $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
-    else{
-      $responseKeys=json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($config['reCaptchaServer']).'&response='.urlencode($captcha)),true);
-      if($responseKeys["success"])
-        $not=['spammer'=>true,'target'=>'','element'=>'','action'=>'none','alert'=>'','text'=>'','reason'=>'Create Account Form reCaptcha Failed'];
-    }
-  }
-}
 if($not['spammer']==false){
   $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
   if($act=='reset_password'){
@@ -39,7 +29,7 @@ if($not['spammer']==false){
       if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)
         $not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Create Account Form found Blacklisted IP via Project Honey Pot'];
     }
-    if($_POST['fullname'.$hash]==''){
+    if($not['spammer']==false){
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
       if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip!='127.0.0.1'){
         $filter=new SpamFilter();
@@ -97,9 +87,9 @@ if($not['spammer']==false){
         	if($mail->Send())
             $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Check your Email for a generated Password.<br>Don\'t forget to change your password when you login next','reason'=>''];
           else
-            $not=['spammer'=>false,'target'=>'resetemail','element'=>'div','action'=>'after','alert'=>'not alert alert-danger','text'=>'Problem Sending to Email Provided!','reason'=>''];
+            $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','alert'=>'not alert alert-danger','text'=>'Problem Sending to Email Provided!','reason'=>''];
         }else
-          $not=['spammer'=>false,'target'=>'resetemail','element'=>'div','action'=>'after','class'=>'not alert alert-info','text'=>'Account Not Found!','reason'=>''];
+          $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-info','text'=>'Account Not Found!','reason'=>''];
       }
     }else{
       $r=rand(0,10);
@@ -115,7 +105,7 @@ if($not['spammer']==false){
         default:
           $out='Go Away!';
       }
-      $not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>$out,'reason'=>'']
+      $not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>$out,'reason'=>''];
     }
     echo(isset($not)?$not['target'].'|'.$not['element'].'|'.$not['action'].'|'.$not['class'].'|'.$not['text']:'');
   }

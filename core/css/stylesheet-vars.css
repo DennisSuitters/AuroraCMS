@@ -23,11 +23,6 @@
   --mark-background-color: #ff0;
   --figcaption-color: #888;
 
-  --page-progress-zindex: 2000;
-  --page-progress-height: .45em;
-  --page-progress-start-color: #09c;
-  --page-progress-end-color: #f44;
-
   --header-background-color: #4650F8;
   --header-color: #fff;
 
@@ -177,6 +172,8 @@
   --gutter-x: 1.5rem;
   --gutter-y: 0;
 
+  --form-background-color:#fff;
+  --form-background-color-hover:#fff;
   --form-border-color: #ced4da;
   --form-border-color-hover: #007bff;
   --form-color: #495057;

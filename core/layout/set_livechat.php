@@ -40,12 +40,12 @@
         <label id="removeMessages" for="chatAutoRemove"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#removeMessages" aria-label="PermaLink to Remove Messages Selector">&#128279;</a>':'';?>Remove Messages</label>
         <div class="form-row">
           <select id="chatAutoRemove" data-dbid="1" data-dbt="config" data-dbc="chatAutoRemove" onchange="update('1','config','chatAutoRemove',$(this).val(),'select');">
-            <option value="0"<?=$config['chatAutoRemove']==0?' selected="Selected"':'';?>>Never</option>
-            <option value="86400"<?=$config['chatAutoRemove']==86400?' selected="Selected"':'';?>>Older than 24 Hours</option>
-            <option value="172800"<?=$config['chatAutoRemove']==172800?' selected="Selected"':'';?>>Older than 2 Days</option>
-            <option value="604800"<?=$config['chatAutoRemove']==604800?' selected="Selected"':'';?>>Older than 7 Days</option>
-            <option value="1209600"<?=$config['chatAutoRemove']==1209600?' selected="Selected"':'';?>>Older than 14 Days</option>
-            <option value="2592000"<?=$config['chatAutoRemove']==2592000?' selected="Selected"':'';?>>Older than 30 Days</option>
+            <option value="0"<?=$config['chatAutoRemove']==0?' selected':'';?>>Never</option>
+            <option value="86400"<?=$config['chatAutoRemove']==86400?' selected':'';?>>Older than 24 Hours</option>
+            <option value="172800"<?=$config['chatAutoRemove']==172800?' selected':'';?>>Older than 2 Days</option>
+            <option value="604800"<?=$config['chatAutoRemove']==604800?' selected':'';?>>Older than 7 Days</option>
+            <option value="1209600"<?=$config['chatAutoRemove']==1209600?' selected':'';?>>Older than 14 Days</option>
+            <option value="2592000"<?=$config['chatAutoRemove']==2592000?' selected':'';?>>Older than 30 Days</option>
           </select>
         </div>
         <div class="row mt-3">
@@ -83,18 +83,18 @@
         <label id="facebookMessengerColor" for="messengerFBColor"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerColor" aria-label="PermaLink to Facebook Messenger Colour">&#128279;</a>':'';?>Colour</label>
         <div class="form-row">
           <select id="messengerFBColor" name="colorpicker"<?=$user['options'][1]==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val(),'select');" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?=$user['options'][1]==1?'':' disabled';?>>
-            <option value="#7bd148"<?=$config['messengerFBColor']=='#7bd148'?' selected="selected"':'';?>>Green</option>
-            <option value="#5484ed"<?=$config['messengerFBColor']=='#5484ed'?' selected="selected"':'';?>>Bold blue</option>
-            <option value="#a4bdfc"<?=$config['messengerFBColor']=='#a4bdfc'?' selected="selected"':'';?>>Blue</option>
-            <option value="#46d6db"<?=$config['messengerFBColor']=='#46d6db'?' selected="selected"':'';?>>Turquoise</option>
-            <option value="#7ae7bf"<?=$config['messengerFBColor']=='#7ae7bf'?' selected="selected"':'';?>>Light green</option>
-            <option value="#51b749"<?=$config['messengerFBColor']=='#51b749'?' selected="selected"':'';?>>Bold green</option>
-            <option value="#fbd75b"<?=$config['messengerFBColor']=='#fbd75b'?' selected="selected"':'';?>>Yellow</option>
-            <option value="#ffb878"<?=$config['messengerFBColor']=='#ffb878'?' selected="selected"':'';?>>Orange</option>
-            <option value="#ff887c"<?=$config['messengerFBColor']=='#ff887c'?' selected="selected"':'';?>>Red</option>
-            <option value="#dc2127"<?=$config['messengerFBColor']=='#dc2127'?' selected="selected"':'';?>>Bold red</option>
-            <option value="#dbadff"<?=$config['messengerFBColor']=='#dbadff'?' selected="selected"':'';?>>Purple</option>
-            <option value="#e1e1e1"<?=$config['messengerFBColor']=='#e1e1e1'?' selected="selected"':'';?>>Gray</option>
+            <option value="#7bd148"<?=$config['messengerFBColor']=='#7bd148'?' selected':'';?>>Green</option>
+            <option value="#5484ed"<?=$config['messengerFBColor']=='#5484ed'?' selected':'';?>>Bold blue</option>
+            <option value="#a4bdfc"<?=$config['messengerFBColor']=='#a4bdfc'?' selected':'';?>>Blue</option>
+            <option value="#46d6db"<?=$config['messengerFBColor']=='#46d6db'?' selected':'';?>>Turquoise</option>
+            <option value="#7ae7bf"<?=$config['messengerFBColor']=='#7ae7bf'?' selected':'';?>>Light green</option>
+            <option value="#51b749"<?=$config['messengerFBColor']=='#51b749'?' selected':'';?>>Bold green</option>
+            <option value="#fbd75b"<?=$config['messengerFBColor']=='#fbd75b'?' selected':'';?>>Yellow</option>
+            <option value="#ffb878"<?=$config['messengerFBColor']=='#ffb878'?' selected':'';?>>Orange</option>
+            <option value="#ff887c"<?=$config['messengerFBColor']=='#ff887c'?' selected':'';?>>Red</option>
+            <option value="#dc2127"<?=$config['messengerFBColor']=='#dc2127'?' selected':'';?>>Bold red</option>
+            <option value="#dbadff"<?=$config['messengerFBColor']=='#dbadff'?' selected':'';?>>Purple</option>
+            <option value="#e1e1e1"<?=$config['messengerFBColor']=='#e1e1e1'?' selected':'';?>>Gray</option>
           </select>
         </div>
         <?php require'core/layout/footer.php';?>

@@ -558,7 +558,8 @@ nav.account-menu ul li a {
   font-size: 16px !important;
   font-weight: 700 !important ;
   color: #aaa !important;
-  text-transform: none !important; }
+  text-transform: none !important;
+  text-shadow: none !important; }
 
 nav.account-menu ul li a:hover {
   color: #ddd !important;

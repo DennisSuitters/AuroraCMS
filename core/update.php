@@ -123,6 +123,16 @@ if($tbl=='seo'){
     ':id'=>$id
   ]);
 }
+if(($col=='cost'||$col=='rCost')){
+	if($da==0){
+		$gst=0;
+	}else{
+  	$gst=$da*($config['gst']/100);
+		$gst=$da+$gst;
+		$gst=number_format((float)$gst,2,'.','');
+	}
+	echo'<script>window.top.window.$("#gst'.$col.'").html("'.$gst.'");</script>';
+}
 if($tbl=='login'&&$col=='username'){
   $uc1=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:da");
   $uc1->execute([':da'=>$da]);

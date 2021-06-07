@@ -33,25 +33,6 @@
     </div>
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
-        <legend id="websiteVoice" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#websiteVoice" aria-label="PermaLink to Website Voice Section">&#128279;</a>':'';?>Website Voice</legend>
-        <?php if($config['wv_site_id']==''){?>
-          <div class="alert alert-info" role="alert">
-            <a class="alert-link" target="_blank" href="https://websitevoice.com/convert-text-to-audio-free">Website Voice</a> allows you to add a narrator to your Website to allow visually impaired visitors and those who wish to listen to your content read to them.<br>
-            To full-enable Website Voice, visit the link above and sign-up for free. You can optionally pay for the service to enable extra features.<br>
-            Once signed-up copy and paste the <code>WV_SITE_ID</code> into the field below, and enable the option. The Service will be automatically added to your site pages.
-          </div>
-        <?php }?>
-        <div class="row">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#enableWebsiteVoice" aria-label="PermaLink to Wenable Website Voice Checkbox">&#128279;</a>':'';?>
-          <input id="enableWebsiteVoice" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16" type="checkbox"<?=$config['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="enableWebsiteVoice" id="configoptions161">Enable Website Voice</label>
-        </div>
-        <label id="websiteVoiceID" for="update_url"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/settings#websiteVoiceID" aria-label="PermaLink to Website Voice ID">&#128279;</a>':'';?>WV_SITE_ID</label>
-        <div class="form-row">
-          <input class="textinput" id="wv_site_id" data-dbid="1" data-dbt="config" data-dbc="wv_site_id" type="text" value="<?=$config['wv_site_id'];?>" placeholder="Enter Website Voice ID...">
-          <button class="save" id="savewv_site_id" data-dbid="wv_site_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
-        </div>
-        <hr>
         <?php if(!file_exists('layout/'.$config['theme'].'/theme.ini')){
           echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         }else{?>

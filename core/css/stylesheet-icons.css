@@ -13,7 +13,7 @@
 
 .i svg {
   width: 14px !important;
-  height:14px !important; }
+  height: 14px !important; }
 
 .i-lg svg {
   width: 28px !important;
@@ -38,19 +38,6 @@
 .i-fw {
   width: 1.28571429em;
   text-align: center; }
-
-.i-spin {
-  -webkit-animation: i-spin 1s infinite;
-  animation: i-spin 1s infinite;
-  transform-origin: bottom right;
-}
-
-@keyframes i-spin {
-  0% {
-    transform: rotate(0); }
-  100% {
-    transform: rotate(359deg); }
-}
 
 .i-color-black {
   fill: #000; }
@@ -84,6 +71,21 @@
 
 .i-color-warning {
   fill: var(--warning-color); }
+
+.i-spin {
+  width: 14px;
+  height: 14px;
+  animation-name: i-spin;
+  animation-duration: 1500ms;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;  }
+
+@keyframes i-spin {
+  from {
+    transform:rotate(0);}
+  to {
+    transform:rotate(360deg); }
+}
 
 .i-social {
   position: relative;

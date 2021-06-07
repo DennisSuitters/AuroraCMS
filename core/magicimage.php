@@ -14,6 +14,11 @@
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+  if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+  if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
 $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);

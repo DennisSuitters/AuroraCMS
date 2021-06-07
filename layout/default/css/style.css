@@ -1,79 +1,19 @@
 @charset "UTF-8";
 
 @import url('stylesheet-vars.css');
-@import url('stylesheet-base.css');
-@import url('stylesheet-typography.css');
-@import url('stylesheet-grid.css');
-@import url('stylesheet-forms.css');
-@import url('stylesheet-helpers.css');
-@import url('stylesheet-xtras.css');
-@import url('stylesheet-icons.css');
-@import url('fancybox.css');
-@import url('stylesheet-aurora.css');
+@import url('../../../core/css/stylesheet-base.css');
+@import url('../../../core/css/stylesheet-typography.css');
+@import url('../../../core/css/stylesheet-grid.css');
+@import url('../../../core/css/stylesheet-forms.css');
+@import url('../../../core/css/stylesheet-helpers.css');
+@import url('../../../core/css/stylesheet-xtras.css');
+@import url('../../../core/css/stylesheet-icons.css');
+@import url('../../../core/js/fancybox/fancybox.css');
+@import url('../../../core/css/stylesheet-aurora.css');
+@import url('../../../core/css/stylesheet-print.css');
 
 /* The below are styles specific to the theme for website they are for,
    and most likely include overrides to produce a particular effect. */
-
-[for="fullname"],
-[for="resetfullname"],
-[for="signupfullname"] {
-  border: 0 !important;
-  clip: rect(0 0 0 0) !important;
-  height: 1px !important;
-  margin: -1px !important;
-  overflow: hidden !important;
-  padding: 0 !important;
-  position: absolute !important;
-  width: 1px !important;
-  outline: none !important; }
-
-#fullname,
-#resetfullname,
-#signupfullname {
-  display: none; }
-
-.comingsoon,
-.maintenance {
-  background-color: transparent;
-  background-repeat: no-repeat;
-  background-position: top center;
-  -webkit-background-size: cover;
-     -moz-background-size: cover;
-       -o-background-size: cover;
-          background-size: cover;
-  width: 100%;
-  height: 100%;
-  -webkit-text-size-adjust: 100%;
-      -ms-text-size-adjust: 100%;
-  -webkit-font-smoothing: antialiased;
-          font-smoothing: antialiased;
-  overflow: hidden; }
-
-.comingsoon body,
-.maintenance body {
-  color: #fff;
-  background-color: transparent; }
-
-.comingsoon main,
-.maintenance main {
-  margin: 200px 40px 40px 40px !important; }
-
-.comingsoon main p,
-.maintenance main p {
-  line-height: 1.25 !important;
-  font-weight: 300 !important;
-  font-style: normal !important;
-  text-shadow: 0 0 20px #000,
-               0 0 15px #000,
-               0 0 10px #000,
-               0 0 5px #000; }
-
-.comingsoon main h1,
-.maintenance main h1 {
-  text-shadow: 0 0 20px #000,
-               0 0 15px #000,
-               0 0 10px #000,
-               0 0 5px #000; }
 
 .brand {
   position: absolute;
@@ -87,9 +27,6 @@
   margin: 0 !important;
   padding: 0 !important; }
 
-.hidewhenempty:empty {
-  display: none; }
-
 .glass {
   background-color: rgba(255, 255, 255, .7);
   -webkit-backdrop-filter: blur(5px);
@@ -102,55 +39,6 @@
 
 .sticky-logo ~ .sticky-top {
   top: 75px; }
-
-@media print {
-  body * {
-    visibility: hidden; }
-
-  #section-to-print {
-    margin: 0 0 0 0;
-    position: absolute;
-    top: 0;
-    left: 0; }
-
-  #section-to-print * {
-    visibility: visible !important;  }
-
-  #section-to-print.orderstheme.col-11 {
-    width: 100%; }
-
-  #section-to-print article.col-12 {
-    width: 25%; }
-}
-
-@media (min-width: 360px) { // xs
-
-}
-
-@media (min-width: 576px) { // sm
-
-
-}
-
-@media (min-width: 768px) { // md
-
-}
-
-@media (min-width: 992px) { // lg
-  .sticky-logo {
-    display: none;
-    z-index: 1020;
-    position: sticky;
-    top: 0; }
-
-  .sticky-logo ~ .sticky-top {
-    top: 0px; }
-
-}
-
-@media (min-width: 1200px) { // xl
-
-}
 
 nav {
   background-color: transparent !important; }
@@ -181,3 +69,41 @@ address [role="button"] {
   font-size: medium;
   font-family: var(--font);
   line-height: var(--line-height); }
+
+#gl {
+  width: auto;
+  height: 500px; }
+
+#map {
+  height: 400px; }
+
+.leaflet-control-layers-toggle {
+  background-image: url(../images/layers.png) !important;
+  width: 36px !important;
+  height: 36px !important; }
+
+.leaflet-retina .leaflet-control-layers-toggle {
+  background-image: url(../images/layers-2x.png) !important;
+  background-size: 26px 26px !important; }
+
+.leaflet-default-icon-path {
+  background-image: url(../images/marker-icon.png) !important; }
+
+@media (min-width: 360px) { // xs}
+
+@media (min-width: 576px) { // sm}
+
+@media (min-width: 768px) { // md}
+
+@media (min-width: 992px) { // lg
+  .sticky-logo {
+    display: none;
+    z-index: 1020;
+    position: sticky;
+    top: 0; }
+
+  .sticky-logo ~ .sticky-top {
+    top: 0; }
+}
+
+@media (min-width: 1200px) { // xl }

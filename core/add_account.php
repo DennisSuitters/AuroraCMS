@@ -75,7 +75,11 @@ if($not['spammer']==false){
         $not=['spammer'=>false,'target'=>'signupemail','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-info','text'=>'Email can NOT be blank','reason'=>''];
       if($not['spammer']==false){
         if(isset($_POST['terms'])&&$_POST['terms']=='yes'){
-          define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url']);
+          if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+            if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+          }else{
+            if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+          }
           if($username!=''){
             $s=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:username LIMIT 1");
             $s->execute([':username'=>$username]);

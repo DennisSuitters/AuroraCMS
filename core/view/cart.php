@@ -224,6 +224,14 @@ if($args[0]=='confirm'){
 				elseif($i['fileURL']!='')$image=$i['fileURL'];
 				elseif($i['file']!=''&&file_exists('media/'.basename($i['file'])))$image='media/'.basename($i['file']);
 				else $image=NOIMAGE;
+				$gst=0;
+				if($config['gst']>0){
+					$gst=$ci['cost']*($config['gst']/100);
+					$gst=$gst*$ci['quantity'];
+					$gst=number_format((float)$gst,2,'.','');
+				}
+				$total=$total+($ci['cost']*$ci['quantity'])+$gst;
+				$total=number_format((float)$total,2,'.','');
 				$cartitem=preg_replace([
 					'/<print zebra>/',
 					'/<print carturl>/',
@@ -234,8 +242,9 @@ if($args[0]=='confirm'){
 					'/<print content=[\"\']?dimensions[\"\']?>/',
 					'/<print choice>/',
 					'/<print cart=[\"\']?id[\"\']?>/',
-					'/<print cart=[\"\']?quantity[\"\']?>/',
 					'/<print cart=[\"\']?cost[\"\']?>/',
+					'/<print cart=[\"\']?quantity[\"\']?>/',
+					'/<print cart=[\"\']?gst[\"\']?>/',
 					'/<print itemscalculate>/'
 				],[
 					'zebra'.$zebra,
@@ -247,11 +256,11 @@ if($args[0]=='confirm'){
 					'W:'.$i['width'].$i['widthunit'].' x L:'.$i['length'].$i['lengthunit'].' H:'.$i['height'].$i['heightunit'],
 					$c['title']!=''?' : '.$c['title']:'',
 					$ci['id'],
-					htmlspecialchars($ci['quantity'],ENT_QUOTES,'UTF-8'),
 					$ci['cost'],
-					$ci['cost']*$ci['quantity']
+					htmlspecialchars($ci['quantity'],ENT_QUOTES,'UTF-8'),
+					$gst,
+					$total
 				],$cartitem);
-				$total=$total+($ci['cost']*$ci['quantity']);
 				$cartitems.=$cartitem;
 				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 				$weight=$weight+($i['weight']*$ci['quantity']);

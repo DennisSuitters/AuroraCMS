@@ -114,12 +114,12 @@ if($metaRobots==''){
   elseif(in_array($view,['proofs','orders','settings'],true))$metaRobots='noindex,nofollow';
   else$metaRobots=$page['metaRobots'];
 }
-if($seoCaption=='')$seoCaption=$page['seoCaption'];
+if(isset($seoCaption)&&$seoCaption=='')$seoCaption=$page['seoCaption'];
 if($seoDescription==''){
   if($page['seoDescription']=='')$seoDescription=substr(strip_tags($page['notes']),0,160);
   else$seoDescription=$page['seoDescription'];
 }
-if($seoKeywords==''){
+if(isset($seoKeywords)&&$seoKeywords==''){
   if($page['seoKeywords']=='')$seoKeywords=$config['seoKeywords'];
   else$seoKeywords=$page['seoKeywords'];
 }
@@ -210,7 +210,7 @@ if(stristr($head,'<css')){
 }
 if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
   if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false)
-    $head=str_replace('<google_analytics>','<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
+    $head=str_replace('<google_analytics>','<script defer async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
 }else$head=str_replace('<google_analytics>','',$head);
 if($view=='login'){
   if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){

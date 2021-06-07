@@ -117,6 +117,7 @@
       $('#save'+c).removeClass('btn-danger');
       if($('.unsaved').length===0)$('.saveall').removeClass('btn-danger');
       unsaved=false;
+      $('#sp').html(msg);
     });
 	 	return false;
 	});

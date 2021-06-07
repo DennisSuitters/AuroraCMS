@@ -72,13 +72,13 @@
         <label id="messageCheckInterval" for="message_check_interval"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#messageCheckInterval" aria-label="PermaLink to Message Check Interval">&#128279;</a>':'';?>Check for new Messages every</label>
         <div class="form-row">
           <select id="message_check_interval" onchange="update('1','config','message_check_interval',$(this).val(),'select');">
-            <option value="0"<?=$config['message_check_interval']==0?' selected="selected"':'';?>>Disable Checking</option>
-            <option value="1"<?=$config['message_check_interval']==1?' selected="selected"':'';?>>Every time Messages is opened</option>
-            <option value="300"<?=$config['message_check_interval']==300?' selected="selected"':'';?>>5 Minutes</option>
-            <option value="600"<?=$config['message_check_interval']==600?' selected="selected"':'';?>>10 Minutes</option>
-            <option value="900"<?=$config['message_check_interval']==900?' selected="selected"':'';?>>15 Minutes</option>
-            <option value="1800"<?=$config['message_check_interval']==1800?' selected="selected"':'';?>>30 Minutes</option>
-            <option value="3600"<?=$config['message_check_interval']==3600?' selected="selected"':'';?>>1 Hour</option>
+            <option value="0"<?=$config['message_check_interval']==0?' selected':'';?>>Disable Checking</option>
+            <option value="1"<?=$config['message_check_interval']==1?' selected':'';?>>Every time Messages is opened</option>
+            <option value="300"<?=$config['message_check_interval']==300?' selected':'';?>>5 Minutes</option>
+            <option value="600"<?=$config['message_check_interval']==600?' selected':'';?>>10 Minutes</option>
+            <option value="900"<?=$config['message_check_interval']==900?' selected':'';?>>15 Minutes</option>
+            <option value="1800"<?=$config['message_check_interval']==1800?' selected':'';?>>30 Minutes</option>
+            <option value="3600"<?=$config['message_check_interval']==3600?' selected':'';?>>1 Hour</option>
           </select>
         </div>
         <div class="row mt-3">
@@ -133,19 +133,19 @@
             <div class="form-row mt-1" id="l_<?=$rm['id'];?>">
               <div class="input-text">Type</div>
               <select id="type<?=$rm['id'];?>" onchange="update(`<?=$rm['id'];?>`,`choices`,`type`,$(this).val());">
-                <option value="imap"<?=$rm['type']=='imap'?' selected="selected"':'';?>>IMAP</option>
-                <option value="pop3"<?=$rm['type']=='pop3'?' selected="selected"':'';?>>POP3</option>
+                <option value="imap"<?=$rm['type']=='imap'?' selected':'';?>>IMAP</option>
+                <option value="pop3"<?=$rm['type']=='pop3'?' selected':'';?>>POP3</option>
               </select>
               <div class="input-text">Port</div>
               <input id="port<?=$rm['id'];?>" type="text" value="<?=$rm['port'];?>" onchange="update(`<?=$rm['id'];?>`,`choices`,`port`,$(this).val());">
               <div class="input-text">Flag</div>
               <select id="flag" onchange="update(`<?=$rm['id'];?>`,`choices`,`flag`,$(this).val(),'select');">
-                <option value="novalidate-cert"<?=$rm['flag']=='novalidate-cert'?' selected="selected"':'';?>>novalidate-cert</option>
-                <option value="validate-cert"<?=$rm['flag']=='validate-cert'?' selected="selected"':'';?>>validate-cert</option>
-                <option value="norsh"<?=$rm['flag']=='norsh'?' selected="selected"':'';?>>norsh</option>
-                <option value="ssl"<?=$rm['flag']=='ssl'?' selected="selected"':'';?>>ssl</option>
-                <option value="notls"<?=$rm['flag']=='notls'?' selected="selected"':'';?>>notls</option>
-                <option value="tls"<?=$rm['flag']=='tls'?' selected="selected"':'';?>>tls</option>
+                <option value="novalidate-cert"<?=$rm['flag']=='novalidate-cert'?' selected':'';?>>novalidate-cert</option>
+                <option value="validate-cert"<?=$rm['flag']=='validate-cert'?' selected':'';?>>validate-cert</option>
+                <option value="norsh"<?=$rm['flag']=='norsh'?' selected':'';?>>norsh</option>
+                <option value="ssl"<?=$rm['flag']=='ssl'?' selected':'';?>>ssl</option>
+                <option value="notls"<?=$rm['flag']=='notls'?' selected':'';?>>notls</option>
+                <option value="tls"<?=$rm['flag']=='tls'?' selected':'';?>>tls</option>
               </select>
               <div class="input-text">Server</div>
               <input id="url<?=$rm['id'];?>" name="url" type="text" value="<?=$rm['url'];?>" placeholder="Enter a Server" onchange="update(`<?=$rm['id'];?>`,`choices`,`url`,$(this).val());">

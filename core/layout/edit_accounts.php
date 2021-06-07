@@ -747,7 +747,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
                   'Australia/Sydney'     => "(GMT+10:00) Sydney"
                 ];
-                foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected="selected"':'').'>'.$tz.'</option>';?>
+                foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected':'').'>'.$tz.'</option>';?>
               </select>
             </div>
             <?php if($user['id']==$r['id']||$user['options'][5]==1){?>

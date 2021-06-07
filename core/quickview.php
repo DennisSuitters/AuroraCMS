@@ -7,15 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ * @changes    v0.1.2 Fix GST Calculation.
  */
 define('UNICODE','UTF-8');
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))$config['theme']=$_GET['theme'];
 define('THEME','layout/'.$config['theme']);
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+  if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+  if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 if(file_exists('../'.THEME.'/images/noimage.png'))define('NOIMAGE',THEME.'/images/noimage.png');
 elseif(file_exists('../'.THEME.'/images/noimage.gif'))define('NOIMAGE',THEME.'/images/noimage.gif');
@@ -28,6 +34,14 @@ if(file_exists('../'.THEME.'/quickview.html')){
   $s->execute([':id'=>$id]);
   if($s->rowCount()>0){
     $r=$s->fetch(PDO::FETCH_ASSOC);
+    if($config['gst']>0){
+      $gst=$r['cost']*($config['gst']/100);
+      $r['cost']=$r['cost']+$gst;
+      $r['cost']=number_format((float)$r['cost'],2,'.','');
+      $gst=$r['rCost']*($config['gst']/100);
+      $r['rCost']=$r['rCost']+$gst;
+      $r['rCost']=number_format((float)$r['rCost'],2,'.','');
+    }
     if(stristr($html,'<quickviewthumbs>')){
       preg_match('/<quickviewthumbs>([\w\W]*?)<\/quickviewthumbs>/',$html,$matches);
       $thumbsitem=$matches[1];

@@ -14,9 +14,7 @@
  * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `id`=:id");
-$s->execute([
-  ':id'=>$args[1]
-]);
+$s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section id="content">
@@ -143,14 +141,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-row">
               <input id="cover" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="cover" type="text" value="<?=$r['cover'];?>" readonly onchange="coverUpdate('<?=$r['id'];?>','menu','cover',$(this).val());">
               <?=$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);">'.svg2('browse-media').'</button>':'';
-              if($r['cover']!='')
-                echo'<a data-fancybox="cover" data-type="image" href="'.$r['cover'].'"><img class="bg-white" id="coverimage" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
-              elseif($r['coverURL']!='')
-                echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img class="bg-white" id="coverimage" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
-              elseif($r['coverURL'] != '')
-                echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img class="bg-white" id="coverimage" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
-              else
-                echo'<img id="coverimage" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';
+              if($r['cover']!='')echo'<a data-fancybox="cover" data-type="image" href="'.$r['cover'].'"><img class="bg-white" id="coverimage" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
+              elseif($r['coverURL']!='')echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img class="bg-white" id="coverimage" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
+              elseif($r['coverURL']!='')echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img class="bg-white" id="coverimage" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
+              else echo'<img id="coverimage" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';
               echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,``);">'.svg2('trash').'</button>':'';?>
             </div>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
@@ -231,15 +225,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
               <div class="row mt-3" id="mi">
                 <?php $sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `file`!='' AND `rid`=0 AND `pid`=:id ORDER BY `ord` ASC");
-                $sm->execute([
-                  ':id'=>$r['id']
-                ]);
+                $sm->execute([':id'=>$r['id']]);
                 if($sm->rowCount()>0){
                   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-                    if(file_exists('media/sm/'.basename($rm['file'])))
-                      $thumb='media/sm/'.basename($rm['file']);
-                    else
-                      $thumb=ADMINNOIMAGE;?>
+                    if(file_exists('media/sm/'.basename($rm['file'])))$thumb='media/sm/'.basename($rm['file']);
+                    else $thumb=ADMINNOIMAGE;?>
                     <div class="card stats col-6 col-md-3 m-1" id="mi_<?=$rm['id'];?>">
                       <?php if($user['options'][1]==1){?>
                         <div class="btn-group float-right">
@@ -319,8 +309,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               if($cntc<0){
                 $cnt=abs($cntc);
                 $cnt=number_format($cnt)*-1;
-              }else
-                $cnt=number_format($cntc);?>
+              }else$cnt=number_format($cntc);?>
               <div class="input-text text-success<?=$cnt<0?' text-danger':'';?>" id="seoTitlecnt"><?=$cnt;?></div>
               <?php if($user['options'][1]==1){
                 echo'<button data-tooltip="tooltip" onclick="removeStopWords(`seoTitle`,$(`#seoTitle`).val());" aria-label="Remove Stop Words">'.svg2('magic').'</button>';
@@ -370,8 +359,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               if($cntc<0){
                 $cnt=abs($cntc);
                 $cnt=number_format($cnt)*-1;
-              }else
-                $cnt=number_format($cntc);?>
+              }else$cnt=number_format($cntc);?>
               <div class="input-text text-success<?=$cnt<0?' text-danger':'';?>" id="seoDescriptioncnt"><?=$cnt;?></div>
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -468,9 +456,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <select id="mid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','menu','mid',$(this).val(),'select');">
                       <option value="0"<?=$r['mid']==0?' selected':'';?>>None</option>
                       <?php $sm=$db->prepare("SELECT `id`,`title` from `".$prefix."menu` WHERE `mid`=0 AND `mid`!=:mid AND `active`=1 ORDER BY `ord` ASC, `title` ASC");
-                      $sm->execute([
-                        ':mid'=>$r['id']
-                      ]);
+                      $sm->execute([':mid'=>$r['id']]);
                       if($sm->rowCount()>0){
                         while($rm=$sm->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rm['id'].'"'.($r['mid']==$rm['id']?' selected':'').'>'.$rm['title'].'</option>';
                       }?>

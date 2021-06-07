@@ -12,14 +12,20 @@ button,
 button:disabled,
 .btn:disabled,
 input:disabled {
-  opacity: .65;
-  cursor: not-allowed; }
+  color: var(--button-color-disabled) !important;
+  background-color: var(--button-background-color-disabled) !important;
+  border-color: var(--button-background-color-disabled) !important;
+  cursor: not-allowed !important; }
 
 [role="button"][disabled]:hover,
 button[disabled]:hover,
 .btn[disabled]:hover, {
-  -webkit-filter: none;
-          filter: none; }
+  color: var(--button-color-disabled) !important;
+  background-color: var(--button-background-color-disabled) !important;
+  border-color: var(--button-background-color-disabled !important);
+  cursor: not-allowed !important;
+  -webkit-filter: none !important;
+          filter: none !important; }
 
 [role="button"],
 button,
@@ -35,11 +41,11 @@ button,
               border-color .15s ease-in-out,
               box-shadow .15s ease-in-out;
   margin: 0;
-  border: var(--button-border-width) var(--button-border-style) var(--button-background-color);
-  border-radius: var(--border-radius);
-  background-color: var(--button-background-color);
+  border: var(--button-border-width) var(--button-border-style) var(--button-border-color) !important;
+  border-radius: var(--border-radius) !important;
+  background-color: var(--button-background-color) !important;
   padding: .65rem .75rem;
-  color: var(--button-color);
+  color: var(--button-color) !important;
   font-weight: 700;
   font-size: 1rem;
   font-family: var(--font);
@@ -48,13 +54,18 @@ button,
   text-align: center;
   text-decoration: none; }
 
+.btn-sm {
+  padding: .2rem .6rem .4rem .3rem;
+  font-weight: 700;
+  font-size: .5rem; }
+
 [role="button"]:hover,
 button:hover,
 .btn:hover {
   cursor: pointer;
-  border: var(--button-border-width-hover) var(--button-border-style) var(--button-background-color-hover);
-  background-color: var(--button-background-color-hover);
-  color: var(--button-color-hover);
+  border: var(--button-border-width-hover) var(--button-border-style-hover) var(--button-border-color-hover) !important;
+  background-color: var(--button-background-color-hover) !important;
+  color: var(--button-color-hover) !important;
   text-decoration: none; }
 
 [role="button"]:focus,
@@ -102,6 +113,7 @@ textarea {
   border: var(--border-width) var(--border-style) var(--form-border-color);
   border-radius: var(--border-radius);
   background-clip: padding-box;
+  background-color: var(--form-background-color) !important;
   padding: .375rem .75rem;
   width: 100%;
   color: var(--form-color);
@@ -128,12 +140,13 @@ textarea:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem var(--form-focus-shadow);
   border-color: var(--form-focus-border-color);
-  background-color: transparent;
-  color: var(--form-color); }
+  background-color: var(--form-background-color-focus);
+  color: var(--form-color-focus); }
 
 input[readonly],
 textarea[readonly] {
-  background-color: var(--form-border-color); }
+  background-color: var(--form-background-disabled);
+  color: var(--form-color-siabled); }
 
 input::-moz-placeholder,
 textarea::-moz-placeholder {
@@ -804,12 +817,18 @@ input:invalid:focus:not(:-ms-input-placeholder) ~ .requirements {
   max-height: 200px; }
 
 input:invalid:focus:not(:placeholder-shown) ~ .requirements {
-  border: 0 2px 2px 2px;
-  padding: 20px 30px 20px 50px;
-  max-height: 200px; }
+  position: relative;
+  border: var(--border-width) var(--border-style) transparent;
+  border-color: var(--info-border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--info-background-color);
+  padding: .75em 1.25em;
+  margin-bottom: 1rem;
+  width: 100%;
+  max-height: 200px;
+  color: var(--info-color); }
 
 form .requirements {
-  transition: .28s;
   border: 0;
   padding:0;
   max-height: 0;

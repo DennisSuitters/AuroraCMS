@@ -14,9 +14,11 @@
 */
 require'db.php';
 require'class.vcard.php';
-if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443)define('PROTOCOL','https://');
-else define('PROTOCOL','http://');
-define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
+  if(!defined('PROTOCOL'))define('PROTOCOL','https://');
+}else{
+  if(!defined('PROTOCOL'))define('PROTOCOL','http://');
+}
 $username=isset($_GET['u'])?filter_input(INPUT_GET,'u',FILTER_SANITIZE_STRING):0;
 if($username!=0){
   $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username");

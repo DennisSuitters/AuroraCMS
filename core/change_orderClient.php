@@ -40,7 +40,7 @@ if($id==0){
   $q->execute([':id'=>$id]);
   $client=$q->fetch(PDO::FETCH_ASSOC);
 }
-echo'<script'.
+echo'<script>'.
       'window.top.window.$("#to").html(`<strong>'.$client['username'].($client['name']!=''?' ['.$client['name'].']':'').'<br>'.
         ($client['business']!=''?' -> '.$client['business'].'<br>':'').'</strong>'.
         '<small>'.

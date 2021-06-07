@@ -3,30 +3,32 @@
 <block inbed="cart">
 	<pagenotes>
     <section class="row mt-5">
-      <article class="col-11">
+      <article class="col-12">
       	<print page="notes">
       </article>
   	</section>
   </pagenotes>
 	<section class="row my-5">
 		<emptycart>
-			<article id="cart" name="cart" class="col-11 col-sm-5 m-0 p-0 mx-1">
+			<article id="cart" name="cart" class="col-12 col-sm-5 m-0 p-0">
 				<div class="card">
 					<h3 class="p-3">Your Cart</h3>
 					<table class="border-0">
 						<thead class="border-0">
 							<tr>
 								<th class="w-10 d-none d-sm-table-cell border-0"></th>
-								<th colspan="6" class="small border-0">
+								<th colspan="8" class="small border-0">
 									<span class="text-muted">Code : </span>Title<span class="text-muted"> : Choices</span>
 								</th>
 							</tr>
 							<tr>
 								<th class="d-none d-sm-table-cell border-0"></th>
 								<th colspan="2" class="border-0"></th>
-								<th class="w-10 small text-right pr-5 border-0">Quantity</th>
-								<th class="w-10 small text-right border-0">X</th>
+								<th class="small text-center border-0" style="width:40px;">Quantity</th>
+								<th class="small text-right border-0">X</th>
 								<th class="w-10 small text-center border-0">Cost</th>
+								<th class="small text-right border-0" style="width:30px;">+</th>
+								<th class="w-10 small text-center border-0">GST</th>
 								<th class="w-10 small text-right border-0">Total</th>
 							</tr>
 						</thead>
@@ -34,7 +36,7 @@
 							<items>
 								<tr class="<print zebra>">
 									<td class="d-none d-sm-table-cell align-middle border-0 p-0 pt-1 pl-1">
-										<img src="<print content=image>" class="m-0" loading="lazy" width="100%" alt="<print content=title>">
+										<img src="<print content=image>" class="m-0" loading="lazy" width="50%" alt="<print content=title>">
 									</td>
 									<td colspan="6" class="small align-middle border-0">
 										<print content="code"><print content="title"><print choice>
@@ -58,6 +60,8 @@
 									</td>
 									<td class="small align-middle text-right border-0" style="width:30px;">X</td>
 									<td class="w-10 text-center align-middle my-0 py-0 border-0"><print cart="cost"></td>
+									<td class="small align-middle text-right border-0" style="width:30px;">+</td>
+									<td class="w-10 text-center align-middle my-0 py-0 border-0"><print cart="gst"></td>
 									<td class="w-10 text-right align-middle my-0 py-0 border-0"><print itemscalculate></td>
 								</tr>
 							</items>
@@ -65,19 +69,19 @@
 						<tfoot>
 							<tr class="my-0 py-0">
 								<td class="d-none d-sm-table-cell border-0"></td>
-								<td colspan="5" class="text-right my-0 py-0 border-0">Total</td>
-								<td id="total" class="text-right border-dark border-top border-bottom my-0 py-0 font-weight-bold"><print totalcalculate></td>
+								<td colspan="7" class="text-right my-0 py-0 border-0"><strong>Total<strong></td>
+								<td id="total" class="text-right border-black border-top border-bottom my-0 py-0 font-weight-bold"><print totalcalculate></td>
 							</tr>
 							<tr class="my-0 py-0">
 								<td class="d-none d-sm-table-cell border-0"></td>
-								<td colspan="5" class="text-right my-0 py-0 border-0">
+								<td colspan="7" class="text-right my-0 py-0 border-0">
 									<small>Estimated Dimensions: <print dimensions></small>
 								</td>
 								<td class="border-0"></td>
 							</tr>
 							<tr class="my-0 py-0">
 								<td class="d-none d-sm-table-cell border-0"></td>
-								<td colspan="5" class="text-right my-0 py-0 border-0">
+								<td colspan="7" class="text-right my-0 py-0 border-0">
 									<small>Total Weight: <print weight></small>
 								</td>
 								<td class="border-0"></td>
@@ -89,7 +93,7 @@
 					<div class="text-right pr-2"><small>Prices are in Australian Dollars (AUD)</small></div>
 				</div>
 			</article>
-			<article class="col-11 col-sm-5 m-0 p-0 mx-1 mb-5">
+			<article class="col-12 col-sm-5 m-0 p-0 mb-5">
 				<iframe id="sp" name="sp" class="d-none"></iframe>
 				<form class="card p-3" method="post" action="cart/confirm">
 					<input type="hidden" name="<print hash>" value="<print timecode>">
@@ -135,7 +139,7 @@
 					<input type="text" id="rewards" name="rewards" value="" placeholder="Enter Your Rewards Code...">
 					<postageoptions>
 						<label for="postoption">Delivery Options</label>
-						<select id="postoption" name="pid<print iphash>">
+						<select id="postoption" name="pid<print hash>">
 							<postoptions>
 						</select>
 						<small>Note: Delivery prices are estimates, and may change depending on order items and location of delivery.</small>
@@ -145,7 +149,7 @@
 						<select id="payoption" name="payoption" required aria-required="true">
 							<payoptions>
 						</select>
-						<small>Note: Paymtent Option Selected may change the overall cost, which will be reflected on the Order.</small>
+						<small>Note: Payment Option Selected may change the overall cost, which will be reflected on the Order.</small>
 					</paymentoptions>
 					<button type="submit" class="mt-3">Confirm Order</button>
 				</form>

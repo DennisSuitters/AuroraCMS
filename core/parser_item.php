@@ -21,6 +21,14 @@ $html=preg_replace([
   '~<items>.*?<\/items>~is'
 ],'',$html,1);
 $r=$s->fetch(PDO::FETCH_ASSOC);
+if($config['gst']>0){
+  $gst=$r['cost']*($config['gst']/100);
+  $gst=$r['cost']+$gst;
+  $r['cost']=number_format((float)$gst,2,'.','');
+  $gst=$r['rCost']*($config['gst']/100);
+  $gst=$r['rCost']+$gst;
+  $r['rCost']=number_format((float)$gst,2,'.','');
+}
 $seoTitle=$r['seoTitle']==''?$r['title']:$r['seoTitle'];
 $metaRobots=$r['metaRobots']==''?$r['metaRobots']:$page['metaRobots'];
 $seoCaption=$r['seoCaption']==''?$r['seoCaption']:$page['seoCaption'];
@@ -39,7 +47,7 @@ elseif($r['file']!='')$shareImage=rawurldecode($r['file']);
 elseif($r['thumb']!='')$shareImage=rawurldecode($r['thumb']);
 else$shareImage=URL.NOIMAGE;
 $canonical=URL.$view.'/'.$r['urlSlug'].'/';
-$contentTime=isset($r['eti'])&&($r['eti']>$r['ti'])?$r['eti']:isset($r['ti'])?$r['ti']:0;
+$contentTime=isset($r['eti'])&&$r['eti']>$r['ti']?$r['eti']:isset($r['ti'])?$r['ti']:0;
 if(stristr($html,'<breadcrumb>')){
   $jsoni=2;
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
@@ -193,9 +201,7 @@ if(stristr($html,'<cover>')){
 if($r['videoURL']!=''){
   $html=preg_replace([
     '/<[\/]?videoviewer>/',
-    '~<image>.*?<\/image>~is',
-    '~<panoramic>.*?<\/panoramic>~is',
-    '~<360viewer>.*?<\/360viewer>~is'
+    '~<image>.*?<\/image>~is'
   ],'',$html);
   if($r['videoURL']!=''){
     $cover=basename(rawurldecode($r['videoURL']));
@@ -215,21 +221,7 @@ if($r['videoURL']!=''){
 }elseif($r['options'][3]==1&&$r['file']!=''){
   $r['file']=rawurldecode($r['file']);
   $html=preg_replace([
-    '/<[\/]?360viewer>/',
     '~<image>.*?<\/image>~is',
-    '~<panoramic>.*?<\/panoramic>~is',
-    '~<videoviewer>.*?<\/videoviewer>~is'
-  ],'',$html);
-  if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-  elseif($r['file']&&file_exists('media/'.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
-  else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
-  $html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
-}elseif($r['options'][2]==1&&$r['file']!=''){
-  $r['file']=rawurldecode($r['file']);
-  $html=preg_replace([
-    '/<[\/]?panoramic>/',
-    '~<image>.*?<\/image>~is',
-    '~<360viewer>.*?<\/360viewer>~is',
     '~<videoviewer>.*?<\/videoviewer>~is'
   ],'',$html);
   if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
@@ -239,8 +231,6 @@ if($r['videoURL']!=''){
 }else{
   $r['file']=rawurldecode($r['file']);
   $html=preg_replace([
-    '~<panoramic>.*?<\/panoramic>~is',
-    '~<360viewer>.*?<\/360viewer>~is',
     '~<videoviewer>.*?<\/videoviewer>~is'
   ],'',$html);
   if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
@@ -328,7 +318,7 @@ if(stristr($html,'<item')){
       ],$item,1);
     }else$item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
   }
-  if(isset($r['contentType'])&&($r['contentType']=='service'||$r['contentType']=='events')){
+  if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
     if($r['bookable']==1){
       if(stristr($item,'<service>')){
         $item=preg_replace([
@@ -429,7 +419,7 @@ if(stristr($html,'<item')){
       ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
       '/<map>/'
     ],[
-      ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'<script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$r['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$r['geo_position'].'],{draggable:false}).addTo(map);'.($r['title']==''?'':'var popupHtml=`<strong>'.$r['title'].'</strong>'.($r['address']==''?'':'<br><small>'.$r['address'].'<br>'.$r['suburb'].', '.$r['city'].', '.$r['state'].', '.$r['postcode'].',<br>'.$r['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':''),
+      ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css"><script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$r['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$r['geo_position'].'],{draggable:false}).addTo(map);'.($r['title']==''?'':'var popupHtml=`<strong>'.$r['title'].'</strong>'.($r['address']==''?'':'<br><small>'.$r['address'].'<br>'.$r['suburb'].', '.$r['city'].', '.$r['state'].', '.$r['postcode'].',<br>'.$r['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':''),
       ''
     ],$item);
   }
@@ -450,7 +440,7 @@ if(stristr($html,'<item')){
       $jrr=$jss->fetch(PDO::FETCH_ASSOC);
       $jsonld.='"aggregateRating":{"@type":"aggregateRating","ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'","reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"},"offers":{"@type":"Offer","url":"'.$canonical.'","priceCurrency":"AUD","price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'","priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'","availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'OutOfStock':'In Stock'):($r['stockStatus']=='none'?'OutOfStock':'InStock')).'","seller":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"}}';
     }elseif($r['schemaType']=='Service')
-      $jsonld.='"@type":"Service","serviceType":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'","provider":{"@type":"LocalBusiness","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","address":"'.htmlspecialchars($config['address'],', '.$config['state'].', '.$config['post'],ENT_QUOTES,'UTF-8').'","telephone":"'.($config['phone']!=''?htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8')).'","priceRange":"'.htmlspecialchars(($r['rCost']!=0?$r['rCost']:$r['cost']),ENT_QUOTES,'UTF-8').'","image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"},"areaServed":{"@type":"State","name":"All"}';
+      $jsonld.='"@type":"Service","serviceType":"'.$r['category_1'].'","provider":{"@type":"LocalBusiness","name":"'.$config['business'].'","address":"'.$config['address'].', '.$config['state'].', '.$config['postcode'].'","telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'","priceRange":"'.($r['rCost']!=0?$r['rCost']:$r['cost']).'","image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"},"areaServed":{"@type":"State","name":"All"}';
     else
       $jsonld.='"@type":"'.$r['schemaType'].'","headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"},"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'","genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'","keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'","wordcount":"'.htmlspecialchars(strlen(strip_tags(escaper($r['notes']))),ENT_QUOTES,'UTF-8').'","publisher":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"},"url":"'.$canonical.'/","datePublished":"'.date('Y-m-d',$r['pti']).'","dateCreated":"'.date('Y-m-d',$r['ti']).'","dateModified":"'.date('Y-m-d',$r['eti']).'","description":"'.htmlspecialchars(strip_tags(rawurldecode($seoDescription)),ENT_QUOTES,'UTF-8').'","articleBody":"'.htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8').'"';
     $jsonld.='}</script>';

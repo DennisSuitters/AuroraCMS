@@ -25,11 +25,6 @@
   --mark-background-color: #ff0;
   --figcaption-color: #888;
 
-  --page-progress-zindex: 2000;
-  --page-progress-height: .45em;
-  --page-progress-start-color: #09c;
-  --page-progress-end-color: #f44;
-
   --header-background-color: #4650F8;
   --header-color: #fff;
 
@@ -66,11 +61,11 @@
   --button-color: #fff;
   --button-color-hover: #fff;
   --button-color-active: #fff;
-  --button-color-disabled: #fff;
+  --button-color-disabled: #888;
   --button-background-color: #3f6ad8;
   --button-background-color-hover: #2955c8;
   --button-background-color-active: #2955c8;
-  --button-background-color-disabled: #1844b7;
+  --button-background-color-disabled: #444;
   --button-border-width: 1px;
   --button-border-width-hover: 1px;
   --button-border-style: solid;
@@ -78,7 +73,7 @@
   --button-border-color: #3f6ad8;
   --button-border-color-hover: #2651be;
   --button-border-color-active: #2651be;
-  --button-border-color-disabled: #1540ad;
+  --button-border-color-disabled: #444;
   --button-border-radius: .25rem;
 
   --table-background-color: #fff;
@@ -185,9 +180,14 @@
   --form-border-color-hover: #007bff;
   --form-background-color:#fff;
   --form-background-color-hover:#fff;
+  --form-background-color-focus: #fff;
+  --form-background-color-disabled: #444;
   --form-color: #495057;
   --form-placeholder-color: #999;
   --form-focus-color: #495057;
+  --form-color-hover: #fff;
+  --form-color-focus: #000;
+  --form-color-disabled: #888;
   --form-focus-border-color: #8bbafe;
   --form-focus-shadow: rgba(13, 110, 253, .25);
   --form-required-color: #dc3545;
@@ -248,8 +248,8 @@
   --search-item-link-color-hover: #00f;
   --search-item-url-color: #080;
 
-  --slidertron-height: 400px;
-  --slidertron-background-color: #ddd;
+  --slider-height: 400px;
+  --slider-background-color: #ddd;
 
   --jumbotron-background-color: #ddd;
 

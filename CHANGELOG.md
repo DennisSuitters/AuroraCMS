@@ -1,28 +1,12 @@
-### v0.1.2
-- Adjust Featured Content code to use ResponsiveSlides are tiny, more versatilve Content Slider.
-- Fix Sitemap creating bad URL leading to broken pages.
-- Move UNICODE define to index.php
-- Change order of PHP ini settings in index.php
-- Tidy up some code formatting.
-- Add disable tracking of IP's associated with selected user accounts.
-- Fix getting logged in User Rank and display editable fields accordingly.
-- Add Quick Edit Dropdown to Orders.
-- Allow inlining CSS directly into page, to speed up page loading, includes checking for CSS @import and concatenates any found.
-- Start Commenting Section to make search in source a little easier.
-- Add Google reCaptcha to public facing forms that interact by sending notifications.
-- Fix and Add Security related headers.
-- Fix selection of Service/Event.
-- Fix Date to current, or Event date if selected from content item page.
-- Add parsing of hiding elements if selected from content item page.
-- Add option to Orders to email Quote/Invoice for immediate payment for Events.
-- Add checkbox for sending quotes/invoices when Event Booking is created by client.
-- Add Checkbox, Select and Date Fields activity indicator.
-- Allow Single Order to be viewed without being logged in.
-- Deprecate PDF creation in favour of emailing and opening Invoice for payment and/or printing.
-- Display Link when Event is Booked from Booking Form to allow Invoice Payment Online.
-- Force elFinder uploaded files to be lowercase filenames, and replace breaking characters including changing spaces to -
-- Adjust what Tabs are displayed depending on Page being edited.
-- Add Payment Options for Orders in the Settings pages, and add feature to Check out and Orders.
-- Use PHP short opening tag to reduce system file footprint.
-- Remove Virtual Assitant due to non-usage and to reduce CMS footprint.
-- Remove changing backgrounds, and created a space saving SVG background to reduce CMS footprint.
+### v0.1.4
+- Fix styling to make Slider Responsive.
+- Fix Menu Sub Items not showing, and allow Menu and Content to be added to Dropdown Menu's.
+- Restyle Dropdown Header Menu to be more pleasing, and to allow images.
+- Fix category navigation not working correctly.
+- Change SQL Query Order of Pages list in Administration so they appear in the order of the Front End Menu's.
+- Update elFinder, fixing icons displaying outside of the elFinder Window.
+- Allow Proofs, Orders, Profile and Settings pages to be adjusted in the Account Menu.
+- Fix Content Items not displaying correct Items depending on selected Categories.
+- Add dropdown to editable pages in Administration to make changes to another page easier.
+- Add check for number of Slider elements, if 0 then don't show Slider.
+- Add Checkbox Option in Administration Content Settings to Enable/Disable Slider.

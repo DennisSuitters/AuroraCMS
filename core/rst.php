@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -26,16 +25,14 @@ if($not['spammer']==false){
   if($act=='reset_password'){
     if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
       $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
-      if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)
-        $not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Create Account Form found Blacklisted IP via Project Honey Pot'];
+      if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)$not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Create Account Form found Blacklisted IP via Project Honey Pot'];
     }
     if($not['spammer']==false){
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
       if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip!='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_text($email.' '.$username);
-        if($result)
-          $not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Sign Up Form, Spam Detected via Form Field Data.'];
+        if($result)$not=['spammer'=>true,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Sign Up Form, Spam Detected via Form Field Data.'];
       }
       if($not['spammer']==false){
         $s=$db->prepare("SELECT `id`,`name`,`email` FROM `".$prefix."login` WHERE `email`=:email LIMIT 1");
@@ -84,12 +81,9 @@ if($not['spammer']==false){
           ],$layout);
         	$mail->Body=($msg=''?$msg:'Hello '.($c['name']!=''?$name[0]:$c['username']).',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
         	$mail->AltBody=($msg=''?$msg:'Hello '.$name[0].',<br>Your new Password is: '.$password.'<br>We recommend changing this when you login<br>Regards,<br>'.$config['business'].'<br>');
-        	if($mail->Send())
-            $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Check your Email for a generated Password.<br>Don\'t forget to change your password when you login next','reason'=>''];
-          else
-            $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','alert'=>'not alert alert-danger','text'=>'Problem Sending to Email Provided!','reason'=>''];
-        }else
-          $not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-info','text'=>'Account Not Found!','reason'=>''];
+        	if($mail->Send())$not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Check your Email for a generated Password.<br>Don\'t forget to change your password when you login next','reason'=>''];
+          else$not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','alert'=>'not alert alert-danger','text'=>'Problem Sending to Email Provided!','reason'=>''];
+        }else$not=['spammer'=>false,'target'=>'reset','element'=>'div','action'=>'replace','class'=>'not alert alert-info','text'=>'Account Not Found!','reason'=>''];
       }
     }else{
       $r=rand(0,10);

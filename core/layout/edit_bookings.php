@@ -7,20 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-$s->execute([
-  ':id'=>$id
-]);
+$s->execute([':id'=>$id]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $sr=$db->prepare("SELECT `contentType` FROM `".$prefix."content` where `id`=:id");
-$sr->execute([
-  ':id'=>$r['rid']
-]);
+$sr->execute([':id'=>$r['rid']]);
 $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section id="content">

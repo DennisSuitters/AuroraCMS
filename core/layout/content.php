@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.1 Fix incorrect Icon being fetched when displaying Contect Type Selection Fallback.
- * @changes    v0.1.2 Use PHP short codes where possible.
- * @changes    v0.1.2 Tidy up Source.
  */
 $rank=0;
 $show='categories';
@@ -259,7 +256,7 @@ else{
                             <div class="small">Belongs to <a href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" data-tooltip="tooltip" aria-label="View Proofs"><?=$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
                           <?php }
                         }
-                        echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';?>
+                        echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':ucwords(str_replace('-',' ',rank($r['rank']))).' and above').'</small>';?>
                       </td>
                       <td class="align-middle text-center small"><small><?=$r['code'];?></small></td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
@@ -286,7 +283,7 @@ else{
                         $srr=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`!='approved'");
                         $srr->execute([':rid'=>$r['id']]);
                         $src=$srr->rowCount($srr);
-                        echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab-content-reviews"'.($src>0?' data-tooltip="tooltip"':'').' role="button" aria-label="'.$src.' New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
+                        echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6"'.($src>0?' data-tooltip="tooltip"':'').' role="button" aria-label="'.$src.' New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
                       </td>
                       <td class="text-center align-middle d-none d-sm-table-cell">
                         <?=$user['options'][1]==1?'<button class="btn trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span></button>':$r['views'];?>

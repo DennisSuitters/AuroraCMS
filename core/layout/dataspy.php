@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -53,8 +52,7 @@ if($s->rowCount()>0){?>
           <td class="text-center small"><?=$r['action'];?></td>
           <td class="text-center small"><small><?= date($config['dateFormat'],$r['ti']);?></small></td>
           <td>
-            <?php if($r['refColumn']=='notes'&&strlen($r['oldda'])>400&&strlen($r['newda'])>400)
-              echo'<div><small>Dataset too large to display</small></div>';
+            <?php if($r['refColumn']=='notes'&&strlen($r['oldda'])>400&&strlen($r['newda'])>400)echo'<div><small>Dataset too large to display</small></div>';
             else{?>
               <div><small>From: <small><?= strlen($r['oldda'])>400?'Dataset too large to display':htmlspecialchars($r['oldda']);?></small></small></div>
               <div><small>To: <small><?= strlen($r['newda'])>400?'Dataset too large to display':htmlspecialchars($r['newda']);?></small></small></div>
@@ -70,5 +68,4 @@ if($s->rowCount()>0){?>
       <?php }?>
     </tbody>
   </table>
-<?php }else
-  echo'<div class="alert alert-info" role="alert">No Results Found!</div>';
+<?php }else echo'<div class="alert alert-info" role="alert">No Results Found!</div>';

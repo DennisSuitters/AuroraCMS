@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.1 Fix unintentional addition of extra quotes when parsing image filename in JSON+LD.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
 */
 $html=preg_replace([
   '~<contentitems>.*?<\/contentitems>~is',
@@ -227,12 +225,18 @@ if($r['videoURL']!=''){
   if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
   elseif($r['file']&&file_exists('media/'.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
   else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
-  $html=preg_replace('/<print content=[\"\']?imageALT[\"\']?>/',htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),$html);
+  $html=preg_replace([
+    '/<print content=[\"\']?imageALT[\"\']?>/',
+    '/<print content=[\"\']?rank[\'"\']?>/',
+    '/<print content=[\"\']?cssrank[\'"\']?>/'
+  ],[
+    htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
+    $r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
+    rank($r['rank'])
+  ],$html);
 }else{
   $r['file']=rawurldecode($r['file']);
-  $html=preg_replace([
-    '~<videoviewer>.*?<\/videoviewer>~is'
-  ],'',$html);
+  $html=preg_replace('~<videoviewer>.*?<\/videoviewer>~is','',$html);
   if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
   elseif($r['file']!=''&&file_exists('media/'.basename($r['file']))){
     $caption='';
@@ -248,7 +252,9 @@ if($r['videoURL']!=''){
       '/<print content=[\"\']?srcset[\"\']?>/',
       '/<print content=[\"\']?image[\"\']?>/',
       '/<print content=[\"\']?figcaption[\"\']?>/',
-      '/<print content=[\"\']?imageALT[\"\']?>/'
+      '/<print content=[\"\']?imageALT[\"\']?>/',
+      '/<print content=[\"\']?rank[\'"\']?>/',
+      '/<print content=[\"\']?cssrank[\'"\']?>/'
     ],[
       '',
       'srcset="'.
@@ -258,7 +264,9 @@ if($r['videoURL']!=''){
         ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file'].' 400w'):'').'" ',
       ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
       $caption,
-      htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8')
+      htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
+      $r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
+      rank($r['rank'])
     ],$html);
   }else$html=preg_replace('~<image>.*?<\/image>~is','',$html);
 }
@@ -331,7 +339,7 @@ if(stristr($html,'<item')){
           $r['id']
         ],$item);
       }
-    }else$item=preg_replace(['~<service.*?>.*?<\/service>~is','~<inventory>.*?<\/inventory>~is'],'',$item,1);
+    }
   }else$item=preg_replace(['~<service.*?>.*?<\/service>~is',($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')],'',$item,1);
   $address=$edit=$contentQuantity='';
   if(isset($r['contentType'])&&($r['contentType']=='inventory')){
@@ -345,6 +353,24 @@ if(stristr($html,'<item')){
       ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
     ],$item);
   }else$item=preg_replace('~<quantity>.*?<\/quantity>~is','',$item);
+  $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
+  if($uid!=0){
+    $su=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+    $su->execute([':id'=>$uid]);
+    $ru=$su->fetch(PDO::FETCH_ASSOC);
+    if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1){
+      $item=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$item);
+    }
+  }
+  if($config['options'][30]==1){
+    if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
+      $item=preg_replace('/<[\/]?addtocart>/','',$item);
+    }else{
+      $item=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$item);
+    }
+  }else{
+    $item=preg_replace('/<[\/]?addtocart>/','',$item);
+  }
   if(stristr($item,'<condition>')){
     if($r['itemCondition']!=''){
       $item=preg_replace([
@@ -506,7 +532,9 @@ if(stristr($html,'<item')){
               '/<print related=[\"\']?imageALT[\"\']?>/',
               '/<print related=[\"\']?title[\"\']?>/',
               '/<print related=[\"\']?contentType[\"\']?>/',
-              '/<print related=[\"\']?quantity[\"\']?>/'
+              '/<print related=[\"\']?quantity[\"\']?>/',
+              '/<print related=[\"\']?rank[\'"\']?>/',
+              '/<print related=[\"\']?cssrank[\'"\']?>/',
             ],[
               (isset($ri['contentType'])?URL.$ri['contentType'].'/'.$ri['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''):''),
               (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" ':''),
@@ -514,7 +542,9 @@ if(stristr($html,'<item')){
               (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),
               (isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):''),
               (isset($ri['contentType'])?$ri['contentType']:''),
-              $relatedQuantity
+              $relatedQuantity,
+              $ri['rank']>300?ucwords(str_replace('-',' ',rank($ri['rank']))):'',
+              rank($ri['rank'])
             ],$relateditem);
             $relitems.=$relateditem;
           }

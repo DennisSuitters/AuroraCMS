@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Tidy up code and reduce footprint.
 */
 $contentType=$view;
+$rowItems=$s->rowCount();
 $html=preg_replace('~<item>.*?<\/item>~is','',$html,1);
 if(stristr($html,'<settings')){
 	preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
@@ -55,10 +55,10 @@ if(stristr($html,'<breadcrumb>')){
     $breaditems.=$breadit;
   }else{
     $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[0])&&$args[0]!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[1])&&$args[1]!=''?',':'');
     $breaditems.=$breadit;
   }
-  if(isset($args[0])&&$args[0]!=''){
+	if(isset($args[1])&&$args[1]!=''){
     $jsoni++;
 		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
 	    $breadit=preg_replace([
@@ -69,7 +69,21 @@ if(stristr($html,'<breadcrumb>')){
 	      htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
 	    ],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[1])&&$args[1]!=''?',':'');
+    $breaditems.=$breadit;
+  }
+  if(isset($args[1])&&$args[1]!=''){
+    $jsoni++;
+		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
+	    $breadit=preg_replace([
+	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
+	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
+	    ],[
+	      URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'/'.str_replace(' ','-',urlencode($args[1])).'/',
+	      htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8')
+	    ],$breaditem);
+		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'","name":"'.htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[2])&&$args[2]!=''){
@@ -79,7 +93,7 @@ if(stristr($html,'<breadcrumb>')){
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
     	],[
-      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])),
+      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])),
       	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
     	],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8'),$breadcurrent);
@@ -93,7 +107,7 @@ if(stristr($html,'<breadcrumb>')){
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
     	],[
-      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])),
+      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])),
       	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
     	],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8'),$breadcurrent);
@@ -306,19 +320,17 @@ if(stristr($html,'<sort>')){
 }
 $html=preg_replace([
 	'/<print page=[\"\']?contentType[\"\']?>/',
-	'/<notification>/'
+	'/<notification>/',
+	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+	'/<print page=[\"\']?notes[\"\']?>/',
+	'/<print content=[\"\']?seoTitle[\"\']?>/'
 ],[
 	htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
-	$notification
-],$html);
-$html=preg_replace([
-	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
-	'/<print page=[\"\']?notes[\"\']?>/'
-],[
+	$notification,
 	'',
-	rawurldecode($page['notes'])
+	rawurldecode($page['notes']),
+	$config['business']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8')
 ],$html);
-$html=$config['business']?preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),$html):preg_replace('/<print content=[\"\']?seoTitle[\"\']?>/',htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),$html);
 if(stristr($html,'<categories>')){
 	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `title` ASC");
 	$sc->execute();
@@ -398,6 +410,8 @@ if(stristr($html,'<items')){
 			'/<print date=[\"\']?year[\"\']?>/',
 			'/<print content=[\"\']?contentType[\"\']?>/',
 			'/<print content=[\"\']?quantity[\"\']?>/',
+			'/<print content=[\"\']?rank[\'"\']?>/',
+			'/<print content=[\"\']?cssrank[\'"\']?>/',
 			'/<print content=[\"\']?notes[\"\']?>/'
 		],[
 			'',
@@ -422,6 +436,8 @@ if(stristr($html,'<items')){
 			date('Y',$r['tis']!=0?$r['tis']:$r['ti']),
 			$r['contentType'],
 			$itemQuantity,
+			$r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
+			rank($r['rank']),
 			($view=='index'?substr(htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'),0,300).'...':htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'))
 		],$items); /* help */
 		$r['notes']=strip_tags($r['notes']);
@@ -477,18 +493,25 @@ $html=preg_replace([
 	'/<[\/]?items>/',
 	'/<[\/]?contentitems>/'
 ],'',$html);
-if(stristr($html,'<more>')){
-	if($s->rowCount()<=$config['showItems'])$html=preg_replace('~<more>.*?<\/more>~is','',$html,1);
-	else{
-		$html=preg_replace([
-			'/<[\/]?more>/',
-			'/<print view>/',
-			'/<print contentType>/',
-			'/<print config=[\"\']?showItems[\"\']?>/'
-		],[
-			'',
-			$view,
-			$config['showItems']
-		],$html);
+if(stristr($html,'<pagination>')){
+	$paginationItems='';
+	if($config['showItems']>0){
+		$num=ceil(($rowCount / $config['showItems']) - 1);
+		$numi=1;
+		if($num>0){
+			$paginationItems.='<li>'.($itemPage==0?'<span>First</span>':'<a href="'.URL.$view.'">First</a>').'</li>';
+			while($numi < $num){
+				$paginationItems.='<li>'.($itemPage==$numi?'<span>'.($numi+1).'</span>':'<a href="'.URL.$view.'?page='.$numi.'">'.($numi+1).'</a>').'</li>';
+				$numi++;
+			}
+			$paginationItems.='<li>'.($itemPage==$num?'<span>Last</span>':'<a href="'.URL.$view.'?page='.$num.'">Last</a>').'</li>';
+		}
 	}
+	$html=preg_replace([
+		$num>0?'/<\/?pagination>/':'~<pagination>.*?<\/pagination>~is',
+		'/<paginationitems>/'
+	],[
+		'',
+		$paginationItems
+	],$html);
 }

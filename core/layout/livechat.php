@@ -7,13 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
-if($args[0]=='settings')
-  require'core/layout/set_livechat.php';
+if($args[0]=='settings')require'core/layout/set_livechat.php';
 else{?>
 <main>
   <section id="content">
@@ -48,9 +46,7 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
               <span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_<?=$r['id'];?>" data-sid="<?=$r['sid'];?>" data-chatname="<?=$r['name'];?>" data-chatemail="<?=$r['email'];?>">
                 <span class="btn-group float-right">
                   <?php $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-                  $scc->execute([
-                    ':ip'=>$r['ip']
-                  ]);
+                  $scc->execute([':ip'=>$r['ip']]);
                   if($scc->rowCount()<1){?>
                     <form id="blacklist<?=$r['id'];?>" target="sp" method="post" action="core/add_blacklist.php">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">

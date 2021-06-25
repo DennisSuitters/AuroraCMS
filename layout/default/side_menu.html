@@ -1,17 +1,25 @@
-	<aside class="col-12 col-sm-3 order-1 order-sm-2 mt-3 mb-0 mb-sm-5 px-3 px-sm-0">
+	<aside class="col-12 col-sm-3 order-1 order-sm-2 mb-5 mb-sm-5 px-3">
 		<sort>
 			<div class="card mx-auto mb-3">
 				<div class="card-body my-4">
+					<legend>Item Display Options</legend>
 					<form method="post" action="">
 						<input type="hidden" name="act" value="sort">
-						<label for="sort" class="h3">Sort Items</label>
 						<div class="row">
-							<select id="sort" class="col-9" name="sort">
+							<label for="sort" class="col-4">Sort Order</label>
+							<select id="sort" class="col-8" name="sort">
 								<option value="">Select a Sort Option</option>
 								<sortOptions>
 							</select>
-							<button class="col-3" type="submit">Sort</button>
 						</div>
+						<showItems>
+							<div class="row mt-3">
+								<label for="itemCount" class="col-4">Show</label>
+								<input id="itemCount" class="col-3" type="number" name="itemCount" value="<itemCount>">
+								<label for="itemCount" class="col-2 ml-3">items</label>
+							</div>
+						</showItems>
+						<button class="btn-block mt-3" type="submit">Sort</button>
 					</form>
 				</div>
 			</div>
@@ -29,7 +37,9 @@
 						</service>
 						<inventory>
 							<choices>
-							<button class="addCart mt-3" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+							<addtocart>
+								<button class="addCart mt-3" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+							</addtocart>
 							<condition>
 								<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
 							</condition>

@@ -7,15 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `id`=:id");
-$s->execute([
-  ':id'=>$args[1]
-]);
+$s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section id="content">
@@ -54,10 +51,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
           <div class="col-12 col-md-2 order-1 order-md-2 mb-4 mb-md-0">
-            <?php if(file_exists('media/sm/'.basename($r['file'])))
-              $thumb='media/sm/'.basename($r['file']);
-            else
-              $thumb=NOIMAGE;?>
+            <?php if(file_exists('media/sm/'.basename($r['file'])))$thumb='media/sm/'.basename($r['file']);
+            else$thumb=NOIMAGE;?>
             <a class="card bg-dark m-2" data-fancybox="media" href="<?=$r['file'];?>">
               <img src="<?=$thumb;?>" alt="Media <?=$r['id'];?>">
             </a>

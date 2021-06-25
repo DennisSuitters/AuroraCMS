@@ -7,13 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 $rank=0;
 $notification='';
+$html=preg_replace([
+  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?notes[\"\']?>/',
+],[
+  '',
+  $page['notes']
+],$html);
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
   $breaditem=$matches[1];

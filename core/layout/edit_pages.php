@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Adjust what Tabs are displayed depending on Page being edited.
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `id`=:id");
 $s->execute([':id'=>$args[1]]);
@@ -32,7 +30,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
           <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/pages';?>">Pages</a></li>
           <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
-          <li class="breadcrumb-item active"><span id="titleupdate"><?=$r['title'];?></span></li>
+          <li class="breadcrumb-item active breadcrumb-dropdown">
+            <span id="titleupdate"><?=$r['title'];?></span><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+            <ul class="breadcrumb-dropper">
+<?php $sd=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `menu`!='none' AND `id`!=:id ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+$sd->execute([':id'=>$r['id']]);
+while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$rd['id'].'">'.$rd['title'].'</a></li>';?>
+            </ul>
+          </li>
         </ol>
       </div>
     </div>
@@ -46,7 +51,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <?=$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'';?>
           <input id="tab1-4" class="tab-control" name="tabs" type="radio">
           <label for="tab1-4">SEO</label>
-          <?=$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
+          <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
@@ -394,76 +399,94 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 */ ?>
           </div>
 <?php /* Settings */
-          if($r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
+          if($r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
             <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
-              <div class="row mt-3">
-                <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
-                <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
-              </div>
-              <label id="pageAccess" for="rank"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAccess" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Access</label>
-              <div class="form-row">
-                <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="rank" onchange="update('<?=$r['id'];?>','menu','rank',$(this).val(),'select');"<?=$user['options'][5]==1?'':' disabled';?>>
-                  <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
-                  <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber and above</option>
-                  <option value="200"<?=$r['rank']==200?' selected':'';?>>Member and above</option>
-                  <option value="300"<?=$r['rank']==300?' selected':'';?>>Client and above</option>
-                  <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor and above</option>
-                  <option value="500"<?=$r['rank']==500?' selected':'';?>>Author and above</option>
-                  <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor and above</option>
-                  <option value="700"<?=$r['rank']==700?' selected':'';?>>Moderator and above</option>
-                  <option value="800"<?=$r['rank']==800?' selected':'';?>>Manager and above</option>
-                  <option value="900"<?=$r['rank']==900?' selected':'';?>>Administrator and above</option>
-                </select>
-              </div>
-              <?php if($user['rank']>899){?>
-                <div class="form-row mt-3">
-                  <label id="pageContentType" for="contentType"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageContentType" aria-label="PermaLink to Page Content Type Field">&#128279;</a>':'';?>contentType</label>
-                  <small class="form-text text-right">
-                    <?php $sct=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
-                    $sct->execute();
-                    while($rct=$sct->fetch(PDO::FETCH_ASSOC))echo$rct['contentType'].' ';
-                    ?>
-                  </small>
-                </div>
-                <div class="form-row">
-                  <input class="textinput" id="contentType" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="contentType" type="text" value="<?=$r['contentType'];?>" placeholder="">
-                  <button class="save" id="savecontentType" data-dbid="contentType" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <?php if($r['file']!='index'){?>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
+                  <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                  <label for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
                 </div>
               <?php }?>
-              <div class="form-row mt-3">
-                <label id="pageURLType" for="url"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageURLType" aria-label="PermaLink to Page URL Type Field">&#128279;</a>':'';?>URL&nbsp;Type</label>
-                <small class="form-text text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <code class="click" style="cursor:pointer;" onclick="$('#url').val('#<?=$r['contentType'];?>');update('<?=$r['id'];?>','menu','url',$('#url').val());"><small>#<?=$r['contentType'];?></small></code> to link to Anchor on same page.</small>
+              <div class="row mt-3">
+                <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableSlider" aria-label="PermaLink to Slider Checkbox">&#128279;</a>':'';?>
+                <input id="enableSlider" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="1" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                <label for="enableSlider" id="configoptions11">Enable Content Slider</label>
               </div>
-              <div class="form-row">
-                <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="url" type="text" value="<?=$r['url'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=$user['options'][1]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-              </div>
-              <div class="row">
-                <div class="col-12 col-md-6 pr-md-1">
-                  <label id="pageMenu" for="menu"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMenu" aria-label="PermaLink to Page Menu Selector">&#128279;</a>':'';?>Menu</label>
-                  <div class="form-row">
-                    <select id="menu"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','menu','menu',$(this).val(),'select');">
-                      <option value="head"<?=$r['menu']=='head'?' selected':'';?>>Head</option>
-                      <option value="other"<?=$r['menu']=='other'?' selected':'';?>>Other</option>
-                      <option value="footer"<?=$r['menu']=='footer'?' selected':'';?>>Footer</option>
-                    </select>
-                  </div>
+              <?php if($r['file']!='index'){?>
+                <label id="pageAccess" for="rank"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAccess" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Access</label>
+                <div class="form-row">
+                  <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="rank" onchange="update('<?=$r['id'];?>','menu','rank',$(this).val(),'select');"<?=$user['options'][5]==1?'':' disabled';?>>
+                    <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
+                    <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber and above</option>
+                    <option value="200"<?=$r['rank']==200?' selected':'';?>>Member and above</option>
+                    <option value="210"<?=$r['rank']==210?' selected':'';?>>Member Silver and above</option>
+                    <option value="220"<?=$r['rank']==220?' selected':'';?>>Member Bronze and above</option>
+                    <option value="230"<?=$r['rank']==230?' selected':'';?>>Member Gold and above</option>
+                    <option value="240"<?=$r['rank']==240?' selected':'';?>>Member Platinum and above</option>
+                    <option value="300"<?=$r['rank']==300?' selected':'';?>>Client and above</option>
+                    <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler Silver and above</option>
+                    <option value="320"<?=$r['rank']==320?' selected':'';?>>Wholesaler Bronze and above</option>
+                    <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Gold and above</option>
+                    <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Platinum and above</option>
+                    <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor and above</option>
+                    <option value="500"<?=$r['rank']==500?' selected':'';?>>Author and above</option>
+                    <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor and above</option>
+                    <option value="700"<?=$r['rank']==700?' selected':'';?>>Moderator and above</option>
+                    <option value="800"<?=$r['rank']==800?' selected':'';?>>Manager and above</option>
+                    <option value="900"<?=$r['rank']==900?' selected':'';?>>Administrator and above</option>
+                  </select>
                 </div>
-                <div class="col-12 col-md-6 pl-md-1">
-                  <label id="pageSubMenu" for="mid"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSubMenu" aria-label="PermaLink to Page SubMenu Selector">&#128279;</a>':'';?>SubMenu</label>
-                  <div class="form-row">
-                    <select id="mid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','menu','mid',$(this).val(),'select');">
-                      <option value="0"<?=$r['mid']==0?' selected':'';?>>None</option>
-                      <?php $sm=$db->prepare("SELECT `id`,`title` from `".$prefix."menu` WHERE `mid`=0 AND `mid`!=:mid AND `active`=1 ORDER BY `ord` ASC, `title` ASC");
-                      $sm->execute([':mid'=>$r['id']]);
-                      if($sm->rowCount()>0){
-                        while($rm=$sm->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rm['id'].'"'.($r['mid']==$rm['id']?' selected':'').'>'.$rm['title'].'</option>';
-                      }?>
-                    </select>
+                <?php if($user['rank']>999){?>
+                  <div class="form-row mt-3">
+                    <label id="pageContentType" for="contentType"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageContentType" aria-label="PermaLink to Page Content Type Field">&#128279;</a>':'';?>contentType</label>
+                    <small class="form-text text-right">
+                      <?php $sct=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
+                      $sct->execute();
+                      while($rct=$sct->fetch(PDO::FETCH_ASSOC))echo$rct['contentType'].' ';?>
+                    </small>
                   </div>
+                  <div class="form-row">
+                    <input class="textinput" id="contentType" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="contentType" type="text" value="<?=$r['contentType'];?>" placeholder="">
+                    <button class="save" id="savecontentType" data-dbid="contentType" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+                  </div>
+                <?php }?>
+                <div class="form-row mt-3">
+                  <label id="pageURLType" for="url"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageURLType" aria-label="PermaLink to Page URL Type Field">&#128279;</a>':'';?>URL&nbsp;Type</label>
+                  <small class="form-text text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <code class="click" style="cursor:pointer;" onclick="$('#url').val('#<?=$r['contentType'];?>');update('<?=$r['id'];?>','menu','url',$('#url').val());"><small>#<?=$r['contentType'];?></small></code> to link to Anchor on same page.</small>
                 </div>
-              </div>
+                <div class="form-row">
+                  <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="url" type="text" value="<?=$r['url'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
+                  <?=$user['options'][1]==1?'<button class="save" id="saveurl" data-tooltip="tooltip" data-dbid="url" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+                <?php if($r['menu']=='head'||$r['menu']=='other'||$r['menu']=='footer'||$user['rank']>999){?>
+                  <div class="row">
+                    <div class="col-12 col-md-6 pr-md-1">
+                      <label id="pageMenu" for="menu"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMenu" aria-label="PermaLink to Page Menu Selector">&#128279;</a>':'';?>Menu</label>
+                      <div class="form-row">
+                        <select id="menu"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','menu','menu',$(this).val(),'select');">
+                          <option value="head"<?=$r['menu']=='head'?' selected':'';?>>Head</option>
+                          <option value="other"<?=$r['menu']=='other'?' selected':'';?>>Other</option>
+                          <option value="footer"<?=$r['menu']=='footer'?' selected':'';?>>Footer</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12 col-md-6 pl-md-1">
+                      <label id="pageSubMenu" for="mid"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSubMenu" aria-label="PermaLink to Page SubMenu Selector">&#128279;</a>':'';?>SubMenu</label>
+                      <div class="form-row">
+                        <select id="mid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','menu','mid',$(this).val(),'select');">
+                          <option value="0"<?=$r['mid']==0?' selected':'';?>>None</option>
+                          <?php $sm=$db->prepare("SELECT `id`,`title` from `".$prefix."menu` WHERE `mid`=0 AND `mid`!=:mid AND `active`=1 ORDER BY `ord` ASC, `title` ASC");
+                          $sm->execute([':mid'=>$r['id']]);
+                          if($sm->rowCount()>0){
+                            while($rm=$sm->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rm['id'].'"'.($r['mid']==$rm['id']?' selected':'').'>'.$rm['title'].'</option>';
+                          }?>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                <?php }?>
+              <?php }?>
             </div>
           <?php }?>
         </div>

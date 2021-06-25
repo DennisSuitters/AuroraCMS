@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
 */
 function strip_html_tags($t,$l=400){
  $t=preg_replace([
@@ -45,10 +44,8 @@ function is_base64_string($s){
  if(in_array($e,array('UTF-8','ASCII')))return TRUE;else return FALSE;
 }
 if($user['options'][3]==1){
-  if($args[0]=='settings')
-    require'core/layout/set_messages.php';
-  elseif($args[0]=='view'||$args[0]=='compose')
-    require'core/layout/edit_messages.php';
+  if($args[0]=='settings')require'core/layout/set_messages.php';
+  elseif($args[0]=='view'||$args[0]=='compose')require'core/layout/edit_messages.php';
   else{
     $folder="INBOX";
     if(isset($args[0])){
@@ -143,9 +140,7 @@ if($user['options'][3]==1){
                             <div class="btn-group" role="group">
                               <?php if($user['options'][0]==1){
                                 $scc=$db->prepare("SELECT `email` FROM `".$prefix."whitelist` WHERE `email`=:email");
-                                $scc->execute([
-                                  ':email'=>$r['from_email']
-                                ]);
+                                $scc->execute([':email'=>$r['from_email']]);
                                 if($scc->rowCount()<1){?>
                                   <form id="whitelist<?=$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
                                     <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -153,9 +148,7 @@ if($user['options'][3]==1){
                                   </form>
                                 <?php }
                                 $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
-                                $scc->execute([
-                                  ':ip'=>$r['ip']
-                                ]);
+                                $scc->execute([':ip'=>$r['ip']]);
                                 if($scc->rowCount()<1){?>
                                   <form id="blacklist<?=$r['id'];?>" target="sp" method="post" action="core/add_messageblacklist.php">
                                     <input name="id" type="hidden" value="<?=$r['id'];?>">

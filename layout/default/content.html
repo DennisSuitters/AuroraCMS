@@ -2,8 +2,8 @@
 <block include="header.html">
 <block inbed="content">
 	<breadcrumb>
-		<section class="row mt-3 mb-0">
-			<nav class="col-12">
+		<section class="row">
+			<nav>
 				<ol class="breadcrumb">
 					<json-ld-breadcrumb>
 					<breaditems>
@@ -17,13 +17,25 @@
 		</section>
 	</breadcrumb>
 	<section class="row mb-5">
+		<category-nav>
+			<aside class="col-12 col-sm-2-5 p-0 mt-0 mx-3">
+				<div class="card">
+					<nav class="category-nav">
+						<ul>
+							<catlist>
+						</ul>
+					</nav>
+				</div>
+			</aside>
+		</category-nav>
 		<item>
-			<article class="card col-12 col-sm-8">
+			<article class="card col-12 col-sm m-0 p-0">
 				<json-ld>
 				<image>
 					<figure class="card-image full">
 						<img <print content=srcset>src="<print content=image>" loading="lazy" alt="<print content=imageALT>">
 						<figcaption><print content="figcaption"></figcaption>
+						<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
 					</figure>
 				</image>
 				<videoviewer>
@@ -49,7 +61,9 @@
 								</service>
 								<inventory>
 									<choices>
-									<button class="addCart btn-block" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+									<addtocart>
+										<button class="addCart btn-block" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+									</addtocart>
 									<condition>
 										<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
 									</condition>
@@ -144,6 +158,7 @@
 											</h4>
 										</div>
 										<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print related="contentType"></div>
+										<div class="corner-ribbon big top-left <print related=cssrank> text-uppercase font-weight-bold shadow-sm"><print related="rank"></div>
 									</article>
 								</relitems>
 							</section>
@@ -154,39 +169,57 @@
 		</item>
 		<settings itemCount="all">
 		<contentitems>
-			<section class="col-12 col-sm-8 order-2 order-sm-1">
+			<section class="col-12 col-sm order-2 order-sm-1">
 				<pagenotes>
-					<article class="col-12 m-0 pb-0 hidewhenempty"><print page="notes"></article>
+					<article class="col-12 m-0 p-0 px-3 hidewhenempty"><print page="notes"></article>
 				</pagenotes>
+				<pagination>
+					<div class="row">
+						<nav class="justify-content-center">
+							<ul class="pagination">
+								<paginationitems>
+							</ul>
+						</nav>
+					</div>
+				</pagination>
 				<items>
-					<article class="card col-12 col-sm-5">
-						<div class="card-image">
-							<a href="<print content=linktitle>">
-								<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
-							</a>
-							<quickview>
-								<div class="quickview" aria-hidden="true">
-									<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
-								</div>
-							</quickview>
-						</div>
-						<div class="card-header">
-							<div class="title"><h2 class="h4 line-clamp"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></h2></div>
-							<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
-						</div>
-						<div class="card-body">
-							<print content="notes">
-						</div>
-						<div class="corner-ribbon big top-right text-uppercase font-weight-bold shadow-sm"><print content="quantity"></div>
-						<div class="corner-ribbon small top-right success text-uppercase font-weight-bold shadow-sm"><print content="cost"></div>
-						<div class="card-footer">
-								<a class="btn" href="<print content=linktitle>" role="button">View</a>
-						</div>
-					</article>
+					<div class="col-12 col-sm-5">
+						<article class="card">
+							<div class="card-image">
+								<a href="<print content=linktitle>">
+									<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
+								</a>
+								<quickview>
+									<div class="quickview" aria-hidden="true">
+										<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+									</div>
+								</quickview>
+							</div>
+							<div class="card-header">
+								<div class="title"><h2 class="h4 line-clamp"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></h2></div>
+								<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
+							</div>
+							<div class="card-body">
+								<print content="notes">
+							</div>
+							<div class="corner-ribbon big top-right text-uppercase font-weight-bold shadow-sm"><print content="quantity"></div>
+							<div class="corner-ribbon small top-right success text-uppercase font-weight-bold shadow-sm"><print content="cost"></div>
+							<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
+							<div class="card-footer">
+									<a class="btn" href="<print content=linktitle>" role="button">View</a>
+							</div>
+						</article>
+					</div>
 				</items>
-				<more>
-					<button id="more<print config=showItems>" class="addMore btn btn-outline-secondary btn-block" data-contenttype="<print contentType>" data-view="<print view>" data-itemcount="<print config=showItems>">More</button>
-				</more>
+				<pagination>
+					<div class="row">
+						<nav class="justify-content-center">
+							<ul class="pagination">
+								<paginationitems>
+							</ul>
+						</nav>
+					</div>
+				</pagination>
 			</section>
 		</contentitems>
 </block>

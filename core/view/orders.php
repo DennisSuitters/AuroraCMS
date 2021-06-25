@@ -7,15 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Allow Single Order to be viewed without being logged in.
- * @changes    v0.1.2 Add Parsing for Payment Options.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'core/puconverter.php';
-$html=preg_replace(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false?'~<orderlist>.*?<\/orderlist>~is':'/<\/orderlist>/','',$html,1);
+$html=preg_replace([
+  isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false?'~<orderlist>.*?<\/orderlist>~is':'/<[\/]?orderlist>/',
+  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?notes[\"\']?>/',
+],[
+  '',
+  '',
+  $page['notes']
+],$html);
 if(stristr($html,'<order>')){
   preg_match('/<order>([\w\W]*?)<\/order>/',$html,$matches);
   $order=$matches[1];
@@ -124,7 +129,7 @@ if(isset($args[0])&&$args[0]!=''){
       $r['status'],
       htmlspecialchars(ucfirst($r['status']),ENT_QUOTES,'UTF-8'),
     ],$order);
-    $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `ti` ASC");
+    $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC, `title` ASC");
     $ois->execute([':oid'=>$r['id']]);
     $outitems='';
     $total=$weight=$totalWeight=$dimW=$dimL=$dimH=0;
@@ -138,10 +143,12 @@ if(isset($args[0])&&$args[0]!=''){
       $c=$sc->fetch(PDO::FETCH_ASSOC);
       $item=$orderItem;
       $gst=0;
-      if($config['gst']>0){
-        $gst=$oir['cost']*($config['gst']/100);
-        if($oir['quantity']>1)$gst=$gst*$oir['quantity'];
-        $gst=number_format((float)$gst, 2, '.', '');
+      if($oir['status']!='pre-order'){
+        if($config['gst']>0){
+          $gst=$oir['cost']*($config['gst']/100);
+          if($oir['quantity']>1)$gst=$gst*$oir['quantity'];
+          $gst=number_format((float)$gst, 2, '.', '');
+        }
       }
       $item=preg_replace([
         '/<print zebra>/',
@@ -164,14 +171,16 @@ if(isset($args[0])&&$args[0]!=''){
         htmlspecialchars($oir['quantity'],ENT_QUOTES,'UTF-8'),
         htmlspecialchars($oir['cost'],ENT_QUOTES,'UTF-8'),
         $gst,
-        htmlspecialchars($oir['cost']*$oir['quantity']+$gst,ENT_QUOTES,'UTF-8')
+        ($oir['status']!='pre-order'?htmlspecialchars($oir['cost']*$oir['quantity']+$gst,ENT_QUOTES,'UTF-8'):'<small>Pre-Order</small>')
       ],$item);
-      $total=$total+($oir['cost']*$oir['quantity'])+$gst;
-      if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+      if($oir['status']!='pre-order'){
+        $total=$total+($oir['cost']*$oir['quantity'])+$gst;
+      }
+      if(isset($i['weightunit'])&&$i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 			$weight=(int)$weight+((int)$i['weight']*(int)$oir['quantity']);
-			if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
-			if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
-			if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+			if(isset($i['widthunit'])&&$i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+			if(isset($i['lengthunit'])&&$i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+			if(isset($i['heightunit'])&&$i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
 			if($i['width']>$dimW)$dimW=$i['width'];
 			if($i['length']>$dimL)$dimL=$i['length'];
 			$dimH=(int)$dimH+((int)$i['height']*(int)$oir['quantity']);
@@ -230,7 +239,7 @@ if(isset($args[0])&&$args[0]!=''){
         $sd->rowCount()>0?'Spent over &#36;'.$rd['f'].' discount of '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off':'',
         $dedtot
       ],$order);
-    }else $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order,1);
+    }else$order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order,1);
     $order=preg_replace([
       '/<print orderurl>/',
       '/<print order=[\"\']?oid[\"\']?>/',
@@ -244,14 +253,9 @@ if(isset($args[0])&&$args[0]!=''){
     ],$order);
     $total=$total+$r['postageCost'];
     $total=number_format((float)$total, 2, '.', '');
-
     $paytot=0;
-    if($r['payMethod']==1){
-      $paytot=$total*($r['payCost']/100);
-    }
-    if($r['payMethod']==2){
-      $paytot=$r['payCost'];
-    }
+    if($r['payMethod']==1)$paytot=$total*($r['payCost']/100);
+    if($r['payMethod']==2)$paytot=$r['payCost'];
     $total=number_format((float)$total, 2, '.', '');
     $order=preg_replace([
       '/<print order=[\"\']?paymentOption[\"\']?>/',
@@ -303,15 +307,15 @@ if(isset($args[0])&&$args[0]!=''){
           $total
         ],$deductionHTML);
         $order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is',$deductionHTML,$order);
-      }else
-        $order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is','',$order);
+      }else$order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is','',$order);
     }
+    $so=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE id=:id");
+    $so->execute([
+      ':id'=>$r['id'],
+      ':total'=>$total
+    ]);
     $html=preg_replace('~<order>~is',$order,$html,1);
-    $html=preg_replace([
-      '/<print paypal>/'
-    ],[
-      (stristr($html,'<print paypal>')&&$r['status']!='paid'?'<div id="paypal-button-container"></div><script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script><script>paypal.Buttons({style:{shape:"rect",color:"gold",layout:"horizontal",label:"pay",},createOrder:function(data,actions){return actions.order.create({purchase_units:[{amount:{value:"'.$total.'"}}]});},Approve:function(data,actions){return actions.order.capture().then(function(details){alert("Transaction completed by "+details.payer.name.given_name+"!");});}}).render("#paypal-button-container");</script>':''),
-    ],$html);
+    $html=preg_replace('/<print paypal>/',(stristr($html,'<print paypal>')&&$r['status']!='paid'?'<div id="paypal-button-container"></div><script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script><script>paypal.Buttons({style:{shape:"rect",color:"gold",layout:"horizontal",label:"pay",},createOrder:function(data,actions){return actions.order.create({purchase_units:[{amount:{value:"'.$total.'"}}]});},Approve:function(data,actions){return actions.order.capture().then(function(details){alert("Transaction completed by "+details.payer.name.given_name+"!");});}}).render("#paypal-button-container");</script>':''),$html);
 /*          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
         '<div id="paypal-button-container"></div>'.
         '<script>paypal.Buttons({'.

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
@@ -52,16 +51,12 @@
                 $action='';
                 if($r['refTable']=='content'){
                   $sql=$db->prepare("SELECT * FROM ".$prefix.$r['refTable']." WHERE `id`=:rid");
-                  $sql->execute([
-                    ':rid'=>$r['rid']
-                  ]);
+                  $sql->execute([':rid'=>$r['rid']]);
                   $c=$sql->fetch(PDO::FETCH_ASSOC);
                 }
                 if($r['uid']!=0){
                   $su=$db->prepare("SELECT `id`,`username`,`avatar`,`gravatar`,`name`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
-                  $su->execute([
-                    ':id'=>$r['uid']
-                  ]);
+                  $su->execute([':id'=>$r['uid']]);
                   $u=$su->fetch(PDO::FETCH_ASSOC);
                 }else$u=['id'=>0,'username'=>'Anonymous','avatar'=>'','gravatar'=>'','name'=>'Anonymous','rank'=>1000];
                 $action.='<strong>Action:</strong> ';

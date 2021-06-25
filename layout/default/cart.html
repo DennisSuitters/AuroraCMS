@@ -2,15 +2,15 @@
 <block include="header.html">
 <block inbed="cart">
 	<pagenotes>
-    <section class="row mt-5">
-      <article class="col-12">
+    <section class="row">
+      <article>
       	<print page="notes">
       </article>
   	</section>
   </pagenotes>
-	<section class="row my-5">
+	<section class="row mb-5">
 		<emptycart>
-			<article id="cart" name="cart" class="col-12 col-sm-5 m-0 p-0">
+			<article id="cart" name="cart" class="col-12 col-sm-6 m-0 p-0 px-3">
 				<div class="card">
 					<h3 class="p-3">Your Cart</h3>
 					<table class="border-0">
@@ -27,7 +27,7 @@
 								<th class="small text-center border-0" style="width:40px;">Quantity</th>
 								<th class="small text-right border-0">X</th>
 								<th class="w-10 small text-center border-0">Cost</th>
-								<th class="small text-right border-0" style="width:30px;">+</th>
+								<th class="small text-center border-0" style="width:30px;">+</th>
 								<th class="w-10 small text-center border-0">GST</th>
 								<th class="w-10 small text-right border-0">Total</th>
 							</tr>
@@ -93,7 +93,7 @@
 					<div class="text-right pr-2"><small>Prices are in Australian Dollars (AUD)</small></div>
 				</div>
 			</article>
-			<article class="col-12 col-sm-5 m-0 p-0 mb-5">
+			<article class="col-12 col-sm-6 m-0 p-0 px-3">
 				<iframe id="sp" name="sp" class="d-none"></iframe>
 				<form class="card p-3" method="post" action="cart/confirm">
 					<input type="hidden" name="<print hash>" value="<print timecode>">

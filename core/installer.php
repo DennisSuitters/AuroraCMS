@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.0
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,8 +35,7 @@ if($_POST['emailtrap']==''){
 				 'version = '.time().PHP_EOL.
 				 'url = '.PHP_EOL.
 				 'admin = '.PHP_EOL;
-		if(file_exists('config.ini'))
-			unlink('config.ini');
+		if(file_exists('config.ini'))unlink('config.ini');
 		$oFH=fopen("config.ini",'w');
 		fwrite($oFH,$txt);
 		fclose($oFH);
@@ -89,19 +88,14 @@ if($_POST['emailtrap']==''){
 				],$sql);
 			$q=$db->exec($sql);
 			$e=$db->errorInfo();
-			if(is_null($e[2])){
-				echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-success" role="alert">Database Import Succeeded!</div>`);</script>';
-			}
+			if(is_null($e[2]))echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-success" role="alert">Database Import Succeeded!</div>`);</script>';
 			require'db.php';
 			$prefix=$settings['database']['prefix'];
 			$sql=$db->prepare("UPDATE `".$prefix."config` SET `theme`=:theme,`maintenance`=1 WHERE `id`=1");
-			$sql->execute([
-				':theme'=>$aTheme
-			]);
+			$sql->execute([':theme'=>$aTheme]);
 			$e=$db->errorInfo();
-			if(!is_null($e[2])){
-				echo'<script>window.top.window.alert(`'.$e[2].'`);</script>';
-			}else{
+			if(!is_null($e[2]))echo'<script>window.top.window.alert(`'.$e[2].'`);</script>';
+			else{
 				echo'<script>'.
 					'window.top.window.$("#step2").addClass("d-none");'.
 					'window.top.window.$("#step3").removeClass("d-none");'.
@@ -129,9 +123,8 @@ if($_POST['emailtrap']==''){
 			':ti'=>time()
 		]);
 		$e=$db->errorInfo();
-		if(!is_null($e[2])){
-			echo'<script>window.top.window.alert(`'.$e[2].'`);</script>';
-		}else{
+		if(!is_null($e[2]))echo'<script>window.top.window.alert(`'.$e[2].'`);</script>';
+		else{
 			echo'<script>'.
 				'window.top.window.$("#step3").addClass("d-none");'.
 				'window.top.window.$("#step4").removeClass("d-none");'.

@@ -1,5 +1,10 @@
 /* stylesheet v0.9 - Extras - https://github.com/DiemenDesign/stylesheet */
 
+nav ul li ul li {
+  min-width: auto;
+  max-width: auto;
+}
+
 /* Back To Top Styling */
 #back-top-top {
   width: 0;
@@ -23,6 +28,17 @@
   font-size: .8rem;
   color: #000; }
 
+
+
+.select-sm,
+.select-sm:focus {
+  margin: 0 0 0 0;
+  padding: 0 0 0 0;
+  color: #000;
+  font-size: 1em; }
+
+.select-sm option {
+  color: #000; }
 
 /* Search Results */
 .search-item-info {
@@ -657,6 +673,9 @@ figcaption:empty,
 .breadcrumb {
   display: flex; }
 
+.breadcrumb-item {
+  position: relative; }
+
 .breadcrumb-item + .breadcrumb-item {
   padding-left: .5rem; }
 
@@ -668,6 +687,30 @@ figcaption:empty,
 
 .breadcrumb-item.active {
   color: var(--color-muted); }
+
+.breadcrumb-dropdown:hover .breadcrumb-dropper {
+  display: block !important; }
+
+.breadcrumb-dropper {
+  display: none;
+  z-index: 1000;
+  position: absolute;
+  top: 15px;
+  left: 0;
+  z-index: 100;
+  box-shadow: var(--box-shadow-x) var(--box-shadow-y) var(--box-shadow-spread) var(--box-shadow-spread) var(--box-shadow-color);
+  border: var(--border-width) var(--border-style) var(--menu-dropdown-border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--menu-dropdown-background-color);
+  padding: .5rem 1rem;
+  width: auto;
+  height: auto;
+  white-space: wrap;
+  list-style: none; }
+
+.breadcrumb-dropper a {
+  display: block;
+  font-size: 1em; }
 
 /* Alerts */
 .alert {

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 class vCard{
   protected $data=[
@@ -59,10 +58,8 @@ class vCard{
   protected $card;
   public function set($key,$value=null){
     if(is_array($key)){
-      foreach($key as$_key=>$_value)
-        $this->data[$_key]=trim($_value);
-    }elseif(!is_null($value))
-      $this->data[$key]=trim($value);
+      foreach($key as$_key=>$_value)$this->data[$_key]=trim($_value);
+    }elseif(!is_null($value))$this->data[$key]=trim($value);
     return$this;
   }
   protected function build(){

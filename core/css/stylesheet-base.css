@@ -150,11 +150,21 @@ nav ul li ul {
   padding: .5rem 1rem;
   width: auto;
   height: auto;
-  white-space: nowrap; }
+  white-space: wrap; }
 
 nav ul li ul li,
 nav ul li ul li a {
   display: block; }
+
+nav ul li ul li {
+  min-width: 300px;
+  max-width: 400px;
+}
+
+nav ul li ul li img {
+  width: 32px;
+  max-height: 32px;
+}
 
 /* Tables */
 caption {

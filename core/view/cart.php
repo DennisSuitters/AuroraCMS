@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add Parser for Payment Options.
- * @changes    v0.1.2 Check over and tidy up code.
  */
 require'core/puconverter.php';
 require'core/phpmailer/class.phpmailer.php';
@@ -35,6 +33,40 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 		$s->execute([':id'=>$qid]);
 	}
 	if($qty>0){
+		$rank=isset($_SESSION['rank'])?$_SESSION['rank']:0;
+		$limit=0;
+		if($rank!=0){
+		  $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+		  $us->execute([':id'=>$uid]);
+		  $user=$us->fetch(PDO::FETCH_ASSOC);
+		  if($user['purchaseLimit']!=0)
+		    $limit=$user['purchaseLimit'];
+		  else{
+		    if($rank==200)
+		      $limit=$config['memberLimit'];
+		    if($rank==210)
+		      $limit=$config['memberLimitSilver'];
+		    if($rank==220)
+		      $limit=$config['memberLimitBronze'];
+		    if($rank==230)
+		      $limit=$config['memberLimitGold'];
+		    if($rank==240)
+		      $limit=$config['memberLimitPlatinum'];
+		    if($rank==310)
+		      $limit=$config['wholesaleLimitSilver'];
+		    if($rank==320)
+		      $limit=$config['wholesaleLimitBronze'];
+		    if($rank==330)
+		      $limit=$config['wholesaleLimitGold'];
+		    if($rank==340)
+		      $limit=$config['wholesaleLimitPlatinum'];
+		  }
+		  if($limit>0){
+		    if($qty > $limit){
+					$qty=$limit;
+		    }
+		  }
+		}
 		$s=$db->prepare("UPDATE `".$prefix."cart` SET `quantity`=:quantity WHERE `id`=:id");
 		$s->execute([
 			':quantity'=>$qty,
@@ -170,7 +202,7 @@ if($args[0]=='confirm'){
 					':sold'=>$sold,
 					':id'=>$r['iid']
 				]);
-				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`ti`) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:ti)");
+				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:status,:ti)");
 				$sq->execute([
 					':oid'=>$oid,
 					':iid'=>$r['iid'],
@@ -178,6 +210,7 @@ if($args[0]=='confirm'){
 					':title'=>$i['title'],
 					':quantity'=>$r['quantity'],
 					':cost'=>$r['cost'],
+					':status'=>$r['status'],
 					':ti'=>$ti
 				]);
 			}
@@ -312,7 +345,15 @@ if($args[0]=='confirm'){
 				$sco->rowCount()>0?'':'<input type="hidden" name="payoption" value="0">',
 				''
 			],$html);
-			$html=preg_replace(isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/','',$html);
+			if(isset($user['rank'])){
+				$us=$db->prepare("SELECT `email` FROM `".$prefix."login` WHERE `id`=:id");
+				$us->execute([':id'=>$uid]);
+				$u=$us->fetch(PDO::FETCH_ASSOC);
+			}
+			$html=preg_replace(
+				isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/',
+				isset($u['email'])&&$u['email']!=''?'<input type="hidden" name="email" value="'.$u['email'].'">':'',
+			$html);
 		}else$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
 	}
 }

@@ -1,18 +1,24 @@
-<settings itemcount="all" contenttype="folder" order="random">
+<settings itemcount="10" contenttype="mixed" order="random">
 <div class="slider-wrapper">
 	<ul class="slider">
 		<items>
-	    <li>
+	    <li class="<carousel>">
 				<img src="<print content=image>" alt="<print content=title>">
 	      <caption>
-				  <div class="slider-caption">
-						<div class="title h2" role="heading"><a href="<print link>"><print content="title"></a></div>
-						<print content="caption">
-						<attribution>
-							<div class="attribution">
-								<a href="<print media=attributionURL>" target="_blank" rel="noopener noreferrer"><print media="attributionName"></a>
+				  <div class="slider-content">
+						<div class="row mt-0 mt-sm-4">
+							<thumb><div class="col-12 col-sm-3 mt-3 mt-sm-5 thumb order-<ord1>"><img class="<rand>" src="<print content=thumb>" alt="<print content=title>"></div></thumb>
+							<div class="info col-12 col-sm mx-0 mx-sm-5 px-0 pt-sm-5 px-0 px-sm-5 order-<ord2>">
+								<h3 class="slider-title text-center text-sm-left"><print content="title"></h3>
+								<div class="slider-caption d-none d-sm-block"><print content="caption"></div>
+								<div class="price mt-2 ml-3 d-none d-sm-block"><print content="cost"></div>
+								<div class="mx-5 text-right">
+									<a class="btn float-right" href="<print link>">Read More</a>
+								</div>
 							</div>
-						</attribution>
+						</div>
+						<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
+						<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
 	        </div>
 			  </caption>
 			</li>

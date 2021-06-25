@@ -7,13 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add Parsing of Google reCaptcha.
- * @changes    v0.1.2 Add parsing time duration field, and hidden encoded name field.
- * @changes    v0.1.2 Move adding to Blacklist SQL to end reducing to only one instance of the same code.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -28,23 +24,19 @@ $timecode=$_POST[$hash];
 if($timecode!=''){
   $timecheck=$ti - base64_decode($timecode);
   if($config['formMinTime']!=0){
-    if($timecheck < $config['formMinTime'])
-      $not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert-alert-danger','text'=>'Woah, too quick, blacklisted!','reason'=>'Contact Form filled in too quickly! ('.$config['formMinTime'].' seconds)'];
+    if($timecheck < $config['formMinTime'])$not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert-alert-danger','text'=>'Woah, too quick, blacklisted!','reason'=>'Contact Form filled in too quickly! ('.$config['formMinTime'].' seconds)'];
   }
   if($config['formMaxTime']!=0){
-    if($timecheck > ($config['formMaxTime']*60))
-      $not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Way too long to fill out a form!','reason'=>'Contact Form Exceeded time allowed! ('.$config['formMaxTime'].' minutes)'];
+    if($timecheck > ($config['formMaxTime']*60))$not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Way too long to fill out a form!','reason'=>'Contact Form Exceeded time allowed! ('.$config['formMaxTime'].' minutes)'];
   }
 }
 if($config['reCaptchaServer']!=''){
   if(isset($_POST['g-recaptcha-response'])){
     $captcha=$_POST['g-recaptcha-response'];
-    if(!$captcha)
-      $not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
+    if(!$captcha)$not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
     else{
       $responseKeys=json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($config['reCaptchaServer']).'&response='.urlencode($captcha)),true);
-      if($responseKeys["success"])
-        $not=['spammer'=>true,'target'=>'','element'=>'','action'=>'none','class'=>'','text'=>'','reason'=>'Contact Form reCaptcha Failed'];
+      if($responseKeys["success"])$not=['spammer'=>true,'target'=>'','element'=>'','action'=>'none','class'=>'','text'=>'','reason'=>'Contact Form reCaptcha Failed'];
     }
   }
 }
@@ -53,8 +45,7 @@ if($not['spammer']==false){
   if($act=='add_message'){
     if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
       $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
-      if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)
-        $not=['spam'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Contact found Blacklisted IP via Project Honey Pot'];
+      if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)$not=['spam'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Contact found Blacklisted IP via Project Honey Pot'];
     }
     if($_POST['fullname'.$hash]==''){
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
@@ -64,11 +55,9 @@ if($not['spammer']==false){
       if($config['spamfilter'][0]==1&&$note['spammer']==false&&$ip='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_email($email);
-        if($result)
-          $not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Contact Form, Spam Detected via Form Field Data.'];
+        if($result)$not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Contact Form, Spam Detected via Form Field Data.'];
         $result=$filter->check_text($subject.' '.$name.' '.$notes);
-        if($result)
-          $not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Contact Form, Spam Detected via Form Field Data.'];
+        if($result)$not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Contact Form, Spam Detected via Form Field Data.'];
       }
       if($not['spammer']==false&&$email!=''){
     		if(filter_var($email,FILTER_VALIDATE_EMAIL)){
@@ -113,10 +102,8 @@ if($not['spammer']==false){
   								 'Message: '.$notes;
   						$mail->Body=$msg;
   						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-  						if($mail->Send())
-                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
-  						else
-                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
+  						if($mail->Send())$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
+  						else$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
   						$mail2=new PHPMailer;
   						$mail2->isSendmail();
   						$mail2->SetFrom($config['email'],$config['business']);
@@ -153,13 +140,10 @@ if($not['spammer']==false){
   						],$msg2);
   						$mail2->Body=$msg2;
   						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-  						if($mail2->Send())
-                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
-              else
-                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
+  						if($mail2->Send())$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
+              else$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
     				}
-    			}else
-            $not=['spammer'=>false,'taget'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
+    			}else$not=['spammer'=>false,'taget'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
     		}
       }
   	}

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
@@ -21,14 +20,10 @@ define('URL', PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $sg=$db->prepare("SELECT `ip` FROM `".$prefix."tracker` WHERE `id`=:id");
-$sg->execute([
-  ':id'=>$id
-]);
+$sg->execute([':id'=>$id]);
 $gr=$sg->fetch(PDO::FETCH_ASSOC);
 $s=$db->prepare("SELECT * FROM `".$prefix."tracker` WHERE `ip`=:ip ORDER BY `ti` ASC");
-$s->execute([
-  ':ip'=>$gr['ip']
-]);
+$s->execute([':ip'=>$gr['ip']]);
 if($s->rowCount()>0){
 echo'<div class="fancybox-ajax">'.
       '<table class="table-zebra">'.

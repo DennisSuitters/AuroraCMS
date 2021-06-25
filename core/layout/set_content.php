@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
@@ -58,12 +57,18 @@
           <input class="textinput" id="showItems" data-dbid="1" data-dbt="config" data-dbc="showItems" type="text" value="<?=$config['showItems'];?>" placeholder="Enter Item Count...">
           <button class="save" id="saveshowItems" data-tooltip="tooltip" data-dbid="showItems" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
         </div>
+        <small class="form-text text-muted">'0' to Disable and display all items.</small>
         <div class="row mt-3">
           <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
           <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="enableQuickView" id="configoptions51">Quick View for Products</label>
         </div>
         <legend id="categoriesSection" class="mt-3 mb-0"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#categoriesSection" aria-label="PermaLink to Categories Section">&#128279;</a>':'';?>Categories</legend>
+        <div class="row mt-3">
+          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableCategoryNavigation" aria-label="PermaLink to Category Navigation Checkbox">&#128279;</a>':'';?>
+          <input id="enableCategoryNavigation" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="31" type="checkbox"<?=$config['options'][31]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="enableCategoryNavigation" id="configoptions311">Category Navigation</label>
+        </div>
         <form target="sp" method="post" action="core/add_category.php">
           <div class="row">
             <div class="col-12 col-md-6">

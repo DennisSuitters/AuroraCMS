@@ -1,35 +1,12 @@
 /* stylesheet v0.9 - Forms - https://github.com/DiemenDesign/stylesheet */
 
-button,
 .btn,
+button,
 [role="button"],
 [type="button"],
 [type="reset"],
 [type="submit"] {
-  -webkit-appearance: button; }
-
-[role="button"]:disabled,
-button:disabled,
-.btn:disabled,
-input:disabled {
-  color: var(--button-color-disabled) !important;
-  background-color: var(--button-background-color-disabled) !important;
-  border-color: var(--button-background-color-disabled) !important;
-  cursor: not-allowed !important; }
-
-[role="button"][disabled]:hover,
-button[disabled]:hover,
-.btn[disabled]:hover, {
-  color: var(--button-color-disabled) !important;
-  background-color: var(--button-background-color-disabled) !important;
-  border-color: var(--button-background-color-disabled !important);
-  cursor: not-allowed !important;
-  -webkit-filter: none !important;
-          filter: none !important; }
-
-[role="button"],
-button,
-.btn {
+  -webkit-appearance: button;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -41,8 +18,10 @@ button,
               border-color .15s ease-in-out,
               box-shadow .15s ease-in-out;
   margin: 0;
-  border: var(--button-border-width) var(--button-border-style) var(--button-border-color) !important;
-  border-radius: var(--border-radius) !important;
+  border-width: var(--button-border-width) !important;
+  border-style: var(--button-border-style) !important;
+  border-color: var(--button-border-color) !important;
+  border-radius: var(--button-border-radius) !important;
   background-color: var(--button-background-color) !important;
   padding: .65rem .75rem;
   color: var(--button-color) !important;
@@ -54,23 +33,24 @@ button,
   text-align: center;
   text-decoration: none; }
 
-.btn-sm {
-  padding: .2rem .6rem .4rem .3rem;
-  font-weight: 700;
-  font-size: .5rem; }
-
-[role="button"]:hover,
+.btn:hover,
 button:hover,
-.btn:hover {
+[role="button"]:hover,
+[type="button"]:hover,
+[type="reset"]:hover,
+[type="submit"]:hover {
   cursor: pointer;
   border: var(--button-border-width-hover) var(--button-border-style-hover) var(--button-border-color-hover) !important;
   background-color: var(--button-background-color-hover) !important;
   color: var(--button-color-hover) !important;
   text-decoration: none; }
 
-[role="button"]:focus,
 .btn:focus,
 button:focus,
+[role="button"]:focus,
+[type="button"]:focus,
+[type="reset"]:focus,
+[type="submit"]:focus,
 input:focus,
 select:focus,
 textarea:focus {
@@ -78,6 +58,39 @@ textarea:focus {
   box-shadow:0 0 0 .2rem var(--form-focus-shadow);
   border-width: var(--border-width) !important;
   border-color: var(--form-focus-border-color); }
+
+
+.btn:disabled,
+.btn.disabled,
+button:disabled,
+[role="button"]:disabled,
+input:disabled {
+  color: var(--button-color-disabled) !important;
+  background-color: var(--button-background-color-disabled) !important;
+  border-color: var(--button-background-color-disabled) !important;
+  cursor: not-allowed !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important; }
+
+.btn:disabled:hover,
+.btn.disabled:hover,
+.btn[disabled]:hover,
+[role="button"][disabled]:hover,
+button[disabled]:hover {
+  color: var(--button-color-disabled) !important;
+  background-color: var(--button-background-color-disabled) !important;
+  border-color: var(--button-background-color-disabled !important);
+  cursor: not-allowed !important;
+  -webkit-filter: none !important;
+          filter: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important; }
+
+.btn-sm {
+  padding: .2rem .6rem .4rem .3rem;
+  font-weight: 700;
+  font-size: .5rem; }
+
 
 .btn-block {
   width: 100% !important;
@@ -700,7 +713,7 @@ input[type="file"] + label {
   display: block;
   flex-shrink: 0;
   margin-left: -1px;
-  border: var(--border-width) var(--border-style) var(--button-border-color);
+  border: var(--button-border-width) var(--button-border-style) var(--button-border-color);
   border-radius: var(--button-border-radius);
   background-color: var(--button-background-color);
   padding: .375rem .75rem;
@@ -712,6 +725,8 @@ input[type="file"] + label * {
 
 input[type="file"]:focus + label,
 input[type="file"] + label:hover {
+  border: var(--button-border-width-hover) var(--button-border-style-hover) var(--button-border-color-hover);
+  color: var(--button-color-hover);
   background-color: var(--button-background-color-hover); }
 
 input[type="file"]:focus + label {

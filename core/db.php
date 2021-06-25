@@ -8,23 +8,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Check over and tidy up code.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(file_exists('../../../VERSION')){
-  if(!defined('DS'))
-    define('VERSION',trim(file_get_contents('../../../VERSION')));
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('../../../VERSION')));
 }elseif(file_exists('../../VERSION')){
   if(!defined('DS'))define('VERSION',trim(file_get_contents('../../VERSION')));
 }elseif(file_exists('../VERSION')){
-  if(!defined('DS'))
-    define('VERSION',trim(file_get_contents('../VERSION')));
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('../VERSION')));
 }else{
-  if(!defined('DS'))
-    define('VERSION',trim(file_get_contents('VERSION')));
+  if(!defined('DS'))define('VERSION',trim(file_get_contents('VERSION')));
 }
 if(session_status()==PHP_SESSION_NONE){
   session_start();
@@ -35,14 +31,10 @@ if(!isset($_SERVER['SCRIPT_URI'])){
   $pos=strrpos($_SERVER['SCRIPT_URI'],'/');
   if($pos!==false)$_SERVER['SCRIPT_URI']=substr($_SERVER['SCRIPT_URI'],0,$pos+1);
 }
-if(file_exists('../../core/config.ini'))
-  $settings=parse_ini_file('../../core/config.ini',TRUE);
-elseif(file_exists('../core/config.ini'))
-  $settings=parse_ini_file('../core/config.ini',TRUE);
-elseif(file_exists('core/config.ini'))
-  $settings=parse_ini_file('core/config.ini',TRUE);
-elseif(file_exists('config.ini'))
-  $settings=parse_ini_file('config.ini',TRUE);
+if(file_exists('../../core/config.ini'))$settings=parse_ini_file('../../core/config.ini',TRUE);
+elseif(file_exists('../core/config.ini'))$settings=parse_ini_file('../core/config.ini',TRUE);
+elseif(file_exists('core/config.ini'))$settings=parse_ini_file('core/config.ini',TRUE);
+elseif(file_exists('config.ini'))$settings=parse_ini_file('config.ini',TRUE);
 else{
   require ROOT_DIR.'/core/layout/install.php';
   die();

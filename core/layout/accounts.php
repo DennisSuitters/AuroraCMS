@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.1 Add Quick Edit to Accounts Table.
- * @changes    v0.1.2 Use PHP short codes where possible.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
  * Header Toolbar: Back, Fullscreen, Settings, Print, Email, Send, Add, SaveAll
  * Button Toolbar: Edit, Restore (hidden), Delete, Purge (hidden)
@@ -88,7 +85,9 @@ else{
                   <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><?=$r['username'].':'.$r['name'];?></a><br>
                   <small class="text-muted"><small><?= _agologgedin($r['lti']);?></small></small>
                 </td>
-                <td class="text-center align-middle d-none d-sm-table-cell"><?= ucfirst(rank($r['rank']));?></td>
+                <td class="text-center align-middle d-none d-sm-table-cell">
+                  <?='<span id="accountrank'.$r['id'].'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span>'.($r['options'][19]!=1?'<br><small id="wholesaler'.$r['id'].'">Approval Pending</small>':'');?>
+                </td>
                 <td class="text-center align-middle d-none d-sm-table-cell"><?=$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
                 <td class="align-middle" id="controls_<?=$r['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar">

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $rank=0;
 $show='pages';
@@ -68,7 +67,7 @@ else{
               </tr>
             </thead>
             <tbody id="sortable">
-              <?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' ORDER BY `menu` DESC, `ord` ASC");
+              <?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <tr class="item subsortable" id="l_<?=$r['id'];?>">
@@ -94,7 +93,7 @@ else{
                         <?php while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
                           <div class="item zebra border-bottom position-relative" style="position:relative;" id="l_<?=$rm['id'];?>">
                             <a href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'];?>"><?=$rm['title'];?></a>
-                            <?='<br><small class="text-muted">Available to '.($rm['rank']==0?'Everyone':ucfirst(rank($rm['rank'])).' and above').'</small>';?>
+                            <?='<br><small class="text-muted">Page Available to '.($rm['rank']==0?'Everyone':ucfirst(rank($rm['rank'])).' and above').'</small>';?>
                             <span style="position:absolute;top:0;right:0;" id="controls_<?=$rm['id'];?>" role="group">
                               <?=$user['options'][0]==1?'<button class="btn trash align-top" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);"><span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
                               <?=$r['contentType']!='index'?'<input id="active'.$rm['id'].'" data-dbid="'.$rm['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"'.($rm['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled').'>':'';?>
@@ -140,7 +139,7 @@ else{
                         <?php while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
                           <div class="zebra border-bottom position-relative" style="position:relative;">
                             <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"><?=$rm['title'];?></a>
-                            <?='<br><small class="text-muted">Available to '.($rm['rank']==0?'Everyone':ucfirst(rank($rm['rank'])).' and above').'</small>';?>
+                            <?='<br><small class="text-muted">'.ucfirst($rm['contentType']).' Available to '.($rm['rank']==0?'Everyone':ucfirst(rank($rm['rank'])).' and above').'</small>';?>
                             <span style="position:absolute;top:0;right:0;" id="controls_<?=$rm['id'];?>" role="group">
                               <?=$user['options'][0]==1?'<button class="btn-sm trash align-top" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);"><span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
                               <span class="i" style="width:24px;">&nbsp;</span>

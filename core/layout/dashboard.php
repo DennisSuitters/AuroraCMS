@@ -7,13 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
-if(isset($args[0])&&$args[0]=='settings')
-  require'core/layout/set_dashboard.php';
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_dashboard.php';
 else{?>
 <main>
   <section id="content">
@@ -33,24 +31,15 @@ else{?>
       <div class="card border-radius-0 shadow p-3">
         <?php $curHr=date('G');
         $msg='<h5 class="welcome-message my-4">';
-        if($curHr<12)
-          $msg.='Good Morning ';
-        elseif($curHr<18)
-          $msg.='Good Afternoon ';
-        else
-          $msg.='Good Evening ';
+        if($curHr<12)$msg.='Good Morning ';
+        elseif($curHr<18)$msg.='Good Afternoon ';
+        else$msg.='Good Evening ';
         $msg.=($user['name']!=''?strtok($user['name'], " "):$user['username']).'!'."<br>The date is ".date($config['dateFormat'])."</h5>";
         echo$msg.($config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').($config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
-        if(!file_exists('layout/'.$config['theme'].'/theme.ini')){
-          echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
-        }
+        if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         $tid=$ti-2592000;
-        if($config['business']==''){
-          echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
-        }
-        if($config['email']==''){
-          echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
-        }
+        if($config['business']=='')echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
+        if($config['email']=='')echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
         $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='seotips' ORDER BY rand() LIMIT 1");
         $sc->execute();
         if($sc->rowCount()>0){
@@ -64,9 +53,7 @@ else{?>
         }?>
         <div class="row">
           <?php $ss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."iplist` WHERE `ti`>=:ti");
-          $ss->execute([
-            'ti'=>time()-604800
-          ]);
+          $ss->execute(['ti'=>time()-604800]);
           $sa=$ss->fetch(PDO::FETCH_ASSOC);
           $bc=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Chrome'")->fetch(PDO::FETCH_ASSOC);
           $bie=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Explorer'")->fetch(PDO::FETCH_ASSOC);
@@ -138,7 +125,7 @@ else{?>
             <?php }
           }
           if($sa['cnt']>0){?>
-            <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/security#tab-1-3';?>">
+            <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/security#tab1-3';?>">
               <span class="h5">Blacklist</span>
               <span class="p-0">
                 <span class="text-3x" id="browser-blacklist"><?=$sa['cnt'];?></span> <small><small>Added Last 7 Days</small></small>
@@ -344,9 +331,7 @@ if($s->rowCount()>0){?>
                   <tbody>
 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
 $sr=$db->prepare("SELECT COUNT(`keywords`) AS `cnt` FROM `".$prefix."tracker` WHERE `keywords` LIKE :keywords");
-$sr->execute([
-  ':keywords'=>$r['keywords']
-]);
+$sr->execute([':keywords'=>$r['keywords']]);
 $rr=$sr->fetch(PDO::FETCH_ASSOC);?>
                       <tr>
                         <td class="text-truncated"><?=$r['keywords'];?></td>

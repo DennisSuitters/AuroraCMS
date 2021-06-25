@@ -16,6 +16,9 @@ function getClient(email){
 	$('#sp').load('core/get_client.php?email='+email);
 }
 document.addEventListener("DOMContentLoaded",function(){
+	$('.opener').click(function(e){
+		$(this).parent('li').toggleClass('open');
+	});
 	$('.auroraForm').click(function(e){
 		const formType=$(this).data('formtype');
 		$('#'+formType+'-btn').removeAttr('disabled');
@@ -66,23 +69,27 @@ $(document).on(
 			}
 		}).done(
 			function(msg){
-				$('.cart').text(msg);
-				if($('#cartage').length>0){
-					$.ajax({
-						type:"GET",
-						url:"core/update_cartage.php"
-					}).done(
-						function(msg){
-							$('#sidecart').removeClass('d-none');
-							$('#sidecart').removeClass('jello');
-							$('#sidecart').addClass('jello');
-							var height=$('#cartage').height();
-							$('#cartage').css('min-height',height);
-							$('#cartage').fadeOut(250, function() {
-        				$(this).html(msg).slideDown(250);
-    					});
-						}
-					);
+				if(msg=='nomore'){
+					alert('Purchase Limit Reached');
+				} else {
+					$('.cart').text(msg);
+					if($('#cartage').length>0){
+						$.ajax({
+							type:"GET",
+							url:"core/update_cartage.php"
+						}).done(
+							function(msg){
+								$('#sidecart').removeClass('d-none');
+								$('#sidecart').removeClass('jello');
+								$('#sidecart').addClass('jello');
+								var height=$('#cartage').height();
+								$('#cartage').css('min-height',height);
+								$('#cartage').fadeOut(250, function() {
+	        				$(this).html(msg).slideDown(250);
+	    					});
+							}
+						);
+					}
 				}
 		});
 	}

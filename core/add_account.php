@@ -7,14 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Move and rename this file into core/
- * @changes    v0.1.2 Add Parsing of Google reCaptcha.
- * @changes    v0.1.2 Add parsing time duration field, and hidden encoded name field.
- * @changes    v0.1.2 Move adding to Blacklist SQL to end reducing to only one instance of the same code.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 require'projecthoneypot/class.projecthoneypot.php';
@@ -40,12 +35,10 @@ if($timecode!=''){
 if($config['reCaptchaServer']!=''){
   if(isset($_POST['g-recaptcha-response'])){
     $captcha=$_POST['g-recaptcha-response'];
-    if(!$captcha)
-      $not=['spammer'=>false,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
+    if(!$captcha)$not=['spammer'=>false,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
     else{
       $responseKeys=json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($config['reCaptchaServer']).'&response='.urlencode($captcha)),true);
-      if($responseKeys["success"])
-        $not=['spammer'=>true,'target'=>'','element'=>'','action'=>'none','class'=>'','text'=>'','reason'=>'Create Account Form reCaptcha Failed'];
+      if($responseKeys["success"])$not=['spammer'=>true,'target'=>'','element'=>'','action'=>'none','class'=>'','text'=>'','reason'=>'Create Account Form reCaptcha Failed'];
     }
   }
 }
@@ -63,16 +56,13 @@ if($not['spammer']==false){
       if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip!='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_text($email.' '.$username);
-        if($result)
-          $not=['spammer'=>true,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Sign Up Form, Spam Detected via Form Field Data.'];
+        if($result)$not=['spammer'=>true,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Sign Up Form, Spam Detected via Form Field Data.'];
       }
       if($not['spammer']==false&&$email!=''){
         $s=$db->prepare("SELECT `email` FROM `".$prefix."login` WHERE `email`=:email");
         $s->execute([':email'=>$email]);
-        if($s->rowCount()>0)
-          $not=['spammer'=>false,'target'=>'signupemail','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-info','text'=>'Email is Already in Use!','reason'=>''];
-      }else
-        $not=['spammer'=>false,'target'=>'signupemail','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-info','text'=>'Email can NOT be blank','reason'=>''];
+        if($s->rowCount()>0)$not=['spammer'=>false,'target'=>'signupemail','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-info','text'=>'Email is Already in Use!','reason'=>''];
+      }else$not=['spammer'=>false,'target'=>'signupemail','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-info','text'=>'Email can NOT be blank','reason'=>''];
       if($not['spammer']==false){
         if(isset($_POST['terms'])&&$_POST['terms']=='yes'){
           if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
@@ -84,8 +74,7 @@ if($not['spammer']==false){
             $s=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:username LIMIT 1");
             $s->execute([':username'=>$username]);
             $r=$s->fetch(PDO::FETCH_ASSOC);
-            if($s->rowCount()>0)
-              $not=['spammer'=>false,'target'=>'signupusername','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-danger','text'=>'Username Already Exists!','reason'=>''];
+            if($s->rowCount()>0)$not=['spammer'=>false,'target'=>'signupusername','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-danger','text'=>'Username Already Exists!','reason'=>''];
             else{
               $chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&";
               $password=substr(str_shuffle($chars),0,8);
@@ -131,15 +120,11 @@ if($not['spammer']==false){
               ],$msg);
             	$mail->Body=$msg;
             	$mail->AltBody=$msg;
-            	if($mail->Send())
-                $not=['spammer'=>false,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Check the provided Email for Activation Details!','reason'=>''];
-              else
-                $not=['spammer'=>false,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Problem Sending Email','reason'=>''];
+            	if($mail->Send())$not=['spammer'=>false,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Check the provided Email for Activation Details!','reason'=>''];
+              else$not=['spammer'=>false,'target'=>'signup','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Problem Sending Email','reason'=>''];
             }
-          }else
-            $not=['spammer'=>false,'target'=>'signupusername','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-danger','text'=>'Must have a Username!','reason'=>''];
-        }else
-          $not=['spammer'=>false,'target'=>'signuptermsblock','element'=>'div','action'=>'after','class'=>'not alert alert-warning','text'=>'You Must agree to the Terms Of Service to Sign Up!','reason'=>''];
+          }else$not=['spammer'=>false,'target'=>'signupusername','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-danger','text'=>'Must have a Username!','reason'=>''];
+        }else$not=['spammer'=>false,'target'=>'signuptermsblock','element'=>'div','action'=>'after','class'=>'not alert alert-warning','text'=>'You Must agree to the Terms Of Service to Sign Up!','reason'=>''];
       }
     }
     echo(isset($not)?$not['target'].'|'.$not['element'].'|'.$not['action'].'|'.$not['class'].'|'.$not['text']:'');

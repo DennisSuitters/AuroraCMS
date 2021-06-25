@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 $rank=0;
 $show='';
@@ -127,11 +126,11 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		'/<print user=[\"\']?postcode[\"\']?>/',
 		'/<print user=[\"\']?country[\"\']?>/'
 	],[
-		file_exists('media/avatar/'.$user['avatar'])?'media/avatar/'.$user['avatar']:NOAVATAR,
+		$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar'])?'media/avatar/'.$user['avatar']:NOAVATAR,
 		htmlspecialchars($user['gravatar'],ENT_QUOTES,'UTF-8'),
 		date($config['dateFormat'],$user['ti']),
 		htmlspecialchars($user['username'],ENT_QUOTES,'UTF-8'),
-		ucfirst(rank($user['rank'])),
+		ucwords(str_replace('-',' ',rank($user['rank']))).(($user['rank']>301||$user['rank']<399)&&$user['options'][19]==1?'':' (Approval Pending)'),
 		htmlspecialchars($user['id'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['email'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['name'],ENT_QUOTES,'UTF-8'),
@@ -149,4 +148,11 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 }else{
 	if(file_exists(THEME.'/noaccess.html'))$html=file_get_contents(THEME.'/noaccess.html');
 }
+$html=preg_replace([
+  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?notes[\"\']?>/',
+],[
+  '',
+  $page['notes']
+],$html);
 $content.=$html;

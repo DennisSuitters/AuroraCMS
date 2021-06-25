@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Deprecate PDF creation in favour of emailing and opening Invoice for payment and/or printing.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
- * @changes    v0.1.2 Reformat Order output.
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -95,7 +92,7 @@ if($r['iid']!='')$oid=$r['iid'];
   $i=13;
   $ot=$st=$pwc=0;
   $zeb=1;
-  $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='delete' AND `status`!='neg'");
+  $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='delete' AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC, `title` ASC");
   $s->execute([':oid'=>$id]);
   while($ro=$s->fetch(PDO::FETCH_ASSOC)){
   	$si=$db->prepare("SELECT `code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
@@ -113,16 +110,23 @@ if($r['iid']!='')$oid=$r['iid'];
              '<td style="text-align:right;"><small>'.$ro['cost'].'</small></td>'.
              '<td style="text-align:center;"><small>';
              $gst=0;
-             if($config['gst']>0){
-                $gst=$ro['cost']*($config['gst']/100);
-                if($ro['quantity']>1)$gst=$gst*$ro['quantity'];
-                $gst=number_format((float)$gst,2,'.','');
+             if($ro['status']!='pre-order'){
+               if($config['gst']>0){
+                  $gst=$ro['cost']*($config['gst']/100);
+                  if($ro['quantity']>1)$gst=$gst*$ro['quantity'];
+                  $gst=number_format((float)$gst,2,'.','');
+               }
+               $html.=($gst>0?$gst:'').'</small>';
              }
-             $html.=($gst>0?$gst:'').'</small></td>';
-             $html.='<td style="text-align:right;">'.($st + $gst).'</td>'.
+             $html.='</td>'.
+             '<td style="text-align:right;">';
+             if($ro['status']!='pre-order'){
+               $html.=number_format((float)$st+$gst,2,'.','');
+               $ot=$ot+$st+$gst;
+               $ot=number_format((float)$ot,2,'.','');
+             }else$html.='<small>Pre-Order</small>';
+              $html.='</td>'.
             '</tr>';
-    $ot=$ot+$st+$gst;
-    $ot=number_format((float)$ot, 2, '.', '');
     $zeb=($zeb==1?0:1);
   }
   $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
@@ -155,12 +159,8 @@ if($r['iid']!='')$oid=$r['iid'];
     ]);
     if($sd->rowCount()>0){
       $rd=$sd->fetch(PDO::FETCH_ASSOC);
-      if($rd['value']==1){
-        $dedtot=$rd['cost'];
-      }
-      if($rd['value']==2){
-        $dedtot=$ot*($rd['cost']/100);
-      }
+      if($rd['value']==1)$dedtot=$rd['cost'];
+      if($rd['value']==2)$dedtot=$ot*($rd['cost']/100);
       $ot=$ot - $dedtot;
   $html.='<tr>'.
     '<td colspan="6"><small>Spent over &#36;'.$rd['f'].' discount of '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off').'</small></td>'.
@@ -178,12 +178,8 @@ if($r['iid']!='')$oid=$r['iid'];
   }
   if($r['payCost']!=0||$r['payOption']!=''){
     $paytot=0;
-    if($r['payMethod']==1){
-      $paytot=$ot*($r['payCost']/100);
-    }
-    if($r['payMethod']==2){
-      $paytot=$r['payCost'];
-    }
+    if($r['payMethod']==1)$paytot=$ot*($r['payCost']/100);
+    if($r['payMethod']==2)$paytot=$r['payCost'];
     $html.='<tr style="background-color:#f0f0f0">'.
               '<td colspan="6" class="text-right"><small>Payment Option: '.$r['payOption'].($r['payMethod']==1&&$r['payCost']>0?' ('.number_format((float)$r['payCost'],1,'.','').'&#37; Surcharge)':'').'</small></td>'.
               '<td style="text-align:right;">'.($paytot!=0?number_format((float)$paytot,2,'.',''):'').'</td>'.

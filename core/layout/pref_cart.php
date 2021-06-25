@@ -7,10 +7,9 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.1.2
+* @version    0.1.3
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
-* @changes    v0.1.2 Use PHP short codes where possible.
 */?>
 <main>
   <section id="content">
@@ -50,9 +49,7 @@
             $s->execute();
             while($r=$s->fetch(PDO::FETCH_ASSOC)){
               $ci=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-              $ci->execute([
-                ':id'=>$r['iid']
-              ]);
+              $ci->execute([':id'=>$r['iid']]);
               $cr=$ci->fetch(PDO::FETCH_ASSOC);?>
               <tr id="l_<?=$r['id'];?>">
                 <td class="text-wrap align-middle"><?= trim($r['id']);?></td>

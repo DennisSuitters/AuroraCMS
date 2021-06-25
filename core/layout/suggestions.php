@@ -7,13 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
-$getcfg=true;
 require'../db.php';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
@@ -55,6 +53,5 @@ if($s->rowCount()>0){?>
       <?php }?>
     </tbody>
   </table>
-<?php }else
-  echo'No Results Found...';
+<?php }else echo'No Results Found...';
 echo'</div>';

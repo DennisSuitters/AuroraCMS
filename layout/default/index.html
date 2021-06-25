@@ -6,10 +6,10 @@
 		<figure class="jumbotron"><print page="coverItem"></figure>
 	</cover>
 	<section class="row mt-5">
-		<article class="col-12 col-lg-8">
+		<article class="col-12 col-md">
 			<print page="notes">
 		</article>
-		<aside id="newsletters" class="col-12 col-md-3 m-0">
+		<aside id="newsletters" class="col-12 col-md-3 m-0 mr-3">
 			<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
 				<input type="hidden" name="act" value="add_subscriber">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
@@ -29,11 +29,11 @@
 		</aside>
 	</section>
 	<section class="jumbotron mt-5">
-		<img src="media/307093.jpg" alt="test">
+		<img class="filter" src="media/307093.jpg" alt="test">
   	<header class="mt-5">
-			<h2>Fluid jumbotron</h2>
+			<h2 class="text-white">Fluid jumbotron</h2>
 		</header>
-  	<p>This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+  	<p class="mt-5 text-white">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
 	</section>
 	<settings items="all" contenttype="all">
 	<section class="mt-5">
@@ -61,6 +61,7 @@
 				</div>
 				<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow-sm"><print content="quantity"></div>
 				<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
+				<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
 				<div class="card-footer">
 					<a class="btn" href="<print content=linktitle>">View</a>
 				</div>

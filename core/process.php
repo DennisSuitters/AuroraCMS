@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add disable tracking of IP's associated with selected user accounts.
- * @changes    v0.1.2 Allow inlining CSS directly into page, to speed up page loading, includes checking for @import and concatenates them.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'core/db.php';
 if(isset($headerType))header($headerType);

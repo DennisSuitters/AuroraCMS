@@ -7,152 +7,192 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Adjust code to use ResponsiveSlides are tiny, more versatilve Content Slider.
- * @changes    v0.1.2 Check over and tidy up code.
 */
-preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
-$html=preg_replace('~<settings.*?>~is','',$html,1);
-$itemCount=$matches[1];
-$limit=', '.$matches[1];
-if($itemCount==0){
-	$itemCount=$config['showItems'];
-	$limit='';
-}
-$contentType=$matches[2];
-$cT=$matches[2];
-if($contentType=='all'||$contentType=='mixed')$contentType='%';
-if($matches[3]=='asc'||$matches[3]=='ASC'){
-	$order='ti ASC';
-	$arrayOrder='asc';
-}elseif($matches[3]=='rand'||$matches[3]=='random'){
-	$order='RAND()';
-	$arrayOrder='random';
-}else{
-	$order='ti DESC';
-	$arrayOrder='desc';
-}
-preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
-$it=$matches[1];
-$items='';
-$fi=0;
-$featuredfiles=array();
-if($cT=='all'||$cT=='mixed'||$cT=='folder'){
-	if(file_exists('media/carousel/')){
-		foreach(glob('media/carousel/*.*')as$file){
-			$fileinfo=pathinfo($file);
-			$filetime=filemtime($file);
-			if($file=='.'||$file=='..')continue;
-			$filename=basename($file,'.'.$fileinfo['extension']);
-			if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'||$fileinfo['extension']=='webp'){
-				if(!in_array('media/carousel/'.$filename.'.html',$featuredfiles)){
-					$filehtml=file_exists('media/carousel/'.$filename.'.html')?file_get_contents('media/carousel/'.$filename.'.html'):'';
-					$featuredfiles[]=[
-						'contentType'=>'carousel',
-						'thumb'=>'',
-						'file'=>$file,
-						'title'=>basename(rtrim($file),3),
-						'link'=>'nolink',
-						'seoCaption'=>$filehtml,
-						'notes'=>'',
-						'ti'=>$filetime
-					];
+if($config['options'][1]==1){
+	preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
+	$html=preg_replace('~<settings.*?>~is','',$html,1);
+	$itemCount=$matches[1];
+	$limit=', '.$matches[1];
+	if($itemCount==0){
+		$itemCount=$config['showItems'];
+		$limit='';
+	}
+	$contentType=$matches[2];
+	$cT=$matches[2];
+	if($contentType=='all'||$contentType=='mixed')$contentType='%';
+	if($matches[3]=='asc'||$matches[3]=='ASC'){
+		$order='id ASC';
+		$arrayOrder='asc';
+	}elseif($matches[3]=='rand'||$matches[3]=='random'){
+		$order='RAND()';
+		$arrayOrder='random';
+	}else{
+		$order='id DESC';
+		$arrayOrder='desc';
+	}
+	preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
+	$it=$matches[1];
+	$items='';
+	$fi=0;
+	$featuredfiles=array();
+	if($cT!='folder'){
+		$sf=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `file`!='' AND `thumb`!='' AND `featured`='1' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY $order $limit");
+		$sf->execute([':rank'=>$_SESSION['rank']]);
+		while($f=$sf->fetch(PDO::FETCH_ASSOC)){
+			if($f['rank']>$_SESSION['rank'])continue;
+			$filechk=basename($f['file']);
+			if(file_exists('media/'.$filechk)){
+				$featuredfiles[]=[
+					'id'=>$f['id'],
+					'carousel'=>'',
+					'filehtml'=>'',
+					'options'=>$f['options'],
+					'contentType'=>$f['contentType'],
+					'rank'=>$f['rank'],
+					'urlSlug'=>$f['urlSlug'],
+					'thumb'=>$f['thumb'],
+					'file'=>$f['file'],
+					'fileALT'=>$f['fileALT'],
+					'title'=>$f['title'],
+					'link'=>$f['contentType'].'/'.$f['urlSlug'].'/',
+					'seoCaption'=>$f['seoCaption'],
+					'attributionImageTitle'=>$f['attributionImageTitle'],
+					'attributionImageName'=>$f['attributionImageName'],
+					'attributionImageURL'=>$f['attributionImageURL'],
+					'notes'=>$f['notes'],
+					'seoDescription'=>$f['seoDescription'],
+					'coming'=>$f['coming'],
+					'rrp'=>$f['rrp'],
+					'rCost'=>$f['rCost'],
+					'cost'=>$f['cost'],
+					'dCost'=>$f['dCost'],
+					'stockStatus'=>$f['stockStatus'],
+					'ti'=>$f['ti']
+				];
+			}
+		}
+	}
+	if($cT=='all'||$cT=='mixed'||$cT=='folder'){
+		if(file_exists('media/carousel/')){
+			foreach(glob('media/carousel/*.*')as$file){
+				$fileinfo=pathinfo($file);
+				$filetime=filemtime($file);
+				if($file=='.'||$file=='..')continue;
+				$filename=basename($file,'.'.$fileinfo['extension']);
+				if($fileinfo['extension']=='jpg'||$fileinfo['extension']=='jpeg'||$fileinfo['extension']=='png'||$fileinfo['extension']=='webp'){
+					if(!in_array('media/carousel/'.$filename.'.html',$featuredfiles)){
+						$filehtml=file_exists('media/carousel/'.$filename.'.html')?file_get_contents('media/carousel/'.$filename.'.html'):'';
+						$featuredfiles[]=[
+							'id'=>time(),
+							'carousel'=>$filehtml!=''?'filehtml':'folder',
+							'filehtml'=>$filehtml,
+							'options'=>00000000000000000000000000000000,
+							'contentType'=>'carousel',
+							'rank'=>$_SESSION['rank'],
+							'urlSlug'=>'',
+							'thumb'=>$file,
+							'file'=>$file,
+							'fileALT'=>basename(rtrim($file),3),
+							'title'=>basename(rtrim($file),3),
+							'link'=>'nolink',
+							'seoCaption'=>'',
+							'attributionImageTitle'=>$r['attributionImageTitle'],
+							'attributionImageName'=>$r['attributionImageName'],
+							'attributionImageURL'=>$r['attributionImageURL'],
+							'notes'=>'',
+							'seoDescription'=>'',
+							'coming'=>0,
+							'rrp'=>0,
+							'rCost'=>0,
+							'cost'=>0,
+							'dCost'=>0,
+							'stockStatus'=>'',
+							'ti'=>$filetime
+						];
+					}
 				}
 			}
 		}
 	}
-}
-if($cT!='folder'){
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `file`!='' OR `thumb`!='' AND `featured`='1' AND internal!='1' AND `status`='published' AND `contentType` LIKE :contentType AND `rank`<=:rank ORDER BY $order $limit");
-	$s->execute([
-		':contentType'=>$contentType,
-		':rank'=>$_SESSION['rank']
-	]);
-	while($r=$s->fetch(PDO::FETCH_ASSOC)){
-		if($r['featured']!=1||$r['internal']==1)continue;
-		$filechk=basename($r['file']);
-		if(file_exists('media/'.$filechk)){
-			$featuredfiles[]=[
-				'contentType'=>$r['contentType'],
-				'thumb'=>$r['thumb'],
-				'file'=>$r['file'],
-				'title'=>$r['title'],
-				'link'=>$r['contentType'].'/'.$r['urlSLug'].'/',
-				'seoCaption'=>$r['seoCaption'],
-				'attributionImageTitle'=>$r['attributionImageTitle'],
-				'attributionImageName'=>$r['attributionImageName'],
-				'attributionImageURL'=>$r['attributionImageURL'],
-				'notes'=>$r['notes'],
-				'ti'=>$r['ti']
-			];
-		}
-	}
-}
-if($arrayOrder=='random')shuffle($featuredfiles);
-elseif($arrayOrder=='asc')asort($featuredfiles);
-else arsort($featuredfiles);
-$featuredfiles=array_slice($featuredfiles,0,$itemCount);
-$ii=count($featuredfiles);
-$i=0;
-$ci=0;
-if($ii>0){
-	$showCarousel=true;
-	foreach($featuredfiles as$key=>$r){
-		$item=$it;
-		$item=preg_replace([
-			$r['link']=='nolink'?'~<link>.*?<\/link>~is':'/<[\/]?link>/',
-			'/<print link>/',
-			'/<print content=[\"\']?title[\"\']?>/'
-		],[
-			'',
-			(isset($r['urlSlug'])&&$r['urlSlug']!=''?$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''):''),
-			$r['title']
-		],$item);
-		if(preg_match('/<print content=[\"\']?thumb[\"\']?>/',$item)){
-			if($r['thumb']!='')$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['thumb'],$item);
-			elseif($r['file']!='')$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/',$r['file'],$item);
-			else$item=preg_replace('/<print content=[\"\']?thumb[\"\']?>/','',$item);
-		}
-		if(preg_match('/<print content=[\"\']?alt[\"\']?>/',$item)){
-			if($r['file']!=''){
-				$alt=pathinfo($r['file']);
-				$alt=$alt['filename'];
-				$alt=str_replace('-',' ',$alt);
-				$alt=ucfirst($alt);
-			}else$alt=$r['title'];
-			$item=preg_replace('/<print content=[\"\']?alt[\"\']?>/',htmlspecialchars($alt,ENT_QUOTES,'UTF-8'),$item);
-		}
-		if(preg_match('/<print content=[\"\']?image[\"\']?>/',$item)){
-			$item=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file']!=''?htmlspecialchars($r['file'],ENT_QUOTES,'UTF-8'):'',$item);
-		}
-		$item=$r['link']=='nolink'?preg_replace('/<print content=[\"\']?title[\"\']?>/','<span class="hidden">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</span>',$item):preg_replace('/<print content=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$item);
-		if($r['contentType']=='carousel')$item=preg_replace('~<caption>.*?<\/caption>~is',$r['seoCaption'],$item,1);
-		else{
-			$r['notes']=strip_tags($r['notes']);
-			$pos=strpos($r['notes'],' ',300);
-			$r['notes']=substr(rawurldecode($r['notes']),0,$pos).'...';
-			if($r['seoCaption']!='')$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'),$item);
-			elseif($r['notes']!='')$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/',htmlspecialchars(rawurldecode($r['notes']),ENT_QUOTES,'UTF-8'),$item);
-			else$item=preg_replace('/<print content=[\"\']?caption[\"\']?>/','',$item);
-			if($r['attributionImageName']!=''&&$r['attributionImageURL']!=''){
+	if(count($featuredfiles)>0){
+		if($arrayOrder=='random')shuffle($featuredfiles);
+		elseif($arrayOrder=='asc')asort($featuredfiles);
+		else arsort($featuredfiles);
+		$showCarousel=true;
+		$ord1=rand(1,2);
+		$ord2=$ord1==1?2:1;
+		foreach($featuredfiles as $f){
+			$item=$it;
+			$sideCost='';
+			if($f['carousel']=='filehtml'){
+				$item=$f['filehtml'];
+			}else{
+				if($f['options'][0]==1||$f['cost']!=''){
+					if($f['stockStatus']=='pre-order')$sideCost.='<div class="pre-order">Pre-Order</div>';
+					elseif($f['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+					else{
+						if($f['stockStatus']=='sold out')$sideCost.='<div class="sold d-inline">';
+						$sideCost.=$f['rrp']!=0?'<span class="rrp d-inline mr-5">RRP &#36;'.$f['rrp'].'</span>':'';
+						$sideCost.=(is_numeric($f['cost'])&&$f['cost']!=0?'<span class="cost d-inline mr-5'.($f['rCost']!=0?' strike':'').'">'.(is_numeric($f['cost'])?'&#36;':'').htmlspecialchars($f['cost'],ENT_QUOTES,'UTF-8').'</span>'.($f['rCost']!=0?'<span class="reduced d-inline mr-5">&#36;'.$f['rCost'].'</span>':''):'<span>'.htmlspecialchars($f['cost'],ENT_QUOTES,'UTF-8').'</span>');
+						if($f['stockStatus']=='sold out')$sideCost.='</div>';
+					}
+				}
+				$f['notes']=$r['seoDescription']?$f['seoDescription']:strip_tags($f['notes']);
+				$f['notes']=substr(rawurldecode($f['notes']),0,300).'...';
 				$item=preg_replace([
+					'/<print link>/',
+					'/<print content=[\"\']?title[\"\']?>/',
+					'/<print content=[\"\']?contentType[\"\']?>/',
+					'/<print content=[\"\']?rank[\'"\']?>/',
+					'/<print content=[\"\']?cssrank[\'"\']?>/',
+					'/<print content=[\"\']?cost[\"\']?>/',
+					'/<print content=[\"\']?id[\"\']?>/',
+					'/<print content=[\"\']?thumb[\"\']?>/',
+					'/<print content=[\"\']?image[\"\']?>/',
+					'/<print content=[\"\']?alt[\"\']?>/',
+					'/<print content=[\"\']?caption[\"\']?>/',
+					'/<\/?thumb>/',
+					'/<rand>/',
+					'/<ord1>/',
+					'/<ord2>/',
+					'/<carousel>/',
+					$f['attributionImageName']!=''&&$f['attributionImageURL']!=''?'/<\/?attribution>/':'~<attribution>.*?<\/attribution>~is',
 					'/<print media=[\"\']?attributionName[\"\']?>/',
-	        '/<print media=[\"\']?attributionURL[\"\']?>/',
-          '/<[\/]?attribution>/'
+					'/<print media=[\"\']?attributionURL[\"\']?>/',
+					'/<print content=[\"\']?notes[\"\']?>/',
+					'/<\/?caption>/'
 				],[
-					htmlspecialchars($r['attributionImageName'],ENT_QUOTES,'UTF-8'),
-	        htmlspecialchars($r['attributionImageURL'],ENT_QUOTES,'UTF-8'),
+					$f['urlSlug']!=''?URL.$f['contentType'].'/'.$f['urlSlug']:'',
+					$f['title'],
+					$f['contentType']=='carousel'?'':$f['contentType'],
+					$f['contentType']=='carousel'?'':($f['rank']>300?ucwords(str_replace('-',' ',rank($f['rank']))):''),
+					rank($f['rank']),
+					$sideCost,
+					$f['id'],
+					$f['thumb'],
+					$f['file'],
+					$f['fileALT']!=''?$f['fileALT']:str_replace('-',' ',basename($f['file'])),
+					$f['seoCaption']!=''?$f['seoCaption']:$f['notes'],
+					'',
+					$f['carousel']=='folder'?'':'rot'.rand(1,6),
+					$ord1,
+					$ord2,
+					$f['carousel'],
+					'',
+					htmlspecialchars($f['attributionImageName'],ENT_QUOTES,'UTF-8'),
+					htmlspecialchars($f['attributionImageURL'],ENT_QUOTES,'UTF-8'),
+					$f['notes']!=''?htmlspecialchars(strip_tags(rawurldecode($f['notes'])),ENT_QUOTES,'UTF-8'):'',
 					''
 				],$item);
-			}else$item=preg_replace('~<attribution>.*?<\/attribution>~is','',$items);
-			$item=$r['notes']!=''?preg_replace('/<print content=[\"\']?notes[\"\']?>/',htmlspecialchars(strip_tags(rawurldecode($r['notes'])),$item,ENT_QUOTES,'UTF-8')):preg_replace('/<print content=[\"\']?notes[\"\']?>/','',$item);
-			$item=preg_replace('/<[\/]?caption>/','',$item);
+			}
+			$items.=$item;
+			$ord1=$ord1==1?2:1;
+			$ord2=$ord2==1?2:1;
 		}
-		$items.=$item;
-		$i++;$ci++;if($ci>8)$ci=0;
+		$html=preg_replace('~<items>.*?<\/items>~is',$items,$html,1);
+		$content.=$html;
 	}
-}else$showCarousel=false;
-$html=$i>0?preg_replace('~<items>.*?<\/items>~is',$items,$html,1):'';
-$content.=$html;
+}

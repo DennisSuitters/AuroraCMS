@@ -7,13 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add Checking if Human or Bot for Google reCaptcha.
- * @changes    v0.1.2 Add parsing time duration field, and hidden encoded name field.
- * @changes    v0.1.2 Move adding to Blacklist SQL to end reducing to only one instance of the same code.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -32,15 +28,13 @@ if($timecode!=''){
       $not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-info','text'=>'Woah, too quick, blacklisted!','reason'=>'Comment Form filled in too quickly! ('.$config['formMinTime'].' seconds)'];
   }
   if($config['formMaxTime']!=0){
-    if($timecheck > ($config['formMaxTime']*60))
-      $not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-info','text'=>'Way too long to fill out a form!','reason'=>'Comment Form Exceeded time allowed! ('.$config['formMaxTime'].' minutes)'];
+    if($timecheck > ($config['formMaxTime']*60))$not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-info','text'=>'Way too long to fill out a form!','reason'=>'Comment Form Exceeded time allowed! ('.$config['formMaxTime'].' minutes)'];
   }
 }
 if($config['reCaptchaServer']!=''){
   if(isset($_POST['g-recaptcha-response'])){
     $captcha=$_POST['g-recaptcha-response'];
-    if(!$captcha)
-      $not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
+    if(!$captcha)$not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'reCaptcha failed, maybe the setup is wrong!','reason'=>''];
     else{
       $responseKeys=json_decode(file_get_contents('https://www.google.com/recaptcha/api/siteverify?secret='.urlencode($config['reCaptchaServer']).'&response='.urlencode($captcha)),true);
       if($responseKeys["success"])
@@ -53,8 +47,7 @@ if($not['spammer']==false){
   if($act=='add_comment'){
     if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
       $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
-      if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)
-        $not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Comment Form found Blacklisted IP via Project Honey Pot'];
+      if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)$not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Comment Form found Blacklisted IP via Project Honey Pot'];
     }
     if($_POST['fullname'.$hash]==''){
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
@@ -65,11 +58,9 @@ if($not['spammer']==false){
       if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip!='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_email($email);
-        if($result)
-          $not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Comment Form, Spam Detected via Form Field Data.'];
+        if($result)$not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Comment Form, Spam Detected via Form Field Data.'];
         $result=$filter->check_text($name.' '.$notes);
-        if($result)
-          $not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Comment Form, Spam Detected via Form Field Data.'];
+        if($result)$not=['spammer'=>true,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Comment Form, Spam Detected via Form Field Data.'];
       }
       if($not['spammer']==false&&$email!=''){
         if(filter_var($email,FILTER_VALIDATE_EMAIL)){
@@ -120,13 +111,10 @@ if($not['spammer']==false){
                    'Comment: '.$notes;
               $mail->Body=$msg;
               $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-              if($mail->Send())
-                $not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Comment will be Appear once Approved.','reason'=>''];
-              else
-                $not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Comment.','reason'=>''];
+              if($mail->Send())$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Comment will be Appear once Approved.','reason'=>''];
+              else$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Comment.','reason'=>''];
             }
-          }else
-            $not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Comment.','reason'=>''];
+          }else$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Comment.','reason'=>''];
         }
       }
     }

@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if($view=='add'){
   $ti=time();
@@ -24,22 +23,16 @@ if($view=='add'){
   $view='bookings';
   $args[0]='edit';
   echo'<script>/*<![CDATA[*/history.replaceState("","","'.URL.$settings['system']['admin'].'/bookings/edit/'.$id.'");/*]]>*/</script>';
-}elseif(isset($args[1]))
-  $id=$args[1];
-if($args[0]=='settings')
-  require'core/layout/set_bookings.php';
-elseif($args[0]=='edit')
-  require'core/layout/edit_bookings.php';
+}elseif(isset($args[1]))$id=$args[1];
+if($args[0]=='settings')require'core/layout/set_bookings.php';
+elseif($args[0]=='edit')require'core/layout/edit_bookings.php';
 else{
   $sortOrder='';
   $bookSearch=isset($_POST['booksearch'])?" AND LOWER(`name`) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%' OR LOWER(`business`) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%'":'';
 //    $bookSearch=str_replace(' ','%',$_POST['booksearch']);
-  if(isset($args[0])&&$args[0]=='archived')
-    $bookStatus=isset($args[0])?" AND `status`='archived'":'';
-  elseif(isset($args[0])&&$args[0]!='')
-    $bookStatus=isset($args[0])?" AND `status`='".$args[0]."' AND `status`!='archived'":'';
-  else
-    $bookStatus=" AND `status`!='archived'";
+  if(isset($args[0])&&$args[0]=='archived')$bookStatus=isset($args[0])?" AND `status`='archived'":'';
+  elseif(isset($args[0])&&$args[0]!='')$bookStatus=isset($args[0])?" AND `status`='".$args[0]."' AND `status`!='archived'":'';
+  else$bookStatus=" AND `status`!='archived'";
   if(isset($_POST['booksort'])){
   	$sort=isset($_POST['booksort'])?filter_input(INPUT_POST,'booksort',FILTER_SANITIZE_STRING):'';
   	$sortOrder=" ORDER BY ";
@@ -111,18 +104,12 @@ else{
             <tbody id="bookings">
               <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <tr class="<?php
-                if($r['status']=='confirmed')
-                  echo'bg-success';
-                elseif($r['status']=='in-progess')
-                  echo'bg-warning';
-                elseif($r['status']=='complete')
-                  echo'bg-info';
-                elseif($r['status']=='delete')
-                  echo' bg-danger';
-                elseif($r['status']=='archived')
-                  echo' bg-info';
-                elseif($r['status']=='unpublished')
-                  echo' bg-warning';?>" id="l_<?=$r['id'];?>">
+                if($r['status']=='confirmed')echo'bg-success';
+                elseif($r['status']=='in-progess')echo'bg-warning';
+                elseif($r['status']=='complete')echo'bg-info';
+                elseif($r['status']=='delete')echo' bg-danger';
+                elseif($r['status']=='archived')echo' bg-info';
+                elseif($r['status']=='unpublished')echo' bg-warning';?>" id="l_<?=$r['id'];?>">
                   <td class="d-table-cell d-sm-none">
                     <?= date($config['dateFormat'],$r['ti']).'<br>Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: ' . date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>Business: '.$r['business']:'').($r['name']!=''?'<br>Name: '.$r['name']:'').($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
                   </td>

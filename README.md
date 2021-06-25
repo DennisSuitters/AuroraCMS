@@ -1,10 +1,16 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.1.2
+Current version is v0.1.4
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
+- Forms
+  - Editable minimum and maximum times to submit forms. (Too Fast, is possible Bot Submission).
+  - Hidden Captcha taking Screen Reader user's into account, so they don't get trapped.
+  - Optional Google reCaptcha v2 for Forms.
+  - Form Filtering for Blacklisted editable text lists.
+  - Project Honey Pot Blacklist IP Filtering.
 - No Plugins. AuroraCMS does use some Third Party Script's, that are security vetted.
 - Business Hours Editor.
 - Content Scheduler with Auto Content Publishing.
@@ -30,15 +36,18 @@ Current version is v0.1.2
   - Print booking.
   - Signature taking and storage for confirmation of Services.
 - Messaging.
-  - Whenever a message is created via the Contact Us page, it is stored in the messages system as well as emailed.
+  - Whenever a message is created via the Contact Us page, it can be stored in the messages system as well as emailed.
   - Live Chat. Choose between the built in Live Chat, or easily integrate Facebook Messenger.
 - Orders.
   - Create quotes, invoices. Client viewing of Orders.
   - PayPal Integration for accepting PayPal and Credit Card Payments.
   - Australia Post API Integration for Calculating Postage Costs.
-  - Add deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
+  - Deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
   - Rewards with percentage or value off, date period available, quantity usage.
   - Discount Range Calculation depending on Account Expenditure.
+  - GST Calculating.
+  - Payment Options with Surcharge options.
+  - Create New Quote/Invoice from selected items.
 - Media.
   - Upload and manage various types of files for addition into content using elFinder.
   - Auto resizing, makes thumbnails and Large, Medium and Small versions of images for use with srcset.
@@ -49,7 +58,13 @@ Current version is v0.1.2
     - Administrators.
     - Editors (especially good for SEO and Copywriters).
     - Client's.
+    - Members with Silver/Bronze/Gold/Platinum
+      - Default and Account editable purchasing limits.
     - Visitors.
+    - Wholesalers with Silver/Bronze/Gold/Platinum
+      - Default and Account editable purchasing limits.
+      - Approval of Wholesaler Purchasing.
+      - Time limited purchasing, disables purchasing if purchases are not made inside maximum time limit (this encourages Wholesalers to continue purchasing).
 - Client Proofs and Commenting.
 - Easy Theme Selector.
   - Themes are built in such a way that changes in Administration are carried over to other themes. However, this will also depend on the features built into the theme selected.

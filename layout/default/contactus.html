@@ -2,8 +2,8 @@
 <block include="header.html">
 <block inbed="contactus">
 	<breadcrumb>
-		<section class="row mt-3 mb-0">
-			<nav class="col-12">
+		<section class="row">
+			<nav>
 				<ol class="breadcrumb">
 					<json-ld-breadcrumb>
 					<breaditems>
@@ -16,8 +16,8 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<section class="row mt-5">
-		<article class="col-12 col-sm-6 m-0 pb-0">
+	<section class="row">
+		<article class="col-12 col-sm-6 m-0 p-0 px-3">
 			<pagenotes>
 				<div class="hidewhenempty"><print page="notes"></div>
   		</pagenotes>
@@ -73,7 +73,7 @@
 				</div>
 			</map>
 		</article>
-		<article id="contact" class="col-12 col-sm-6 m-0 pb-0">
+		<article id="contact" class="col-12 col-sm-6 m-0 p-0 px-3">
 			<form class="auroraForm card p-3" data-formtype="contact" method="post" action="core/add_contactus.php">
 				<input type="hidden" name="act" value="add_message">
 				<input type="hidden" name="<print hash>" value="<print timecode>">

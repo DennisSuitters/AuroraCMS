@@ -18,15 +18,16 @@ function elFinderAutoloader($name)
         'elFinderSession' => 'elFinderSession.php',
         'elFinderSessionInterface' => 'elFinderSessionInterface.php',
         'elFinderVolumeDriver' => 'elFinderVolumeDriver.class.php',
-//        'elFinderVolumeDropbox2' => 'elFinderVolumeDropbox2.class.php',
-//        'elFinderVolumeFTP' => 'elFinderVolumeFTP.class.php',
-//        'elFinderVolumeFlysystemGoogleDriveCache' => 'elFinderFlysystemGoogleDriveNetmount.php',
-//        'elFinderVolumeFlysystemGoogleDriveNetmount' => 'elFinderFlysystemGoogleDriveNetmount.php',
-//        'elFinderVolumeGoogleDrive' => 'elFinderVolumeGoogleDrive.class.php',
+        'elFinderVolumeDropbox2' => 'elFinderVolumeDropbox2.class.php',
+        'elFinderVolumeFTP' => 'elFinderVolumeFTP.class.php',
+        'elFinderVolumeFlysystemGoogleDriveCache' => 'elFinderFlysystemGoogleDriveNetmount.php',
+        'elFinderVolumeFlysystemGoogleDriveNetmount' => 'elFinderFlysystemGoogleDriveNetmount.php',
+        'elFinderVolumeGoogleDrive' => 'elFinderVolumeGoogleDrive.class.php',
         'elFinderVolumeGroup' => 'elFinderVolumeGroup.class.php',
         'elFinderVolumeLocalFileSystem' => 'elFinderVolumeLocalFileSystem.class.php',
-//        'elFinderVolumeMySQL' => 'elFinderVolumeMySQL.class.php',
-//        'elFinderVolumeTrash' => 'elFinderVolumeTrash.class.php',
+        'elFinderVolumeMySQL' => 'elFinderVolumeMySQL.class.php',
+        'elFinderVolumeSFTPphpseclib' => 'elFinderVolumeSFTPphpseclib.class.php',
+        'elFinderVolumeTrash' => 'elFinderVolumeTrash.class.php',
     );
     if (isset($map[$name])) {
         return include_once(ELFINDER_PHP_ROOT_PATH . '/' . $map[$name]);
@@ -52,3 +53,4 @@ if (version_compare(PHP_VERSION, '5.3', '<')) {
 } else {
     spl_autoload_register('elFinderAutoloader', true, true);
 }
+

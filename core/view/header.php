@@ -7,19 +7,35 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.1 Fix <print url> parser only changing single instance.
- * @changes    v0.1.2 Check over and tidy up code.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name` FROM `".$prefix."login` WHERE `id`=:uid");
 	$su->execute([':uid'=>$_SESSION['uid']]);
 	$user=$su->fetch(PDO::FETCH_ASSOC);
-	$html=$view=='proofs'||$view=='proof'?preg_replace('/<print active=[\"\']?proofs[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?proofs[\"\']?>/','',$html);
-	$html=$view=='orders'||$view=='order'?preg_replace('/<print active=[\"\']?orders[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?orders[\"\']?>/','',$html);
-	$html=$view=='settings'?preg_replace('/<print active=[\"\']?settings[\"\']?>/',' active',$html):preg_replace('/<print active=[\"\']?settings[\"\']?>/','',$html);
+	preg_match('/<accountMenuItems>([\w\W]*?)<\/accountMenuItems>/',$html,$matches);
+	$accountMenuItem=$matches[1];
+	$sa=$db->prepare("SELECT `id`,`contentType`,`title` FROM `".$prefix."menu` WHERE `menu`='account' AND `mid`=0 AND `active`=1 AND `rank`>'299' ORDER BY `ord` ASC");
+	$sa->execute();
+	$items='';
+	if($sa->rowCount()>0){
+		while($ra=$sa->fetch(PDO::FETCH_ASSOC)){
+			$item=$accountMenuItem;
+			$item=preg_replace([
+				'/<print active>/',
+				'/<print account=[\"\']?url[\"\']?>/',
+				'/<print account=[\"\']?title[\"\']?>/'
+			],[
+				$view==$ra['contentType']?' active':'',
+				URL.$ra['contentType'].'/'.($ra['contentType']=='profile'?str_replace(' ','-',$user['name']):''),
+				$ra['title']
+			],$item);
+			$items.=$item;
+		}
+	}
+	$html=preg_replace('~<accountMenuItems>.*?<\/accountMenuItems>~is',$items,$html,1);
 	if(preg_match('/<print user=[\"\']?avatar[\"\']?>/',$html)){
 		if(isset($user)&&$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media/avatar/'.$user['avatar'],$html);
 		elseif(isset($user)&&$user['gravatar']!=''){
@@ -33,7 +49,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		$user['rank']>399?'/<[\/]?administration>/':'~<administration>.*?<\/administration>~is',
 		'/<print administrationLink>/',
 		'/<print user=[\"\']?name[\"\']?>/',
-		'/<[\/]?profile>/',
+		'/<print user=[\"\']?cssrank[\"\']?>/',
+		'/<print user=[\"\']?rank[\"\']?>/',
 		isset($_SESSION['options'])&&$_SESSION['options'][6]==1?'/<[\/]?seohelper>/':'~<seohelper>.*?<\/seohelper>~is',
 		$config['development'][0]==1&&$_SESSION['rank']>899?'/<[\/]?development>/':'~<development>.*?<\/development>~is'
 	],[
@@ -41,7 +58,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		'',
 		URL.$settings['system']['admin'].'/',
 		str_replace(' ','-',$user['name']),
-		'',
+		rank($user['rank']),
+		($user['name']!=''?$user['name']:$user['username']).' ('.ucwords(str_replace('-',' ',rank($user['rank']))).')',
 		'',
 		''
 	],$html);
@@ -50,12 +68,14 @@ $html=preg_replace([
 	'/<print view>/',
 	'/<print config=[\"\']?seoTitle[\"\']?>/',
 	'/<print config=[\"\']?business[\"\']?>/',
-	'/<print meta=[\"\']?url[\"\']?>/'
+	'/<print meta=[\"\']?url[\"\']?>/',
+	'/<print page=[\"\']?title[\"\']?>/'
 ],[
 	$view,
 	$config['seoTitle'],
 	$config['business'],
-	URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'')
+	URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+	$page['title']
 ],$html);
 if(stristr($html,'<buildMenu')){
 	preg_match('/<nondropDown>([\w\W]*?)<\/nondropDown>/',$html,$matches);
@@ -73,6 +93,7 @@ if(stristr($html,'<buildMenu')){
 	$s->execute([':rank'=>$_SESSION['rank']]);
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$menuURL='';
+		if($r['contentType']=='cart'&&$config['options'][30]==1&&(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false))continue;
 		if($r['contentType']!='index'){
 			if(isset($r['url'][0])&&$r['url'][0]=='#')$menuURL.=URL.$r['url'].'/';
 			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))$menuURL.=$r['url'];
@@ -92,24 +113,34 @@ if(stristr($html,'<buildMenu')){
 			':id'=>$r['id'],
 			':rank'=>$_SESSION['rank']
 		]);
-		$smc=$sm->rowCount();
+		$smcat=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' AND `url`=:view ORDER BY `title` ASC");
+		$smcat->execute([
+			':view'=>'inventory'
+		]);
+		$smc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `mid`=:id AND `status`='published' AND `rank`<=:rank ORDER BY `title` ASC");
+		$smc->execute([
+			':id'=>$r['id'],
+			':rank'=>$_SESSION['rank']
+		]);
 		$menuItem=$nondropDown;
-		if($smc>0)$menuItem=$dropDown;
+		if($sm->rowCount()>0||$smc->rowCount()>0)$menuItem=$dropDown;
 		$menuItem=preg_replace([
+			'/<print header>/',
 			'/<print active=[\"\']?menu[\"\']?>/',
 			'/<print menu=[\"\']?url[\"\']?>/',
 			'/<print rel=[\"\']?contentType[\"\']?>/',
 			'/<print menu=[\"\']?title[\"\']?>/'
 		],[
+			'',
 			$r['contentType']==$view?$theme['settings']['activeClass']:'',
 			$menuURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
 			$r['contentType'],
 			$r['title']
 		],$menuItem);
-		if($smc>0){
-			$submenu='';
+		$submenu='';
+		if($sm->rowCount()>0){
 			while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-				$item=$subMenuItem;
+				$mitem=$subMenuItem;
 				$subURL='';
 				if($rm['contentType']!='index'){
 					if(isset($rm['url'][0])&&$rm['url'][0]=='#')$subURL.=URL.$rm['url'].'/';
@@ -125,19 +156,83 @@ if(stristr($html,'<buildMenu')){
 						)$subURL.=str_replace(' ','-',strtolower($rm['title'])).'/';
 					}
 				}
-				$item=preg_replace([
+				$mitem=preg_replace([
+					'/<print header>/',
 					'/<print submenu=[\"\']?url[\"\']?>/',
 					'/<print rel=[\"\']?contentType[\"\']?>/',
-					'/<print submenu=[\"\']?title[\"\']?>/'
+					'/<print submenu=[\"\']?title[\"\']?>/',
+					'/<print content=[\"\']?image[\"\']?>/'
 				],[
+					'',
 					$subURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
 					$rm['contentType'],
-					$rm['title']
-				],$item);
-				$submenu.=$item;
+					$rm['title'],
+					''
+				],$mitem);
+				$submenu.=$mitem;
 			}
-			$menuItem=preg_replace('~<subMenuItem>.*?<\/subMenuItem>~is',$submenu,$menuItem,1);
 		}
+		if(in_array(
+			$r['contentType'],
+			['article','events','gallery','inventory','news','portfolio','proofs','service',],
+			true)
+		){
+			if($smcat->rowCount()>0){
+				$ih=0;
+				while($rm=$smcat->fetch(PDO::FETCH_ASSOC)){
+					$mitem=$subMenuItem;
+					$subURL='';
+					$mitem=preg_replace([
+						'/<print header>/',
+						'/<print submenu=[\"\']?url[\"\']?>/',
+						'/<print rel=[\"\']?contentType[\"\']?>/',
+						'/<print submenu=[\"\']?title[\"\']?>/',
+						'/<print content=[\"\']?image[\"\']?>/'
+					],[
+						$ih==0?'<li class="dropdown-header">Categories</li>':'',
+						URL.$rm['url'].'/'.str_replace(' ','-',strtolower($rm['title'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+						$rm['contentType'],
+						$rm['title'],
+						$rm['icon']!=''?'<img src="'.$rm['icon'].'" alt="'.$r['title'].'">':''
+					],$mitem);
+					$ih++;
+					$submenu.=$mitem;
+				}
+			}
+		}
+		if($smc->rowCount()>0){
+			$ih=0;
+			while($rm=$smc->fetch(PDO::FETCH_ASSOC)){
+				$menuimage='';
+				if($rm['thumb']!='')$menuimage=$rm['thumb'];
+				$mitem=$subMenuItem;
+				$subURL='';
+				if($rm['contentType']!='index'){
+					if(isset($rm['url'][0])&&$rm['url'][0]=='#')$subURL.=URL.$rm['url'].'/';
+					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))$subURL.=$rm['url'].'/';
+					else{
+						$subURL.=URL.$rm['contentType'].'/';
+						$subURL.=str_replace(' ','-',strtolower($rm['title'])).'/';
+					}
+				}
+				$mitem=preg_replace([
+					'/<print header>/',
+					'/<print submenu=[\"\']?url[\"\']?>/',
+					'/<print rel=[\"\']?contentType[\"\']?>/',
+					'/<print submenu=[\"\']?title[\"\']?>/',
+					'/<print content=[\"\']?image[\"\']?>/'
+				],[
+					$ih==0?'<li class="dropdown-header">Products</li>':'',
+					$subURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+					$rm['contentType'],
+					$rm['title'],
+					$menuimage!=''?'<img src="'.$menuimage.'" alt="'.$rm['title'].'">':''
+				],$mitem);
+				$ih++;
+				$submenu.=$mitem;
+			}
+		}
+		if($sm->rowCount()>0||$smc->rowCount()>0)$menuItem=preg_replace('~<subMenuItem>.*?<\/subMenuItem>~is',$submenu,$menuItem,1);
 		$cart='';
 		if($r['contentType']=='cart'){
 			$dti=$ti-86400;
@@ -158,7 +253,7 @@ if(stristr($html,'<buildMenu')){
 			'/<print urlself>/'
 		],[
 			URL,
-			$_SERVER['REQUEST_URI']
+			rtrim($_SERVER['REQUEST_URI'],'logout')
 		],$menuLogin);
 		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$menuLogin='';
 		else{

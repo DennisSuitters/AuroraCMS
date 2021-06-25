@@ -7,21 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.0.1 Add check if Compsing New Email contains an email set in the URL.
- * @changes    v0.1.2 Use PHP short codes where possible.
 */
 if($args[0]!='compose'){
   $q=$db->prepare("UPDATE `".$prefix."messages` SET `status`='read' WHERE `id`=:id");
-  $q->execute([
-    ':id'=>$args[1]
-  ]);
+  $q->execute([':id'=>$args[1]]);
   $q=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `id`=:id");
-  $q->execute([
-    ':id'=>$args[1]
-  ]);
+  $q->execute([':id'=>$args[1]]);
   $r=$q->fetch(PDO::FETCH_ASSOC);
 }else{
   $r=[
@@ -120,14 +114,10 @@ if($args[0]!='compose'){
                   foreach($attachments as$attachment){
                     $atts.=($atts!=''?',':'').$attachment;
                     $attimg='core/images/i-file.svg';
-                    if(preg_match("/\.(gif|png|jpg|jpeg|bmp|webp|svg)$/",$attachment))
-                      $attimg=$attachment;
-                    if(preg_match("/\.(pdf)$/",$attachment))
-                      $attimg='core/images/i-file-pdf.svg';
-                    if(preg_match("/\.(zip|zipx|tar|gz|rar|7zip|7z|bz2)$/",$attachment))
-                      $attimg='core/images/i-file-archive.svg';
-                    if(preg_match("/\.(doc|docx|xls)$/",$attachment))
-                      $attimg='core/images/i-file-docs.svg';?>
+                    if(preg_match("/\.(gif|png|jpg|jpeg|bmp|webp|svg)$/",$attachment))$attimg=$attachment;
+                    if(preg_match("/\.(pdf)$/",$attachment))$attimg='core/images/i-file-pdf.svg';
+                    if(preg_match("/\.(zip|zipx|tar|gz|rar|7zip|7z|bz2)$/",$attachment))$attimg='core/images/i-file-archive.svg';
+                    if(preg_match("/\.(doc|docx|xls)$/",$attachment))$attimg='core/images/i-file-docs.svg';?>
                     <div class="form-row mt-1" id="a_<?=$ti;?>">
                       <img src="<?=$attimg;?>" alt="<?= basename($attachment);?>">
                       <div class="input-text col-12">

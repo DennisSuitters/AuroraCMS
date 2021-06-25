@@ -5,12 +5,11 @@
  * @category   Administration - Core - Update
  * @package    core/update.php
  * @author     Dennis Suitters <dennis@diemen.design>
- * @copyright  2014-2019 Diemen Design
+ * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Check over and tidy up code.
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if(session_status()==PHP_SESSION_NONE)session_start();
@@ -111,7 +110,7 @@ if($tbl=='login'&&$col=='password'){
 if($tbl=='content'||$tbl=='menu'){
   $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `eti`=:ti,`login_user`=:login_user WHERE `id`=:id");
   $q->execute([
-    'ti'=>$ti,
+    ':ti'=>$ti,
     ':login_user'=>$login_user,
     ':id'=>$id
   ]);
@@ -119,7 +118,7 @@ if($tbl=='content'||$tbl=='menu'){
 if($tbl=='seo'){
   $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `ti`=:ti WHERE `id`=:id");
   $q->execute([
-    'ti'=>$ti,
+    ':ti'=>$ti,
     ':id'=>$id
   ]);
 }
@@ -133,7 +132,14 @@ if(($col=='cost'||$col=='rCost')){
 	}
 	echo'<script>window.top.window.$("#gst'.$col.'").html("'.$gst.'");</script>';
 }
-if($tbl=='login'&&$col=='username'){
+if($tbl=='login'&&$col=='rank'){
+	$q=$db->prepare("UPDATE `".$prefix."login` SET `pti`=:pti,`rank`=:rank WHERE `id`=:id");
+	$q->execute([
+		':id'=>$id,
+		':pti'=>$ti,
+		':rank'=>$da
+	]);
+}elseif($tbl=='login'&&$col=='username'){
   $uc1=$db->prepare("SELECT `username` FROM `".$prefix."login` WHERE `username`=:da");
   $uc1->execute([':da'=>$da]);
   if($uc1->rowCount()<1){
@@ -175,17 +181,18 @@ if($tbl=='orders'&&$col=='status'&&$da=='archived'){
   ]);
 }
 if($tbl=='orders'&&$col=='status'&&$da=='paid'){
-	$q=$db->prepare("SELECT `uid`,`total` FROM `".$prefix."orders` WHERE `id`=:id");
+	$q=$db->prepare("SELECT `cid`,`total` FROM `".$prefix."orders` WHERE `id`=:id");
 	$q->execute([':id'=>$id]);
 	$r=$q->fetch(PDO::FETCH_ASSOC);
 	$s=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
-	$s->execute([':uid'=>$r['uid']]);
+	$s->execute([':uid'=>$r['cid']]);
 	$ru=$s->fetch(PDO::FETCH_ASSOC);
 	$ru['spent']=$ru['spent']+$r['total'];
-	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent WHERE `id`=:uid");
+	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent,`pti`=:pti WHERE `id`=:uid");
 	$s->execute([
 		':spent'=>$ru['spent'],
-		':uid'=>$r['uid']
+		':uid'=>$r['cid'],
+		':pti'=>$ti
 	]);
 }
 if(is_null($e[2])){
@@ -198,82 +205,6 @@ if(is_null($e[2])){
 		if(file_exists('../media/file_'.$id.'.tif'))unlink('../media/file_'.$id.'.tif');
 	}
 	if($tbl=='config'&&$col=='php_honeypot')echo'<script>window.top.window.$("#php_honeypot_link").html(`'.($da!=''?'<a target="_blank" href="'.$da.'">'.$da.'</a>':'Honey Pot File Not Uploaded').'`);</script>';
-	if($tbl=='orderitems'||$tbl=='cart'){
-    if($tbl=='cart'&&$col=='quantity'){
-      if($da==0){
-        $q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `id`=:id");
-        $q->execute([':id'=>$id]);
-        $cnt='';
-      }
-      $q=$db->prepare("SELECT SUM(`quantity`) as quantity FROM `".$prefix."cart` WHERE `si`=:si");
-      $q->execute([':si'=>$si]);
-      $r=$q->fetch(PDO::FETCH_ASSOC);
-      $cnt=$r['quantity'];
-      if($r['quantity']==0){
-				$cnt='';
-				echo'<script>window.top.window.$("#cart").html(`'.$cnt.'`);</script>';
-			}
-		}
-    if($tbl=='orderitems'){
-      $q=$db->prepare("SELECT `oid` FROM `".$prefix."orderitems` WHERE `id`=:id");
-      $q->execute([':id'=>$id]);
-      $iid=$q->fetch(PDO::FETCH_ASSOC);
-    }
-    if($tbl=='orderitems'&&$col=='quantity'&&$da==0){
-      $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
-      $q->execute([':id'=>$id]);
-    }
-    $total=0;
-    $content=$html='';
-    if($tbl=='cart'){
-      $q=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si ORDER BY `ti` DESC");
-      $q->execute([':si'=>$si]);
-    }
-    if($tbl=='orderitems'){
-      $q=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid ORDER BY `ti` ASC,`title` ASC");
-      $q->execute([':oid'=>$iid['oid']]);
-    }
-    while($oi=$q->fetch(PDO::FETCH_ASSOC)){
-      $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-      $s->execute([':id'=>$oi['iid']]);
-      $i=$s->fetch(PDO::FETCH_ASSOC);
-      $html.='<tr>'.
-	      '<td class="text-left">'.$i['code'].'</td>'.
-	      '<td class="text-left">'.
-	        '<form target="sp" action="core/update.php">'.
-	          '<input name="id" type="hidden" value="'.$oi['id'].'">'.
-	          '<input name="t" type="hidden" value="'.$tbl.'">'.
-	          '<input name="c" type="hidden" value="title">'.
-	          '<input name="da" type="text" value="'.($oi['title']!=''?$oi['title']:$i['title']).'">'.
-	        '</form>'.
-	      '</td>'.
-        '<td class="col-md-1 text-center">'.
-          ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="quantity"><input class="text-center" name="da" value="'.$oi['quantity'].'"></form>':'').
-        '</td>'.
-        '<td class="col-md-1 text-right">'.
-          ($oi['iid']!=0?'<form target="sp" action="core/update.php"><input name="id" type="hidden" value="'.$oi['id'].'"><input name="t" type="hidden" value="orderitems"><input name="c" type="hidden" value="cost"><input class="text-center" name="da" value="'.$oi['cost'].'"></form>':'').
-        '</td>'.
-        '<td class="text-right">'.($oi['iid'] != 0?$oi['cost']*$oi['quantity']:'').'</td>'.
-        '<td class="text-right">'.
-          '<form target="sp" action="core/update.php">'.
-            '<input name="id" type="hidden" value="'.$oi['id'].'">'.
-            '<input name="t" type="hidden" value="orderitems">'.
-            '<input name="c" type="hidden" value="quantity">'.
-            '<input name="da" type="hidden" value="0">'.
-            '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
-          '</form>'.
-        '</td>'.
-      '</tr>';
-      if($oi['iid']!=0)$total=$total+($oi['cost']*$oi['quantity']);
-    }
-    $html.='<tr>'.
-      '<td colspan="3">&nbsp;</td>'.
-      '<td class="text-right"><strong>Total</strong></td>'.
-      '<td class="text-right"><strong>'.$total.'</strong></td>'.
-      '<td role="cell"></td>'.
-    '</tr>';
-		echo'<script>window.top.window.$("#updateorder").html(`'.$html.'`);</script>';
-	}
 	if($tbl=='login'&&$col=='gravatar'){
     if($da==''){
       $sav=$db->prepare("SELECT `avatar` FROM `".$prefix."login` WHERE `id`=:id");

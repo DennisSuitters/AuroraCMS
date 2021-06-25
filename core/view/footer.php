@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Check over and tidy up code.
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='<li><a href="logout/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Logout</a></li>';
 else{
@@ -154,6 +153,7 @@ if(stristr($html,'<buildMenu')){
 	$htmlMenu=$matches[1];
 	$menu='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+		if($r['contentType']=='cart'&&$config['options'][30]==1&&(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false))continue;
 		$buildMenu=$htmlMenu;
 		$buildMenu=$view==$r['contentType']||$view==$r['contentType'].'s'?preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu):preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
 		if($r['contentType']!='index'){

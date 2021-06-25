@@ -54,7 +54,7 @@ config
   `comingsoon` int(1)
   `options` varchar(32)
     0
-    1
+    1   Slider
     2   Image Resizing
     3   Account Sign Ups
     4   Enable Tooltips
@@ -83,8 +83,8 @@ config
     27  Enable Map Display on Pages.
     28  Enable Assistance.
     29  Create Invoice from Booking Service for Payment online.
-    30
-    31
+    30  Must be logged in to Purchase.
+    31  Display Category Menu.
   `theme` varchar(255)
   `seoTitle` varchar(60)
   `seoDescription` varchar(255)
@@ -129,6 +129,11 @@ config
   `orderEmailReadNotification` tinyint(1)
   `austPostAPIKey` varchar(128)
   `gst` varchar(4)
+  `purchaseLimit` varchar(6)
+  `purchaseLimitSilver` varchar(6)
+  `purchaseLimitBronze` varchar(6)
+  `purchaseLimitGold` varchar(6)
+  `purchaseLimitPlatinum` varchar(6)
   `passwordResetLayout` text
   `passwordResetSubject` tinytext
   `accountActivationSubject` tinytext
@@ -211,8 +216,8 @@ content
   `options` varchar(16)
     0 Show Cost
     1 Enable Comments
-    2 Enable Panorama
-    3 Enable 360 Viewer
+    2
+    3
     4 Video Autoplay
     5 Video Loop
     6 Video Controls
@@ -370,7 +375,7 @@ login
     16  elFinder Administrator Hide Folders
     17  elFinder Allow Administrator to Administer Folders for Accounts
     18  Do not track account IP's
-    19
+    19  Wholesaler Accepted to Purchase
     20
     21
     22
@@ -433,7 +438,7 @@ login
   `experience` int(4) NOT NULL,
   `hash` varchar(32) COLLATE utf8_bin NOT NULL,
   `emailPassword` tinytext COLLATE utf8_bin NOT NULL,
-  liveChatNotification INT(10) NOT NULL,
+  `liveChatNotification` INT(10) NOT NULL,
   `email_check` int(10) NOT NULL,
   `liveChatNotification` int(1)
   `email_signature` text COLLATE utf8_bin NOT NULL,
@@ -461,7 +466,15 @@ login
         0     Vistor
         100   Subscriber
         200   Member
+        210   Member Silver
+        220   Member Bronze
+        230   Member Gold
+        240   Member Platinum
         300   Client
+        310   Wholesale Silver
+        320   Wholesale Bronze
+        330   Wholesale Gold
+        340   Wholesale Platinum
         400   Contributor
         500   Author
         600   Editor
@@ -470,9 +483,11 @@ login
         900   Administrator
         1000  Developer
   `discount` varchar(4) COLLATE utf8_bin NOT NULL,
+  `spent` decimal(10,2),
   `lti` int(10) NOT NULL,
   `userAgent` tinytext COLLATE utf8_bin NOT NULL,
   `userIP` varchar(32) COLLATE utf8_bin NOT NULL,
+  `pti` int(10) UNSIGNED NOT NULL,
   `ti` int(10) UNSIGNED NOT NULL
 
 logs

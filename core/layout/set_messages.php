@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
@@ -126,9 +125,7 @@
         </script>
         <div id="mailboxes">
           <?php $sm=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='mailbox' AND `uid`=:uid ORDER BY `url`");
-          $sm->execute([
-            ':uid'=>$user['id']
-          ]);
+          $sm->execute([':uid'=>$user['id']]);
           while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
             <div class="form-row mt-1" id="l_<?=$rm['id'];?>">
               <div class="input-text">Type</div>

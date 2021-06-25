@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.1 Fix mistyped variable reference.
- * @changes    v0.1.1 Add Tag Editing Field as well as retreiving and sorting Tags from other Content
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
@@ -290,9 +287,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <?php if($user['options'][1]==1){
                       echo'<datalist id="category_1_options">';
                       $sc=$db->prepare("SELECT DISTINCT `title` FROM `".$prefix."choices` WHERE `title`!='' AND `contentType`='category' AND `url`=:url ORDER BY `title` ASC");
-                      $sc->execute([
-                        ':url'=>$r['contentType']
-                      ]);
+                      $sc->execute([':url'=>$r['contentType']]);
                       if($sc->rowCount()>0){
                         while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['title'].'"/>';
                       }
@@ -300,8 +295,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       if($sc->rowCount()>0){
                         while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
                       }
-                      echo'</datalist>';
-                      echo'<button class="save" id="savecategory_1" data-tooltip="tooltip" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
+                      echo'</datalist>'.
+                      '<button class="save" id="savecategory_1" data-tooltip="tooltip" data-dbid="category_1" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>';
                     }?>
                   </div>
                 </div>
@@ -427,10 +422,10 @@ else{
                   </div>
                 </div>
                 <div class="col-12 col-sm-3">
-                  <label id="<?=$r['contentType'];?>DistributorCost" for="dCost"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DistributorCost" aria-label="PermaLink to '.ucfirst($r['contentType']).' Distributor Cost Field">&#128279;</a>':'';?>Distributor Cost</label>
+                  <label id="<?=$r['contentType'];?>WholesaleCost" for="dCost"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'WholesaleCost" aria-label="PermaLink to '.ucfirst($r['contentType']).' Wholesale Cost Field">&#128279;</a>':'';?>Wholesale Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
-                    <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Distributor Cost..."':' readonly';?>>
+                    <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Wholesale Cost..."':' readonly';?>>
                     <?=$user['options'][1]==1?'<button class="save" id="savedCost" data-tooltip="tooltip" data-dbid="dCost" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
@@ -1233,7 +1228,15 @@ else{
                     <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
                     <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber and above</option>
                     <option value="200"<?=$r['rank']==200?' selected':'';?>>Member and above</option>
+                    <option value="210"<?=$r['rank']==210?' selected':'';?>>Member Silver and above</option>
+                    <option value="220"<?=$r['rank']==220?' selected':'';?>>Member Bronze and above</option>
+                    <option value="230"<?=$r['rank']==230?' selected':'';?>>Member Gold and above</option>
+                    <option value="240"<?=$r['rank']==240?' selected':'';?>>Member Platinum and above</option>
                     <option value="300"<?=$r['rank']==300?' selected':'';?>>Client and above</option>
+                    <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler Silver and above</option>
+                    <option value="320"<?=$r['rank']==320?' selected':'';?>>Wholesaler Bronze and above</option>
+                    <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Gold and above</option>
+                    <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Platinum and above</option>
                     <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor and above</option>
                     <option value="500"<?=$r['rank']==500?' selected':'';?>>Author and above</option>
                     <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor and above</option>
@@ -1300,7 +1303,7 @@ else{
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Bookable" aria-label="PermaLink to '.ucfirst($r['contentType']).' Bookable Checkbox">&#128279;</a>':'';?>
                 <input id="<?=$r['contentType'];?>Bookable" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0" type="checkbox"<?=($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="<?=$r['contentType'];?>bookable" id="contentbookable0<?=$r['id'];?>">Bookable</label>
+                <label for="<?=$r['contentType'];?>Bookable" id="contentbookable0<?=$r['id'];?>">Bookable</label>
               </div>
             <?php }
             if($r['contentType']=='events'){?>

@@ -7,16 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Fix GST Calculation.
  */
 define('UNICODE','UTF-8');
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))$config['theme']=$_GET['theme'];
 define('THEME','layout/'.$config['theme']);
+$theme=parse_ini_file('../'.THEME.'/theme.ini',TRUE);
 if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
   if(!defined('PROTOCOL'))define('PROTOCOL','https://');
 }else{
@@ -84,8 +84,8 @@ if(file_exists('../'.THEME.'/quickview.html')){
 					'/<print empty>/'
 				],[
 					'',
-					' col-sm-6',
-					' d-none'
+					$r['file']==''?' col-sm-6':'',
+					$r['file']==''?' d-none':''
 				],$html);
 			}
     }else$html=preg_replace('~<quickviewallthumbs>.*?<\/quickviewallthumbs>~is','',$html);
@@ -141,8 +141,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
       '/<print brand>/',
       '/<print content=[\"\']?title[\"\']?>/',
       '/<print content=[\"\']?notes[\"\']?>/',
-			'/<print URLENCODED_URL>/',
-			($r['coming'][0]==1?'~<addToCart>.*?<\/addToCart>~is':'/<[\/]?addTocart>/')
+			'/<print URLENCODED_URL>/'
     ],[
       $r['file'],
 			$r['fileALT'],
@@ -163,9 +162,19 @@ if(file_exists('../'.THEME.'/quickview.html')){
       $brand,
       $r['title'],
       $r['notes'],
-			urlencode(URL.$r['contentType'].'/'.$r['urlSlug']),
-			''
+			urlencode(URL.$r['contentType'].'/'.$r['urlSlug'])
     ],$html);
+    $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
+    if($uid!=0){
+      $su=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+      $su->execute([':id'=>$uid]);
+      $ru=$su->fetch(PDO::FETCH_ASSOC);
+      if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)$html=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$html);
+    }
+    if($config['options'][30]==1){
+      if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true||$user['purchase']==true)$html=preg_replace('/<[\/]?addtocart>/','',$html);
+      else$html=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$html);
+    }else$html=preg_replace('/<[\/]?addtocart>/','',$html);
     print $html;
   }else echo'There was an issue finding the content!';
 }else echo'Quick View template does not exist!';

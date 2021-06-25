@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -32,13 +31,119 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 $c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
 $ti=time();
-if(file_exists(THEME.'/images/noimage.png'))define('NOIMAGE',THEME.'/images/noimage.png');
-elseif(file_exists(THEME.'/images/noimage.gif'))define('NOIMAGE',THEME.'/images/noimage.gif');
-elseif(file_exists(THEME.'/images/noimage.jpg'))define('NOIMAGE',THEME.'/images/noimage.jpg');
-else define('NOIMAGE','core/images/noimage.jpg');
+if($act=='removeItems'){
+  $items=explode(',',$da);
+  foreach($items as $item => $value){
+    $q=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
+    $q->execute([':id'=>$value]);
+  }
+  echo'<script>window.top.window.$("#action").val("0");</script>';
+}
+if($act=='newQuote'){
+  $items=explode(',',$da);
+  $sg=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+  $sg->execute([':id'=>$id]);
+  $rg=$sg->fetch(PDO::FETCH_ASSOC);
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`iid`,`iid_ti`,`due_ti`,`notes`,`status`,`postageCode`,`postageOption`,`postageCost`,`payOption`,`payMethod`,`payCost`,`recurring`) VALUES (:cid,:uid,:iid,:iid_ti,:due_ti,:notes,:status,:postageCode,:postageOption,:postageCost,:payOption,:payMethod,:payCost,:recurring)");
+  $s->execute([
+    ':cid'=>$rg['cid'],
+    ':uid'=>$rg['uid'],
+    ':iid'=>'',
+    ':iid_ti'=>0,
+    ':due_ti'=>$ti + $config['orderPayti'],
+    ':notes'=>$rg['notes'],
+    ':status'=>$rg['status'],
+    ':postageCode'=>$rg['postageCode'],
+    ':postageOption'=>$rg['postageOption'],
+    ':postageCost'=>$rg['postageCost'],
+    ':payOption'=>$rg['payOption'],
+    ':payMethod'=>$rg['payMethod'],
+    ':payCost'=>$rg['payCost'],
+    ':recurring'=>$rg['recurring']
+  ]);
+  $iid=$db->lastInsertId();
+  $qid='Q'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
+  $qid_ti=$ti+$config['orderPayti'];
+  $q=$db->prepare("UPDATE `".$prefix."orders` SET `qid`=:qid,`qid_ti`=:qid_ti WHERE `id`=:id");
+  $q->execute([
+    ':id'=>$iid,
+    ':qid'=>$qid,
+    ':qid_ti'=>$ti
+  ]);
+  foreach($items as $item => $value){
+    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `oid`=:oiid WHERE `id`=:id ");
+    $q->execute([
+      ':id'=>$value,
+      ':oiid'=>$iid
+    ]);
+  }
+  echo'<script>'.
+    'window.top.window.$("#action").val("0");'.
+    'window.top.window.toastr["success"]("New Quote '.$qid.' created!");'.
+  '</script>';
+}
+if($act=='newInvoice'){
+  $items=explode(',',$da);
+  $sg=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+  $sg->execute([':id'=>$id]);
+  $rg=$sg->fetch(PDO::FETCH_ASSOC);
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`qid`,`qid_ti`,`due_ti`,`notes`,`status`,`postageCode`,`postageOption`,`postageCost`,`payOption`,`payMethod`,`payCost`,`recurring`) VALUES (:cid,:uid,:qid,:qid_ti,:due_ti,:notes,:status,:postageCode,:postageOption,:postageCost,:payOption,:payMethod,:payCost,:recurring)");
+  $s->execute([
+    ':cid'=>$rg['cid'],
+    ':uid'=>$rg['uid'],
+    ':qid'=>'',
+    ':qid_ti'=>0,
+    ':due_ti'=>$ti + $config['orderPayti'],
+    ':notes'=>$rg['notes'],
+    ':status'=>$rg['status'],
+    ':postageCode'=>$rg['postageCode'],
+    ':postageOption'=>$rg['postageOption'],
+    ':postageCost'=>$rg['postageCost'],
+    ':payOption'=>$rg['payOption'],
+    ':payMethod'=>$rg['payMethod'],
+    ':payCost'=>$rg['payCost'],
+    ':recurring'=>$rg['recurring']
+  ]);
+  $iid=$db->lastInsertId();
+  $oid='I'.date("ymd",$ti).sprintf("%06d",$iid+1,6);
+  $oid_ti=$ti+$config['orderPayti'];
+  $q=$db->prepare("UPDATE `".$prefix."orders` SET `iid`=:iid,`iid_ti`=:iid_ti WHERE `id`=:id");
+  $q->execute([
+    ':id'=>$iid,
+    ':iid'=>$oid,
+    ':iid_ti'=>$ti
+  ]);
+  foreach($items as $item => $value){
+    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `oid`=:oiid WHERE `id`=:id ");
+    $q->execute([
+      ':id'=>$value,
+      ':oiid'=>$iid
+    ]);
+  }
+  echo'<script>'.
+    'window.top.window.$("#action").val("0");'.
+    'window.top.window.toastr["success"]("Invoice '.$oid.' Created!");'.
+  '</script>';
+}
+if($act=='statusAvailable'){
+  $items=explode(',', $da);
+  foreach($items as $item => $value){
+    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `status`='' WHERE `id`=:id");
+    $q->execute([':id'=>$value]);
+  }
+  echo'<script>window.top.window.$("#action").val("0");</script>';
+}
+if($act=='statusPreorder'){
+  $items=explode(',', $da);
+  foreach($items as $item => $value){
+    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `status`='pre-order' WHERE `id`=:id");
+    $q->execute([':id'=>$value]);
+  }
+  echo'<script>window.top.window.$("#action").val("0");</script>';
+}
 if($act=='additem'){
 	if($da!=0){
-		$q=$db->prepare("SELECT `title`,`cost`,`rCost` FROM `".$prefix."content` WHERE `id`=:id");
+		$q=$db->prepare("SELECT `title`,`cost`,`rCost`,`stockStatus` FROM `".$prefix."content` WHERE `id`=:id");
 		$q->execute([':id'=>$da]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
 		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
@@ -62,7 +167,7 @@ if($act=='additem'){
     ':iid'=>$da,
     ':title'=>$r['title'],
     ':cost'=>$r['cost'],
-		':status'=>isset($r['status'])&&$r['status']!=''?$r['status']:'',
+		':status'=>$r['stockStatus'],
     ':ti'=>time()
   ]);
 }
@@ -251,12 +356,10 @@ if($act=='paycost'){
     ':payC'=>$da
   ]);
 }
-
-
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
 $s->execute([':id'=>$id]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `ti` ASC,`title` ASC");
+$si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC,`title` ASC");
 $si->execute([':oid'=>$r['id']]);
 $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
 $su->execute([':uid'=>$r['cid']]);
@@ -270,16 +373,13 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
   $sc->execute([':id'=>$oi['cid']]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
-	$image='';
-	if($i['thumb']!=''&&file_exists('../media/'.basename($i['thumb'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['thumb']).'" alt="'.$i['title'].'">';
-	elseif($i['file']!=''&&file_exists('../media/'.basename($i['file'])))$image='<img class="img-fluid" style="max-width:24px;height:24px" src="media/'.basename($i['file']).'" alt="'.$i['title'].'">';
-	elseif($i['fileURL']!='')$image='<img class="img-fluid" style="max-width:24px;height:24px" src="'.$i['fileURL'].'" alt="'.$i['title'].'">';
-	else$image='';
 $html.='<tr>'.
-  '<td class="text-center align-middle">'.$image.'</td>'.
-	'<td class="text-left align-middle">'.$i['code'].'</td>'.
-	'<td class="text-left align-middle">'.
-	 ($oi['iid']!=0?$i['title']:
+          '<td class="align-middle">'.
+            '<input type="checkbox" class="orderitems" name="item" value="'.$oi['id'].'">'.
+          '</td>'.
+	        '<td class="text-left align-middle small px-0">'.$i['code'].'</td>'.
+	'<td class="text-left align-middle px-0">'.
+	 ($r['iid_ti']!=0?$i['title']:
     '<form target="sp" method="post" action="core/updateorder.php">'.
       '<input name="act" type="hidden" value="title">'.
       '<input name="id" type="hidden" value="'.$oi['id'].'">'.
@@ -288,8 +388,8 @@ $html.='<tr>'.
       '<input name="da" type="text" value="'.$oi['title'].'">'.
     '</form>').
   '</td>'.
-  '<td class="text-left align-middle">'.$c['title'].'</td>'.
-  '<td class="text-center align-middle">'.
+  '<td class="text-left align-middle px-0">'.$c['title'].'</td>'.
+  '<td class="text-center align-middle px-0">'.
     ($oi['iid']!=0?
       '<form target="sp" method="post" action="core/updateorder.php">'.
         '<input name="act" type="hidden" value="quantity">'.
@@ -300,7 +400,7 @@ $html.='<tr>'.
       '</form>':($oi['iid']!=0?$oi['quantity']:'')
     ).
   '</td>'.
-  '<td class="text-right align-middle">'.
+  '<td class="text-right align-middle px-0">'.
     ($oi['iid']!=0?
       '<form target="sp" method="post" action="core/updateorder.php">'.
         '<input name="act" type="hidden" value="cost">'.
@@ -310,16 +410,26 @@ $html.='<tr>'.
         '<input class="text-center" style="min-width:80px" name="da" value="'.$oi['cost'].'"'.($r['status']=='archived'?' readonly':'').'>'.
       '</form>':($oi['iid'] != 0?$oi['cost']:'')
     ).
-  '</td>';
+  '</td>'.
+  '<td class="test-right align-middle px-0">';
   $gst=0;
-  if($config['gst']>0){
-    $gst=$oi['cost']*($config['gst']/100);
-    if($oi['quantity']>1)$gst=$gst*$oi['quantity'];
-    $gst=number_format((float)$gst,2,'.','');
+  if($oi['status']!='pre-order'){
+    if($config['gst']>0){
+      $gst=$oi['cost']*($config['gst']/100);
+      if($oi['quantity']>1)$gst=$gst*$oi['quantity'];
+      $gst=number_format((float)$gst,2,'.','');
+    }
+    $html.=$gst>0?$gst:'';
   }
-  $html.='<td class="text-right align-middle">'.$gst.'</td>'.
-  '<td class="text-right align-middle">'.($oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'').'</td>'.
-  '<td class="text-right">'.
+  $html.='</td>'.
+  '<td class="text-right align-middle px-0">';
+  if($oi['status']!='pre-order'){
+    $html.=($oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'');
+  }else{
+    $html.='<small>Pre-Order</small>';
+  }
+  $html.='</td>'.
+  '<td class="align-middle text-right px-0">'.
     '<form target="sp" method="post" action="core/updateorder.php">'.
       '<input name="act" type="hidden" value="trash">'.
       '<input name="id" type="hidden" value="'.$oi['id'].'">'.
@@ -330,21 +440,20 @@ $html.='<tr>'.
     '</form>'.
   '</td>'.
 '</tr>';
-  if($oi['iid']!=0){
-    $total=$total+($oi['cost']*$oi['quantity'])+$gst;
-    $total=number_format((float)$total,2,'.','');
+  if($oi['status']!='pre-order'){
+    if($oi['iid']!=0){
+      $total=$total+($oi['cost']*$oi['quantity'])+$gst;
+      $total=number_format((float)$total,2,'.','');
+    }
   }
 }
-
-
-
 $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
 $sr->execute([':rid'=>$r['rid']]);
 $reward=$sr->fetch(PDO::FETCH_ASSOC);
 $html.='<tr>'.
-  '<td colspan="2" class="text-right align-middle"><strong>Rewards</strong></td>'.
-	'<td colspan="4" class="text-center">'.
-		'<form id="rewardsinput" class="form-row" target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
+  '<td colspan="2" class="text-right align-middle px-0"><div class="input-text">Rewards</div></td>'.
+  '<form id="rewardsinput" class="form-row" target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
+	  '<td colspan="1" class="text-center px-0">'.
 			'<input name="act" type="hidden" value="reward">'.
 			'<input name="id" type="hidden" value="'.$r['id'].'">'.
 			'<input name="t" type="hidden" value="orders">'.
@@ -353,7 +462,7 @@ $ssr=$db->prepare("SELECT * FROM `".$prefix."rewards` ORDER BY `code` ASC,`title
 $ssr->execute();
 if($ssr->rowCount()>0){
       $html.='<select onchange="$(\'#rewardselect\').val($(this).val())">'.
-        '<option value="">Select a Code</option>';
+        '<option value="">Rewards Codes</option>';
 	while($srr=$ssr->fetch(PDO::FETCH_ASSOC)){
 				$html.='<option value="'.$srr['code'].'"'.($srr['code']==$reward['code']?' selected="selected"':'').'>'.
           $srr['code'].':'.($srr['method']==1?'$'.$srr['value']:$srr['value'].'%').' Off'.
@@ -361,10 +470,13 @@ if($ssr->rowCount()>0){
 	}
 			$html.='</select>';
 }
-      $html.='<input id="rewardselect" name="da" type="text" value="'.($ssr->rowCount()==1?$reward['code']:'').'">'.
+      $html.='</td>'.
+      '<td class="align-middle px-0" colspan="3">'.
+        '<input id="rewardselect" name="da" type="text" value="'.($ssr->rowCount()==1?$reward['code']:'').'" onchange="$(\'#rewardsinput:first\').submit();">'.
+      '</td>'.
 		'</form>'.
 	'</td>'.
-	'<td class="text-center align-middle">';
+	'<td class="text-center align-middle px-0">';
 if($sr->rowCount()==1){
   if($reward['method']==1){
     $html.='$';
@@ -379,7 +491,7 @@ if($sr->rowCount()==1){
   $html.=' Off';
 }
   $html.='</td>'.
-  '<td class="text-right align-middle">'.($reward['value']>0?$total:'').'</td>'.
+  '<td class="text-right align-middle px-0">'.($reward['value']>0?$total:'').'</td>'.
 	'<td>&nbsp;</td>'.
 '</tr>';
 
@@ -393,31 +505,27 @@ if($config['options'][26]==1){
   ]);
   if($sd->rowCount()>0){
     $rd=$sd->fetch(PDO::FETCH_ASSOC);
-    if($rd['value']==1){
-      $dedtot=$rd['cost'];
-    }
-    if($rd['value']==2){
-      $dedtot=$total*($rd['cost']/100);
-    }
+    if($rd['value']==1)$dedtot=$rd['cost'];
+    if($rd['value']==2)$dedtot=$total*($rd['cost']/100);
     $total=$total - $dedtot;
 $html.='<tr>'.
-  '<td class="align-middle text-right" colspan="2"><strong>Spent</strong></td>'.
-  '<td class="align-middle" colspan="5"><strong>over &#36;'.$rd['f'].' discount of '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off').'</strong></td>'.
-  '<td class="text-right align-middle">-'.$dedtot.'</td>'.
+  '<td class="align-middle text-right px-0" colspan="2"><div class="input-text">Spent</div></td>'.
+  '<td class="align-middle" colspan="5">&#36;'.$user['spent'].' within Discount Range &#36;'.$rd['f'].'-&#36;'.$rd['t'].' granting '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off').'</td>'.
+  '<td class="text-right align-middle px-0">-'.$dedtot.'</td>'.
   '<td>&nbsp;</td>'.
 '</tr>';
   }
 }
 $html.='<tr>'.
-	'<td class="text-right align-middle" colspan="2"><strong>Shipping</strong></td>'.
-  '<td class="align-middle pl-0 pr-0" colspan="1">'.
+	'<td class="text-right align-middle px-0" colspan="2"><div class="input-text">Shipping</div></td>'.
+  '<td class="align-middle px-0" colspan="1">'.
     '<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
       '<input type="hidden" name="act" value="postageupdate">'.
       '<input type="hidden" name="id" value="'.$r['id'].'">'.
       '<input type="hidden" name="t" value="orders">'.
       '<input type="hidden" name="c" value="postageCode">'.
       '<select name="da">'.
-        '<option value="">Select a Shipping Option</option>'.
+        '<option value="">Shipping Options</option>'.
         '<option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>'.
         '<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>';
 $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postageoption' ORDER BY `title` ASC");
@@ -427,7 +535,7 @@ if($spo->rowCount()>0){
       $html.='</select>'.
     '</form>'.
   '</td>'.
-	'<td class="text-right align-middle pl-0 pr-0" colspan="4">'.
+	'<td class="text-right align-middle px-0" colspan="4">'.
     '<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
       '<input name="act" type="hidden" value="postoption">'.
       '<input name="id" type="hidden" value="'.$r['id'].'">'.
@@ -436,7 +544,7 @@ if($spo->rowCount()>0){
       '<input name="da" type="text" value="'.$r['postageOption'].'">'.
     '</form>'.
 	'</td>'.
-	'<td class="text-right pl-0 pr-0">'.
+	'<td class="text-right px-0">'.
 		'<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
 			'<input name="act" type="hidden" value="postcost">'.
 			'<input name="id" type="hidden" value="'.$r['id'].'">'.
@@ -450,9 +558,8 @@ $total=number_format((float)$total,2,'.','');
 	'<td></td>'.
 '</tr>';
 $html.='<tr>'.
-  '<td class="text-right align-middle" colspan="2"><strong>Payment</strong></td>'.
-  '<td class="align-middle pl-0 pr-0" colspan="1">'.
-    '<div class="form-row">';
+  '<td class="text-right align-middle px-0" colspan="2"><div class="input-text">Payment</div></td>'.
+  '<td class="align-middle px-0" colspan="1">';
 $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY title ASC");
 if($spo->rowCount()>0){
       $html.='<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
@@ -461,14 +568,13 @@ if($spo->rowCount()>0){
         '<input name="t" type="hidden" value="orders">'.
         '<input name="c" type="hidden" value="payOption">'.
         '<select name="da">'.
-          '<option value="">Select a Pay Option</option>';
+          '<option value="">Payment Options</option>';
   while($rpo=$spo->fetch(PDO::FETCH_ASSOC))$html.='<option value="'.$rpo['id'].'">'.$rpo['title'].($rpo['value']!=0?' (Surcharge '.($rpo['type']==1?$rpo['value'].'%':'$'.$rpo['value']).')':'').'</option>';
         $html.='</select>'.
       '</form>';
 }
-    $html.='</div>'.
-  '</td>'.
-  '<td class="text-right align-middle pl-0 pr-0" colspan="3">'.
+  $html.='</td>'.
+  '<td class="text-right align-middle px-0" colspan="3">'.
     '<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
       '<input type="hidden" name="act" value="paytext">'.
       '<input type="hidden" name="id" value="'.$r['id'].'">'.
@@ -477,7 +583,7 @@ if($spo->rowCount()>0){
       '<input type="text" name="da" value="'.$r['payOption'].'">'.
     '</form>'.
   '</td>'.
-  '<td class="text-right align-middle pl-0 pr-0">'.
+  '<td class="text-right align-middle px-0">'.
     '<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
       '<input type="hidden" name="act" value="paymethod">'.
       '<input type="hidden" name="id" value="'.$r['id'].'">'.
@@ -488,16 +594,10 @@ if($spo->rowCount()>0){
         '<option vlaue="1"'.($r['payMethod']==1?' selected':'').'>Add &#37;</option>'.
       '</select>'.
     '</form>';
-if($r['payMethod']==1){
-//                        echo'Add '.$r['payCost'].'%';
-  $paytot=$total*($r['payCost']/100);
-}else{
-//if($r['payMethod']==2){
-//                        echo'Add $'.$r['payCost'];
-  $paytot=$r['payCost'];
-}
+if($r['payMethod']==1)$paytot=$total*($r['payCost']/100);
+else$paytot=$r['payCost'];
   $html.='</td>'.
-  '<td class="align-middle text-right pl-0 pr-0">'.
+  '<td class="align-middle text-right px-0">'.
     ($r['payMethod']==2?'<form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">'.
       '<input type="hidden" name="act" value="paycost">'.
       '<input type="hidden" name="id" value="'.$r['id'].'">'.
@@ -511,8 +611,8 @@ $total=number_format((float)$total,2,'.','');
   $html.='<td></td>'.
 '</tr>';
 $html.='<tr>'.
-	'<td colspan="7" class="text-right"><strong>Total</strong></td>'.
-	'<td class="total text-right border-2 border-black border-top border-bottom"><strong>'.$total.'</strong></td>'.
+	'<td class="text-right" colspan="7"><strong>Total</strong></td>'.
+	'<td class="total text-right border-2 border-black border-top border-bottom px-0"><strong>'.$total.'</strong></td>'.
 	'<td></td>'.
 '</tr>';
 $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
@@ -520,29 +620,29 @@ $sn->execute([':oid'=>$r['id']]);
 if($sn->rowCount()>0){
 	while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
 $html.='<tr>'.
-  '<td class="small align-middle" colspan="2"><small>'.date($config['dateFormat'],$rn['ti']).'</td>'.
-  '<td class="align-middle" colspan="5">'.
+  '<td class="small align-middle px-0" colspan="2"><small>'.date($config['dateFormat'],$rn['ti']).'</small></td>'.
+  '<td class="align-middle px-0" colspan="5">'.
     '<form target="sp" method="post" action="core/updateorder.php">'.
       '<input name="act" type="hidden" value="title">'.
       '<input name="id" type="hidden" value="'.$rn['id'].'">'.
       '<input name="t" type="hidden" value="orderitems">'.
       '<input name="c" type="hidden" value="title">'.
-      '<input name="da" type="text" value="'.$rn['title'].'">'.
+      '<div class="form-row">'.
+        '<input name="da" type="text" value="'.$rn['title'].'">'.
+        '<div class="input-text">minus</div>'.
+      '</div>'.
     '</form>'.
   '</td>'.
-  '<td class="text-right align-middle pl-0 pr-0">'.
+  '<td class="text-right align-middle px-0">'.
     '<form target="sp" method="post" action="core/updateorder.php">'.
       '<input name="act" type="hidden" value="cost">'.
       '<input name="id" type="hidden" value="'.$rn['id'].'">'.
       '<input name="t" type="hidden" value="orderitems">'.
       '<input name="c" type="hidden" value="cost">'.
-      '<div class="form-row">'.
-        '<div class="input-text minus">&#8722;</div>'.
-        '<input class="text-right" name="da" value="'.$rn['cost'].'">'.
-      '</div>'.
+      '<input class="text-right" name="da" value="'.$rn['cost'].'">'.
     '</form>'.
   '</td>'.
-  '<td class="text-right">'.
+  '<td class="text-right px-0">'.
     '<form target="sp" method="post" action="core/updateorder.php">'.
       '<input name="act" type="hidden" value="trash">'.
       '<input name="id" type="hidden" value="'.$rn['id'].'">'.
@@ -555,12 +655,17 @@ $html.='<tr>'.
 '</tr>';
     $total=$total-$rn['cost'];
     $total=number_format((float)$total,2,'.','');
-$html.='<tr>'.
-  '<td class="text-right" colspan="7"><strong>Total</strong></td>'.
-  '<td class="total text-right border-2 border-black border-top border-bottom"><strong>'.$total.'</td>'.
-  '<td></td>'.
-'</tr>';
   }
+  $html.='<tr>'.
+    '<td class="text-right" colspan="7"><strong>Total</strong></td>'.
+    '<td class="total text-right border-2 border-black border-top border-bottom px-0"><strong>'.$total.'</td>'.
+    '<td></td>'.
+  '</tr>';
+  $so=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE id=:id");
+  $so->execute([
+    ':id'=>$r['id'],
+    ':total'=>$total
+  ]);
 }
 echo'<script>'.
   'window.top.window.$("#updateorder").html(`'.$html.'`);'.

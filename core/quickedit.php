@@ -7,11 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Fix getting logged in User Rank and display editable fields accordingly.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
@@ -334,7 +332,16 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 	          '<option value="0"'.($r['rank']==0?' selected':'').'>Available to Everyone</option>'.
 	          '<option value="100"'.($r['rank']==100?' selected':'').'>Available to Subscriber and Above</option>'.
 	          '<option value="200"'.($r['rank']==200?' selected':'').'>Available to Member and Above</option>'.
+						'<option value="200"'.($r['rank']==200?' selected':'').'>Available to Member and Above</option>'.
+						'<option value="210"'.($r['rank']==210?' selected':'').'>Available to Member Silver and Above</option>'.
+						'<option value="220"'.($r['rank']==220?' selected':'').'>Available to Member Bronze and Above</option>'.
+						'<option value="230"'.($r['rank']==230?' selected':'').'>Available to Member Gold and Above</option>'.
+						'<option value="240"'.($r['rank']==240?' selected':'').'>Available to Member Platinum and Above</option>'.
 	          '<option value="300"'.($r['rank']==300?' selected':'').'>Available to Client and Above</option>'.
+	          '<option value="310"'.($r['rank']==310?' selected':'').'>Available to Wholesaler Silver and Above</option>'.
+	          '<option value="320"'.($r['rank']==320?' selected':'').'>Available to Wholesaler Bronze and Above</option>'.
+	          '<option value="330"'.($r['rank']==330?' selected':'').'>Available to Wholesaler Gold and Above</option>'.
+	          '<option value="340"'.($r['rank']==340?' selected':'').'>Available to Wholesaler Platinum and Above</option>'.
 	          '<option value="400"'.($r['rank']==400?' selected':'').'>Available to Contributor and Above</option>'.
 	          '<option value="500"'.($r['rank']==500?' selected':'').'>Available to Author and Above</option>'.
 	          '<option value="600"'.($r['rank']==600?' selected':'').'>Available to Editor and Above</option>'.
@@ -360,11 +367,19 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 				'<div class="row">'.
 					'<label for="qerank'.$r['id'].'">Rank</label>'.
 					'<div class="form-row">'.
-						'<select id="qerank'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="rank" onchange="update(`'.$r['id'].'`,`login`,`rank`,$(this).val());">'.
+						'<select id="qerank'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="rank" onchange="update(`'.$r['id'].'`,`login`,`rank`,$(this).val());$(`#accountrank'.$r['id'].'`).text(rank($(this).val()));">'.
 							'<option value="0"'.($r['rank']==0?' selected':'').'>Visitor</option>'.
 							'<option value="100"'.($r['rank']==100?' selected':'').'>Subscriber</option>'.
 							'<option value="200"'.($r['rank']==200?' selected':'').'>Member</option>'.
+							'<option value="210"'.($r['rank']==210?' selected':'').'>Member Silver</option>'.
+							'<option value="220"'.($r['rank']==220?' selected':'').'>Member Bronze</option>'.
+							'<option value="230"'.($r['rank']==230?' selected':'').'>Member Gold</option>'.
+							'<option value="240"'.($r['rank']==240?' selected':'').'>Member Platinum</option>'.
 							'<option value="300"'.($r['rank']==300?' selected':'').'>Client</option>'.
+							'<option value="310"'.($r['rank']==310?' selected':'').'>Wholesaler Silver</option>'.
+							'<option value="320"'.($r['rank']==320?' selected':'').'>Wholesaler Bronze</option>'.
+							'<option value="330"'.($r['rank']==330?' selected':'').'>Wholesaler Gold</option>'.
+							'<option value="340"'.($r['rank']==340?' selected':'').'>Wholesaler Platinum</option>'.
 							'<option value="400"'.($r['rank']==400?' selected':'').'>Contributor</option>'.
 							'<option value="500"'.($r['rank']==500?' selected':'').'>Author</option>'.
 							'<option value="600"'.($r['rank']==600?' selected':'').'>Editor</option>'.
@@ -374,6 +389,10 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 							($rank==1000?'<option value="1000"'.($r['rank']==1000?' selected':'').'>Developer</option>':'').
 						'</select>'.
 					'</div>'.
+				'</div>'.
+				'<div class="row">'.
+					'<input id="accountWholesaler'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"'.($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').' onclick="$(\'#wholesaler'.$r['id'].'\').toggle(\'.d-none\');">'.
+					'<label for="accountWholesaler'.$r['id'].'" id="loginnewsletter0'.$r['id'].'">Wholesaler Accepted to Purchase</label>'.
 				'</div>'.
 				'<div class="row">'.
 					'<label for="qespent'.$r['id'].'">Spent</label>'.
@@ -491,6 +510,27 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 					'$("#qetags"+id).val(eltags);'.
 					'$("#qetags"+id).trigger("change");'.
 				'}'.
+			'}'.
+			'function rank(rank){'.
+				'if(rank==0){return"Visitor";}'.
+				'if(rank==100){return"Subscriber";}'.
+				'if(rank==200){return"Member";}'.
+				'if(rank==210){return"Member Silver";}'.
+				'if(rank==220){return"Member Bronze";}'.
+				'if(rank==230){return"Member Gold";}'.
+				'if(rank==240){return"Member Platinum";}'.
+				'if(rank==300){return"Client";}'.
+				'if(rank==310){return"Wholesaler Silver";}'.
+				'if(rank==320){return"Wholesaler Bronze";}'.
+				'if(rank==330){return"Wholesaler Gold";}'.
+				'if(rank==340){return"Wholesaler Platinum";}'.
+				'if(rank==400){return"Contributor";}'.
+				'if(rank==500){return"Author";}'.
+				'if(rank==600){return"Editor";}'.
+				'if(rank==700){return"Moderator";}'.
+				'if(rank==800){return"Manager";}'.
+				'if(rank==900){return"Administrator";}'.
+				'if(rank==1000){return"Developer";}'.
 			'}'.
 	  '</script>'.
 	'</td>';

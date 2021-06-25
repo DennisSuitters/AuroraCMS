@@ -1,26 +1,37 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="content">
+	<breadcrumb>
+		<section class="row">
+			<nav>
+				<ol class="breadcrumb">
+					<json-ld-breadcrumb>
+					<breaditems>
+						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+					</breaditems>
+					<breadcurrent>
+						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+					</breadcurrent>
+				</ol>
+			</nav>
+		</section>
+	</breadcrumb>
 	<section class="row jumboside">
-		<article class="jumbo m-0">
-			<breadcrumb>
-				<nav>
-					<ol class="breadcrumb">
-						<json-ld-breadcrumb>
-						<breaditems>
-							<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-						</breaditems>
-						<breadcurrent>
-							<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-						</breadcurrent>
-					</ol>
-				</nav>
-			</breadcrumb>
+		<cover>
+			<picture class="jumbo jumbotron d-none d-lg-block hidewhenempty order-2"><print page="coverItem"></picture>
+		</cover>
+		<article class="jumbo m-0 p-0 px-3 order-1">
 			<print page="notes">
 		</article>
-		<cover>
-			<picture class="jumbo jumbotron d-none d-sm-block"><print page="coverItem"></picture>
-		</cover>
+	</section>
+	<section class="row">
+		<article class="media text-center">
+			<mediaitems>
+				<mediaimages>
+					<a class="m2" href="<print media=file>" data-fancybox="gallery" data-caption="<print media=fileALT>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="img-thumbnail" loading="lazy" alt="<print media=fileALT>"></a>
+				</mediaimages>
+			</mediaitems>
+		</article>
 	</section>
 </block>
 <block include="footer.html">

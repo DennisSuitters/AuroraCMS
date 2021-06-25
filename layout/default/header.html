@@ -1,20 +1,20 @@
 <accountmenu>
 	<nav class="account-menu" role="menubar">
 		<input class="menubar-input" type="checkbox" id="administration-menu">
-		<label class="menubar-label" for="administration-menu" onclick>Administration</label>
+		<label class="menubar-label" for="administration-menu" onclick>Administration<img class="img-avatar avatar right" src="<print user=avatar>" alt="<print user=name>"></label>
 		<ul role="menu">
-			<li role="menuitem"><a href="proofs">Proofs</a></li>
-			<li role="menuitem"><a href="orders">Orders</a></li>
-			<li role="menuitem"><a href="settings">Settings</a></li>
-			<profile>
-				<li role="menuitem"><a href="profile/<print user=name>">Profile</a></li>
-			</profile>
+			<accountMenuItems>
+				<li class="<print active>" role="menuitem"><a href="<print account=url>"><print account="title"></a></li>
+			</accountMenuItems>
 			<administration>
 				<li role="menuitem"><a href="<print administrationLink>">Administration</a></li>
 			</administration>
 			<li role="menuitem"><a href="logout">Logout</a></li>
-			<li class="d-none d-sm-inline-block" role="menuitem"><img class="img-avatar avatar" src="<print user=avatar>" alt="<print user=name>"></li>
+			<li class="d-none d-sm-inline-block" role="menuitem">
+				<img class="img-avatar avatar" src="<print user=avatar>" alt="<print user=name>">
+			</li>
 		</ul>
+		<div class="account-rank badger badge-<print user=cssrank>"><print user="rank"></div>
 	</nav>
 </accountmenu>
 <activation>
@@ -103,7 +103,13 @@
 						<a href="<print menu=url>"><print menu="title"></a>
 						<ul role="menu">
 							<subMenuItem>
-								<li role="menuitem"><a href="<print submenu=url>"><print submenu="title"></a></li>
+								<print header>
+								<li role="menuitem">
+									<a href="<print submenu=url>">
+										<print content="image">
+										<print submenu="title">
+									</a>
+								</li>
 							</subMenuItem>
 						</ul>
 					</li>

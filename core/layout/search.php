@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 $rank=0;
 $show='search';
@@ -39,9 +38,7 @@ $search=isset($_POST['s'])?$_POST['s']:'%';?>
         </form>
         <div class="row pl-5">
           <?php $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`login_user`) LIKE LOWER(:search) OR LOWER(`contentType`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`barcode`) LIKE LOWER(:search) OR LOWER(`fccid`) LIKE LOWER(:search) OR LOWER(`code`) LIKE LOWER(:search) OR LOWER(`brand`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`category_1`) LIKE LOWER(:search) OR LOWER(`category_2`) LIKE LOWER(:search) OR LOWER(`category_3`) LIKE LOWER(:search) OR LOWER(`category_4`) LIKE LOWER(:search) OR LOWER(`name`) LIKE LOWER(:search) OR LOWER(`email`) LIKE LOWER(:search) OR LOWER(`business`) LIKE LOWER(:search) OR LOWER(`address`) LIKE LOWER(:search) OR LOWER(`suburb`) LIKE LOWER(:search) OR LOWER(`city`) LIKE LOWER(:search) OR LOWER(`state`) LIKE LOWER(:search) OR LOWER(`postcode`) LIKE LOWER(:search) OR LOWER(`phone`) LIKE LOWER(:search) OR LOWER(`mobile`) LIKE LOWER(:search) OR LOWER(`fileALT`) LIKE LOWER(:search) OR LOWER(`attributionImageTitle`) LIKE LOWER(:search) OR LOWER(`attributionImageName`) LIKE LOWER(:search) OR LOWER(`cost`) LIKE LOWER(:search) OR LOWER(`subject`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) OR LOWER(`attributionContentName`) LIKE LOWER(:search) OR LOWER(`tags`) LIKE LOWER(:search) OR LOWER(`seoTitle`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) ORDER BY `ti` DESC");
-          $s->execute([
-            ':search'=>'%'.$search.'%'
-          ]);
+          $s->execute([':search'=>'%'.$search.'%']);
           while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <div class="contentType mt-4" id="google-title" data-contentType="<?=$r['contentType'];?>">
               <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>"><?=($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?></a>
@@ -54,9 +51,7 @@ $search=isset($_POST['s'])?$_POST['s']:'%';?>
             </div>
           <?php }
           $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE LOWER(`login_user`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`seoTitle`) LIKE LOWER(:search) OR LOWER(`fileALT`) LIKE LOWER(:search) OR LOWER(`attributionImageTitle`) LIKE LOWER(:search) OR LOWER(`attributionImageName`) LIKE LOWER(:search) OR LOWER(`contentType`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) ORDER BY `ord` ASC");
-          $s->execute([
-            ':search'=>'%'.$search.'%'
-          ]);
+          $s->execute([':search'=>'%'.$search.'%']);
           while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <div class="contentType mt-4" id="google-title" data-contentType="<?=$r['contentType'];?>">
               <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>"><?=($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?></a>

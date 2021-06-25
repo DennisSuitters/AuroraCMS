@@ -7,12 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add checkbox for sending quotes/invoices when Event Booking is created by client.
- * @changes    v0.1.2 Add ability to add Payment Options for when Placing Orders.
- * @changes    v0.1.2 Use PHP short codes where possible.
  * https://auspost.com.au/forms/pacpcs-registration.html
  * https://github.com/fontis/auspost-api-php
  */?>

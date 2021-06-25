@@ -7,17 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.1 Add Tag Editing Field as well as retreiving and sorting Tags from other Content
- * @changes    v0.1.2 Add disable tracking of IP's associated with selected user accounts.
- * @changes    v0.1.2 Use PHP short codes where possible.
 */
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-$q->execute([
-  ':id'=>$args[1]
-]);
+$q->execute([':id'=>$args[1]]);
 $r=$q->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section id="content">
@@ -101,11 +96,57 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <hr>
             <legend role="heading">Orders Information</legend>
-            <label id="accountSpent" for="spent"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountSpent" aria-label="PermaLink to Spent Field">&#128279;</a>':'';?>Spent</label>
-            <div class="form-row">
-              <div class="input-text">$</div>
-              <input class="textinput" id="spent" type="number" value="<?=$r['spent'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="spent"<?=$user['options'][5]==1?'':' readonly';?>>
-              <?=$user['options'][5]==1?'<button class="save" id="savespent" data-tooltip="tooltip" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+<?php $purchaseLimit=$config['memberLimit'];
+if($r['purchaseLimit']==0||$r['purchaseLimit']==''){
+  if($r['rank']==200)$purchaseLimit=$config['memberLimit'];
+  if($r['rank']==210)$purchaseLimit=$config['memberLimitSilver'];
+  if($r['rank']==220)$purchaseLimit=$config['memberLimitBronze'];
+  if($r['rank']==230)$purchaseLimit=$config['memberLimitGold'];
+  if($r['rank']==240)$purchaseLimit=$config['memberLimitPlatinum'];
+  if($r['rank']==310)$purchaseLimit=$config['memberLimitSilver'];
+  if($r['rank']==320)$purchaseLimit=$config['memberLimitBronze'];
+  if($r['rank']==330)$purchaseLimit=$config['memberLimitGold'];
+  if($r['rank']==340)$purchaseLimit=$config['memberLimitPlatinum'];
+}else$purchaseLimit=$r['purchaseLimit'];
+if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
+            <div class="row">
+              <div class="col-12 col-sm-6 pr-2">
+                <label id="accountpurchaseLimit" for="purchaseLimit"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountpurchaseLimit" aria-label="PermaLink to Purchase Limit Field">&#128279;</a>':'';?>Purchase Limit Override</label>
+                <div class="form-row">
+                  <input class="textinput" id="purchaseLimit" type="number" value="<?=$r['purchaseLimit'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseLimit"<?=$user['options'][5]==1?'':' readonly';?>>
+                  <?=$user['options'][5]==1?'<button class="save" id="savepurchaseLimit" data-tooltip="tooltip" data-dbid="purchaseLimit" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+                <small class="form-text">(Set to "0" or no value to use default for this account level, currently allowed to purchase <?=$purchaseLimit;?> items.)</small>
+              </div>
+              <div class="col-12 col-sm-6 pl-2">
+                <label id="accountPurchaseTime" for="purchaseTime"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPurchaseTime" aria-label="PermaLink to Purchase Time Selector">&#128279;</a>':'';?>Wholesale Purchase Time</label>
+                <select id="purchaseTime" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseTime"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','purchaseTime',$(this).val(),'select');">
+                  <option value="0"<?=$r['purchaseTime']==0?' selected':'';?>>Use System Default</option>
+                  <option value="2629743"<?=$r['purchaseTime']==2629743?' selected':'';?>>1 Month</option>
+                  <option value="5259486"<?=$r['purchaseTime']==5259486?' selected':'';?>>2 Months</option>
+                  <option value="7889229"<?=$r['purchaseTime']==7889229?' selected':'';?>>3 Months</option>
+                  <option value="15778458"<?=$r['purchaseTime']==15778458?' selected':'';?>>6 Months</option>
+                  <option value="31556926"<?=$r['purchaseTime']==31556926?' selected':'';?>>1 Year</option>
+                  <option value="63113852"<?=$r['purchaseTime']==63113852?' selected':'';?>>2 Years</option>
+                  <option value="94670778"<?=$r['purchaseTime']==94670778?' selected':'';?>>3 Years</option>
+                </select>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-sm-6 pr-2">
+                <label id="accountpti" for="pti"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountpti" aria-label="PermaLink to Last Purchase Date">&#128279;</a>':'';?>Last Purchase Date</label>
+                <div class="form-row">
+                  <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('._ago($r['pti']).')';?>
+                </div>
+              </div>
+              <Div class="col-12 col-sm-6 pl-2">
+                <label id="accountSpent" for="spent"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountSpent" aria-label="PermaLink to Spent Field">&#128279;</a>':'';?>Spent</label>
+                <div class="form-row">
+                  <div class="input-text">$</div>
+                  <input class="textinput" id="spent" type="number" value="<?=$r['spent'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="spent"<?=$user['options'][5]==1?'':' readonly';?>>
+                  <?=$user['options'][5]==1?'<button class="save" id="savespent" data-tooltip="tooltip" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+              </div>
             </div>
             <hr>
             <legend role="heading">Subject Tags</legend>
@@ -719,12 +760,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
   <?php /* Tab 7 Settings */ ?>
           <div class="tab1-7 border-top p-3" data-tabid="tab1-7" role="tabpanel">
             <label id="accountAdminTheme" for="theme"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAdminTheme" aria-label="PermaLink to Administration Theme Selector">&#128279;</a>':'';?>Administration Theme</label>
-            <div class="form-row">
-              <select id="theme" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="theme"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','theme',$(this).val(),'select');setTheme($(this).val());">
-                <option value="none">Light</option>
-                <option value="dark"<?=$r['theme']=='dark'?' selected':'';?>>Dark</option>
-              </select>
-            </div>
+            <select id="theme" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="theme"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','theme',$(this).val(),'select');setTheme($(this).val());">
+              <option value="none">Light</option>
+              <option value="dark"<?=$r['theme']=='dark'?' selected':'';?>>Dark</option>
+            </select>
             <script>
               function setTheme(theme){
                 $('body').removeClass('dark');
@@ -734,22 +773,20 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               }
             </script>
             <label id="accountTimezone" for="timezone"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTimezone" aria-label="PermaLink to Timezone Selector">&#128279;</a>':'';?>Timezone</label>
-            <div class="form-row">
-              <select id="timezone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="timezone"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','timezone',$(this).val(),'select');">
-                <option value="default">System Default</option>
-                <?php $o=[
-                  'Australia/Perth'      => "(GMT+08:00) Perth",
-                  'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
-                  'Australia/Darwin'     => "(GMT+09:30) Darwin",
-                  'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
-                  'Australia/Canberra'   => "(GMT+10:00) Canberra",
-                  'Australia/Hobart'     => "(GMT+10:00) Hobart",
-                  'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
-                  'Australia/Sydney'     => "(GMT+10:00) Sydney"
-                ];
-                foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected':'').'>'.$tz.'</option>';?>
+            <select id="timezone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="timezone"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','timezone',$(this).val(),'select');">
+              <option value="default">System Default</option>
+              <?php $o=[
+                'Australia/Perth'      => "(GMT+08:00) Perth",
+                'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
+                'Australia/Darwin'     => "(GMT+09:30) Darwin",
+                'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
+                'Australia/Canberra'   => "(GMT+10:00) Canberra",
+                'Australia/Hobart'     => "(GMT+10:00) Hobart",
+                'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
+                'Australia/Sydney'     => "(GMT+10:00) Sydney"
+              ];
+              foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected':'').'>'.$tz.'</option>';?>
               </select>
-            </div>
             <?php if($user['id']==$r['id']||$user['options'][5]==1){?>
               <form target="sp" method="post" action="core/update.php" onsubmit="$('.page-block').addClass('d-block');">
                 <label id="accountPassword" for="password"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPassword" aria-label="PermaLink to Password Field">&#128279;</a>':'';?>Password</label>
@@ -768,24 +805,35 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <label for="accountActive" id="loginactive0<?=$r['id'];?>">Active</label>
             </div>
             <label id="accountRank" for="rank"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountRank" aria-label="PermaLink to Rank Selector">&#128279;</a>':'';?>Rank</label>
-            <div class="form-row">
-              <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="rank"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','rank',$(this).val(),'select');">
-                <option value="0"<?=$r['rank']==0?' selected':'';?>>Visitor</option>
-                <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber</option>
-                <option value="200"<?=$r['rank']==200?' selected':'';?>>Member</option>
-                <option value="300"<?=$r['rank']==300?' selected':'';?>>Client</option>
-                <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor</option>
-                <option value="500"<?=$r['rank']==500?' selected':'';?>>Author</option>
-                <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor</option>
-                <option value="700"<?=$r['rank']==700?' selected':'';?>>Moderator</option>
-                <option value="800"<?=$r['rank']==800?' selected':'';?>>Manager</option>
-                <option value="900"<?=$r['rank']==900?' selected':'';?>>Administrator</option>
-                <?=$user['rank']==1000?'<option value="1000"'.($r['rank']==1000?' selected':'').'>Developer</option>':'';?>
-              </select>
-            </div>
+            <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="rank"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','rank',$(this).val(),'select');">
+              <option value="0"<?=$r['rank']==0?' selected':'';?>>Visitor</option>
+              <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber</option>
+              <option value="200"<?=$r['rank']==200?' selected':'';?>>Member</option>
+              <option value="210"<?=$r['rank']==210?' selected':'';?>>Member Silver</option>
+              <option value="220"<?=$r['rank']==220?' selected':'';?>>Member Bronze</option>
+              <option value="230"<?=$r['rank']==230?' selected':'';?>>Member Gold</option>
+              <option value="240"<?=$r['rank']==240?' selected':'';?>>Member Platinum</option>
+              <option value="300"<?=$r['rank']==300?' selected':'';?>>Client</option>
+              <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler Silver</option>
+              <option value="320"<?=$r['rank']==320?' selected':'';?>>Wholesaler Bronze</option>
+              <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Gold</option>
+              <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Platinum</option>
+              <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor</option>
+              <option value="500"<?=$r['rank']==500?' selected':'';?>>Author</option>
+              <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor</option>
+              <option value="700"<?=$r['rank']==700?' selected':'';?>>Moderator</option>
+              <option value="800"<?=$r['rank']==800?' selected':'';?>>Manager</option>
+              <option value="900"<?=$r['rank']==900?' selected':'';?>>Administrator</option>
+              <?=$user['rank']==1000?'<option value="1000"'.($r['rank']==1000?' selected':'').'>Developer</option>':'';?>
+            </select>
             <hr>
             <legend>Account Permissions</legend>
             <div class="row mt-3">
+              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountWholesalerAccepter" aria-label="PermaLink to Wholesaler Accepted Checkbox">&#128279;</a>':'';?>
+              <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"<?=($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label for="accountNewsletterSubscriber" id="loginnewsletter0<?=$r['id'];?>">Wholesaler Accepted to Purchase</label>
+            </div>
+            <div class="row">
               <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNewsletterSubscriber" aria-label="PermaLink to Newsletter Subscriber Checkbox">&#128279;</a>':'';?>
               <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label for="accountNewsletterSubscriber" id="loginnewsletter0<?=$r['id'];?>">Newsletter Subscriber</label>

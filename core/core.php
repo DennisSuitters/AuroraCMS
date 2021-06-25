@@ -7,13 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Move UNICODE define to index.php
- * @changes    v0.1.2 Tidy up some code formatting
- * @changes    v0.1.2 Add disable tracking of IP's associated with selected user accounts.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
@@ -75,11 +71,36 @@ elseif(file_exists(THEME.'/images/noavatar.jpg'))define('NOAVATAR',THEME.'/image
 else define('NOAVATAR','core/images/noavatar.jpg');
 define('ADMINNOAVATAR','core/images/noavatar.jpg');
 require'login.php';
+if(isset($user['rank'])&&$user['rank']>301&&$user['rank']<399){
+	$ranktime=0;
+	if($user['rank']==310)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeSilver'];
+	if($user['rank']==320)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeBronze'];
+	if($user['rank']==330)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeGold'];
+	if($user['rank']==340)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimePlatinum'];
+	$rt=time()-$user['pti'];
+	if($rt<$ranktime){
+		$user['options'][19]=0;
+		$sr=$db->prepare("UPDATE `".$prefix."login` SET `options`=:options WHERE id=:id");
+		$sr->execute([
+			':id'=>$user['id'],
+			':options'=>$user['options']
+		]);
+	}
+}
+
 function rank($txt){
 	if($txt==0)return'visitor';
 	if($txt==100)return'subscriber';
 	if($txt==200)return'member';
+	if($txt==210)return'member-silver';
+	if($txt==220)return'member-bronze';
+	if($txt==230)return'member-gold';
+	if($txt==240)return'member-platinum';
 	if($txt==300)return'client';
+	if($txt==310)return'wholesale-silver';
+	if($txt==320)return'wholesale-bronze';
+	if($txt==330)return'wholesale-gold';
+	if($txt==340)return'wholesale-platinum';
 	if($txt==400)return'contributor';
 	if($txt==500)return'author';
 	if($txt==600)return'editor';
@@ -127,7 +148,7 @@ function _ago($time){
 	else{
 		$fromTime=$time;
 		$timeDiff=floor(abs(time()-$fromTime)/60);
-		if($timeDiff<2)$timeDiff='Online Now';
+		if($timeDiff<2)$timeDiff='Just Now';
 		elseif($timeDiff>2&&$timeDiff<60)$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
 		elseif($timeDiff>60&&$timeDiff<120)$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
 		elseif($timeDiff<1440)$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';

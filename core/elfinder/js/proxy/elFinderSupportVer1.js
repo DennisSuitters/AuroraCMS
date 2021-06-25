@@ -1,1 +1,408 @@
-window.elFinderSupportVer1=function(e){var d=this,b,c,f,a=function(g){return g.replace("Today",c).replace("Yesterday",f)};b=new Date();c=b.getFullYear()+"/"+(b.getMonth()+1)+"/"+b.getDate();b=new Date(Date.now()-86400000);f=b.getFullYear()+"/"+(b.getMonth()+1)+"/"+b.getDate();this.upload=e||"auto";this.init=function(g){this.fm=g;this.fm.parseUploadData=function(j){var h;if(!$.trim(j)){return{error:["errResponse","errDataEmpty"]}}try{h=JSON.parse(j)}catch(i){return{error:["errResponse","errDataNotJSON"]}}return d.normalize("upload",h)}};this.send=function(g){var o=this,l=this.fm,h=$.Deferred(),i=g.data.cmd,k=[],m={},j,n;h.abort=function(){if(n.state()=="pending"){n.quiet=true;n.abort()}};switch(i){case"open":g.data.tree=1;break;case"parents":case"tree":return h.resolve({tree:[]});case"get":g.data.cmd="read";g.data.current=l.file(g.data.target).phash;break;case"put":g.data.cmd="edit";g.data.current=l.file(g.data.target).phash;break;case"archive":case"rm":g.data.current=l.file(g.data.targets[0]).phash;break;case"extract":case"rename":case"resize":g.data.current=l.file(g.data.target).phash;break;case"duplicate":m=$.extend(true,{},g);$.each(g.data.targets,function(p,q){$.ajax(Object.assign(m,{data:{cmd:"duplicate",target:q,current:l.file(q).phash}})).fail(function(r){l.error(l.res("error","connect"))}).done(function(r){r=o.normalize("duplicate",r);if(r.error){l.error(r.error)}else{if(r.added){l.trigger("add",{added:r.added})}}})});return h.resolve({});case"mkdir":case"mkfile":g.data.current=g.data.target;break;case"paste":g.data.current=g.data.dst;if(!g.data.tree){$.each(g.data.targets,function(p,q){if(l.file(q)&&l.file(q).mime==="directory"){g.data.tree="1";return false}})}break;case"size":return h.resolve({error:l.res("error","cmdsupport")});case"search":return h.resolve({error:l.res("error","cmdsupport")});case"file":g.data.cmd="open";g.data.current=l.file(g.data.target).phash;break}n=$.ajax(g).fail(function(p){h.reject(p)}).done(function(p){j=o.normalize(i,p);h.resolve(j)});return h};this.normalize=function(j,l){var r=this,o=this.fm,g={},i=function(s){return s&&s.hash&&s.name&&s.mime?s:null},h=function(s){return $.grep(s,function(t){return t&&t.mime&&t.mime==="directory"?true:false})},q=function(s){var u=h(s);k=o.diff(u,null,["date","ts"]);if(k.added.length){k.added=h(k.added)}if(k.changed.length){k.changed=h(k.changed)}if(k.removed.length){var t=[];$.each(k.removed,function(v,w){var x;if((x=o.file(w))&&x.mime==="directory"){t.push(w)}});k.removed=t}return k},n,p,m,k;if((j=="tmb"||j=="get")){return l}if(j=="upload"&&l.error&&l.cwd){l.warning=Object.assign({},l.error);l.error=false}if(l.error){return l}if(j=="put"){n=o.file(l.target.hash).phash;return{changed:[this.normalizeFile(l.target,n)]}}n=l.cwd.hash;m=(n==o.cwd().hash);if(l.tree){$.each(this.normalizeTree(l.tree),function(t,s){g[s.hash]=s})}$.each(l.cdc||[],function(t,s){var u=s.hash,v;if(g[u]){if(s.date){v=Date.parse(a(s.date));if(v&&!isNaN(v)){g[u].ts=Math.floor(v/1000)}else{g[u].date=s.date||o.formatDate(s)}}g[u].locked=s.hash==n?true:s.rm===void (0)?false:!s.rm}else{g[u]=r.normalizeFile(s,n,l.tmb)}});if(!l.tree){$.each(o.files(),function(t,s){if(!g[t]&&s.phash!=n&&s.mime=="directory"){g[t]=s}})}if(j=="open"){return{cwd:g[n]||this.normalizeFile(l.cwd),files:$.map(g,function(s){return s}),options:r.normalizeOptions(l),init:!!l.params,debug:l.debug}}if(m){p=o.diff($.map(g,i))}else{if(l.tree&&j!=="paste"){p=q(g)}else{p={added:[],removed:[],changed:[]};if(j==="paste"){p.sync=true}}}return Object.assign({current:l.cwd.hash,error:l.error,warning:l.warning,options:{tmb:!!l.tmb}},p)};this.normalizeTree=function(h){var i=this,g=[],j=function(m,n){var l,k;for(l=0;l<m.length;l++){k=m[l];g.push(i.normalizeFile(k,n));k.dirs.length&&j(k.dirs,k.hash)}};j([h]);return g};this.normalizeFile=function(h,m,j){var i=h.mime||"directory",g=i=="directory"&&!h.linkTo?0:h.size,l=h.date?Date.parse(a(h.date)):void 0,k={url:h.url,hash:h.hash,phash:m,name:h.name,mime:i,ts:h.ts,size:g,read:h.read,write:h.write,locked:!m?true:h.rm===void (0)?false:!h.rm};if(!k.ts){if(l&&!isNaN(l)){k.ts=Math.floor(l/1000)}else{k.date=h.date||this.fm.formatDate(h)}}if(h.mime=="application/x-empty"||h.mime=="inode/x-empty"){k.mime="text/plain"}if(h.linkTo){k.alias=h.linkTo}if(h.linkTo){k.linkTo=h.linkTo}if(h.tmb){k.tmb=h.tmb}else{if(k.mime.indexOf("image/")===0&&j){k.tmb=1}}if(h.dirs&&h.dirs.length){k.dirs=true}if(h.dim){k.dim=h.dim}if(h.resize){k.resize=h.resize}return k};this.normalizeOptions=function(h){var g={path:h.cwd.rel,disabled:$.merge((h.disabled||[]),["search","netmount","zipdl"]),tmb:!!h.tmb,copyOverwrite:true};if(h.params){g.api=1;g.url=h.params.url;g.archivers={create:h.params.archives||[],extract:h.params.extract||[]}}if(g.path.indexOf("/")!==-1){g.separator="/"}else{if(g.path.indexOf("\\")!==-1){g.separator="\\"}}return g}};
+/**
+ * elFinder transport to support old protocol.
+ *
+ * @example
+ * $('selector').elfinder({
+ *   .... 
+ *   transport : new elFinderSupportVer1()
+ * })
+ *
+ * @author Dmitry (dio) Levashov
+ **/
+window.elFinderSupportVer1 = function(upload) {
+	"use strict";
+	var self = this,
+		dateObj, today, yesterday,
+		getDateString = function(date) {
+			return date.replace('Today', today).replace('Yesterday', yesterday);
+		};
+	
+	dateObj = new Date();
+	today = dateObj.getFullYear() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getDate();
+	dateObj = new Date(Date.now() - 86400000);
+	yesterday = dateObj.getFullYear() + '/' + (dateObj.getMonth() + 1) + '/' + dateObj.getDate();
+	
+	this.upload = upload || 'auto';
+	
+	this.init = function(fm) {
+		this.fm = fm;
+		this.fm.parseUploadData = function(text) {
+			var data;
+
+			if (!$.trim(text)) {
+				return {error : ['errResponse', 'errDataEmpty']};
+			}
+
+			try {
+				data = JSON.parse(text);
+			} catch (e) {
+				return {error : ['errResponse', 'errDataNotJSON']};
+			}
+			
+			return self.normalize('upload', data);
+		};
+	};
+	
+	
+	this.send = function(opts) {
+		var self = this,
+			fm = this.fm,
+			dfrd = $.Deferred(),
+			cmd = opts.data.cmd,
+			args = [],
+			_opts = {},
+			data,
+			xhr;
+			
+		dfrd.abort = function() {
+			if (xhr.state() == 'pending') {
+				xhr.quiet = true;
+				xhr.abort();
+			}
+		};
+		
+		switch (cmd) {
+			case 'open':
+				opts.data.tree = 1;
+				break;
+			case 'parents':
+			case 'tree':
+				return dfrd.resolve({tree : []});
+			case 'get':
+				opts.data.cmd = 'read';
+				opts.data.current = fm.file(opts.data.target).phash;
+				break;
+			case 'put':
+				opts.data.cmd = 'edit';
+				opts.data.current = fm.file(opts.data.target).phash;
+				break;
+			case 'archive':
+			case 'rm':
+				opts.data.current = fm.file(opts.data.targets[0]).phash;
+				break;
+			case 'extract':
+			case 'rename':
+			case 'resize':
+				opts.data.current = fm.file(opts.data.target).phash;
+				break;
+			case 'duplicate':
+				_opts = $.extend(true, {}, opts);
+
+				$.each(opts.data.targets, function(i, hash) {
+					$.ajax(Object.assign(_opts, {data : {cmd : 'duplicate', target : hash, current : fm.file(hash).phash}}))
+						.fail(function(error) {
+							fm.error(fm.res('error', 'connect'));
+						})
+						.done(function(data) {
+							data = self.normalize('duplicate', data);
+							if (data.error) {
+								fm.error(data.error);
+							} else if (data.added) {
+								fm.trigger('add', {added : data.added});
+							}
+						});
+				});
+				return dfrd.resolve({});
+				
+			case 'mkdir':
+			case 'mkfile':
+				opts.data.current = opts.data.target;
+				break;
+			case 'paste':
+				opts.data.current = opts.data.dst;
+				if (! opts.data.tree) {
+					$.each(opts.data.targets, function(i, h) {
+						if (fm.file(h) && fm.file(h).mime === 'directory') {
+							opts.data.tree = '1';
+							return false;
+						}
+					});
+				}
+				break;
+				
+			case 'size':
+				return dfrd.resolve({error : fm.res('error', 'cmdsupport')});
+			case 'search':
+				return dfrd.resolve({error : fm.res('error', 'cmdsupport')});
+				
+			case 'file':
+				opts.data.cmd = 'open';
+				opts.data.current = fm.file(opts.data.target).phash;
+				break;
+		}
+		// cmd = opts.data.cmd
+		
+		xhr = $.ajax(opts)
+			.fail(function(error) {
+				dfrd.reject(error);
+			})
+			.done(function(raw) {
+				data = self.normalize(cmd, raw);
+				dfrd.resolve(data);
+			});
+			
+		return dfrd;
+	};
+	
+	// fix old connectors errors messages as possible
+	// this.errors = {
+	// 	'Unknown command'                                  : 'Unknown command.',
+	// 	'Invalid backend configuration'                    : 'Invalid backend configuration.',
+	// 	'Access denied'                                    : 'Access denied.',
+	// 	'PHP JSON module not installed'                    : 'PHP JSON module not installed.',
+	// 	'File not found'                                   : 'File not found.',
+	// 	'Invalid name'                                     : 'Invalid file name.',
+	// 	'File or folder with the same name already exists' : 'File named "$1" already exists in this location.',
+	// 	'Not allowed file type'                            : 'Not allowed file type.',
+	// 	'File exceeds the maximum allowed filesize'        : 'File exceeds maximum allowed size.',
+	// 	'Unable to copy into itself'                       : 'Unable to copy "$1" into itself.',
+	// 	'Unable to create archive'                         : 'Unable to create archive.',
+	// 	'Unable to extract files from archive'             : 'Unable to extract files from "$1".'
+	// }
+	
+	this.normalize = function(cmd, data) {
+		var self = this,
+			fm   = this.fm,
+			files = {}, 
+			filter = function(file) { return file && file.hash && file.name && file.mime ? file : null; },
+			getDirs = function(items) {
+				return $.grep(items, function(i) {
+					return i && i.mime && i.mime === 'directory'? true : false;
+				});
+			},
+			getTreeDiff = function(files) {
+				var dirs = getDirs(files);
+				treeDiff = fm.diff(dirs, null, ['date', 'ts']);
+				if (treeDiff.added.length) {
+					treeDiff.added = getDirs(treeDiff.added);
+				}
+				if (treeDiff.changed.length) {
+					treeDiff.changed = getDirs(treeDiff.changed);
+				}
+				if (treeDiff.removed.length) {
+					var removed = [];
+					$.each(treeDiff.removed, function(i, h) {
+						var item;
+						if ((item = fm.file(h)) && item.mime === 'directory') {
+							removed.push(h);
+						}
+					});
+					treeDiff.removed = removed;
+				}
+				return treeDiff;
+			},
+			phash, diff, isCwd, treeDiff;
+
+		if ((cmd == 'tmb' || cmd == 'get')) {
+			return data;
+		}
+		
+		// if (data.error) {
+		// 	$.each(data.error, function(i, msg) {
+		// 		if (self.errors[msg]) {
+		// 			data.error[i] = self.errors[msg];
+		// 		}
+		// 	});
+		// }
+		
+		if (cmd == 'upload' && data.error && data.cwd) {
+			data.warning = Object.assign({}, data.error);
+			data.error = false;
+		}
+		
+		
+		if (data.error) {
+			return data;
+		}
+		
+		if (cmd == 'put') {
+
+			phash = fm.file(data.target.hash).phash;
+			return {changed : [this.normalizeFile(data.target, phash)]};
+		}
+		
+		phash = data.cwd.hash;
+
+		isCwd = (phash == fm.cwd().hash);
+		
+		if (data.tree) {
+			$.each(this.normalizeTree(data.tree), function(i, file) {
+				files[file.hash] = file;
+			});
+		}
+		
+		$.each(data.cdc||[], function(i, file) {
+			var hash = file.hash,
+				mcts;
+
+			if (files[hash]) {
+				if (file.date) {
+					mcts = Date.parse(getDateString(file.date));
+					if (mcts && !isNaN(mcts)) {
+						files[hash].ts = Math.floor(mcts / 1000);
+					} else {
+						files[hash].date = file.date || fm.formatDate(file);
+					}
+				}
+				files[hash].locked = file.hash == phash ? true : file.rm === void(0) ? false : !file.rm;
+			} else {
+				files[hash] = self.normalizeFile(file, phash, data.tmb);
+			}
+		});
+		
+		if (!data.tree) {
+			$.each(fm.files(), function(hash, file) {
+				if (!files[hash] && file.phash != phash && file.mime == 'directory') {
+					files[hash] = file;
+				}
+			});
+		}
+		
+		if (cmd == 'open') {
+			return {
+					cwd     : files[phash] || this.normalizeFile(data.cwd),
+					files   : $.map(files, function(f) { return f; }),
+					options : self.normalizeOptions(data),
+					init    : !!data.params,
+					debug   : data.debug
+				};
+		}
+		
+		if (isCwd) {
+			diff = fm.diff($.map(files, filter));
+		} else {
+			if (data.tree && cmd !== 'paste') {
+				diff = getTreeDiff(files);
+			} else {
+				diff = {
+					added   : [],
+					removed : [],
+					changed : []
+				};
+				if (cmd === 'paste') {
+					diff.sync = true;
+				}
+			}
+		}
+		
+		return Object.assign({
+			current : data.cwd.hash,
+			error   : data.error,
+			warning : data.warning,
+			options : {tmb : !!data.tmb}
+		}, diff);
+		
+	};
+	
+	/**
+	 * Convert old api tree into plain array of dirs
+	 *
+	 * @param  Object  root dir
+	 * @return Array
+	 */
+	this.normalizeTree = function(root) {
+		var self     = this,
+			result   = [],
+			traverse = function(dirs, phash) {
+				var i, dir;
+				
+				for (i = 0; i < dirs.length; i++) {
+					dir = dirs[i];
+					result.push(self.normalizeFile(dir, phash));
+					dir.dirs.length && traverse(dir.dirs, dir.hash);
+				}
+			};
+
+		traverse([root]);
+
+		return result;
+	};
+	
+	/**
+	 * Convert file info from old api format into new one
+	 *
+	 * @param  Object  file
+	 * @param  String  parent dir hash
+	 * @return Object
+	 */
+	this.normalizeFile = function(file, phash, tmb) {
+		var mime = file.mime || 'directory',
+			size = mime == 'directory' && !file.linkTo ? 0 : file.size,
+			mcts = file.date? Date.parse(getDateString(file.date)) : void 0,
+			info = {
+				url    : file.url,
+				hash   : file.hash,
+				phash  : phash,
+				name   : file.name,
+				mime   : mime,
+				ts     : file.ts,
+				size   : size,
+				read   : file.read,
+				write  : file.write,
+				locked : !phash ? true : file.rm === void(0) ? false : !file.rm
+			};
+		
+		if (! info.ts) {
+			if (mcts && !isNaN(mcts)) {
+				info.ts = Math.floor(mcts / 1000);
+			} else {
+				info.date = file.date || this.fm.formatDate(file);
+			}
+		}
+		
+		if (file.mime == 'application/x-empty' || file.mime == 'inode/x-empty') {
+			info.mime = 'text/plain';
+		}
+		
+		if (file.linkTo) {
+			info.alias = file.linkTo;
+		}
+
+		if (file.linkTo) {
+			info.linkTo = file.linkTo;
+		}
+		
+		if (file.tmb) {
+			info.tmb = file.tmb;
+		} else if (info.mime.indexOf('image/') === 0 && tmb) {
+			info.tmb = 1;
+			
+		}
+
+		if (file.dirs && file.dirs.length) {
+			info.dirs = true;
+		}
+		if (file.dim) {
+			info.dim = file.dim;
+		}
+		if (file.resize) {
+			info.resize = file.resize;
+		}
+		return info;
+	};
+	
+	this.normalizeOptions = function(data) {
+		var opts = {
+				path          : data.cwd.rel,
+				disabled      : $.merge((data.disabled || []), [ 'search', 'netmount', 'zipdl' ]),
+				tmb           : !!data.tmb,
+				copyOverwrite : true
+			};
+		
+		if (data.params) {
+			opts.api      = 1;
+			opts.url      = data.params.url;
+			opts.archivers = {
+				create  : data.params.archives || [],
+				extract : data.params.extract || []
+			};
+		}
+		
+		if (opts.path.indexOf('/') !== -1) {
+			opts.separator = '/';
+		} else if (opts.path.indexOf('\\') !== -1) {
+			opts.separator = '\\';
+		}
+		return opts;
+	};
+};

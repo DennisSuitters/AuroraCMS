@@ -7,39 +7,56 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add Parsing of Google reCaptcha.
- * @changes    v0.1.2 Add Parsing for Event Bookings and Date/Time.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 $sideTemp='';
 if(file_exists(THEME.'/side_menu.html')){
 	$sideTemp=file_get_contents(THEME.'/side_menu.html');
+	$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
+	$ru=[
+		'options'=>00000000000000000000000000000000,
+		'rank'=>0
+	];
+	if($uid!=0){
+		$su=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+		$su->execute([':id'=>$uid]);
+		$ru=$su->fetch(PDO::FETCH_ASSOC);
+	}
 	if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 		$sideCost='';
 		if($r['options'][0]==1||$r['cost']!=''){
-			if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+			if($r['stockStatus']=='pre-order')$sideCost.='<div class="pre-order">Pre-Order</div>';
+			elseif($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
 			else{
-				if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
-				$sideCost.=$r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'';
-				$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
-				if($r['stockStatus']=='sold out')$sideCost.='</div>';
+					if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
+					$sideCost.=$r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'';
+					$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+					if($r['stockStatus']=='sold out')$sideCost.='</div>';
 			}
 		}
 		if($r['stockStatus']=='out of stock')$r['quantity']=0;
 		if($r['stockStatus']=='pre-order')$r['quantity']=0;
+		if(isset($ru['rank'])&&$ru['rank']>300||$ru['rank']<400){
+			if($r['dCost']!=0)$sideCost='<div class="sold">&#36;'.$r['dCost'].'</div>';
+		}
 		$sideTemp=preg_replace([
 			'/<print content=[\"\']?stockStatus[\"\']?>/',
 			'/<print content=[\"\']?cost[\"\']?>/',
-			'/<print content=[\"\']?id[\"\']?>/'
+			'/<print content=[\"\']?id[\"\']?>/',
 		],[
 			$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']),
 			$sideCost,
 			$r['id']
 		],$sideTemp);
+
+    if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+		if($config['options'][30]==1){
+			if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
+			else$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$sideTemp);
+		}else$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
 		$sideQuantity='';
 		if(isset($r['contentType'])&&$r['contentType']=='inventory'){
 				$sideTemp=preg_replace([
@@ -48,7 +65,7 @@ if(file_exists(THEME.'/side_menu.html')){
 					'/<print content=[\"\']?stock[\"\']?>/'
 				],[
 					'',
-					($r['quantity']==0?'out of stock':$r['quantity']),
+					($r['quantity']==0?'':$r['quantity']),
 					($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
 				],$sideTemp);
 				if($r['stockStatus']=='sold out')$sideQuantity='<div class="quantity">Sold Out</div>';
@@ -168,10 +185,14 @@ if(file_exists(THEME.'/side_menu.html')){
 				if($view=='portfolio'||$view=='gallery')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
 				$sideTemp=preg_replace([
 					'/<[\/]?sort>/',
-					'/<sortOptions>/'
+					'/<sortOptions>/',
+					$config['showItems']>0?'/<\/showItems>/':'~<showItems>.*?<\/showItems>~is',
+					'/<itemCount>/'
 				],[
 					'',
-					$sortOptions
+					$sortOptions,
+					'',
+					$config['showItems']
 				],$sideTemp);
 			}else$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 		}
@@ -240,14 +261,18 @@ if(file_exists(THEME.'/side_menu.html')){
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 	$insides=$matches[1];
 	if(isset($sidecat)&&$sidecat!=''){
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published' ORDER BY `featured` DESC, `ti` DESC $show");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `ti` DESC $show");
 		$s->execute([
 			':contentType'=>$contentType,
-			':cat'=>$sidecat
+			':cat'=>$sidecat,
+			':rank'=>$_SESSION['rank']
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' ORDER BY `featured` DESC, `ti` DESC $show");
-		$s->execute([':contentType'=>$contentType]);
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `ti` DESC $show");
+		$s->execute([
+			':contentType'=>$contentType,
+			':rank'=>$_SESSION['rank']
+		]);
 	}
 	$output='';
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
@@ -287,7 +312,7 @@ if(file_exists(THEME.'/side_menu.html')){
 		'~<settings.*?>~is'
 	],[
 		$output,
-		'',
+		''
 	],$outside,1);
 	$sideTemp=preg_replace('~<item>.*?<\/item>~is',$outside,$sideTemp,1);
 }

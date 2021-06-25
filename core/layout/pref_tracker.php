@@ -7,10 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Use PHP short codes where possible.
  */?>
 <main>
   <section id="content">
@@ -52,9 +51,7 @@
           <tbody id="l_tracker">
             <?php if(isset($args[1])&&$args[1]!=''){
               $s=$db->prepare("SELECT * FROM `".$prefix."tracker` WHERE LOWER(`browser`) LIKE LOWER (:browser) ORDER BY `ti` DESC LIMIT 20");
-              $s->execute([
-                ':browser'=>strtolower($args[1])
-              ]);
+              $s->execute([':browser'=>strtolower($args[1])]);
             }else{
               $s=$db->prepare("SELECT * FROM `".$prefix."tracker` ORDER BY `ti` DESC LIMIT 20");
               $s->execute();

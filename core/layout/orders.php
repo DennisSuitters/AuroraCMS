@@ -7,19 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add Quick Edit Dropdown.
- * @changes    v0.1.2 Use PHP short codes where possible.
  */
 if($user['options'][4]==1){
   $uid=isset($_SESSION['uid'])?$_SESSION['uid']:$uid=0;
   $error=0;
   $ti=time();
   $oid='';
-  if(isset($args[1]))
-    $id=$args[1];
+  if(isset($args[1]))$id=$args[1];
   if($args[0]=='duplicate'){
     $sd=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
     $sd->execute([':id'=>$id]);
@@ -113,7 +110,6 @@ if($user['options'][4]==1){
       ':iid_ti'=>$ti,
       ':id'=>$id
     ]);
-    if(file_exists('../media/order/'.$r['qid'].'.pdf'))unlink('../media/orders/'.$r['qid'].'.pdf');
     $args[0]='invoices';
   }
   if($args[0]=='settings')require'core/layout/set_orders.php';
@@ -194,15 +190,11 @@ if($user['options'][4]==1){
                 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   if($r['due_ti']<$ti){
                     $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id");
-                    $us->execute([
-                      ':id'=>$r['id']
-                    ]);
+                    $us->execute([':id'=>$r['id']]);
                     $r['status']='overdue';
                   }
-                  $cs=$db->prepare("SELECT `username`,`name`,`email`,`business` FROM `".$prefix."login` WHERE `id`=:id");
-                  $cs->execute([
-                    ':id'=>$r['cid']
-                  ]);
+                  $cs=$db->prepare("SELECT `username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+                  $cs->execute([':id'=>$r['cid']]);
                   $c=$cs->fetch(PDO::FETCH_ASSOC);?>
                   <tr id="l_<?=$r['id'];?>">
                     <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?= svg2('plus').svg2('close','d-none');?></button></td>
@@ -210,7 +202,11 @@ if($user['options'][4]==1){
                       <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     </td>
                     <td class="align-middle">
-                      <?=$c['username'].($c['name']!=''?' ['.$c['name'].']':'').':'.($c['name']!=''&&$c['business']!=''?'<br>':'').($c['business']!=''?$c['business']:'');?>
+                      <?=$c['username'].($c['name']!=''?' ['.$c['name'].']':'').
+                          ':'.
+                          ($c['name']!=''&&$c['business']!=''?'<br>':'').
+                          ($c['business']!=''?$c['business']:'').
+                          (($c['rank']>200&&$c['rank']<300)||($c['rank']>300&&$c['rank']<400)?'<br><small>'.ucwords(str_replace('-',' ',rank($c['rank']))).'</small>':'');?>
                     </td>
                     <td class="align-middle">
                       <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>

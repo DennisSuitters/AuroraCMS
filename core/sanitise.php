@@ -7,11 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @notes      Modified kses from WordPress to be faster, work with PHP7+, and include HTML5 elements.
- * @changes    v0.1.2 Tidy up code and reduce footprint.
  */
 function kses(
   $string,

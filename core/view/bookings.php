@@ -7,14 +7,9 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.2
+ * @version    0.1.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * @changes    v0.1.2 Add Parsing of Google reCaptcha.
- * @changes    v0.1.2 Fix selection of Service/Event.
- * @changes    v0.1.2 Fix Date to current, or Event date if selected from content item page.
- * @changes    v0.1.2 Add parsing of hiding elements if selected from content item page.
- * @changes    v0.1.2 Check over and tidy up code.
  */
 if(stristr($html,'<breadcrumb>')){
   preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);

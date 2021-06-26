@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,7 +31,7 @@ if($_POST['emailtrap']==''){
 				 'username = '.$dbusername.PHP_EOL.
 				 'password = '.$dbpassword.PHP_EOL.
 				 '[system]'.PHP_EOL.
-				 'devmode = false'.PHP_EOL,
+				 'devmode = false'.PHP_EOL.
 				 'version = '.time().PHP_EOL.
 				 'url = '.PHP_EOL.
 				 'admin = '.PHP_EOL;
@@ -61,7 +61,7 @@ if($_POST['emailtrap']==''){
 				 'username = '.$config['database']['username'].PHP_EOL.
 				 'password = '.$config['database']['password'].PHP_EOL.
 				 '[system]'.PHP_EOL.
-				 'devmode = '.$config['system']['devmode'].PHP_EOL,
+				 'devmode = '.$config['system']['devmode'].PHP_EOL.
 				 'version = '.time().PHP_EOL.
 				 'url = '.ltrim($sysurl).PHP_EOL.
 				 'admin = '.($sysadmin==''?'admin':$sysadmin).PHP_EOL;

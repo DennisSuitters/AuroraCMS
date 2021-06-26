@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -167,9 +167,7 @@
 			<script src="core/js/aurora.min.js"></script>
 			<script>
 				function isValid(){
-					if($(this).valid()){
-						$('#block').addClass('d-block');
-					}
+					$('#block').addClass('d-block');
 				}
 			</script>
 		</main>

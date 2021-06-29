@@ -1171,7 +1171,6 @@ a.badge-dark:focus {
   background-color: #f8d7da !important;
   color: #000 !important; }
 
-
 .badge[data-badge]::after,
 .badge:not([data-badge])::after {
   display: inline-block;

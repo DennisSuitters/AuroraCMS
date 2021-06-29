@@ -25,7 +25,6 @@ This is a quick list of things what need to be fixed or worked on to help those 
     - Mobile Display Formatting.
     - Option to allow recurring orders with time offset.
     - Allow Orders to be sent as gifts, purchaser can enter recipients address.
-    - Add Convert pre-order items to invoice.
   - Content
     - Remove Tabs such as Media from displaying when editing the Home Page.
     - Check that Title tags for Links are required for SEO.
@@ -39,11 +38,13 @@ This is a quick list of things what need to be fixed or worked on to help those 
   - SEO Related
     - Add Tags to fields for auto-filling information.
     - Add a character length warning SEO fields if they are too short or too long.
+  - Check styling for PWA Manifest for when site is offline or inaccessible.
 - Front End
   - Content
     - If the End Time is set, display a countdown clock, add a parser so it can appear depending on the template, also a checkbox option to enable/disable.
   - Search
     - Integrate PHP's levenshtein function, for matching miss-typed word matches for better search results, and to help expose content that may otherwise be hidden due to miss-typed search queries.
+  - Check styling for PWA Manifest for when site is offline or inaccessible.
   - Chat
     - Build interactive Chat Bot that can return asked about products and services.
 - Pick apart the following services and integrate their features

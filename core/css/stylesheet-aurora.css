@@ -44,30 +44,39 @@
   background-color: #fff !important;
   color: #000 !important;
   font-family: Arial !important;
-  font-size: 1em !important; }
+  font-size: 1em !important;
+  font-weight: 400 !important; }
 
 .order-list {
-  border: 0 !important;
   border-radius: 0 !important; }
+
+.order-list thead {
+  background-color: #000 !important; }
 
 .order-list thead tr th {
   background-color: #000 !important;
   font-family: Arial !important;
   font-size: 1em !important;
+  font-weight: 700 !important;
   color: #fff !important; }
 
 .order-list tbody tr td {
   background-color: #fff !important;
   font-family: Arial !important;
   font-size: 1em !important;
-  color: #000 !important; }
+  font-weight: 400 !important;
+  color: #000 !important;
+  text-shadow: none !important; }
 
 .order-list tbody tr td a {
   font-family: Arial !important;
   font-size: 1em !important;
-  color: #000 !important; }
+  font-weight: 400 !important;
+  color: #000 !important;
+  text-shadow: none !important; }
 
 .order-list tbody tr td a:hover {
+  color: #000 !important;
   text-decoration: underline !important; }
 
 .order-list tbody tr td a.btn {
@@ -76,7 +85,6 @@
 .order-list tbody tr td a.btn:hover {
   color: var(--button-color-hover) !important;
   text-decoration: none !important; }
-
 
 #cart * {
   background: #fff !important;

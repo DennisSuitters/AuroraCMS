@@ -1,12 +1,16 @@
-### v0.1.4
-- Fix styling to make Slider Responsive.
-- Fix Menu Sub Items not showing, and allow Menu and Content to be added to Dropdown Menu's.
-- Restyle Dropdown Header Menu to be more pleasing, and to allow images.
-- Fix category navigation not working correctly.
-- Change SQL Query Order of Pages list in Administration so they appear in the order of the Front End Menu's.
-- Update elFinder, fixing icons displaying outside of the elFinder Window.
-- Allow Proofs, Orders, Profile and Settings pages to be adjusted in the Account Menu.
-- Fix Content Items not displaying correct Items depending on selected Categories.
-- Add dropdown to editable pages in Administration to make changes to another page easier.
-- Add check for number of Slider elements, if 0 then don't show Slider.
-- Add Checkbox Option in Administration Content Settings to Enable/Disable Slider.
+### v0.1.5
+- Remove .valid() jQuery check that wasn't working correctly.
+- Fix typo in installer, stopping stepping through install.
+- Fix index page not showing correct number of items set in settings attribute.
+- Add is_numeric check in postage unit calculator, and cart calculation.
+- Fix Cover Image removal removing input element, and changing to wrong noimage file.
+- Add Points Earning system and template parsing, where points are added to users account depending on the value an inventory item is set to.
+- Add information to Orders in Administration, showing Rank, Purchase Limit, Spent, Points, and last purchase.
+- Fix hidden spam field position when logged in when viewing the cart, was throwing an error when submitting cart.
+- Remove SQL and Parsing of adding category's to menu dropdowns.
+- Add "Share this to Social Media" widget to the sidebar menu, along with an edit in administration button when logged in as Administrator.
+- Remove reference to "bootstrap.min.css" from service worker as Bootstrap is now deprecated.
+- Fix loading of Summernote plugin CSS in Find N Replace plugin, we now load CSS in the Head rather than script.
+- Add Points Earned with the Account Name and Rank display.
+- Fix Logged in and Not Logged in Purchasing.
+- Fix Category Navigation not showing correct selected Category after selection.

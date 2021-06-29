@@ -1404,10 +1404,10 @@ a.badge-dark:focus {
   box-shadow: 0 0 0 .2rem rgba(52, 58, 64, .5); }
 
 .account-rank {
-  position: absolute;
-  right: 5px;
-  bottom: -10px;
-}
+  position: absolute !important;
+  right: 5px !important;
+  bottom: -10px !important;
+  text-shadow: none !important; }
 
 .badge-visitor,
 .badge-subscriber {
@@ -1430,12 +1430,12 @@ a.badge-dark:focus {
 .badge-member-bronze,
 .badge-wholesale-bronze {
   background-color: #a57164 !important;
-  color: #000 !important; }
+  color: #fff !important; }
 
 .badge-member-gold,
 .badge-wholesale-gold {
   background-color: #c39953 !important;
-  color: #000 !important; }
+  color: #fff !important; }
 
 .badge-member-platinum,
 .badge-wholesale-platinum {
@@ -1448,7 +1448,7 @@ a.badge-dark:focus {
 .badge-moderator,
 .badge-manager {
   background-color: #9400d3 !important;
-  color: #000 !important; }
+  color: #fff !important; }
 
 .badge-administrator,
 .badge-developer {

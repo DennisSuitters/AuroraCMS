@@ -71,8 +71,10 @@ if(file_exists(THEME.'/side_menu.html')){
 			number_format((float)$r['points'])
 		],$sideTemp);
 
-    if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)
-			$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+		if($config['options'][30]==1){
+    	if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)
+				$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+		}
 		if($config['options'][30]==1){
 			if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
 				$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);

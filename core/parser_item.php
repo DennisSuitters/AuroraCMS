@@ -362,19 +362,18 @@ if(stristr($html,'<item')){
     $su=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
     $su->execute([':id'=>$uid]);
     $ru=$su->fetch(PDO::FETCH_ASSOC);
-    if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1){
-      $item=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$item);
+    if($config['options'][30]==1){
+      if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)
+        $item=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$item);
     }
   }
   if($config['options'][30]==1){
-    if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
+    if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
       $item=preg_replace('/<[\/]?addtocart>/','',$item);
-    }else{
+    else
       $item=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$item);
-    }
-  }else{
+  }else
     $item=preg_replace('/<[\/]?addtocart>/','',$item);
-  }
   if(stristr($item,'<condition>')){
     if($r['itemCondition']!=''){
       $item=preg_replace([

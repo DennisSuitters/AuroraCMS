@@ -53,7 +53,7 @@ config
   `maintenance` int(1)
   `comingsoon` int(1)
   `options` varchar(32)
-    0
+    0   Enable Points Display
     1   Slider
     2   Image Resizing
     3   Account Sign Ups

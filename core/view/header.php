@@ -12,7 +12,7 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
-	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name` FROM `".$prefix."login` WHERE `id`=:uid");
+	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name`,`points` FROM `".$prefix."login` WHERE `id`=:uid");
 	$su->execute([':uid'=>$_SESSION['uid']]);
 	$user=$su->fetch(PDO::FETCH_ASSOC);
 	preg_match('/<accountMenuItems>([\w\W]*?)<\/accountMenuItems>/',$html,$matches);
@@ -51,6 +51,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		'/<print user=[\"\']?name[\"\']?>/',
 		'/<print user=[\"\']?cssrank[\"\']?>/',
 		'/<print user=[\"\']?rank[\"\']?>/',
+		'/<print user=[\"\']?points[\"\']?>/',
 		isset($_SESSION['options'])&&$_SESSION['options'][6]==1?'/<[\/]?seohelper>/':'~<seohelper>.*?<\/seohelper>~is',
 		$config['development'][0]==1&&$_SESSION['rank']>899?'/<[\/]?development>/':'~<development>.*?<\/development>~is'
 	],[
@@ -59,6 +60,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		URL.$settings['system']['admin'].'/',
 		str_replace(' ','-',$user['name']),
 		rank($user['rank']),
+		($user['points']>0?' | '.number_format((float)$user['points']).' Points Earned':''),
 		($user['name']!=''?$user['name']:$user['username']).' ('.ucwords(str_replace('-',' ',rank($user['rank']))).')',
 		'',
 		''

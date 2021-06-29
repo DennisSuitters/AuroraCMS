@@ -294,10 +294,10 @@ if($show=='item'){
 	$args[3]=$r['category_4'];
 }
 if($config['options'][31]==1&&stristr($html,'<category-nav>')){
-	$cat1=isset($args[0])&&$args[0]!=''?$args[0]:'';
-	$cat2=isset($args[1])&&$args[1]!=''?$args[1]:'';
-	$cat3=isset($args[2])&&$args[2]!=''?$args[2]:'';
-	$cat4=isset($args[3])&&$args[3]!=''?$args[3]:'';
+	$cat1=isset($args[0])&&$args[0]!=''?str_replace('-',' ',$args[0]):'';
+	$cat2=isset($args[1])&&$args[1]!=''?str_replace('-',' ',$args[1]):'';
+	$cat3=isset($args[2])&&$args[2]!=''?str_replace('-',' ',$args[2]):'';
+	$cat4=isset($args[3])&&$args[3]!=''?str_replace('-',' ',$args[3]):'';
 	$sc1=$db->prepare("SELECT DISTINCT(`category_1`) FROM `".$prefix."content` WHERE `contentType`=:contentType AND `category_1`!='' GROUP BY `category_1` ORDER BY `category_1` ASC");
 	$sc1->execute([':contentType'=>$view]);
 	$catlist='';

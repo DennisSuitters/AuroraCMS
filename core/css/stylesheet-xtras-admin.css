@@ -1125,6 +1125,53 @@ a.badge-dark:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem rgba(52, 58, 64, .5); }
 
+.badge-visitor,
+.badge-subscriber {
+  background-color: #ffff00 !important;
+  color: #000 !important; }
+
+.badge-member {
+  background-color: #4682b4 !important;
+  color: #fff !important; }
+
+.badge-client {
+  background-color: #00ff7f !important;
+  color: #000 !important; }
+
+.badge-member-silver,
+.badge-wholesale-silver {
+  background-color: #a6a6a6 !important;
+  color: #000 !important; }
+
+.badge-member-bronze,
+.badge-wholesale-bronze {
+  background-color: #a57164 !important;
+  color: #fff !important; }
+
+.badge-member-gold,
+.badge-wholesale-gold {
+  background-color: #c39953 !important;
+  color: #fff !important; }
+
+.badge-member-platinum,
+.badge-wholesale-platinum {
+  background-color: #e5e4e2 !important;
+  color: #000 !important; }
+
+.badge-contributor,
+.badge-author,
+.badge-editor,
+.badge-moderator,
+.badge-manager {
+  background-color: #9400d3 !important;
+  color: #fff !important; }
+
+.badge-administrator,
+.badge-developer {
+  background-color: #f8d7da !important;
+  color: #000 !important; }
+
+
 .badge[data-badge]::after,
 .badge:not([data-badge])::after {
   display: inline-block;

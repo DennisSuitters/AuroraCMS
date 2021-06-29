@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,30 @@ $q->execute([':id'=>$id]);
 $r=$q->fetch(PDO::FETCH_ASSOC);
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 $q->execute([':id'=>$r['cid']]);
-$client=$q->fetch(PDO::FETCH_ASSOC);
+if($q->rowCount()>0){
+  $client=$q->fetch(PDO::FETCH_ASSOC);
+}else{
+  $client=[
+    'id'=>0,
+    'options'=>00000000000000000000000000000000,
+    'rank'=>0,
+    'purchaseLimit'=>0,
+    'spent'=>0,
+    'points'=>0,
+    'pti'=>0,
+    'username'=>'',
+    'name'=>'',
+    'business'=>'',
+    'email'=>'',
+    'phone'=>'',
+    'mobile'=>'',
+    'address'=>'',
+    'suburb'=>'',
+    'city'=>'',
+    'state'=>'',
+    'postcode'=>0
+  ];
+}
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 $q->execute([':id'=>$r['uid']]);
 $usr=$q->fetch(PDO::FETCH_ASSOC);
@@ -63,14 +86,14 @@ else{?>
               <div class="form-row">
                 <div class="input-text">Order #</div>
                 <div class="input-text">
-                  <a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'];?></a>
+                  <a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' '.svg2('new-window');?></a>
                 </div>
                 <div class="input-text">Created</div>
                 <input id="detailscreated" type="text" value="<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?>" readonly aria-label="Date Created">
                 <div class="input-text">Due</div>
                 <input id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
                 <div class="input-text">Status</div>
-                <?php if($r['status']=='archived')echo'<input type="text" value="Archived" readonly>';
+                <?php if($r['status']=='archived'||$r['status']=='paid')echo'<input type="text" value="'.ucfirst($r['status']).'" readonly>';
                 else{?>
                   <select id="status" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
                     <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
@@ -79,6 +102,26 @@ else{?>
                     <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
                   </select>
                 <?php }?>
+              </div>
+              <div class="form-row">
+                <div class="input-text col-12 col-sm">Rank:&nbsp;<span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span></div>
+                <div class="input-text col-12 col-sm">
+<?php if($client['purchaseLimit']==0){
+  if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
+  if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
+  if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
+  if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
+  if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
+  if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
+  if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
+  if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
+  if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
+  if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
+}?>
+                  Purchase Limit:&nbsp;<span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span></div>
+                <div class="input-text col-12 col-sm">Spent:&nbsp;$<span id="clientSpent"><?=$client['spent'];?></span></div>
+                <div class="input-text col-12 col-sm">Points Earned:&nbsp;<span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
+                <div class="input-text col-12 col-sm">Last Purchase:&nbsp;<span id="clientpti"><?= _ago($client['pti']);?></span></div>
               </div>
             </div>
           </div>

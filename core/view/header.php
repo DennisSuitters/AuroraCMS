@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -113,10 +113,6 @@ if(stristr($html,'<buildMenu')){
 			':id'=>$r['id'],
 			':rank'=>$_SESSION['rank']
 		]);
-		$smcat=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' AND `url`=:view ORDER BY `title` ASC");
-		$smcat->execute([
-			':view'=>'inventory'
-		]);
 		$smc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `mid`=:id AND `status`='published' AND `rank`<=:rank ORDER BY `title` ASC");
 		$smc->execute([
 			':id'=>$r['id'],
@@ -170,34 +166,6 @@ if(stristr($html,'<buildMenu')){
 					''
 				],$mitem);
 				$submenu.=$mitem;
-			}
-		}
-		if(in_array(
-			$r['contentType'],
-			['article','events','gallery','inventory','news','portfolio','proofs','service',],
-			true)
-		){
-			if($smcat->rowCount()>0){
-				$ih=0;
-				while($rm=$smcat->fetch(PDO::FETCH_ASSOC)){
-					$mitem=$subMenuItem;
-					$subURL='';
-					$mitem=preg_replace([
-						'/<print header>/',
-						'/<print submenu=[\"\']?url[\"\']?>/',
-						'/<print rel=[\"\']?contentType[\"\']?>/',
-						'/<print submenu=[\"\']?title[\"\']?>/',
-						'/<print content=[\"\']?image[\"\']?>/'
-					],[
-						$ih==0?'<li class="dropdown-header">Categories</li>':'',
-						URL.$rm['url'].'/'.str_replace(' ','-',strtolower($rm['title'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
-						$rm['contentType'],
-						$rm['title'],
-						$rm['icon']!=''?'<img src="'.$rm['icon'].'" alt="'.$r['title'].'">':''
-					],$mitem);
-					$ih++;
-					$submenu.=$mitem;
-				}
 			}
 		}
 		if($smc->rowCount()>0){

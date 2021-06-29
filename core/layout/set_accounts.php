@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -40,6 +40,11 @@
           <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#productLoggedIn" aria-label="PermaLink to Must be Logged In to Purchase Products Checkbox">&#128279;</a>':'';?>
           <input id="configoptions30" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="30" type="checkbox"<?=$config['options'][30]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label id="configoptions301" for="configoptions30" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Must be Logged In to Purchase Products</label>
+        </div>
+        <div class="row">
+          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#productEnablePoints" aria-label="PermaLink to Display Points Value Checkbox">&#128279;</a>':'';?>
+          <input id="configoptions0" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="0" type="checkbox"<?=$config['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label id="configoptions01" for="configoptions0" data-tooltip="tooltip" aria-label="Enable Points Value Display.">Display Points Value</label>
         </div>
         <legend id="purchaseLimitsSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings#purchaseLimitsSection" aria-label="PermaLink to Purchase Limits Section">&#128279;</a>':'';?>Purchase Item Limits</legend>
         <div class="row">

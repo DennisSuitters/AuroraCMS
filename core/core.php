@@ -87,7 +87,6 @@ if(isset($user['rank'])&&$user['rank']>301&&$user['rank']<399){
 		]);
 	}
 }
-
 function rank($txt){
 	if($txt==0)return'visitor';
 	if($txt==100)return'subscriber';

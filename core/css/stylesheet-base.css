@@ -142,7 +142,7 @@ nav ul li ul {
   position: absolute;
   top: 1.7rem;
   right: 0;
-  z-index: 1000;
+  z-index: 1040;
   box-shadow: var(--box-shadow-x) var(--box-shadow-y) var(--box-shadow-spread) var(--box-shadow-spread) var(--box-shadow-color);
   border: var(--border-width) var(--border-style) var(--menu-dropdown-border-color);
   border-radius: var(--border-radius);

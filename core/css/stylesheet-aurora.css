@@ -1,6 +1,23 @@
 /* stylesheet v0.9 - Aurora - https://github.com/DiemenDesign/stylesheet */
 /* This additional Stylesheet contains CSS specific to the extra for AuroraCMS */
 
+.designby {
+  width: 100% !important;
+  background-color: #000 !important;
+  color: #888 !important;
+  font-family: sans-serif !important;
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  text-align: right !important;
+  padding: 2px 10px; }
+
+.designby a {
+  color: #888 !important; }
+
+.designby a:hover {
+  color: #888 !important;
+  text-decoration: underline !important; }
+
 [for="fullname"],
 [for="resetfullname"],
 [for="signupfullname"] {
@@ -28,6 +45,38 @@
   color: #000 !important;
   font-family: Arial !important;
   font-size: 1em !important; }
+
+.order-list {
+  border: 0 !important;
+  border-radius: 0 !important; }
+
+.order-list thead tr th {
+  background-color: #000 !important;
+  font-family: Arial !important;
+  font-size: 1em !important;
+  color: #fff !important; }
+
+.order-list tbody tr td {
+  background-color: #fff !important;
+  font-family: Arial !important;
+  font-size: 1em !important;
+  color: #000 !important; }
+
+.order-list tbody tr td a {
+  font-family: Arial !important;
+  font-size: 1em !important;
+  color: #000 !important; }
+
+.order-list tbody tr td a:hover {
+  text-decoration: underline !important; }
+
+.order-list tbody tr td a.btn {
+  color: var(--button-color) !important; }
+
+.order-list tbody tr td a.btn:hover {
+  color: var(--button-color-hover) !important;
+  text-decoration: none !important; }
+
 
 #cart * {
   background: #fff !important;
@@ -124,14 +173,13 @@
   width: 100%;
   height: var(--slider-height) !important;
   padding: 0;
-  margin: 0;
-  background-color: #000; }
+  margin: 0; }
 
 .slider li {
   -webkit-backface-visibility: hidden;
   display: none;
   width: 100%;
-  height: 100%;
+  height: var(--slider-height) !important;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%); }
@@ -144,6 +192,7 @@
   display: flex !important;
   width: 100%;
   height: auto !important;
+  object-fit: cover !important;
   border: 0;
   filter: blur(10px) brightness(0.25); }
 

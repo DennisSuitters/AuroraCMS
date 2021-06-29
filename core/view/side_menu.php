@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,6 +24,21 @@ if(file_exists(THEME.'/side_menu.html')){
 		$su->execute([':id'=>$uid]);
 		$ru=$su->fetch(PDO::FETCH_ASSOC);
 	}
+	$site_url=URL.$view.(isset($r['urlSlug'])?'/'.$r['urlSlug']:
+		(isset($args[0])&&$args[0]!=''?'/'.$args[0]:'').
+		(isset($args[1])&&$args[1]!=''?'/'.$args[1]:'').
+		(isset($args[2])&&$args[2]!=''?'/'.$args[2]:'').
+		(isset($args[3])&&$args[3]!=''?'/'.$args[3]:''));
+	$sideTemp=preg_replace([
+		'/<share>/',
+		isset($_SESSION['rank'])&&$_SESSION['rank']>899?'/<[\/]?admin>/':'~<admin>.*?<\/admin>~is',
+		'/<print adminlink>/'
+	],[
+		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook">'.frontsvg('i-social-facebook').'</a><a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text=AuroraCMS%20Share%20Buttons&amp;hashtags='.($r['tags']!=''?$r['tags']:$config['business']).'" title="Share to Twitter">'.frontsvg('i-social-twitter').'</a><a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest">'.frontsvg('i-social-pinterest').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Stumbleupon">'.frontsvg('i-social-stumbleupon').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Reddit">'.frontsvg('i-social-reddit').'</a><a class="i i-social i-2x m-1" target="_blank" href="https://bufferapp.com/add?url='.$site_url.'&amp;text='.$config['business'].'" title="Share to Buffer">'.frontsvg('i-social-buffer').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://www.digg.com/submit?url='.$site_url.'" title="Share to Digg">'.frontsvg('i-social-digg').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin">'.frontsvg('i-social-linkedin').'</a>',
+		'',
+		URL.$settings['system']['admin'].'/content/edit/'.$r['id']
+	],$sideTemp);
+
 	if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 		$sideCost='';
@@ -46,17 +61,25 @@ if(file_exists(THEME.'/side_menu.html')){
 			'/<print content=[\"\']?stockStatus[\"\']?>/',
 			'/<print content=[\"\']?cost[\"\']?>/',
 			'/<print content=[\"\']?id[\"\']?>/',
+			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
+			'/<print content=[\"\']?points[\"\']?>/'
 		],[
 			$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']),
 			$sideCost,
-			$r['id']
+			$r['id'],
+			'',
+			number_format((float)$r['points'])
 		],$sideTemp);
 
-    if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+    if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)
+			$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
 		if($config['options'][30]==1){
-			if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
-			else$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$sideTemp);
-		}else$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
+			if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
+				$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
+			else
+				$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$sideTemp);
+		}else
+			$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
 		$sideQuantity='';
 		if(isset($r['contentType'])&&$r['contentType']=='inventory'){
 				$sideTemp=preg_replace([

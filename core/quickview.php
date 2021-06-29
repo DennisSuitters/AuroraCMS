@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -141,7 +141,9 @@ if(file_exists('../'.THEME.'/quickview.html')){
       '/<print brand>/',
       '/<print content=[\"\']?title[\"\']?>/',
       '/<print content=[\"\']?notes[\"\']?>/',
-			'/<print URLENCODED_URL>/'
+			'/<print URLENCODED_URL>/',
+			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
+			'/<print content=[\"\']?points[\"\']?>/'
     ],[
       $r['file'],
 			$r['fileALT'],
@@ -162,7 +164,9 @@ if(file_exists('../'.THEME.'/quickview.html')){
       $brand,
       $r['title'],
       $r['notes'],
-			urlencode(URL.$r['contentType'].'/'.$r['urlSlug'])
+			urlencode(URL.$r['contentType'].'/'.$r['urlSlug']),
+			'',
+			number_format((float)$r['points'])
     ],$html);
     $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
     if($uid!=0){

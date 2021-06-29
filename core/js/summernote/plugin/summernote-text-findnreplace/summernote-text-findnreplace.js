@@ -38,11 +38,6 @@
           options  = context.options,
           lang     = options.langInfo,
           interface = $.summernote.interface;
-      $('<link/>', {
-        rel: 'stylesheet',
-        type: 'text/css',
-        href: '../summernote-text-findnreplace/css/lite.css'
-      }).appendTo('head');
       context.memo('button.findnreplace', function() {
         var button = ui.button({
           contents: options.findnreplace.icon,

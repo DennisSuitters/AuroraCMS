@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -433,14 +433,21 @@ else{
             <?php }
             if($r['contentType']=='inventory'){?>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-3">
+                <div class="col-12 col-sm-4 pr-md-3">
                   <label id="<?=$r['contentType'];?>Quantity" for="quantity"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Quantity" aria-label="PermaLink to '.ucfirst($r['contentType']).' Quantity Field">&#128279;</a>':'';?>Quantity</label>
                   <div class="form-row">
                     <input class="textinput" id="quantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?=$r['quantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
                     <?=$user['options'][1]==1?'<button class="save" id="savequantity" data-tooltip="tooltip" data-dbid="quantity" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-1">
+                <div class="col-12 col-sm-4 pr-md-3">
+                  <label id="<?=$r['contentType'];?>Points" for="quantity"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Points" aria-label="PermaLink to '.ucfirst($r['contentType']).' Points Value Field">&#128279;</a>':'';?>Points Value</label>
+                  <div class="form-row">
+                    <input class="textinput" id="points" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="points" type="text" value="<?=$r['points'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Points Value..."':' readonly';?>>
+                    <?=$user['options'][1]==1?'<button class="save" id="savepoints" data-tooltip="tooltip" data-dbid="points" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-4 pl-md-1">
                   <label id="<?=$r['contentType'];?>ItemCondition" for="itemCondition"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ItemCondition" aria-label="PermaLink to '.ucfirst($r['contentType']).' Condition Selector">&#128279;</a>':'';?>Condition</label>
                   <div class="form-row">
                     <select id="itemCondition"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?=$r['id'];?>','content','itemCondition',$(this).val(),'select');">

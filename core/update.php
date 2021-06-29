@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -181,18 +181,27 @@ if($tbl=='orders'&&$col=='status'&&$da=='archived'){
   ]);
 }
 if($tbl=='orders'&&$col=='status'&&$da=='paid'){
-	$q=$db->prepare("SELECT `cid`,`total` FROM `".$prefix."orders` WHERE `id`=:id");
+	$q=$db->prepare("SELECT `id`,`cid`,`total`,`points` FROM `".$prefix."orders` WHERE `id`=:id");
 	$q->execute([':id'=>$id]);
 	$r=$q->fetch(PDO::FETCH_ASSOC);
+	$sp=$db->prepare("SELECT `quantity`,`points` FROM `".$prefix."orderitems` WHERE `oid`=:id");
+	$sp->execute([
+		':id'=>$r['id']
+	]);
+	$points=0;
+	while($rp=$sp->fetch(PDO::FETCH_ASSOC)){
+		if($rp['points']>0)$points=$points+($rp['points'] * $rp['quantity']);
+	}
 	$s=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
 	$s->execute([':uid'=>$r['cid']]);
 	$ru=$s->fetch(PDO::FETCH_ASSOC);
 	$ru['spent']=$ru['spent']+$r['total'];
-	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent,`pti`=:pti WHERE `id`=:uid");
+	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent,`points`=`points`+:points,`pti`=:pti WHERE `id`=:cid");
 	$s->execute([
 		':spent'=>$ru['spent'],
-		':uid'=>$r['cid'],
-		':pti'=>$ti
+		':points'=>$points,
+		':pti'=>$ti,
+		':cid'=>$r['cid']
 	]);
 }
 if(is_null($e[2])){

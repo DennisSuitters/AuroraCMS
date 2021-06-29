@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -191,7 +191,7 @@ if($args[0]=='confirm'){
 			$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si");
 			$s->execute([':si'=>SESSIONID]);
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
-				$si=$db->prepare("SELECT `title`,`quantity`,`sold` FROM `".$prefix."content` WHERE `id`=:id");
+				$si=$db->prepare("SELECT `title`,`quantity`,`sold`,`points` FROM `".$prefix."content` WHERE `id`=:id");
 				$si->execute([':id'=>$r['iid']]);
 				$i=$si->fetch(PDO::FETCH_ASSOC);
 				$quantity=$i['quantity']-$r['quantity'];
@@ -202,7 +202,7 @@ if($args[0]=='confirm'){
 					':sold'=>$sold,
 					':id'=>$r['iid']
 				]);
-				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:status,:ti)");
+				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`points`,`ti`) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:status,:points,:ti)");
 				$sq->execute([
 					':oid'=>$oid,
 					':iid'=>$r['iid'],
@@ -210,7 +210,8 @@ if($args[0]=='confirm'){
 					':title'=>$i['title'],
 					':quantity'=>$r['quantity'],
 					':cost'=>$r['cost'],
-					':status'=>$r['status'],
+					':status'=>$r['stockStatus'],
+					':points'=>$r['points'],
 					':ti'=>$ti
 				]);
 			}
@@ -296,7 +297,7 @@ if($args[0]=='confirm'){
 				],$cartitem);
 				$cartitems.=$cartitem;
 				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
-				$weight=$weight+($i['weight']*$ci['quantity']);
+				$weight=$weight + (is_numeric($i['weight'])?$i['weight'] * $ci['quantity']:0);
 				if($i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
 				if($i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
 				if($i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -407,13 +407,15 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                   <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                   <label for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
                 </div>
-              <?php }?>
+              <?php }
+              if($r['file']=='index'){?>
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableSlider" aria-label="PermaLink to Slider Checkbox">&#128279;</a>':'';?>
                 <input id="enableSlider" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="1" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
                 <label for="enableSlider" id="configoptions11">Enable Content Slider</label>
               </div>
-              <?php if($r['file']!='index'){?>
+              <?php }
+                if($r['file']!='index'){?>
                 <label id="pageAccess" for="rank"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAccess" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Access</label>
                 <div class="form-row">
                   <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="rank" onchange="update('<?=$r['id'];?>','menu','rank',$(this).val(),'select');"<?=$user['options'][5]==1?'':' disabled';?>>

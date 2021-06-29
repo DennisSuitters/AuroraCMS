@@ -97,6 +97,8 @@
 				<iframe id="sp" name="sp" class="d-none"></iframe>
 				<form class="card p-3" method="post" action="cart/confirm">
 					<input type="hidden" name="<print hash>" value="<print timecode>">
+					<label for="fullname" aria-hidden="true">Full Name</label>
+					<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 					<loggedin>
 						<h3>Create or Add to Existing Account</h3>
 						<div class="alert alert-info" role="alert">If you have ordered from us previously, or already have an account, you can just enter your email below, and we will add this order using your account details.</div>
@@ -106,8 +108,6 @@
 						<div class="requirements alert alert-danger">Must be a valid email address.</div>
 						<label for="name" class="mt-0">Name</label>
 						<input type="text" id="name" name="name" value="" placeholder="Enter a Name...">
-						<label for="fullname" aria-hidden="true">Full Name</label>
-						<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 						<label for="business">Business</label>
 						<input type="text" id="business" name="business" value="" placeholder="Enter a Business...">
 						<label for="phone">Phone</label>

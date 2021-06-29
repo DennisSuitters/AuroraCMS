@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -367,7 +367,7 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 				'<div class="row">'.
 					'<label for="qerank'.$r['id'].'">Rank</label>'.
 					'<div class="form-row">'.
-						'<select id="qerank'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="rank" onchange="update(`'.$r['id'].'`,`login`,`rank`,$(this).val());$(`#accountrank'.$r['id'].'`).text(rank($(this).val()));">'.
+						'<select id="qerank'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="rank" onchange="update(`'.$r['id'].'`,`login`,`rank`,$(this).val());$(`#accountrank'.$r['id'].'`).text(rank($(this).val()));$(`#accountrank'.$r['id'].'`).removeClass().addClass(`badger badge-`+rankclass($(this).val()));">'.
 							'<option value="0"'.($r['rank']==0?' selected':'').'>Visitor</option>'.
 							'<option value="100"'.($r['rank']==100?' selected':'').'>Subscriber</option>'.
 							'<option value="200"'.($r['rank']==200?' selected':'').'>Member</option>'.
@@ -390,8 +390,8 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 						'</select>'.
 					'</div>'.
 				'</div>'.
-				'<div class="row">'.
-					'<input id="accountWholesaler'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"'.($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').' onclick="$(\'#wholesaler'.$r['id'].'\').toggle(\'.d-none\');">'.
+				'<div id="aWT'.$r['id'].'" class="row'.($r['rank']<301||$r['rank']>399?' d-none':'').'">'.
+					'<input id="accountWholesaler'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"'.($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').' onclick="$(\'#wholesaler'.$r['id'].'\').toggleClass(\'d-none\');">'.
 					'<label for="accountWholesaler'.$r['id'].'" id="loginnewsletter0'.$r['id'].'">Wholesaler Accepted to Purchase</label>'.
 				'</div>'.
 				'<div class="row">'.
@@ -400,6 +400,13 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 						'<div class="input-text">$</div>'.
 						'<input class="qetextinput" id="qespent'.$r['id'].'" type="number" value="'.$r['spent'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="spent">'.
 						'<button class="qesave" id="qesavespent'.$r['id'].'" data-tooltip="tooltip" data-dbid="qespent'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'</div>'.
+				'</div>'.
+				'<div class="row">'.
+					'<label for="qepoints'.$r['id'].'">Points Earned</label>'.
+					'<div class="form-row">'.
+						'<input class="qetextinput" id="qepoints'.$r['id'].'" type="number" value="'.$r['points'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="points">'.
+						'<button class="qesave" id="qesavepoints'.$r['id'].'" data-tooltip="tooltip" data-dbid="qepoints'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="row">'.
@@ -531,6 +538,27 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 				'if(rank==800){return"Manager";}'.
 				'if(rank==900){return"Administrator";}'.
 				'if(rank==1000){return"Developer";}'.
+			'}'.
+			'function rankclass(rank){'.
+				'if(rank==0){return"visitor";}'.
+				'if(rank==100){return"subscriber";}'.
+				'if(rank==200){return"member";}'.
+				'if(rank==210){return"member-silver";}'.
+				'if(rank==220){return"member-bronze";}'.
+				'if(rank==230){return"member-gold";}'.
+				'if(rank==240){return"member-platinum";}'.
+				'if(rank==300){return"client";}'.
+				'if(rank==310){return"wholesale-silver";}'.
+				'if(rank==320){return"wholesale-bronze";}'.
+				'if(rank==330){return"wholesale-gold";}'.
+				'if(rank==340){return"wholesale-platinum";}'.
+				'if(rank==400){return"contributor";}'.
+				'if(rank==500){return"author";}'.
+				'if(rank==600){return"editor";}'.
+				'if(rank==700){return"moderator";}'.
+				'if(rank==800){return"manager";}'.
+				'if(rank==900){return"administrator";}'.
+				'if(rank==1000){return"developer";}'.
 			'}'.
 	  '</script>'.
 	'</td>';

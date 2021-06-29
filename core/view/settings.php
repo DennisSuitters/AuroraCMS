@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -113,6 +113,8 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		'/<print user=[\"\']?username[\"\']?>/',
 		'/<print user=[\"\']?rank[\"\']?>/',
 		'/<print user=[\"\']?id[\"\']?>/',
+		'/<print user=[\"\']?spent[\"\']?>/',
+		'/<print user=[\"\']?points[\"\']?>/',
 		'/<print user=[\"\']?email[\"\']?>/',
 		'/<print user=[\"\']?name[\"\']?>/',
 		'/<print user=[\"\']?url[\"\']?>/',
@@ -132,6 +134,8 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['username'],ENT_QUOTES,'UTF-8'),
 		ucwords(str_replace('-',' ',rank($user['rank']))).(($user['rank']>301||$user['rank']<399)&&$user['options'][19]==1?'':' (Approval Pending)'),
 		htmlspecialchars($user['id'],ENT_QUOTES,'UTF-8'),
+		number_format((float)$user['spent'],2,'.',''),
+		number_format((float)$user['points']),
 		htmlspecialchars($user['email'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['name'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['url'],ENT_QUOTES,'UTF-8'),

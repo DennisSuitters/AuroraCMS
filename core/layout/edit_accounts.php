@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -133,18 +133,25 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-sm-6 pr-2">
+              <div class="col-12 col-sm-4 pr-2">
                 <label id="accountpti" for="pti"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountpti" aria-label="PermaLink to Last Purchase Date">&#128279;</a>':'';?>Last Purchase Date</label>
                 <div class="form-row">
                   <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('._ago($r['pti']).')';?>
                 </div>
               </div>
-              <Div class="col-12 col-sm-6 pl-2">
+              <div class="col-12 col-sm-4 pl-2">
                 <label id="accountSpent" for="spent"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountSpent" aria-label="PermaLink to Spent Field">&#128279;</a>':'';?>Spent</label>
                 <div class="form-row">
                   <div class="input-text">$</div>
                   <input class="textinput" id="spent" type="number" value="<?=$r['spent'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="spent"<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savespent" data-tooltip="tooltip" data-dbid="spent" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 pl-2">
+                <label id="accountPoints" for="points"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPoints" aria-label="PermaLink to Points Earned Field">&#128279;</a>':'';?>Points Earned</label>
+                <div class="form-row">
+                  <input class="textinput" id="points" type="number" value="<?=$r['points'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="points"<?=$user['options'][5]==1?'':' readonly';?>>
+                  <?=$user['options'][5]==1?'<button class="save" id="savepoints" data-tooltip="tooltip" data-dbid="points" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
                 </div>
               </div>
             </div>

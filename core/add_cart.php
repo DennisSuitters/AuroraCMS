@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -64,7 +64,7 @@ if($add==true){
     ]);
   }else{
     if(isset($iid)&&$iid!=0){
-      $q=$db->prepare("SELECT `cost`,`rCost`,`dCost`,`stockStatus` FROM `".$prefix."content` WHERE `id`=:id");
+      $q=$db->prepare("SELECT `cost`,`rCost`,`dCost`,`stockStatus`,`points` FROM `".$prefix."content` WHERE `id`=:id");
       $q->execute([':id'=>$iid]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
       if(is_numeric($r['cost'])||is_numeric($r['rCost'])||is_numeric($r['dCost'])){
@@ -72,12 +72,13 @@ if($add==true){
         if($rank>300||$rank<400){
           if($r['dCost']!=0)$r['cost']=$r['dCost'];
         }
-        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`cid`,`quantity`,`cost`,`stockStatus`,`si`,`ti`) VALUES (:iid,:cid,'1',:cost,:stockStatus,:si,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`cid`,`quantity`,`cost`,`stockStatus`,`points`,`si`,`ti`) VALUES (:iid,:cid,'1',:cost,:stockStatus,:points,:si,:ti)");
         $q->execute([
           ':iid'=>$iid,
           ':cid'=>$cid,
           ':cost'=>$r['cost'],
           ':stockStatus'=>$r['stockStatus'],
+          ':points'=>$r['points'],
           ':si'=>SESSIONID,
           ':ti'=>$ti
         ]);

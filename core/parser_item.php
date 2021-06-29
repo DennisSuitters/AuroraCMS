@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -346,11 +346,15 @@ if(stristr($html,'<item')){
     $item=preg_replace([
       ($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
       '/<print content=[\"\']?quantity[\"\']?>/',
-      '/<print content=[\"\']?stock[\"\']?>/'
+      '/<print content=[\"\']?stock[\"\']?>/',
+			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
+			'/<print content=[\"\']?points[\"\']?>/'
     ],[
       '',
       ($r['quantity']==0?'out of stock':$r['quantity']),
-      ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
+      ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])),
+			'',
+			number_format((float)$r['points'])
     ],$item);
   }else$item=preg_replace('~<quantity>.*?<\/quantity>~is','',$item);
   $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;

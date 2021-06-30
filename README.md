@@ -152,6 +152,8 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 ### Contributors:
 - [Raycraft Computer Services](https://www.raycraft.com.au/)
   - Live Testing, Suggestions, and witty Banter.
+- GitHub User [Digifolder](https://github.com/Digifolder)
+  - Windows Testing, bug finding and reporting.
 
 ### AuroraCMS Live Sites by Diemen Design:
 - [Anime Excess](https://www.animeexcess.com.au/)

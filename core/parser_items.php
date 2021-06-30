@@ -58,18 +58,19 @@ if(stristr($html,'<breadcrumb>')){
     $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['contentType'],ENT_QUOTES,'UTF-8').'"}}'.(isset($args[1])&&$args[1]!=''?',':'');
     $breaditems.=$breadit;
   }
-	if(isset($args[1])&&$args[1]!=''){
+	if(isset($args[0])&&$args[0]!=''){
     $jsoni++;
-		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
+		if($r['title']!=''||(isset($args[0])&&$args[0]!='')){
 	    $breadit=preg_replace([
 	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
 	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
 	    ],[
-	      URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])),
-	      htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
+	      URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[0]))),
+	      htmlspecialchars(ucwords(str_replace('-',' ',$args[0])),ENT_QUOTES,'UTF-8')
 	    ],$breaditem);
-		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[1])&&$args[1]!=''?',':'');
+		}else
+			$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[0]))).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[1])&&$args[1]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[1])&&$args[1]!=''){
@@ -79,11 +80,11 @@ if(stristr($html,'<breadcrumb>')){
 	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
 	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
 	    ],[
-	      URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'/'.str_replace(' ','-',urlencode($args[1])).'/',
-	      htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8')
+	      URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[0]))).'/'.str_replace(' ','-',urlencode($args[1])).'/',
+	      htmlspecialchars(ucwords(str_replace('-',' ',$args[1])),ENT_QUOTES,'UTF-8')
 	    ],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'","name":"'.htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'","name":"'.htmlspecialchars(ucfirst($args[1]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[2])&&$args[2]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[2])&&$args[2]!=''){
@@ -93,11 +94,11 @@ if(stristr($html,'<breadcrumb>')){
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
     	],[
-      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])),
-      	htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8')
+      	URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[0]))).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))),
+      	htmlspecialchars(ucwords(str_replace('-',' ',$args[2])),ENT_QUOTES,'UTF-8')
     	],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'","name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[3])&&$args[3]!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))).'","name":"'.htmlspecialchars(ucfirst($args[2]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[3])&&$args[3]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[3])&&$args[3]!=''){
@@ -107,11 +108,11 @@ if(stristr($html,'<breadcrumb>')){
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
     	],[
-      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[0])).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])),
-      	htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8')
+      	URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[0]))).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))).'/'.urlencode(str_replace(' ','-',strtolower($args[3]))),
+      	htmlspecialchars(ucwords(str_replace('-',' ',$args[3])),ENT_QUOTES,'UTF-8')
     	],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[4])&&$args[4]!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))).'/'.urlencode(str_replace(' ','-',strtolower($args[3]))).'","name":"'.htmlspecialchars(ucfirst($args[3]),ENT_QUOTES,'UTF-8').'"}}'.(isset($args[4])&&$args[4]!=''?',':'');
     $breaditems.=$breadit;
   }
   if(isset($args[4])&&$args[4]!=''){
@@ -121,11 +122,11 @@ if(stristr($html,'<breadcrumb>')){
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
     	],[
-      	URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])),
-      	htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8')
+      	URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))).'/'.urlencode(str_replace(' ','-',strtolower($args[3]))).'/'.urlencode(str_replace(' ','-',strtolower($args[4]))),
+      	htmlspecialchars(ucwords(str_replace('-',' ',$args[4])),ENT_QUOTES,'UTF-8')
     	],$breaditem);
 		}else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.str_replace(' ','-',urlencode($args[1])).'/'.str_replace(' ','-',urlencode($args[2])).'/'.str_replace(' ','-',urlencode($args[3])).'/'.str_replace(' ','-',urlencode($args[4])).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}}'.($r['title']!=''?',':'');
+    $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))).'/'.urlencode(str_replace(' ','-',strtolower($args[3]))).'/'.urlencode(str_replace(' ','-',strtolower($args[4]))).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}}'.($r['title']!=''?',':'');
     $breaditems.=$breadit;
   }
   if($r['title']!=''){

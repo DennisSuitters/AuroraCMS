@@ -48,25 +48,25 @@
   </div>
   <nav class="horizontal" id="notifications">
     <ul>
-      <li data-tooltip="right" aria-label="Notifications">
+      <li class="text-center" data-tooltip="tooltip" aria-label="Notifications">
         <input id="notification-checkbox" type="checkbox">
-        <label class="badge ml-4 text-white" data-badge="<?=$navStat>0?$navStat:'';?>" for="notification-checkbox"><?= svg2('bell','i-2x');?></label>
+        <label class="badge mt-0 text-white" data-badge="<?=$navStat>0?$navStat:'';?>" for="notification-checkbox"><?= svg2('bell','i-2x');?></label>
         <ul id="nav-stat-list">
           <li class="dropdown-heading py-2">Notifications</li>
-          <?=($nc['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/comments">'.svg2('comments').' Comments<span class="badger badge-primary">'.$nc['cnt'].'</span></a></li>':'').
-          ($nr['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/reviews">'.svg2('review').' Reviews<span class="badger badge-primary">'.$nr['cnt'].'</span></a></li>':'').
-          ($nm['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/messages">'.svg2('inbox').' Messages<span class="badger badge-primary">'.$nm['cnt'].'</span></a></li>':'').
-          ($po['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/orders/pending">'.svg2('order').' Orders<span class="badger badge-primary align-self-end">'.$po['cnt'].'</span></a></li>':'').
-          ($nb['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/bookings">'.svg2('calendar').' Bookings<span class="badger badge-primary">'.$nb['cnt'].'</span></a></li>':'').
-          ($nu['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts">'.svg2('users').' Users<span class="badger badge-primary">'.$nu['cnt'].'</span></a></li>':'').
-          ($nt['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/content/type/testimonials">'.svg2('testimonial').' Testimonials<span class="badger badge-primary">'.$nt['cnt'].'</span></a></li>':'').
-          ($nou['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts">'.svg2('users').' Active Users<span class="badger badge-primary">'.$nou['cnt'].'</span></a></li>':'');?>
+          <?=($nc['cnt']>0?'<li><span class="badger badge-primary">'.$nc['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/comments"> Comments</a></li>':'').
+          ($nr['cnt']>0?'<li><span class="badger badge-primary">'.$nr['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/reviews"> Reviews</a></li>':'').
+          ($nm['cnt']>0?'<li><span class="badger badge-primary">'.$nm['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/messages"> Messages</a></li>':'').
+          ($po['cnt']>0?'<li><span class="badger badge-primary align-self-end">'.$po['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/orders/pending"> Orders</a></li>':'').
+          ($nb['cnt']>0?'<li><span class="badger badge-primary">'.$nb['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/bookings"> Bookings</a></li>':'').
+          ($nu['cnt']>0?'<li><span class="badger badge-primary">'.$nu['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/accounts"> Users</a></li>':'').
+          ($nt['cnt']>0?'<li><span class="badger badge-primary">'.$nt['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/content/type/testimonials"> Testimonials</a></li>':'').
+          ($nou['cnt']>0?'<li><span class="badger badge-primary">'.$nou['cnt'].'</span><a href="'.URL.$settings['system']['admin'].'/accounts"> Active Users</a></li>':'');?>
         </ul>
       </li>
-      <li data-tooltip="right" aria-label="View Site">
+      <li data-tooltip="tooltip" aria-label="View Site">
         <a href="<?= URL;?>"><?= svg2('browser-general','i-2x');?></a>
       </li>
-      <li data-tooltip="right" aria-label="Logout">
+      <li data-tooltip="tooltip" aria-label="Logout">
         <a href="<?= URL.$settings['system']['admin'].'/logout';?>"><?= svg2('sign-out','i-2x');?></a>
       </li>
     </ul>

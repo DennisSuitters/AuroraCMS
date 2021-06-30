@@ -432,8 +432,8 @@ header .account {
 #notifications ul li ul {
   background-color: var(--menu-dropdown-background-color) !important;
   border-bottom: 1px solid var(--menu-dropdown-border-color);
-  top: 77px;
-  left: -8px;
+  top: 45px;
+  left: -21px;
   right: auto;
   color: #000;
   width: 240px;
@@ -455,22 +455,33 @@ header .account {
   line-height: 1.75; }
 
 #notifications ul li ul li a .badger {
-  position: absolute;
-  top: 5px;
-  right: 10px; }
+  margin-right: 10px; }
 
 #notifications ul li ul li a:hover {
   color: var(--menu-dropdown-color-hover);
   text-decoration: none; }
 
-.dropdown-heading,
-.dropdown-heading:hover,
-.dropdown-heading:focus {
+#nav-stat-list .dropdown-heading {
   background-color: var(--menu-dropdown-background-color) !important;
-  font-size: 1.2rem;
-  font-weight: 900;
-  text-align: center;
+  font-size: 1.2rem !important;
+  font-weight: 900 !important;
+  width: 240px !important;
+  text-align: center !important;
   border-bottom: 1px solid var(--menu-dropdown-border-color); }
+
+#nav-stat-list li {
+  display: block !important;
+  position: relative !important;
+  width: 240px !important;
+  text-align: left !important;
+  margin: 0 !important; }
+
+#nav-stat-list li span.badger {
+  margin-left: 5px; }
+
+#nav-stat-list li a {
+  display: inline-block !important;
+  line-height: 1.75 !important; }
 
 #searchbox {
   visibility: hidden; }
@@ -666,6 +677,7 @@ td img.avatar {
 
 header nav.horizontal {
   position: absolute;
+  display: inline-flex;
   left: 0;
   right: 0;
   bottom: 0;
@@ -673,12 +685,11 @@ header nav.horizontal {
   height: auto; }
 
 header nav.horizontal li {
-  width: 61px;
-  height: 61px; }
+  display: inline-flex !important;
+  width: 48px !important;
+  margin-left: 21px !important; }
 
 header nav.horizontal li a {
-  line-height: 4rem;
-  padding: 1rem;
   color: #fff; }
 
 header nav.horizontal .date{

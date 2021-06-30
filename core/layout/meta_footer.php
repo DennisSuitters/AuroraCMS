@@ -446,14 +446,14 @@
         if(stats[0]==0)stats[0]='';
         $('#nav-nou').html(stats[2]);
         var stathtml='<li class="dropdown-heading py-2">Notifications</li>';
-        if(stats[3]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/comments"><?php svg('comments');?> Comments<span class="badger badge-primary">'+stats[3]+'</span></a></li>';
-        if(stats[4]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/reviews"><?php svg('review');?> Reviews<span class="badger badge-primary">'+stats[4]+'</span></a></li>';
-        if(stats[5]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/messages"><?php svg('inbox');?> Messages<span class="badger badge-primary">'+stats[5]+'</span></a></li>';
-        if(stats[6]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/orders/pending"><?php svg('order');?> Orders<span class="badger badge-primary">'+stats[6]+'</span></a></li>';
-        if(stats[7]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/bookings"><?php svg('calendar');?> Bookings<span class="badger badge-primary">'+stats[7]+'</span></a></li>';
-        if(stats[8]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/accounts"><?php svg('users');?> Users<span class="badger badge-primary">'+stats[8]+'</span></a></li>';
-        if(stats[9]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"><?php svg('testimonial');?> Testimonials<span class="badger badge-primary">'+stats[9]+'</span></a></li>';
-        if(stats[2]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/accounts"><?php svg('users');?> Active Users<span class="badger badge-primary">'+stats[2]+'</span></a></li>';
+        if(stats[3]>0)stathtml+='<li><span class="badger badge-primary">'+stats[3]+'</span><a href="<?= URL.$settings['system']['admin'];?>/comments"> Comments</a></li>';
+        if(stats[4]>0)stathtml+='<li><span class="badger badge-primary">'+stats[4]+'</span><a href="<?= URL.$settings['system']['admin'];?>/reviews"> Reviews</a></li>';
+        if(stats[5]>0)stathtml+='<li><span class="badger badge-primary">'+stats[5]+'</span><a href="<?= URL.$settings['system']['admin'];?>/messages"> Messages</a></li>';
+        if(stats[6]>0)stathtml+='<li><span class="badger badge-primary">'+stats[6]+'</span><a href="<?= URL.$settings['system']['admin'];?>/orders/pending"> Orders</a></li>';
+        if(stats[7]>0)stathtml+='<li><span class="badger badge-primary">'+stats[7]+'</span><a href="<?= URL.$settings['system']['admin'];?>/bookings"> Bookings</a></li>';
+        if(stats[8]>0)stathtml+='<li><span class="badger badge-primary">'+stats[8]+'</span><a href="<?= URL.$settings['system']['admin'];?>/accounts"> Users</a></li>';
+        if(stats[9]>0)stathtml+='<li><span class="badger badge-primary">'+stats[9]+'</span><a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"> Testimonials</a></li>';
+        if(stats[2]>0)stathtml+='<li><span class="badger badge-primary">'+stats[2]+'</span><a href="<?= URL.$settings['system']['admin'];?>/accounts"> Active Users</a></li>';
         $('#nav-stat').data('badge',stats[0]);
         $('#nav-stat-list').html(stathtml);
         if(stats[1]==0){

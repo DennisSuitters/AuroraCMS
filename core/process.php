@@ -30,7 +30,7 @@ if($view=='page'){
   $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType AND LOWER(`title`)=LOWER(:title)");
   $sp->execute([
     ':contentType'=>$view,
-    ':title'=>str_replace('-',' ',$args[0])
+    ':title'=>str_replace('-',' ',strtolower($args[0]))
   ]);
 }else{
   $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType");

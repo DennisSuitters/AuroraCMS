@@ -14,3 +14,8 @@
 - Add Points Earned with the Account Name and Rank display.
 - Fix Logged in and Not Logged in Purchasing.
 - Fix Category Navigation not showing correct selected Category after selection.
+- Fix Administration Notification area icon spacing and notification dropdown.
+- Fix Live Chat Facebook Colour Picker not showing Colours correctly.
+- Fix Administration Menu not allowing some dropdown parts from showing.
+- Adjust URL to be lowercase, and fix category-nav to suite.
+- Fix Content Item being displayed regardless of account rank.

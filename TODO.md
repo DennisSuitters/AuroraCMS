@@ -40,6 +40,7 @@ This is a quick list of things what need to be fixed or worked on to help those 
     - Add a character length warning SEO fields if they are too short or too long.
   - Check styling for PWA Manifest for when site is offline or inaccessible.
 - Front End
+  - Wholesale Items only displayed to that account.
   - Content
     - If the End Time is set, display a countdown clock, add a parser so it can appear depending on the template, also a checkbox option to enable/disable.
   - Search

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,7 +60,7 @@ echo'<aside class="border-right" id="sidebar">'.
     '<li class="'.($args[0]!='settings'&&$view=='comments'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/comments">'.svg2('comments','i-2x mr-4').' Comments</a></li>'.
     '<li class="'.($args[0]!='settings'&&$view=='reviews'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/reviews">'.svg2('review','i-2x mr-4').' Reviews</a></li>';
     if($user['options'][7]==1){
-      echo'<li class="'.($args[0]=='settings'?' open':'').'">'.
+      echo'<li class="'.($view=='settings'?' open':'').'">'.
         '<a class="opener" href="'.URL.$settings['system']['admin'].'/settings">'.svg2('settings','i-2x mr-4').' Settings</a>'.
         '<span class="arrow'.($args[0]=='settings'?' open':'').'">'.svg2('arrow-up').'</span>'.
         '<ul>'.

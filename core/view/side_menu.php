@@ -12,7 +12,7 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $sideTemp='';
-if($r['rank']<=$_SESSION['rank']){
+//if(isset($r['rank'])&&($r['rank']<=$_SESSION['rank'])||($_SESSION['rank']<300||$_SESSION['rank']>400)){
 	if(file_exists(THEME.'/side_menu.html')){
 		$sideTemp=file_get_contents(THEME.'/side_menu.html');
 		$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
@@ -32,12 +32,19 @@ if($r['rank']<=$_SESSION['rank']){
 			(isset($args[3])&&$args[3]!=''?'/'.$args[3]:''));
 		$sideTemp=preg_replace([
 			'/<share>/',
-			isset($_SESSION['rank'])&&$_SESSION['rank']>899?'/<[\/]?admin>/':'~<admin>.*?<\/admin>~is',
-			'/<print adminlink>/'
+			'/<print adminlink>/',
+			isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?'/<[\/]?admin>/':'~<admin>.*?<\/admin>~is'
 		],[
-			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook">'.frontsvg('i-social-facebook').'</a><a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text=AuroraCMS%20Share%20Buttons&amp;hashtags='.($r['tags']!=''?$r['tags']:$config['business']).'" title="Share to Twitter">'.frontsvg('i-social-twitter').'</a><a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest">'.frontsvg('i-social-pinterest').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Stumbleupon">'.frontsvg('i-social-stumbleupon').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Reddit">'.frontsvg('i-social-reddit').'</a><a class="i i-social i-2x m-1" target="_blank" href="https://bufferapp.com/add?url='.$site_url.'&amp;text='.$config['business'].'" title="Share to Buffer">'.frontsvg('i-social-buffer').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://www.digg.com/submit?url='.$site_url.'" title="Share to Digg">'.frontsvg('i-social-digg').'</a><a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin">'.frontsvg('i-social-linkedin').'</a>',
-			'',
-			URL.$settings['system']['admin'].'/content/edit/'.$r['id']
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook">'.frontsvg('i-social-facebook').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text=AuroraCMS%20Share%20Buttons&amp;hashtags='.(isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business']).'" title="Share to Twitter">'.frontsvg('i-social-twitter').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest">'.frontsvg('i-social-pinterest').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Stumbleupon">'.frontsvg('i-social-stumbleupon').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Reddit">'.frontsvg('i-social-reddit').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="https://bufferapp.com/add?url='.$site_url.'&amp;text='.$config['business'].'" title="Share to Buffer">'.frontsvg('i-social-buffer').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.digg.com/submit?url='.$site_url.'" title="Share to Digg">'.frontsvg('i-social-digg').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin">'.frontsvg('i-social-linkedin').'</a>',
+			isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?URL.$settings['system']['admin'].'/content/edit/'.$r['id']:'',
+			''
 		],$sideTemp);
 
 		if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
@@ -342,5 +349,5 @@ if($r['rank']<=$_SESSION['rank']){
 		],$outside,1);
 		$sideTemp=preg_replace('~<item>.*?<\/item>~is',$outside,$sideTemp,1);
 	}
-}
+//}
 $content.=$sideTemp;

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -37,7 +37,9 @@ if($args[0]!='compose'){
           <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
           <div>Messages Edit</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" data-placement="left" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php }?>
           </div>
         </div>
         <ol class="breadcrumb">

@@ -20,7 +20,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <div class="content-title-icon"><?= svg2($r['contentType'],'i-3x');?></div>
           <div><?= ucfirst($r['contentType']);?> Edit</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/add/'.$r['contentType'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php }?>
             <button class="<?=$r['status']=='published'?'':'hidden';?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?= svg2('share');?></button>
             <?=$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" role="button" aria-label="Add '.ucfirst($r['contentType']).'">'.svg2('add').'</a>':'';?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
@@ -896,7 +898,7 @@ else{
                 ':contentType'=>$r['contentType'],
                 ':rid'=>$r['id']
               ]);
-              if($user['options']{1}==1){
+              if($user['options'][1]==1){
                 while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="row p-2 mt-1<?=$rc['status']=='unapproved'?' danger':'';?>" id="l_<?=$rc['id'];?>">
                     <?php $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
@@ -1231,7 +1233,7 @@ else{
               <div class="col-12 col-sm-6 pl-md-3">
                 <label id="<?=$r['contentType'];?>Rank" for="rank"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Rank" aria-label="PermaLink to '.ucfirst($r['contentType']).' Access Selector">&#128279;</a>':'';?>Access</label>
                 <div class="form-row">
-                  <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rank"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','rank',$(this).val(),'select');">
+                  <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rank"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','rank',$(this).val(),'select');toggleRank($(this).val());">
                     <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
                     <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber and above</option>
                     <option value="200"<?=$r['rank']==200?' selected':'';?>>Member and above</option>
@@ -1251,8 +1253,25 @@ else{
                     <option value="800"<?=$r['rank']==800?' selected':'';?>>Manager and above</option>
                     <option value="900"<?=$r['rank']==900?' selected':'';?>>Administrator and above</option>
                   </select>
+                  <div class="input-text<?=$r['rank']>300&&$r['rank']<400?' ':' d-none';?>" id="contentRestrict">
+                    <input id="restrict" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                    &nbsp;<label>Restrict</label>
+                  </div>
                 </div>
               </div>
+              <script>
+                function toggleRank(rank){
+                  if(rank<301){
+                    $('#contentRestrict').removeClass().addClass('input-text d-none');
+                  }
+                  if(rank>300&&rank<400){
+                    $('#contentRestrict').removeClass().addClass('input-text');
+                  }
+                  if(rank>399){
+                    $('#contentRestrict').removeClass('d-none').addClass('input-text d-none');
+                  }
+                }
+              </script>
             </div>
             <div class="row">
               <div class="col-12 col-sm-6 pr-md-3">

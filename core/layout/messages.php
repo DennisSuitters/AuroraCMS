@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -44,8 +44,8 @@ function is_base64_string($s){
  if(in_array($e,array('UTF-8','ASCII')))return TRUE;else return FALSE;
 }
 if($user['options'][3]==1){
-  if($args[0]=='settings')require'core/layout/set_messages.php';
-  elseif($args[0]=='view'||$args[0]=='compose')require'core/layout/edit_messages.php';
+  if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_messages.php';
+  elseif(isset($args[0])&&($args[0]=='view'||$args[0]=='compose'))require'core/layout/edit_messages.php';
   else{
     $folder="INBOX";
     if(isset($args[0])){

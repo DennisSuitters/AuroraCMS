@@ -12,7 +12,7 @@
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
-	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`name`,`points` FROM `".$prefix."login` WHERE `id`=:uid");
+	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`username`,`name`,`points` FROM `".$prefix."login` WHERE `id`=:uid");
 	$su->execute([':uid'=>$_SESSION['uid']]);
 	$user=$su->fetch(PDO::FETCH_ASSOC);
 	preg_match('/<accountMenuItems>([\w\W]*?)<\/accountMenuItems>/',$html,$matches);

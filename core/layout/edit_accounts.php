@@ -25,7 +25,9 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             else svg('user','i-3x');?></div>
           <div>Edit Account <?=$r['username'].':'.$r['name'];?></div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
         </div>

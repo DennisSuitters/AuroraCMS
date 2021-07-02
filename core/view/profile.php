@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,16 +52,16 @@ if(stristr($html,'<breadcrumb>')){
   }
   if(isset($args[0])&&$args[0]!=''){
     $jsoni++;
-		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
-	    $breadit=preg_replace([
-	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
-	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
-	    ],[
-	      URL.'profile/'.str_replace(' ','-',urlencode($args[0])),
-	      htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8')
-	    ],$breaditem);
+		if((isset($r['title'])&&$r['title']!='')||(isset($args[1])&&$args[1]!='')){
+      $breadit=preg_replace([
+        '/<print breadcrumb=[\"\']?url[\"\']?>/',
+        '/<print breadcrumb=[\"\']?title[\"\']?>/'
+      ],[
+        URL.'profile/'.str_replace(' ','-',urlencode($args[0])),
+        htmlspecialchars(ucwords($args[0]),ENT_QUOTES,'UTF-8')
+      ],$breaditem);
 		}else
-			$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
+			$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($args[0]),ENT_QUOTES,'UTF-8'),$breadcurrent);
     $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.'profile/'.str_replace(' ','-',urlencode($args[0])).'","name":"'.htmlspecialchars(ucfirst($args[0]),ENT_QUOTES,'UTF-8').'"}}';
     $breaditems.=$breadit;
   }
@@ -189,7 +189,7 @@ if($args[0]!=''){
               htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),
               htmlspecialchars($rs['business'],ENT_QUOTES,'UTF-8'),
               $rs['tis']!=0?' / '.date('Y-M',$rs['tis']):' / Current',
-              $rs['tie']!=0?' - '.date("Y-M",$rs['tie']):$rs['tis']==0?'':' - Current',
+              $rs['tie']!=0?' - '.date("Y-M",$rs['tie']):($rs['tis']==0?'':' - Current'),
               $rs['notes']
             ],$build);
             $items.=$build;
@@ -224,7 +224,7 @@ if($args[0]!=''){
               htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),
               htmlspecialchars($rs['business'],ENT_QUOTES,'UTF-8'),
               $rs['tis']!=0?' / '.date('Y-M',$rs['tis']):' / Current',
-              $rs['tie']!=0?' - '.date("Y-M",$rs['tie']):$rs['tis']==0?'':' - Current',
+              $rs['tie']!=0?' - '.date("Y-M",$rs['tie']):($rs['tis']==0?'':' - Current'),
               $rs['notes']
             ],$build);
             $items.=$build;

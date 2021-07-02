@@ -7,31 +7,31 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $rank=0;
 $show='categories';
-if($args[0]=='scheduler')require'core/layout/scheduler.php';
+if(isset($args[0])&&$args[0]=='scheduler')require'core/layout/scheduler.php';
 else{
   if($view=='add'){
     $stockStatus='none';
     $ti=time();
     $schema='';
     $comments=0;
-    if($args[0]=='article')$schema='blogPosting';
-    if($args[0]=='inventory'){
+    if(isset($args[0])&&$args[0]=='article')$schema='blogPosting';
+    if(isset($args[0])&&$args[0]=='inventory'){
       $schema='Offer';
       $stockStatus='quantity';
     }
-    if($args[0]=='service')$schema='Service';
-    if($args[0]=='gallery')$schema='ImageGallery';
-    if($args[0]=='testimonial')$schema='Review';
-    if($args[0]=='news')$schema='NewsArticle';
-    if($args[0]=='event')$schema='Event';
-    if($args[0]=='portfolio')$schema='CreativeWork';
-    if($args[0]=='proof'){
+    if(isset($args[0])&&$args[0]=='service')$schema='Service';
+    if(isset($args[0])&&$args[0]=='gallery')$schema='ImageGallery';
+    if(isset($args[0])&&$args[0]=='testimonial')$schema='Review';
+    if(isset($args[0])&&$args[0]=='news')$schema='NewsArticle';
+    if(isset($args[0])&&$args[0]=='event')$schema='Event';
+    if(isset($args[0])&&$args[0]=='portfolio')$schema='CreativeWork';
+    if(isset($args[0])&&$args[0]=='proof'){
       $schema='CreativeWork';
       $comments=1;
     }
@@ -60,15 +60,15 @@ else{
     $args[1]=$id;
     echo'<script>/*<![CDATA[*/window.location.replace("'.URL.$settings['system']['admin'].'/content/edit/'.$args[1].'");/*]]>*/</script>';
   }
-  if($args[0]=='edit'){
+  if(isset($args[0])&&$args[0]=='edit'){
     $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
     $s->execute([':id'=>$args[1]]);
     $show='item';
   }
-  if($args[0]=='settings')require'core/layout/set_content.php';
+  if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_content.php';
   else{
     if($show=='categories'){
-      if($args[0]=='type'){
+      if(isset($args[0])&&$args[0]=='type'){
         if(isset($args[2])&&($args[2]=='archived'||$args[2]=='unpublished'||$args[2]=='autopublish'||$args[2]=='published'||$args[2]=='delete'||$args[2]=='all')){
           if($args[2]=='all')$getStatus=" ";
           else$getStatus=" AND `status`='".$args[2]."' ";
@@ -124,7 +124,7 @@ else{
         </div>
         <div class="container-fluid p-0">
           <div class="card border-radius-0 shadow overflow-visible">
-            <?php if($args[0]==''){?>
+            <?php if(isset($args[0])&&$args[0]==''){?>
               <div class="row p-3">
                 <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/media';?>" aria-label="Go to Media Page">
                   <span class="h5">Media</span>
@@ -282,7 +282,7 @@ else{
                         $rr=$sr->fetch(PDO::FETCH_ASSOC);
                         $srr=$db->prepare("SELECT `id` FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`!='approved'");
                         $srr->execute([':rid'=>$r['id']]);
-                        $src=$srr->rowCount($srr);
+                        $src=$srr->rowCount();
                         echo$rr['num']>0?'<a class="btn'.($src>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6"'.($src>0?' data-tooltip="tooltip"':'').' role="button" aria-label="'.$src.' New Reviews">'.$rr['num'] .'/'.$rr['cnt'].'</a>':'';?>
                       </td>
                       <td class="text-center align-middle d-none d-sm-table-cell">

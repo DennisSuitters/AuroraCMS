@@ -19,7 +19,9 @@
           <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
           <div>Accounts Settings</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?= svg2('back');?></a>
+            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
         </div>

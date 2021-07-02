@@ -88,7 +88,7 @@ $opts=[
       'quality'=>$config['mediaQuality'],
       'preserveExif'=>false,
       'forceEffect'=>false,
-      'targetType'=>IMG_GIF|IMG_JPG|IMG_PNG,
+//      'targetType'=>IMG_GIF|IMG_JPG|IMG_PNG,
       'offDropWith'=>null,
       'onDropWith'=>null,
     ]

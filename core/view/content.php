@@ -27,7 +27,7 @@ if($config['showItems']>0){
 }
 setcookie("itemCount",$config['showItems'],time()+86400);
 if($view=='newsletters'){
-	if($args[0]=='unsubscribe'&&isset($args[1])){
+	if(isset($args[0])&&$args[0]=='unsubscribe'&&isset($args[1])){
 		$s=$db->prepare("DELETE FROM `".$prefix."subscribers` WHERE `hash`=:hash");
 		$s->execute([':hash'=>$args[1]]);
 		$notification=preg_replace([
@@ -106,7 +106,7 @@ elseif($view=='search'){
 		$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank");
 		$s->execute([
 			':contentType'=>$view,
-			':category_1'=>html_entity_decode(str_replace('-',' ',$args[1])),
+			':category_1'=>isset($args[1])?html_entity_decode(str_replace('-',' ',$args[1])):'%',
 			':category_2'=>isset($args[2])?html_entity_decode(str_replace('-',' ',$args[2])):'%',
 			':category_3'=>isset($args[3])?html_entity_decode(str_replace('-',' ',$args[3])):'%',
 			':category_4'=>isset($args[4])?html_entity_decode(str_replace('-',' ',$args[4])):'%',
@@ -120,7 +120,7 @@ elseif($view=='search'){
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':contentType'=>$view,
-		':category_1'=>html_entity_decode(str_replace('-','%',$args[1])),
+		':category_1'=>isset($args[1])?html_entity_decode(str_replace('-','%',$args[1])):'%',
 		':category_2'=>isset($args[2])?html_entity_decode(str_replace('-',' ',$args[2])):'%',
 		':category_3'=>isset($args[3])?html_entity_decode(str_replace('-',' ',$args[3])):'%',
 		':category_4'=>isset($args[4])?html_entity_decode(str_replace('-',' ',$args[4])):'%',

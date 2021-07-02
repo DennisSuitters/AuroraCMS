@@ -13,7 +13,7 @@
  */
 $rank=0;
 $show='pages';
-if($args[0]=='add'){
+if(isset($args[0])&&$args[0]=='add'){
   $ti=time();
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."menu` (`rank`,`uid`,`mid`,`login_user`,`title`,`seoTitle`,`file`,`contentType`,`schemaType`,`menu`,`active`,`ord`,`eti`) VALUES ('0',:uid,'0',:login_user,:title,'','page','page','Article','other','0',:ord,:eti)");
   $q->execute([
@@ -28,9 +28,9 @@ if($args[0]=='add'){
   $args[1]=$id;?>
   <script>history.replaceState('','','<?= URL.$settings['system']['admin'].'/pages/edit/'.$args[1];?>');</script>
 <?php }
-if($args[0]=='settings')require'core/layout/set_pages.php';
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_pages.php';
 else{
-  if($args[0]=='edit')$show='item';
+  if(isset($args[0])&&$args[0]=='edit')$show='item';
   if($show=='pages'){?>
   <main>
     <section id="content">

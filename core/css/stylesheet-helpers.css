@@ -665,26 +665,41 @@
   box-shadow: 0 1rem 3rem -1.5rem rgba(0, 0, 0, .175) !important; }
 
 /* Overflow Classes */
-.overflow-hidden,
-.overflow-x-hidden,
-.overflow-y-hidden {
+.overflow-hidden {
   overflow: hidden !important; }
 
-.overflow-visible,
-.overflow-x-visible,
-.overflow-y-visisble {
+.overflow-x-hidden {
+  overflow-x: hidden !important; }
+
+.overflow-y-hidden {
+  overflow-y: hidden !important; }
+
+.overflow-visible {
   overflow: visible !important; }
 
-.overflow-scroll,
-.overflow-x-scroll,
-.overflow-y-scroll {
+.overflow-x-visible {
+  overflow-x: visible !important; }
+
+.overflow-y-visible {
+  overflow-y: visible !important; }
+
+.overflow-scroll {
   overflow: scroll !important; }
 
-.overflow-auto,
-.overflow-x-auto,
-.overflow-y-auto {
+.overflow-x-scroll {
+  overflow-x: scroll !important; }
+
+.overflow-y-scroll {
+  overflow-y: scroll !important; }
+
+.overflow-auto {
   overflow: auto !important; }
 
+.overflow-x-auto {
+  overflow-x: auto !important; }
+
+.overflow-y-auto {
+  overflow-y: auto !important; }
 
 /* Display Classes */
 .d-inherit {

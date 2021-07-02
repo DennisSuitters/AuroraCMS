@@ -19,7 +19,13 @@ $html=preg_replace([
   '~<items>.*?<\/items>~is'
 ],'',$html,1);
 $r=$s->fetch(PDO::FETCH_ASSOC);
-if($r['rank']-1 < $_SESSION['rank']){
+$skip=false;
+if($r['rank']-1 < $_SESSION['rank'])$skip=false;else $skip=true;
+if($r['options'][2]==1){
+  if($_SESSION['rank']>399)$skip=false;
+  elseif($_SESSION['rank']==$r['rank'])$skip=false;else$skip=true;
+}
+if($skip==false){
   if($config['gst']>0){
     $gst=$r['cost']*($config['gst']/100);
     $gst=$r['cost']+$gst;
@@ -46,7 +52,7 @@ if($r['rank']-1 < $_SESSION['rank']){
   elseif($r['thumb']!='')$shareImage=rawurldecode($r['thumb']);
   else$shareImage=URL.NOIMAGE;
   $canonical=URL.$view.'/'.$r['urlSlug'].'/';
-  $contentTime=isset($r['eti'])&&$r['eti']>$r['ti']?$r['eti']:isset($r['ti'])?$r['ti']:0;
+  $contentTime=isset($r['eti'])&&$r['eti']>$r['ti']?$r['eti']:(isset($r['ti'])?$r['ti']:0);
   if(stristr($html,'<breadcrumb>')){
     $jsoni=2;
     preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);

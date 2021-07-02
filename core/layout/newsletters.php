@@ -7,19 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if($args[0]=='add'){
+if(isset($args[0])&&$args[0]=='add'){
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`contentType`,`status`,`ti`) VALUES ('newsletters','unpublished',:ti)");
   $q->execute([':ti'=>$ti]);
   $args[1]=$db->lastInsertId();
   $args[0]='edit';
   echo'<script>history.replaceState("","","'.URL.$settings['system']['admin'].'/newsletters/edit/'.$args[1].'");</script>';
 }
-if($args[0]=='settings')require'core/layout/set_newsletters.php';
-elseif($args[0]=='edit')require'core/layout/edit_newsletters.php';
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_newsletters.php';
+elseif(isset($args[0])&&$args[0]=='edit')require'core/layout/edit_newsletters.php';
 else{
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ORDER BY `ti` DESC, `title` ASC");
   $s->execute([':contentType'=>'newsletters']);?>

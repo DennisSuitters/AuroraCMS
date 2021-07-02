@@ -74,7 +74,7 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 		]);
 	}
 }
-if($args[0]=='confirm'){
+if(isset($args[0])&&$args[0]=='confirm'){
 	if($_POST['fullname'.$hash]==''){
 		$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
 		$rewards=filter_input(INPUT_POST,'rewards',FILTER_SANITIZE_STRING);
@@ -288,7 +288,7 @@ if($args[0]=='confirm'){
 					($i['code']!=''?' : ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
 					$i['weight'].$i['weightunit'],
 					'W:'.$i['width'].$i['widthunit'].' x L:'.$i['length'].$i['lengthunit'].' H:'.$i['height'].$i['heightunit'],
-					$c['title']!=''?' : '.$c['title']:'',
+					isset($c['title'])&&$c['title']!=''?' : '.$c['title']:'',
 					$ci['id'],
 					$ci['cost'],
 					htmlspecialchars($ci['quantity'],ENT_QUOTES,'UTF-8'),

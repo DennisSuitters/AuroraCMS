@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,7 +25,9 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           <div class="content-title-icon"><?= svg2('calendar','i-3x');?></div>
           <div>Booking</div>
           <div class="content-title-actions">
-            <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" aria-label="Back"><?= svg2('back');?></a>
+            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+            <?php }?>
             <a class="btn" data-tooltip="tooltip" href="#" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');return false;"><?= svg2('print');?></a>
             <?php if($user['options'][0]==1||$user['options'][2]==1){?>
               <a class="btn" data-tooltip="tooltip" href="#" aria-label="Email Booking" onclick="$('#sp').load('core/email_booking.php?id=<?=$r['id'];?>');return false;"><?= svg2('email-send');?></a>

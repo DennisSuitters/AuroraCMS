@@ -14,7 +14,7 @@
  * Header Toolbar: Back, Fullscreen, Settings, Print, Email, Send, Add, SaveAll
  * Button Toolbar: Edit, Restore (hidden), Delete, Purge (hidden)
  */
-if($args[0]=='add'){
+if(isset($args[0])&&$args[0]=='add'){
   $type=filter_input(INPUT_GET,'type',FILTER_SANITIZE_STRING);
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`active`,`timezone`,`ti`) VALUES ('1','default',:ti)");
   $q->execute([':ti'=>time()]);
@@ -27,10 +27,10 @@ if($args[0]=='add'){
   $args[0]='edit';
   echo'<script>/*<![CDATA[*/history.replaceState("","","'.URL.$settings['system']['admin'].'/accounts/edit/'.$args[1].'");/*]]>*/</script>';
 }
-if($args[0]=='settings')require'core/layout/set_accounts.php';
-elseif($args[0]=='edit')require'core/layout/edit_accounts.php';
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_accounts.php';
+elseif(isset($args[0])&&$args[0]=='edit')require'core/layout/edit_accounts.php';
 else{
-  if($args[0]=='type'){
+  if(isset($args[0])&&$args[0]=='type'){
     if(isset($args[1]))$rank=rank($args[1]);
     $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `rank`=:rank ORDER BY `ti` DESC");
     $s->execute([':rank'=>$rank]);
@@ -88,7 +88,7 @@ else{
                 <td class="text-center align-middle d-none d-sm-table-cell">
                   <?='<span id="accountrank'.$r['id'].'" class="badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span><br><small class="'.($r['options'][19]!=1&&$r['rank']>301&&$r['rank']<400?'':' d-none').'" id="wholesaler'.$r['id'].'">Approval Pending</small>';?>
                 </td>
-                <td class="text-center align-middle d-none d-sm-table-cell"><?=$r['active'][0]==1?'Active':$r['status']!=''?ucfirst($r['status']):'Inactive';?></td>
+                <td class="text-center align-middle d-none d-sm-table-cell"><?=$r['active'][0]==1?'Active':($r['status']!=''?ucfirst($r['status']):'Inactive');?></td>
                 <td class="align-middle" id="controls_<?=$r['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar">
                     <div class="btn-group" role="group">

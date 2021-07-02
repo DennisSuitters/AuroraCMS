@@ -112,9 +112,9 @@ if(file_exists('../'.THEME.'/quickview.html')){
 					$choices.='<option value="'.$rcq['id'].'">'.$rcq['title'].':'.$rcq['ti'].'</option>';
 				}
 				$choices.='</select>';
-				$html=str_replace('<choices>',$choices,$html);
-			}else$html=str_replace('<choices>','',$html);
-		}else$html=preg_replace('<choices>','',$html);
+				$html=preg_replace('/<choices>/',$choices,$html);
+			}else$html=preg_replace('/<choices>/','',$html);
+		}else$html=preg_replace('/<choices>/','',$html);
 		if($r['brand']!=0){
     	$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
     	$sb->execute([':id'=>$r['brand']]);
@@ -176,9 +176,9 @@ if(file_exists('../'.THEME.'/quickview.html')){
       if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)$html=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$html);
     }
     if($config['options'][30]==1){
-      if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true||$user['purchase']==true)$html=preg_replace('/<[\/]?addtocart>/','',$html);
+      if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)||(isset($ru['options'])&&$ru['options']==1))$html=preg_replace('/<[\/]?addtocart>/','',$html);
       else$html=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$html);
     }else$html=preg_replace('/<[\/]?addtocart>/','',$html);
-    print $html;
+    echo$html;
   }else echo'There was an issue finding the content!';
 }else echo'Quick View template does not exist!';

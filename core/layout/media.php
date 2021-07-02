@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if($args[0]=='settings')require'core/layout/set_media.php';
-elseif($args[0]=='edit')require'core/layout/edit_media.php';
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_media.php';
+elseif(isset($args[0])&&$args[0]=='edit')require'core/layout/edit_media.php';
 else{?>
 <main>
   <section id="content" class="main">

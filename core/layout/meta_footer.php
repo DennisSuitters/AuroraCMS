@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -118,7 +118,11 @@
     });
 	 	return false;
 	});
-  <?php  if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'||($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view')){?>
+  <?php  if(
+    (isset($args[0])&&($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'))
+    ||
+    (isset($args[0])&&($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view'))
+  ){?>
       function elfinderDialog(id,t,c){
         var fm=$('<div class="shadow light"/>').dialogelfinder({
           url:"<?= URL.'/core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
@@ -216,7 +220,7 @@
           }).dialogelfinder('instance');
         }
       <?php }
-      if($view=='seo'||$view=='media'||$args[0]=='security'||($view=='accounts'||$view=='orders'||$view=='bookings'&&$args[0]=='settings')){?>
+      if(($view=='seo'||$view=='media'||isset($args[0])&&$args[0]=='security')||($view=='accounts'||$view=='orders'||$view=='bookings'&&isset($args[0])&&$args[0]=='settings')){?>
         $().ready(function(){
           var fm=$('#elfinder').elfinder({
             url:"<?= URL.'/core/elfinder/php/connector.php';?>",
@@ -252,7 +256,7 @@
         });
       <?php }?>
       document.addEventListener("DOMContentLoaded",function(event){
-      <?php if($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings')){?>
+      <?php if(isset($args[0])&&($args[0]=='settings'||$args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply')||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages')){?>
         $('.summernote').summernote({
           codemirror:{
             lineNumbers:true,

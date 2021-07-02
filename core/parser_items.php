@@ -14,6 +14,7 @@
 $contentType=$view;
 $rowItems=$s->rowCount();
 $html=preg_replace('~<item>.*?<\/item>~is','',$html,1);
+$skip=false;
 if(stristr($html,'<settings')){
 	preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
 	$count=$matches[0];
@@ -43,7 +44,7 @@ if(stristr($html,'<breadcrumb>')){
     'Home'
   ],$breaditem);
   $breaditems=$breadit;
-  if($r['title']!=''||$args[0]!=''){
+  if((isset($r['title'])&&$r['title']!='')||(isset($args[0])&&$args[0]!='')){
     $breadit=preg_replace([
       '/<print breadcrumb=[\"\']?url[\"\']?>/',
       '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -60,7 +61,7 @@ if(stristr($html,'<breadcrumb>')){
   }
 	if(isset($args[0])&&$args[0]!=''){
     $jsoni++;
-		if($r['title']!=''||(isset($args[0])&&$args[0]!='')){
+		if(isset($r['title'])&&$r['title']!=''||isset($args[0])&&$args[0]!=''){
 	    $breadit=preg_replace([
 	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
 	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -75,7 +76,7 @@ if(stristr($html,'<breadcrumb>')){
   }
   if(isset($args[1])&&$args[1]!=''){
     $jsoni++;
-		if($r['title']!=''||(isset($args[1])&&$args[1]!='')){
+		if(isset($r['title'])&&$r['title']!=''||(isset($args[1])&&$args[1]!='')){
 	    $breadit=preg_replace([
 	      '/<print breadcrumb=[\"\']?url[\"\']?>/',
 	      '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -129,7 +130,7 @@ if(stristr($html,'<breadcrumb>')){
     $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($args[1]))).'/'.urlencode(str_replace(' ','-',strtolower($args[2]))).'/'.urlencode(str_replace(' ','-',strtolower($args[3]))).'/'.urlencode(str_replace(' ','-',strtolower($args[4]))).'","name":"'.htmlspecialchars(ucfirst($args[4]),ENT_QUOTES,'UTF-8').'"}}'.($r['title']!=''?',':'');
     $breaditems.=$breadit;
   }
-  if($r['title']!=''){
+  if(isset($r['title'])&&$r['title']!=''){
     $jsoni++;
     $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
     $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}}';
@@ -371,6 +372,9 @@ if(stristr($html,'<items')){
 	$output='';
 	$si=1;
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+		if($_SESSION['rank']>300||$_SESSION['rank']<400&&$_SESSION['rank']!=$r['rank']){
+			if($_SESSION['rank']<399&&$r['options'][2]==0)continue;
+		}
 		if($view=='search'&&$r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
 		$sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
 		$sr->execute([':contentType'=>$r['contentType']]);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,8 +24,8 @@ if($view=='add'){
   $args[0]='edit';
   echo'<script>/*<![CDATA[*/history.replaceState("","","'.URL.$settings['system']['admin'].'/bookings/edit/'.$id.'");/*]]>*/</script>';
 }elseif(isset($args[1]))$id=$args[1];
-if($args[0]=='settings')require'core/layout/set_bookings.php';
-elseif($args[0]=='edit')require'core/layout/edit_bookings.php';
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_bookings.php';
+elseif(isset($args[0])&&$args[0]=='edit')require'core/layout/edit_bookings.php';
 else{
   $sortOrder='';
   $bookSearch=isset($_POST['booksearch'])?" AND LOWER(`name`) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%' OR LOWER(`business`) LIKE '%".str_replace(' ','%',strtolower($_POST['booksearch']))."%'":'';
@@ -141,7 +141,7 @@ else{
   </section>
 </main>
 <script>
-  <?php if($args[0]!='add'||$args[0]!='edit'){?>
+  <?php if(!isset($args[0])){?>
     document.addEventListener('DOMContentLoaded',function(){
       var calendarEl=document.getElementById('calendar');
       var calendar=new FullCalendar.Calendar(calendarEl,{

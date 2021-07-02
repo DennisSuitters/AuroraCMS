@@ -61,7 +61,9 @@ else{?>
             <div class="content-title-icon"><?= svg2('order','i-3x');?></div>
             <div>Edit Order <?=$r['qid'].$r['iid'];?></div>
             <div class="content-title-actions">
-              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <?php }?>
               <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><?= svg2('print');?></button>
               <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><?= svg2('email-send');?></button>
               <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>

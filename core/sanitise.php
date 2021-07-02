@@ -97,7 +97,7 @@ function kses(
     'mailto'
   )
 ){
-  if(get_magic_quotes_gpc())$string=stripslashes($string);
+  $string=stripslashes($string);
   $string=kses_no_null($string);
   $string=kses_js_entities($string);
   $string=kses_normalize_entities($string);

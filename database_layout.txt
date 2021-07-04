@@ -216,8 +216,8 @@ content
   `options` varchar(16)
     0 Show Cost
     1 Enable Comments
-    2
-    3
+    2 Restrict to Wholesale Account
+    3 Show Countdown
     4 Video Autoplay
     5 Video Loop
     6 Video Controls

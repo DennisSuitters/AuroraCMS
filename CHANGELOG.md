@@ -19,3 +19,9 @@
 - Fix Administration Menu not allowing some dropdown parts from showing.
 - Adjust URL to be lowercase, and fix category-nav to suite.
 - Fix Content Item being displayed regardless of account rank.
+- Add Restricting Wholesale Items to Rank Set.
+- Update Lightbox for viewing Images, and Quick View items.
+- Fix multiple issues throwing errors when using PHPv8+.
+- Fix Back button adding content, rather than returning to previous URL.
+- Fix styling and thumbnail reference for Quickview parsing.
+- Add Countdown CLock styling, parsing for Events.

@@ -20,6 +20,7 @@ Current version is v0.1.5
 - Portfolio.
 - Events.
   - Book Events and Invoice for immediate payment.
+  - Option to display Countdown Clock for when Event Starts.
 - News.
 - Testimonials.
   - Approval before before public display.
@@ -27,6 +28,7 @@ Current version is v0.1.5
   - Quick View Option for Inventory.
   - Product Reviews and Approval before public display.
   - Assign Points to Items, that get added to user's Earned Points.
+  - Restrict Wholesale Items to Wholesale Account per Level.
 - Services.
 - Gallery.
 - Client Proofs.
@@ -108,6 +110,7 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 ### Dependencies
 - PHP > 7.0 - Must have PDO, and Password Compat support. If you have tried AuroraCMS with a higher version, please report your experiences.
 - Works with PHP 7+. Please make sure PHP Libraries are installed before reporting Issues.
+- Works with PHP 8+. Please make sure PHP Libraries are installed before reporting Issues.
 - mod_rewrite or rewrite.
 - mbstring.
 - xml functions.

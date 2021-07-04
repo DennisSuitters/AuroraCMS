@@ -49,6 +49,20 @@
 					<print content="dateEvent" class="text-muted small" container="div" leadingtext="Event Date: ">
 					<print content="categories" class="text-muted small" container="div" leadingtext="Categories: ">
 					<print content="tags" class="text-muted small" container="div" leadingtext="Tags: ">
+					<countdown>
+						<input id="countdownDateEnd" type="hidden" value="<print countdown=tie>">
+						<div class="row my-5">
+							<div class="col-12">
+								<p>This <print countdown="contentType"> starts in:</p>
+								<div class="countdown-content">
+									<p id="countdownDays"></p>
+									<p id="countdownHours"></p>
+									<p id="countdownMinutes"></p>
+									<p id="countdownSeconds"></p>
+								</div>
+							</div>
+						</div>
+					</countdown>
 					<cost>
 						<div class="my-4 d-block d-sm-none text-center">
 							<quantity>

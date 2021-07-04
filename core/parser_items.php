@@ -90,7 +90,7 @@ if(stristr($html,'<breadcrumb>')){
   }
   if(isset($args[2])&&$args[2]!=''){
     $jsoni++;
-		if($r['title']!=''||$args[2]!=''){
+		if(isset($r['title'])&&$r['title']!=''||$args[2]!=''){
     	$breadit=preg_replace([
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -104,7 +104,7 @@ if(stristr($html,'<breadcrumb>')){
   }
   if(isset($args[3])&&$args[3]!=''){
     $jsoni++;
-		if($r['title']!=''||$args[3]!=''){
+		if(isset($r['title'])&&$r['title']!=''||$args[3]!=''){
     	$breadit=preg_replace([
       	'/<print breadcrumb=[\"\']?url[\"\']?>/',
       	'/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -357,7 +357,7 @@ if(stristr($html,'<categories>')){
 					($rc['icon']!=''&&file_exists('media/'.'md/'.basename($rc['icon']))?'media/'.'md/'.basename($rc['icon']).' 600w':'').'" ',
 				($rc['icon']!=''&&file_exists('media/'.'thumbs/'.basename($rc['icon']))?$rc['icon']:NOIMAGESM),
 				htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
-				URL.$rc['url'].'/category/'.str_replace(' ','-',$rc['title']).'/',
+				URL.$rc['url'].'/category/'.str_replace(' ','-',strtolower($rc['title'])).'/',
 				htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8'),
 				htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8')
 			],$catitems);

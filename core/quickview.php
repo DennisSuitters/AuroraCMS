@@ -54,7 +54,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
 					'/<print empty>/'
 				],[
 					' col-sm-8',
-					'col-12 col-sm m-0 p-3'
+					''
 				],$html);
         while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
 					if(basename($r['file'])==basename($rm['file']))continue;
@@ -64,7 +64,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
             '/<print thumbs=[\"\']?image[\"\']?>/',
             '/<print thumbs=[\"\']?imageALT[\"\']?>/'
           ],[
-            $rm['file'],
+            URL.'media/thumbs/'.basename($rm['file']),
             $rm['file'],
             $rm['fileALT']
           ],$item);
@@ -122,6 +122,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
     	$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
 		}else$brand='';
     $html=preg_replace([
+      '/<print content=[\"\']?thumb[\"\']?>/',
       '/<print content=[\"\']?image[\"\']?>/',
 			'/<print content=[\"\']?imageALT[\"\']?>/',
       '/<print content=[\"\']?id[\"\']?>/',
@@ -145,6 +146,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
 			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
 			'/<print content=[\"\']?points[\"\']?>/'
     ],[
+      URL.'media/thumbs/'.basename($r['file']),
       $r['file'],
 			$r['fileALT'],
       $r['id'],

@@ -36,6 +36,36 @@
 #signupfullname {
   display: none; }
 
+.countdown {
+  text-align: center;
+  font-size: 60px;
+  margin: 0; }
+
+.countdown-content small{
+  display: block;
+  clear: both;
+  font-size: 10px;
+  line-height: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: left;
+  padding-top: 2px; }
+
+#countdownDays,
+#countdownHours,
+#countdownMinutes,
+#countdownSeconds {
+  float: left;
+  margin: 0; }
+
+.countdown-content {
+  width: 45%;
+  margin: 0 auto; }
+
+.countdown-content p {
+  width: calc(97%/4); }
+
+
 .g-recaptcha {
   display: table;
   margin: 0 auto; }
@@ -45,10 +75,17 @@
   color: #000 !important;
   font-family: Arial !important;
   font-size: 1em !important;
-  font-weight: 400 !important; }
+  font-weight: 400 !important;
+  border-color: #ccc !important; }
+
+.order-list *,
+.orderstheme * {
+  border-color: #f5f5f5 !important; }
+
 
 .order-list {
-  border-radius: 0 !important; }
+  border-radius: 0 !important;
+  border-color: #ccc !important; }
 
 .order-list thead {
   background-color: #000 !important; }
@@ -1001,8 +1038,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   overflow: hidden; }
 
 .quickview-image {
-  height: 300px;
-  max-height: 300px !important;
+  height: calc(100vh - 280px);
   overflow: hidden; }
 
 .card-image .quickview {
@@ -1076,10 +1112,14 @@ h3.quickview-header,
 h4.quickview-header,
 h5.quickview-header,
 h6.quickview-header,
-footer.quickview-footer h3 {
+.quickview-footer h3 {
   font-family: var(--font) !important;
   color: #fff !important;
   text-shadow: none !important; }
+
+.quickview-footer {
+  background-color: #000 !important;
+  background-image: none !important;}
 
 .quickview-body {
   width: 100%;
@@ -1088,8 +1128,15 @@ footer.quickview-footer h3 {
   overflow-y: auto; }
 
 .quickview-image img {
-  object-fit: contain;
-  object-position: center center; }
+  height: 100% !important;
+  object-fit: scale-down;
+  object-position: top; }
+
+.quickview-thumbs {
+  height: 100%;
+  max-height: 100%;
+  overflow: none;
+  overflow-y: auto; }
 
 .quickview-thumbs img {
   border: 2px solid transparent; }

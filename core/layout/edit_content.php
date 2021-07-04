@@ -166,58 +166,72 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }
             if($r['contentType']=='events'){?>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-3">
-                  <label id="<?=$r['contentType'];?>Start" for="tis"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Start" aria-label="PermaLink to '.ucfirst($r['contentType']).' Event Start Date Field">&#128279;</a>':'';?>Event Start <span class="labeldate" id="labeldatetis"><?= date($config['dateFormat'],$r['tis']);?></span></label>
+                <div class="col-12 col-sm-4 pr-md-3">
+                  <label id="<?=$r['contentType'];?>Start" for="tis"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Start" aria-label="PermaLink to '.ucfirst($r['contentType']).' Event Start Date Field">&#128279;</a>':'';?>Event Start <span class="labeldate" id="labeldatetis"><?= $r['tis']>0?date($config['dateFormat'],$r['tis']):'';?></span></label>
                   <div class="form-row">
                     <input id="tis" type="datetime-local" value="<?=$r['tis']!=0?date('Y-m-d\TH:i',$r['tis']):'';?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`tis`,getTimestamp(`tis`));"':' readonly';?>>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-3">
-                  <label id="<?=$r['contentType'];?>End" for="tie"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'End" aria-label="PermaLink to '.ucfirst($r['contentType']).' End Date Field">&#128279;</a>':'';?>Event End <span class="labeldate" id="labeldatetie"><?= date($config['dateFormat'],$r['tie']);?></span></label>
+                <div class="col-12 col-sm-4 pr-md-3">
+                  <label id="<?=$r['contentType'];?>End" for="tie"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'End" aria-label="PermaLink to '.ucfirst($r['contentType']).' End Date Field">&#128279;</a>':'';?>Event End <span class="labeldate" id="labeldatetie"><?= $r['tie']>0?date($config['dateFormat'],$r['tie']):'';?></span></label>
                   <div class="form-row">
                     <input id="tie" type="datetime-local" value="<?=$r['tie']!=0?date('Y-m-d\TH:i',$r['tie']):'';?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`tie`,getTimestamp(`tie`));"':' readonly';?>>
                   </div>
                 </div>
-              </div>
-              <label id="<?=$r['contentType'];?>Address" for="address"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Address" aria-label="PermaLink to '.ucfirst($r['contentType']).' Address Field">&#128279;</a>':'';?>Address</label>
-              <div class="form-row">
-                <input class="textinput" id="address" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="address" type="text" value="<?=$r['address'];?>" placeholder="Enter an Address...">
-                <button class="save" id="saveaddress" data-tooltip="tooltip" data-dbid="address" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                <div class="col-12 col-sm-4 pl-md-3">
+                  <label>&nbsp;</label>
+                  <div class="form-row">
+                    <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCountdown" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Countdown Checkbox">&#128279;</a>':'';?>
+                    <input id="<?=$r['contentType'];?>showCountdown" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                    <label for="<?=$r['contentType'];?>showCountdown" id="contentoptions3<?=$r['id'];?>">&nbsp;Show Countdown</label>
+                  </div>
+                </div>
               </div>
               <div class="row">
-                <div class="col-12 col-md-3 pr-md-3">
+                <div class="col-12 col-sm-6 pr-sm-3">
+                  <label id="<?=$r['contentType'];?>Address" for="address"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Address" aria-label="PermaLink to '.ucfirst($r['contentType']).' Address Field">&#128279;</a>':'';?>Address</label>
+                  <div class="form-row">
+                    <input class="textinput" id="address" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="address" type="text" value="<?=$r['address'];?>" placeholder="Enter an Address...">
+                    <button class="save" id="saveaddress" data-tooltip="tooltip" data-dbid="address" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 pr-sm-3">
                   <label id="<?=$r['contentType'];?>Suburb" for="suburb"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Suburb" aria-label="PermaLink to '.ucfirst($r['contentType']).' Suburb Field">&#128279;</a>':'';?>Suburb</label>
                   <div class="form-row">
                     <input class="textinput" id="suburb" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="suburb" type="text" value="<?=$r['suburb'];?>" placeholder="Enter a Suburb...">
                     <button class="save" id="savesuburb" data-tooltip="tooltip" data-dbid="suburb" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-md-3 pr-md-3">
+              </div>
+              <div class="row">
+                <div class="col-12 col-sm-3 pl-sm-3 pr-sm-3">
                   <label id="<?=$r['contentType'];?>City" for="city"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'City" aria-label="PermaLink to '.ucfirst($r['contentType']).' City Field">&#128279;</a>':'';?>City</label>
                   <div class="form-row">
                     <input class="textinput" id="city" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="city" type="text" value="<?=$r['city'];?>" placeholder="Enter a City...">
                     <button class="save" id="savecity" data-tooltip="tooltip" data-dbid="city" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-md-3 pr-md-3">
+                <div class="col-12 col-sm-3 pl-sm-3 pr-sm-3">
                   <label id="<?=$r['contentType'];?>State" for="state"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'State" aria-label="PermaLink to '.ucfirst($r['contentType']).' State Field">&#128279;</a>':'';?>State</label>
                   <div class="form-row">
                     <input class="textinput" id="state" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="state" type="text" value="<?=$r['state'];?>" placeholder="Enter a State...">
                     <button class="save" id="savestate" data-tooltip="tooltip" data-dbid="state" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-md-3">
+                <div class="col-12 col-md-3 pl-sm-3 pr-sm-3">
                   <label id="<?=$r['contentType'];?>Postcode" for="postcode"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Postcode" aria-label="PermaLink to '.ucfirst($r['contentType']).' Postcode Field">&#128279;</a>':'';?>Postcode</label>
                   <div class="form-row">
                     <input class="textinput" id="postcode" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="postcode" type="text" value="<?=$r['postcode']!=0?$r['postcode']:'';?>" placeholder="Enter a Postcode...">
                     <button class="save" id="savepostcode" data-tooltip="tooltip" data-dbid="postcode" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                   </div>
                 </div>
-              </div>
-              <label id="<?=$r['contentType'];?>Country" for="country"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Country" aria-label="PermaLink to '.ucfirst($r['contentType']).' Country Field">&#128279;</a>':'';?>Country</label>
-              <div class="form-row">
-                <input class="textinput" id="country" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="country" type="text" value="<?=$r['country'];?>" placeholder="Enter a Country...">
-                <button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                <div class="col-12 col-sm-3 pl-sm-3">
+                  <label id="<?=$r['contentType'];?>Country" for="country"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Country" aria-label="PermaLink to '.ucfirst($r['contentType']).' Country Field">&#128279;</a>':'';?>Country</label>
+                  <div class="form-row">
+                    <input class="textinput" id="country" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="country" type="text" value="<?=$r['country'];?>" placeholder="Enter a Country...">
+                    <button class="save" id="savecountry" data-tooltip="tooltip" data-dbid="country" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                  </div>
+                </div>
               </div>
             <?php }
             echo$r['ip']!=''?'<div class="form-text small text-right">'.$r['ip'].'</div>':'';

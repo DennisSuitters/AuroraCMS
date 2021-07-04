@@ -350,6 +350,20 @@ if($skip==false){
       }
     }else$item=preg_replace(['~<service.*?>.*?<\/service>~is',($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')],'',$item,1);
     $address=$edit=$contentQuantity='';
+    $showCountdown=false;
+    if(isset($r['contentType'])&&($r['contentType']=='events')){
+      $item=preg_replace([
+        $r['options'][3]==1?'/<[\/]?countdown>/':'~<countdown>.*?<\/countdown>~is',
+        '/<print countdown=[\"\']?contentType[\"\']?>/',
+        '/<print countdown=[\"\']?tie[\"\']?>/'
+      ],[
+        '',
+        rtrim($r['contentType'],'s'),
+        date('Y-m-d h:i',$r['tis'])
+      ],$item);
+      if($r['options'][3]==1)$showCountdown=true;
+    }else
+      $item=preg_replace('~<countdown>.*?<\/countdown>~is','',$item);
     if(isset($r['contentType'])&&($r['contentType']=='inventory')){
       $item=preg_replace([
         ($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),

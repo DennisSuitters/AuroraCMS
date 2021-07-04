@@ -903,10 +903,10 @@ figcaption:empty,
   padding: 0; }
 
 .card .card-header a {
-  color: var(--card-link-color); }
+  color: var(--card-link-color) !important; }
 
 .card .card-header a:hover {
-  color: var(--card-link-color-hover);
+  color: var(--card-link-color-hover) !important;
   text-decoration: none; }
 
 .card .card-header:last-child,
@@ -928,9 +928,12 @@ figcaption:empty,
   margin-top: -.25rem;
   margin-bottom: 0; }
 
+.card .card-subtitle a {
+  color: var(--card-link-color) !important; }
+
 .card .card-subtitle a:focus,
 .card .card-subtitle a:hover {
-  color: var(--card-link-color-hover); }
+  color: var(--card-link-color-hover) !important; }
 
 .card .card-body {
   -webkit-line-clamp: var(--card-body-lines);

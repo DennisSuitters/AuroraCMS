@@ -28,7 +28,124 @@ nav ul li ul li {
   font-size: .8rem;
   color: #000; }
 
+section.list {
+  width: 100%; }
 
+section.content * {
+  transition: all 0.5s ease; }
+
+section.content .card-image .image-toolbar {
+  position: absolute;
+  display: block;
+  top: -3px;
+  right: -3px;
+  text-align: right; }
+
+section.list .card:hover {
+  background: #f5f5f5 !important; }
+
+section.content .status {
+  position: absolute;
+  top: -3px;
+  left: -3px; }
+
+section.content .status {
+  display: inline-block !important;
+  width: auto !important;
+  padding: .15em .2em !important;
+  font-size: 75% !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  vertical-align: baseline !important;
+  border-radius: .25rem !important;
+  border: 0 !important; }
+
+section.content .status.published,
+section.content .status .published {
+  color: #fff !important;
+  background-color: #28a745 !important;
+}
+
+section.content .status.autopublish,
+section.content .status .autopublish {
+  color: #fff !important;
+  background-color: #007bff !important;
+}
+
+section.content .status.unpublished,
+section.content .status .unpublished {
+  color: #212529 !important;
+  background-color: #ffc107 !important;
+}
+
+section.content .status.delete,
+section.content .status .delete {
+  color: #fff !important;
+  background-color: #dc3545 !important;
+}
+
+section.content .status.archived,
+section.content .status .archived {
+  color: #fff !important;
+  background-color: #343a40 !important;
+}
+
+section.content .card-image .image-toolbar .badger {
+  margin-top: 1px; }
+
+section.content.list .card-header .badger,
+section.content.list .card-footer .views,
+section.content.list .card-footer .share,
+section.content.list .card-footer .reviews,
+section.content.list .card-footer .comments,
+section.content.list .card-footer .quickeditbtn {
+  display: inline-block; }
+
+section.content.list .card-image .image-toolbar,
+section.content .card-header .badger,
+section.content .card-footer .views,
+section.content .card-footer .share,
+section.content .card-footer .reviews,
+section.content .card-footer .comments,
+section.content .card-footer .quickeditbtn {
+  display: none; }
+
+section.list article {
+  margin: .1rem .1rem .15rem .1rem; }
+
+section.list .card {
+  flex-direction: row;
+  width: 100%; }
+
+section.list .card .card-image {
+  width: 92px;
+  height: 92px; }
+
+section.list .card .card-image img {
+  width: 92px;
+  max-height: 92px; }
+
+section.list .card .card-header {
+  height: 64px;
+  vertical-align: middle;
+  font-size: 1em; }
+
+section.content .card .card-header small {
+  font-size: .65rem !important; }
+
+section.content.list .card .card-header small {
+  font-size: .9rem !important; }
+
+section.list .card .card-footer {
+  align-self: flex-end;
+  margin-left: auto !important;
+  margin-right: 0 !important;}
+
+section.content .card-footer {
+  margin-left: auto;
+  margin-right: 0 !important; }
 
 .select-sm,
 .select-sm:focus {
@@ -1008,7 +1125,8 @@ a.badger:hover {
   position: relative;
   top: -1px; }
 
-.badge-primary {
+.badge-primary,
+.badge-autopublish {
   color: #fff;
   background-color: #007bff; }
 
@@ -1038,7 +1156,8 @@ a.badge-secondary:focus {
   box-shadow: 0 0 0 .2rem rgba(108, 117, 125, .5); }
 
 .badge-success,
-.badge-paid {
+.badge-paid,
+.badge-published {
   color: #fff;
   background-color: #28a745; }
 
@@ -1067,7 +1186,8 @@ a.badge-info:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem rgba(23, 162, 184, .5); }
 
-.badge-warning {
+.badge-warning,
+.badge-unpublished {
   color: #212529;
   background-color: #ffc107; }
 
@@ -1082,7 +1202,8 @@ a.badge-warning:focus {
   box-shadow: 0 0 0 .2rem rgba(255, 193, 7, .5); }
 
 .badge-danger,
-.badge-overdue {
+.badge-overdue,
+.badge-delete {
   color: #fff;
   background-color: #dc3545; }
 
@@ -1096,8 +1217,7 @@ a.badge-danger:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .5); }
 
-.badge-light,
-.badge-archived {
+.badge-light {
   color: #212529;
   background-color: #f8f9fa; }
 
@@ -1111,7 +1231,8 @@ a.badge-light:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem rgba(248, 249, 250, .5); }
 
-.badge-dark {
+.badge-dark,
+.badge-archived {
   color: #fff;
   background-color: #343a40; }
 

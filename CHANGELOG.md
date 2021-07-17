@@ -1,27 +1,11 @@
-### v0.1.5
-- Remove .valid() jQuery check that wasn't working correctly.
-- Fix typo in installer, stopping stepping through install.
-- Fix index page not showing correct number of items set in settings attribute.
-- Add is_numeric check in postage unit calculator, and cart calculation.
-- Fix Cover Image removal removing input element, and changing to wrong noimage file.
-- Add Points Earning system and template parsing, where points are added to users account depending on the value an inventory item is set to.
-- Add information to Orders in Administration, showing Rank, Purchase Limit, Spent, Points, and last purchase.
-- Fix hidden spam field position when logged in when viewing the cart, was throwing an error when submitting cart.
-- Remove SQL and Parsing of adding category's to menu dropdowns.
-- Add "Share this to Social Media" widget to the sidebar menu, along with an edit in administration button when logged in as Administrator.
-- Remove reference to "bootstrap.min.css" from service worker as Bootstrap is now deprecated.
-- Fix loading of Summernote plugin CSS in Find N Replace plugin, we now load CSS in the Head rather than script.
-- Add Points Earned with the Account Name and Rank display.
-- Fix Logged in and Not Logged in Purchasing.
-- Fix Category Navigation not showing correct selected Category after selection.
-- Fix Administration Notification area icon spacing and notification dropdown.
-- Fix Live Chat Facebook Colour Picker not showing Colours correctly.
-- Fix Administration Menu not allowing some dropdown parts from showing.
-- Adjust URL to be lowercase, and fix category-nav to suite.
-- Fix Content Item being displayed regardless of account rank.
-- Add Restricting Wholesale Items to Rank Set.
-- Update Lightbox for viewing Images, and Quick View items.
-- Fix multiple issues throwing errors when using PHPv8+.
-- Fix Back button adding content, rather than returning to previous URL.
-- Fix styling and thumbnail reference for Quickview parsing.
-- Add Countdown CLock styling, parsing for Events.
+### v0.1.6
+- Update Summernote.
+- Update FullCalendar.
+- Fix FullCalendar Views for easier editing multiple content items.
+- Fix views for Calendar which break when switching between Calendar and Table.
+- Update Summernote-Cleaner.
+- Add template page and parsing for checkout.html
+- Add Stripe Payment services.
+- Fix PayPal Payment services.
+- Add Order Payment Information for Orders including manual editing in Administration.
+- Add Order Payment Information when viewing Orders on Front End Theme Templates.

@@ -26,10 +26,19 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $rank=isset($_SESSION['rank'])?$_SESSION['rank']:400;
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
-//if($t=='content'||$t=='login'||$t=='orders'){
+if($t=='content'||$t=='login'||$t=='orders'){
 	$s=$db->prepare("SELECT * FROM `".$prefix.$t."` WHERE id=:id");
 	$s->execute([':id'=>$id]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
+	if(!isset($r['id']))$r['id']=0;
+	if(!isset($r['contentType']))$r['contentType']='';
+	if(!isset($r['urlSlug']))$r['urlSlug']='';
+	if(!isset($r['ti']))$r['ti']=0;
+	if(!isset($r['pti']))$r['pti']=0;
+	if(!isset($r['eti']))$r['eti']=0;
+	if(!isset($r['status']))$r['status']='';
+	if(!isset($r['rank']))$r['rank']=0;
+
 	echo'<td colspan="8">'.
 		'<div class="row">'.
 	    '<div class="col-12 col-sm-4 p-1">';
@@ -562,4 +571,4 @@ $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter
 			'}'.
 	  '</script>'.
 	'</td>';
-//}
+}

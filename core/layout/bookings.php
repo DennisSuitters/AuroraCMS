@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -54,7 +54,7 @@ else{
           <div class="content-title-actions">
             <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings">'.svg2('settings').'</a>':'';?>
             <button class="<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><?= svg2('table');?></button>
-            <button class="<?=(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><?= svg2('calendar');?></button>
+            <button class="<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><?= svg2('calendar');?></button>
             <?=$user['options'][2]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
           </div>
         </div>
@@ -147,14 +147,14 @@ else{
       var calendar=new FullCalendar.Calendar(calendarEl,{
         expandRows:true,
         headerToolbar:{
-          left:'prev today',
+          left:'prev,next today',
           center:'title',
-          right:'dayGridMonth,today next',
+          right:'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
         },
         initialView:'dayGridMonth',
         navLinks:true,
         <?php if($user['options'][2]==1){?>editable:true,<?php }?>
-        height:'auto',
+        height:'100vh',
         selectable:false,
         nowIndicator:true,
         dayMaxEvents:true,

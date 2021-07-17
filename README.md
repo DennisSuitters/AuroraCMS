@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.1.5
+Current version is v0.1.6
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -43,7 +43,8 @@ Current version is v0.1.5
   - Live Chat. Choose between the built in Live Chat, or easily integrate Facebook Messenger.
 - Orders.
   - Create quotes, invoices. Client viewing of Orders.
-  - PayPal Integration for accepting PayPal and Credit Card Payments.
+  - PayPal Integration for Accepting PayPal and Credit Card Payments.
+  - Stripe Integration for Accepting Credit Card Payments (working on adding others that Stripe can interact with).
   - Australia Post API Integration for Calculating Postage Costs.
   - Deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
   - Rewards with percentage or value off, date period available, quantity usage.

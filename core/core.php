@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -355,6 +355,10 @@ class front{
 		$view='cart';
 		require'process.php';
 	}
+	function checkout($args=false){
+		$view='checkout';
+		require'process.php';
+	}
 	function contactus($args=false){
 		$view='contactus';
 		require'process.php';
@@ -501,6 +505,7 @@ $routes=[
 	'home'=>['front','index'],
 	'sitemap'=>['front','sitemap'],
 	'orders'=>['front','orders'],
+	'checkout'=>['front','checkout'],
 	'profile'=>['front','profile'],
 	'proofs'=>['front','proofs'],
 	'login'=>['front','login'],

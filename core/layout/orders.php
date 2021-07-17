@@ -188,8 +188,8 @@ if($user['options'][4]==1){
               </thead>
               <tbody>
                 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                  if($r['due_ti']<$ti){
-                    $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id");
+                  if($r['due_ti']<$ti&&$r['status']!='paid'){
+                    $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id AND `status`!='paid'");
                     $us->execute([':id'=>$r['id']]);
                     $r['status']='overdue';
                   }

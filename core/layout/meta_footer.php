@@ -298,7 +298,7 @@
           lang:'en-US',
           toolbar:[
             ['save',['save']],
-            ['find',['findnreplace']],
+            ['custom',['findnreplace','cleaner']],
             ['style',['cleaner','style']],
             ['font',['bold','italic','underline','clear']],
             ['para',['ul','ol','paragraph']],

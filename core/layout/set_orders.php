@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -227,6 +227,22 @@
             <input type="text" id="ipn" class="form-control" value="Not Yet Implemented" readonly data-tooltip="tooltip" aria-label="Not Yet Implemented">
           </div>
         </div> */ ?>
+        <legend id="stripe" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripe" aria-label="PermaLink to Stripe Section">&#128279;</a>':'';?>Stripe</legend>
+        <div id="stripePublishKey" class="form-row">
+          <label for="stripePublishKey"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripePublishKey" aria-label="PermaLink to Stripe Publish Key">&#128279;</a>':'';?>Publish&nbsp;Key</label>
+          <?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
+            <small class="form-text text-right">You will need to a Stripe Account to get a Publish Key.</small>
+          <?php }?>
+        </div>
+        <div class="form-row">
+          <input class="textinput" id="stripe_publishkey" data-dbid="1" data-dbt="config" data-dbc="stripe_publishkey" type="text" value="<?=$config['stripe_publishkey'];?>" placeholder="Enter a Stripe Publish Key...">
+          <button class="save" id="savestripe_publishkey" data-tooltip="tooltip" data-dbid="stripe_publishkey" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label for="stripeSecretKey"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripeSecretKey" aria-label="PermaLink to Stripe Secret Key">&#128279;</a>':'';?>Secret&nbsp;Key</label>
+        <div class="form-row">
+          <input class="textinput" id="stripe_secretkey" data-dbid="1" data-dbt="config" data-dbc="stripe_secretkey" type="text" value="<?=$config['stripe_secretkey'];?>" placeholder="Enter a Stripe Secret Key...">
+          <button class="save" id="savestripe_secretkey" data-tooltip="tooltip" data-dbid="stripe_secretkey" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+        </div>
         <hr>
         <legend id="orderProcessing"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderProcessing" aria-label="PermaLink to Order Processing Section">&#128279;</a>':'';?>Order Processing</legend>
         <div class="form-row">

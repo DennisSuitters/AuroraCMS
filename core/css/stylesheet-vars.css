@@ -172,11 +172,13 @@
   --gutter-x: 1.5rem;
   --gutter-y: 0;
 
-  --form-background-color:#fff;
-  --form-background-color-hover:#fff;
+  --form-background-color: #fff;
+  --form-background-color-hover: #fff;
+  --form-background-disabled: #e9ecef;
   --form-border-color: #ced4da;
   --form-border-color-hover: #007bff;
   --form-color: #495057;
+  --form-color-disabled: #495057;
   --form-placeholder-color: #999;
   --form-focus-color: #495057;
   --form-focus-border-color: #8bbafe;
@@ -210,7 +212,7 @@
   --card-figcaption-background-color: rgba(0, 0, 0, .5);
   --card-figcaption-color: #fff;
   --card-body-lines: 3;
-  --width-card: 225px;
+  --width-card: 230px;
   --width-card-medium: 460px;
   --width-card-wide: 800px;
   --width-content: 100%;

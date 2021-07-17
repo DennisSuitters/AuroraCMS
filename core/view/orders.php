@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -315,8 +315,13 @@ if(isset($args[0])&&$args[0]!=''){
       ':total'=>$total
     ]);
     $html=preg_replace('~<order>~is',$order,$html,1);
-    $html=preg_replace('/<print paypal>/',(stristr($html,'<print paypal>')&&$r['status']!='paid'?'<div id="paypal-button-container"></div><script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script><script>paypal.Buttons({style:{shape:"rect",color:"gold",layout:"horizontal",label:"pay",},createOrder:function(data,actions){return actions.order.create({purchase_units:[{amount:{value:"'.$total.'"}}]});},Approve:function(data,actions){return actions.order.capture().then(function(details){alert("Transaction completed by "+details.payer.name.given_name+"!");});}}).render("#paypal-button-container");</script>':''),$html);
-/*          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
+    $html=preg_replace(
+      '/<print checkoutlink>/',
+      $r['status']!='paid'?'<a class="btn" href="'.URL.'checkout/'.$r['qid'].$r['iid'].'">Proceed to Checkout</a>':'<div class="alert alert-success">Order Already Paid</div>',
+      $html,1);
+
+/*    $html=preg_replace('/<print paypal>/',(stristr($html,'<print paypal>')&&$r['status']!='paid'?'<div id="paypal-button-container"></div><script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script><script>paypal.Buttons({style:{shape:"rect",color:"gold",layout:"horizontal",label:"pay",},createOrder:function(data,actions){return actions.order.create({purchase_units:[{amount:{value:"'.$total.'"}}]});},Approve:function(data,actions){return actions.order.capture().then(function(details){alert("Transaction completed by "+details.payer.name.given_name+"!");});}}).render("#paypal-button-container");</script>':''),$html);
+          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
         '<div id="paypal-button-container"></div>'.
         '<script>paypal.Buttons({'.
           'createOrder:function(data,actions){'.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -108,23 +108,68 @@ else{?>
               <div class="form-row">
                 <div class="input-text col-12 col-sm">Rank:&nbsp;<span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span></div>
                 <div class="input-text col-12 col-sm">
-<?php if($client['purchaseLimit']==0){
-  if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
-  if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
-  if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
-  if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
-  if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
-  if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
-  if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
-  if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
-  if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
-  if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
-}?>
+                  <?php if($client['purchaseLimit']==0){
+                    if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
+                    if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
+                    if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
+                    if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
+                    if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
+                    if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
+                    if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
+                    if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
+                    if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
+                    if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
+                  }?>
                   Purchase Limit:&nbsp;<span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span></div>
                 <div class="input-text col-12 col-sm">Spent:&nbsp;$<span id="clientSpent"><?=$client['spent'];?></span></div>
                 <div class="input-text col-12 col-sm">Points Earned:&nbsp;<span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
                 <div class="input-text col-12 col-sm">Last Purchase:&nbsp;<span id="clientpti"><?= _ago($client['pti']);?></span></div>
               </div>
+              <legend class="mt-3 small">Payment Details</legend>
+              <?php if($r['status']=='paid'){?>
+                <div class="form-row">
+                  <div class="input-text">Paid Via</div>
+                  <input type="text" value="<?= ucwords($r['paid_via']);?>" readonly>
+                  <div class="input-text">Transaction ID</div>
+                  <input type="text" value="<?=$r['txn_id'];?>" readonly>
+                  <div class="input-text">Date Paid</div>
+                  <input type="text" value="<?=$r['paid_ti']>0?date($config['dateFormat'],$r['paid_ti']):'';?>" readonly>
+                </div>
+                <div class="form-row">
+                  <div class="input-text">Name</div>
+                  <input type="text" value="<?=$r['paid_name'];?>" readonly>
+                  <div class="input-text">Email</div>
+                  <input type="text" value="<?=$r['paid_email'];?>" readonly>
+                </div>
+              <?php }else{?>
+                <div class="form-row">
+                  <div class="input-text">Paid Via</div>
+                  <select id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
+                    <option value="">Select an Option</option>
+                    <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
+                    <option value="cash on delivery"<?=$r['paid_via']=='cash on delivery'?' selected':'';?>>Cash On Delivery</option>
+                    <option value="credit card"<?=$r['paid_via']=='credit card'?' selected':'';?>>Credit Card</option>
+                    <option value="paypal"<?=$r['paid_via']=='paypal'?' selected':'';?>>PayPal</option>
+                    <option value="stripe"<?=$r['paid_via']=='stripe'?' selected':'';?>>Stripe</option>
+                    <option value="afterpay"<?=$r['paid_via']=='afterpay'?' selected':'';?>>AfterPay</option>
+                    <option value="applepay"<?=$r['paid_via']=='applepay'?' selected':'';?>>ApplePay</option>
+                    <option value="googlepay"<?=$r['paid_via']=='googlepay'?' selected':'';?>>GooglePay</option>
+                  </select>
+                  <div class="input-text">Transaction ID</div>
+                  <input class="textinput" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">
+                  <?=$user['options'][1]==1?'<button class="save" id="savetxn_id" data-tooltip="tooltip" data-dbid="txn_id" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <div class="input-text">Paid Date</div>
+                  <input id="paid_ti" type="datetime-local" value="<?=$r['paid_ti']>0?date('Y-m-d\TH:i',$r['paid_ti']):'';?>" autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`paid_ti`,getTimestamp(`paid_ti`));">
+                </div>
+                <div class="form-row">
+                  <div class="input-text">Name</div>
+                  <input class="textinput" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name...">
+                  <?=$user['options'][1]==1?'<button class="save" id="savepaid_name" data-tooltip="tooltip" data-dbid="paid_name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <div class="input-text">Email</div>
+                  <input class="textinput" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email...">
+                  <?=$user['options'][1]==1?'<button class="save" id="savepaid_email" data-tooltip="tooltip" data-dbid="paid_email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+              <?php }?>
             </div>
           </div>
           <hr>
@@ -269,7 +314,7 @@ else{?>
                         </form>
                       <?php }?>
                     </td>
-                    <td class="text-left align-middle px-0"><?=$c['title'];?></td>
+                    <td class="text-left align-middle px-0"><?= isset($c['title'])?$c['title']:'';?></td>
                     <td class="text-center align-middle px-0">
                       <?php if($oi['iid']!=0){?>
                         <form target="sp" method="post" action="core/updateorder.php">
@@ -376,7 +421,7 @@ else{?>
                         echo' Off';
                       }?>
                     </td>
-                    <td class="text-right align-middle px-0"><?=$reward['value']>0?$total:'';?></td>
+                    <td class="text-right align-middle px-0"><?=(isset($reward['value'])?($reward['value']>0?$total:''):'');?></td>
                     <td>&nbsp;</td>
                   </tr>
 <?php if($config['options'][26]==1){

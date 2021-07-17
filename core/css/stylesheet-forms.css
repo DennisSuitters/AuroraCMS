@@ -53,18 +53,19 @@ button:focus,
 [type="submit"]:focus,
 input:focus,
 select:focus,
-textarea:focus {
+textarea:focus,
+.field:focus {
   outline: none!important;
   box-shadow:0 0 0 .2rem var(--form-focus-shadow);
   border-width: var(--border-width) !important;
   border-color: var(--form-focus-border-color); }
 
-
 .btn:disabled,
 .btn.disabled,
 button:disabled,
 [role="button"]:disabled,
-input:disabled {
+input:disabled,
+.field:disabled {
   color: var(--button-color-disabled) !important;
   background-color: var(--button-background-color-disabled) !important;
   border-color: var(--button-background-color-disabled) !important;
@@ -119,7 +120,8 @@ label {
 
 input,
 select,
-textarea {
+textarea,
+.field {
   display: block;
   transition: border-color .15s ease-in-out,
               box-shadow .15s ease-in-out;
@@ -143,13 +145,15 @@ select {
 @media (prefers-reduced-motion: reduce) {
   input,
   select,
-  textarea {
+  textarea.
+  .field {
     transition: none; }
 }
 
 input:focus,
 select:focus,
-textarea:focus {
+textarea:focus,
+.field:focus {
   outline: 0;
   box-shadow: 0 0 0 .2rem var(--form-focus-shadow);
   border-color: var(--form-focus-border-color);
@@ -158,8 +162,8 @@ textarea:focus {
 
 input[readonly],
 textarea[readonly] {
-  background-color: var(--form-background-disabled);
-  color: var(--form-color-siabled); }
+  background-color: var(--form-background-disabled) !important;
+  color: var(--form-color-disabled) !important; }
 
 input::-moz-placeholder,
 textarea::-moz-placeholder {
@@ -771,29 +775,34 @@ textarea {
 
 input:required,
 select:required,
-textarea:required {
+textarea:required,
+.field:required {
   border-color: var(--form-required-border-color);
   color: var(--form-required-color); }
 
 input:required:valid,
-textarea:required:valid {
+textarea:required:valid,
+.field:required:valid {
   border-color: var(--form-valid-border-color);
   color: var(--form-valid-color); }
 
 input:required:valid:focus,
-textarea:required:valid:focus {
+textarea:required:valid:focus,
+.field:required:valid:focus {
   box-shadow: 0 0 0 .2rem var(--form-valid-shadow);
   border-color: var(--form-valid-border-color);
   color: var(--form-valid-color); }
 
 input:required:focus,
 select:required:focus,
-textarea:required:focus {
+textarea:required:focus,
+.field:required:focus {
   box-shadow: 0 0 0 .2rem var(--form-focus-required-shadow); }
 
 input:required::-moz-placeholder,
 select:required::-moz-placeholder,
-textarea:required::-moz-placeholder {
+textarea:required::-moz-placeholder,
+.field:required::-moz-placeholder {
   color: var(--form-required-color); }
 
 input:required::-ms-input-placeholder,

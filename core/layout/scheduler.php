@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -62,14 +62,14 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);?>
     var calendar=new FullCalendar.Calendar(calendarEl,{
       expandRows:true,
       headerToolbar:{
-        left:'prev today',
+        left:'prev,next today',
         center:'title',
-        right:'dayGridMonth,today next',
+        right:'dayGridMonth,timeGridWeek,timeGridDay,listWeek',
       },
       initialView:'dayGridMonth',
       navLinks:true,
       <?php if($user['options'][2]==1){?>editable:true,<?php }?>
-      height:'auto',
+      height:'100vh',
       selectable:true,
       nowIndicator:true,
       dayMaxEvents:true,

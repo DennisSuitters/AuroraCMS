@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,6 +16,14 @@ if(!defined('VERSION'))define('VERSION',trim(file_get_contents('VERSION')));
 if(!isset($_COOKIE['bookingview'])){
   setcookie("bookingview","calendar",time()+(60*60*24*14));
   $_COOKIE['bookingview']='calendar';
+}
+if(!isset($_COOKIE['contentview'])){
+  setcookie("contentview","cards",time()+(60*60*24*14));
+  $_COOKIE['contentview']='cards';
+}
+if(!isset($_COOKIE['accountview'])){
+  setcookie("accountview","cards",time()+(60*60*24*14));
+  $_COOKIE['accountview']='cards';
 }
 if(!isset($_COOKIE['theme'])){
   setcookie("theme","",time()+(60*60*24*14));

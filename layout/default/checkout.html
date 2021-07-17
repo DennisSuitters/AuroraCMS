@@ -1,0 +1,216 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="checkout">
+  <section id="payment-info" class="row my-5">
+    <pagenotes>
+      <article class="col-12 m-0 p-0 px-3 hidewhenempty"><print page="notes"></article>
+    </pagenotes>
+    <article class="col-12 text-center">
+      <h3>Options to Pay Order #<print checkout="orderid"></h3>
+    </article>
+    <article class="col-12 col-sm-5">
+      <error>
+      <paypal>
+        <div class="card p-3 mb-3">
+          <div id="smart-button-container">
+            <div class="text-center">
+              <div id="paypal-button-container"></div>
+            </div>
+          </div>
+          <script src="https://www.paypal.com/sdk/js?client-id=<print paypal=clientID>&enable-funding=venmo&currency=AUD" data-sdk-integration-source="button-factory"></script>
+          <script>
+            function initPayPalButton(){
+              paypal.Buttons({
+                style:{
+                  shape:'rect',
+                  color:'gold',
+                  layout:'vertical',
+                  label:'paypal',
+                },
+                createOrder:function(data,actions){
+                  return actions.order.create({
+                    purchase_units:[{
+                      "amount":{
+                        "currency_code":"AUD",
+                        "value":<print checkout=total>
+                      }
+                    }]
+                  });
+                },
+                onApprove:function(data,actions){
+                  return actions.order.capture().then(function(details){
+                    var name=details.payer.name.given_name+' '+details.payer.name.surname;
+                    var email=details.payer.email_address;
+                    var txnid=details.id;
+                    var act='paid';
+                    $.ajax({
+                      type:"POST",
+                      url:"core/paypalpayment.php",
+                      data:{
+                        id:<print orderid>,
+                        name:name,
+                        email:email,
+                        txnid:txnid,
+                        amount:<print checkout="total">,
+                        act:act
+                      }
+                    }).done(
+                      function(msg){
+                        if(msg=='error'){
+                          $('#smart-button-container').html('<div class="alert alert-danger">There was an Issue with Processing Your Transaction!</div>');
+                        }else{
+                          $('#payment-info').html('<article class="col-12 col-sm-6 text-center"><div class="alert alert-success">Payment Succeeded, thank you!<br><br><a href="<print url>orders" class="btn-link">Back to Order Page</a></div></article>');
+                        }
+                      }
+                    );
+                  });
+                },
+                onError:function(err){
+                  $('#smart-button-container').html('<div class="alert alert-danger">There was an Issue with Processing Your Transcaction!</div>');
+                }
+              }).render('#paypal-button-container');
+            }
+            initPayPalButton();
+          </script>
+        </div>
+      </paypal>
+      <direct>
+        <div class="card p-3">
+          <h4>Direct Deposit</h4>
+          <p>
+            <strong>Bank:</strong> <print checkout="bank"><br>
+            <strong>Account Name:</strong> <print checkout="accountName"><br>
+            <strong>Account Number:</strong> <print checkout="accountNumber"><br>
+            <strong>Branch BSB:</strong> <print checkout="accountBSB">
+          </p>
+          <p>
+            Note: When paying via Direct Deposit, please use the Order Number above in the payment description so we can easily determine your payment.
+          </p>
+        </div>
+      </direct>
+    </article>
+    <stripe>
+      <article id="stripe" class="col-12 col-sm-5 border-0">
+        <div class="card p-3 d-block">
+          <form target="sp" action="core/stripepayment.php" method="post" id="paymentFrm">
+            <input type="hidden" name="orderID" value="<print checkout=orderid>">
+            <label>Email</label>
+            <input type="email" name="email" id="email" class="field" placeholder="Enter email" required="">
+            <label>Name on Card</label>
+            <input type="text" name="name" id="name" class="field" placeholder="Enter name" required="" autofocus="">
+            <label>Card Number</label>
+            <div id="card_number" class="field"></div>
+            <div class="row">
+              <div class="col-6">
+                <label>Expiry</label>
+                <div id="card_expiry" class="field"></div>
+              </div>
+              <div class="col-6">
+                <label>CVC Number <small>(Back of Card)</small></label>
+                <div id="card_cvc" class="field"></div>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-success mt-4" id="payBtn">Pay $<print checkout="total"></button>
+          </form>
+          <iframe id="sp" name="sp" class="d-none"></iframe>
+          <div class="col-12 text-muted small text-center mt-3">
+            <a class="text-muted" href="https://stripe.com"><em>Powered by</em> <svg class="InlineSVG Icon Footer-PoweredBy-Icon Icon--md" focusable="false" width="33" height="15"><g fill-rule="evenodd"><path d="M32.956 7.925c0-2.313-1.12-4.138-3.261-4.138-2.15 0-3.451 1.825-3.451 4.12 0 2.719 1.535 4.092 3.74 4.092 1.075 0 1.888-.244 2.502-.587V9.605c-.614.307-1.319.497-2.213.497-.876 0-1.653-.307-1.753-1.373h4.418c0-.118.018-.588.018-.804zm-4.463-.859c0-1.02.624-1.445 1.193-1.445.55 0 1.138.424 1.138 1.445h-2.33zM22.756 3.787c-.885 0-1.454.415-1.77.704l-.118-.56H18.88v10.535l2.259-.48.009-2.556c.325.235.804.57 1.6.57 1.616 0 3.089-1.302 3.089-4.166-.01-2.62-1.5-4.047-3.08-4.047zm-.542 6.225c-.533 0-.85-.19-1.066-.425l-.009-3.352c.235-.262.56-.443 1.075-.443.822 0 1.391.922 1.391 2.105 0 1.211-.56 2.115-1.39 2.115zM18.04 2.766V.932l-2.268.479v1.843zM15.772 3.94h2.268v7.905h-2.268zM13.342 4.609l-.144-.669h-1.952v7.906h2.259V6.488c.533-.696 1.436-.57 1.716-.47V3.94c-.289-.108-1.346-.307-1.879.669zM8.825 1.98l-2.205.47-.009 7.236c0 1.337 1.003 2.322 2.34 2.322.741 0 1.283-.135 1.581-.298V9.876c-.289.117-1.716.533-1.716-.804V5.865h1.716V3.94H8.816l.009-1.96zM2.718 6.235c0-.352.289-.488.767-.488.687 0 1.554.208 2.241.578V4.202a5.958 5.958 0 0 0-2.24-.415c-1.835 0-3.054.957-3.054 2.557 0 2.493 3.433 2.096 3.433 3.17 0 .416-.361.552-.867.552-.75 0-1.708-.307-2.467-.723v2.15c.84.362 1.69.515 2.467.515 1.879 0 3.17-.93 3.17-2.548-.008-2.692-3.45-2.213-3.45-3.225z"></path></g></svg></a>
+          </div>
+        </div>
+      </article>
+      <script src="https://js.stripe.com/v3/"></script>
+      <script>
+        var stripe=Stripe('<print stripe="publishkey">');
+        var elements=stripe.elements();
+        var style={
+          base:{
+            fontSize:'1.2rem',
+            lineHeight:'1.5',
+            color:'#495057',
+            backgroundColor:'#fff',
+            '::placeholder':{
+              color:'#999',
+            },
+          },
+          invalid:{
+            color:'#dc3545',
+          }
+        };
+        var cardElement=elements.create('cardNumber',{
+          showIcon:true,
+          style:style
+        });
+        cardElement.mount('#card_number');
+        var exp=elements.create('cardExpiry',{
+          showIcon:true,
+          'style':style
+        });
+        exp.mount('#card_expiry');
+        var cvc=elements.create('cardCvc',{
+          showIcon:true,
+          'style':style
+        });
+        cvc.mount('#card_cvc');
+        var resultContainer=document.getElementById('paymentResponse');
+        cardElement.addEventListener('change',function(event){
+          if(event.error){
+            resultContainer.innerHTML='<p>'+event.error.message+'</p>';
+          }else{
+            resultContainer.innerHTML='';
+          }
+        });
+        var form=document.getElementById('paymentFrm');
+        form.addEventListener('submit',function(e){
+          e.preventDefault();
+          createToken();
+        });
+        function createToken(){
+          stripe.createToken(cardElement).then(function(result){
+            if(result.error){
+              resultContainer.innerHTML='<p>'+result.error.message+'</p>';
+            }else{
+              stripeTokenHandler(result.token);
+            }
+          });
+        }
+        function stripeTokenHandler(token){
+          var hiddenInput=document.createElement('input');
+          hiddenInput.setAttribute('type','hidden');
+          hiddenInput.setAttribute('name','stripeToken');
+          hiddenInput.setAttribute('value',token.id);
+          form.appendChild(hiddenInput);
+          form.submit();
+        }
+        var cardBrandToPfClass={
+            'visa':'pf-visa',
+            'mastercard':'pf-mastercard',
+            'amex':'pf-american-express',
+            'discover':'pf-discover',
+            'diners':'pf-diners',
+            'jcb':'pf-jcb',
+            'unknown':'pf-credit-card',
+        }
+        function setBrandIcon(brand){
+	        var brandIconElement=document.getElementById('brand-icon');
+          var pfClass='pf-credit-card';
+          if(brand in cardBrandToPfClass){
+            pfClass=cardBrandToPfClass[brand];
+          }
+          for(var i=brandIconElement.classList.length - 1;i >= 0;i--){
+            brandIconElement.classList.remove(brandIconElement.classList[i]);
+          }
+          brandIconElement.classList.add('pf');
+          brandIconElement.classList.add(pfClass);
+        }
+        cardNumberElement.on('change',function(event){
+          if(event.brand){
+            setBrandIcon(event.brand);
+          }
+          setOutcome(event);
+        });
+      </script>
+    </stripe>
+  </section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

@@ -45,7 +45,7 @@ if(stristr($html,'<items>')){
     ],[
       'zebra'.$zebra,
       $r['qid'].$r['iid'],
-      ucfirst($r['status']),
+      $r['status'],
       $r['iid_ti']>0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']),
       date($config['dateFormat'],$r['due_ti']),
       URL.'orders/'.$r['qid'].$r['iid'].'/'
@@ -127,7 +127,7 @@ if(isset($args[0])&&$args[0]!=''){
       $r['qid'].$r['iid'],
       date($config['dateFormat'],$r['due_ti']),
       $r['status'],
-      htmlspecialchars(ucfirst($r['status']),ENT_QUOTES,'UTF-8'),
+      $r['status'],
     ],$order);
     $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC, `title` ASC");
     $ois->execute([':oid'=>$r['id']]);

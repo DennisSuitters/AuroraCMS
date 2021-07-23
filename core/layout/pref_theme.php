@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -27,35 +27,35 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow">
+      <div class="card border-radius-0 shadow overflow-visible">
         <?='<div class="alert alert-danger'.(file_exists(THEME.'/theme.ini')?' hidden':'').'" id="notheme" role="alert">A Website Theme has not been set.</div>';?>
-        <table class="table-zebra">
-          <tbody class="theme-chooser" id="preference-theme">
-            <?php $folders=preg_grep('/^([^.])/',scandir("layout"));
-            foreach($folders as$folder){
-              if(!file_exists('layout/'.$folder.'/theme.ini'))continue;
-              $theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
-              <tr class="theme<?=$config['theme']==$folder?' theme-selected':'';?>" data-theme="<?=$folder;?>">
-                <td class="col-3 col-md-1">
-                  <img src="<?php if(file_exists('layout/'.$folder.'/theme.jpg'))echo'layout/'.$folder.'/theme.jpg';elseif(file_exists('layout/'.$folder.'/theme.png'))echo'layout/'.$folder.'/theme.png';else echo ADMINNOIMAGE;?>" alt="<?= $theme['title'];?>">
-                </td>
-                <td class="col-9 col-md-11">
-                  <h4><?= isset($theme['title'])&&$theme['title']!=''?$theme['title']:'No Title Assigned';?></h4>
-                  <?= isset($theme['version'])&&$theme['version']!=''?'<small class="version">Version: '.$theme['version'].'</small><br>':'';
-                  if(isset($theme['creator'])&&$theme['creator']!='')echo'<small class="creator">Creator'.(isset($theme['creator_url'])&&$theme['creator_url']!=''?': <a target="_blank" href="'.$theme['creator_url'].'">'.$theme['creator'].'</a>':$theme['creator']).'</small><br>';
-                  if(isset($theme['framework_name'])&&$theme['framework_name']!='')echo'<small class="creator">Framework'.(isset($theme['framework_url'])&&$theme['framework_url']!=''?': <a target="_blank" href="'.$theme['framework_url'].'">'.$theme['framework_name'].'</a>':$theme['framework_name']).'</small><br>';?>
-                </td>
-              </tr>
-            <?php }?>
-          </tbody>
-        </table>
+        <section class="content overflow-visible theme-chooser" id="preference-theme">
+          <?php $folders=preg_grep('/^([^.])/',scandir("layout"));
+          foreach($folders as$folder){
+            if(!file_exists('layout/'.$folder.'/theme.ini'))continue;
+            $theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
+            <article class="card col-12 col-sm-5 mx-3 mt-4 mb-0 overflow-visible theme<?=$config['theme']==$folder?' theme-selected':'';?>" data-theme="<?=$folder;?>">
+              <figure class="card-image position-relative overflow-visible">
+                <img src="<?php if(file_exists('layout/'.$folder.'/theme.jpg'))echo'layout/'.$folder.'/theme.jpg';elseif(file_exists('layout/'.$folder.'/theme.png'))echo'layout/'.$folder.'/theme.png';else echo ADMINNOIMAGE;?>" alt="<?=$theme['title'];?>">
+                <div class="image-toolbar overflow-visible">
+                  <span class="badger badge-success enable" data-tooltip="tooltip" aria-label="Theme Enabled"><?= svg2('approve');?></span>
+                </div>
+              </figure>
+              <div class="card-body pt-0 mt-2 mb-0 text-center">
+                <?= isset($theme['title'])&&$theme['title']!=''?$theme['title']:'No Title Assigned';?><br>
+                <small>Version <?=$theme['version'];?> created by <?=(isset($theme['creator_url'])&&$theme['creator_url']!=''?'<a target="_blank" href="'.$theme['creator_url'].'">'.$theme['creator'].'</a>':$theme['creator']);?><br>
+                using the <?=(isset($theme['framework_url'])&&$theme['framework_url']!=''?'<a target="_blank" href="'.$theme['framework_url'].'">'.$theme['framework_name'].'</a>':$theme['framework_name']);?> CSS Framework</small>
+              </div>
+            </article>
+          <?php }?>
+        </section>
         <?php require'core/layout/footer.php';?>
       </div>
     </div>
     <script>
-      $(".theme-chooser").not(".disabled").find("tr.theme").on("click",function(){
+      $(".theme-chooser").not(".disabled").find("figure.card-image").on("click",function(){
         $('#preference-theme .theme').removeClass("theme-selected");
-        $(this).addClass("theme-selected");
+        $(this).parent('article').addClass("theme-selected");
         $('#notheme').addClass("hidden");
         $.ajax({
           type:"GET",
@@ -64,7 +64,7 @@
             id:"1",
             t:"config",
             c:"theme",
-            da:$(this).attr("data-theme")
+            da:$(this).parent('article').attr("data-theme")
           }
         });
       });

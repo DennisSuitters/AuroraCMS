@@ -1265,6 +1265,7 @@ figcaption:empty,
   font-weight: 700;
   line-height: 1;
   text-align: center;
+  text-transform: capitalize;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .25rem;

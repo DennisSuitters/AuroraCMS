@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -74,7 +74,7 @@ if(stristr($html,'<items>')){
           '/<print content=[\"\']?title[\"\']?>/',
           '/<[\/]?view>/'
         ],[
-          URL.$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+          URL.$r['contentType'].'/'.$r['urlSlug'].'/',
           $r['title'],
           ''
         ],$items);
@@ -87,7 +87,7 @@ if(stristr($html,'<items>')){
               '/<[\/]?service>/',
               '~<inventory>.*?<\/inventory>~is'
             ],[
-              URL.'bookings/'.$r['id'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+              URL.'bookings/'.$r['id'].'/',
               '',
               ''
             ],$items);

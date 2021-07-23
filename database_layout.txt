@@ -69,7 +69,7 @@ config
     13  Enable Chat
     14  Facebook Messenger instead of Integrated Chat
     15  Email Chat Notifications to Nominated Accounts
-    16  Enable Website Voice Service
+    16  Enable AfterPay
     17  Lock Down Developer Options
     18  PWA Offline Page
     19  Display Business Hours
@@ -389,10 +389,10 @@ login
     30
     31
   `bio_options` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '00000000000000000000000000000000',
-    0   Enable
-    1   Show Address
-    2   Career Enable
-    3   Education Enable
+    0
+    1
+    2
+    3
     4
     5
     6

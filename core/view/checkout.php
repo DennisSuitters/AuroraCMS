@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,6 @@ $html=preg_replace([
   $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
   '/<print page=[\"\']?notes[\"\']?>/',
 ],[
-  '',
   '',
   $page['notes']
 ],$html);
@@ -37,6 +36,7 @@ if($s->rowCount()>0&&$r['status']!='paid'){
     $config['payPalClientID']==''?'~<paypal>.*?</paypal>~is':'/<[\/]?paypal>/',
     '/<print paypal=[\"\']?clientID[\"\']?>/',
     '/<print url>/',
+    $config['options'][16]==1?'/<[\/]?afterpay>/':'~<afterpay>.*?</afterpay>~is',
     $config['stripe_publishkey']==''?'~<stripe>.*?</stripe>~is':'/<[\/]?stripe>/',
     '/<print checkout=[\"\']?total[\"\']?>/',
     '/<print orderid>/',
@@ -52,6 +52,7 @@ if($s->rowCount()>0&&$r['status']!='paid'){
     '',
     $config['payPalClientID'],
     URL,
+    '',
     '',
     $r['total'],
     $r['id'],

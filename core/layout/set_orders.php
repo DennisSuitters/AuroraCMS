@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -128,7 +128,7 @@
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#discountRangeCalculations" aria-label="PermaLink to Discount Ranges Calculations Checkbox">&#128279;</a>':'';?>
           <input id="discountRangeCalculations" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="26" type="checkbox"<?=$config['options'][26]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label for="discountRangeCalculations" id="configoptions261">Discount Range Calculations.</label>
+          <label for="discountRangeCalculations" id="configoptions261">Discount Range Calculations</label>
         </div>
         <form target="sp" method="post" action="core/add_discountrange.php">
           <div class="form-row">
@@ -206,7 +206,7 @@
         <div id="paypalID" class="form-row">
           <label for="payPalClientID"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#paypalID" aria-label="PermaLink to Pay Pal Client ID">&#128279;</a>':'';?>Client&nbsp;ID</label>
           <?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
-            <small class="form-text text-right">You will need to a PayPal Business Account to get a Client ID.</small>
+            <small class="form-text text-right">You will need to a <a target="_blank" href="https://www.paypal.com/au/business">PayPal Business</a> Account to get a Client ID.</small>
           <?php }?>
         </div>
         <div class="form-row">
@@ -229,19 +229,24 @@
         </div> */ ?>
         <legend id="stripe" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripe" aria-label="PermaLink to Stripe Section">&#128279;</a>':'';?>Stripe</legend>
         <div id="stripePublishKey" class="form-row">
-          <label for="stripePublishKey"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripePublishKey" aria-label="PermaLink to Stripe Publish Key">&#128279;</a>':'';?>Publish&nbsp;Key</label>
+          <label id="stripePublishKey" for="stripe_publishkey"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripePublishKey" aria-label="PermaLink to Stripe Publish Key">&#128279;</a>':'';?>Publish&nbsp;Key</label>
           <?php if($config['payPalClientID']==''||$config['payPalSecret']==''){?>
-            <small class="form-text text-right">You will need to a Stripe Account to get a Publish Key.</small>
+            <small class="form-text text-right">You will need to a <a target="_blank" href="https://stripe.com/">Stripe</a> Account to get a Publish Key.</small>
           <?php }?>
         </div>
         <div class="form-row">
           <input class="textinput" id="stripe_publishkey" data-dbid="1" data-dbt="config" data-dbc="stripe_publishkey" type="text" value="<?=$config['stripe_publishkey'];?>" placeholder="Enter a Stripe Publish Key...">
           <button class="save" id="savestripe_publishkey" data-tooltip="tooltip" data-dbid="stripe_publishkey" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label for="stripeSecretKey"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripeSecretKey" aria-label="PermaLink to Stripe Secret Key">&#128279;</a>':'';?>Secret&nbsp;Key</label>
+        <label id="stripeSecretKey" for="stripe_secretkey"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#stripeSecretKey" aria-label="PermaLink to Stripe Secret Key">&#128279;</a>':'';?>Secret&nbsp;Key</label>
         <div class="form-row">
           <input class="textinput" id="stripe_secretkey" data-dbid="1" data-dbt="config" data-dbc="stripe_secretkey" type="text" value="<?=$config['stripe_secretkey'];?>" placeholder="Enter a Stripe Secret Key...">
           <button class="save" id="savestripe_secretkey" data-tooltip="tooltip" data-dbid="stripe_secretkey" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <div class="row mt-3">
+          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#enableAfterpay" aria-label="PermaLink to Enable AfterPay Checkbox">&#128279;</a>':'';?>
+          <input id="enableAfterpay" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16" type="checkbox"<?=$config['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="enableAfterpay" id="configoptions161">Enable AfterPay</label>
         </div>
         <hr>
         <legend id="orderProcessing"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#orderProcessing" aria-label="PermaLink to Order Processing Section">&#128279;</a>':'';?>Order Processing</legend>

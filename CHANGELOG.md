@@ -1,11 +1,12 @@
-### v0.1.6
-- Update Summernote.
-- Update FullCalendar.
-- Fix FullCalendar Views for easier editing multiple content items.
-- Fix views for Calendar which break when switching between Calendar and Table.
-- Update Summernote-Cleaner.
-- Add template page and parsing for checkout.html
-- Add Stripe Payment services.
-- Fix PayPal Payment services.
-- Add Order Payment Information for Orders including manual editing in Administration.
-- Add Order Payment Information when viewing Orders on Front End Theme Templates.
+### v0.1.7
+- Continue tidying up source to improve processing performance.
+- Add links for PayPal and Stripe websites for signing up to Settings/Orders page.
+- Fix Checkout Page Content display parser.
+- Fix Price Display for Pre-Order/Out Of Stock items in main content area and side menu.
+- Add paid_via options "Cash/Bank Transfer".
+- Fix capitalized category in href on content pages.
+- Add SECURITY.md to the GitHub repository that contains instructions on how to disclose issues.
+- Amend SVG front end function to fetch SVG files from core/images if requested file is non-existent in theme.
+- Remove ?theme= theme override parsing.
+- Add a notice about purchasing inventory if having an account is a requirement.
+- Remove unused Profile feature.

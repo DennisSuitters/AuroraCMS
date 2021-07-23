@@ -7,13 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))$config['theme']=$_GET['theme'];
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
@@ -116,11 +115,15 @@ function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
 }
 function frontsvg($svg){
-	if(file_exists(THEME.'/svg/'.$svg.'.svg'))return file_get_contents(THEME.'/svg/'.$svg.'.svg');
-	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
-	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
-	elseif(file_exists('../../'.THEME.'/svg/'.$svg.'.svg'))return file_get_contents('../../'.THEME.'/svg/'.$svg.'.svg');
-	else return'No Such File: '.$svg;
+	if(file_exists(THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents(THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../'.THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents('../'.THEME.'/svg/'.$svg.'.svg');
+	elseif(file_exists('../../'.THEME.'/svg/'.$svg.'.svg'))
+		return file_get_contents('../../'.THEME.'/svg/'.$svg.'.svg');
+	else return file_get_contents('core/images/'.$svg.'.svg');
 }
 function microid($identity,$service,$algorithm='sha1'){
 	$microid=substr($identity,0,strpos($identity,':'))."+".substr($service,0,strpos($service,':')).":".strtolower($algorithm).":";
@@ -417,10 +420,6 @@ class front{
 		$view='portfolio';
 		require'process.php';
 	}
-	function profile($args=false){
-		$view='profile';
-		require'process.php';
-	}
 	function proof($args=false){
 		$view='proofs';
 		require'process.php';
@@ -506,7 +505,6 @@ $routes=[
 	'sitemap'=>['front','sitemap'],
 	'orders'=>['front','orders'],
 	'checkout'=>['front','checkout'],
-	'profile'=>['front','profile'],
 	'proofs'=>['front','proofs'],
 	'login'=>['front','login'],
 	'settings'=>['front','settings'],

@@ -245,11 +245,41 @@ legend {
 .btn-danger.focus {
   box-shadow: 0 0 0 0 rgba(223, 70, 106, .5) !important; }
 
+.theme {
+  border-width: 2px !important; }
+
+.theme-chooser .enable {
+  display: none; }
+
 .theme-selected {
-  background-color: var(--success-background-color) !important;
-  color: var(--success-color) !important;
-  border: var(--border-width) solid var(--success-border-color) !important;
-  box-shadow: 0 0 10px var(--success-border-color) !important; }
+  border: 2px solid var(--success-border-color) !important;
+  box-shadow: 0 0 20px var(--success-border-color) !important; }
+
+.theme-selected .enable {
+  display: block !important; }
+
+.theme .card-image {
+  overflow: visible !important;
+  height: 60vh !important; }
+
+.theme .card-image img {
+  height: 100%;
+  object-position: top !important; }
+
+.theme-editor {
+  position: absolute;
+  display: none;
+  top: auto;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 0;
+  background-color: rgba(0,0,0,.75);
+  padding: 20px; }
+
+.theme-editor.enabled {
+  display: block;
+  height: auto; }
 
 .vert-shadow{
   height: 100vh;

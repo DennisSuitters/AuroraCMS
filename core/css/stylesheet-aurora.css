@@ -8,15 +8,32 @@
   font-family: sans-serif !important;
   font-weight: 400 !important;
   font-size: 14px !important;
-  text-align: right !important;
+  text-align: center !important;
   padding: 2px 10px; }
 
 .designby a {
   color: #888 !important; }
 
 .designby a:hover {
-  color: #888 !important;
+  color: #f40 !important;
   text-decoration: underline !important; }
+
+.designby span,
+.designby span + span {
+  display: inline-block; }
+
+.designby span + span:before {
+  content: "\00a0|\00a0"; }
+
+@media (max-width: 361px) {
+  .designby span,
+  .designby span + span {
+    display: block;
+    text-align: center; }
+
+  .designby span + span:before {
+    content: " "; }
+}
 
 [for="fullname"],
 [for="resetfullname"],
@@ -1196,358 +1213,6 @@ h6.quickview-header,
     transform: scale3d(1, 1, 1); }
 }
 
-/* Profile */
-.profile a:active,
-.profile a:focus,
-.profile a:hover {
-  text-decoration: none; }
-
-.profile a {
-  color: #000;
-  transition: color .1s linear; }
-
-.profile a:hover {
-  color: #cc2127; }
-
-.profile a.btn {
-  color: #fff; }
-
-aside .profile-menu {
-  z-index: 0;
-  background-color: #000;
-  color: #fff;
-  text-align: center; }
-
-aside .profile-menu header .name {
-  font-size: 40px;
-  font-weight: 400;
-  font-family: sans-serif;
-  letter-spacing: 2px;
-  margin-bottom: 18px; }
-
-aside .profile-menu header .description {
-  letter-spacing: 1.4px;
-  font-family: sans-serif;
-  font-size: 20px;
-  font-weight: 400;
-  margin-bottom: 0; }
-
-aside .profile-menu .photo {
-  background: #000;
-  display: block;
-  text-align: center;
-  vertical-align: middle;
-  width: 100%; }
-
-aside .profile-menu .profile-nav {
-  background: #000;
-  -webkit-border-radius: 0 0 3px 3px;
-  -moz-border-radius: 0 0 3px 3px;
-  border-radius: 0 0 3px 3px;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-  margin-bottom: 20px; }
-
-aside .profile-menu .profile-nav ul {
-  list-style: none;
-  margin: 0 25px;
-  padding: 0;
-  text-align: center; }
-
-aside .profile-menu .profile-nav ul li {
-  border-bottom: 1px solid rgba(0, 0, 0, .1); }
-
-aside .profile-menu .profile-nav ul li a {
-  color: #fff;
-  display: inline-block;
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 1.8px;
-  padding: 12px 0;
-  text-transform: uppercase;
-  transition: color .15s linear;
-  width: 100%; }
-
-aside .profile-menu .profile-nav ul li a.active,
-aside .profile-menu .profile-nav ul li a:hover {
-  color: #cc2127;
-  text-decoration: none; }
-
-aside .profile-menu .profile-nav ul li:last-child {
-  border-bottom: 0; }
-
-aside .profile-menu .socials {
-  margin: 9px 30px 15px;
-  max-width: 100%; }
-
-aside .profile-menu .socials {
-  display: inline-block;
-  font-size: 16px;
-  line-height: 32px;
-  margin: 0 auto 6px;
-  text-align: center !important; }
-
-aside .profile-menu footer {
-  background-color: #fafafa;
-  margin: 0;
-  padding: 20px 15px 20px;
-  text-align: center; }
-
-article.profile {
-  margin: 0 !important;
-  padding: 0 !important; }
-
-.profile .content {
-  text-align: left !important; }
-
-.profile header {
-  background: #f9f9f9;
-  height: 250px;
-  max-height: 250px; }
-
-.profile header .header-wrapper {
-  color: #000;
-  display: table-cell;
-  height: 250px;
-  padding: 0 40px;
-  vertical-align: middle; }
-
-.profile header .header-wrapper .name {
-  font-family: sans-serif;
-  font-size: 70px;
-  font-weight: 400;
-  letter-spacing: 4.1px;
-  margin-bottom: 18px; }
-
-.profile header .header-wrapper .description {
-  font-family: sans-serif;
-  font-size: 24px;
-  font-weight: 400;
-  letter-spacing: 1.4px;
-  text-align: left; }
-
-.profile .content {
-  background: #fff;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-  color: #6a6a6a;
-  padding: 30px 30px 0 30px; }
-
-.profile .content:first-child {
-  padding-top: 25px; }
-
-.profile .content h1,
-.profile .content h2,
-.profile .content h3,
-.profile .content h4,
-.profile .content h5,
-.profile .content h6 {
-  color: #000;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 36px;
-  font-weight: 600;
-  letter-spacing: -.2px;
-  line-height: 1.2;
-  margin-bottom: 30px;
-  padding-bottom: 10px;
-  position: relative;
-  text-transform: uppercase;
-  text-align: left !important; }
-
-.profile .content h1:after,
-.profile .content h2:after,
-.profile .content h3:after,
-.profile .content h4:after,
-.profile .content h5:after,
-.profile .content h6:after {
-  background: #ff4027;
-  bottom: 0;
-  content: "";
-  display: block;
-  height: 2px;
-  left: 0;
-  position: absolute;
-  width: 45%; }
-
-.profile .content h3,
-.profile .content h4,
-.profile .content h5,
-.profile .content h6 {
-  margin-bottom: 35px;
-  margin-top: 30px; }
-
-.profile .content h3 {
-  font-size: 30px; }
-
-.profile .content h4 {
-  font-size: 24px; }
-
-.profile .content h5 {
-  font-size: 20px; }
-
-.profile .content h6 {
-  font-size: 16px; }
-
-.profile .content section {
-  color: #6a6a6a;
-  font-size: 16px;
-  letter-spacing: .3px;
-  line-height: 1.75;
-  padding: 0 40px 25px;
-  text-align: left !important; }
-
-.profile .content ol li .icon,
-.profile .content ul li .icon {
-  display: inline-block;
-  width: 20px;
-  fill: currentColor; }
-
-.profile .content img {
-  max-width: 100%; }
-
-.profile .contact .contact-info-wrapper {
-  margin-top: 25px; }
-
-.profile .contact .contact-info {
-  margin-bottom: 10px; }
-
-.profile .contact .contact-info div.item {
-  margin-bottom: 13px; }
-
-.profile .contact .contact-info div.item .icon {
-  display: inline-block;
-  font-size: 28px;
-  margin-right: 14px;
-  text-align: center;
-  width: 25px;
-  vertical-align: top;
-  fill: currentColor; }
-
-.profile .contact .contact-info div.item .info {
-  display: inline-block;
-  letter-spacing: .8px; }
-
-.profile .contact .contact-info div.item .info strong {
-  display: none; }
-
-.profile .contact .contact-info div.item.phone .icon {
-  font-size: 28px;
-  margin-top: 0;
-  fill: currentColor; }
-
-.profile .contact .contact-info div.item.mobile .icon {
-  font-size: 36px;
-  position: relative;
-  top: -4px;
-  fill: currentColor; }
-
-.profile .contact .contact-info div.item.email .icon {
-  font-size: 24px;
-  fill: currentColor; }
-
-.profile .contact .contact-info div.item.address .icon {
-  font-size: 28px;
-  fill: currentColor; }
-
-.profile .contact .contact-info div.item.website .icon {
-  font-size: 25px;
-  fill: currentColor; }
-
-.profile .contact .contact-info.without-icons div .info strong {
-  display: inline; }
-
-.profile .contact .contact-info.without-icons div .icon {
-  display: none;
-  fill: currentColor; }
-
-@media all and (max-width: 991px) {
-  .profile .contact .contact-info-wrapper .contact-info {
-    margin-bottom: 30px; }
-}
-
-.profile .resume {
-  position: relative; }
-
-.profile .resume .icon {
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  -moz-background-clip: padding;
-  -webkit-background-clip: padding-box;
-  background-clip: padding-box;
-  color: #fff;
-  display: inline-block;
-  height: 55px;
-  left: 0;
-  line-height: 55px;
-  text-align: center;
-  top: 0;
-  vertical-align: middle;
-  width: 55px;
-  fill: currentColor; }
-
-.profile .resume .icon.icon-education {
-  background: #cc2127;
-  fill: currentColor; }
-
-.profile .resume .icon.icon-career {
-  background: #000;
-  fill: currentColor; }
-
-.profile .resume ul {
-  list-style: none;
-  padding: 0; }
-
-.profile .resume ul li {
-  margin-bottom: 17px;
-  padding-top: 12px;
-  padding-left: 80px;
-  position: relative; }
-
-.profile .resume ul li .icon {
-  width: 55px;
-  position: absolute;
-  fill: currentColor; }
-
-.profile .resume .resume-item-title {
-  color: #000;
-  font-size: 30px;
-  line-height: 1em;
-  margin-bottom: 11px; }
-
-.profile .resume .resume-item-subtitle {
-  color: #aaa;
-  font-size: 16px;
-  margin-bottom: 8px; }
-
-@media all and (max-width: 500px) {
-  .profile .resume .icon {
-    font-size: 14px;
-    height: 40px;
-    line-height: 40px;
-    width: 40px;
-    fill: currentColor; }
-
-  .profile .resume ul li .icon {
-    width: 40px;
-    fill: currentColor; }
-
-  .profile .resume .resume-item-subtitle,
-  .profile .resume ul li p {
-    margin-left: -55px; }
-
-  .profile .resume ul li {
-    margin-bottom: 25px;
-    padding-top: 8px;
-    padding-left: 55px; }
-
-  .profile .resume .resume-item-title {
-    font-size: 25px;
-    min-height: 35px; }
-}
-
 nav[role="menubar"].account-menu {
   z-index: 1021 !important;
   position: relative !important;
@@ -1644,3 +1309,18 @@ nav[role="menubar"].account-menu #accountavatar {
   width: 32px !important;
   max-height: 32px !important;
   border-radius: 5px !important; }
+
+/* Popup Stripe Payments */
+.popup-payment {
+  font-family: sans-serif !important;
+  font-size: 1em !important;
+  color: #0A2540 !important; }
+
+.popup-payment input,
+.popup-payment select {
+  font-size: 1.1em !important;
+  width: 100% !important; }
+
+.popup-payment a {
+  color: #635BFF !important;
+  font-weight: 900 !important; }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,11 +25,18 @@ if(!defined('THEME'))define('THEME','..'.DS.'..'.DS.'layout'.DS.$config['theme']
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $html=file_get_contents(THEME.DS."offline.html");
 $logo=THEME.DS.'images'.DS.'offlinelogo.png';
-if(file_exists(THEME.DS.'images'.DS.'offlinelogo.jpg'))$logo=THEME.DS.'images'.DS.'offlinelogo.jpg';
-elseif(file_exists(THEME.DS.'images'.DS.'logo.png'))$logo=THEME.DS.'images'.DS.'logo.png';
-elseif(file_exists(THEME.DS.'images'.DS.'logo.jpg'))$logo=THEME.DS.'images'.DS.'logo.jpg';
-elseif(file_exists(THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.png'))$logo=THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.png';
-elseif(file_exists(THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.jpg'))$logo=THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.jpg';
+if(file_exists(THEME.DS.'images'.DS.'offlinelogo.jpg'))
+  $logo=THEME.DS.'images'.DS.'offlinelogo.jpg';
+elseif(file_exists(THEME.DS.'images'.DS.'logo.png'))
+  $logo=THEME.DS.'images'.DS.'logo.png';
+elseif(file_exists(THEME.DS.'images'.DS.'logo.jpg'))
+  $logo=THEME.DS.'images'.DS.'logo.jpg';
+elseif(file_exists(THEME.DS.'images'.DS.'offlinelogo.svg'))
+  $logo=THEME.DS.'images'.DS.'offlinelogo.svg';
+elseif(file_exists(THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.png'))
+  $logo=THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.png';
+elseif(file_exists(THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.jpg'))
+  $logo=THEME.DS.'images'.DS.str_replace(' ','-',$config['business']).'.jpg';
 else$logo=THEME.DS.'images'.DS.'offlinelogo.png';
 $html=preg_replace([
   '/<print seo=[\'\"]?title[\'\"]?>/',

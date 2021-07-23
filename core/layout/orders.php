@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -178,11 +178,11 @@ if($user['options'][4]==1){
             <table class="table-zebra" id="stupidtable">
               <thead>
                 <tr>
-                  <th></th>
                   <th>Order Number</th>
                   <th>Client</th>
                   <th>Date</th>
                   <th>Status</th>
+                  <th></th>
                   <th></th>
                 </tr>
               </thead>
@@ -197,7 +197,6 @@ if($user['options'][4]==1){
                   $cs->execute([':id'=>$r['cid']]);
                   $c=$cs->fetch(PDO::FETCH_ASSOC);?>
                   <tr id="l_<?=$r['id'];?>">
-                    <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?= svg2('plus').svg2('close','d-none');?></button></td>
                     <td class="align-middle">
                       <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     </td>
@@ -237,6 +236,7 @@ if($user['options'][4]==1){
                         </div>
                       </div>
                     </td>
+                    <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('chevron-down').svg('chevron-up','d-none');?></button></td>
                   </tr>
                   <tr class="quickedit d-none" id="quickedit<?=$r['id'];?>"></tr>
                 <?php }?>

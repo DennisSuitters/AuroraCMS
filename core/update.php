@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,25 +35,7 @@ $e='';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-if($tbl=='seo'||
-	$tbl=='content'||
-	$tbl=='menu'||
-	$tbl=='config'||
-	$tbl=='login'||
-	$tbl=='orders'&&
-		$col=='tis'||
-		$col=='tie'||
-		$col=='pti'||
-		$col=='paid_ti'||
-		$col=='notes'||
-		$col=='notes2'||
-		$col=='PasswordResetLayout'||
-		$col=='orderEmailLayout'||
-		$col=='orderEmailNotes'||
-		$col=='passwordResetLayout'||
-		$col=='accountActivationLayout'||
-		$col=='bookingEmailLayout'||
-		$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'){
+if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'){
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 	if($col=='messengerFBCode')$da=rawurldecode($da);
 }else{
@@ -199,6 +181,7 @@ if($tbl=='orders'&&$col=='status'&&$da=='archived'){
   ]);
 }
 if($tbl=='orders'&&$col=='status'&&$da=='paid'){
+	$points=0;
 	$q=$db->prepare("SELECT `id`,`cid`,`total`,`points` FROM `".$prefix."orders` WHERE `id`=:id");
 	$q->execute([':id'=>$id]);
 	$r=$q->fetch(PDO::FETCH_ASSOC);
@@ -206,17 +189,12 @@ if($tbl=='orders'&&$col=='status'&&$da=='paid'){
 	$sp->execute([
 		':id'=>$r['id']
 	]);
-	$points=0;
 	while($rp=$sp->fetch(PDO::FETCH_ASSOC)){
 		if($rp['points']>0)$points=$points+($rp['points'] * $rp['quantity']);
 	}
-	$s=$db->prepare("SELECT `spent` FROM `".$prefix."login` WHERE `id`=:uid");
-	$s->execute([':uid'=>$r['cid']]);
-	$ru=$s->fetch(PDO::FETCH_ASSOC);
-	$ru['spent']=$ru['spent']+$r['total'];
-	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent,`points`=`points`+:points,`pti`=:pti WHERE `id`=:cid");
+	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=`spent`+:spent,`points`=`points`+:points,`pti`=:pti WHERE `id`=:cid");
 	$s->execute([
-		':spent'=>$ru['spent'],
+		':spent'=>$r['total'],
 		':points'=>$points,
 		':pti'=>$ti,
 		':cid'=>$r['cid']

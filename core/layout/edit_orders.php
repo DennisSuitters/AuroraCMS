@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,9 +16,9 @@ $q->execute([':id'=>$id]);
 $r=$q->fetch(PDO::FETCH_ASSOC);
 $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 $q->execute([':id'=>$r['cid']]);
-if($q->rowCount()>0){
+if($q->rowCount()>0)
   $client=$q->fetch(PDO::FETCH_ASSOC);
-}else{
+else{
   $client=[
     'id'=>0,
     'options'=>00000000000000000000000000000000,
@@ -51,7 +51,8 @@ if($r['notes']==''){
     ':id'=>$r['id']
   ]);
 }
-if($error==1)echo'<div class="alert alert-danger" role="alert">'.$e[0].'</div>';
+if($error==1)
+  echo'<div class="alert alert-danger" role="alert">'.$e[0].'</div>';
 else{?>
   <main>
     <section id="content">
@@ -147,13 +148,13 @@ else{?>
                   <select id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
                     <option value="">Select an Option</option>
                     <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
+                    <option value="bank transfer"<?=$r['paid_via']=='bank transfer'?' selected':'';?>>Bank Transfer</option>
+                    <option value="cash"<?=$r['paid_via']=='cash'?' selected':'';?>>Cash</option>
                     <option value="cash on delivery"<?=$r['paid_via']=='cash on delivery'?' selected':'';?>>Cash On Delivery</option>
                     <option value="credit card"<?=$r['paid_via']=='credit card'?' selected':'';?>>Credit Card</option>
                     <option value="paypal"<?=$r['paid_via']=='paypal'?' selected':'';?>>PayPal</option>
                     <option value="stripe"<?=$r['paid_via']=='stripe'?' selected':'';?>>Stripe</option>
                     <option value="afterpay"<?=$r['paid_via']=='afterpay'?' selected':'';?>>AfterPay</option>
-                    <option value="applepay"<?=$r['paid_via']=='applepay'?' selected':'';?>>ApplePay</option>
-                    <option value="googlepay"<?=$r['paid_via']=='googlepay'?' selected':'';?>>GooglePay</option>
                   </select>
                   <div class="input-text">Transaction ID</div>
                   <input class="textinput" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">

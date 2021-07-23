@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,7 +29,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 				'/<print account=[\"\']?title[\"\']?>/'
 			],[
 				$view==$ra['contentType']?' active':'',
-				URL.$ra['contentType'].'/'.($ra['contentType']=='profile'?str_replace(' ','-',$user['name']):''),
+				URL.$ra['contentType'].'/',
 				$ra['title']
 			],$item);
 			$items.=$item;
@@ -76,7 +76,7 @@ $html=preg_replace([
 	$view,
 	$config['seoTitle'],
 	$config['business'],
-	URL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+	URL,
 	$page['title']
 ],$html);
 if(stristr($html,'<buildMenu')){
@@ -131,7 +131,7 @@ if(stristr($html,'<buildMenu')){
 		],[
 			'',
 			$r['contentType']==$view?$theme['settings']['activeClass']:'',
-			$menuURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+			$menuURL,
 			$r['contentType'],
 			$r['title']
 		],$menuItem);
@@ -162,7 +162,7 @@ if(stristr($html,'<buildMenu')){
 					'/<print content=[\"\']?image[\"\']?>/'
 				],[
 					'',
-					$subURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+					$subURL,
 					$rm['contentType'],
 					$rm['title'],
 					''
@@ -193,7 +193,7 @@ if(stristr($html,'<buildMenu')){
 					'/<print content=[\"\']?image[\"\']?>/'
 				],[
 					$ih==0?'<li class="dropdown-header">Products</li>':'',
-					$subURL.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+					$subURL,
 					$rm['contentType'],
 					$rm['title'],
 					$menuimage!=''?'<img src="'.$menuimage.'" alt="'.$rm['title'].'">':''
@@ -342,7 +342,7 @@ $html=preg_replace([
 	'',
 	'',
 	'',
-	'<a href="contactus/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>',
+	'<a href="contactus/">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>',
 	htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -92,21 +92,21 @@ foreach($tags as$tag){
 			else$container=$parsing='';
 			break;
 		case'category':
-			if(isset($r['category_1'])&&$r['category_1']!='')$parsing.=' <a href="'.$r['contentType'].'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
+			if(isset($r['category_1'])&&$r['category_1']!='')$parsing.=' <a href="'.$r['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
 			else$container=$parsing='';
 			break;
 		case'categories':
 			if(isset($r['category_1'])&&$r['category_1']!=''){
-				$parsing.=' <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
-				if($r['category_2']!='')$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'</a>';
-				if($r['category_3']!='')$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.urlencode(str_replace(' ','-',$r['category_3'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'</a>';
-				if($r['category_4']!='')$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',$r['category_1'])).'/'.urlencode(str_replace(' ','-',$r['category_2'])).'/'.urlencode(str_replace(' ','-',$r['category_3'])).'/'.urlencode(str_replace(' ','-',$r['category_4'])).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'</a>';
+				$parsing.=' <a href="'.$view.'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/">'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'</a>';
+				if($r['category_2']!='')$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/">'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'</a>';
+				if($r['category_3']!='')$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/">'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'</a>';
+				if($r['category_4']!='')$parsing.=' / <a href="'.$view.'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_4']))).'/">'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'</a>';
 			}else$container=$parsing='';
 			break;
 		case'tags':
 			if(isset($r['tags'])&&$r['tags']!=''){
 				$tags=explode(',',$r['tags']);
-				foreach($tags as$tag)$parsing.='<a href="search/'.urlencode(str_replace(' ','-',$tag)).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">#'.htmlspecialchars($tag,ENT_QUOTES,'UTF-8').'</a> ';
+				foreach($tags as$tag)$parsing.='<a href="search/'.urlencode(str_replace(' ','-',strtolower($tag))).'/">#'.htmlspecialchars($tag,ENT_QUOTES,'UTF-8').'</a> ';
 			}else$container=$parsing='';
 			break;
 		case'cost':

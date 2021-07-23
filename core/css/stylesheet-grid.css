@@ -56,7 +56,8 @@
 .row {
   display: flex;
   flex: 1 0 100%;
-  flex-wrap: wrap; }
+  flex-wrap: wrap;
+  align-items: flex-start; }
 
 .row > * {
   flex-shrink: 0;

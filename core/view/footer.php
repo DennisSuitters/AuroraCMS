@@ -7,20 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='<li><a href="logout/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Logout</a></li>';
+if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='<li><a href="logout/">Logout</a></li>';
 else{
 	if($config['options'][3]==1)$link_x=' or Sign Up';
 	else{
 		$link_x='';
 		$html=preg_replace('~<block signup>.*?<\/block signup>~is','',$html,1);
 	}
-	$link='<li><a href="login/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Login'.$link_x.'</a></li>';
+	$link='<li><a href="login/">Login'.$link_x.'</a></li>';
 }
-$html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">Administration</a></li>',$html):str_replace('<administration>','',$html);
+$html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'/">Administration</a></li>',$html):str_replace('<administration>','',$html);
 if(stristr($html,'<hours>')){
 	if($config['options'][19]==1){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
@@ -77,7 +77,8 @@ $html=preg_replace([
 	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
 	stristr($html,'<contact>')&&$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
 	stristr($html,'<phone>')&&$config['options'][24]==1?'/<[\/]?phone>/':'~<phone>.*?<\/phone>~is',
-	stristr($html,'<paymentoptions>')&&$config['options'][7]==1?'/<[\/]?paymentoptions>/':'~<paymentoptions>.*?<\/paymentoptions>~is',
+	$config['payPalClientID']==''&&$config['stripe_publishkey']==''&&$config['options'][16]==0?'~<paymentoptions>.*?<\/paymentoptions>~is':'/<[\/]?paymentoptions>/',
+	$config['options'][7]==1?'/<[\/]?paymentoptions>/':'~<paymentoptions>.*?<\/paymentoptions>~is',
 	'/<print config=[\"\']?email[\"\']?>/',
 	'/<print config=[\"\']?business[\"\']?>/',
 	'/<print config=[\"\']?address[\"\']?>/',
@@ -96,16 +97,20 @@ $html=preg_replace([
 	'/<login>/',
 	'/<print config=[\"\']?seoDescription[\"\']?>/',
 	'/<print config=[\"\']?abn[\"\']?>/',
-	'/<print hosting>/',
-	'/<print honey_pot_link>/',
+	'/<print theme="design">/',
+	'/<print theme="hosting">/',
 	'/<print honey_pot_quick_link>/',
-	'/<print theme>/'
+	'/<print theme>/',
+	$config['payPalClientID']==''?'~<paypal>.*?</paypal>~is':'/<[\/]?paypal>/',
+	$config['options'][16]==0?'~<afterpay>.*?</afterpay>~is':'/<[\/]?afterpay>/',
+	$config['stripe_publishkey']==''?'~<creditcards>.*?</creditcards>~is':'/<[\/]?creditcards>/'
 ],[
 	'',
 	'',
 	'',
 	'',
-	'<a href="contactus/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:'').'">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>',
+	'',
+	'<a href="contactus/">'.htmlspecialchars($config['email'],ENT_QUOTES,'UTF-8').'</a>',
 	htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
@@ -123,10 +128,13 @@ $html=preg_replace([
 	$link,
 	htmlspecialchars($config['seoDescription'],ENT_QUOTES,'UTF-8'),
 	$config['abn']!=''?htmlspecialchars('ABN '.$config['abn'],ENT_QUOTES,'UTF-8'):'',
-	isset($theme['hosting'])&&$theme['hosting']!=''?'Hosting by <a target="_blank" href="'.$theme['hosting_url'].'">'.$theme['hosting'].'</a><br>':'',
-	$config['php_options'][0]==1?' Protected by <a href="http://www.projecthoneypot.org?rf=113735"><img src="layout/'.$config['theme'].'/images/phpot.gif" alt="Stop Spam Harvesters, Join Project Honey Pot"></a><br>':'',
+	'<span>Website Design by <a href="'.$theme['creator_url'].'">'.$theme['creator'].'</a></span>',
+	isset($theme['hosting'])&&$theme['hosting']!=''?'<span>Hosting by <a target="_blank" href="'.$theme['hosting_url'].'">'.$theme['hosting'].'</a></span>':'',
 	$config['php_options'][0]==1&&$config['php_options'][2]==1&&$config['php_quicklink']!=''?$config['php_quicklink']:'',
-	THEME
+	THEME,
+	'',
+	'',
+	''
 ],$html);
 if(stristr($html,'<subjectText>')){
 	$s=$db >prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='subject' ORDER BY `title` ASC");
@@ -157,17 +165,21 @@ if(stristr($html,'<buildMenu')){
 		$buildMenu=$htmlMenu;
 		$buildMenu=$view==$r['contentType']||$view==$r['contentType'].'s'?preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu):preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
 		if($r['contentType']!='index'){
-			if(isset($r['url'][0])&&$r['url'][0]=='#')$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),$buildMenu);
-			elseif(filter_var($r['url'],FILTER_VALIDATE_URL))$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',$r['url'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),$buildMenu);
-			elseif($r['contentType']=='page'&&$r['title']!='')$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),$buildMenu);
-			else$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'].'/',$buildMenu);
+			if(isset($r['url'][0])&&$r['url'][0]=='#')
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/',$buildMenu);
+			elseif(filter_var($r['url'],FILTER_VALIDATE_URL))
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',$r['url'].'/',$buildMenu);
+			elseif($r['contentType']=='page'&&$r['title']!='')
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']).'/',$buildMenu);
+			else
+				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'].'/',$buildMenu);
 			$buildMenu=preg_replace('/<print rel=[\"\']?contentType[\"\']?>/',strtolower($r['contentType']),$buildMenu);
 		}else{
 			$buildMenu=preg_replace([
 				'/<print menu=[\"\']?url[\"\']?>/',
 				'/<print rel=[\"\']?contentType[\"\']?>/'
 			],[
-				URL.'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+				URL.'/',
 				'home'
 			],$buildMenu);
 		}

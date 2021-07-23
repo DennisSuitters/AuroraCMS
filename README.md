@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.1.6
+Current version is v0.1.7
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -23,7 +23,7 @@ Current version is v0.1.6
   - Option to display Countdown Clock for when Event Starts.
 - News.
 - Testimonials.
-  - Approval before before public display.
+  - Approval before public display.
 - Inventory.
   - Quick View Option for Inventory.
   - Product Reviews and Approval before public display.
@@ -44,7 +44,7 @@ Current version is v0.1.6
 - Orders.
   - Create quotes, invoices. Client viewing of Orders.
   - PayPal Integration for Accepting PayPal and Credit Card Payments.
-  - Stripe Integration for Accepting Credit Card Payments (working on adding others that Stripe can interact with).
+  - Stripe Integration for Accepting Credit Card Payments (includes enabling AfterPay).
   - Australia Post API Integration for Calculating Postage Costs.
   - Deduction rows to allow multiple payments showing date of payment, editable title, amount, and total left owing.
   - Rewards with percentage or value off, date period available, quantity usage.
@@ -92,7 +92,6 @@ Current version is v0.1.6
 - Progressive Web Application (PWA) Service Worker for Offline Pages.
 - GDPR Privacy Notice Compliance.
   - For those providing Services and or Products to Countries that require Privacy Cookie Consent.
-- Website Voice service. Ability to add a text to speech reader for visually impaired visitors.
 - Open Street Maps via the Leaflet JavaScript library.
   - Address location Map can be displayed on Home Page, Contact Us, and Event Items.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
@@ -150,6 +149,9 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 ### TODO:
 Consult the everchanging [TODO](https://github.com/DiemenDesign/AuroraCMS/blob/master/TODO.md) file.
 
+### UPDATING:
+Other than updating files, which can be done be simply overwriting them, the database occasionally has new or changed fields, changes that can be run in phpMyAdmin will be in the root folder as `update.sql`, and will change at each release.
+
 ### LEGAL:
 By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for any damages that your usage of AuroraCMS may cause to your system, or persons. Damages may infer such things as Data Loss, Aural or Visual Impairment, Server Crashes, Alien Abduction, Coding nightmare's, Alien Implants, or Visiting Alternate Realities. AuroraCMS is Licensed under [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE). We request that if you modify, and hopefully enhance AuroraCMS, that you take part in maintaining, and contributing to it's code base here at GitHub.
 
@@ -163,6 +165,8 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Anime Excess](https://www.animeexcess.com.au/)
 - [BizzyKnits](https://www.bizzyknits.biz/)
 - [Corner Life Coach](https://corner.net.au/)
+- [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
+- [Cradle Mountain Message](https://cradlemountainmassage.com.au/)
 - [Diemen Design](https://diemen.design/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)

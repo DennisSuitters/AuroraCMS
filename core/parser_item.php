@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -281,6 +281,10 @@ if($skip==false){
   if(stristr($html,'<item')){
     preg_match('/<item>([\w\W]*?)<\/item>/',$html,$matches);
     $item=$matches[1];
+    if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
+      $item=preg_replace('~<purchasewarning>.*?</purchasewarning>~is','',$item,1);
+    else
+      $item=preg_replace($config['options'][30]!=1&&($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='event')?'~<purchasewarning>.*?</purchasewarning>~is':'/<[\/]?purchasewarning>/','',$item);
     if(stristr($item,'<mediaitems')){
       $sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `pid`=:pid AND `rid`=:rid AND `rank`<=:rank ORDER BY `ord` ASC");
       $sm->execute([
@@ -373,7 +377,7 @@ if($skip==false){
   			'/<print content=[\"\']?points[\"\']?>/'
       ],[
         '',
-        ($r['quantity']==0?'out of stock':$r['quantity']),
+        $r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
         ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])),
   			'',
   			number_format((float)$r['points'])
@@ -394,8 +398,13 @@ if($skip==false){
         $item=preg_replace('/<[\/]?addtocart>/','',$item);
       else
         $item=preg_replace('~<addtocart>.*?<\/addtocart>~is',$theme['settings']['accounttopurchase'],$item);
-    }else
-      $item=preg_replace('/<[\/]?addtocart>/','',$item);
+    }else{
+      $item=preg_replace([
+        $r['stockStatus']=='out of stock'?'~<addtocart>.*?<\/addtocart>~is':'/<[\/]?addtocart>/'
+      ],[
+        ''
+      ],$item);
+    }
     if(stristr($item,'<condition>')){
       if($r['itemCondition']!=''){
         $item=preg_replace([
@@ -561,7 +570,7 @@ if($skip==false){
                 '/<print related=[\"\']?rank[\'"\']?>/',
                 '/<print related=[\"\']?cssrank[\'"\']?>/',
               ],[
-                (isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''):''),
+                (isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/':''),
                 (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" ':''),
                 (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.$ri['thumb']:NOIMAGESM),
                 (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),

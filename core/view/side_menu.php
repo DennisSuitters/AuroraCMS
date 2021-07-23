@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,7 +17,7 @@ $sideTemp='';
 		$sideTemp=file_get_contents(THEME.'/side_menu.html');
 		$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 		$ru=[
-			'options'=>00000000000000000000000000000000,
+			'options'=>'00000000000000000000000000000000',
 			'rank'=>0
 		];
 		if($uid!=0){
@@ -51,17 +51,13 @@ $sideTemp='';
 		if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 			$sideCost='';
 			if($r['options'][0]==1||$r['cost']!=''){
-				if($r['stockStatus']=='pre-order')$sideCost.='<div class="pre-order">Pre-Order</div>';
-				elseif($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
-				else{
-						if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
-						$sideCost.=$r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'';
-						$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
-						if($r['stockStatus']=='sold out')$sideCost.='</div>';
-				}
+				if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+					if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
+					$sideCost.=$r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'';
+					$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+					if($r['stockStatus']=='sold out')$sideCost.='</div>';
 			}
-			if($r['stockStatus']=='out of stock')$r['quantity']=0;
-			if($r['stockStatus']=='pre-order')$r['quantity']=0;
+			if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre-order')$r['quantity']=0;
 			if(isset($ru['rank'])&&$ru['rank']>300||$ru['rank']<400){
 				if($r['dCost']!=0)$sideCost='<div class="sold">&#36;'.$r['dCost'].'</div>';
 			}
@@ -72,7 +68,7 @@ $sideTemp='';
 				$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
 				'/<print content=[\"\']?points[\"\']?>/'
 			],[
-				$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']),
+				$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
 				$sideCost,
 				$r['id'],
 				'',
@@ -80,8 +76,15 @@ $sideTemp='';
 			],$sideTemp);
 
 			if($config['options'][30]==1){
-	    	if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)
+	    	if(
+					($r['rank']>300||
+						$r['rank']<400)
+						&&
+					($ru['rank']>300||
+					$ru['rank']<400)
+						&&$ru['options'][19]==0){
 					$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+				}
 			}
 			if($config['options'][30]==1){
 				if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
@@ -265,18 +268,13 @@ $sideTemp='';
 					'<print viewlink>',
 					'<print view>'
 				],[
-					URL.$view.'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+					URL.$view.'/',
 					ucfirst($view)
 				],$heading);
 			}else$heading='';
 			$outside=preg_replace('~<heading>.*?<\/heading>~is',$heading,$outside,1);
 		}
-
-	/*
-	 Parse in Google Recaptcha into form if tag is present
-	*/
 		$sideTemp=preg_replace('/<g-recaptcha>/',$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':'',$sideTemp);
-
 		if(stristr($sideTemp,'<settings')){
 			preg_match('/<settings items="(.*?)" contenttype="(.*?)">/',$outside,$matches);
 			if(isset($matches[1])){
@@ -330,7 +328,7 @@ $sideTemp='';
 				'/<thumb>/',
 				'/<print content=[\"\']?caption[\"\']?>/'
 			],[
-				URL.$r['contentType'].'/'.$r['urlSlug'].'/'.(isset($_GET['theme'])?'?theme='.$_GET['theme']:''),
+				URL.$r['contentType'].'/'.$r['urlSlug'].'/',
 				htmlspecialchars($r['schemaType'],ENT_QUOTES,'UTF-8'),
 				date('Y-m-d',$r['ti']),
 				htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,7 +26,7 @@ if(stristr($html,'<hours>')){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
 		$htmlHours=$matches[1];
 		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours'");
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
 		if($s->rowCount()>0){
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
 				$buildHours=$htmlHours;
@@ -77,8 +77,9 @@ $html=preg_replace([
 	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
 	stristr($html,'<contact>')&&$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
 	stristr($html,'<phone>')&&$config['options'][24]==1?'/<[\/]?phone>/':'~<phone>.*?<\/phone>~is',
-	$config['payPalClientID']==''&&$config['stripe_publishkey']==''&&$config['options'][16]==0?'~<paymentoptions>.*?<\/paymentoptions>~is':'/<[\/]?paymentoptions>/',
+	$config['options'][22]==1||$config['options'][24]==1?'/<[\/]?address>/':'~<address>.*?<\/address>~is',
 	$config['options'][7]==1?'/<[\/]?paymentoptions>/':'~<paymentoptions>.*?<\/paymentoptions>~is',
+	$config['payPalClientID']==''&&$config['stripe_publishkey']==''&&$config['options'][16]==0?'~<paymentoptions>.*?<\/paymentoptions>~is':'/<[\/]?paymentoptions>/',
 	'/<print config=[\"\']?email[\"\']?>/',
 	'/<print config=[\"\']?business[\"\']?>/',
 	'/<print config=[\"\']?address[\"\']?>/',
@@ -105,6 +106,7 @@ $html=preg_replace([
 	$config['options'][16]==0?'~<afterpay>.*?</afterpay>~is':'/<[\/]?afterpay>/',
 	$config['stripe_publishkey']==''?'~<creditcards>.*?</creditcards>~is':'/<[\/]?creditcards>/'
 ],[
+	'',
 	'',
 	'',
 	'',

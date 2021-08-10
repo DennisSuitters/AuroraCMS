@@ -861,3 +861,19 @@ form .requirements {
 iframe {
   border: 0;
   margin: 0; }
+
+.form-row {
+  position: relative;
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: nowrap;
+  vertical-align: middle; }
+
+.form-row .brl-0 {
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important; }
+
+.form-row .brr-0 {
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+}

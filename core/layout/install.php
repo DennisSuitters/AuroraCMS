@@ -32,7 +32,7 @@
 	</head>
 	<body class="aurora">
 		<main class="row">
-			<div class="col-12 col-md-3 mx-auto mt-0 mt-sm-5 p-5 p-sm-0">
+			<div class="col-12 col-sm-3 mx-auto mt-0 mt-sm-5 p-5 p-sm-0">
 				<div class="m-4">
 					<img class="login-logo" src="core/images/auroracms.svg" alt="AuroraCMS">
 				</div>
@@ -45,27 +45,31 @@
 					if(version_compare(phpversion(),'7.0','<'))echo'<div class="alert alert-danger" role="alert">AuroraCMS was built using PHP v7.0, your installed version is lower. While AuroraCMS may operate on your system, some functionality may not work or be available. We recommend using PHP 7.3 if available on you\'re services!</div>';
 					if(extension_loaded('pdo')){
 						if(empty(PDO::getAvailableDrivers())){
-							$error=1;
+							$error++;
 							echo'<div class="alert alert-danger" role="alert">Great PDO is Installed and Active, but there are no Database Drivers Installed!</div>';
 						}
 					}else{
-						$error=1;
+						$error++;
 						echo'<div class="alert alert-danger" role="alert">AuroraCMS uses PDO for Database Interaction, please Install or Enable PDO!</div>';
 					}
 					if(file_exists('core/config.ini')&&!is_writable('core/config.ini')){
-						$error=1;
+						$error++;
 						echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, but is not writeable. There is two ways to fix this, either make <code>core/config.ini</code> writable, or remove the file!</div>';
 					}
 					if(!isset($_SERVER['HTTP_MOD_REWRITE'])){
-						$error=1;
+						$error++;
 						echo'<div class="alert alert-danger" role="alert"><code>mod_rewrite</code> must be available and enabled for AuroraCMS to function correctly!</div>';
 					}
 					if(!extension_loaded('gd')&&!function_exists('gd_info')){
-						$error=1;
+						$error++;
 						echo'<div class="alert alert-danger" role="alert">GD-Image is NOT Installed or Enabled!</div>';
 					}
+					if(!function_exists('curl_version')){
+						$error++;
+						echo'<div class="alert alert-info" role="alert">CURL Function is NOT enabled or Installed. Please install or enable the CURL extension!</div>';
+					}
 					echo(!function_exists('exif_read_data')?'<div class="alert alert-info" role="alert">EXIF Functions are NOT enabled or installed. While not Mandatory, some features won\'t work.</div>':'');
-					echo($error==1?'<div class="alert alert-danger" role="alert">Please fix the above Issue\'s outlined within the Red Sections, then Refresh the page to Check Again.</div>':'');
+					echo($error>0?'<div class="alert alert-danger" role="alert">Please fix the above '.$error.' Issue\'s outlined within the Red Sections, then Refresh the page to Check Again.</div>':'');
 					if($error==0){?>
 						<h4 class="text-white text-md-black">Database Settings</h4>
 						<form target="sp" method="post" action="core/installer.php" onsubmit="isValid();">

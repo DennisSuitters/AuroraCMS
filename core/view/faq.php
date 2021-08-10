@@ -2,8 +2,8 @@
 /**
  * AuroraCMS - Copyright (C) Diemen Design 2019
  *
- * @category   Administration - View - Bookings
- * @package    core/view/bookings.php
+ * @category   Administration - View - FAQ
+ * @package    core/view/faq.php
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
@@ -72,17 +72,21 @@ if(stristr($html,'<breadcrumb>')){
   $breaditem=$matches[1];
   preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
   $breadcurrent=$matches[1];
+  $jsoni=1;
   $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
   $breadit=preg_replace([
-    '/<print breadcrumb=[\"\']?url[\"\']?>/',
-    '/<print breadcrumb=[\"\']?title[\"\']?>/'
+   '/<print breadcrumb=[\"\']?url[\"\']?>/',
+   '/<print breadcrumb=[\"\']?title[\"\']?>/'
   ],[
-    URL,
-    'Home'
+   URL,
+   'Home'
   ],$breaditem);
   $breaditems=$breadit;
+  $jsoni++;
   $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-  $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars(ucfirst($page['title']),ENT_QUOTES,'UTF-8').'"}}]}</script>';
+  $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.
+    URL.urlencode($page['contentType']).'/","name":"'.
+    htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}]}</script>';
   $breaditems.=$breadit;
   $html=preg_replace([
     '/<[\/]?breadcrumb>/',
@@ -96,78 +100,37 @@ if(stristr($html,'<breadcrumb>')){
     ''
   ],$html);
 }
-$ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $html=preg_replace([
-  $page['notes']!=''?'/<print page=[\"\']?notes[\"\']?>/':'~<pagenotes>.*?<\/pagenotes>~is',
-  '/<[\/]?pagenotes>/',
-  '/<g-recaptcha>/'
+	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?notes[\"\']?>/',
 ],[
-  rawurldecode($page['notes']),
   '',
-  $config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''&&stristr($html,'g-recaptcha')?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':''
+	rawurldecode($page['notes']),
 ],$html);
-$eventDate=0;
-if(stristr($html,'<items>')){
-  $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
-  if($sb->rowCount()>0){
-    preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
-    $item=$matches[1];
-    $output='';
-    while($rb=$sb->fetch(PDO::FETCH_ASSOC)){
-      if($rb['tie']>0){
-        if(time()>$rb['tie'])continue;
-      }
-      if(isset($args[0])&&$args[0]==$rb['id'])$eventDate=$rb['tis'];
-      $items=$item;
-      $items=preg_replace([
-        '/<print id>/',
-        '/<print content=[\"\']?thumb[\"\']?>/',
-        '/<print content=[\"\']?imageALT[\"\']?>/',
-        '/<print content=[\"\']?title[\"\']?>/',
-        '/<itemChecked>/',
-        '/<itemHidden>/'
-      ],[
-        $rb['id'],
-        $rb['file']!=''&&file_exists('media/'.'thumbs'.basename($rb['file']))?'media/'.'thumbs/'.basename($rb['file']):NOIMAGESM,
-        $rb['fileALT']!=''?$rb['fileeALT']:$rb['title'],
-        $rb['title'],
-        isset($args[0])&&$args[0]==$rb['id']?'checked':'',
-        isset($args[0])&&$args[0]!=$rb['id']?'d-none':''
-      ],$items);
-      $output.=$items;
-    }
-    $html=preg_replace([
-      '~<items>.*?<\/items>~is',
-      '~<serviceselect>.*?<\/serviceselect>~is',
-      '/<[\/]?bookservices>/'
+$faqs='';
+if(stristr($html,'<items')){
+  preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
+  $faq=$matches[1];
+  $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='faq' ORDER BY `title` ASC");
+  $s->execute();
+	$i=$s->rowCount();
+	$ii=0;
+  $output='';
+	$schema='<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[';
+  while($r=$s->fetch(PDO::FETCH_ASSOC)){
+    $faqs=$faq;
+    $faqs=preg_replace([
+			'/<print content=[\"\']?title[\"\']?>/',
+			'/<print content=[\"\']?notes[\"\']?>/'
     ],[
-      $output,
-      '',
-      '',
-      ''
-    ],$html);
-  }else$html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
-}else{
-  $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
-  if($sb->rowCount()>0){
-    $bookable='';
-    while($rb=$sb->fetch(PDO::FETCH_ASSOC)){
-      $bookable.='<option value="'.$rb['id'].'"'.($rb['id']==$args[0]?' selected':'').'>'.htmlspecialchars(ucfirst($rb['contentType']),ENT_QUOTES,'UTF-8').($rb['code']!=''?':'.htmlspecialchars($rb['code'],ENT_QUOTES,'UTF-8'):'').':'.htmlspecialchars($rb['title'],ENT_QUOTES,'UTF-8').'</option>';
-    }
-    $html=preg_replace([
-      '/<serviceoptions>/',
-      '/<[\/]?bookservices>/'
-    ],[
-      $bookable,
-      ''
-    ],$html);
-  }else$html=preg_replace('~<bookservices>.*?<\/bookservices>~is','<input type="hidden" name="service" value="0">',$html,1);
+      htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
+      $r['notes']
+    ],$faqs);
+    $output.=$faqs;
+		$ii++;
+		$schema.='{"@type":"Question","name":"'.$r['title'].'","acceptedAnswer":{"@type":"Answer","text": "'.strip_tags($r['notes']).'"}}'.($ii<$i?',':'');
+  }
+	$schema.=']}</script>';
+	$faqs=preg_replace('~<items>.*?<\/items>~is',$schema.$output,$html,1);
 }
-$html=preg_replace([
-  '/<print currentdate>/',
-  '/<itemreadonly>/'
-],[
-  ($eventDate>0?date('Y-m-d\TH:i',$eventDate):date('Y-m-d\TH:i',time())),
-  ($eventDate>0?'readonly':'')
-],$html);
-$content.=$html;
+$content.=$faqs;

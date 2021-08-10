@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -44,13 +44,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <input class="tab-control" id="tab1-2" name="tabs" type="radio">
           <label for="tab1-2">Images</label>
           <?=($r['contentType']!='testimonials'?'<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Media</label>':'').
-            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'').
-            ($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'').
-            ($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'').
-            ($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'').
-            ($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8">SEO</label>':'');?>
+          ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'').
+          ($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'').
+          ($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'').
+          ($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'').
+          ($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8">SEO</label>':'');?>
           <input class="tab-control" id="tab1-9" name="tabs" type="radio">
           <label for="tab1-9">Settings</label>
+          <?=($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'');?>
 <?php /* Content */?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row mt-3">
@@ -58,6 +59,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible. This Title is also used For H1 Headings on pages.</small>
             </div>
             <div class="form-row">
+              <button class="brr-0" data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
                 $ss->execute([
@@ -65,13 +67,12 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   ':t'=>'content',
                   ':c'=>'title'
                 ]);
-                echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                echo$ss->rowCount()>0?'<button class="brl-0 brr-0" data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
               }?>
-              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
-              <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?=$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
-              <?=$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
-              '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-              '<button class="save" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <input class="textinput brl-0 brr-0" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?=$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
+              <?=$user['options'][1]==1?'<button class="brl-0 brr-0" data-tooltip="tooltip" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
+              '<button class="brl-0 brr-0" data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save brl-0" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <script>
               function genurl(){
@@ -381,7 +382,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       }
                     }
                   }
-                  $tags=array_unique($tgs);
+                  if(isset($tgs)&&$tgs!='')$tags=array_unique($tgs);
                   asort($tags);
                   echo'<select id="tags_options" onchange="addTag($(this).val());">'.
                     '<option value="none">Clear All</option>';
@@ -640,7 +641,7 @@ else{
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
                     <input name="act" type="hidden" value="add_tstavatar">
                     <div class="btn custom-file" data-tooltip="tooltip" aria-label="Browse Computer for Image">
-                      <input class="custom-file-input hidden" id="avatarfu" type="file" name="fu" onchange="form.submit()">
+                      <input class="custom-file-input hidden" id="avatarfu" type="file" name="fu" onchange="form.submit();">
                       <label for="avatarfu"><?= svg2('browse-computer');?></label>
                     </div>
                     <img id="tstavatar" src="<?=$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
@@ -1475,6 +1476,40 @@ else{
               <?php }
               }?>
           </div>
+<?php if($r['contentType']=='events'){?>
+          <div class="tab1-10 border-top p-3" data-tabid="tab1-10" role="tabpanel">
+            <div class="row">
+              <?php
+              $sbb=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='booking' AND `rid`=:rid ORDER BY `ti` DESC");
+              $sbb->execute([':rid'=>$r['id']]);
+              if($sbb->rowCount()>0){
+                while($rbb=$sbb->fetch(PDO::FETCH_ASSOC)){
+                  $sbu=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `email`=:email LIMIT 1");
+                  $sbu->execute([':email'=>$rbb['email']]);
+                  if($sbu->rowCount()>0){
+                    $rbu=$sbu->fetch(PDO::FETCH_ASSOC);
+                  }
+                  echo'<div class="form-row col-12">'.
+                    ($sbu->rowCount()>0?'':'<button class="btn add" data-tooltip="tooltip" aria-label="Create Account for Contacts">'.svg2('address-card').'</button>').
+                    '<div class="input-text col-12 col-sm"><small>'.(isset($rbu['name'])?$rbu['name']:$rbb['name']).($rbb['business']!=''?' | '.$rbb['business']:'').'</small></div>'.
+                    '<div class="input-text col-12 col-sm"><a href="mailto:'.$rbb['email'].'">'.$rbb['email'].'</a></div>';
+                  if($rbb['category_1']!=''){
+                    $sbo=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `iid`=:iid");
+                    $sbo->execute([':iid'=>$rbb['category_1']]);
+                    if($sbo->rowCount()>0){
+                      $rbo=$sbo->fetch(PDO::FETCH_ASSOC);
+                      echo'<div class="input-text col-12 col-sm">Order&nbsp;<a href="'.URL.$settings['system']['admin'].'/orders/edit/'.$rbo['id'].'">#'.$rbo['iid'].'</a>&nbsp;&nbsp;<span class="badger badge-'.$rbo['status'].'">'.ucwords($rbo['status']).'</span></div>';
+                    }
+                  }
+                  echo'<div class="input-text col-12 col-sm">Booking Status:&nbsp;<span class="badger badge-'.$rbb['status'].'">'.ucwords($rbb['status']).'</span></div>'.
+                  '<a class="btn" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$rbb['id'].'" data-tooltip="tooltip" aria-label="Go to Booking">'.svg2('calendar').'</a>'.
+                  '</div>';
+                }
+              }
+              ?>
+            </div>
+          </div>
+<?php }?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>

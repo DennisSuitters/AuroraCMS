@@ -1,12 +1,19 @@
-### v0.1.7
-- Continue tidying up source to improve processing performance.
-- Add links for PayPal and Stripe websites for signing up to Settings/Orders page.
-- Fix Checkout Page Content display parser.
-- Fix Price Display for Pre-Order/Out Of Stock items in main content area and side menu.
-- Add paid_via options "Cash/Bank Transfer".
-- Fix capitalized category in href on content pages.
-- Add SECURITY.md to the GitHub repository that contains instructions on how to disclose issues.
-- Amend SVG front end function to fetch SVG files from core/images if requested file is non-existent in theme.
-- Remove ?theme= theme override parsing.
-- Add a notice about purchasing inventory if having an account is a requirement.
-- Remove unused Profile feature.
+### v0.1.8
+- Add sort field to find items on Content and Users on Account administration pages.
+- Fix purchase when logged in parser showing noticed on non inventory items.
+- Fix button and input styling in administration.
+- Restyle Footer "Back To Top" link, and fix styling for client sites so they have better mobile responsiveness.
+- Fix Footer Template Blocks to work better as responsive elements.
+- Fix Footer Template Blocks display with toggable options correctly.
+- Fix missing URL declaration in `core/add_account.php` resulting in malformed activation link.
+- Fix display order not working for Business Hours in Footer area.
+- Add ability to upload Theme ZIP files.
+- Fix `array_unique()` throwing errors if array is empty.
+- Add check if CURL is installed and enabled when installing.
+- Add display of number of issues that need to be resolved when installing.
+- Add embed Audio plugin for Summernote.
+- Fix typo in notification when Booking Invoice is created.
+- Add FAQ Administration Editing, and Front End Parsing.
+- Make sure Quick Edit dropdown gets closed when switching from List to Cards.
+- Change logged in label from "Administration" to "Account", to reduce confusion.
+- Add SQL to clear `activate` login field to faciliate activating accounts with activation issues.

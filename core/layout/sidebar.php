@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -32,6 +32,7 @@ echo'<aside class="border-right" id="sidebar">'.
             echo'<li class="'.(stristr($view,'media')?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/media">'.svg2('picture','i-2x mr-4').' Media</a></li>';
           }
           echo'<li class="'.($view=='pages'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/pages">'.svg2('content','i-2x mr-4').' Pages</a></li>'.
+          '<li class="'.($view=='faq'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/faq">'.svg2('faq','i-2x mr-4').' FAQ</a></li>'.
           '<li class="'.(isset($args[0])&&$args[0]!='settings'&&$args[0]=='scheduler'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/content/scheduler">'.svg2('calendar-time','i-2x mr-4').' Scheduler</a></li>'.
           '<li class="'.(isset($args[0])&&$args[0]!='settings'&&isset($args[1])&&$args[1]=='article'?' active':'').'"><a id="menu-article" href="'.URL.$settings['system']['admin'].'/content/type/article">'.svg2('content','i-2x mr-4').' Articles</a></li>'.
           '<li class="'.(isset($args[0])&&$args[0]!='settings'&&isset($args[1])&&$args[1]=='portfolio'?' active':'').'"><a id="menu-portfolio" href="'.URL.$settings['system']['admin'].'/content/type/portfolio">'.svg2('portfolio','i-2x mr-4').' Portfolio</a></li>'.

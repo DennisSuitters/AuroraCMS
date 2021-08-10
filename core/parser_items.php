@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -149,59 +149,60 @@ if(stristr($html,'<breadcrumb>')){
   ],$html);
 }
 if(stristr($html,'<cover>')){
+	$coverHTML='';
 	$iscover=false;
 	if($page['coverVideo']!=''){
 		$cover=basename(rawurldecode($page['coverVideo']));
 		if(stristr($page['coverVideo'],'youtu')){
 			preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$page['coverVideo'],$vidMatch);
-			$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
+			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.
+				($page['options'][0]==1?'autoplay=1&mute=1&':'').
+				($page['options'][1]==1?'loop=1&':'').
+				($page['options'][2]==1?'controls=1&':'controls=0&').
+			'" frameborder="0" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
   	}elseif(stristr($page['coverVideo'],'vimeo')){
 			preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$page['coverVideo'],$vidMatch);
-			$videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
+			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.
+				($page['options'][0]==1?'autoplay=1&':'').
+				($page['options'][1]==1?'loop=1&':'').
+				($page['options'][2]==1?'controls=1&':'controls=0&').
+			'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
 		}else
-			$videoHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
-		$html=preg_replace([
-			'/<[\/]?cover>/',
-			'/<print page=[\"\']?coverItem[\"\']?>/',
-		],[
-			'',
-			$videoHTML
-		],$html);
-		$iscover=true;
+			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
 	}
-	if($page['cover']!=''||$page['coverURL']!=''){
+	if($page['cover']!=''&&$coverHTML==''){
 		$cover=basename($page['cover']);
 		if(file_exists('media/'.$cover)){
-			$coverLink='';
-			if(isset($page['cover'])&&$page['cover']!='')$coverLink.='media/'.$cover;
-			elseif($page['coverURL']!='')$coverLink.=$page['coverURL'];
-			$figcaption='';
-			if($page['attributionImageTitle']!='')$figcaption=$page['attributionImageTitle'];
-			if($page['attributionImageName']!=''){
-				$figcaption.=$figcaption!=''?' by ':'';
-				if($page['attributionImageURL']!='')$figcaption.='<a href="'.$page['attributionImageURL'].'" target="_blank">';
-				$figcaption.=$page['attributionImageName'];
-				if($page['attributionImageURL']!='')$figcaption.='</a>';
-			}
-			$html=preg_replace([
-				'/<[\/]?cover>/',
-				'/<print page=[\"\']?coverItem[\"\']?>/'
-			],[
-				'',
-				(file_exists('media/'.$cover)?'<img srcset="'.
-					(file_exists('media/'.basename($cover))?'media/'.'lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
-					(file_exists('media/'.'lg/'.basename($cover))?'media/'.'lg/'.$cover.' 1000w,':'').
-					(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
-					(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
-					(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-				'" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image"><figcaption>'.
-					($figcaption!=''?$figcaption:($page['fileALT']!=''?$page['fileALT']:'')).
-				'</figcaption>':'')
-			],$html);
+			$coverHTML='<img srcset="'.
+			(file_exists('media/'.$cover)?'<img srcset="'.
+				(file_exists('media/'.basename($cover))?'media/'.'lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
+				(file_exists('media/'.'lg/'.basename($cover))?'media/'.'lg/'.$cover.' 1000w,':'').
+				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
+				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
+				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
+			'" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+				($page['attributionImageTitle']!=''?
+					'<figcaption>'.
+						$page['attributionImageTitle'].
+						($page['attributionImageName']!=''?
+							' by '.
+								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'">':'').
+								$page['attributionImageName'].
+								($page['attributionImageURL']!=''?'</a>':'')
+						:'').
+					'</figcaption>'
+				:'')
+			:'');
 			$iscover=true;
 		}
 	}
-	$html=preg_replace('~<cover>.*?<\/cover>~is','',$html,1);
+	$html=preg_replace([
+		$coverHTML==''?'~<cover>.*?</cover>~is':'/<[\/]?cover>/',
+		'/<print page=[\"\']?coverItem[\"\']?>/'
+	],[
+		'',
+		$coverHTML
+	],$html);
 }
 if(stristr($html,'<map>')){
 	$html=preg_replace([
@@ -325,13 +326,15 @@ $html=preg_replace([
 	'/<notification>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
 	'/<print page=[\"\']?notes[\"\']?>/',
-	'/<print content=[\"\']?seoTitle[\"\']?>/'
+	'/<print content=[\"\']?seoTitle[\"\']?>/',
+	'/<print config=[\"\']?business[\"\']?>/'
 ],[
 	htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
 	$notification,
 	'',
 	rawurldecode($page['notes']),
-	$config['business']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8')
+	$config['business']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),
+	ucwords($config['business'])
 ],$html);
 if(stristr($html,'<categories>')){
 	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `title` ASC");
@@ -366,15 +369,67 @@ if(stristr($html,'<categories>')){
 		$html=preg_replace('~<categories>.*?<\/categories>~is',$catoutput,$html,1);
 	}else$html=preg_replace('~<categories>.*?<\/categories>~is','',$html,1);
 }
+if(stristr($html,'<eventsitems')){
+	preg_match('/<eventsitems.*?items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+	$limit=isset($matches[1])&&$matches[1]==0?4:$matches[1];
+	preg_match('/<eventitem>([\w\W]*?)<\/eventitem>/',$html,$matches);
+	$eventitem=$matches[1];
+	$eventoutput='';
+	$se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :ct1 AND `status` LIKE :status AND `rank`<:rank OR `contentType` LIKE :ct2 AND `status` LIKE :status AND `rank`<:rank ORDER BY `ti` DESC LIMIT $limit");
+	$se->execute([
+		':ct1'=>'events',
+		':ct2'=>'news',
+		':status'=>'published',
+		':rank'=>(isset($_SESSION['rank'])?$_SESSION['rank'] + 1:0)
+	]);
+	if($se->rowCount()>0){
+		while($re=$se->fetch(PDO::FETCH_ASSOC)){
+			$eventitems=$eventitem;
+			$re['file']=rawurldecode($re['file']);
+			$eventitems=preg_replace([
+				'/<print event=[\"\']?srcset[\"\']?>/',
+				'/<print event=[\"\']?thumb[\"\']?>/',
+				'/<print event=[\"\']?imageALT[\"\']?>/',
+				'/<print event=[\"\']?contentType[\"\']?>/',
+				'/<print event=[\"\']?linktitle[\"\']?>/',
+				'/<print event=[\"\']?title[\"\']?>/',
+				'/<print date=[\"\']?day[\"\']?>/',
+				'/<print date=[\"\']?month[\"\']?>/',
+				'/<print date=[\"\']?year[\"\']?>/'
+			],[
+				'srcset="'.
+					($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
+					($re['thumb']!=''&&file_exists('media/'.'md/'.basename($re['thumb']))?'media/'.'md/'.basename($re['thumb']).' 600w,':NOIMAGE.' 600w,').
+					($re['thumb']!=''&&file_exists('media/'.'sm/'.basename($re['thumb']))?'media/'.'sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+				($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']):NOIMAGESM),
+				htmlspecialchars($re['fileALT']!=''?$re['fileALT']:$re['title'],ENT_QUOTES,'UTF-8'),
+				$re['contentType'],
+				URL.$re['contentType'].'/'.$re['urlSlug'].'/',
+				$re['title'],
+				date('jS',($re['tis']==0?$re['ti']:$re['tis'])),
+				date('F',($re['tis']==0?$re['ti']:$re['tis'])),
+				date('Y',($re['tis']==0?$re['ti']:$re['tis']))
+			],$eventitems);
+			$eventoutput.=$eventitems;
+		}
+		$html=preg_replace([
+			'~<eventitem>.*?<\/eventitem>~is',
+			'/<[\/]?eventsitems.*?>/'
+		],[
+			$eventoutput,
+			''
+		],$html);
+	}else$html=preg_replace('~<eventsitems.*?>.*?<\/eventsitems>~is','',$html,1);
+}
 if(stristr($html,'<items')){
 	preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 	$item=$matches[1];
 	$output='';
 	$si=1;
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
-		if($_SESSION['rank']>300||$_SESSION['rank']<400&&$_SESSION['rank']!=$r['rank']){
-			if($_SESSION['rank']<399&&$r['options'][2]==0)continue;
-		}
+//		if($_SESSION['rank']>300||$_SESSION['rank']<400&&$_SESSION['rank']!=$r['rank']){
+//			if($_SESSION['rank']<399&&$r['options'][2]==0)continue;
+//		}
 		if($view=='search'&&$r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
 		$sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
 		$sr->execute([':contentType'=>$r['contentType']]);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -133,17 +133,33 @@ else{
                 <ul class="breadcrumb-dropper">
                   <li><a href="<?= URL.$settings['system']['admin'].'/content';?>">All</a></li>
                   <?php $sc=$db->prepare("SELECT DISTINCT `contentType` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`!=:cT ORDER BY `contentType` ASC");
-                  $sc->execute([
-                    ':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%'
-                  ]);
+                  $sc->execute([':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%']);
                   while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                     echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</a></li>';
                   }?>
+                </ul>
             </ol>
           </div>
         </div>
         <div class="container-fluid p-0">
           <div class="card border-radius-0 shadow overflow-visible">
+            <div class="row p-3">
+              <div class="col-12 col-sm-6">
+                <small>View:
+                  <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" aria-label="Display All Content">All</a>&nbsp;
+                  <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" aria-label="Display Published Items">Published</a>&nbsp;
+                  <a class="badger badge-info" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
+                  <a class="badger badge-warning" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
+                  <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
+                  <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" aria-label="Display Archived Items">Archived</a>&nbsp;
+                </small>
+              </div>
+              <div class="col-12 col-sm-6">
+                <div class="form-row">
+                  <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+                </div>
+              </div>
+            </div>
             <section id="contentview" class="content overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>">
             <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
               $sr=$db->prepare("SELECT COUNT(`id`) as num,SUM(`cid`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid");
@@ -163,7 +179,7 @@ else{
                 ]);
                 $sccc=$scc->rowCount();
               }?>
-              <article class="card overflow-visible" id="l_<?=$r['id'];?>">
+              <article class="card overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
                 <div class="card-image overflow-visible">
                   <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))
                     echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -227,19 +243,9 @@ else{
                   </div>
                 </div>
               </article>
-              <div class="quickedit col-12 d-none" id="quickedit<?=$r['id'];?>"></div>
+              <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
             <?php }?>
           </section>
-          <div class="col-12 mt-0 text-right">
-            <small>View:
-              <a class="badger badge-light" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" aria-label="Display All Content">All</a>&nbsp;
-              <a class="badger badge-published" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" aria-label="Display Published Items">Published</a>&nbsp;
-              <a class="badger badge-autopublish" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
-              <a class="badger badge-unpublished" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
-              <a class="badger badge-delete" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
-              <a class="badger badge-archived" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" aria-label="Display Archived Items">Archived</a>&nbsp;
-            </small>
-          </div>
           <?php require'core/layout/footer.php';?>
         </div>
       </div>

@@ -298,12 +298,12 @@
           lang:'en-US',
           toolbar:[
             ['save',['save']],
-            ['custom',['findnreplace','cleaner']],
-            ['style',['cleaner','style']],
+            ['custom',['findnreplace']],
+//            ['style',['style']],
             ['font',['bold','italic','underline','clear']],
             ['para',['ul','ol','paragraph']],
             ['table',['table']],
-            ['insert',['picture','video','link','hr','checkbox']],
+            ['insert',['picture','video','audio','link','hr','checkbox']],
             ['view',['fullscreen','codeview']],
             ['help',['help']]
           ],

@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jul 23, 2021 at 05:42 PM
--- Server version: 8.0.25-0ubuntu0.20.04.1
--- PHP Version: 8.0.8
+-- Generation Time: Aug 11, 2021 at 02:16 AM
+-- Server version: 8.0.26-0ubuntu0.20.04.2
+-- PHP Version: 8.0.9
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,7 +34,7 @@ CREATE TABLE `cart` (
   `rid` bigint NOT NULL,
   `quantity` mediumint UNSIGNED NOT NULL,
   `cost` decimal(10,2) UNSIGNED NOT NULL,
-  `stockStatus` tinytext COLLATE utf8_bin NOT NULL,
+  `stockStatus` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `points` int NOT NULL,
   `si` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `ti` int UNSIGNED NOT NULL
@@ -149,11 +149,11 @@ CREATE TABLE `config` (
   `orderEmailReadNotification` tinyint(1) NOT NULL,
   `austPostAPIKey` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `gst` varchar(4) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `memberLimit` varchar(6) COLLATE utf8_bin NOT NULL,
-  `memberLimitSilver` varchar(6) COLLATE utf8_bin NOT NULL,
-  `memberLimitBronze` varchar(6) COLLATE utf8_bin NOT NULL,
-  `memberLimitGold` varchar(6) COLLATE utf8_bin NOT NULL,
-  `memberLimitPlatinum` varchar(6) COLLATE utf8_bin NOT NULL,
+  `memberLimit` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `memberLimitSilver` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `memberLimitBronze` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `memberLimitGold` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `memberLimitPlatinum` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `wholesaleLimit` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `wholesaleLimitSilver` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `wholesaleLimitBronze` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -189,22 +189,22 @@ CREATE TABLE `config` (
   `bankBSB` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `payPalClientID` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `payPalSecret` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `stripe_publishkey` text COLLATE utf8_bin NOT NULL,
+  `stripe_publishkey` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `stripe_secretkey` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `defaultOrder` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT 'old',
+  `defaultOrder` varchar(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT 'old',
   `showItems` int NOT NULL,
   `idleTime` int NOT NULL,
   `ga_clientID` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `ga_tracking` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `ga_verification` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `reCaptchaClient` text COLLATE utf8_bin NOT NULL,
-  `reCaptchaServer` text COLLATE utf8_bin NOT NULL,
+  `reCaptchaClient` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `reCaptchaServer` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `seo_msvalidate` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `seo_yandexverification` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `seo_alexaverification` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `seo_domainverify` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `seo_pinterestverify` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `mapapikey` varchar(128) COLLATE utf8_bin NOT NULL,
+  `mapapikey` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `geo_region` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `geo_placename` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `geo_position` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -212,8 +212,8 @@ CREATE TABLE `config` (
   `php_APIkey` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `php_honeypot` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `php_quicklink` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `formMinTime` varchar(8) COLLATE utf8_bin NOT NULL,
-  `formMaxTime` varchar(8) COLLATE utf8_bin NOT NULL,
+  `formMinTime` varchar(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `formMaxTime` varchar(8) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `spamfilter` int NOT NULL,
   `notification_volume` int NOT NULL,
   `mediaMaxWidth` int NOT NULL,
@@ -237,7 +237,7 @@ CREATE TABLE `config` (
 --
 
 INSERT INTO `config` (`id`, `development`, `maintenance`, `comingsoon`, `options`, `theme`, `seoTitle`, `seoDescription`, `seoCaption`, `seoKeywords`, `metaRobots`, `seoRSSTitle`, `seoRSSNotes`, `seoRSSLink`, `seoRSSAuthor`, `seoRSSti`, `business`, `abn`, `address`, `suburb`, `city`, `state`, `country`, `postcode`, `phone`, `mobile`, `email`, `vti`, `sti`, `dateFormat`, `email_check`, `email_interval`, `email_signature`, `storemessages`, `message_check_interval`, `chatAutoRemove`, `messengerFBCode`, `messengerFBColor`, `messengerFBGreeting`, `language`, `timezone`, `orderPayti`, `orderEmailSubject`, `orderEmailLayout`, `orderEmailNotes`, `orderEmailReadNotification`, `austPostAPIKey`, `gst`, `memberLimit`, `memberLimitSilver`, `memberLimitBronze`, `memberLimitGold`, `memberLimitPlatinum`, `wholesaleLimit`, `wholesaleLimitSilver`, `wholesaleLimitBronze`, `wholesaleLimitGold`, `wholesaleLimitPlatinum`, `wholesaleTime`, `wholesaleTimeSilver`, `wholesaleTimeBronze`, `wholesaleTimeGold`, `wholesaleTimePlatinum`, `passwordResetLayout`, `passwordResetSubject`, `accountActivationSubject`, `accountActivationLayout`, `bookingNoteTemplate`, `bookingEmailSubject`, `bookingEmailLayout`, `bookingEmailReadNotification`, `bookingAutoReplySubject`, `bookingAutoReplyLayout`, `bookingAttachment`, `bookingAgreement`, `bookingBuffer`, `contactAutoReplySubject`, `contactAutoReplyLayout`, `newslettersEmbedImages`, `newslettersSendMax`, `newslettersSendDelay`, `newslettersOptOutLayout`, `bank`, `bankAccountName`, `bankAccountNumber`, `bankBSB`, `payPalClientID`, `payPalSecret`, `stripe_publishkey`, `stripe_secretkey`, `defaultOrder`, `showItems`, `idleTime`, `ga_clientID`, `ga_tracking`, `ga_verification`, `reCaptchaClient`, `reCaptchaServer`, `seo_msvalidate`, `seo_yandexverification`, `seo_alexaverification`, `seo_domainverify`, `seo_pinterestverify`, `mapapikey`, `geo_region`, `geo_placename`, `geo_position`, `php_options`, `php_APIkey`, `php_honeypot`, `php_quicklink`, `formMinTime`, `formMaxTime`, `spamfilter`, `notification_volume`, `mediaMaxWidth`, `mediaMaxHeight`, `mediaMaxWidthThumb`, `mediaMaxHeightThumb`, `mediaQuality`, `suggestions`, `bti`, `backup_ti`, `uti`, `uti_freq`, `update_url`, `navstat`, `iconsColor`, `ti`) VALUES
-(1, 0, 0, 0, '10111111011100000011101110100111', 'animeexcess', '', '', '', 'Clippy', 'index,follow', '', '', '', '', 0, 'Business', '000 000 000', '0 Address St', 'Suburb', 'City', 'State', 'Country', 9999, '00 000 000', '0000 000 000', 'example@example.com', 0, 3600, 'M jS, Y g:i A', 1425893894, 3600, '<p>Sent using <a href=\"https://github.com/DiemenDesign/AuroraCMS\">AuroraCMS</a> the Australian Open Source Content Management System.</p>', 0, 300, 0, '', '#5484ed', '', 'en-AU', 'Australia/Hobart', 1209600, 'Order {order_number}', '<p>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href=\"{order_link}\">{order_link}</a></p><hr>', '', 1, '', '0', '0', '0', '0', '0', '0', '', '5', '5', '5', '5', 0, 0, 0, 0, 0, '%3Cp%3EHi%20%7Bname%7D%2C%3C/p%3E%3Cp%3EA%20Password%20Reset%20was%20requested%2C%20it%20is%20now%3A%20%7Bpassword%7D%3C/p%3E%3Cp%3EWe%20recommend%20changing%20the%20above%20password%20after%20logging%20in.%3C/p%3E', 'Password Reset {business}.', 'Account Activation for {username} from {site}.', '<p>Hi {username},</p><p>Below is the Activation Link to enable your Account at {site}.<br>{activation_link}</p><p>The username you signed up with was: {username}</p><p>The AutoGenerated password is: {password}</p><p><br></p><p>If this email is in error, and you did not sign up for an Account, please take the time to contact us to let us know, or alternatively ignore this email and your email will be purged from our system in a few days.</p>', '<p>This is a test template</p><p>Backup:</p><p><input type=\"checkbox\">&nbsp;Music</p><p><input type=\"checkbox\">&nbsp;Software</p><p><input type=\"checkbox\">&nbsp;Emails</p><p><br></p>', '{business} Booking Confirmation on {date}', '<p>Hi {first},</p><p>{details}</p><p>Please check the details above, and get in touch if any need correcting.</p><p>Kind Regards,<br>{business}<br></p>\r\n', 0, '{business} Booking Confirmation on {date}', '%3Cp%3EHi%20%7Bfirst%7D%2C%3C/p%3E%3Cp%3EThank%20you%20for%20contacting%20%7Bbusiness%7D%2C%20someone%20will%20get%20back%20to%20you%20ASAP.%3Cbr%3EPlease%20note%2C%20this%20email%20is%20not%20a%20confirmed%20booking%20-%20we%20will%20contact%20you%20to%20confirm%20the%20time%20and%20date%20of%20your%20booking.%3Cbr%3E%3C/p%3E%3Cp%3EKind%20Regards%2C%3Cbr%3E%7Bbusiness%7D%3Cbr%3E%3C/p%3E', '', '<p>By clicking this checkbox and or signing below, you agree that we are not responsible for any data loss.</p>', 3600, '{business} Contact Confirmation on {date}', '<p>Hi {first},</p><p>Thank you for contacting {business}, someone will get back to you ASAP.</p><p>Kind Regards,</p><p>{business}</p><p><br></p>', 0, 50, 5, '<br>\r\n<br>\r\n<p><span style=\"font-size: 10px;\">If you don\'t wish to continue to receive these Newsletters you can <a href=\"{optOutLink}\">Unsubscribe</a>.</span></p>', '', '', '', '', '', '', '', '', 'new', 10, 30, '', '', '', '', '', '', '', '', '', '', '', '', '', '-41.39651366867026,146.17034912109378', '1011111000000000', '', '', '', '5', '60', 1, 0, 1280, 1280, 250, 250, 88, 0, 0, 1602516248, 0, 0, '', 2, 0, 0);
+(1, 0, 0, 0, '10111111011100000001101110100111', 'animeexcess', '', '', '', 'Clippy', 'index,follow', '', '', '', '', 0, 'Business', '000 000 000', '0 Address St', 'Suburb', 'City', 'State', 'Country', 9999, '00 000 000', '0000 000 000', 'example@example.com', 0, 3600, 'M jS, Y g:i A', 1425893894, 3600, '<p>Sent using <a href=\"https://github.com/DiemenDesign/AuroraCMS\">AuroraCMS</a> the Australian Open Source Content Management System.</p>', 0, 300, 0, '', '#5484ed', '', 'en-AU', 'Australia/Hobart', 1209600, 'Order {order_number}', '<p>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href=\"{order_link}\">{order_link}</a></p><hr>', '', 1, '', '0', '0', '0', '0', '0', '0', '', '5', '5', '5', '5', 0, 0, 0, 0, 0, '%3Cp%3EHi%20%7Bname%7D%2C%3C/p%3E%3Cp%3EA%20Password%20Reset%20was%20requested%2C%20it%20is%20now%3A%20%7Bpassword%7D%3C/p%3E%3Cp%3EWe%20recommend%20changing%20the%20above%20password%20after%20logging%20in.%3C/p%3E', 'Password Reset {business}.', 'Account Activation for {username} from {site}.', '<p>Hi {username},</p><p>Below is the Activation Link to enable your Account at {site}.<br>{activation_link}</p><p>The username you signed up with was: {username}</p><p>The AutoGenerated password is: {password}</p><p><br></p><p>If this email is in error, and you did not sign up for an Account, please take the time to contact us to let us know, or alternatively ignore this email and your email will be purged from our system in a few days.</p>', '<p>This is a test template</p><p>Backup:</p><p><input type=\"checkbox\">&nbsp;Music</p><p><input type=\"checkbox\">&nbsp;Software</p><p><input type=\"checkbox\">&nbsp;Emails</p><p><br></p>', '{business} Booking Confirmation on {date}', '<p>Hi {first},</p><p>{details}</p><p>Please check the details above, and get in touch if any need correcting.</p><p>Kind Regards,<br>{business}<br></p>\r\n', 0, '{business} Booking Confirmation on {date}', '%3Cp%3EHi%20%7Bfirst%7D%2C%3C/p%3E%3Cp%3EThank%20you%20for%20contacting%20%7Bbusiness%7D%2C%20someone%20will%20get%20back%20to%20you%20ASAP.%3Cbr%3EPlease%20note%2C%20this%20email%20is%20not%20a%20confirmed%20booking%20-%20we%20will%20contact%20you%20to%20confirm%20the%20time%20and%20date%20of%20your%20booking.%3Cbr%3E%3C/p%3E%3Cp%3EKind%20Regards%2C%3Cbr%3E%7Bbusiness%7D%3Cbr%3E%3C/p%3E', '', '<p>By clicking this checkbox and or signing below, you agree that we are not responsible for any data loss.</p>', 3600, '{business} Contact Confirmation on {date}', '<p>Hi {first},</p><p>Thank you for contacting {business}, someone will get back to you ASAP.</p><p>Kind Regards,</p><p>{business}</p><p><br></p>', 0, 50, 5, '<br>\r\n<br>\r\n<p><span style=\"font-size: 10px;\">If you don\'t wish to continue to receive these Newsletters you can <a href=\"{optOutLink}\">Unsubscribe</a>.</span></p>', '', '', '', '', '', '', '', '', 'new', 10, 30, '', '', '', '', '', '', '', '', '', '', '', '', '', '-41.39651366867026,146.17034912109378', '1011111000000000', '', '', '', '5', '60', 1, 0, 1280, 1280, 250, 250, 88, 0, 0, 1602516248, 0, 0, '', 5, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -276,7 +276,7 @@ CREATE TABLE `content` (
   `suburb` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `city` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `state` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `country` varchar(40) COLLATE utf8_bin NOT NULL,
+  `country` varchar(40) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `postcode` mediumint UNSIGNED NOT NULL,
   `phone` varchar(14) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `mobile` varchar(14) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -299,7 +299,7 @@ CREATE TABLE `content` (
   `exifFilename` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `exifti` bigint NOT NULL,
   `rrp` decimal(10,2) NOT NULL,
-  `cost` decimal(10,2) DEFAULT NULL,
+  `cost` decimal(10,2) DEFAULT '0.00',
   `rCost` decimal(10,2) NOT NULL,
   `dCost` decimal(10,2) NOT NULL,
   `sold` bigint NOT NULL,
@@ -339,7 +339,7 @@ CREATE TABLE `content` (
   `checklist` varchar(16) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '0000000000000000',
   `active` tinyint UNSIGNED NOT NULL,
   `coming` tinyint NOT NULL DEFAULT '0',
-  `geo_position` tinytext COLLATE utf8_bin NOT NULL,
+  `geo_position` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `pin` tinyint(1) NOT NULL,
   `tis` bigint UNSIGNED NOT NULL,
   `tie` bigint UNSIGNED NOT NULL,
@@ -377,7 +377,7 @@ CREATE TABLE `livechat` (
   `name` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `email` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `notes` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `ip` varchar(64) COLLATE utf8_bin NOT NULL,
+  `ip` varchar(64) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `user_agent` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `phpChecked` int DEFAULT NULL,
   `status` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -397,7 +397,7 @@ CREATE TABLE `login` (
   `bio_options` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL DEFAULT '00000000000000000000000000000000',
   `username` varchar(128) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `password` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `tags` text COLLATE utf8_bin NOT NULL,
+  `tags` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `cover` varchar(60) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
   `coverURL` varchar(256) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `attributionImageTitle` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -439,7 +439,7 @@ CREATE TABLE `login` (
   `discount` varchar(4) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `spent` decimal(10,2) NOT NULL,
   `points` int NOT NULL,
-  `purchaseLimit` varchar(6) COLLATE utf8_bin NOT NULL,
+  `purchaseLimit` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `purchaseTime` int NOT NULL,
   `lti` int NOT NULL,
   `userAgent` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
@@ -554,32 +554,33 @@ CREATE TABLE `menu` (
 --
 
 INSERT INTO `menu` (`id`, `rank`, `mid`, `uid`, `options`, `login_user`, `title`, `seoTitle`, `metaRobots`, `url`, `file`, `fileALT`, `cover`, `coverURL`, `coverVideo`, `attributionImageTitle`, `attributionImageName`, `attributionImageURL`, `contentType`, `schemaType`, `seoKeywords`, `seoDescription`, `seoCaption`, `menu`, `notes`, `ord`, `checklist`, `active`, `views`, `suggestions`, `eti`) VALUES
-(1, 0, 0, 1, '00000000', 'Dennis Suitters', 'Home', '', '', '', 'index', '', 'http://localhost/AuroraCMS2/media/eucalypt-burl-on-white.jpg', '', '', '', '', '', 'index', '', 'wood,turning,woodturned,timber,open,source,photography,digital,artwork,websit,design,development', '', '', 'head', '<p>Billabong tickets on yourself smokes suss. Trackies up yourself bloke chuck a sickie pokies tucker bush oyster bottlo we\'re going cut lunch. Shazza coathanger bizzo also dole bludger greenie watch out for the. Jumbuck slaps scratchy pub bail out built like a boogie board sheila onya bike. Wobbly moolah grundies mates truckie. Oldies cockie pinga ocker troppo wrap your laughing gear \'round that chook dero fair go, mate hottie. Toads mate footy roadie. Cranky dog\'s balls pint garbo bundy cracker flick.</p><p>Brickie runners rello throw-down corker chook rack off skeg. Bizzo tucker-bag bail head like a dropped pie no worries hottie daks a cold one dardy whit. Bikie greenie dardy cooee chock a block ute burk kelpie. Road train slappa bloody rello donga bushman\'s handkerchief no wuckin\' furries. Fair go, mate mozzie figjam unit postie straya. Booze knock hit the turps gyno piss up good oil your shout dob.</p>', 0, '0000000000000000', 1, 685, 0, 1626176372),
-(2, 0, 0, 1, '00000000', 'Dennis Suitters', 'Blog', '', '', '', 'article', '', '', '', '', '', '', '', 'article', '', '', '', '', 'head', '', 4, '0000000000000000', 1, 12, 0, 1624603854),
+(1, 0, 0, 1, '00000000', 'Dennis Suitters', 'Home', 'Meta Home Page', '', '', 'index', '', 'http://localhost/AuroraCMS2/media/bg-masthead.jpg', '', '', '', '', '', 'index', '', 'wood,turning,woodturned,timber,open,source,photography,digital,artwork,websit,design,development', 'Home Page Meta Description', '', 'head', '<p>Billabong tickets on yourself smokes suss. Trackies up yourself bloke chuck a sickie pokies tucker bush oyster bottlo we\'re going cut lunch. Shazza coathanger bizzo also dole bludger greenie watch out for the. Jumbuck slaps scratchy pub bail out built like a boogie board sheila onya bike. Wobbly moolah grundies mates truckie. Oldies cockie pinga ocker troppo wrap your laughing gear \'round that chook dero fair go, mate hottie. Toads mate footy roadie. Cranky dog\'s balls pint garbo bundy cracker flick.</p><p>Brickie runners rello throw-down corker chook rack off skeg. Bizzo tucker-bag bail head like a dropped pie no worries hottie daks a cold one dardy whit. Bikie greenie dardy cooee chock a block ute burk kelpie. Road train slappa bloody rello donga bushman\'s handkerchief no wuckin\' furries. Fair go, mate mozzie figjam unit postie straya. Booze knock hit the turps gyno piss up good oil your shout dob.</p>', 0, '0000000000000000', 1, 1331, 0, 1628004644),
+(2, 0, 0, 1, '00000000', 'Dennis Suitters', 'Blog', '', '', '', 'article', '', '', '', '', '', '', '', 'article', '', '', '', '', 'head', '', 4, '0000000000000000', 1, 15, 0, 1624603854),
 (3, 0, 0, 1, '00000000', 'Dennis Suitters', 'Portfolio', '', '', '', 'portfolio', '', '', '', '', '', '', '', 'portfolio', '', '', '', '', 'head', '', 8, '0000000000000000', 0, 0, 0, 1624603960),
-(4, 0, 0, 1, '00000000', 'Dennis Suitters', 'Bookings', '', '', '', 'bookings', '', '', '', '', '', '', '', 'bookings', '', '', '', '', 'head', '<p>Loose cannon struth ratbag hit the frog and toad no wuckin\' furries dunny deadset carry on like a pork chop. Bottle-o you little ripper she\'ll be right cobber. Rage on better than a kick up the backside garbo boogie board flick and. Better than a ham sandwich no wuckin\' furries bail up prezzy boogie board mates. Dry as as dead dingo\'s donga brass razoo shark biscuit brolly bingle freckle. Ratbag two up avos knackered defo. Skull trackies chook butcher loose cannon blue pash not my cup of tea sheila what\'s crackin\' rage on footy. Ankle biter cut snake sunnies chin wag coppers fair dinkum. Maccas bloody hard yakka fossicker. Dardy bottlo amber fluid porky lippy.</p><p>Blow in the bag outback slappa home grown where cracker dill suss it out. Up the duff g\'day dinky-di grab us a catcus lappy. Mullet onya bike tucker-bag a few sandwiches short of a picnic roo bar freo vb. Deadset tucker plonk fairy floss. Tucker-bag bloke servo bloke grouse. Battler flanny a few sandwiches short of a picnic also pozzy jumbuck defo pav.</p><p>Compo sandgropper grouse crow eaters. Digger pull the wool over their eyes cark it goon bag. Chock a block parma doovalacky bonza oi heaps stickybeak. Dag ugg boots corker mate\'s rates shoey. Ten clicks away furthy rapt pav fair suck of the sauce bottle chuck a spaz how. Bloody ripper rack off fisho boil-over skull aussie salute milk bar mates eureka as dry as a lippy dardy. Ken oath middy bities spit the dummy shag on a rock bloody oath.</p><p>Dero shazza got us some metho brizzie tucker-bag mickey mouse mate rock up offsider carry on like a pork chop. Cobber iffy swag bingle bushman\'s handkerchief bastard chock a block decent nik pull the wool over their eyes. Tradie better than a kick up the backside throw-down laughing gear middy fremantle doctor kindie. Shazza sickie footy slaps as dry as a gutta. Brass razoo ciggies arvo thunderbox gutta dog\'s breakfast furthy. Sick drongo fruit loop accadacca buckley\'s chance offsider nuddy chewie stubby pissed suss it out bradman. Slacker bushranger goon bag barbie chuck a yewy carrying on like a pork chop dead horse bushman\'s handkerchief smokes. Shazza built like a bazza ugg piss up dog\'s eye come a tosser road train taking the piss. Butcher schooner goon whit shazza got us some middy prezzy lollies.</p><p>Pozzy leg it chunder mozzie. Throw-down longneck parma going off. Avo brizzie to he\'s got a massive he\'s dreaming. Cark it trackie dacks footy moolah bogged skeg piker shoey. Bush he\'s got a massive thunderbox piss off. Brisvegas like a madwoman\'s shit down under billy. Flamin\' good oil as dry as a sook hottie.</p>', 2, '0000000000000000', 1, 16, 0, 1624719096),
-(5, 0, 0, 1, '00000000', 'Dennis Suitters', 'Events', '', '', '', 'events', '', '', '', '', '', '', '', 'events', '', '', '', '', 'head', '', 9, '0000000000000000', 0, 74, 0, 1624603994),
-(6, 0, 0, 1, '00000000', 'Anonymous', 'News', '', 'index,follow', '', 'news', '', '', '', '', '', '', '', 'news', '', '', '', '', 'head', '', 11, '0000000000000000', 0, 0, 0, 1585466222),
-(7, 0, 0, 1, '00000000', 'Dennis Suitters', 'Testimonials', '', '', '', 'testimonials', '', '', '', '', '', '', '', 'testimonials', '', '', '', '', 'head', '', 3, '0000000000000000', 1, 35, 0, 1624603833),
-(8, 0, 0, 1, '00000000', 'Dennis Suitters', 'Products', '', '', '', 'inventory', '', '', '', '', '', '', '', 'inventory', '', '', '', '', 'head', '', 6, '0000000000000000', 1, 518, 0, 1624603911),
-(9, 0, 0, 1, '11000000', 'Dennis Suitters', 'Services', '', '', '', 'services', '', '', '', 'https://youtu.be/FsXG1YSqcjU', '', '', '', 'service', '', '', '', '', 'head', '', 5, '0000000000000000', 1, 6, 0, 1624603892),
+(4, 0, 0, 1, '00000000', 'Dennis Suitters', 'Bookings', '', '', '', 'bookings', '', '', '', '', '', '', '', 'bookings', '', '', '', '', 'head', '<p>Loose cannon struth ratbag hit the frog and toad no wuckin\' furries dunny deadset carry on like a pork chop. Bottle-o you little ripper she\'ll be right cobber. Rage on better than a kick up the backside garbo boogie board flick and. Better than a ham sandwich no wuckin\' furries bail up prezzy boogie board mates. Dry as as dead dingo\'s donga brass razoo shark biscuit brolly bingle freckle. Ratbag two up avos knackered defo. Skull trackies chook butcher loose cannon blue pash not my cup of tea sheila what\'s crackin\' rage on footy. Ankle biter cut snake sunnies chin wag coppers fair dinkum. Maccas bloody hard yakka fossicker. Dardy bottlo amber fluid porky lippy.</p><p>Blow in the bag outback slappa home grown where cracker dill suss it out. Up the duff g\'day dinky-di grab us a catcus lappy. Mullet onya bike tucker-bag a few sandwiches short of a picnic roo bar freo vb. Deadset tucker plonk fairy floss. Tucker-bag bloke servo bloke grouse. Battler flanny a few sandwiches short of a picnic also pozzy jumbuck defo pav.</p><p>Compo sandgropper grouse crow eaters. Digger pull the wool over their eyes cark it goon bag. Chock a block parma doovalacky bonza oi heaps stickybeak. Dag ugg boots corker mate\'s rates shoey. Ten clicks away furthy rapt pav fair suck of the sauce bottle chuck a spaz how. Bloody ripper rack off fisho boil-over skull aussie salute milk bar mates eureka as dry as a lippy dardy. Ken oath middy bities spit the dummy shag on a rock bloody oath.</p><p>Dero shazza got us some metho brizzie tucker-bag mickey mouse mate rock up offsider carry on like a pork chop. Cobber iffy swag bingle bushman\'s handkerchief bastard chock a block decent nik pull the wool over their eyes. Tradie better than a kick up the backside throw-down laughing gear middy fremantle doctor kindie. Shazza sickie footy slaps as dry as a gutta. Brass razoo ciggies arvo thunderbox gutta dog\'s breakfast furthy. Sick drongo fruit loop accadacca buckley\'s chance offsider nuddy chewie stubby pissed suss it out bradman. Slacker bushranger goon bag barbie chuck a yewy carrying on like a pork chop dead horse bushman\'s handkerchief smokes. Shazza built like a bazza ugg piss up dog\'s eye come a tosser road train taking the piss. Butcher schooner goon whit shazza got us some middy prezzy lollies.</p><p>Pozzy leg it chunder mozzie. Throw-down longneck parma going off. Avo brizzie to he\'s got a massive he\'s dreaming. Cark it trackie dacks footy moolah bogged skeg piker shoey. Bush he\'s got a massive thunderbox piss off. Brisvegas like a madwoman\'s shit down under billy. Flamin\' good oil as dry as a sook hottie.</p>', 2, '0000000000000000', 1, 45, 0, 1624719096),
+(5, 0, 0, 1, '00000000', 'Dennis Suitters', 'Events', '', '', '', 'events', '', '', '', '', '', '', '', 'events', '', '', '', '', 'head', '', 9, '0000000000000000', 1, 111, 0, 1624603994),
+(6, 0, 0, 1, '00000000', 'Anonymous', 'News', '', 'index,follow', '', 'news', '', '', '', '', '', '', '', 'news', '', '', '', '', 'head', '', 11, '0000000000000000', 1, 3, 0, 1585466222),
+(7, 0, 0, 1, '00000000', 'Dennis Suitters', 'Testimonials', '', '', '', 'testimonials', '', 'http://localhost/AuroraCMS2/media/bg-signup.jpg', '', '', '', '', '', 'testimonials', '', '', '', '', 'head', '', 3, '0000000000000000', 1, 50, 0, 1628171851),
+(8, 0, 0, 1, '00000000', 'Dennis Suitters', 'Products', '', '', '', 'inventory', '', '', '', '', '', '', '', 'inventory', '', '', '', '', 'head', '', 6, '0000000000000000', 1, 764, 0, 1624603911),
+(9, 0, 0, 1, '11000000', 'Dennis Suitters', 'Services', '', '', '', 'services', '', '', '', 'https://youtu.be/FsXG1YSqcjU', '', '', '', 'service', '', '', '', '', 'head', '', 5, '0000000000000000', 1, 7, 0, 1624603892),
 (10, 0, 0, 1, '00000000', 'Dennis Suitters', 'Gallery', '', '', '', 'gallery', '', '', '', '', '', '', '', 'gallery', '', '', '', '', 'head', '', 10, '0000000000000000', 0, 0, 0, 1624604025),
-(11, 0, 0, 1, '00000000', 'Dennis Suitters', 'Contact', '', '', '', 'contactus', '', '', '', '', 'Contact Page Attribution', 'Anonymous', 'https://diemen.design/', 'contactus', '', '', '', '', 'head', '', 7, '0000000000000000', 1, 3, 0, 1624603926),
-(12, 0, 0, 1, '00000000', 'Dennis Suitters', 'Cart', '', '', '', 'cart', '', '', '', '', '', '', '', 'cart', '', '', '', '', 'head', '', 12, '0000000000000000', 1, 8, 0, 1624604069),
+(11, 0, 0, 1, '00000000', 'Dennis Suitters', 'Contact', '', '', '', 'contactus', '', '', '', '', 'Contact Page Attribution', 'Anonymous', 'https://diemen.design/', 'contactus', '', '', '', '', 'head', '', 7, '0000000000000000', 1, 9, 0, 1624603926),
+(12, 0, 0, 1, '00000000', 'Dennis Suitters', 'Cart', '', '', '', 'cart', '', '', '', '', '', '', '', 'cart', '', '', '', '', 'head', '', 12, '0000000000000000', 1, 13, 0, 1624604069),
 (13, 0, 0, 1, '00000000', 'Anonymous', 'Terms of Service', '', 'index,follow', '', 'page', '', '', '', '', '', '', '', 'page', '', '', '', '', 'footer', '', 17, '0000000000000000', 1, 1, 0, 1585466323),
 (14, 0, 0, 1, '00000000', 'Dennis Suitters', 'Search', 'Search Meta title', '', '', 'search', '', '', '', '', '', '', '', 'search', '', '', '', '', 'other', '', 23, '0000000000000000', 1, 4, 0, 1604631971),
-(15, 0, 0, 1, '00000000', 'Dennis Suitters', 'About', '', '', '', 'aboutus', '', '', '', '', 'Contact Cover Attribution', 'Anonymous', 'https://diemen.design/', 'aboutus', '', '', '', '', 'head', '<p>Carry on like a pork chop dipstick sandgropper jackaroo iffy strewth. Home grown burk frothy troppo accadacca like a madwoman\'s shit thongs yobbo. Clucky tell your story walkin\' brumby outback. Snag rotten thongs captain cook trackies paddock a few stubbies short of a six-pack outback. Chunder maccas dry as as dead dingo\'s donga hooroo bizzo rellie apples a few sandwiches short of a picnic. Bail up mate ugg boots fossicker do the harry coldie quid. As dry as a dog\'s eye heaps booze put a sock in it pokies how.</p><p>Rellie flat out like a as cross as a pull the wool over their eyes. Do the harry barbie cracker mozzie good onya figjam brickie bunyip bluey. Barbie rip snorter snag bail out dag troppo. As cross as a roo bar have a captain cook toads facey bloody ripper stonkered bloke. Rage on squizz no worries fair go, mate show pony blue flanny. Gutta ratbag ute what\'s crackin\' moolah barrack yobbo joey billabong no-hoper. Watch out for the give it a burl fair dinkum butcher.</p><p>No wuckin\' furries two pot screamer sheila rotten galah. Bingle flake lippy esky mates cut lunch commando. Not my cup of tea garbo mongrel pozzy flake skeg spit the dummy. Ciggies ute avos bail out true blue. Feral bull bar get a dog up ya chokkie avos gobsmacked brumby brisvegas. Kero a cold one how ugg bonza down under daks. Captain cook skull coldie bradman cab sav as cross as a heaps chuck a yewy schooner. Ute doovalacky schooner durry cut snake bradman freckle up the duff onya bike bundy wrap your laughing gear \'round that. Full boar rack off on the cans show pony knock. Cleanskin oldies gutful of fair suck of the sauce bottle reckon. Sickie bloke lets throw a watch out for the cranky my. Dry as as dead dingo\'s donga put a sock in it wobbly goon bag strewth. Dog\'s balls cobber slaps feral watch out for the billabong.</p><p>Stubby no wucka\'s chin wag no worries, mate, she\'ll be right clucky freckle squizz dipstick. Mokkies fair suck of the sauce bottle aussie rules footy flanno greenie waggin\' school schooner trackies roadie. Bludger slab joey straya pelican. Down under boil-over get a dog up ya straight to the pool room strides. Shazza got us some bruce nipper goon bag bonza sunnies dry as as dead dingo\'s donga. Oldies bikie rort hottie good onya no wucka\'s tucker-bag yabber ironman ute porky. Skite heaps hard yakka up the duff as cunning as a gobful buckley\'s chance bludger. He hasn\'t got a dropkick have a captain cook skite fisho shoot through fair dinkum. Fair crack of the whip runners sickie yakka. Donga brolly how stoked ute yakka holy dooley.</p><p>Chook flake maccas cleanskin mokkies pull the wool over your eyes. Rock up bogan get a dog up ya no wuckin\' furries cranky you little ripper. Cleanskin brumby gyno like a madwoman\'s shit spag bol. Root rat mad as a true blue dunny bundy. Ute roadie catcus have a go, you mug figjam tell him he\'s dreaming. Crack the shits no worries grundies pissed runners bloody ripper.</p>', 1, '0000000000000000', 1, 26, 0, 1625205587),
-(16, 300, 0, 1, '00000000', 'Dennis Suitters', 'Proofs', 'Proofs', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'proofs', '', '', '', '', '', '', '', 'proofs', '', '', '', '', 'account', '', 19, '0000000000000000', 1, 1, 0, 1624604287),
-(17, 0, 0, 1, '00000000', 'Dennis Suitters', 'Newsletters', '', '', '', 'newsletters', '', '', '', '', '', '', '', 'newsletters', '', '', '', '', 'footer', '', 14, '0000000000000000', 1, 2, 0, 1624604143),
-(19, 0, 0, 1, '00000000', 'Dennis Suitters', 'Distributors', 'Distributors', '', '', 'distributors', '', '', '', '', '', '', '', 'distributors', '', '', '', '', 'footer', '', 13, '0000000000000000', 1, 1, 0, 1624804668),
+(15, 0, 0, 1, '00000000', 'Dennis Suitters', 'About', '', '', '', 'aboutus', '', 'http://localhost/AuroraCMS2/media/bg-masthead.jpg', '', '', 'Contact Cover Attribution', 'Anonymous', 'https://diemen.design/', 'aboutus', '', '', '', '', 'head', '<p><a href=\"https://embed.podcasts.apple.com/us/podcast/be-tasmanian/id1567853218\" target=\"_blank\">https://embed.podcasts.apple.com/us/podcast/be-tasmanian/id1567853218</a></p><p><br></p><p><br></p>', 1, '0000000000000000', 1, 53, 0, 1628171697),
+(16, 300, 0, 1, '00000000', 'Dennis Suitters', 'Proofs', 'Proofs', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'proofs', '', '', '', '', '', '', '', 'proofs', '', '', '', '', 'account', '', 20, '0000000000000000', 1, 2, 0, 1624604287),
+(17, 0, 0, 1, '00000000', 'Dennis Suitters', 'Newsletters', '', '', '', 'newsletters', '', '', '', '', '', '', '', 'newsletters', '', '', '', '', 'footer', '', 14, '0000000000000000', 1, 3, 0, 1624604143),
+(19, 0, 0, 1, '00000000', 'Dennis Suitters', 'Distributors', 'Distributors', '', '', 'distributors', '', '', '', '', '', '', '', 'distributors', '', '', '', '', 'footer', '', 13, '0000000000000000', 1, 3, 0, 1624804668),
 (20, 0, 0, 1, '00000000', 'Anonymous', 'Privacy Policy', '', '', '', 'page', '', '', '', '', '', '', '', 'page', 'Article', '', '', '', 'footer', '', 16, '0000000000000000', 1, 1, 0, 1594213384),
-(21, 0, 0, 1, '00000000', 'Dennis Suitters', 'Login', 'Login Meta Title', '', '', 'login', '', '', '', '', '', '', '', 'login', '', '', '', '', 'other', '', 22, '0000000000000000', 1, 5, 0, 1624762165),
+(21, 0, 0, 1, '00000000', 'Dennis Suitters', 'Login', 'Login Meta Title', '', '', 'login', '', '', '', '', '', '', '', 'login', '', '', '', '', 'other', '', 22, '0000000000000000', 1, 7, 0, 1624762165),
 (22, 0, 0, 1, '00000000', 'Anonymous', 'Sitemap', 'Sitemap Meta Title', '', '', 'sitemap', '', '', '', '', '', '', '', 'sitemap', '', '', '', '', 'footer', '', 15, '0000000000000000', 1, 1, 0, 1594211774),
 (23, 0, 0, 1, '00000000', 'Dennis Suitters', 'Coming Soon', 'Coming Soon Meta Title', '', '', 'comingsoon', '', '', '', '', '', '', '', 'comingsoon', '', '', '', '', 'none', '', 23, '0000000000000000', 1, 0, 0, 1622036017),
 (24, 0, 0, 1, '00000000', 'Anonymous', 'Maintenance', 'Maintenance Meta Title', '', '', 'maintenance', '', '', '', '', '', '', '', 'maintenance', '', '', '', '', 'none', '', 24, '0000000000000000', 1, 0, 0, 1598020736),
-(27, 300, 0, 1, '00000000', 'Dennis Suitters', 'Orders', 'Orders', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'orders', '', '', '', '', '', '', '', 'orders', '', '', '', '', 'account', '', 18, '0000000000000000', 1, 180, 0, 1624604264),
-(29, 300, 0, 1, '00000000', 'Dennis Suitters', 'Settings', 'Settings', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'settings', '', '', '', '', '', '', '', 'settings', '', '', '', '', 'account', '', 21, '0000000000000000', 1, 2, 0, 1624604341),
-(30, 0, 0, 1, '00000000', 'Dennis Suitters', 'Checkout', 'Checkout', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'checkout', '', '', '', '', '', '', '', 'checkout', '', '', '', '', 'other', '<p>To ensure our user\'s privacy, we don\'t store Credit Card details,<br>only the chosen Payment Method, Name, Email and Date of Payment.</p>', 30, '0000000000000000', 1, 519, 0, 1626612177);
+(25, 0, 0, 1, '00000000', 'Dennis Suitters', 'FAQ', NULL, '', '', 'faq', '', '', '', '', '', '', '', 'faq', '', '', '', '', 'footer', '<p>Boardies avos avo bottlo snag devo snag bail lappy. Tradie bonza counter meal sleepout his blood\'s worth bottling have a captain cook rego down under. As cross as a no worries schooner donga avo slab pinga. Bog standard bathers holden vb avo as busy as a middy. Tickets on yourself swag blimey blind where bloody shark biscuit pub flamin\'. Pokies dob rego mate\'s rates cobber watch out for the bushie slacker jug. Gutta barbie tosser rock up bail.</p>', 18, '0000000000000000', 1, 77, 0, 1628178524),
+(27, 300, 0, 1, '00000000', 'Dennis Suitters', 'Orders', 'Orders', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'orders', '', '', '', '', '', '', '', 'orders', '', '', '', '', 'account', '', 19, '0000000000000000', 1, 185, 0, 1624604264),
+(29, 300, 0, 1, '00000000', 'Dennis Suitters', 'Settings', 'Settings', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'settings', '', '', '', '', '', '', '', 'settings', '', '', '', '', 'account', '', 21, '0000000000000000', 1, 3, 0, 1624604341),
+(30, 0, 0, 1, '00000000', 'Dennis Suitters', 'Checkout', 'Checkout', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'checkout', '', '', '', '', '', '', '', 'checkout', '', '', '', '', 'other', '<p>To ensure our user\'s privacy, we don\'t store Credit Card details,<br>only the chosen Payment Method, Name, Email and Date of Payment.</p>', 24, '0000000000000000', 1, 519, 0, 1626612177);
 
 -- --------------------------------------------------------
 
@@ -665,19 +666,19 @@ CREATE TABLE `orders` (
   `postageCode` varchar(6) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `postageOption` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `postageCost` decimal(6,2) NOT NULL,
-  `payOption` tinytext COLLATE utf8_bin NOT NULL,
+  `payOption` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `payMethod` int NOT NULL,
   `payCost` decimal(6,2) NOT NULL,
   `recurring` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `points` int NOT NULL,
-  `paid_via` tinytext COLLATE utf8_bin NOT NULL,
-  `txn_id` varchar(50) COLLATE utf8_bin NOT NULL,
-  `paid_email` tinytext COLLATE utf8_bin NOT NULL,
-  `paid_name` tinytext COLLATE utf8_bin NOT NULL,
-  `paid_amount` varchar(10) COLLATE utf8_bin NOT NULL,
+  `paid_via` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `txn_id` varchar(50) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `paid_email` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `paid_name` tinytext CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
+  `paid_amount` varchar(10) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `paid_ti` int NOT NULL,
-  `payment_status` varchar(25) COLLATE utf8_bin NOT NULL,
+  `payment_status` varchar(25) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `ti` bigint UNSIGNED NOT NULL,
   `eti` bigint NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
@@ -853,7 +854,7 @@ CREATE TABLE `subscribers` (
   `id` bigint NOT NULL,
   `email` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `hash` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
-  `tags` text COLLATE utf8_bin NOT NULL,
+  `tags` text CHARACTER SET utf8 COLLATE utf8_bin NOT NULL,
   `ti` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin;
 

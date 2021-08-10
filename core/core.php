@@ -275,6 +275,10 @@ class admin{
 		$view='dashboard';
 		require'admin.php';
 	}
+	function faq($args=false){
+		$view='faq';
+		require'admin.php';
+	}
 	function logout($args=false){
 		$act='logout';
 		$view='';
@@ -383,6 +387,10 @@ class front{
 		$view='events';
 		require'process.php';
 	}
+	function faq($args=false){
+		$view='faq';
+		require'process.php';
+	}
 	function gallery($args=false){
 		$view='gallery';
 		require'process.php';
@@ -479,6 +487,7 @@ $routes=[
 	$settings['system']['admin'].'/comments'=>['admin','comments'],
 	$settings['system']['admin'].'/content'=>['admin','content'],
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],
+	$settings['system']['admin'].'/faq'=>['admin','faq'],
 	$settings['system']['admin'].'/logout'=>['admin','logout'],
 	$settings['system']['admin'].'/media'=>['admin','media'],
 	$settings['system']['admin'].'/messages'=>['admin','messages'],
@@ -509,6 +518,7 @@ $routes=[
 	'login'=>['front','login'],
 	'settings'=>['front','settings'],
 	'logout'=>['front','logout'],
+	'home'=>['front','index'],
   ''=>['front','index']
 ];
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `active`=1 AND `rank`<=:rank");

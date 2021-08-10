@@ -1,14 +1,14 @@
 /*!
- *
+ * 
  * Super simple wysiwyg editor v0.8.18
  * https://summernote.org
- *
- *
+ * 
+ * 
  * Copyright 2013- Alan Hong. and other contributors
  * summernote may be freely distributed under the MIT license.
- *
- * Date: 2020-12-30T05:21Z
- *
+ * 
+ * Date: 2021-08-06T14:25Z
+ * 
  */
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
@@ -378,12 +378,12 @@ var toolbar = renderer.create('<div class="note-toolbar" role="toolbar"></div><d
 var viewportArea = renderer.create('<div class="note-viewport-area"></div>');
 var editingArea = renderer.create('<div class="note-editing-area"></div>');
 var codable = renderer.create('<textarea class="note-codable" aria-multiline="true"></div>');
-var ui_editable = renderer.create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"></div>');
+var ui_editable = renderer.create('<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true" aria-label="Editable Area"></div>');
 var statusbar = renderer.create(['<div class="note-statusbar" role="status">', '<output class="note-status-output" aria-live="polite"></output>', '<div class="note-resizebar" aria-label="resize">', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '<div class="note-icon-bar"></div>', '</div>', '</div>'].join(''));
 var airEditor = renderer.create('<div class="note-editor note-airframe"></div>');
 var airEditable = renderer.create(['<div class="note-editable" contentEditable="true" role="textbox" aria-multiline="true"></div>', '<output class="note-status-output" role="status" aria-live="polite"></output>'].join(''));
-var buttonGroup = renderer.create('<div class="note-btn-group">');
-var ui_button = renderer.create('<button type="button" class="note-btn" tabindex="-1">', function ($node, options) {
+var buttonGroup = renderer.create('<div class="note-btn-group"></div>');
+var ui_button = renderer.create('<button type="button" class="note-btn" tabindex="-1"></button>', function ($node, options) {
   // set button type
   $node.attr({
     'aria-label': options.tooltip
@@ -406,7 +406,7 @@ var ui_button = renderer.create('<button type="button" class="note-btn" tabindex
     $node.addClass('note-codeview-keep');
   }
 });
-var ui_text = renderer.create('<div class="note-txt">', function ($node, options) {
+var ui_text = renderer.create('<div class="note-txt"></div>', function ($node, options) {
   $node.attr({
     'aria-label': options.tooltip
   });
@@ -418,7 +418,7 @@ var ui_text = renderer.create('<div class="note-txt">', function ($node, options
     $node.html(options.contents);
   }
 });
-var dropdown = renderer.create('<div class="note-dropdown-menu" role="list">', function ($node, options) {
+var dropdown = renderer.create('<div class="note-dropdown-menu" role="list"></div>', function ($node, options) {
   var markup = Array.isArray(options.items) ? options.items.map(function (item) {
     var value = typeof item === 'string' ? item : item.value || '';
     var content = options.template ? options.template(item) : item;
@@ -450,7 +450,7 @@ var dropdown = renderer.create('<div class="note-dropdown-menu" role="list">', f
     $node.addClass('note-codeview-keep');
   }
 });
-var dropdownCheck = renderer.create('<div class="note-dropdown-menu note-check" role="list">', function ($node, options) {
+var dropdownCheck = renderer.create('<div class="note-dropdown-menu note-check" role="list"></div>', function ($node, options) {
   var markup = Array.isArray(options.items) ? options.items.map(function (item) {
     var value = typeof item === 'string' ? item : item.value || '';
     var content = options.template ? options.template(item) : item;
@@ -516,7 +516,7 @@ var palette = renderer.create('<div class="note-color-palette"></div>', function
     for (var col = 0, colSize = colors.length; col < colSize; col++) {
       var color = colors[col];
       var colorName = colorsName[col];
-      buttons.push(['<button type="button" class="note-btn note-color-btn"', 'style="background-color:', color, '" ', 'data-event="', eventName, '" ', 'data-value="', color, '" ', 'data-tooltip="', tipPlacement, '"', 'aria-label="', colorName, '" ', 'data-toggle="button" tabindex="-1"></button>'].join(''));
+      buttons.push(['<button type="button" class="note-btn note-color-btn"', 'style="background-color:', color, '" ', 'data-event="', eventName, '" ', 'data-value="', color, '" ', 'data-tooltip="', tipPlacement, '"', 'aria-label="', colorName, '" ', 'data-toggle="button" tabindex="0"></button>'].join(''));
     }
 
     contents.push('<div class="note-color-row">' + buttons.join('') + '</div>');
@@ -529,7 +529,7 @@ var colorDropdownButton = function colorDropdownButton() {
   return buttonGroup().render();
 };
 
-var dialog = renderer.create('<div class="note-modal" aria-hidden="false" tabindex="-1" role="dialog"></div>', function ($node, options) {
+var dialog = renderer.create('<div class="note-modal" aria-hidden="false" tabindex="0" role="dialog"></div>', function ($node, options) {
   if (options.fade) {
     $node.addClass('fade');
   }
@@ -562,7 +562,7 @@ var popover = renderer.create(['<div class="note-popover bottom">', '<div class=
   }
 });
 var ui_checkbox = renderer.create('<div class="note-checkbox"></div>', function ($node, options) {
-  $node.html(['<input type="checkbox"' + (options.id ? ' id="' + options.id + '"' : ''), options.checked ? ' checked' : '', ' aria-checked="' + (options.checked ? 'true' : 'false') + '"/>', '<label class="note-form-label" ' + (options.id ? ' for="' + options.id + '"' : '') + '>', options.text ? options.text : '', '</label>'].join(''));
+  $node.html(['<input type="checkbox"' + (options.id ? ' id="' + options.id + '"' : '') + (options.checked === true ? ' checked' : '') + ' aria-checked="' + (options.checked === true ? 'true' : 'false') + '"/>', '&nbsp;&nbsp;<label class="note-form-label" ' + (options.id ? ' for="' + options.id + '"' : '') + '>' + (options.text ? options.text : '') + '</label>'].join(''));
 });
 
 var icon = function icon(iconClassName, tagName) {
@@ -726,7 +726,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.exten
       videoLink: 'Video Link',
       insert: 'Insert Video',
       url: 'Video URL',
-      providers: '(YouTube, Google Drive, Vimeo, Vine, Instagram, DailyMotion or Youku)',
+      providers: '(YouTube, Google Drive, Vimeo, Vine, Instagram, DailyMotion, Youku, Peertube)',
       note: 'Note: Not all options are available with all services...',
       suggested: 'Show Suggested videos when the video finishes',
       controls: 'Show player controls',
@@ -746,7 +746,8 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.exten
       title: 'Title',
       rel: 'Choose a Rel option to use',
       openInNewWindow: 'Open in new window',
-      useProtocol: 'Use default protocol'
+      useProtocol: 'Use default protocol',
+      linkList: 'Curated Links'
     },
     table: {
       table: 'Table',
@@ -2042,9 +2043,14 @@ function dom_nextPoint(point, isSkipInnerOffset) {
 
 
 function nextPointWithEmptyNode(point, isSkipInnerOffset) {
-  var node, offset; // if node is empty string node, return current node's sibling.
+  var node,
+      offset = 0; // if node is empty string node, return current node's sibling.
 
   if (dom_isEmpty(point.node)) {
+    if (point.node === null) {
+      return null;
+    }
+
     node = point.node.nextSibling;
     offset = 0;
     return {
@@ -2070,6 +2076,13 @@ function nextPointWithEmptyNode(point, isSkipInnerOffset) {
     offset = 0;
 
     if (dom_isEmpty(node)) {
+      if (!dom_isEmpty(point.node.nextSibling)) {
+        return {
+          node: point.node.nextSibling,
+          offset: offset
+        };
+      }
+
       return null;
     }
   } else {
@@ -5843,9 +5856,9 @@ var Editor_Editor = /*#__PURE__*/function () {
       external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.each(anchors, function (idx, anchor) {
         external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('href', linkUrl);
         external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('title', linkTitle);
-        external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('rel', linkRel);
+        if (linkRel != '') external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('rel', linkRel);
 
-        if (isNewWindow) {
+        if (isNewWindow === true) {
           external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).attr('target', '_blank');
         } else {
           external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(anchor).removeAttr('target');
@@ -6858,17 +6871,16 @@ var Dropzone_Dropzone = /*#__PURE__*/function () {
   Dropzone_createClass(Dropzone, [{
     key: "initialize",
     value: function initialize() {
-      if (this.options.disableDragAndDrop) {
+      if (this.options.disableDragAndDrop === true) {
         // prevent default drop event
         this.documentEventHandlers.onDrop = function (event) {
           event.preventDefault();
-        }; // do not consider outside of dropzone
-
+        };
+      } else {
+        this.attachDragAndDropEvent(); // do not consider outside of dropzone
 
         this.$eventListener = this.$dropzone;
         this.$eventListener.on('drop', this.documentEventHandlers.onDrop);
-      } else {
-        this.attachDragAndDropEvent();
       }
     }
     /**
@@ -6932,7 +6944,8 @@ var Dropzone_Dropzone = /*#__PURE__*/function () {
       }); // attach dropImage
 
       this.$dropzone.on('drop', function (event) {
-        var dataTransfer = event.originalEvent.dataTransfer; // stop the browser from opening the dropped content
+        var dataTransfer = event.originalEvent.dataTransfer;
+        if (_this.options.callbacks.onDrop && _this.options.callbacks.onDrop(dataTransfer)) return; // stop the browser from opening the dropped content
 
         event.preventDefault();
 
@@ -7064,7 +7077,7 @@ var Codeview_CodeView = /*#__PURE__*/function () {
         this.activate();
       }
 
-      this.context.triggerEvent('note-codeview.note-toggled');
+      this.context.triggerEvent('codeview.toggled');
     }
     /**
      * purify input value
@@ -7561,7 +7574,7 @@ var AutoLink_AutoLink = /*#__PURE__*/function () {
       if (match && (match[1] || match[2])) {
         var link = match[1] ? keyword : defaultScheme + keyword;
         var urlText = this.options.showDomainOnlyForAutolink ? keyword.replace(/^(?:https?:\/\/)?(?:tel?:?)?(?:mailto?:?)?(?:www\.)?/i, '').split('/')[0] : keyword;
-        var node = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<a />').html(urlText).attr('href', link)[0];
+        var node = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<a></a>').html(urlText).attr('href', link)[0];
 
         if (this.context.options.linkTargetBlank) {
           external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()(node).attr('target', '_blank');
@@ -7780,7 +7793,7 @@ var Placeholder_Placeholder = /*#__PURE__*/function () {
     value: function initialize() {
       var _this2 = this;
 
-      this.$placeholder = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div class="note-placeholder">');
+      this.$placeholder = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div class="note-placeholder"></div>');
       this.$placeholder.on('click', function () {
         _this2.context.invoke('focus');
       }).html(this.options.placeholder).prependTo(this.$editingArea);
@@ -7930,7 +7943,7 @@ var Buttons_Buttons = /*#__PURE__*/function () {
             }
           }
         }), this.button({
-          className: 'dropdown-toggle',
+          className: 'note-dropdown-toggle',
           contents: this.ui.dropdownButtonContents('', this.options),
           tooltip: this.lang.color.more,
           placement: this.placement,
@@ -8975,13 +8988,20 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
     key: "initialize",
     value: function initialize() {
       var $container = this.options.dialogsInBody ? this.$body : this.options.container;
-      var body = ["<label for=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.url + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-link-url note-input\" type=\"text\" value=\"http://\">", '</div>', "<label for=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.textToDisplay + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-link-text note-input\" type=\"text\">", '</div>', '<label for="note-dialog-link-title-' + this.options.id + '" class="note-form-label">' + this.lang.link.title + '</label>', '<div class="note-form-group">', '<input id="note-dialog-link-title' + this.options.id + '" class="note-linke-title note-input" type="text">', '</div>', "<label for=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.rel + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-link-rel note-input\">", "<option value=\"noreferrer noopener\" selected>NoReferrer NoOpener (Suggested for external links that open in new tabs or windows)</option>", "<option value=\"alternate\">Alternate</option>", "<option value=\"author\">Author</option>", "<option value=\"bookmark\">Bookmark</option>", "<option value=\"external\">External</option>", "<option value=\"Help\">Help</option>", "<option value=\"license\">License</option>", "<option value=\"next\">Next</option>", "<option value=\"nofollow\">NoFollow</option>", "<option value=\"noreferrer\">NoReferrer</option>", "<option value=\"noopener\">NoOperner</option>", "<option value=\"prev\">Prev</option>", "<option value=\"search\">Search</option>", "<option value=\"tag\">Tag</option>", "</select>", '</div>', !this.options.disableLinkTarget ? external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+      var linkChoices = '';
+
+      for (var i = 0; i < this.options.linkList.length; i++) {
+        var linkOpts = this.options.linkList[i];
+        linkChoices += "<option value=\"" + linkOpts[0] + "|" + linkOpts[1] + "\">" + linkOpts[2] + "</option>";
+      }
+
+      var body = [linkChoices != '' ? "<label for=\"note-dialog-link-list-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.linkList + "</label>" + "<div class=\"note-form-group\">" + "<select id=\"note-dialog-link-list-" + this.options.id + "\" class=\"note-link-list note-input\">" + "<option value=\"|\">Select a Link</option>" + linkChoices + "</select>" + "</div>" : '', "<label for=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.url + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-url-" + this.options.id + "\" class=\"note-link-url note-input\" type=\"text\" value=\"http://\">", '</div>', "<label for=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.textToDisplay + "</label>", '<div class="note-form-group">', "<input id=\"note-dialog-link-txt-" + this.options.id + "\" class=\"note-link-text note-input\" type=\"text\">", '</div>', '<label for="note-dialog-link-title-' + this.options.id + '" class="note-form-label">' + this.lang.link.title + '</label>', '<div class="note-form-group">', '<input id="note-dialog-link-title' + this.options.id + '" class="note-link-title note-input" type="text">', '</div>', "<label for=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-form-label\">" + this.lang.link.rel + "</label>", '<div class="note-form-group">', "<select id=\"note-dialog-link-rel-" + this.options.id + "\" class=\"note-link-rel note-input\">", "<option value=\"\" selected>Do not use Rel attribute (For Same Site Links)</option>", "<option value=\"noreferrer noopener\">NoReferrer NoOpener (Suggested for external links that open in new tabs or windows)</option>", "<option value=\"alternate\">Alternate</option>", "<option value=\"author\">Author</option>", "<option value=\"bookmark\">Bookmark</option>", "<option value=\"external\">External</option>", "<option value=\"Help\">Help</option>", "<option value=\"license\">License</option>", "<option value=\"next\">Next</option>", "<option value=\"nofollow\">NoFollow</option>", "<option value=\"noreferrer\">NoReferrer</option>", "<option value=\"noopener\">NoOperner</option>", "<option value=\"prev\">Prev</option>", "<option value=\"search\">Search</option>", "<option value=\"tag\">Tag</option>", "</select>", '</div>', !this.options.disableLinkTarget ? external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div></div>').append(this.ui.checkbox({
         "for": 'note-dialog-new-window-' + this.options.id,
         id: 'note-checkbox-open-in-new-window-' + this.options.id,
         className: 'note-checkbox-open-in-new-window',
         text: this.lang.link.openInNewWindow,
-        checked: true
-      }).render()).html() : '', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div/>').append(this.ui.checkbox({
+        checked: false
+      }).render()).html() : '', external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<div></div>').append(this.ui.checkbox({
         "for": 'note-dialog-link-use-protocol-' + this.options.id,
         id: 'note-checkbox-use-protocol-' + this.options.id,
         className: 'note-checkbox-use-protocol',
@@ -9035,6 +9055,8 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
       var _this = this;
 
       return external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.Deferred(function (deferred) {
+        var $linkList = _this.$dialog.find('.note-link-list');
+
         var $linkUrl = _this.$dialog.find('.note-link-url');
 
         var $linkText = _this.$dialog.find('.note-link-text');
@@ -9057,6 +9079,14 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
             linkInfo.url = linkInfo.text;
           }
 
+          $linkList.on('change', function () {
+            var linkSplit = $linkList.val().split('|');
+            $linkText.val(linkSplit[0]);
+            $linkTitle.val(linkSplit[0]);
+            $linkUrl.val(linkSplit[1]);
+
+            _this.toggleLinkBtn($linkBtn, $linkText, $linkUrl);
+          });
           $linkText.on('input paste propertychange', function () {
             // If linktext was modified by input events,
             // cloning text from linkUrl will be stopped.
@@ -9073,7 +9103,7 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
 
             _this.toggleLinkBtn($linkBtn, $linkText, $linkUrl);
           }).val(linkInfo.url);
-          $linkTitle.val(linkInfo.title); //        $linkRel.val(linkInfo.rel);
+          $linkTitle.val(linkInfo.title);
 
           if (!env.isSupportTouch) {
             $linkUrl.trigger('focus');
@@ -9086,7 +9116,6 @@ var LinkDialog_LinkDialog = /*#__PURE__*/function () {
           _this.bindEnterKey($linkText, $linkBtn);
 
           var isNewWindowChecked = linkInfo.isNewWindow !== undefined ? linkInfo.isNewWindow : _this.context.options.linkTargetBlank;
-          $openInNewWindow.prop('checked', isNewWindowChecked);
 
           if ($openInNewWindow.prop('checked')) {
             if (linkInfo.rel) {
@@ -9707,7 +9736,7 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
   }, {
     key: "createVideoNode",
     value: function createVideoNode(url) {
-      // video url patterns(youtube, instagram, vimeo, dailymotion, youku, mp4, ogg, webm)
+      // video url patterns(youtube, instagram, vimeo, dailymotion, youku, peertube, mp4, ogg, webm)
       var ytRegExp = /\/\/(?:(?:www|m)\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))([\w|-]{11})(?:(?:[\?&]t=)(\S+))?$/;
       var ytRegExpForStart = /^(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?$/;
       var ytMatch = url.match(ytRegExp);
@@ -9723,6 +9752,8 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
       var dmMatch = url.match(dmRegExp);
       var youkuRegExp = /\/\/v\.youku\.com\/v_show\/id_(\w+)=*\.html/;
       var youkuMatch = url.match(youkuRegExp);
+      var peerTubeRegExp = /\/\/(.*)\/videos\/watch\/([^?]*)(?:\?(?:start=(\w*))?(?:&stop=(\w*))?(?:&loop=([10]))?(?:&autoplay=([10]))?(?:&muted=([10]))?)?/;
+      var peerTubeMatch = url.match(peerTubeRegExp);
       var qqRegExp = /\/\/v\.qq\.com.*?vid=(.+)/;
       var qqMatch = url.match(qqRegExp);
       var qqRegExp2 = /\/\/v\.qq\.com\/x?\/?(page|cover).*?\/([^\/]+)\.html\??.*/;
@@ -9798,6 +9829,18 @@ var VideoDialog_VideoDialog = /*#__PURE__*/function () {
       } else if (youkuMatch && youkuMatch[1].length) {
         // Youku
         $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('width', vWidth).attr('height', vHeight).attr('src', '//player.youku.com/embed/' + youkuMatch[1]);
+      } else if (peerTubeMatch && peerTubeMatch[0].length) {
+        var begin = 0;
+        if (peerTubeMatch[2] !== 'undefined') begin = peerTubeMatch[2];
+        var end = 0;
+        if (peerTubeMatch[3] !== 'undefined') end = peerTubeMatch[3];
+        var loop = 0;
+        if (peerTubeMatch[4] !== 'undefined') loop = peerTubeMatch[4];
+        var autoplay = 0;
+        if (peerTubeMatch[5] !== 'undefined') autoplay = peerTubeMatch[5];
+        var muted = 0;
+        if (peerTubeMatch[6] !== 'undefined') muted = peerTubeMatch[6];
+        $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe allowfullscreen sandbox="allow-same-origin allow-scripts allow-popups">').attr('frameborder', 0).attr('src', '//' + peerTubeMatch[1] + '/videos/embed/' + peerTubeMatch[2] + "?loop=" + loop + "&autoplay=" + autoplay + "&muted=" + muted + (begin > 0 ? '&start=' + begin : '') + (end > 0 ? '&end=' + start : '')).attr('width', '560').attr('height', '315');
       } else if (qqMatch && qqMatch[1].length || qqMatch2 && qqMatch2[2].length) {
         var vid = qqMatch && qqMatch[1].length ? qqMatch[1] : qqMatch2[2];
         $video = external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<iframe webkitallowfullscreen mozallowfullscreen allowfullscreen>').attr('frameborder', 0).attr('width', vWidth).attr('height', vHeight).attr('src', 'https://v.qq.com/txp/iframe/player.html?vid=' + vid + '&amp;auto=0');
@@ -9951,7 +9994,7 @@ var HelpDialog_HelpDialog = /*#__PURE__*/function () {
         $row.append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<label class="note-help"><kbd class="note-help">' + key + '</kdb></label>').css({
           'width': 150,
           'margin-right': 5
-        })).append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<span class="note-help"/>').html(_this.context.memo('help.' + command) || command));
+        })).append(external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default()('<span class="note-help"></span>').html(_this.context.memo('help.' + command) || command));
         return $row.html();
       }).join('');
     }
@@ -10577,6 +10620,8 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     linkTargetBlank: true,
     useProtocol: true,
     defaultProtocol: 'https://',
+    linkList: [// [ 'title', 'url', 'select text' ],
+    ],
     focus: false,
     tabDisabled: false,
     tabSize: 4,
@@ -10638,6 +10683,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
       onChange: null,
       onChangeCodeview: null,
       onDialogShown: null,
+      onDrop: null,
       onEnter: null,
       onFocus: null,
       onImageLinkInsert: null,
@@ -10660,7 +10706,7 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
     codeviewFilterRegex: /<\/*(?:applet|b(?:ase|gsound|link)|embed|frame(?:set)?|ilayer|l(?:ayer|ink)|meta|object|s(?:cript|tyle)|t(?:itle|extarea)|xml)[^>]*?>/gi,
     codeviewIframeFilter: true,
     codeviewIframeWhitelistSrc: [],
-    codeviewIframeWhitelistSrcBase: ['www.youtube.com', 'www.youtube-nocookie.com', 'www.facebook.com', 'vine.co', 'instagram.com', 'player.vimeo.com', 'www.dailymotion.com', 'player.youku.com', 'v.qq.com'],
+    codeviewIframeWhitelistSrcBase: ['www.youtube.com', 'www.youtube-nocookie.com', 'www.facebook.com', 'vine.co', 'instagram.com', 'player.vimeo.com', 'www.dailymotion.com', 'player.youku.com', 'jumpingbean.tv', 'v.qq.com'],
     keyMap: {
       pc: {
         'ESC': 'escape',
@@ -10792,3 +10838,4 @@ external_root_jQuery_commonjs2_jquery_commonjs_jquery_amd_jquery_default.a.summe
 
 /******/ });
 });
+//# sourceMappingURL=summernote.js.map

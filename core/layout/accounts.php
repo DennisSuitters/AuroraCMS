@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -62,9 +62,16 @@ else{
     </div>
     <div class="container-fluid p-0">
       <div class="card border-radius-0 shadow overflow-visible">
+        <div class="row p-3">
+          <div class="col-12 col-sm-6 ml-sm-auto">
+            <div class="form-row">
+              <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+            </div>
+          </div>
+        </div>
         <section id="accountview" class="content overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>">
           <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card overflow-visible" id="l_<?=$r['id'];?>">
+            <article class="card overflow-visible card-list" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
               <div class="card-image overflow-visible">
                 <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><img src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
                 elseif($r['gravatar']!='')echo$r['gravatar'];

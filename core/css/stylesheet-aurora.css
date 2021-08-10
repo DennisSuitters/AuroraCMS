@@ -2,6 +2,7 @@
 /* This additional Stylesheet contains CSS specific to the extra for AuroraCMS */
 
 .designby {
+  position: relative !important;
   width: 100% !important;
   background-color: #000 !important;
   color: #888 !important;
@@ -9,14 +10,15 @@
   font-weight: 400 !important;
   font-size: 14px !important;
   text-align: center !important;
-  padding: 2px 10px; }
+  padding: 2px 10px;
+  border: 0 solid #000 !important; }
 
 .designby a {
   color: #888 !important; }
 
 .designby a:hover {
-  color: #f40 !important;
-  text-decoration: underline !important; }
+  color: #fff !important;
+  text-decoration: none !important; }
 
 .designby span,
 .designby span + span {
@@ -1214,10 +1216,10 @@ h6.quickview-header,
 }
 
 nav[role="menubar"].account-menu {
-  z-index: 1021 !important;
+  z-index: 1201 !important;
   position: relative !important;
   width: 100% !important;
-  height: 50px !important;
+  height: 55px !important;
   background: #000 !important;
   border: 0 !important;
   margin: 0 !important;
@@ -1236,34 +1238,28 @@ nav[role="menubar"].account-menu ul {
   border: 0 !important;
   right: 0 !important;
   margin: 0 0 0 auto !important;
-  background-color: #000 !important; }
+  background: #000 !important; }
 
 nav[role="menubar"].account-menu ul li {
   border: 0 !important;
   margin: 0 !important;
-  padding: .1rem .75rem !important;
+  background: #000 !important;
   color: #aaa !important;
-  line-height: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 1.7 !important;
   vertical-align: middle !important; }
-
-nav[role="menubar"].account-menu ul li.active,
-nav[role="menubar"].account-menu ul li.active a{
-  border: 0 !important;
-  font-family: arial !important;
-  font-size: 16px !important;
-  font-weight: 700 !important ;
-  color: #fff !important;
-  text-transform: none !important;
-  text-shadow: none !important;
-  background-color: transparent !important;
-  border-radius: 0 !important; }
 
 nav[role="menubar"].account-menu ul li a {
   border: 0 !important;
   font-family: arial !important;
   font-size: 16px !important;
-  font-weight: 700 !important ;
+  font-weight: 700 !important;
+  background: #000 !important;
   color: #aaa !important;
+  margin: 0 !important;
+  padding: .5em 1em !important;
+  line-height: 1.7 !important;
   text-transform: none !important;
   text-shadow: none !important; }
 
@@ -1273,37 +1269,23 @@ nav[role="menubar"].account-menu ul li a:hover {
   text-decoration: none !important;
   text-shadow: none !important; }
 
+nav[role="menubar"].account-menu ul li.active,
+nav[role="menubar"].account-menu ul li.active a{
+  border: 0 !important;
+  background: #000 !important;
+  color: #fff !important;
+  border-radius: 0 !important; }
+
 nav[role="menubar"].account-menu label {
   font-family: Arial !important;
   font-size: 1.2rem !important;
   font-weight: 700 !important;
-  background-color: #000 !important;
+  background: #000 !important;
   border-color: #000 !important;
   color: #aaa !important; }
 
 nav[role="menubar"].account-menu label:hover {
   color: #ddd !important; }
-
-nav[role="menubar"].account-menu button {
-  margin-top: 0 !important;
-  border-radius: 5px !important;
-  display: inline-block !important;
-  font-size: 1.2rem !important;
-  font-weight: 700 !important;
-  line-height: 150% !important;
-  padding: .25rem .5rem !important;
-  font-family: Arial !important;
-  background-color: #dc3545 !important;
-  border: 2px solid #dc3545 !important;
-  color: #fff !important;
-  outline: none !important; }
-
-nav[role="menubar"].account-menu button:focus,
-nav[role="menubar"].account-menu button:hover {
-  color: #fff !important;
-  background-color: #c82333 !important;
-  border-color: #bd2130 !important;
-  outline: none !important; }
 
 nav[role="menubar"].account-menu #accountavatar {
   width: 32px !important;

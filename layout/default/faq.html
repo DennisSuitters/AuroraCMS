@@ -1,11 +1,11 @@
 <block include="meta_head.html">
 <block include="header.html">
-<block inbed="page">
-	<cover>
+<block inbed="faq">
+  <cover>
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
-	<breadcrumb>
-		<section class="row mt-3 mb-0">
+  <breadcrumb>
+		<section class="row">
 			<nav class="breadcrumb">
 				<ol>
 					<json-ld-breadcrumb>
@@ -19,11 +19,23 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<section class="row mt-5">
-		<article class="col-11">
-			<print content="notes">
-		</article>
-	</section>
+  <pagenotes>
+    <section class="row">
+      <article class="hidewhenempty"><print page="notes"></article>
+    </section>
+  </pagenotes>
+  <section class="row">
+    <article>
+      <items>
+        <details>
+          <summary><print content="title"></summary>
+          <div class="ml-4">
+            <print content="notes">
+          </div>
+        </details>
+      </items>
+    </article>
+  </section>
 </block>
 <block include="footer.html">
 <block include="meta_footer.html">

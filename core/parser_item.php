@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -158,51 +158,60 @@ if($skip==false){
     ],$html);
   }
   if(stristr($html,'<cover>')){
-    if($r['fileURL']){
-      $html=preg_replace([
-        '/<[\/]?cover>/',
-        '/<print page=[\"\']?coverItem[\"\']?>/'
-      ],[
-        '',
-        '<img src="'.$r['fileURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">'
-      ],$html);
-    }elseif($r['file']){
-      $r['file']=rawurldecode($r['file']);
-      $html=preg_replace([
-        '/<[\/]?cover>/',
-        '/<print page=[\"\']?coverItem[\"\']?>/'
-      ],[
-        '',
-        '<img srcset="'.
-          ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w,':'').
-          ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').
-          ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':'').
-          ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':'').
-        '" src="'.$r['file'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">'
-      ],$html);
-    }elseif($page['file']){
-      $page['file']=rawurldecode($page['file']);
-      $html=preg_replace([
-        '/<[\/]?cover>/',
-        '/<print page=[\"\']?coverItem[\"\']?>/'
-      ],[
-        '',
-        '<img srcset="'.
-          ($page['file']!=''&&file_exists('media/'.basename($page['file']))?'media/'.basename($page['file']).' '.$config['mediaMaxWidth'].'w,':'').
-          ($page['file']!=''&&file_exists('media/lg/'.basename($page['file']))?'media/lg/'.basename($page['file']).' 1000w,':'').
-          ($page['file']!=''&&file_exists('media/md/'.basename($page['file']))?'media/md/'.basename($page['file']).' 600w,':'').
-          ($page['file']!=''&&file_exists('media/sm/'.basename($page['file']))?'media/sm/'.basename($page['file']).' 400w':'').
-        '" src="'.$page['file'].'" alt="'.($page['fileALT']!=''?$page['fileALT']:$page['attributionImageTitle']).'">'
-      ],$html);
-    }elseif($page['coverURL']){
-      $html=preg_replace([
-        '/<[\/]?cover>/',
-        '/<print page=[\"\']?coverItem[\"\']?>/'
-      ],[
-        '',
-        '<img src="'.$page['coverURL'].'" alt="'.($r['fileALT']!=''?$r['fileALT']:$r['attributionImageTitle']).'">'
-      ],$html);
-    }else$html=preg_replace('~<cover>.*?<\/cover>~is','',$html);
+  	$coverHTML='';
+  	$iscover=false;
+  	if($page['coverVideo']!=''){
+  		$cover=basename(rawurldecode($page['coverVideo']));
+  		if(stristr($page['coverVideo'],'youtu')){
+  			preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$page['coverVideo'],$vidMatch);
+  			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.
+  				($page['options'][0]==1?'autoplay=1&mute=1&':'').
+  				($page['options'][1]==1?'loop=1&':'').
+  				($page['options'][2]==1?'controls=1&':'controls=0&').
+  			'" frameborder="0" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
+    	}elseif(stristr($page['coverVideo'],'vimeo')){
+  			preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$page['coverVideo'],$vidMatch);
+  			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.
+  				($page['options'][0]==1?'autoplay=1&':'').
+  				($page['options'][1]==1?'loop=1&':'').
+  				($page['options'][2]==1?'controls=1&':'controls=0&').
+  			'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
+  		}else
+  			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
+  	}
+  	if($page['cover']!=''&&$coverHTML==''){
+  		$cover=basename($page['cover']);
+  		if(file_exists('media/'.$cover)){
+  			$coverHTML='<img srcset="'.
+  			(file_exists('media/'.$cover)?'<img srcset="'.
+  				(file_exists('media/'.basename($cover))?'media/'.'lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
+  				(file_exists('media/'.'lg/'.basename($cover))?'media/'.'lg/'.$cover.' 1000w,':'').
+  				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
+  				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
+  				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
+  			'" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+  				($page['attributionImageTitle']!=''?
+  					'<figcaption>'.
+  						$page['attributionImageTitle'].
+  						($page['attributionImageName']!=''?
+  							' by '.
+  								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'">':'').
+  								$page['attributionImageName'].
+  								($page['attributionImageURL']!=''?'</a>':'')
+  						:'').
+  					'</figcaption>'
+  				:'')
+  			:'');
+  			$iscover=true;
+  		}
+  	}
+  	$html=preg_replace([
+  		$coverHTML==''?'~<cover>.*?</cover>~is':'/<[\/]?cover>/',
+  		'/<print page=[\"\']?coverItem[\"\']?>/'
+  	],[
+  		'',
+  		$coverHTML
+  	],$html);
   }
   if($r['videoURL']!=''){
     $html=preg_replace([
@@ -283,8 +292,12 @@ if($skip==false){
     $item=$matches[1];
     if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
       $item=preg_replace('~<purchasewarning>.*?</purchasewarning>~is','',$item,1);
-    else
-      $item=preg_replace($config['options'][30]!=1&&($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='event')?'~<purchasewarning>.*?</purchasewarning>~is':'/<[\/]?purchasewarning>/','',$item);
+    else{
+      if($r['contentType']=='inventory')
+        $item=preg_replace($config['options'][30]!=1?'~<purchasewarning>.*?</purchasewarning>~is':'/<[\/]?purchasewarning>/','',$item);
+      else
+        $item=preg_replace('~<purchasewarning>.*?</purchasewarning>~is','',$item);
+    }
     if(stristr($item,'<mediaitems')){
       $sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `pid`=:pid AND `rid`=:rid AND `rank`<=:rank ORDER BY `ord` ASC");
       $sm->execute([
@@ -384,7 +397,7 @@ if($skip==false){
       ],$item);
     }else$item=preg_replace('~<quantity>.*?<\/quantity>~is','',$item);
     $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
-    if($uid!=0){
+/*    if($uid!=0){
       $su=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
       $su->execute([':id'=>$uid]);
       $ru=$su->fetch(PDO::FETCH_ASSOC);
@@ -392,7 +405,7 @@ if($skip==false){
         if(($r['rank']>300||$r['rank']<400)&&($ru['rank']>300||$ru['rank']<400)&&$ru['options'][19]!=1)
           $item=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$item);
       }
-    }
+    } */
     if($config['options'][30]==1){
       if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
         $item=preg_replace('/<[\/]?addtocart>/','',$item);
@@ -635,11 +648,13 @@ if($skip==false){
       '~<settings.*?>~is',
       '~<more>.*?<\/more>~is',
       '/<print page=[\"\']?notes[\"\']?>/',
+      '/<print config=[\"\']?business[\"\']?>/',
       '/<print view>/'
     ],[
       '',
       '',
       '',
+      ucwords($config['business']),
       $view,
     ],$html);
     if($view=='article'||$view=='events'||$view=='news'||$view=='proofs'){
@@ -688,9 +703,11 @@ if($skip==false){
 }else{
   $html=preg_replace([
     '~<item>.*?<\/item>~is',
-    '~<category-nav>.*?<\/category-nav>~is'
+    '~<category-nav>.*?<\/category-nav>~is',
+    '~<eventsitems.*>.*?<\/eventitems>~is',
   ],[
     '<article class="card col-12 col-sm"><div class="alert alert-info" role="alert">This content is not available to your account ranking.</div></article>',
+    '',
     ''
   ],$html);
 }

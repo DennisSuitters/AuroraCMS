@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -42,32 +42,38 @@
             <?php $tid=$ti-2592000;
             if($config['backup_ti']<$tid)echo$config['backup_ti']==0?'<div class="alert alert-info" role="alert">A Backup has yet to be performed.</div>':'<div class="alert alert-danger" role="alert">It has been more than 30 days since a Backup has been performed.</div>';?>
           </div>
-          <form target="sp" method="post" action="core/backup.php">
+          <form target="sp" method="post" action="core/backup.php" onsubmit="$('.page-block').addClass('d-block');">
             <div class="form-row">
               <label>Backup</label>
-              <small class="form-text text-right">Note: Only the database is backed up.</text>
+              <small class="form-text text-right">Note: Only the database is backed up.</small>
             </div>
             <div class="form-row">
-              <button class="btn-block saveall" type="submit">Perform Backup</button>
+              <button class="btn-block" type="submit">Perform Backup</button>
             </div>
           </form>
           <div id="backups">
             <?php foreach(glob("media/backup/*") as$file){
               $filename=basename($file);
               $filename=rtrim($filename,'.sql.gz');?>
-              <div id="l_<?=$filename;?>" class="form-row mt-1">
-                <a class="btn col-12" href="<?=$file;?>">Click to Download <?= ltrim($file,'media/backup/');?></a>
+              <div id="l_<?=$filename;?>" class="form-row mt-2">
+                <a class="btn btn-block" href="<?=$file;?>">Click to Download <?= ltrim($file,'media/backup/');?></a>
                 <button class="trash" aria-label="Delete" onclick="removeBackup('<?=$filename;?>');"><?= svg2('trash');?></button>
               </div>
             <?php }?>
           </div>
-          <form target="sp" method="post" enctype="multipart/form-data" action="core/restorebackup.php">
-            <label>Restore</label>
-            <div class="form-row">
-              <input class="custom-file-input" id="restorefu" type="file" name="fu" accept="application/sql">
-              <button type="submit">Restore</button>
+          <div class="row mt-3">
+            <div class="col-12">
+              To restore a Database Backup, you will need to upload the .sql/.sql.gz file to PHPMyAdmin or other Database Configuration tool.
+            </div>
+          </div>
+<?php /*
+          <form class="mt-3" target="sp" method="post" action="core/restorebackup.php" enctype="multipart/form-data">
+            <div class="custom-file">
+              <input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();">
+              <label for="fu" class="btn add">Choose File and Restore Database</label>
             </div>
           </form>
+*/?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>

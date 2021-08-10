@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,7 +24,7 @@ if($act=='logout'){
   $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username AND `activate`='' AND `active`='1' LIMIT 1");
   $q->execute([':username'=>$username]);
   $user=$q->fetch(PDO::FETCH_ASSOC);
-  if($user['id']!=0){
+  if(isset($user['id'])&&$user['id']!=0){
     if(password_verify($password,$user['password'])){
       $_SESSION['username']=$user['username'];
       $_SESSION['password']=$password;

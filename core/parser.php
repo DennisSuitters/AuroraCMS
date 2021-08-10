@@ -241,6 +241,11 @@ foreach($tags as$tag){
 				else$container=$parsing='';
 				break;
 			break;
+		case'business':
+			if($attribute=='config'){
+				$parsing=ucwords($config['business']);
+			}
+			break;
 		default:
 			if($attribute=='content'){
 				if(isset($r[$print])){

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -18,7 +18,9 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?= svg2('theme','i-3x');?></div>
           <div>Preferences - Theme</div>
-          <div class="content-title-actions"></div>
+          <div class="content-title-actions">
+            <?= ($user['options'][0]==1?'<form target="sp" method="post" action="core/upload_theme.php" enctype="multipart/form-data"><div class="custom-file" data-tooltip="tooltip" aria-label="Add Theme (Overwrites Existing)"><input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();"><label for="fu" class="btn add">'.svg2('add').'</label></div></form>':'');?>
+          </div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>

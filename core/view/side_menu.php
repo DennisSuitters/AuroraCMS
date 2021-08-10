@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -75,7 +75,7 @@ $sideTemp='';
 				number_format((float)$r['points'])
 			],$sideTemp);
 
-			if($config['options'][30]==1){
+/*			if($config['options'][30]==1){
 	    	if(
 					($r['rank']>300||
 						$r['rank']<400)
@@ -85,7 +85,7 @@ $sideTemp='';
 						&&$ru['options'][19]==0){
 					$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
 				}
-			}
+			} */
 			if($config['options'][30]==1){
 				if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
 					$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
@@ -296,13 +296,13 @@ $sideTemp='';
 			$s->execute([
 				':contentType'=>$contentType,
 				':cat'=>$sidecat,
-				':rank'=>$_SESSION['rank']
+				':rank'=>$_SESSION['rank'] + 1
 			]);
 		}else{
 			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `ti` DESC $show");
 			$s->execute([
 				':contentType'=>$contentType,
-				':rank'=>$_SESSION['rank']
+				':rank'=>$_SESSION['rank'] + 1
 			]);
 		}
 		$output='';
@@ -320,20 +320,29 @@ $sideTemp='';
 				}
 			}
 			$items=preg_replace([
-				'/<print link>/',
+				'/<print content=[\"\']?srcset[\"\']?>/',
+				'/<print content=[\"\']?thumb[\"\']?>/',
+				'/<print content=[\"\']?imageALT[\"\']?>/',
+				'/<print content=[\"\']?linktitle[\"\']?>/',
+				'/<print content=[\"\']?contentType[\"\']?>/',
 				'/<print content=[\"\']?schemaType[\"\']?>/',
 				'/<print metaDate>/',
 				'/<print content=[\"\']?title[\"\']?>/',
 				'/<print time>/',
-				'/<thumb>/',
 				'/<print content=[\"\']?caption[\"\']?>/'
 			],[
+				'srcset="'.
+					($r['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($r['thumb']))?'media/'.'thumbs/'.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
+					($r['thumb']!=''&&file_exists('media/'.'md/'.basename($r['thumb']))?'media/'.'md/'.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').
+					($r['thumb']!=''&&file_exists('media/'.'sm/'.basename($r['thumb']))?'media/'.'sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+				($r['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($r['thumb']))?'media/'.'thumbs/'.basename($r['thumb']):NOIMAGESM),
+				htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
 				URL.$r['contentType'].'/'.$r['urlSlug'].'/',
-				htmlspecialchars($r['schemaType'],ENT_QUOTES,'UTF-8'),
+				ucwords($r['contentType']),
+				$r['schemaType'],
 				date('Y-m-d',$r['ti']),
 				htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 				$time,
-				file_exists('media/thumbs/'.basename($r['thumb']))?'<img src="'.$r['thumb'].'" alt="'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'">':'',
 				$r['seoCaption']!=''?htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'):substr(strip_tags(rawurldecode($r['notes'])),0,100).'...'
 			],$items);
 			$output.=$items;

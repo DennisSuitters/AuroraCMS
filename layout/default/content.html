@@ -1,10 +1,13 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="content">
+	<cover>
+		<figure class="covertron"><print page="coverItem"></figure>
+	</cover>
 	<breadcrumb>
 		<section class="row">
-			<nav>
-				<ol class="breadcrumb">
+			<nav class="breadcrumb">
+				<ol>
 					<json-ld-breadcrumb>
 					<breaditems>
 						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
@@ -16,18 +19,49 @@
 			</nav>
 		</section>
 	</breadcrumb>
+	<pagenotes>
+		<section class="row">
+			<article class="hidewhenempty"><print page="notes"></article>
+		</section>
+  </pagenotes>
 	<section class="row mb-5">
-		<category-nav>
-			<aside class="col-12 col-sm-2-5 p-0 mt-0 mx-3">
-				<div class="card">
-					<nav class="category-nav">
-						<ul>
-							<catlist>
-						</ul>
-					</nav>
+		<aside class="col-12 col-sm-2-5 p-2 mt-0">
+			<div class="row">
+				<category-nav>
+					<div class="card">
+						<nav class="category-nav">
+							<ul>
+								<catlist>
+							</ul>
+						</nav>
+					</div>
+				</category-nav>
+			</div>
+			<eventsitems items="4">
+				<hr>
+				<div class="row mt-3">
+					<h6>News and Events</h6>
+					<eventitem>
+						<article class="card col-12 col-sm-8 event side mx-auto">
+							<figure class="card-image">
+								<a href="<print event=linktitle>">
+									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
+								</a>
+								<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
+							</figure>
+							<div class="card-date shadow">
+								<span class="day"><print date="day"></span>
+								<span class="month"><print date="month"></span>
+								<span class="year"><print date="year"></span>
+							</div>
+							<div class="card-header px-2 py-1">
+								<h6><a href="<print event=linktitle>"><print event="title"></a></h6>
+							</div>
+						</article>
+					</eventitem>
 				</div>
-			</aside>
-		</category-nav>
+			</eventsitems>
+		</aside>
 		<item>
 			<article class="card col-12 col-sm m-0 p-0">
 				<json-ld>
@@ -126,9 +160,7 @@
 									<print author="avatar" alt="name" class="img-thumbnail">
 								</div>
 								<div class="col-9 col-sm-10 ml-2">
-				      		<h5>
-										<a class="text-default" href="<print author=link>"><print author="name"></a>
-				      		</h5>
+				      		<h5><a class="text-default" href="<print author=link>"><print author="name"></a></h5>
 									<div>
 										<print author="social" type="icon" class="i i-social i-2x m-1">
 									</div>
@@ -171,9 +203,7 @@
 											<img <print thumb=srcset>src="<print related=thumb>" loading="lazy" alt="<print related=imageALT>">
 										</a>
 										<div class="card-footer d-inline-block text-center line-clamp p-1 py-2">
-											<h4 class="line-clamp">
-												<a class="stretched-link" href="<print related=linktitle>" title="<print related=title>"><print related="title"></a>
-											</h4>
+											<h5><a href="<print related=linktitle>" title="<print related=title>"><print related="title"></a></h5>
 										</div>
 										<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print related="contentType"></div>
 										<div class="corner-ribbon big top-left <print related=cssrank> text-uppercase font-weight-bold shadow-sm"><print related="rank"></div>
@@ -213,8 +243,7 @@
 							</quickview>
 						</div>
 						<div class="card-header">
-							<div class="title"><h2 class="h4 line-clamp"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></h2></div>
-							<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
+							<h2 class="h5"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></h2>
 						</div>
 						<div class="card-body">
 							<print content="notes">

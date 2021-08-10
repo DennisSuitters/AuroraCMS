@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -175,8 +175,10 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
                   }
                 }
               }
-              $tags=array_unique($tgs);
-              asort($tags);
+              if(!empty($tags)){
+                $tags=array_unique($tgs);
+                asort($tags);
+              }
               echo'<select id="tags_options" onchange="addTag($(this).val());">'.
                 '<option value="none">Clear All</option>';
               foreach($tags as$t)echo'<option value="'.$t.'">'.$t.'</option>';

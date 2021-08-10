@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -45,6 +45,44 @@ if(stristr($html,'<breadcrumb>')){
 		''
 	],$html);
 }
+if(stristr($html,'<print page="coverItem">')){
+ if($page['coverVideo']!=''){
+   $cover=basename($page['coverVideo']);
+   if(stristr($page['coverVideo'],'youtu')){
+     preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$page['coverVideo'],$vidMatch);
+     $videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+   }elseif(stristr($page['coverVideo'],'vimeo')){
+     preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$page['coverVideo'],$vidMatch);
+     $videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.($page['options'][0]==1?'autoplay=1&':'').($page['options'][1]==1?'loop=1&':'').($page['options'][2]==1?'controls=1&':'controls=0&').'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
+   }else$videoHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
+ }
+ if($page['cover']!=''||$page['coverURL']!=''){
+   $cover=basename($page['cover']);
+   list($width,$height)=getimagesize($page['cover']);
+   $coverHTML='<img src="';
+   if(file_exists('media/'.$cover))$coverHTML.=htmlspecialchars($page['cover'],ENT_QUOTES,'UTF-8');
+   elseif($page['coverURL']!='')$coverHTML.=htmlspecialchars($page['coverURL'],ENT_QUOTES,'UTF-8');
+   $coverHTML.='" alt="';
+   if($page['attributionImageTitle']==''&&$page['attributionImageName']==''&&$page['attributionImageURL']==''){
+     if($page['attributionImageTitle'])$coverHTML.=$page['attributionImageTitle'].$page['attributionImageName']!=''?' - ':'';
+     if($page['attributionImageName'])$coverHTML.=$page['attributionImageName'].$page['attributionImageURL']!=''?' - ':'';
+     if($page['attributionImageURL'])$coverHTML.=htmlspecialchars($page['attributionImageURL'],ENT_QUOTES,'UTF-8');
+   }else$coverHTML.=$page['seoTitle']!=''?$page['seoTitle']:$config['seoTitle'];
+   if($page['seoTitle']==''&&$config['seoTitle']=='')$coverHTML.=htmlspecialchars(basename($page['cover']),ENT_QUOTES,'UTF-8');
+   $coverHTML.='">';
+ }else$coverHTML='';
+ $html=preg_replace([
+   '/<[\/]?cover>/',
+   '/<print page=[\"\']?coverItem[\"\']?>/',
+   '/<print page=[\"\']?fileALT[\"\']?>/'
+ ],[
+   '',
+   $coverHTML,
+   htmlspecialchars($page['fileALT'],ENT_QUOTES,'UTF-8')
+ ],$html);
+}else
+  $html=preg_replace('~<cover>.*?</cover>~is','',$html);
+
 $html=preg_replace([
 	'~<settings.*?>~is',
 	'/<print page=[\"\']?notes[\"\']?>/',

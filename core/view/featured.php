@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -99,9 +99,9 @@ if($config['options'][1]==1){
 							'title'=>basename(rtrim($file),3),
 							'link'=>'nolink',
 							'seoCaption'=>'',
-							'attributionImageTitle'=>$r['attributionImageTitle'],
-							'attributionImageName'=>$r['attributionImageName'],
-							'attributionImageURL'=>$r['attributionImageURL'],
+							'attributionImageTitle'=>isset($r['attributionImageTitle'])?$r['attributionImageTitle']:'',
+							'attributionImageName'=>isset($r['attributionImageName'])?$r['attributionImageName']:'',
+							'attributionImageURL'=>isset($r['attributionImageURL'])?$r['attributionImageURL']:'',
 							'notes'=>'',
 							'seoDescription'=>'',
 							'coming'=>0,
@@ -130,9 +130,9 @@ if($config['options'][1]==1){
 			if($f['carousel']=='filehtml'){
 				$item=$f['filehtml'];
 			}else{
-				if($f['options'][0]==1||$f['cost']!=''){
+				if((isset($f['options'][0])&&$f['options'][0]==1)||$f['cost']!=''){
 					if($f['stockStatus']=='pre-order')$sideCost.='<div class="pre-order">Pre-Order</div>';
-					elseif($f['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+					elseif(isset($f['coming'][0])&&$f['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
 					else{
 						if($f['stockStatus']=='sold out')$sideCost.='<div class="sold d-inline">';
 						$sideCost.=$f['rrp']!=0?'<span class="rrp d-inline mr-5">RRP &#36;'.$f['rrp'].'</span>':'';
@@ -140,7 +140,7 @@ if($config['options'][1]==1){
 						if($f['stockStatus']=='sold out')$sideCost.='</div>';
 					}
 				}
-				$f['notes']=$r['seoDescription']?$f['seoDescription']:strip_tags($f['notes']);
+				$f['notes']=isset($r['seoDescription'])&&$r['seoDescription']?$f['seoDescription']:strip_tags($f['notes']);
 				$f['notes']=substr(rawurldecode($f['notes']),0,300).'...';
 				$item=preg_replace([
 					'/<print link>/',

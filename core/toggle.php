@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -28,6 +28,10 @@ if(($tbl!='NaN'&&$col!='NaN')||($tbl!=''&&$col!='')){
       ':c'=>$r['c'],
       ':id'=>$id
     ]);
+    if($tbl=='login'&&$col=='active'){
+      $q=$db->prepare("UPDATE `".$prefix."login` SET `activate`='' WHERE `id`=:id");
+      $q->execute([':id'=>$id]);
+    }
   }
 }
 if($tbl!='messages'||$col!='pin')echo'<script>window.top.window.$("#'.$tbl.$col.$bit.'").remove();";</script>';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,16 +34,20 @@ if($view=='page'){
   ]);
 }else{
   $sp=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`=:contentType");
-  $sp->execute([':contentType'=>$view]);
+  $sp->execute([
+    ':contentType'=>$view==''?'index':$view
+  ]);
 }
 $page=$sp->fetch(PDO::FETCH_ASSOC);
-$seoTitle=$page['seoTitle'];
-$metaRobots=$page['metaRobots'];
-$seoCaption=$page['seoCaption'];
-$seoDescription=$page['seoDescription'];
-$seoKeywords=$page['seoKeywords'];
-$pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1 WHERE `id`=:id");
-$pu->execute([':id'=>$page['id']]);
+$seoTitle=isset($page['seoTitle'])?$page['seoTitle']:'';
+$metaRobots=isset($page['metaRobots'])?$page['metaRobots']:'';
+$seoCaption=isset($page['seoCaption'])?$page['seoCaption']:'';
+$seoDescription=isset($page['seoDescription'])?$page['seoDescription']:'';
+$seoKeywords=isset($page['seoKeywords'])?$page['seoKeywords']:'';
+if(isset($page['id'])){
+  $pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1 WHERE `id`=:id");
+  $pu->execute([':id'=>$page['id']]);
+}
 if(isset($act)&&$act=='logout')require'core/login.php';
 require'core/cart_quantity.php';
 $status=isset($_SESSON['rank'])&&$_SESSION['rank']>699?"%":"published";
@@ -98,7 +102,7 @@ foreach($tag as$tag1){
     $req=$inbed;
   }
 }
-if(!isset($contentTime))$contentTime=($page['eti']>$config['ti']?$page['eti']:$config['ti']);
+$contentTime=(!isset($contentTime)?((isset($page['eti'])&&$page['eti'])>(isset($config['ti'])&&$config['ti'])?$page['eti']:$config['ti']):$contentTime);
 if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
 if($seoTitle==''){
   if($page['seoTitle']=='')$seoTitle=$page['title'];
@@ -111,20 +115,18 @@ if($metaRobots==''){
   elseif(in_array($view,['proofs','orders','settings'],true))$metaRobots='noindex,nofollow';
   else$metaRobots=$page['metaRobots'];
 }
-if(isset($seoCaption)&&$seoCaption=='')$seoCaption=$page['seoCaption'];
+$seoCaption=isset($seoCaption)&&$seoCaption==''?(isset($page['seoCaption'])?$page['seoCaption']:''):'';
 if($seoDescription==''){
   if($page['seoDescription']=='')$seoDescription=substr(strip_tags($page['notes']),0,160);
   else$seoDescription=$page['seoDescription'];
 }
 if(isset($seoKeywords)&&$seoKeywords==''){
-  if($page['seoKeywords']=='')$seoKeywords=$config['seoKeywords'];
-  else$seoKeywords=$page['seoKeywords'];
+  $seoKeywords=isset($page['seoKeywords'])&&$page['seoKeywords']==''?(isset($config['seoKeywords'])?$config['seoKeywords']:''):(isset($page['seoKeywords'])?$page['seoKeywords']:'');
 }
 $rss='';
 if(isset($args[0])){
   if($args[0]!='index'||$args[0]!='bookings'||$args[0]!='contactus'||$args[0]!='cart'||$args[0]!='proofs'||$args[0]!='settings'||$args[0]!='accounts'){}else$rss=$view;
 }
-$devtoolbar=($config['development'][0]==1&&$_SESSION['rank']>999?file_get_contents('core/development_toolbar.html'):'');
 $head=preg_replace([
   '/<print config=[\"\']?business[\"\']?>/',
   '/<print theme=[\"\']?title[\"\']?>/',
@@ -149,9 +151,7 @@ $head=preg_replace([
   '/<print meta=[\"\']?author[\"\']?>/',
   '/<print theme>/',
   '/<print site_verifications>/',
-	'/<print geo>/',
-  '/<print development>/',
-  '/<meta_helper>/'
+	'/<print geo>/'
 ],[
   trim(htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
@@ -182,9 +182,7 @@ $head=preg_replace([
     ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
-    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-  $devtoolbar,
-  (isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<link rel="stylesheet" type="text/css" href="core/css/seohelper.css">':'')
+    ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':'')
 ],$head);
 if(stristr($head,'<css')){
   preg_match('/<css file=[\"\']([\w\W]*?)[\"\']>/',$head,$cssfilematch);

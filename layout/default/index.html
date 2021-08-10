@@ -3,30 +3,53 @@
 <block include="featured.html">
 <block inbed="content">
 	<cover>
-		<figure class="jumbotron"><print page="coverItem"></figure>
+		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
-	<section id="next-content-1" class="row mt-5">
-		<article class="col-12 col-md">
-			<print page="notes">
-		</article>
-		<aside id="newsletters" class="col-12 col-md-3 m-0 mr-3">
-			<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
-				<input type="hidden" name="act" value="add_subscriber">
-				<input type="hidden" name="<print hash>" value="<print timecode>">
-				<div class="card">
-					<fieldset class="border-0 m-0">
-						<legend class="h4">Subscribe to our Newsletters</legend>
-						<label for="fullname" aria-hidden="true">Full Name</label>
-						<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
-						<label for="newslettersemail">Email</label>
-						<input type="email" id="newslettersemail" name="email" value="" required aria-required="true" placeholder="Email...">
-						<div class="requirements alert alert-danger">Must be a valid email address.</div>
-						<g-recaptcha>
-						<button class="btn-block mt-3" id="newsletters-btn" type="submit" disabled="disabled">Subscribe</button>
-					</fieldset>
+	<section class="row mt-5">
+		<pagenotes>
+			<article class="col-12 col-sm hidewhenemty"><print page="notes"></article>
+		</pagenotes>
+		<div class="col-12 col-sm-6">
+			<div class="row">
+				<h4>News and Events</h4>
+				<eventsitems items="3">
+					<eventitem>
+						<article class="card event col-12 col-sm-5 mx-0 mx-sm-3">
+							<figure class="card-image">
+								<a href="<print event=linktitle>">
+									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
+								</a>
+								<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print event="contentType"></div>
+							</figure>
+							<div class="card-date shadow">
+								<span class="day"><print date="day"></span>
+								<span class="month"><print date="month"></span>
+								<span class="year"><print date="year"></span>
+							</div>
+							<div class="card-header">
+								<h2 class="h5"><a href="<print event=linktitle>"><print event="title"></a></h2>
+							</div>
+						</article>
+					</eventitem>
+				</eventsitems>
+				<div id="newsletters" class="card event col-12 col-sm-5 mx-0 mx-sm-3 mt-3">
+					<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
+						<input type="hidden" name="act" value="add_subscriber">
+						<input type="hidden" name="<print hash>" value="<print timecode>">
+						<fieldset class="border-0 m-0">
+							<legend class="h5">Subscribe to our Newsletters</legend>
+							<label for="fullname" aria-hidden="true">Full Name</label>
+							<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
+							<label for="newslettersemail">Email</label>
+							<input type="email" id="newslettersemail" name="email" value="" required aria-required="true" placeholder="Email...">
+							<div class="requirements alert alert-danger">Must be a valid email address.</div>
+							<g-recaptcha>
+							<button class="btn-block mt-3" id="newsletters-btn" type="submit" disabled="disabled">Subscribe</button>
+						</fieldset>
+					</form>
 				</div>
-			</form>
-		</aside>
+			</div>
+		</div>
 	</section>
 	<section class="jumbotron mt-5">
 		<img class="filter" src="layout/default/images/index-jumbotron.jpg" alt="Index Jumbotron">
@@ -35,7 +58,7 @@
 		</header>
   	<p class="mt-5 text-white">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
 	</section>
-	<settings items="4" contenttype="all">
+	<settings items="6" contenttype="all">
 	<section class="mt-5">
 		<header>
 			<h2>Latest Content Additions</h2>
@@ -53,8 +76,7 @@
 					</quickview>
 				</figure>
 				<div class="card-header">
-					<div class="card-title"><h2 class="h4 line-clamp"><a href="<print content=linktitle>"><print content="title"></a></h2></div>
-					<print content="category" class="card-subtitle" container="div" leadingtext="Category: ">
+					<h2 class="h5"><a href="<print content=linktitle>"><print content="title"></a></h2>
 				</div>
 				<div class="card-body">
 					<print content="notes">
@@ -78,7 +100,7 @@
 					<img <print thumb=srcset>src="<print category=thumb>" loading="lazy" alt="<print category=imageALT>">
 				</a>
 				<div class="card-header">
-					<div class="card-title"><h2 class="h4 text-center line-clamp"><a href="<print category=link>"><print category="category"></a></h2></div>
+					<h2 class="h5 text-center"><a href="<print category=link>"><print category="category"></a></h2>
 				</div>
 			</article>
 		</categories>

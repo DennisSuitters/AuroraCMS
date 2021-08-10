@@ -23,11 +23,13 @@ if(isset($_FILES['fu'])){
     if(is_null($e[2])){
       echo'<script>'.
         'window.top.window.$("#backup_info").html("");'.
-        'window.top.window.toastr["success"]("Resture from Backup Successfull!");'.
+        'window.top.window.$(".page-block").removeClass("d-block");'.
+        'window.top.window.toastr["success"]("Restore from Backup Successfull!");'.
       '</script>';
     }else{
       echo'<script>'.
         'window.top.window.$("#backup_info").html("");'.
+        'window.top.window.$(".page-block").removeClass("d-block");'.
         'window.top.window.toastr["error"]("There was an issue Restoring the Backup!<br>'.$e[2].'");'.
       '</script>';
     }

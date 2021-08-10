@@ -1100,7 +1100,7 @@ figcaption:empty,
   font-size: 75%;
   font-weight: 700;
   line-height: 1;
-  text-align: center;
+  text-align: center !important;
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: .25rem;
@@ -1127,8 +1127,8 @@ a.badger:hover {
 
 .badge-primary,
 .badge-autopublish {
-  color: #fff;
-  background-color: #007bff; }
+  color: #fff !important;
+  background-color: #007bff !important; }
 
 a.badge-primary:focus,
 a.badge-primary:hover {
@@ -1142,8 +1142,8 @@ a.badge-primary:focus {
 
 .badge-secondary,
 .badge-cancelled {
-  color: #fff;
-  background-color: #6c757d; }
+  color: #fff !important;
+  background-color: #6c757d !important; }
 
 a.badge-secondary:focus,
 a.badge-secondary:hover {
@@ -1157,9 +1157,10 @@ a.badge-secondary:focus {
 
 .badge-success,
 .badge-paid,
-.badge-published {
-  color: #fff;
-  background-color: #28a745; }
+.badge-published,
+.badge-confirmed {
+  color: #fff !important;
+  background-color: #28a745 !important; }
 
 a.badge-success:focus,
 a.badge-success:hover {
@@ -1173,8 +1174,8 @@ a.badge-success:focus {
 
 .badge-info,
 .badge-pending {
-  color: #fff;
-  background-color: #17a2b8; }
+  color: #fff !important;
+  background-color: #17a2b8 !important; }
 
 a.badge-info:focus,
 a.badge-info:hover {
@@ -1188,8 +1189,8 @@ a.badge-info:focus {
 
 .badge-warning,
 .badge-unpublished {
-  color: #212529;
-  background-color: #ffc107; }
+  color: #212529 !important;
+  background-color: #ffc107 !important; }
 
 a.badge-warning:focus,
 a.badge-warning:hover {
@@ -1203,9 +1204,10 @@ a.badge-warning:focus {
 
 .badge-danger,
 .badge-overdue,
+.badge-unconfirmed,
 .badge-delete {
-  color: #fff;
-  background-color: #dc3545; }
+  color: #fff !important;
+  background-color: #dc3545 !important; }
 
 a.badge-danger:focus,
 a.badge-danger:hover {
@@ -1218,8 +1220,8 @@ a.badge-danger:focus {
   box-shadow: 0 0 0 .2rem rgba(220, 53, 69, .5); }
 
 .badge-light {
-  color: #212529;
-  background-color: #f8f9fa; }
+  color: #212529 !important;
+  background-color: #f8f9fa !important; }
 
 a.badge-light:focus,
 a.badge-light:hover {
@@ -1233,8 +1235,8 @@ a.badge-light:focus {
 
 .badge-dark,
 .badge-archived {
-  color: #fff;
-  background-color: #343a40; }
+  color: #fff !important;
+  background-color: #343a40 !important; }
 
 a.badge-dark:focus,
 a.badge-dark:hover {

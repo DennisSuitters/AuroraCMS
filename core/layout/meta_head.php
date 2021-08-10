@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -43,10 +43,11 @@
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.js"></script>
     <script src="core/js/summernote/plugin/summernote-save-button/summernote-save-button.js"></script>
-    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script>
+<?php /*    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script> */ ?>
     <script src="core/js/summernote/plugin/summernote-image-captionit/summernote-image-captionit.js"></script>
     <script src="core/js/summernote/plugin/summernote-classes/summernote-classes.js"></script>
     <script src="core/js/summernote/plugin/summernote-checkbox/summernote-checkbox.js"></script>
+    <script src="core/js/summernote/plugin/summernote-audio/summernote-audio.js"></script>
     <script src="core/js/summernote/plugin/summernote-text-findnreplace/summernote-text-findnreplace.js"></script>
     <script src="core/js/codemirror/codemirror.js"></script>
     <script src="core/js/summernote/plugin/elfinder/elfinder.js"></script>
@@ -55,6 +56,7 @@
     <script src="core/js/fullcalendar/fullcalendar.min.js"></script>
     <script src="core/js/fancybox/jquery.fancybox.min.js"></script>
     <script src="core/js/leaflet/leaflet.js"></script>
+    <script src="core/js/shuffle/shuffle.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
   <body class="<?= (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?' '.$_COOKIE['theme']:'';?>">

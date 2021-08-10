@@ -1,10 +1,13 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="bookings">
+	<cover>
+		<figure class="covertron"><print page="coverItem"></figure>
+	</cover>
 	<breadcrumb>
 		<section class="row">
-			<nav>
-				<ol class="breadcrumb">
+			<nav class="breadcrumb">
+				<ol>
 					<json-ld-breadcrumb>
 					<breaditems>
 						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
@@ -16,9 +19,9 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<section class="row mb-5">
+	<section class="row">
 		<pagenotes>
-			<article class="col-12 col-sm-6 m-0 p-0 px-3 hidewhenempty"><print page="notes"></article>
+			<article class="col-12 col-sm m-0 p-0 px-3 hidewhenempty"><print page="notes"></article>
 		</pagenotes>
 		<article id="booking" class="col-12 col-sm-6 m-0 p-0">
 			<form class="auroraForm card p-3" data-formtype="booking" method="post" action="core/add_booking.php">

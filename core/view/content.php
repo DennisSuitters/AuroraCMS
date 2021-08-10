@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.1.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -346,6 +346,58 @@ if($config['options'][31]==1&&stristr($html,'<category-nav>')){
 		],$html);
 	}else$html=preg_replace('~<category-nav>.*?<\/category-nav>~is','',$html);
 }else$html=preg_replace('~<category-nav>.*?<\/category-nav>~is','',$html);
+if(stristr($html,'<eventsitems')){
+	preg_match('/<eventsitems.*?items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+	$limit=isset($matches[1])&&$matches[1]==0?4:$matches[1];
+	preg_match('/<eventitem>([\w\W]*?)<\/eventitem>/',$html,$matches);
+	$eventitem=$matches[1];
+	$se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :ct1 AND `status` LIKE :status AND `rank`<:rank OR `contentType` LIKE :ct2 AND `status` LIKE :status AND `rank`<:rank ORDER BY `ti` DESC LIMIT $limit");
+	$se->execute([
+		':ct1'=>'events',
+		':ct2'=>'news',
+		':status'=>'published',
+		':rank'=>(isset($_SESSION['rank'])?$_SESSION['rank'] + 1:0)
+	]);
+	$eventoutput='';
+	if($se->rowCount()>0){
+		while($re=$se->fetch(PDO::FETCH_ASSOC)){
+			$eventitems=$eventitem;
+			$re['file']=rawurldecode($re['file']);
+			$eventitems=preg_replace([
+				'/<print event=[\"\']?srcset[\"\']?>/',
+				'/<print event=[\"\']?thumb[\"\']?>/',
+				'/<print event=[\"\']?imageALT[\"\']?>/',
+				'/<print event=[\"\']?contentType[\"\']?>/',
+				'/<print event=[\"\']?linktitle[\"\']?>/',
+				'/<print event=[\"\']?title[\"\']?>/',
+				'/<print date=[\"\']?day[\"\']?>/',
+				'/<print date=[\"\']?month[\"\']?>/',
+				'/<print date=[\"\']?year[\"\']?>/'
+			],[
+				'srcset="'.
+					($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
+					($re['thumb']!=''&&file_exists('media/'.'md/'.basename($re['thumb']))?'media/'.'md/'.basename($re['thumb']).' 600w,':NOIMAGE.' 600w,').
+					($re['thumb']!=''&&file_exists('media/'.'sm/'.basename($re['thumb']))?'media/'.'sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+				($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']):NOIMAGESM),
+				htmlspecialchars($re['fileALT']!=''?$re['fileALT']:$re['title'],ENT_QUOTES,'UTF-8'),
+				$re['contentType'],
+				URL.$re['contentType'].'/'.$re['urlSlug'].'/',
+				$re['title'],
+				date('jS',($re['tis']==0?$re['ti']:$re['tis'])),
+				date('F',($re['tis']==0?$re['ti']:$re['tis'])),
+				date('Y',($re['tis']==0?$re['ti']:$re['tis']))
+			],$eventitems);
+			$eventoutput.=$eventitems;
+		}
+		$html=preg_replace([
+			'~<eventitem>.*?<\/eventitem>~is',
+			'/<[\/]?eventsitems.*?>/'
+		],[
+			$eventoutput,
+			''
+		],$html);
+	}else$html=preg_replace('~<eventsitems.*?>.*?<\/eventsitems>~is','',$html,1);
+}
 if($view=='login'){
 	if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
 		$html=preg_replace([

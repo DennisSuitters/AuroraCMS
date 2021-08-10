@@ -1,13 +1,8 @@
 </main>
-<footer class="row border-top px-2 py-4">
-	<a class="back-to-top" href="<print url>#back-to-top" title="Back to Top" aria-label="Scroll to Top"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 12.85856,9.482625 -1.23573,1.22829 q -0.14144,0.14144 -0.33499,0.14144 -0.19355,0 -0.33499,-0.14144 L 7,6.758065 3.04715,10.710915 q -0.14144,0.14144 -0.33499,0.14144 -0.19355,0 -0.33499,-0.14144 L 1.14144,9.482625 Q 1,9.341185 1,9.143915 1,8.946645 1.14144,8.805205 L 6.66501,3.289075 Q 6.80645,3.147645 7,3.147645 q 0.19355,0 0.33499,0.14143 l 5.52357,5.51613 Q 13,8.946645 13,9.143915 q 0,0.19727 -0.14144,0.33871 z"/></svg></a>
-	<aside class="col-12 col-sm-3 mt-1 mt-sm-2 pt-4 order-4 order-sm-1 text-center">
-		<img class="mx-auto" src="layout/default/images/logo.png" alt="<print config=business>"><br>
-		<small>&copy; <print year>. <print config="abn"></small><br>
-	</aside>
-	<aside class="col-12 col-md-4 col-lg-3 order-1 order-sm-2">
-		<h3 class="m-0 mt-4">Extras</h3>
-		<ul class="list-unstyled pl-0 pl-sm-3 text-center text-md-left">
+<footer class="row border-top mt-5 p-5">
+	<aside class="col-12 col-sm">
+		<h5 class="m-0 text-center text-sm-left">Information</h5>
+		<ul class="list-unstyled mt-2 pl-0 pl-sm-2 text-center text-sm-left">
 			<buildMenu>
 				<li><a href="<print menu=url>"><print menu="title"></a><menuCart></li>
 			</buildMenu>
@@ -15,40 +10,79 @@
 			<administration>
 		</ul>
 	</aside>
-	<aside class="col-12 col-md-3 order-2 order-sm-3">
-		<h3 class="m-0 mt-4">Social Links</h3>
-		<div class="text-center text-md-left pl-0 pl-sm-3">
-			<buildSocial>
-				<a class="i i-social i-2x" href="<print sociallink>" aria-label="<print rel=label>"><print socialicon></a>
-			</buildSocial>
-			<rss>
-				<a class="i i-social i-2x" href="<print rsslink>" aria-label="RSS Feed"><print rssicon></a>
-			</rss>
-		</div>
-		<paymentoptions>
-			<h3 class="m-0 mt-4">Payment Options</h3>
-			<div class="text-center text-md-left pl-0 pl-sm-3">
-				<paypal><img class="mt-2" src="core/images/paypal.svg" width="100" alt="PayPal"><br></paypal>
-				<afterpay><img class="mt-2" src="core/images/afterpay.svg" width="100" alt="AfterPay"><br></afterpay>
+	<address>
+		<aside class="col-12 col-sm">
+			<h5 class="m-0 text-center text-sm-left">Contact</h5>
+			<div class="mt-2 pl-0 pl-sm-2">
+				<email>
+					<div class="text-center text-sm-left d-block">
+						<div class="d-block"><print config="email"></div>
+					</div>
+				</email>
+				<contact>
+					<div class="text-center text-sm-left d-block">
+						<div class="d-block"><print config="address"> <print config="suburb"></div>
+						<div class="d-block"><print config="country"> <print config="postcode"></div>
+					</div>
+				</contact>
+				<phone>
+					<div class="text-center text-sm-left d-block">
+						<div class="d-block"><print config="phone"></div>
+						<div class="d-block"><print config="mobile"></div>
+					</div>
+				</phone>
+			</div>
+		</aside>
+	</address>
+	<hours>
+		<aside class="col-12 col-sm">
+			<h5 class="m-0 mt-3 mt-sm-0 text-center text-sm-left">Business Hours</h5>
+			<div class="row mt-2 text-center text-sm-left">
+				<buildHours>
+					<div class="pl-0 pl-sm-2 d-block">
+						<print dayfrom><print dayto> <print timefrom><print timeto> <print info>
+					</div>
+				</buildHours>
+			</div>
+		</aside>
+	</hours>
+	<paymentoptions>
+		<aside class="col-12 col-sm">
+			<h5 class="m-0 mt-3 mt-sm-0 text-center text-sm-left">Payment Options</h5>
+			<div class="text-center text-sm-left mt-1 pl-0 pl-sm-2">
+				<paypal><img class="mt-2 mr-1" src="core/images/paypal.svg" width="85" alt="PayPal"></paypal>
+				<afterpay><img class="mt-2 mr-1" src="core/images/afterpay.svg" width="85" alt="AfterPay"></afterpay>
 				<creditcards>
-					<img class="mt-2" src="core/images/cc-visa.png" alt="Visa">
-					<img class="mt-2" src="core/images/cc-mastercard.png" alt="Mastercard">
-					<img class="mt-2" src="core/images/cc-amex.png" alt="American Express">
+					<div>
+						<img class="mt-2 mr-1" src="core/images/cc-amex.png" alt="American Express" title="American Express">
+						<img class="mt-2 mr-1" src="core/images/cc-jcb.png" alt="JCB" title="JCB">
+						<img class="mt-2 mr-1" src="core/images/cc-mastercard.png" alt="Mastercard" title="Mastercard">
+						<img class="mt-2 mr-1" src="core/images/cc-visa.png" alt="Visa" title="Visa">
+					</div>
 				</creditcards>
 			</div>
-		</paymentoptions>
-	</aside>
-	<aside class="col-12 col-sm-3 order-3 order-sm-4">
-		<label for="footersearch" class="h3 m-0 mt-4">Search</label>
-		<form class="row m-0" method="post" action="search">
-			<input id="footersearch" class="col-9" type="search" name="search" placeholder="Enter a Search Term...">
-			<button type="submit" class="col-3">Search</button>
+		</aside>
+	</paymentoptions>
+	<aside class="col-12 col-sm">
+		<h5 class="m-0 mt-3 mt-sm-0 text-center text-sm-left">Follow Us</h5>
+		<div class="mt-2 text-center">
+			<buildSocial>
+				<a class="i i-social i-3x mr-1" href="<print sociallink>" aria-label="<print rel=label>"><print socialicon></a>
+			</buildSocial>
+			<rss>
+				<a class="i i-social i-3x mr-1" href="<print rsslink>" aria-label="RSS Feed"><print rssicon></a>
+			</rss>
+		</div>
+		<form class="form-row mt-4" method="post" action="search">
+			<input class="brr-0" id="footersearch" type="search" name="search" placeholder="Enter a Search Term...">
+			<button class="brl-0" type="submit">Search</button>
 		</form>
 		<print honey_pot_quick_link>
 	</aside>
 </footer>
 <div class="designby">
-	<print theme="design"><print theme="hosting">
+	<span>&copy; <print config="business"> <print year></span><span><print config="abn"></span><print theme="design"><print theme="hosting">
+	<a class="back-to-top" href="<print url>#back-to-top" title="Back to Top" aria-label="Scroll to Top"><i class="i"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 12.85856,9.482625 -1.23573,1.22829 q -0.14144,0.14144 -0.33499,0.14144 -0.19355,0 -0.33499,-0.14144 L 7,6.758065 3.04715,10.710915 q -0.14144,0.14144 -0.33499,0.14144 -0.19355,0 -0.33499,-0.14144 L 1.14144,9.482625 Q 1,9.341185 1,9.143915 1,8.946645 1.14144,8.805205 L 6.66501,3.289075 Q 6.80645,3.147645 7,3.147645 q 0.19355,0 0.33499,0.14143 l 5.52357,5.51613 Q 13,8.946645 13,9.143915 q 0,0.19727 -0.14144,0.33871 z"/></svg></i></a>
 </div>
 <chat>
 	<div class="chat card icon col-12 col-sm-6 col-md-4 mr-0 mr-sm-2">

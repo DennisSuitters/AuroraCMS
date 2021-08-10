@@ -13,7 +13,7 @@
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT `language` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 function svg2($svg,$class=null,$size=null){
 	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
 }
@@ -102,15 +102,11 @@ if(file_exists('../media/backup/'.$file)){
   $q=$db->prepare("UPDATE `".$prefix."config` SET `backup_ti`=:backup_ti WHERE `id`='1'");
   $q->execute([':backup_ti'=>$ti]);
   echo'<script>'.
-		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-group row">'.
-			'<label class="col-form-label col-sm-2">&nbsp;</label>'.
-			'<div class="input-group col-sm-10">'.
-				'<a class="btn col" href="media/backup/'.$file.'">Click to Download '.$file.'</a>'.
-				'<div class="input-group-append">'.
-					'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button>'.
-				'</div>'.
-			'</div>'.
+		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-row mt-2">'.
+			'<a class="btn btn-block" href="media/backup/'.$file.'">Click to Download '.$file.'</a>'.
+			'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button>'.
 		'</div>`);'.
   	'window.top.window.$("#alert_backup").addClass("d-none");'.
+		'window.top.window.$(".page-block").removeClass("d-block");'.
 	'</script>';
 }else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';

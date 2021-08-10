@@ -1,10 +1,13 @@
 <block include="meta_head.html">
 <block include="header.html">
 <block inbed="testimonials">
+	<cover>
+		<figure class="covertron"><print page="coverItem"></figure>
+	</cover>
 	<breadcrumb>
 		<section class="row">
-			<nav>
-				<ol class="breadcrumb">
+			<nav class="breadcrumb">
+				<ol>
 					<json-ld-breadcrumb>
 					<breaditems>
 						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
@@ -16,8 +19,8 @@
 			</nav>
 		</section>
 	</breadcrumb>
-	<section class="row mb-5">
-		<article class="col-12 col-sm-6 m-0 p-0 px-3">
+	<section class="row">
+		<article class="col-12 col-sm m-0 p-0 px-3">
 			<pagenotes>
 				<div class="hidewhenempty"><print page="notes"></div>
 			</pagenotes>

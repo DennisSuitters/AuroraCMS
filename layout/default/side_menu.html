@@ -119,31 +119,18 @@
 	</review>
 	<item>
 		<settings items="4" contenttype="current">
-		<div class="list-group card d-none d-sm-block">
-			<items>
-				<a class="list-group-item border-0" href="<print link>" itemscope>
-					<span class="list-group-item-heading" itemprop="headline"><print content="title"></span>
-					<meta itemprop="datePublished" content="<print metaDate>">
-					<p class="list-group-item-text">
-						<small><small><small class="text-muted"><print time></small></small></small><br>
-						<small><small><print content="caption"></small></small>
-					</p>
-				</a>
-				<media>
-					<a class="list-group-item" href="<print link>" itemscope>
-						<span class="media">
-							<span class="media-left">
-								<img class="img-thumbnail side_menu_gallery pull-left" src="<print content=thumb>" alt="<print content=title>">
-							</span>
-							<meta itemprop="datePublished" content="<print metaDate>">
-							<span class="media-body">
-								<span class="media-heading"><print content="title"></span>
-								<small><small><print content="caption"></small></small>
-							</span>
-						</span>
+		<items>
+			<article class="card col-12 event mx-auto">
+				<figure class="card-image">
+					<a href="<print content=linktitle>">
+						<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
 					</a>
-				</media>
-			</items>
-		</div>
+					<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
+				</figure>
+				<div class="card-header px-2 py-1">
+					<h6><a href="<print content=linktitle>"><print content="title"></a></h6>
+				</div>
+			</article>
+		</items>
 	</item>
 </aside>

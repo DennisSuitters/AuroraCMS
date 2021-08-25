@@ -1306,3 +1306,53 @@ nav[role="menubar"].account-menu #accountavatar {
 .popup-payment a {
   color: #635BFF !important;
   font-weight: 900 !important; }
+
+/* Forum */
+#addreply,
+#newpost {
+  position: relative !important; }
+
+.forum-header {
+  background-color: #000;
+  color: #fff;
+  padding: .75rem 0;
+  border-top-left-radius: var(--border-radius);
+  border-top-right-radius: var(--border-radius); }
+
+.forum-topic-avatar {
+  max-width: 48px;
+  height: 48px; }
+
+.forum-avatar {
+  max-width: 128px;
+  height: 128px; }
+
+.forum-toolbar {
+  position: absolute;
+  top: 0;
+  right: 0; }
+
+.forum-item:hover {
+  background-color: #fafafa; }
+
+.forum-vote {
+  display: inline-block;
+  text-align: center; }
+
+.forum-vote-number {
+  font-size: 18px;
+  color: #888;
+  font-weight: 700; }
+
+.btn-forum-vote {
+  background: none !important;
+  border: 0 !important;
+  color: #ccc !important;
+  font-size: 20px !important;
+  margin: 0 !important; }
+
+.btn-forum-vote:hover,
+.btn-forum-vote:focus {
+  background: none !important;
+  border: 0 !important;
+  color: #000 !important; }

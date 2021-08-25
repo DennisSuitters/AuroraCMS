@@ -223,7 +223,7 @@ content
     6 Video Controls
     7 Show Map
     8 Newsletter match Account Tags
-    9
+    9 Show FAQ in open state
     10
     11
     12

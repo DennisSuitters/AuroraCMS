@@ -19,6 +19,9 @@ nav ul li ul li {
   padding-right: 5px !important;
   padding-left: 5px !important; }
 
+.bg-white {
+  background-color: #fff !important; }
+
 [data-gst]::before {
   content: attr(data-gst);
   position: absolute;

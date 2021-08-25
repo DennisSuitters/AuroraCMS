@@ -88,14 +88,27 @@ button[disabled]:hover {
           box-shadow: none !important; }
 
 .btn-sm {
-  padding: .2rem .6rem .4rem .3rem;
+  padding: .2rem .3rem .2rem .3rem;
   font-weight: 700;
-  font-size: .5rem; }
+  font-size: .6rem; }
 
 
 .btn-block {
   width: 100% !important;
   height: 100%; }
+
+.trash {
+  color: #fff !important;
+  background-color: #d92550 !important;
+  border-color: #d92550 !important; }
+
+.trash:hover {
+  color: #fff !important;
+  background-color: #b81f44 !important;
+  border-color: #ad1e40 !important; }
+
+.trash:focus {
+  box-shadow: 0 0 0 0 rgba(223, 70, 106, .5) !important; }
 
 form {
   display: block;

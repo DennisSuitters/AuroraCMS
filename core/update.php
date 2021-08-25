@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,7 +35,7 @@ $e='';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'){
+if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$tbl=='forumCategory'||$tbl=='forumTopics'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'){
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 	if($col=='messengerFBCode')$da=rawurldecode($da);
 }else{
@@ -47,10 +47,10 @@ if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%
 $si=session_id();
 $ti=time();
 if($col!='messengerFBCode'){
-	$s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
+	$s=$db->prepare("SELECT `".$col."` AS 'col' FROM `".$prefix.$tbl."` WHERE `id`=:id");
 	$s->execute([':id'=>$id]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
-	$oldda=$r[$col];
+	$oldda=$r['col'];
 }
 if($tbl=='content'&&$col=='status'&&$da=='published'){
 	if($ti>time())$status='unpublished';else$status='published';
@@ -71,7 +71,7 @@ if($tbl=='content'&&$col=='title'){
 if($tbl=='content'){
 	if($col=='tis'||$col=='tie'||$col=='pti')echo"(".date($config['dateFormat'],$da).")";
 }
-if($tbl=='config'||$tbl=='login'||$tbl=='orders'||$tbl=='orderitems'||$tbl=='messages')$r['contentType']='';
+if($tbl=='config'||$tbl=='login'||$tbl=='orders'||$tbl=='orderitems'||$tbl=='messages'||$tbl=='forumCategory'||$tbl=='forumTopics')$r['contentType']=$tbl;
 $log=[
   'uid'=>0,
   'rid'=>$id,

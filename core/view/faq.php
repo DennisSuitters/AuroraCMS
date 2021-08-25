@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -117,19 +117,28 @@ if(stristr($html,'<items')){
 	$ii=0;
   $output='';
 	$schema='<script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[';
-  while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    $faqs=$faq;
-    $faqs=preg_replace([
-			'/<print content=[\"\']?title[\"\']?>/',
-			'/<print content=[\"\']?notes[\"\']?>/'
-    ],[
-      htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
-      $r['notes']
-    ],$faqs);
-    $output.=$faqs;
-		$ii++;
-		$schema.='{"@type":"Question","name":"'.$r['title'].'","acceptedAnswer":{"@type":"Answer","text": "'.strip_tags($r['notes']).'"}}'.($ii<$i?',':'');
-  }
+	$sc=$db->prepare("SELECT DISTINCT(`category_1`) FROM `".$prefix."content` WHERE `contentType`='faq' ORDER BY `category_1` ASC");
+	$sc->execute();
+	while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='faq' AND `category_1`=:category ORDER BY `title` ASC");
+	  $s->execute([':category'=>$rc['category_1']]);
+		$output.=$rc['category_1']!=''?'<h5>'.$rc['category_1'].'</h5>':'';
+	  while($r=$s->fetch(PDO::FETCH_ASSOC)){
+	    $faqs=$faq;
+	    $faqs=preg_replace([
+				'/<print details=[\"\']?open[\"\']?>/',
+				'/<print content=[\"\']?title[\"\']?>/',
+				'/<print content=[\"\']?notes[\"\']?>/'
+	    ],[
+				$r['options'][9]==1?' open':'',
+	      $r['title'],
+	      $r['notes']
+	    ],$faqs);
+	    $output.=$faqs;
+			$ii++;
+			$schema.='{"@type":"Question","name":"'.$r['title'].'","acceptedAnswer":{"@type":"Answer","text": "'.strip_tags($r['notes']).'"}}'.($ii<$i?',':'');
+	  }
+	}
 	$schema.=']}</script>';
 	$faqs=preg_replace('~<items>.*?<\/items>~is',$schema.$output,$html,1);
 }

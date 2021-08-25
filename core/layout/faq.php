@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -28,9 +28,19 @@
       <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
         <legend>Frequently Asked Questions</legend>
         <form target="sp" method="post" action="core/add_faq.php">
+          <label for="c">Category</label>
+          <input type="text" id="c" name="c" placeholder="Enter a Category...">
           <label for="title">Question</label>
-          <input id="title" name="t" placeholder="Enter FAQ Title/Question...">
-          <label for="da">Answer</label>
+          <input type="text" id="title" name="t" placeholder="Enter FAQ Title/Question...">
+          <div class="row">
+            <div class="col-sm">
+              <label for="da">Answer</label>
+            </div>
+            <div class="col-sm-11">
+              <input id="open" type="checkbox" name="open" value="1" checked>
+              <label for="open">Open By Default</label>
+            </div>
+          </div>
           <div class="form-row">
             <div class="col-11">
               <textarea class="summernote" id="da" name="da"></textarea>
@@ -47,7 +57,17 @@
                 ['insert',['link']],
               ],
               linkList: [
-<?php $sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
+<?php
+$sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+$sl->execute();
+while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+              echo'['.
+                '"'.$rl['title'].'",'.
+                '"'.URL.$rl['contentType'].'/'.$rl['url'].'",'.
+                '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+              '],';
+}
+$sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
 $sl->execute();
 while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
                 echo'['.
@@ -67,17 +87,24 @@ while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
         </script>
         <hr>
         <div id="faqs">
-<?php $sf=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='faq' ORDER BY `title` ASC");
+<?php $sf=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='faq' ORDER BY `category_1` ASC, `title` ASC");
 $sf->execute();
 while($rf=$sf->fetch(PDO::FETCH_ASSOC)){?>
           <div id="l_<?=$rf['id'];?>">
             <div class="row">
-              <details open>
+              <h5><?=$rf['category_1'];?></h5>
+              <details<?=$rf['options'][9]==1?' open':'';?>>
                 <summary>
                   <?=$rf['title'];?>
-                  <button class="float-right trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rf['id'];?>`,'content');"><?= svg2('trash');?></button>
+                  <div class="col-3 float-right text-right">
+                    <input id="faqoptions9<?=$rf['id'];?>" data-dbid="<?=$rf['id'];?>" data-dbt="content" data-dbc="options" data-dbb="9" type="checkbox"<?=($rf['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                    <label for="faqoptions9<?=$rf['id'];?>">Display as Open</label>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rf['id'];?>`,'content');"><?= svg2('trash');?></button>
+                  </div>
                 </summary>
-                <p><?=$rf['notes'];?></p>
+                <div class="ml-4">
+                  <?=$rf['notes'];?>
+                </div>
               </details>
             </div>
           </div>

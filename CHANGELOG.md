@@ -1,19 +1,8 @@
-### v0.1.8
-- Add sort field to find items on Content and Users on Account administration pages.
-- Fix purchase when logged in parser showing noticed on non inventory items.
-- Fix button and input styling in administration.
-- Restyle Footer "Back To Top" link, and fix styling for client sites so they have better mobile responsiveness.
-- Fix Footer Template Blocks to work better as responsive elements.
-- Fix Footer Template Blocks display with toggable options correctly.
-- Fix missing URL declaration in `core/add_account.php` resulting in malformed activation link.
-- Fix display order not working for Business Hours in Footer area.
-- Add ability to upload Theme ZIP files.
-- Fix `array_unique()` throwing errors if array is empty.
-- Add check if CURL is installed and enabled when installing.
-- Add display of number of issues that need to be resolved when installing.
-- Add embed Audio plugin for Summernote.
-- Fix typo in notification when Booking Invoice is created.
-- Add FAQ Administration Editing, and Front End Parsing.
-- Make sure Quick Edit dropdown gets closed when switching from List to Cards.
-- Change logged in label from "Administration" to "Account", to reduce confusion.
-- Add SQL to clear `activate` login field to faciliate activating accounts with activation issues.
+### v0.1.9
+- Add listing active Pages to Link select for FAQ's.
+- Fix FAQ output displaying entities.
+- Add Category for FAQ's.
+- Add ability for FAQ's to be open when displayed.
+- Add Forum System, still work to be done.
+- Forum Post Pinning filter to pin checkbox toggle.
+- Create text Snippet function for search results to highlight search term, and truncate leading and following text.

@@ -74,6 +74,8 @@ if(stristr($html,'<hours>')){
 	}else$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
 }
 $html=preg_replace([
+	($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
+	'/<map>/',
 	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
 	stristr($html,'<contact>')&&$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
 	stristr($html,'<phone>')&&$config['options'][24]==1?'/<[\/]?phone>/':'~<phone>.*?<\/phone>~is',
@@ -106,6 +108,8 @@ $html=preg_replace([
 	$config['options'][16]==0?'~<afterpay>.*?</afterpay>~is':'/<[\/]?afterpay>/',
 	$config['stripe_publishkey']==''?'~<creditcards>.*?</creditcards>~is':'/<[\/]?creditcards>/'
 ],[
+	($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'<script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map",{zoomControl:false}).setView(['.$config['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`,}).addTo(map);var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.($config['business']==''?'':'var popupHtml=`<strong>'.$config['business'].'</strong>'.($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'map.dragging.disable();map.touchZoom.disable();map.doubleClickZoom.disable();map.scrollWheelZoom.disable();marker.off("click");</script>':''),
+	'',
 	'',
 	'',
 	'',

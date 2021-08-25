@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -231,6 +231,17 @@ function sluggify($url){
 function escaper($val){
   return str_replace(array("\\","/","\"","\n","\r","\t","\x08","\x0c"),array("\\\\","\\/","\\\"","\\n","\\r","\\t","\\f","\\b"),$val);
 }
+function snippet($keyword,$txt,$span=15){
+	$txt=filter_var($txt,FILTER_SANITIZE_STRING);
+  $snip='';
+  preg_match_all("#(\W.{0,$span}\W)($keyword)(\W.{0,$span}\W)#i","  $txt  ",$matches);
+  foreach($matches[0] as$match){
+    if(!$match=trim($match))continue;
+    if(isset($snip))$snip.="$match... ";else$snip=" ...$match... ";
+  }
+  $snip=preg_replace("#($keyword)#i",'<strong class="bg-danger text-danger">$1</strong>',$snip);
+  return$snip;
+}
 class internal{
 	function humans($args=false){require'core/humans.php';}
 	function sitemap($args=false){require'core/sitemap.php';}
@@ -277,6 +288,10 @@ class admin{
 	}
 	function faq($args=false){
 		$view='faq';
+		require'admin.php';
+	}
+	function forum($args=false){
+		$view='forum';
 		require'admin.php';
 	}
 	function logout($args=false){
@@ -391,6 +406,10 @@ class front{
 		$view='faq';
 		require'process.php';
 	}
+	function forum($args=false){
+		$view='forum';
+		require'process.php';
+	}
 	function gallery($args=false){
 		$view='gallery';
 		require'process.php';
@@ -488,6 +507,7 @@ $routes=[
 	$settings['system']['admin'].'/content'=>['admin','content'],
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],
 	$settings['system']['admin'].'/faq'=>['admin','faq'],
+	$settings['system']['admin'].'/forum'=>['admin','forum'],
 	$settings['system']['admin'].'/logout'=>['admin','logout'],
 	$settings['system']['admin'].'/media'=>['admin','media'],
 	$settings['system']['admin'].'/messages'=>['admin','messages'],

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -104,7 +104,7 @@ if(stristr($html,'<buildMenu')){
 				if(!in_array(
 					$r['contentType'],
 					['aboutus','article','bookings','cart','contactus','distributors',
-					'events','gallery','inventory','news','newsletters','portfolio',
+					'events','forum','gallery','inventory','news','newsletters','portfolio',
 					'proofs','search','service','testimonials','tos'],
 					true)
 				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';

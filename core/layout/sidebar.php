@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,13 +17,13 @@ echo'<aside class="border-right" id="sidebar">'.
       '<li class="'.($view=='dashboard'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/dashboard">'.svg2('dashboard','i-2x mr-4').' Dashboard</a></li>'.
       '<li class="'.(isset($args[0])&&$args[0]!='settings'&&$view=='livechat'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/livechat">'.svg2('chat','i-2x mr-4').' Live Chat</a></li>'.
       '<li class="';
-        if(isset($args[0])&&$args[0]!='settings'&&$view=='media'||$view=='pages'||$view=='content'||$view=='rewards'){
+        if(isset($args[0])&&$args[0]!='settings'&&$view=='media'||$view=='pages'||$view=='content'||$view=='rewards'||$view=='faq'){
           echo' open';
         }
         echo'">'.
         '<a class="opener" href="'.URL.$settings['system']['admin'].'/content">'.svg2('content','i-2x mr-4').' Content</a>'.
         '<span class="arrow';
-          if(isset($args[0])&&$args[0]!='settings'&&$view=='media'||$view=='pages'||$view=='content'||$view=='rewards') {
+          if(isset($args[0])&&$args[0]!='settings'&&$view=='media'||$view=='pages'||$view=='content'||$view=='rewards'||$view=='faq') {
             echo' open';
           }
           echo'">'.svg2('arrow-up').'</span>'.
@@ -48,6 +48,7 @@ echo'<aside class="border-right" id="sidebar">'.
       if($user['options'][3]==1){
         echo'<li class="'.(isset($args[0])&&$args[0]!='settings'&&$view=='messages'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/messages">'.svg2('inbox','i-2x mr-4').' Messages</a></li>';
       }
+      echo'<li class="'.(isset($args[0])&&$args[0]!='settings'&&$view=='forum'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/forum">'.svg2('forum','i-2x mr-4').' Forum</a></li>';
       echo'<li class="'.(isset($args[0])&&$args[0]!='settings'&&$view=='newsletters'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/newsletters">'.svg2('newspaper','i-2x mr-4').' Newsletters</a></li>'.
       '<li class="'.(isset($args[0])&&$args[0]!='settings'&&$view=='bookings'?' active':'').'"><a href="'.URL.$settings['system']['admin'].'/bookings">'.svg2('calendar','i-2x mr-4').' Bookings</a></li>';
       if($user['options'][4]==1){

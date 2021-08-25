@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.1.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,7 +19,7 @@ $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filt
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
-if($id!=0&&$tbl!='logs'&&$tbl!='livechat'){
+if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'||$tbl!='forumTopics'){
   $s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
   $r=$s->fetch(PDO::FETCH_ASSOC);

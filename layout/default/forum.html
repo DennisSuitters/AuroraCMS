@@ -1,0 +1,390 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="forum">
+  <cover>
+		<figure class="covertron"><print page="coverItem"></figure>
+	</cover>
+  <breadcrumb>
+		<section class="row">
+			<nav class="breadcrumb">
+				<ol>
+					<json-ld-breadcrumb>
+					<breaditems>
+						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+					</breaditems>
+					<breadcurrent>
+						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+					</breadcurrent>
+				</ol>
+			</nav>
+		</section>
+	</breadcrumb>
+  <pagenotes>
+    <section class="row">
+      <article class="hidewhenempty"><print page="notes"></article>
+    </section>
+  </pagenotes>
+  <main class="row">
+    <section id="notifications" class="col-sm m-0 mx-3">
+      <search>
+        <div class="col-12">
+          <nav class="breadcrumb">
+            <ol class="mx-0 mt-0 p-0">
+              <li class="breadcrumb-item small"><a href="<print forum=link>">Forum</a></li>
+              <li class="breadcrumb-item small"><a href="<print forum=link>?act=search">Search</a></li>
+              <li class="breadcrumb-item small active"><print search="search"></li>
+            </ol>
+          </nav>
+        </div>
+        <form class="col-12" method="post" action="forum">
+          <input type="hidden" name="act" value="search">
+          <div class="form-row">
+            <input type="search" name="s" value="<print search=search>" placeholder="Search Term...">
+            <button type="submit">Go</button>
+          </div>
+        </form>
+        <searchitem>
+          <article class="col-12 mx-0 my-0 mb-1">
+            <div><a class="forum-search-title" href="<print search=link>"><print search="title"></a></div>
+            <span class="text-muted"><print search="notes"></span>
+          </article>
+        </searchitem>
+      </search>
+      <categories>
+        <categoryheader>
+          <div class="col-12">
+            <nav class="breadcrumb">
+              <ol class="mx-0 mt-0 p-0">
+                <li class="breadcrumb-item small active">Forum</li>
+              </ol>
+            </nav>
+            <div class="row forum-header">
+              <div class="forum-icon col-sm-1 p-2"></div>
+              <div class="forum-title col-sm small">Title</div>
+              <div class="forum-topics col-sm-1 small text-center">Topics</div>
+              <div class="forum-posts col-sm-1 small text-center">Posts</div>
+              <div class="forum-last col-sm-3 small">Last Post</div>
+            </div>
+          </div>
+        </categoryheader>
+        <category>
+          <article class="card forum-item col-12 mx-0 my-0 mb-1">
+            <header class="card-header text-left">
+              <div class="row">
+                <div class="forum-icon col-sm-1 p-2"><print category="icon"></div>
+                <div class="forum-title col-sm text-left">
+                  <h4 class="mb-0 pb-0"><print category="pinned"><a href="<print category=link>"><print category="title"></a></h4>
+                  <small class="ml-4"><print category="notes"></small>
+                </div>
+                <div class="forum-topics col-sm-1 text-center"><print topics="count"></div>
+                <div class="forum-posts col-sm-1 text-center"><print posts="count"></div>
+                <div class="forum-last col-sm-3"><print post="last"></div>
+              </div>
+            </header>
+          </article>
+        </category>
+      </categories>
+      <topic>
+        <div class="col-12">
+          <nav class="breadcrumb">
+            <ol class="mx-0 mt-0 p-0">
+              <li class="breadcrumb-item small"><a href="<print forum=link>">Forum</a></li>
+              <li class="breadcrumb-item small active"><print category="title"></li>
+            </ol>
+          </nav>
+          <div class="row forum-header">
+            <div class="forum-icon col-sm-1 p-2"></div>
+            <div class="forum-title col-sm small">Title</div>
+            <div class="forum-posts col-sm-1 small text-center">Posts</div>
+            <div class="form-left col-sm-3 small">Last Post</div>
+          </div>
+          <topics>
+            <article class="card forum-item col-12 m-0 mb-1">
+              <header class="card-header text-left">
+                <div class="row">
+                  <div class="forum-icon col-sm-1 p-2"><print topic="icon"></div>
+                  <div class="forum-title col-sm text-left">
+                    <h4 class="mb-0 pb-0"><print topic="pinned"><a href="<print topic=link>"><print topic="title"></a></h4>
+                    <small class="ml-4"><print topic="notes"></small>
+                  </div>
+                  <div class="forum-posts col-sm-1 text-center"><print posts="count"></div>
+                  <div class="forum-last col-sm-3"><print post="last"></div>
+                </div>
+              </header>
+            </article>
+          </topics>
+        </div>
+      </topic>
+      <posts>
+        <div class="row">
+          <nav class="breadcrumb col-sm">
+            <ol class="mx-0 mt-0 p-0">
+              <li class="breadcrumb-item small"><a href="<print forum=link>">Forum</a></li>
+              <li class="breadcrumb-item small"><a href="<print category=link>"><print category="title"></a></li>
+              <li class="breadcrumb-item small active"><print topic="title"></li>
+            </ol>
+          </nav>
+        </div>
+        <div class="row">
+          <div class="col-sm-2 mb-1">
+            <newpostbtn>
+              <a class="btn" href="<print newpostlink>">New Post</a>
+            </newpostbtn>
+          </div>
+          <div class="col-sm mb-1 pt-3 text-right">
+            <pagination>
+          </div>
+        </div>
+        <div class="row forum-header">
+          <div class="forum-icon col-sm-1 p-2"></div>
+          <div class="forum-title col-sm small">Title</div>
+          <div class="forum-author col-sm-2 small text-center">Author</div>
+          <div class="forum-posts col-sm-1 small text-center">Replies</div>
+          <div class="forum-views col-sm-1 small text-center">Views</div>
+          <div class="form-left col-sm-2 small">Last Post</div>
+        </div>
+        <post>
+          <article id="post<print post=id>" class="card forum-item col-12 m-0 mb-1">
+            <header class="card-header text-left">
+              <div class="row">
+                <div class="forum-icon col-sm-1 p-2"><print post="icon"></div>
+                <div class="forum-title col-sm text-left">
+                  <h4 class="mb-0 pb-0 pt-2"><print post="pinned"><a href="<print post=link>"><print post="title"></a></h4>
+                  <small class="text-muted"><print post="date"></small>
+                </div>
+                <div class="forum-author col-sm-2 small text-center"><print post="author"></div>
+                <div class="forum-posts col-sm-1 text-center"><print post="replies"></div>
+                <div class="forum-posts col-sm-1 text-center"><print post="views"></div>
+                <div class="forum-last col-sm-2">
+                  <print post="last">
+                  <toolbar>
+                    <div class="forum-toolbar">
+                      Pin: <input type="checkbox" id="pin<print post=id>" data-dbid="<print post=id>" data-dbt="forumPosts" data-dbc="pin" data-dbb="0"<print post=checked>>
+                      <form target="sp" method="post" action="core/forum_remove.php">
+                        <input type="hidden" name="id" value="<print post=id>">
+                        <input type="hidden" name="act" value="post">
+                        <button type="submit" class="btn-sm trash">Delete</button>
+                      </form>
+                    </div>
+                  </toolbar>
+                </div>
+              </div>
+              <div id="notification<print post=id>"></div>
+            </header>
+          </article>
+        </post>
+        <div class="row">
+          <div class="col-sm-2 mb-1">
+            <newpostbtn>
+              <a class="btn" href="<print newpostlink>">New Post</a>
+            </newpostbtn>
+          </div>
+          <div class="col-sm align-text-top text-right">
+            <pagination>
+          </div>
+        </div>
+      </posts>
+      <postpage>
+        <div class="row">
+          <div class="col-12">
+            <nav class="breadcrumb">
+              <ol class="mx-0 mt-0 p-0">
+                <li class="breadcrumb-item small"><a href="<print forum=link>">Forum</a></li>
+                <li class="breadcrumb-item small"><a href="<print category=link>"><print category="title"></a></li>
+                <li class="breadcrumb-item small"><a href="<print topic=link>"><print topic="title"></a></li>
+                <li class="breadcrumb-item small active"><print post="title"></li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-sm mb-1 pt-3 text-right">
+            <pagination>
+          </div>
+        </div>
+        <replies>
+          <article id="post<print post=id>" class="card col-12 m-0 mb-1">
+            <div class="row">
+              <div class="col-sm p-3">
+                <div class="row">
+                  <div class="col-sm-1">
+                    <div id="forum-vote-<print post=id>" class="forum-vote">
+                      <form id="forum-vote-up<print post=postid>" class="forum-vote-up" target="sp" method="post" action="core/forum_vote.php">
+                        <input type="hidden" name="act" value="up">
+                        <input type="hidden" name="id" value="<print post=postid>">
+                        <button class="btn-forum-vote"><i class="i i-2x"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 12.85856,9.482625 -1.23573,1.22829 q -0.14144,0.14144 -0.33499,0.14144 -0.19355,0 -0.33499,-0.14144 L 7,6.758065 3.04715,10.710915 q -0.14144,0.14144 -0.33499,0.14144 -0.19355,0 -0.33499,-0.14144 L 1.14144,9.482625 Q 1,9.341185 1,9.143915 1,8.946645 1.14144,8.805205 L 6.66501,3.289075 Q 6.80645,3.147645 7,3.147645 q 0.19355,0 0.33499,0.14143 l 5.52357,5.51613 Q 13,8.946645 13,9.143915 q 0,0.19727 -0.14144,0.33871 z"/></svg></i></button>
+                      </form>
+                      <div id="forum-vote-number-<print post=postid>" class="forum-vote-number"><print post="vote"></div>
+                      <form id="forum-vote-down<print post=id>" class="forum-vote-down" target="sp" method="post" action="core/forum_vote.php">
+                        <input type="hidden" name="act" value="down">
+                        <input type="hidden" name="id" value="<print post=postid>">
+                        <button class="btn-forum-vote"><i class="i i-2x"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 12.85856,5.194785 -5.52357,5.51613 Q 7.19355,10.852355 7,10.852355 q -0.19355,0 -0.33499,-0.14144 L 1.141439,5.194785 Q 1,5.053345 1,4.856075 1,4.658805 1.141439,4.517365 L 2.37717,3.289075 q 0.14144,-0.14143 0.33499,-0.14143 0.19355,0 0.33499,0.14143 L 7,7.241935 10.95285,3.289075 q 0.14144,-0.14143 0.33499,-0.14143 0.19355,0 0.33499,0.14143 l 1.23573,1.22829 Q 13,4.658805 13,4.856075 q 0,0.19727 -0.14144,0.33871 z"/></svg></i></button>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="col-sm">
+                    <h5><print post="title"></h5>
+                    <small class="text-muted"><print post="date"></small>
+                    <div class="p-3">
+                      <print post="notes">
+                    </div>
+                    <print user="signature">
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2 position-relative">
+                <print user="avatar">
+                <small class="d-block"><print user="name"></small>
+                <small class="d-block"><print user="rank"></small>
+                <small class="d-block">Posts: <print user="posts"></small>
+                <small class="d-block">Member since: <print user="time"></small>
+                <toolbar>
+                  <div class="forum-toolbar">
+                    <form target="sp" method="post" action="core/forum_remove.php">
+                      <input type="hidden" name="id" value="<print post=id>">
+                      <input type="hidden" name="act" value="reply">
+                      <button type="submit" class="trash">Delete</button>
+                    </form>
+                  </div>
+                </toolbar>
+              </div>
+            </div>
+          </article>
+        </replies>
+        <div class="row">
+          <div class="col-sm mb-1 pt-3 text-right">
+            <pagination>
+          </div>
+        </div>
+        <replyform>
+          <div id="addreply" class="row">
+            <form target="sp" method="post" action="core/forum_reply.php" onsubmit="$('#forumbusy').addClass('d-block');">
+              <input type="hidden" name="pid" value="<print pid>">
+              <input type="hidden" name="uid" value="<print uid>">
+              <div class="row">
+                <div class="col-12">
+                  <textarea class="note" id="da" name="da"></textarea>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 text-right">
+                  <button type="submit">Reply</button>
+                </div>
+              </div>
+            </form>
+            <div id="forumbusy" class="page-block">
+              <div class="spinner">
+                <div class="sk-chase">
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                  <div class="sk-chase-dot"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </replyform>
+      </postpage>
+      <newpost>
+        <div class="col-12">
+          <nav class="breadcrumb">
+            <ol class="mx-0 mt-0 p-0">
+              <li class="breadcrumb-item small"><a href="<print forum=link>">Forum</a></li>
+              <li class="breadcrumb-item small"><a href="<print category=link>"><print category="title"></a></li>
+              <li class="breadcrumb-item small"><a href="<print topic=link>"><print topic="title"></a></li>
+            </ol>
+          </nav>
+        </div>
+        <newpostform>
+          <div id="newpost" class="row">
+            <form target="sp" method="post" action="core/forum_post.php" onsubmit="$('#forumbusy').addClass('d-block');">
+              <input type="hidden" name="cid" value="<print cid>">
+              <input type="hidden" name="tid" value="<print tid>">
+              <input type="hidden" name="uid" value="<print uid>">
+              <input type="hidden" name="r" value="<print rank>">
+              <article class="card col-12 m-0 mb-1">
+                <div class="row">
+                  <div class="col-sm">
+                    <div id="forumtitle" class="form-row">
+                      <input type="text" name="t" value="" placeholder="Enter a Title">
+                    </div>
+                    <textarea class="note" id="da" name="da"></textarea>
+                  </div>
+                </div>
+              </article>
+              <div class="row">
+                <div class="col-12 text-right">
+                  <button type="submit">Post</button>
+                </div>
+              </div>
+              <div id="forumbusy" class="page-block">
+                <div class="spinner">
+                  <div class="sk-chase">
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                    <div class="sk-chase-dot"></div>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </div>
+        </newpostform>
+      </newpost>
+      <iframe id="sp" name="sp" class="d-none"></iframe>
+      <div class="row forum-header mt-5 px-2">
+        Online Now
+      </div>
+      <div class="card col-12 p-3 d-inline">
+        There are <strong><print stats="online"></strong> user's online now. (based on users active over the past 5 minutes)<br>
+        Registered Users: <print stats="users">
+      </div>
+      <div class="row forum-header mt-3 px-2">
+        Statistics
+      </div>
+      <div class="card col-12 p-3 d-inline">
+        Total Posts <strong><print total="posts"></strong> | Total Topics <strong><print total="topics"></strong> | Total members <strong><print total="members"></strong>
+      </div>
+    </section>
+    <div class="col-12 col-sm-3 mr-3">
+      <aside class="col-12 mt-3">
+        <div class="forum-header px-2 m-0">
+          Search Forum
+        </div>
+        <div class="card p-2 m-0">
+          <form method="post" action="forum">
+            <input type="hidden" name="act" value="search">
+            <div class="form-row">
+              <input type="search" name="s" value="" placeholder="Search Term...">
+              <button type="submit">Go</button>
+            </div>
+          </form>
+        </div>
+      </aside>
+      <sideposts>
+        <aside class="col-12 mt-3">
+          <div class="forum-header mt-3 px-2">
+            Popular Posts
+          </div>
+          <div class="card px-2 pt-2">
+            <sidepostitems>
+              <div class="mb-3">
+                <a href="<print post=link>"><print post="title"></a>
+                <small class="d-block text-muted"><print post="user"></small>
+              </div>
+            </sidepostitems>
+          </div>
+        </aside>
+      </sideposts>
+    </div>
+    <div class="row mt-5">
+      <div class="alert alert-info col-12" role="alert">Please note that the Forum is currently in development phase while features are added, and issues resolved during the development process</div>
+    </div>
+  </main>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

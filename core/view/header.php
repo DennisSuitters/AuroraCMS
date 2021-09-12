@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,8 +52,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		'/<print user=[\"\']?cssrank[\"\']?>/',
 		'/<print user=[\"\']?rank[\"\']?>/',
 		'/<print user=[\"\']?points[\"\']?>/',
-		isset($_SESSION['options'])&&$_SESSION['options'][6]==1?'/<[\/]?seohelper>/':'~<seohelper>.*?<\/seohelper>~is',
-		$config['development'][0]==1&&$_SESSION['rank']>899?'/<[\/]?development>/':'~<development>.*?<\/development>~is'
+		'/<print currenturl>/'
 	],[
 		'',
 		'',
@@ -62,8 +61,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		rank($user['rank']),
 		($user['points']>0?' | '.number_format((float)$user['points']).' Points Earned':''),
 		($user['name']!=''?$user['name']:$user['username']).' ('.ucwords(str_replace('-',' ',rank($user['rank']))).')',
-		'',
-		''
+		$_SERVER['REQUEST_URI']
 	],$html);
 }else$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
 $html=preg_replace([
@@ -92,7 +90,7 @@ if(stristr($html,'<buildMenu')){
 	}else$menuLogin='';
 	$htmlMenu='';
 	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='head' AND `mid`=0 AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
-	$s->execute([':rank'=>$_SESSION['rank']]);
+	$s->execute([':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0]);
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		$menuURL='';
 		if($r['contentType']=='cart'&&$config['options'][30]==1&&(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false))continue;
@@ -113,12 +111,12 @@ if(stristr($html,'<buildMenu')){
 		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=:id AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
 		$sm->execute([
 			':id'=>$r['id'],
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$smc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `mid`=:id AND `status`='published' AND `rank`<=:rank ORDER BY `title` ASC");
 		$smc->execute([
 			':id'=>$r['id'],
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$menuItem=$nondropDown;
 		if($sm->rowCount()>0||$smc->rowCount()>0)$menuItem=$dropDown;

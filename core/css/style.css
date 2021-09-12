@@ -1014,11 +1014,28 @@ header nav.horizontal .date{
 .card.stats:hover {
   text-decoration: none; }
 
+.card.stats.danger {
+  background-color: var(--alert-danger-background-color) !important;
+  border-color: var(--alert-danger-border-color) !important;
+  color: var(--alert-danger-color) !important; }
+
+.card.stats.danger .icon {
+  color: var(--alert-danger-color) !important; }
+
+.card.stats.warning {
+  background-color: var(--alert-warning-background-color) !important;
+  border-color: var(--alert-warning-border-color) !important;
+  color: var(--alert-warning-color) !important; }
+
+.card.stats.warning .icon {
+  color: var(--alert-warning-color) !important; }
+
 .card.stats .icon {
   position: absolute;
   right: 46px;
   bottom: 20px;
-  color: #ccc; }
+  color: #000;
+  opacity: .1 !important; }
 
 .no-image {
   display: none; }

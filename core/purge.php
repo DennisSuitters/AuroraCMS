@@ -32,8 +32,10 @@ if($tbl=='suggestions'){
   $s->execute([':id'=>$id]);
   if($s->rowCount()==1){
     $r=$s->fetch(PDO::FETCH_ASSOC);
-    $ss=$db->prepare("UPDATE `".$prefix.$r['t']."` SET `suggestions`=0 WHERE `id`=:id");
-    $ss->execute([':id'=>$r['rid']]);
+    if($r['t']!=''){
+      $ss=$db->prepare("UPDATE `".$prefix.$r['t']."` SET `suggestions`=0 WHERE `id`=:id");
+      $ss->execute([':id'=>$r['rid']]);
+    }
   }
 }
 if($id==0&&$tbl=='iplist'){

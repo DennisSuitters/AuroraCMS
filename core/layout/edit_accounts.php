@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -55,6 +55,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <label for="tab1-6">Messages</label>
           <input class="tab-control" id="tab1-7" name="tabs" type="radio">
           <label for="tab1-7">Settings</label>
+<?php if($config['hoster'][0]==1){?>
+          <input class="tab-control" id="tab1-8" name="tabs" type="radio">
+          <label for="tab1-8">Hosting/Website Payments</label>
+<?php }?>
 <?php /* Tab 1 General */?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <?=$user['rank']==1000?'<div class="row">'.
@@ -185,7 +189,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               echo'</select>';
             }?>
           </div>
-<?php /* Tab 2 Profile */ ?>
+<?php /* Tab 2 Contact */ ?>
           <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
@@ -277,6 +281,12 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               <input class="textinput" id="caption" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="caption" type="text" value="<?=$r['caption'];?>" placeholder="Enter a Caption..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savecaption" data-tooltip="tooltip" data-dbid="caption" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
+            <div class="row mt-3">
+              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountsContact" aria-label="PermaLink to Accounts Contact Checkbox">&#128279;</a>':'';?>
+              <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label for="accountsContact" id="loginaccountsContact0<?=$r['id'];?>">Accounts Contact</label>
+              <small class="help-text">Set this to indicate Accounts that belong to the Accounts Payable Person</small>
+            </div>
           </div>
 <?php /* Tab 3 Images */ ?>
           <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
@@ -307,7 +317,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
           </div>
 <?php /* Tab 3 Proofs */ ?>
-          <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
+          <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
             <div class="form-row" id="mi">
               <?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='proofs' AND `uid`=:id ORDER BY `ord` ASC");
               $sm->execute([
@@ -367,7 +377,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             <?php }?>
           </div>
   <?php /* Tab 4 Social */ ?>
-          <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
             <?php if($user['options'][0]==1||$user['options'][5]==1){?>
               <form class="form-row p-0" target="sp" method="post" action="core/add_data.php">
                 <input name="user" type="hidden" value="<?=$r['id'];?>">
@@ -564,6 +574,16 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               <label for="accountNewsletterSubscriber" id="loginnewsletter0<?=$r['id'];?>">Wholesaler Accepted to Purchase</label>
             </div>
             <div class="row">
+              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountForumBanned" aria-label="PermaLink to Forum Banned Checkbox">&#128279;</a>':'';?>
+              <input id="accountForumBanned" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="20" type="checkbox"<?=($r['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label for="accountForumBanned" id="loginforumbanned20<?=$r['id'];?>">Banned From Posting or Replying on Forum</label>
+            </div>
+            <div class="row">
+              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#loginForumHelpResponder" aria-label="PermaLink to Forum Help Responder">&#128279;</a>':'';?>
+              <input id="loginForumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label for="loginForumHelpResponder" id="loginForumHelpResponder0<?=$r['id'];?>">Forum Help Ticket Responder (Receives Urgent Emails).</label>
+            </div>
+            <div class="row">
               <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNewsletterSubscriber" aria-label="PermaLink to Newsletter Subscriber Checkbox">&#128279;</a>':'';?>
               <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label for="accountNewsletterSubscriber" id="loginnewsletter0<?=$r['id'];?>">Newsletter Subscriber</label>
@@ -658,6 +678,63 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               <?php }?>
             </div>
           <?php }?>
+<?php if($config['hoster'][0]==1){?>
+          <div class="tab1-8 border-top p-3" data-tabid="tab1-8" role="tabpanel">
+            <legend>Hosting Payments</legend>
+            <div class="row">
+              <div class="col-12 col-sm-4 pr-sm-3">
+                <label for="hostCost">Hosting Cost</label>
+                <div class="form-row">
+                  <input class="textinput" id="hostCost" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="hostCost" type="text" value="<?=$r['hostCost'];?>" placeholder="Enter a Cost...">
+                  <button class="save" id="savehostCost" data-tooltip="tooltip" data-dbid="hostCost" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 pr-sm-3">
+                <label for="hti">Due On <span class="labeldate" id="labeldatehti">(<?= date($config['dateFormat'],$r['hti']);?>)</span></label>
+                <div class="form-row">
+                  <input id="hti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['hti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`login`,`hti`,getTimestamp(`hti`),`select`);"':' readonly';?>>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <label for="hostStatus">Hosting Status</label>
+                <div class="form-row">
+                  <select id="hostStatus" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="hostStatus"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','hostStatus',$(this).val(),'select');">
+                    <option value="paid"<?=$r['hostStatus']=='paid'?' selected':'';?>>Paid</option>
+                    <option value="outstanding"<?=$r['siteStatus']=='outstanding'?' selected':'';?>>Outstanding</option>
+                    <option value="overdue"<?=$r['hostStatus']=='overdue'?' selected':'';?>>Overdue</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <legend class="mt-3">Site Payments</legend>
+            <div class="row">
+              <div class="col-12 col-sm-4 pr-sm-3">
+                <label for="hostCost">Site Payments</label>
+                <div class="form-row">
+                  <input class="textinput" id="siteCost" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="siteCost" type="text" value="<?=$r['siteCost'];?>" placeholder="Enter a Cost...">
+                  <button class="save" id="savesiteCost" data-tooltip="tooltip" data-dbid="siteCost" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4 pr-sm-3">
+                <label for="sti">Due On <span class="labeldate" id="labeldatehti">(<?= date($config['dateFormat'],$r['sti']);?>)</span></label>
+                <div class="form-row">
+                  <input id="sti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['sti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`login`,`sti`,getTimestamp(`sti`),`select`);"':' readonly';?>>
+                </div>
+              </div>
+              <div class="col-12 col-sm-4">
+                <label for="siteStatus">Payment Status</label>
+                <div class="form-row">
+                  <select id="siteStatus" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="siteStatus"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','siteStatus',$(this).val(),'select');">
+                    <option value="paid"<?=$r['siteStatus']=='paid'?' selected':'';?>>Paid</option>
+                    <option value="outstanding"<?=$r['siteStatus']=='outstanding'?' selected':'';?>>Outstanding</option>
+                    <option value="overdue"<?=$r['siteStatus']=='overdue'?' selected':'';?>>Overdue</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+<?php }?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>

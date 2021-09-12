@@ -70,7 +70,7 @@ class elFinderPluginMultiImages extends elFinderPlugin {
     $images = $this -> options['imageSizes'];
     foreach ($images as $key => $value) {
       if (is_array($value) and count($value) == 2) {
-        $fakeName = $this -> getName($imagesPath . $key . '/',$name);
+        $fakeName = $this -> getName($imagesPath . $key . '/', $name);
         $image = new Zebra_Image();
         $image -> source_path = $src;
         $image -> target_path = $imagesPath . $key . '/' . $fakeName;

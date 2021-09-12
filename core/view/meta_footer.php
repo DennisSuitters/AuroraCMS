@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -28,7 +28,35 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     $config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''&&$view=='contactus'?'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css"><script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$config['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.($config['business']==''?'':'var popupHtml=`<strong>'.$config['business'].'</strong>'.($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':'',
     stristr($html,'<g-recaptchascript>')&&$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<script defer async src="https://www.google.com/recaptcha/api.js"></script><script>function resizeReCaptcha(){var width=$(".g-recaptcha" ).parent().width();if(width<302){var scale=width/302;}else{var scale=1;}$(".g-recaptcha").css("transform","scale("+scale+")");$(".g-recaptcha").css("-webkit-transform","scale("+scale+")");$(".g-recaptcha").css("transform-origin","0 0");$(".g-recaptcha").css("-webkit-transform-origin","0 0");};$(document).ready(function(){$(window).on("resize",function(){resizeReCaptcha();});resizeReCaptcha();});</script>':'',
     isset($showCountdown)&&$showCountdown==true?'<script>countdown();</script>':'',
-    $view=='forum'&&(isset($_SESSION['uid'])&&$_SESSION['uid']>0)?'<Link rel="stylesheet" type="text/css" href="core/js/summernote/summernote.min.css" media="all"><script src="core/js/summernote/summernote.js"></script><script>$(document).ready(function(){$(".note").summernote({height:"250px",disableUpload:true,fileExplorer:"",popover:{image:[[`remove`,[`removeMedia`]],],link:[[`link`,[`linkDialogShow`,`unlink`]],],air:[]},toolbar:[[`font`,[`bold`,`italic`,`underline`,`clear`]],[`para`,[`ul`,`ol`]],[`insert`,[`picture`,`video`,`audio`,`link`,`hr`]],]});$(document).on("click","#notifications input[type=checkbox]",{},function(event){var id=$(this).data("dbid");var t=$(this).data("dbt");var c=$(this).data("dbc");var b=$(this).data("dbb");$.ajax({type:"GET",url:"core/toggle.php",data:{id:id,t:t,c:c,b:b}}).done(function(msg){});});});</script>':''
+    $view=='forum'&&(isset($_SESSION['uid'])&&$_SESSION['uid']>0)?'<Link rel="stylesheet" type="text/css" href="core/js/summernote/summernote.min.css" media="all">'.
+    '<Link rel="stylesheet" type="text/css" href="core/js/summernote/forum.min.css" media="all">'.
+    '<script src="core/js/summernote/summernote.js"></script>'.
+    '<script src="core/js/summernote/plugin/emoji/emoji.js"></script>'.
+    '<script>'.
+      '$(document).ready(function(){$(".note").summernote({'.
+        'height:"250px",'.
+        'disableUpload:true,'.
+        'fileExplorer:"",'.
+        'emoji:{'.
+          'url:"'.URL.'core/images/emojis/",'.
+        '},'.
+        'popover:{'.
+          'image:['.
+            '[`remove`,[`removeMedia`]],'.
+          '],'.
+          'link:['.
+            '[`link`,[`linkDialogShow`,`unlink`]],'.
+          '],'.
+          'air:[]'.
+        '},'.
+        'toolbar:['.
+          '[`font`,[`bold`,`italic`,`underline`,`clear`]],'.
+          '[`para`,[`ul`,`ol`]],'.
+          '[`emoji`,[`emoji`]],'.
+          '[`insert`,[`picture`,`video`,`audio`,`link`,`hr`]],'.
+        ']'.
+      '});'.
+      '$(document).on("click","#notifications input[type=checkbox]",{},function(event){var id=$(this).data("dbid");var t=$(this).data("dbt");var c=$(this).data("dbc");var b=$(this).data("dbb");$.ajax({type:"GET",url:"core/toggle.php",data:{id:id,t:t,c:c,b:b}}).done(function(msg){});});});</script>':''
   ],$footer);
   if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
     if($config['options'][13]==1){

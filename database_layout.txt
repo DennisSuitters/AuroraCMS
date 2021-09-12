@@ -85,6 +85,40 @@ config
     29  Create Invoice from Booking Service for Payment online.
     30  Must be logged in to Purchase.
     31  Display Category Menu.
+  `forumOptions` varchar(32)
+    0   Email Help Notifications
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+    16
+    17
+    18
+    19
+    20
+    21
+    22
+    23
+    24
+    25
+    26
+    27
+    28
+    29
+    30
+    31
   `theme` varchar(255)
   `seoTitle` varchar(60)
   `seoDescription` varchar(255)
@@ -376,7 +410,7 @@ login
     17  elFinder Allow Administrator to Administer Folders for Accounts
     18  Do not track account IP's
     19  Wholesaler Accepted to Purchase
-    20
+    20  Banned From Forum Posting/Replying
     21
     22
     23
@@ -457,6 +491,7 @@ login
   `notes` text COLLATE utf8_bin NOT NULL,
   `resume_notes` text COLLATE utf8_bin NOT NULL,
   `status` varchar(16) COLLATE utf8_bin NOT NULL,
+  `helpResponder` tinyint(1) UNSIGNED NOT NULL,
   `active` tinyint(1) UNSIGNED NOT NULL,
   `activate` varchar(255) COLLATE utf8_bin NOT NULL,
   `newsletter` int(1) NOT NULL DEFAULT '0',

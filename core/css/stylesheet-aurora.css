@@ -1248,22 +1248,27 @@ nav[role="menubar"].account-menu ul li {
   margin: 0 !important;
   padding: 0 !important;
   line-height: 1.7 !important;
-  vertical-align: middle !important; }
+  vertical-align: middle !important;
+  text-align: center !important;}
 
-nav[role="menubar"].account-menu ul li a {
+nav[role="menubar"].account-menu ul li a,
+nav[role="menubar"].account-menu button[role="link"] {
   border: 0 !important;
   font-family: arial !important;
   font-size: 16px !important;
   font-weight: 700 !important;
+  width: 100% !important;
   background: #000 !important;
   color: #aaa !important;
   margin: 0 !important;
   padding: .5em 1em !important;
   line-height: 1.7 !important;
   text-transform: none !important;
-  text-shadow: none !important; }
+  text-shadow: none !important;
+  border-radius: 0 !important; }
 
-nav[role="menubar"].account-menu ul li a:hover {
+nav[role="menubar"].account-menu ul li a:hover,
+nav[role="menubar"].account-menu button[role="link"]:hover {
   border: 0 !important;
   color: #fff !important;
   text-decoration: none !important;
@@ -1313,24 +1318,47 @@ nav[role="menubar"].account-menu #accountavatar {
   position: relative !important; }
 
 .forum-header {
-  background-color: #000;
-  color: #fff;
-  padding: .75rem 0;
-  border-top-left-radius: var(--border-radius);
-  border-top-right-radius: var(--border-radius); }
+  background-color: var(--forum-head-background-color) !important;
+  color: var(--forum-head-color) !important;
+  border: var(--card-border-width) var(--card-border-style) var(--card-border-color) !important;
+  border-bottom: 0 !important;
+  border-top-left-radius: var(--border-radius) !important;
+  border-top-right-radius: var(--border-radius) !important; }
+
+.forum-header + .card {
+  border-top-left-radius: 0 !important;
+  border-top-right-radius: 0 !important; }
 
 .forum-topic-avatar {
   max-width: 48px;
   height: 48px; }
+
+.forum-read {
+  color: var(--forum-read) !important;
+  fill: var(--forum-read) !important; }
+
+.forum-topic-avatar.forum-read {
+  border: var(--forum-read-border-width) solid var(--forum-read-border-color) !important; }
+
+.forum-unread {
+  color: var(--forum-unread) !important;
+  fill: var(--forum-unread) !important; }
+
+.forum-topic-avatar.forum-unread {
+  border: var(--forum-unread-border-width) solid var(--forum-unread-border-color) !important; }
+
+.forum-pin {
+  fill: var(--forum-pin-color); }
 
 .forum-avatar {
   max-width: 128px;
   height: 128px; }
 
 .forum-toolbar {
-  position: absolute;
-  top: 0;
-  right: 0; }
+  text-align: right; }
+
+.forum-item-unread {
+  background-color: var(--success-background-color) !important; }
 
 .forum-item:hover {
   background-color: #fafafa; }
@@ -1356,3 +1384,75 @@ nav[role="menubar"].account-menu #accountavatar {
   background: none !important;
   border: 0 !important;
   color: #000 !important; }
+
+.forum-post blockquote,
+.note-editable blockquote {
+  background: var(--forum-blockquote-background-color, #ebebeb) url(../images/quote.gif) 6px 8px no-repeat !important;
+  border: 1px solid var(--forum-blockquote-border-color, #dbdbdb) !important;
+  font-size: 0.95em !important;
+  color: var(--forum-blockquote-color, #000) !important;
+  margin: 0.1em 0 0 0 !important;
+  overflow: hidden !important;
+  padding: 5px !important; }
+
+.forum-post blockquote cite,
+.note-editable blockquote cite {
+  font-style: normal !important;
+  font-weight: bold !important;
+  margin-left: 20px !important;
+  display: block !important;
+  font-size: 0.9em !important; }
+
+.status {
+  display: inline-block !important;
+  width: 100% !important;
+  text-align: center !important;
+  border-radius: var(--border-radius); }
+
+.status.urgent,
+.status .urgent {
+  color: #fff !important;
+  background-color: #dc3545 !important; }
+
+.status.in-progress,
+.status .in-progress {
+  color: #fff !important;
+  background-color: #007bff !important; }
+
+.status.closed,
+.status .closed {
+  color: #fff !important;
+  background-color: #343a40 !important; }
+
+.note-emoji-list {
+	width: 180px;
+	height: 200px;
+	overflow: auto;
+	padding-left: 5px;
+  white-space: normal; }
+
+.note-emoji-list button,
+.note-emoji-list button:hover,
+.note-emoji-list button:focus {
+  background: none !important;
+  border: 0 !important;
+  margin-top: 5px;
+  margin-right: 5px;
+  padding: 0; }
+
+.note-emoji-list button:hover {
+  background-color: #f5f5f5 !important; }
+
+.note-emoji-list .note-emoji-btn img {
+  width: 20px; }
+
+img.emoji-img-inline {
+  display: inline-block;
+  margin-top:-0.3em;
+  height: 1.2em;
+  width: auto; }
+
+.note-emoji-search {
+	margin-right: 5px;
+  margin-left: 5px;
+  margin-bottom: 5px; }

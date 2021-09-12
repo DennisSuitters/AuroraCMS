@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- */?>
+ */
+if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_forum.php';
+else{?>
 <main>
   <section id="content">
     <div class="content-title-wrapper">
@@ -18,6 +20,9 @@
         <div class="content-title-heading">
           <div class="content-title-icon"><?= svg2('forum','i-3x');?></div>
           <div>Forum</div>
+          <div class="content-title-actions">
+            <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/forum/settings" role="button" aria-label="Forum Settings">'.svg2('settings').'</a>':'';?>
+          </div>
         </div>
         <ol class="breadcrumb">
           <li class="breadcrumb-item active">Forum</li>
@@ -54,6 +59,9 @@
               <option value="800">Manager and above</option>
               <option value="900">Administrator and above</option>
             </select>
+            <div class="input-text">
+              <label for="help">Help: </label><input type="checkbox" id="help" name="help">
+            </div>
             <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
           </div>
         </form>
@@ -76,6 +84,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                 <input class="text-input" id="notes<?=$rc['id'];?>" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="notes" type="text" value="<?=$rc['notes'];?>" placeholder="Enter a Description...">
                 <button class="save" id="savenotes<?=$rc['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                 <div class="input-text">
+                  <label for="help<?=$rc['id'];?>">Help: </label><input type="checkbox" id="help<?=$rc['id'];?>"<?=$rc['help']==1?' checked':'';?> disabled>
+                </div>
+                <div class="input-text">
                   <label for="pin<?=$rc['id'];?>">Pin: </label><input type="checkbox" id="pin<?=$rc['id'];?>" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="pin" data-dbb="0"<?=$rc['pin']==1?' checked':'';?>>
                 </div>
                 <form target="sp" method="post" action="core/purgeforum.php">
@@ -91,6 +102,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                 <input type="hidden" name="act" value="topic">
                 <input type="hidden" name="id" value="<?=$rc['id'];?>">
                 <input type="hidden" name="rank" value="<?=$rc['rank'];?>">
+                <input type="hidden" name="help" value="<?=$rc['help'];?>">
                 <div class="form-row">
                   <div class="input-text">Topic</div>
                   <input name="t" placeholder="Enter a Topic Title...">
@@ -186,3 +198,4 @@ $sp->execute([':tid'=>$rt['id']]);?>
     </div>
   </section>
 </main>
+<?php }

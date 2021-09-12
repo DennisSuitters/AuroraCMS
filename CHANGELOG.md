@@ -1,8 +1,20 @@
-### v0.1.9
-- Add listing active Pages to Link select for FAQ's.
-- Fix FAQ output displaying entities.
-- Add Category for FAQ's.
-- Add ability for FAQ's to be open when displayed.
-- Add Forum System, still work to be done.
-- Forum Post Pinning filter to pin checkbox toggle.
-- Create text Snippet function for search results to highlight search term, and truncate leading and following text.
+### v0.2.0
+- Fix elFinder Multi-Thumb plugin not correctly renaming all files.
+- Fix elFinder Filename Normalizer plugin not correctly parsing files with underscores.
+- Fix Pagination to use same function as Forum.
+- Fix loging out changing page.
+- Add better styling for Forum elements.
+- Add Forum Post tracking.
+- Add ability to quote posts and replies.
+- Add Emojis dropdown for Summernote for Forum Posts and Replies.
+- Add parsing for Emoji shortcodes when making new Forum Posts or Replies.
+- Add ability when Quoting to grab selected text for Quote, for when only a section needs mentioning.
+- Add Banning user's from Post or Replying on Forum.
+- Adjust Mobile Responsiveness for Forum Elements.
+- Add Administration page to allow disabling, reordering, selecting default page to open, and rank restriction of menu items in Administration.
+- Fix Breadcrumb Dropdown width in Administration.
+- Add Category Navigation to Content Editing area in Administration.
+- Add Hosting Information and Editing for Administrators, to let client's know when or if Hosting is Due or Overdue.
+- Add Site Payment Information to let nominated Account know that Site Payments are overdue.
+- Fix incorrect Tab reference on Account Editing page in Administration.
+- Add Payments Viewing for Hoster's to edit Payment Accounts in Administration, Only available to Developer Accounts.

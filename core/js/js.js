@@ -2,6 +2,16 @@ function getClient(email){
 	$('#busy').css({'display':'inline-block'});
 	$('#sp').load('core/get_client.php?email='+email);
 }
+function getSelectedText(){
+  if(window.getSelection){
+    txt=window.getSelection();
+  }else if(window.document.getSelection){
+    txt =window.document.getSelection();
+  }else if(window.document.selection){
+    txt=window.document.selection.createRange().text;
+  }
+  return txt;
+}
 document.addEventListener("DOMContentLoaded",function(){
 	$('.opener').click(function(e){
 		$(this).parent('li').toggleClass('open');
@@ -9,6 +19,15 @@ document.addEventListener("DOMContentLoaded",function(){
 	$('.auroraForm').click(function(e){
 		const formType=$(this).data('formtype');
 		$('#'+formType+'-btn').removeAttr('disabled');
+	});
+	$('.getquote').click(function(e){
+		const id=$(this).data('postid');
+		let quote=getSelectedText();
+		if(quote==''){
+			quote=$('#forum-post-'+id).html();
+		}
+		const user=$('#forum-user-'+id).html();
+		$('#da').summernote('pasteHTML','<blockquote><cite>' + user + ' wrote:</cite>' + quote + '</blockquote>');
 	});
 	$('.auroraForm').submit(function(e){
 		const formType=$(this).data('formtype');

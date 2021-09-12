@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,7 +49,9 @@ function rank($txt){
 $cid=isset($_POST['cid'])?filter_input(INPUT_POST,'cid',FILTER_SANITIZE_NUMBER_INT):0;
 $tid=isset($_POST['tid'])?filter_input(INPUT_POST,'tid',FILTER_SANITIZE_NUMBER_INT):0;
 $uid=isset($_POST['uid'])?filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT):0;
+$h=isset($_POST['h'])?filter_input(INPUT_POST,'h',FILTER_SANITIZE_NUMBER_INT):0;
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
+$st=isset($_POST['st'])?filter_input(INPUT_POST,'st',FILTER_SANITIZE_STRING):'';
 $rank=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_SANITIZE_NUMBER_INT):0;
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):'';
 if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
@@ -74,8 +76,13 @@ if($t==''||$da==''){
   echo'window.top.window.$("#forumbusy").removeClass("d-block");';
   echo'</script>';
 }else{
+  $emojijson=file_get_contents('images/emojis/emojis.json');
+	$data=json_decode($emojijson,true);
+	foreach($data as $val => $key){
+		$da=str_replace(':'.$val.':','<img class="emoji-img-inline" src="'.$key.'" alt="'.$val.'" title="'.$val.'">',$da);
+	}
   $ti=time();
-  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumPosts` (`rank`,`cid`,`tid`,`pid`,`uid`,`title`,`notes`,`ti`) VALUES (:rank,:cid,:tid,:pid,:uid,:title,:notes,:ti)");
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumPosts` (`rank`,`cid`,`tid`,`pid`,`uid`,`title`,`notes`,`help`,`status`,`ti`) VALUES (:rank,:cid,:tid,:pid,:uid,:title,:notes,:help,:status,:ti)");
   $s->execute([
     ':rank'=>$rank,
   	':cid'=>$cid,
@@ -84,17 +91,77 @@ if($t==''||$da==''){
     ':uid'=>$uid,
   	':title'=>$t,
     ':notes'=>$da,
+    ':help'=>$h,
+    ':status'=>$st,
     ':ti'=>$ti
   ]);
   $id=$db->lastInsertId();
+  $spt=$db->prepare("INSERT INTO `".$prefix."forumPostTrack` (`cid`,`tid`,`pid`,`uid`,`notes`) VALUES (:cid,:tid,:pid,:uid,'read')");
+  $spt->execute([
+    ':cid'=>$cid,
+    ':tid'=>$tid,
+    ':pid'=>$id,
+    ':uid'=>$uid
+  ]);
+  if($st=='urgent'&&$config['forumOptions'][0]==1){
+    require'phpmailer/class.phpmailer.php';
+    $su=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `email`!='' AND `rank`>599 AND `helpResponder`=1 AND `active`=1");
+    $su->execute();
+    $subject='New Ticket: '.$t;
+    $body='New Ticket created at <strong>'.$config['business'].'</strong><br>'.
+      'Title: '.$t.'<br>'.
+      'Post: '.filter_var($da,FILTER_SANITIZE_STRING).'<br>'.
+      'Ticket URL: <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'">'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'</a><br>';
+    $mail=new PHPMailer;
+    $mail->isHTML(true);
+    $mail->SetFrom($config['email'],$config['business']);
+    $mail->Subject=$subject;
+    $mail->AltBody=$body;
+    $betweenDelay=$config['newslettersSendMax']!=''||$config['newslettersSendMax']==0?$config['newslettersSendMax']:$betweenDelay=50;
+    $sendCount=1;
+    $sendDelay=$config['newslettersSendDelay']!=''||$config['newslettersSendDelay']==0?$config['newslettersSendDelay']:1;
+    ignore_user_abort(true);
+    set_time_limit(300);
+    if($su->rowCount()>0){
+      while($ru=$su->fetch(PDO::FETCH_ASSOC)){
+        if($ru['email']!=''){
+          if(($sendCount % $betweenDelay)==0)sleep($sendDelay);
+          $mail->AddAddress($ru['email']);
+          $mail->Body=$body;
+          if($mail->Send()){
+            $mail->clearAllRecipients();
+            $sendCount++;
+          }
+        }
+      }
+    }else{
+      if($config['email']!=''){
+        $mail->AddAddress($config['email']);
+        $mail->Body=$body;
+        if($mail->Send()){}
+      }
+    }
+  }
   echo'<script>'.
     'window.top.window.$("#newpost").html(`'.
-  		'<div class="alert alert-success text-center" role="alert">'.
-  			'Your Post has been added.<br>'.
-  			'This page will redirect to your post, or you can click <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'">here</a> to view it.'.
-  		'</div>'.
-  	'`);'.
-  //	'window.parent.window.location.href = "'.URL.'forum?cid='.$cid.'&tid='.$tis.'&pid='.$id.'";'.
-  //	'window.top.window.setTimeout(function(){window.top.window.location.href = "'.URL.'forum?cid='.$cid.'&tid='.$tis.'&pid='.$id.'";},5000);'.
+  		'<div class="alert alert-success text-center" role="alert">';
+        if($h==1){
+          echo'Your Ticket has been added.';
+          if($st=='urgent'){
+            if($config['forumOptions'][0]==1){
+              echo' As your Ticket was marked <strong>Urgent</strong>, a Notification has been sent to <strong>'.$sendCount.'</strong> Responders.<br>';
+            }else{
+              echo' Your Ticket has been marked Urgent.<br>';
+            }
+          }
+        }else{
+          echo'Your Post has been added.<br>';
+        }
+        echo'This page will redirect in 5 seconds to your post, or you can click <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'">here</a> to view it.'.
+      '</div>'.
+    '`);'.
+    'window.setTimeout(function(){'.
+  	   'parent.window.location.href = "'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'";'.
+    '},5000);'.
   '</script>';
 }

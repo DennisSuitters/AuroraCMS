@@ -9,7 +9,7 @@
 			<administration>
 				<li role="menuitem"><a href="<print administrationLink>">Administration</a></li>
 			</administration>
-			<li role="menuitem"><a href="logout">Logout</a></li>
+			<li role="menuitem"><form method="post" action="<print currenturl>"><input type="hidden" name="act" value="logout"><button type="submit" role="link">Logout</button></form></li>
 			<li class="d-none d-sm-inline-block" role="menuitem">
 				<img class="img-avatar avatar" src="<print user=avatar>" alt="<print user=name>">
 			</li>

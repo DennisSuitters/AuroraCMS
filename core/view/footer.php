@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='<li><a href="logout/">Logout</a></li>';
+if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='';
 else{
 	if($config['options'][3]==1)$link_x=' or Sign Up';
 	else{
@@ -162,7 +162,7 @@ if(stristr($html,'<subjectText>')){
 }
 if(stristr($html,'<buildMenu')){
 	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='footer' AND `mid`=0 AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
-	$s->execute([':rank'=>$_SESSION['rank']]);
+	$s->execute([':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0]);
 	preg_match('/<buildMenu>([\w\W]*?)<\/buildMenu>/',$html,$matches);
 	$htmlMenu=$matches[1];
 	$menu='';

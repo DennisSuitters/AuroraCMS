@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -269,7 +269,7 @@ elseif($view=='search'){
 				':contentType'=>$view,
 				':status'=>$status,
 				':ti'=>time(),
-				':rank'=>$_SESSION['rank']
+				':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 			]);
 			$rowCount=$s->rowCount();
 			$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
@@ -279,7 +279,7 @@ elseif($view=='search'){
 			':contentType'=>$view,
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 	}
 }

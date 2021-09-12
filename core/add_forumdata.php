@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,12 +43,14 @@ if($act=='category'){
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):'';
 	$rank=isset($_POST['rank'])?filter_input(INPUT_POST,'rank',FILTER_SANITIZE_STRING):0;
+	$help=isset($_POST['help'])?1:0;
 	$el='#cats';
-  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumCategory` (`rank`,`title`,`notes`,`ti`) VALUES (:rank,:title,:notes,:ti)");
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumCategory` (`rank`,`title`,`notes`,`help`,`ti`) VALUES (:rank,:title,:notes,:help,:ti)");
   $s->execute([
 		':rank'=>$rank,
     ':title'=>$t,
     ':notes'=>$da,
+		':help'=>$help,
     ':ti'=>time()
   ]);
 	$id=$db->lastInsertId();
@@ -77,6 +79,15 @@ if($act=='category'){
 					'<input type="text" name="da" value="'.$da.'" placeholder="Enter a Description...">'.
 					'<button class="save" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
 				'</form>'.
+				'<div class="input-text">'.
+					'<form class="d-inline-flex" target="sp" method="post" action="core/toggle.php">'.
+						'<input type="hidden" name="id" value="'.$id.'">'.
+						'<input type="hidden" name="b" value="0">'.
+						'<input type="hidden" name="t" value="forumCategory">'.
+						'<input type="hidden" name="c" value="help">'.
+						'<label for="help'.$id.'">Help: </label><input type="checkbox" id="help'.$id.'"'.($help==1?' checked':'').' onchange="this.form.submit();">'.
+					'</form>'.
+				'</div>'.
 				'<div class="input-text">'.
 					'<form class="d-inline-flex" target="sp" method="post" action="core/toggle.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
@@ -115,13 +126,15 @@ if($act=='topic'){
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):'';
 	$rank=isset($_POST['rank'])?filter_input(INPUT_POST,'rank',FILTER_SANITIZE_STRING):0;
+	$help=isset($_POST['help'])?filter_input(INPUT_POST,'help',FILTER_SANITIZE_NUMBER_INT):0;
 	$el='#topics_'.$cid;
-  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumTopics` (`rank`,`cid`,`title`,`notes`,`ti`) VALUES (:rank,:cid,:title,:notes,:ti)");
+  $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumTopics` (`rank`,`cid`,`title`,`notes`,`help`,`ti`) VALUES (:rank,:cid,:title,:notes,:help,:ti)");
   $s->execute([
 		':rank'=>$rank,
 		':cid'=>$cid,
     ':title'=>$t,
     ':notes'=>$da,
+		':help'=>$help,
     ':ti'=>time()
   ]);
 	$id=$db->lastInsertId();

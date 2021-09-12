@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,13 @@ require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+$ti=time();
 $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
 $s->execute([':pti'=>time()]);
+$s=$db->prepare("UPDATE `".$prefix."login` SET `hti`=:ti,`hostStatus`='overdue' WHERE `hti`<:ti AND `hostStatus`='outstanding'");
+$s->execute([':ti'=>$ti]);
+$s=$db->prepare("UPDATE `".$prefix."login` SET `sti`=:ti,`siteStatus`='overdue' WHERE `sti`<:ti AND `siteStatus`='outstanding'");
+$s->execute([':ti'=>$ti]);
 if($config['php_options'][6]==1){
 	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `ti`<:ti");
 	$s->execute([':ti'=>time()-2592000]);
@@ -327,6 +332,10 @@ class admin{
 		$view='pages';
 		require'admin.php';
 	}
+	function payments($args=false){
+		$view='payments';
+		require'admin.php';
+	}
 	function preferences($args=false){
 		$view='preferences';
 		require'admin.php';
@@ -515,6 +524,7 @@ $routes=[
 	$settings['system']['admin'].'/orders'=>['admin','orders'],
   $settings['system']['admin'].'/rewards'=>['admin','rewards'],
 	$settings['system']['admin'].'/pages'=>['admin','pages'],
+	$settings['system']['admin'].'/payments'=>['admin','payments'],
 	$settings['system']['admin'].'/preferences'=>['admin','preferences'],
 	$settings['system']['admin'].'/settings'=>['admin','settings'],
 	$settings['system']['admin'].'/reviews'=>['admin','reviews'],

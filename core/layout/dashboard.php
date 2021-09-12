@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,7 +35,11 @@ else{?>
         elseif($curHr<18)$msg.='Good Afternoon ';
         else$msg.='Good Evening ';
         $msg.=($user['name']!=''?strtok($user['name'], " "):$user['username']).'!'."<br>The date is ".date($config['dateFormat'])."</h5>";
-        echo$msg.($config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').($config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
+        echo$msg;
+        if($user['accountsContact'][0]==1&&$config['hosterURL']!=''){
+          echo'<div id="hostinginfo"></div>';
+        }
+        echo($config['maintenance'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').($config['comingsoon'][0]==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
         if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         $tid=$ti-2592000;
         if($config['business']=='')echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
@@ -52,7 +56,39 @@ else{?>
           '</div>';
         }?>
         <div class="row">
-          <?php $ss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."iplist` WHERE `ti`>=:ti");
+          <?php if($config['hoster'][0]==1&&$user['rank']=1000){
+            $rh=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `hostStatus`='overdue'")->fetch(PDO::FETCH_ASSOC);
+            if($rh['cnt']>0){?>
+              <a class="card stats danger col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/payments';?>">
+                <span class="h5">Hosting</span>
+                  <span class="p-0">
+                    <span class="text-3x" id="stats-messages"><?=$rh['cnt'];?></span> <small><small>Overdue</small></small>
+                  </span>
+                  <span class="icon"><?= svg2('hosting','i-5x');?></span>
+              </a>
+<?php       }
+            $rso=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `siteStatus`='overdue'")->fetch(PDO::FETCH_ASSOC);
+            if($rso['cnt']>0){?>
+              <a class="card stats danger col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/payments';?>">
+                <span class="h5">Site Payments</span>
+                  <span class="p-0">
+                    <span class="text-3x" id="stats-messages"><?=$rso['cnt'];?></span> <small><small>Overdue</small></small>
+                  </span>
+                <span class="icon"><?= svg2('hosting','i-5x');?></span>
+              </a>
+<?php       }
+            $rss=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `siteStatus`='outstanding'")->fetch(PDO::FETCH_ASSOC);
+            if($rss['cnt']>0){?>
+              <a class="card stats warning col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/payments';?>">
+                <span class="icon"><?= svg2('hosting','i-5x');?></span>
+                <span class="h5">Site Payments</span>
+                <span class="p-0">
+                  <span class="text-3x" id="stats-messages"><?=$rss['cnt'];?></span> <small><small>Oustanding</small></small>
+                </span>
+              </a>
+<?php       }
+          }
+          $ss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."iplist` WHERE `ti`>=:ti");
           $ss->execute(['ti'=>time()-604800]);
           $sa=$ss->fetch(PDO::FETCH_ASSOC);
           $bc=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Chrome'")->fetch(PDO::FETCH_ASSOC);
@@ -360,5 +396,32 @@ if(file_exists('CHANGELOG.md')){
       </div>
     </div>
   </section>
+<?php $ss=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE `popup`=1 AND `seen`=0 AND `uid`=:uid ORDER BY `ti` ASC");
+$ss->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+if($ss->rowCount()>0){
+  $rs=$ss->fetch(PDO::FETCH_ASSOC);
+  $su=$db->prepare("UPDATE `".$prefix."suggestions` SET `seen`=1,`sti`=:sti WHERE `id`=:id");
+  $su->execute([
+    ':id'=>$rs['id'],
+    ':sti'=>time()
+  ]);
+  $su=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
+  $su->execute([':id'=>$rs['uid']]);
+  $rt=$su->fetch(PDO::FETCH_ASSOC);
+  $su=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
+  $su->execute([':id'=>$rs['rid']]);
+  $rf=$su->fetch(PDO::FETCH_ASSOC);
+  $mhtml='<div class="popupmessage col-12 col-sm-8 p-5">'.
+    '<h5>To: '.$rt['username'].($rt['name']!=''?':'.$rt['name']:'').'<br>From: '.$rf['username'].($rf['name']!=''?':'.$rf['name']:'').'</h5>'.
+    '<div class="mt-3 p-3">'.
+      $rs['notes'].
+    '</div>'.
+  '</div>';?>
+  <script>
+  $(document).ready(function(){
+    $.fancybox.open(`<?=$mhtml;?>`);
+  });
+  </script>
+<?php }?>
 </main>
 <?php }

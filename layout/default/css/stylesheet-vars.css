@@ -215,8 +215,8 @@
 
   --card-background-color: #fff;
   --card-header-background-color: transparent;
-  --card-link-color: #000;
-  --card-link-color-hover: #08f;
+  --card-link-color: var(--link-color);
+  --card-link-color-hover: var(--link-color-hover);
   --card-border-width: 1px;
   --card-border-style: solid;
   --card-border-radius: .25rem;
@@ -261,6 +261,36 @@
   --starRating-color: #ffdf00;
   --starRating-outline-width: 1px;
   --starRating-outline-color: #888;
+
+  --forum-head-background-color: #000;
+  --forum-head-color: #fff;
+  --forum-pin-color: #4c4;
+  --forum-read: #eee;
+  --forum-read-border-width: 5px;
+  --forum-read-border-color: #eee;
+  --forum-unread: var(--card-link-color);
+  --forum-unread-border-width: 5px;
+  --forum-unread-border-color: var(--card-link-color);
+  --forum-blockquote-background-color: #ebebeb;
+  --forum-blockquote-border-color: #dbdbdb;
+  --forum-blockquote-color: #000;
+  --forum-wysiwyg-toolbar-background-color: var(--forum-head-background-color);
+  --forum-wysiwyg-toolbar-border-color: var(--card-border-color);
+  --forum-wysiwyg-button-background-color: var(--button-background-color);
+  --forum-wysiwyg-button-background-color-hover: var(--button-background-color-hover);
+  --forum-wysiwyg-button-border-width: var(--button-border-width);
+  --forum-wysiwyg-button-border-width-hover: var(--button-border-width-hover);
+  --forum-wysiwyg-button-border-style: var(--button-border-style);
+  --forum-wysiwyg-button-border-style-hover: var(--button-border-style-hover);
+  --forum-wysiwyg-button-border-color: var(--button-border-color);
+  --forum-wysiwyg-button-border-color-hover: var(--button-border-color-hover);
+  --forum-wysiwyg-button-color: var(--button-color);
+  --forum-wysiwyg-button-color-hover: var(--button-color-hover);
+  --forum-wysiwyg-button-border-radius: var(--button-border-radius);
+  --forum-wysiwyg-background-color: var(--card-background-color);
+  --forum-wysiwyg-border-color: var(--card-border-color);
+  --forum-wysiwyg-editable-background-color: var(--card-background-color);
+  --forum-wysiwyg-editable-color: var(--card-color);
 
   --chat-zindex: 1020;
   --chat-header-color: #e9e9e9;

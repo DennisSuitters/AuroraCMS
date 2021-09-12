@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -72,9 +72,25 @@ else{
         if(isset($args[2])&&($args[2]=='archived'||$args[2]=='unpublished'||$args[2]=='autopublish'||$args[2]=='published'||$args[2]=='delete'||$args[2]=='all')){
           if($args[2]=='all')$getStatus=" ";
           else$getStatus=" AND `status`='".$args[2]."' ";
+        }elseif(isset($args[2])&&$args[2]!='cat'){
+          $getStatus=" ";
         }else$getStatus=" AND `status`!='archived'";
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
-        $s->execute([':contentType'=>$args[1]]);
+        if(isset($args[2])&&$args[2]=='cat'){
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s->execute([
+            ':category_1'=>isset($args[3])&&$args[3]!=''?'%'.str_replace('-','%',$args[3]).'%':'%',
+            ':category_2'=>isset($args[4])&&$args[4]!=''?'%'.str_replace('-','%',$args[4]).'%':'%',
+            ':category_3'=>isset($args[5])&&$args[5]!=''?'%'.str_replace('-','%',$args[5]).'%':'%',
+            ':category_4'=>isset($args[6])&&$args[6]!=''?'%'.str_replace('-','%',$args[6]).'%':'%',
+            ':contentType'=>$args[1]
+          ]);
+        }else{
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s->execute([
+            ':contentType'=>$args[1]
+          ]);
+
+        }
       }elseif(isset($args[1])&&($args[1]=='archived'||$args[1]=='unpublished'||$args[1]=='autopublish'||$args[1]=='published'||$args[1]=='delete'||$args[1]=='all')){
         $getStatus=" AND `status`!='archived'";
         if($args[1]=='all')
@@ -84,32 +100,34 @@ else{
         $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
         $s->execute([':contentType'=>$view]);
       }else{
-        if(isset($args[3])){
+        if(isset($args[5])){
           $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
           $s->execute([
-            ':category_1'=>str_replace('-',' ',$args[0]),
-            ':category_2'=>str_replace('-',' ',$args[1]),
-            ':category_3'=>str_replace('-',' ',$args[2]),
-            ':category_4'=>str_replace('-',' ',$args[3])
+            ':category_1'=>str_replace('-',' ',strtolower($args[2])),
+            ':category_2'=>str_replace('-',' ',strtolower($args[3])),
+            ':category_3'=>str_replace('-',' ',strtolower($args[4])),
+            ':category_4'=>str_replace('-',' ',strtolower($args[5]))
+          ]);
+        }elseif(isset($args[4])){
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s->execute([
+            ':category_1'=>str_replace('-',' ',strtolower($args[2])),
+            ':category_2'=>str_replace('-',' ',strtolower($args[3])),
+            ':category_3'=>str_replace('-',' ',strtolower($args[4]))
           ]);
         }elseif(isset($args[3])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute([
-            ':category_1'=>str_replace('-',' ',$args[0]),
-            ':category_2'=>str_replace('-',' ',$args[1]),
-            ':category_3'=>str_replace('-',' ',$args[2])
+            ':category_1'=>str_replace('-',' ',strtolower($args[2])),
+            ':category_2'=>str_replace('-',' ',strtolower($args[3]))
           ]);
-        }elseif(isset($args[1])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+        }elseif(isset($args[2])){
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` ASC, `title` ASC");
           $s->execute([
-            ':category_1'=>str_replace('-',' ',$args[0]),
-            ':category_2'=>str_replace('-',' ',$args[1])
+            ':category_1'=>str_replace('-',' ',strtolower($args[2]))
           ]);
-        }elseif(isset($args[0])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` ASC,`title` ASC");
-          $s->execute([':category_1'=>str_replace('-',' ',$args[0])]);
         }else{
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute();
         }
       }?>
@@ -144,7 +162,7 @@ else{
         <div class="container-fluid p-0">
           <div class="card border-radius-0 shadow overflow-visible">
             <div class="row p-3">
-              <div class="col-12 col-sm-6">
+              <div class="col-12 col-sm-9">
                 <small>View:
                   <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" aria-label="Display All Content">All</a>&nbsp;
                   <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" aria-label="Display Published Items">Published</a>&nbsp;
@@ -153,8 +171,72 @@ else{
                   <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
                   <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" aria-label="Display Archived Items">Archived</a>&nbsp;
                 </small>
+                <div class="small">
+                  <ol class="breadcrumb pl-0 bg-transparent">
+                    <li class="breadcrumb-item">Categories</li>
+                    <li class="breadcrumb-item breadcrumb-dropdown">
+                      <?= isset($args[3])&&$args[3]!=''?ucwords(str_replace('-',' ',$args[3])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                      <ul class="breadcrumb-dropper">
+                        <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>">All</a></li>
+                        <?php $sc1=$db->prepare("SELECT DISTINCT `category_1` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`=:cT AND `category_1`!='' ORDER BY `category_1` ASC");
+                        $sc1->execute([':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%']);
+                        while($rc1=$sc1->fetch(PDO::FETCH_ASSOC)){
+                          echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$args[1].'/cat/'.str_replace(' ','-',strtolower($rc1['category_1'])).'">'.ucfirst($rc1['category_1']).'</a></li>';
+                        }?>
+                      </ul>
+                    </li>
+                    <?php if(isset($args[3])&&$args[3]!=''){?>
+                      <li class="breadcrumb-item breadcrumb-dropdown">
+                        <?= isset($args[4])&&$args[4]!=''?ucwords(str_replace('-',' ',$args[4])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                        <ul class="breadcrumb-dropper">
+                          <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]).'/cat/'.$args[3];?>">All</a></li>
+                          <?php $sc2=$db->prepare("SELECT DISTINCT `category_2` FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:cat1) AND `contentType`=:cT AND `category_2`!='' ORDER BY `category_2` ASC");
+                          $sc2->execute([
+                            ':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%',
+                            ':cat1'=>isset($args[3])&&$args[3]!=''?'%'.str_replace('-',' ',$args[3]).'%':'%'
+                          ]);
+                          while($rc2=$sc2->fetch(PDO::FETCH_ASSOC)){
+                            echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$args[1].'/cat/'.$args[3].'/'.str_replace(' ','-',strtolower($rc2['category_2'])).'">'.ucfirst($rc2['category_2']).'</a></li>';
+                          }?>
+                        </ul>
+                      </li>
+                    <?php }
+                    if(isset($args[4])&&$args[4]!=''){?>
+                      <li class="breadcrumb-item breadcrumb-dropdown">
+                        <?= isset($args[5])&&$args[5]!=''?ucwords(str_replace('-',' ',$args[5])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                        <ul class="breadcrumb-dropper">
+                          <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]).'/cat/'.$args[3].'/'.$args[4];?>">All</a></li>
+                          <?php $sc3=$db->prepare("SELECT DISTINCT `category_3` FROM `".$prefix."content` WHERE LOWER(`category_2`) LIKE LOWER(:cat2) AND `contentType`=:cT AND `category_3`!='' ORDER BY `category_3` ASC");
+                          $sc3->execute([
+                            ':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%',
+                            ':cat2'=>isset($args[4])&&$args[4]!=''?'%'.str_replace('-',' ',$args[4]).'%':'%'
+                          ]);
+                          while($rc3=$sc3->fetch(PDO::FETCH_ASSOC)){
+                            echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$args[1].'/cat/'.$args[3].'/'.$args[4].'/'.str_replace(' ','-',strtolower($rc3['category_3'])).'">'.ucfirst($rc3['category_3']).'</a></li>';
+                          }?>
+                        </ul>
+                      </li>
+                    <?php }
+                    if(isset($args[5])&&$args[5]!=''){?>
+                      <li class="breadcrumb-item breadcrumb-dropdown">
+                        <?= isset($args[6])&&$args[6]!=''?ucwords(str_replace('-',' ',$args[6])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                        <ul class="breadcrumb-dropper">
+                          <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]).'/cat/'.$args[3].'/'.$args[4].'/'.$args[5];?>">All</a></li>
+                          <?php $sc4=$db->prepare("SELECT DISTINCT `category_4` FROM `".$prefix."content` WHERE LOWER(`category_3`) LIKE LOWER(:cat3) AND `contentType`=:cT AND `category_4`!='' ORDER BY `category_4` ASC");
+                          $sc4->execute([
+                            ':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%',
+                            ':cat3'=>isset($args[5])&&$args[5]!=''?'%'.str_replace('-',' ',$args[5]).'%':'%'
+                          ]);
+                          while($rc4=$sc4->fetch(PDO::FETCH_ASSOC)){
+                            echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$args[1].'/cat/'.$args[3].'/'.$args[4].'/'.$args[5].'/'.str_replace(' ','-',strtolower($rc4['category_4'])).'">'.ucfirst($rc4['category_4']).'</a></li>';
+                          }?>
+                        </ul>
+                      </li>
+                    <?php }?>
+                  </ol>
+                </div>
               </div>
-              <div class="col-12 col-sm-6">
+              <div class="col-12 col-sm-3">
                 <div class="form-row">
                   <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
                 </div>

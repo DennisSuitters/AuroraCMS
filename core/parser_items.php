@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -554,18 +554,19 @@ $html=preg_replace([
 	'/<[\/]?contentitems>/'
 ],'',$html);
 if(stristr($html,'<pagination>')){
+	require'core/pagination.php';
+//	use auroraCMS\Paginator;
 	$paginationItems='';
 	if($config['showItems']>0){
 		$num=ceil(($rowCount / $config['showItems']) - 1);
-		$numi=1;
-		if($num>0){
-			$paginationItems.='<li>'.($itemPage==0?'<span>First</span>':'<a href="'.URL.$view.'">First</a>').'</li>';
-			while($numi < $num){
-				$paginationItems.='<li>'.($itemPage==$numi?'<span>'.($numi+1).'</span>':'<a href="'.URL.$view.'?page='.$numi.'">'.($numi+1).'</a>').'</li>';
-				$numi++;
-			}
-			$paginationItems.='<li>'.($itemPage==$num?'<span>Last</span>':'<a href="'.URL.$view.'?page='.$num.'">Last</a>').'</li>';
-		}
+
+		$totalItems = $num;
+		$itemsPerPage=$config['showItems'];
+		$currentPage=$itemPage==0?1:$itemPage;
+		$urlPattern=URL.$view.'?page=(:num)';
+
+		$paginationItems=new Paginator($totalItems,$itemsPerPage,$currentPage,$urlPattern);
+
 	}
 	$html=preg_replace([
 		$num>0?'/<\/?pagination>/':'~<pagination>.*?<\/pagination>~is',

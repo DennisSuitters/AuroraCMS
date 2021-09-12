@@ -44,7 +44,7 @@
           <img class="logo" src="core/images/auroracms.svg" width="100%" alt="AuroraCMS">
         </div>
         <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
-        <form id="login" method="post" action="<?=(isset($_SERVER['HTTP_REFERER'])&&stristr($_SERVER['REQUEST_URI'],'logout')?$_SERVER['HTTP_REFERER']:URL.$settings['system']['admin'].'/dashboard');?>" accept-charset="UTF-8">
+        <form id="login" method="post" action="<?=(isset($_SERVER['HTTP_REFERER'])&&stristr($_SERVER['REQUEST_URI'],'logout')?$_SERVER['HTTP_REFERER']:URL.$settings['system']['admin'].'/'.$config['defaultPage']);?>" accept-charset="UTF-8">
           <input name="act" type="hidden" value="login">
           <div class="row mt-3">
             <label for="username" class="text-white text-md-black">Username</label>

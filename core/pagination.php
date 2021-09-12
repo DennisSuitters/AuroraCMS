@@ -1,5 +1,5 @@
 <?php
-namespace auroraCMS;
+//namespace auroraCMS;
 class Paginator{
   const NUM_PLACEHOLDER='(:num)';
   protected $totalItems;

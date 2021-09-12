@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.0
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -513,9 +513,19 @@
         </div>
       </div>
     </div>
-<?php if($config['development']==1&&$user['rank']==1000){?>
+<?php if($view=='dashboard'&&$user['accountsContact'][0]==1&&$config['hosterURL']!=''){?>
     <script>
-      $('.developmentbottom').html('Memory Used: <?= size_format(memory_get_usage());?> | Process Time: <?= elapsed_time();?> | PHPv<?= (float)PHP_VERSION;?> ');
+      $(document).ready(function(){
+        $.getJSON('<?= rtrim($config['hosterURL'],'/');?>/core/hostinginfo.php?h=<?=$user['infoHash'];?>',function(data){
+          var html=(data.hostStatus=='overdue'?'<div class="alert alert-danger shake-horizontal">Hosting was Due <strong>'+data.hostDays+'</strong> days ago.</div></div>':'')+
+          (data.hostStatus=='outstanding'?'<div class="alert alert-warning">Hosting Payment is currently Outstanding, due in <strong>'+data.hostDays+'</strong> days.</div>':'')+
+          (data.hostStatus=='paid'?'<div class="alert alert-success">Hosting is due in <strong>'+data.hostDays+'</strong> days.</div>':'')+
+          (data.siteStatus=='overdue'?'<div class="alert alert-'+(data.siteDate!=0?'danger':'info')+'">Outstanding Site Payment Left <strong>$'+data.siteCost+'</strong>.'+(data.siteDate!=0?'<br>Final Payment was Due on <strong>'+data.siteDate+'</strong>.':''):'');
+          if(html!=''){
+            $("#hostinginfo").html(html);
+          }
+        });
+      });
     </script>
 <?php }?>
   </body>

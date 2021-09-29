@@ -7,17 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'core/puconverter.php';
 $html=preg_replace([
-  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',
+  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is'
 ],[
-  '',
-  $page['notes']
+  $page['heading']==''?$page['seoTitle']:$page['heading'],
+  $page['notes'],
+  ''
 ],$html);
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`=:id OR `iid`=:id AND `status`!='archived'");
 $s->execute([':id'=>$args[0]]);

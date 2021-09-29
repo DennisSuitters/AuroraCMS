@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,11 +16,13 @@ require'core/phpmailer/class.phpmailer.php';
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $hash=md5($ip);
 $html=preg_replace([
-	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
-	'/<print page=[\"\']?notes[\"\']?>/'
+	'/<print page=[\"\']?heading[\"\']?>/',
+	'/<print page=[\"\']?notes[\"\']?>/',
+	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is'
 ],[
-	'',
-	rawurldecode($page['notes'])
+	$page['heading']==''?$page['seoTitle']:$page['heading'],
+	rawurldecode($page['notes']),
+	''
 ],$html);
 $notification='';
 $ti=time();
@@ -198,7 +200,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$sold=$i['quantity']+$r['quantity'];
 				$qry=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`sold`=:sold WHERE `id`=:id");
 				$qry->execute([
-					':quantity'=>$quantity,
+					':quantity'=>$quantity<1?0:$quantity,
 					':sold'=>$sold,
 					':id'=>$r['iid']
 				]);

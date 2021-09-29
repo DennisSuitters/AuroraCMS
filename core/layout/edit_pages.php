@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,7 +35,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <li class="breadcrumb-item active breadcrumb-dropdown">
             <span id="titleupdate"><?=$r['title'];?></span><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
             <ul class="breadcrumb-dropper">
-<?php $sd=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `menu`!='none' AND `id`!=:id ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+<?php $sd=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `menu`!='none' AND `file`!='notification' AND `id`!=:id ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
 $sd->execute([':id'=>$r['id']]);
 while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$rd['id'].'">'.$rd['title'].'</a></li>';?>
             </ul>
@@ -57,7 +57,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
 <?php /* Content */ ?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-              <label id="pageTitle" for="title"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageTitle" aria-label="PermaLink to Page Title Field">&#128279;</a>':'';?>Title</label>
+              <label id="menuTitle" for="title"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#menuTitle" aria-label="PermaLink to Menu Title Field">&#128279;</a>':'';?>Menu Title</label>
               <div class="form-row">
                 <?php if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -68,10 +68,8 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                   ]);
                   echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }?>
-                <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
                 <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="title" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?> onkeyup="genurl();$('#titleupdate').text($(this).val());">
-                <?=$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
-                '<button class="save" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
               </div>
 <?php if($r['contentType']!='index'){?>
               <script>
@@ -90,6 +88,24 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                 </div>
               </div>
             <?php }?>
+
+            <label id="pageHeading" for="heading"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageHeading" aria-label="PermaLink to Page Heading Field">&#128279;</a>':'';?>Page Heading</label>
+            <div class="form-row">
+              <?php if($user['options'][1]==1){
+                $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
+                $ss->execute([
+                  ':rid'=>$r['id'],
+                  ':t'=>'menu',
+                  ':c'=>'title'
+                ]);
+                echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+              }?>
+              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
+              <input class="textinput" id="heading" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="heading" type="text" value="<?=$r['heading'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Heading..."':' readonly';?>>
+              <?=$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="save" id="saveheading" data-tooltip="tooltip" data-dbid="heading" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+
             <div id="pageNotes" class="row mt-3">
               <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'';?>
               <?php if($user['options'][1]==1){

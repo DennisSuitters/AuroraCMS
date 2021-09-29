@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.4
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -67,7 +67,7 @@ else{
               </tr>
             </thead>
             <tbody id="sortable">
-              <?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+              <?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `file`!='notification' ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <tr class="item subsortable" id="l_<?=$r['id'];?>">
@@ -217,6 +217,33 @@ else{
                 </td>
                 <td></td>
               </tr>
+              <tr>
+                <th colspan="6">Notifications</th>
+                <th><?=$user['options'][0]==1?'<a class="btn btn-sm add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" aria-label="Add Notification">'.svg2('add').'</a>':'';?></td>
+              <tr>
+<?php $sn=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `file`='notification' ORDER BY `id` ASC");
+$sn->execute();
+while($rn=$sn->fetch(PDO::FETCH_ASSOC)){?>
+              <tr>
+                <td>
+                  <?php if($rn['cover']!=''){
+                    $imgcheck=basename($rn['cover']);
+                    if(file_exists('media/lg/'.$imgcheck)&&file_exists('media/sm/'.$imgcheck))echo'<a data-fancybox="media" data-caption="'.$rn['title'].($rn['fileALT']!=''?'<br>ALT: '.$rn['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="media/lg/'.$imgcheck.'"><img class="img-rounded" style="max-width:32px;height:32px;" src="media/sm/'.$imgcheck.'" alt="'.$rn['title'].'"></a>';
+                  }?>
+                </td>
+                <td><a href="<?= URL.$settings['system']['admin'].'/notificationpages/edit/24';?>"><?=$rn['title'];?></a></td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td id="controls_<?=$rn['id'];?>" class="align-middle">
+                  <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
+                    <div class="btn-group" role="group" aria-label="Item Controls">
+                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/notification/edit/'.$rn['id'];?>"<?=$user['options'][1]==1?' data-tooltip="tooltip" role="button" aria-label="Edit Notification"':' data-tooltip="tooltip" role="button" aria-label="View Notification"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+<?php }?>
               <tr class="ghost hidden">
                 <td colspan="4">&nbsp;</td>
               </tr>

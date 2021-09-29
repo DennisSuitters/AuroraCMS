@@ -1,20 +1,26 @@
-### v0.2.0
-- Fix elFinder Multi-Thumb plugin not correctly renaming all files.
-- Fix elFinder Filename Normalizer plugin not correctly parsing files with underscores.
-- Fix Pagination to use same function as Forum.
-- Fix loging out changing page.
-- Add better styling for Forum elements.
-- Add Forum Post tracking.
-- Add ability to quote posts and replies.
-- Add Emojis dropdown for Summernote for Forum Posts and Replies.
-- Add parsing for Emoji shortcodes when making new Forum Posts or Replies.
-- Add ability when Quoting to grab selected text for Quote, for when only a section needs mentioning.
-- Add Banning user's from Post or Replying on Forum.
-- Adjust Mobile Responsiveness for Forum Elements.
-- Add Administration page to allow disabling, reordering, selecting default page to open, and rank restriction of menu items in Administration.
-- Fix Breadcrumb Dropdown width in Administration.
-- Add Category Navigation to Content Editing area in Administration.
-- Add Hosting Information and Editing for Administrators, to let client's know when or if Hosting is Due or Overdue.
-- Add Site Payment Information to let nominated Account know that Site Payments are overdue.
-- Fix incorrect Tab reference on Account Editing page in Administration.
-- Add Payments Viewing for Hoster's to edit Payment Accounts in Administration, Only available to Developer Accounts.
+### v0.2.1
+- Fix CORS permissions for hostinginfo when requested from Hosted Site accounts.
+- Fix Image Srcset for Cover Images.
+- Adjust order if content items in side menu to include highest viewed items.
+- Add Editable Dismissable Banners and Administration Banner Editing Page.
+- Fix wrong icon for Payments Administration page.
+- Add Job List editing in Administration.
+- Add "Back Order" as a new Status Option, mainly for Inventory.
+- Fix Order conversion to Invoice so items are deducted from inventory, and if reached 0, change status for item, and duplicate extra items into order.
+- Fix Session Rank variable throwing errors if not set.
+- Fix contentType variable throwing errors if not set in update entries script.
+- Fix Items Page Pagination if no page number is set throwing errors breaking page rendering.
+- Fix Srcset validation errors by adding size information to images.
+- Add Heading editing for Pages to help pages be Standards Compliant.
+- Fix erroneous elements and template elements rendering.
+- Fix Elements for SEO in Themes.
+- Fix Number of Search Items not calculating correctly.
+- Add parser to indicate quantities with colour indication.
+- Fix incorrect database value being used for Suggestion Seen Date/Time.
+- Add Notification Email when a new Administration Suggestion is added.
+- Fix Testimonials font size.
+- Update Summernote WYSIWYG Editor.
+- Fix Administration Button Colours not showing correct colour in active or hover state.
+- Adjust Dashboard Statistics to only show current months information.
+- Add Selecting Animation for displaying Banners.
+- Adjust how Banners are retreived and displayed, now via AJAX. 

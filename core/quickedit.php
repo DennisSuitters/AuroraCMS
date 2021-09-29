@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -172,7 +172,8 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	  				'<option value="quantity"'.($r['stockStatus']=='quantity'?' selected':'').'>Dependant on Quantity (In Stock/Out Of Stock)</option>'.
 	  				'<option value="in stock"'.($r['stockStatus']=='in stock'?' selected':'').'>In Stock</option>'.
 	  				'<option value="out of stock"'.($r['stockStatus']=='out of stock'?' selected':'').'>Out Of Stock</option>'.
-	  				'<option value="pre-order"'.($r['stockStatus']=='pre-order'?' selected':'').'>Pre-Order</option>'.
+						'<option value="back order"'.($r['stockStatus']=='back order'?' selected':'').'>Back Order</option>'.
+	  				'<option value="pre order"'.($r['stockStatus']=='pre order'?' selected':'').'>Pre Order</option>'.
 	  				'<option value="available"'.($r['stockStatus']=='available'?' selected':'').'>Available</option>'.
 	  				'<option value="sold out"'.($r['stockStatus']=='sold out'?' selected':'').'>Sold Out</option>'.
 	  				'<option value="none"'.($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'').'>No Display</option>'.

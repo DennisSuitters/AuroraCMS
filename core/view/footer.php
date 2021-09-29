@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -134,8 +134,8 @@ $html=preg_replace([
 	$link,
 	htmlspecialchars($config['seoDescription'],ENT_QUOTES,'UTF-8'),
 	$config['abn']!=''?htmlspecialchars('ABN '.$config['abn'],ENT_QUOTES,'UTF-8'):'',
-	'<span>Website Design by <a href="'.$theme['creator_url'].'">'.$theme['creator'].'</a></span>',
-	isset($theme['hosting'])&&$theme['hosting']!=''?'<span>Hosting by <a target="_blank" href="'.$theme['hosting_url'].'">'.$theme['hosting'].'</a></span>':'',
+	'<span>Website Design by <a href="'.$theme['creator_url'].'" rel="noopener no referrer">'.$theme['creator'].'</a></span>',
+	isset($theme['hosting'])&&$theme['hosting']!=''?'<span>Hosting by <a target="_blank" href="'.$theme['hosting_url'].'" rel="noopener no referrer">'.$theme['hosting'].'</a></span>':'',
 	$config['php_options'][0]==1&&$config['php_options'][2]==1&&$config['php_quicklink']!=''?$config['php_quicklink']:'',
 	THEME,
 	'',

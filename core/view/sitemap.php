@@ -41,7 +41,13 @@ if(stristr($html,'<breadcrumb>')){
     ''
   ],$html);
 }
-$html=preg_replace('/<print page=[\"\']?notes[\"\']?>/',rawurldecode($page['notes']),$html);
+$html=preg_replace([
+  '/<print page=[\"\']?heading[\"\']?>/',
+  '/<print page=[\"\']?notes[\"\']?>/'
+],[
+  $page['heading']==''?$page['seoTitle']:$page['heading'],
+  rawurldecode($page['notes'])
+],$html);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
 $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY `contentType` ASC, `ti` DESC");

@@ -54,8 +54,14 @@
 							<label for="signupfullname" aria-hidden="true">Full Name</label>
 							<input id="signupfullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 							<div class="form-row" id="signuptermsblock">
-								<input type="checkbox" id="signupterms" name="terms" value="yes">
-								<label for="signupterms"> Agree to the <a href="page/Terms-of-Service">Terms Of Service</a></label>
+								<div class="row">
+									<div class="col-1 pt-3">
+										<input type="checkbox" id="signupterms" name="terms" value="yes">
+									</div>
+									<div class="col-11">
+										<label for="signupterms"> Agree to the</label> <a href="page/Terms-of-Service">Terms Of Service</a>
+									</div>
+								</div>
 							</div>
 							<g-recaptcha>
 							<div class="text-right mt-3">

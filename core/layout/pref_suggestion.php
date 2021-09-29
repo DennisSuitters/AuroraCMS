@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -69,7 +69,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
               <h6 class="m-0 p-0">To: <?=$rt['username'].($rt['name']!=''?':'.$rt['name']:'').' - From: '.$rf['username'].($rf['name']!=''?':'.$rf['name']:'');?></h6>
 							<details class="m-0">
 								<summary>
-									Created on <?= date($config['dateFormat'],$r['ti']);?> and has <?=($r['seen']==1?'':'<strong>NOT</strong>');?> been seen<?=($r['sti']==0?'':' on '.date($config['dateFormat']));?>.
+									Created on <?= date($config['dateFormat'],$r['ti']);?> and has <?=($r['seen']==1?'':'<strong>NOT</strong>');?> been seen<?=($r['sti']==0?'':' on '.date($config['dateFormat'],$r['sti']));?>.
 									<form class="float-right" target="sp" action="core/purge.php">
 										<input name="id" type="hidden" value="<?=$r['id'];?>">
 										<input name="t" type="hidden" value="suggestions">

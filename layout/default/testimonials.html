@@ -5,35 +5,33 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
 	<breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
 	<section class="row">
 		<article class="col-12 col-sm m-0 p-0 px-3">
 			<pagenotes>
-				<div class="hidewhenempty"><print page="notes"></div>
-			</pagenotes>
+				<h1><print page="heading"></h1>
+				<print page="notes">
 			<items>
 				<blockquote class="testimonials">
 					<img src="<print content=avatar>" loading="lazy" alt="<print content=name>">
 					<footer>
-						<h3 itemprop="author"><print content="name"></h3>
-						<h5><print content="business"></h5>
+						<div class="h3"><print content="name"></div>
+						<div class="h5"><print content="business"></div>
 					</footer>
 					<json-ld-testimonial>
 					<p><print content="notes"></p>
-					<data class="p-rating" value="<print review=rating>">
+					<div class="p-rating">
 						<span class="rating">
 							<span class="<print review=set1>"></span>
 							<span class="<print review=set2>"></span>
@@ -41,7 +39,7 @@
 							<span class="<print review=set4>"></span>
 							<span class="<print review=set5>"></span>
 						</span>
-					</data>
+					</div>
 				</blockquote>
 			</items>
 		</article>
@@ -49,7 +47,8 @@
 			<form class="auroraForm card p-3" data-formtype="testimonial" method="post" action="core/add_testimonial.php">
 				<input type="hidden" name="act" value="add_test">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
-				<h4>We would love to have you share your experience with us.</h4>
+				<div class="h4">We would love to have you share your experience with us.</div>
+				<div class="alert alert-info" role="alert">Entering your email is only for our records, we don't use it for displaying your Testimonial.</div>
 				<div class="alert alert-danger" role="alert">Highlighted fields are required.</div>
 				<label>Rating</label>
 				<span class="starRating">
@@ -68,7 +67,7 @@
 				<textarea id="testimonialtxt" name="review" required aria-required="true"></textarea>
 				<label for="testimonialemail">Please Enter your Email</label>
 				<input type="email" id="testimonialemail" name="email" required aria-required="true">
-				<div class="requirements mt-3 mb-0">Must be a valid email address.</div>
+				<div class="requirements alert alert-danger">Must be a valid email address.</div>
 				<label for="testimonialname">Please Enter your Name</label>
 				<input type="text" id="testimonialname" name="name" required aria-required="true">
 				<label for="fullname" aria-hidden="true">Full Name</label>

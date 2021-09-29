@@ -7,16 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+$origin=isset($_SERVER['HTTP_ORIGIN'])?$_SERVER['HTTP_ORIGIN']:'*';
+header("Access-Control-Allow-Headers: X-Requested-With");
+header('Access-Control-Allow-Origin: '.$origin);
+header('Access-Control-Allow-Methods: GET, POST');
 header('Content-Type: application/json');
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $hash=isset($_GET['h'])?$_GET['h']:'';
 if($hash!=''){
-  $s=$db->prepare("SELECT `id`,`hti`,`hostCost`,`hostStatus`,`sti`,`siteCost`,`siteStatus` FROM `".$prefix."login` WHERE `infoHash`=:hash");
+  $s=$db->prepare("SELECT `id`,`hti`,`hostCost`,`hostStatus`,`sti`,`siteCost`,`siteStatus`,`url` FROM `".$prefix."login` WHERE `infoHash`=:hash");
   $s->execute([
     ':hash'=>$hash
   ]);

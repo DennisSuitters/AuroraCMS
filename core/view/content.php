@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -56,21 +56,24 @@ elseif($view=='search'){
 	if(isset($args[0])&&$args[0]!='')$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
 	elseif(isset($_POST['search'])&&$_POST['search']!='')$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
 	else$search='%';
-	if($config['showItems']>0){
+	preg_match('/<settings.*itemCount=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+	$itemCount=isset($matches[1])&&$matches[1]!=0?$matches[1]:$config['showItems'];
+	if($itemCount>0){
 		$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE LOWER(`code`) LIKE LOWER(:search) OR LOWER(`brand`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`category_1`) LIKE LOWER(:search) OR LOWER(`category_2`) LIKE LOWER(:search) OR LOWER(`category_3`) LIKE LOWER(:search) OR LOWER(`category_4`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`tags`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) AND `status`=:status AND `rank` <= :rank");
 		$s->execute([
 			':search'=>$search,
 			':status'=>$status,
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$rowCount=$s->rowCount();
-		$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
+		$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
+		$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$itemCount;
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`code`) LIKE LOWER(:search) OR LOWER(`brand`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`category_1`) LIKE LOWER(:search) OR LOWER(`category_2`) LIKE LOWER(:search) OR LOWER(`category_3`) LIKE LOWER(:search) OR LOWER(`category_4`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`tags`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) AND `status`=:status AND `rank` <= :rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':search'=>$search,
 		':status'=>$status,
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 }elseif($view=='index'){
 	$contentType=$cat1='';
@@ -90,7 +93,7 @@ elseif($view=='search'){
 			':contentType4'=>(isset($ctarray[3])?$ctarray[3]:''),
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 	}else{
 		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".$itemCount);
@@ -98,7 +101,7 @@ elseif($view=='search'){
 			':contentType'=>$contentType,
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 	}
 }elseif(isset($args[0])&&$args[0]=='category'){
@@ -112,9 +115,10 @@ elseif($view=='search'){
 			':category_4'=>isset($args[4])?html_entity_decode(str_replace('-',' ',$args[4])):'%',
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$rowCount=$s->rowCount();
+		$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 		$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
@@ -126,7 +130,7 @@ elseif($view=='search'){
 		':category_4'=>isset($args[4])?html_entity_decode(str_replace('-',' ',$args[4])):'%',
 		':status'=>$status,
 		':ti'=>time(),
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 }elseif(isset($args[1])){
 	if($config['showItems']>0){
@@ -139,9 +143,10 @@ elseif($view=='search'){
 			':category_4'=>isset($args[3])?html_entity_decode(str_replace('-',' ',$args[3])):'%',
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$rowCount=$s->rowCount();
+		$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 		$sqlLimit="LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
@@ -153,7 +158,7 @@ elseif($view=='search'){
 		':category_4'=>isset($args[3])?html_entity_decode(str_replace('-',' ',$args[3])):'%',
 		':status'=>$status,
 		':ti'=>time(),
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 }elseif(isset($args[2])){
 	if($config['showItems']>0){
@@ -166,9 +171,10 @@ elseif($view=='search'){
 			':category_4'=>isset($args[3])?html_entity_decode(str_replace('-',' ',$args[3])):'%',
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$rowCount=$s->rowCount();
+		$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 		$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
@@ -180,7 +186,7 @@ elseif($view=='search'){
 		':category_4'=>isset($args[3])?html_entity_decode(str_replace('-',' ',$args[3])):'%',
 		':status'=>$status,
 		':ti'=>time(),
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 }elseif(isset($args[3])){
 	if($config['showItems']>0){
@@ -193,9 +199,10 @@ elseif($view=='search'){
 			':category_4'=>html_entity_decode(str_replace('-',' ',$args[3])),
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$rowCount=$s->rowCount();
+		$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 		$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
@@ -207,7 +214,7 @@ elseif($view=='search'){
 		':category_4'=>html_entity_decode(str_replace('-',' ',$args[3])),
 		':status'=>$status,
 		':ti'=>time(),
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 }elseif(isset($args[0])){
 	if($config['showItems']>0){
@@ -217,9 +224,10 @@ elseif($view=='search'){
 			':category_1'=>html_entity_decode(str_replace('-','%',$args[0])),
 			':status'=>$status,
 			':ti'=>time(),
-			':rank'=>$_SESSION['rank']
+			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$rowCount=$s->rowCount();
+		$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 		$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 	}
 	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
@@ -228,7 +236,7 @@ elseif($view=='search'){
 		':category_1'=>html_entity_decode(str_replace('-','%',$args[0])),
 		':status'=>$status,
 		':ti'=>time(),
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 	if($s->rowCount()<1){
 		if($view=='proofs'){
@@ -251,15 +259,16 @@ elseif($view=='search'){
 				$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` LIKE 'proofs' AND `uid`=:uid AND `rank`<=:rank ORDER BY `ord` ASC, `ti` DESC");
 				$s->execute([
 					':uid'=>$_SESSION['uid'],
-					':rank'=>$_SESSION['rank']
+					':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 				]);
 				$rowCount=$s->rowCount();
+				$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 				$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 			}
 			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE 'proofs' AND `uid`=:uid AND `rank`<=:rank ORDER BY `ord` ASC, `ti` DESC".($sqlLimit!=''?$sqlLimit:''));
 			$s->execute([
 				':uid'=>$_SESSION['uid'],
-				':rank'=>$_SESSION['rank']
+				':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 			]);
 		}
 	}else{
@@ -272,6 +281,7 @@ elseif($view=='search'){
 				':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 			]);
 			$rowCount=$s->rowCount();
+			$itemPage=isset($itemPage)&&$itemPage>0?$itemPage:0;
 			$sqlLimit=" LIMIT ".$itemPage * $config['showItems'].", ".$config['showItems'];
 		}
 		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
@@ -305,7 +315,7 @@ if($config['options'][31]==1&&stristr($html,'<category-nav>')){
 			]);
 			$cat1=isset($args[0])&&$args[0]!=''?$args[0]:'';
 			$rcc1=urlencode(str_replace(' ','-',strtolower($rc1['category_1'])));
-			$catlist.='<li'.($cat1==$rcc1?' class="open"':'').'>'.($sc2->rowCount()>0?'<a class="opener" role="button" tabindex="0">&nbsp;</a>':'').'<a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'">'.$rc1['category_1'].'</a>';
+			$catlist.='<li'.($cat1==$rcc1?' class="open"':'').'>'.($sc2->rowCount()>0?'<a class="opener" role="button" tabindex="0" aria-label="Open/Close Category '.$rc1['category_1'].'">&nbsp;</a>':'').'<a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'">'.$rc1['category_1'].'</a>';
 			while($rc2=$sc2->fetch(PDO::FETCH_ASSOC)){
 				$sc3=$db->prepare("SELECT DISTINCT(`category_3`) FROM `".$prefix."content` WHERE `contentType`=:contentType AND LOWER(`category_1`) LIKE LOWER(:category1) AND LOWER(`category_2`) LIKE LOWER(:category2) AND `category_3`!='' GROUP BY `category_3` ORDER BY `category_3` ASC");
 				$sc3->execute([
@@ -315,7 +325,7 @@ if($config['options'][31]==1&&stristr($html,'<category-nav>')){
 				]);
 				$cat2=isset($args[1])&&$args[1]!=''?$args[1]:'';
 				$rcc2=urlencode(str_replace(' ','-',strtolower($rc2['category_2'])));
-				$catlist.='<ul><li'.($cat2==$rcc2?' class="open"':'').'>'.($sc3->rowCount()>0?'<a class="opener" role="button" tabindex="0">&nbsp;</a>':'').'<a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($rc2['category_2']))).'">'.ucfirst($rc2['category_2']).'</a>'."\r\n";
+				$catlist.='<ul><li'.($cat2==$rcc2?' class="open"':'').'>'.($sc3->rowCount()>0?'<a class="opener" role="button" tabindex="0" aria-label="Open/Close Category '.$rc2['category_2'].'">&nbsp;</a>':'').'<a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($rc2['category_2']))).'">'.ucfirst($rc2['category_2']).'</a>'."\r\n";
 				while($rc3=$sc3->fetch(PDO::FETCH_ASSOC)){
 					$sc4=$db->prepare("SELECT DISTINCT(`category_4`) FROM `".$prefix."content` WHERE `contentType`=:contentType AND LOWER(`category_1`) LIKE LOWER(:category1) AND LOWER(`category_2`) LIKE LOWER(:category2) AND LOWER(`category_3`) LIKE LOWER(:category3) AND `category_4`!='' GROUP BY `category_4` ORDER BY `category_4` ASC");
 					$sc4->execute([
@@ -326,7 +336,7 @@ if($config['options'][31]==1&&stristr($html,'<category-nav>')){
 					]);
 					$cat3=isset($args[2])&&$args[2]!=''?$args[2]:'';
 					$rcc3=urlencode(str_replace(' ','-',strtolower($rc3['category_3'])));
-					$catlist.='<ul><li'.($cat3==$rcc3?' class="open"':'').'>'.($sc4->rowCount()!=0?'<a class="opener" role="button" tabindex="0">&nbsp;</a>':'').'<a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($rc2['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($rc3['category_3']))).'">'.ucfirst($rc3['category_3']).'</a>';
+					$catlist.='<ul><li'.($cat3==$rcc3?' class="open"':'').'>'.($sc4->rowCount()!=0?'<a class="opener" role="button" tabindex="0" aria-label="Open/Close Category '.$rc3['category_3'].'">&nbsp;</a>':'').'<a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($rc2['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($rc3['category_3']))).'">'.ucfirst($rc3['category_3']).'</a>';
 					while($rc4=$sc4->fetch(PDO::FETCH_ASSOC)){
 						$cat4=isset($args[3])&&$args[3]!=''?$args[3]:'';
 						$catlist.='<ul><li><a href="'.URL.$view.'/'.urlencode(str_replace(' ','-',strtolower($rc1['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($rc2['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($rc3['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($rc4['category_4']))).'">'.ucfirst($rc4['category_4']).'</a></li></ul>';
@@ -377,7 +387,7 @@ if(stristr($html,'<eventsitems')){
 				'srcset="'.
 					($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 					($re['thumb']!=''&&file_exists('media/'.'md/'.basename($re['thumb']))?'media/'.'md/'.basename($re['thumb']).' 600w,':NOIMAGE.' 600w,').
-					($re['thumb']!=''&&file_exists('media/'.'sm/'.basename($re['thumb']))?'media/'.'sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+					($re['thumb']!=''&&file_exists('media/'.'sm/'.basename($re['thumb']))?'media/'.'sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
 				($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']):NOIMAGESM),
 				htmlspecialchars($re['fileALT']!=''?$re['fileALT']:$re['title'],ENT_QUOTES,'UTF-8'),
 				$re['contentType'],
@@ -417,6 +427,13 @@ if($view=='login'){
 	],[
 		URL,
 		'',
+		$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':''
+	],$html);
+}
+if(stristr($html,'<g-recaptcha>')){
+	$html=preg_replace([
+		'/<g-recaptcha>/'
+	],[
 		$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':''
 	],$html);
 }

@@ -5,24 +5,23 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
 	<breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
 	<section class="row">
-		<pagenotes>
-			<article class="col-12 col-sm m-0 p-0 px-3 hidewhenempty"><print page="notes"></article>
-		</pagenotes>
+		<article class="col-12 col-sm m-0 p-0 px-3">
+			<h1><print page="heading"></h1>
+			<print page="notes">
+		</article>
 		<article id="booking" class="col-12 col-sm-6 m-0 p-0">
 			<form class="auroraForm card p-3" data-formtype="booking" method="post" action="core/add_booking.php">
 				<input type="hidden" name="act" value="add_booking">
@@ -33,7 +32,7 @@
 				<div class="requirements alert alert-danger">Must be a valid email address.</div>
 				<label for="name">Name</label>
 				<input type="text" id="name" name="name" value="" placeholder="Enter a Name..." required aria-required="true">
-				<div class="requirements alert alert-danger">A Name is required.</div>
+				<div class="requirements alert alert-danger" role="alert">A Name is required.</div>
 				<label for="fullname" aria-hidden="true">Full Name</label>
 				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="business">Business</label>
@@ -68,9 +67,7 @@
 									<figure class="card-image">
 										<img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
 									</figure>
-									<div class="card-header">
-										<div class="card-title h6 text-center line-clamp" title="<print content=title>"><print content="title"></div>
-									</div>
+									<div class="card-header h6 text-center line-clamp" title="<print content=title>"><print content="title"></div>
 								</div>
 							</label>
 						</items>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -76,7 +76,7 @@ else{
           $getStatus=" ";
         }else$getStatus=" AND `status`!='archived'";
         if(isset($args[2])&&$args[2]=='cat'){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
           $s->execute([
             ':category_1'=>isset($args[3])&&$args[3]!=''?'%'.str_replace('-','%',$args[3]).'%':'%',
             ':category_2'=>isset($args[4])&&$args[4]!=''?'%'.str_replace('-','%',$args[4]).'%':'%',
@@ -85,7 +85,7 @@ else{
             ':contentType'=>$args[1]
           ]);
         }else{
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
           $s->execute([
             ':contentType'=>$args[1]
           ]);
@@ -97,11 +97,11 @@ else{
           $getStatus=" ";
         else
           $getStatus=" AND `status`='".$args[1]."' ";
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
         $s->execute([':contentType'=>$view]);
       }else{
         if(isset($args[5])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
@@ -109,25 +109,25 @@ else{
             ':category_4'=>str_replace('-',' ',strtolower($args[5]))
           ]);
         }elseif(isset($args[4])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
             ':category_3'=>str_replace('-',' ',strtolower($args[4]))
           ]);
         }elseif(isset($args[3])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3]))
           ]);
         }elseif(isset($args[2])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` ASC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` ASC, `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2]))
           ]);
         }else{
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute();
         }
       }?>
@@ -278,6 +278,19 @@ else{
                     <option class="delete" value="delete"<?=$r['status']=='delete'?' selected':'';?>>Delete</option>
                     <option class="archived" value="archived"<?=$r['status']=='archived'?' selected':'';?>>Archived</option>
                   </select>
+<?php if($r['contentType']=='inventory'){?>
+                  <select class="stock status"
+                  onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');" data-tooltip="tooltip" aria-label="Stock Status">
+                    <option value="quantity"<?=$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity</option>
+                    <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
+                    <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
+                    <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
+                    <option value="pre-order"<?=$r['stockStatus']=='pre-order'?' selected':'';?>>Pre-Order</option>
+                    <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
+                    <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
+                    <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']=='')?' selected':'';?>>No Display</option>
+                  </select>
+<?php }?>
                   <div class="image-toolbar">
                     <?= !isset($args[1])?'<a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a><br>':'';
                     echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> '.svg2('view').'</button><br>':'';

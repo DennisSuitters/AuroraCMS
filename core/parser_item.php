@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -182,20 +182,19 @@ if($skip==false){
   	if($page['cover']!=''&&$coverHTML==''){
   		$cover=basename($page['cover']);
   		if(file_exists('media/'.$cover)){
-  			$coverHTML='<img srcset="'.
-  			(file_exists('media/'.$cover)?'<img srcset="'.
+  			$coverHTML=(file_exists('media/'.$cover)?'<img srcset="'.
   				(file_exists('media/'.basename($cover))?'media/'.'lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
   				(file_exists('media/'.'lg/'.basename($cover))?'media/'.'lg/'.$cover.' 1000w,':'').
   				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
   				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
   				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-  			'" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+  			'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
   				($page['attributionImageTitle']!=''?
   					'<figcaption>'.
   						$page['attributionImageTitle'].
   						($page['attributionImageName']!=''?
   							' by '.
-  								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'">':'').
+  								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'" rel="noopener noreferrer">':'').
   								$page['attributionImageName'].
   								($page['attributionImageURL']!=''?'</a>':'')
   						:'').
@@ -260,7 +259,7 @@ if($skip==false){
       if($r['attributionImageTitle']!='')$caption.=$r['attributionImageTitle'];
       if($r['attributionImageName']!=''){
         $caption.=$caption!=''?' by ':'';
-        if($r['attributionImageURL']!='')$caption.='<a href="'.$r['attributionImageURL'].'" target="_blank">';
+        if($r['attributionImageURL']!='')$caption.='<a href="'.$r['attributionImageURL'].'" target="_blank" rel="noopener noreferrer">';
         $caption.=$r['attributionImageName'];
         if($r['attributionImageURL']!='')$caption.='</a>';
       }
@@ -278,7 +277,7 @@ if($skip==false){
           ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file'].' '.$config['mediaMaxWidth'].'w,'):'').
           ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file'].' 1000w,'):'').
           ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file'].' 600w,'):'').
-          ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file'].' 400w'):'').'" ',
+          ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file'].' 400w'):'').'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" ',
         ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
         $caption,
         htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
@@ -329,7 +328,7 @@ if($skip==false){
             'srcset="'.
               ($rm['file']!=''&&file_exists('media/thumbs/'.basename($rm['file']))?'media/thumbs/'.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
-              ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':'').'" ',
+              ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" ',
             ($rm['file']!=''&&file_exists('media/'.basename($rm['file']))?'media/'.basename($rm['file']).' '.$config['mediaMaxWidth'].'w, ':'').
               ($rm['file']!=''&&file_exists('media/lg/'.basename($rm['file']))?'media/lg/'.basename($rm['file']).' 1000w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
@@ -584,7 +583,7 @@ if($skip==false){
                 '/<print related=[\"\']?cssrank[\'"\']?>/',
               ],[
                 (isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/':''),
-                (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" ':''),
+                (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ':''),
                 (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.$ri['thumb']:NOIMAGESM),
                 (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),
                 (isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):''),

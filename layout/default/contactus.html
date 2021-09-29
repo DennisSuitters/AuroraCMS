@@ -5,24 +5,23 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
 	<breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
 	<section class="row">
 		<article class="col-12 col-sm m-0 p-0 px-3">
 			<pagenotes>
-				<div class="hidewhenempty"><print page="notes"></div>
+				<h1><print page="heading"></h1>
+				<print page="notes">
   		</pagenotes>
 			<hours>
 				<div class="row">
@@ -93,7 +92,7 @@
 				</subjectSelect>
 				<label for="contactemail">Email</label>
 				<input type="email" id="contactemail" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-				<div class="requirements alert alert-danger">Must be a valid email address.</div>
+				<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
 				<label for="contactname">Name</label>
 				<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name...">
 				<label for="fullname" aria-hidden="true">Full Name</label>

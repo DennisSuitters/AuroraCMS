@@ -9,6 +9,23 @@ hr {
 hr:not([size]) {
   height: 1px; }
 
+h1:empty,
+.h1:empty,
+h2:empty,
+.h2:empty,
+h3:empty,
+.h3:empty,
+h4:empty,
+.h4:empty,
+h5:empty,
+.h5:empty,
+h6:empty,
+.h6:empty,
+section:empty,
+article:empty,
+p:empty {
+  display: none !important; }
+
 h1,
 .h1,
 h2,

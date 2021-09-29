@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -56,7 +56,7 @@ else{?>
           '</div>';
         }?>
         <div class="row">
-          <?php if($config['hoster'][0]==1&&$user['rank']=1000){
+          <?php if($config['hoster'][0]==1&&$user['rank']==1000){
             $rh=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `hostStatus`='overdue'")->fetch(PDO::FETCH_ASSOC);
             if($rh['cnt']>0){?>
               <a class="card stats danger col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/payments';?>">
@@ -91,17 +91,51 @@ else{?>
           $ss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."iplist` WHERE `ti`>=:ti");
           $ss->execute(['ti'=>time()-604800]);
           $sa=$ss->fetch(PDO::FETCH_ASSOC);
-          $bc=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Chrome'")->fetch(PDO::FETCH_ASSOC);
-          $bie=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Explorer'")->fetch(PDO::FETCH_ASSOC);
-          $be=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Edge'")->fetch(PDO::FETCH_ASSOC);
-          $bf=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Firefox'")->fetch(PDO::FETCH_ASSOC);
-          $bo=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Opera'")->fetch(PDO::FETCH_ASSOC);
-          $bs=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Safari'")->fetch(PDO::FETCH_ASSOC);
-          $sb=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Bing'")->fetch(PDO::FETCH_ASSOC);
-          $sd=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='DuckDuckGo'")->fetch(PDO::FETCH_ASSOC);
-          $sf=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Facebook' OR urlDest LIKE '%fbclid=%'")->fetch(PDO::FETCH_ASSOC);
-          $sg=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Google'")->fetch(PDO::FETCH_ASSOC);
-          $sy=$db->query("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Yahoo'")->fetch(PDO::FETCH_ASSOC);
+          $currentMonthStart=mktime(0, 0, 0, date("n"), 1);
+          $bcs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Chrome' AND `ti`>:sD");
+          $bcs->execute(['sD'=>$currentMonthStart - 1]);
+          $bc=$bcs->fetch(PDO::FETCH_ASSOC);
+
+          $bies=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Explorer' AND `ti`>:sD");
+          $bies->execute(['sD'=>$currentMonthStart - 1]);
+          $bie=$bies->fetch(PDO::FETCH_ASSOC);
+
+          $bes=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Edge' AND `ti`>:sD");
+          $bes->execute(['sD'=>$currentMonthStart - 1]);
+          $be=$bes->fetch(PDO::FETCH_ASSOC);
+
+          $bfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Firefox' AND `ti`>:sD");
+          $bfs->execute(['sD'=>$currentMonthStart - 1]);
+          $bf=$bfs->fetch(PDO::FETCH_ASSOC);
+
+          $bos=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Opera' AND `ti`>:sD");
+          $bos->execute(['sD'=>$currentMonthStart - 1]);
+          $bo=$bos->fetch(PDO::FETCH_ASSOC);
+
+          $bss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Safari' AND `ti`>:sD");
+          $bss->execute(['sD'=>$currentMonthStart - 1]);
+          $bs=$bss->fetch(PDO::FETCH_ASSOC);
+
+          $sbs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Bing' AND `ti`>:sD");
+          $sbs->execute(['sD'=>$currentMonthStart - 1]);
+          $sb=$sbs->fetch(PDO::FETCH_ASSOC);
+
+          $sds=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='DuckDuckGo' AND `ti`>:sD");
+          $sds->execute(['sD'=>$currentMonthStart - 1]);
+          $sd=$sds->fetch(PDO::FETCH_ASSOC);
+
+          $sfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Facebook' OR urlDest LIKE '%fbclid=%' AND `ti`>:sD");
+          $sfs->execute(['sD'=>$currentMonthStart - 1]);
+          $sf=$sfs->fetch(PDO::FETCH_ASSOC);
+
+          $sgs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Google' AND `ti`>:sD");
+          $sgs->execute(['sD'=>$currentMonthStart - 1]);
+          $sg=$sgs->fetch(PDO::FETCH_ASSOC);
+
+          $sys=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Yahoo' AND `ti`>:sD");
+          $sys->execute(['sD'=>$currentMonthStart - 1]);
+          $sy=$sys->fetch(PDO::FETCH_ASSOC);
+
           if($user['options'][3]==1){
             if($nm['cnt']>0){?>
               <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/messages';?>">
@@ -173,7 +207,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/google';?>">
               <span class="h5">Google</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-google"><?=$sg['cnt'];?></span> <small><small>Bots Visits</small></small>
+                <span class="text-3x" id="browser-google"><?=$sg['cnt'];?></span> <small><small>Bots Visits This Month</small></small>
               </span>
               <span class="icon"><?= svg2('brand-google','i-5x');?></span>
             </a>
@@ -182,7 +216,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/yahoo';?>">
               <span class="h5">Yahoo</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-yahoo"><?=$sy['cnt'];?></span> <small><small>Bots Visits</small></small>
+                <span class="text-3x" id="browser-yahoo"><?=$sy['cnt'];?></span> <small><small>Bots Visits This Month</small></small>
               </span>
               <span class="icon"><?= svg2('social-yahoo','i-5x');?></span>
             </a>
@@ -191,7 +225,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/bing';?>">
               <span class="h5">Bing</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-bing"><?=$sb['cnt'];?></span> <small><small>Bots Visits</small></small>
+                <span class="text-3x" id="browser-bing"><?=$sb['cnt'];?></span> <small><small>Bots Visits This Month</small></small>
               </span>
               <span class="icon"><?= svg2('brand-bing','i-5x');?></span>
             </a>
@@ -200,7 +234,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/duckduckgo';?>">
               <span class="h5">DuckDuckGo</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-duckduckgo"><?=$sd['cnt'];?></span> <small><small>Bots Visits</small></small>
+                <span class="text-3x" id="browser-duckduckgo"><?=$sd['cnt'];?></span> <small><small>Bots Visits This Month</small></small>
               </span>
               <span class="icon"><?= svg2('brand-duckduckgo','i-5x');?></span>
             </a>
@@ -209,7 +243,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/facebook';?>">
               <span class="h5">Facebook</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-facebook"><?=$sf['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-facebook"><?=$sf['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('social-facebook','i-5x');?></span>
             </a>
@@ -218,7 +252,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/chrome';?>">
               <span class="h5">Chrome</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-chrome"><?=$bc['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-chrome"><?=$bc['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('browser-chrome','i-5x');?></span>
             </a>
@@ -227,7 +261,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/edge';?>">
               <span class="h5">Edge</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-edge"><?=$be['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-edge"><?=$be['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('browser-edge','i-5x');?></span>
             </a>
@@ -236,7 +270,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/explorer';?>">
               <span class="h5">Explorer</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-explorer"><?=$bie['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-explorer"><?=$bie['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('browser-explorer','i-5x');?></span>
             </a>
@@ -245,7 +279,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/firefox';?>">
               <span class="h5">Firefox</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-firefox"><?=$bf['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-firefox"><?=$bf['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('browser-firefox','i-5x');?></span>
             </a>
@@ -254,7 +288,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/opera';?>">
               <span class="h5">Opera</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-opera"><?=$bo['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-opera"><?=$bo['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('browser-opera','i-5x');?></span>
             </a>
@@ -263,7 +297,7 @@ else{?>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker/safari';?>">
               <span class="h5">Safari</span>
               <span class="p-0">
-                <span class="text-3x" id="browser-safari"><?=$bs['cnt'];?></span> <small><small>Views</small></small>
+                <span class="text-3x" id="browser-safari"><?=$bs['cnt'];?></span> <small><small>Views This Month</small></small>
               </span>
               <span class="icon"><?= svg2('browser-safari','i-5x');?></span>
             </a>
@@ -350,12 +384,12 @@ else{?>
               </div>
             </div>
           </div>
-<?php $s=$db->prepare("SELECT DISTINCT(`keywords`) AS `keywords` FROM `".$prefix."tracker` WHERE `keywords`!='' ORDER BY keywords DESC LIMIT 0,10");
+<?php $s=$db->prepare("SELECT DISTINCT(`keywords`) AS `keywords` FROM `".$prefix."tracker` WHERE `keywords`!='' ORDER BY `keywords` DESC LIMIT 0,10");
 $s->execute();
 if($s->rowCount()>0){?>
           <div class="col-12 col-md-6 p-2">
             <div class="card">
-              <div class="h5 m-2">Top Ten Search Keywords</div>
+              <div class="h5 m-2">Top Ten Search Keywords This Month</div>
               <div id="seostats-pageviews">
                 <table class="table-zebra small">
                   <thead>

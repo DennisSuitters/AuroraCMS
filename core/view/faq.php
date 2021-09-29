@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,7 +43,7 @@ if(stristr($html,'<cover>')){
 				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
 				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
 				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-			'" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+			'" src="media/'.$cover.'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" loading="lazy" alt="'.$page['title'].' Cover Image">'.
 				($page['attributionImageTitle']!=''?
 					'<figcaption>'.
 						$page['attributionImageTitle'].
@@ -101,9 +101,11 @@ if(stristr($html,'<breadcrumb>')){
   ],$html);
 }
 $html=preg_replace([
+	'/<print page=[\"\']?heading[\"\']?>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
   '/<print page=[\"\']?notes[\"\']?>/',
 ],[
+	$page['heading']==''?$page['seoTitle']:$page['heading'],
   '',
 	rawurldecode($page['notes']),
 ],$html);
@@ -122,7 +124,7 @@ if(stristr($html,'<items')){
 	while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
 		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='faq' AND `category_1`=:category ORDER BY `title` ASC");
 	  $s->execute([':category'=>$rc['category_1']]);
-		$output.=$rc['category_1']!=''?'<h5>'.$rc['category_1'].'</h5>':'';
+		$output.=$rc['category_1']!=''?'<h2 class="h3">'.$rc['category_1'].'</h2>':'';
 	  while($r=$s->fetch(PDO::FETCH_ASSOC)){
 	    $faqs=$faq;
 	    $faqs=preg_replace([

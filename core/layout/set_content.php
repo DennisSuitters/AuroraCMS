@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -64,6 +64,16 @@
           <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
           <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="enableQuickView" id="configoptions51">Quick View for Products</label>
+        </div>
+        <label id="fallbackStatus" for="inventoryFallbackStatus"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#fallbackStatus" aria-label="PermaLink to Inventory Fallback Status Selector">&#128279;</a>':'';?>Fallback Status</label>
+        <div class="form-row">
+          <select id="inventoryFallbackStatus"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Fallback Stock Status"':' disabled';?> onchange="update('1','config','inventoryFallbackStatus',$(this).val(),'select');">
+            <option value="out of stock"<?=$config['inventoryFallbackStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
+            <option value="back order"<?=$config['inventoryFallbackStatus']=='back order'?' selected':'';?>>Back Order</option>
+            <option value="pre order"<?=$config['inventoryFallbackStatus']=='pre-order'?' selected':'';?>>Pre Order</option>
+            <option value="sold out"<?=$config['inventoryFallbackStatus']=='sold out'?' selected':'';?>>Sold Out</option>
+            <option value="none"<?=($config['inventoryFallbackStatus']=='none'||$config['inventoryFallbackStatus']==''?' selected':'');?>>No Display</option>
+          </select>
         </div>
         <legend id="categoriesSection" class="mt-3 mb-0"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/settings#categoriesSection" aria-label="PermaLink to Categories Section">&#128279;</a>':'';?>Categories</legend>
         <div class="row mt-3">

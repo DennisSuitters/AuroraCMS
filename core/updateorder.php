@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -136,18 +136,42 @@ if($act=='statusAvailable'){
 if($act=='statusPreorder'){
   $items=explode(',', $da);
   foreach($items as $item => $value){
-    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `status`='pre-order' WHERE `id`=:id");
+    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `status`='pre order' WHERE `id`=:id");
+    $q->execute([':id'=>$value]);
+  }
+  echo'<script>window.top.window.$("#action").val("0");</script>';
+}
+if($act=='statusBackorder'){
+  $items=explode(',', $da);
+  foreach($items as $item => $value){
+    $q=$db->prepare("UPDATE `".$prefix."orderitems` SET `status`='back order' WHERE `id`=:id");
     $q->execute([':id'=>$value]);
   }
   echo'<script>window.top.window.$("#action").val("0");</script>';
 }
 if($act=='additem'){
 	if($da!=0){
-		$q=$db->prepare("SELECT `title`,`cost`,`rCost`,`stockStatus` FROM `".$prefix."content` WHERE `id`=:id");
+		$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 		$q->execute([':id'=>$da]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
 		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
 		if($r['rCost']!=0)$r['cost']=$r['rCost'];
+    $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+    $so->execute([':id'=>$id]);
+    $ro=$so->fetch(PDO::FETCH_ASSOC);
+    if($ro['iid_ti']!=0&&$r['contentType']=='inventory'){
+      $r['quantity']=$r['quantity'] - 1;
+      if($r['quantity']<1){
+        $r['quantity']=0;
+        $r['stockStatus']=$config['inventoryFallbackStatus'];
+      }
+      $si=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:sS WHERE `id`=:id");
+      $si->execute([
+        ':id'=>$r['id'],
+        ':quantity'=>$r['quantity'],
+        ':sS'=>$r['stockStatus']
+      ]);
+    }
 	}elseif($da=='neg'){
 		$r=[
 			'title'=>'',
@@ -185,7 +209,7 @@ if($act=='title'){
 if($act=='quantity'||$act=='trash'){
   $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
   $ss->execute([':id'=>$id]);
-  $r=$ss->fetch(PDO::FETCH_ASSOC);
+  $rs=$ss->fetch(PDO::FETCH_ASSOC);
   if($da==0){
     $s=$db->prepare("DELETE FROM `".$prefix."orderitems` WHERE `id`=:id");
     $s->execute([':id'=>$id]);
@@ -196,7 +220,7 @@ if($act=='quantity'||$act=='trash'){
       ':id'=>$id
     ]);
   }
-  $id=$r['oid'];
+  $id=$rs['oid'];
 }
 if($act=='cost'){
   $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");
@@ -373,22 +397,22 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
   $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
   $sc->execute([':id'=>$oi['cid']]);
   $c=$sc->fetch(PDO::FETCH_ASSOC);
-$html.='<tr>'.
+$html.='<tr class="'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'').'">'.
           '<td class="align-middle">'.
             '<input type="checkbox" class="orderitems" name="item" value="'.$oi['id'].'">'.
           '</td>'.
 	        '<td class="text-left align-middle small px-0">'.$i['code'].'</td>'.
 	'<td class="text-left align-middle px-0">'.
-	 ($r['iid_ti']!=0?$i['title']:
+	 ($r['iid_ti']!=0?($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title']:
     '<form target="sp" method="post" action="core/updateorder.php">'.
       '<input name="act" type="hidden" value="title">'.
       '<input name="id" type="hidden" value="'.$oi['id'].'">'.
       '<input name="t" type="hidden" value="orderitems">'.
       '<input name="c" type="hidden" value="title">'.
-      '<input name="da" type="text" value="'.$oi['title'].'">'.
+      '<input name="da" type="text" value="'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'].'">'.
     '</form>').
   '</td>'.
-  '<td class="text-left align-middle px-0">'.$c['title'].'</td>'.
+  '<td class="text-left align-middle px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
   '<td class="text-center align-middle px-0">'.
     ($oi['iid']!=0?
       '<form target="sp" method="post" action="core/updateorder.php">'.
@@ -440,7 +464,7 @@ $html.='<tr>'.
     '</form>'.
   '</td>'.
 '</tr>';
-  if($oi['status']!='pre-order'){
+  if($oi['status']!='pre order'||$oi['status']!='back order'){
     if($oi['iid']!=0){
       $total=$total+($oi['cost']*$oi['quantity'])+$gst;
       $total=number_format((float)$total,2,'.','');
@@ -491,7 +515,7 @@ if($sr->rowCount()==1){
   $html.=' Off';
 }
   $html.='</td>'.
-  '<td class="text-right align-middle px-0">'.($reward['value']>0?$total:'').'</td>'.
+  '<td class="text-right align-middle px-0">'.(isset($reward['value'])&&$reward['value']>0?$total:'').'</td>'.
 	'<td>&nbsp;</td>'.
 '</tr>';
 

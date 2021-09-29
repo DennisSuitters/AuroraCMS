@@ -82,6 +82,7 @@ if($add==true){
           ':si'=>SESSIONID,
           ':ti'=>$ti
         ]);
+
       }
     }
   }

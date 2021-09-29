@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -101,9 +101,52 @@ if($user['options'][4]==1){
     <script>history.replaceState('','','<?= URL.$settings['system']['admin'].'/orders/edit/'.$id;?>');</script>
   <?php }
   if(isset($args[0])&&$args[0]=='to_invoice'){
-    $q=$db->prepare("SELECT `qid` FROM `".$prefix."orders` WHERE `id`=:id");
+    $q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
     $q->execute([':id'=>$id]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
+    $oi=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:id");
+    $oi->execute([':id'=>$r['id']]);
+    $or=$oi->fetch(PDO::FETCH_ASSOC);
+    $si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+    $si->execute([':id'=>$or['iid']]);
+    $ri=$si->fetch(PDO::FETCH_ASSOC);
+    if($ri['contentType']=='inventory'){
+      $qty=$ri['quantity'] - $or['quantity'];
+      if($qty<0){
+        $s=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=0,`stockStatus`=:sS WHERE `id`=:id");
+        $s->execute([
+          ':sS'=>$config['inventoryFallbackStatus'],
+          ':id'=>$or['iid']
+        ]);
+        $nqty = abs($ri['quantity'] - $or['quantity']);
+        $sn=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`points`,`ti`) VALUES (:id,:iid,:cid,:title,:quantity,:cost,:status,:points,:ti)");
+        $sn->execute([
+          ':id'=>$or['oid'],
+          ':iid'=>$or['iid'],
+          ':cid'=>$or['cid'],
+          ':title'=>$or['title'],
+          ':quantity'=>$nqty,
+          ':cost'=>$or['cost'],
+          ':status'=>$config['inventoryFallbackStatus'],
+          ':points'=>0,
+          ':ti'=>$or['ti']
+        ]);
+        $sn=$db->prepare("UPDATE `".$prefix."orderitems` SET `quantity`=:quantity WHERE `id`=:id");
+        $sn->execute([
+          ':quantity'=>abs($ri['quantity'] - $ro['quantity']),
+          ':id'=>$or['id']
+        ]);
+      }
+    }
+    $qty=$ri['quantity'] - $or['quantity'];
+    $qty2 = abs($qty);
+    if($qty<1)$qty2=0;
+    $sc=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:status WHERE `id`=:id");
+    $sc->execute([
+      ':quantity'=>$qty2,
+      ':id'=>$or['iid'],
+      ':status'=>$ri['contentType']=='inventory'?($qty2==0?$config['inventoryFallbackStatus']:$ri['stockStatus']):$ri['stockStatus']
+    ]);
     $q=$db->prepare("UPDATE `".$prefix."orders` SET `iid`=:iid,`iid_ti`=:iid_ti,`qid`='',`qid_ti`='0' WHERE `id`=:id");
     $q->execute([
       ':iid'=>'I'.date("ymd",$ti).sprintf("%06d",$id,6),

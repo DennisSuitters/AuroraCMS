@@ -5,29 +5,30 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
   <breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
   <pagenotes>
     <section class="row">
-      <article class="hidewhenempty"><print page="notes"></article>
+      <article>
+        <h1><print page="heading"></h1>
+        <print page="notes">
+      </article>
     </section>
   </pagenotes>
   <section class="row col-12">
     <article class="media my-2 text-center">
       <items>
-         <a class="m2" href="<print media=file>" data-fancybox="gallery" data-caption="<print media=fileALT>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="img-thumbnail" loading="lazy" alt="<print media=fileALT>"></a>
+         <a class="m2" href="<print media=file>" data-fancybox="gallery" data-caption="<print media=fileALT>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="col-2 img-thumbnail" loading="lazy" alt="<print media=fileALT>"></a>
       </items>
     </article>
   </section>

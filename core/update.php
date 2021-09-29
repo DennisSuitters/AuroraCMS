@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,7 +35,7 @@ $e='';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$tbl=='forumCategory'||$tbl=='forumTopics'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'||$col=='defaultPage'||$col=='hostStatus'||$col=='siteStatus'){
+if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$tbl=='forumCategory'||$tbl=='forumTopics'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'||$col=='defaultPage'||$col=='hostStatus'||$col=='siteStatus'||$col=='heading'||$col=='inventoryFallbackStatus'){
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 	if($col=='messengerFBCode')$da=rawurldecode($da);
 }else{
@@ -77,8 +77,8 @@ $log=[
   'rid'=>$id,
   'username'=>'',
   'name'=>'',
-  'view'=>$r['contentType'],
-  'contentType'=>$r['contentType'],
+  'view'=>isset($r['contentType'])?$r['contentType']:'',
+  'contentType'=>isset($r['contentType'])?$r['contentType']:'',
   'refTable'=>$tbl,
   'refColumn'=>$col,
   'oldda'=>$oldda,
@@ -86,7 +86,7 @@ $log=[
   'action'=>'update',
   'ti'=>$ti
 ];
-if($r['contentType']=='booking')$log['view']=$r['contentType'].'s';
+if(isset($r['contentType'])&&$r['contentType']=='booking')$log['view']=$r['contentType'].'s';
 if(isset($_SESSION['uid'])){
   $uid=(int)$_SESSION['uid'];
   $q=$db->prepare("SELECT `rank`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");

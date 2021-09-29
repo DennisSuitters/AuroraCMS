@@ -1,7 +1,7 @@
-<aside class="col-12 col-sm-3 order-1 order-sm-2 mb-5 mb-sm-5 px-3">
+<aside class="col-12 col-sm-3 mb-5 mb-sm-5 px-3">
 	<div class="card mb-3">
 		<div class="card-body mt-4 mb-3 no-clamp">
-			<legend class="h5">Share this to Social Media</legend>
+			<h3>Share this:</h3>
 			<div class="text-center"><share></div>
 			<admin>
 				<div class="text-right">
@@ -13,8 +13,8 @@
 	<sort>
 		<div class="card mx-auto mb-3">
 			<div class="card-body my-4">
-				<legend>Item Display Options</legend>
-				<form method="post" action="">
+				<h3>Item Display Options</h3>
+				<form method="post" action="<print sort=self>">
 					<input type="hidden" name="act" value="sort">
 					<div class="row">
 						<label for="sort" class="col-4">Sort Order</label>
@@ -27,7 +27,7 @@
 						<div class="row mt-3">
 							<label for="itemCount" class="col-4">Show</label>
 							<input id="itemCount" class="col-3" type="number" name="itemCount" value="<itemCount>">
-							<label for="itemCount" class="col-2 ml-3">items</label>
+							<label class="col-2 ml-3">items</label>
 						</div>
 					</showItems>
 					<button class="btn-block mt-3" type="submit">Sort</button>
@@ -44,7 +44,7 @@
 				<div class="price"><print content="cost"></div>
 				<div class="row text-right">
 					<service>
-						<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
+						<a class="btn btn-block" href="bookings/<print content=bookservice>" role="button">Book Now</a>
 					</service>
 					<inventory>
 						<choices>
@@ -79,7 +79,7 @@
 			<table id="cartage">
 				<cartageitems>
 			</table>
-			<a class="btn-block" href="cart/" role="button">Proceed to Checkout</a>
+			<a class="btn btn-block" href="cart/" role="button">Proceed to Checkout</a>
 		</div>
 	</div>
 	<review>
@@ -88,7 +88,7 @@
 				<input type="hidden" name="id" value="<print content=id>">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<h3>Add a Review</h3>
-				<label for="rating5">Rating</label>
+				<label>Rating</label>
 				<span class="starRating">
 					<input id="rating5" type="radio" name="rating" value="5" checked>
 					<label for="rating5" title="Awesome!">5</label>
@@ -119,18 +119,20 @@
 	</review>
 	<item>
 		<settings items="4" contenttype="current">
-		<items>
-			<article class="card col-12 event mx-auto">
-				<figure class="card-image">
-					<a href="<print content=linktitle>">
-						<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
-					</a>
-					<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
-				</figure>
-				<div class="card-header px-2 py-1">
-					<h6><a href="<print content=linktitle>"><print content="title"></a></h6>
-				</div>
-			</article>
-		</items>
+		<div class="row">
+			<items>
+				<article class="card col-5 event mx-auto">
+					<figure class="card-image">
+						<a href="<print content=linktitle>">
+							<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
+						</a>
+						<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
+					</figure>
+					<div class="card-header px-2 py-1 h6">
+						<a href="<print content=linktitle>"><print content="title"></a>
+					</div>
+				</article>
+			</items>
+		</div>
 	</item>
 </aside>

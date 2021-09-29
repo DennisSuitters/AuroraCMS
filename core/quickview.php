@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -100,9 +100,9 @@ if(file_exists('../'.THEME.'/quickview.html')){
 				if($r['stockStatus']=='sold out')$sideCost.='</div>';
 			}
 		}
-    if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre-order')$r['quantity']=0;
+    if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order')$r['quantity']=0;
 		$choices='';
-		if(stristr($html,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
+		if(stristr($html,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order'||$r['stockStatus']=='available'){
 			$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
 			$scq->execute([':id'=>$r['id']]);
 			if($scq->rowCount()>0){

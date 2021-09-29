@@ -7,19 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'core/puconverter.php';
 $html=preg_replace([
   isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false?'~<orderlist>.*?<\/orderlist>~is':'/<[\/]?orderlist>/',
-  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
+  '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',
+  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
 ],[
   '',
-  '',
-  $page['notes']
+  $page['heading']==''?$page['seoTitle']:$page['heading'],
+  $page['notes'],
+  ''
 ],$html);
 if(stristr($html,'<order>')){
   preg_match('/<order>([\w\W]*?)<\/order>/',$html,$matches);
@@ -143,7 +145,7 @@ if(isset($args[0])&&$args[0]!=''){
       $c=$sc->fetch(PDO::FETCH_ASSOC);
       $item=$orderItem;
       $gst=0;
-      if($oir['status']!='pre-order'){
+      if($oir['status']!='pre order'||$oir['status']!='back order'){
         if($config['gst']>0){
           $gst=$oir['cost']*($config['gst']/100);
           if($oir['quantity']>1)$gst=$gst*$oir['quantity'];
@@ -162,18 +164,18 @@ if(isset($args[0])&&$args[0]!=''){
         '/<print orderitem=[\"\']?gst[\"\']?>/',
         '/<print orderitem=[\"\']?subtotal[\"\']?>/'
       ],[
-        'zebra'.$zebra,
+        'zebra'.$zebra.' '.($oir['status']=='back order'||$oir['status']=='pre order'?'bg-warning':''),
         htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
-        htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
+        ($oir['status']=='back order'||$oir['status']=='pre order'?ucwords($oir['status']).': ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
         ($i['weight']==''?'':'<br><small>Weight: '.$i['weight'].$i['weightunit']),
         ($i['width']==''?'':'<br><small>W: '.$i['width'].$i['widthunit'].' L: '.$i['length'].$i['lengthunit'].' H: '.$i['height'].$i['heightunit'].'</small>'),
         isset($c['title'])?htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'):'',
         htmlspecialchars($oir['quantity'],ENT_QUOTES,'UTF-8'),
         htmlspecialchars($oir['cost'],ENT_QUOTES,'UTF-8'),
         $gst,
-        ($oir['status']!='pre-order'?htmlspecialchars($oir['cost']*$oir['quantity']+$gst,ENT_QUOTES,'UTF-8'):'<small>Pre-Order</small>')
+        ($oir['status']!='pre order'||$oir['status']!='back order'?htmlspecialchars($oir['cost']*$oir['quantity']+$gst,ENT_QUOTES,'UTF-8'):'<small>'.($oir['status']=='pre order'?'Pre Order':'Back Order').'</small>')
       ],$item);
-      if($oir['status']!='pre-order'){
+      if($oir['status']!='pre order'||$oir['status']!='back order'){
         $total=$total+($oir['cost']*$oir['quantity'])+$gst;
       }
       if(isset($i['weightunit'])&&$i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');

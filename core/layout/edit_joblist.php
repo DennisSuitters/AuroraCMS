@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.1.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,21 +22,18 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('calendar','i-3x');?></div>
-          <div>Booking</div>
+          <div class="content-title-icon"><?= svg2('joblist','i-3x');?></div>
+          <div>Job List</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
               <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
             <?php }?>
-            <a class="btn" data-tooltip="tooltip" href="#" aria-label="Print Booking" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');return false;"><?= svg2('print');?></a>
-            <?php if($user['options'][0]==1||$user['options'][2]==1){?>
-              <a class="btn" data-tooltip="tooltip" href="#" aria-label="Email Booking" onclick="$('#sp').load('core/email_booking.php?id=<?=$r['id'];?>');return false;"><?= svg2('email-send');?></a>
-            <?php }?>
+            <a class="btn" data-tooltip="tooltip" href="#" aria-label="Print Job" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');return false;"><?= svg2('print');?></a>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/bookings';?>">Bookings</a></li>
+          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/joblist';?>">Job List</a></li>
           <li class="breadcrumb-item active"><span id="bookingname"><?=$r['name'];?></span>:<span id="bookingbusiness"><?=$r['business'];?></span></li>
         </ol>
       </div>

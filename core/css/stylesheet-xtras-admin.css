@@ -52,6 +52,9 @@ section.content .status {
   top: -3px;
   left: -3px; }
 
+section.content .status.stock {
+  top: 18px; }
+
 section.content .status {
   display: inline-block !important;
   width: auto !important;
@@ -67,7 +70,6 @@ section.content .status {
 
 select.select-sm {
   display: inline-block !important;
-  width: auto !important;
   padding: .15em .2em !important;
   font-size: 75% !important;
   font-weight: 700 !important;
@@ -1693,17 +1695,25 @@ dialog footer {
   color: var(--alert-default-color);
   border-width: var(--card-border-width) var(--card-border-style) var(--alert-default-border-color); }
 
-#overdue .kanban-item {
+#overdue .kanban-item,
+#unconfirmed .kanban-item {
   background-color: var(--alert-danger-background-color);
   color: var(--alert-danger-color);
   border-color: var(--alert-danger-color); }
 
-#outstanding .kanban-item {
+#outstanding .kanban-item,
+#confirmed .kanban-item {
   background-color: var(--alert-warning-background-color);
   color: var(--alert-warning-color);
   border-color: var(--alert-warning-color); }
 
-#paid .kanban-item {
+#in-progress .kanban-item {
+  background-color: var(--alert-info-background-color);
+  color: var(--alert-info-color);
+  border-color: var(--alert-info-color); }
+
+#paid .kanban-item,
+#complete .kanban-item {
   background-color: var(--alert-success-background-color);
   color: var(--alert-success-color);
   border-color: var(--alert-success-color); }

@@ -2,22 +2,24 @@
 <block include="header.html">
 <block inbed="sitemap">
 	<breadcrumb>
-		<section class="row mt-0">
-			<div class="col-11">
-				<div class="breadcrumb">
-					<json-ld-breadcrumb>
-					<breaditems>
-						<a class="breadcrumb-item" href="<print breadcrumb=url>"><print breadcrumb="title"></a>
-					</breaditems>
-					<breadcurrent>
-						<span class="breadcrumb-item active"><print breadcrumb="title"></span>
-					</breadcurrent>
-				</div>
-			</div>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
-	<section class="row mt-5">
-		<article class="col-11">
+	<section class="row">
+		<article>
+			<h1><print page="heading"></h1>
+			<print page="notes">
+		</article>
+		<article>
 			<items>
         <div class="mb-4">
           <print content="contentType">

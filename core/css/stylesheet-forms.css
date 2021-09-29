@@ -89,9 +89,7 @@ button[disabled]:hover {
 
 .btn-sm {
   padding: .2rem .3rem .2rem .3rem;
-  font-weight: 700;
-  font-size: .6rem; }
-
+  font-weight: 700; }
 
 .btn-block {
   width: 100% !important;

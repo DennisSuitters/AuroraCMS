@@ -1029,7 +1029,7 @@ svg.leaflet-image-layer.leaflet-interactive path {
   max-height: 128px; }
 
 .testimonials p {
-  font-size: .75em;
+  font-size: 1rem;
   line-height: 1.2em; }
 
 .testimonials p:before {
@@ -1060,29 +1060,6 @@ svg.leaflet-image-layer.leaflet-interactive path {
   height: calc(100vh - 280px);
   overflow: hidden; }
 
-.card-image .quickview {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  opacity: 0;
-  background-color: rgba(255, 255, 255, .5);
-  -webkit-backdrop-filter: blur(5px);
-  backdrop-filter: blur(5px);
-  -webkit-transition: opacity .15s ease-out;
-  transition: opacity .15s ease-out; }
-
-.card-image:hover .quickview {
-  display: flex;
-  opacity: 1;
-  -webkit-transition: opacity .25s ease-in;
-  transition: opacity .25s ease-in; }
 
 .quickview-choices select {
   background-color: var(--form-background-color) !important;
@@ -1215,7 +1192,7 @@ h6.quickview-header,
     transform: scale3d(1, 1, 1); }
 }
 
-nav[role="menubar"].account-menu {
+nav[role="navigation"].account-menu {
   z-index: 1201 !important;
   position: relative !important;
   width: 100% !important;
@@ -1228,19 +1205,19 @@ nav[role="menubar"].account-menu {
   font-size: 16px !important;
   line-height: 1.7 !important; }
 
-nav[role="menubar"].account-menu .right {
+nav[role="navigation"].account-menu .right {
   display: block !important;
   position: absolute !important;
   top: 10px !important;
   right: 10px !important; }
 
-nav[role="menubar"].account-menu ul {
+nav[role="navigation"].account-menu ul {
   border: 0 !important;
   right: 0 !important;
   margin: 0 0 0 auto !important;
   background: #000 !important; }
 
-nav[role="menubar"].account-menu ul li {
+nav[role="navigation"].account-menu ul li {
   border: 0 !important;
   margin: 0 !important;
   background: #000 !important;
@@ -1251,8 +1228,8 @@ nav[role="menubar"].account-menu ul li {
   vertical-align: middle !important;
   text-align: center !important;}
 
-nav[role="menubar"].account-menu ul li a,
-nav[role="menubar"].account-menu button[role="link"] {
+nav[role="navigation"].account-menu ul li a,
+nav[role="navigation"].account-menu button[role="link"] {
   border: 0 !important;
   font-family: arial !important;
   font-size: 16px !important;
@@ -1267,21 +1244,21 @@ nav[role="menubar"].account-menu button[role="link"] {
   text-shadow: none !important;
   border-radius: 0 !important; }
 
-nav[role="menubar"].account-menu ul li a:hover,
-nav[role="menubar"].account-menu button[role="link"]:hover {
+nav[role="navigation"].account-menu ul li a:hover,
+nav[role="navigation"].account-menu button[role="link"]:hover {
   border: 0 !important;
   color: #fff !important;
   text-decoration: none !important;
   text-shadow: none !important; }
 
-nav[role="menubar"].account-menu ul li.active,
-nav[role="menubar"].account-menu ul li.active a{
+nav[role="navigation"].account-menu ul li.active,
+nav[role="navigation"].account-menu ul li.active a{
   border: 0 !important;
   background: #000 !important;
   color: #fff !important;
   border-radius: 0 !important; }
 
-nav[role="menubar"].account-menu label {
+nav[role="navigation"].account-menu label {
   font-family: Arial !important;
   font-size: 1.2rem !important;
   font-weight: 700 !important;
@@ -1289,10 +1266,10 @@ nav[role="menubar"].account-menu label {
   border-color: #000 !important;
   color: #aaa !important; }
 
-nav[role="menubar"].account-menu label:hover {
+nav[role="navigation"].account-menu label:hover {
   color: #ddd !important; }
 
-nav[role="menubar"].account-menu #accountavatar {
+nav[role="navigation"].account-menu #accountavatar {
   width: 32px !important;
   max-height: 32px !important;
   border-radius: 5px !important; }

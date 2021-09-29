@@ -17,16 +17,22 @@
 		</section>
 	</breadcrumb>
 	<section class="row">
-		<article class="col-11">
+		<article class="col-12">
 			<label for="pagesearch" class="h3 m-0">Search</label>
 			<form class="row m-0" method="post" action="search">
 				<input id="pagesearch" class="col-11" type="search" name="search" value="<print search>" placeholder="Enter a Search Term...">
 				<button type="submit" class="col-1">Search</button>
 			</form>
 			<settings itemCount="50">
-			<div class="row">
-				<pagination>
-			</div>
+			<pagination>
+				<div class="row my-5">
+					<nav class="pagination">
+						<ul>
+							<paginationitems>
+						</ul>
+					</nav>
+				</div>
+			</pagination>
 			<items>
 				<div class="search mb-4">
 	        <div class="search-item">
@@ -46,10 +52,15 @@
 	        </div>
 	      </div>
 			</items>
-			<div class="row">
-				<pagination>
-			</div>
-		</article>
+			<pagination>
+				<div class="row my-5">
+					<nav class="pagination">
+						<ul>
+							<paginationitems>
+						</ul>
+					</nav>
+				</div>
+			</pagination>		</article>
 	</section>
 </block>
 <block include="footer.html">

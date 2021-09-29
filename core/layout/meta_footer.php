@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -516,7 +516,7 @@
 <?php if($view=='dashboard'&&$user['accountsContact'][0]==1&&$config['hosterURL']!=''){?>
     <script>
       $(document).ready(function(){
-        $.getJSON('<?= rtrim($config['hosterURL'],'/');?>/core/hostinginfo.php?h=<?=$user['infoHash'];?>',function(data){
+        $.getJSON('<?=$config['hosterURL'];?>core/hostinginfo.php?h=<?=$user['infoHash'];?>',function(data){
           var html=(data.hostStatus=='overdue'?'<div class="alert alert-danger shake-horizontal">Hosting was Due <strong>'+data.hostDays+'</strong> days ago.</div></div>':'')+
           (data.hostStatus=='outstanding'?'<div class="alert alert-warning">Hosting Payment is currently Outstanding, due in <strong>'+data.hostDays+'</strong> days.</div>':'')+
           (data.hostStatus=='paid'?'<div class="alert alert-success">Hosting is due in <strong>'+data.hostDays+'</strong> days.</div>':'')+

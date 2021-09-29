@@ -215,7 +215,7 @@ config
     4   Block Blacklisted IP's
     5   Wordpress Attacks
     6   Toggle Project Honey Pot
-    7
+    7   Reserved
     8
     9
     10

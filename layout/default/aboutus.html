@@ -5,22 +5,23 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
 	<breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
 	<section class="row">
-		<article class="hidewhenempty"><print page="notes"></article>
+		<article>
+			<h1><print page="heading"></h1>
+			<print page="notes">
+		</article>
 	</section>
 	<section class="row">
 		<article class="media text-center">

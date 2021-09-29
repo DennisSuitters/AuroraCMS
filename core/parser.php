@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -118,18 +118,18 @@ foreach($tags as$tag){
 					$gst=$r['rCost']+$gst;
 				}
 				if($r['options'][0]==1||$r['cost']!=''){
-					if(is_numeric($r['cost'])&&$r['cost']!=0){
+					if(is_numeric($r['cost'])&&$r['cost']>0){
 						if($r['stockStatus']=='sold out')$parsing.='<div class="sold">';
-						$parsing.=$r['rrp']!=0?'<span class="rrp" title="Recommended Retail Price">RRP &#36;'.htmlspecialchars($r['rrp'],ENT_QUOTES,'UTF-8').'</span>':'';
+						$parsing.=$r['rrp']!=0&&$show=='item'?'<span class="rrp" title="Recommended Retail Price">RRP &#36;'.htmlspecialchars($r['rrp'],ENT_QUOTES,'UTF-8').'</span>':'';
 						$parsing.='<span class="cost'.($r['rCost']!=0?' strike':'').'">';
 						if($r['coming'][0]==1)$parsing.='Coming Soon';
 						else{
 							if(is_numeric($r['cost']))$parsing.='&#36;';
-							$parsing.=htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
-							$parsing.=$r['rCost']!=0?'<span class="reduced">&#36;'.htmlspecialchars($r['rCost'],ENT_QUOTES,'UTF-8').'</span>':'';
+							$parsing.=($show!='item'&&$r['rCost']!=0?$r['rCost']:$r['cost']).'</span>';
+							$parsing.=$r['rCost']!=0&&$show=='item'?'<span class="reduced">&#36;'.htmlspecialchars($r['rCost'],ENT_QUOTES,'UTF-8').'</span>':'';
 						}
 						if($r['stockStatus']=='sold out')$parsing.='</div>';
-					}else$parsing.='<span class="cost">'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>';
+					}else$parsing.='';
 					if($r['contentType']=='service'||$r['contentType']=='events'&&$r['bookable']==1){
 						if(stristr($parse,'<service>')){
 							$parse=preg_replace(['~<inventory>.*?<\/inventory>~is','/<[\/]?service>/'],'',$parse);

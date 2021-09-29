@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.7
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -274,7 +274,8 @@ else{?>
                         <option value="newQuote">Create New Quote with Selected Items</option>
                         <option value="newInvoice">Create New Invoice with Selected Items</option>
                         <option value="statusAvailable">Change Selected Items Status to "Available"</option>
-                        <option value="statusPreorder">Change Selected Items Status to "Pre-Order"</option>
+                        <option value="statusPreorder">Change Selected Items Status to "Pre Order"</option>
+                        <option value="statusBackorder">Change Selected Items Status to "Back Order"</option>
                       </select>
                     </form>
                     <script>
@@ -298,20 +299,20 @@ else{?>
                   $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
                   $sc->execute([':id'=>$oi['cid']]);
                   $c=$sc->fetch(PDO::FETCH_ASSOC);?>
-                  <tr>
+                  <tr class="<?=($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'');?>">
                     <td class="align-middle">
                       <input type="checkbox" class="orderitems" name="item" value="<?=$oi['id'];?>">
                     </td>
                     <td class="text-left align-middle small px-0"><?=$i['code'];?></td>
                     <td class="text-left align-middle px-0">
-                      <?php if($r['iid_ti']!=0)echo$i['title'];
+                      <?php if($r['iid_ti']!=0)echo($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
                       else{?>
                         <form target="sp" method="post" action="core/updateorder.php">
                           <input name="act" type="hidden" value="title">
                           <input name="id" type="hidden" value="<?=$oi['id'];?>">
                           <input name="t" type="hidden" value="orderitems">
                           <input name="c" type="hidden" value="title">
-                          <input name="da" type="text" value="<?=$oi['title'];?>">
+                          <input name="da" type="text" value="<?=($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];?>">
                         </form>
                       <?php }?>
                     </td>
@@ -343,7 +344,7 @@ else{?>
                     <td class="text-right align-middle px-0">
                       <?php
                       $gst=0;
-                      if($oi['status']!='pre-order'){
+                      if($oi['status']!='pre order'||$oi['status']!='back order'){
                         if($config['gst']>0){
                           $gst=$oi['cost']*($config['gst']/100);
                           if($oi['quantity']>1)$gst=$gst*$oi['quantity'];
@@ -355,10 +356,10 @@ else{?>
                     </td>
                     <td class="text-right align-middle px-0">
                       <?php
-                      if($oi['status']!='pre-order'){
+                      if($oi['status']!='pre order'||$oi['status']!='back order'){
                         echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
                       }else{
-                          echo'<small>Pre-Order</small>';
+                          echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
                       }?>
                     </td>
                     <td class="align-middle text-right px-0">
@@ -373,7 +374,7 @@ else{?>
                     </td>
                   </tr>
                   <?php
-                    if($oi['status']!='pre-order'){
+                    if($oi['status']!='pre order'||$oi['status']!='back order'){
                       if($oi['iid']!=0){
                         $total=$total+($oi['cost']*$oi['quantity'])+$gst;
                         $total=number_format((float)$total,2,'.','');

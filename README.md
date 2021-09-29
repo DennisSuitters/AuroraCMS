@@ -1,10 +1,14 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.0
+Current version is v0.2.1
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
+- Hosting and Site Payments for Developers.
+  - When setup, Hosting and Site Payment notifications are displayed on the Dashboard of Client Sites.
+    - Show Status of Hosting Payments, Overdue by days which has an alert animation to attract attention, Outstanding due date, Paid with number of days.
+    - Show Status of Site Payment as Site is paid off.
 - Forms
   - Editable minimum and maximum times to submit forms. (Too Fast, is possible Bot Submission).
   - Hidden Captcha taking Screen Reader user's into account, so they don't get trapped.
@@ -55,6 +59,12 @@ Current version is v0.2.0
   - GST Calculating.
   - Payment Options with Surcharge options.
   - Create New Quote/Invoice from selected items.
+- TODO/Joblist in a Kanban board.
+- Forum
+  - Post, Reply as per other Forums.
+  - Integrated Help Tickets as Forum Posts.
+  - Upvote or Downvote posts and comments.
+- Banner Notifications with Entrance Animation choice. Dissmissable with local storage variable.
 - Media.
   - Upload and manage various types of files for addition into content using elFinder.
   - Auto resizing, makes thumbnails and Large, Medium and Small versions of images for use with srcset.

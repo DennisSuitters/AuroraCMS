@@ -7,12 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&file_exists(THEME.'/meta_footer.html')){
   $footer=file_get_contents(THEME.'/meta_footer.html');
+  $sb=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `file`='notification' AND `active`=1 LIMIT 1");
+  $sb->execute();
+  $rb=$sb->fetch(PDO::FETCH_ASSOC);
   $footer=preg_replace([
     '/<print theme>/',
     '/<carousel>/',
@@ -20,7 +23,8 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     '/<map>/',
     '/<g-recaptchascript>/',
     '/<countdownscript>/',
-    '/<forum>/'
+    '/<forum>/',
+    '/<banner>/'
   ],[
     THEME,
     isset($showCarousel)&&$showCarousel==true?'<script src="core/js/responsiveslides/responsiveslides.min.js"></script><script>$(function(){$(".slider").responsiveSlides({auto:true,speed:500,timeout:4000,pager:false,nav:true,random:false,pause:false,pauseControls:true,prevText:"Previous",nextText:"Next",maxwidth:"",namespace:"slider-btns",navContainer:"",manualControls:"",before:function(){},after:function(){}});});</script>':'',
@@ -56,7 +60,12 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
           '[`insert`,[`picture`,`video`,`audio`,`link`,`hr`]],'.
         ']'.
       '});'.
-      '$(document).on("click","#notifications input[type=checkbox]",{},function(event){var id=$(this).data("dbid");var t=$(this).data("dbt");var c=$(this).data("dbc");var b=$(this).data("dbb");$.ajax({type:"GET",url:"core/toggle.php",data:{id:id,t:t,c:c,b:b}}).done(function(msg){});});});</script>':''
+      '$(document).on("click","#notifications input[type=checkbox]",{},function(event){var id=$(this).data("dbid");var t=$(this).data("dbt");var c=$(this).data("dbc");var b=$(this).data("dbb");$.ajax({type:"GET",url:"core/toggle.php",data:{id:id,t:t,c:c,b:b}}).done(function(msg){});});});</script>':'',
+      isset($rb['id'])&&$rb['id']!=0?'<script>'.
+        'if(!localStorage.banner'.$rb['id'].'Closed){'.
+          '$(`#banner`).load(`core/banner.php?lS='.$rb['id'].'`);'.
+        '}'.
+      '</script>':''
   ],$footer);
   if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
     if($config['options'][13]==1){

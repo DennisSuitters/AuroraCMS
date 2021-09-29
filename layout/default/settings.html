@@ -2,13 +2,14 @@
 <block include="header.html">
 <block inbed="settings">
 	<pagenotes>
-		<section class="row mt-5">
-			<article class="col-12">
+		<section class="row">
+			<article>
+				<h1><print page="heading"></h1>
 				<print page="notes">
 			</article>
 		</section>
 	</pagenotes>
-	<section class="row my-5">
+	<section class="row my-5 justify-content-center">
 		<article class="col-12 col-md-6">
 			<iframe id="sp" name="sp" class="d-none"></iframe>
 			<form class="card mx-auto" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">

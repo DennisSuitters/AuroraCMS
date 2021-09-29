@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -102,15 +102,15 @@ if($r['iid']!='')$oid=$r['iid'];
   	$sc->execute([':id'=>$ro['cid']]);
   	$ch=$sc->fetch(PDO::FETCH_ASSOC);
     $st=$ro['cost']*$ro['quantity'];
-  	$html.='<tr'.($zeb==1?' style="background-color:#f4f4f4;"':' style="backgroound-color:#fff;"').'>'.
+  	$html.='<tr style="'.($zeb==1?'background-color:#f4f4f4;':'backgroound-color:#fff;').($ro['status']=='back order'||$ro['status']=='pre order'?'background-color:#ffc107;':'').'">'.
   	         '<td><small>'.$i['code'].'</small></td>'.
   	         '<td><small>'.($ro['title']==''?$i['title']:$ro['title']).'</small></td>'.
-             '<td><small>'.$ch['title'].'</small></td>'.
+             '<td><small>'.(isset($ch['title'])?$ch['title']:'').'</small></td>'.
              '<td style="text-align:center;"><small>'.$ro['quantity'].'</small></td>'.
              '<td style="text-align:right;"><small>'.$ro['cost'].'</small></td>'.
              '<td style="text-align:center;"><small>';
              $gst=0;
-             if($ro['status']!='pre-order'){
+             if($ro['status']!='pre order'||$ro['status']!='back order'){
                if($config['gst']>0){
                   $gst=$ro['cost']*($config['gst']/100);
                   if($ro['quantity']>1)$gst=$gst*$ro['quantity'];
@@ -120,11 +120,11 @@ if($r['iid']!='')$oid=$r['iid'];
              }
              $html.='</td>'.
              '<td style="text-align:right;">';
-             if($ro['status']!='pre-order'){
+             if($ro['status']!='pre order'||$ro['status']!='back order'){
                $html.=number_format((float)$st+$gst,2,'.','');
                $ot=$ot+$st+$gst;
                $ot=number_format((float)$ot,2,'.','');
-             }else$html.='<small>Pre-Order</small>';
+             }else$html.='<small>'.($ro['status']=='back order'?'Back Order':'Pre Order').'</small>';
               $html.='</td>'.
             '</tr>';
     $zeb=($zeb==1?0:1);

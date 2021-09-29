@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,14 +35,14 @@ $sideTemp='';
 			'/<print adminlink>/',
 			isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?'/<[\/]?admin>/':'~<admin>.*?<\/admin>~is'
 		],[
-			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook">'.frontsvg('i-social-facebook').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text=AuroraCMS%20Share%20Buttons&amp;hashtags='.(isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business']).'" title="Share to Twitter">'.frontsvg('i-social-twitter').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest">'.frontsvg('i-social-pinterest').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Stumbleupon">'.frontsvg('i-social-stumbleupon').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Reddit">'.frontsvg('i-social-reddit').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="https://bufferapp.com/add?url='.$site_url.'&amp;text='.$config['business'].'" title="Share to Buffer">'.frontsvg('i-social-buffer').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.digg.com/submit?url='.$site_url.'" title="Share to Digg">'.frontsvg('i-social-digg').'</a>'.
-			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin">'.frontsvg('i-social-linkedin').'</a>',
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook" rel="noopener noreferrer">'.frontsvg('i-social-facebook').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text=AuroraCMS%20Share%20Buttons&amp;hashtags='.(isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business']).'" title="Share to Twitter" rel="noopener noreferrer">'.frontsvg('i-social-twitter').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest" rel="noopener noreferrer">'.frontsvg('i-social-pinterest').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Stumbleupon" rel="noopener noreferrer">'.frontsvg('i-social-stumbleupon').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Reddit" rel="noopener noreferrer">'.frontsvg('i-social-reddit').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="https://bufferapp.com/add?url='.$site_url.'&amp;text='.$config['business'].'" title="Share to Buffer" rel="noopener noreferrer">'.frontsvg('i-social-buffer').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.digg.com/submit?url='.$site_url.'" title="Share to Digg" rel="noopener noreferrer">'.frontsvg('i-social-digg').'</a>'.
+			'<a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin" rel="noopener noreferrer">'.frontsvg('i-social-linkedin').'</a>',
 			isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?URL.$settings['system']['admin'].'/content/edit/'.$r['id']:'',
 			''
 		],$sideTemp);
@@ -50,14 +50,14 @@ $sideTemp='';
 		if($show=='item')$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
 		if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
 			$sideCost='';
-			if($r['options'][0]==1||$r['cost']!=''){
+			if($r['options'][0]==1&&$r['cost']>0){
 				if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
 					if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
 					$sideCost.=$r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'';
 					$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
 					if($r['stockStatus']=='sold out')$sideCost.='</div>';
-			}
-			if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre-order')$r['quantity']=0;
+			}else$sideCost='';
+			if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order')$r['quantity']=0;
 			if(isset($ru['rank'])&&$ru['rank']>300||$ru['rank']<400){
 				if($r['dCost']!=0)$sideCost='<div class="sold">&#36;'.$r['dCost'].'</div>';
 			}
@@ -158,7 +158,7 @@ $sideTemp='';
 							],$sideTemp);
 						}else$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
 					}
-					if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre-order'||$r['stockStatus']=='available'){
+					if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order'||$r['stockStatus']=='available'){
 						$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
 						$scq->execute([':id'=>$r['id']]);
 						if($scq->rowCount()>0){
@@ -221,11 +221,13 @@ $sideTemp='';
 					if($view=='portfolio'||$view=='gallery')$sortOptions='<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option><option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option><option value="namea"'.(isset($sort)&&$sort=='namea'?' selected':'').'>Name: A-Z</option><option value="namez"'.(isset($sort)&&$sort=='namez'?' selected':'').'>Name: Z-A</option><option value="view"'.(isset($sort)&&$sort=='view'?' selected':'').'>Most viewed</option>';
 					$sideTemp=preg_replace([
 						'/<[\/]?sort>/',
+						'/<print sort=[\"\']?self[\"\/]?>/',
 						'/<sortOptions>/',
-						$config['showItems']>0?'/<\/showItems>/':'~<showItems>.*?<\/showItems>~is',
+						$config['showItems']>0?'/<[]\/]?showItems>/':'~<showItems>.*?<\/showItems>~is',
 						'/<itemCount>/'
 					],[
 						'',
+						(((!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://").$_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'],
 						$sortOptions,
 						'',
 						$config['showItems']
@@ -255,7 +257,15 @@ $sideTemp='';
 				$cartage.=$cartitem;
 			}
 			$sideTemp=preg_replace('/<cartageitems>/',$cartage,$sideTemp);
-		}else$sideTemp=preg_replace('/<cartagedisplay>/','d-none',$sideTemp);
+		}else{
+			$sideTemp=preg_replace([
+				'/<cartageitems>/',
+				'/<cartagedisplay>/',
+			],[
+				isset($cartage)?$cartage:'',
+				'd-none'
+			],$sideTemp);
+		}
 		preg_match('/<item>([\w\W]*?)<\/item>/',$sideTemp,$matches);
 		$outside=$matches[1];
 		$show='';
@@ -292,14 +302,14 @@ $sideTemp='';
 		preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 		$insides=$matches[1];
 		if(isset($sidecat)&&$sidecat!=''){
-			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `ti` DESC $show");
+			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `views` DESC, `ti` DESC $show");
 			$s->execute([
 				':contentType'=>$contentType,
 				':cat'=>$sidecat,
 				':rank'=>$_SESSION['rank'] + 1
 			]);
 		}else{
-			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `ti` DESC $show");
+			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `views` DESC, `ti` DESC $show");
 			$s->execute([
 				':contentType'=>$contentType,
 				':rank'=>$_SESSION['rank'] + 1
@@ -334,7 +344,7 @@ $sideTemp='';
 				'srcset="'.
 					($r['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($r['thumb']))?'media/'.'thumbs/'.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 					($r['thumb']!=''&&file_exists('media/'.'md/'.basename($r['thumb']))?'media/'.'md/'.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').
-					($r['thumb']!=''&&file_exists('media/'.'sm/'.basename($r['thumb']))?'media/'.'sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+					($r['thumb']!=''&&file_exists('media/'.'sm/'.basename($r['thumb']))?'media/'.'sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'"  sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
 				($r['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($r['thumb']))?'media/'.'thumbs/'.basename($r['thumb']):NOIMAGESM),
 				htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
 				URL.$r['contentType'].'/'.$r['urlSlug'].'/',

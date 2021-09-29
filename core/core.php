@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -299,6 +299,10 @@ class admin{
 		$view='forum';
 		require'admin.php';
 	}
+	function joblist($args=false){
+		$view='joblist';
+		require'admin.php';
+	}
 	function logout($args=false){
 		$act='logout';
 		$view='';
@@ -314,6 +318,10 @@ class admin{
 	}
 	function newsletters($args=false){
 		$view='newsletters';
+		require'admin.php';
+	}
+	function notification($args=false){
+		$view='notification';
 		require'admin.php';
 	}
 	function orders($args=false){
@@ -517,10 +525,12 @@ $routes=[
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],
 	$settings['system']['admin'].'/faq'=>['admin','faq'],
 	$settings['system']['admin'].'/forum'=>['admin','forum'],
+	$settings['system']['admin'].'/joblist'=>['admin','joblist'],
 	$settings['system']['admin'].'/logout'=>['admin','logout'],
 	$settings['system']['admin'].'/media'=>['admin','media'],
 	$settings['system']['admin'].'/messages'=>['admin','messages'],
 	$settings['system']['admin'].'/newsletters'=>['admin','newsletters'],
+	$settings['system']['admin'].'/notification'=>['admin','notification'],
 	$settings['system']['admin'].'/orders'=>['admin','orders'],
   $settings['system']['admin'].'/rewards'=>['admin','rewards'],
 	$settings['system']['admin'].'/pages'=>['admin','pages'],

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -173,20 +173,19 @@ if(stristr($html,'<cover>')){
 	if($page['cover']!=''&&$coverHTML==''){
 		$cover=basename($page['cover']);
 		if(file_exists('media/'.$cover)){
-			$coverHTML='<img srcset="'.
-			(file_exists('media/'.$cover)?'<img srcset="'.
+			$coverHTML=(file_exists('media/'.$cover)?'<img srcset="'.
 				(file_exists('media/'.basename($cover))?'media/'.'lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
 				(file_exists('media/'.'lg/'.basename($cover))?'media/'.'lg/'.$cover.' 1000w,':'').
 				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
 				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
 				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-			'" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+			'" src="media/'.$cover.'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" loading="lazy" alt="'.$page['title'].' Cover Image">'.
 				($page['attributionImageTitle']!=''?
 					'<figcaption>'.
 						$page['attributionImageTitle'].
 						($page['attributionImageName']!=''?
 							' by '.
-								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'">':'').
+								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'" rel="noopener noreferrer">':'').
 								$page['attributionImageName'].
 								($page['attributionImageURL']!=''?'</a>':'')
 						:'').
@@ -258,7 +257,7 @@ if(stristr($html,'<mediaitems')){
 				' srcset="'.
 					(file_exists('media/'.'thumbs/'.basename($rm['file']))?'media/'.'thumbs/'.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
 					(file_exists('media/'.'md/'.basename($rm['file']))?'media/'.'md/'.basename($rm['file']).' 600w,':'').
-					(file_exists('media/'.'sm/'.basename($rm['file']))?'media/'.'sm/'.basename($rm['file']).' 400w':'').'" ',
+					(file_exists('media/'.'sm/'.basename($rm['file']))?'media/'.'sm/'.basename($rm['file']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
 				(file_exists('media/'.basename($rm['file']))?'media/'.basename($rm['file']).' '.$config['mediaMaxWidth'].'w,':'').
 					(file_exists('media/'.'lg/'.basename($rm['file']))?'media/'.'lg/'.basename($rm['file']).' 1000w,':'').
 					(file_exists('media/'.'md/'.basename($rm['file']))?'media/'.'md/'.basename($rm['file']).' 600w,':'').
@@ -324,6 +323,7 @@ if(stristr($html,'<sort>')){
 $html=preg_replace([
 	'/<print page=[\"\']?contentType[\"\']?>/',
 	'/<notification>/',
+	'/<print page=[\"\']?heading[\"\']?>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
 	'/<print page=[\"\']?notes[\"\']?>/',
 	'/<print content=[\"\']?seoTitle[\"\']?>/',
@@ -331,6 +331,7 @@ $html=preg_replace([
 ],[
 	htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
 	$notification,
+	htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
 	'',
 	rawurldecode($page['notes']),
 	$config['business']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),
@@ -357,7 +358,7 @@ if(stristr($html,'<categories>')){
 				'srcset="'.
 					($rc['icon']!=''&&file_exists('media/'.'thumbs/'.basename($rc['icon']))?'media/'.'thumbs/'.basename($rc['icon']).' '.$config['mediaMaxWidthThumb'].'w,':'').
 					($rc['icon']!=''&&file_exists('media/'.'sm/'.basename($rc['icon']))?'media/'.'sm/'.basename($rc['icon']).' 400w,':'').
-					($rc['icon']!=''&&file_exists('media/'.'md/'.basename($rc['icon']))?'media/'.'md/'.basename($rc['icon']).' 600w':'').'" ',
+					($rc['icon']!=''&&file_exists('media/'.'md/'.basename($rc['icon']))?'media/'.'md/'.basename($rc['icon']).' 600w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
 				($rc['icon']!=''&&file_exists('media/'.'thumbs/'.basename($rc['icon']))?$rc['icon']:NOIMAGESM),
 				htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
 				URL.$rc['url'].'/category/'.str_replace(' ','-',strtolower($rc['title'])).'/',
@@ -400,7 +401,7 @@ if(stristr($html,'<eventsitems')){
 				'srcset="'.
 					($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 					($re['thumb']!=''&&file_exists('media/'.'md/'.basename($re['thumb']))?'media/'.'md/'.basename($re['thumb']).' 600w,':NOIMAGE.' 600w,').
-					($re['thumb']!=''&&file_exists('media/'.'sm/'.basename($re['thumb']))?'media/'.'sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+					($re['thumb']!=''&&file_exists('media/'.'sm/'.basename($re['thumb']))?'media/'.'sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
 				($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']):NOIMAGESM),
 				htmlspecialchars($re['fileALT']!=''?$re['fileALT']:$re['title'],ENT_QUOTES,'UTF-8'),
 				$re['contentType'],
@@ -443,10 +444,12 @@ if(stristr($html,'<items')){
 		$su->execute([':id'=>$r['uid']]);
 		$ua=$su->fetch(PDO::FETCH_ASSOC);
 		$itemQuantity='';
-		if($r['coming'][0]==1&&$r['contentType']=='inventory'){$itemQuantity.='<div class="quantity">Coming Soon</div>';
+		if($r['coming'][0]==1&&$r['contentType']=='inventory'){
+			$itemQuantity='Coming Soon';
 		}else{
-			if(is_numeric($r['quantity']))
-				$itemQuantity.=$r['stockStatus']=='quantity'?($r['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($r['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($r['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($r['stockStatus']).'</div>');
+			if(is_numeric($r['quantity'])){
+				$itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords($r['stockStatus']));
+			}
 		}
 		$r['file']=trim(rawurldecode($r['file']));
 		$r['thumb']=trim(rawurldecode($r['thumb']));
@@ -469,6 +472,7 @@ if(stristr($html,'<items')){
 			'/<print date=[\"\']?month[\"\']?>/',
 			'/<print date=[\"\']?year[\"\']?>/',
 			'/<print content=[\"\']?contentType[\"\']?>/',
+			'/<print content=[\"\']?quantitycolor[\"\']?>/',
 			'/<print content=[\"\']?quantity[\"\']?>/',
 			'/<print content=[\"\']?rank[\'"\']?>/',
 			'/<print content=[\"\']?cssrank[\'"\']?>/',
@@ -478,7 +482,7 @@ if(stristr($html,'<items')){
 			'srcset="'.
 				($r['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($r['thumb']))?'media/'.'thumbs/'.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 				($r['thumb']!=''&&file_exists('media/'.'md/'.basename($r['thumb']))?'media/'.'md/'.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').
-				($r['thumb']!=''&&file_exists('media/'.'sm/'.basename($r['thumb']))?'media/'.'sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" ',
+				($r['thumb']!=''&&file_exists('media/'.'sm/'.basename($r['thumb']))?'media/'.'sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
 			($r['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($r['thumb']))?'media/'.'thumbs/'.basename($r['thumb']):NOIMAGESM),
 			($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
 			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
@@ -495,10 +499,11 @@ if(stristr($html,'<items')){
 			date('M',$r['tis']!=0?$r['tis']:$r['ti']),
 			date('Y',$r['tis']!=0?$r['tis']:$r['ti']),
 			$r['contentType'],
+			str_replace(' ','-',strtolower($itemQuantity)),
 			$itemQuantity,
 			$r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
 			rank($r['rank']),
-			($view=='index'?substr(htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'),0,300).'...':htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'))
+			($view=='index'?substr(htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'),0,300):htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'))
 		],$items); /* help */
 		$r['notes']=strip_tags($r['notes']);
 		if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){
@@ -553,23 +558,19 @@ $html=preg_replace([
 	'/<[\/]?items>/',
 	'/<[\/]?contentitems>/'
 ],'',$html);
-if(stristr($html,'<pagination>')){
-	require'core/pagination.php';
-//	use auroraCMS\Paginator;
+if(stristr($html,'<pagination')){
 	$paginationItems='';
+	$num=0;
 	if($config['showItems']>0){
-		$num=ceil(($rowCount / $config['showItems']) - 1);
-
-		$totalItems = $num;
+		require'core/pagination.php';
+		$totalItems=$rowCount;
 		$itemsPerPage=$config['showItems'];
 		$currentPage=$itemPage==0?1:$itemPage;
 		$urlPattern=URL.$view.'?page=(:num)';
-
 		$paginationItems=new Paginator($totalItems,$itemsPerPage,$currentPage,$urlPattern);
-
 	}
 	$html=preg_replace([
-		$num>0?'/<\/?pagination>/':'~<pagination>.*?<\/pagination>~is',
+		$totalItems>0?'/<\/?pagination>/':'~<pagination>.*?<\/pagination>~is',
 		'/<paginationitems>/'
 	],[
 		'',

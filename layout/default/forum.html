@@ -5,26 +5,27 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
   <breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
   <pagenotes>
     <section class="row">
-      <article class="hidewhenempty"><print page="notes"></article>
+      <article>
+        <h1><print page="heading"></h1>
+        <print page="notes">
+      </article>
     </section>
   </pagenotes>
-  <main class="row">
+  <div class="row mb-5">
     <section id="notifications" class="col-sm m-0 mx-sm-3 px-2 px-sm-0">
       <search>
         <div class="col-12">
@@ -156,8 +157,12 @@
               <a class="btn" href="<print newpostlink>">New Post</a>
             </newpostbtn>
           </div>
-          <div class="col-sm mb-1 pt-3 text-right">
-            <pagination>
+          <div class="col-sm mb-1 d-flex justify-content-end">
+            <nav>
+							<ul>
+                <pagination>
+              </ul>
+            </nav>
           </div>
         </div>
         <div class="row forum-header px-2 py-1">
@@ -216,8 +221,12 @@
               <a class="btn mt-1" href="<print newpostlink>">New Post</a>
             </newpostbtn>
           </div>
-          <div class="col-sm align-text-top text-right">
-            <pagination>
+          <div class="col-sm mt-1 d-flex justify-content-end">
+            <nav>
+							<ul>
+                <pagination>
+              </ul>
+            </nav>
           </div>
         </div>
       </posts>
@@ -235,8 +244,12 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-sm mb-1 pt-3 text-right">
-            <pagination>
+          <div class="col-sm mb-1 d-flex justify-content-end">
+            <nav>
+							<ul>
+                <pagination>
+              </ul>
+            </nav>
           </div>
         </div>
         <replies>
@@ -306,8 +319,12 @@
           </article>
         </replies>
         <div class="row">
-          <div class="col-sm mb-1 pt-3 text-right">
-            <pagination>
+          <div class="col-sm mb-1 d-flex justify-content-end">
+            <nav>
+							<ul>
+                <pagination>
+              </ul>
+            </nav>
           </div>
         </div>
         <bannednotification>
@@ -448,7 +465,7 @@
         </div>
       </aside>
     </div>
-  </main>
+  </div>
 </block>
 <block include="footer.html">
 <block include="meta_footer.html">

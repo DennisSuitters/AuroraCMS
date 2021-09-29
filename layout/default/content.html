@@ -5,25 +5,18 @@
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
 	<breadcrumb>
-		<section class="row">
-			<nav class="breadcrumb">
-				<ol>
-					<json-ld-breadcrumb>
-					<breaditems>
-						<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
-					</breaditems>
-					<breadcurrent>
-						<li class="breadcrumb-item active"><print breadcrumb="title"></li>
-					</breadcurrent>
-				</ol>
-			</nav>
-		</section>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
 	</breadcrumb>
-	<pagenotes>
-		<section class="row">
-			<article class="hidewhenempty"><print page="notes"></article>
-		</section>
-  </pagenotes>
 	<section class="row mb-5">
 		<aside class="col-12 col-sm-2-5 p-2 mt-0">
 			<div class="row">
@@ -40,22 +33,22 @@
 			<eventsitems items="4">
 				<hr>
 				<div class="row mt-3">
-					<h6>News and Events</h6>
+					<div class="h3 text-center text-sm-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events/" aria-label="Go to Events">Events</a></div>
 					<eventitem>
-						<article class="card col-12 col-sm-8 event side mx-auto">
+						<article class="card col-5 col-sm-8 event side mx-auto">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
 								</a>
-								<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
+								<div class="corner-ribbon small top-right"><print event="contentType"></div>
 							</figure>
 							<div class="card-date shadow">
 								<span class="day"><print date="day"></span>
 								<span class="month"><print date="month"></span>
 								<span class="year"><print date="year"></span>
 							</div>
-							<div class="card-header px-2 py-1">
-								<h6><a href="<print event=linktitle>"><print event="title"></a></h6>
+							<div class="card-header px-2 py-1 h6">
+								<a href="<print event=linktitle>"><print event="title"></a>
 							</div>
 						</article>
 					</eventitem>
@@ -69,7 +62,7 @@
 					<figure class="card-image full">
 						<img <print content=srcset>src="<print content=image>" loading="lazy" alt="<print content=imageALT>">
 						<figcaption><print content="figcaption"></figcaption>
-						<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
+						<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
 					</figure>
 				</image>
 				<videoviewer>
@@ -108,7 +101,7 @@
 							<div class="price"><print content="cost"></div>
 							<div class="text-right">
 								<service>
-									<a href="bookings/<print content=bookservice>" role="button">Book Now</a>
+									<a class="btn" href="bookings/<print content=bookservice>" role="button">Book Now</a>
 								</service>
 								<inventory>
 									<choices>
@@ -153,14 +146,14 @@
 				<author>
 					<hr>
 					<aside class="card border-0">
-						<div class="card-header"><h5>About the Author</h5></div>
+						<div class="card-header h5">About the Author</div>
 						<div class="card-body">
 							<div class="row">
 								<div class="col-2 col-sm-1">
 									<print author="avatar" alt="name" class="img-thumbnail">
 								</div>
 								<div class="col-9 col-sm-10 ml-2">
-				      		<h5><a class="text-default" href="<print author=link>"><print author="name"></a></h5>
+				      		<div class="h5"><a class="text-default" href="<print author=link>"><print author="name"></a></div>
 									<div>
 										<print author="social" type="icon" class="i i-social i-2x m-1">
 									</div>
@@ -175,7 +168,7 @@
 						<json-ld-review>
 						<div class="card-header font-weight-bold d-flex justify-content-between">
 							<div>Review by <span class="p-author h-card"><print review="name"></span> on <time class="dt-published" datetime="<print review=datetime>"><print review="date"></time></div>
-							<data class="p-rating" value="<print review=rating>">
+							<div class="p-rating">
 								<span class="rating">
 									<span class="<print review=set1>"></span>
 									<span class="<print review=set2>"></span>
@@ -183,7 +176,7 @@
 									<span class="<print review=set4>"></span>
 									<span class="<print review=set5>"></span>
 								</span>
-							</data>
+							</div>
 						</div>
 						<div class="card-body">
 							<div class="e-content summary"><print review="review"></div>
@@ -194,19 +187,19 @@
 				<related itemCount="4">
 					<hr>
 					<div class="card border-0 mb-5">
-						<div class="card-header"><h4>Related content</h4></div>
-						<div class="card-body overflow-hidden">
+						<div class="card-header h3">Related content</div>
+						<div class="card-body">
 							<section>
 								<relitems>
 									<article class="card col-12 col-sm-5 m-2">
 										<a href="<print related=linktitle>" class="card-image">
 											<img <print thumb=srcset>src="<print related=thumb>" loading="lazy" alt="<print related=imageALT>">
 										</a>
-										<div class="card-footer d-inline-block text-center line-clamp p-1 py-2">
-											<h5><a href="<print related=linktitle>" title="<print related=title>"><print related="title"></a></h5>
+										<div class="card-footer d-inline-block text-center line-clamp p-1 py-2 h5">
+											<a href="<print related=linktitle>" title="<print related=title>"><print related="title"></a>
 										</div>
-										<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print related="contentType"></div>
-										<div class="corner-ribbon big top-left <print related=cssrank> text-uppercase font-weight-bold shadow-sm"><print related="rank"></div>
+										<div class="corner-ribbon small top-right"><print related="contentType"></div>
+										<div class="corner-ribbon big top-left <print related=cssrank>"><print related="rank"></div>
 									</article>
 								</relitems>
 							</section>
@@ -217,13 +210,16 @@
 		</item>
 		<settings itemCount="all">
 		<contentitems>
-			<section class="col-12 col-sm order-2 order-sm-1">
+			<section class="col-12 col-sm">
 				<pagenotes>
-					<article class="col-12 m-0 p-0 px-3 hidewhenempty"><print page="notes"></article>
+					<article class="col-12 m-0 p-0 px-3">
+						<h1><print page="heading"></h1>
+						<print page="notes">
+					</article>
 				</pagenotes>
 				<pagination>
-					<div class="row mr-5">
-						<nav class="justify-content-end">
+					<div class="row">
+						<nav class="pagination justify-content-center">
 							<ul>
 								<paginationitems>
 							</ul>
@@ -231,34 +227,30 @@
 					</div>
 				</pagination>
 				<items>
-					<article class="card">
+					<article class="card mx-auto">
 						<div class="card-image">
 							<a href="<print content=linktitle>">
 								<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
 							</a>
-							<quickview>
-								<div class="quickview" aria-hidden="true">
-									<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
-								</div>
-							</quickview>
 						</div>
-						<div class="card-header">
-							<h2 class="h5"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></h2>
+						<div class="card-header h5">
+							<a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a>
 						</div>
-						<div class="card-body">
-							<print content="notes">
-						</div>
-						<div class="corner-ribbon big top-right text-uppercase font-weight-bold shadow-sm"><print content="quantity"></div>
-						<div class="corner-ribbon small top-right success text-uppercase font-weight-bold shadow-sm"><print content="cost"></div>
-						<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
+						<div class="card-body"><print content="notes"></div>
+						<div class="corner-ribbon small top-right"><print content="cost"></div>
+						<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
+						<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
 						<div class="card-footer">
-								<a class="btn" href="<print content=linktitle>" role="button">View</a>
+							<a class="btn" href="<print content=linktitle>" role="button">View</a>
+							<quickview>
+								<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+							</quickview>
 						</div>
 					</article>
 				</items>
 				<pagination>
-					<div class="row mr-5">
-						<nav class="justify-content-end">
+					<div class="row">
+						<nav class="pagination justify-content-center">
 							<ul>
 								<paginationitems>
 							</ul>

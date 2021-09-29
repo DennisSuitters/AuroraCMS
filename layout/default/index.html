@@ -5,30 +5,31 @@
 	<cover>
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
-	<section class="row mt-5">
+	<section class="row">
 		<pagenotes>
-			<article class="col-12 col-sm hidewhenemty"><print page="notes"></article>
+			<article class="col-12 col-sm">
+				<h1><print page="heading"></h1>
+				<print page="notes">
+			</article>
 		</pagenotes>
-		<div class="col-12 col-sm-6">
+		<div class="col-12 col-sm-6 mt-5">
 			<div class="row">
-				<h4>News and Events</h4>
+				<div class="h3 text-center text-sm-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events" aria-label="Go to Events">Events</a></div>
 				<eventsitems items="3">
 					<eventitem>
-						<article class="card event col-12 col-sm-5 mx-0 mx-sm-3">
+						<article class="card event col-5 mx-auto mx-sm-3">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
 								</a>
-								<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print event="contentType"></div>
+								<div class="corner-ribbon small top-right"><print event="contentType"></div>
 							</figure>
 							<div class="card-date shadow">
 								<span class="day"><print date="day"></span>
 								<span class="month"><print date="month"></span>
 								<span class="year"><print date="year"></span>
 							</div>
-							<div class="card-header">
-								<h2 class="h5"><a href="<print event=linktitle>"><print event="title"></a></h2>
-							</div>
+							<div class="card-header h5"><a href="<print event=linktitle>"><print event="title"></a></div>
 						</article>
 					</eventitem>
 				</eventsitems>
@@ -59,9 +60,9 @@
   	<p class="mt-5 text-white">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
 	</section>
 	<settings items="6" contenttype="all">
-	<section class="mt-5">
+	<section class="mt-5 justify-content-center">
 		<header>
-			<h2>Latest Content Additions</h2>
+			<h2 class="text-center">Latest Content Additions</h2>
 		</header>
 		<items>
 			<article class="card">
@@ -69,38 +70,36 @@
 					<a href="<print content=linktitle>">
 						<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
 					</a>
-					<quickview>
-						<div class="quickview" aria-hidden="true">
-							<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
-						</div>
-					</quickview>
 				</figure>
-				<div class="card-header">
-					<h2 class="h5"><a href="<print content=linktitle>"><print content="title"></a></h2>
+				<div class="card-header h5">
+					<a href="<print content=linktitle>"><print content="title"></a>
 				</div>
 				<div class="card-body">
 					<print content="notes">
 				</div>
-				<div class="corner-ribbon big top-right danger text-uppercase font-weight-bold shadow-sm"><print content="quantity"></div>
-				<div class="corner-ribbon small top-right text-uppercase font-weight-bold shadow-sm"><print content="contentType"></div>
-				<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
+				<div class="corner-ribbon small top-right"><print content="contentType"></div>
+				<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
+				<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
 				<div class="card-footer">
 					<a class="btn" href="<print content=linktitle>">View</a>
+					<quickview>
+						<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+					</quickview>
 				</div>
 			</article>
 		</items>
 	</section>
-	<section class="mt-5">
+	<section class="mt-5 justify-content-center">
 		<header>
-			<h2>Shop by Category</h2>
+			<h2 class="text-center">Shop by Category</h2>
 		</header>
 		<categories>
 			<article class="card">
 				<a href="<print category=link>" class="card-image">
 					<img <print thumb=srcset>src="<print category=thumb>" loading="lazy" alt="<print category=imageALT>">
 				</a>
-				<div class="card-header">
-					<h2 class="h5 text-center"><a href="<print category=link>"><print category="category"></a></h2>
+				<div class="card-header h5">
+					<a href="<print category=link>"><print category="category"></a>
 				</div>
 			</article>
 		</categories>
@@ -110,19 +109,19 @@
 	<settings items="3">
 	<section class="my-5">
 		<header>
-			<h2><a href="testimonials/">Testimonials</a> <small><small>Our Clients Love Us!</small></small></h2>
+			<h2 class="text-center"><a href="testimonials/">Testimonials</a> <small><small>Our Clients Love Us!</small></small></h2>
 		</header>
 		<div class="row">
 			<items>
 				<blockquote class="testimonials col-11 col-sm-3">
 					<img src="<print content=avatar>" loading="lazy" alt="<print content=name>">
 					<footer>
-						<h3 itemprop="author"><print content="name"></h3>
-						<h5><print content="business"></h5>
+						<div class="h3"><print content="name"></div>
+						<div class="h5"><print content="business"></div>
 					</footer>
 					<json-ld-testimonial>
 					<p><print content="notes"></p>
-					<data class="p-rating" value="<print review=rating>">
+					<div class="p-rating">
 						<span class="rating">
 							<span class="<print review=set1>"></span>
 							<span class="<print review=set2>"></span>
@@ -130,7 +129,7 @@
 							<span class="<print review=set4>"></span>
 							<span class="<print review=set5>"></span>
 						</span>
-					</data>
+					</div>
 	  		</blockquote>
 			</items>
 		</div>

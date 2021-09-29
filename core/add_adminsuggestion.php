@@ -7,13 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$config=$db->query("SELECT `dateFormat` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `email`,`business`,`dateFormat` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $u=isset($_POST['u'])?filter_input(INPUT_POST,'u',FILTER_SANITIZE_NUMBER_INT):0;
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):'';
 if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
@@ -23,21 +23,39 @@ if($u!=0||$da!=''){
   $s=$db->prepare("INSERT IGNORE INTO `".$prefix."suggestions` (`rid`,`uid`,`notes`,`popup`,`seen`,`ti`) VALUES (:rid,:uid,:da,1,0,:ti)");
   $s->execute([
     ':rid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0,
-    ':uid'=>$u,
+    ':uid'=>(int)$u,
     ':da'=>$da,
     ':ti'=>$ti
   ]);
   $id=$db->lastInsertId();
-  $tu=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
+  $tu=$db->prepare("SELECT `id`,`email`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
   $tu->execute([
     ':id'=>(int)$u
   ]);
   $rt=$tu->fetch(PDO::FETCH_ASSOC);
-  $fu=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
+  $fu=$db->prepare("SELECT `id`,`email`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
   $fu->execute([
     ':id'=>isset($_SESSION['uid'])?$_SESSION['uid']:0
   ]);
   $rf=$fu->fetch(PDO::FETCH_ASSOC);
+  if($rt['email']!=''){
+    require'phpmailer/class.phpmailer.php';
+    $mail=new PHPMailer;
+    $mail->isSendmail();
+    $toname=$c['name'];
+    $mail->SetFrom($config['email'],$config['business']);
+    $mail->AddAddress($rt['email']);
+    $mail->IsHTML(true);
+    $mail->Subject='New Administration Message via '.($config['business']=''?'AuroraCMS':$config['business']);
+    $name=explode(" ",$rt['name']);
+    $mail->Body='Hello '.($name[0]==''?$rf['username']:$name[0]).', <br>A new message is available to be read when logging in to the Administration of the '.($config['business']==''?'AuroraCMS':$config['business']).' Website.';
+    $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+    if($mail->Send()){
+      echo'<script>window.top.window.toastr["success"](`Notification Email was sent to '.$rt['email'].'`);</script>';
+    }else{
+      echo'<script>window.top.window.toastr["error"](`The was an issue sending a Notification Email to '.$rt['email'].'`);</script>';
+    }
+  }
 	echo'<script>'.
 				'window.top.window.$("#suggestions").prepend(`'.
 					'<div id="l_'.$id.'">'.

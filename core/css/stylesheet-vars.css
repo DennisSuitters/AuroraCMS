@@ -84,6 +84,7 @@
   --alert-danger-color: #842029;
   --alert-danger-link: #6a1a21;
   --danger-background-color: #dc3545;
+  --danger-background-color-hover: #b81f44;
   --danger-border-color: #dc3545;
   --danger-color: #dc3545;
   --danger-color-contrast: #fff;
@@ -146,8 +147,9 @@
   --alert-success-border-color: #badbcc;
   --alert-success-color: #0f5132;
   --alert-success-link: #0c4128;
-  --success-background-color: #198754;
-  --success-border-color: #198754;
+  --success-background-color: #2e9d64;
+  --success-background-color-hover: #198754;
+  --success-border-color: #2e9d64;
   --success-color: #198754;
   --success-color-contrast: #fff;
   --success-link: #0c4128;

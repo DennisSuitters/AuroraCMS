@@ -217,11 +217,19 @@ legend {
   box-shadow: none !important;
   outline: 0 !important; }
 
+.add,
+.btn-success {
+  color: var(--success-color-contrast) !important;
+  fill: var(--success-color-contrast) !important;
+  background-color: var(--success-background-color) !important;
+  border-color: var(--success-background-color) !important; }
+
 .add:hover,
 .btn-success:hover {
-  color: #fff !important;
-  background-color: #31a66a !important;
-  border-color: #2e9d64 !important; }
+  color: var(--success-color-contrast) !important;
+  fill: var(--success-color-contrast) !important;
+  background-color: var(--success-background-color-hover) !important;
+  border-color: var(--success-background-color-hover) !important; }
 
 .add:focus,
 .btn-success:focus,
@@ -230,15 +238,17 @@ legend {
 
 .trash,
 .btn-danger {
-  color: #fff !important;
-  background-color: #d92550 !important;
-  border-color: #d92550 !important; }
+  color: var(--danger-color-contrast) !important;
+  fill: var(--danger-color-contrast) !important;
+  background-color: var(--danger-background-color) !important;
+  border-color: var(--danger-background-color) !important; }
 
 .trash:hover,
 .btn-danger:hover {
-  color: #fff !important;
-  background-color: #b81f44 !important;
-  border-color: #ad1e40 !important; }
+  color: var(--danger-color-contrast) !important;
+  fill: var(--danger-color-contrast) !important;
+  background-color: var(--danger-background-color-hover) !important;
+  border-color: var(--danger-background-color-hover) !important; }
 
 .trash:focus,
 .btn-danger:focus,

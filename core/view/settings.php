@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -23,6 +23,15 @@ if(isset($_SESSION['uid'])&&$_SESSION['uid']>0){
 	$user=$s->fetch(PDO::FETCH_ASSOC);
 }
 if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$user['rank']>0)){
+	$html=preg_replace([
+		'/<print page=[\"\']?heading[\"\']?>/',
+	  '/<print page=[\"\']?notes[\"\']?>/',
+		$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is'
+	],[
+		$page['heading']==''?$page['seoTitle']:$page['heading'],
+	  $page['notes'],
+		''
+	],$html);
 	if(isset($act)&&$act=='updatePassword'){
 		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
 			$password=filter_input(INPUT_POST,'newPass',FILTER_SANITIZE_STRING);
@@ -152,11 +161,4 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 }else{
 	if(file_exists(THEME.'/noaccess.html'))$html=file_get_contents(THEME.'/noaccess.html');
 }
-$html=preg_replace([
-  $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
-  '/<print page=[\"\']?notes[\"\']?>/',
-],[
-  '',
-  $page['notes']
-],$html);
 $content.=$html;

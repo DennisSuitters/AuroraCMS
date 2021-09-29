@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -85,11 +85,13 @@ if(stristr($html,'<print page="coverItem">')){
 
 $html=preg_replace([
 	'~<settings.*?>~is',
+	'/<print page=[\"\']?heading[\"\']?>/',
 	'/<print page=[\"\']?notes[\"\']?>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
 	'/<g-recaptcha>/'
 ],[
 	'',
+	$page['heading']==''?$page['seoTitle']:$page['heading'],
 	rawurldecode($page['notes']),
 	'',
 	$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':'',

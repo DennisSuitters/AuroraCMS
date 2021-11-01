@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'core/puconverter.php';
 require'core/phpmailer/class.phpmailer.php';
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
@@ -20,8 +22,8 @@ $html=preg_replace([
 	'/<print page=[\"\']?notes[\"\']?>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is'
 ],[
-	$page['heading']==''?$page['seoTitle']:$page['heading'],
-	rawurldecode($page['notes']),
+	htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
+	$purify->purify($page['notes']),
 	''
 ],$html);
 $notification='';
@@ -44,29 +46,18 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 		  if($user['purchaseLimit']!=0)
 		    $limit=$user['purchaseLimit'];
 		  else{
-		    if($rank==200)
-		      $limit=$config['memberLimit'];
-		    if($rank==210)
-		      $limit=$config['memberLimitSilver'];
-		    if($rank==220)
-		      $limit=$config['memberLimitBronze'];
-		    if($rank==230)
-		      $limit=$config['memberLimitGold'];
-		    if($rank==240)
-		      $limit=$config['memberLimitPlatinum'];
-		    if($rank==310)
-		      $limit=$config['wholesaleLimitSilver'];
-		    if($rank==320)
-		      $limit=$config['wholesaleLimitBronze'];
-		    if($rank==330)
-		      $limit=$config['wholesaleLimitGold'];
-		    if($rank==340)
-		      $limit=$config['wholesaleLimitPlatinum'];
+		    if($rank==200)$limit=$config['memberLimit'];
+		    if($rank==210)$limit=$config['memberLimitSilver'];
+		    if($rank==220)$limit=$config['memberLimitBronze'];
+		    if($rank==230)$limit=$config['memberLimitGold'];
+		    if($rank==240)$limit=$config['memberLimitPlatinum'];
+		    if($rank==310)$limit=$config['wholesaleLimitSilver'];
+		    if($rank==320)$limit=$config['wholesaleLimitBronze'];
+		    if($rank==330)$limit=$config['wholesaleLimitGold'];
+		    if($rank==340)$limit=$config['wholesaleLimitPlatinum'];
 		  }
 		  if($limit>0){
-		    if($qty > $limit){
-					$qty=$limit;
-		    }
+		    if($qty > $limit)$qty=$limit;
 		  }
 		}
 		$s=$db->prepare("UPDATE `".$prefix."cart` SET `quantity`=:quantity WHERE `id`=:id");
@@ -105,7 +96,8 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$ru=$s->fetch(PDO::FETCH_ASSOC);
 				if($ru['status']=='delete'||$ru['status']=='disabled')
 					$notification.=preg_replace(['/<print alert>/','/<print text>/'],['danger','The account associated with the details provided has been suspended, or the email supplied is invalid.'],$theme['settings']['alert']);
-				else$uid=$ru['id'];
+				else
+					$uid=$ru['id'];
 			}else{
 				$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 				$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
@@ -163,7 +155,8 @@ if(isset($args[0])&&$args[0]=='confirm'){
 			if($sr->rowCount()>0){
 				$reward=$sr->fetch(PDO::FETCH_ASSOC);
 				if(!$reward['tis']>$ti&&!$reward['tie']<$ti)$rewards['id']=0;
-				if($reward['quantity']<1)$reward['id']=0;
+				if($reward['quantity']<1)
+					$reward['id']=0;
 				else{
 					$sr=$db->prepare("UPDATE `".$prefix."rewards` SET `quantity`=:quantity WHERE `code`=:code");
 					$sr->execute([
@@ -233,9 +226,11 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				if($mail->Send()){}
 			}
 			$notification.=preg_replace(['/<print alert/','/<print text>/'],['success','Thank you for placing an Order, a representative will process your order as soon as humanly possible'],$theme['settings']['alert']);
-		}else$notification.=preg_replace(['/<print alert>/','/<print text>/'],['danger','The account associated with the details provided has been suspended, or the email supplied is invalid.'],$theme['settings']['alert']);
+		}else
+			$notification.=preg_replace(['/<print alert>/','/<print text>/'],['danger','The account associated with the details provided has been suspended, or the email supplied is invalid.'],$theme['settings']['alert']);
 		$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$notification,$html,1);
-	}else$html=preg_replace('~<emptycart>.*?<\/emptycart>~is','',$html,1);
+	}else
+		$html=preg_replace('~<emptycart>.*?<\/emptycart>~is','',$html,1);
 }else{
 	$total=0;
 	if(stristr($html,'<items')){
@@ -256,10 +251,14 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$sc->execute([':id'=>$ci['cid']]);
 				$image=NOIMAGE;
 				$c=$sc->fetch(PDO::FETCH_ASSOC);
-				if($i['thumb']!=''&&file_exists('media/thumbs/'.basename(strtolower($i['thumb']))))$image='media/thumbs/'.basename(strtolower($i['thumb']));
-				elseif($i['fileURL']!='')$image=$i['fileURL'];
-				elseif($i['file']!=''&&file_exists('media/'.basename($i['file'])))$image='media/'.basename($i['file']);
-				else $image=NOIMAGE;
+				if($i['thumb']!=''&&file_exists('media/thumbs/'.basename(strtolower($i['thumb']))))
+					$image='media/thumbs/'.basename(strtolower($i['thumb']));
+				elseif($i['fileURL']!='')
+					$image=$i['fileURL'];
+				elseif($i['file']!=''&&file_exists('media/'.basename($i['file'])))
+					$image='media/'.basename($i['file']);
+				else
+					$image=NOIMAGE;
 				$gst=0;
 				if($config['gst']>0){
 					$gst=$ci['cost']*($config['gst']/100);
@@ -290,10 +289,10 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					($i['code']!=''?' : ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
 					$i['weight'].$i['weightunit'],
 					'W:'.$i['width'].$i['widthunit'].' x L:'.$i['length'].$i['lengthunit'].' H:'.$i['height'].$i['heightunit'],
-					isset($c['title'])&&$c['title']!=''?' : '.$c['title']:'',
+					isset($c['title'])&&$c['title']!=''?' : '.htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'):'',
 					$ci['id'],
 					$ci['cost'],
-					htmlspecialchars($ci['quantity'],ENT_QUOTES,'UTF-8'),
+					$ci['quantity'],
 					$gst,
 					$total
 				],$cartitem);
@@ -322,9 +321,9 @@ if(isset($args[0])&&$args[0]=='confirm'){
 			$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
 			$sco->execute();
 			$postageoptions='<option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>'. // AUS_PARCEL_REGULAR
-							'<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS
+											'<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS
 			if($sco->rowCount()>0){
-				while($rco=$sco->fetch(PDO::FETCH_ASSOC))$postageoptions.='<option value="'.$rco['id'].'">'.$rco['title'].'</option>';
+				while($rco=$sco->fetch(PDO::FETCH_ASSOC))$postageoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').'</option>';
 			}
 			$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY `title` ASC");
 			$sco->execute();
@@ -332,7 +331,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 			if($sco->rowCount()>0){
 				$payoptions.='<option value="0">Select an Option</option>';
 				while($rco=$sco->fetch(PDO::FETCH_ASSOC)){
-					$payoptions.='<option value="'.$rco['id'].'">'.$rco['title'].($rco['type']!=0&&$rco['value']!=0?($rco['type']==1?' (Surcharge of '.$rco['value'].'&#37;)':' (Surcharge of &#36;'.$rco['value'].')'):'').'</option>';
+					$payoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').($rco['type']!=0&&$rco['value']!=0?($rco['type']==1?' (Surcharge of '.$rco['value'].'&#37;)':' (Surcharge of &#36;'.$rco['value'].')'):'').'</option>';
 				}
 			}
 			$html=preg_replace([
@@ -357,7 +356,8 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/',
 				isset($u['email'])&&$u['email']!=''?'<input type="hidden" name="email" value="'.$u['email'].'">':'',
 			$html);
-		}else$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
+		}else
+			$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
 	}
 }
 $content.=$html;

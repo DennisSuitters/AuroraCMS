@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -30,9 +30,9 @@ else{?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <form target="sp" method="post" action="core/add_forumdata.php">
-          <input type="hidden" name="act" value="category">
+          <input name="act" type="hidden" value="category">
           <div class="form-row">
             <div class="input-text">Category</div>
             <input id="t" name="t" placeholder="Enter a Category Title...">
@@ -60,7 +60,7 @@ else{?>
               <option value="900">Administrator and above</option>
             </select>
             <div class="input-text">
-              <label for="help">Help: </label><input type="checkbox" id="help" name="help">
+              <label for="help">Help: </label><input id="help" name="help" type="checkbox">
             </div>
             <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
           </div>
@@ -73,7 +73,7 @@ $sc->execute();
 while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
   $st=$db->prepare("SELECT * FROM `".$prefix."forumTopics` WHERE `cid`=:cid ORDER BY `pin` DESC, `ord` ASC, `ti` ASC");
   $st->execute([':cid'=>$rc['id']]);?>
-          <div id="cats_<?=$rc['id'];?>" class="item row mb-3 border-1 bg-white">
+          <div class="item row mb-3 border-1 bg-white" id="cats_<?=$rc['id'];?>">
             <div class="card col-12 border-0">
               <div class="form-row">
                 <div class="input-text"><?php svg('drag','cathandle');?></div>
@@ -84,25 +84,25 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                 <input class="text-input" id="notes<?=$rc['id'];?>" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="notes" type="text" value="<?=$rc['notes'];?>" placeholder="Enter a Description...">
                 <button class="save" id="savenotes<?=$rc['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                 <div class="input-text">
-                  <label for="help<?=$rc['id'];?>">Help: </label><input type="checkbox" id="help<?=$rc['id'];?>"<?=$rc['help']==1?' checked':'';?> disabled>
+                  <label for="help<?=$rc['id'];?>">Help:</label>&nbsp;<input id="help<?=$rc['id'];?>" type="checkbox"<?=$rc['help']==1?' checked':'';?> disabled>
                 </div>
                 <div class="input-text">
-                  <label for="pin<?=$rc['id'];?>">Pin: </label><input type="checkbox" id="pin<?=$rc['id'];?>" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="pin" data-dbb="0"<?=$rc['pin']==1?' checked':'';?>>
+                  <label for="pin<?=$rc['id'];?>">Pin:</label>&nbsp;<input id="pin<?=$rc['id'];?>" type="checkbox" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="pin" data-dbb="0"<?=$rc['pin']==1?' checked':'';?>>
                 </div>
                 <form target="sp" method="post" action="core/purgeforum.php">
-                  <input type="hidden" name="t" value="forumCategory">
-                  <input type="hidden" name="id" value="<?=$rc['id'];?>">
+                  <input name="t" type="hidden" value="forumCategory">
+                  <input name="id" type="hidden" value="<?=$rc['id'];?>">
                   <button class="trash" data-tooltip="tooltip" aria-label="Delte"><?= svg2('trash');?></button>
                 </form>
               </div>
               <small class="badger badge-<?= rank($rc['rank']);?>">Available to <?= ucwords(($rc['rank']==0?'everyone':str_replace('-',' ',rank($rc['rank']))));?></small>
             </div>
-            <div id="topics_<?=$rc['id'];?>" class="card-body ml-3 mt-3">
+            <div class="card-body ml-3 mt-3" id="topics_<?=$rc['id'];?>">
               <form target="sp" method="post" action="core/add_forumdata.php">
-                <input type="hidden" name="act" value="topic">
-                <input type="hidden" name="id" value="<?=$rc['id'];?>">
-                <input type="hidden" name="rank" value="<?=$rc['rank'];?>">
-                <input type="hidden" name="help" value="<?=$rc['help'];?>">
+                <input name="act" type="hidden" value="topic">
+                <input name="id" type="hidden" value="<?=$rc['id'];?>">
+                <input name="rank" type="hidden" value="<?=$rc['rank'];?>">
+                <input name="help" type="hidden" value="<?=$rc['help'];?>">
                 <div class="form-row">
                   <div class="input-text">Topic</div>
                   <input name="t" placeholder="Enter a Topic Title...">
@@ -114,7 +114,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
 <?php while($rt=$st->fetch(PDO::FETCH_ASSOC)){
 $sp=$db->prepare("SELECT * FROM `".$prefix."forumPosts` WHERE `tid`=:tid");
 $sp->execute([':tid'=>$rt['id']]);?>
-              <div id="topic_<?=$rt['id'];?>" class="item row mt-3 bg-white">
+              <div class="item row mt-3 bg-white" id="topic_<?=$rt['id'];?>">
                 <div class="card col-12">
                   <div class="form-row">
                     <div class="input-text"><?php svg('drag','subhandle');?></div>
@@ -125,11 +125,11 @@ $sp->execute([':tid'=>$rt['id']]);?>
                     <input class="text-input" id="notes<?=$rt['id'];?>" data-dbid="<?=$rt['id'];?>" data-dbt="forumTopics" data-dbc="notes" type="text" value="<?=$rt['notes'];?>" placeholder="Enter a Description...">
                     <button class="save" id="savenotes<?=$rt['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
                     <div class="input-text">
-                      <label for="pin<?=$rt['id'];?>">Pin: </label><input type="checkbox" id="pin<?=$rt['id'];?>" data-dbid="<?=$rt['id'];?>" data-dbt="forumTopics" data-dbc="pin" data-dbb="0"<?=$rt['pin']==1?' checked':'';?>>
+                      <label for="pin<?=$rt['id'];?>">Pin:</label>&nbsp;<input id="pin<?=$rt['id'];?>" data-dbid="<?=$rt['id'];?>" data-dbt="forumTopics" data-dbc="pin" data-dbb="0" type="checkbox"<?=$rt['pin']==1?' checked':'';?>>
                     </div>
                     <form target="sp" method="post" action="core/purgeforum.php">
-                      <input type="hidden" name="t" value="forumTopics">
-                      <input type="hidden" name="id" value="<?=$rt['id'];?>">
+                      <input name="t" type="hidden" value="forumTopics">
+                      <input name="id" type="hidden" value="<?=$rt['id'];?>">
                       <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
                     </form>
                   </div>
@@ -192,8 +192,8 @@ $sp->execute([':tid'=>$rt['id']]);?>
       return ui;
     }
   </script>
-<?php }?>
-<?php require'core/layout/footer.php';?>
+<?php }
+require'core/layout/footer.php';?>
       </div>
     </div>
   </section>

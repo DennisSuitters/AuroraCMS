@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -25,6 +25,11 @@
     ".nav-toggle",function(){
       $('#content,#sidebar').toggleClass('navsmall');
       document.getElementById('notification-checkbox').checked=false;
+      if($('#sidebar').hasClass('navsmall')){
+        Cookies.set('sidebar','small');
+      }else{
+        Cookies.remove('sidebar');
+      }
       return false;
     }
   );
@@ -298,7 +303,7 @@
           lang:'en-US',
           toolbar:[
             ['save',['save']],
-            ['custom',['findnreplace']],
+            ['custom',['cleaner','findnreplace']],
 //            ['style',['style']],
             ['font',['bold','italic','underline','clear']],
             ['para',['ul','ol','paragraph']],
@@ -448,17 +453,16 @@
         var stats=results.split(",");
         var navStat=$('#nav-stat').html();
         if(stats[0]==0)stats[0]='';
-        $('#nav-nou').html(stats[2]);
         var stathtml='<li class="dropdown-heading py-2">Notifications</li>';
-        if(stats[3]>0)stathtml+='<li><span class="badger badge-primary">'+stats[3]+'</span><a href="<?= URL.$settings['system']['admin'];?>/comments"> Comments</a></li>';
-        if(stats[4]>0)stathtml+='<li><span class="badger badge-primary">'+stats[4]+'</span><a href="<?= URL.$settings['system']['admin'];?>/reviews"> Reviews</a></li>';
-        if(stats[5]>0)stathtml+='<li><span class="badger badge-primary">'+stats[5]+'</span><a href="<?= URL.$settings['system']['admin'];?>/messages"> Messages</a></li>';
-        if(stats[6]>0)stathtml+='<li><span class="badger badge-primary">'+stats[6]+'</span><a href="<?= URL.$settings['system']['admin'];?>/orders/pending"> Orders</a></li>';
-        if(stats[7]>0)stathtml+='<li><span class="badger badge-primary">'+stats[7]+'</span><a href="<?= URL.$settings['system']['admin'];?>/bookings"> Bookings</a></li>';
-        if(stats[8]>0)stathtml+='<li><span class="badger badge-primary">'+stats[8]+'</span><a href="<?= URL.$settings['system']['admin'];?>/accounts"> Users</a></li>';
-        if(stats[9]>0)stathtml+='<li><span class="badger badge-primary">'+stats[9]+'</span><a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"> Testimonials</a></li>';
-        if(stats[2]>0)stathtml+='<li><span class="badger badge-primary">'+stats[2]+'</span><a href="<?= URL.$settings['system']['admin'];?>/accounts"> Active Users</a></li>';
-        $('#nav-stat').data('badge',stats[0]);
+        if(stats[3]>0)stathtml+='<li><span class="badger badge-primary">'+stats[3]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/comments"> Comments</a></li>';
+        if(stats[4]>0)stathtml+='<li><span class="badger badge-primary">'+stats[4]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/reviews"> Reviews</a></li>';
+        if(stats[5]>0)stathtml+='<li><span class="badger badge-primary">'+stats[5]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/messages"> Messages</a></li>';
+        if(stats[6]>0)stathtml+='<li><span class="badger badge-primary">'+stats[6]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/orders/pending"> Orders</a></li>';
+        if(stats[7]>0)stathtml+='<li><span class="badger badge-primary">'+stats[7]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/bookings"> Bookings</a></li>';
+        if(stats[8]>0)stathtml+='<li><span class="badger badge-primary">'+stats[8]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/accounts"> Users</a></li>';
+        if(stats[9]>0)stathtml+='<li><span class="badger badge-primary">'+stats[9]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"> Testimonials</a></li>';
+        if(stats[2]>0)stathtml+='<li><span class="badger badge-primary">'+stats[2]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/accounts"> Active Users</a></li>';
+        $('#nav-stat').attr('data-badge',stats[0]);
         $('#nav-stat-list').html(stathtml);
         if(stats[1]==0){
           document.title='Administration <?=$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';

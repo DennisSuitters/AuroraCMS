@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -20,7 +20,7 @@
           <div>Live Chat Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
             <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
@@ -32,13 +32,13 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="row mt-3">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#enableChat" aria-label="PermaLink to Enable Chat Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#enableChat" data-tooltip="tooltip" aria-label="PermaLink to Enable Chat Checkbox">&#128279;</a>':'';?>
           <input id="enableChat" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13" type="checkbox"<?=$config['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="enableChat" id="configoptions131">Enable Live Chat</label>
         </div>
-        <label id="removeMessages" for="chatAutoRemove"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#removeMessages" aria-label="PermaLink to Remove Messages Selector">&#128279;</a>':'';?>Remove Messages</label>
+        <label id="removeMessages" for="chatAutoRemove"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#removeMessages" data-tooltip="tooltip" aria-label="PermaLink to Remove Messages Selector">&#128279;</a>':'';?>Remove Messages</label>
         <div class="form-row">
           <select id="chatAutoRemove" data-dbid="1" data-dbt="config" data-dbc="chatAutoRemove" onchange="update('1','config','chatAutoRemove',$(this).val(),'select');">
             <option value="0"<?=$config['chatAutoRemove']==0?' selected':'';?>>Never</option>
@@ -50,13 +50,13 @@
           </select>
         </div>
         <div class="row mt-3">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#chatNotifications" aria-label="PermaLink to Chat Notifications Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#chatNotifications" data-tooltip="tooltip" aria-label="PermaLink to Chat Notifications Checkbox">&#128279;</a>':'';?>
           <input id="chatNotifications" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15" type="checkbox"<?=$config['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="chatNotifications" id="configoptions151">Email new LiveChat notifications to nominated accounts.</label>
         </div>
         <hr>
         <div class="row mt-3">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessenger" aria-label="PermaLink to Enable Facebook Messenger Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessenger" data-tooltip="tooltip" aria-label="PermaLink to Enable Facebook Messenger Checkbox">&#128279;</a>':'';?>
           <input id="facebookMessenger" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14" type="checkbox"<?=$config['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="facebookMessenger" id="configoptions141">Facebook Messenger</label>
         </div>
@@ -71,17 +71,17 @@
             6. Scroll down to find "White-listed Domains", and enter your domain name including the https:// protocol.
           </div>
         <?php }?>
-        <label id="facebookMessengerCode" for="messengerFBCode"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerCode" aria-label="PermaLink to Facebook Messenger Code">&#128279;</a>':'';?>Page ID</label>
+        <label id="facebookMessengerCode" for="messengerFBCode"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerCode" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Code">&#128279;</a>':'';?>Page ID</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBCode" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" type="text" value="<?=$config['messengerFBCode'];?>" placeholder="Enter Page ID...">
-          <button class="save" id="savemessengerFBCode" data-tooltip="tooltip" data-dbid="messengerFBCode" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savemessengerFBCode" data-dbid="messengerFBCode" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label id="facebookMessengerGreeting" for="messengerFBGreeting"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerGreeting" aria-label="PermaLink to Facebook Messenger Greeting">&#128279;</a>':'';?>Greeting</label>
+        <label id="facebookMessengerGreeting" for="messengerFBGreeting"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerGreeting" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Greeting">&#128279;</a>':'';?>Greeting</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBGreeting" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" type="text" value="<?=$config['messengerFBGreeting'];?>" placeholder="Enter Greeting...">
-          <button class="save" id="savemessengerFBGreeting" data-tooltip="tooltip" data-dbid="messengerFBGreeting" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savemessengerFBGreeting" data-dbid="messengerFBGreeting" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label id="facebookMessengerColor" for="messengerFBColor"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerColor" aria-label="PermaLink to Facebook Messenger Colour">&#128279;</a>':'';?>Colour</label>
+        <label id="facebookMessengerColor" for="messengerFBColor"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerColor" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Colour">&#128279;</a>':'';?>Colour</label>
         <div class="form-row">
           <select id="messengerFBColor" name="colorpicker"<?=$user['options'][1]==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val(),'select');" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?=$user['options'][1]==1?'':' disabled';?>>
             <option value="#7bd148"<?=$config['messengerFBColor']=='#7bd148'?' selected':'';?>>Green</option>

@@ -1,17 +1,16 @@
 /* stylesheet v0.9 - Vars - https://github.com/DiemenDesign/stylesheet */
 
-
 :root {
   --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size: 1rem;
   --line-height: 1.5;
   --line-clamp: 1;
-  --body-background-color: #f6f8fA;
+  --body-background-color: #f6f8fa;
   --color: #000;
   --color-muted: #6c757d;
   --link-color: #0044ff;
-  --link-color-hover: #0056C4;
+  --link-color-hover: #0056c4;
   --text-decoration-wave-color: #f00;
   --content-background-color: #920de90b;
   --content-border-color: #007bff;
@@ -35,7 +34,8 @@
   --footer-background-color: #fff;
   --footer-color: #000;
   --footer-link-color: #0044ff;
-  --footer-link-color-hover: #0056C4;
+  --footer-link-color-hover: #0056c4;
+  --footer-link-color-active: #0056c4;
   --footer-link-decoration-hover: underline;
 
   --menu-background-color: transparent;

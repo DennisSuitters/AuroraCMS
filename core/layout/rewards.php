@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow overflow-visible">
+      <div class="card border-radius-0 overflow-visible">
         <table class="table-zebra">
           <thead>
             <tr>
@@ -64,7 +64,7 @@
                     <input id="tie" name="tie" type="date" value="" onchange="$(`#tiex`).val(getTimestamp(`tie`));">
                     <input id="tiex" name="tiex" type="hidden" value="<?= time();?>">
                   </td>
-                  <td><button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?= svg2('add');?></button></td>
+                  <td><button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button></td>
                 </tr>
             </form>
           <?php }

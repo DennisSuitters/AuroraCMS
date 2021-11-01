@@ -7,73 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$link='';
-else{
-	if($config['options'][3]==1)$link_x=' or Sign Up';
-	else{
-		$link_x='';
-		$html=preg_replace('~<block signup>.*?<\/block signup>~is','',$html,1);
-	}
-	$link='<li><a href="login/">Login'.$link_x.'</a></li>';
-}
-$html=isset($_SESSION['rank'])&&$_SESSION['rank']>899?str_replace('<administration>','<li><a target="_blank" href="'.$settings['system']['admin'].'/">Administration</a></li>',$html):str_replace('<administration>','',$html);
-if(stristr($html,'<hours>')){
-	if($config['options'][19]==1){
-		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
-		$htmlHours=$matches[1];
-		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
-		if($s->rowCount()>0){
-			while($r=$s->fetch(PDO::FETCH_ASSOC)){
-				$buildHours=$htmlHours;
-				if($r['tis']!=0){
-					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)$hourFrom=$r['tis'];
-					else{
-						$hourFromH=substr($r['tis'],0,2);
-						$hourFromM=substr($r['tis'],3,4);
-						$hourFrom=($hourFromH<12?ltrim($hourFromH,'0').($hourFromM>0?$hourFromM:'').'am':$hourFromH - 12 .($hourFromM>0?$hourFromM :'').'pm');
-					}
-				}else$hourFrom='';
-				if($r['tie']!=0){
-					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)$hourTo=$r['tie'];
-					else{
-						$hourToH=substr($r['tie'],0,2);
-						$hourToM=substr($r['tie'],3,4);
-						$hourTo=($hourToH<12?ltrim($hourToH,'0').($hourToM>0?$hourToM:'').'am':$hourToH - 12 .($hourToM>0?$hourToM:'').'pm');
-					}
-				}else$hourTo='';
-				$buildHours=preg_replace([
-					'/<print dayfrom>/',
-					'/<print dayto>/',
-					'/<print timefrom>/',
-					'/<print timeto>/',
-					'/<print info>/'
-				],[
-					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])),
-					($r['password']==$r['username']?'':'-'.ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
-					$hourFrom,
-					($r['tie']>0?'-'.$hourTo:''),
-					($r['title']!=''?ucfirst($r['title']):'')
-				],$buildHours);
-				$hoursItems.=$buildHours;
-			}
-		}
-		$html=preg_replace([
-			'/<[\/]?hours>/',
-			'~<buildHours>.*?<\/buildHours>~is'
-		],[
-			'',
-			$hoursItems,
-		],$html);
-	}else$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
-}
+require'inc-hours.php';
 $html=preg_replace([
+	'~<block signup>.*?<\/block signup>~is',
+	'/<administration>/',
+	'/<login>/',
 	($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
 	'/<map>/',
 	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
@@ -97,7 +39,6 @@ $html=preg_replace([
 	'/<print theme=[\"\']?creator[\"\']?>/',
 	'/<print theme=[\"\']?creator_url[\"\']?>/',
 	'/<print theme=[\"\']?creator_url_title[\"\']?>/',
-	'/<login>/',
 	'/<print config=[\"\']?seoDescription[\"\']?>/',
 	'/<print config=[\"\']?abn[\"\']?>/',
 	'/<print theme="design">/',
@@ -108,6 +49,9 @@ $html=preg_replace([
 	$config['options'][16]==0?'~<afterpay>.*?</afterpay>~is':'/<[\/]?afterpay>/',
 	$config['stripe_publishkey']==''?'~<creditcards>.*?</creditcards>~is':'/<[\/]?creditcards>/'
 ],[
+	$config['options'][3]==1?'':'',
+	isset($_SESSION['rank'])&&$_SESSION['rank']>899?'<li role="menuitem"><a target="_blank" href="'.$settings['system']['admin'].'/">Administration</a></li>':'',
+	isset($_SESSION['rank'])&&$_SESSION['rank']>0?'':'<li role="menuitem"><a href="login/">Login'.($config['options'][3]==1?' or Sign Up':'').'</a></li>',
 	($config['options'][27]==1&&$config['geo_position']!=''&&$config['mapapikey']!=''?'<script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map",{zoomControl:false}).setView(['.$config['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`,}).addTo(map);var marker=L.marker(['.$config['geo_position'].'],{draggable:false}).addTo(map);'.($config['business']==''?'':'var popupHtml=`<strong>'.$config['business'].'</strong>'.($config['address']==''?'':'<br><small>'.$config['address'].'<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'map.dragging.disable();map.touchZoom.disable();map.doubleClickZoom.disable();map.scrollWheelZoom.disable();marker.off("click");</script>':''),
 	'',
 	'',
@@ -131,7 +75,6 @@ $html=preg_replace([
 	htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($theme['creator_url'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($theme['creator_url_title'],ENT_QUOTES,'UTF-8'),
-	$link,
 	htmlspecialchars($config['seoDescription'],ENT_QUOTES,'UTF-8'),
 	$config['abn']!=''?htmlspecialchars('ABN '.$config['abn'],ENT_QUOTES,'UTF-8'):'',
 	'<span>Website Design by <a href="'.$theme['creator_url'].'" rel="noopener no referrer">'.$theme['creator'].'</a></span>',
@@ -169,7 +112,6 @@ if(stristr($html,'<buildMenu')){
 	while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		if($r['contentType']=='cart'&&$config['options'][30]==1&&(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false))continue;
 		$buildMenu=$htmlMenu;
-		$buildMenu=$view==$r['contentType']||$view==$r['contentType'].'s'?preg_replace('/<print active=[\"\']?menu[\"\']?>/',' active',$buildMenu):preg_replace('/<print active=[\"\']?menu[\"\']?>/','',$buildMenu);
 		if($r['contentType']!='index'){
 			if(isset($r['url'][0])&&$r['url'][0]=='#')
 				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['url'].'/',$buildMenu);
@@ -179,7 +121,13 @@ if(stristr($html,'<buildMenu')){
 				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.strtolower($r['contentType']).'/'.str_replace(' ','-',$r['title']).'/',$buildMenu);
 			else
 				$buildMenu=preg_replace('/<print menu=[\"\']?url[\"\']?>/',URL.$r['contentType'].'/',$buildMenu);
-			$buildMenu=preg_replace('/<print rel=[\"\']?contentType[\"\']?>/',strtolower($r['contentType']),$buildMenu);
+			$buildMenu=preg_replace([
+				'/<print active=[\"\']?menu[\"\']?>/',
+				'/<print rel=[\"\']?contentType[\"\']?>/'
+			],[
+				$page['id']==$r['id']?$theme['settings']['activeClass']:'',
+				strtolower($r['contentType'])
+			],$buildMenu);
 		}else{
 			$buildMenu=preg_replace([
 				'/<print menu=[\"\']?url[\"\']?>/',
@@ -201,37 +149,12 @@ if(stristr($html,'<buildMenu')){
 		''
 	],$html);
 }
-if(stristr($html,'<buildSocial')){
-	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
-	$htmlSocial=$matches[1];
-	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
-	if($s->rowCount()>0){
-		while($r=$s->fetch(PDO::FETCH_ASSOC)){
-			$buildSocial=$htmlSocial;
-			$buildSocial=str_replace([
-				'<print sociallink>',
-				'<print rel=label>',
-				'<print socialicon>'
-			],[
-				$r['url'],
-				ucfirst($r['icon']),
-				frontsvg('i-social-'.$r['icon'])
-			],$buildSocial);
-			$socialItems.=$buildSocial;
-		}
-	}else$socialItems='';
-	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
-	if($config['options'][9]==1){
-		$html=preg_replace('/<[\/]?rss>/','',$html);
-		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'].'/',$html):str_replace('<print rsslink>','rss',$html);
-		$html=str_replace('<print rssicon>',frontsvg('i-social-rss'),$html);
-	}else$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
-}
+require'inc-buildsocial.php';
 if(stristr($html,'<chat')){
 	if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
 		if($config['options'][13]==1){
-			if($config['options'][14]==1&&$config['messengerFBCode']!='')$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
+			if($config['options'][14]==1&&$config['messengerFBCode']!='')
+				$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
 			else{
 				$html=preg_replace([
 					'/<[\/]?chat>/',
@@ -241,7 +164,9 @@ if(stristr($html,'<chat')){
 					SESSIONID
 				],$html);
 			}
-		}else$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
-	}else$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
+		}else
+			$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
+	}else
+		$html=preg_replace('~<chat>.*?<\/chat>~is','',$html,1);
 }
 $content.=$html;

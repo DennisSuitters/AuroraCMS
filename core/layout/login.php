@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -15,6 +15,7 @@
 <!--
      AuroraCMS - Administration - Copyright (C) Diemen Design 2019
           the MIT Licensed Open Source Content Management System.
+          Built for Australian inhabitants of the Tau`ri.
 
      Project Maintained at https://github.com/DiemenDesign/AuroraCMS
 -->
@@ -37,21 +38,21 @@
     <link rel="apple-touch-icon" href="<?= URL.$favicon;?>">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css">
   </head>
-  <body class="aurora<?=(isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?' '.$_COOKIE['theme']:''?>">
+  <body class="aurora" data-theme="<?=(isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?$_COOKIE['theme']:''?>">
     <main class="row">
-      <div class="col-12 col-sm-3 mx-auto mt-0 mt-sm-5 p-5 p-sm-0">
-        <div class="m-4">
+      <div class="col-11 col-sm-6 col-md-3 mx-auto mt-0 mt-sm-5 p-5 p-sm-0">
+        <div class="m-0 m-md-4">
           <img class="logo" src="core/images/auroracms.svg" width="100%" alt="AuroraCMS">
         </div>
         <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
         <form id="login" method="post" action="<?=(isset($_SERVER['HTTP_REFERER'])&&stristr($_SERVER['REQUEST_URI'],'logout')?$_SERVER['HTTP_REFERER']:URL.$settings['system']['admin'].'/'.$config['defaultPage']);?>" accept-charset="UTF-8">
           <input name="act" type="hidden" value="login">
           <div class="row mt-3">
-            <label for="username" class="text-white text-md-black">Username</label>
+            <label class="text-white text-md-black" for="username">Username</label>
             <input id="username" name="username" type="text" placeholder="Username..." required aria-required="true" aria-label="Username">
           </div>
           <div class="row mt-3">
-            <label for="password" class="text-white text-md-black">Password</label>
+            <label class="text-white text-md-black" for="password">Password</label>
             <input id="password" name="password" type="password" placeholder="Password..." autocomplete="off" required aria-required="true" aria-label="Password">
           </div>
           <div class="row mt-4">
@@ -60,10 +61,10 @@
         </form>
         <form class="d-none" id="panel-rst" target="rstfeedback" method="post" action="core/rst.php" accept-charset="UTF-8">
           <input name="emailtrap" type="hidden" value="">
-          <input type="hidden" name="act" value="reset_password">
+          <input name="act" type="hidden" value="reset_password">
           <label for="rst" class="text-white text-md-black">Enter Email Associated with Account</label>
           <input id="rst" name="email" type="email" value="" autocomplete="off" placeholder="Enter an Email..." required aria-required="true">
-          <button id="rstbusy" class="btn-block mt-3" type="submit" aria-label="Send Reset Password Email">Send</button>
+          <button class="btn-block mt-3" id="rstbusy" type="submit" aria-label="Send Reset Password Email">Send</button>
           <div class="form-row mt-3 hideifempty" id="reset"></div>
         </form>
         <div class="row mt-4">

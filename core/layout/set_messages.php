@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -20,7 +20,7 @@
           <div>Messages Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
             <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
@@ -32,10 +32,10 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
-        <legend id="contactForm" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#contactForm" aria-label="PermaLink to Contact Form Section">&#128279;</a>':'';?>Contact Form</legend>
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
+        <legend id="contactForm" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#contactForm" data-tooltip="tooltip" aria-label="PermaLink to Contact Form Section">&#128279;</a>':'';?>Contact Form</legend>
         <div class="row">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#storeMessages" aria-label="PermaLink to Enable Store Messages Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#storeMessages" data-tooltip="tooltip" aria-label="PermaLink to Enable Store Messages Checkbox">&#128279;</a>':'';?>
           <input id="storeMessages" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?=$config['storemessages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="storeMessages" id="configstoremessages01">Store Contact Form Messages</label>
         </div>
@@ -48,7 +48,7 @@
             <input id="sub" name="sub" type="text" value="" placeholder="Enter a Subject...">
             <div class="input-text">Email</div>
             <input id="eml" name="eml" type="text" value="" placeholder="Enter an Email...">
-            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?= svg2('add');?></button>
+            <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
           </div>
         </form>
         <div id="subjects">
@@ -69,8 +69,8 @@
           <?php }?>
         </div>
         <hr>
-        <legend id="webmailSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/media/settings#webmailSection" aria-label="PermaLink to Webmail Section">&#128279;</a>':'';?>Webmail</legend>
-        <label id="messageCheckInterval" for="message_check_interval"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#messageCheckInterval" aria-label="PermaLink to Message Check Interval">&#128279;</a>':'';?>Check for new Messages every</label>
+        <legend id="webmailSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/settings#webmailSection" data-tooltip="tooltip" aria-label="PermaLink to Webmail Section">&#128279;</a>':'';?>Webmail</legend>
+        <label id="messageCheckInterval" for="message_check_interval"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#messageCheckInterval" data-tooltip="tooltip" aria-label="PermaLink to Message Check Interval">&#128279;</a>':'';?>Check for new Messages every</label>
         <div class="form-row">
           <select id="message_check_interval" onchange="update('1','config','message_check_interval',$(this).val(),'select');">
             <option value="0"<?=$config['message_check_interval']==0?' selected':'';?>>Disable Checking</option>
@@ -83,11 +83,11 @@
           </select>
         </div>
         <div class="row mt-3">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#deleteRetrievedMessages" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#deleteRetrievedMessages" data-tooltip="tooltip" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>
           <input id="deleteRetrievedMessages" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9" type="checkbox"<?=$user['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="deleteRetrievedMessages" id="loginoptions91">Delete Retrieved Messages</label>
         </div>
-        <legend id="mailboxes" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#mailboxes" aria-label="PermaLink to Mailboxes Section">&#128279;</a>':'';?>Mailboxes</legend>
+        <legend id="mailboxes" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#mailboxes" data-tooltip="tooltip" aria-label="PermaLink to Mailboxes Section">&#128279;</a>':'';?>Mailboxes</legend>
         <form target="sp" method="post" action="core/add_mailbox.php">
           <input name="uid" type="hidden" value="<?=$user['id'];?>">
           <div class="form-row">
@@ -113,7 +113,7 @@
             <input id="mailusr" name="mailusr" type="text" value="" placeholder="Enter a Username...">
             <div class="input-text">Password</div>
             <input id="mailpwd" name="mailpwd" type="text" value="" placeholder="Enter a Password">
-            <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?= svg2('add');?></button>
+            <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
           </div>
         </form>
         <script>
@@ -161,9 +161,9 @@
           <?php }?>
         </div>
         <hr>
-        <legend id="autoreplyEmail" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyEmail" aria-label="PermaLink to AutoReply Email Section">&#128279;</a>':'';?>AutoReply Email</legend>
+        <legend id="autoreplyEmail" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyEmail" data-tooltip="tooltip" aria-label="PermaLink to AutoReply Email Section">&#128279;</a>':'';?>AutoReply Email</legend>
         <div id="autoreplySubject" class="form-row">
-          <label for="contactAutoReplySubject"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplySubject" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>Subject</label>
+          <label for="contactAutoReplySubject"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplySubject" data-tooltip="tooltip" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>Subject</label>
           <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{business}');return false;">{business}</a>
             <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{date}');return false;">{date}</a>
@@ -171,7 +171,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="aRS" type="text" value="<?=$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-          <button class="save" id="saveaRS" data-tooltip="tooltip" data-dbid="aRS" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveaRS" data-dbid="aRS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <div id="autoreplyLayout" class="form-row mt-3">
           <small class="form-text text-right">Tokens:
@@ -182,7 +182,7 @@
           </small>
         </div>
         <div class="form-row">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyLayout" aria-label="PermaLink to AutoReply Layout">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#autoreplyLayout" data-tooltip="tooltip" aria-label="PermaLink to AutoReply Layout">&#128279;</a>':'';?>
           <form class="w-100" method="post" target="sp" action="core/update.php">
             <input name="id" type="hidden" value="1">
             <input name="t" type="hidden" value="config">
@@ -191,7 +191,7 @@
           </form>
         </div>
         <hr>
-        <legend id="emailSignature" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/messages/settings#emailSignature" aria-label="PermaLink to Email Signature">&#128279;</a>':'';?>Email Signature</legend>
+        <legend id="emailSignature" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#emailSignature" data-tooltip="tooltip" aria-label="PermaLink to Email Signature">&#128279;</a>':'';?>Email Signature</legend>
         <div class="form-row">
           <form class="w-100" method="post" target="sp" action="core/update.php">
             <input name="id" type="hidden" value="1">

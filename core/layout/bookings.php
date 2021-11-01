@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,10 +52,10 @@ else{
           <div class="content-title-icon"><?= svg2('calendar','i-3x');?></div>
           <div>Bookings</div>
           <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings">'.svg2('settings').'</a>':'';?>
+            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" data-tooltip="tooltip" aria-label="Bookings Settings">'.svg2('settings').'</a>':'';?>
             <button class="<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><?= svg2('table');?></button>
             <button class="<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><?= svg2('calendar');?></button>
-            <?=$user['options'][2]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add">'.svg2('add').'</a>':'';?>
+            <?=$user['options'][2]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" data-tooltip="tooltip" aria-label="Add">'.svg2('add').'</a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -64,16 +64,16 @@ else{
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow overflow-visible">
+      <div class="card border-radius-0 overflow-visible">
         <div class="row p-3">
           <div class="col-12 col-sm-6">
             <small>Legend:
-              <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/';?>" aria-label="View All Bookings">All</a>
-              <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
-              <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/confirmed';?>" aria-label="View Confirmed Bookings">Confirmed</a>
-              <a class="badger badge-warning" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/in-progress';?>" aria-label="View In Progress Bookings">In Progress</a>
-              <a class="badger badge-info" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/complete';?>" aria-label="View Complete Bookings">Complete</a>
-              <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/archived';?>" aria-label="View Archived Bookings">Archived</a>
+              <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/bookings/';?>" data-tooltip="tooltip" aria-label="View All Bookings">All</a>
+              <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" data-tooltip="tooltip" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
+              <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/bookings/confirmed';?>" data-tooltip="tooltip" aria-label="View Confirmed Bookings">Confirmed</a>
+              <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/bookings/in-progress';?>" data-tooltip="tooltip" aria-label="View In Progress Bookings">In Progress</a>
+              <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/bookings/complete';?>" data-tooltip="tooltip" aria-label="View Complete Bookings">Complete</a>
+              <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/bookings/archived';?>" data-tooltip="tooltip" aria-label="View Archived Bookings">Archived</a>
             </small>
           </div>
           <div class="col-12 col-sm-6">
@@ -119,11 +119,11 @@ else{
                   <td class="align-middle" id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar">
                       <div class="btn-group" role="group">
-                        <a class="btn" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/bookings/edit/<?=$r['id'];?>" role="button" aria-label="Edit"><?= svg2('edit');?></a>
+                        <a class="btn" href="<?= URL.$settings['system']['admin'];?>/bookings/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><?= svg2('edit');?></a>
                         <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><?= svg2('print');?></button>
                         <button class="btn" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?=$r['id'];?>');"><?= svg2('bookingtoinvoice');?></button>
                         <?php if($user['options'][0]==1){?>
-                          <button class="btn<?=($r['status']!='delete'?' d-none':'');?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" role="button" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><?= svg2('untrash');?></button>
+                          <button class="btn<?=($r['status']!='delete'?' d-none':'');?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><?= svg2('untrash');?></button>
                           <button class="btn trash<?=($r['status']=='delete'?' d-none':'');?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><?= svg2('trash');?></button>
                           <button class="btn trash<?=($r['status']!='delete'?' d-none':'');?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><?= svg2('purge');?></button>
                         <?php }?>
@@ -177,9 +177,9 @@ else{
             allDay:false,
             customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left"><?=($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?><div class="events-buttons" role="toolbar"><div class="btn-group" role="group">` +
 <?php if($user['options'][2]==1){?>
-                  `<button class="btn" id="prbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><?= svg2('print');?></button><a class="btn" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?= svg2('edit');?></a><button class="btn" id="bibut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?=$r['id'];?>');"><?= svg2('bookingtoinvoice');?></button><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?= svg2('trash');?></button>` +
+                  `<button class="btn" id="prbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><?= svg2('print');?></button><a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><?= svg2('edit');?></a><button class="btn" id="bibut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?=$r['id'];?>');"><?= svg2('bookingtoinvoice');?></button><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?= svg2('trash');?></button>` +
 <?php }else{?>
-                  '<a class="btn" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" aria-label="View"><?= svg2('view');?></a>' +
+                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><?= svg2('view');?></a>' +
 <?php }?>
                 `</div></div></div>`
           },

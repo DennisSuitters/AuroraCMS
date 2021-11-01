@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -20,7 +20,7 @@
           <div>Forum Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
             <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
@@ -32,10 +32,10 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
-        <legend id="forumNotifications"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/forum/settings#forumNotifications" aria-label="PermaLink to Forum Notifcations Section">&#128279;</a>':'';?>Forum Notifications</legend>
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
+        <legend id="forumNotifications"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/forum/settings#forumNotifications" data-tooltip="tooltip" aria-label="PermaLink to Forum Notifcations Section">&#128279;</a>':'';?>Forum Notifications</legend>
         <div class="row">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/forum/settings#forumEnableHelpNotifications" aria-label="PermaLink to Enable Forum Email Notifications Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/forum/settings#forumEnableHelpNotifications" data-tooltip="tooltip" aria-label="PermaLink to Enable Forum Email Notifications Checkbox">&#128279;</a>':'';?>
           <input id="helpTicketEmailNotifications" data-dbid="1" data-dbt="config" data-dbc="forumOptions" data-dbb="0" type="checkbox"<?=$config['forumOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="helpTicketEmailNotifications" id="helpTicketEmailNotifications0">Help Ticket Email Notifications</label>
         </div>

@@ -45,7 +45,7 @@ section.content .card-image .image-toolbar {
   text-align: right; }
 
 section.list .card:hover {
-  background: #f5f5f5 !important; }
+  background-color: var(--card-hover) !important; }
 
 section.content .status {
   position: absolute;
@@ -451,6 +451,11 @@ nav[role="menubar"] ul li.active a{
 [data-tooltip] {
   position: relative; }
 
+.no-tooltip [data-tooltip]:hover:before,
+.no-tooltip [data-tooltip]:hover:after {
+  display: none;
+  visibility: hidden; }
+
 [data-tooltip]:before,
 [data-tooltip]:after {
   position: absolute;
@@ -467,14 +472,14 @@ nav[role="menubar"] ul li.active a{
   transform: translate(-50%, -5px) scale(.5);
   z-index: 5000 !important;
   border-radius: var(--tooltip-border-radius);
-  background-color: var(--tooltip-background-color);
+  background-color: var(--tooltip-background-color) !important;
   padding: .25rem .5rem;
   width: -webkit-max-content;
   width: max-content;
   width: -moz-max-content;
   min-width: 50px;
   max-width: 300px;
-  color: var(--tooltip-color);
+  color: var(--tooltip-color) !important;
   font-size: .875rem;
   font-family: var(--font);
   line-break: auto;
@@ -491,7 +496,7 @@ nav[role="menubar"] ul li.active a{
   transition-duration: 0s;
   border-width: 5px 5px 0 5px;
   border-style: solid;
-  border-color: var(--tooltip-background-color) transparent transparent transparent;
+  border-color: var(--tooltip-background-color) transparent transparent transparent !important;
   content: ''; }
 
 [data-tooltip]:hover:before,
@@ -524,7 +529,7 @@ nav[role="menubar"] ul li.active a{
   transform: translateY(50%) scaleX(0);
   transform-origin: left;
   border-width: 5px 0 5px 5px;
-  border-color: transparent transparent transparent var(--tooltip-background-color); }
+  border-color: transparent transparent transparent var(--tooltip-background-color) !important; }
 
 [data-tooltip="left"]:hover:after {
   transform: translateY(50%) scaleX(1); }
@@ -544,7 +549,7 @@ nav[role="menubar"] ul li.active a{
   transform: translateY(50%) scaleX(0);
   transform-origin: right;
   border-width: 5px 5px 5px 0;
-  border-color: transparent var(--tooltip-background-color) transparent transparent; }
+  border-color: transparent var(--tooltip-background-color) transparent transparent !important; }
 
 [data-tooltip="right"]:hover:after {
   transform: translateY(50%) scaleX(1); }
@@ -563,7 +568,7 @@ nav[role="menubar"] ul li.active a{
 [data-tooltip="bottom"]:after {
   transform-origin: bottom;
   border-width: 0 5px 5px 5px;
-  border-color: transparent transparent var(--tooltip-background-color) transparent; }
+  border-color: transparent transparent var(--tooltip-background-color) transparent !important; }
 
 /* Covertron */
 .covertron:empty { display: none; }
@@ -954,27 +959,27 @@ figcaption:empty,
   position: relative;
   top: 1px;
   margin:0;
-  border: var(--border-width) var(--border-style) var(--border-color);
+  border: var(--border-width) var(--border-style) var(--tab-border-color);
   border-radius: var(--border-radius) var(--border-radius) 0 0;
   background: transparent;
   padding: 4px 12px; }
 
 .tabs input.tab-control + label:hover {
   cursor: pointer;
-  color: var(--button-color-hover);
-  background-color: var(--button-background-color-hover); }
+  color: var(--tab-color-hover);
+  background-color: var(--tab-background-color-hover); }
 
 .tabs input.tab-control:checked + label {
   border-bottom: var(--border-width) var(--border-style) transparent;
-  background-color: var(--button-background-color);
+  background-color: var(--tab-background-color);
   color: #fff; }
 
 .tabs input.tab-control:checked + label:hover {
-  background-color: var(--button-background-color-hover) !important; }
+  background-color: var(--tab-background-color-hover) !important; }
 
 .tabs input.tab-control ~ .tab {
   display: none;
-  border-top: var(--border-width) var(--border-style) var(--border-color);
+  border-top: var(--border-width) var(--border-style) var(--tab-border-color);
   padding: 12px;
   width: 100%; }
 
@@ -1134,7 +1139,8 @@ a.badger:focus,
 a.badger:hover {
   text-decoration: none; }
 
-.badger:empty {
+.badger:empty,
+.badge[data-badge=""] {
   display: none; }
 
 .btn .badger {

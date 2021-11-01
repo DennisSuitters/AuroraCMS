@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow overflow-visible">
+      <div class="card border-radius-0 overflow-visible">
         <div class="row p-3">
           <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="options11" id="configoptions111">Visitor Tracking</label>
@@ -43,7 +43,7 @@
               <th class="text-center">Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="btn-sm purge trash" data-tooltip="tooltip" data-placement="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?= svg2('purge');?></button>
+                  <button class="btn-sm purge trash" data-tooltip="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?= svg2('purge');?></button>
                 </div>
               </th>
             </tr>

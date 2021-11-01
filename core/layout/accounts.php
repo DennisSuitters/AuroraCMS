@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -45,14 +45,14 @@ else{
   }?>
 <main>
   <section id="content">
-    <div class="content-title-wrapper mb-0">
+    <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
           <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
           <div>Accounts</div>
           <div class="content-title-actions">
             <button class="accountview" data-tooltip="tooltip" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><?= svg2('list',($_COOKIE['accountview']=='list'?'d-none':'')).svg2('cards',($_COOKIE['accountview']=='cards'?'d-none':''));?></button>
-            <?=($user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" aria-label="Accounts Settings">'.svg2('settings').'</a>':'&nbsp;').($user['options'][0]==1?'&nbsp;<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add">'.svg2('add').'</a>':'&nbsp;');?>
+            <?=($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="tooltip" aria-label="Accounts Settings">'.svg2('settings').'</a>':'&nbsp;').($user['options'][0]==1?'&nbsp;<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="tooltip" aria-label="Add">'.svg2('add').'</a>':'&nbsp;');?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -61,7 +61,7 @@ else{
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow overflow-visible">
+      <div class="card border-radius-0 overflow-visible">
         <div class="row p-3">
           <div class="col-12 col-sm-6 ml-sm-auto">
             <div class="form-row">
@@ -69,20 +69,20 @@ else{
             </div>
           </div>
         </div>
-        <section id="accountview" class="content overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>">
+        <section class="content overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>" id="accountview">
           <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
             <article class="card overflow-visible card-list" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
               <div class="card-image overflow-visible">
-                <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><img src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
+                <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><img src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
                 elseif($r['gravatar']!='')echo$r['gravatar'];
                 else echo ADMINNOAVATAR;?>" alt="<?=$r['username'];?>"></a>
-                <?='<span id="accountrank'.$r['id'].'" class="status badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span>';?>
+                <?='<span class="status badger badge-'.rank($r['rank']).'" id="accountrank'.$r['id'].'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span>';?>
                 <div class="image-toolbar">
                   <?=$r['active'][0]==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
                 </div>
               </div>
               <div class="card-header overflow-visible pt-2 line-clamp">
-                <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><?=$r['username'].':'.$r['name'];?></a><br>
+                <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><?=$r['username'].':'.$r['name'];?></a><br>
                 <small class="text-muted"><small><?= _agologgedin($r['lti']);?></small></small>
                 <?=$r['active'][0]==1?'<br><span class="badger badge-success">Active</span>':'<br><span class="badger badge-dark">Inactive</span>';?>
               </div>
@@ -90,7 +90,7 @@ else{
                 <div id="controls_<?=$r['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar">
                     <div class="btn-group" role="group">
-                      <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="Edit<?=' '.$r['username'].':'.$r['name'];?>"><?= svg2('edit');?></a>
+                      <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit<?=' '.$r['username'].':'.$r['name'];?>"><?= svg2('edit');?></a>
                       <?php if($user['options'][0]==1){?>
                         <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><?= svg2('untrash');?></button>
                         <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><?= svg2('trash');?></button>

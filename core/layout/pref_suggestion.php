@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="alert alert-info" role="alert">The Suggestions are for notifying other User's of the Administration area with information, or to pass notes, for e.g. editing suggestions, or just to let them know an issue has been resolved. Can also be use to set reminders for yourself when you Login next.</div>
         <form target="sp" method="post" action="core/add_adminsuggestion.php">
           <div class="form-row">
@@ -73,7 +73,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
 									<form class="float-right" target="sp" action="core/purge.php">
 										<input name="id" type="hidden" value="<?=$r['id'];?>">
 										<input name="t" type="hidden" value="suggestions">
-										<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?= svg2('trash');?></button>
+										<button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
 									</form>
 								</summary>
 								<?=$r['notes'];?>

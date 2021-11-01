@@ -163,9 +163,6 @@
   display: block !important; }
 
 /* Pagination */
-.pagination li {
-  padding: 0 !important; }
-
 .pagination li:first-child {
   padding-right: 1rem !important; }
 
@@ -195,10 +192,11 @@
   font-weight: 700;
   font-size: 1rem;
   font-family: var(--font);
-  line-height: 1;
+  line-height: 1.2;
   user-select: none;
   text-align: center;
-  text-decoration: none; }
+  text-decoration: none;
+  text-shadow: none !important; }
 
 .pagination a:hover,
 .pagination a:focus {
@@ -207,6 +205,9 @@
   background-color: var(--button-background-color-hover) !important;
   color: var(--button-color-hover) !important;
   text-decoration: none; }
+
+.pagination ul li {
+  padding: .5rem .1rem; }
 
 .pagination span {
   -webkit-appearance: button;
@@ -1078,6 +1079,9 @@ figcaption:empty,
   border-bottom-right-radius: var(--card-border-radius);
   border-bottom-left-radius: var(--card-border-radius); }
 
+#booking .card-image > img {
+  height: 12rem !important; }
+
 /* Breadcrumb */
 .breadcrumb {
 	border: 0 !important;
@@ -1729,6 +1733,7 @@ button.badge::after {
 
 .corner-ribbon.dark {
 	background-color: var(--dark-background-color);
+  border: 1px dashed var(--dark-color-contrast);
 	box-shadow: 0 0 0 3px var(--dark-background-color), 0 0 20px -3px rgba(0,0,0,0.5);
   color: var(--dark-color-contrast); }
 
@@ -1752,7 +1757,8 @@ button.badge::after {
 	box-shadow: 0 0 0 3px var(--primary-background-color), 0 0 20px -3px rgba(0,0,0,0.5);
   color: var(--primary-color-contrast); }
 
-.corner-ribbon.secondary {
+.corner-ribbon.secondary,
+.corner-ribbon.sold-out {
 	background-color: var(--secondary-background-color);
   border: 1px dashed var(--secondary-color-contrast);
 	box-shadow: 0 0 0 3px var(--secondary-background-color), 0 0 20px -3px rgba(0,0,0,0.5);

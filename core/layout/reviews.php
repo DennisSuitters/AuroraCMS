@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,7 +26,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow">
+      <div class="card border-radius-0">
         <table class="table-zebra">
           <thead>
             <tr>
@@ -63,8 +63,8 @@
                 <td class="small"><?= date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-top">
                   <div class="btn-group float-right" id="controls-<?=$r['id'];?>">
-                    <button class="btn<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" data-tooltip="tooltip" onclick="update('<?=$r['id'];?>','comments','status','approved');" aria-label="Approve"><?= svg2('approve');?></button>
-                    <button class="btn trash" data-tooltip="tooltip" onclick="purge('<?=$r['id'];?>','comments');" aria-label="Delete"><?= svg2('trash');?></button>
+                    <button class="btn<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" onclick="update('<?=$r['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><?= svg2('approve');?></button>
+                    <button class="btn trash" onclick="purge('<?=$r['id'];?>','comments');" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
                   </div>
                 </td>
               </tr>

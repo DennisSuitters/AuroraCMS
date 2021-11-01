@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow overflow-visible">
+      <div class="card border-radius-0 overflow-visible">
         <div class="row p-3">
           <div class="col-12 col-md-4">
             <small>Legend:
@@ -38,10 +38,10 @@
           </div>
           <div class="col-12 col-md-8 text-right">
             <small>View:
-              <a class="badger badge-<?= !isset($args[1])?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/scheduler';?>" aria-label="Display All Content">All</a>&nbsp;
+              <a class="badger badge-<?= !isset($args[1])?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'].'/content/scheduler';?>" data-tooltip="tooltip" aria-label="Display All Content">All</a>&nbsp;
               <?php $s=$db->query("SELECT DISTINCT(`contentType`) AS contentType FROM `".$prefix."content` WHERE `contentType`!='booking' ORDER BY `contentType` ASC");
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <a class="badger badge-<?= isset($args[1])&&$args[1]==$r['contentType']?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/scheduler/'.$r['contentType'];?>" aria-label="Display <?= ucfirst($r['contentType']);?> Items"><?= ucfirst($r['contentType']);?></a>&nbsp;
+                <a class="badger badge-<?= isset($args[1])&&$args[1]==$r['contentType']?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'].'/content/scheduler/'.$r['contentType'];?>" data-tooltip="tooltip" aria-label="Display <?= ucfirst($r['contentType']);?> Items"><?= ucfirst($r['contentType']);?></a>&nbsp;
               <?php }?>
             </small>
           </div>
@@ -87,11 +87,11 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);?>
             title:`<?= ucfirst($r['contentType']).`: `.$r['title'];?>`,
             start:`<?= date("Y-m-d H:i:s",$r['pti']);?>`,
             allDay:true,
-            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>"><?=$r['title'];?><div class="events-buttons" role="toolbar" aria-label="Item Toolbar Controls"><div class="btn-group" role="group" aria-label="Item Controls">` +
+            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>"><?=$r['title'];?><div class="events-buttons" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls"><div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">` +
 <?php if($user['options'][2]==1){?>
-                  `<a class="btn" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit"><?= svg2('edit');?></a><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?= svg2('trash');?></button>` +
+                  `<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit"><?= svg2('edit');?></a><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?= svg2('trash');?></button>` +
 <?php }else{?>
-                  '<a class="btn" id="edbut<?=$r['id'];?>" data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="View"><?= svg2('view');?></a>' +
+                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><?= svg2('view');?></a>' +
 <?php }?>
                 '</div></div></div>'
           },

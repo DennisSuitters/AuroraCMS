@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.9
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -25,19 +25,19 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <legend>Frequently Asked Questions</legend>
         <form target="sp" method="post" action="core/add_faq.php">
           <label for="c">Category</label>
-          <input type="text" id="c" name="c" placeholder="Enter a Category...">
+          <input id="c" name="c" type="text" placeholder="Enter a Category...">
           <label for="title">Question</label>
-          <input type="text" id="title" name="t" placeholder="Enter FAQ Title/Question...">
+          <input id="title" name="t" type="text" placeholder="Enter FAQ Title/Question...">
           <div class="row">
             <div class="col-sm">
               <label for="da">Answer</label>
             </div>
             <div class="col-sm-11">
-              <input id="open" type="checkbox" name="open" value="1" checked>
+              <input id="open" name="open" type="checkbox" value="1" checked>
               <label for="open">Open By Default</label>
             </div>
           </div>
@@ -56,9 +56,8 @@
               toolbar:[
                 ['insert',['link']],
               ],
-              linkList: [
-<?php
-$sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+              linkList:[
+<?php $sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
 $sl->execute();
 while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
               echo'['.

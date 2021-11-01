@@ -11,105 +11,31 @@
 		<meta name="apple-mobile-web-app-title" content="AuroraCMS Administration Offline">
 		<link rel="apple-touch-icon" href="favicon.png">
 		<style>
-			body{background:#000 url(<print background>) no-repeat center center fixed;background-size:cover;height:100%;color:#fff}
-			.aurora{-webkit-filter:blur(100px);-moz-filter:blur(100px);-ms-filter:blur(100px);-o-filter:blur(100px);filter:blur(100px);-webkit-animation:blur 1s linear forwards;-moz-animation:blur 1s linear forwards;-ms-animation:blur 1s linear forwards;-o-animation:blur 1s linear forwards;animation:blur 1s linear forwards}
-			@-webkit-keyframes blur{
-			  from{background:rgba(230,67,67,1);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%)}
-			  to{background-color:#343a40!important;-webkit-filter:blur(0);filter:blur(0)}
+			body{
+				position: relative;
+				background: #ffffff url(<print logo>) no-repeat top center;
+				background-size: cover;
+				color: #000;
 			}
-			@-moz-keyframes blur{
-			  from{background:rgba(230,67,67,1);background:-moz-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-ms-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);}
-			  to{background-color:#343a40!important;-moz-filter:blur(0);filter:blur(0)}
+			h1 {
+				position: absolute;
+				bottom: 200px;
+				left: 0;
+				right: 0;
+				text-align: center;
 			}
-			@keyframes blur{
-			  from{background:rgba(230,67,67,1);background:-moz-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-webkit-gradient(left top,right top,color-stop(0%,rgba(230,67,67,1)),color-stop(100%,rgba(93,255,84,1)));background:-webkit-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-o-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:-ms-linear-gradient(left,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);background:linear-gradient(to right,rgba(230,67,67,1)0%,rgba(93,255,84,1)100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#e64343',endColorstr='#5dff54',GradientType=1)}
-			  to{background-color:#343a40!important;-webkit-filter:blur(0);-moz-filter:blur(0);filter:blur(0)}
+			h1{margin-top:1.66666667em;margin-bottom:.55555556em;font-weight:500;line-height:1.11111111;font-size:1.15rem;font-family:sans-serif;}
+			@media(min-width:43.75em){
+				h1{font-size:2.15em;line-height:1.22222222;margin-top:1.83333333em;margin-bottom:.61111111em;}
 			}
-			.container{width:100%;padding-right:15px;padding-left:15px;margin-right:auto;margin-left:auto}
-			@media (min-width:576px){.container{max-width:540px}}
-			@media (min-width:768px){.container{max-width:720px}}
-			@media (min-width:992px){.container{max-width:960px}}
-			@media (min-width:1200px){.container{max-width:1140px}}
-			.row{display:-ms-flexbox;display:flex;-ms-flex-wrap:wrap;flex-wrap:wrap;margin-right:-15px;margin-left:-15px}
-			.col,.col-1,.col-10,.col-11,.col-12,.col-2,.col-3,.col-4,.col-5,.col-6,.col-7,.col-8,.col-9,.col-auto,
-			.col-lg,.col-lg-1,.col-lg-10,.col-lg-11,.col-lg-12,.col-lg-2,.col-lg-3,.col-lg-4,.col-lg-5,.col-lg-6,.col-lg-7,.col-lg-8,.col-lg-9,.col-lg-auto,
-			.col-md,.col-md-1,.col-md-10,.col-md-11,.col-md-12,.col-md-2,.col-md-3,.col-md-4,.col-md-5,.col-md-6,.col-md-7,.col-md-8,.col-md-9,.col-md-auto,
-			.col-sm,.col-sm-1,.col-sm-10,.col-sm-11,.col-sm-12,.col-sm-2,.col-sm-3,.col-sm-4,.col-sm-5,.col-sm-6,.col-sm-7,.col-sm-8,.col-sm-9,.col-sm-auto,
-			.col-xl,.col-xl-1,.col-xl-10,.col-xl-11,.col-xl-12,.col-xl-2,.col-xl-3,.col-xl-4,.col-xl-5,.col-xl-6,.col-xl-7,.col-xl-8,.col-xl-9,.col-xl-auto{position:relative;width:100%;padding-right:15px;padding-left:15px}.col{-ms-flex-preferred-size:0;flex-basis:0;-ms-flex-positive:1;flex-grow:1;max-width:100%}
-			.col-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}
-			.col-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}
-			.col-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}
-			.col-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}
-			.col-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}
-			.col-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}
-			.col-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}
-			.col-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}
-			.col-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}
-			.col-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}
-			.col-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}
-			.col-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}
-			.col-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}
-			.col-sm-auto{-ms-flex:0 0 auto;flex:0 0 auto;width:auto;max-width:100%}.col-sm-1{-ms-flex:0 0 8.333333%;flex:0 0 8.333333%;max-width:8.333333%}.col-sm-2{-ms-flex:0 0 16.666667%;flex:0 0 16.666667%;max-width:16.666667%}.col-sm-3{-ms-flex:0 0 25%;flex:0 0 25%;max-width:25%}.col-sm-4{-ms-flex:0 0 33.333333%;flex:0 0 33.333333%;max-width:33.333333%}.col-sm-5{-ms-flex:0 0 41.666667%;flex:0 0 41.666667%;max-width:41.666667%}.col-sm-6{-ms-flex:0 0 50%;flex:0 0 50%;max-width:50%}.col-sm-7{-ms-flex:0 0 58.333333%;flex:0 0 58.333333%;max-width:58.333333%}.col-sm-8{-ms-flex:0 0 66.666667%;flex:0 0 66.666667%;max-width:66.666667%}.col-sm-9{-ms-flex:0 0 75%;flex:0 0 75%;max-width:75%}.col-sm-10{-ms-flex:0 0 83.333333%;flex:0 0 83.333333%;max-width:83.333333%}.col-sm-11{-ms-flex:0 0 91.666667%;flex:0 0 91.666667%;max-width:91.666667%}.col-sm-12{-ms-flex:0 0 100%;flex:0 0 100%;max-width:100%}
-			.ml-auto,.mx-auto{margin-left:auto!important}
-			.mr-auto,.mx-auto{margin-right:auto!important}
-			.mt-sm-0,.my-sm-0{margin-top:0!important}
-			.mr-sm-0,.mx-sm-0{margin-right:0!important}
-			.mb-sm-0,.my-sm-0{margin-bottom:0!important}
-			.ml-sm-0,.mx-sm-0{margin-left:0!important}
-			.m-sm-1{margin:.25rem!important}
-			.mt-sm-1,.my-sm-1{margin-top:.25rem!important}
-			.mr-sm-1,.mx-sm-1{margin-right:.25rem!important}
-			.mb-sm-1,.my-sm-1{margin-bottom:.25rem!important}
-			.ml-sm-1,.mx-sm-1{margin-left:.25rem!important}
-			.m-sm-2{margin:.5rem!important}
-			.mt-sm-2,.my-sm-2{margin-top:.5rem!important}
-			.mr-sm-2,.mx-sm-2{margin-right:.5rem!important}
-			.mb-sm-2,.my-sm-2{margin-bottom:.5rem!important}
-			.ml-sm-2,.mx-sm-2{margin-left:.5rem!important}
-			.m-sm-3{margin:1rem!important}
-			.mt-sm-3,.my-sm-3{margin-top:1rem!important}
-			.mr-sm-3,.mx-sm-3{margin-right:1rem!important}
-			.mb-sm-3,.my-sm-3{margin-bottom:1rem!important}
-			.ml-sm-3,.mx-sm-3{margin-left:1rem!important}
-			.m-sm-4{margin:1.5rem!important}
-			.mt-sm-4,.my-sm-4{margin-top:1.5rem!important}
-			.mr-sm-4,.mx-sm-4{margin-right:1.5rem!important}
-			.mb-sm-4,.my-sm-4{margin-bottom:1.5rem!important}
-			.ml-sm-4,.mx-sm-4{margin-left:1.5rem!important}
-			.m-sm-5{margin:3rem!important}
-			.mt-sm-5,.my-sm-5{margin-top:3rem!important}
-			.mr-sm-5,.mx-sm-5{margin-right:3rem!important}
-			.mb-sm-5,.my-sm-5{margin-bottom:3rem!important}
-			.ml-sm-5,.mx-sm-5{margin-left:3rem!important}
-			.m-5{margin:3rem!important}.mt-5,.my-5{margin-top:3rem!important}.mr-5,.mx-5{margin-right:3rem!important}.mb-5,.my-5{margin-bottom:3rem!important}.ml-5,.mx-5{margin-left:3rem!important}
-			h1,h2,h3,h4,h5,h6{margin-top:0;margin-bottom:.5rem}
-			p{margin-top:0;margin-bottom:1rem}
-			.h1,.h2,.h3,.h4,.h5,.h6,
-			h1,h2,h3,h4,h5,h6{margin-bottom:.5rem;font-weight:500;line-height:1.2}.h1,h1{font-size:2.5rem}
-			.h2,h2{font-size:2rem}
-			.h3,h3{font-size:1.75rem}
-			.h4,h4{font-size:1.5rem}
-			.h5,h5{font-size:1.25rem}
-			.h6,h6{font-size:1rem}
-			.text-center{text-align:center!important}
-			.img-fluid{max-width:100%;height:auto}
-			*{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box}
+			@media(min-width:56.25em){
+				h1{font-size:1.25em;line-height:1.22222222;margin-top:1.83333333em;margin-bottom:.61111111em;}
+			}
 		</style>
 	</head>
-	<body id="top">
-		<div class="container aurora mt-5">
-			<div class="row mt-5">
-				<div class="col-12 col-sm-6 ml-auto mr-auto mt-2 text-center">
-					<img class="img-fluid" src="<print logo>" alt="AuroraCMS Administration Logo">
-				</div>
-			</div>
-			<div class="row mt-5">
-				<div class="col-12 col-sm-10 ml-auto mr-auto mt-5">
-					<h1 class="h4 text-center">
-						The Administration area is not available offline.
-					</h1>
-				</div>
-			</div>
-		</div>
+	<body>
+		<h1>
+			The Administration area is not available offline.
+		</h1>
   </body>
 </html>

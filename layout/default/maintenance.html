@@ -1,6 +1,6 @@
 <block inbed="maintenance">
 <!DOCTYPE HTML>
-<html lang="en-AU" class="maintenance"<print background>>
+<html lang="en-AU">
 	<head>
 		<base href="<print meta=url>">
 		<meta charset="UTF-8">
@@ -29,53 +29,29 @@
 		<meta name="twitter:description" content="<print meta=seoDescription>">
 		<link rel="publisher" href="<print meta=url>">
 		<link rel="stylesheet" type="text/css" href="<print theme>/css/style.css">
-		<style>
-			.maintenance {
-			  background-color: transparent;
-			  background-repeat: no-repeat;
-			  background-position: top center;
-			  -webkit-background-size: cover;
-			  -moz-background-size:c over;
-			  -o-background-size: cover;
-			  background-size: cover;
-			  width: 100%;
-			  height: 100%;
-			  -webkit-text-size-adjust: 100%;
-			  -ms-text-size-adjust: 100%;
-			  -webkit-font-smoothing: antialiased;
-			  font-smoothing: antialiased;
-			  overflow: hidden; }
-
-		.maintenance body {
-			color: #fff;
-			background-color: transparent; }
-
-		.maintenance main {
-			margin: 200px 40px 40px 40px !important; }
-
-		.maintenance main p {
-			line-height: 1.25 !important;
-			font-weight: 300 !important;
-			font-style: normal !important;
-			text-shadow: 0 0 20px #000, 0 0 15px #000, 0 0 10px #000, 0 0 5px #000; }
-
-		.maintenance main h1 {
-			text-shadow: 0 0 20px #000, 0 0 15px #000, 0 0 10px #000, 0 0 5px #000; }
-
-		</style>
+		<script src="core/js/jquery/jquery.min.js"></script>
+		<script src="core/js/js.js"></script>
 		<google_analytics>
+		<style>
+			html,body{width:100%;height:100%;overflow:auto;}
+		</style>
 	</head>
-	<body>
-		<nav class="social-nav">
-			<ul>
-				<buildSocial>
-					<li class="mx-1"><a class="i i-social" href="<print sociallink>"><print socialicon></a></li>
-				</buildSocial>
-			</ul>
-		</nav>
+	<body class="unavailable" style="<print background>">
 		<main>
-			<h1 class="text-center"><print config="business"></h1>
-			<print page="notes">
+			<section class="row mt-0 mt-md-3">
+				<article class="card col-11 col-md-8 mx-auto mt-5 p-4 shadow">
+					<h1 class="text-center text-md-left"><print page="heading"></h1>
+					<print page="notes">
+					<div class="row justify-content-center">
+						<h2 class="text-center">Social networks where you can find us:</h2>
+						<div class="col-12 mx-auto text-center">
+							<buildSocial>
+								<a class="i i-2x i-social m-1" href="<print sociallink>" title="<print social>" aria-label="<print social>"><print socialicon></a>
+							</buildSocial>
+						</div>
+					</div>
+				</article>
+			</section>
 		</main>
 	</body>
 </html>

@@ -7,31 +7,30 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.0.8
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 header('Content-Type: application/javascript');
 header('Service-Worker-Allowed:/');
-if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
+require'../db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
+//if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
   if(!defined('PROTOCOL'))define('PROTOCOL','https://');
 }else{
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
-if(file_exists('..'.DS.'..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('..'.DS.'core'.DS.'config.ini'))$settings=parse_ini_file('..'.DS.'core'.DS.'config.ini',TRUE);
-elseif(file_exists('core'.DS.'config.ini'))$settings=parse_ini_file('core'.DS.'config.ini',TRUE);
+if(file_exists('../../core/config.ini'))$settings=parse_ini_file('../../core/config.ini',TRUE);
+elseif(file_exists('../core/config.ini'))$settings=parse_ini_file('../core/config.ini',TRUE);
+elseif(file_exists('core/config.ini'))$settings=parse_ini_file('core/config.ini',TRUE);
 elseif(file_exists('config.ini'))$settings=parse_ini_file('config.ini',TRUE);
 else{
-  require ROOT_DIR.DS.'core'.DS.'layout'.DS.'install.php';
+  require ROOT_DIR.'/core/layout/install.php';
   die();
 }
-$prefix=$settings['database']['prefix'];
-require'../db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-$html=file_get_contents('..'.DS.'layout'.DS.'offline.html');
+$html=file_get_contents('../layout/offline.html');
 $html=preg_replace([
   '/<print url>/',
   '/<print seo=[\'\"]title[\'\"]?>/',
@@ -41,9 +40,9 @@ $html=preg_replace([
   URL,
   $config['business'].' - Administration - AuroraCMS',
   '',
- 'data:'.mime_content_type('..'.DS.'images'.DS.'auroracms.svg').';base64,'.base64_encode(file_get_contents('..'.DS.'images'.DS.'auroracms.svg'))
+ 'data:'.mime_content_type('../images/readmelogo.jpg').';base64,'.base64_encode(file_get_contents('../images/readmelogo.jpg'))
 ],$html);?>
-const CACHE=`AuroraCMSv0.1.2`;
+const CACHE=`AuroraCMSadministration`;
 const offlineFallbackPage=`<?=$html;?>`;
 const offlineFallbackPages=["/",];
 self.addEventListener("install",function(event){

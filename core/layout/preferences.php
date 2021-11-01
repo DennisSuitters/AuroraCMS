@@ -27,7 +27,7 @@ if($args[0]==''){?>
         </div>
       </div>
       <div class="container-fluid p-0">
-        <div class="card border-radius-0 shadow p-3">
+        <div class="card border-radius-0 p-3">
           <div class="row">
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/theme';?>" aria-label="Go to Theme Preferences">
               <span class="h5">Theme</span>

@@ -17,25 +17,23 @@
 			</ol>
 		</nav>
 	</breadcrumb>
-	<section class="row mb-5">
-		<aside class="col-12 col-sm-2-5 p-2 mt-0">
+	<section class="row">
+		<aside class="col-11 col-md-2-5 p-md-2 mt-0 mb-3 mx-auto hidewhenempty"><category-nav>
 			<div class="row">
-				<category-nav>
-					<div class="card">
-						<nav class="category-nav">
-							<ul>
-								<catlist>
-							</ul>
-						</nav>
-					</div>
-				</category-nav>
+				<div class="card">
+					<nav class="category-nav">
+						<ul>
+							<catlist>
+						</ul>
+					</nav>
+				</div>
 			</div>
-			<eventsitems items="4">
+		</category-nav><eventsitems items="4">
 				<hr>
 				<div class="row mt-3">
-					<div class="h3 text-center text-sm-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events/" aria-label="Go to Events">Events</a></div>
+					<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events/" aria-label="Go to Events">Events</a></div>
 					<eventitem>
-						<article class="card col-5 col-sm-8 event side mx-auto">
+						<article class="card col-5 col-md-8 event side mx-auto">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
@@ -53,10 +51,9 @@
 						</article>
 					</eventitem>
 				</div>
-			</eventsitems>
-		</aside>
+			</eventsitems></aside>
 		<item>
-			<article class="card col-12 col-sm m-0 p-0">
+			<article class="card col-11 col-md mx-auto mx-md-3">
 				<json-ld>
 				<image>
 					<figure class="card-image full">
@@ -94,10 +91,10 @@
 						</div>
 					</countdown>
 					<cost>
-						<div class="my-4 d-block d-sm-none text-center">
-							<quantity>
-								<div class="content-quantity"><print content="quantity"> <print content="stock"></div>
-							</quantity>
+						<quantity>
+							<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="stock"></div>
+						</quantity>
+						<div class="my-4 d-block d-md-none text-center">
 							<div class="price"><print content="cost"></div>
 							<div class="text-right">
 								<service>
@@ -113,10 +110,10 @@
 										<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
 									</condition>
 									<weight>
-										<div class="content-weight col-12 col-sm-6 mt-3 text-left">Weight: <print content="weight"></div>
+										<div class="content-weight col-12 col-md-6 mt-3 text-left">Weight: <print content="weight"></div>
 									</weight>
 									<size>
-										<div class="content-size col-12 col-sm-6 mt-3 text-right">Size:
+										<div class="content-size col-12 col-md-6 mt-3 text-right">Size:
 											<span class="content-width">Width: <print content="width"></span><br>
 											<span class="content-height">Height: <print content="height"></span><br>
 											<span class="content-length">Length: <print content="length"></span>
@@ -130,9 +127,12 @@
 						</div>
 					</cost>
 					<mediaitems>
-						<div class="media row my-5 text-center">
+						<div class="row">
+							<div class="media m-0 my-2 text-center"
 							<mediaimages>
-								<a class="col-6 col-md-2 m-2" data-fancybox="media<print content=id>" data-id="<print media=id>" data-caption="<print media=caption>" href="<print media=file>" data-srcset="<print lightbox=srcset>"><img <print thumb=srcset>src="<print media=thumb>" class="img-thumbnail" loading="lazy" alt="<print media=title>"></a>
+								<a data-fancybox="media<print content=id>" data-id="<print media=id>" data-caption="<print media=caption>" href="<print media=file>" data-srcset="<print lightbox=srcset>">
+									<img <print thumb=srcset>src="<print media=thumb>" class="col-5 col-sm-3 col-md-1 m-1 img-thumbnail" loading="lazy" alt="<print media=title>">
+								</a>
 							</mediaimages>
 						</div>
 					</mediaitems>
@@ -149,11 +149,11 @@
 						<div class="card-header h5">About the Author</div>
 						<div class="card-body">
 							<div class="row">
-								<div class="col-2 col-sm-1">
+								<div class="col-2 col-md-1">
 									<print author="avatar" alt="name" class="img-thumbnail">
 								</div>
-								<div class="col-9 col-sm-10 ml-2">
-				      		<div class="h5"><a class="text-default" href="<print author=link>"><print author="name"></a></div>
+								<div class="col-9 col-md-10 ml-2">
+				      		<div class="h5"><print author="name"></div>
 									<div>
 										<print author="social" type="icon" class="i i-social i-2x m-1">
 									</div>
@@ -189,7 +189,7 @@
 					<div class="card border-0 mb-5">
 						<div class="card-header h3">Related content</div>
 						<div class="card-body">
-							<section>
+							<section class="justify-content-center">
 								<relitems>
 									<article class="card col-12 col-sm-5 m-2">
 										<a href="<print related=linktitle>" class="card-image">
@@ -199,6 +199,7 @@
 											<a href="<print related=linktitle>" title="<print related=title>"><print related="title"></a>
 										</div>
 										<div class="corner-ribbon small top-right"><print related="contentType"></div>
+										<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
 										<div class="corner-ribbon big top-left <print related=cssrank>"><print related="rank"></div>
 									</article>
 								</relitems>
@@ -210,7 +211,7 @@
 		</item>
 		<settings itemCount="all">
 		<contentitems>
-			<section class="col-12 col-sm">
+			<section class="col-12 col-md">
 				<pagenotes>
 					<article class="col-12 m-0 p-0 px-3">
 						<h1><print page="heading"></h1>
@@ -227,16 +228,13 @@
 					</div>
 				</pagination>
 				<items>
-					<article class="card mx-auto">
+					<article class="card col-11 col-sm-5 mx-auto">
 						<div class="card-image">
 							<a href="<print content=linktitle>">
 								<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
 							</a>
 						</div>
-						<div class="card-header h5">
-							<a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a>
-						</div>
-						<div class="card-body"><print content="notes"></div>
+						<div class="card-header h5"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></div>
 						<div class="corner-ribbon small top-right"><print content="cost"></div>
 						<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
 						<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>

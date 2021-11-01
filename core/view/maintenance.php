@@ -7,15 +7,24 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`='maintenance'");
 $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
 if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
-$image=$page['cover']==''?$image=URL.THEME.'/images/maintenance.png':$image=$page['cover'];
+if($page['cover']!='')
+  $image=$page['cover'];
+elseif(file_exists(THEME.'/images/unavailable.png'))
+  $image=URL.THEME.'/images/unavaliable.png';
+elseif(file_exists(THEME.'/images/unavailable.jpg'))
+  $image=URL.THEME.'/images/unavailable.jpg';
+else
+  $image='core/images/unavailable.png';
 $html=preg_replace([
   '/<print background>/',
   '/<print theme>/',
@@ -43,10 +52,11 @@ $html=preg_replace([
   '/<print theme>/',
   '/<print site_verifications>/',
 	'/<print geo>/',
+  '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',
   '/<google_analytics>/'
 ],[
-  ' style="background-image:url('.$image.'"',
+  'background-color:none!important;background-image:url('.$image.')!important;background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;',
   THEME,
   trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8')),
@@ -78,27 +88,9 @@ $html=preg_replace([
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-  $page['notes'],
+  htmlspecialchars(($page['heading']!=''?$page['heading']:$page['seoTitle']),ENT_QUOTES,'UTF-8'),
+  $purify->purify($page['notes']),
   $config['ga_tracking']!=''?'<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':''
 ],$html);
-if(stristr($html,'<buildSocial')){
-	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
-	$htmlSocial=$matches[1];
-	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
-	if($s->rowCount()>0){
-		while($r=$s->fetch(PDO::FETCH_ASSOC)){
-			$buildSocial=$htmlSocial;
-			$buildSocial=str_replace([
-				'<print sociallink>',
-				'<print socialicon>'
-			],[
-				htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
-				frontsvg('i-social-'.$r['icon'])
-			],$buildSocial);
-			$socialItems.=$buildSocial;
-		}
-	}else$socialItems='';
-	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
-}
+require'inc-buildsocial.php';
 $content.=$html;

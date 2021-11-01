@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,14 +24,15 @@ if(!defined('URL'))define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system
 define('FAVICON','images/favicon.png');
 define('FAVICONTYPE','image/png');
 echo json_encode([
-  "name"=>'AuroraCMS',
-  "gcm_user_visible_only"=>true,
-  "short_name"=>'AuroraCMS',
+  "name"=>'AuroraCMSadministration',
+//  "gcm_user_visible_only"=>true,
+  "short_name"=>'AuroraCMSadmin',
   "description"=>'Administration Area for AuroraCMS',
   "start_url"=>'/',
   "display"=>"standalone",
-  "background_color"=>'#000',
+  "background_color"=>'#ffffff',
   "theme_color"=>"#000000",
+//  "prefer_related_applications"=>true,
   "icons"=>[
     [
       "src"=>FAVICON,

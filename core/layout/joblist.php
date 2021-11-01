@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -40,7 +40,7 @@ else{
           <div class="content-title-icon"><?= svg2('joblist','i-3x');?></div>
           <div>Job List</div>
           <div class="content-title-actions">
-            <?=$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/joblist/add" role="button" aria-label="Add Job">'.svg2('add').'</a>':'';?>
+            <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/joblist/add" role="button" data-tooltip="tooltip" aria-label="Add Job">'.svg2('add').'</a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -49,7 +49,7 @@ else{
       </div>
     </div>
     <div class="kanban-board p-0">
-      <div class="card border-radius-0 shadow p-2">
+      <div class="card border-radius-0 p-2">
         <div class="row">
           <div class="alert alert-info d-block d-sm-none" role="alert"></div>
           <div class="col-sm-3">
@@ -89,7 +89,6 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
               </div>
             </div>
           </div>
-
           <div class="col-sm-3">
             <div class="card m-1">
               <div class="card-header bg-warning text-warning font-weight-bold p-2">Confirmed</div>
@@ -126,7 +125,6 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
               </div>
             </div>
           </div>
-
           <div class="col-sm-3">
             <div class="card m-1">
               <div class="card-header bg-info text-info font-weight-bold p-2">In Progress</div>
@@ -163,7 +161,6 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
               </div>
             </div>
           </div>
-
           <div class="col-sm-3">
             <div class="card m-1">
               <div class="card-header bg-success text-success font-weight-bold p-2">Complete</div>
@@ -237,46 +234,38 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
             </div>
           </div>
         </div>
-        <?php require'core/layout/footer.php';?>
+<?php require'core/layout/footer.php';?>
       </div>
     </div>
   </section>
   <script>
-    $(function () {
-      var kanbanCol = $('.card-body');
-      kanbanCol.css('height', (window.innerHeight - 50) + 'px');
-      kanbanCol.css('max-height', (window.innerHeight - 50) + 'px');
-
+    $(function(){
+      var kanbanCol=$('.card-body');
+      kanbanCol.css('height',(window.innerHeight - 50) + 'px');
+      kanbanCol.css('max-height',(window.innerHeight - 50) + 'px');
       draggableInit();
-
-      $('.card-header').click(function() {
-        var $panelBody = $(this).parent().children('.card-body');
+      $('.card-header').click(function(){
+        var $panelBody=$(this).parent().children('.card-body');
         $panelBody.slideToggle();
       });
     });
-
-    function draggableInit() {
+    function draggableInit(){
       var sourceId;
-
-      $('[draggable=true]').bind('dragstart', function (event) {
-        sourceId = $(this).parent().attr('id');
-        event.originalEvent.dataTransfer.setData("text/plain", event.target.getAttribute('id'));
+      $('[draggable=true]').bind('dragstart',function(event){
+        sourceId=$(this).parent().attr('id');
+        event.originalEvent.dataTransfer.setData("text/plain",event.target.getAttribute('id'));
       });
-
-      $('.card-body').bind('dragover', function (event) {
-        event.preventDefault();
-      });
-
-      $('.card-body').bind('drop', function (event) {
-        var children = $(this).children();
-        var targetId = children.attr('id');
-        if (sourceId != targetId) {
-          var elementId = event.originalEvent.dataTransfer.getData("text/plain");
-          var element = document.getElementById(elementId);
-          var dbid = $(element).data('dbid');
-          var dbt = $(element).data('dbt');
-          var dbc = $(element).data('dbc');
-          var dbda = $(this).data('dbda');
+      $('.card-body').bind('dragover',function(event){event.preventDefault();});
+      $('.card-body').bind('drop',function(event){
+        var children=$(this).children();
+        var targetId=children.attr('id');
+        if(sourceId!=targetId){
+          var elementId=event.originalEvent.dataTransfer.getData("text/plain");
+          var element=document.getElementById(elementId);
+          var dbid=$(element).data('dbid');
+          var dbt=$(element).data('dbt');
+          var dbc=$(element).data('dbc');
+          var dbda=$(this).data('dbda');
           children.prepend(element);
           $.ajax({
         		type:"GET",
@@ -287,9 +276,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
         			c:dbc,
               da:dbda
         		}
-        	}).done(function(msg){
-//            $(element).html('This has been moved to '+dbda+'!');
-          });
+        	}).done(function(msg){});
         }
         event.preventDefault();
       });

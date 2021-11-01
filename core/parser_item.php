@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -20,10 +20,17 @@ $html=preg_replace([
 ],'',$html,1);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $skip=false;
-if($r['rank']-1 < $_SESSION['rank'])$skip=false;else $skip=true;
+if($r['rank']-1 < $_SESSION['rank'])
+  $skip=false;
+else
+  $skip=true;
 if($r['options'][2]==1){
-  if($_SESSION['rank']>399)$skip=false;
-  elseif($_SESSION['rank']==$r['rank'])$skip=false;else$skip=true;
+  if($_SESSION['rank']>399)
+    $skip=false;
+  elseif($_SESSION['rank']==$r['rank'])
+    $skip=false;
+  else
+    $skip=true;
 }
 if($skip==false){
   if($config['gst']>0){
@@ -47,10 +54,14 @@ if($skip==false){
   $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
   $us->execute([':uid'=>$r['uid']]);
   $ua=$us->fetch(PDO::FETCH_ASSOC);
-  if($r['fileURL']!='')$shareImage=$r['fileURL'];
-  elseif($r['file']!='')$shareImage=rawurldecode($r['file']);
-  elseif($r['thumb']!='')$shareImage=rawurldecode($r['thumb']);
-  else$shareImage=URL.NOIMAGE;
+  if($r['fileURL']!='')
+    $shareImage=$r['fileURL'];
+  elseif($r['file']!='')
+    $shareImage=rawurldecode($r['file']);
+  elseif($r['thumb']!='')
+    $shareImage=rawurldecode($r['thumb']);
+  else
+    $shareImage=URL.NOIMAGE;
   $canonical=URL.$view.'/'.$r['urlSlug'].'/';
   $contentTime=isset($r['eti'])&&$r['eti']>$r['ti']?$r['eti']:(isset($r['ti'])?$r['ti']:0);
   if(stristr($html,'<breadcrumb>')){
@@ -59,7 +70,17 @@ if($skip==false){
     $breaditem=$matches[1];
     preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
     $breadcurrent=$matches[1];
-    $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
+    $jsonld='<script type="application/ld+json">{'.
+      '"@context":"http://schema.org",'.
+      '"@type":"BreadcrumbList",'.
+      '"itemListElement":[{'.
+        '"@type":"ListItem",'.
+        '"position":1,'.
+        '"item":{'.
+          '"@id":"'.URL.'",'.
+          '"name":"Home"'.
+        '}'.
+      '},';
     preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
     $breaditem=$matches[1];
     $breadit=preg_replace([
@@ -72,7 +93,7 @@ if($skip==false){
       'Home'
     ],$breaditem);
     $breaditems=$breadit;
-    if($r['title']!=''||$r['category_1']!=''){
+    if($r['title']!=''){
       $breadit=preg_replace([
         '/<print breadcrumb=[\"\']?url[\"\']?>/',
         '/<print breadcrumb=[\"\']?title[\"\']?>/'
@@ -80,8 +101,17 @@ if($skip==false){
         URL.urlencode($page['contentType']),
         htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
       ],$breaditem);
-    }else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-    $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.urlencode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}},';
+    }else
+      $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+    $jsonld.=
+    '{'.
+      '"@type":"ListItem",'.
+      '"position":2,'.
+      '"item":{'.
+        '"@id":"'.URL.urlencode($page['contentType']).'",'.
+        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
+      '}'.
+    '},';
     $breaditems.=$breadit;
     if($r['category_1']!=''){
       $jsoni++;
@@ -95,7 +125,15 @@ if($skip==false){
         ],$breaditem);
       }else
         $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-      $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'","name":"'.htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8').'"}},';
+      $jsonld.=
+      '{'.
+        '"@type":"ListItem",'.
+        '"position":'.$jsoni.','.
+        '"item":{'.
+          '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'",'.
+          '"name":"'.$r['category_1'].'"'.
+        '}'.
+      '},';
       $breaditems.=$breadit;
     }
     if($r['category_2']!=''){
@@ -108,8 +146,17 @@ if($skip==false){
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))),
           htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8')
         ],$breaditem);
-      }else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-      $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'","name":"'.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8').'"}},';
+      }else
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+      $jsonld.=
+      '{'.
+        '"@type":"ListItem",'.
+        '"position":'.$jsoni.','.
+        '"item":{'.
+          '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'",'.
+          '"name":"'.$r['category_2'].'"'.
+        '}'.
+      '},';
       $breaditems.=$breadit;
     }
     if($r['category_3']!=''){
@@ -122,8 +169,17 @@ if($skip==false){
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))),
           htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8')
         ],$breaditem);
-      }else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-      $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'","name":"'.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8').'"}},';
+      }else
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+      $jsonld.=
+      '{'.
+        '"@type":"ListItem",'.
+        '"position":'.$jsoni.','.
+        '"item":{'.
+          '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'",'.
+          '"name":"'.$r['category_3'].'"'.
+        '}'.
+      '},';
       $breaditems.=$breadit;
     }
     if($r['category_4']!=''){
@@ -136,14 +192,31 @@ if($skip==false){
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_4']))),
           htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8')
         ],$breaditem);
-      }else$breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-      $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_4']))).'","name":"'.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8').'"}},';
+      }else
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+      $jsonld.=
+      '{'.
+        '"@type":"ListItem",'.
+        '"position":'.$jsoni.','.
+        '"item":{'.
+          '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_4']))).'",'.
+          '"name":"'.$r['category_4'].'"'.
+        '}'.
+      '},';
       $breaditems.=$breadit;
     }
     $jsoni++;
     if($r['title']!=''){
       $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-      $jsonld.='{"@type":"ListItem","position":'.$jsoni.',"item":{"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'"}}]}</script>';
+      $jsonld.=
+      '{'.
+        '"@type":"ListItem",'.
+        '"position":'.$jsoni.','.
+        '"item":{'.
+          '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
+          '"name":"'.$r['title'].'"'.
+        '}'.
+      '}]}</script>';
       $breaditems.=$breadit;
     }
     $html=preg_replace([
@@ -164,20 +237,30 @@ if($skip==false){
   		$cover=basename(rawurldecode($page['coverVideo']));
   		if(stristr($page['coverVideo'],'youtu')){
   			preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$page['coverVideo'],$vidMatch);
-  			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.
+  			$coverHTML='<div class="embed-responsive embed-responsive-16by9">'.
+          '<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.
   				($page['options'][0]==1?'autoplay=1&mute=1&':'').
   				($page['options'][1]==1?'loop=1&':'').
   				($page['options'][2]==1?'controls=1&':'controls=0&').
-  			'" frameborder="0" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe></div>';
+          '" frameborder="0" allow="accelerometer;encrypted-media;gyroscope;picture-in-picture" allowfullscreen></iframe>'.
+        '</div>';
     	}elseif(stristr($page['coverVideo'],'vimeo')){
   			preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$page['coverVideo'],$vidMatch);
-  			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.
+  			$coverHTML='<div class="embed-responsive embed-responsive-16by9">'.
+          '<iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.
   				($page['options'][0]==1?'autoplay=1&':'').
   				($page['options'][1]==1?'loop=1&':'').
   				($page['options'][2]==1?'controls=1&':'controls=0&').
-  			'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
-  		}else
-  			$coverHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
+  			  '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>'.
+        '</div>'.
+        '<script src="https://player.vimeo.com/api/player.js"></script>';
+  		}else{
+  			$coverHTML='<div class="embed-responsive embed-responsive-16by9">'.
+          '<video class="embed-responsive-item" preload autoplay loop muted>'.
+            '<source src="'.htmlspecialchars($page['coverVideo'],ENT_QUOTES,'UTF-8').'" type="video/mp4">'.
+          '</video>'.
+        '</div>';
+      }
   	}
   	if($page['cover']!=''&&$coverHTML==''){
   		$cover=basename($page['cover']);
@@ -221,26 +304,47 @@ if($skip==false){
       $cover=basename(rawurldecode($r['videoURL']));
       if(stristr($r['videoURL'],'youtu')){
         preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$r['videoURL'],$vidMatch);
-        $videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.($r['options'][4]==1?'autoplay=1&':'').($r['options'][5]==1?'loop=1&':'').($page['options'][6]==1?'controls=1&':'controls=0&').'" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>';
+        $videoHTML='<div class="embed-responsive embed-responsive-16by9">'.
+          '<iframe class="embed-responsive-item" src="https://www.youtube.com/embed/'.$vidMatch[0].'?playsinline=1&fs=0&modestbranding=1&'.
+            ($r['options'][4]==1?'autoplay=1&':'').
+            ($r['options'][5]==1?'loop=1&':'').
+            ($page['options'][6]==1?'controls=1&':'controls=0&').
+          '" frameborder="0" allow="accelerometer; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>'.
+        '</div>';
       }elseif(stristr($r['videoURL'],'vimeo')){
         preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$r['videoURL'],$vidMatch);
-        $videoHTML='<div class="embed-responsive embed-responsive-16by9"><iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.($r['options'][4]==1?'autoplay=1&':'').($r['options'][5]==1?'loop=1&':'').($r['options'][6]==1?'controls=1&':'controls=0&').'" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe></div><script src="https://player.vimeo.com/api/player.js"></script>';
-      }else$videoHTML='<div class="embed-responsive embed-responsive-16by9"><video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($r['videoURL'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video></div>';
+        $videoHTML='<div class="embed-responsive embed-responsive-16by9">'.
+          '<iframe class="embed-responsive-item" src="https://player.vimeo.com/video/'.$vidMatch[5].'?'.
+            ($r['options'][4]==1?'autoplay=1&':'').
+            ($r['options'][5]==1?'loop=1&':'').
+            ($r['options'][6]==1?'controls=1&':'controls=0&').
+          '" style="position:absolute;top:0;left:0;width:100%;height:100%;" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>'.
+        '</div>'.
+        '<script src="https://player.vimeo.com/api/player.js"></script>';
+      }else{
+        $videoHTML='<div class="embed-responsive embed-responsive-16by9">'.
+          '<video class="embed-responsive-item" preload autoplay loop muted><source src="'.htmlspecialchars($r['videoURL'],ENT_QUOTES,'UTF-8').'" type="video/mp4"></video>'.
+        '</div>';
+      }
       $html=preg_replace(
         '/<print content=[\"\']?video[\"\']?>/',
         $videoHTML,
         $html
       );
-    }else$html=preg_replace('/<print content=[\"\']?video[\"\']?>/','',$html);
+    }else
+      $html=preg_replace('/<print content=[\"\']?video[\"\']?>/','',$html);
   }elseif($r['options'][3]==1&&$r['file']!=''){
     $r['file']=rawurldecode($r['file']);
     $html=preg_replace([
       '~<image>.*?<\/image>~is',
       '~<videoviewer>.*?<\/videoviewer>~is'
     ],'',$html);
-    if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-    elseif($r['file']&&file_exists('media/'.basename($r['file'])))$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
-    else$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
+    if($r['fileURL'])
+      $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
+    elseif($r['file']&&file_exists('media/'.basename($r['file'])))
+      $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
+    else
+      $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
     $html=preg_replace([
       '/<print content=[\"\']?imageALT[\"\']?>/',
       '/<print content=[\"\']?rank[\'"\']?>/',
@@ -253,15 +357,19 @@ if($skip==false){
   }else{
     $r['file']=rawurldecode($r['file']);
     $html=preg_replace('~<videoviewer>.*?<\/videoviewer>~is','',$html);
-    if($r['fileURL'])$html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
+    if($r['fileURL'])
+      $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
     elseif($r['file']!=''&&file_exists('media/'.basename($r['file']))){
       $caption='';
-      if($r['attributionImageTitle']!='')$caption.=$r['attributionImageTitle'];
+      if($r['attributionImageTitle']!='')
+        $caption.=$r['attributionImageTitle'];
       if($r['attributionImageName']!=''){
         $caption.=$caption!=''?' by ':'';
-        if($r['attributionImageURL']!='')$caption.='<a href="'.$r['attributionImageURL'].'" target="_blank" rel="noopener noreferrer">';
+        if($r['attributionImageURL']!='')
+          $caption.='<a href="'.$r['attributionImageURL'].'" target="_blank" rel="noopener noreferrer">';
         $caption.=$r['attributionImageName'];
-        if($r['attributionImageURL']!='')$caption.='</a>';
+        if($r['attributionImageURL']!='')
+          $caption.='</a>';
       }
       $html=preg_replace([
         '/<[\/]?image>/',
@@ -284,7 +392,8 @@ if($skip==false){
         $r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
         rank($r['rank'])
       ],$html);
-    }else$html=preg_replace('~<image>.*?<\/image>~is','',$html);
+    }else
+      $html=preg_replace('~<image>.*?<\/image>~is','',$html);
   }
   if(stristr($html,'<item')){
     preg_match('/<item>([\w\W]*?)<\/item>/',$html,$matches);
@@ -348,7 +457,8 @@ if($skip==false){
           $mediaoutput,
           ''
         ],$item,1);
-      }else$item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
+      }else
+        $item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
     }
     if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
       if($r['bookable']==1){
@@ -364,7 +474,8 @@ if($skip==false){
           ],$item);
         }
       }
-    }else$item=preg_replace(['~<service.*?>.*?<\/service>~is',($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')],'',$item,1);
+    }else
+      $item=preg_replace(['~<service.*?>.*?<\/service>~is',($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')],'',$item,1);
     $address=$edit=$contentQuantity='';
     $showCountdown=false;
     if(isset($r['contentType'])&&($r['contentType']=='events')){
@@ -380,21 +491,32 @@ if($skip==false){
       if($r['options'][3]==1)$showCountdown=true;
     }else
       $item=preg_replace('~<countdown>.*?<\/countdown>~is','',$item);
+    $itemQuantity='';
+    if($r['coming'][0]==1&&$r['contentType']=='inventory'){
+      $itemQuantity='Coming Soon';
+    }else{
+      if(is_numeric($r['quantity'])){
+        $itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords($r['stockStatus']));
+      }
+    }
     if(isset($r['contentType'])&&($r['contentType']=='inventory')){
       $item=preg_replace([
         ($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
+  			'/<print content=[\"\']?quantitycolor[\"\']?>/',
         '/<print content=[\"\']?quantity[\"\']?>/',
         '/<print content=[\"\']?stock[\"\']?>/',
   			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
   			'/<print content=[\"\']?points[\"\']?>/'
       ],[
         '',
+  			str_replace(' ','-',strtolower($itemQuantity)),
         $r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
         ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])),
   			'',
   			number_format((float)$r['points'])
       ],$item);
-    }else$item=preg_replace('~<quantity>.*?<\/quantity>~is','',$item);
+    }else
+      $item=preg_replace('~<quantity>.*?<\/quantity>~is','',$item);
     $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 /*    if($uid!=0){
       $su=$db->prepare("SELECT `options`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
@@ -426,7 +548,8 @@ if($skip==false){
           '',
           $r['itemCondition'],
         ],$item);
-      }else$item=preg_replace('~<condition>.*?<\/condition>~is','',$item);
+      }else
+        $item=preg_replace('~<condition>.*?<\/condition>~is','',$item);
     }
     if(stristr($item,'<weight>')){
       if($r['weight']!=''){
@@ -437,7 +560,8 @@ if($skip==false){
           '',
           $r['weight'].$r['weightunit'],
         ],$item);
-      }else$item=preg_replace('~<weight>.*?<\/weight>~is','',$item);
+      }else
+        $item=preg_replace('~<weight>.*?<\/weight>~is','',$item);
     }
     if(stristr($item,'<size>')){
       if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
@@ -452,7 +576,8 @@ if($skip==false){
           $r['height'].$r['heightunit'],
           $r['length'].$r['lengthunit']
         ],$item);
-      }else$item=str_replace('~<size>.*?<\/size>~is','',$item);
+      }else
+        $item=preg_replace('~<size>.*?<\/size>~is','',$item);
     }
     if(stristr($item,'<brand>')){
       if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
@@ -461,9 +586,12 @@ if($skip==false){
         $rb=$sb->fetch(PDO::FETCH_ASSOC);
         $rb['icon']=rawurldecode($rb['icon']);
         $brand='';
-        if(isset($rb['url']))$brand=$rb['url']!=''?'<a href="'.$rb['url'].'">':'';
-        if(isset($rb['title']))$brand.=$rb['icon']==''?$rb['title']:'<img src="media/'.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
-        if(isset($rb['url']))$brand.=$rb['url']!=''?'</a>':'';
+        if(isset($rb['url']))
+          $brand=$rb['url']!=''?'<a href="'.$rb['url'].'">':'';
+        if(isset($rb['title']))
+          $brand.=$rb['icon']==''?$rb['title']:'<img src="media/'.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
+        if(isset($rb['url']))
+          $brand.=$rb['url']!=''?'</a>':'';
         $item=preg_replace([
           '/<[\/]?brand>/',
           '/<print brand>/',
@@ -471,21 +599,25 @@ if($skip==false){
           '',
           $brand,
         ],$item);
-      }else$item=preg_replace('~<brand>.*?<\/brand>~is','',$item);
+      }else
+        $item=preg_replace('~<brand>.*?<\/brand>~is','',$item);
     }
     if(stristr($item,'<choices')){
       $scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
       $scq->execute([':id'=>isset($r['id'])?$r['id']:$page['id']]);
       if($scq->rowCount()>0){
-        $choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
+        $choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());">'.
+          '<option value="0">Select an Option</option>';
         while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
           if($rcq['ti']==0)continue;
           $choices.='<option value="'.$rcq['id'].'">'.htmlspecialchars($rcq['title'],ENT_QUOTES,'UTF-8').':'.$rcq['ti'].'</option>';
         }
         $choices.='</select>';
         $item=str_replace('<choices>',$choices,$item);
-      }else$item=str_replace('<choices>','',$item);
-    }else$item=str_replace('<choices>','',$item);
+      }else
+        $item=str_replace('<choices>','',$item);
+    }else
+      $item=str_replace('<choices>','',$item);
     if(stristr($item,'<map>')){
       $item=preg_replace([
         ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
@@ -503,41 +635,139 @@ if($skip==false){
       $r['ti']=isset($r['ti'])?$r['ti']:$page['ti'];
       $r['eti']=isset($r['eti'])?$r['eti']:$page['eti'];
       $jsonld='<script type="application/ld+json">{"@context":"http://schema.org/",';
-      if($r['schemaType']=='blogPosting')
-        $jsonld.='"@type":"BlogPosting","headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"},"editor":"'.htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8').'","genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'","mainEntityOfPage":"True","keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'","wordcount":"'.htmlspecialchars(strlen(strip_tags($r['notes'])),ENT_QUOTES,'UTF-8').'","publisher":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'","logo":{"@type":"ImageObject","url":"'.URL.FAVICON.'","width":"400","height":"55"}},"url":"'.$canonical.'","datePublished":"'.date('Y-m-d',$r['pti']).'","dateCreated":"'.date('Y-m-d',$r['ti']).'","dateModified":"'.date('Y-m-d',$r['eti']).'","description":"'.htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8').'","articleBody":"'.htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8').'","author":{"@type":"Person","name":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'"}';
-      elseif($r['schemaType']=='Product'){
-        $jsonld.='"@type":"Product","name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"},"description":"'.($seoDescription!=''?htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8'):htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8')).'","mpn":"'.($r['barcode']==''?$r['id']:htmlspecialchars($r['barcode'],ENT_QUOTES,'UTF-8')).'","sku":"'.($r['fccid']==''?$r['id']:htmlspecialchars($r['fccid'],ENT_QUOTES,'UTF-8')).'","brand":{"@type":"Thing","name":"'.htmlspecialchars($r['brand'],ENT_QUOTES,'UTF-8').'"},';
+      if($r['schemaType']=='blogPosting'){
+        $jsonld.=
+        '"@type":"BlogPosting",'.
+        '"headline":"'.$r['title'].'",'.
+        '"alternativeHeadline":"'.$r['title'].'",'.
+        '"image":{'.
+          '"@type":"ImageObject",'.
+          '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
+        '},'.
+        '"editor":"'.($ua['name']!=''?$ua['name']:$ua['username']).'",'.
+        '"genre":"'.($r['category_1']!=''?$r['category_1']:'None').($r['category_2']!=''?' > '.$r['category_2']:'').($r['category_3']!=''?' > '.$r['category_3']:'').($r['category_4']!=''?' > '.$r['category_4']:'').'",'.
+        '"mainEntityOfPage":"True",'.
+        '"keywords":"'.$seoKeywords.'",'.
+        '"wordcount":"'.strlen(strip_tags($r['notes'])).'",'.
+        '"publisher":{'.
+          '"@type":"Organization",'.
+          '"name":"'.$config['business'].'",'.
+          '"logo":{'.
+            '"@type":"ImageObject",'.
+            '"url":"'.URL.FAVICON.'",'.
+            '"width":"400",'.
+            '"height":"55"'.
+          '}'.
+        '},'.
+        '"url":"'.$canonical.'",'.
+        '"datePublished":"'.date('Y-m-d',$r['pti']).'",'.
+        '"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
+        '"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
+        '"description":"'.$seoDescription.'",'.
+        '"articleBody":"'.strip_tags($r['notes']).'",'.
+        '"author":{'.
+          '"@type":"Person",'.
+          '"name":"'.($ua['name']!=''?$ua['name']:$ua['username']).'"'.
+        '}';
+      }elseif($r['schemaType']=='Product'){
+        $jsonld.=
+        '"@type":"Product",'.
+        '"name":"'.$r['title'].'",'.
+        '"image":{'.
+          '"@type":"ImageObject",'.
+          '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
+        '},'.
+        '"description":"'.($seoDescription!=''?$seoDescription:strip_tags(escaper($r['notes']))).'",'.
+        '"mpn":"'.($r['barcode']==''?$r['id']:$r['barcode']).'",'.
+        '"sku":"'.($r['fccid']==''?$r['id']:$r['fccid']).'",'.
+        '"brand":"'.($r['brand']!=''?$r['brand']:$config['business']).'",';
         $jss=$db->prepare("SELECT AVG(`cid`) as rate,COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND status='approved'");
         $jss->execute([':rid'=>$r['id']]);
         $jrr=$jss->fetch(PDO::FETCH_ASSOC);
-        $jsonld.='"aggregateRating":{"@type":"aggregateRating","ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'","reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"},"offers":{"@type":"Offer","url":"'.$canonical.'","priceCurrency":"AUD","price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'","priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'","availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'OutOfStock':'In Stock'):($r['stockStatus']=='none'?'OutOfStock':'InStock')).'","seller":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"}}';
-      }elseif($r['schemaType']=='Service')
-        $jsonld.='"@type":"Service","serviceType":"'.$r['category_1'].'","provider":{"@type":"LocalBusiness","name":"'.$config['business'].'","address":"'.$config['address'].', '.$config['state'].', '.$config['postcode'].'","telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'","priceRange":"'.($r['rCost']!=0?$r['rCost']:$r['cost']).'","image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"},"areaServed":{"@type":"State","name":"All"}';
-      else
-        $jsonld.='"@type":"'.$r['schemaType'].'","headline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","alternativeHeadline":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'","image":{"@type":"ImageObject","url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"},"author":"'.($ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')).'","genre":"'.($r['category_1']!=''?htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'):'None').($r['category_2']!=''?' > '.htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'):'').($r['category_3']!=''?' > '.htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'):'').($r['category_4']!=''?' > '.htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'):'').'","keywords":"'.htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8').'","wordcount":"'.htmlspecialchars(strlen(strip_tags(escaper($r['notes']))),ENT_QUOTES,'UTF-8').'","publisher":{"@type":"Organization","name":"'.htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8').'"},"url":"'.$canonical.'/","datePublished":"'.date('Y-m-d',$r['pti']).'","dateCreated":"'.date('Y-m-d',$r['ti']).'","dateModified":"'.date('Y-m-d',$r['eti']).'","description":"'.htmlspecialchars(strip_tags(rawurldecode($seoDescription)),ENT_QUOTES,'UTF-8').'","articleBody":"'.htmlspecialchars(strip_tags(escaper($r['notes'])),ENT_QUOTES,'UTF-8').'"';
+        $jsonld.=
+        '"aggregateRating":{'.
+          '"@type":"aggregateRating",'.
+          '"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
+          '"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
+        '},'.
+        '"offers":{'.
+          '"@type":"Offer",'.
+          '"url":"'.$canonical.'",'.
+          '"priceCurrency":"AUD",'.
+          '"price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'",'.
+          '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",'.
+          '"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'Out Of Stock':'In Stock')).'",'.
+          '"seller":{'.
+            '"@type":"Organization",'.
+            '"name":"'.$config['business'].'"'.
+          '}'.
+        '}';
+      }elseif($r['schemaType']=='Service'){
+        $jsonld.=
+        '"@type":"Service",'.
+        '"serviceType":"'.$r['category_1'].'",'.
+        '"provider":{'.
+          '"@type":"LocalBusiness",'.
+          '"name":"'.$config['business'].'",'.
+          '"address":"'.$config['address'].', '.$config['state'].', '.$config['postcode'].'",'.
+          '"telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'",'.
+          '"priceRange":"'.($r['rCost']!=0?$r['rCost']:$r['cost']).'",'.
+          '"image":"'.($r['file']!=''?$r['file']:URL.FAVICON).'"'.
+        '},'.
+        '"areaServed":{'.
+          '"@type":"State",'.
+          '"name":"All"'.
+        '}';
+      }else{
+        $jsonld.=
+        '"@type":"'.$r['schemaType'].'",'.
+        '"headline":"'.$r['title'].'",'.
+        '"alternativeHeadline":"'.$r['title'].'",'.
+        '"image":{'.
+          '"@type":"ImageObject",'.
+          '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
+        '},'.
+        '"author":"'.($ua['name']!=''?$ua['name']:$ua['username']).'",'.
+        '"genre":"'.($r['category_1']!=''?$r['category_1']:'None').($r['category_2']!=''?' > '.$r['category_2']:'').($r['category_3']!=''?' > '.$r['category_3']:'').($r['category_4']!=''?' > '.$r['category_4']:'').'",'.
+        '"keywords":"'.$seoKeywords.'",'.
+        '"wordcount":"'.strlen(strip_tags(escaper($r['notes']))).'",'.
+        '"publisher":{'.
+          '"@type":"Organization",'.
+          '"name":"'.$config['business'].'"'.
+        '},'.
+        '"url":"'.$canonical.'/",'.
+        '"datePublished":"'.date('Y-m-d',$r['pti']).'",'.
+        '"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
+        '"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
+        '"description":"'.strip_tags(rawurldecode($seoDescription)).'",'.
+        '"articleBody":"'.strip_tags(escaper($r['notes'])).'"';
+      }
       $jsonld.='}</script>';
       $item=str_replace('<json-ld>',$jsonld,$item);
     }
     $sidecat=isset($r['category_1'])&&$r['category_1']!=''?$r['category_1']:'';
     $item=preg_replace([
-      '/<print author=[\"\']?link[\"\']?>/',
       '/<print author=[\"\']?name[\"\']?>/'
     ],[
-      URL.'profile/'.urlencode(str_replace(' ','-',strtolower($r['login_user']))).'/',
       $ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')
     ],$item);
   /* Related */
     if($view=='article'||$view=='inventory'||$view=='service'||$view=='portfolio'&&stristr($item,'<related')){
       if($config['options'][11]==1){
         preg_match('/<related.*itemCount=[\"\'](.+?)[\"\'].*>/',$item,$matches);
-        if(!isset($matches[1]))$iC=$config['showItems'];
-        elseif($matches[1]=='all')$iC='';
-        elseif($matches[1]=='default')$iC=$config['showItems'];
-        else$iC=$matches[1];
+        if(!isset($matches[1]))
+          $iC=$config['showItems'];
+        elseif($matches[1]=='all')
+          $iC='';
+        elseif($matches[1]=='default')
+          $iC=$config['showItems'];
+        else
+          $iC=$matches[1];
         $sr=$db->prepare("SELECT `rid` as id FROM `".$prefix."choices` WHERE `uid`=:id AND `contentType`='related' ORDER BY `title` ASC LIMIT $iC");
         $sr->execute([':id'=>$r['id']]);
         $go=false;
-        if($sr->rowCount()>0)$go=true;
+        if($sr->rowCount()>0)
+          $go=true;
         else{
           if($config['options'][10]==1){
             if($r['category_1']!=''){
@@ -597,9 +827,12 @@ if($skip==false){
           }
           $related=preg_replace('~<relitems>.*?<\/relitems>~is',$relitems,$related,1);
           $item=preg_replace('~<related.*>.*?<\/related>~is',$related,$item,1);
-        }else$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
-      }else$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
-    }else$item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+        }else
+          $item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+      }else
+        $item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+    }else
+      $item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
   /* Reviews */
     if($view!='page'&&stristr($item,'<review')){
       preg_match('/<review>([\w\W]*?)<\/review>/',$item,$matches);
@@ -609,8 +842,31 @@ if($skip==false){
       $reviews='';
       while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
         $reviewitem=$review;
-        if(stristr($reviewitem,'<json-ld-review>'))
-          $jsonldreview='<script type="application/ld+json">{"@context":"https://schema.org/","@type":"Review","itemReviewed":{"@type":"Product","image":"'.(file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'","name":"'.$r['title'].'"},"reviewRating":{"@type":"Rating","ratingValue":"'.$rr['cid'].'"},"name":"'.$r['title'].'","author":{"@type":"Person","name":"'.($rr['name']!=''?$rr['name']:'Anonymous').'"},"datePublished":"'.date('Y-m-d',$rr['ti']).'","reviewBody":"'.$rr['notes'].'","publisher":{"@type":"Organization","name":"'.$config['business'].'"}}</script>';
+        if(stristr($reviewitem,'<json-ld-review>')){
+          $jsonldreview='<script type="application/ld+json">{'.
+            '"@context":"https://schema.org/",'.
+            '"@type":"Review",'.
+            '"itemReviewed":{'.
+              '"@type":"Product",'.
+              '"image":"'.(file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'","name":"'.$r['title'].'"'.
+            '},'.
+            '"reviewRating":{'.
+              '"@type":"Rating",'.
+              '"ratingValue":"'.$rr['cid'].'"'.
+            '},'.
+            '"name":"'.$r['title'].'",'.
+            '"author":{'.
+              '"@type":"Person",'.
+              '"name":"'.($rr['name']!=''?$rr['name']:'Anonymous').'"'.
+            '},'.
+            '"datePublished":"'.date('Y-m-d',$rr['ti']).'",'.
+            '"reviewBody":"'.$rr['notes'].'",'.
+            '"publisher":{'.
+              '"@type":"Organization",'.
+              '"name":"'.$config['business'].'"'.
+            '}'.
+          '}</script>';
+        }
         $reviewitem=str_replace('<json-ld-review>',$jsonldreview,$reviewitem);
         $reviewitem=preg_replace('/<print review=[\"\']?rating[\"\']?>/',$rr['cid'],$reviewitem);
         $reviewitem=preg_replace([
@@ -642,7 +898,8 @@ if($skip==false){
     }
     require'core/parser.php';
     $authorHTML='';
-    if(isset($r['contentType'])&&($r['contentType']=='article'||$r['contentType']=='portfolio'))$item=preg_replace('~<controls>.*?<\/controls>~is','',$item,1);
+    if(isset($r['contentType'])&&($r['contentType']=='article'||$r['contentType']=='portfolio'))
+      $item=preg_replace('~<controls>.*?<\/controls>~is','',$item,1);
     $html=preg_replace([
       '~<settings.*?>~is',
       '~<more>.*?<\/more>~is',
@@ -694,9 +951,12 @@ if($skip==false){
             $config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':''
           ],$commentsHTML);
           $item=preg_replace('/<comments>/',$commentsHTML,$item,1);
-        }else$item.='Comments for this post are Enabled, but no <strong>"'.THEME.'/comments.html"</strong> template file exists';
-      }else$item=preg_replace('/<comments>/','',$item,1);
-    }else$item=preg_replace('/<comments>/','',$item,1);
+        }else
+          $item.='Comments for this post are Enabled, but no <strong>"'.THEME.'/comments.html"</strong> template file exists';
+      }else
+        $item=preg_replace('/<comments>/','',$item,1);
+    }else
+      $item=preg_replace('/<comments>/','',$item,1);
     $html=preg_replace('~<item>.*?<\/item>~is',$item,$html,1);
   }
 }else{

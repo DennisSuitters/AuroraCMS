@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,6 @@ ini_set('session.use_strict_mode',true);
 ini_set('session.cookie_httponly',true);
 ini_set('session.cookie_secure',true);
 header('X-Powered-By:AuroraCMS');
-header("X-Clacks-Overhead:GNU Terry Pratchett");
 header("Strict-Transport-Security:max-age=31536000;includeSubDomains");
 header("X-Frame-Options:SAMEORIGIN");
 header("X-XSS-Protection:1;mode=block");

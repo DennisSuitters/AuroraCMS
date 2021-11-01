@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_dashboard.php';
 else{?>
 <main>
-  <section id="content">
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
@@ -28,7 +28,7 @@ else{?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 p-3">
         <?php $curHr=date('G');
         $msg='<h5 class="welcome-message my-4">';
         if($curHr<12)$msg.='Good Morning ';
@@ -95,47 +95,36 @@ else{?>
           $bcs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Chrome' AND `ti`>:sD");
           $bcs->execute(['sD'=>$currentMonthStart - 1]);
           $bc=$bcs->fetch(PDO::FETCH_ASSOC);
-
           $bies=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Explorer' AND `ti`>:sD");
           $bies->execute(['sD'=>$currentMonthStart - 1]);
           $bie=$bies->fetch(PDO::FETCH_ASSOC);
-
           $bes=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Edge' AND `ti`>:sD");
           $bes->execute(['sD'=>$currentMonthStart - 1]);
           $be=$bes->fetch(PDO::FETCH_ASSOC);
-
           $bfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Firefox' AND `ti`>:sD");
           $bfs->execute(['sD'=>$currentMonthStart - 1]);
           $bf=$bfs->fetch(PDO::FETCH_ASSOC);
-
           $bos=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Opera' AND `ti`>:sD");
           $bos->execute(['sD'=>$currentMonthStart - 1]);
           $bo=$bos->fetch(PDO::FETCH_ASSOC);
-
           $bss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Safari' AND `ti`>:sD");
           $bss->execute(['sD'=>$currentMonthStart - 1]);
           $bs=$bss->fetch(PDO::FETCH_ASSOC);
-
           $sbs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Bing' AND `ti`>:sD");
           $sbs->execute(['sD'=>$currentMonthStart - 1]);
           $sb=$sbs->fetch(PDO::FETCH_ASSOC);
-
           $sds=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='DuckDuckGo' AND `ti`>:sD");
           $sds->execute(['sD'=>$currentMonthStart - 1]);
           $sd=$sds->fetch(PDO::FETCH_ASSOC);
-
           $sfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Facebook' OR urlDest LIKE '%fbclid=%' AND `ti`>:sD");
           $sfs->execute(['sD'=>$currentMonthStart - 1]);
           $sf=$sfs->fetch(PDO::FETCH_ASSOC);
-
           $sgs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Google' AND `ti`>:sD");
           $sgs->execute(['sD'=>$currentMonthStart - 1]);
           $sg=$sgs->fetch(PDO::FETCH_ASSOC);
-
           $sys=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Yahoo' AND `ti`>:sD");
           $sys->execute(['sD'=>$currentMonthStart - 1]);
           $sy=$sys->fetch(PDO::FETCH_ASSOC);
-
           if($user['options'][3]==1){
             if($nm['cnt']>0){?>
               <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/messages';?>">

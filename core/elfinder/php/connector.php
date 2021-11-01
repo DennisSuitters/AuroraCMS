@@ -34,14 +34,14 @@ if($config['mediaMaxWidth']==0)$mediaEnable=false;
 if($config['mediaMaxHeight']==0)$mediaEnable=false;
 $folders='';
 if($user['rank']==900){
-  $folders.='!^/core|layout|';
+  $folders.='!^/core|layout|lg|md|sm|thumbs|';
   if($user['options'][16]==1)$folders.='avatar|backup|cache|email|updates|';
 }
-if($user['rank']==800)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
-if($user['rank']==700)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
-if($user['rank']==600)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
-if($user['rank']==500)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
-if($user['rank']==400)$folders.='!^/core|layout|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==800)$folders.='!^/core|layout|lg|md|sm|thumbs|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==700)$folders.='!^/core|layout|lg|md|sm|thumbs|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==600)$folders.='!^/core|layout|lg|md|sm|thumbs|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==500)$folders.='!^/core|layout|lg|md|sm|thumbs|avatar|backup|cache|carousel|email|updates|';
+if($user['rank']==400)$folders.='!^/core|layout|lg|md|sm|thumbs|avatar|backup|cache|carousel|email|updates|';
 $folders.='index.php!';
 $opts=[
   'bind'=>[

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -27,8 +27,8 @@ else{?>
         </ol>
       </div>
     </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-2">
+    <div class="kanban-board p-0">
+      <div class="card border-radius-0 p-2">
 <?php if($user['rank']<1000){?>
         <div class="alert alert-info" role="alert">This Page is not available to your Account Rank</div>
 <?php }else{?>
@@ -39,9 +39,10 @@ else{?>
               <div class="card-body p-1 overflow-y" data-dbda="overdue">
                 <div id="overdue">
 <?php $ti=time();
-$sh=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `accountsContact`=1 AND `hostStatus`='overdue' OR `siteStatus`='overdue' ORDER BY `hti` DESC, `sti` DESC");
+$sh=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `hostStatus`='overdue' OR `siteStatus`='overdue' ORDER BY `hti` DESC, `sti` DESC");
 $sh->execute();
 while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
+  if($rh['accountsContact'][0]==0)continue;
   if($rh['hostStatus']=='overdue'){
     $days=0;
     if($rh['hti'] < $ti){
@@ -84,9 +85,10 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
               <div class="card-header bg-warning text-warning font-weight-bold p-2">Outstanding</div>
               <div class="card-body p-1 overflow-y" data-dbda="outstanding">
                 <div id="outstanding">
-<?php $sh=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `accountsContact`=1 AND `hostStatus`='outstanding' OR `siteStatus`='outstanding' ORDER BY `hti` DESC, `sti` DESC");
+<?php $sh=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `hostStatus`='outstanding' OR `siteStatus`='outstanding' ORDER BY `hti` DESC, `sti` DESC");
 $sh->execute();
 while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
+  if($rh['accountsContact'][0]==0)continue;
   if($rh['hostStatus']=='outstanding'){
     $days=0;
     if($rh['hti'] > $ti){
@@ -129,9 +131,10 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
               <div class="card-header bg-success text-success font-weight-bold p-2">Paid</div>
               <div class="card-body p-1 overflow-y" data-dbda="paid">
                 <div id="paid">
-<?php $sh=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `accountsContact`=1 AND `hostStatus`='paid' OR `siteStatus`='paid' ORDER BY `hti` DESC, `sti` DESC");
+<?php $sh=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `hostStatus`='paid' OR `siteStatus`='paid' ORDER BY `hti` DESC, `sti` DESC");
 $sh->execute();
 while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
+  if($rh['accountsContact'][0]==0)continue;
   if($rh['hostStatus']=='paid'){
     $days=0;
     if($rh['hti'] > $ti){
@@ -170,44 +173,33 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
     </div>
   </section>
   <script>
-    $(function () {
-      var kanbanCol = $('.card-body');
-      kanbanCol.css('height', (window.innerHeight - 50) + 'px');
-      kanbanCol.css('max-height', (window.innerHeight - 50) + 'px');
-
-      var kanbanColCount = parseInt(kanbanCol.length);
-      $('.container-fluid').css('min-width', (kanbanColCount * 350) + 'px');
-
+    $(function(){
+      var kanbanCol=$('.card-body');
+      kanbanCol.css('height',(window.innerHeight - 50) + 'px');
+      kanbanCol.css('max-height',(window.innerHeight - 50) + 'px');
       draggableInit();
-
-      $('.card-header').click(function() {
-        var $panelBody = $(this).parent().children('.card-body');
+      $('.card-header').click(function(){
+        var $panelBody=$(this).parent().children('.card-body');
         $panelBody.slideToggle();
       });
     });
-
-    function draggableInit() {
+    function draggableInit(){
       var sourceId;
-
-      $('[draggable=true]').bind('dragstart', function (event) {
-        sourceId = $(this).parent().attr('id');
-        event.originalEvent.dataTransfer.setData("text/plain", event.target.getAttribute('id'));
+      $('[draggable=true]').bind('dragstart',function(event){
+        sourceId=$(this).parent().attr('id');
+        event.originalEvent.dataTransfer.setData("text/plain",event.target.getAttribute('id'));
       });
-
-      $('.card-body').bind('dragover', function (event) {
-        event.preventDefault();
-      });
-
-      $('.card-body').bind('drop', function (event) {
-        var children = $(this).children();
-        var targetId = children.attr('id');
-        if (sourceId != targetId) {
-          var elementId = event.originalEvent.dataTransfer.getData("text/plain");
-          var element = document.getElementById(elementId);
-          var dbid = $(element).data('dbid');
-          var dbt = $(element).data('dbt');
-          var dbc = $(element).data('dbc');
-          var dbda = $(this).data('dbda');
+      $('.card-body').bind('dragover',function(event){event.preventDefault();});
+      $('.card-body').bind('drop',function(event){
+        var children=$(this).children();
+        var targetId=children.attr('id');
+        if(sourceId!=targetId){
+          var elementId=event.originalEvent.dataTransfer.getData("text/plain");
+          var element=document.getElementById(elementId);
+          var dbid=$(element).data('dbid');
+          var dbt=$(element).data('dbt');
+          var dbc=$(element).data('dbc');
+          var dbda=$(this).data('dbda');
           children.prepend(element);
           $.ajax({
         		type:"GET",
@@ -218,9 +210,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
         			c:dbc,
               da:dbda
         		}
-        	}).done(function(msg){
-//            $(element).html('This has been moved to '+dbda+'!');
-          });
+        	}).done(function(msg){});
         }
         event.preventDefault();
       });

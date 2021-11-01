@@ -7,18 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'core/puconverter.php';
 $html=preg_replace([
   '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',
   $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is'
 ],[
-  $page['heading']==''?$page['seoTitle']:$page['heading'],
-  $page['notes'],
+  htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
+  $purify->purify($page['notes']),
   ''
 ],$html);
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`=:id OR `iid`=:id AND `status`!='archived'");
@@ -47,10 +49,10 @@ if($s->rowCount()>0&&$r['status']!='paid'){
   ],[
     '',
     '',
-    $config['bank'],
-    $config['bankAccountName'],
-    $config['bankAccountNumber'],
-    $config['bankBSB'],
+    htmlspecialchars($config['bank'],ENT_QUOTES,'UTF-8'),
+    htmlspecialchars($config['bankAccountName'],ENT_QUOTES,'UTF-8'),
+    htmlspecialchars($config['bankAccountNumber'],ENT_QUOTES,'UTF-8'),
+    htmlspecialchars($config['bankBSB'],ENT_QUOTES,'UTF-8'),
     '',
     $config['payPalClientID'],
     URL,

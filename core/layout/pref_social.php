@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 p-3">
         <div class="row mt-3">
           <input id="options9" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="9" type="checkbox"<?=$config['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="options9" id="configoptions9">Show RSS Feed Icon</label>
@@ -150,7 +150,7 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><?= svg2('trash');?></button>
+                    <button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
                   </form>
                 </div>
               </div>

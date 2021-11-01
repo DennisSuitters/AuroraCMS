@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,39 +33,8 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
     stristr($html,'<g-recaptchascript>')&&$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<script defer async src="https://www.google.com/recaptcha/api.js"></script><script>function resizeReCaptcha(){var width=$(".g-recaptcha" ).parent().width();if(width<302){var scale=width/302;}else{var scale=1;}$(".g-recaptcha").css("transform","scale("+scale+")");$(".g-recaptcha").css("-webkit-transform","scale("+scale+")");$(".g-recaptcha").css("transform-origin","0 0");$(".g-recaptcha").css("-webkit-transform-origin","0 0");};$(document).ready(function(){$(window).on("resize",function(){resizeReCaptcha();});resizeReCaptcha();});</script>':'',
     isset($showCountdown)&&$showCountdown==true?'<script>countdown();</script>':'',
     $view=='forum'&&(isset($_SESSION['uid'])&&$_SESSION['uid']>0)?'<Link rel="stylesheet" type="text/css" href="core/js/summernote/summernote.min.css" media="all">'.
-    '<Link rel="stylesheet" type="text/css" href="core/js/summernote/forum.min.css" media="all">'.
-    '<script src="core/js/summernote/summernote.js"></script>'.
-    '<script src="core/js/summernote/plugin/emoji/emoji.js"></script>'.
-    '<script>'.
-      '$(document).ready(function(){$(".note").summernote({'.
-        'height:"250px",'.
-        'disableUpload:true,'.
-        'fileExplorer:"",'.
-        'emoji:{'.
-          'url:"'.URL.'core/images/emojis/",'.
-        '},'.
-        'popover:{'.
-          'image:['.
-            '[`remove`,[`removeMedia`]],'.
-          '],'.
-          'link:['.
-            '[`link`,[`linkDialogShow`,`unlink`]],'.
-          '],'.
-          'air:[]'.
-        '},'.
-        'toolbar:['.
-          '[`font`,[`bold`,`italic`,`underline`,`clear`]],'.
-          '[`para`,[`ul`,`ol`]],'.
-          '[`emoji`,[`emoji`]],'.
-          '[`insert`,[`picture`,`video`,`audio`,`link`,`hr`]],'.
-        ']'.
-      '});'.
-      '$(document).on("click","#notifications input[type=checkbox]",{},function(event){var id=$(this).data("dbid");var t=$(this).data("dbt");var c=$(this).data("dbc");var b=$(this).data("dbb");$.ajax({type:"GET",url:"core/toggle.php",data:{id:id,t:t,c:c,b:b}}).done(function(msg){});});});</script>':'',
-      isset($rb['id'])&&$rb['id']!=0?'<script>'.
-        'if(!localStorage.banner'.$rb['id'].'Closed){'.
-          '$(`#banner`).load(`core/banner.php?lS='.$rb['id'].'`);'.
-        '}'.
-      '</script>':''
+    '<Link rel="stylesheet" type="text/css" href="core/js/summernote/forum.min.css" media="all"><script src="core/js/summernote/summernote.js"></script><script src="core/js/summernote/plugin/emoji/emoji.js"></script><script>$(document).ready(function(){$(".note").summernote({height:"250px",disableUpload:true,fileExplorer:"",emoji:{url:"'.URL.'core/images/emojis/",},popover:{image:[[`remove`,[`removeMedia`]],],link:[[`link`,[`linkDialogShow`,`unlink`]],],air:[]},toolbar:[[`font`,[`bold`,`italic`,`underline`,`clear`]],[`para`,[`ul`,`ol`]],[`emoji`,[`emoji`]],[`insert`,[`picture`,`video`,`audio`,`link`,`hr`]],]});$(document).on("click","#notifications input[type=checkbox]",{},function(event){var id=$(this).data("dbid");var t=$(this).data("dbt");var c=$(this).data("dbc");var b=$(this).data("dbb");$.ajax({type:"GET",url:"core/toggle.php",data:{id:id,t:t,c:c,b:b}}).done(function(msg){});});});</script>':'',
+    isset($rb['id'])&&$rb['id']!=0?'<script>if(!localStorage.banner'.$rb['id'].'Closed){$(`#banner`).load(`core/banner.php?lS='.$rb['id'].'`);}</script>':''
   ],$footer);
   if(isset($_SESSION['rank'])&&$_SESSION['rank']<100){
     if($config['options'][13]==1){
@@ -80,7 +49,10 @@ if(preg_match('/<block include=[\"\']?meta_footer.html[\"\']?>/',$template)&&fil
           '<script>function updateChat(){chatTimer=null;$.ajax({type:"POST",url:"core/chat.php",data:{sid:$("#chatsid").val()}}).done(function(data){if(data!="none"){$("#chatScreen").html(data);if(data!="")$("#chatBody").removeClass("d-none");document.getElementById("chatScreen").scrollTop=9999999;}});clearTimeout(chatTimer);chatTimer=setTimeout(function(){updateChat();},2500);}function initChat(){chatTimer=null;$.ajax({type:"POST",url:"core/chat.php",data:{sid:$("#chatsid").val()}}).done(function(data){if(data!="none"){$("#chatScreen").html(data);if(data!=""){$("#chatBody").removeClass("d-none");$(".chat-close,.chat-open").toggleClass("d-none");}if($("#chatBody").hasClass("d-none")){clearTimeout(chatTimer);}else{$(".chathideme,.chatunhideme").toggleClass("d-none");clearTimeout(chatTimer);}}document.getElementById("chatScreen").scrollTop=9999999;});}$(document).ready(function(){initChat();$("#chatHeader").click(function(e){$("#chatBody,.chat-close,.chat-open").toggleClass("d-none");if($("#chatBody").hasClass("d-none"))clearTimeout(chatTimer);});$("#startChat").click(function(){$.ajax({type:"POST",url:"core/chat.php",data:{sid:$("#chatsid").val(),who:$("#chatwho").val(),name:$("#chatName").val(),email:$("#chatEmail").val(),message:"|*|*|*|*|*|"}}).done(function(data){if(data=="available"){$("#chatScreen").html(`<ul><li class="admin"><p>Hello `+$("#chatName").val()+`, how can we assist you?</p></li></ul>`);}else{$("#chatScreen").html(data);}document.getElementById("chatScreen").scrollTop=9999999;$("#chatMessage").val("");$(".chathideme,.chatunhideme").toggleClass("d-none");clearTimeout(chatTimer);});});$("#chatButton").click(function(){$.ajax({type:"POST",url:"core/chat.php",data:{sid:$("#chatsid").val(),who:$("#chatwho").val(),name:$("#chatName").val(),email:$("#chatEmail").val(),message:$("#chatMessage").val()}}).done(function(data){$("#chatScreen").html(data);document.getElementById("chatScreen").scrollTop=9999999;$("#chatMessage").val("");clearTimeout(chatTimer);chatTimer=setTimeout(function(){updateChat();},2500);});});});</script>',
         $footer);
       }
-  	}else$footer=preg_replace('/<chatscript>/','',$footer);
-  }else$footer=preg_replace('/<chatscript>/','',$footer,1);
-}else$footer='You MUST include a meta_footer template';
+  	}else
+      $footer=preg_replace('/<chatscript>/','',$footer);
+  }else
+    $footer=preg_replace('/<chatscript>/','',$footer,1);
+}else
+  $footer='You MUST include a meta_footer template';
 $content.=$footer;

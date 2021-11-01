@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'core/puconverter.php';
 $html=preg_replace([
   isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false?'~<orderlist>.*?<\/orderlist>~is':'/<[\/]?orderlist>/',
@@ -19,8 +21,8 @@ $html=preg_replace([
   $page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
 ],[
   '',
-  $page['heading']==''?$page['seoTitle']:$page['heading'],
-  $page['notes'],
+  htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
+  $purify->purify($page['notes']),
   ''
 ],$html);
 if(stristr($html,'<order>')){
@@ -101,7 +103,7 @@ if(isset($args[0])&&$args[0]!=''){
       '/<print status>/',
       '/<print order=[\"\']?status[\"\']?>/'
     ],[
-      rawurldecode($r['notes']),
+      $purify->purify($r['notes']),
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['abn'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
@@ -116,8 +118,8 @@ if(isset($args[0])&&$args[0]!=''){
       htmlspecialchars($config['bankAccountName'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['bankAccountNumber'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['bankBSB'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars($ru['name']!=''?$ru['name']:$ru['business'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars($ru['business']!=''?$ru['business']:$ru['name'],ENT_QUOTES,'UTF-8'),
+      htmlspecialchars(($ru['name']!=''?$ru['name']:$ru['business']),ENT_QUOTES,'UTF-8'),
+      htmlspecialchars(($ru['business']!=''?$ru['business']:$ru['name']),ENT_QUOTES,'UTF-8'),
       htmlspecialchars($ru['address'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($ru['suburb'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($ru['city'],ENT_QUOTES,'UTF-8'),
@@ -148,7 +150,8 @@ if(isset($args[0])&&$args[0]!=''){
       if($oir['status']!='pre order'||$oir['status']!='back order'){
         if($config['gst']>0){
           $gst=$oir['cost']*($config['gst']/100);
-          if($oir['quantity']>1)$gst=$gst*$oir['quantity'];
+          if($oir['quantity']>1)
+            $gst=$gst*$oir['quantity'];
           $gst=number_format((float)$gst, 2, '.', '');
         }
       }
@@ -175,14 +178,17 @@ if(isset($args[0])&&$args[0]!=''){
         $gst,
         ($oir['status']!='pre order'||$oir['status']!='back order'?htmlspecialchars($oir['cost']*$oir['quantity']+$gst,ENT_QUOTES,'UTF-8'):'<small>'.($oir['status']=='pre order'?'Pre Order':'Back Order').'</small>')
       ],$item);
-      if($oir['status']!='pre order'||$oir['status']!='back order'){
+      if($oir['status']!='pre order'||$oir['status']!='back order')
         $total=$total+($oir['cost']*$oir['quantity'])+$gst;
-      }
-      if(isset($i['weightunit'])&&$i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
+      if(isset($i['weightunit'])&&$i['weightunit']!='kg')
+        $i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
 			$weight=(int)$weight+((int)$i['weight']*(int)$oir['quantity']);
-			if(isset($i['widthunit'])&&$i['widthunit']!='cm')$i['width']=length_converter($i['width'],$i['widthunit'],'cm');
-			if(isset($i['lengthunit'])&&$i['lengthunit']!='cm')$i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
-			if(isset($i['heightunit'])&&$i['heightunit']!='cm')$i['height']=length_converter($i['height'],$i['heightunit'],'cm');
+			if(isset($i['widthunit'])&&$i['widthunit']!='cm')
+        $i['width']=length_converter($i['width'],$i['widthunit'],'cm');
+			if(isset($i['lengthunit'])&&$i['lengthunit']!='cm')
+        $i['length']=length_converter($i['length'],$i['lengthunit'],'cm');
+			if(isset($i['heightunit'])&&$i['heightunit']!='cm')
+        $i['height']=length_converter($i['height'],$i['heightunit'],'cm');
 			if($i['width']>$dimW)$dimW=$i['width'];
 			if($i['length']>$dimL)$dimL=$i['length'];
 			$dimH=(int)$dimH+((int)$i['height']*(int)$oir['quantity']);
@@ -213,8 +219,8 @@ if(isset($args[0])&&$args[0]!=''){
         $total,
         ''
       ],$order);
-    }else$order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
-
+    }else
+      $order=preg_replace('~<rewards>.*?<\/rewards>~is','',$order,1);
     if($config['options'][26]==1){
       $dedtot=0;
       $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
@@ -224,12 +230,10 @@ if(isset($args[0])&&$args[0]!=''){
       ]);
       if($sd->rowCount()>0){
         $rd=$sd->fetch(PDO::FETCH_ASSOC);
-        if($rd['value']==1){
+        if($rd['value']==1)
           $dedtot=$rd['cost'];
-        }
-        if($rd['value']==2){
+        if($rd['value']==2)
           $dedtot=$total*($rd['cost']/100);
-        }
         $total=$total - $dedtot;
       }
       $order=preg_replace([
@@ -241,7 +245,8 @@ if(isset($args[0])&&$args[0]!=''){
         $sd->rowCount()>0?'Spent over &#36;'.$rd['f'].' discount of '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost']).' Off':'',
         $dedtot
       ],$order);
-    }else$order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order,1);
+    }else
+      $order=preg_replace('~<discountRange>.*?<\/discountRange>~is','',$order,1);
     $order=preg_replace([
       '/<print orderurl>/',
       '/<print order=[\"\']?oid[\"\']?>/',
@@ -256,8 +261,10 @@ if(isset($args[0])&&$args[0]!=''){
     $total=$total+$r['postageCost'];
     $total=number_format((float)$total, 2, '.', '');
     $paytot=0;
-    if($r['payMethod']==1)$paytot=$total*($r['payCost']/100);
-    if($r['payMethod']==2)$paytot=$r['payCost'];
+    if($r['payMethod']==1)
+      $paytot=$total*($r['payCost']/100);
+    if($r['payMethod']==2)
+      $paytot=$r['payCost'];
     $total=number_format((float)$total, 2, '.', '');
     $order=preg_replace([
       '/<print order=[\"\']?paymentOption[\"\']?>/',
@@ -294,7 +301,7 @@ if(isset($args[0])&&$args[0]!=''){
             '/<print deduction=[\"\']?cost[\"\']?>/'
           ],[
             date($config['dateFormat'],$rn['ti']),
-            $rn['title'],
+            htmlspecialchars($rn['title'],ENT_QUOTE,'UTF-8'),
             $rn['cost']
           ],$ditem);
           $deductionItems.=$ditem;
@@ -309,7 +316,8 @@ if(isset($args[0])&&$args[0]!=''){
           $total
         ],$deductionHTML);
         $order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is',$deductionHTML,$order);
-      }else$order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is','',$order);
+      }else
+        $order=preg_replace('~<orderDeduction>.*?<\/orderDeduction>~is','',$order);
     }
     $so=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE id=:id");
     $so->execute([
@@ -374,6 +382,8 @@ if(isset($args[0])&&$args[0]!=''){
             '},'.
           '}).render(`#paypal-button-container`);'.
         '</script>', */
-  }else$html=preg_replace('~<order>~is','',$html,1);
-}else$html=preg_replace('~<order>~is','',$html,1);
+  }else
+    $html=preg_replace('~<order>~is','',$html,1);
+}else
+  $html=preg_replace('~<order>~is','',$html,1);
 $content.=$html;

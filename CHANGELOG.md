@@ -1,26 +1,32 @@
-### v0.2.1
-- Fix CORS permissions for hostinginfo when requested from Hosted Site accounts.
-- Fix Image Srcset for Cover Images.
-- Adjust order if content items in side menu to include highest viewed items.
-- Add Editable Dismissable Banners and Administration Banner Editing Page.
-- Fix wrong icon for Payments Administration page.
-- Add Job List editing in Administration.
-- Add "Back Order" as a new Status Option, mainly for Inventory.
-- Fix Order conversion to Invoice so items are deducted from inventory, and if reached 0, change status for item, and duplicate extra items into order.
-- Fix Session Rank variable throwing errors if not set.
-- Fix contentType variable throwing errors if not set in update entries script.
-- Fix Items Page Pagination if no page number is set throwing errors breaking page rendering.
-- Fix Srcset validation errors by adding size information to images.
-- Add Heading editing for Pages to help pages be Standards Compliant.
-- Fix erroneous elements and template elements rendering.
-- Fix Elements for SEO in Themes.
-- Fix Number of Search Items not calculating correctly.
-- Add parser to indicate quantities with colour indication.
-- Fix incorrect database value being used for Suggestion Seen Date/Time.
-- Add Notification Email when a new Administration Suggestion is added.
-- Fix Testimonials font size.
-- Update Summernote WYSIWYG Editor.
-- Fix Administration Button Colours not showing correct colour in active or hover state.
-- Adjust Dashboard Statistics to only show current months information.
-- Add Selecting Animation for displaying Banners.
-- Adjust how Banners are retreived and displayed, now via AJAX. 
+### v0.2.2
+- Remove Profile Link to non-existent Profiles page on Blog Articles.
+- Fix Accounts that are not Account Contacts for Hosting or Site Payments from showing up as Payment Accounts.
+- Remove some Social Media Share To options on content pages.
+- Fix images for Services/Events not displaying in the selector on Bookings Page.
+- Adjust Administration Folder Viewing Permissions.
+- Fix filtering of editor data for FAQ's, that was removing links from the data.
+- Adjust Administration Menu and Header area to help with viewing on Mobile Devices.
+- Adjust Coming Soon and Maintenance Pages, add Countdown Clock to Coming Soon page.
+- Improve Administration Sidebar Hiding/Showing actions.
+- Fix HTML Attribute order in Administration pages.
+- Fix Menu not highlighting correct active page in header and footer menus.
+- Add role values to header and footer navigation menus.
+- Fix Inventory Stock Status not Showing item as Pre Order.
+- Remove Tooltip trigger from Checkboxes in Administration but leave aria-label for Screen Readers.
+- Fix Administration Notifications dropdown styling, and data retrieval.
+- Adjust robots.txt file to exclude areas from being indexed by search engines.
+- Fix sitemap.xml and sitemap adding links to pages that cause errors, or shouldn't get indexed.
+- Fix Escaping Parser for JSON-LD.
+- Stop Offline page showing, but rather routing to an error page, as it should only be used for offline circumstances, and not indexable.
+- Fix content items from showing malformed content if content item title and URLSlug changes, now goes to a 404 Error Page.
+- Adjust Error page to not fetch content that isn't available to non-logged in site visitors.
+- Extract common functions into seperate files, such as breadcrumbs, cover image building, to overall reduce size, and allow easier future editing.
+- Add HTMLPurifier to properly mitigate XSS code executing on HTML Output.
+- Fix Gallery Items on Gallery and Content pages displaying wrong thumbnail.
+- Make sure Gallery Item on Gallery and Content pages are responsive.
+- Fix Bookings page showing non Service items.
+- Shopping Cart Widget not displaying no image image correctly.
+- Fix content Pagination not showing correct number of pages, or correct previous page link value.
+- Fix Forum unset values throwing errors.
+- Add missing role="menuitem" to login/administration menu links.
+- Fix Page list in Administration not clearing views for all items.

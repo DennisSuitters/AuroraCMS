@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -200,11 +200,11 @@ if($user['options'][4]==1){
               <div class="content-title-icon"><?= svg2('order','i-3x');?></div>
               <div>Orders</div>
               <div class="content-title-actions">
-                <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" aria-label="Orders Settings">'.svg2('settings').'</a>':'';?>
+                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="tooltip" aria-label="Orders Settings">'.svg2('settings').'</a>':'';?>
                 <?php if(isset($args[0])&&$args[0]!=''){
                   if($user['options'][4]==1){
-                    if(isset($args[0])&&$args[0]=='quotes')echo'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" aria-label="Add Quote">'.svg2('add').'</a>';
-                    if(isset($args[0])&&$args[0]=='invoices')echo'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" aria-label="Add Invoice">'.svg2('add').'</a>';
+                    if(isset($args[0])&&$args[0]=='quotes')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" data-tooltip="tooltip" aria-label="Add Quote">'.svg2('add').'</a>';
+                    if(isset($args[0])&&$args[0]=='invoices')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" data-tooltip="tooltip" aria-label="Add Invoice">'.svg2('add').'</a>';
                   }
                 }?>
               </div>
@@ -216,10 +216,10 @@ if($user['options'][4]==1){
           </div>
         </div>
         <div class="container-fluid p-0">
-          <div class="card border-radius-0 overflow-visible shadow">
+          <div class="card border-radius-0 overflow-visible">
             <div id="notifications" role="alert"></div>
             <table class="table-zebra" id="stupidtable">
-              <thead>
+              <thead class="d-none d-md-table-header-group">
                 <tr>
                   <th>Order Number</th>
                   <th>Client</th>
@@ -242,10 +242,24 @@ if($user['options'][4]==1){
                   <tr id="l_<?=$r['id'];?>">
                     <td class="align-middle">
                       <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
+                      <div class="d-block d-md-none small">Client:&nbsp;
+                        <?php
+                        if(isset($c['username'])&&isset($c['name'])){
+                        echo$c['username'].(isset($c['name'])&&$c['name']!=''?' ['.$c['name'].']':'').
+                          ':'.
+                          ($c['name']!=''&&$c['business']!=''?'<br>':'').
+                          ($c['business']!=''?$c['business']:'');
+                      }?></div>
+                      <div class="d-block d-md-none small">Date:&nbsp;
+                        <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
+                        <small>Due: <?= date($config['dateFormat'],$r['due_ti']);?></small>
+                      </div>
+                      <div class="d-block d-md-none small">
+                        <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
+                      </div>
                     </td>
-                    <td class="align-middle">
-                      <?php
-                      if(isset($c['username'])&&isset($c['name'])){
+                    <td class="align-middle d-none d-md-table-cell">
+                      <?php if(isset($c['username'])&&isset($c['name'])){
                         echo$c['username'].(isset($c['name'])&&$c['name']!=''?' ['.$c['name'].']':'').
                           ':'.
                           ($c['name']!=''&&$c['business']!=''?'<br>':'').
@@ -253,24 +267,24 @@ if($user['options'][4]==1){
                           (($c['rank']>200&&$c['rank']<300)||($c['rank']>300&&$c['rank']<400)?'<br><small class="badger badge-'.rank($c['rank']).'">'.ucwords(str_replace('-',' ',rank($c['rank']))).'</small>':'');
                       }?>
                     </td>
-                    <td class="align-middle">
+                    <td class="align-middle d-none d-md-table-cell">
                       <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
                       <small>Due: <?= date($config['dateFormat'],$r['due_ti']);?></small>
                     </td>
-                    <td class="align-middle">
+                    <td class="align-middle d-none d-md-table-cell">
                       <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
                     </td>
-                    <td class="align-middle" id="controls_<?=$r['id'];?>">
+                    <td class="align-middle" style="display:block;width:100%;flex:auto;" id="controls_<?=$r['id'];?>">
                       <div class="btn-toolbar float-right" role="toolbar">
-                        <div class="btn-group " role="group">
+                        <div class="btn-group" role="group">
                           <?php if($user['options'][0]==1){
-                            echo$r['qid']!=''&&$r['aid']==''?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
+                            echo$r['qid']!=''&&$r['aid']==''?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice">'.svg2('order-quotetoinvoice').'</a>':'';
                             echo$r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');">'.svg2('archive').'</button>':'';
                           }?>
                           <button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');"><?= svg2('print');?></button>
                           <?= isset($c['email'])&&$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');">'.svg2('email-send').'</button>':'';
-                          echo$user['options'][0]==1?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
-                          <a class="btn<?=$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" role="button" aria-label="Edit"><?= svg2('edit');?></a>
+                          echo$user['options'][0]==1?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Duplicate">'.svg2('copy').'</a>':'';?>
+                          <a class="btn<?=$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><?= svg2('edit');?></a>
                           <?php if($user['options'][0]==1){?>
                             <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','orders','status','');"><?= svg2('untrash');?></button>
                             <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','orders','status','delete');"><?php svg('trash');?></button>
@@ -279,7 +293,7 @@ if($user['options'][4]==1){
                         </div>
                       </div>
                     </td>
-                    <td class="align-middle"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('chevron-down').svg('chevron-up','d-none');?></button></td>
+                    <td class="align-middle d-none d-md-table-cell"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('chevron-down').svg('chevron-up','d-none');?></button></td>
                   </tr>
                   <tr class="quickedit d-none" id="quickedit<?=$r['id'];?>"></tr>
                 <?php }?>
@@ -287,13 +301,13 @@ if($user['options'][4]==1){
             </table>
             <div class="col-12 mt-0 text-right">
               <small>View:
-                <a class="badger badge-<?= !isset($args[0])?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders" aria-label="Display All Orders">All</a>&nbsp;
-                <a class="badger badge-<?= isset($args[0])&&$args[0]=='quotes'?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders/quotes" aria-label="Display Quote Orders">Quotes</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='invoices'?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders/invoices" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='pending'?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders/pending" aria-label="Display Pending Orders">Pending</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/orders/archived" aria-label="Display Archived Items">Archived</a>&nbsp;
+                <a class="badger badge-<?= !isset($args[0])?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders" data-tooltip="tooltip" aria-label="Display All Orders">All</a>&nbsp;
+                <a class="badger badge-<?= isset($args[0])&&$args[0]=='quotes'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/quotes" data-tooltip="tooltip" aria-label="Display Quote Orders">Quotes</a>&nbsp;
+                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='invoices'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/invoices" data-tooltip="tooltip" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
+                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='pending'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/pending" data-tooltip="tooltip" aria-label="Display Pending Orders">Pending</a>&nbsp;
+                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" data-tooltip="tooltip" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
+                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" data-tooltip="tooltip" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
+                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
               </small>
             </div>
             <?php require'core/layout/footer.php';?>
@@ -312,11 +326,11 @@ if($user['options'][4]==1){
               <div>Orders</div>
               <div class="content-title-actions">
                 <button data-tooltip="tooltip" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><?= svg2('fullscreen');?></button>
-                <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" aria-label="Orders Settings">'.svg2('settings').'</a>':'';?>
+                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="tooltip" aria-label="Orders Settings">'.svg2('settings').'</a>':'';?>
                 <?php if($args[0]!=''){
                   if($user['options'][4]==1){
-                    if($args[0]=='quotes')echo'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" aria-label="Add Quote">'.svg2('add').'</a>';
-                    if($args[0]=='invoices')echo'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" aria-label="Add Invoice">'.svg2('add').'</a>';
+                    if($args[0]=='quotes')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" data-tooltip="tooltip" aria-label="Add Quote">'.svg2('add').'</a>';
+                    if($args[0]=='invoices')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" data-tooltip="tooltip" aria-label="Add Invoice">'.svg2('add').'</a>';
                   }
                 }?>
               </div>

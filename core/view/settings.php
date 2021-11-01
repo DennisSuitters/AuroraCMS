@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $rank=0;
 $show='';
 $currentPassCSS=$matchPassCSS='';
@@ -28,8 +30,8 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 	  '/<print page=[\"\']?notes[\"\']?>/',
 		$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is'
 	],[
-		$page['heading']==''?$page['seoTitle']:$page['heading'],
-	  $page['notes'],
+		htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
+	  $purify->purify($page['notes']),
 		''
 	],$html);
 	if(isset($act)&&$act=='updatePassword'){
@@ -159,6 +161,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
 	],$html);
 }else{
-	if(file_exists(THEME.'/noaccess.html'))$html=file_get_contents(THEME.'/noaccess.html');
+	if(file_exists(THEME.'/noaccess.html'))
+		$html=file_get_contents(THEME.'/noaccess.html');
 }
 $content.=$html;

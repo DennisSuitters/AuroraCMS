@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -58,7 +58,7 @@ if($user['options'][3]==1){
       if($args[0]=='spam')$folder='spam';
     }?>
     <main>
-      <section id="content" class="main">
+      <section id="content">
         <div class="content-title-wrapper mb-0">
           <div class="content-title">
             <div class="content-title-heading">

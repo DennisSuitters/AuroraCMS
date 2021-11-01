@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -140,8 +140,8 @@ else{
               <div><?= isset($args[1])?ucfirst($args[1]):'All';?></div>
               <div class="content-title-actions">
                 <button class="contentview" data-tooltip="tooltip" aria-label="View Content as Cards or List" onclick="toggleContentView();return false;"><?= svg2('list',($_COOKIE['contentview']=='list'?'d-none':'')).svg2('cards',($_COOKIE['contentview']=='cards'?'d-none':''));?></button>
-                <a class="btn" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/settings';?>" role="button" aria-label="Content Settings"><?= svg2('settings');?></a>
-                <?=(isset($args[1])&&$args[1]!=''&&$user['options'][0]==1?'<a class="btn add" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" aria-label="Add '.ucfirst($args[1]).'">'.svg2('add').'</a>':'');?>
+                <a class="btn" href="<?= URL.$settings['system']['admin'].'/content/settings';?>" role="button" data-tooltip="tooltip" aria-label="Content Settings"><?= svg2('settings');?></a>
+                <?=(isset($args[1])&&$args[1]!=''&&$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" data-tooltip="tooltip" aria-label="Add '.ucfirst($args[1]).'">'.svg2('add').'</a>':'');?>
               </div>
             </div>
             <ol class="breadcrumb">
@@ -160,16 +160,16 @@ else{
           </div>
         </div>
         <div class="container-fluid p-0">
-          <div class="card border-radius-0 shadow overflow-visible">
+          <div class="card border-radius-0 overflow-visible">
             <div class="row p-3">
               <div class="col-12 col-sm-9">
                 <small>View:
-                  <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" aria-label="Display All Content">All</a>&nbsp;
-                  <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" aria-label="Display Published Items">Published</a>&nbsp;
-                  <a class="badger badge-info" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
-                  <a class="badger badge-warning" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
-                  <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
-                  <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" aria-label="Display Archived Items">Archived</a>&nbsp;
+                  <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" data-tooltip="tooltip" aria-label="Display All Content">All</a>&nbsp;
+                  <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" data-tooltip="tooltip" aria-label="Display Published Items">Published</a>&nbsp;
+                  <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" data-tooltip="tooltip" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
+                  <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" data-tooltip="tooltip" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
+                  <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" data-tooltip="tooltip" aria-label="Display Deleted Items">Deleted</a>&nbsp;
+                  <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
                 </small>
                 <div class="small">
                   <ol class="breadcrumb pl-0 bg-transparent">
@@ -242,7 +242,7 @@ else{
                 </div>
               </div>
             </div>
-            <section id="contentview" class="content overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>">
+            <section class="content overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
             <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
               $sr=$db->prepare("SELECT COUNT(`id`) as num,SUM(`cid`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid");
               $sr->execute([':rid'=>$r['id']]);
@@ -285,7 +285,7 @@ else{
                     <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
                     <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
                     <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
-                    <option value="pre-order"<?=$r['stockStatus']=='pre-order'?' selected':'';?>>Pre-Order</option>
+                    <option value="pre order"<?=$r['stockStatus']=='pre order'?' selected':'';?>>Pre Order</option>
                     <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
                     <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
                     <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']=='')?' selected':'';?>>No Display</option>
@@ -294,8 +294,8 @@ else{
                   <div class="image-toolbar">
                     <?= !isset($args[1])?'<a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a><br>':'';
                     echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> '.svg2('view').'</button><br>':'';
-                    echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a><br>':'');
-                    echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" data-tooltip="tooltip" role="button" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' '.svg2('review').'</a><br>':'';?>
+                    echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a><br>':'');
+                    echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' '.svg2('review').'</a><br>':'';?>
                     <button class="badger badger-primary <?=($r['status']=='published'?'':'d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media">Share</button>
                   </div>
                 </div>
@@ -316,10 +316,10 @@ else{
                 <div class="card-footer">
                   <span class="code hidewhenempty"><?=$r['code'];?></span>
                   <span class="reviews hidewhenempty">
-                    <?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" data-tooltip="tooltip" role="button" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' '.svg2('review').'</a>':'';?>
+                    <?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' '.svg2('review').'</a>':'';?>
                   </span>
                   <span class="comments hidewhenempty">
-                    <?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a>':'');?>
+                    <?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a>':'');?>
                   </span>
                   <?=$r['views']>0?'<button class="btn views trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> '.svg2('view').'</button>':'';?>
                   <div id="controls_<?=$r['id'];?>">

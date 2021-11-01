@@ -7,15 +7,24 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`='comingsoon'");
 $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
 if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
-$image=$page['cover']==''?URL.THEME.'/images/comingsoon.png':$page['cover'];
+if($page['cover']!='')
+  $image=$page['cover'];
+elseif(file_exists(THEME.'/images/unavailable.png'))
+  $image=URL.THEME.'/images/unavaliable.png';
+elseif(file_exists(THEME.'/images/unavailable.jpg'))
+  $image=URL.THEME.'/images/unavailable.jpg';
+else
+  $image='core/images/unavailable.png';
 $html=preg_replace([
   '/<print background>/',
   '/<print theme>/',
@@ -43,24 +52,28 @@ $html=preg_replace([
   '/<print theme>/',
   '/<print site_verifications>/',
 	'/<print geo>/',
+  '/<google_analytics>/',
+  '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',
-  '/<google_analytics>/'
+  $page['tie']>0?'/<[\/]?countdown>/':'~<countdown>.*?<\/countdown>~is',
+  '/<print countdown=[\"\']?tie[\"\']?>/',
+  '/<countdownscript>/'
 ],[
-  ' style="background-image:url('.$image.'"',
+  'background:none url('.$image.') !important;background-repeat:no-repeat;background-size:cover;background-position:center;',
   THEME,
-  trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($theme['creator_url'],ENT_QUOTES,'UTF-8')),
+  htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($theme['creator_url'],ENT_QUOTES,'UTF-8'),
   URL,
   $favicon,
-  trim(htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8')),
+  htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
   $page['metaRobots']!=''?trim(htmlspecialchars($page['metaRobots'],ENT_QUOTES,'UTF-8')):'index,follow',
-  trim(htmlspecialchars($page['seoTitle'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($page['seoDescription'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($page['seoDescription'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($page['seoKeywords'],ENT_QUOTES,'UTF-8')),
+  htmlspecialchars($page['seoTitle'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($page['seoDescription'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($page['seoDescription'],ENT_QUOTES,'UTF-8'),
+  htmlspecialchars($page['seoKeywords'],ENT_QUOTES,'UTF-8'),
   $canonical,
   URL,
   $view,
@@ -68,7 +81,7 @@ $html=preg_replace([
   $shareImage,
   FAVICON,
   microid($config['email'],$canonical),
-  isset($page['login_user'])?$page['login_user']:$config['business'],
+  isset($page['login_user'])?$page['login_user']:htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
   THEME,
   ($config['ga_verification']!=''?'<meta name="google-site-verification" content="'.$config['ga_verification'].'">':'').
     ($config['seo_msvalidate']!='<meta name="msvalidate.01" content="'.$config['seo_msvalidate'].'">'?'':'').
@@ -78,27 +91,12 @@ $html=preg_replace([
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-  $page['notes'],
-  ($config['ga_tracking']!=''?'<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':'')
+  ($config['ga_tracking']!=''?'<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':''),
+  htmlspecialchars(($page['heading']!=''?$page['heading']:$page['seoTitle']),ENT_QUOTES,'UTF-8'),
+  $purify->purify($page['notes']),
+  '',
+  date('Y-m-d h:i',$page['tie']),
+  stristr($html,'<countdownscript')?'<script>countdown();</script>':'',
 ],$html);
-if(stristr($html,'<buildSocial')){
-	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
-	$htmlSocial=$matches[1];
-	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
-	if($s->rowCount()>0){
-		while($r=$s->fetch(PDO::FETCH_ASSOC)){
-			$buildSocial=$htmlSocial;
-			$buildSocial=str_replace([
-				'<print sociallink>',
-				'<print socialicon>'
-			],[
-				htmlspecialchars($r['url'],ENT_QUOTES,'UTF-8'),
-				frontsvg('i-social-'.$r['icon'])
-			],$buildSocial);
-			$socialItems.=$buildSocial;
-		}
-	}else$socialItems='';
-	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
-}
+require'inc-buildsocial.php';
 $content.=$html;

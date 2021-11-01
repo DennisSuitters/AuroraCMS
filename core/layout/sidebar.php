@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-echo'<aside class="border-right" id="sidebar">'.
+echo'<aside class="'.(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?' navsmall':'').'" id="sidebar">'.
   '<nav>'.
     '<ul>';
 $sm1=$db->prepare("SELECT * FROM `".$prefix."sidebar` WHERE `mid`=0 AND `active`=1 AND `rank`<=:r ORDER BY `ord` ASC, `title` ASC");
@@ -19,7 +19,7 @@ $sm1->execute([':r'=>$user['rank']]);
 while($rm1=$sm1->fetch(PDO::FETCH_ASSOC)){
   if($rm1['contentType']=='dropdown'){
     echo'<li class="'.($view==$rm1['view']?'open':'').'">'.
-      '<a class="opener" href="'.URL.$settings['system']['admin'].'/'.$rm1['view'].'">'.svg2($rm1['icon'],'i-2x mr-4').' '.$rm1['title'].'</a>'.
+      '<a class="opener" href="'.URL.$settings['system']['admin'].'/'.$rm1['view'].'" title="'.$rm1['title'].'">'.svg2($rm1['icon'],'i-2x mr-4').' '.$rm1['title'].'</a>'.
       '<span class="arrow'.($view==$rm1['view']?' open':'').'">'.svg2('arrow-up').'</span>'.
       '<ul>';
     $sm2=$db->prepare("SELECT * FROM `".$prefix."sidebar` WHERE `mid`=:mid AND `active`=1 AND `rank`<=:r ORDER BY `ord` ASC, `title` ASC");
@@ -30,15 +30,17 @@ while($rm1=$sm1->fetch(PDO::FETCH_ASSOC)){
     while($rm2=$sm2->fetch(PDO::FETCH_ASSOC)){
       echo'<li class="'.($view==$rm2['contentType']?'active':'').'">';
       if($rm2['view']=='settings'){
-        echo'<a href="'.URL.$settings['system']['admin'].'/'.$rm2['contentType'].'/'.$rm2['view'].'">'.svg2($rm2['icon'],'i-2x mr-4').' '.$rm2['title'].'</a>';
+        echo'<a href="'.URL.$settings['system']['admin'].'/'.$rm2['contentType'].'/'.$rm2['view'].'" title="'.$rm2['title'].'">'.svg2($rm2['icon'],'i-2x mr-4').' '.$rm2['title'].'</a>';
       }else{
-        echo'<a href="'.URL.$settings['system']['admin'].'/'.$rm2['view'].'/'.($rm2['view']=='content'?'type/':'').$rm2['contentType'].'">'.svg2($rm2['icon'],'i-2x mr-4').' '.$rm2['title'].'</a>';
+        echo'<a href="'.URL.$settings['system']['admin'].'/'.$rm2['view'].'/'.($rm2['view']=='content'?'type/':'').$rm2['contentType'].'" title="'.$rm2['title'].'">'.svg2($rm2['icon'],'i-2x mr-4').' '.$rm2['title'].'</a>';
       }
       echo'</li>';
     }
     echo'</ul>';
   }else{
-    echo'<li class="'.($view==$rm1['view']?'active':'').'"><a href="'.URL.$settings['system']['admin'].'/'.$rm1['view'].'">'.svg2($rm1['icon'],'i-2x mr-4').' '.$rm1['title'].'</a></li>';
+    echo'<li class="'.($view==$rm1['view']?'active':'').'">'.
+      '<a href="'.URL.$settings['system']['admin'].'/'.$rm1['view'].'" title="'.$rm1['title'].'">'.svg2($rm1['icon'],'i-2x mr-4').' '.$rm1['title'].'</a>'.
+    '</li>';
   }
 }
     echo'</ul>'.

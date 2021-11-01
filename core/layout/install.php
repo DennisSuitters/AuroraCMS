@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -177,7 +177,7 @@
 		</main>
 		<div class="row mt-4">
 			<footer class="footer mb-4 text-center">
-				<a href="https://github.com/DiemenDesign/AuroraCMS" title="Project Source Hosted on GitHub, where you can also report Issues."><img class="tasmanian" src="core/images/octocat.svg" alt="GitHub Octocat."></a> <a href="https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE" title="AuroraCMS is MIT Licensed."><img class="tasmanian" src="core/images/mit.svg" alt="AuroraCMS is MIT Licensed."></a> <img class="tasmanian" src="core/images/tasmania.svg" data-tooltip="tooltip" alt="Made in Tasmania for Australian Businesses." title="Made in Tasmania for Australian Businesses.">
+				<a href="https://github.com/DiemenDesign/AuroraCMS" title="Project Source Hosted on GitHub, where you can also report Issues."><img class="tasmanian" src="core/images/octocat.svg" alt="GitHub Octocat."></a> <a href="https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE" title="AuroraCMS is MIT Licensed."><img class="tasmanian" src="core/images/mit.svg" alt="AuroraCMS is MIT Licensed."></a> <img class="tasmanian" src="core/images/tasmania.svg" alt="Made in Tasmania for Australian Businesses." title="Made in Tasmania for Australian Businesses.">
 			</footer>
 		</div>
 	</body>

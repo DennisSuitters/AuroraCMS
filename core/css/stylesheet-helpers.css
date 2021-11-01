@@ -1317,6 +1317,9 @@
   .d-md-inline-table {
     display: inline-table !important; }
 
+  .d-md-table-column-group {
+    display: table-column-group !important; }
+
   .md-is-visible,
   .md-show,
   .d-md-block {

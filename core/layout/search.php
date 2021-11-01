@@ -29,7 +29,7 @@ $search=isset($_POST['s'])?$_POST['s']:'%';?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 p-3">
         <form method="post" action="<?= URL.$settings['system']['admin'].'/search';?>">
           <div class="form-row">
             <input name="s" type="text" value="<?= str_replace('%',' ',$search);?>" placeholder="What are you looking for?">

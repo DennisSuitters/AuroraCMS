@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -63,7 +63,7 @@ else{?>
             <div>Edit Order <?=$r['qid'].$r['iid'];?></div>
             <div class="content-title-actions">
               <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+                <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
               <?php }?>
               <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><?= svg2('print');?></button>
               <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><?= svg2('email-send');?></button>
@@ -82,93 +82,130 @@ else{?>
         </div>
       </div>
       <div class="container-fluid p-0">
-        <div class="card border-radius-0 shadow px-4 py-3">
+        <div class="card border-radius-0 px-4 py-3">
           <div class="row">
             <div class="col-12">
               <h4>Details</h4>
-              <div class="form-row">
-                <div class="input-text">Order #</div>
-                <div class="input-text">
-                  <a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' '.svg2('new-window');?></a>
+              <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                  <div class="input-text">Order #<a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' '.svg2('new-window');?></a></div>
                 </div>
-                <div class="input-text">Created</div>
-                <input id="detailscreated" type="text" value="<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?>" readonly aria-label="Date Created">
-                <div class="input-text">Due</div>
-                <input id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
-                <div class="input-text">Status</div>
-                <?php if($r['status']=='archived'||$r['status']=='paid')echo'<input type="text" value="'.ucfirst($r['status']).'" readonly>';
-                else{?>
-                  <select id="status" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
-                    <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
-                    <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
-                    <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
-                    <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
-                  </select>
-                <?php }?>
+                <div class="col-12 col-sm-6 col-md-3">
+                  <div class="input-text">Created:&nbsp;<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?></div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                  <div class="input-text py-0">Due:&nbsp;
+                    <input class="border-0" id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                  <div class="input-text py-0">Status:&nbsp;
+                    <?php if($r['status']=='archived'||$r['status']=='paid')echo'<input type="text" value="'.ucfirst($r['status']).'" readonly>';
+                    else{?>
+                      <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
+                        <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
+                        <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
+                        <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
+                        <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
+                      </select>
+                    <?php }?>
+                  </div>
+                </div>
               </div>
-              <div class="form-row">
-                <div class="input-text col-12 col-sm">Rank:&nbsp;<span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span></div>
-                <div class="input-text col-12 col-sm">
-                  <?php if($client['purchaseLimit']==0){
-                    if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
-                    if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
-                    if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
-                    if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
-                    if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
-                    if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
-                    if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
-                    if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
-                    if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
-                    if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
-                  }?>
-                  Purchase Limit:&nbsp;<span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span></div>
-                <div class="input-text col-12 col-sm">Spent:&nbsp;$<span id="clientSpent"><?=$client['spent'];?></span></div>
-                <div class="input-text col-12 col-sm">Points Earned:&nbsp;<span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
-                <div class="input-text col-12 col-sm">Last Purchase:&nbsp;<span id="clientpti"><?= _ago($client['pti']);?></span></div>
+              <div class="row">
+                <div class="col-12 col-sm-6 col-md">
+                  <div class="input-text">Rank:&nbsp;<span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span></div>
+                </div>
+                <div class="col-12 col-sm-6 col-md">
+                  <div class="input-text">
+                    <?php if($client['purchaseLimit']==0){
+                      if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
+                      if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
+                      if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
+                      if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
+                      if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
+                      if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
+                      if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
+                      if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
+                      if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
+                      if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
+                    }?>
+                    Purchase Limit:&nbsp;<span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span>
+                  </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md">
+                  <div class="input-text">Spent:&nbsp;$<span id="clientSpent"><?=$client['spent'];?></span></div>
+                </div>
+                <div class="col-12 col-sm-6 col-md">
+                  <div class="input-text">Points Earned:&nbsp;<span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
+                </div>
+                <div class="col-12 col-md">
+                  <div class="input-text">Last Purchase:&nbsp;<span id="clientpti"><?= _ago($client['pti']);?></span></div>
+                </div>
               </div>
-              <legend class="mt-3 small">Payment Details</legend>
+              <legend class="mt-3 h5">Payment Details</legend>
               <?php if($r['status']=='paid'){?>
-                <div class="form-row">
-                  <div class="input-text">Paid Via</div>
-                  <input type="text" value="<?= ucwords($r['paid_via']);?>" readonly>
-                  <div class="input-text">Transaction ID</div>
-                  <input type="text" value="<?=$r['txn_id'];?>" readonly>
-                  <div class="input-text">Date Paid</div>
-                  <input type="text" value="<?=$r['paid_ti']>0?date($config['dateFormat'],$r['paid_ti']):'';?>" readonly>
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <div class="input-text">Paid Via:&nbsp; <?= ucwords($r['paid_via']);?></div>
+                  </div>
                 </div>
-                <div class="form-row">
-                  <div class="input-text">Name</div>
-                  <input type="text" value="<?=$r['paid_name'];?>" readonly>
-                  <div class="input-text">Email</div>
-                  <input type="text" value="<?=$r['paid_email'];?>" readonly>
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <div class="input-text">Transaction ID:&nbsp;<?=$r['txn_id'];?></div>
+                  </div>
+                  <div class="col-12 col-sn-6">
+                    <div class="input-text">Date Paid:&nbsp;<?=$r['paid_ti']>0?date($config['dateFormat'],$r['paid_ti']):'';?></div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12 col-sm-6">
+                    <div class="input-text">Name:&nbsp;<?=$r['paid_name'];?></div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <div class="input-text">Email:&nbsp;<?=$r['paid_email'];?></div>
+                  </div>
                 </div>
               <?php }else{?>
-                <div class="form-row">
-                  <div class="input-text">Paid Via</div>
-                  <select id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
-                    <option value="">Select an Option</option>
-                    <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
-                    <option value="bank transfer"<?=$r['paid_via']=='bank transfer'?' selected':'';?>>Bank Transfer</option>
-                    <option value="cash"<?=$r['paid_via']=='cash'?' selected':'';?>>Cash</option>
-                    <option value="cash on delivery"<?=$r['paid_via']=='cash on delivery'?' selected':'';?>>Cash On Delivery</option>
-                    <option value="credit card"<?=$r['paid_via']=='credit card'?' selected':'';?>>Credit Card</option>
-                    <option value="paypal"<?=$r['paid_via']=='paypal'?' selected':'';?>>PayPal</option>
-                    <option value="stripe"<?=$r['paid_via']=='stripe'?' selected':'';?>>Stripe</option>
-                    <option value="afterpay"<?=$r['paid_via']=='afterpay'?' selected':'';?>>AfterPay</option>
-                  </select>
-                  <div class="input-text">Transaction ID</div>
-                  <input class="textinput" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">
-                  <?=$user['options'][1]==1?'<button class="save" id="savetxn_id" data-tooltip="tooltip" data-dbid="txn_id" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-                  <div class="input-text">Paid Date</div>
-                  <input id="paid_ti" type="datetime-local" value="<?=$r['paid_ti']>0?date('Y-m-d\TH:i',$r['paid_ti']):'';?>" autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`paid_ti`,getTimestamp(`paid_ti`));">
-                </div>
-                <div class="form-row">
-                  <div class="input-text">Name</div>
-                  <input class="textinput" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name...">
-                  <?=$user['options'][1]==1?'<button class="save" id="savepaid_name" data-tooltip="tooltip" data-dbid="paid_name" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
-                  <div class="input-text">Email</div>
-                  <input class="textinput" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email...">
-                  <?=$user['options'][1]==1?'<button class="save" id="savepaid_email" data-tooltip="tooltip" data-dbid="paid_email" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <div class="row">
+                  <div class="col-12 col-md-6">
+                    <div class="input-text py-0">Paid Via:&nbsp;
+                      <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
+                        <option value="">Select an Option</option>
+                        <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
+                        <option value="bank transfer"<?=$r['paid_via']=='bank transfer'?' selected':'';?>>Bank Transfer</option>
+                        <option value="cash"<?=$r['paid_via']=='cash'?' selected':'';?>>Cash</option>
+                        <option value="cash on delivery"<?=$r['paid_via']=='cash on delivery'?' selected':'';?>>Cash On Delivery</option>
+                        <option value="credit card"<?=$r['paid_via']=='credit card'?' selected':'';?>>Credit Card</option>
+                        <option value="paypal"<?=$r['paid_via']=='paypal'?' selected':'';?>>PayPal</option>
+                        <option value="stripe"<?=$r['paid_via']=='stripe'?' selected':'';?>>Stripe</option>
+                        <option value="afterpay"<?=$r['paid_via']=='afterpay'?' selected':'';?>>AfterPay</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <div class="input-text py-0">Transaction ID:&nbsp;
+                      <input class="textinput border-0" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savetxn_id" data-dbid="txn_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    </div>
+                  </div>
+                  <div class="col-12 col-md">
+                    <div class="input-text py-0">Paid Date:&nbsp;
+                      <input class="border-0" id="paid_ti" type="datetime-local" value="<?=$r['paid_ti']>0?date('Y-m-d\TH:i',$r['paid_ti']):'';?>" autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`paid_ti`,getTimestamp(`paid_ti`));">
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md">
+                    <div class="input-text py-0">Name:&nbsp;
+                      <input class="textinput border-0" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name...">
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_name" data-dbid="paid_name" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 col-md">
+                    <div class="input-text py-0">Email:&nbsp;
+                      <input class="textinput border-0" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email...">
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_email" data-dbid="paid_email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    </div>
+                  </div>
                 </div>
               <?php }?>
             </div>
@@ -230,7 +267,7 @@ else{?>
                     while($i=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$i['id'].'">'.ucfirst(rtrim($i['contentType'],'s')).$i['code'].':$'.$i['cost'].':'.$i['title'].'</option>';
                   }?>
                 </select>
-                <button class="add" data-tooltip="tooltip" type="submit" aria-label="Add"><?= svg2('add');?></button>
+                <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
               </form>
               <div class="row">
                 <small class="form-text text-muted">Note: Adding or removing items does not recalculate Postage Costs, you will need to do that manually with the selection below</small>
@@ -266,9 +303,9 @@ else{?>
                   <th class="col-1 text-right">Total</th>
                   <th class="col-1 align-middle">
                     <form target="sp" type="post" action="core/updateorder.php">
-                      <input type="hidden" name="id" value="<?=$r['id'];?>">
-                      <input type="hidden" id="actionda" name="da" value="">
-                      <select id="action" class="pull-right text-black select-sm" name="act" onchange="actionItems();this.form.submit();">
+                      <input name="id" type="hidden" value="<?=$r['id'];?>">
+                      <input id="actionda" name="da" type="hidden" value="">
+                      <select class="pull-right text-black select-sm" id="action" name="act" onchange="actionItems();this.form.submit();">
                         <option value="0" selected hidden>Action</option>
                         <option value="removeItems">Remove Selected Items</option>
                         <option value="newQuote">Create New Quote with Selected Items</option>
@@ -359,7 +396,7 @@ else{?>
                       if($oi['status']!='pre order'||$oi['status']!='back order'){
                         echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
                       }else{
-                          echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
+                        echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
                       }?>
                     </td>
                     <td class="align-middle text-right px-0">
@@ -508,20 +545,20 @@ else{?>
                     </td>
                     <td class="text-right align-middle px-0" colspan="3">
                       <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input type="hidden" name="act" value="paytext">
-                        <input type="hidden" name="id" value="<?=$r['id'];?>">
-                        <input type="hidden" name="t" value="orders">
-                        <input type="hidden" name="c" value="payOption">
-                        <input type="text" name="da" value="<?=$r['payOption'];?>">
+                        <input name="act" type="hidden"value="paytext">
+                        <input name="id" type="hidden"value="<?=$r['id'];?>">
+                        <input name="t" type="hidden"value="orders">
+                        <input name="c" type="hidden"value="payOption">
+                        <input name="da" type="text" value="<?=$r['payOption'];?>">
                       </form>
                     </td>
                     <td class="text-right align-middle px-0">
                       <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input type="hidden" name="act" value="paymethod">
-                        <input type="hidden" name="id" value="<?=$r['id'];?>">
-                        <input type="hidden" name="t" value="orders">
-                        <input type="hidden" name="c" value="payMethod">
-                        <select name="da" class="pl-1 pr-1">
+                        <input name="act" type="hidden" value="paymethod">
+                        <input name="id" type="hidden" value="<?=$r['id'];?>">
+                        <input name="t" type="hidden" value="orders">
+                        <input name="c" type="hidden" value="payMethod">
+                        <select class="pl-1 pr-1" name="da">
                           <option value="2"<?=$r['payMethod']==2?' selected':'';?>>Add &#36;</option>
                           <option vlaue="1"<?=$r['payMethod']==1?' selected':'';?>>Add &#37;</option>
                         </select>
@@ -535,11 +572,11 @@ else{?>
                     <td class="align-middle text-right px-0">
                       <?php if($r['payMethod']==2){?>
                         <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                          <input type="hidden" name="act" value="paycost">
-                          <input type="hidden" name="id" value="<?=$r['id'];?>">
-                          <input type="hidden" name="t" value="orders">
-                          <input type="hidden" name="c" value="payCost">
-                          <input type="text" class="text-right" name="da" value="<?= number_format((float)$paytot,2,'.','');?>">
+                          <input name="act" type="hidden" value="paycost">
+                          <input name="id" type="hidden" value="<?=$r['id'];?>">
+                          <input name="t" type="hidden" value="orders">
+                          <input name="c" type="hidden" value="payCost">
+                          <input class="text-right" name="da" type="text" value="<?= number_format((float)$paytot,2,'.','');?>">
                         </form>
                       <?php }else echo number_format((float)$paytot,2,'.','');
                       $total=$total+$paytot;
@@ -613,7 +650,7 @@ else{?>
                 </tbody>
               </table>
             </div>
-            <div class="col-sm-6">
+            <div class="col-12 col-md-6">
               <?php if($r['status']!='archived'&&$user['rank']>699){?>
                 <form target="sp" method="post" action="core/update.php">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">

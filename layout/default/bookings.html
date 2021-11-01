@@ -18,11 +18,11 @@
 		</nav>
 	</breadcrumb>
 	<section class="row">
-		<article class="col-12 col-sm m-0 p-0 px-3">
+		<article class="col-11 mx-auto col-md-6 px-3">
 			<h1><print page="heading"></h1>
 			<print page="notes">
 		</article>
-		<article id="booking" class="col-12 col-sm-6 m-0 p-0">
+		<article id="booking" class="col-11 mx-auto col-md-6 ">
 			<form class="auroraForm card p-3" data-formtype="booking" method="post" action="core/add_booking.php">
 				<input type="hidden" name="act" value="add_booking">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
@@ -62,7 +62,7 @@
 					<div class="row">
 						<items>
 							<input class="service" id="rid<print id>" type="radio" name="rid" value="<print id>" <itemChecked> hidden>
-							<label for="rid<print id>" class="col-6 mx-auto <itemHidden>">
+							<label for="rid<print id>" class="col-12 col-sm-6 mx-auto <itemHidden>">
 								<div class="card m-1 service">
 									<figure class="card-image">
 										<img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">

@@ -7,61 +7,38 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if(stristr($html,'<breadcrumb>')){
-  preg_match('/<breaditems>([\w\W]*?)<\/breaditems>/',$html,$matches);
-  $breaditem=$matches[1];
-  preg_match('/<breadcurrent>([\w\W]*?)<\/breadcurrent>/',$html,$matches);
-  $breadcurrent=$matches[1];
-  $jsoni=2;
-  $jsonld='<script type="application/ld+json">{"@context":"http://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"@id":"'.URL.'","name":"Home"}},';
-  $breadit=preg_replace([
-    '/<print breadcrumb=[\"\']?url[\"\']?>/',
-    '/<print breadcrumb=[\"\']?title[\"\']?>/'
-  ],[
-    URL,
-    'Home'
-  ],$breaditem);
-  $breaditems=$breadit;
-  $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
-  $jsonld.='{"@type":"ListItem","position":2,"item":{"@id":"'.URL.url_encode($page['contentType']).'","name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"}}';
-  $breaditems.=$breadit;
-  $html=preg_replace([
-    '/<[\/]?breadcrumb>/',
-    '/<json-ld-breadcrumb>/',
-    '~<breaditems>.*?<\/breaditems>~is',
-    '~<breadcurrent>.*?<\/breadcurrent>~is'
-  ],[
-    '',
-    $jsonld.']}</script>',
-    $breaditems,
-    ''
-  ],$html);
-}
+require'core/sanitize/HTMLPurifier.php';
+$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
+include'inc-breadcrumbs.php';
 $html=preg_replace([
   '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/'
 ],[
-  $page['heading']==''?$page['seoTitle']:$page['heading'],
-  rawurldecode($page['notes'])
+  htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
+  $purify->purify($page['notes'])
 ],$html);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
-$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY `contentType` ASC, `ti` DESC");
-$s->execute([':rank'=>$_SESSION['rank']]);
+$s1=$db->query("SELECT `contentType`,`title` FROM `".$prefix."menu` WHERE `active`='1' AND `contentType`!='proofs' AND `contentType`!='orders' AND `contentType`!='settings' AND `contentType`!='comingsoon' AND `contentType`!='maintenance' AND `contentType`!='offline' AND `contentType`!='checkout' AND `contentType`!='cart' ORDER BY `ord` ASC");
 $items=$sitemapitems='';
-if($s->rowCount()>0){
-	while($r=$s->fetch(PDO::FETCH_ASSOC)){
-		$items=$item;
-		$sitemaplinks='';
-		$items=preg_replace('/<print content=[\"\']?contentType[\"\']?>/',ucfirst($r['contentType']),$items);
-		$sitemaplinks.='<a href="'.$r['contentType'].'/'.$r['urlSlug'].'/">'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'</a><br>';
-		$items=preg_replace('/<print links>/',$sitemaplinks,$items);
-		$sitemapitems.=$items;
-	}
+while($r1=$s1->fetch(PDO::FETCH_ASSOC)){
+  $items=$item;
+  $sitemaplinks='';
+  $items=preg_replace(
+    '/<print content=[\"\']?contentType[\"\']?>/',
+    '<a href="'.URL.$r1['contentType'].($r1['contentType']=='page'?'/'.str_replace(' ','-',strtolower(htmlspecialchars($r1['title'],ENT_QUOTES,'UTF-8'))):'').'">'.($r1['contentType']=='page'?ucwords(htmlspecialchars($r1['title'],ENT_QUOTES,'UTF-8')):ucwords($r1['contentType'])).'</a>',
+  $items);
+  $s2=$db->prepare("SELECT `contentType`,`title`,`urlSlug` FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='testimonials' AND `status`='published' AND `internal`!='1' ORDER BY ti DESC");
+  $s2->execute([':contentType'=>$r1['contentType']]);
+  while($r2=$s2->fetch(PDO::FETCH_ASSOC)){
+    $sitemaplinks.='<a href="'.$r1['contentType'].'/'.$r2['urlSlug'].'/">'.htmlspecialchars($r2['title'],ENT_QUOTES,'UTF-8').'</a><br>';
+  }
+  $items=preg_replace('/<print links>/',$sitemaplinks,$items);
+	$sitemapitems.=$items;
 }
 $html=preg_replace('~<items>.*?<\/items>~is',$sitemapitems,$html,1);
 $content.=$html;

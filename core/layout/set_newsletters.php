@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -20,7 +20,7 @@
           <div>Newsletters Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
             <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
@@ -33,31 +33,31 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="form-row mt-3">
-          <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#embedImages" aria-label="PermaLink to Embed Image Checkbox">&#128279;</a>':'';?>
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#embedImages" data-tooltip="tooltip" aria-label="PermaLink to Embed Image Checkbox">&#128279;</a>':'';?>
           <input id="embedImages" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0" type="checkbox"<?=$config['newslettersEmbedImages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="embedImages" id="confignewslettersEmbedImages01">&nbsp;&nbsp;Embed&nbsp;Images</label>
           <small class="form-text text-right">Enable if your hosting doesn't support remote image access.</small>
         </div>
         <div id="sendMax" class="form-row mt-3">
-          <label for="newslettersSendMax"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendMax" aria-label="PermaLink to Send Max">&#128279;</a>':'';?>Send&nbsp;Max</label>
+          <label for="newslettersSendMax"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendMax" data-tooltip="tooltip" aria-label="PermaLink to Send Max">&#128279;</a>':'';?>Send&nbsp;Max</label>
           <small class="form-text text-right">Maximum Emails to Send in one Instance. '0' uses the Default of '50'.</small>
         </div>
         <div class="form-row mt-3">
           <input class="textinput" id="newslettersSendMax" type="text" value="<?=$config['newslettersSendMax'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendMax">
-          <button class="save" id="savenewslettersSendMax" data-tooltip="tooltip" data-dbid="newslettersSendMax" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savenewslettersSendMax" data-dbid="newslettersSendMax" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <div id="sendDelay" class="form-row mt-3">
-          <label id="sendDelay" for="newslettersSendDelay"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendDelay" aria-label="PermaLink to Send Delay">&#128279;</a>':'';?>Send&nbsp;Delay</label>
+          <label id="sendDelay" for="newslettersSendDelay"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendDelay" data-tooltip="tooltip" aria-label="PermaLink to Send Delay">&#128279;</a>':'';?>Send&nbsp;Delay</label>
           <small class="form-text text-right">Seconds to Delay between Email Sends. '0' uses the default of '1' second.</small>
         </div>
         <div class="form-row">
           <input class="textinput" id="newslettersSendDelay" data-dbid="1" data-dbt="config" data-dbc="newslettersSendDelay" type="text" value="<?=$config['newslettersSendDelay'];?>">
-          <button class="save" id="savenewslettersSendDelay" data-tooltip="tooltip" data-placement="top" data-dbid="newslettersSendDelay" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savenewslettersSendDelay" data-placement="top" data-dbid="newslettersSendDelay" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <hr>
-        <legend id="optOutMessage" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/newsletters/settings#optOutMessage" aria-label="PermaLink to Opt Out Message">&#128279;</a>':'';?>Opt Out Message</legend>
+        <legend id="optOutMessage" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#optOutMessage" data-tooltip="tooltip" aria-label="PermaLink to Opt Out Message">&#128279;</a>':'';?>Opt Out Message</legend>
         <div class="form-row">
           <small class="form-text text-right">Tokens:
             <a class="badge badge-secondary" href="#" onclick="$('#optOutLayout').summernote('insertText','{optOutLink}');return false;">{optOutLink}</a>

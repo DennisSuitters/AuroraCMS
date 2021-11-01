@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -27,16 +27,16 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-4 py-3 overflow-visible">
-        <legend id="databaseOptions"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseOptions" aria-label="PermaLink to Preferences Database Options">&#128279;</a>':'';?>Database Options</legend>
+      <div class="card border-radius-0 px-4 py-3 overflow-visible">
+        <legend id="databaseOptions"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseOptions" data-tooltip="tooltip" aria-label="PermaLink to Preferences Database Options">&#128279;</a>':'';?>Database Options</legend>
         <form target="sp" method="post" action="core/changeprefix.php">
-          <label id="tablePrefix" for="prefix"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#tablePrefix" aria-label="PermaLink to Database Table Prefix Field">&#128279;</a>':'';?>Table Prefix</label>
+          <label id="tablePrefix" for="prefix"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#tablePrefix" data-tooltip="tooltip" aria-label="PermaLink to Database Table Prefix Field">&#128279;</a>':'';?>Table Prefix</label>
           <div class="form-row">
             <input class="textinput" id="prefix" name="dbprefix" type="text" value="<?=$prefix;?>" placeholder="Enter a Table Prefix...">
             <button type="submit" onclick="$('body').append('<div id=blocker><div></div></div>');">Update</button>
           </div>
         </form>
-        <legend id="databaseBackupSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseBackupSection" aria-label="PermaLink to Preferences Database Backup/Restore">&#128279;</a>':'';?>Database Backup/Restore</legend>
+        <legend id="databaseBackupSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseBackupSection" data-tooltip="tooltip" aria-label="PermaLink to Preferences Database Backup/Restore">&#128279;</a>':'';?>Database Backup/Restore</legend>
         <div id="backup" name="backup">
           <div id="backup_info">
             <?php $tid=$ti-2592000;
@@ -57,7 +57,7 @@
               $filename=rtrim($filename,'.sql.gz');?>
               <div id="l_<?=$filename;?>" class="form-row mt-2">
                 <a class="btn btn-block" href="<?=$file;?>">Click to Download <?= ltrim($file,'media/backup/');?></a>
-                <button class="trash" aria-label="Delete" onclick="removeBackup('<?=$filename;?>');"><?= svg2('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup('<?=$filename;?>');"><?= svg2('trash');?></button>
               </div>
             <?php }?>
           </div>

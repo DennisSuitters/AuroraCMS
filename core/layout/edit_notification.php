@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -23,7 +23,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <div>Edit Notification: <?=$r['title'];?></div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" data-tooltip="tooltip" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
             <?php }?>
             <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
@@ -36,21 +36,21 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow px-3 py-3 overflow-visible">
+      <div class="card border-radius-0 px-3 py-3 overflow-visible">
         <div class="tabs" role="tablist">
-          <input id="tab1-1" class="tab-control" name="tabs" type="radio">
+          <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
-          <input id="tab1-2" class="tab-control" name="tabs" type="radio">
+          <input class="tab-control" id="tab1-2" name="tabs" type="radio">
           <label for="tab1-2">Images</label>
           <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
-            <label id="pageTitle" for="title"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageTitle" aria-label="PermaLink to Page Title Field">&#128279;</a>':'';?>Title</label>
+            <label id="pageTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageTitle" data-tooltip="tooltip" aria-label="PermaLink to Page Title Field">&#128279;</a>':'';?>Title</label>
             <div class="form-row">
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="title" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?> onkeyup="genurl();$('#titleupdate').text($(this).val());">
-              <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-tooltip="tooltip" data-dbid="title" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
-            <label id="notificationAnimation" for="animation"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/notification/edit/'.$r['id'].'#notificationAnimation" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Animation</label>
+            <label id="notificationAnimation" for="animation"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/notification/edit/'.$r['id'].'#notificationAnimation" data-tooltip="tooltip" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Animation</label>
             <div class="form-row">
               <select id="animation" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="heading" onchange="update('<?=$r['id'];?>','menu','heading',$(this).val(),'select');"<?=$user['options'][5]==1?'':' disabled';?>>
                 <option value=""<?=$r['heading']==''?' selected':'';?>>None</option>
@@ -60,7 +60,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </select>
             </div>
             <div id="pageNotes" class="row mt-3">
-              <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'';?>
+              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" data-tooltip="tooltip" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'';?>
               <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
                   '<div class="btn-group d-flex justify-content-end">';
@@ -71,7 +71,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     ':t'=>'menu',
                     ':c'=>'notes'
                   ]);
-                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" data-dbgid="notesda" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
+                  echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=notes" data-dbgid="notesda" data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb').'</button>':'';
                 }
                 echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information">'.svg2('seo').'</button>'.
                     '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;">'.svg2('blocks').'</button>'.
@@ -106,7 +106,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <?php /* Images */ ?>
           <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
             <legend class="mt-3">Cover</legend>
-            <label id="pageCoverImage" for="cover"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverImage" aria-label="PermaLink to Page Cover Image Field">&#128279;</a>':'';?>Image</label>
+            <label id="pageCoverImage" for="cover"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverImage" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image Field">&#128279;</a>':'';?>Image</label>
             <div class="form-row">
               <input id="cover" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="cover" type="text" value="<?=$r['cover'];?>" readonly onchange="coverUpdate('<?=$r['id'];?>','menu','cover',$(this).val());">
               <?=$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);">'.svg2('browse-media').'</button>':'';
@@ -116,11 +116,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               else echo'<img id="coverimage" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';
               echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,``);">'.svg2('trash').'</button>':'';?>
             </div>
-            <label id="pageImageALT" for="fileALT"><?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageImageALT" aria-label="PermaLink to Page Cover Image ALT Field">&#128279;</a>':'';?>Image ALT</label>
+            <label id="pageImageALT" for="fileALT"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageImageALT" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image ALT Field">&#128279;</a>':'';?>Image ALT</label>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><?= svg2('seo');?></button>
               <input class="textinput" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Image ALT Test..."':' readonly';?>>
-              <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" data-dbid="fileALT" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>':'';?>
+              <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-dbid="fileALT" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
           </div>
 <?php /* Settings */
@@ -128,9 +128,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['file']!='index'){?>
                 <div class="row mt-3">
-                  <?=$user['rank']>899?'<a class="permalink" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
                   <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
+                  <label id="menuactive0<?=$r['id'];?>" for="pageActive">Active</label>
                 </div>
               <?php }?>
             </div>

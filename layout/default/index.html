@@ -7,17 +7,17 @@
 	</cover>
 	<section class="row">
 		<pagenotes>
-			<article class="col-12 col-sm">
+			<article class="col-12 col-md mx-auto">
 				<h1><print page="heading"></h1>
 				<print page="notes">
 			</article>
 		</pagenotes>
-		<div class="col-12 col-sm-6 mt-5">
+		<div class="col-12 col-md-6 mt-5">
 			<div class="row">
-				<div class="h3 text-center text-sm-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events" aria-label="Go to Events">Events</a></div>
+				<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events" aria-label="Go to Events">Events</a></div>
 				<eventsitems items="3">
 					<eventitem>
-						<article class="card event col-5 mx-auto mx-sm-3">
+						<article class="card event col-5 mx-auto mx-md-3">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
@@ -33,7 +33,7 @@
 						</article>
 					</eventitem>
 				</eventsitems>
-				<div id="newsletters" class="card event col-12 col-sm-5 mx-0 mx-sm-3 mt-3">
+				<article id="newsletters" class="card event col-5 mx-auto mx-md-3 mt-3">
 					<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
 						<input type="hidden" name="act" value="add_subscriber">
 						<input type="hidden" name="<print hash>" value="<print timecode>">
@@ -45,10 +45,10 @@
 							<input type="email" id="newslettersemail" name="email" value="" required aria-required="true" placeholder="Email...">
 							<div class="requirements alert alert-danger">Must be a valid email address.</div>
 							<g-recaptcha>
-							<button class="btn-block mt-3" id="newsletters-btn" type="submit" disabled="disabled">Subscribe</button>
+							<button class="btn btn-block mt-3" id="newsletters-btn" type="submit" disabled="disabled">Subscribe</button>
 						</fieldset>
 					</form>
-				</div>
+				</article>
 			</div>
 		</div>
 	</section>
@@ -65,7 +65,7 @@
 			<h2 class="text-center">Latest Content Additions</h2>
 		</header>
 		<items>
-			<article class="card">
+			<article class="card col-12 col-sm-5 col-lg-2-5">
 				<figure class="card-image">
 					<a href="<print content=linktitle>">
 						<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
@@ -111,7 +111,7 @@
 		<header>
 			<h2 class="text-center"><a href="testimonials/">Testimonials</a> <small><small>Our Clients Love Us!</small></small></h2>
 		</header>
-		<div class="row">
+		<div class="row testimonial-block">
 			<items>
 				<blockquote class="testimonials col-11 col-sm-3">
 					<img src="<print content=avatar>" loading="lazy" alt="<print content=name>">

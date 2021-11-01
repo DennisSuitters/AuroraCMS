@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -549,6 +549,7 @@ $routes=[
 	'rss'=>['internal','rss'],
 	'manifest.json'=>['internal','manifest'],
 	'error'=>['front','error'],
+	'offline'=>['front','error'],
 	'index'=>['front','index'],
 	'home'=>['front','index'],
 	'sitemap'=>['front','sitemap'],
@@ -564,6 +565,7 @@ $routes=[
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `active`=1 AND `rank`<=:rank");
 $s->execute([':rank'=>$_SESSION['rank']]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
+	if($r['contentType']=='offline')continue;
 	if(method_exists('front',$r['contentType']))$routes[$r['contentType']]=['front',$r['contentType']];
   else$routes[$r['contentType']]=['front','content'];
 }

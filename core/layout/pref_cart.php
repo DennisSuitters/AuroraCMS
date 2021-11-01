@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-0 overflow-visible">
+      <div class="card border-radius-0 p-0 overflow-visible">
         <table class="table-zebra">
           <thead>
             <tr>

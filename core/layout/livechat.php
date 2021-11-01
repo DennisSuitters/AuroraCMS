@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -21,7 +21,7 @@ else{?>
           <div class="content-title-icon"><?= svg2('chat','i-3x');?></div>
           <div>Live Chat</div>
           <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button" aria-label="Live Chat Settings">'.svg2('settings').'</a>':'';?>
+            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button"  data-tooltip="tooltip" aria-label="Live Chat Settings">'.svg2('settings').'</a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -30,17 +30,11 @@ else{?>
       </div>
     </div>
     <div class="container-fluid p-0">
-      <div class="card border-radius-0 shadow p-3">
+      <div class="card border-radius-0 p-3">
         <div class="row chat">
           <input id="chatactive" type="hidden" value="0">
           <div class="chatList card col-12 col-md-4" id="chatList">
-            <?php
-/*
-Add the below if using MYSQL 8.0 /etc/mysql/my.cnf
- [mysqld]
-sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION"
-*/
-            $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
+            <?php $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
             $s->execute();
             while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               <span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_<?=$r['id'];?>" data-sid="<?=$r['sid'];?>" data-chatname="<?=$r['name'];?>" data-chatemail="<?=$r['email'];?>">
@@ -52,14 +46,14 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
                       <input name="t" type="hidden" value="livechat">
                       <input name="r" type="hidden" value="Added Manually via Live Chat">
-                      <button data-tooltip="tooltip" aria-label="Add to Blacklist"><?= svg2('security');?></button>
+                      <button  data-tooltip="tooltip" aria-label="Add to Blacklist"><?= svg2('security');?></button>
                     </form>
                   <?php } ?>
                   <form target="sp" method="get" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
                     <input name="t" type="hidden" value="livechat">
                     <input name="c" type="hidden" value="<?=$r['sid'];?>">
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><?= svg2('trash');?></button>
+                    <button class="trash"  data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><?= svg2('trash');?></button>
                   </form>
                 </span>
                 <small><?=$r['name'];?></small><br>
@@ -73,11 +67,11 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
             <div class="card chatBody">
               <div class="card-header" id="chatTitle">&nbsp;</div>
               <div class="card-body p-0" id="chatBody">
-                <input type="hidden" id="chatsid" value="">
-                <input type="hidden" id="chatwho" value="admin">
-                <input type="hidden" id="chataid" value="<?=$user['id'];?>">
-                <input type="hidden" id="chatemail" value="<?=$user['email'];?>">
-                <input type="hidden" id="chatname" value="<?= $user['name']!=''?$user['name']:$user['username'];?>">
+                <input id="chatsid" type="hidden" value="">
+                <input id="chatwho" type="hidden" value="admin">
+                <input id="chataid" type="hidden" value="<?=$user['id'];?>">
+                <input id="chatemail" type="hidden" value="<?=$user['email'];?>">
+                <input id="chatname" type="hidden" value="<?= $user['name']!=''?$user['name']:$user['username'];?>">
                 <div class="card-content" style="height:54vh;" id="chatScreen" data-empty="Select a Message Thread on the left!"></div>
               </div>
               <div class="card-footer p-0 border-0">
@@ -113,7 +107,7 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
     clearTimeout(chatTimer);
     chatTimer=setTimeout(function(){
       updateChat();
-    }, 2500);
+    },2500);
   }
   function updateChatList(){
     chatListTimer=null;
@@ -121,7 +115,7 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
       type:"POST",
       url:"core/chatlist.php",
       data:{
-        sid: $('#chatactive').val()
+        sid:$('#chatactive').val()
       }
     }).done(function(data){
       if(data!='none'){
@@ -131,7 +125,7 @@ sql-mode = "STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_
     clearTimeout(chatListTimer);
     chatListTimer=setTimeout(function(){
       updateChatList();
-    }, 2500);
+    },2500);
   }
   $(document).ready(function(){
     updateChatList();

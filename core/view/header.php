@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -39,10 +39,14 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	if(preg_match('/<print user=[\"\']?avatar[\"\']?>/',$html)){
 		if(isset($user)&&$user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','media/avatar/'.$user['avatar'],$html);
 		elseif(isset($user)&&$user['gravatar']!=''){
-			if(stristr('@',$user['gravatar']))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
-			elseif(stristr('gravatar.com/avatar/'))$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$user['gravatar'],$html);
-			else$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
-		}else$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
+			if(stristr('@',$user['gravatar']))
+				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/','http://gravatar.com/avatar/'.md5($user['gravatar']),$html);
+			elseif(stristr('gravatar.com/avatar/'))
+				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$user['gravatar'],$html);
+			else
+				$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
+		}else
+			$html=preg_replace('/<print user=[\"\']?avatar[\"\']?>/',$noavatar,$html);
 	}
 	$html=preg_replace([
 		$user['rank']>399?'/<[\/]?accountmenu>/':'/<[\/]?accountmenu>/',
@@ -63,7 +67,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		($user['name']!=''?$user['name']:$user['username']).' ('.ucwords(str_replace('-',' ',rank($user['rank']))).')',
 		$_SERVER['REQUEST_URI']
 	],$html);
-}else$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
+}else
+	$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
 $html=preg_replace([
 	'/<print view>/',
 	'/<print config=[\"\']?seoTitle[\"\']?>/',
@@ -87,7 +92,8 @@ if(stristr($html,'<buildMenu')){
 	if(stristr($html,'<menuLogin')){
 		preg_match('/<menuLogin>([\w\W]*?)<\/menuLogin>/',$html,$matches);
 		$menuLogin=$matches[1];
-	}else$menuLogin='';
+	}else
+		$menuLogin='';
 	$htmlMenu='';
 	$s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='head' AND `mid`=0 AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
 	$s->execute([':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0]);
@@ -95,8 +101,10 @@ if(stristr($html,'<buildMenu')){
 		$menuURL='';
 		if($r['contentType']=='cart'&&$config['options'][30]==1&&(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false))continue;
 		if($r['contentType']!='index'){
-			if(isset($r['url'][0])&&$r['url'][0]=='#')$menuURL.=URL.$r['url'].'/';
-			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))$menuURL.=$r['url'];
+			if(isset($r['url'][0])&&$r['url'][0]=='#')
+				$menuURL.=URL.$r['url'].'/';
+			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))
+				$menuURL.=$r['url'];
 			else{
 				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
@@ -107,7 +115,8 @@ if(stristr($html,'<buildMenu')){
 					true)
 				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';
 			}
-		}else$menuURL.=URL;
+		}else
+			$menuURL.=URL;
 		$sm=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=:id AND `active`=1 AND `rank`<=:rank ORDER BY `ord` ASC");
 		$sm->execute([
 			':id'=>$r['id'],
@@ -119,7 +128,8 @@ if(stristr($html,'<buildMenu')){
 			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 		$menuItem=$nondropDown;
-		if($sm->rowCount()>0||$smc->rowCount()>0)$menuItem=$dropDown;
+		if($sm->rowCount()>0||$smc->rowCount()>0)
+			$menuItem=$dropDown;
 		$menuItem=preg_replace([
 			'/<print header>/',
 			'/<print active=[\"\']?menu[\"\']?>/',
@@ -128,7 +138,7 @@ if(stristr($html,'<buildMenu')){
 			'/<print menu=[\"\']?title[\"\']?>/'
 		],[
 			'',
-			$r['contentType']==$view?$theme['settings']['activeClass']:'',
+			$page['id']==$r['id']?$theme['settings']['activeClass']:'',
 			$menuURL,
 			$r['contentType'],
 			$r['title']
@@ -139,8 +149,10 @@ if(stristr($html,'<buildMenu')){
 				$mitem=$subMenuItem;
 				$subURL='';
 				if($rm['contentType']!='index'){
-					if(isset($rm['url'][0])&&$rm['url'][0]=='#')$subURL.=URL.$rm['url'].'/';
-					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))$subURL.=$rm['url'].'/';
+					if(isset($rm['url'][0])&&$rm['url'][0]=='#')
+						$subURL.=URL.$rm['url'].'/';
+					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))
+						$subURL.=$rm['url'].'/';
 					else{
 						$subURL.=URL.$rm['contentType'].'/';
 						if(!in_array(
@@ -172,12 +184,15 @@ if(stristr($html,'<buildMenu')){
 			$ih=0;
 			while($rm=$smc->fetch(PDO::FETCH_ASSOC)){
 				$menuimage='';
-				if($rm['thumb']!='')$menuimage=$rm['thumb'];
+				if($rm['thumb']!='')
+					$menuimage=$rm['thumb'];
 				$mitem=$subMenuItem;
 				$subURL='';
 				if($rm['contentType']!='index'){
-					if(isset($rm['url'][0])&&$rm['url'][0]=='#')$subURL.=URL.$rm['url'].'/';
-					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))$subURL.=$rm['url'].'/';
+					if(isset($rm['url'][0])&&$rm['url'][0]=='#')
+						$subURL.=URL.$rm['url'].'/';
+					elseif(isset($rm['url'])&&filter_var($rm['url'],FILTER_VALIDATE_URL))
+						$subURL.=$rm['url'].'/';
 					else{
 						$subURL.=URL.$rm['contentType'].'/';
 						$subURL.=str_replace(' ','-',strtolower($rm['title'])).'/';
@@ -200,7 +215,8 @@ if(stristr($html,'<buildMenu')){
 				$submenu.=$mitem;
 			}
 		}
-		if($sm->rowCount()>0||$smc->rowCount()>0)$menuItem=preg_replace('~<subMenuItem>.*?<\/subMenuItem>~is',$submenu,$menuItem,1);
+		if($sm->rowCount()>0||$smc->rowCount()>0)
+			$menuItem=preg_replace('~<subMenuItem>.*?<\/subMenuItem>~is',$submenu,$menuItem,1);
 		$cart='';
 		if($r['contentType']=='cart'){
 			$dti=$ti-86400;
@@ -223,7 +239,8 @@ if(stristr($html,'<buildMenu')){
 			URL,
 			rtrim($_SERVER['REQUEST_URI'],'logout')
 		],$menuLogin);
-		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)$menuLogin='';
+		if(isset($_SESSION['rank'])&&$_SESSION['rank']>0)
+			$menuLogin='';
 		else{
 			$menuLogin=preg_replace($config['options'][3]==0?'~<signup>.*?<\/signup>~is':'/<[\/]?signup>/','',$menuLogin);
 			$htmlMenu.=$menuLogin;
@@ -237,93 +254,17 @@ if(stristr($html,'<buildMenu')){
 		(isset($crtr)&&$crtr['quantity']>0?$crtr['quantity']:'')
 	],$html,1);
 }
-if(stristr($html,'<buildSocial')){
-	preg_match('/<buildSocial>([\w\W]*?)<\/buildSocial>/',$html,$matches);
-	$htmlSocial=$matches[1];
-	$socialItems='';
-	$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `icon` ASC");
-	if($s->rowCount()>0){
-		while($r=$s->fetch(PDO::FETCH_ASSOC)){
-			$buildSocial=$htmlSocial;
-			$buildSocial=str_replace([
-				'<print sociallink>',
-				'<print socialicon>',
-				'<print rel=label>'
-			],[
-				$r['url'],
-				frontsvg('i-social-'.$r['icon']),
-				ucfirst($r['icon'])
-			],$buildSocial);
-			$socialItems.=$buildSocial;
-		}
-	}else$socialItems='';
-	$html=preg_replace('~<buildSocial>.*?<\/buildSocial>~is',$socialItems,$html,1);
-	if($config['options'][9]==1){
-		$html=preg_replace('/<[\/]?rss>/','',$html);
-		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'],$html):str_replace('<print rsslink>','rss',$html);
-		$html=str_replace('<print rssicon>',frontsvg('i-social-rss'),$html);
-	}else$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
-}
+include'inc-buildsocial.php';
 if(isset($_GET['activate'])&&$_GET['activate']!=''){
 	$activate=filter_input(INPUT_GET,'activate',FILTER_SANITIZE_STRING);
 	$sa=$db->prepare("UPDATE `".$prefix."login` SET `active`='1',`activate`='',`rank`='200' WHERE `activate`=:activate");
 	$sa->execute([':activate'=>$activate]);
 	$html=$sa->rowCount()>0?str_replace('<activation>',preg_replace(['/<print alert>/','/<print text>/'],['success','Your Account is now Active!'],$theme['settings']['alert']),$html):str_replace('<activation>',preg_replace(['/<print alert>/','/<print text>/'],['danger','There was an Issue Activation your Account!'],$theme['settings']['alert']),$html);
-}else$html=str_replace('<activation>','',$html);
-if(stristr($html,'<hours>')){
-	if($config['options'][19]==1){
-		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
-		$htmlHours=$matches[1];
-		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
-		if($s->rowCount()>0){
-			while($r=$s->fetch(PDO::FETCH_ASSOC)){
-				$buildHours=$htmlHours;
-				if($r['tis']!=0){
-					$r['tis']=str_pad($r['tis'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)$hourFrom=$r['tis'];
-					else{
-						$hourFromH=substr($r['tis'],0,2);
-						$hourFromM=substr($r['tis'],3,4);
-						$hourFrom=($hourFromH<12?ltrim($hourFromH,'0').($hourFromM>0?$hourFromM:'').'am':$hourFromH - 12 .($hourFromM>0?$hourFromM:'').'pm');
-					}
-				}else$hourFrom='';
-				if($r['tie']!=0){
-					$r['tie']=str_pad($r['tie'],4,'0',STR_PAD_LEFT);
-					if($config['options'][21]==1)$hourTo=$r['tie'];
-					else{
-						$hourToH=substr($r['tie'],0,2);
-						$hourToM=substr($r['tie'],3,4);
-						$hourTo=($hourToH<12?ltrim($hourToH,'0').($hourToM>0?$hourToM:'').'am':$hourToH - 12 .($hourToM>0?$hourToM:'').'pm');
-						if($hourTo=='0pm')$hourTo='12pm';
-					}
-				}else$hourTo='';
-				$buildHours=preg_replace([
-					'/<print dayfrom>/',
-					'/<print dayto>/',
-					'/<print timefrom>/',
-					'/<print timeto>/',
-					'/<print info>/'
-				],[
-					ucfirst(($config['options'][20]==1?substr($r['username'],0,3):$r['username'])).($r['password']==''?'':' - '),
-					($r['password']==$r['username']?'':ucfirst(($config['options'][20]==1?substr($r['password'],0,3):$r['password']))),
-					$hourFrom,
-					($r['tie']>0?'-'.$hourTo:''),
-					($r['title']!=''?ucfirst($r['title']):'')
-				],$buildHours);
-				$hoursItems.=$buildHours;
-			}
-		}
-		$html=preg_replace([
-				'/<[\/]?hours>/',
-				'~<buildHours>.*?<\/buildHours>~is'
-			],[
-				'',
-				$hoursItems,
-			],$html);
-	}else$html=preg_replace('~<hours>.*?<\/hours>~is','',$html,1);
-}
+}else
+	$html=str_replace('<activation>','',$html);
+include'inc-hours.php';
 $html=preg_replace([
+	'/<rand>/',
 	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
 	stristr($html,'<contact>')&&$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
 	stristr($html,'<phone>')&&$config['options'][24]==1?'/<[\/]?phone>/':'~<phone>.*?<\/phone>~is',
@@ -337,6 +278,7 @@ $html=preg_replace([
 	'/<print config=[\"\']?mobile[\"\']?>/',
 	'/<print theme>/'
 ],[
+	rand(1,10),
 	'',
 	'',
 	'',

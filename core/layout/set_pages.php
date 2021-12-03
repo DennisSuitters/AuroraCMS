@@ -13,16 +13,14 @@
  */?>
 <main>
   <section id="content">
-    <div class="content-title-wrapper mb-0">
+    <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
-          <div>Page Settings</div>
+          <div class="content-title-icon"><?= svg2('content','i-3x');?></div>
+          <div>Page <br class="d-block d-sm-none">Settings</div>
           <div class="content-title-actions">
-            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
-            <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <?= isset($_SERVER['HTTP_REFERER'])?'<a class="btn" href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="tooltip" aria-label="Back">'.svg2('back').'</a>':'';?>
+            <button class="btn saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
           </div>
         </div>
         <ol class="breadcrumb">

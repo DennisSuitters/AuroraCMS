@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -42,7 +42,7 @@ if(isset($_POST['act'])=='sort')
 	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
 else
 	$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
-$sortOrder=" ORDER BY ";
+$sortOrder=" ORDER BY `pin` DESC, ";
 if($sort=="")$sortOrder.="`ti` DESC ";
 if($sort=="new")$sortOrder.="`ti` DESC ";
 if($sort=="old")$sortOrder.="`ti` ASC ";
@@ -73,7 +73,7 @@ elseif($view=='search'){
 		$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 		$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`code`) LIKE LOWER(:search) OR LOWER(`brand`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`category_1`) LIKE LOWER(:search) OR LOWER(`category_2`) LIKE LOWER(:search) OR LOWER(`category_3`) LIKE LOWER(:search) OR LOWER(`category_4`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`tags`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) AND `status`=:status AND `rank` <= :rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`code`) LIKE LOWER(:search) OR LOWER(`brand`) LIKE LOWER(:search) OR LOWER(`title`) LIKE LOWER(:search) OR LOWER(`category_1`) LIKE LOWER(:search) OR LOWER(`category_2`) LIKE LOWER(:search) OR LOWER(`category_3`) LIKE LOWER(:search) OR LOWER(`category_4`) LIKE LOWER(:search) OR LOWER(`seoKeywords`) LIKE LOWER(:search) OR LOWER(`tags`) LIKE LOWER(:search) OR LOWER(`seoCaption`) LIKE LOWER(:search) OR LOWER(`seoDescription`) LIKE LOWER(:search) OR LOWER(`notes`) LIKE LOWER(:search) AND `status`=:status AND `rank` <= :rank".($sortOrder==''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':search'=>$search,
 		':status'=>$status,
@@ -89,7 +89,7 @@ elseif($view=='search'){
 	}
 	if(stristr($contentType,'|')){
 		$ctarray=explode('|',$contentType);
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType1 OR `contentType` LIKE :contentType2 OR `contentType` LIkE :contentType3 OR `contentType` LIKE :contentType4 AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank` <= :rank".($sortOrder==''?" ORDER BY `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".$itemCount);
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType1 OR `contentType` LIKE :contentType2 OR `contentType` LIkE :contentType3 OR `contentType` LIKE :contentType4 AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank` <= :rank".($sortOrder==''?" ORDER BY `pin` DESC, `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".$itemCount);
 		$s->execute([
 			':contentType1'=>(isset($ctarray[0])?$ctarray[0]:''),
 			':contentType2'=>(isset($ctarray[1])?$ctarray[1]:''),
@@ -100,7 +100,7 @@ elseif($view=='search'){
 			':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".$itemCount);
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `pin` DESC, `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".$itemCount);
 		$s->execute([
 			':contentType'=>$contentType,
 			':status'=>$status,
@@ -125,7 +125,7 @@ elseif($view=='search'){
 		$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 		$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>isset($args[1])?html_entity_decode(str_replace('-','%',$args[1])):'%',
@@ -153,7 +153,7 @@ elseif($view=='search'){
 		$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 		$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -181,7 +181,7 @@ elseif($view=='search'){
 		$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 		$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder==''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -209,7 +209,7 @@ elseif($view=='search'){
 		$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 		$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-',' ',$args[0])),
@@ -234,7 +234,7 @@ elseif($view=='search'){
 		$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 		$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 	}
-	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+	$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`category_1`) LIKE LOWER(:category_1) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 	$s->execute([
 		':contentType'=>$view,
 		':category_1'=>html_entity_decode(str_replace('-','%',$args[0])),
@@ -247,7 +247,7 @@ elseif($view=='search'){
 			$status='%';
 			if($_SESSION['loggedin']==false)die();
 		}
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`urlSlug`) LIKE LOWER(:urlSlug) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti".($sortOrder==''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND LOWER(`urlSlug`) LIKE LOWER(:urlSlug) AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti".($sortOrder==''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 		$s->execute([
 			':contentType'=>$view,
 			':urlSlug'=>$args[0],
@@ -263,7 +263,7 @@ elseif($view=='search'){
 	if($view=='proofs'){
 		if(isset($_SESSION['uid'])&&$_SESSION['uid']!=0){
 			if($config['showItems']>0){
-				$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` LIKE 'proofs' AND `uid`=:uid AND `rank`<=:rank ORDER BY `ord` ASC, `ti` DESC");
+				$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` LIKE 'proofs' AND `uid`=:uid AND `rank`<=:rank ORDER BY `pin` DESC, `ord` ASC, `ti` DESC");
 				$s->execute([
 					':uid'=>$_SESSION['uid'],
 					':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
@@ -272,7 +272,7 @@ elseif($view=='search'){
 				$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 				$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 			}
-			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE 'proofs' AND `uid`=:uid AND `rank`<=:rank ORDER BY `ord` ASC, `ti` DESC".($sqlLimit!=''?$sqlLimit:''));
+			$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE 'proofs' AND `uid`=:uid AND `rank`<=:rank ORDER BY `pin` DESC, `ord` ASC, `ti` DESC".($sqlLimit!=''?$sqlLimit:''));
 			$s->execute([
 				':uid'=>$_SESSION['uid'],
 				':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
@@ -280,7 +280,7 @@ elseif($view=='search'){
 		}
 	}else{
 		if($config['showItems']>0){
-			$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder));
+			$s=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder));
 			$s->execute([
 				':contentType'=>$view,
 				':status'=>$status,
@@ -291,7 +291,7 @@ elseif($view=='search'){
 			$from=$itemPage==0?0:($itemPage -1) * $config['showItems'];
 			$sqlLimit=" LIMIT ".$from.", ".$config['showItems'];
 		}
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti AND `rank`<=:rank".($sortOrder=''?" ORDER BY `pin` DESC, `ti` DESC":$sortOrder).($sqlLimit!=''?$sqlLimit:''));
 		$s->execute([
 			':contentType'=>$view,
 			':status'=>$status,
@@ -315,7 +315,7 @@ if(stristr($html,'<eventsitems')){
 	$limit=isset($matches[1])&&$matches[1]==0?4:$matches[1];
 	preg_match('/<eventitem>([\w\W]*?)<\/eventitem>/',$html,$matches);
 	$eventitem=$matches[1];
-	$se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :ct1 AND `status` LIKE :status AND `rank`<:rank OR `contentType` LIKE :ct2 AND `status` LIKE :status AND `rank`<:rank ORDER BY `ti` DESC LIMIT $limit");
+	$se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :ct1 AND `status` LIKE :status AND `rank`<:rank OR `contentType` LIKE :ct2 AND `status` LIKE :status AND `rank`<:rank ORDER BY `pin` DESC, `ti` DESC LIMIT $limit");
 	$se->execute([
 		':ct1'=>'events',
 		':ct2'=>'news',

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -443,11 +443,73 @@ if($r['contentType']!='offline'){?>
                 </div>
               <?php }
               if($r['file']=='index'){?>
-              <div class="row mt-3">
-                <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableSlider" data-tooltip="tooltip" aria-label="PermaLink to Slider Checkbox">&#128279;</a>':'';?>
-                <input id="enableSlider" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="1" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                <label id="configoptions11" for="enableSlider">Enable Content Slider</label>
-              </div>
+              <fieldset>
+                <legend>Featured Content Slider</legend>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableSlider" data-tooltip="tooltip" aria-label="PermaLink to Slider Enable Checkbox">&#128279;</a>':'';?>
+                  <input id="enableSlider" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="0" type="checkbox"<?=$r['sliderOptions'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions00" for="enableSlider">Enable</label>
+                </div>
+                <label id="pageSliderDirection" for="sliderDirection"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSliderDirection" data-tooltip="tooltip" aria-label="PermaLink to Page Slider Direction">&#128279;</a>':'';?>Direction</label>
+                <div class="form-row">
+                  <select id="sliderDirection" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderDirection" onchange="update('<?=$r['id'];?>','menu','sliderDirection',$(this).val(),'select');"<?=$user['options'][5]==1?'':' disabled';?>>
+                    <option value="horizontal"<?=$r['sliderDirection']=='horizontal'?' selected':'';?>>Horizontal (default)</option>
+                    <option value="vertical"<?=$r['sliderDirection']=='vertical'?' selected':'';?>>Vertical</option>
+                  </select>
+                </div>
+                <label id="pageSliderEffect" for="sliderEffect"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSliderEffect" data-tooltip="tooltip" aria-label="PermaLink to Page Slider Effect">&#128279;</a>':'';?>Effect</label>
+                <div class="form-row">
+                  <select id="sliderEffect" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderEffect" onchange="update('<?=$r['id'];?>','menu','sliderEffect',$(this).val(),'select');"<?=$user['options'][5]==1?'':' disabled';?>>
+                    <option value="slide"<?=$r['sliderEffect']=='slide'?' selected':'';?>>Slide (default)</option>
+                    <option value="fade"<?=$r['sliderEffect']=='fade'?' selected':'';?>>Fade</option>
+                    <option value="cube"<?=$r['sliderEffect']=='cube'?' selected':'';?>>Cube</option>
+                    <option value="coverflow"<?=$r['sliderEffect']=='coverflow'?' selected':'';?>>Coverflow</option>
+                    <option value="flip"<?=$r['sliderEffect']=='flip'?' selected':'';?>>Flip</option>
+                    <option value="creative"<?=$r['sliderEffect']=='creative'?' selected':'';?>>Creative</option>
+                    <option value="cards"<?=$r['sliderEffect']=='cards'?' selected':'';?>>Cards</option>
+                  </select>
+                </div>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#sliderLoop" data-tooltip="tooltip" aria-label="PermaLink to Slider Loop Checkbox">&#128279;</a>':'';?>
+                  <input id="sliderLoop" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="1" type="checkbox"<?=$r['sliderOptions'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions01" for="sliderLoop">Loop</label>
+                </div>
+                <label id="pageSliderSpeed" for="dCost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSliderSpeed" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Slider Speed Field">&#128279;</a>':'';?>Speed</label>
+                <div class="form-row">
+                  <input class="textinput" id="sliderSpeed" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderSpeed" type="number" value="<?=$r['sliderSpeed'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Slider Speed..."':' readonly';?>>
+                  <?=$user['options'][1]==1?'<button class="save" id="savedsliderSpeed" data-dbid="sliderSpeed" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+                <label id="pageSliderAutoplayDelay" for="sliderAutoplayDelay"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSliderAutoplayDelay" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' SliderAutoplayDelay">&#128279;</a>':'';?>Autoplay Delay</label>
+                <div class="form-row">
+                  <input class="textinput" id="sliderAutoplayDelay" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderAutoplayDelay" type="number" value="<?=$r['sliderAutoplayDelay'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Slider Autoplay Delay..."':' readonly';?>>
+                  <?=$user['options'][1]==1?'<button class="save" id="savedsliderAutoplayDelay" data-dbid="sliderAutoplayDelay" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                </div>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#sliderDisableOnInteraction" data-tooltip="tooltip" aria-label="PermaLink to Slider Disable On Interaction Checkbox">&#128279;</a>':'';?>
+                  <input id="sliderDisableOnInteraction" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="2" type="checkbox"<?=$r['sliderOptions'][2]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions02" for="sliderDisableOnInteraction">Disable On Interaction</label>
+                </div>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#sliderNavigation" data-tooltip="tooltip" aria-label="PermaLink to Slider Navigation Checkbox">&#128279;</a>':'';?>
+                  <input id="sliderNavigation" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="3" type="checkbox"<?=$r['sliderOptions'][3]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions03" for="sliderNavigation">Navigation</label>
+                </div>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#sliderPagination" data-tooltip="tooltip" aria-label="PermaLink to Slider Pagination Checkbox">&#128279;</a>':'';?>
+                  <input id="sliderPagination" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="4" type="checkbox"<?=$r['sliderOptions'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions04" for="sliderPagination">Pagination</label>
+                </div>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#sliderscrollbar" data-tooltip="tooltip" aria-label="PermaLink to Slider Scrollbar Checkbox">&#128279;</a>':'';?>
+                  <input id="sliderScrollbar" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="5" type="checkbox"<?=$r['sliderOptions'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions05" for="sliderScrollbar">Scrollbar</label>
+                </div>
+                <div class="row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#sliderContentBackground" data-tooltip="tooltip" aria-label="PermaLink to Slider Content Background Checkbox">&#128279;</a>':'';?>
+                  <input id="sliderContentBackground" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="6" type="checkbox"<?=$r['sliderOptions'][6]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <label id="sliderOptions06" for="sliderContentBackground">Use Content Image as Background</label>
+                </div>
+              </fieldset>
               <?php }
                 if($r['file']!='index'&&$r['file']!='offline'){?>
                 <label id="pageAccess" for="rank"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAccess" data-tooltip="tooltip" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Access</label>

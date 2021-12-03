@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -37,7 +37,7 @@ else{
       <div class="content-title-wrapper">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?php svg('content','i-3x');?></div>
+            <div class="content-title-icon"><?= svg2('content','i-3x');?></div>
             <div>Pages</div>
             <div class="content-title-actions">
               <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/pages/settings" role="button" data-tooltip="tooltip" aria-label="Pages Settings">'.svg2('settings').'</a>':'';?>
@@ -51,7 +51,7 @@ else{
         </div>
       </div>
       <div class="container-fluid p-0">
-        <div class="card border-radius-0 overflow-visible">
+        <div class="card border-radius-0">
           <table class="table-zebra">
             <thead>
               <tr>
@@ -60,7 +60,7 @@ else{
                   Title<span class="ml-5 small">Submenu</span>
                 </th>
                 <th class="col text-center">Menu</th>
-                <th class="col text-center">Views<?=$user['options'][1]==1?' <button class="btn-sm trash" data-tooltip="tooltip" aria-label="Clear All Page Views" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`pageviews`);">'.svg2('eraser').'</button>':'';?></th>
+                <th class="col text-center">Views<?=$user['options'][1]==1?' <button class="btn-sm trash" data-tooltip="right" aria-label="Clear All Page Views" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`pageviews`);">'.svg2('eraser').'</button>':'';?></th>
                 <th class="col text-center">Active</th>
                 <th class="col"></th>
                 <th class="col"></th>

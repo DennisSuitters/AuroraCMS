@@ -253,10 +253,20 @@
   --search-item-link-color-hover: #00f;
   --search-item-url-color: #080;
 
-  --slider-height: 400px;
-  --slider-background-color: #ddd;
+  --slider-height: 360px;
+  --slider-background-color: var(--body-background-color);
+  --slider-content-color: var(--color);
+  --slider-scrollbar-background-color: rgba(0,0,0,.1);
+  --slider-scrollbar-color: var(--button-background-color);
+  --slider-navigation-size: 44px;
+  --slider-navigation-color: var(--button-background-color);
+  --slider-navigation-color-hover: var(--button-background-color-hover);
+  --slider-pagination-bullet-color: #000;
+  --slider-pagination-bullet-active-color: var(--button-background-color);
+  --slider-pagination-bullet-opacity: .2;
+  --slider-pagination-bullet-active-opacity: 1;
 
-  --jumbotron-background-color: #000;
+  --jumbotron-background-color: transparent;
 
   --starRating-color: #ffdf00;
   --starRating-outline-width: 1px;
@@ -292,8 +302,10 @@
   --forum-wysiwyg-editable-background-color: var(--card-background-color);
   --forum-wysiwyg-editable-color: var(--card-color);
 
-  --chat-zindex: 1020;
-  --chat-header-color: #e9e9e9;
+  --chat-zindex: 1050;
+  --chat-header-background-color: transparent;
+  --chat-body-border-color: #e9e9e9;
+  --chat-body-background-color: #fff;
 
   --banner-background-color: var(--danger-background-color);
   --banner-border-color: var(--danger-border-color);

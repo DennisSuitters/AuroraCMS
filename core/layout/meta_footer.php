@@ -27,12 +27,25 @@
       document.getElementById('notification-checkbox').checked=false;
       if($('#sidebar').hasClass('navsmall')){
         Cookies.set('sidebar','small');
+        if($(window).width() < 577){
+          $(this).attr('aria-expanded','true');
+        }else{
+          $(this).attr('aria-expanded','false');
+        }
       }else{
         Cookies.remove('sidebar');
+        if($(window).width() < 577){
+          $(this).attr('aria-expanded','false');
+        }else{
+          $(this).attr('aria-expanded','true');
+        }
       }
       return false;
     }
   );
+  if ($(window).width() < 577) {
+    $('.nav-toggle').attr('aria-expanded','false');
+  }
   var unsaved=false;
   window.onbeforeunload=function(e){
     if(unsaved)return'You have unsaved changes. Do you ant to leave this page and discard your changes or stay on this page?';
@@ -303,7 +316,8 @@
           lang:'en-US',
           toolbar:[
             ['save',['save']],
-            ['custom',['cleaner','findnreplace']],
+            ['custom',['findnreplace']],
+//            ['custom',['cleaner','findnreplace']],
 //            ['style',['style']],
             ['font',['bold','italic','underline','clear']],
             ['para',['ul','ol','paragraph']],

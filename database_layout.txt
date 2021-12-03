@@ -54,7 +54,7 @@ config
   `comingsoon` int(1)
   `options` varchar(32)
     0   Enable Points Display
-    1   Slider
+    1   Enable a11y Widget
     2   Image Resizing
     3   Account Sign Ups
     4   Enable Tooltips
@@ -242,6 +242,7 @@ config
   `update_url` varchar(255)
   `navstat` int(4)
   `iconsColor` int(1)
+  `a11yPosition` tinytext
   `ti` int(10)
 
 content
@@ -595,6 +596,27 @@ menu
   `cover` varchar(128) COLLATE utf8_bin NOT NULL,
   `coverURL` varchar(256) COLLATE utf8_bin NOT NULL,
   `coverVideo` varchar(255) COLLATE utf8_bin NOT NULL,
+  `sliderOptions` VARCHAR(16) NOT NULL DEFAULT '0000000000000000'
+    0   Enable
+    1   loop
+    2   disableOnInteraction
+    3   navigation
+    4   pagination
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+  `sliderDirection` TINYTEXT NOT NULL
+  `sliderEffect` TINYTEXT NOT NULL
+  `sliderSpeed` INT(8) NOT NULL DEFAULT '300'
+  `sliderAutoplayDelay` INT(8) NOT NULL DEFAULT '3000'
   `attributionImageTitle` tinytext COLLATE utf8_bin NOT NULL,
   `attributionImageName` tinytext COLLATE utf8_bin NOT NULL,
   `attributionImageURL` varchar(256) COLLATE utf8_bin NOT NULL,

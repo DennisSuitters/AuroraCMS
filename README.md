@@ -1,10 +1,11 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.2
+Current version is v0.2.3
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
+- Accessibility (A11Y) Widget that can be enabled to allow site visitors to change toggle settings to allow those with disabilities to use the website more easily, and to adhere to the Australian Accessibility Law. 
 - Hosting and Site Payments for Developers.
   - When setup, Hosting and Site Payment notifications are displayed on the Dashboard of Client Sites.
     - Show Status of Hosting Payments, Overdue by days which has an alert animation to attract attention, Outstanding due date, Paid with number of days.
@@ -163,7 +164,7 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 Consult the everchanging [TODO](https://github.com/DiemenDesign/AuroraCMS/blob/master/TODO.md) file.
 
 ### UPDATING:
-Other than updating files, which can be done be simply overwriting them, the database occasionally has new or changed fields, changes that can be run in phpMyAdmin will be in the root folder as `update.sql`, and will change at each release.
+Other than updating files, which can be done by simply overwriting them, the database occasionally has new or changed fields, changes that can be run in phpMyAdmin will be in the root folder as `update.sql`, and will change at each release.
 
 ### LEGAL:
 By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for any damages that your usage of AuroraCMS may cause to your system, or persons. Damages may infer such things as Data Loss, Aural or Visual Impairment, Server Crashes, Alien Abduction, Coding nightmare's, Alien Implants, or Visiting Alternate Realities. AuroraCMS is Licensed under [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE). We request that if you modify, and hopefully enhance AuroraCMS, that you take part in maintaining, and contributing to it's code base here at GitHub.
@@ -175,8 +176,9 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
   - Windows Testing, bug finding and reporting.
 
 ### AuroraCMS Live Sites by Diemen Design:
-- [Anime Excess](https://www.animeexcess.com.au/)
-- [BizzyKnits](https://www.bizzyknits.biz/)
+- [Anime Excess](https://animeexcess.com.au/)
+- [BizzyKnits](https://bizzyknits.biz/)
+- [Budget Skips Express](https://budgetskipsexpress.com.au/)
 - [Corner Life Coach](https://corner.net.au/)
 - [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
 - [Cradle Mountain Message](https://cradlemountainmassage.com.au/)
@@ -185,6 +187,6 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
 - [Hays Computer World](https://hayscomputerworld.com.au/)
 - [K9FineDining](https://k9finedining.com/)
-- [Lovely Gardens](https://www.lovelygardens.com.au/)
+- [Lone Wolf Anime](https://lonewolfanime.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)
 - [Raycraft Entertainment](https://www.entertainme.net.au/)

@@ -6,9 +6,9 @@
       </figure>
       <quickviewallthumbs>
         <div class="quickview-thumbs col-12 col-sm-1 p-0">
-          <img class="col-3 col-sm-12 mb-1 active" src="<print content=thumb>" data-image="<print content=image>" loading="lazy" alt="<print content=imageALT>" onclick="$('#quickview-image').attr('src',$(this).data('image'));$('.quickview-thumbs img').removeClass('active');$(this).addClass('active');">
+          <img class="col-3 col-sm-12 mb-1 active" src="<print content=thumb>" data-image="<print content=image>" loading="lazy" alt="<print content=imageALT>" onclick="quickview(`<print content=image>`,this);">
           <quickviewthumbs>
-            <img class="col-3 col-sm-12 mb-1" src="<print thumbs=thumb>" data-image="<print thumbs=image>" loading="lazy" alt="<print thumbs=imageALT>" onclick="$('#quickview-image').attr('src',$(this).data('image'));$('.quickview-thumbs img').removeClass('active');$(this).addClass('active');">
+            <img class="col-3 col-sm-12 mb-1" src="<print thumbs=thumb>" data-image="<print thumbs=image>" loading="lazy" alt="<print thumbs=imageALT>" onclick="quickview(`<print thumbs=image>`,this);">
           </quickviewthumbs>
         </div>
       </quickviewallthumbs>

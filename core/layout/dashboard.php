@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -407,7 +407,8 @@ if(file_exists('CHANGELOG.md')){
   require'core/parsedown/class.parsedown.php';?>
           <div class="col-12 col-md-6 p-2">
             <div class="card p-2">
-              <div class="h5"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a></div>
+              <div class="h5"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS">Latest Project Updates</a>.</div>
+              <div class="small text-muted">last update <?=date ($config['dateFormat'],filemtime('CHANGELOG.md'));?>.</div>
               <p>
                 <?php $Parsedown=new Parsedown();echo$Parsedown->text(file_get_contents('CHANGELOG.md'));?>
               </p>

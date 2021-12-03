@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -360,6 +360,10 @@ class admin{
 		$view='search';
 		require'admin.php';
 	}
+	function templates($args=false){
+		$view='templates';
+		require'admin.php';
+	}
   function tracker($args=false){
     $view='tracker';
     require'admin.php';
@@ -540,6 +544,7 @@ $routes=[
 	$settings['system']['admin'].'/reviews'=>['admin','reviews'],
 	$settings['system']['admin'].'/search'=>['admin','search'],
 	$settings['system']['admin'].'/security'=>['admin','security'],
+	$settings['system']['admin'].'/templates'=>['admin','templates'],
   $settings['system']['admin'].'/tracker'=>['admin','tracker'],
 	$settings['system']['admin']=>['admin','dashboard'],
 	$settings['system']['admin'].'/manifest.json'=>['internal','manifestadmin'],

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,7 +22,7 @@ else{
     $comments=0;
     if(isset($args[0])&&$args[0]=='article')$schema='blogPosting';
     if(isset($args[0])&&$args[0]=='inventory'){
-      $schema='Offer';
+      $schema='Product';
       $stockStatus='quantity';
     }
     if(isset($args[0])&&$args[0]=='service')$schema='Service';
@@ -283,15 +283,21 @@ else{
                   onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');" data-tooltip="tooltip" aria-label="Stock Status">
                     <option value="quantity"<?=$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity</option>
                     <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
+                    <option value="in store only"<?=$r['stockStatus']=='in store only'?' selected':'';?>>In Store Only</option>
+                    <option value="online only"<?=$r['stockStatus']=='online only'?' selected':'';?>>Online Only</option>
+                    <option value="limited availability"<?=$r['stockStatus']=='limited availability'?' selected':'';?>>Limited Availability</option>
                     <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
                     <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
                     <option value="pre order"<?=$r['stockStatus']=='pre order'?' selected':'';?>>Pre Order</option>
+                    <option value="pre sale"<?=$r['stockStatus']=='pre sale'?' selected':'';?>>Pre Sale</option>
                     <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
                     <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
-                    <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']=='')?' selected':'';?>>No Display</option>
+                    <option value="discontinued"<?=$r['stockStatus']=='discontinued'?' selected':'';?>>Discontinued</option>
+                    <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'');?>>No Display</option>
                   </select>
 <?php }?>
                   <div class="image-toolbar">
+                    <?=($r['pin'][0]==1?'<a class="badger badge-primary small text-white" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin">Pinned</a><br>':'');?>
                     <?= !isset($args[1])?'<a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a><br>':'';
                     echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> '.svg2('view').'</button><br>':'';
                     echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a><br>':'');

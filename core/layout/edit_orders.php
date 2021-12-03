@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -340,7 +340,7 @@ else{?>
                     <td class="align-middle">
                       <input type="checkbox" class="orderitems" name="item" value="<?=$oi['id'];?>">
                     </td>
-                    <td class="text-left align-middle small px-0"><?=$i['code'];?></td>
+                    <td class="text-left align-middle small px-0"><?=(isset($i['code'])?$i['code']:'');?></td>
                     <td class="text-left align-middle px-0">
                       <?php if($r['iid_ti']!=0)echo($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
                       else{?>
@@ -364,11 +364,13 @@ else{?>
                           <input class="text-center" name="da" type="text" value="<?=$oi['quantity'];?>"<?=$r['status']=='archived'?' readonly':'';?>>
                         </form>
                       <?php }else{
-                        if($oi['iid']!=0)echo$oi['quantity'];
+                        if($r['iid']!=0)echo$oi['quantity'];
                       }?>
                     </td>
                     <td class="text-right align-middle px-0">
-                      <?php if($oi['iid']!=0){?>
+                      <?php if($r['iid_ti']!=0){
+                        echo number_format((float)$oi['cost'],2,'.','');
+                      }else{?>
                         <form target="sp" method="post" action="core/updateorder.php">
                           <input name="act" type="hidden" value="cost">
                           <input name="id" type="hidden" value="<?=$oi['id'];?>">
@@ -376,7 +378,7 @@ else{?>
                           <input name="c" type="hidden" value="cost">
                           <input class="text-center" style="min-width:80px" name="da" value="<?= number_format((float)$oi['cost'],2,'.','');?>"<?=$r['status']=='archived'?' readonly':'';?>>
                         </form>
-                      <?php }elseif($oi['iid']!=0)echo number_format((float)$oi['cost'],2,'.','');?>
+                      <?php }?>
                     </td>
                     <td class="text-right align-middle px-0">
                       <?php

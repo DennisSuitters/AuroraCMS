@@ -1,13 +1,12 @@
 <settings itemcount="10" contenttype="mixed" order="random">
-<div class="slider-wrapper">
-	<a class="next-content" href="#next-content-1" title="Next Content" aria-label="Scroll to Next Content"><svg role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path d="m 12.85856,5.194785 -5.52357,5.51613 Q 7.19355,10.852355 7,10.852355 q -0.19355,0 -0.33499,-0.14144 L 1.141439,5.194785 Q 1,5.053345 1,4.856075 1,4.658805 1.141439,4.517365 L 2.37717,3.289075 q 0.14144,-0.14143 0.33499,-0.14143 0.19355,0 0.33499,0.14143 L 7,7.241935 10.95285,3.289075 q 0.14144,-0.14143 0.33499,-0.14143 0.19355,0 0.33499,0.14143 l 1.23573,1.22829 Q 13,4.658805 13,4.856075 q 0,0.19727 -0.14144,0.33871 z"/></svg></a>
-	<ul class="slider">
+<div class="swiper auroraSwiper">
+	<div class="swiper-wrapper">
 		<items>
-	    <li class="<carousel>">
-				<img src="<print content=image>" alt="<print content=title>">
+	    <div class="swiper-slide <carousel>">
+				<print content="image">
 	      <caption>
-				  <div class="slider-content">
-						<div class="row mt-0 mt-sm-4">
+				  <div class="swiper-content">
+						<div class="row">
 							<thumb><div class="col-12 col-sm-3 mt-3 mt-sm-5 thumb order-<ord1>"><img class="<rand>" src="<print content=thumb>" alt="<print content=title>"></div></thumb>
 							<div class="info col-12 col-sm mx-0 mx-sm-5 px-0 pt-sm-5 px-0 px-sm-5 order-<ord2>">
 								<h3 class="slider-title text-center text-sm-left"><print content="title"></h3>
@@ -22,7 +21,11 @@
 						<div class="corner-ribbon big top-left <print content=cssrank> text-uppercase font-weight-bold shadow-sm"><print content="rank"></div>
 	        </div>
 			  </caption>
-			</li>
+			</div>
 		</items>
-	</ul>
+	</div>
+	<div class="swiper-pagination"></div>
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+  <div class="swiper-scrollbar"></div>
 </div>

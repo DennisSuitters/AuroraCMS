@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,6 +52,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <input class="tab-control" id="tab1-9" name="tabs" type="radio">
           <label for="tab1-9">Settings</label>
           <?=($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'');?>
+          <input class="tab-control" id="tab1-11" name="tabs" type="radio">
+          <label for="tab1-11">Template</label>
 <?php /* Content */?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row mt-3">
@@ -504,11 +506,16 @@ else{
                 <select id="stockStatus"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');">
                   <option value="quantity"<?=$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
                   <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
+                  <option value="in store only"<?=$r['stockStatus']=='in store only'?' selected':'';?>>In Store Only</option>
+                  <option value="online only"<?=$r['stockStatus']=='online only'?' selected':'';?>>Online Only</option>
+                  <option value="limited availability"<?=$r['stockStatus']=='limited availability'?' selected':'';?>>Limited Availability</option>
                   <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
                   <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
                   <option value="pre order"<?=$r['stockStatus']=='pre order'?' selected':'';?>>Pre Order</option>
+                  <option value="pre sale"<?=$r['stockStatus']=='pre sale'?' selected':'';?>>Pre Sale</option>
                   <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
                   <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
+                  <option value="discontinued"<?=$r['stockStatus']=='discontinued'?' selected':'';?>>Discontinued</option>
                   <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'');?>>No Display</option>
                 </select>
               </div>
@@ -1011,7 +1018,7 @@ else{
                 $sr->execute([':id'=>$r['id']]);
                 if($sr->rowCount()>0){?>
                   <div class="form-row">
-                    <select id="schemaType" name="rid"<?=$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> data-tooltip="tooltip" aria-label="Select a Content Item to Relate to this one...">
+                    <select id="rid" name="rid"<?=$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> data-tooltip="tooltip" aria-label="Select a Content Item to Relate to this one...">
                       <option value="0">Select a Content Item to Relate to this one...</option>
                       <?php while($rr=$sr->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rr['id'].'">'.$rr['contentType'].': '.$rr['title'].'</option>';?>
                       </select>
@@ -1308,6 +1315,11 @@ else{
                 </div>
               </div>
             </div>
+            <div class="row mt-3">
+              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Pinned Checkbox">&#128279;</a>':'';?>
+              <input id="pin" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="pin" data-dbb="0" type="checkbox"<?=($r['pin'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+              <label id="contentpin0<?=$r['id'];?>" for="pin">Pinned</label>
+            </div>
             <?php if($r['contentType']=='inventory'){?>
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#coming" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Coming Soon Checkbox">&#128279;</a>':'';?>
@@ -1497,6 +1509,59 @@ else{
             </div>
           </div>
 <?php }?>
+          <div class="tab1-11 border-top py-3" data-tabid="tab1-11" role="tabpanel">
+            <section class="content overflow-visible theme-chooser" id="templates">
+              <article class="card overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
+                <figure class="card-image">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none"></svg>
+                  <div class="image-toolbar overflow-visible">
+                    <?= svg2('approve','icon enable text-white i-3x pt-2 pr-1');?>
+                  </div>
+                </figure>
+                <div class="card-header line-clamp">
+                  Theme Generated
+                </div>
+                <div class="card-body no-clamp">
+                  <p class="small"><small>This selection uses the item template in the theme file.</small></p>
+                </div>
+              </article>
+<?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
+$st->execute();
+while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
+              <article class="card overflow-visible theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
+                <figure class="card-image position-relative overflow-visible">
+                  <?=$rt['image'];?>
+                  <div class="image-toolbar overflow-visible">
+                    <?= svg2('approve','icon enable text-white i-3x pt-2 pr-1');?>
+                  </div>
+                </figure>
+                <div class="card-header line-clamp">
+                  <?=$rt['title'];?>
+                </div>
+                <div class="card-body no-clamp">
+                  <p class="small"><small><?=$rt['notes'];?></small></p>
+                </div>
+              </article>
+<?php }?>
+            </section>
+            <script>
+              $(".theme-chooser").not(".disabled").find("figure.card-image").on("click",function(){
+                $('#templates .theme').removeClass("theme-selected");
+                $(this).parent('article').addClass("theme-selected");
+                $('#notheme').addClass("hidden");
+                $.ajax({
+                  type:"GET",
+                  url:"core/update.php",
+                  data:{
+                    id:"<?=$r['id'];?>",
+                    t:"content",
+                    c:"templatelist",
+                    da:$(this).parent('article').attr("data-template")
+                  }
+                });
+              });
+            </script>
+          </div>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>

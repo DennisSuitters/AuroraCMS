@@ -40,7 +40,7 @@
               <figure class="card-image position-relative overflow-visible">
                 <img src="<?php if(file_exists('layout/'.$folder.'/theme.jpg'))echo'layout/'.$folder.'/theme.jpg';elseif(file_exists('layout/'.$folder.'/theme.png'))echo'layout/'.$folder.'/theme.png';else echo ADMINNOIMAGE;?>" alt="<?=$theme['title'];?>">
                 <div class="image-toolbar overflow-visible">
-                  <span class="badger badge-success enable" data-tooltip="tooltip" aria-label="Theme Enabled"><?= svg2('approve');?></span>
+                  <?= svg2('approve','icon enable text-white i-3x pt-2 pr-1');?>
                 </div>
               </figure>
               <div class="card-body pt-0 mt-2 mb-0 text-center">
@@ -48,6 +48,7 @@
                 <small>Version <?=$theme['version'];?> created by <?=(isset($theme['creator_url'])&&$theme['creator_url']!=''?'<a target="_blank" href="'.$theme['creator_url'].'">'.$theme['creator'].'</a>':$theme['creator']);?><br>
                 using the <?=(isset($theme['framework_url'])&&$theme['framework_url']!=''?'<a target="_blank" href="'.$theme['framework_url'].'">'.$theme['framework_name'].'</a>':$theme['framework_name']);?> CSS Framework</small>
               </div>
+
             </article>
           <?php }?>
         </section>

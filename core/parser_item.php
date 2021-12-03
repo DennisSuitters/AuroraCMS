@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -99,17 +99,17 @@ if($skip==false){
         '/<print breadcrumb=[\"\']?title[\"\']?>/'
       ],[
         URL.urlencode($page['contentType']),
-        htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')
+        htmlspecialchars(ucwords($page['title']),ENT_QUOTES,'UTF-8')
       ],$breaditem);
     }else
-      $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+      $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($page['title']),ENT_QUOTES,'UTF-8'),$breadcurrent);
     $jsonld.=
     '{'.
       '"@type":"ListItem",'.
       '"position":2,'.
       '"item":{'.
         '"@id":"'.URL.urlencode($page['contentType']).'",'.
-        '"name":"'.htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8').'"'.
+        '"name":"'.htmlspecialchars(ucwords($page['title']),ENT_QUOTES,'UTF-8').'"'.
       '}'.
     '},';
     $breaditems.=$breadit;
@@ -121,17 +121,17 @@ if($skip==false){
           '/<print breadcrumb=[\"\']?title[\"\']?>/'
         ],[
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))),
-          htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8')
+          htmlspecialchars(ucwords($r['category_1']),ENT_QUOTES,'UTF-8')
         ],$breaditem);
       }else
-        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_1'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($r['category_1']),ENT_QUOTES,'UTF-8'),$breadcurrent);
       $jsonld.=
       '{'.
         '"@type":"ListItem",'.
         '"position":'.$jsoni.','.
         '"item":{'.
           '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'",'.
-          '"name":"'.$r['category_1'].'"'.
+          '"name":"'.ucwords($r['category_1']).'"'.
         '}'.
       '},';
       $breaditems.=$breadit;
@@ -144,17 +144,17 @@ if($skip==false){
           '/<print breadcrumb=[\"\']?title[\"\']?>/'
         ],[
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))),
-          htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8')
+          htmlspecialchars(ucwords($r['category_2']),ENT_QUOTES,'UTF-8')
         ],$breaditem);
       }else
-        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_2'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($r['category_2']),ENT_QUOTES,'UTF-8'),$breadcurrent);
       $jsonld.=
       '{'.
         '"@type":"ListItem",'.
         '"position":'.$jsoni.','.
         '"item":{'.
           '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'",'.
-          '"name":"'.$r['category_2'].'"'.
+          '"name":"'.ucwords($r['category_2']).'"'.
         '}'.
       '},';
       $breaditems.=$breadit;
@@ -167,17 +167,17 @@ if($skip==false){
           '/<print breadcrumb=[\"\']?title[\"\']?>/'
         ],[
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))),
-          htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8')
+          htmlspecialchars(ucwords($r['category_3']),ENT_QUOTES,'UTF-8')
         ],$breaditem);
       }else
-        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_3'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($r['category_3']),ENT_QUOTES,'UTF-8'),$breadcurrent);
       $jsonld.=
       '{'.
         '"@type":"ListItem",'.
         '"position":'.$jsoni.','.
         '"item":{'.
           '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'",'.
-          '"name":"'.$r['category_3'].'"'.
+          '"name":"'.ucwords($r['category_3']).'"'.
         '}'.
       '},';
       $breaditems.=$breadit;
@@ -190,31 +190,31 @@ if($skip==false){
           '/<print breadcrumb=[\"\']?title[\"\']?>/'
         ],[
           URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_4']))),
-          htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8')
+          htmlspecialchars(ucwords($r['category_4']),ENT_QUOTES,'UTF-8')
         ],$breaditem);
       }else
-        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['category_4'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+        $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($r['category_4']),ENT_QUOTES,'UTF-8'),$breadcurrent);
       $jsonld.=
       '{'.
         '"@type":"ListItem",'.
         '"position":'.$jsoni.','.
         '"item":{'.
           '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode(str_replace(' ','-',strtolower($r['category_1']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_2']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_3']))).'/'.urlencode(str_replace(' ','-',strtolower($r['category_4']))).'",'.
-          '"name":"'.$r['category_4'].'"'.
+          '"name":"'.ucwords($r['category_4']).'"'.
         '}'.
       '},';
       $breaditems.=$breadit;
     }
     $jsoni++;
     if($r['title']!=''){
-      $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),$breadcurrent);
+      $breadit=preg_replace('/<print breadcrumb=[\"\']?title[\"\']?>/',htmlspecialchars(ucwords($r['title']),ENT_QUOTES,'UTF-8'),$breadcurrent);
       $jsonld.=
       '{'.
         '"@type":"ListItem",'.
         '"position":'.$jsoni.','.
         '"item":{'.
           '"@id":"'.URL.urlencode($page['contentType']).'/'.urlencode($r['urlSlug']).'",'.
-          '"name":"'.$r['title'].'"'.
+          '"name":"'.ucwords($r['title']).'"'.
         '}'.
       '}]}</script>';
       $breaditems.=$breadit;
@@ -664,7 +664,7 @@ if($skip==false){
         '"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
         '"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
         '"description":"'.$seoDescription.'",'.
-        '"articleBody":"'.strip_tags($r['notes']).'",'.
+        '"articleBody":"'.htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8').'",'.
         '"author":{'.
           '"@type":"Person",'.
           '"name":"'.($ua['name']!=''?$ua['name']:$ua['username']).'"'.
@@ -681,22 +681,52 @@ if($skip==false){
         '"mpn":"'.($r['barcode']==''?$r['id']:$r['barcode']).'",'.
         '"sku":"'.($r['fccid']==''?$r['id']:$r['fccid']).'",'.
         '"brand":"'.($r['brand']!=''?$r['brand']:$config['business']).'",';
-        $jss=$db->prepare("SELECT AVG(`cid`) as rate,COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND status='approved'");
+        $jss=$db->prepare("SELECT AVG(`cid`) as rate, COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`='approved'");
         $jss->execute([':rid'=>$r['id']]);
         $jrr=$jss->fetch(PDO::FETCH_ASSOC);
-        $jsonld.=
-        '"aggregateRating":{'.
-          '"@type":"aggregateRating",'.
-          '"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
-          '"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
-        '},'.
-        '"offers":{'.
+        if($jrr['cnt']>0){
+          $jsonld.=
+          '"aggregateRating":{'.
+            '"@type":"aggregateRating",'.
+            '"ratingValue":"'.($jrr['rate']==''?'1':$jrr['rate']).'",'.
+            '"reviewCount":"'.($jrr['cnt']==0?'1':$jrr['cnt']).'"'.
+          '},';
+        }
+        $jss=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`='approved' ORDER BY `ti` DESC");
+        $jss->execute([':rid'=>$r['id']]);
+        if($jss->rowCount()>0){
+          $rc=1;
+          $jsonld.='"review":[';
+          while($jrr=$jss->fetch(PDO::FETCH_ASSOC)){
+            $jsonld.='{'.
+              '"@type":"Review",'.
+              '"reviewRating":{'.
+                '"@type":"Rating",'.
+                '"ratingValue":"'.$jrr['cid'].'"'.
+              '},'.
+              '"name":"'.htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8').'",'.
+              '"author":{'.
+                '"@type":"Person",'.
+                '"name":"'.htmlspecialchars($jrr['name'],ENT_QUOTES,'UTF-8').'"'.
+              '},'.
+              '"datePublished":"'.date('Y-m-d',$jrr['ti']).'",'.
+              '"reviewBody":"'.strip_tags($jrr['notes']).'",'.
+              '"publisher":{'.
+                '"@type":"Organization",'.
+                '"name":"'.htmlspecialchars($jrr['name'],ENT_QUOTES,'UTF-8').'"'.
+              '}'.
+            '}'.($rc < $jss->rowCount()?',':'');
+            $rc++;
+          }
+          $jsonld.='],';
+        }
+        $jsonld.='"offers":{'.
           '"@type":"Offer",'.
           '"url":"'.$canonical.'",'.
           '"priceCurrency":"AUD",'.
           '"price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'",'.
           '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",'.
-          '"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'Out Of Stock':'In Stock')).'",'.
+          '"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'http://schema.org/OutOfStock':'http://schema.org/InStock'):($r['stockStatus']=='none'?'http://schema.org/OutOfStock':'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus'])))).'",'.
           '"seller":{'.
             '"@type":"Organization",'.
             '"name":"'.$config['business'].'"'.

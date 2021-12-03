@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -150,7 +150,7 @@ if($act=='statusBackorder'){
   echo'<script>window.top.window.$("#action").val("0");</script>';
 }
 if($act=='additem'){
-	if($da!=0){
+	if(is_numeric($da)&&$da!=0){
 		$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 		$q->execute([':id'=>$da]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
@@ -176,13 +176,13 @@ if($act=='additem'){
 		$r=[
 			'title'=>'',
 			'cost'=>0,
-			'status'=>'neg'
+			'stockStatus'=>'neg'
 		];
 	}else{
     $r=[
       'title'=>'',
       'cost'=>0,
-			'status'=>''
+			'stockStatus'=>''
     ];
   }
 	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
@@ -425,14 +425,14 @@ $html.='<tr class="'.($oi['status']=='back order'||$oi['status']=='pre order'||$
     ).
   '</td>'.
   '<td class="text-right align-middle px-0">'.
-    ($oi['iid']!=0?
+    ($oi['iid_ti']!=0?($oi['iid'] != 0?$oi['cost']:''):
       '<form target="sp" method="post" action="core/updateorder.php">'.
         '<input name="act" type="hidden" value="cost">'.
         '<input name="id" type="hidden" value="'.$oi['id'].'">'.
         '<input name="t" type="hidden" value="orderitems">'.
         '<input name="c" type="hidden" value="cost">'.
         '<input class="text-center" style="min-width:80px" name="da" value="'.$oi['cost'].'"'.($r['status']=='archived'?' readonly':'').'>'.
-      '</form>':($oi['iid'] != 0?$oi['cost']:'')
+      '</form>'
     ).
   '</td>'.
   '<td class="test-right align-middle px-0">';

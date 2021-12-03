@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
   <nav>
     <ul class="nav-left">
       <li>
-        <a class="nav-toggle" href="javascript:void(0);">
+        <button class="nav-toggle" type="button" aria-label="Show/Hide Sidebar" aria-expanded="true">
           <span class="line line-1"></span>
           <span class="line line-2"></span>
           <span class="line line-3"></span>

@@ -1,32 +1,19 @@
-### v0.2.2
-- Remove Profile Link to non-existent Profiles page on Blog Articles.
-- Fix Accounts that are not Account Contacts for Hosting or Site Payments from showing up as Payment Accounts.
-- Remove some Social Media Share To options on content pages.
-- Fix images for Services/Events not displaying in the selector on Bookings Page.
-- Adjust Administration Folder Viewing Permissions.
-- Fix filtering of editor data for FAQ's, that was removing links from the data.
-- Adjust Administration Menu and Header area to help with viewing on Mobile Devices.
-- Adjust Coming Soon and Maintenance Pages, add Countdown Clock to Coming Soon page.
-- Improve Administration Sidebar Hiding/Showing actions.
-- Fix HTML Attribute order in Administration pages.
-- Fix Menu not highlighting correct active page in header and footer menus.
-- Add role values to header and footer navigation menus.
-- Fix Inventory Stock Status not Showing item as Pre Order.
-- Remove Tooltip trigger from Checkboxes in Administration but leave aria-label for Screen Readers.
-- Fix Administration Notifications dropdown styling, and data retrieval.
-- Adjust robots.txt file to exclude areas from being indexed by search engines.
-- Fix sitemap.xml and sitemap adding links to pages that cause errors, or shouldn't get indexed.
-- Fix Escaping Parser for JSON-LD.
-- Stop Offline page showing, but rather routing to an error page, as it should only be used for offline circumstances, and not indexable.
-- Fix content items from showing malformed content if content item title and URLSlug changes, now goes to a 404 Error Page.
-- Adjust Error page to not fetch content that isn't available to non-logged in site visitors.
-- Extract common functions into seperate files, such as breadcrumbs, cover image building, to overall reduce size, and allow easier future editing.
-- Add HTMLPurifier to properly mitigate XSS code executing on HTML Output.
-- Fix Gallery Items on Gallery and Content pages displaying wrong thumbnail.
-- Make sure Gallery Item on Gallery and Content pages are responsive.
-- Fix Bookings page showing non Service items.
-- Shopping Cart Widget not displaying no image image correctly.
-- Fix content Pagination not showing correct number of pages, or correct previous page link value.
-- Fix Forum unset values throwing errors.
-- Add missing role="menuitem" to login/administration menu links.
-- Fix Page list in Administration not clearing views for all items.
+### v0.2.3
+- Add Last update Date/Time to Changelog display on Dashboard page.
+- Update No-Avatar default image.
+- Fix strange escaping values in JSON-LD for Articles.
+- Fix capitalisation for Breadcrumb Items.
+- Fix incorrect SchemaType used for Products/Inventory when creating a new Item.
+- Add further Schema Availability types for Inventory.
+- Fix Deduction fields not be added correctly for Orders in Administration.
+- Fix typo encoding title in Deduction line on Front End Orders page.
+- Add Templates for selection of extra content item layouts.
+- Improve Theme and Template selector visual styling.
+- Fix Featured Content parser throwing errors on unset session rank.
+- Remove jQuery dependency for front end and rewrite Javascript to use Vanilla Javascript, except for Forum where text editor relies on jQuery.
+- Fix Live Chat and Banner layering and remove jQuery dependency.
+- Swap out Featured Content Slider for a Vanilla Javascript Swiper Slider.
+- Add options for Swiper to Page Editing.
+- Fix Banner not storing Local Storage value.
+- Fix Quick View Items thumbnail selector not working.
+- Built and added an Accessibility Widget to enable people with disabilities the option of adjust the readability of the sites, making sites inclusive to all.

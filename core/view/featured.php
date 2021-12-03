@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
-if($config['options'][1]==1){
+if($page['sliderOptions'][0]==1){
 	preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
 	$html=preg_replace('~<settings.*?>~is','',$html,1);
 	$itemCount=$matches[1];
@@ -40,9 +40,11 @@ if($config['options'][1]==1){
 	$featuredfiles=array();
 	if($cT!='folder'){
 		$sf=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `file`!='' AND `thumb`!='' AND `featured`='1' AND `internal`!='1' AND `status`='published' AND `rank`<=:rank ORDER BY $order $limit");
-		$sf->execute([':rank'=>$_SESSION['rank']]);
+		$sf->execute([':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0]);
 		while($f=$sf->fetch(PDO::FETCH_ASSOC)){
-			if($f['rank']>$_SESSION['rank'])continue;
+			if(isset($_SESSION['rank'])){
+				if($f['rank']>$_SESSION['rank'])continue;
+			}
 			$filechk=basename($f['file']);
 			if(file_exists('media/'.$filechk)){
 				$featuredfiles[]=[
@@ -91,7 +93,7 @@ if($config['options'][1]==1){
 							'filehtml'=>$filehtml,
 							'options'=>00000000000000000000000000000000,
 							'contentType'=>'carousel',
-							'rank'=>$_SESSION['rank'],
+							'rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0,
 							'urlSlug'=>'',
 							'thumb'=>$file,
 							'file'=>$file,
@@ -173,7 +175,7 @@ if($config['options'][1]==1){
 					$sideCost,
 					$f['id'],
 					$f['thumb'],
-					$f['file'],
+					$page['sliderOptions'][6]==1?'<img src="'.$f['file'].'" alt="'.$f['fileALT']!=''?$f['fileALT']:str_replace('-',' ',basename($f['file'])).'">':'',
 					$f['fileALT']!=''?$f['fileALT']:str_replace('-',' ',basename($f['file'])),
 					$f['seoCaption']!=''?$f['seoCaption']:$f['notes'],
 					'',
@@ -192,7 +194,19 @@ if($config['options'][1]==1){
 			$ord1=$ord1==1?2:1;
 			$ord2=$ord2==1?2:1;
 		}
-		$html=preg_replace('~<items>.*?<\/items>~is',$items,$html,1);
+		$html=preg_replace([
+			'~<items>.*?<\/items>~is',
+			'/<div class="swiper-button-prev"><\/div>/',
+			'/<div class="swiper-button-next"><\/div>/',
+			'/<div class="swiper-pagination"><\/div>/',
+			'/<div class="swiper-scrollbar"><\/div>/'
+		],[
+			$items,
+			$page['sliderOptions'][3]==1?'<div class="swiper-button-prev"></div>':'',
+			$page['sliderOptions'][3]==1?'<div class="swiper-button-next"></div>':'',
+			$page['sliderOptions'][4]==1?'<div class="swiper-pagination"></div>':'',
+			$page['sliderOptions'][5]==1?'<div class="swiper-scrollbar"></div>':'',
+		],$html);
 		$content.=$html;
 	}
 }

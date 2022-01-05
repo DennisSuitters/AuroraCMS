@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -276,10 +276,24 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
                 </div>
               </div>
             </div>
+            <div class="row mt-3">
+              <input id="bio0" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
+            </div>
             <label id="accountCaption" for="caption"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountCaption" data-tooltip="tooltip" aria-label="PermaLink to Caption Field">&#128279;</a>':'';?>Caption</label>
             <div class="form-row">
               <input class="textinput" id="caption" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="caption" type="text" value="<?=$r['caption'];?>" placeholder="Enter a Caption..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savecaption" data-dbid="caption" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+            </div>
+            <label id="accountNotes" for="notes"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNotes" data-tooltip="tooltip" aria-label="PermaLink to Bio Notes">&#128279;</a>':'';?>Bio Notes</label>
+            <div class="row">
+              <?=$user['options'][5]==1?'<form target="sp" method="post" action="core/update.php">'.
+                '<input name="id" type="hidden" value="'.$r['id'].'">'.
+                '<input name="t" type="hidden" value="login">'.
+                '<input name="c" type="hidden" value="notes">'.
+                '<textarea class="summernote" id="notes" name="da">'.rawurldecode($r['notes']).'</textarea></form>'
+              :
+              '<textarea class="field">'.rawurldecode($r['notes']).'</textarea>';?>
             </div>
             <div class="row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountsContact" data-tooltip="tooltip" aria-label="PermaLink to Accounts Contact Checkbox">&#128279;</a>':'';?>

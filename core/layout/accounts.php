@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -32,14 +32,14 @@ elseif(isset($args[0])&&$args[0]=='edit')require'core/layout/edit_accounts.php';
 else{
   if(isset($args[0])&&$args[0]=='type'){
     if(isset($args[1]))$rank=rank($args[1]);
-    $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `rank`=:rank ORDER BY `ti` DESC");
+    $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `rank`=:rank ORDER BY `ord` ASC, `ti` DESC");
     $s->execute([':rank'=>$rank]);
   }else{
     if($user['options'][5]==1){
-      $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `rank`<:rank ORDER BY `ti` DESC");
+      $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `rank`<:rank ORDER BY `ord` ASC, `ti` DESC");
       $s->execute([':rank'=>$_SESSION['rank']+1]);
     }else{
-      $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+      $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id ORDER BY `ord` ASC, `ti` DESC");
       $s->execute([':id'=>$user['id']]);
     }
   }?>
@@ -71,7 +71,7 @@ else{
         </div>
         <section class="content overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>" id="accountview">
           <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card overflow-visible card-list" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
+            <article class="card overflow-visible card-list item" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
               <div class="card-image overflow-visible">
                 <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><img src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
                 elseif($r['gravatar']!='')echo$r['gravatar'];
@@ -98,13 +98,38 @@ else{
                         <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('chevron-down').svg('chevron-up','d-none');?></button>
                       <?php }?>
                     </div>
+                    <?php svg('drag','orderhandle');?>
                   </div>
                 </div>
               </div>
             </article>
             <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
           <?php }?>
+          <article class="ghost hidden"></article>
         </section>
+        <script>
+          $('#accountview').sortable({
+            items:"article.item",
+            handle:'.orderhandle',
+            placeholder:".ghost",
+            helper:fixWidthHelper,
+            update:function(e,ui){
+              var order=$("#accountview").sortable("serialize");
+              $.ajax({
+                type:"POST",
+                dataType:"json",
+                url:"core/reorderaccounts.php",
+                data:order
+              });
+            }
+          }).disableSelection();
+          function fixWidthHelper(e,ui){
+            ui.children().each(function(){
+              $(this).width($(this).width());
+            });
+            return ui;
+          }
+        </script>
         <?php require'core/layout/footer.php';?>
       </div>
     </div>

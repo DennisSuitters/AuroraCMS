@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -333,7 +333,7 @@ if($skip==false){
       );
     }else
       $html=preg_replace('/<print content=[\"\']?video[\"\']?>/','',$html);
-  }elseif($r['options'][3]==1&&$r['file']!=''){
+  }elseif($r['file']==''){
     $r['file']=rawurldecode($r['file']);
     $html=preg_replace([
       '~<image>.*?<\/image>~is',
@@ -505,13 +505,15 @@ if($skip==false){
   			'/<print content=[\"\']?quantitycolor[\"\']?>/',
         '/<print content=[\"\']?quantity[\"\']?>/',
         '/<print content=[\"\']?stock[\"\']?>/',
+        '/<print content=[\"\']?cartonQuantity[\"\']?>/',
   			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
   			'/<print content=[\"\']?points[\"\']?>/'
       ],[
         '',
   			str_replace(' ','-',strtolower($itemQuantity)),
         $r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
-        ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])),
+        ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])).'.',
+        ($r['stockStatus']=='in stock'?$r['quantity'].' '.$r['stockStatus']:'').($r['cartonQuantity']>0?' ('.$r['cartonQuantity'].'per carton.)':''),
   			'',
   			number_format((float)$r['points'])
       ],$item);

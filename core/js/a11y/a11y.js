@@ -1,5 +1,4 @@
-document.addEventListener('mousemove',({pageY:h})=>document.documentElement.style.setProperty('--a11y-adhd-border-pos',`${h}px`));
-var aFS=localStorage.getItem("a11y-font-size");
+var aFS=localStorage.getItem("a11y-resize-font");
 var aG=localStorage.getItem("a11y-grayscale");
 var aSS=localStorage.getItem("a11y-seizure-safe");
 var aAF=localStorage.getItem("a11y-adhd-friendly");
@@ -10,7 +9,8 @@ var aLB=localStorage.getItem("a11y-light-background");
 var aLU=localStorage.getItem("a11y-links-underline");
 var aRF=localStorage.getItem("a11y-readable-font");
 if(aFS!==null){
-  if(aFS > 100 || aFS < 201){document.querySelector("body").classList.add("a11y-resize-font-"+aFS);}
+  document.querySelector("body").classList.add("a11y-resize-font");
+  document.documentElement.style.setProperty('--a11y-resize-font',aFS+`%`);
 }
 if(aSS==="true"){
   document.querySelector("body").classList.add("a11y-seizure-safe");
@@ -19,6 +19,7 @@ if(aSS==="true"){
 if(aAF==="true"){
   document.querySelector("body").classList.add("a11y-adhd-friendly");
   document.querySelector(".a11y-btn-adhd-friendly").classList.add('active');
+  document.addEventListener('mousemove',({pageY:h})=>document.documentElement.style.setProperty('--a11y-adhd-border-pos',`${h}px`));
 }
 if(aDF==="true"){
   document.querySelector("body").classList.add("a11y-dyslexic-friendly");
@@ -63,50 +64,35 @@ document.addEventListener('click',function(event){
     event.preventDefault();
     var action=event.target.closest(".a11y-toolbar-link").getAttribute("data-action");
     if(action==='resize-plus'){
-      var aFS=localStorage.getItem("a11y-font-size");
+      var aFS=localStorage.getItem("a11y-resize-font");
       console.log(aFS);
       if(aFS===null)aFS=110;
       if(aFS){
-        aFS = parseFloat(aFS) + parseFloat(10);
+        aFS = parseFloat(aFS) + parseFloat(5);
         if(aFS<120)aFS=120;
         if(aFS>200)aFS=200;
-        document.querySelector("body").classList.remove("a11y-resize-font-0");
-        document.querySelector("body").classList.remove("a11y-resize-font-120");
-        document.querySelector("body").classList.remove("a11y-resize-font-130");
-        document.querySelector("body").classList.remove("a11y-resize-font-140");
-        document.querySelector("body").classList.remove("a11y-resize-font-150");
-        document.querySelector("body").classList.remove("a11y-resize-font-160");
-        document.querySelector("body").classList.remove("a11y-resize-font-170");
-        document.querySelector("body").classList.remove("a11y-resize-font-180");
-        document.querySelector("body").classList.remove("a11y-resize-font-190");
-        document.querySelector("body").classList.remove("a11y-resize-font-200");        document.querySelector("body").classList.add("a11y-resize-font-"+aFS);
-        localStorage.setItem("a11y-font-size",aFS);
+        document.querySelector("body").classList.remove("a11y-resize-font");
+        document.querySelector("body").classList.add("a11y-resize-font");
+        document.documentElement.style.setProperty('--a11y-resize-font',aFS+`%`)
+        localStorage.setItem("a11y-resize-font",aFS);
       }
       return false;
     }
     if(action==='resize-minus'){
-      var aFS=localStorage.getItem("a11y-font-size");
+      var aFS=localStorage.getItem("a11y-resize-font");
       console.log(aFS);
       if(aFS){
-        aFS -= 10;
+        aFS -= 5;
         if(aFS<120){
           aFS = 0;
         }
         if(aFS>200){
           aFS = 200;
         }
-        document.querySelector("body").classList.remove("a11y-resize-font-0");
-        document.querySelector("body").classList.remove("a11y-resize-font-120");
-        document.querySelector("body").classList.remove("a11y-resize-font-130");
-        document.querySelector("body").classList.remove("a11y-resize-font-140");
-        document.querySelector("body").classList.remove("a11y-resize-font-150");
-        document.querySelector("body").classList.remove("a11y-resize-font-160");
-        document.querySelector("body").classList.remove("a11y-resize-font-170");
-        document.querySelector("body").classList.remove("a11y-resize-font-180");
-        document.querySelector("body").classList.remove("a11y-resize-font-190");
-        document.querySelector("body").classList.remove("a11y-resize-font-200");
-        document.querySelector("body").classList.add("a11y-resize-font-"+aFS);
-        localStorage.setItem("a11y-font-size",aFS);
+        document.querySelector("body").classList.remove("a11y-resize-font");
+        document.querySelector("body").classList.add("a11y-resize-font");
+        document.documentElement.style.setProperty('--a11y-resize-font',aFS+`%`)
+        localStorage.setItem("a11y-resize-font",aFS);
       }
       return false;
     }
@@ -116,36 +102,30 @@ document.addEventListener('click',function(event){
         aBA.classList.remove('active');
       });
       event.target.closest(".a11y-toolbar-link").classList.remove("active");
-      document.querySelector("body").classList.remove("a11y-resize-font-0");
-      document.querySelector("body").classList.remove("a11y-resize-font-120");
-      document.querySelector("body").classList.remove("a11y-resize-font-130");
-      document.querySelector("body").classList.remove("a11y-resize-font-140");
-      document.querySelector("body").classList.remove("a11y-resize-font-150");
-      document.querySelector("body").classList.remove("a11y-resize-font-160");
-      document.querySelector("body").classList.remove("a11y-resize-font-170");
-      document.querySelector("body").classList.remove("a11y-resize-font-180");
-      document.querySelector("body").classList.remove("a11y-resize-font-190");
-      document.querySelector("body").classList.remove("a11y-resize-font-200");
+      localStorage.removeItem("a11y-resize-font");
+      document.querySelector("body").classList.remove("a11y-resize-font");
       localStorage.removeItem("a11y-seizure-safe");
       document.querySelector("body").classList.remove("a11y-seizure-safe");
       localStorage.removeItem("a11y-adhd-friendly");
       document.querySelector("body").classList.remove("a11y-adhd-friendly");
       localStorage.removeItem("a11y-dyslexic-friendly");
       document.querySelector("body").classList.remove("a11y-dyslexic-friendly");
-      localStorage.removeItem("a11y-font-size");
-      document.querySelector("body").classList.remove("a11y-grayscale");
       localStorage.removeItem("a11y-grayscale");
-      document.querySelector("body").classList.remove("a11y-high-contrast");
+      document.querySelector("body").classList.remove("a11y-grayscale");
       localStorage.removeItem("a11y-high-contrast");
-      document.querySelector("body").classList.remove("a11y-negative-contrast");
+      document.querySelector("body").classList.remove("a11y-high-contrast");
       localStorage.removeItem("a11y-negative-contrast");
-      document.querySelector("body").classList.remove("a11y-light-background");
+      document.querySelector("body").classList.remove("a11y-negative-contrast");
       localStorage.removeItem("a11y-light-background");
-      document.querySelector("body").classList.remove("a11y-links-underline");
+      document.querySelector("body").classList.remove("a11y-light-background");
       localStorage.removeItem("a11y-links-underline");
-      document.querySelector("body").classList.remove("a11y-readable-font");
+      document.querySelector("body").classList.remove("a11y-links-underline");
       localStorage.removeItem("a11y-readable-font");
+      document.querySelector("body").classList.remove("a11y-readable-font");
     }else{
+      if(action=='adhd-friendly'){
+        document.addEventListener('mousemove',({pageY:h})=>document.documentElement.style.setProperty('--a11y-adhd-border-pos',`${h}px`));
+      }
       event.target.closest(".a11y-toolbar-link").classList.toggle("active");
       document.querySelector("body").classList.toggle("a11y-"+action);
       var lSC=localStorage.getItem("a11y-"+action);

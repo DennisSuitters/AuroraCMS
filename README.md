@@ -1,11 +1,11 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.3
+Current version is v0.2.4
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
-- Accessibility (A11Y) Widget that can be enabled to allow site visitors to change toggle settings to allow those with disabilities to use the website more easily, and to adhere to the Australian Accessibility Law. 
+- Accessibility (A11Y) Widget that can be enabled to allow site visitors to change settings to allow those with disabilities to use the website more easily, and to adhere to the Australian Accessibility Law.
 - Hosting and Site Payments for Developers.
   - When setup, Hosting and Site Payment notifications are displayed on the Dashboard of Client Sites.
     - Show Status of Hosting Payments, Overdue by days which has an alert animation to attract attention, Outstanding due date, Paid with number of days.
@@ -109,15 +109,16 @@ Current version is v0.2.3
 - Open Street Maps via the Leaflet JavaScript library.
   - Address location Map can be displayed on Home Page, Contact Us, and Event Items.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
+  - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
+  - [summernote-checkbox](https://github.com/DiemenDesign/summernote-checkbox)
+  - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
   - [summernote-cleaner](https://github.com/DiemenDesign/summernote-cleaner)
-  - [summernote-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
-  - [summernote-image-attributes](https://github.com/DiemenDesign/summernote-image-attributes)
+  - [summernote-ext-elfinder](https://github.com/semplon/summernote-ext-elfinder)
   - [summernote-image-captionit](https://github.com/DiemenDesign/summernote-image-captionit)
   - [summernote-image-shapes](https://github.com/DiemenDesign/summernote-image-shapes)
   - [summernote-save-button](https://github.com/DiemenDesign/summernote-save-button)
-  - [summernote-seo](https://github.com/DiemenDesign/summernote-seo)
+  - [summernote-text-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
   - [summernote-video-attributes](https://github.com/DiemenDesign/summernote-video-attributes)
-  - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
 
 You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https://github.com/DiemenDesign/AuroraCMS-themes)
 
@@ -133,18 +134,17 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 
 #### Integrated Projects:
 - [iCONS](https://github.com/DiemenDesign/iCONS)
-- [Summernote](https://github.com/summernote/summernote)
+- [Summernote](https://github.com/summernote/summernote) Skunkworks Version (In Development)
+  - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
+  - [summernote-checkbox](https://github.com/DiemenDesign/summernote-checkbox)
+  - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
   - [summernote-cleaner](https://github.com/DiemenDesign/summernote-cleaner)
-  - [summernote-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
-  - [summernote-image-attributes](https://github.com/DiemenDesign/summernote-image-attributes)
+  - [summernote-ext-elfinder](https://github.com/semplon/summernote-ext-elfinder)
   - [summernote-image-captionit](https://github.com/DiemenDesign/summernote-image-captionit)
   - [summernote-image-shapes](https://github.com/DiemenDesign/summernote-image-shapes)
   - [summernote-save-button](https://github.com/DiemenDesign/summernote-save-button)
-  - [summernote-seo](https://github.com/DiemenDesign/summernote-seo)
+  - [summernote-text-findnreplace](https://github.com/DiemenDesign/summernote-text-findnreplace)
   - [summernote-video-attributes](https://github.com/DiemenDesign/summernote-video-attributes)
-  - [summernote-ext-elfinder](https://github.com/semplon/summernote-ext-elfinder)
-  - [summernote-libreICONS-svg](https://github.com/DiemenDesign/LibreICONS/tree/master/themes/summernote)
-  - [summernote-classes](https://github.com/DiemenDesign/summernote-classes)
 - [CodeMirror](https://github.com/codemirror/CodeMirror)
 - [FullCalendar](https://github.com/fullcalendar/fullcalendar)
 - [PHPMailer](https://github.com/PHPMailer/PHPMailer)
@@ -183,10 +183,10 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
 - [Cradle Mountain Message](https://cradlemountainmassage.com.au/)
 - [Diemen Design](https://diemen.design/)
+- [EntertainMe](https://entertainme.net.au/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
 - [Hays Computer World](https://hayscomputerworld.com.au/)
 - [K9FineDining](https://k9finedining.com/)
 - [Lone Wolf Anime](https://lonewolfanime.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)
-- [Raycraft Entertainment](https://www.entertainme.net.au/)

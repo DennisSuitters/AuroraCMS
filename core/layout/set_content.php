@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -60,6 +60,12 @@
           <button class="save" id="saveshowItems" data-dbid="showItems" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <small class="form-text text-muted">'0' to Disable and display all items.</small>
+        <label id="searchItemCount" for="searchItems"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#searchItemCount" data-tooltip="tooltip" aria-label="PermaLink to Search Item Count Field">&#128279;</a>':'';?>Search Items Count</label>
+        <div class="form-row">
+          <input class="textinput" id="searchItems" data-dbid="1" data-dbt="config" data-dbc="searchItems" type="text" value="<?=$config['searchItems'];?>" placeholder="Enter Search Items Count...">
+          <button class="save" id="savesearchItems" data-dbid="searchItems" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <small class="form-text text-muted">'0' to Default to 10 items.</small>
         <div class="row mt-3">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" data-tooltip="tooltip" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
           <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
@@ -190,6 +196,64 @@
             </div>
           <?php }?>
         </div>
+        <legend id="templateSection" class="mt-3 mb-0"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#templateSection" data-tooltip="tooltip" aria-label="PermaLink to Template Section">&#128279;</a>':'';?>Template Defaults</legend>
+        <label id="templateQTYField" for="templateQTY"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#templateQTYField" data-tooltip="tooltip" aria-label="PermaLink to Item Template Quantity Field">&#128279;</a>':'';?>Item Template Quantity</label>
+        <div class="form-row">
+          <input class="textinput" id="templateQTY" data-dbid="1" data-dbt="config" data-dbc="templateQTY" type="text" value="<?=$config['templateQTY'];?>" placeholder="Enter Template Item Quantity...">
+          <button class="save" id="savetemplateQTY" data-dbid="templateQTY" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <small class="form-text text-muted">'0' to Disable.</small>
+        <section class="content overflow-visible theme-chooser" id="templates">
+          <article class="card overflow-visible theme<?=$config['templateID']==0?' theme-selected':'';?>" id="l_0" data-template="0">
+            <figure class="card-image">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none"></svg>
+              <div class="image-toolbar overflow-visible">
+                <?= svg2('approve','icon enable text-white i-3x pt-2 pr-1');?>
+              </div>
+            </figure>
+            <div class="card-header line-clamp">
+              Theme Generated
+            </div>
+            <div class="card-body no-clamp">
+              <p class="small"><small>This selection uses the item template in the theme file.</small></p>
+            </div>
+          </article>
+<?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
+$st->execute();
+while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
+          <article class="card overflow-visible theme<?=$rt['id']==$config['templateID']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
+            <figure class="card-image position-relative overflow-visible">
+              <?=$rt['image'];?>
+              <div class="image-toolbar overflow-visible">
+                <?= svg2('approve','icon enable text-white i-3x pt-2 pr-1');?>
+              </div>
+            </figure>
+            <div class="card-header line-clamp">
+              <?=$rt['title'];?>
+            </div>
+            <div class="card-body no-clamp">
+              <p class="small"><small><?=$rt['notes'];?></small></p>
+            </div>
+          </article>
+<?php }?>
+        </section>
+        <script>
+          $(".theme-chooser").not(".disabled").find("figure.card-image").on("click",function(){
+            $('#templates .theme').removeClass("theme-selected");
+            $(this).parent('article').addClass("theme-selected");
+            $('#notheme').addClass("hidden");
+            $.ajax({
+              type:"GET",
+              url:"core/update.php",
+              data:{
+                id:"1",
+                t:"config",
+                c:"templateID",
+                da:$(this).parent('article').attr("data-template")
+              }
+            });
+          });
+        </script>
         <?php require'core/layout/footer.php';?>
       </div>
     </div>

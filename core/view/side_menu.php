@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -80,17 +80,14 @@ if(file_exists(THEME.'/side_menu.html')){
 			number_format((float)$r['points'])
 		],$sideTemp);
 
-/*			if($config['options'][30]==1){
-    	if(
-				($r['rank']>300||
-					$r['rank']<400)
-					&&
-				($ru['rank']>300||
-				$ru['rank']<400)
-					&&$ru['options'][19]==0){
-				$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+		if(isset($_SESSION['rank'])){
+			if($_SESSION['rank']>309&&$_SESSION['rank']<349){
+				if($r['rank']!=$_SESSION['rank']){
+					$sideTemp=preg_replace('~<addtocart>.*?<\/addtocart>~is','',$sideTemp);
+				}
 			}
-		} */
+		}
+
 		if($config['options'][30]==1){
 			if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)
 				$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
@@ -107,7 +104,7 @@ if(file_exists(THEME.'/side_menu.html')){
 			],[
 				'',
 				($r['quantity']==0?'':$r['quantity']),
-				($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus']))
+				($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])).'.'.($r['cartonQuantity']>0?' ('.$r['cartonQuantity'].'per carton.)':'')
 			],$sideTemp);
 			if($r['stockStatus']=='sold out')
 				$sideQuantity='<div class="quantity">Sold Out</div>';
@@ -362,17 +359,15 @@ if(file_exists(THEME.'/side_menu.html')){
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 	$insides=$matches[1];
 	if(isset($sidecat)&&$sidecat!=''){
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `views` DESC, `ti` DESC $show");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `category_1` LIKE :cat AND `internal`=0 AND `status`='published'".$sqlrank." ORDER BY `featured` DESC, `views` DESC, `ti` DESC $show");
 		$s->execute([
 			':contentType'=>$contentType,
-			':cat'=>$sidecat,
-			':rank'=>$_SESSION['rank'] + 1
+			':cat'=>$sidecat
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published' AND `rank`<=:rank ORDER BY `featured` DESC, `views` DESC, `ti` DESC $show");
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `internal`='0' AND `status`='published'".$sqlrank." ORDER BY `featured` DESC, `views` DESC, `ti` DESC $show");
 		$s->execute([
-			':contentType'=>$contentType,
-			':rank'=>$_SESSION['rank'] + 1
+			':contentType'=>$contentType
 		]);
 	}
 	$output='';

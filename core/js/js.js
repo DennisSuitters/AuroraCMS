@@ -76,6 +76,8 @@ document.addEventListener('click',function(event){
 		}).then(function(j){
 			if(j=='nomore'){
 				alert('Purchase Limit Reached!');
+      }else if(j=='wholesaleoutside'){
+        alert('Wholesale purchasing is restricted only to items in your account rank!');
 			}else{
 				document.querySelector('.cart').innerHTML=j;
 				var cartage=document.querySelector('#cartage');
@@ -98,32 +100,6 @@ function clean0(timeto0){
 	if(timeto0 < 10)var timeto0='0'+timeto0;
 	else var timeto0=timeto0;
 	return timeto0;
-}
-function countdown(){
-	var enddate=document.getElementById("countdownDateEnd").value;
-	if(enddate!=''){
-		var countDownDate=new Date(enddate).getTime();
-		var x=setInterval(function(){
-			var now=new Date().getTime();
-			var distance=countDownDate - now;
-			var days=Math.floor(distance / (1000 * 60 * 60 * 24));
-			var hours=Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-			var minutes=Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-			var seconds=Math.floor((distance % (1000 * 60)) / 1000);
-			var days=clean0(days);
-			var hours=clean0(hours);
-			var minutes=clean0(minutes);
-			var seconds=clean0(seconds);
-			document.getElementById("countdownDays").innerHTML=days+"<small>Days</small>";
-			document.getElementById("countdownHours").innerHTML=hours+"<small>Hours</small>";
-			document.getElementById("countdownMinutes").innerHTML=minutes+"<small>Minutes</small>";
-			document.getElementById("countdownSeconds").innerHTML=seconds+"<small>Seconds</small>";
-			if(distance < 0){
-				clearInterval(x);
-				document.getElementById("countdowninfo").innerHTML="EXPIRED";
-			}
-		},1000);
-	}else document.getElementById("countdowninfo").innerHTML="EXPIRED";
 }
 function updateChat(){
   chatTimer=null;

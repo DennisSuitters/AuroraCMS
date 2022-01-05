@@ -1,0 +1,46 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="biography">
+  <cover>
+		<figure class="covertron"><print page="coverItem"></figure>
+	</cover>
+  <breadcrumb>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
+	</breadcrumb>
+  <pagenotes>
+    <section class="row">
+      <article class="mx-auto">
+        <h1><print page="heading"></h1>
+        <print page="notes">
+      </article>
+    </section>
+  </pagenotes>
+  <section class="row justify-content-center br-1">
+		<items>
+			<article class="card col-11 col-sm-2 biography shadow">
+				<div class="card-image">
+					<img class="bio-avatar" src="<print bio=avatar>" loading="lazy" alt="<print bio=imageALT>">
+				</div>
+				<div class="card-header h4 text-center">
+					<print bio="name">
+				</div>
+				<div class="card-body d-block">
+          <p class="caption text-center"><print bio="caption"></p>
+					<print bio="notes">
+				</div>
+			</article>
+    </items>
+  </section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

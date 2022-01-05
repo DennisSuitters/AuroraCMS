@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -109,7 +109,7 @@ if(stristr($html,'<buildMenu')){
 				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
 					$r['contentType'],
-					['aboutus','article','bookings','cart','contactus','distributors',
+					['aboutus','article','biography','bookings','cart','contactus','distributors',
 					'events','forum','gallery','inventory','news','newsletters','portfolio',
 					'proofs','search','service','testimonials','tos'],
 					true)
@@ -157,7 +157,7 @@ if(stristr($html,'<buildMenu')){
 						$subURL.=URL.$rm['contentType'].'/';
 						if(!in_array(
 							$rm['contentType'],
-							['aboutus','article','bookings','cart','contactus','distributors',
+							['aboutus','article','biography','bookings','cart','contactus','distributors',
 							'events','gallery','inventory','news','newsletters','portfolio',
 							'proofs','search','service','testimonials','tos'],
 							true)
@@ -264,6 +264,7 @@ if(isset($_GET['activate'])&&$_GET['activate']!=''){
 	$html=str_replace('<activation>','',$html);
 include'inc-hours.php';
 $html=preg_replace([
+	'/<print page=[\"\']?contentType[\"\']?>/',
 	'/<rand>/',
 	stristr($html,'<email>')&&$config['options'][23]==1?'/<[\/]?email>/':'~<email>.*?<\/email>~is',
 	stristr($html,'<contact>')&&$config['options'][22]==1?'/<[\/]?contact>/':'~<contact>.*?<\/contact>~is',
@@ -278,6 +279,7 @@ $html=preg_replace([
 	'/<print config=[\"\']?mobile[\"\']?>/',
 	'/<print theme>/'
 ],[
+	$page['contentType'],
 	rand(1,10),
 	'',
 	'',

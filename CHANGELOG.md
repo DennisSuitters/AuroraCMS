@@ -1,19 +1,14 @@
-### v0.2.3
-- Add Last update Date/Time to Changelog display on Dashboard page.
-- Update No-Avatar default image.
-- Fix strange escaping values in JSON-LD for Articles.
-- Fix capitalisation for Breadcrumb Items.
-- Fix incorrect SchemaType used for Products/Inventory when creating a new Item.
-- Add further Schema Availability types for Inventory.
-- Fix Deduction fields not be added correctly for Orders in Administration.
-- Fix typo encoding title in Deduction line on Front End Orders page.
-- Add Templates for selection of extra content item layouts.
-- Improve Theme and Template selector visual styling.
-- Fix Featured Content parser throwing errors on unset session rank.
-- Remove jQuery dependency for front end and rewrite Javascript to use Vanilla Javascript, except for Forum where text editor relies on jQuery.
-- Fix Live Chat and Banner layering and remove jQuery dependency.
-- Swap out Featured Content Slider for a Vanilla Javascript Swiper Slider.
-- Add options for Swiper to Page Editing.
-- Fix Banner not storing Local Storage value.
-- Fix Quick View Items thumbnail selector not working.
-- Built and added an Accessibility Widget to enable people with disabilities the option of adjust the readability of the sites, making sites inclusive to all.
+### v0.2.4
+- Add cartonQuantity option for Inventory Items that are sold as bulk stock.
+- Adjust parser to add cartonQuantity if value is set and not 0.
+- Reduce A11Y Widget font size styling, now uses CSS Vars for resizing.
+- Adjust reCaptcha resize function to use Vanilla Javascript.
+- Add Wholesale Account limiting to set user rank when purchasing products.
+- Add Biography page, and options to enable Accounts as Bio and to add Caption and Notes.
+- Add ability to drag accounts to reorder their appearance on Biography pages.
+- Fix issue with displaying item event images when Event has countdown enabled.
+- Add check for Event items to not display events with start date set that have expired.
+- Add options for set number of content items to use a set content template without individual item being set to predetermined template.
+- Add option for number of items returned for search results.
+- Tidy up source, remove commented out test blocks that are no longer needed.
+- Add Users online quantity to footer in Administration.

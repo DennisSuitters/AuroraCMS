@@ -54,7 +54,7 @@ if(stristr($html,'<items')){
 				($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':NOIMAGE.' 600w,').
 				($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px"',
       'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w,'.(file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').(file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w':''),
-      'media/thumbs/'.basename($r['file']),
+      'media/sm/'.basename($r['file']),
       $r['file'],
 			htmlspecialchars($caption,ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),

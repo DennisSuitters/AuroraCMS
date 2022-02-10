@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,7 +52,7 @@ if(stristr($html,'<items>')){
       $r['status'],
       $r['iid_ti']>0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']),
       date($config['dateFormat'],$r['due_ti']),
-      URL.'orders/'.$r['qid'].$r['iid'].'/'
+      URL.'orders/'.$r['qid'].$r['iid'].'/',
     ],$item);
     $output.=$item;
     $zebra=$zebra==2?$zebra=1:$zebra=2;
@@ -72,6 +72,15 @@ if(isset($args[0])&&$args[0]!=''){
     $su->execute([':uid'=>$r['cid']]);
     $ru=$su->fetch(PDO::FETCH_ASSOC);
     $order=$r['iid_ti']>0?preg_replace('/<print order=[\"\']?date[\"\']?>/',date($config['dateFormat'],$r['iid_ti']),$order):preg_replace('/<print order=[\"\']?date[\"\']?>/',date($config['dateFormat'],$r['qid_ti']),$order);
+    $tracklink='';
+    if($r['status']=='paid'){
+      $strack=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+      $strack->execute([':id'=>$r['trackOption']]);
+      if($strack->rowCount()>0){
+        $rtrack=$strack->fetch(PDO::FETCH_ASSOC);
+        $tracklink='<strong>Tracking Link: </strong><a target="_blank" href="'.$rtrack['url'].$r['trackNumber'].'">'.$rtrack['title'].'</a><br><strong>Tracking ID: </strong> '.$r['trackNumber'];
+      }
+    }
     $order=preg_replace([
       '/<print order=[\"\']?notes[\"\']?>/',
       '/<print config=[\"\']?business[\"\']?>/',
@@ -101,7 +110,8 @@ if(isset($args[0])&&$args[0]!=''){
       '/<print order=[\"\']?ordernumber[\"\']?>/',
       '/<print order=[\"\']?duedate[\"\']?>/',
       '/<print status>/',
-      '/<print order=[\"\']?status[\"\']?>/'
+      '/<print order=[\"\']?status[\"\']?>/',
+      '/<tracklink>/'
     ],[
       $purify->purify($r['notes']),
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
@@ -120,11 +130,11 @@ if(isset($args[0])&&$args[0]!=''){
       htmlspecialchars($config['bankBSB'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars(($ru['name']!=''?$ru['name']:$ru['business']),ENT_QUOTES,'UTF-8'),
       htmlspecialchars(($ru['business']!=''?$ru['business']:$ru['name']),ENT_QUOTES,'UTF-8'),
-      htmlspecialchars($ru['address'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars($ru['suburb'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars($ru['city'],ENT_QUOTES,'UTF-8'),
-      htmlspecialchars($ru['state'],ENT_QUOTES,'UTF-8'),
-      $ru['postcode']==0?'':htmlspecialchars($ru['postcode'],ENT_QUOTES,'UTF-8'),
+      ($ru['address']!=''?htmlspecialchars($ru['address'],ENT_QUOTES,'UTF-8').', ':''),
+      ($ru['suburb']!=''?htmlspecialchars($ru['suburb'],ENT_QUOTES,'UTF-8').', ':''),
+      ($ru['city']!=''?htmlspecialchars($ru['city'],ENT_QUOTES,'UTF-8').', ':''),
+      ($ru['state']!=''?htmlspecialchars($ru['state'],ENT_QUOTES,'UTF-8').', ':''),
+      ($ru['postcode']!=0?htmlspecialchars($ru['postcode'],ENT_QUOTES,'UTF-8'):''),
       htmlspecialchars($ru['email'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($ru['phone'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($ru['mobile'],ENT_QUOTES,'UTF-8'),
@@ -132,6 +142,7 @@ if(isset($args[0])&&$args[0]!=''){
       date($config['dateFormat'],$r['due_ti']),
       $r['status'],
       $r['status'],
+      $tracklink
     ],$order);
     $ois=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC, `title` ASC");
     $ois->execute([':oid'=>$r['id']]);
@@ -325,63 +336,22 @@ if(isset($args[0])&&$args[0]!=''){
       ':total'=>$total
     ]);
     $html=preg_replace('~<order>~is',$order,$html,1);
-    $html=preg_replace(
-      '/<print checkoutlink>/',
-      $r['status']!='paid'?'<a class="btn" href="'.URL.'checkout/'.$r['qid'].$r['iid'].'">Proceed to Checkout</a>':'<div class="alert alert-success">Order Already Paid</div>',
+    if(($config['iconsColor'][0]==1&&$ru['rank']<310)&&$ru['address']==''||$ru['city']==''||$ru['suburb']==''||$ru['country']=''||$ru['state']==''||$ru['postcode']==0){
+      $html=preg_replace([
+          '~<bankdetails>.*?<\/bankdetails>~is',
+          '/<print checkoutlink>/',
+        ],
+        '<a class="btn" href="'.URL.'settings#address">Please fill in Address Information for Shipping</a>',
       $html,1);
-
-/*    $html=preg_replace('/<print paypal>/',(stristr($html,'<print paypal>')&&$r['status']!='paid'?'<div id="paypal-button-container"></div><script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'&currency=AUD" data-sdk-integration-source="button-factory"></script><script>paypal.Buttons({style:{shape:"rect",color:"gold",layout:"horizontal",label:"pay",},createOrder:function(data,actions){return actions.order.create({purchase_units:[{amount:{value:"'.$total.'"}}]});},Approve:function(data,actions){return actions.order.capture().then(function(details){alert("Transaction completed by "+details.payer.name.given_name+"!");});}}).render("#paypal-button-container");</script>':''),$html);
-          '<script src="https://www.paypal.com/sdk/js?client-id='.$config['payPalClientID'].'"></script>'.
-        '<div id="paypal-button-container"></div>'.
-        '<script>paypal.Buttons({'.
-          'createOrder:function(data,actions){'.
-            'return actions.order.create({'.
-              'purchase_units:[{'.
-                'amount:{'.
-                  'currency_code:`AUD`,'.
-                  'value:`'.$total.'`'.
-                '}'.
-              '}]'.
-            '});'.
-          '},'.
-          'onApprove:function(data,actions){'.
-            '$.ajax({'.
-              'type:"POST",'.
-      					'url:"core/paymenttransaction.php",'.
-      					'data:{'.
-      						'id:"'.$r['id'].'",'.
-      						'act:"paid",'.
-      					'}'.
-      				'}).done(function(msg){'.
-                '$("#paymenttransaction").html(msg).removeClass("d-none").addClass("alert alert-success");'.
-      				'});'.
-            '},'.
-            'onCancel:function(){'.
-              '$.ajax({'.
-                'type:"POST",'.
-                'url:"core/paymenttransaction.php",'.
-                'data:{'.
-                  'id:"'.$r['id'].'",'.
-                  'act:"cancelled",'.
-                '}'.
-              '}).done(function(msg){'.
-                '$("#paymenttransaction").html(msg).removeClass("d-none").addClass("alert alert-danger");'.
-              '});'.
-            '},'.
-            'onError:function(){'.
-              '$.ajax({'.
-                'type:"POST",'.
-                'url:"core/paymenttransaction.php",'.
-                'data:{'.
-                  'id:"'.$r['id'].'",'.
-                  'act:"error",'.
-                '}'.
-              '}).done(function(msg){'.
-                '$("#paymenttransaction").html(msg).removeClass("d-none").addClass("alert alert-danger");'.
-              '});'.
-            '},'.
-          '}).render(`#paypal-button-container`);'.
-        '</script>', */
+    }else{
+      $html=preg_replace([
+        '/<print checkoutlink>/',
+        '/<[\/]?bankdetails>/'
+      ],[
+        $r['status']!='paid'?'<a class="btn" href="'.URL.'checkout/'.$r['qid'].$r['iid'].'">Proceed to Checkout</a>':'<div class="alert alert-success">Order Already Paid</div>',
+        ''
+      ],$html,1);
+    }
   }else
     $html=preg_replace('~<order>~is','',$html,1);
 }else

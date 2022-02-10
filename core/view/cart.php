@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -318,44 +318,71 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''),
 				$total
 			],$html);
-			$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
-			$sco->execute();
-			$postageoptions='<option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>'. // AUS_PARCEL_REGULAR
-											'<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS
-			if($sco->rowCount()>0){
-				while($rco=$sco->fetch(PDO::FETCH_ASSOC))$postageoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').'</option>';
-			}
-			$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY `title` ASC");
-			$sco->execute();
-			$payoptions='';
-			if($sco->rowCount()>0){
-				$payoptions.='<option value="0">Select an Option</option>';
-				while($rco=$sco->fetch(PDO::FETCH_ASSOC)){
-					$payoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').($rco['type']!=0&&$rco['value']!=0?($rco['type']==1?' (Surcharge of '.$rco['value'].'&#37;)':' (Surcharge of &#36;'.$rco['value'].')'):'').'</option>';
+
+			$suser=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+			$suser->execute([':id'=>$uid]);
+			$ruser=$suser->fetch(PDO::FETCH_ASSOC);
+			if(($config['iconsColor'][0]==1&&$ruser['rank']<310)&&$ruser['address']==''||$ruser['city']==''||$ruser['suburb']==''||$ruser['country']==''||$ruser['state']==''||$ruser['postcode']==0){
+				$html=preg_replace([
+					'~<noaddress>.*?<\/noaddress>~is',
+					'/<[\/]?emptycart>/'
+				],[
+					'<a class="btn btn-block" href="'.URL.'settings#address">Please Update your Address details for Shipping.</a>',
+					''
+				],$html);
+			}else{
+				if($user['rank']>300&&$user['rank']<400){
+					$html=preg_replace([
+						'~<postageoptions>.*?<\/postageoptions>~is',
+						'/<[\/]?emptycart>/',
+						'/<[\/]?noaddress>/'
+					],[
+						'<input type="hidden" name="payoption" value="0">',
+						'',
+						''
+					],
+						$html);
+				}else{
+					$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
+					$sco->execute();
+					$postageoptions='<option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>'. // AUS_PARCEL_REGULAR
+													'<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS
+					if($sco->rowCount()>0){
+						while($rco=$sco->fetch(PDO::FETCH_ASSOC))$postageoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').'</option>';
+					}
+					$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY `title` ASC");
+					$sco->execute();
+					$payoptions='';
+					if($sco->rowCount()>0){
+						$payoptions.='<option value="0">Select an Option</option>';
+						while($rco=$sco->fetch(PDO::FETCH_ASSOC)){
+							$payoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').($rco['type']!=0&&$rco['value']!=0?($rco['type']==1?' (Surcharge of '.$rco['value'].'&#37;)':' (Surcharge of &#36;'.$rco['value'].')'):'').'</option>';
+						}
+					}
+					$html=preg_replace([
+						$sco->rowCount()>0?'/<[\/]?paymentoptions>/':'~<paymentoptions>.*?<\/paymentoptions>~is',
+						'/<postoptions>/',
+						'/<[\/]?postageoptions>/',
+						'/<payoptions>/',
+						'/<[\/]?emptycart>/'
+					],[
+						$sco->rowCount()>0?'':'<input type="hidden" name="payoption" value="0">',
+						$postageoptions,
+						'',
+						$payoptions,
+						''
+					],$html);
 				}
+				if(isset($user['rank'])){
+					$us=$db->prepare("SELECT `email` FROM `".$prefix."login` WHERE `id`=:id");
+					$us->execute([':id'=>$uid]);
+					$u=$us->fetch(PDO::FETCH_ASSOC);
+				}
+				$html=preg_replace(
+					isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/',
+					isset($u['email'])&&$u['email']!=''?'<input type="hidden" name="email" value="'.$u['email'].'">':'',
+				$html);
 			}
-			$html=preg_replace([
-				'/<postoptions>/',
-				'/<[\/]?postageoptions>/',
-				'/<payoptions>/',
-				$sco->rowCount()>0?'/<[\/]?paymentoptions>/':'~<paymentoptions>.*?<\/paymentoptions>~is',
-				'/<[\/]?emptycart>/'
-			],[
-				$postageoptions,
-				'',
-				$payoptions,
-				$sco->rowCount()>0?'':'<input type="hidden" name="payoption" value="0">',
-				''
-			],$html);
-			if(isset($user['rank'])){
-				$us=$db->prepare("SELECT `email` FROM `".$prefix."login` WHERE `id`=:id");
-				$us->execute([':id'=>$uid]);
-				$u=$us->fetch(PDO::FETCH_ASSOC);
-			}
-			$html=preg_replace(
-				isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/',
-				isset($u['email'])&&$u['email']!=''?'<input type="hidden" name="email" value="'.$u['email'].'">':'',
-			$html);
 		}else
 			$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);
 	}

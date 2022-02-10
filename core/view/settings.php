@@ -46,7 +46,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 			$success='';
 		}
 	}
-	if(isset($act)&&$act=='updateAccount'&&isset($_POST['emailTrap'])&&$_POST['emailTrap']==''){
+	if(isset($act)&&$act=='updateAccount'){
 		$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
 		$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 		$url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_STRING);
@@ -71,7 +71,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 			':suburb'=>$suburb,
 			':city'=>$city,
 			':state'=>$state,
-			':postcode'=>$postcode,
+			':postcode'=>$postcode==''?0:$postcode,
 			':country'=>$country,
 			':id'=>$user['id']
 		]);

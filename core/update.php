@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,11 +31,22 @@ function sluggify($url){
 	$url=trim($url,'-');
 	return$url;
 }
+function htmlentitiesOutsideHTMLTags($htmlText,$ent){
+  $matches=Array();
+  $sep='###HTMLTAG###';
+  preg_match_all(":</{0,1}[a-z]+[^>]*>:i",$htmlText,$matches);
+  $tmp=preg_replace(":</{0,1}[a-z]+[^>]*>:i",$sep,$htmlText);
+  $tmp=explode($sep,$tmp);
+  for($i=0;$i<count($tmp);$i++)$tmp[$i]=htmlentities($tmp[$i],$ent,'UTF-8',false);
+  $tmp=join($sep,$tmp);
+  for($i=0;$i<count($matches[0]);$i++)$tmp=preg_replace(":$sep:",$matches[0][$i],$tmp,1);
+  return$tmp;
+}
 $e='';
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$tbl=='forumCategory'||$tbl=='forumTopics'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'||$col=='defaultPage'||$col=='hostStatus'||$col=='siteStatus'||$col=='heading'||$col=='inventoryFallbackStatus'||$col=='templatelist'){
+if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$tbl=='orders'&&$col=='tis'||$col=='tie'||$col=='pti'||$col=='paid_ti'||$col=='notes'||$col=='notes2'||$col=='PasswordResetLayout'||$col=='orderEmailLayout'||$tbl=='forumCategory'||$tbl=='forumTopics'||$col=='orderEmailNotes'||$col=='passwordResetLayout'||$col=='accountActivationLayout'||$col=='bookingEmailLayout'||$col=='bookingAutoReplyLayout'||$col=='contactAutoReplyLayout'||$col=='dateFormat'||$col=='newslettersOptOutLayout'||$col=='php_quicklink'||$col=='ga_tracking'||$col=='messengerFBCode'||$col=='signature'||$col=='defaultPage'||$col=='hostStatus'||$col=='siteStatus'||$col=='heading'||$col=='inventoryFallbackStatus'||$col=='templatelist'||$col=='trackOption'||$col=='trackNumber'||$col=='exturl'){
   $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 	if($col=='messengerFBCode')$da=rawurldecode($da);
 }else{
@@ -44,6 +55,7 @@ if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$t
 }
 if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
 if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%3E%3C/p%3E','',$da);
+$da=htmlentitiesOutsideHTMLTags($da, ENT_QUOTES | ENT_HTML5);
 $si=session_id();
 $ti=time();
 if($col!='messengerFBCode'){

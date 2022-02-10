@@ -226,7 +226,7 @@ $html=preg_replace([
 	$notification,
 	htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
 	'',
-	rawurldecode($page['notes']),
+	$page['notes'],
 	$config['business']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),
 	ucwords($config['business'])
 ],$html);

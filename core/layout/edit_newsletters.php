@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -61,7 +61,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <?='<button class="save" id="savetags"  data-dbid="tags" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>';?>
           </div>
           <?php if($user['options'][1]==1){
-            $tags=array();
+            $tags=$tgs=array();
             $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
             if($st->rowCount()>0){
               while($rt=$st->fetch(PDO::FETCH_ASSOC)){
@@ -71,12 +71,16 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 }
               }
             }
-            $tags=array_unique($tgs);
-            asort($tags);
+            if($tgs!=''){
+              $tags=array_unique($tgs, SORT_REGULAR);
+              asort($tags);
+            }else $tags='';
             echo'<select id="tags_options" onchange="addTag($(this).val());">'.
               '<option value="none">Clear All</option>';
-            foreach($tags as$t){
-              echo'<option value="'.$t.'">'.$t.'</option>';
+            if($tags!=''){
+              foreach($tags as$t){
+                echo'<option value="'.$t.'">'.$t.'</option>';
+              }
             }
             echo'</select>';
           }?>
@@ -88,6 +92,11 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <option value="published"<?=$r['status']=='published'?' selected':'';?>>Published</option>
             <option value="delete"<?=$r['status']=='delete'?' selected':'';?>>Delete</option>
           </select>
+        </div>
+        <div class="form-row mt-3">
+          <small class="form-text text-right">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{name}');return false;">{name}</a>
+          </small>
         </div>
         <div class="row mt-3">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#summernote" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Content Field">&#128279;</a>':'';?>

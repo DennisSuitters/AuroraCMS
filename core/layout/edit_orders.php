@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -208,6 +208,27 @@ else{?>
                   </div>
                 </div>
               <?php }?>
+              <legend class="mt-3 h5">Tracking Details</legend>
+              <div class="row">
+                <div class="col-12 col-md-6">
+                  <div class="input-text py-0">Service&nbsp;
+                    <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Tracking Service" onchange="update('<?=$r['id'];?>','orders','trackOption',$(this).val(),'select');">
+                      <option value="">Select a Tracking Service</option>
+<?php $sto=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' ORDER BY `title` ASC");
+$sto->execute();
+while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
+  echo'<option value="'.$rto['id'].'"'.($rto['id']==$r['trackOption']?' selected':'').'>'.$rto['title'].'</option>';
+}?>
+                    </select>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <div class="input-text py-0">Tracking #&nbsp;
+                    <input class="textinput border-0" id="trackNumber" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="trackNumber" type="text" value="<?=$r['trackNumber'];?>" placeholder="Enter a Tracking Number...">
+                    <?=$user['options'][1]==1?'<button class="save border-0" id="savetrackNumber" data-dbid="trackNumber" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
           <hr>

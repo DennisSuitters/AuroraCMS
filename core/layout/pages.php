@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -171,13 +171,16 @@ else{
                   <td class="align-middle"><?php svg('drag','orderhandle');?></td>
                 </tr>
               <?php }?>
-              <tr class="border-top" id="l_23">
+<?php $so=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='none' ORDER BY `title` ASC");
+$so->execute();
+while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
+              <tr id="l_<?=$ro['id'];?>">
                 <td></td>
                 <td class="align-middle">
-                  <a href="<?= URL.$settings['system']['admin'].'/pages/edit/23';?>">Coming Soon</a>
+                  <a href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'];?>"><?=$ro['title'];?></a>
                   <?php if($user['options'][1]==1){
-                    $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=23");
-                    $ss->execute();
+                    $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:rid");
+                    $ss->execute([':rid'=>$ro['id']]);
                     $rs=$ss->fetch(PDO::FETCH_ASSOC);
                     echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
                   }?>
@@ -188,58 +191,13 @@ else{
                 <td class="align-middle" id="controls_">
                   <div class="btn-toolbar float-right" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">
                     <div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">
-                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/23';?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
                     </div>
                   </div>
                 </td>
                 <td></td>
               </tr>
-              <tr id="l_24">
-                <td></td>
-                <td class="align-middle">
-                  <a href="<?= URL.$settings['system']['admin'].'/pages/edit/24';?>">Maintenance</a>
-                  <?php if($user['options'][1]==1){
-                    $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=24");
-                    $ss->execute();
-                    $rs=$ss->fetch(PDO::FETCH_ASSOC);
-                    echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
-                  }?>
-                </td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td class="align-middle" id="controls_">
-                  <div class="btn-toolbar float-right" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">
-                    <div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">
-                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/24';?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                    </div>
-                  </div>
-                </td>
-                <td></td>
-              </tr>
-              <tr id="l_31">
-                <td></td>
-                <td class="align-middle">
-                  <a href="<?= URL.$settings['system']['admin'].'/pages/edit/31';?>">Offline</a>
-                  <?php if($user['options'][1]==1){
-                    $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=31");
-                    $ss->execute();
-                    $rs=$ss->fetch(PDO::FETCH_ASSOC);
-                    echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
-                  }?>
-                </td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td class="align-middle" id="controls_">
-                  <div class="btn-toolbar float-right" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">
-                    <div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">
-                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/31';?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                    </div>
-                  </div>
-                </td>
-                <td></td>
-              </tr>
+<?php }?>
               <tr>
                 <th colspan="6">Notifications</th>
                 <th><?=$user['options'][0]==1?'<a class="btn btn-sm add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="tooltip" aria-label="Add Notification">'.svg2('add').'</a>':'';?></td>

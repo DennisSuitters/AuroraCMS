@@ -1,0 +1,50 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="activate">
+	<cover>
+		<figure class="covertron"><print page="coverItem"></figure>
+	</cover>
+	<breadcrumb>
+		<nav class="breadcrumb">
+			<ol>
+				<json-ld-breadcrumb>
+				<breaditems>
+					<li class="breadcrumb-item"><a href="<print breadcrumb=url>"><print breadcrumb="title"></a></li>
+				</breaditems>
+				<breadcurrent>
+					<li class="breadcrumb-item active"><print breadcrumb="title"></li>
+				</breadcurrent>
+			</ol>
+		</nav>
+	</breadcrumb>
+	<section class="row">
+		<article class="col-11 mx-auto">
+			<activation>
+			<success>
+				<h1><print page="heading"></h1>
+				<print page="notes">
+				<div class="col-12 col-sm-3 mx-auto">
+					<div class="card p-3">
+						<form method="post" action="<print url>settings">
+							<h4>Login</h4>
+							<input type="hidden" name="act" value="login">
+							<label for="loginusername">Username</label>
+							<div class="form-row">
+								<input type="text" id="loginusername" name="username" value="" placeholder="Username..." autocomplete="username">
+							</div>
+							<label for="loginpassword">Password</label>
+							<div class="form-row">
+								<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="current-password">
+							</div>
+							<div class="text-right mt-3">
+								<button type="submit">Login</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</success>
+		</article>
+	</section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

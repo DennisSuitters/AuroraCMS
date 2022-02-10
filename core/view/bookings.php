@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,7 @@ require'inc-breadcrumbs.php';
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $eventDate=0;
 if(stristr($html,'<items>')){
-  $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `contentType`='service' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
+  $sb=$db->query("SELECT * FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC, `title` ASC");
   if($sb->rowCount()>0){
     preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
     $item=$matches[1];

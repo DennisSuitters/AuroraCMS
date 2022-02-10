@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,7 +52,7 @@ if($not['spammer']==false){
       $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
       $business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
       $review=filter_input(INPUT_POST,'review',FILTER_SANITIZE_STRING);
-      $rating=filter_input(INPUT_POST,'rating',FILTER_SANITIZE_NUMBER_INT);
+      $rating=filter_input(INPUT_POST,'rating',FILTER_SANITIZE_STRING);
       $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
       if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip!='127.0.0.1'){
         $filter=new SpamFilter();
@@ -75,8 +75,25 @@ if($not['spammer']==false){
             ':ti'=>time()
           ]);
           $e=$db->errorInfo();
-          if(is_null($e[2]))$not=['spammer'=>false,'target'=>'testimonial','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank you for your Testimonial, it will be appear once an Administrator Approves it.','reason'=>''];
-          else$not=['scammer'=>false,'target'=>'testimonial','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Testimonial!','reason'=>''];
+          if(is_null($e[2])){
+            $not=['spammer'=>false,'target'=>'testimonial','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank you for your Testimonial, it will be appear once an Administrator Approves it.','reason'=>''];
+            if($config['email']!=''){
+              require'phpmailer/class.phpmailer.php';
+              $mail=new PHPMailer;
+              $mail->isSendmail();
+              $toname=$config['business'];
+              $mail->SetFrom($config['email'],$config['business']);
+              $mail->AddAddress($config['email']);
+              $mail->IsHTML(true);
+              $subject='New Testimonial added '.($config['business']!=''?'to '.$config['business'].' ':'').'by '.$name;
+              $mail->Subject=$subject;
+              $msg='<p>A new Testimonial was added '.($config['business']!=''?'to '.$config['business'].' ':'').'by '.$name.', dated '.date($config['dateFormat'],time()).'</p><p>Rating: '.$rating.'</p><p>Message: '.$review.'</p>';
+              $mail->Body=$msg;
+              $mail->AltBody=$msg;
+              if($mail->Send()){}
+            }
+          }else
+            $not=['scammer'=>false,'target'=>'testimonial','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Testimonial!','reason'=>''];
         }else$not=['scammer'=>false,'target'=>'testimonialemail','element'=>'div','action'=>'after','class'=>'not alert alert-info','text'=>'The Email entered is not valid!','reason'=>''];
       }
     }else$not=['scam'=>true,'target'=>'testimonial','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text','Spammers and Email Harvesters not welcome.','reason'=>'Testimonial Form Honey Pot Field was populated with data, suspected Bot'];

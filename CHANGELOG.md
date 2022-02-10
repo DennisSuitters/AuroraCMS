@@ -1,14 +1,20 @@
-### v0.2.4
-- Add cartonQuantity option for Inventory Items that are sold as bulk stock.
-- Adjust parser to add cartonQuantity if value is set and not 0.
-- Reduce A11Y Widget font size styling, now uses CSS Vars for resizing.
-- Adjust reCaptcha resize function to use Vanilla Javascript.
-- Add Wholesale Account limiting to set user rank when purchasing products.
-- Add Biography page, and options to enable Accounts as Bio and to add Caption and Notes.
-- Add ability to drag accounts to reorder their appearance on Biography pages.
-- Fix issue with displaying item event images when Event has countdown enabled.
-- Add check for Event items to not display events with start date set that have expired.
-- Add options for set number of content items to use a set content template without individual item being set to predetermined template.
-- Add option for number of items returned for search results.
-- Tidy up source, remove commented out test blocks that are no longer needed.
-- Add Users online quantity to footer in Administration.
+### v0.2.5
+- Fix Adding Testimonials not sending notification emails.
+- Fix incorrect rating for Reviews and Testimonials being stored.
+- Fix rating stars not displaying correctly when editing Testimonials in Administration.
+- Fix typo on $_SESSION['rank'] function.
+- Fix side menu template parsing throwing errors, due to unset vars.
+- Fix Settings page not updating changed information.
+- Adjust Shopping Cart to make sure Shoppers select a Shipping Option.
+- Add Tracking links for Orders, including adding Tracking Services and Tracking ID.
+- Add functionality to check if Accounts contain Shipping information when in Shopping Cart, and on Orders with disabling Checkout Link if Account Shipping information is not present.
+- Add proper Activation Page, so information can be added, such as how to update Address information.
+- Fix sidemenu displaying all events, when it should only display current and future events.
+- Fix content title SQL table cell truncating title's.
+- Add option and parsing to check and notify if address information is empty.
+- Fix Editing Newletters array_unique() and arsort() throwing errors when used with empty vars.
+- Fix Date parsing parameters for javascript date function for Safari.
+- Add code to process Free or Paid Events to produce Invoice and Confirmation, or Confirmation with link to Free Events.
+- Add code to payment processing for PayPal and Stripe for paid Events to email Payment Confirmation for all Payments, and to send Link for Events once paid.
+- Add HTMLEntity Parser when saving text body data that doesn't harm HTML Elements but converts symbols to entities that break text layouts.
+- Fix RRP (Recommended Retail Price) not being displayed for Wholesalers.

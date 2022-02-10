@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.6
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -40,7 +40,7 @@ if($s->rowCount()>0){
     ':paid_ti'=>time(),
     ':status'=>'paid'
   ]);
-  $sp=$db->prepare("SELECT `id`,`points`,`quantity` WHERE `oid`=:oid");
+  $sp=$db->prepare("SELECT `id`,`points`,`quantity` FROM `".$prefix."orderitems` WHERE `oid`=:oid");
   $sp->execute([':oid'=>$r['id']]);
   $points=0;
   while($rp=$sp->fetch(PDO::FETCH_ASSOC)){
@@ -54,5 +54,41 @@ if($s->rowCount()>0){
     ':pti'=>time()
   ]);
   $msg='success';
+  $i=1;
+  if($ru['email']!=''){
+    $extlink='';
+    $soi=$db->prepare("SELECT `iid` FROM `".$prefix."orderitems` WHERE `oid`=:oid");
+    $soi->execute([':oid'=>$r['id']]);
+    while($roi=$so->fetch(PDO::FETCH_ASSOC)){
+      $si=$db->prepare("SELECT `contentType`,`title`,`exturl` FROM `".$prefix."content` WHERE `id`=:id");
+      $si->execute([':id'=>$roi['iid']]);
+      while($ri=$si->fetch(PDO::FETCH_ASSOC)){
+        $extlink.='Link for '.$ri['title'].'<br /><a href="'.$ri['exturl'].'">'.$ri['exturl'].'</a><br /><br />';
+        $i++;
+      }
+    }
+    if($extlink!=''){
+      require'phpmailer/class.phpmailer.php';
+      $mail-new PHPMailer;
+      $mail-isSendMail();
+      $mail->SetFrom($config['email'],$config['business']);
+      $mail->AddAddress($ru['email']);
+      $mail->isHTML(true);
+      $mail->Subject='Payment Confirmation and Event Link from '.$config['business'];
+      $name=explode(' ',$ru['name']);
+      $msg='Hi '.$name[0].'<br />'.
+        'Thank you for your payment for the below event'.($i>1?'s':'')'.<br />'.
+        $extlink.
+        'You can view your invoice via <a href="'.URL.'orders/'.$r['iid'].'">#'.$r['iid'].'</a><br />'.
+        'Please contact us if you have further enquiries.<br /><br />'.
+        'Kind Regards,<br />'.
+        $config['business'];
+      $mail->Body=$msg;
+      $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+      if($mail->Send()){
+        $msg='eventpaidlink';
+      }
+    }
+  }
 }
 echo$msg;

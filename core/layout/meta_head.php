@@ -49,6 +49,8 @@
     <script src="core/js/summernote/plugin/summernote-checkbox/summernote-checkbox.js"></script>
     <script src="core/js/summernote/plugin/summernote-audio/summernote-audio.js"></script>
     <script src="core/js/summernote/plugin/summernote-text-findnreplace/summernote-text-findnreplace.js"></script>
+    <script src="core/js/summernote/plugin/summernote-templates/summernote-templates.js"></script>
+    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script>
     <script src="core/js/codemirror/codemirror.js"></script>
     <script src="core/js/summernote/plugin/elfinder/elfinder.js"></script>
     <script src="core/elfinder/js/elfinder.min.js"></script>

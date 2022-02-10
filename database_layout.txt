@@ -65,7 +65,7 @@ config
     9   Delete Messages When Retrieved / Show RSS Feed Icon
     10  Related Content by Content type
     11  Enable Visitor Tracking
-    12  Enable Administration Acivity Tracking
+    12  Enable Administration Activity Tracking
     13  Enable Chat
     14  Facebook Messenger instead of Integrated Chat
     15  Email Chat Notifications to Nominated Accounts
@@ -241,7 +241,7 @@ config
   `uti_freq` int(10)
   `update_url` varchar(255)
   `navstat` int(4)
-  `iconsColor` int(1)
+  `iconsColor` int(1)    Being used for check Address Information Toggle
   `a11yPosition` tinytext
   `ti` int(10)
 

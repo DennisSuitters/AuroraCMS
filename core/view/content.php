@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,7 +19,7 @@ $rowCount=0;
 $sqlLimit='';
 $sqlrank='';
 if(isset($_SESSION['rank'])){
-	if(!$_SESSION['rank']>340 && $_SESSION['rank']>309 || $_SESSION['rank' < 341])
+	if(!$_SESSION['rank'] > 340 AND $_SESSION['rank'] > 309 || $_SESSION['rank'] < 341)
 		$sqlrank=" AND `rank` > 309 AND `rank` < 341";
 	else
 		$sqlrank=" AND `rank` <= ".$_SESSION['rank'];
@@ -322,7 +322,7 @@ if(stristr($html,'<eventsitems')){
 				($re['thumb']!=''&&file_exists('media/'.'thumbs/'.basename($re['thumb']))?'media/'.'thumbs/'.basename($re['thumb']):NOIMAGESM),
 				htmlspecialchars(($re['fileALT']!=''?$re['fileALT']:$re['title']),ENT_QUOTES,'UTF-8'),
 				$re['contentType'],
-				URL.$re['contentType'].'/'.$re['urlSlugs'].'/',
+				URL.$re['contentType'].'/'.$re['urlSlug'].'/',
 				$re['title'],
 				date('jS',($re['tis']==0?$re['ti']:$re['tis'])),
 				date('F',($re['tis']==0?$re['ti']:$re['tis'])),

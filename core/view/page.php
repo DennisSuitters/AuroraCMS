@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,6 +18,13 @@ $notification='';
 $html=str_replace('<print view>',$view,$html);
 require'inc-cover.php';
 require'inc-breadcrumbs.php';
+$page['notes']=preg_replace([
+  '/{business}/',
+  '/{url}/'
+],[
+  $config['business'],
+  URL
+],$page['notes']);
 $html=preg_replace([
   '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',

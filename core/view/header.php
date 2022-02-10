@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
-	$su=$db->prepare("SELECT `avatar`,`gravatar`,`rank`,`username`,`name`,`points` FROM `".$prefix."login` WHERE `id`=:uid");
+	$su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:uid");
 	$su->execute([':uid'=>$_SESSION['uid']]);
 	$user=$su->fetch(PDO::FETCH_ASSOC);
 	preg_match('/<accountMenuItems>([\w\W]*?)<\/accountMenuItems>/',$html,$matches);
@@ -56,7 +56,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		'/<print user=[\"\']?cssrank[\"\']?>/',
 		'/<print user=[\"\']?rank[\"\']?>/',
 		'/<print user=[\"\']?points[\"\']?>/',
-		'/<print currenturl>/'
+		'/<print currenturl>/',
+		'/<accountnotification>/'
 	],[
 		'',
 		'',
@@ -65,7 +66,8 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		rank($user['rank']),
 		($user['points']>0?' | '.number_format((float)$user['points']).' Points Earned':''),
 		($user['name']!=''?$user['name']:$user['username']).' ('.ucwords(str_replace('-',' ',rank($user['rank']))).')',
-		$_SERVER['REQUEST_URI']
+		$_SERVER['REQUEST_URI'],
+		$user['rank']<301?($config['iconsColor'][0]==1&&$user['address']==''||$user['suburb']==''||$user['city']==''||$user['country']==''||$user['state']==''||$user['postcode']==0?'<div class="alert alert-info m-0">There is missing Address Information that is required for calculating Shipping Costs, and Destination. Please go to your <a href="'.URL.'settings#address">Settings</a> to update the information.</div>':''):''
 	],$html);
 }else
 	$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
@@ -255,13 +257,6 @@ if(stristr($html,'<buildMenu')){
 	],$html,1);
 }
 include'inc-buildsocial.php';
-if(isset($_GET['activate'])&&$_GET['activate']!=''){
-	$activate=filter_input(INPUT_GET,'activate',FILTER_SANITIZE_STRING);
-	$sa=$db->prepare("UPDATE `".$prefix."login` SET `active`='1',`activate`='',`rank`='200' WHERE `activate`=:activate");
-	$sa->execute([':activate'=>$activate]);
-	$html=$sa->rowCount()>0?str_replace('<activation>',preg_replace(['/<print alert>/','/<print text>/'],['success','Your Account is now Active!'],$theme['settings']['alert']),$html):str_replace('<activation>',preg_replace(['/<print alert>/','/<print text>/'],['danger','There was an Issue Activation your Account!'],$theme['settings']['alert']),$html);
-}else
-	$html=str_replace('<activation>','',$html);
 include'inc-hours.php';
 $html=preg_replace([
 	'/<print page=[\"\']?contentType[\"\']?>/',

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,8 +52,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <input class="tab-control" id="tab1-9" name="tabs" type="radio">
           <label for="tab1-9">Settings</label>
           <?=($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'');?>
+<?php if($r['contentType']!='testimonials'){?>
           <input class="tab-control" id="tab1-11" name="tabs" type="radio">
           <label for="tab1-11">Template</label>
+<?php }?>
 <?php /* Content */?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row mt-3">
@@ -198,7 +200,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <button class="save" id="saveaddress" data-dbid="address" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pr-sm-3">
+                <div class="col-12 col-sm-6">
                   <label id="<?=$r['contentType'];?>Suburb" for="suburb"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Suburb" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Suburb Field">&#128279;</a>':'';?>Suburb</label>
                   <div class="form-row">
                     <input class="textinput" id="suburb" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="suburb" type="text" value="<?=$r['suburb'];?>" placeholder="Enter a Suburb...">
@@ -207,7 +209,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-3 pl-sm-3 pr-sm-3">
+                <div class="col-12 col-sm-3 pr-sm-3">
                   <label id="<?=$r['contentType'];?>City" for="city"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'City" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' City Field">&#128279;</a>':'';?>City</label>
                   <div class="form-row">
                     <input class="textinput" id="city" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="city" type="text" value="<?=$r['city'];?>" placeholder="Enter a City...">
@@ -221,7 +223,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <button class="save" id="savestate" data-dbid="state" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
                   </div>
                 </div>
-                <div class="col-12 col-md-3 pl-sm-3 pr-sm-3">
+                <div class="col-12 col-md-3 pr-sm-3">
                   <label id="<?=$r['contentType'];?>Postcode" for="postcode"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Postcode" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Postcode Field">&#128279;</a>':'';?>Postcode</label>
                   <div class="form-row">
                     <input class="textinput" id="postcode" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="postcode" type="text" value="<?=$r['postcode']!=0?$r['postcode']:'';?>" placeholder="Enter a Postcode...">
@@ -280,20 +282,18 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
                 <div class="col-12 col-sm-6 pl-md-3 p-0 pb-2">
                   <label class="mb-0" id="<?=$r['contentType'];?>Rating" for="rating"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Rating" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Rating Selector">&#128279;</a>':'';?>Rating</label>
-                  <div class="">
-                    <span class="starRating">
-                      <input id="rating5" name="rating" type="radio" value="5" onclick="update('<?=$r['id'];?>','content','rating','5');"<?=$r['rating']==5?' checked':'';?>>
-                      <label for="rating5" data-tooltip="tooltip" aria-label="Awesome!">5</label>
-                      <input id="rating4" name="rating" type="radio" value="4" onclick="update('<?=$r['id'];?>','content','rating','4');"<?=$r['rating']==4?' checked':'';?>>
-                      <label for="rating4" data-tooltip="tooltip" aria-label="Great!">4</label>
-                      <input id="rating3" name="rating" type="radio" value="3" onclick="update('<?=$r['id'];?>','content','rating','3');"<?=$r['rating']==3?' checked':'';?>>
-                      <label for="rating3" data-tooltip="tooltip" aria-label="Meh!">3</label>
-                      <input id="rating2" name="rating" type="radio" value="2" onclick="update('<?=$r['id'];?>','content','rating','2');"<?=$r['rating']==2?' checked':'';?>>
-                      <label for="rating2" data-tooltip="tooltip" aria-label="So So!">2</label>
-                      <input id="rating1" name="rating" type="radio" value="1" onclick="update('<?=$r['id'];?>','content','rating','1');"<?=$r['rating']==1?' checked':'';?>>
-                      <label for="rating1" data-tooltip="tooltip" aria-label="Bad!">1</label>
-                    </span>
-                  </div>
+                  <span class="starRating">
+                    <input id="rating5" name="rating" type="radio" value="5" onclick="update('<?=$r['id'];?>','content','rating','5');"<?=$r['rating']==5?' checked':'';?>>
+                    <label for="rating5" aria-label="Awesome!">5</label>
+                    <input id="rating4" name="rating" type="radio" value="4" onclick="update('<?=$r['id'];?>','content','rating','4');"<?=$r['rating']==4?' checked':'';?>>
+                    <label for="rating4" aria-label="Great!">4</label>
+                    <input id="rating3" name="rating" type="radio" value="3" onclick="update('<?=$r['id'];?>','content','rating','3');"<?=$r['rating']==3?' checked':'';?>>
+                    <label for="rating3" aria-label="Meh!">3</label>
+                    <input id="rating2" name="rating" type="radio" value="2" onclick="update('<?=$r['id'];?>','content','rating','2');"<?=$r['rating']==2?' checked':'';?>>
+                    <label for="rating2" aria-label="So So!">2</label>
+                    <input id="rating1" name="rating" type="radio" value="1" onclick="update('<?=$r['id'];?>','content','rating','1');"<?=$r['rating']==1?' checked':'';?>>
+                    <label for="rating1" aria-label="Bad!">1</label>
+                  </span>
                 </div>
               </div>
             <?php }
@@ -447,6 +447,15 @@ else{
                     <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Wholesale Cost..."':' readonly';?>>
                     <?=$user['options'][1]==1?'<button class="save" id="savedCost" data-dbid="dCost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
+                </div>
+              </div>
+            <?php }
+            if($r['contentType']=='events'){?>
+              <div class="col-12">
+                <label id="<?=$r['contentType'];?>exturl" for="exturl"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'exturl" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' External URL">&#128279;</a>':'';?>External URL</label>
+                <div class="form-row">
+                  <input class="textinput" id="exturl" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="exturl" type="text" value="<?=$r['exturl'];?>" placeholder="Enter an External URL (Zoom or other Service)...">
+                  <button class="save" id="saveexturl" data-dbid="exturl" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
                 </div>
               </div>
             <?php }
@@ -629,17 +638,13 @@ else{
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
                   <input name="t" type="hidden" value="content">
                   <input name="c" type="hidden" value="notes">
-                  <div class="<?=($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='proofs'?'note-admin ':'').$r['contentType'];?>">
-                    <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
-                  </div>
+                  <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
                 </form>
               <?php }else{?>
-                <div class="<?=($r['contentType']=='article'?'note-admin ':'').$r['contentType'];?>">
-                  <div class="note-editor note-frame">
-                    <div class="note-editing-area">
-                      <div class="note-editable">
-                        <?= rawurldecode($r['notes']);?>
-                      </div>
+                <div class="note-editor note-frame">
+                  <div class="note-editing-area">
+                    <div class="note-editable">
+                      <?= rawurldecode($r['notes']);?>
                     </div>
                   </div>
                 </div>
@@ -1520,6 +1525,7 @@ else{
             </div>
           </div>
 <?php }?>
+<?php if($r['contentType']!='testimonials'){?>
           <div class="tab1-11 border-top py-3" data-tabid="tab1-11" role="tabpanel">
             <section class="content overflow-visible theme-chooser" id="templates">
               <article class="card overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
@@ -1573,6 +1579,7 @@ while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
               });
             </script>
           </div>
+<?php }?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>

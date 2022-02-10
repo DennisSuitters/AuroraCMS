@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,9 +49,9 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
           <?=$r['file']!='offline'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>':'';?>
-          <?=$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'&&$r['file']!='offline'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'';?>
-          <?=$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">SEO</label>':'';?>
-          <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
+          <?=$r['file']!='activate'&&$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'&&$r['file']!='offline'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'';?>
+          <?=$r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">SEO</label>':'';?>
+          <?=$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
@@ -241,7 +241,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           </div>
 <?php }
 /* Media */
-          if($r['file']!='index'||$r['file']!='comingsoon'&&$r['file']!='maintenance'&&$r['file']!='offline'){?>
+          if($r['file']!='activate'&&$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'&&$r['file']!='offline'){?>
             <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
               <?php if($user['options'][1]==1){?>
                 <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
@@ -301,7 +301,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
             </div>
           <?php }
 /* SEO */
-if($r['contentType']!='offline'){?>
+if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
           <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
             <label id="pageViews" for="views"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageViews" data-tooltip="tooltip" aria-label="PermaLink to Page Views Field">&#128279;</a>':'';?>Views</label>
             <div class="form-row">
@@ -426,7 +426,7 @@ if($r['contentType']!='offline'){?>
           </div>
 <?php }
 /* Settings */
-          if($r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
+          if($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
             <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
                 <div class="row mt-3">

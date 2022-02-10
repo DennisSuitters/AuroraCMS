@@ -23,6 +23,7 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('ADMINURL',URL.$settings['system']['admin'].'/');
 define('UNICODE','UTF-8');
 $theme=parse_ini_file(THEME.'/theme.ini',true);
+$css=file_get_contents(THEME.'/css/newsletter.css');
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT `options`,`title`,`tags`,`notes` FROM `".$prefix."content` WHERE `id`=:id");
 $s->execute([':id'=>$id]);
@@ -42,7 +43,7 @@ if($config['email']!=''){
   $mail->isHTML(true);
   $mail->SetFrom($config['email'],$config['business']);
   $mail->Subject=$news['title'];
-  $mail->AltBody='To view this message, please use an HTML compatible email viewer!';
+  $mail->AltBody='To view this message, please use an HTML compatible email viewer! Or view online at '.URL.'newsletters/'.str_replace(' ','-',$news['title']);
   if($config['newslettersEmbedImages'][0]==1){
     preg_match_all('/<img.*?>/',$body,$matches);
     if(isset($matches[0])){
@@ -67,18 +68,23 @@ if($config['email']!=''){
   if($news['options'][8]==1){
     $tags=explode(",",$news['tags']);
     $tags_list=sprintf('"%s"',implode('","',$tags));
-    $s=$db->prepare("SELECT DISTINCT `email`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1 AND `tags` IN (".$tags_list.")");
+    $s=$db->prepare("SELECT DISTINCT `email`,`name`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`name`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1 AND `tags` IN (".$tags_list.")");
     $s->execute();
   }else{
-    $s=$db->prepare("SELECT DISTINCT `email`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1");
+    $s=$db->prepare("SELECT DISTINCT `email`,`name`,`hash` FROM `".$prefix."subscribers` UNION SELECT DISTINCT `email`,`name`,`hash` FROM `".$prefix."login` WHERE `newsletter`=1");
     $s->execute();
   }
+  $head='<!DOCTYPE html><head><style>'.$css.'</style></head><body>';
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
     if(($sendCount % $betweenDelay)==0)sleep($sendDelay);
     $mail->AddAddress($r['email']);
     $optOut=$config['newslettersOptOutLayout'];
     $optOut=str_replace('{optOutLink}',URL.'newsletters/unsubscribe/'.$r['hash'],$optOut);
-    $mail->Body=$body.$optOut;
+    $first=explode(' ',$r['name']);
+    if($first[0]=='')$first=explode('@',$r['email']);
+    $name=$first[0];
+    $bodysend=str_replace('{name}',$name,$body);
+    $mail->Body=$head.$body.$optOut.'</body></html>';
     if($mail->Send()){
       $mail->clearAllRecipients();
       $sendCount++;

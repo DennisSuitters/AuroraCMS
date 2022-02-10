@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -378,6 +378,10 @@ class front{
 		$view='aboutus';
 		require'process.php';
 	}
+	function activate($args=false){
+		$view='activate';
+		require'process.php';
+	}
 	function article($args=false){
 		$view='article';
 		require'process.php';
@@ -561,6 +565,7 @@ $routes=[
 	'robots.txt'=>['internal','robots'],
 	'rss'=>['internal','rss'],
 	'manifest.json'=>['internal','manifest'],
+	'activate'=>['front','activate'],
 	'error'=>['front','error'],
 	'offline'=>['front','error'],
 	'index'=>['front','index'],

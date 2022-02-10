@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -69,8 +69,17 @@ if($r['iid']!='')$oid=$r['iid'];
                   '<small>Order <strong>#'.$r['qid'] . $r['iid'].'</strong><br />'.
                   'Order Date: <strong>'.date($config['dateFormat'],$r['qid_ti'].$r['iid_ti']) . '</strong><br />'.
                   'Due Date: <strong class="'.$r['status'].'">'.date($config['dateFormat'], $r['due_ti']) . '</strong><br />'.
-                  'Status: <strong class="'.$r['status'].'"'.($r['status']=='overdue'?' style="color: red;"':'').'>'.ucfirst($r['status']).'</strong></small>'.
-                '</p>'.
+                  'Status: <strong class="'.$r['status'].'"'.($r['status']=='overdue'?' style="color: red;"':'').'>'.ucfirst($r['status']).'</strong></small><br />';
+                  $tracklink='';
+                  if($r['status']=='paid'){
+                    $strack=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+                    $strack->execute([':id'=>$r['trackOption']]);
+                    if($strack->rowCount()>0){
+                      $rtrack=$strack->fetch(PDO::FETCH_ASSOC);
+                      $tracklink='<small>Tracking Link: <strong><a target="_blank" href="'.$rtrack['url'].$r['trackNumber'].'">'.$rtrack['title'].'</a></strong><br />Tracking ID: <strong> '.$r['trackNumber'].'</strong></small>';
+                    }
+                  }
+                $html.=$tracklink.'</p>'.
               '</td>'.
             '</tr>'.
           '</table>'.

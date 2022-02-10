@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -54,10 +54,38 @@
             <div class="form-row mt-1" id="l_<?=$rs['id'];?>">
               <div class="input-text">Code</div>
               <input id="c<?=$rs['id'];?>" name="code" type="text" value="<?=$rs['type'];?>" readonly>
-              <div class="input-text">title</div>
+              <div class="input-text">Title</div>
               <input id="t<?=$rs['id'];?>" name="service" type="text" value="<?=$rs['title'];?>" readonly>
               <div class="input-text">Cost</div>
               <input id="v<?=$rs['id'];?>" name="cost" type="text" value="<?=$rs['value']!=0?$rs['value']:'';?>" readonly>
+              <form target="sp" action="core/purge.php">
+                <input name="id" type="hidden" value="<?=$rs['id'];?>">
+                <input name="t" type="hidden" value="choices">
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+              </form>
+            </div>
+          <?php }?>
+        </div>
+        <hr>
+        <legend id="trackingOptions" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#trackingOptions" data-tooltip="tooltip" aria-label="PermaLink to Postage Tracking Options Section">&#128279;</a>':'';?>Postage Tracking Options</legend>
+        <form target="sp" method="post" action="core/add_trackoption.php">
+          <div class="form-row">
+            <div class="input-text">Service</div>
+            <input name="s" type="text" value="" placeholder="Enter a Service...">
+            <div class="input-text">URL</div>
+            <input name="u" type="text" value="" placeholder="Enter a URL...">
+            <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+          </div>
+        </form>
+        <div id="trackoption">
+          <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' AND `uid`=0 ORDER BY `title` ASC");
+          $ss->execute();
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+            <div class="form-row mt-1" id="l_<?=$rs['id'];?>">
+              <div class="input-text">Service</div>
+              <input id="s<?=$rs['id'];?>" name="service" type="text" value="<?=$rs['type'];?>" readonly>
+              <div class="input-text">URL</div>
+              <input id="u<?=$rs['id'];?>" name="service" type="text" value="<?=$rs['title'];?>" readonly>
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?=$rs['id'];?>">
                 <input name="t" type="hidden" value="choices">

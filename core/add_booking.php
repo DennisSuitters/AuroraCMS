@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -103,189 +103,216 @@ if($not['spammer']==false){
   //                'The Date or Time that was selected is outside of our Operating Hours, please select a different Date or Time.'
   //              ],$theme['settings']['alert']);
 	//				}else{
-            $cont='go';
-            $sc=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` = :contentType AND `tis` > :tis AND `tie` < :tie");
-            $sc->execute([
-              ':contentType'=>'booking',
-              ':tis'=>$tis-1,
-              ':tie'=>$tie+$config['bookingBuffer']+1
-            ]);
-            if($sc->rowCount()>0&&$r['contentType']!='events'){
-              $not=['spammer'=>false,'target'=>'tis','element'=>'div','action'=>'after','alert'=>'not mt-3 alert alert-info','text'=>'Date or Time is already Booked, please select a different Date or Time.','reason'=>''];
-              $cont='stop';
-            }
-						if($cont=='go'){
-							$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`notes`,`status`,`tis`,`tie`,`ti`) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
-							$q->execute([
-								':rid'=>$rid,
-								':contentType'=>'booking',
-								':name'=>$name,
-								':email'=>$email,
-								':business'=>$business,
-								':address'=>$address,
-								':suburb'=>$suburb,
-								':city'=>$city,
-								':state'=>$state,
-								':postcode'=>$postcode,
-								':phone'=>$phone,
-								':notes'=>$notes,
-								':status'=>'unconfirmed',
-								':tis'=>$tis,
-								':tie'=>$tie,
-								':ti'=>$ti
-							]);
-              $bid=$db->lastInsertId();
-              if($config['options'][6]==1&&$r['contentType']=='events'){
+          $cont='go';
+          $sc=$db->prepare("SELECT `id` FROM `".$prefix."content` WHERE `contentType` = :contentType AND `tis` > :tis AND `tie` < :tie");
+          $sc->execute([
+            ':contentType'=>'booking',
+            ':tis'=>$tis-1,
+            ':tie'=>$tie+$config['bookingBuffer']+1
+          ]);
+          if($sc->rowCount()>0&&$r['contentType']!='events'){
+            $not=['spammer'=>false,'target'=>'tis','element'=>'div','action'=>'after','alert'=>'not mt-3 alert alert-info','text'=>'Date or Time is already Booked, please select a different Date or Time.','reason'=>''];
+            $cont='stop';
+          }
+					if($cont=='go'){
+						$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`notes`,`status`,`tis`,`tie`,`ti`) VALUES (:rid,:contentType,:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:notes,:status,:tis,:tie,:ti)");
+						$q->execute([
+							':rid'=>$rid,
+							':contentType'=>'booking',
+							':name'=>$name,
+							':email'=>$email,
+							':business'=>$business,
+							':address'=>$address,
+							':suburb'=>$suburb,
+  						':city'=>$city,
+							':state'=>$state,
+							':postcode'=>$postcode,
+							':phone'=>$phone,
+							':notes'=>$notes,
+							':status'=>'unconfirmed',
+							':tis'=>$tis,
+							':tie'=>$tie,
+							':ti'=>$ti
+						]);
+            $bid=$db->lastInsertId();
+            if($config['options'][6]==1&&$r['contentType']=='events'){
 /* If an Event is being booked, check if User exists with details given via form. */
-                $qc=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `email`=:email");
-                $qc->execute([':email'=>$email]);
-                $qr=$qc->fetch(PDO::FETCH_ASSOC);
-                $cid=$qr['id'];
-                if($qc->rowCount()==0){
+              $qc=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `email`=:email");
+              $qc->execute([':email'=>$email]);
+              $qr=$qc->fetch(PDO::FETCH_ASSOC);
+              $cid=$qr['id'];
+              if($qc->rowCount()==0){
   /* Create account if it doesn't exist */
-                  $ql=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`rank`,`status`,`ti`) VALUES (:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:rank,:status,:ti)");
-                  $ql->execute([
-                    ':name'=>$name,
-                    ':email'=>$email,
-                    ':business'=>$business,
-                    ':address'=>$address,
-                    ':suburb'=>$suburb,
-                    ':city'=>$city,
-                    ':state'=>$state,
-                    ':postcode'=>$postcode,
-                    ':phone'=>$phone,
-                    ':rank'=>200,
-                    ':status'=>'unconfirmed',
-                    ':ti'=>$ti
-                  ]);
-                  $cid=$db->lastInsertId();
-                }
-  /* Create new Order ID */
-                $oi=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
-                $dti=$ti+$config['orderPayti'];
-                $oid='I'.date("ymd",$ti).sprintf("%06d",$oi['id']+1,6);
-                $sbb=$db->prepare("UPDATE `".$prefix."content` SET `category_1`=:oid WHERE `id`=:id");
-                $sbb->execute([
-                  ':oid'=>$oid,
-                  ':id'=>$bid
-                ]);
-  /* Insert New Order for Event Payment */
-                $iq=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
-                $iq->execute([
-                  ':uid'=>$ro['uid'],
-                  ':cid'=>$qr['id'],
-                  ':iid'=>$oid,
-                  ':iid_ti'=>$ti,
-                  ':due_ti'=>$dti
-                ]);
-                $qid=$db->lastInsertId();
-                $se=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) values (:oid,:iid,:cid,:title,:quantity,:cost,:status,:ti)");
-                $se->execute([
-                  ':oid'=>$qid,
-                  ':iid'=>$r['id'],
-                  ':cid'=>$cid,
-                  ':title'=>$r['title'],
-                  ':quantity'=>1,
-                  ':cost'=>$r['cost'],
-                  ':status'=>'',
+                $ql=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`rank`,`status`,`ti`) VALUES (:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:rank,:status,:ti)");
+                $ql->execute([
+                  ':name'=>$name,
+                  ':email'=>$email,
+                  ':business'=>$business,
+                  ':address'=>$address,
+                  ':suburb'=>$suburb,
+                  ':city'=>$city,
+                  ':state'=>$state,
+                  ':postcode'=>$postcode,
+                  ':phone'=>$phone,
+                  ':rank'=>200,
+                  ':status'=>'unconfirmed',
                   ':ti'=>$ti
                 ]);
-                $paylink='<br>A Booking and Invoice has been created, you can pay online by using the link below to View the Invoice.<br><a href="'.URL.'orders/'.$oid.'">#'.$oid.'</a>';
+                $cid=$db->lastInsertId();
               }
-							if($config['email']!=''){
-								require'phpmailer/class.phpmailer.php';
-								$mail=new PHPMailer;
-								$mail->isSendmail();
-								$mail->SetFrom($email,$name);
-								$toname=$config['email'];
-								$mail->AddAddress($config['email']);
-								$mail->IsHTML(true);
+            }
+  /* Create new Order ID */
+            if($r['cost']>0){
+              $oi=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
+              $dti=$ti+$config['orderPayti'];
+              $oid='I'.date("ymd",$ti).sprintf("%06d",$oi['id']+1,6);
+              $sbb=$db->prepare("UPDATE `".$prefix."content` SET `category_1`=:oid WHERE `id`=:id");
+              $sbb->execute([
+                ':oid'=>$oid,
+                ':id'=>$bid
+              ]);
+/* Insert New Order for Event Payment */
+              $iq=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
+              $iq->execute([
+                ':uid'=>$ro['uid'],
+                ':cid'=>$qr['id'],
+                ':iid'=>$oid,
+                ':iid_ti'=>$ti,
+                ':due_ti'=>$dti
+              ]);
+              $qid=$db->lastInsertId();
+              $se=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`ti`) values (:oid,:iid,:cid,:title,:quantity,:cost,:status,:ti)");
+              $se->execute([
+                ':oid'=>$qid,
+                ':iid'=>$r['id'],
+                ':cid'=>$cid,
+                ':title'=>$r['title'],
+                ':quantity'=>1,
+                ':cost'=>$r['cost'],
+                ':status'=>'',
+                ':ti'=>$ti
+              ]);
+              $paylink=$r['cost']!=''||$r['cost']>0?'<br>A Booking and Invoice has been created, you can pay online by using the link below to View the Invoice.<br><a href="'.URL.'orders/'.$oid.'">#'.$oid.'</a>':'';
+            }
+            if($r['contentType']=='events'&&$r['cost']==0){
+              $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'A Booking has been created for your attendance. A confirmation email has been sent to the email address you provided with details of how to access the Event.','reason'=>''];
+            }
+						if($config['email']!=''){
+							require'phpmailer/class.phpmailer.php';
+							$mail=new PHPMailer;
+							$mail->isSendmail();
+							$mail->SetFrom($email,$name);
+							$toname=$config['email'];
+							$mail->AddAddress($config['email']);
+							$mail->IsHTML(true);
+							$subject=str_replace([
+								'{business}',
+								'{name}'
+							],[
+								$name,
+								$business
+							],'Booking Created by {name} for {business}');
+							$mail->Subject=$subject;
+							$msg='Booking Date: '.date($config['dateFormat'],$tis).'<br />';
+							if($rid!=0){
+								$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+								$s->execute([':id'=>$rid]);
+								$r=$s->fetch(PDO::FETCH_ASSOC);
+								$msg.='Booked: '.ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title'].'<br />';
+							}
+							$msg.='Name: '.$name.'<br />'.
+								'Email: '.$email.'<br />'.
+								'Business: '.$business.'<br />'.
+								'Address: '.$address.'<br />'.
+								'Suburb: '.$suburb.'<br />'.
+								'City: '.$city.'<br />'.
+								'State: '.$state.'<br />'.
+								'Postcode: '.$postcode.'<br />'.
+								'Phone: '.$phone.'<br />'.
+								'Notes: '.$notes;
+							$mail->Body=$msg;
+							$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
+							if($mail->Send()){
+//                  $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Making a Booking, a Representative will be in touch shortly!','reason'=>''];
+              }
+						}
+						if($email!=''){
+							$mail2=new PHPMailer;
+							$mail2->isSendmail();
+							$mail2->SetFrom($config['email'], $config['business']);
+							$toname=$email;
+							$mail2->AddAddress($email);
+							if($config['bookingAttachment']!='')$mail2->AddAttachment('../media/'.basename($config['bookingAttachment']));
+								$mail2->IsHTML(true);
+								$namee=explode(' ',$name);
+								$subject=isset($config['bookingAutoReplySubject'])&&$config['bookingAutoReplySubject']!=''?$config['bookingAutoReplySubject']:'Booking Confirmation from {business}';
 								$subject=str_replace([
 									'{business}',
-									'{name}'
+									'{name}',
+									'{first}',
+									'{last}',
+									'{date}'
 								],[
+									$config['business'],
 									$name,
-									$business
-								],'Booking Created by {name} for {business}');
-								$mail->Subject=$subject;
-								$msg='Booking Date: '.date($config['dateFormat'],$tis).'<br />';
-								if($rid!=0){
-									$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-									$s->execute([':id'=>$rid]);
-									$r=$s->fetch(PDO::FETCH_ASSOC);
-									$msg.='Booked: '.ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title'];
-								}
-								$msg.='Name: '.$name.'<br />'.
-										'Email: '.$email.'<br />'.
-										'Business: '.$business.'<br />'.
-										'Address: '.$address.'<br />'.
-										'Suburb: '.$suburb.'<br />'.
-										'City: '.$city.'<br />'.
-										'State: '.$state.'<br />'.
-										'Postcode: '.$postcode.'<br />'.
-										'Phone: '.$phone.'<br />'.
-										'Notes: '.$notes;
-								$mail->Body=$msg;
-								$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-								if($mail->Send())
-                  $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Making a Booking, a Representative will be in touch shortly!','reason'=>''];
-							}
-								if($email!=''){
-									$mail2=new PHPMailer;
-									$mail2->isSendmail();
-									$mail2->SetFrom($config['email'], $config['business']);
-									$toname=$email;
-									$mail2->AddAddress($email);
-									if($config['bookingAttachment']!='')$mail2->AddAttachment('../media/'.basename($config['bookingAttachment']));
-									$mail2->IsHTML(true);
-									$namee=explode(' ',$name);
-									$subject=isset($config['bookingAutoReplySubject'])&&$config['bookingAutoReplySubject']!=''?$config['bookingAutoReplySubject']:'Booking Confirmation from {business}';
-									$subject=str_replace([
-										'{business}',
-										'{name}',
-										'{first}',
-										'{last}',
-										'{date}'
-									],[
-										$config['business'],
-										$name,
-										$namee[0],
-										end($namee),
-										date($config['dateFormat'],$ti)
-									],$subject);
-									$mail2->Subject=$subject;
-									$msg2=isset($config['bookingAutoReplyLayout'])&&$config['bookingAutoReplyLayout']!=''?rawurldecode($config['bookingAutoReplyLayout']):'Thank you for your Booking,<br />Someone will be in touch to confirm your Booking time.<br />Regards,<br />{business}<br />'.$paylink;
-									$bookingDate=$tis!=0?date($config['dateFormat'],$tis):'';
-									$bookingService=$rid!=0?ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title']:'';
-			          	$namee=explode(' ',$name);
-									$msg2=str_replace([
-										'{business}',
-										'{name}',
-										'{first}',
-										'{last}',
-										'{date}',
-										'{booking_date}',
-										'{service}'
-									],[
-										$config['business'],
-										$name,
-										$namee[0],
-										end($namee),
-										date($config['dateFormat'],$ti),
-										$bookingDate,
-										$bookingService
-									],$msg2);
-									$mail2->Body=$msg2;
-									$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg2));
-									if($mail2->Send())$not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Making a Booking, a Representative will be in touch shortly!'.$paylink,'reason'=>''];
-									else$not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was a problem adding the Booking!','reason'=>''];
+									$namee[0],
+									end($namee),
+									date($config['dateFormat'],$ti)
+								],$subject);
+								$mail2->Subject=$subject;
+                if(isset($config['bookingAutoReplyLayout'])&&$config['bookingAutoReplyLayout']!=''){
+                  $msg2=rawurldecode($config['bookingAutoReplyLayout']);
+                }else{
+                  $msg2='Thank you for your Booking,<br />';
+                  if($r['contentType']=='events'){
+                    if($r['cost']>0){
+                      $msg2.=$paylink;
+                    }
+                  }
+                  if($r['contentType'=='service']){
+                    $msg2.=$paylink.'Someone will be in touch to confirm your Booking time.<br />Regards,<br />{business}';
+                  }
+                }
+								$bookingDate=$tis!=0?date($config['dateFormat'],$tis):'';
+								$bookingService=$rid!=0?ucfirst(rtrim($r['contentType'],'s')).' - '.$r['title']:'';
+		          	$namee=explode(' ',$name);
+								$msg2=str_replace([
+									'{business}',
+									'{name}',
+									'{first}',
+									'{last}',
+									'{date}',
+									'{booking_date}',
+									'{service}',
+                  '{event}',
+                  '{externalLink}'
+								],[
+									$config['business'],
+									$name,
+									$namee[0],
+									end($namee),
+									date($config['dateFormat'],$ti),
+									$bookingDate,
+									$bookingService,
+                  $bookingService,
+                  $r['contentType']=='events'&&$r['cost']==0&&$r['exturl']!=''?'As this is a Free Event, please find your link to the Event below:-<br /><a href="'.$r['exturl'].'">'.$r['exturl'].'</a>':''
+								],$msg2);
+								$mail2->Body=$msg2;
+								$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg2));
+								if($mail2->Send()){
+                  if($r['contentType']=='events'&&$r['cost']>0){
+                    $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Making a Booking, a Representative will be in touch shortly!'.$paylink,'reason'=>''];
+                  }
+								}else
+                  $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was a problem adding the Booking!','reason'=>''];
 								}
 							}
 	//				}
 // 6LeohZcaAAAAALoOJB_iZ95NOrYg2RZDuxc75S9O
 // 6LeohZcaAAAAAGhQ9qaDVbOpZegPAqiuQ1BobwLU
 //
-          }else$not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was a problem adding the Booking!','reason'=>''];
+          }else
+            $not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was a problem adding the Booking!','reason'=>''];
 			}
 		}
 	}

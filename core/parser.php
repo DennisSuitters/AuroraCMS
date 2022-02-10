@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -139,24 +139,31 @@ foreach($tags as$tag){
 					$gst=$r['rCost']*($config['gst']/100);
 					$gst=$r['rCost']+$gst;
 				}
-				if($r['options'][0]==1||$r['cost']!=''){
-					if(is_numeric($r['cost'])&&$r['cost']>0){
-						if($r['stockStatus']=='sold out')
-							$parsing.='<div class="sold">';
-						$parsing.=$r['rrp']!=0&&$show=='item'?'<span class="rrp" title="Recommended Retail Price">RRP &#36;'.htmlspecialchars($r['rrp'],ENT_QUOTES,'UTF-8').'</span>':'';
-						$parsing.='<span class="cost'.($r['rCost']!=0?' strike':'').'">';
-						if($r['coming'][0]==1)
-							$parsing.='Coming Soon';
-						else{
-							if(is_numeric($r['cost']))
-								$parsing.='&#36;';
-							$parsing.=($show!='item'&&$r['rCost']!=0?$r['rCost']:$r['cost']).'</span>';
-							$parsing.=$r['rCost']!=0&&$show=='item'?'<span class="reduced">&#36;'.htmlspecialchars($r['rCost'],ENT_QUOTES,'UTF-8').'</span>':'';
-						}
-						if($r['stockStatus']=='sold out')
-							$parsing.='</div>';
-					}else
-						$parsing.='';
+				if($r['options'][0]==1){
+					if(is_numeric($r['cost'])&&$r['cost']!=0){
+						if($r['coming'][0]==1)$parsing.='<div class="sold">Coming Soon</div>';
+					}
+					if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order')
+						$r['quantity']=0;
+					if(isset($user['rank'])&&$user['rank']>700){
+						$parsing='<div class="sold">'.
+							($r['rrp']>0?'<div><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>':'').
+							($r['cost']>0?'<div>Cost &#36;'.$r['cost'].'</div>':'').
+							($r['dCost']>0?'<div>Wholesale &#36;'.$r['dCost'].'</div>':'').
+						'</div>';
+					}elseif(isset($user['rank'])&&$user['rank']>300&&$user['rank']<400){
+						$parsing=
+						'<div class="sold">'.
+							($r['rrp']>0?'<div class="rrp"><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>':'').
+							($r['dCost']>0?'<div class="cost">&#36;'.$r['dCost'].'</div>':'').
+						'</div>';
+					}else{
+						$parsing.=
+							'<div class="sold">'.
+								($r['rrp']>0?'<div class="rrp"><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>':'').
+								($r['cost']>0?'<div class="cost">&#36;'.$r['cost'].'</div>':'').
+							'</div>';
+					}
 					if($r['contentType']=='service'||$r['contentType']=='events'&&$r['bookable']==1){
 						if(stristr($parse,'<service>')){
 							$parse=preg_replace(['~<inventory>.*?<\/inventory>~is','/<[\/]?service>/'],'',$parse);

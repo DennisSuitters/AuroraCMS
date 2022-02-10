@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -154,6 +154,8 @@
             <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{date}');return false;">{date}</a>
             <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
             <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{service}');return false;">{service}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{event}');return false;">{event}</a>
+            <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{externalLink}');return false;">{externalLink}</a>
           </div>
         </div>
         <div class="form-row">

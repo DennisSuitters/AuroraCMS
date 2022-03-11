@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -322,7 +322,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 			$suser=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 			$suser->execute([':id'=>$uid]);
 			$ruser=$suser->fetch(PDO::FETCH_ASSOC);
-			if(($config['iconsColor'][0]==1&&$ruser['rank']<310)&&$ruser['address']==''||$ruser['city']==''||$ruser['suburb']==''||$ruser['country']==''||$ruser['state']==''||$ruser['postcode']==0){
+			if(($config['options'][30]==1&&$ruser['rank']<310)&&($ruser['address']==''||$ruser['city']==''||$ruser['suburb']==''||$ruser['country']==''||$ruser['state']==''||$ruser['postcode']==0)){
 				$html=preg_replace([
 					'~<noaddress>.*?<\/noaddress>~is',
 					'/<[\/]?emptycart>/'

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,6 +15,37 @@ require'core/sanitize/HTMLPurifier.php';
 $purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'inc-cover.php';
 require'inc-breadcrumbs.php';
+if(stristr($html,'<playlist')){
+	$sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY ord ASC");
+	$sp->execute([
+		':rid'=>$page['id']
+	]);
+	$playlistoutput='';
+	if($sp->rowCount()>0){
+		preg_match('/<playlistitem>([\w\W]*?)<\/playlistitem>/',$html,$match);
+		$pli=$match[1];
+		$playlistoutput='';
+		while($pr=$sp->fetch(PDO::FETCH_ASSOC)){
+			$bpli='';
+			$bpli=preg_replace([
+				'/<print playlist=[\"\']?url[\"\']?>/'
+			],[
+				$pr['url']
+			],$pli);
+			$playlistoutput.=$bpli;
+		}
+		$html=preg_replace([
+			'/<[\/]?playlist>/',
+			'~<playlistitem>.*?<\/playlistitem>~is'
+		],[
+			'',
+			$playlistoutput
+		],$html);
+	}else{
+		$html=preg_replace('~<playlist>.*?<\/playlist>~is','',$html);
+	}
+}
+
 $html=preg_replace([
 	'/<print page=[\"\']?heading[\"\']?>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',
@@ -47,8 +78,8 @@ if(stristr($html,'<items')){
       $bioavatar,
       htmlspecialchars(($r['name']==''?$r['username']:$r['name']),ENT_QUOTES,'UTF-8'),
 			htmlspecialchars(($r['name']==''?$r['username']:$r['name']),ENT_QUOTES,'UTF-8'),
-			htmlspecialchars($caption,ENT_QUOTES,'UTF-8'),
-			$purify->purify($r['notes'])
+			$caption,
+			$r['notes']
     ],$items);
     $output.=$items;
   }

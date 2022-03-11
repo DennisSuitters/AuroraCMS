@@ -122,9 +122,13 @@
 								<form method="post" action="<print urlself>">
 									<input type="hidden" name="act" value="login">
 									<label for="menuLoginUsername">Username</label>
-									<input type="text" id="menuLoginUsername" name="username" placeholder="Username..." autocomplete="username">
+									<div class="form-row">
+										<input type="text" id="menuLoginUsername" name="username" placeholder="Username..." autocomplete="username">
+									</div>
 									<label for="loginMenuPassword">Password</label>
-									<input type="password" id="loginMenuPassword" name="password" placeholder="Password..." autocomplete="current-password">
+									<div class="form-row">
+										<input type="password" id="loginMenuPassword" name="password" placeholder="Password..." autocomplete="current-password">
+									</div>
 									<div class="text-right mt-3">
 										<button type="submit">Sign in</button>
 									</div>

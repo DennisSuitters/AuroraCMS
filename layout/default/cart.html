@@ -96,63 +96,90 @@
 			</article>
 			<article class="col-12 col-md-6 mx-auto p-0 px-3">
 				<iframe id="sp" name="sp" class="d-none"></iframe>
-				<form class="card p-3" method="post" action="cart/confirm">
+				<form method="post" action="cart/confirm">
 					<input type="hidden" name="<print hash>" value="<print timecode>">
 					<label for="fullname" aria-hidden="true">Full Name</label>
-					<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
+					<div class="form-row">
+						<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
+					</div>
 					<loggedin>
 						<h3>Create or Add to Existing Account</h3>
 						<div class="alert alert-info" role="alert">If you have ordered from us previously, or already have an account, you can just enter your email below, and we will add this order using your account details.</div>
-						<div class="alert alert-danger" role="alert">Highlighted Fields are Required.</div>
-						<label for="email">Email</label>
-						<input type="email" id="email" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-						<div class="requirements alert alert-danger">Must be a valid email address.</div>
-						<label for="name" class="mt-0">Name</label>
-						<input type="text" id="name" name="name" value="" placeholder="Enter a Name...">
+						<label class="required" for="email">Email</label>
+						<div class="form-row flex-wrap">
+							<input type="email" id="email" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+							<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+						</div>
+						<label class="required" for="name">Name</label>
+						<div class="form-row flex-wrap">
+							<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+							<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
+						</div>
 						<label for="business">Business</label>
-						<input type="text" id="business" name="business" value="" placeholder="Enter a Business...">
+						<div class="form-row">
+							<input type="text" id="business" name="business" value="" placeholder="Enter your Business...">
+						</div>
 						<label for="phone">Phone</label>
-						<input type="tel" id="phone" name="phone" value="" placeholder="Enter a Phone Number...">
+						<div class="form-row flex-wrap">
+							<input type="tel" id="phone" name="phone" value="" placeholder="Enter your Phone Number..." pattern="^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{1}( |-){0,1}[0-9]{3}$">
+							<div class="requirements alert alert-info">Must be a valid phone number.</div>
+						</div>
 						<label for="address">Address</label>
-						<input type="text" id="address" name="address" value="" placeholder="Enter an Address...">
-						<label for="city">City</label>
-						<input type="text" id="city" name="city" value="" placeholder="Enter a City...">
-						<label for="suburb">Suburb</label>
-						<input type="text" id="suburb" name="suburb" value="" placeholder="Enter a Suburb...">
-						<label for="country">Country</label>
-						<input type="text" id="country" name="country" value="Australia" placeholder="Enter a Country...">
-						<label for="state">State</label>
-						<select id="state" name="state">
-							<option value="">Choose...</option>
-							<option value="New South Wales">New South Wales</option>
-							<option value="Northern Territory">Northern Territory</option>
-							<option value="Queensland">Queensland</option>
-							<option value="South Australia">South Australia</option>
-							<option value="Tasmania">Tasmania</option>
-							<option value="Victoria">Victoria</option>
-							<option value="Western Australia">Western Australia</option>
-							<option value="Australian Capital Territory">Australian Capital Territory</option>
-						</select>
+						<div class="form-row">
+							<input type="text" id="address" name="address" value="" placeholder="Enter your Address...">
+						</div>
 						<label for="postcode">Postcode</label>
-						<input type="text" id="postcode" name="postcode" value="" placeholder="Enter a Postcode...">
+						<div class="form-row flex-wrap">
+							<input type="text" id="postcode" name="postcode" value="" placeholder="Enter your Postcode...">
+							<nav class="col-12 border-1 border-top:0 d-none" id="postcodelist"></nav>
+						</div>
+						<label for="suburb">Suburb</label>
+						<div class="form-row">
+							<input type="text" id="suburb" name="suburb" value="" placeholder="Enter your Suburb...">
+						</div>
+						<label for="state">State</label>
+						<div class="form-row">
+							<input list="statelist" type="text" id="state" name="state" placeholder="Enter your State/Province, or select from the dropdown choices...">
+							<datalist id="statelist">
+								<option value="New South Wales">
+								<option value="Northern Territory">
+								<option value="Queensland">
+								<option value="South Australia">
+								<option value="Tasmania">
+								<option value="Victoria">
+								<option value="Western Australia">
+								<option value="Australian Capital Territory">
+							</datalist>
+						</div>
+						<label for="city">City</label>
+						<div class="form-row">
+							<input type="text" id="city" name="city" value="" placeholder="Enter your City...">
+						</div>
+						<label for="country">Country</label>
+						<div class="form-row">
+							<input type="text" id="country" name="country" value="Australia" placeholder="Enter your Country...">
+						</div>
 					</loggedin>
 					<label for="rewards">Rewards</label>
-					<input type="text" id="rewards" name="rewards" value="" placeholder="Enter Your Rewards Code...">
+					<div class="form-row">
+						<input type="text" id="rewards" name="rewards" value="" placeholder="Enter Your Rewards Code...">
+					</div>
 					<postageoptions>
-						<label for="postoption">Delivery Options</label>
-						<select id="postoption" name="pid<print hash>">
+						<label class="required" for="postoption">Delivery Options</label>
+						<select id="postoption" name="pid<print iphash>" required aria-required="true">
+							<option value="">Select a Shipping Option</option>
 							<postoptions>
 						</select>
 						<small>Note: Delivery prices are estimates, and may change depending on order items and location of delivery.</small>
 					</postageoptions>
 					<paymentoptions>
-						<label for="payoption">Payment Options</label>
+						<label class="required" for="payoption">Payment Options</label>
 						<select id="payoption" name="payoption" required aria-required="true">
 							<payoptions>
 						</select>
 						<small>Note: Payment Option Selected may change the overall cost, which will be reflected on the Order.</small>
 					</paymentoptions>
-					<button type="submit" class="mt-3">Confirm Order</button>
+					<button type="submit" class="btn-block mt-3">Confirm Order</button>
 				</form>
 			</article>
 		</emptycart>

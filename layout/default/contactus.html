@@ -80,27 +80,38 @@
 				<input type="hidden" name="act" value="add_message">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<div class="alert alert-danger" role="alert">Highlighted Fields are Required</div>
-				<label for="contactsubject">Subject</label>
+				<label class="required" for="contactsubject">Subject</label>
 				<subjectText>
-					<input type="text" id="contactsubject" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true">
+					<div class="form-row">
+						<input type="text" id="contactsubject" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true">
+					</div>
 				</subjectText>
 				<subjectSelect>
-					<select id="contactsubject" name="subject" required aria-required="true">
-						<option value="">Select a Subject for Contacting Us</option>
-						<subjectOptions>
-					</select>
+					<div class="form-row">
+						<select id="contactsubject" name="subject" required aria-required="true">
+							<option value="">Please Select a Subject for Contacting Us</option>
+							<subjectOptions>
+						</select>
+					</div>
 				</subjectSelect>
-				<label for="contactemail">Email</label>
-				<input type="email" id="contactemail" name="email" value="" placeholder="Enter an Email..." required aria-required="true">
-				<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
-				<label for="contactname">Name</label>
-				<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name...">
+				<label class="required" for="contactemail">Email</label>
+				<div class="form-row flex-wrap">
+					<input type="email" id="contactemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+				</div>
+				<label class="required" for="contactname">Name</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
+				</div>
 				<label for="fullname" aria-hidden="true">Full Name</label>
 				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="contacttxt">Message</label>
-				<textarea id="contacttxt" name="notes" placeholder="Enter a Message..." required aria-required="true"></textarea>
+				<div class="form-row">
+					<textarea id="contacttxt" name="notes" placeholder="Enter your Message..." required aria-required="true"></textarea>
+				</div>
 				<g-recaptcha>
-				<button id="contact-btn" class="btn-block mt-3" type="submit" disabled="disabled">Send</button>
+				<button id="contact-btn" class="btn-block mt-3" type="submit" disabled>Send</button>
 			</form>
 		</article>
 	</section>

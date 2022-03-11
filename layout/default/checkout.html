@@ -97,10 +97,15 @@
           </afterpay>
           <form target="sp" action="core/stripepayment.php" method="post" id="paymentFrm">
             <input type="hidden" name="orderID" value="<print checkout=orderid>">
-            <label>Email</label>
-            <input type="email" name="email" id="email" class="field" placeholder="Enter email" required="">
-            <label>Name on Card</label>
-            <input type="text" name="name" id="name" class="field" placeholder="Enter name" required="" autofocus="">
+            <label class="required" for="email">Email</label>
+            <div class="form-row flex-wrap">
+              <input type="email" name="email" id="email" class="field" placeholder="Enter your Email..." required aria-reqired="true">
+              <div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+            </div>
+            <label class="required" for="name">Name on Card</label>
+            <div class="form-row">
+              <input type="text" name="name" id="name" class="field" placeholder="Enter Name as it appears on your Card..." required aria-required="true" autofocus>
+            </div>
             <label>Card Number</label>
             <div id="card_number" class="field"></div>
             <div class="row">

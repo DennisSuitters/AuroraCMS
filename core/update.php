@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -55,7 +55,7 @@ if($tbl=='seo'||$tbl=='content'||$tbl=='menu'||$tbl=='config'||$tbl=='login'||$t
 }
 if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
 if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%3E%3C/p%3E','',$da);
-$da=htmlentitiesOutsideHTMLTags($da, ENT_QUOTES | ENT_HTML5);
+if($col=='notes')$da=htmlentitiesOutsideHTMLTags($da,ENT_QUOTES|ENT_HTML5);
 $si=session_id();
 $ti=time();
 if($col!='messengerFBCode'){

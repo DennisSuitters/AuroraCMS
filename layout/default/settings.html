@@ -2,82 +2,121 @@
 <block include="header.html">
 <block inbed="settings">
 	<pagenotes>
-		<section class="row">
-			<article class="mx-auto">
-				<h1><print page="heading"></h1>
-				<print page="notes">
-			</article>
-		</section>
-	</pagenotes>
-	<section class="row my-5 justify-content-center">
+    <section class="row">
+      <article class="mx-0">
+        <h1><print page="heading"></h1>
+        <print page="notes">
+      </article>
+    </section>
+  </pagenotes>
+	<section class="row mb-5 justify-content-center">
 		<article class="col-12 col-md-6">
 			<iframe id="sp" name="sp" class="d-none"></iframe>
-			<form class="card mx-auto" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
+			<form class="card p-3" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
 				<input type="hidden" name="id" value="<print user=id>">
 				<input type="hidden" name="act" value="add_avatar">
-				<fieldset class="border-0 m-0">
-					<legend>Avatar</legend>
-					<div class="text-center">
-						<img class="img-avatar avatar xxl" src="<print user=avatar>" alt="<print user=name>">
+				<h2>Avatar</h2>
+				<div class="text-center">
+					<img class="img-avatar avatar xxl" src="<print user=avatar>" alt="<print user=name>">
+				</div>
+				<input class="d-none" type="file" name="fu" id="fu">
+				<label for="fu">Choose File</label>
+				<button class="btn btn-block mt-3">Upload</button>
+			</form>
+			<form class="card mt-5 p-3" method="post" action="settings">
+				<h2>Reset Password</h2>
+				<input type="hidden" name="act" value="updatePassword">
+				<input type="hidden" name="emailtrap" value="none">
+				<div class="alert alert-danger<error currentPassHidden>" role="alert">The Password you entered was incorrect!</div>
+				<div class="alert alert-danger<error matchPassHidden>" role="alert">The New &amp; Confirm Passwords do NOT match!</div>
+				<div class="alert alert-success<success passUpdated>" role="alert">Password Successfully Updated!</div>
+				<label class="required" for="password">Password</label>
+				<div class="form-row">
+					<input type="password" id="password" name="newPass" value="" placeholder="Enter New Password..." required aria-required="true">
+				</div>
+				<button class="btn btn-block mt-3" type="submit">Update Password</button>
+				<div class="form-text text-muted small">Changing Password will Sign you Out</div>
+			</form>
+			<form class="card mt-5 p-3" method="post" action="settings">
+				<h2>Account Details</h2>
+				<input type="hidden" name="act" value="updateAccount">
+				<div class="alert alert-success<success accountHidden>" role="alert">Account Details Updated!</div>
+				<div class="alert alert-danger<error accountHidden>" role="alert">There was an Issue Updating your Account Details!</div>
+				<label for="ti">Created</label>
+				<div class="form-row">
+					<input type="text" id="ti" value="<print user=ti>" readonly>
+				</div>
+				<label for="username">Username</label>
+				<div class="form-row">
+					<input type="text" id="username" name="usrname" value="<print user=username>" readonly>
+				</div>
+				<label for="rank">Rank</label>
+				<div class="form-row">
+					<input type="text" id="rank" value="<print user=rank>" readonly>
+				</div>
+				<label for="spent">Spent</label>
+				<div class="form-row">
+					<input type="text" id="spent" value="$<print user=spent>" readonly>
+				</div>
+				<label for="points">Points Earned</label>
+				<div class="form-row">
+					<input type="text" id="points" value="<print user=points>" readonly>
+				</div>
+				<label class="required" for="email">Email</label>
+				<div class="form-row flex-wrap">
+					<input type="email" id="email" name="email" value="<print user=email>" placeholder="Enter an Email..." required aria-required="true">
+					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+				</div>
+				<label class="required" for="name">Name</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="name" name="name" value="<print user=name>" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
+				</div>
+				<label for="url">URL</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="url" name="url" value="<print user=url>" placeholder="Enter a URL..." pattern=".*\.[a-z]{2,}$">
+					<div class="requirements alert alert-info">Must be a valid URL.</div>
+				</div>
+				<label for="business">Business</label>
+				<div class="form-row">
+					<input type="text" id="business" name="business" value="<print user=business>" placeholder="Enter your Business...">
+				</div>
+				<label for="phone">Phone</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="phone" name="phone" value="<print user=phone>" placeholder="Enter your Phone Number..." pattern="^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{1}( |-){0,1}[0-9]{3}$">
+					<div class="requirements alert alert-info">Must be a valid phone number.</div>
+				</div>
+				<label for="mobile">Mobile</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="mobile" name="mobile" value="<print user=mobile>" placeholder="Enter your Mobile Number..." pattern="^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{1}( |-){0,1}[0-9]{3}$">
+					<div class="requirements alert alert-info">Must be a valid mobile number.</div>
+				</div>
+				<label for="address">Address</label>
+				<div class="form-row">
+					<input type="text" id="address" name="address" value="<print user=address>" placeholder="Enter your Address...">
+				</div>
+				<label for="postcode">Postcode</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="postcode" name="postcode" value="" placeholder="Enter your Postcode...">
+					<nav class="col-12 border-1 border-top-0 d-none" id="postcodelist"></nav>
+				</div>
+				<label for="suburb">Suburb</label>
+				<div class="form-row">
+					<input type="text" id="suburb" name="suburb" value="<print user=suburb>" placeholder="Enter your Suburb...">
+				</div>
+				<label for="state">State</label>
+				<div class="form-row">
+					<input type="text" id="state" name="state" value="<print user=state>" placeholder="Enter your State...">
 					</div>
-					<input class="d-none" type="file" name="fu" id="fu">
-					<label for="fu">Choose File</label>
-					<button class="btn btn-block mt-3">Upload</button>
-				</fieldset>
-			</form>
-			<form class="card mx-auto mt-5" method="post" action="settings">
-				<fieldset class="border-0 m-0">
-					<legend>Reset Password</legend>
-					<input type="hidden" name="act" value="updatePassword">
-					<input type="hidden" name="emailtrap" value="none">
-					<div class="alert alert-danger<error currentPassHidden>" role="alert">The Password you entered was incorrect!</div>
-					<div class="alert alert-danger<error matchPassHidden>" role="alert">The New &amp; Confirm Passwords do NOT match!</div>
-					<div class="alert alert-success<success passUpdated>" role="alert">Password Successfully Updated!</div>
-					<label for="password">Password</label>
-					<input type="password" id="password" class="form-control" name="newPass" value="" placeholder="Enter New Password..." required aria-required="true">
-					<button class="btn btn-block mt-3" type="submit">Update Password</button>
-					<div class="form-text text-muted small">Changing Password will Sign you Out</div>
-				</fieldset>
-			</form>
-			<form class="card mx-auto mt-5" method="post" action="settings">
-				<fieldset class="border-0 m-0">
-					<legend>Account Details</legend>
-					<input type="hidden" name="act" value="updateAccount">
-					<input type="hidden" name="emailTrap" value="none">
-					<div class="alert alert-success<success accountHidden>" role="alert">Account Details Updated!</div>
-					<div class="alert alert-danger<error accountHidden>" role="alert">There was an Issue Updating your Account Details!</div>
-					<label for="ti">Created</label>
-					<input type="text" id="ti" class="form-control" value="<print user=ti>" readonly>
-					<label for="username">Username</label>
-					<input type="text" id="username" class="form-control" name="usrname" value="<print user=username>" readonly>
-					<label for="rank">Rank</label>
-					<input type="text" id="rank" class="form-control" value="<print user=rank>" readonly>
-					<label for="email">Email</label>
-					<input type="text" id="email" class="form-control" name="email" value="<print user=email>" placeholder="Enter an Email...">
-					<label for="name">Name</label>
-					<input type="text" id="name" class="form-control" name="name" value="<print user=name>" placeholder="Enter a Name...">
-					<label for="url">URL</label>
-					<input type="text" id="url" class="form-control" name="url" value="<print user=url>" placeholder="Enter a URL...">
-					<label for="business">Business</label>
-					<input type="text" id="business" class="form-control" name="business" value="<print user=business>" placeholder="Enter a Business...">
-					<label for="phone">Phone</label>
-					<input type="text" id="phone" class="form-control" name="phone" value="<print user=phone>" placeholder="Enter a Phone Number...">
-					<label for="mobile">Mobile</label>
-					<input type="text" id="mobile" class="form-control" name="mobile" value="<print user=mobile>" placeholder="Enter a Mobile Number...">
-					<label for="address">Address</label>
-					<input type="text" id="address" class="form-control" name="address" value="<print user=address>" placeholder="Enter an Address...">
-					<label for="suburb">Suburb</label>
-					<input type="text" id="suburb" class="form-control" name="suburb" value="<print user=suburb>" placeholder="Enter a Suburb...">
-					<label for="city">City</label>
-					<input type="text" id="city" class="form-control" name="city" value="<print user=city>" placeholder="Enter a City...">
-					<label for="state">State</label>
-					<input type="text" id="state" class="form-control" name="state" value="<print user=state>" placeholder="Enter a State...">
-					<label for="postcode">Postcode</label>
-					<input type="text" id="postcode" class="form-control" name="postcode" value="<print user=postcode>" placeholder="Enter a Postcode...">
-					<label for="country">Country</label>
-					<input type="text" id="country" class="form-control" name="country" value="<print user=country>" placeholder="Enter a Country...">
-					<button class="btn btn-block mt-3" type="submit">Update Account</button>
-				</fieldset>
+				<label for="city">City</label>
+				<div class="form-row">
+					<input type="text" id="city" name="city" value="<print user=city>" placeholder="Enter your City...">
+				</div>
+				<label for="country">Country</label>
+				<div class="form-row">
+					<input type="text" id="country" name="country" value="<print user=country>" placeholder="Enter your Country...">
+				</div>
+				<button class="btn btn-block mt-3" type="submit">Update Account</button>
 			</form>
 		</article>
 	</section>

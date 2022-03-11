@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -395,6 +395,7 @@ if($skip==false){
     }else
       $html=preg_replace('~<image>.*?<\/image>~is','',$html);
   }
+
   if(stristr($html,'<item')){
     preg_match('/<item>([\w\W]*?)<\/item>/',$html,$matches);
     $item=$matches[1];
@@ -724,11 +725,13 @@ if($skip==false){
         }
         $jsonld.='"offers":{'.
           '"@type":"Offer",'.
-          '"url":"'.$canonical.'",'.
-          '"priceCurrency":"AUD",'.
+          '"url":"'.$canonical.'",';
+        if(is_numeric($r['cost'])||is_numeric($r['rCost'])){
+          $jsonld.='"priceCurrency":"AUD",'.
           '"price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'",'.
-          '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",'.
-          '"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'http://schema.org/OutOfStock':'http://schema.org/InStock'):($r['stockStatus']=='none'?'http://schema.org/OutOfStock':'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus'])))).'",'.
+          '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+        }
+        $jsonld.='"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'http://schema.org/OutOfStock':'http://schema.org/InStock'):($r['stockStatus']=='none'?'http://schema.org/OutOfStock':'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus'])))).'",'.
           '"seller":{'.
             '"@type":"Organization",'.
             '"name":"'.$config['business'].'"'.

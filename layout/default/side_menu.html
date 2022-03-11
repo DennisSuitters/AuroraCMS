@@ -101,18 +101,25 @@
 					<input id="rating1" type="radio" name="rating" value="1">
 					<label for="rating1" title="Bad!">1</label>
 	      </span>
-				<label for="reviewemail">Email</label>
-				<input type="email" id="reviewemail" name="email" value="" required aria-required="true">
-				<div class="requirements mt-3 mb-0">Must be a valid email address.</div>
-				<label for="reviewname">Name</label>
-				<input type="text" id="reviewname" name="name" value="" required aria-required="true">
+				<label class="required" for="reviewemail">Email</label>
+				<div class="form-row flex-wrap">
+					<input type="email" id="reviewemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+				</div>
+				<label class="required" for="contactname">Name</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<div class="requirements alert alert-info">Names can only contain letters and the usual characters associated with some names.</div>
+				</div>
 				<label for="fullname" aria-hidden="true">Full Name</label>
 				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
-				<label for="reviewtxt">Review</label>
-				<textarea id="reviewtxt" name="review"></textarea>
+				<label class="required" for="reviewtxt">Review</label>
+				<div class="form-row">
+					<textarea id="reviewtxt" name="review" placeholder="Enter your Review..." required aria-required="true"></textarea>
+				</div>
 				<g-recaptcha>
 				<div class="text-right mt-3">
-					<button id="review-btn" type="submit" disabled="disabled">Add Review</button>
+					<button id="review-btn" type="submit" disabled>Add Review</button>
 				</div>
 			</form>
 		</div>

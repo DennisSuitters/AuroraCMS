@@ -19,7 +19,7 @@ $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filt
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
-if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTopics'&&$tbl!='pageviews'){
+if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTopics'&&$tbl!='pageviews'&&$tbl!='playlist'){
   $s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
@@ -77,7 +77,11 @@ if($id!=0&&$tbl=='seo'){
   $q->execute([':id'=>$id]);
   $el='l_';
 }
-if($id!=0&&$id!='activity'&&$tbl!='pageviews'){
+if($tbl=='playlist'){
+  $s=$db->prepare("DELETE FROM `".$prefix."choices` WHERE `id`=:id");
+  $s->execute([':id'=>$id]);
+}
+if($id!=0&&$id!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'){
   $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $q->execute([':id'=>$id]);
   if($tbl=='media')$el='media_items_';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -69,8 +69,12 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 		$_SERVER['REQUEST_URI'],
 		$user['rank']<301?($config['iconsColor'][0]==1&&$user['address']==''||$user['suburb']==''||$user['city']==''||$user['country']==''||$user['state']==''||$user['postcode']==0?'<div class="alert alert-info m-0">There is missing Address Information that is required for calculating Shipping Costs, and Destination. Please go to your <a href="'.URL.'settings#address">Settings</a> to update the information.</div>':''):''
 	],$html);
-}else
-	$html=preg_replace('~<accountmenu>.*?<\/accountmenu>~is','',$html,1);
+}else{
+	$html=preg_replace([
+		'~<accountmenu>.*?<\/accountmenu>~is',
+		'/<accountnotification>/'
+	],'',$html);
+}
 $html=preg_replace([
 	'/<print view>/',
 	'/<print config=[\"\']?seoTitle[\"\']?>/',

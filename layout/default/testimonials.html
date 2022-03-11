@@ -50,7 +50,6 @@
 				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<div class="h4">We would love to have you share your experience with us.</div>
 				<div class="alert alert-info" role="alert">Entering your email is only for our records, we don't use it for displaying your Testimonial.</div>
-				<div class="alert alert-danger" role="alert">Highlighted fields are required.</div>
 				<label>Rating</label>
 				<span class="starRating">
 					<input id="rating5" type="radio" name="rating" value="5" checked>
@@ -64,20 +63,29 @@
 					<input id="rating1" type="radio" name="rating" value="1">
 					<label for="rating1" title="Bad!">1</label>
 				</span>
-				<label for="testimonialtxt">How your Experience was with us?</label>
-				<textarea id="testimonialtxt" name="review" required aria-required="true"></textarea>
-				<label for="testimonialemail">Please Enter your Email</label>
-				<input type="email" id="testimonialemail" name="email" required aria-required="true">
-				<div class="requirements alert alert-danger">Must be a valid email address.</div>
-				<label for="testimonialname">Please Enter your Name</label>
-				<input type="text" id="testimonialname" name="name" required aria-required="true">
+				<label class="required" for="testimonialtxt">How your Experience was with us?</label>
+				<div class="form-row">
+					<textarea id="testimonialtxt" name="review" placeholder="Enter your Experience..." required aria-required="true"></textarea>
+				</div>
+				<label class="required" for="testimonialemail">Please Enter your Email</label>
+				<div class="form-row flex-wrap">
+					<input type="email" id="testimonialemail" name="email" placeholder="Enter your Email..." required aria-required="true">
+					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+				</div>
+				<label class="required" for="testimonialname">Please Enter your Name</label>
+				<div class="form-row flex-wrap">
+					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
+				</div>
 				<label for="fullname" aria-hidden="true">Full Name</label>
 				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="testimonialbusiness">Please Enter Your Business</label>
-				<input class="mb-3" type="text" id="testimonialbusiness" name="business">
+				<div class="form-row">
+					<input class="mb-3" type="text" id="testimonialbusiness" name="business" placeholder="Enter your Business...">
+				</div>
 				<g-recaptcha>
 				<div class="text-right mt-3">
-					<button id="testimonial-btn" type="submit" disabled="disabled">Submit your Testimonial</button>
+					<button id="testimonial-btn" type="submit" disabled>Submit your Testimonial</button>
 				</div>
 			</form>
 		</article>

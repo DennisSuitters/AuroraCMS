@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -159,10 +159,21 @@ foreach($tags as$tag){
 						'</div>';
 					}else{
 						$parsing.=
-							'<div class="sold">'.
-								($r['rrp']>0?'<div class="rrp"><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>':'').
-								($r['cost']>0?'<div class="cost">&#36;'.$r['cost'].'</div>':'').
-							'</div>';
+							'<div class="sold">';
+								if($show=='item'&&$r['rrp']>0){
+									$parsing.='<div class="rrp"><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>';
+								}
+								if($show=='item'){
+									$parsing.=($r['cost']>0?'<div class="cost'.($r['cost']>0?' strike':'').'">&#36;'.$r['cost'].'</div>':'').($r['rCost']>0?'<div class="cost">&#36;'.$r['rCost'].'</div>':'');
+								}
+								if($show!='item'){
+									if($r['rCost']>0){
+										$parsing.='<div class="cost">&#36;'.$r['rCost'].'</div>';
+									}else{
+										$parsing.='<div class="cost">&#36;'.$r['cost'].'</div>';
+									}
+								}
+							$parsing.='</div>';
 					}
 					if($r['contentType']=='service'||$r['contentType']=='events'&&$r['bookable']==1){
 						if(stristr($parse,'<service>')){

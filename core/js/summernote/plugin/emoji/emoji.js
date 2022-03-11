@@ -54,7 +54,7 @@
             ui.dropdown({
               className:'dropdown-emoji',
               items:[
-                '<div class="note-emoji-search">',
+                '<div class="form-row note-emoji-search">',
                   '<input type="text" placeholder="search..." class="note-control">',
                 '</div>',
                 '<div class="note-emoji-list">',

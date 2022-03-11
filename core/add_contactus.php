@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -86,7 +86,7 @@ if($not['spammer']==false){
     			  $e=$db->errorInfo();
           }
   				if($config['email']!=''){
-  					if($not['spam']==false){
+  					if($not['spammer']==false){
   						require'phpmailer/class.phpmailer.php';
   						$mail=new PHPMailer;
               $mail->isSendmail();
@@ -140,10 +140,13 @@ if($not['spammer']==false){
   						],$msg2);
   						$mail2->Body=$msg2;
   						$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-  						if($mail2->Send())$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
-              else$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
+  						if($mail2->Send())
+                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
+              else
+                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
     				}
-    			}else$not=['spammer'=>false,'taget'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
+    			}else
+            $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
     		}
       }
   	}

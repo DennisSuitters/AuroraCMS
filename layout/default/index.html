@@ -33,20 +33,20 @@
 						</article>
 					</eventitem>
 				</eventsitems>
-				<article id="newsletters" class="card event col-5 mx-auto mx-md-3 mt-3">
+				<article id="newsletters" class="card event col-5 mx-auto mx-md-3 mt-3 p-3">
 					<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
 						<input type="hidden" name="act" value="add_subscriber">
 						<input type="hidden" name="<print hash>" value="<print timecode>">
-						<fieldset class="border-0 m-0">
-							<legend class="h5">Subscribe to our Newsletters</legend>
-							<label for="fullname" aria-hidden="true">Full Name</label>
-							<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
-							<label for="newslettersemail">Email</label>
-							<input type="email" id="newslettersemail" name="email" value="" required aria-required="true" placeholder="Email...">
-							<div class="requirements alert alert-danger">Must be a valid email address.</div>
-							<g-recaptcha>
-							<button class="btn btn-block mt-3" id="newsletters-btn" type="submit" disabled="disabled">Subscribe</button>
-						</fieldset>
+						<div class="h5">Subscribe to our Newsletters</div>
+						<label for="fullname" aria-hidden="true">Full Name</label>
+						<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
+						<label class="required" for="newslettersemail">Email</label>
+						<div class="form-row flex-wrap">
+							<input type="email" id="newslettersemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+							<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
+						</div>
+						<g-recaptcha>
+						<button class="btn btn-block mt-3" id="newsletters-btn" type="submit" disabled>Subscribe</button>
 					</form>
 				</article>
 			</div>
@@ -89,6 +89,22 @@
 			</article>
 		</items>
 	</section>
+	<playlist>
+		<section class="row">
+			<article class="mx-auto mt-5">
+				<header>
+					<h2 class="text-center">Latest Videos</h2>
+				</header>
+				<div class="row">
+					<playlistitem>
+						<div class="col-11 col-sm-4 p-3 mx-auto">
+							<iframe width="100%" height="300" src="<print playlist=url>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+						</div>
+					</playlistitem>
+				</div>
+			</article>
+		</section>
+	</playlist>
 	<section class="mt-5 justify-content-center">
 		<header>
 			<h2 class="text-center">Shop by Category</h2>

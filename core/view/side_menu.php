@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,6 +60,7 @@ if(file_exists(THEME.'/side_menu.html')){
 					'<div class="sold">'.
 						($r['rrp']>0?'<div><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>':'').
 						($r['cost']>0?'<div>Cost &#36;'.$r['cost'].'</div>':'').
+						($r['rCost']>0?'<div>Reduced Cost &#36;'.$r['rCost'].'</div>':'').
 						($r['dCost']>0?'<div>Wholesale &#36;'.$r['dCost'].'</div>':'').
 					'</div>';
 			}elseif(isset($user['rank'])&&$user['rank']>300&&$user['rank']<400){
@@ -72,7 +73,8 @@ if(file_exists(THEME.'/side_menu.html')){
 				$sideCost.=
 					'<div class="sold">'.
 						($r['rrp']>0?'<div class="rrp"><abbr title="Recommended Retail Price">RRP</abbr> &#36;'.$r['rrp'].'</div>':'').
-						($r['cost']>0?'<div class="cost">&#36;'.$r['cost'].'</div>':'').
+						($r['cost']>0?'<div class="cost'.($r['rCost']>0?' strike':'').'">&#36;'.$r['cost'].'</div>':'').
+						($r['rCost']>0?'<div class="cost">&#36;'.$r['rCost'].'</div>':'').
 					'</div>';
 			}
 		}

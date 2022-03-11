@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -41,7 +41,7 @@
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#productLoggedIn" data-tooltip="tooltip" aria-label="PermaLink to Must be Logged In to Purchase Products Checkbox">&#128279;</a>':'';?>
           <input id="configoptions30" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="30" type="checkbox"<?=$config['options'][30]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-          <label id="configoptions301" for="configoptions30" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Must be Logged In to Purchase Products</label>
+          <label id="configoptions301" for="configoptions30" data-tooltip="tooltip" aria-label="Must be Logged In to Purchase Products.">Must be Logged In to Purchase Products</label>
         </div>
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#CheckAddress" data-tooltip="tooltip" aria-label="PermaLink to Check for Logged in Account Address Information">&#128279;</a>':'';?>

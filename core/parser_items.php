@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -222,12 +222,12 @@ $html=preg_replace([
 	'/<print content=[\"\']?seoTitle[\"\']?>/',
 	'/<print config=[\"\']?business[\"\']?>/'
 ],[
-	htmlspecialchars(ucfirst($page['contentType']),ENT_QUOTES,'UTF-8').($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
+	ucfirst($page['contentType']).($page['contentType']=='article'||$page['contentType']=='service'?'s':''),
 	$notification,
-	htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
+	($page['heading']==''?$page['seoTitle']:$page['heading']),
 	'',
 	$page['notes'],
-	$config['business']!=''?htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'):htmlspecialchars($config['seoTitle'],ENT_QUOTES,'UTF-8'),
+	$config['business']!=''?$config['business']:$config['seoTitle'],
 	ucwords($config['business'])
 ],$html);
 if(stristr($html,'<categories>')){
@@ -359,7 +359,8 @@ if(stristr($html,'<items')){
 		if($r['coming'][0]==1&&$r['contentType']=='inventory')
 			$itemQuantity='Coming Soon';
 		else{
-			if(is_numeric($r['quantity']))$itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords($r['stockStatus']));
+			if(is_numeric($r['quantity']))
+				$itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords($r['stockStatus']));
 		}
 		$r['file']=trim(rawurldecode($r['file']));
 		$r['thumb']=trim(rawurldecode($r['thumb']));
@@ -413,7 +414,7 @@ if(stristr($html,'<items')){
 			$itemQuantity,
 			$r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
 			rank($r['rank']),
-			($view=='index'?substr(htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'),0,300):htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8'))
+			($view=='index'?substr(strip_tags($r['notes']),0,300):strip_tags($r['notes']))
 		],$items); /* help */
 		$r['notes']=strip_tags($r['notes']);
 		if($r['contentType']=='testimonials'||$r['contentType']=='testimonial'){

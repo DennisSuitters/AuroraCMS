@@ -1,20 +1,18 @@
-### v0.2.5
-- Fix Adding Testimonials not sending notification emails.
-- Fix incorrect rating for Reviews and Testimonials being stored.
-- Fix rating stars not displaying correctly when editing Testimonials in Administration.
-- Fix typo on $_SESSION['rank'] function.
-- Fix side menu template parsing throwing errors, due to unset vars.
-- Fix Settings page not updating changed information.
-- Adjust Shopping Cart to make sure Shoppers select a Shipping Option.
-- Add Tracking links for Orders, including adding Tracking Services and Tracking ID.
-- Add functionality to check if Accounts contain Shipping information when in Shopping Cart, and on Orders with disabling Checkout Link if Account Shipping information is not present.
-- Add proper Activation Page, so information can be added, such as how to update Address information.
-- Fix sidemenu displaying all events, when it should only display current and future events.
-- Fix content title SQL table cell truncating title's.
-- Add option and parsing to check and notify if address information is empty.
-- Fix Editing Newletters array_unique() and arsort() throwing errors when used with empty vars.
-- Fix Date parsing parameters for javascript date function for Safari.
-- Add code to process Free or Paid Events to produce Invoice and Confirmation, or Confirmation with link to Free Events.
-- Add code to payment processing for PayPal and Stripe for paid Events to email Payment Confirmation for all Payments, and to send Link for Events once paid.
-- Add HTMLEntity Parser when saving text body data that doesn't harm HTML Elements but converts symbols to entities that break text layouts.
-- Fix RRP (Recommended Retail Price) not being displayed for Wholesalers.
+### v0.2.6
+- Fix entity parser encoding all input, to only encoding descriptions.
+- Fix output parsing showing entity codes rather than the symbols they represent.
+- Fix Page Settings checkbox for enabling Slider checking wrong value.
+- Fix broken thumbnail on bookings page.
+- Form submission serializer not parsing correctly selected event/service to backend.
+- Fix reference to incorrect variable in add_contantus.
+- Fix styling for required form fields that wasn't diplaying correctly.
+- Improve Forms for all client sites for better validation and requirement notifications.
+- Update Summernote WYSIWYG Editor.
+- Adjust logic to stop Recommended Retail Price from showing in items list, in favour of Cost Price.
+- Update Summernote plugin summernote-cleaner.
+- Fix Account Required to Purchase option not working correctly.
+- Add Form feature that fetch's postcode information autofilling Suburb and State fields.
+- Fix Accountnotification warning tag element not being parsed away correctly.
+- Add Video Playlist editor for pages, and front end parsing and markup.
+- Remove unused emoji images.
+- Fix Schema Product Prices when no price is set, or is a text value, to not produce cost schema markup.

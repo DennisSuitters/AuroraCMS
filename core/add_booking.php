@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,9 +24,10 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $theme=parse_ini_file('../layout/'.$config['theme'].'/theme.ini',true);
 $paylink='';
 $ti=time();
-$not=['spammer'=>false,'target'=>'','element'=>'','action'=>'','class'=>'','text'=>'','reason'=>''];
+$not=['spammer'=>false,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Making a Booking, a Representative will be in touch shortly!','reason'=>''];
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $hash=md5($ip);
+$cid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $timecode=$_POST[$hash];
 if($timecode!=''){
   $timecheck=$ti - base64_decode($timecode);
@@ -54,7 +55,7 @@ if($not['spammer']==false){
 	    $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
 	    if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)$not=['spammer'=>true,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Booking Form found Blacklisted IP via Project Honey Pot'];
 		}
-		if($_POST['fullname'.$hash]==''){
+		if($_POST['fullname'.$hash]==''&&$not['spammer']==false){
 			$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
 			$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
 			$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
@@ -66,7 +67,7 @@ if($not['spammer']==false){
 			$phone=filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING);
 			$notes=filter_input(INPUT_POST,'notes',FILTER_SANITIZE_STRING);
 			$tis=filter_input(INPUT_POST,'tis',FILTER_SANITIZE_STRING);
-			$rid=isset($_POST['rid'])?filter_input(INPUT_POST,'rid',FILTER_SANITIZE_STRING):0;
+			$rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
 			if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip='127.0.0.1'){
 				$filter=new SpamFilter();
 				$result=$filter->check_email($email);
@@ -111,7 +112,7 @@ if($not['spammer']==false){
             ':tie'=>$tie+$config['bookingBuffer']+1
           ]);
           if($sc->rowCount()>0&&$r['contentType']!='events'){
-            $not=['spammer'=>false,'target'=>'tis','element'=>'div','action'=>'after','alert'=>'not mt-3 alert alert-info','text'=>'Date or Time is already Booked, please select a different Date or Time.','reason'=>''];
+            $not=['spammer'=>false,'target'=>'tis','element'=>'div','action'=>'after','class'=>'not mt-3 alert alert-info','text'=>'Date or Time is already Booked, please select a different Date or Time.','reason'=>''];
             $cont='stop';
           }
 					if($cont=='go'){
@@ -139,9 +140,10 @@ if($not['spammer']==false){
 /* If an Event is being booked, check if User exists with details given via form. */
               $qc=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `email`=:email");
               $qc->execute([':email'=>$email]);
-              $qr=$qc->fetch(PDO::FETCH_ASSOC);
-              $cid=$qr['id'];
-              if($qc->rowCount()==0){
+              if($qc->rowCount()>0){
+                $qr=$qc->fetch(PDO::FETCH_ASSOC);
+                $cid=$qr['id'];
+              }else{
   /* Create account if it doesn't exist */
                 $ql=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`name`,`email`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`phone`,`rank`,`status`,`ti`) VALUES (:name,:email,:business,:address,:suburb,:city,:state,:postcode,:phone,:rank,:status,:ti)");
                 $ql->execute([
@@ -162,7 +164,7 @@ if($not['spammer']==false){
               }
             }
   /* Create new Order ID */
-            if($r['cost']>0){
+            if($rid!=0&&$r['cost']>0){
               $oi=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
               $dti=$ti+$config['orderPayti'];
               $oid='I'.date("ymd",$ti).sprintf("%06d",$oi['id']+1,6);
@@ -174,8 +176,8 @@ if($not['spammer']==false){
 /* Insert New Order for Event Payment */
               $iq=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
               $iq->execute([
-                ':uid'=>$ro['uid'],
-                ':cid'=>$qr['id'],
+                ':uid'=>0,
+                ':cid'=>$cid,
                 ':iid'=>$oid,
                 ':iid_ti'=>$ti,
                 ':due_ti'=>$dti
@@ -295,7 +297,7 @@ if($not['spammer']==false){
 									$bookingDate,
 									$bookingService,
                   $bookingService,
-                  $r['contentType']=='events'&&$r['cost']==0&&$r['exturl']!=''?'As this is a Free Event, please find your link to the Event below:-<br /><a href="'.$r['exturl'].'">'.$r['exturl'].'</a>':''
+                  $r['contentType']=='events'&&$r['cost']==0&&$r['exturl']!=''?'As this is a Free Event, please find your link to the Event below:<br /><a href="'.$r['exturl'].'">'.$r['exturl'].'</a>':''
 								],$msg2);
 								$mail2->Body=$msg2;
 								$mail2->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg2));

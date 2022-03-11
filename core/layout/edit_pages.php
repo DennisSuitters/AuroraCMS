@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,7 +49,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
           <?=$r['file']!='offline'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>':'';?>
-          <?=$r['file']!='activate'&&$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'&&$r['file']!='offline'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'';?>
+          <?=$r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'';?>
           <?=$r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">SEO</label>':'';?>
           <?=$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
@@ -241,14 +241,64 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           </div>
 <?php }
 /* Media */
-          if($r['file']!='activate'&&$r['file']!='index'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'&&$r['file']!='offline'){?>
+          if($r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'){?>
             <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
+              <legend>Video Playlist</legend>
+              <?php if($user['options'][1]==1){?>
+                <div class="form-text text-muted small">Videos will only show up on this page if the theme template contains the playlist elements.</div>
+                <form class="form-row" target="sp" method="post" action="core/add_playlist.php">
+                  <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                  <input name="fu" type="text" value="" placeholder="Enter one or more Video URL's (comma separated)...">
+                  <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+                </form>
+              <?php }?>
+              <div class="row mt-3" id="pi">
+                <?php $sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY `ord` ASC");
+                $sp->execute([':rid'=>$r['id']]);
+                if($sp->rowCount()>0){
+                  while($rp=$sp->fetch(PDO::FETCH_ASSOC)){?>
+                    <div class="play items col-11 col-sm-4 p-3 mx-auto" id="pi_<?=$rp['id'];?>">
+        							<iframe width="100%" height="300" src="<?=$rp['url'];?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                      <?php if($user['options'][1]==1){?>
+                        <div class="btn-group float-right">
+                          <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><?= svg2('drag');?></div>
+                          <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rp['id'];?>`,`playlist`);"><?= svg2('trash');?></button>
+                        </div>
+                      <?php }?>
+        						</div>
+                  <?php }?>
+                  <script>
+                    $('#pi').sortable({
+                      items:".play.items",
+                      placeholder:".ghost",
+                      helper:fixWidthHelper,
+                      update:function(e,ui){
+                        var order=$("#pi").sortable("serialize");
+                        $.ajax({
+                          type:"POST",
+                          dataType:"json",
+                          url:"core/reorderplaylist.php",
+                          data:order
+                        });
+                      }
+                    }).disableSelection();
+                    function fixWidthHelper(e,ui){
+                      ui.children().each(function(){
+                        $(this).width($(this).width());
+                      });
+                      return ui;
+                    }
+                  </script>
+                <?php }?>
+              </div>
+              <hr>
+              <legend class="mt-3">Images for Media</legend>
               <?php if($user['options'][1]==1){?>
                 <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
                   <input name="rid" type="hidden" value="0">
                   <input name="t" type="hidden" value="pages">
-                  <input id="mediafile" name="fu" type="text" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
+                  <input id="mediafile" name="fu" type="text" value="" placeholder="Enter one or more URL's (comma separated), or Select Images using the Media Manager...">
                   <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','media','mediafile');return false;"><?= svg2('browse-media');?></button>
                   <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
                 </form>
@@ -447,7 +497,7 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
                 <legend>Featured Content Slider</legend>
                 <div class="row mt-3">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableSlider" data-tooltip="tooltip" aria-label="PermaLink to Slider Enable Checkbox">&#128279;</a>':'';?>
-                  <input id="enableSlider" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="0" type="checkbox"<?=$r['sliderOptions'][1]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                  <input id="enableSlider" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="0" type="checkbox"<?=$r['sliderOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
                   <label id="sliderOptions00" for="enableSlider">Enable</label>
                 </div>
                 <label id="pageSliderDirection" for="sliderDirection"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSliderDirection" data-tooltip="tooltip" aria-label="PermaLink to Page Slider Direction">&#128279;</a>':'';?>Direction</label>

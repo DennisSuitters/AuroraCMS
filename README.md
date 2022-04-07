@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.6
+Current version is v0.2.7
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -176,6 +176,7 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
   - Windows Testing, bug finding and reporting.
 
 ### AuroraCMS Live Sites by Diemen Design:
+- [AAAEarthworx](https://aaaearthworx.com.au/)
 - [Anime Excess](https://animeexcess.com.au/)
 - [BizzyKnits](https://bizzyknits.biz/)
 - [Budget Skips Express](https://budgetskipsexpress.com.au/)

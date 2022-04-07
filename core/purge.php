@@ -19,7 +19,7 @@ $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filt
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
-if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTopics'&&$tbl!='pageviews'&&$tbl!='playlist'){
+if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTopics'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'){
   $s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
@@ -47,6 +47,11 @@ if($id==0&&$tbl=='logs'){
   $q=$db->query("DELETE FROM `".$prefix."logs`");
   $q->execute();
   $id='timeline';
+}
+if($tbl=='findtracker'){
+  $q=$db->prepare("DELETE FROM `".$prefix."tracker` WHERE `urlDest`=:id");
+  $q->execute([':id'=>'%'.strtolower($id).'%']);
+  $id='tracker';
 }
 if($id==0&&$tbl=='tracker'){
   $q=$db->query("DELETE FROM `".$prefix."tracker`");
@@ -81,7 +86,7 @@ if($tbl=='playlist'){
   $s=$db->prepare("DELETE FROM `".$prefix."choices` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
 }
-if($id!=0&&$id!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'){
+if($id!=0&&$id!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'){
   $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $q->execute([':id'=>$id]);
   if($tbl=='media')$el='media_items_';

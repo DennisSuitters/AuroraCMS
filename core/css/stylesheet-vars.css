@@ -111,9 +111,11 @@
   --alert-dark-color: #141619;
   --alert-dark-link: #101214;
   --dark-background-color: #212529;
+  --dark-background-color-hover: #101418;
   --dark-border-color: #212529;
+  --dark-border-color-hover: #101418;
   --dark-color: #212529;
-  --dark-color-contrast: #000;
+  --dark-color-contrast: #fff;
   --dark-link: #101214;
   --alert-default-background-color: #ddd;
   --alert-default-border-color: #ced4da;

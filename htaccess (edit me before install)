@@ -1,6 +1,5 @@
-# Rename this file to be like ".htaccess" (without the quotes)
-# Uncomment the directives below, but don't change them.
 
+RewriteOptions inherit
 # Uncomment this on a live site
 #<IfModule mod_headers.c>
 #    <FilesMatch "\.(ico|pdf|flv|jpg|jpeg|png|gif|js|css|swf)$">
@@ -13,18 +12,19 @@
   SetEnv HTTP_MOD_REWRITE On
 	RewriteEngine On
   Options +SymLinksIfOwnerMatch
-# Uncomment the below two lines if you want to force https site
-#  RewriteCond %{HTTP_HOST} !^www\.(.*)$ [NC]
-#  RewriteRule ^(.*)$ https://www.%{HTTP_HOST}/$1 [R=301,L]
+  # Redirect HTTP with www to HTTPS without www
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule .* https://%1%{REQUEST_URI} [R=301,L]
+  # Redirect HTTP without www to HTTPS without www
+  RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule .* https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+  # Redirect HTTPS with www to HTTPS without www
+  RewriteCond %{HTTPS} on
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule .* https://%1%{REQUEST_URI} [R=301,L]
 
-# Uncomment below to redirict to non-www and force https
-#  RewriteBase /
-#  RewriteCond %{HTTP_HOST} ^www\.(.*)$ [NC]
-#  RewriteRule ^(.*)$ https://%1/$1 [R=301,L]
-#  RewriteCond %{HTTPS} off
-#  RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
-
-# Below is for using AuroraCMS on localhost
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
 	RewriteRule ^(.*) index.php?url=$1 [L,QSA]

@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en-AU">
 	<head>
+		<google_tagmanager>
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1.0">
 		<title><print meta=seoTitle></title>
@@ -13,12 +14,13 @@
 		<print site_verifications>
 		<link rel="alternate" media="all" href="<print meta=canonical>">
 		<link rel="manifest" href="<print meta=url>manifest.json">
-		<link rel="alternate" type="application/rss+xml" title="<print meta=seoTitle>" href="<print meta=rss>">
+		<link rel="alternate" type="application/rss+xml" href="<print meta=rss>">
 		<link rel="canonical" href="<print meta=canonical>">
 		<link rel="alternate" href="<print meta=canonical>" hreflang="en-AU">
 		<link rel="author" href="humans.txt">
 		<link rel="icon" href="<print meta=favicon>" type="image/png">
-		<script type='application/ld+json'>{"@context":"http://schema.org","@type":"WebSite","url":"<print meta=canonical>","name":"<print meta=seoTitle>","author":{"@type":"Person","name":"<print meta=author>"},"description":"<print meta=seoDescription>","publisher":"<print meta=seoTitle>","potentialAction":{"@type":"SearchAction","target":"<print meta=url>search/{search_term}","query-input":"required name=search_term"}}</script>
+		<schemaWebsite>
+		<schemaOrganization>
 		<meta property="og:locale" content="en-AU">
 		<meta property="og:type" content="<print meta=ogType>">
 		<meta property="og:title" content="<print meta=seoTitle>">
@@ -26,6 +28,8 @@
 		<meta property="og:url" content="<print meta=canonical>">
 		<meta property="og:site_name" content="<print meta=seoTitle>">
 		<meta property="og:image" content="<print meta=shareImage>">
+		<meta name="twitter:site" content="<print config=business>">
+		<meta name="twitter:creator" content="<print meta=author>">
 		<meta name="twitter:card" content="summary">
 		<meta name="twitter:title" content="<print meta=seoTitle>">
 		<meta name="twitter:description" content="<print meta=seoDescription>">
@@ -41,3 +45,4 @@
 		<google_analytics>
 	</head>
 	<body id="back-to-top">
+		<google_tagmanager-noscript>

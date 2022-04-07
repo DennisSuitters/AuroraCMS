@@ -23,6 +23,19 @@
 			<print page="notes">
 		</article>
 	</section>
+	<playlist>
+		<section class="row">
+			<article class="mx-auto mt-5">
+				<div class="row">
+					<playlistitem>
+						<div class="col-11 mx-auto">
+							<div class="note-video-wrapper youtube" data-fancybox href="<print playlist=url>?autoplay=1" data-fancybox-plyr data-embed="<print playlist=videoid>" itemprop="video" itemscope="" itemtype="http://schema.org/VideoObject"><meta itemprop="embedURL" content="<print playlist=url>"><img class="note-video-clip" src="https://img.youtube.com/vi/<print playlist=videoid>/maxresdefault.jpg" alt="Video <print playlist=videoid>"><div class="play"></div></div>
+						</div>
+					</playlistitem>
+				</div>
+			</article>
+		</section>
+	</playlist>
 </block>
 <block include="footer.html">
 <block include="meta_footer.html">

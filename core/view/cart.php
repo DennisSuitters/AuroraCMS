@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -51,10 +51,11 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 		    if($rank==220)$limit=$config['memberLimitBronze'];
 		    if($rank==230)$limit=$config['memberLimitGold'];
 		    if($rank==240)$limit=$config['memberLimitPlatinum'];
-		    if($rank==310)$limit=$config['wholesaleLimitSilver'];
+				if($rank==310)$limit=$config['wholesaleLimit'];
 		    if($rank==320)$limit=$config['wholesaleLimitBronze'];
-		    if($rank==330)$limit=$config['wholesaleLimitGold'];
-		    if($rank==340)$limit=$config['wholesaleLimitPlatinum'];
+				if($rank==330)$limit=$config['wholesaleLimitSilver'];
+		    if($rank==340)$limit=$config['wholesaleLimitGold'];
+		    if($rank==350)$limit=$config['wholesaleLimitPlatinum'];
 		  }
 		  if($limit>0){
 		    if($qty > $limit)$qty=$limit;

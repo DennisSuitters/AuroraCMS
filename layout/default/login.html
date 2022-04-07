@@ -15,14 +15,14 @@
 						<input type="hidden" name="act" value="login">
 						<label for="loginusername">Username</label>
 						<div class="form-row">
-							<input type="text" id="loginusername" name="username" value="" placeholder="Username..." autocomplete="username">
+							<input type="text" id="loginusername" name="username" value="" placeholder="Username..." autocomplete="username" enterkeyhint="next">
 						</div>
 						<label for="loginpassword">Password</label>
 						<div class="form-row">
-							<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="current-password">
+							<input type="password" id="loginpassword" name="password" placeholder="Password..." autocomplete="current-password" enterkeyhint="next">
 						</div>
 						<div class="text-right mt-3">
-							<button type="submit">Login</button>
+							<button type="submit" enterkeyhint="done">Login</button>
 						</div>
 					</form>
 				</div>
@@ -31,16 +31,16 @@
 						<h4>Reset Password</h4>
 						<input type="hidden" name="act" value="reset_password">
 						<input type="hidden" name="<print hash>" value="<print timecode>">
-						<label class="required" for="resetemail">Email</label>
-						<div class="form-row flex-wrap">
-							<input type="email" id="resetemail" name="email" placeholder="Enter the Email associated with your account..." autocomplete="off" required aria-required="true">
-							<div class="requirements alert alert-danger" role="alert">Must be a valid email address, and match the email you used to sign up.</div>
-						</div>
 						<label for="resetfullname" aria-hidden="true">Full Name</label>
 						<input id="resetfullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
+						<label class="required" for="resetemail">Email</label>
+						<div class="form-row flex-wrap">
+							<input type="email" id="resetemail" name="email" placeholder="Enter the Email associated with your account..." autocomplete="off" required aria-required="true" enterkeyhint="next">
+							<div class="requirements alert alert-danger" role="alert">Must be a valid email address, and match the email you used to sign up.</div>
+						</div>
 						<g-recaptcha>
 						<div class="text-right mt-3">
-							<button id="reset-btn" type="submit" disabled>Reset</button>
+							<button id="reset-btn" type="submit" disabled enterkeyhint="done">Reset</button>
 						</div>
 					</form>
 				</div>
@@ -52,21 +52,21 @@
 							<h4>Sign Up</h4>
 							<input type="hidden" name="act" value="add_account">
 							<input type="hidden" name="<print hash>" value="<print timecode>">
+							<label for="signupfullname" aria-hidden="true">Full Name</label>
+							<input id="signupfullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 							<label class="required" for="signupemail">Email</label>
 							<div class="form-row flex-wrap">
-								<input type="email" id="signupemail" name="email" value="" placeholder="Enter your Email..." autocomplete="off" required aria-required="true">
+								<input type="email" id="signupemail" name="email" value="" placeholder="Enter your Email..." autocomplete="off" required aria-required="true" enterkeyhint="next">
 								<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
 							</div>
 							<label class="required" for="signupusername">Username</label>
 							<div class="form-row">
-								<input type="text" id="signupusername" name="username" placeholder="Enter a Username..." required aria-required="true">
+								<input type="text" id="signupusername" name="username" placeholder="Enter a Username..." required aria-required="true" enterkeyhint="next">
 							</div>
-							<label for="signupfullname" aria-hidden="true">Full Name</label>
-							<input id="signupfullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 							<div class="form-row" id="signuptermsblock">
 								<div class="row">
 									<div class="col-1 pt-3">
-										<input type="checkbox" id="signupterms" name="terms" value="yes" required aria-required="true">
+										<input type="checkbox" id="signupterms" name="terms" value="yes" required aria-required="true" enterkeyhint="next">
 									</div>
 									<div class="col-11">
 										<label for="signupterms"> Agree to the</label> <a href="page/Terms-of-Service">Terms Of Service</a>
@@ -75,7 +75,7 @@
 							</div>
 							<g-recaptcha>
 							<div class="text-right mt-3">
-								<button id="signup-btn" type="submit" disabled>Sign Up</button>
+								<button id="signup-btn" type="submit" disabled enterkeyhint="done">Sign Up</button>
 							</div>
 						</form>
 					</div>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.1
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -348,10 +348,11 @@ if($t=='content'||$t=='login'||$t=='orders'){
 						'<option value="230"'.($r['rank']==230?' selected':'').'>Available to Member Gold and Above</option>'.
 						'<option value="240"'.($r['rank']==240?' selected':'').'>Available to Member Platinum and Above</option>'.
 	          '<option value="300"'.($r['rank']==300?' selected':'').'>Available to Client and Above</option>'.
-	          '<option value="310"'.($r['rank']==310?' selected':'').'>Available to Wholesaler Silver and Above</option>'.
-	          '<option value="320"'.($r['rank']==320?' selected':'').'>Available to Wholesaler Bronze and Above</option>'.
-	          '<option value="330"'.($r['rank']==330?' selected':'').'>Available to Wholesaler Gold and Above</option>'.
-	          '<option value="340"'.($r['rank']==340?' selected':'').'>Available to Wholesaler Platinum and Above</option>'.
+						'<option value="310"'.($r['rank']==310?' selected':'').'>Available to Wholesaler and Above</option>'.
+						'<option value="320"'.($r['rank']==320?' selected':'').'>Available to Wholesaler Bronze and Above</option>'.
+	          '<option value="330"'.($r['rank']==330?' selected':'').'>Available to Wholesaler Silver and Above</option>'.
+	          '<option value="340"'.($r['rank']==340?' selected':'').'>Available to Wholesaler Gold and Above</option>'.
+	          '<option value="350"'.($r['rank']==350?' selected':'').'>Available to Wholesaler Platinum and Above</option>'.
 	          '<option value="400"'.($r['rank']==400?' selected':'').'>Available to Contributor and Above</option>'.
 	          '<option value="500"'.($r['rank']==500?' selected':'').'>Available to Author and Above</option>'.
 	          '<option value="600"'.($r['rank']==600?' selected':'').'>Available to Editor and Above</option>'.
@@ -386,10 +387,11 @@ if($t=='content'||$t=='login'||$t=='orders'){
 							'<option value="230"'.($r['rank']==230?' selected':'').'>Member Gold</option>'.
 							'<option value="240"'.($r['rank']==240?' selected':'').'>Member Platinum</option>'.
 							'<option value="300"'.($r['rank']==300?' selected':'').'>Client</option>'.
-							'<option value="310"'.($r['rank']==310?' selected':'').'>Wholesaler Silver</option>'.
+							'<option value="310"'.($r['rank']==310?' selected':'').'>Wholesaler</option>'.
 							'<option value="320"'.($r['rank']==320?' selected':'').'>Wholesaler Bronze</option>'.
-							'<option value="330"'.($r['rank']==330?' selected':'').'>Wholesaler Gold</option>'.
-							'<option value="340"'.($r['rank']==340?' selected':'').'>Wholesaler Platinum</option>'.
+							'<option value="330"'.($r['rank']==330?' selected':'').'>Wholesaler Silver</option>'.
+							'<option value="340"'.($r['rank']==340?' selected':'').'>Wholesaler Gold</option>'.
+							'<option value="350"'.($r['rank']==350?' selected':'').'>Wholesaler Platinum</option>'.
 							'<option value="400"'.($r['rank']==400?' selected':'').'>Contributor</option>'.
 							'<option value="500"'.($r['rank']==500?' selected':'').'>Author</option>'.
 							'<option value="600"'.($r['rank']==600?' selected':'').'>Editor</option>'.
@@ -537,10 +539,11 @@ if($t=='content'||$t=='login'||$t=='orders'){
 				'if(rank==230){return"Member Gold";}'.
 				'if(rank==240){return"Member Platinum";}'.
 				'if(rank==300){return"Client";}'.
-				'if(rank==310){return"Wholesaler Silver";}'.
+				'if(rank==310){return"Wholesaler";}'.
 				'if(rank==320){return"Wholesaler Bronze";}'.
-				'if(rank==330){return"Wholesaler Gold";}'.
-				'if(rank==340){return"Wholesaler Platinum";}'.
+				'if(rank==330){return"Wholesaler Silver";}'.
+				'if(rank==340){return"Wholesaler Gold";}'.
+				'if(rank==350){return"Wholesaler Platinum";}'.
 				'if(rank==400){return"Contributor";}'.
 				'if(rank==500){return"Author";}'.
 				'if(rank==600){return"Editor";}'.
@@ -558,10 +561,11 @@ if($t=='content'||$t=='login'||$t=='orders'){
 				'if(rank==230){return"member-gold";}'.
 				'if(rank==240){return"member-platinum";}'.
 				'if(rank==300){return"client";}'.
-				'if(rank==310){return"wholesale-silver";}'.
+				'if(rank==310){return"wholesale";}'.
 				'if(rank==320){return"wholesale-bronze";}'.
-				'if(rank==330){return"wholesale-gold";}'.
-				'if(rank==340){return"wholesale-platinum";}'.
+				'if(rank==330){return"wholesale-silver";}'.
+				'if(rank==340){return"wholesale-gold";}'.
+				'if(rank==350){return"wholesale-platinum";}'.
 				'if(rank==400){return"contributor";}'.
 				'if(rank==500){return"author";}'.
 				'if(rank==600){return"editor";}'.

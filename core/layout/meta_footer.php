@@ -393,6 +393,26 @@ else
           },1000);
         }
       });
+      function delay(time) {
+        return new Promise(resolve => setTimeout(resolve, time));
+      }
+      $(".trashall").on({
+        click:function(event){
+          event.preventDefault();
+          $('.page-block').addClass('d-block');
+          var total=$('#l_tracker').data("dbtot");
+          let i=1;
+          let trackelements=document.getElementsByClassName('findtracker');
+          for (const element of trackelements) {
+            var id=$(element).data("dbid");
+            purge(id,'tracker');
+            delay(1000);
+            i++;
+            if(i === total) break;
+          };
+          $('.page-block').removeClass('d-block');
+        }
+      });
       $(".textinput").on({
         blur:function(event){
           event.preventDefault();

@@ -15,6 +15,7 @@ if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
 require'../db.php';
 require'../projecthoneypot/class.projecthoneypot.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $idh=time();
 echo'<div class="fancybox-ajax">'.
       '<h6 class="bg-dark p-2">Project Honey Pot IP Checker</h6>'.

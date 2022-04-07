@@ -94,10 +94,10 @@
 
         <div class="row">
           <div class="col-2 mr-4">
-            <label id="accountsWholesaleLimitSilver" for="wholesaleLimitSilver"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitSilver" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Silver Field">&#128279;</a>':'';?><small>Wholesale Silver Limit</small></label>
+            <label id="accountsWholesaleLimit" for="wholesaleLimit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimit" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Field">&#128279;</a>':'';?><small>Wholesale Bronze Limit</small></label>
             <div class="form-row">
-              <input class="textinput" id="wholesaleLimitSilver" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitSilver" type="number" value="<?=$config['wholesaleLimitSilver'];?>">
-              <button class="save" id="savewholesaleLimitSilver" data-dbid="wholesaleLimitSilver" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <input class="textinput" id="wholesaleLimit" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimit" type="number" value="<?=$config['wholesaleLimit'];?>">
+              <button class="save" id="savewholesaleLimit" data-dbid="wholesaleLimit" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
             </div>
           </div>
           <div class="col-2 mr-4">
@@ -105,6 +105,13 @@
             <div class="form-row">
               <input class="textinput" id="wholesaleLimitBronze" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitBronze" type="number" value="<?=$config['wholesaleLimitBronze'];?>">
               <button class="save" id="savewholesaleLimitBronze" data-dbid="wholesaleLimitBronze" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+            </div>
+          </div>
+          <div class="col-2 mr-4">
+            <label id="accountsWholesaleLimitSilver" for="wholesaleLimitSilver"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitSilver" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Silver Field">&#128279;</a>':'';?><small>Wholesale Silver Limit</small></label>
+            <div class="form-row">
+              <input class="textinput" id="wholesaleLimitSilver" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitSilver" type="number" value="<?=$config['wholesaleLimitSilver'];?>">
+              <button class="save" id="savewholesaleLimitSilver" data-dbid="wholesaleLimitSilver" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
             </div>
           </div>
           <div class="col-2 mr-4">
@@ -126,16 +133,16 @@
         <legend id="wholesaleTimes" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#wholesaleTimes" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Time Limits Section">&#128279;</a>':'';?>Wholesale Purchase Time Limits</legend>
         <div class="row">
           <div class="col-2 mr-4">
-            <label for="wholesaleTimeSilver"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitSilver" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Time Limit Silver Field">&#128279;</a>':'';?><small>Wholesale Silver Limit</small></label>
-            <select id="wholesaleTimeSilver" data-dbid="1" data-dbt="login" data-dbc="wholesaleTimeSilver"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('1','config','wholesaleTimeSilver',$(this).val(),'select');">
-              <option value="0"<?=$config['wholesaleTimeSilver']==0?' selected':'';?>>Use System Default</option>
-              <option value="2629743"<?=$config['wholesaleTimeSilver']==2629743?' selected':'';?>>1 Month</option>
-              <option value="5259486"<?=$config['wholesaleTimeSilver']==5259486?' selected':'';?>>2 Months</option>
-              <option value="7889229"<?=$config['wholesaleTimeSilver']==7889229?' selected':'';?>>3 Months</option>
-              <option value="15778458"<?=$config['wholesaleTimeSilver']==15778458?' selected':'';?>>6 Months</option>
-              <option value="31556926"<?=$config['wholesaleTimeSilver']==31556926?' selected':'';?>>1 Year</option>
-              <option value="63113852"<?=$config['wholesaleTimeSilver']==63113852?' selected':'';?>>2 Years</option>
-              <option value="94670778"<?=$config['wholesaleTimeSilver']==94670778?' selected':'';?>>3 Years</option>
+            <label for="wholesaleTime"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimit" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Time Limit Field">&#128279;</a>':'';?><small>Wholesale Limit</small></label>
+            <select id="wholesaleTime" data-dbid="1" data-dbt="login" data-dbc="wholesaleTime"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('1','config','wholesaleTime',$(this).val(),'select');">
+              <option value="0"<?=$config['wholesaleTime']==0?' selected':'';?>>Use System Default</option>
+              <option value="2629743"<?=$config['wholesaleTime']==2629743?' selected':'';?>>1 Month</option>
+              <option value="5259486"<?=$config['wholesaleTime']==5259486?' selected':'';?>>2 Months</option>
+              <option value="7889229"<?=$config['wholesaleTime']==7889229?' selected':'';?>>3 Months</option>
+              <option value="15778458"<?=$config['wholesaleTime']==15778458?' selected':'';?>>6 Months</option>
+              <option value="31556926"<?=$config['wholesaleTime']==31556926?' selected':'';?>>1 Year</option>
+              <option value="63113852"<?=$config['wholesaleTime']==63113852?' selected':'';?>>2 Years</option>
+              <option value="94670778"<?=$config['wholesaleTime']==94670778?' selected':'';?>>3 Years</option>
             </select>
           </div>
           <div class="col-2 mr-4">
@@ -149,6 +156,19 @@
               <option value="31556926"<?=$config['wholesaleTimeBronze']==31556926?' selected':'';?>>1 Year</option>
               <option value="63113852"<?=$config['wholesaleTimeBronze']==63113852?' selected':'';?>>2 Years</option>
               <option value="94670778"<?=$config['wholesaleTimeBronze']==94670778?' selected':'';?>>3 Years</option>
+            </select>
+          </div>
+          <div class="col-2 mr-4">
+            <label for="wholesaleTimeSilver"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitSilver" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Time Limit Silver Field">&#128279;</a>':'';?><small>Wholesale Silver Limit</small></label>
+            <select id="wholesaleTimeSilver" data-dbid="1" data-dbt="login" data-dbc="wholesaleTimeSilver"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('1','config','wholesaleTimeSilver',$(this).val(),'select');">
+              <option value="0"<?=$config['wholesaleTimeSilver']==0?' selected':'';?>>Use System Default</option>
+              <option value="2629743"<?=$config['wholesaleTimeSilver']==2629743?' selected':'';?>>1 Month</option>
+              <option value="5259486"<?=$config['wholesaleTimeSilver']==5259486?' selected':'';?>>2 Months</option>
+              <option value="7889229"<?=$config['wholesaleTimeSilver']==7889229?' selected':'';?>>3 Months</option>
+              <option value="15778458"<?=$config['wholesaleTimeSilver']==15778458?' selected':'';?>>6 Months</option>
+              <option value="31556926"<?=$config['wholesaleTimeSilver']==31556926?' selected':'';?>>1 Year</option>
+              <option value="63113852"<?=$config['wholesaleTimeSilver']==63113852?' selected':'';?>>2 Years</option>
+              <option value="94670778"<?=$config['wholesaleTimeSilver']==94670778?' selected':'';?>>3 Years</option>
             </select>
           </div>
           <div class="col-2 mr-4">

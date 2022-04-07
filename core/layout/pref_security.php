@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.2
+* @version    0.2.7
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -208,6 +208,7 @@
             <table class="table-zebra">
               <thead>
                 <tr>
+                  <th class="text-center">Permanent</th>
                   <th class="text-center">Date Blacklisted</th>
                   <th class="text-center">Date Captured</th>
                   <th class="text-center">IP</th>
@@ -224,14 +225,17 @@
                 $s->execute();
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   <tr id="l_<?=$r['id'];?>">
-                    <td class="text-center small"><?= date($config['dateFormat'],$r['ti']);?></td>
-                    <td class="text-center small"><?= date($config['dateFormat'],$r['oti']);?></td>
-                    <td class="text-center small"><?='<strong>'.$r['ip'].'</strong>';?></td>
-                    <td class="text-left small"><?=$r['reason'];?></td>
+                    <td class="text-center align-middle">
+                      <input data-dbid="<?=$r['id'];?>" data-dbt="iplist" data-dbc="permanent" data-dbb="0" type="checkbox"<?=$r['permanent'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                    </td>
+                    <td class="text-center align-middle small"><?= date($config['dateFormat'],$r['ti']);?></td>
+                    <td class="text-center align-middle small"><?= date($config['dateFormat'],$r['oti']);?></td>
+                    <td class="text-center align-middle small"><?='<strong>'.$r['ip'].'</strong>';?></td>
+                    <td class="text-left align-middle small"><?=$r['reason'];?></td>
                     <td id="controls_<?=$r['id'];?>">
                       <div class="btn-group float-right">
                         <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?= svg2('brand-projecthoneypot');?></a>
-                        <a class="btn" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?= svg2('search');?></a>
+                        <a class="btn" target="_blank" href="https://dnschecker.org/ip-location.php?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?= svg2('search');?></a>
                         <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','iplist');return false;"><?= svg2('purge');?></button>
                       </div>
                     </td>
@@ -259,13 +263,13 @@
                 $s->execute();
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   <tr id="l_<?=$r['id'];?>">
-                    <td class="text-center small"><?= date($config['dateFormat'],$r['ti']);?></td>
-                    <td class="text-center small"><?=$r['email'];?></td>
-                    <td class="text-center small"><?='<strong>'.$r['ip'].'</strong>';?></td>
+                    <td class="text-center align-middle small"><?= date($config['dateFormat'],$r['ti']);?></td>
+                    <td class="text-center align-middle small"><?=$r['email'];?></td>
+                    <td class="text-center align-middle small"><?='<strong>'.$r['ip'].'</strong>';?></td>
                     <td id="controls_<?=$r['id'];?>">
                       <div class="btn-group float-right">
                         <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?= svg2('brand-projecthoneypot');?></a>
-                        <a class="btn" target="_blank" href="http://www.ipaddress-finder.com/?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?= svg2('search');?></a>
+                        <a class="btn" target="_blank" href="https://dnschecker.org/ip-location.php?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?= svg2('search');?></a>
                         <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','whitelist');return false;"><?= svg2('purge');?></button>
                       </div>
                     </td>

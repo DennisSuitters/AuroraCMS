@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -21,10 +21,11 @@ function rank($txt){
 	if($txt==230)return'member-gold';
 	if($txt==240)return'member-platinum';
 	if($txt==300)return'client';
-	if($txt==310)return'wholesale-silver';
+	if($txt==310)return'wholesale';
 	if($txt==320)return'wholesale-bronze';
-	if($txt==330)return'wholesale-gold';
-	if($txt==340)return'wholesale-platinum';
+	if($txt==330)return'wholesale-silver';
+	if($txt==340)return'wholesale-gold';
+	if($txt==350)return'wholesale-platinum';
 	if($txt==400)return'contributor';
 	if($txt==500)return'author';
 	if($txt==600)return'editor';
@@ -87,10 +88,11 @@ if($client['purchaseLimit']==0){
   if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
   if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
   if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
-  if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
-  if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
-  if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
-  if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
+	if($client['rank']==310)$client['purchaseLimit']=$config['wholesaleLimit'];
+  if($client['rank']==320)$client['purchaseLimit']=$config['wholesaleLimitBronze'];
+	if($client['rank']==330)$client['purchaseLimit']=$config['wholesaleLimitSilver'];
+  if($client['rank']==340)$client['purchaseLimit']=$config['wholesaleLimitGold'];
+  if($client['rank']==350)$client['purchaseLimit']=$config['wholesaleLimitPlatinum'];
   if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
 }
 echo'<script>'.

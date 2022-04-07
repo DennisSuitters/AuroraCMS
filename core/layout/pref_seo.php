@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -64,6 +64,11 @@
         <div class="form-row">
           <input class="textinput" id="ga_tracking" data-dbid="1" data-dbt="config" data-dbc="ga_tracking" type="text" value="<?=$config['ga_tracking'];?>" placeholder="Enter Google UA Code...">
           <button class="save" id="savega_tracking" data-dbid="ga_tracking" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="prefGoogleTagManagerCode" for="ga_tagmanager"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleTagManagerCode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google Tag Manager Code Field">&#128279;</a>':'';?>Google&nbsp;Tag&nbsp;Manager&nbsp;Code</label>
+        <div class="form-row">
+          <input class="textinput" id="ga_tagmanager" data-dbid="1" data-dbt="config" data-dbc="ga_tagmanager" type="text" value="<?=$config['ga_tagmanager'];?>" placeholder="Enter Google Tag Manager Code...">
+          <button class="save" id="savega_tagmanager" data-dbid="ga_tagmanager" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <label id="prefMicrosoftValidate" for="seo_msvalidate"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefMicrosoftValidate" data-tooltip="tooltip" aria-label="PermaLink to Preferences Microsoft Validate Field">&#128279;</a>':'';?>Microsoft Validate</label>
         <div class="form-row">

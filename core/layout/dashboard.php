@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,8 +43,21 @@ else{?>
         if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         $tid=$ti-2592000;
         if($config['business']=='')echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
-        if($config['email']=='')echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
-        $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='seotips' ORDER BY rand() LIMIT 1");
+        if($config['email']=='')echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
+        <div class="row">
+          <div class="alert alert-success">
+            <p><strong>Want to learn to do your own Search Engine Optimisation (SEO)?</strong></p>
+            <p class="mx-3 my-1">
+              There's no reason you can't do your own SEO, however, do keep in mind that if you hire a reputable professional consultant that you will get a lot better results.<br>
+              Here's a list of Free SEO Courses, which I do recommend that you at least have a look at the simple ones so you have an understanding of what SEO is, and what you can do to help your business along, even if using a consultant. Plus, it will give you more understanding of what they're talking about.<br>
+              <br>
+              <a target="_blank" rel="nofollow noreferrer" href="https://moz.com/learn/seo/one-hour-guide-to-seo">Moz's One Hour Guide to SEO (6 Part Video Series)</a><br>
+              <a target="_blank" rel="nofollow noreferrer" href="https://members.clickminded.com/courses/seo-mini-course/lessons/getting-started-5/">Free SEO Course by ClickMinded</a><br>
+              <a target="_blank" rel="nofollow noreferrer" href="https://www.semrush.com/academy/courses/seo-toolkit-course">Semrush SEO Toolkit Course</a>
+            </p>
+          </div>
+        </div>
+<?php   $sc=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `contentType`='seotips' ORDER BY rand() LIMIT 1");
         $sc->execute();
         if($sc->rowCount()>0){
           $rc=$sc->fetch(PDO::FETCH_ASSOC);
@@ -92,38 +105,41 @@ else{?>
           $ss->execute(['ti'=>time()-604800]);
           $sa=$ss->fetch(PDO::FETCH_ASSOC);
           $currentMonthStart=mktime(0, 0, 0, date("n"), 1);
-          $bcs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Chrome' AND `ti`>:sD");
-          $bcs->execute(['sD'=>$currentMonthStart - 1]);
+          $pcs=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."tracker` WHERE `action`='Call Click' AND `ti`>:sD");
+          $pcs->execute([':sD'=>$currentMonthStart -1]);
+          $pc=$pcs->Fetch(PDO::FETCH_ASSOC);
+          $bcs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Chrome' AND `ti`>:sD");
+          $bcs->execute([':sD'=>$currentMonthStart - 1]);
           $bc=$bcs->fetch(PDO::FETCH_ASSOC);
-          $bies=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Explorer' AND `ti`>:sD");
-          $bies->execute(['sD'=>$currentMonthStart - 1]);
+          $bies=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Explorer' AND `ti`>:sD");
+          $bies->execute([':sD'=>$currentMonthStart - 1]);
           $bie=$bies->fetch(PDO::FETCH_ASSOC);
-          $bes=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Edge' AND `ti`>:sD");
-          $bes->execute(['sD'=>$currentMonthStart - 1]);
+          $bes=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Edge' AND `ti`>:sD");
+          $bes->execute([':sD'=>$currentMonthStart - 1]);
           $be=$bes->fetch(PDO::FETCH_ASSOC);
-          $bfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Firefox' AND `ti`>:sD");
-          $bfs->execute(['sD'=>$currentMonthStart - 1]);
+          $bfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Firefox' AND `ti`>:sD");
+          $bfs->execute([':sD'=>$currentMonthStart - 1]);
           $bf=$bfs->fetch(PDO::FETCH_ASSOC);
-          $bos=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Opera' AND `ti`>:sD");
-          $bos->execute(['sD'=>$currentMonthStart - 1]);
+          $bos=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Opera' AND `ti`>:sD");
+          $bos->execute([':sD'=>$currentMonthStart - 1]);
           $bo=$bos->fetch(PDO::FETCH_ASSOC);
-          $bss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Safari' AND `ti`>:sD");
-          $bss->execute(['sD'=>$currentMonthStart - 1]);
+          $bss=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Safari' AND `ti`>:sD");
+          $bss->execute([':sD'=>$currentMonthStart - 1]);
           $bs=$bss->fetch(PDO::FETCH_ASSOC);
-          $sbs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Bing' AND `ti`>:sD");
-          $sbs->execute(['sD'=>$currentMonthStart - 1]);
+          $sbs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Bing' AND `ti`>:sD");
+          $sbs->execute([':sD'=>$currentMonthStart - 1]);
           $sb=$sbs->fetch(PDO::FETCH_ASSOC);
-          $sds=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='DuckDuckGo' AND `ti`>:sD");
-          $sds->execute(['sD'=>$currentMonthStart - 1]);
+          $sds=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='DuckDuckGo' AND `ti`>:sD");
+          $sds->execute([':sD'=>$currentMonthStart - 1]);
           $sd=$sds->fetch(PDO::FETCH_ASSOC);
-          $sfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Facebook' OR urlDest LIKE '%fbclid=%' AND `ti`>:sD");
-          $sfs->execute(['sD'=>$currentMonthStart - 1]);
+          $sfs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Facebook' OR `urlDest` LIKE '%fbclid=%' AND `ti`>:sD");
+          $sfs->execute([':sD'=>$currentMonthStart - 1]);
           $sf=$sfs->fetch(PDO::FETCH_ASSOC);
-          $sgs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Google' AND `ti`>:sD");
-          $sgs->execute(['sD'=>$currentMonthStart - 1]);
+          $sgs=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Google' AND `ti`>:sD");
+          $sgs->execute([':sD'=>$currentMonthStart - 1]);
           $sg=$sgs->fetch(PDO::FETCH_ASSOC);
-          $sys=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS cnt FROM `".$prefix."tracker` WHERE `browser`='Yahoo' AND `ti`>:sD");
-          $sys->execute(['sD'=>$currentMonthStart - 1]);
+          $sys=$db->prepare("SELECT COUNT(DISTINCT `ip`) AS `cnt` FROM `".$prefix."tracker` WHERE `browser`='Yahoo' AND `ti`>:sD");
+          $sys->execute([':sD'=>$currentMonthStart - 1]);
           $sy=$sys->fetch(PDO::FETCH_ASSOC);
           if($user['options'][3]==1){
             if($nm['cnt']>0){?>
@@ -143,6 +159,15 @@ else{?>
                 <span class="text-3x" id="stats-bookings"><?=$nb['cnt'];?></span> <small><small>New</small></small>
               </span>
               <span class="icon"><?= svg2('calendar','i-5x');?></span>
+            </a>
+          <?php }
+          if($pc['cnt']>0){?>
+            <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-0 m-md-1" href="<?= URL.$settings['system']['admin'].'/reviews';?>">
+              <span class="h5">Calls from Site</span>
+              <span class="p-0">
+                <span class="text-3x" id="stats-reviews"><?=$pc['cnt'];?></span> <small><small>This Month</small></small>
+                </span>
+              <span class="icon"><?= svg2('tech-mobile','i-5x');?></span>
             </a>
           <?php }
           if($nc['cnt']>0){?>

@@ -26,43 +26,43 @@
 			<form class="auroraForm card p-3" data-formtype="booking" method="post" action="core/add_booking.php">
 				<input type="hidden" name="act" value="add_booking">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
+				<label for="fullname" aria-hidden="true">Full Name</label>
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label class="required" for="email">Email</label>
 				<div class="form-row flex-wrap">
-					<input type="email" id="email" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+					<input type="email" id="email" name="email" value="" placeholder="Enter your Email..." required aria-required="true" enterkeyhint="next">
 					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
 				</div>
 				<label class="required" for="name">Name</label>
 				<div class="form-row flex-wrap">
-					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$" enterkeyhint="next">
 					<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
 				</div>
-				<label for="fullname" aria-hidden="true">Full Name</label>
-				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="business">Business</label>
 				<div class="form-row">
-					<input type="text" id="business" name="business" value="" placeholder="Enter your Business...">
+					<input type="text" id="business" name="business" value="" placeholder="Enter your Business..." enterkeyhint="next">
 				</div>
 				<label for="phone">Phone</label>
 				<div class="form-row flex-wrap">
-					<input type="tel" id="phone" name="phone" value="" placeholder="Enter your Phone Number..." pattern="^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{1}( |-){0,1}[0-9]{3}$">
+					<input type="tel" id="phone" name="phone" value="" placeholder="Enter your Phone Number..." pattern="^\({0,1}((0|\+61)(2|4|3|7|8)){0,1}\){0,1}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{2}( |-){0,1}[0-9]{1}( |-){0,1}[0-9]{3}$" enterkeyhint="next">
 					<div class="requirements alert alert-info">Must be a valid phone number.</div>
 				</div>
 				<label for="address">Address</label>
 				<div class="form-row">
-					<input type="text" id="address" name="address" value="" placeholder="Enter your Address...">
+					<input type="text" id="address" name="address" value="" placeholder="Enter your Address..." enterkeyhint="next">
 				</div>
 				<label for="postcode">Postcode</label>
 				<div class="form-row flex-wrap">
-					<input type="text" id="postcode" name="postcode" value="" placeholder="Enter your Postcode...">
+					<input type="text" id="postcode" name="postcode" value="" placeholder="Enter your Postcode..." enterkeyhint="next">
 					<nav class="col-12 border-1 border-top-0 d-none" id="postcodelist"></nav>
 				</div>
 				<label for="suburb">Suburb</label>
 				<div class="form-row">
-					<input type="text" id="suburb" name="suburb" value="" placeholder="Enter your Suburb...">
+					<input type="text" id="suburb" name="suburb" value="" placeholder="Enter your Suburb..." enterkeyhint="next">
 				</div>
 				<label for="state">State</label>
 				<div class="form-row">
-					<input list="statelist" type="text" id="state" name="state" placeholder="Enter your State/Province, or select from the dropdown choices...">
+					<input list="statelist" type="text" id="state" name="state" placeholder="Enter your State/Province, or select from the dropdown choices..." enterkeyhint="next">
 					<datalist id="statelist">
 						<option value="New South Wales">
 						<option value="Northern Territory">
@@ -76,23 +76,23 @@
 				</div>
 				<label for="city">City</label>
 				<div class="form-row">
-					<input type="text" id="city" name="city" value="" placeholder="Enter your City...">
+					<input type="text" id="city" name="city" value="" placeholder="Enter your City..." enterkeyhint="next">
 				</div>
 				<label for="date">Date</label>
 				<div class="form-row">
-					<input type="datetime-local" id="date" name="tis" min="<print currentdate>" value="<print currentdate>" <itemreadonly>>
+					<input type="datetime-local" id="date" name="tis" min="<print currentdate>" value="<print currentdate>" <itemreadonly> enterkeyhint="next">
 				</div>
 				<bookservices>
 					<label for="rid">Event/Service</label>
 					<serviceselect>
-						<select id="rid" name="rid">
+						<select id="rid" name="rid" enterkeyhint="next">
 							<option value="0">Select an Item...</option>
 							<serviceoptions>
 						</select>
 					</serviceselect>
 					<div class="row">
 						<items>
-							<input class="service" id="rid<print id>" type="radio" name="rid" value="<print id>" <itemChecked> hidden>
+							<input class="service" id="rid<print id>" type="radio" name="rid" value="<print id>" <itemChecked> hidden enterkeyhint="next">
 							<label for="rid<print id>" class="col-12 col-sm-6 mx-auto <itemHidden>">
 								<div class="card m-1 service">
 									<figure class="card-image">
@@ -108,11 +108,11 @@
 				</bookservices>
 				<label for="notes">Notes</label>
 				<div class="form-row">
-					<textarea id="notes" name="notes" placeholder="Enter some Notes..."></textarea>
+					<textarea id="notes" name="notes" placeholder="Enter some Notes..." enterkeyhint="next"></textarea>
 				</div>
 				<g-recaptcha>
 				<div class="text-right">
-					<button id="booking-btn" type="submit" disabled>Make Booking</button>
+					<button id="booking-btn" type="submit" disabled enterkeyhint="done">Make Booking</button>
 				</div>
 			</form>
 		</article>

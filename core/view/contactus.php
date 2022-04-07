@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -21,7 +21,7 @@ $html=preg_replace([
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?</pagenotes>~is'
 ],[
 	htmlspecialchars($page['heading']==''?$page['seoTitle']:$page['heading'],ENT_QUOTES,'UTF-8'),
-	$purify->purify($page['notes']),
+	$page['notes'],
 	''
 ],$html);
 require'inc-hours.php';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -23,22 +23,73 @@ $s->execute([':ti'=>$ti]);
 $s=$db->prepare("UPDATE `".$prefix."login` SET `sti`=:ti,`siteStatus`='overdue' WHERE `sti`<:ti AND `siteStatus`='outstanding'");
 $s->execute([':ti'=>$ti]);
 if($config['php_options'][6]==1){
-	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `ti`<:ti");
+	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `permanent`!=1 AND `ti`<:ti");
 	$s->execute([':ti'=>time()-2592000]);
 }
+if($config['options'][11]==1){
+	$s=$db->prepare("DELETE FROM `".$prefix."tracker` WHERE `ti`<:ti");
+	$s->execute([':ti'=>time()-2592000]);
+}
+if(stristr($_SERVER['REQUEST_URI'],'security.txt')||stristr($_SERVER['REQUEST_URI'],'sellers.json')){
+	echo'# Report Security Issues at the AuroraCMS GitHub Repository: https://github.com/DiemenDesign/AuroraCMS';
+	die();
+}
+if(stristr($_SERVER['REQUEST_URI'],'ads.txt')||stristr($_SERVER['REQUEST_URI'],'sellers.json')){
+	echo'We don\'t use or promote the use of advertising, your search for ads.txt or sellers.json is futile, go look elsewhere!';
+	die();
+}
 if($config['php_options'][5]==1){
-	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')||stristr($_SERVER['REQUEST_URI'],'wp-admin')||stristr($_SERVER['REQUEST_URI'],'wp-login')||stristr($_SERVER['REQUEST_URI'],'wp-content')||stristr($_SERVER['REQUEST_URI'],'wp-plugin')||(isset($_GET['author']) && $_GET['author']!='')){
+	if(stristr($_SERVER['REQUEST_URI'],'/wp')||stristr($_SERVER['REQUEST_URI'],'/wordpress/')||stristr($_SERVER['REQUEST_URI'],'old-wp')){
+		echo'You know, not every fecking Website uses WordPress!';
+		$msg='Trying to access WordPress folder';
+		require'core/xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'xmlrpc.php')){
+		echo'You know, not every fecking Website uses WordPress!';
+		$msg='Trying to access WordPress xmlrpc.php';
+		require'core/xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'dup-installer')){
+		echo'You know, not every fecking Website uses WordPress!';
+		$msg='Trying to access WordPress installer';
+		require'core/xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'eval-stdin.php')){
+		echo'Bit of an old school hacking attempt isn\'t it?';
+		$msg='Trying to use the eval-stdin exploit!';
+		require'core/xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'panels.txt')){
+		echo'Go away you DorkScanner User!<br>';
+		$msg='Using DorkScanner seeing if we are vulnerable!';
+		require'core/xmlrpc.php';
+		die();
+	}
+	if(isset($_GET['author'])&&$_GET['author']!=''){
 		echo'You know, not every fecking Website uses WordPress!<br>';
+		$msg='Trying to discover WordPress authors';
 		require'core/xmlrpc.php';
 		die();
 	}
 	if(stristr($_SERVER['REQUEST_URI'],'magento')){
 		echo'Nope NOT Magento!<br>';
+		$msg='Trying to access Magento folder';
 		require'core/xmlrpc.php';
 		die();
 	}
 	if(stristr($_SERVER['REQUEST_URI'],'.aspx')){
 		echo'Nope doesn\'t run on ASP, blergh!<br>Damn it! Now I have to get the taste of Microsoft out of my interpreter!<br>';
+		$msg='Trying to access .aspx files';
+		require'core/xmlrpc.php';
+		die();
+	}
+	if(stristr($_SERVER['REQUEST_URI'],'aws/')){
+		echo'Nope doesn\'t use AWS!';
+		$msg='Trying to access Amazon Web Services';
 		require'core/xmlrpc.php';
 		die();
 	}
@@ -77,10 +128,11 @@ define('ADMINNOAVATAR','core/images/noavatar.jpg');
 require'login.php';
 if(isset($user['rank'])&&$user['rank']>301&&$user['rank']<399){
 	$ranktime=0;
-	if($user['rank']==310)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeSilver'];
+	if($user['rank']==310)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesale'];
 	if($user['rank']==320)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeBronze'];
-	if($user['rank']==330)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeGold'];
-	if($user['rank']==340)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimePlatinum'];
+	if($user['rank']==330)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeSilver'];
+	if($user['rank']==340)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimeGold'];
+	if($user['rank']==350)$ranktime=$user['purchaseTime']>0?$user['purchaseTime']:$config['wholesaleTimePlatinum'];
 	$rt=time()-$user['pti'];
 	if($rt<$ranktime){
 		$user['options'][19]=0;
@@ -100,10 +152,11 @@ function rank($txt){
 	if($txt==230)return'member-gold';
 	if($txt==240)return'member-platinum';
 	if($txt==300)return'client';
-	if($txt==310)return'wholesale-silver';
+	if($txt==310)return'wholesale';
 	if($txt==320)return'wholesale-bronze';
-	if($txt==330)return'wholesale-gold';
-	if($txt==340)return'wholesale-platinum';
+	if($txt==330)return'wholesale-silver';
+	if($txt==340)return'wholesale-gold';
+	if($txt==350)return'wholesale-platinum';
 	if($txt==400)return'contributor';
 	if($txt==500)return'author';
 	if($txt==600)return'editor';

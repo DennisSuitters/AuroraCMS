@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -48,10 +48,11 @@ else{?>
               <option value="230">Member Gold and above</option>
               <option value="240">Member Platinum and above</option>
               <option value="300">Client and above</option>
-              <option value="310">Wholesaler Silver and above</option>
+              <option value="310">Wholesaler and above</option>
               <option value="320">Wholesaler Bronze and above</option>
-              <option value="330">Wholesaler Gold and above</option>
-              <option value="340">Wholesaler Platinum and above</option>
+              <option value="330">Wholesaler Silver and above</option>
+              <option value="340">Wholesaler Gold and above</option>
+              <option value="350">Wholesaler Platinum and above</option>
               <option value="400">Contributor and above</option>
               <option value="500">Author and above</option>
               <option value="600">Editor and above</option>

@@ -79,16 +79,18 @@
 			<form class="auroraForm card p-3" data-formtype="contact" method="post" action="core/add_contactus.php">
 				<input type="hidden" name="act" value="add_message">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
+				<label for="fullname" aria-hidden="true">Full Name</label>
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<div class="alert alert-danger" role="alert">Highlighted Fields are Required</div>
 				<label class="required" for="contactsubject">Subject</label>
 				<subjectText>
 					<div class="form-row">
-						<input type="text" id="contactsubject" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true">
+						<input type="text" id="contactsubject" name="subject" value="" placeholder="Enter a Subject..." required aria-required="true" enterkeyhint="next">
 					</div>
 				</subjectText>
 				<subjectSelect>
 					<div class="form-row">
-						<select id="contactsubject" name="subject" required aria-required="true">
+						<select id="contactsubject" name="subject" required aria-required="true" enterkeyhint="next">
 							<option value="">Please Select a Subject for Contacting Us</option>
 							<subjectOptions>
 						</select>
@@ -96,22 +98,20 @@
 				</subjectSelect>
 				<label class="required" for="contactemail">Email</label>
 				<div class="form-row flex-wrap">
-					<input type="email" id="contactemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+					<input type="email" id="contactemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true" enterkeyhint="next">
 					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
 				</div>
 				<label class="required" for="contactname">Name</label>
 				<div class="form-row flex-wrap">
-					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$" enterkeyhint="next">
 					<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
 				</div>
-				<label for="fullname" aria-hidden="true">Full Name</label>
-				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label for="contacttxt">Message</label>
 				<div class="form-row">
-					<textarea id="contacttxt" name="notes" placeholder="Enter your Message..." required aria-required="true"></textarea>
+					<textarea id="contacttxt" name="notes" placeholder="Enter your Message..." required aria-required="true" enterkeyhint="next"></textarea>
 				</div>
 				<g-recaptcha>
-				<button id="contact-btn" class="btn-block mt-3" type="submit" disabled>Send</button>
+				<button id="contact-btn" class="btn-block mt-3" type="submit" disabled enterkeyhint="done">Send</button>
 			</form>
 		</article>
 	</section>

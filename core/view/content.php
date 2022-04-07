@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,8 +19,8 @@ $rowCount=0;
 $sqlLimit='';
 $sqlrank='';
 if(isset($_SESSION['rank'])){
-	if(!$_SESSION['rank'] > 340 AND $_SESSION['rank'] > 309 || $_SESSION['rank'] < 341)
-		$sqlrank=" AND `rank` > 309 AND `rank` < 341";
+	if(!$_SESSION['rank'] > 350 AND $_SESSION['rank'] > 309 || $_SESSION['rank'] < 351)
+		$sqlrank=" AND `rank` > 309 AND `rank` < 351";
 	else
 		$sqlrank=" AND `rank` <= ".$_SESSION['rank'];
 }
@@ -99,7 +99,7 @@ elseif($view=='search'){
 			':ti'=>time()
 		]);
 	}else{
-		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti".$sqlrank.($sortOrder==''?" ORDER BY `pin` DESC, `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".$itemCount);
+		$s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :contentType AND `contentType` NOT LIKE 'message%' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'proof%' AND `status` LIKE :status AND `internal`!='1' AND `pti`<:ti ".$sqlrank.($sortOrder==''?" ORDER BY `pin` DESC, `featured` DESC, `ti` DESC":$sortOrder)." LIMIT ".(isset($itemCount)?$itemCount:"4"));
 		$s->execute([
 			':contentType'=>$contentType,
 			':status'=>$status,
@@ -300,9 +300,12 @@ if(stristr($html,'<playlist')){
 		$playlistoutput='';
 		while($pr=$sp->fetch(PDO::FETCH_ASSOC)){
 			$bpli='';
+			preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/",$pr['url'],$vidEmbed);
 			$bpli=preg_replace([
+				'/<print playlist=[\"\']?videoid[\"\']?>/',
 				'/<print playlist=[\"\']?url[\"\']?>/'
 			],[
+				$vidEmbed[1],
 				$pr['url']
 			],$pli);
 			$playlistoutput.=$bpli;

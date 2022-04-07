@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -565,10 +565,11 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               <option value="230"<?=$r['rank']==230?' selected':'';?>>Member Gold</option>
               <option value="240"<?=$r['rank']==240?' selected':'';?>>Member Platinum</option>
               <option value="300"<?=$r['rank']==300?' selected':'';?>>Client</option>
-              <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler Silver</option>
+              <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler</option>
               <option value="320"<?=$r['rank']==320?' selected':'';?>>Wholesaler Bronze</option>
-              <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Gold</option>
-              <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Platinum</option>
+              <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Silver</option>
+              <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Gold</option>
+              <option value="350"<?=$r['rank']==350?' selected':'';?>>Wholesaler Platinum</option>
               <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor</option>
               <option value="500"<?=$r['rank']==500?' selected':'';?>>Author</option>
               <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor</option>

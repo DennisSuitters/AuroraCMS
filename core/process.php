@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -23,7 +23,18 @@ $ip=isset($_SERVER['REMOTE_ADDR'])?($_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$
 $ti=time();
 $show=$html=$head=$content=$foot='';
 $css=THEME.'/css/';
-$favicon=$shareImage=FAVICON;
+$favicon=FAVICON;
+if(file_exists(THEME.'/images/favicon-512.png'))
+	$shareImage=URL.THEME.'/images/favicon-512.png';
+elseif(file_exists(THEME.'/images/favicon-512.gif'))
+	$shareImage=URL.THEME.'/images/favicon-512.gif';
+elseif(file_exists(THEME.'/images/favicon-512.jpg'))
+	$shareImage=URL.THEME.'/images/favicon-512.jpg';
+elseif(file_exists(THEME.'/images/favicon-512.ico'))
+	$shareImage=URL.THEME.'/images/favicon-512.ico';
+else
+	$shareImage=URL.'core/images/shareicon.jpg';
+
 $noimage=NOIMAGE;
 $noavatar=NOAVATAR;
 if($view=='page'){
@@ -109,7 +120,6 @@ if($seoTitle==''){
   else$seoTitle=$page['seoTitle'];
 }
 if($seoTitle=='')$seoTitle.=$view=='index'?'Home':'';
-$seoTitle.=$view=='index'?' | '.$config['business']:'';
 if($metaRobots==''){
   if($page['metaRobots']=='')$metaRobots=$config['metaRobots'];
   elseif(in_array($view,['proofs','orders','settings'],true))$metaRobots='noindex,nofollow';
@@ -168,7 +178,7 @@ $head=preg_replace([
   $canonical,
   URL,
   $view,
-  URL.'rss/'.$rss.'/',
+  URL.'rss/'.$rss,
   $view=='inventory'?'product':$view,
   stristr($shareImage,'noimage')?FAVICON:$shareImage,
   FAVICON,
@@ -203,10 +213,6 @@ if(stristr($head,'<css')){
   }
   $head=preg_replace('~<css.*?>~is','<style>'.$css.'</style>',$head);
 }
-if(isset($config['ga_tracking'])&&$config['ga_tracking']!=''){
-  if(!isset($_SERVER['HTTP_USER_AGENT'])||stripos($_SERVER['HTTP_USER_AGENT'],'Speed Insights')===false)
-    $head=str_replace('<google_analytics>','<script defer async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>',$head);
-}else$head=str_replace('<google_analytics>','',$head);
 if($view=='login'){
   if(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true){
     $content=preg_replace([
@@ -239,6 +245,44 @@ $content=preg_replace([
   md5($ip),
   base64_encode(time())
 ],$content);
+$schemaWebsite='<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","url":"'.$canonical.'","name":"'.$seoTitle.'","author":{"@type":"Person","name":"'.(isset($r['name'])&&$r['name']?$r['name']:$config['business']).'"},"description":"'.$seoDescription.'","publisher":"'.$seoTitle.'","potentialAction":{"@type":"SearchAction","target":"'.URL.'search/{search_term}","query-input":"required name=search_term"}}</script>';
+$schemaOrganization='<script type="application/ld+json">{"@context":"http://schema.org","@type":"Organization","name":"'.$config['business'].'","url":"'.URL.'"';
+if($config['phone']!=''||$config['mobile']!=''){
+  $schemaOrganization.=',"contactPoint":[{"@type":"ContactPoint","telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'","contactType":"customer service"}]';
+}
+if($config['address']!=''){
+  $schemaOrganization.=',"address":{"@type":"PostalAddress","streetAddress":"'.$config['address'].'"'.
+    ($config['city']!=''?',"addressLocality":"'.$config['city'].'"':'').
+    ($config['suburb']!=''?',"addressRegion":"'.$config['suburb'].'"':'').
+    ($config['postcode']!=''||$config['postcode']>0?',"postalCode":"'.$config['postcode'].'"':'').
+    ($config['country']!=''?',"addressCountry":"'.$config['country'].'"':'').
+  '}';
+}
+$ssO=$db->query("SELECT `url` FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `url` ASC");
+if($ssO->rowCount()>0){
+  $schemaOrganization.=',"sameAs":[';
+  $scnt=$ssO->rowCount() - 1;
+  while($srO=$ssO->fetch(PDO::FETCH_ASSOC)){
+    $schemaOrganization.='"'.$srO['url'].'"'.($scnt>0?',':'');
+    $scnt--;
+  }
+  $schemaOrganization.=']';
+}
+$schemaOrganization.='}</script>';
+$head=preg_replace([
+  '/<google_analytics>/',
+  '/<google_tagmanager>/',
+  '/<google_tagmanager-noscript>/',
+  '/<schemaWebsite>/',
+  '/<schemaOrganization>/'
+],[
+  (isset($config['ga_tracking'])&&$config['ga_tracking']!=''?'<script defer async src="/core/js/googleanalytics/gtag/js.js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':''),
+  (isset($config['ga_tagmanager'])&&$config['ga_tagmanager']!=''?'<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=\'https://www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);})(window,document,\'script\',\'dataLayer\',\''.$config['ga_tagmanager'].'\');</script>':''),
+  (isset($config['ga_tagmanager'])&&$config['ga_tagmanager']!=''?'<noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.$config['ga_tagmanager'].'"
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>':''),
+  $schemaWebsite,
+  $schemaOrganization
+],$head);
 print$head.$content;
 $ws=$db->prepare("SELECT `options` FROM `".$prefix."login` WHERE `userIP`=:ip");
 $ws->execute([':ip'=>$ip]);
@@ -248,10 +292,10 @@ if($wr['options'][18]==0){
   if($config['options'][11]==1){
     $current_page=PROTOCOL.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI'];
     if(!isset($_SESSION['current_page'])||(isset($_SESSION['current_page'])&&(stristr($_SESSION['current_page'],'search')||$_SESSION['current_page']!=$current_page))){
-      if(!stristr($current_page,'core/')||
-        !stristr($current_page,'admin/')||
-        !stristr($current_page,'layout/')||
-        !stristr($current_page,'media/')||
+      if(!stristr($current_page,'/core/')||
+        !stristr($current_page,'/admin/')||
+        !stristr($current_page,'/layout/')||
+        !stristr($current_page,'/media/')||
         !stristr($current_page,'.js')||
         !stristr($current_page,'.css')||
         !stristr($current_page,'.map')||
@@ -262,17 +306,22 @@ if($wr['options'][18]==0){
         !stristr($current_page,'.svg')||
         !stristr($current_page,'.webp')
       ){
-        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`keywords`,`ip`,`browser`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:keywords,:ip,:browser,:os,:sid,:ti)");
+        $useragent=$_SERVER['HTTP_USER_AGENT'];
+        $clienthints=getallheaders();
+        $s=$db->prepare("INSERT IGNORE INTO `".$prefix."tracker` (`pid`,`urlDest`,`urlFrom`,`userAgent`,`keywords`,`ip`,`host`,`browser`,`device`,`viewportwidth`,`os`,`sid`,`ti`) VALUES (:pid,:urlDest,:urlFrom,:userAgent,:keywords,:ip,:host,:browser,:device,:viewportwidth,:os,:sid,:ti)");
         $hr=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
         $s->execute([
           ':pid'=>isset($page['id'])?$page['id']:0,
           ':urlDest'=>$current_page,
           ':urlFrom'=>$hr,
-          ':userAgent'=>$_SERVER['HTTP_USER_AGENT'],
+          ':userAgent'=>(isset($clienthints['User-Agent'])?$clienthints['User-Agent']:$_SERVER['HTTP_USER_AGENT']),
           ':keywords'=>isset($search)&&($search!='%'||$search!='')?ltrim(rtrim(str_replace([' ','%'],',',$search),','),','):'',
           ':ip'=>$ip,
-          ':browser'=>getBrowser(),
-          ':os'=>getOS(),
+          ':host'=>(isset($clienthints['Host'])?$clienthints['Host']:$ip),
+          ':browser'=>getBrowser($useragent,$clienthints),
+          ':device'=>getDevice($useragent,$clienthints),
+          ':viewportwidth'=>(isset($clienthints['viewport-width'])?$clienthints['viewport-width']:'N/A'),
+          ':os'=>getOS($useragent,$clienthints),
           ':sid'=>session_id(),
           ':ti'=>time()
         ]);
@@ -281,77 +330,178 @@ if($wr['options'][18]==0){
     }
   }
 }
-function getOS(){
-  $user_agent=$_SERVER['HTTP_USER_AGENT'];
-  $os_platform="Unknown OS Platform";
-  $os_array=[
-    '/windows nt 10/i'=>'Windows',
-    '/windows nt 6.3/i'=>'Windows',
-    '/windows nt 6.2/i'=>'Windows',
-    '/windows nt 6.1/i'=>'Windows',
-    '/windows nt 6.0/i'=>'Windows',
-    '/windows nt 5.2/i'=>'Windows',
-    '/windows nt 5.1/i'=>'Windows',
-    '/windows xp/i'=>'Windows',
-    '/windows nt 5.0/i'=>'Windows',
-    '/windows me/i'=>'Windows',
-    '/win98/i'=>'Windows',
-    '/win95/i'=>'Windows',
-    '/win16/i'=>'Windows',
-    '/macintosh/i'=>'Mac',
-    '/mac os x/i'=>'Mac',
-    '/mac_powerpc/i'=>'Mac',
-    '/linux/i'=>'Linux',
-    '/ubuntu/i'=>'Ubuntu',
-    '/iphone/i'=>'iPhone',
-    '/ipod/i'=>'iPod',
-    '/ipad/i'=>'iPad',
-    '/android/i'=>'Android',
-    '/blackberry/i'=>'BlackBerry',
-    '/webos/i'=>'Mobile'
-  ];
-  foreach($os_array as$regex=>$value){
-    if(preg_match($regex,$user_agent))$os_platform=$value;
+function getDevice($ua,$ch){
+  $osd='Unknown';
+  if(isset($ch['sec-ch-ua-mobile'])){
+    $osd=trim($ch['sec-ch-ua-mobile'],'\'"');
+    if($osd=='?0')$osd='Desktop';
+    if($osd=='?1'){
+      $osd='Mobile';
+      if(isset($ch['sec-ch-ua-model'])&&$ch['sec-ch-ua-model']!=''){
+        $osd=trim($ch['sec-ch-ua-model'],'\'"');
+      }
+    }
+  }else{
+    $ua=$_SERVER['HTTP_USER_AGENT'];
+    $osa=[
+      '/android/i'=>'Android',
+      '/blackberry/i'=>'BlackBerry',
+      '/ipad/i'=>'iPad',
+      '/iphone/i'=>'iPhone',
+      '/ipod/i'=>'iPod',
+      '/iphone/i'=>'iPhone',
+      '/nokia/i'=>'Nokia',
+      '/webos/i'=>'Mobile',
+    ];
+    foreach($osa as$r=>$v){
+      if(preg_match($r,$ua)){
+        $osd=$v;
+        break;
+      }
+    }
   }
-  return$os_platform;
+  return$osd;
 }
-function getBrowser(){
-  $user_agent=$_SERVER['HTTP_USER_AGENT'];
-  $browser="Unknown Browser";
-  $browser_array=[
-    '/brave/i'=>'Brave',
-    '/msie/i'=>'Explorer',
-    '/firefox/i'=>'Firefox',
-    '/safari/i'=>'Safari',
-    '/chrome/i'=>'Chrome',
-    '/edge/i'=>'Edge',
-    '/opera/i'=>'Opera',
-    '/netscape/i'=>'Netscape',
-    '/maxthon/i'=>'Maxthon',
-    '/konqueror/i'=>'Konqueror',
-    '/mobile/i'=>'Mobile',
-    '/bingbot/i'=>'Bing',
-    '/duckduckbot/i'=>'DuckDuckGo',
-    '/googlebot/i'=>'Google',
-    '/msnbot/i'=>'MSN',
-    '/slurp/i'=>'Inktomi',
-    '/yahoo/i'=>'Yahoo',
+function getOS($ua,$ch){
+  if(isset($ch['sec-ch-ua-platform']))
+    $osp=trim($ch['sec-ch-ua-platform'],'\'"');
+  else{
+    $ua=$_SERVER['HTTP_USER_AGENT'];
+    $osp="Unknown";
+    $osa=[
+      '/android/i'=>'Android',
+      '/beos/i'=>'BeOS',
+      '/blackberry/i'=>'BlackBerry',
+      '/dillo/i'=>'Linux',
+      '/dragonFly/i'=>'DragonFlyBSD',
+      '/freebsd/i'=>'FreeBSD',
+      '/ipad/i'=>'iPad',
+      '/iphone/i'=>'iPhone',
+      '/ipod/i'=>'iPod',
+      '/iphone/i'=>'iPhone',
+      '/linux/i'=>'Linux',
+      '/mac os x/i'=>'Mac',
+      '/mac_powerpc/i'=>'Mac',
+      '/macintosh/i'=>'Mac',
+      '/netbsd/i'=>'NetBSD',
+      '/nokia/i'=>'Nokia',
+      '/openbsd/i'=>'OpenBSD',
+      '/opensolaris/i'=>'OpenSolaris',
+      '/os\/2/i'=>'OS/2',
+      '/palmos/i'=>'PalmOS',
+      '/rebelmouse/i'=>'RebelMouse',
+      '/sunos/i'=>'SunOS',
+      '/ubuntu/i'=>'Ubuntu',
+      '/unix/i'=>'UNIX',
+      '/webos/i'=>'Mobile',
+      '/windows nt 10/i'=>'Windows10',
+      '/windows nt 6.4/i'=>'Windows10',
+      '/windows nt 6.3/i'=>'Windows8.1',
+      '/windows nt 6.2/i'=>'Windows8',
+      '/windows nt 6.1/i'=>'Windows7',
+      '/windows nt 6.0/i'=>'WindowsVista',
+      '/windows nt 5.2/i'=>'WindowsXP',
+      '/windows nt 5.1/i'=>'WindowsXP',
+      '/windows xp/i'=>'WindowsXP',
+      '/windows nt 5.01/i'=>'Windows2000',
+      '/windows nt 5.0/i'=>'Windows2000',
+      '/windows nt 5/i'=>'Windows2000',
+      '/windows nt 4.0/i'=>'WindowsNT4.0',
+      '/windows nt4.0/i'=>'WindowsNT4.0',
+      '/windows nt/i'=>'WindowsNT',
+      '/windows me/i'=>'WindowsMe',
+      '/win98/i'=>'Windows98',
+      '/win95/i'=>'Windows95',
+      '/win16/i'=>'Windows16'
+    ];
+    foreach($osa as$r=>$v){
+      if(preg_match($r,$ua)){
+        $osp=$v;
+        break;
+      }
+    }
+  }
+  return$osp;
+}
+function getBrowser($ua,$ch){
+  $b='Unknown';
+  if(isset($ch['sec-ch-ua']))$ua=$ch['sec-ch-ua'];
+  $ba=[
+    '/alexa/i'=>'Alexa',
+    '/amaya/i'=>'Amaya',
+    '/arora/i'=>'Arora',
     '/askjeeves/i'=>'AskJeeves',
+    '/avant browser/i'=>'AvantBrowser',
+    '/baidu/i'=>'Baiduspider',
+    '/beamrise/i'=>'Beamrise',
+    '/bingbot/i'=>'Bing',
+    '/bolt/i'=>'BOLT',
+    '/brave/i'=>'Brave',
+    '/camino/i'=>'Camino',
+    '/chimera/i'=>'Chimera',
+    '/chrome/i'=>'Chrome',
+    '/dillo/i'=>'Dillo',
+    '/duckduckbot/i'=>'DuckDuckGo',
+    '/edg/i'=>'Edge',
+    '/epiphany/i'=>'Epiphany',
+    '/eudoraWeb/i'=>'EudoraWeb',
+    '/exabot/i'=>'Exabot',
+    '/explorer/i'=>'Explorer',
+    '/facebook/i'=>'Facebook',
     '/fastcrawler/i'=>'FastCrawler',
-    '/infoseek/i'=>'InfoSeek',
-    '/lycos/i'=>'Lycos',
-    '/yandex/i'=>'Yandex',
+    '/firebird/i'=>'Firebird',
+    '/firefox/i'=>'Firefox',
+    '/galeon/i'=>'Galeon',
     '/geohasher/i'=>'GeoHasher',
     '/gigablast/i'=>'Gigablast',
-    '/baidu/i'=>'Baiduspider',
-    '/spinn3r/i'=>'Spinn3r',
+    '/googlebot/i'=>'Google',
+    '/hotjava/i'=>'HotJava',
+    '/ibrowse/i'=>'IBrowse',
+    '/icab/i'=>'iCab',
+    '/iceape/i'=>'Iceape',
+    '/iceweasel/i'=>'Iceweasel',
+    '/infoseek/i'=>'InfoSeek',
+    '/itunes/i'=>'iTunes',
+    '/kindle/i'=>'Kindle',
+    '/konqueror/i'=>'Konqueror',
+    '/lynx/i'=>'Lynx',
+    '/links/i'=>'Links',
+    '/lycos/i'=>'Lycos',
+    '/maxthon/i'=>'Maxthon',
+    '/midori/i'=>'Midori',
+    '/mobile/i'=>'Mobile',
+    '/msie/i'=>'Explorer',
+    '/msnbot/i'=>'MSN',
+    '/namoroka/i'=>'Namoroka',
+    '/netscape/i'=>'Netscape',
+    '/netsurf/i'=>'NetSurf',
+    '/omniWeb/i'=>'OmniWeb',
+    '/opera/i'=>'Opera',
+    '/opr/i'=>'Opera',
+    '/phoenix/i'=>'Phoenix',
+    '/qupzilla/i'=>'QupZilla',
+    '/safari/i'=>'Safari',
+    '/seamonkey/i'=>'Sea Monkey',
+    '/shadowfox/i'=>'ShadowFox',
+    '/shiira/i'=>'Shiira',
+    '/silk/i'=>'Silk',
+    '/slurp/i'=>'Inktomi',
     '/sogou/i'=>'Sogou',
-    '/Exabot/i'=>'Exabot',
-    '/facebook/i'=>'Facebook',
-    '/alexa/i'=>'Alexa'
+    '/spinn3r/i'=>'Spinn3r',
+    '/swiftfox/i'=>'Swiftfox',
+    '/trident\/7.0/i'=>'Explorer',
+    '/ucbrowser/i'=>'UCBrowser',
+    '/uzbl/i'=>'Uzbl',
+    '/vivaldi/i'=>'Vivaldi',
+    '/wosbrowser/i'=>'wOSBrowser',
+    '/yahoo/i'=>'Yahoo',
+    '/yandex/i'=>'Yandex'
   ];
-  foreach($browser_array as$regex=>$value){
-    if(preg_match($regex,$user_agent))$browser=$value;
+  foreach($ba as$r=>$v){
+    if(preg_match($r,$ua)){
+      $b=$v;
+      break;
+    }
   }
-  return$browser;
+  return$b;
 }

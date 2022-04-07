@@ -1,18 +1,24 @@
-### v0.2.6
-- Fix entity parser encoding all input, to only encoding descriptions.
-- Fix output parsing showing entity codes rather than the symbols they represent.
-- Fix Page Settings checkbox for enabling Slider checking wrong value.
-- Fix broken thumbnail on bookings page.
-- Form submission serializer not parsing correctly selected event/service to backend.
-- Fix reference to incorrect variable in add_contantus.
-- Fix styling for required form fields that wasn't diplaying correctly.
-- Improve Forms for all client sites for better validation and requirement notifications.
-- Update Summernote WYSIWYG Editor.
-- Adjust logic to stop Recommended Retail Price from showing in items list, in favour of Cost Price.
-- Update Summernote plugin summernote-cleaner.
-- Fix Account Required to Purchase option not working correctly.
-- Add Form feature that fetch's postcode information autofilling Suburb and State fields.
-- Fix Accountnotification warning tag element not being parsed away correctly.
-- Add Video Playlist editor for pages, and front end parsing and markup.
-- Remove unused emoji images.
-- Fix Schema Product Prices when no price is set, or is a text value, to not produce cost schema markup.
+### v0.2.7
+- Fix sitemap.xml listing items and exposing content that is only available to logged in accounts, and adjust listing so pages/content listed as noindex do not get listed.
+- Add more WordPress filtering methods for known attack attempts.
+- Add new option to Visitor Tracker to clear entries via Search Query.
+- Update Video Embedding within the content parser, as well as Summernote when adding video content.
+- Add a check for when an outside source is looking for ads.txt or sellers.json to avoid having those URL's added to the tracking database. (We may visit this as an option, as this is geared mostly towards when advertising is placed on pages, such as Google's AdSense.)
+- Add enterkeyhint attributes to form input element to improve mobile usage.
+- Remove Title and trailing / from RSS feed link meta tag.
+- Fix RSS Feed output listing items and exposing content that is only available to logged in accounts, and adjust listing so pages/content listed as noindex do not get listed.
+- Add regex to remove extraneous white space from RSS feed description text.
+- Fix Facebook and Twitter Share Icons.
+- Fix missing Twiiter Card information.
+- Fix .htaccess URL 301 Redirect to properly resolve to https and without www
+- Add response to access to security.txt saying to report security issues to the github repository.
+- Add new headers for Client Hints directives.
+- Improve how tracking site visitors works, now records more browsers, operating systems, screen width and Telephone Call Clicks.
+- Fix Item Count error in SQL when gathering content.
+- Add Calls count for current month to Dashboard.
+- Update Google Analytics Embed Code to self hosted GA4, self hosting helps speed up page speed.
+- Improve Schema output, now includes dynamic Organization rather than static.
+- Add Google Tag Manager and ID Entry.
+- Adjust Rank for Wholesale (Bronze and Silver were reversed), and add Standard Wholesale.
+- Add Free SEO Course links on Dashboard.
+- Fix issue when updating postcode values, which would not update, and throw error if null/empty value used.

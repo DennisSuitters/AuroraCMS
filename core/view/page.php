@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -38,7 +38,7 @@ $html=preg_replace([
   '/<[\/]?item>/'
 ],[
   htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
-  $purify->purify($page['notes']),
+  $page['notes'],
   $page['contentType'],
   '',
   '',
@@ -50,6 +50,39 @@ $html=preg_replace([
 $items=$html;
 require'core/parser.php';
 $html=$items;
+if(stristr($html,'<playlist')){
+	$sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY ord ASC");
+	$sp->execute([
+		':rid'=>$page['id']
+	]);
+	$playlistoutput='';
+	if($sp->rowCount()>0){
+		preg_match('/<playlistitem>([\w\W]*?)<\/playlistitem>/',$html,$match);
+		$pli=$match[1];
+		$playlistoutput='';
+		while($pr=$sp->fetch(PDO::FETCH_ASSOC)){
+			$bpli='';
+			preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/",$pr['url'],$vidEmbed);
+			$bpli=preg_replace([
+				'/<print playlist=[\"\']?videoid[\"\']?>/',
+				'/<print playlist=[\"\']?url[\"\']?>/'
+			],[
+				$vidEmbed[1],
+				$pr['url']
+			],$pli);
+			$playlistoutput.=$bpli;
+		}
+		$html=preg_replace([
+			'/<[\/]?playlist>/',
+			'~<playlistitem>.*?<\/playlistitem>~is'
+		],[
+			'',
+			$playlistoutput
+		],$html);
+	}else{
+		$html=preg_replace('~<playlist>.*?<\/playlist>~is','',$html);
+	}
+}
 $seoTitle=empty($page['seoTitle'])?trim(htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')):htmlspecialchars($page['seoTitle'],ENT_QUOTES,'UTF-8');
 $metaRobots=!empty($page['metaRobots'])?htmlspecialchars($page['metaRobots'],ENT_QUOTES,'UTF-8'):'index,follow';
 $seoCaption=!empty($page['seoCaption'])?htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8'):htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8');

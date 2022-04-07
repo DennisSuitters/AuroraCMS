@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,7 +29,7 @@ $html=preg_replace([
 ],[
 	'',
 	htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
-	$purify->purify($page['notes']),
+	$page['notes'],
 	'',
 	$config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':'',
 ],$html);
@@ -103,7 +103,7 @@ if($s->rowCount()>0){
 					'"name":"'.htmlspecialchars(($r['name']!=''?$r['name']:'Anonymous').($r['name']!=''&&$r['business']!=''?' : ':'').($r['business']!=''?$r['business']:''),ENT_QUOTES,'UTF-8').'"'.
 				'},'.
 				'"datePublished":"'.date('Y-m-d',$r['ti']).'",'.
-				'"reviewBody":"'.$purify->purify($r['notes']).'",'.
+				'"reviewBody":"'.$r['notes'].'",'.
 				'"reviewRating":{'.
 					'"@type":"Rating",'.
 					'"bestRating":"5",'.
@@ -124,7 +124,7 @@ if($s->rowCount()>0){
 			'/<print review=[\"\']?set2[\"\']?>/',
 			'/<print review=[\"\']?set1[\"\']?>/'
 		],[
-			($view=='index'?substr(strip_tags($purify->purify($r['notes'])),0,600):strip_tags($purify->purify($r['notes']))),
+			($view=='index'?substr(strip_tags($r['notes']),0,600):strip_tags($r['notes'])),
 			$r['business']!=''?htmlspecialchars($r['business'],ENT_QUOTES,'UTF-8'):'Anonymous',
 			$r['name']!=''?htmlspecialchars($r['name'],ENT_QUOTES,'UTF-8'):'Anonymous',
 			$jsonld,

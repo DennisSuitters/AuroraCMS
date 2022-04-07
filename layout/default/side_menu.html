@@ -18,7 +18,7 @@
 					<input type="hidden" name="act" value="sort">
 					<div class="row">
 						<label for="sort" class="col-4">Sort Order</label>
-						<select id="sort" class="col-8" name="sort">
+						<select id="sort" class="col-8" name="sort" enterkeyhint="next">
 							<option value="">Select a Sort Option</option>
 							<sortOptions>
 						</select>
@@ -26,11 +26,11 @@
 					<showItems>
 						<div class="row mt-3">
 							<label for="itemCount" class="col-4">Show</label>
-							<input id="itemCount" class="col-3" type="number" name="itemCount" value="<itemCount>">
+							<input id="itemCount" class="col-3" type="number" name="itemCount" value="<itemCount>" enterkeyhint="next">
 							<label class="col-2 ml-3">items</label>
 						</div>
 					</showItems>
-					<button class="btn-block mt-3" type="submit">Sort</button>
+					<button class="btn-block mt-3" type="submit" enterkeyhint="done">Sort</button>
 				</form>
 			</div>
 		</div>
@@ -87,10 +87,12 @@
 			<form class="auroraForm card p-3" data-formtype="review" method="post" action="core/add_review.php">
 				<input type="hidden" name="id" value="<print content=id>">
 				<input type="hidden" name="<print hash>" value="<print timecode>">
+				<label for="fullname" aria-hidden="true">Full Name</label>
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<h3>Add a Review</h3>
 				<label>Rating</label>
 				<span class="starRating">
-					<input id="rating5" type="radio" name="rating" value="5" checked>
+					<input id="rating5" type="radio" name="rating" value="5" checked enterkeyhint="next">
 					<label for="rating5" title="Awesome!">5</label>
 					<input id="rating4" type="radio" name="rating" value="4">
 					<label for="rating4" title="Great!">4</label>
@@ -103,23 +105,21 @@
 	      </span>
 				<label class="required" for="reviewemail">Email</label>
 				<div class="form-row flex-wrap">
-					<input type="email" id="reviewemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+					<input type="email" id="reviewemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true" enterkeyhint="next">
 					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
 				</div>
 				<label class="required" for="contactname">Name</label>
 				<div class="form-row flex-wrap">
-					<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<input type="text" id="contactname" name="name" value="" placeholder="Enter Your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$" enterkeyhint="next">
 					<div class="requirements alert alert-info">Names can only contain letters and the usual characters associated with some names.</div>
 				</div>
-				<label for="fullname" aria-hidden="true">Full Name</label>
-				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label class="required" for="reviewtxt">Review</label>
 				<div class="form-row">
-					<textarea id="reviewtxt" name="review" placeholder="Enter your Review..." required aria-required="true"></textarea>
+					<textarea id="reviewtxt" name="review" placeholder="Enter your Review..." required aria-required="true" enterkeyhint="next"></textarea>
 				</div>
 				<g-recaptcha>
 				<div class="text-right mt-3">
-					<button id="review-btn" type="submit" disabled>Add Review</button>
+					<button id="review-btn" type="submit" disabled enterkeyhint="done">Add Review</button>
 				</div>
 			</form>
 		</div>

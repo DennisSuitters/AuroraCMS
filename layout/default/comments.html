@@ -30,24 +30,24 @@
 				<input type="hidden" name="<print hash>" value="<print timecode>">
 				<input type="hidden" name="rid" value="<print content=id>">
 				<input type="hidden" name="ct" value="<print content=contentType>">
+				<label for="fullname" aria-hidden="true">Full Name</label>
+				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label class="required" for="commentemail">Email</label>
 				<div class="form-row flex-wrap">
-					<input type="email" id="commentemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true">
+					<input type="email" id="commentemail" name="email" value="" placeholder="Enter your Email..." required aria-required="true" enterkeyhint="next">
 					<div class="requirements alert alert-danger" role="alert">Must be a valid email address.</div>
 				</div>
 				<label class="required" for="commentname" class="mt-0">Name</label>
 				<div class="form-row flex-wrap">
-					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$">
+					<input type="text" id="name" name="name" value="" placeholder="Enter your Name..." required aria-required="true" pattern="^[A-Za-zÀ-ÿ ,.'-]+$" enterkeyhint="next">
 					<div class="requirements alert alert-info" role="alert">Names can only contain letters and the usual characters associated with some names.</div>
 				</div>
-				<label for="fullname" aria-hidden="true">Full Name</label>
-				<input id="fullname" name="fullname<print hash>" value="" autocomplete="off" aria-hidden="true">
 				<label class="required" for="commenttxt">Comment</label>
 				<div class="form-row">
-					<textarea id="commenttxt" name="notes" placeholder="Enter your Comment..." required aria-required="true"></textarea>
+					<textarea id="commenttxt" name="notes" placeholder="Enter your Comment..." required aria-required="true" enterkeyhint="next"></textarea>
 				</div>
 				<g-recaptcha>
-				<button id="comment-btn" class="btn-block mt-3 mb-3" type="submit">Add Comment</button>
+				<button id="comment-btn" class="btn-block mt-3 mb-3" type="submit" enterkeyhint="done">Add Comment</button>
 			</form>
 		</div>
 	</comment>

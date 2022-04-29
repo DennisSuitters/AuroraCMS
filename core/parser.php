@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -132,7 +132,7 @@ foreach($tags as$tag){
 				$container=$parsing='';
 			break;
 		case'cost':
-			if(isset($r['contentType'])&&($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events')){
+			if(isset($r['contentType'])&&($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities')){
 				if($config['gst']>0){
 					$gst=$r['cost']*($config['gst']/100);
 					$gst=$r['cost']+$gst;
@@ -175,17 +175,17 @@ foreach($tags as$tag){
 								}
 							$parsing.='</div>';
 					}
-					if($r['contentType']=='service'||$r['contentType']=='events'&&$r['bookable']==1){
+					if(($r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities')&&$r['bookable']==1){
 						if(stristr($parse,'<service>')){
 							$parse=preg_replace(['~<inventory>.*?<\/inventory>~is','/<[\/]?service>/'],'',$parse);
-						}elseif(stristr($parse,'<service>')&&$r['contentType']!='service')
+						}elseif(stristr($parse,'<service>')&&($r['contentType']!='service'||$r['contentType']!='activities'))
 							$parse=preg_replace('~<service>.*?<\/service>~is','',$parse,1);
 					}else
 						$parse=preg_replace('~<service>.*?<\/service>~is','',$parse,1);
-					if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
+					if(($r['contentType']=='inventory'||$r['contentType']=='activities')&&is_numeric($r['cost'])){
 						if(stristr($parse,'<inventory>')){
 							$parse=preg_replace(['~<service>.*?<\/service>~is','/<[\/]?inventory>/'],'',$parse);
-						}elseif(stristr($parse,'<inventory>')&&$r['contentType']!='inventory')
+						}elseif(stristr($parse,'<inventory>')&&($r['contentType']!='inventory'||$r['contentType']=='activities'))
 							$parse=preg_replace('~<inventory>.*?<\/inventory>~is','',$parse,1);
 					}else
 						$parse=preg_replace('~<inventory>.*?<\/inventory>~is','',$parse,1);
@@ -195,7 +195,11 @@ foreach($tags as$tag){
 				$parse=preg_replace('~<cost>.*?<\/cost>~is','',$parse,1);
 			break;
 		case'stockStatus':
-			$parsing.=$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']);
+			if($r['contentType']!='activities')
+				$parsing.=$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus']);
+			else
+				$parsing.='';
+			break;
 		case'cover':
 			if($attribute=='page'){
 				if($page['cover']!=''&&file_exists('media/'.basename($page['cover'])))

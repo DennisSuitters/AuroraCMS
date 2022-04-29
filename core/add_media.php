@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -45,15 +45,15 @@ if($fu!=''){
 				':ord'=>$iid+1
 			]);
 			echo'<script>'.
-						'window.top.window.$("#mi").append(`<div class="card stats col-6 col-md-3 m-1 swing-in-top-fwd" id="mi_'.$iid.'">'.
+						'window.top.window.$("#mi").append(`<div id="mi_'.$iid.'" class="card stats col-6 col-sm m-1 swing-in-top-fwd">'.
 							'<div class="btn-group float-right">'.
 								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg2('drag').'</div>'.
 								'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times">'.svg2('view').' &nbsp;0</div>'.
 								'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
 								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'media\');">'.svg2('trash').'</button>'.
 							'</div>'.
-							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'">'.
-								'<img src="media/sm/'.basename($file).'" alt="Media '.$iid.'">'.
+							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'" style="display:flex;max-height:150px;">'.
+								'<img src="media/sm/'.basename($file).'" alt="Media '.$iid.'" style="object-fit:cover;object-position:center;">'.
 							'</a>'.
 						'</div>`);'.
 						'window.top.window.$().fancybox({selector:`[data-fancybox="media"]`});'.

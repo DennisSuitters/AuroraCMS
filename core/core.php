@@ -7,29 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-define('THEME','layout'.DS.$config['theme']);
-define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-$ti=time();
-$s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
-$s->execute([':pti'=>time()]);
-$s=$db->prepare("UPDATE `".$prefix."login` SET `hti`=:ti,`hostStatus`='overdue' WHERE `hti`<:ti AND `hostStatus`='outstanding'");
-$s->execute([':ti'=>$ti]);
-$s=$db->prepare("UPDATE `".$prefix."login` SET `sti`=:ti,`siteStatus`='overdue' WHERE `sti`<:ti AND `siteStatus`='outstanding'");
-$s->execute([':ti'=>$ti]);
-if($config['php_options'][6]==1){
-	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `permanent`!=1 AND `ti`<:ti");
-	$s->execute([':ti'=>time()-2592000]);
-}
-if($config['options'][11]==1){
-	$s=$db->prepare("DELETE FROM `".$prefix."tracker` WHERE `ti`<:ti");
-	$s->execute([':ti'=>time()-2592000]);
-}
 if(stristr($_SERVER['REQUEST_URI'],'security.txt')||stristr($_SERVER['REQUEST_URI'],'sellers.json')){
 	echo'# Report Security Issues at the AuroraCMS GitHub Repository: https://github.com/DiemenDesign/AuroraCMS';
 	die();
@@ -38,7 +19,7 @@ if(stristr($_SERVER['REQUEST_URI'],'ads.txt')||stristr($_SERVER['REQUEST_URI'],'
 	echo'We don\'t use or promote the use of advertising, your search for ads.txt or sellers.json is futile, go look elsewhere!';
 	die();
 }
-if($config['php_options'][5]==1){
+if(isset($config['php_options'])&&$config['php_options'][5]==1){
 	if(stristr($_SERVER['REQUEST_URI'],'/wp')||stristr($_SERVER['REQUEST_URI'],'/wordpress/')||stristr($_SERVER['REQUEST_URI'],'old-wp')){
 		echo'You know, not every fecking Website uses WordPress!';
 		$msg='Trying to access WordPress folder';
@@ -93,6 +74,26 @@ if($config['php_options'][5]==1){
 		require'core/xmlrpc.php';
 		die();
 	}
+}
+require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+if($config['php_options'][6]==1){
+	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `permanent`!=1 AND `ti`<:ti");
+	$s->execute([':ti'=>time()-2592000]);
+}
+define('THEME','layout'.DS.$config['theme']);
+define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
+$ti=time();
+$sale=getSaleTime();
+$s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
+$s->execute([':pti'=>time()]);
+$s=$db->prepare("UPDATE `".$prefix."login` SET `hti`=:ti,`hostStatus`='overdue' WHERE `hti`<:ti AND `hostStatus`='outstanding'");
+$s->execute([':ti'=>$ti]);
+$s=$db->prepare("UPDATE `".$prefix."login` SET `sti`=:ti,`siteStatus`='overdue' WHERE `sti`<:ti AND `siteStatus`='outstanding'");
+$s->execute([':ti'=>$ti]);
+if($config['options'][11]==1){
+	$s=$db->prepare("DELETE FROM `".$prefix."tracker` WHERE `ti`<:ti");
+	$s->execute([':ti'=>time()-2592000]);
 }
 if(file_exists(THEME.'/images/favicon.png')){
 	define('FAVICON',THEME.'/images/favicon.png');
@@ -251,6 +252,32 @@ function elapsed_time($b=0,$e=0){
   }else$b=number_format($td,3).'s';
   return trim($b);
 }
+function getSaleTime(){
+  $chkti=time();
+  $sale=[
+    'timestamp'=>0,
+    'sale'=>'',
+    'class'=>''
+  ];
+  $year=date('Y',$chkti);
+  $va=strtotime("2/14/$year - 2 weeks"); // Valentine's Day
+  $ea=strtotime("last sunday of march $year - 1 month"); // Easter
+  $md=strtotime("5/8/$year - 1 month"); // Mother's Day
+  $fd=strtotime("9/4/$year - 1 month"); // Father's Day
+  $bf=strtotime("last friday of october $year - 1 month"); // Black Friday
+  $hw=strtotime("10/31/$year - 1 month"); // Halloween
+  $sb=strtotime("last saturday of november $year - 1 month"); // Small Business Day
+  $cd=strtotime("12/25/$year - 1 month"); // Christmas Day
+  if($chkti>$va)$sale=['timestamp'=>$va,'sale'=>'valentine','class'=>'valentine','title'=>'Checkout our products in our Valentine\'s Day Sale!'];
+  if($chkti>$ea)$sale=['timestamp'=>$ea,'sale'=>'easter','class'=>'easter','title'=>'Checkout our products in our Easter Sale!'];
+  if($chkti>$md)$sale=['timestamp'=>$md,'sale'=>'mothersday','class'=>'mothersday','title'=>'Spoil your Mother with something from our Mother\'s Day Sale!'];
+  if($chkti>$fd)$sale=['timestamp'=>$fd,'sale'=>'fathersday','class'=>'fathersday','title'=>'Spoil your Father with something from our Father\'s Day Sale!'];
+  if($chkti>$bf)$sale=['timestamp'=>$bf,'sale'=>'blackfriday','class'=>'blackfriday','title'=>'Get something from our Black Friday Sale!'];
+  if($chkti>$hw)$sale=['timestamp'=>$hw,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
+  if($chkti>$sb)$sale=['timestamp'=>$sb,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
+  if($chkti>$cd)$sale=['timestamp'=>$cd,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
+  return $sale;
+}
 function size_format($B,$D=2){
   $S='kMGTPEZY';
   $F=floor((strlen($B) - 1) / 3);
@@ -381,6 +408,10 @@ class admin{
 		$view='orders';
 		require'admin.php';
 	}
+	function playlist($args=false){
+		$view='playlist';
+		require'admin.php';
+	}
 	function reviews($args=false){
 		$view='reviews';
 		require'admin.php';
@@ -433,6 +464,10 @@ class front{
 	}
 	function activate($args=false){
 		$view='activate';
+		require'process.php';
+	}
+	function activities($args=false){
+		$view='activities';
 		require'process.php';
 	}
 	function article($args=false){
@@ -597,6 +632,7 @@ $routes=[
 	$settings['system']['admin'].'/joblist'=>['admin','joblist'],
 	$settings['system']['admin'].'/logout'=>['admin','logout'],
 	$settings['system']['admin'].'/media'=>['admin','media'],
+	$settings['system']['admin'].'/playlist'=>['admin','playlist'],
 	$settings['system']['admin'].'/messages'=>['admin','messages'],
 	$settings['system']['admin'].'/newsletters'=>['admin','newsletters'],
 	$settings['system']['admin'].'/notification'=>['admin','notification'],

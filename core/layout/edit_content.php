@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -36,19 +36,19 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         </ol>
       </div>
     </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 p-3 overflow-visible">
+    <div class="container-fluid row p-0">
+      <div class="card col-sm border-radius-0 p-3 overflow-visible order-2 order-sm-1">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
           <label for="tab1-1">Content</label>
           <input class="tab-control" id="tab1-2" name="tabs" type="radio">
           <label for="tab1-2">Images</label>
-          <?=($r['contentType']!='testimonials'?'<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Media</label>':'').
-          ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'').
-          ($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'').
-          ($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'').
-          ($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'').
-          ($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8">SEO</label>':'');?>
+          <?=($r['contentType']!='testimonials'?'<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Media</label>':'');?>
+          <?=($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'');?>
+          <?=($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'');?>
+          <?=($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'');?>
+          <?=($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'');?>
+          <?=($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8">SEO</label>':'');?>
           <input class="tab-control" id="tab1-9" name="tabs" type="radio">
           <label for="tab1-9">Settings</label>
           <?=($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'');?>
@@ -76,6 +76,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" onkeyup="genurl();$('#titleupdate').text($(this).val());"<?=$user['options'][1]==1?' placeholder="Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible...."':' readonly';?>>
               <?=$user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Generate Aussie Lorem Ipsum Title" onclick="ipsuMe(`title`);genurl();$(`#titleupdate`).text($(`#title`).val());$(`#savetitle`).addClass(`trash`);return false;">'.svg2('loremipsum').'</button>'.
               '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="analyzeTitle" data-test="title" data-tooltip="tooltip" aria-label="Analyze Title Text">'.svg2('seo').'</button>'.
               '<button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
             <script>
@@ -297,6 +298,22 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
             <?php }
+            if($r['contentType']=='inventory'){?>
+              <label id="<?=$r['contentType'];?>Sale" for="sale"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Sale" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Sale Selector">&#128279;</a>':'';?>Associate&nbsp;with&nbsp;Sale</label>
+              <div class="form-row">
+                <select id="sale"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Sale"':' disabled';?> onchange="update('<?=$r['id'];?>','content','sale',$(this).val(),'select');">
+                  <option value=""<?=$r['sale']==''?' selected':''?>>No Holiday</option>
+                  <option value="valentine"<?=$r['sale']=='valentine'?' selected':''?>>Valentine's Day</option>
+                  <option value="easter"<?=$r['sale']=='easter'?' selected':''?>>Easter</option>
+                  <option value="mothersday"<?=$r['sale']=='mothersday'?' selected':''?>>Mother's Day</option>
+                  <option value="fathersday"<?=$r['sale']=='fathersday'?' selected':''?>>Father's Day</option>
+                  <option value="blackfriday"<?=$r['sale']=='blackfriday'?' selected':''?>>Black Friday</option>
+                  <option value="halloween"<?=$r['sale']=='halloween'?' selected':''?>>Halloween</option>
+                  <option value="smallbusinessday"<?=$r['sale']=='smallbusinessday'?' selected':''?>>Small Business Day</option>
+                  <option value="christmas"<?=$r['sale']=='christmas'?' selected':''?>>Christmas</option>
+                </select>
+              </div>
+            <?php }
             if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
               <div class="row">
                 <div class="col-12 col-sm-6 pr-md-3">
@@ -395,59 +412,68 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 }?>
               </div>
             <?php }
-            if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'){?>
+            if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Cost Checkbox">&#128279;</a>':'';?>
                 <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                 <label for="<?=$r['contentType'];?>showCost" id="contentoptions0<?=$r['id'];?>">Show Cost</label>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-3 pr-3">
-                  <label id="<?=$r['contentType'];?>RRP" for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'RRP" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' RRP (Recommended Retail Price) Field">&#128279;</a>':'';?>RRP</label>
-                  <div class="form-row">
-                    <div class="input-text">$</div>
-                    <input class="textinput" id="rrp" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?=$r['rrp'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
-                    <?=$user['options'][1]==1?'<button class="save" id="saverrp" data-dbid="rrp" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                <?php if($r['contentType']!='activities'){?>
+                  <div class="col-12 col-sm pr-3">
+                    <label id="<?=$r['contentType'];?>RRP" for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'RRP" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' RRP (Recommended Retail Price) Field">&#128279;</a>':'';?>RRP</label>
+                    <div class="form-row">
+                      <div class="input-text">$</div>
+                      <input class="textinput" id="rrp" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?=$r['rrp'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
+                      <?=$user['options'][1]==1?'<button class="save" id="saverrp" data-dbid="rrp" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    </div>
                   </div>
-                </div>
-                <div class="col-12 col-sm-3 pr-md-3">
+                <?php }?>
+                <div class="col-12 col-sm">
                   <label id="<?=$r['contentType'];?>Cost" for="cost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Cost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Cost Field">&#128279;</a>':'';?>Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
                     <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
-<?php if($r['cost']==0)$gst=0;
+<?php if($r['cost']==0)
+  $gst=0;
 else{
-  $gst=$r['cost']*($config['gst']/100);
-  $gst=$r['cost']+$gst;
-  $gst=number_format((float)$gst,2,'.','');
+  if(isset($config['gst'])&&is_numeric($config['gst'])){
+    $gst=$r['cost'] * ($config['gst'] / 100);
+    $gst=$r['cost'] + $gst;
+    $gst=number_format((float)$gst,2,'.','');
+  }else $gst=0;
 }?>
                     <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstcost" data-gst="Incl. GST"><?=$gst;?></div>
                     <?=$user['options'][1]==1?'<button class="save" id="savecost" data-dbid="cost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-3 pr-md-3">
-                  <label id="<?=$r['contentType'];?>ReducedCost" for="rCost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ReducedCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Reduced Cost Field">&#128279;</a>':'';?>Reduced Cost</label>
-                  <div class="form-row">
-                    <div class="input-text">$</div>
-                    <input class="textinput" id="rCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?=$r['rCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
+                <?php if($r['contentType']!='activities'){?>
+                  <div class="col-12 col-sm pl-sm-3">
+                    <label id="<?=$r['contentType'];?>ReducedCost" for="rCost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ReducedCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Reduced Cost Field">&#128279;</a>':'';?>Reduced Cost</label>
+                    <div class="form-row">
+                      <div class="input-text">$</div>
+                      <input class="textinput" id="rCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?=$r['rCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
 <?php if($r['cost']==0)$gst=0;
 else{
-  $gst=$r['rCost']*($config['gst']/100);
-  $gst=$r['rCost']+$gst;
-  $gst=number_format((float)$gst,2,'.','');
+  if(isset($config['gst'])&&is_numeric($config['gst'])){
+    $gst=$r['rCost']*($config['gst']/100);
+    $gst=$r['rCost']+$gst;
+    $gst=number_format((float)$gst,2,'.','');
+  }else $gst=0;
 }?>
-                    <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstrCost" data-gst="Incl. GST"><?=$gst;?></div>
-                    <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-dbid="rCost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstrCost" data-gst="Incl. GST"><?=$gst;?></div>
+                      <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-dbid="rCost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    </div>
                   </div>
-                </div>
-                <div class="col-12 col-sm-3">
-                  <label id="<?=$r['contentType'];?>WholesaleCost" for="dCost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'WholesaleCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Wholesale Cost Field">&#128279;</a>':'';?>Wholesale Cost</label>
-                  <div class="form-row">
-                    <div class="input-text">$</div>
-                    <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Wholesale Cost..."':' readonly';?>>
-                    <?=$user['options'][1]==1?'<button class="save" id="savedCost" data-dbid="dCost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                  <div class="col-12 col-sm pl-sm-3">
+                    <label id="<?=$r['contentType'];?>WholesaleCost" for="dCost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'WholesaleCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Wholesale Cost Field">&#128279;</a>':'';?>Wholesale Cost</label>
+                    <div class="form-row">
+                      <div class="input-text">$</div>
+                      <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Wholesale Cost..."':' readonly';?>>
+                      <?=$user['options'][1]==1?'<button class="save" id="savedCost" data-dbid="dCost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    </div>
                   </div>
-                </div>
+                <?php }?>
               </div>
             <?php }
             if($r['contentType']=='events'){?>
@@ -459,23 +485,23 @@ else{
                 </div>
               </div>
             <?php }
-            if($r['contentType']=='inventory'){?>
+            if($r['contentType']=='inventory'||$r['contentType']=='activities'){?>
               <div class="row">
-                <div class="col-12 col-sm-4 pr-md-3">
+                <div class="col-12 col-sm-4">
                   <label id="<?=$r['contentType'];?>Quantity" for="quantity"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Quantity" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Quantity Field">&#128279;</a>':'';?>Quantity</label>
                   <div class="form-row">
                     <input class="textinput" id="quantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?=$r['quantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
                     <?=$user['options'][1]==1?'<button class="save" id="savequantity" data-dbid="quantity" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-4 pr-md-3">
+                <div class="col-12 col-sm-4 pl-sm-3">
                   <label id="<?=$r['contentType'];?>cartonQuantity" for="cartonQuantity"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'cartonQuantity" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Carton Quantity Field">&#128279;</a>':'';?>Carton Quantity</label>
                   <div class="form-row">
                     <input class="textinput" id="cartonQuantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="cartonQuantity" type="text" value="<?=$r['cartonQuantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Carton Quantity..."':' readonly';?>>
                     <?=$user['options'][1]==1?'<button class="save" id="savecartonQuantity" data-dbid="cartonQuantity" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm-4 pr-md-3">
+                <div class="col-12 col-sm-4 pl-sm-3">
                   <label id="<?=$r['contentType'];?>Points" for="points"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Points" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Points Value Field">&#128279;</a>':'';?>Points Value</label>
                   <div class="form-row">
                     <input class="textinput" id="points" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="points" type="text" value="<?=$r['points'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Points Value..."':' readonly';?>>
@@ -484,7 +510,7 @@ else{
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-6 pr-md-3">
+                <div class="col-12 col-sm">
                   <label id="<?=$r['contentType'];?>StockStatus" for="stockStatus"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'StockStatus" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Stock Status Selector">&#128279;</a>':'';?>Stock Status</label>
                   <div class="form-row">
                     <select id="stockStatus"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');">
@@ -504,7 +530,7 @@ else{
                     </select>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-3">
+                <div class="col-12 col-sm pl-sm-3">
                   <label id="<?=$r['contentType'];?>ItemCondition" for="itemCondition"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ItemCondition" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Condition Selector">&#128279;</a>':'';?>Condition</label>
                   <div class="form-row">
                     <select id="itemCondition"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?=$r['id'];?>','content','itemCondition',$(this).val(),'select');">
@@ -553,7 +579,7 @@ else{
               </div>
               <label id="<?=$r['contentType'];?>Size" for="size"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Size" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Size Fields">&#128279;</a>':'';?>Size</label>
               <div class="row">
-                <div class="col-12 col-md-4 pr-md-2">
+                <div class="col-12 col-sm">
                   <div class="form-row">
                     <div class="input-text">Width</div>
                     <input class="textinput" id="width" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="width" type="text" value="<?=$r['width'];?>"<?=$user['options'][1]==1?' placeholder="Width"':' readonly';?>>
@@ -572,7 +598,7 @@ else{
                     <?=$user['options'][1]==1?'<button class="save" id="savewidth" data-dbid="width" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-md-4 pr-md-2">
+                <div class="col-12 col-sm pl-sm-2">
                   <div class="form-row">
                     <div class="input-text">Height</div>
                     <input class="textinput" id="height" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="height"<?=$user['options'][1]==1?' placeholder="Height"':' readonly';?> type="text" value="<?=$r['height'];?>">
@@ -591,7 +617,7 @@ else{
                     <?=$user['options'][1]==1?'<button class="save" id="saveheight" data-dbid="height" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-sm pl-sm-2">
                   <div class="form-row">
                     <div class="input-text">Length</div>
                     <input class="textinput" id="length" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="length" type="text" value="<?=$r['length'];?>"<?=$user['options'][1]==1?' placeholder="Length"':' readonly';?>>
@@ -845,7 +871,7 @@ else{
                     $thumb='media/md/'.basename($rm['file']);
                   else
                     $thumb=ADMINNOIMAGE;?>
-                  <div id="mi_<?=$rm['id'];?>" class="card stats col-6 col-md-3 m-1">
+                  <div id="mi_<?=$rm['id'];?>" class="card stats col-6 col-sm m-1">
                     <?php if($user['options'][1]==1){?>
                       <div class="btn-group float-right">
                         <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><?= svg2('drag');?></div>
@@ -854,8 +880,8 @@ else{
                         <button class="btn trash" onclick="purge('<?=$rm['id'];?>','media')" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
                       </div>
                     <?php }?>
-                    <a data-fancybox="media" data-type="image" data-caption="<?=($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?=$rm['file'];?>">
-                      <img src="<?=$thumb;?>" alt="Media <?=$rm['id'];?>">
+                    <a data-fancybox="media" data-type="image" data-caption="<?=($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?=$rm['file'];?>" style="display:flex;max-height:150px;">
+                      <img src="<?=$thumb;?>" alt="Media <?=$rm['id'];?>" style="object-fit:cover;object-position:center;">
                     </a>
                   </div>
                 <?php }
@@ -1126,11 +1152,11 @@ else{
             </div>
             <div class="form-row mt-3">
               <label id="<?=$r['contentType'];?>SEOTitle" for="seoTitle"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SEOTitle" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Title Field">&#128279;</a>':'';?>Meta&nbsp;Title</label>
-              <small class="form-text text-right">The recommended character count for Title\'s is 70.</small>
+              <small class="form-text text-right">The recommended character count for Title\'s is 65.</small>
             </div>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
-              <?php $cntc=70-strlen($r['seoTitle']);
+              <?php $cntc=65-strlen($r['seoTitle']);
               if($cntc<0){
                 $cnt=abs($cntc);
                 $cnt=number_format($cnt)*-1;
@@ -1153,6 +1179,7 @@ else{
               }?>
               <input class="textinput" id="seoTitle" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="seoTitle" type="text" value="<?=$r['seoTitle'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Meta Title..."':' readonly';?>>
               <?=$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=seoTitle" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="analyzeTitle" data-test="seoTitle" data-tooltip="tooltip" aria-label="Analyze Meta Title Text">'.svg2('seo').'</button>'.
               '<button class="save" id="saveseoTitle" data-dbid="seoTitle" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
 <?php /*
@@ -1189,11 +1216,11 @@ else{
 */ ?>
             <div class="form-row mt-3">
               <label id="<?=$r['contentType'];?>SEODescription" for="seoDescription"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SEODescription" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Description Field">&#128279;</a>':'';?>Meta&nbsp;Description</label>
-              <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
+              <small class="form-text text-right">The recommended character count for Descriptions is 230.</small>
             </div>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?= svg2('seo');?></button>
-              <?php $cntc=160-strlen($r['seoDescription']);
+              <?php $cntc=230-strlen($r['seoDescription']);
               if($cntc<0){
                 $cnt=abs($cntc);
                 $cnt=number_format($cnt)*-1;
@@ -1218,12 +1245,6 @@ else{
               '<button class="save" id="saveseoDescription" data-dbid="seoDescription" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
 <?php /*
-            <label for="seoKeywords">Keywords</label>
-            <div class="form-row">
-              <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Keywords.md" data-tooltip="tooltip" aria-label="SEO Keywords Information"><?= svg2('seo');?></button>
-              <input class="textinput" id="seoKeywords" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="seoKeywords" type="text" value="<?=$r['seoKeywords'];?>"<?=$user['options'][1]==1?' placeholder="Enter Keywords..."':' readonly';?>>
-              <?=$user['options'][1]==1?'<button class="save" id="saveseoKeywords" data-dbid="seoKeywords" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
-            </div>
             <label for="tags">Tags</label>
             <div class="form-row">
               <input class="textinput" id="tags" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?=$r['tags'];?>"<?=$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
@@ -1356,7 +1377,7 @@ else{
               <input id="<?=$r['contentType'];?>Internal" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="internal" data-dbb="0" type="checkbox"<?=($r['internal']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
               <label id="contentinternal0<?=$r['id'];?>" for="<?=$r['contentType'];?>Internal">Internal</label>
             </div>
-            <?php if($r['contentType']=='service'||$r['contentType']=='events'){?>
+            <?php if($r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Bookable" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Bookable Checkbox">&#128279;</a>':'';?>
                 <input id="<?=$r['contentType'];?>Bookable" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0" type="checkbox"<?=($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
@@ -1584,6 +1605,15 @@ while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>
+<?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
+$sw->execute();
+if($sw->rowCount()>0){
+  echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 border-0 order-1 order-sm-2">';
+  while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
+    include'core/layout/widget-'.$rw['file'];
+  }
+  echo'</div>';
+}?>
     </div>
   </section>
 </main>

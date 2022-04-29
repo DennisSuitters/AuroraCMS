@@ -37,8 +37,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         </ol>
       </div>
     </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
+    <div class="container-fluid row p-0">
+      <div class="card col-sm border-radius-0 p-3 overflow-visible order-2 order-sm-1">
         <div id="notification" role="alert"></div>
         <label id="newsletterTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#newsletterTitle" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Title Field">&#128279;</a>':'';?>Title</label>
         <div class="form-row">
@@ -110,6 +110,15 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>
+<?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
+$sw->execute();
+if($sw->rowCount()>0){
+  echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 border-0 order-1 order-sm-2">';
+  while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
+    include'core/layout/widget-'.$rw['file'];
+  }
+  echo'</div>';
+}?>
     </div>
   </section>
 </main>

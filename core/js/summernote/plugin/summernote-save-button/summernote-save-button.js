@@ -50,6 +50,7 @@
           placement: options.placement,
           click: function (e) {
             e.preventDefault();
+            $('#notes').html($note.summernote('code'));
             if(options.save.pageBlockClass != '') {
               $(options.save.pageBlockClass).addClass(options.save.pageBlockToggle);
             }
@@ -58,7 +59,10 @@
               $note.summernote('code', escape(noteText));
             }
             this.form.submit();
-            $('#note-form').submit();
+            if($('#hemmingwayrefresh').length>0){
+              console.log('hemmingwayrefresh');
+              $('#hemmingwayrefresh').click();
+            }
             if (options.save.encode) {
               $note.summernote('code', noteText);
             }
@@ -92,6 +96,10 @@
               $note.summernote('code', escape(noteText));
             }
             this.form.submit();
+            if($('#hemmingwayrefresh').length>0){
+              console.log('hemmingwayrefresh');
+              $('#hemmingwayrefresh').click();
+            }
             if (options.save.encode) {
               $note.summernote('code', noteText);
             }

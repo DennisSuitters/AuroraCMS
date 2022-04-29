@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -38,10 +38,11 @@
     <Link rel="stylesheet" type="text/css" href="core/js/summernote/plugin/summernote-text-findnreplace/css/lite.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css" media="all">
+    <Link rel="stylesheet" type="text/css" href="core/images/weather/weather-icons.min.css" media="all">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css" media="all">
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/jquery/jquery-ui.min.js"></script>
-    <script src="core/js/summernote/summernote.js"></script>
+    <script src="core/js/summernote/summernote.min.js"></script>
     <script src="core/js/summernote/plugin/summernote-save-button/summernote-save-button.js"></script>
 <?php /*    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script> */ ?>
     <script src="core/js/summernote/plugin/summernote-image-captionit/summernote-image-captionit.js"></script>

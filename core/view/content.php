@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -289,7 +289,7 @@ if($show=='item'){
 }
 require'inc-categorynav.php';
 if(stristr($html,'<playlist')){
-	$sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY ord ASC");
+	$sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY ord ASC");
 	$sp->execute([
 		':rid'=>$page['id']
 	]);
@@ -300,13 +300,29 @@ if(stristr($html,'<playlist')){
 		$playlistoutput='';
 		while($pr=$sp->fetch(PDO::FETCH_ASSOC)){
 			$bpli='';
-			preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/",$pr['url'],$vidEmbed);
 			$bpli=preg_replace([
-				'/<print playlist=[\"\']?videoid[\"\']?>/',
-				'/<print playlist=[\"\']?url[\"\']?>/'
+				'/<json-ld>/',
+				'/<print playlist=[\"\']?title[\"\']?>/',
+				'/<print playlist=[\"\']?thumbnail_url[\"\']?>/',
+				'/<print playlist=[\"\']?url[\"\']?>/',
+				'/<print playlist=[\"\']?embedurl[\"\']?>/',
+				'/<print playlist=[\"\']?notes[\"\']?>/'
 			],[
-				$vidEmbed[1],
-				$pr['url']
+				'<script type="application/ld+json">{'.
+					'"@content":"https://schema.org",'.
+					'"@type":"VideoObject",'.
+					'"name":"'.$pr['title'].'",'.
+					'"description":"'.($pr['notes']!=''?strip_tags($pr['notes']):$pr['title']).'",'.
+					'"thumbnailUrl":['.
+						'"'.$pr['thumbnail_url'].'"'.
+					']'.
+					'"uploadDate":"'.$pr['dt'].'"'.
+				'}</script>',
+				$pr['title'],
+				$pr['thumbnail_url'],
+				$pr['url'],
+				$pr['embed_url'],
+				$pr['notes']
 			],$pli);
 			$playlistoutput.=$bpli;
 		}

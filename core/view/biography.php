@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,7 @@ $purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'inc-cover.php';
 require'inc-breadcrumbs.php';
 if(stristr($html,'<playlist')){
-	$sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY ord ASC");
+	$sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY ord ASC");
 	$sp->execute([
 		':rid'=>$page['id']
 	]);
@@ -28,9 +28,28 @@ if(stristr($html,'<playlist')){
 		while($pr=$sp->fetch(PDO::FETCH_ASSOC)){
 			$bpli='';
 			$bpli=preg_replace([
-				'/<print playlist=[\"\']?url[\"\']?>/'
+				'/<json-ld>/',
+				'/<print playlist=[\"\']?title[\"\']?>/',
+				'/<print playlist=[\"\']?thumbnail_url[\"\']?>/',
+				'/<print playlist=[\"\']?url[\"\']?>/',
+				'/<print playlist=[\"\']?embedurl[\"\']?>/',
+				'/<print playlist=[\"\']?notes[\"\']?>/'
 			],[
-				$pr['url']
+				'<script type="application/ld+json">{'.
+					'"@content":"https://schema.org",'.
+					'"@type":"VideoObject",'.
+					'"name":"'.$pr['title'].'",'.
+					'"description":"'.($pr['notes']!=''?strip_tags($pr['notes']):$pr['title']).'",'.
+					'"thumbnailUrl":['.
+						'"'.$pr['thumbnail_url'].'"'.
+					']'.
+					'"uploadDate":"'.$pr['dt'].'"'.
+				'}</script>',
+				$pr['title'],
+				$pr['thumbnail_url'],
+				$pr['url'],
+				$pr['embed_url'],
+				$pr['notes']
 			],$pli);
 			$playlistoutput.=$bpli;
 		}
@@ -45,7 +64,6 @@ if(stristr($html,'<playlist')){
 		$html=preg_replace('~<playlist>.*?<\/playlist>~is','',$html);
 	}
 }
-
 $html=preg_replace([
 	'/<print page=[\"\']?heading[\"\']?>/',
 	$page['notes']!=''?'/<[\/]?pagenotes>/':'~<pagenotes>.*?<\/pagenotes>~is',

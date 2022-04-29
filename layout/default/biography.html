@@ -26,12 +26,18 @@
     </section>
   </pagenotes>
   <playlist>
-		<section class="row">
+		<section class="row playlist">
 			<article class="mx-auto mt-5">
 				<div class="row">
 					<playlistitem>
 						<div class="col-11 mx-auto">
-							<div class="note-video-wrapper youtube" data-fancybox href="<print playlist=url>?autoplay=1" data-fancybox-plyr data-embed="<print playlist=videoid>" itemprop="video" itemscope="" itemtype="http://schema.org/VideoObject"><meta itemprop="embedURL" content="<print playlist=url>"><img class="note-video-clip" src="https://img.youtube.com/vi/<print playlist=videoid>/maxresdefault.jpg"><div class="play"></div></div>
+              <div class="note-video-wrapper video" data-fancybox href="<print playlist=url>" data-fancybox-plyr data-embed="<print playlist=embedurl>">
+								<json-ld>
+								<img class="note-video-clip" src="<print playlist=thumbnail_url>" alt="<print playlist=title>">
+								<div class="play"></div>
+							</div>
+							<div class="video-title"><print playlist="title"></div>
+							<div class="video-description"><print playlist="notes"></div>
 						</div>
 					</playlistitem>
 				</div>

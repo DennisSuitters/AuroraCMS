@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.jpg)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.7
+Current version is v0.2.8
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -21,27 +21,34 @@ Current version is v0.2.7
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
 - Custom Pages.
-- Articles.
-- Portfolio.
+- Content Types with pages, and individual item pages.
+  - Activities
+  - Articles
+  - Portfolio
+  - Events.
+    - Book Events and Invoice for immediate payment.
+    - Option to display Countdown Clock for when Event Starts.
+    - Display Events on Home Page.
+  - News.
+    - Display News on Home Page.
+  - Testimonials.
+    - Approval before public display.
+  - Inventory.
+    - Quick View Option for Inventory.
+    - Product Reviews and Approval before public display.
+    - Assign Points to Items, that get added to user's Earned Points.
+    - Restrict Wholesale Items to Wholesale Account per Level.
+    - Sales Content.
+      - Determines Sales periods to current date to suggest edits a month in advance for items older than 11 months in a Dashboard widget, for Valentine's Day, Easter, Mother's Day, Father's Day, Black Friday, Halloween, Small Business Day, and Christmas.
+      - Front End parsing for Sales periods to promote items set with Sale periods for sales promotion.
+  - Newsletters.
+  - Proofs.
+    - User accessible area.
+  - Services.
 - FAQ's.
-- Events.
-  - Book Events and Invoice for immediate payment.
-  - Option to display Countdown Clock for when Event Starts.
-  - Display Events on Home Page.
-- News.
-  - Display News on Home Page.
-- Testimonials.
-  - Approval before public display.
-- Inventory.
-  - Quick View Option for Inventory.
-  - Product Reviews and Approval before public display.
-  - Assign Points to Items, that get added to user's Earned Points.
-  - Restrict Wholesale Items to Wholesale Account per Level.
-- Services.
 - Gallery.
 - Client Proofs.
 - Messages.
-- Newsletters.
 - Bookings.
   - Convert booking to invoice.
   - Print booking.
@@ -83,7 +90,6 @@ Current version is v0.2.7
       - Default and Account editable purchasing limits.
       - Approval of Wholesaler Purchasing.
       - Time limited purchasing, disables purchasing if purchases are not made inside maximum time limit (this encourages Wholesalers to continue purchasing).
-- Client Proofs and Commenting.
 - Easy Theme Selector.
   - Themes are built in such a way that changes in Administration are carried over to other themes. However, this will also depend on the features built into the theme selected.
 - Front End Theme Engine using HTML Style Markup, the use of any CSS or JavaScript Framework.
@@ -108,6 +114,22 @@ Current version is v0.2.7
   - For those providing Services and or Products to Countries that require Privacy Cookie Consent.
 - Open Street Maps via the Leaflet JavaScript library.
   - Address location Map can be displayed on Home Page, Contact Us, and Event Items.
+- Dashboard Widgets, that can be enabled/disabled, resized, and repositioned.
+  - AuroraCMS Updates, changelog of the CMS updates.
+  - Browsers, browsers count used to access website.
+  - Devices, devices count used to access website.
+  - Recent Admin Activity
+  - Referrers, popular referrers, such as Google, Duck Duck Go, and other popular places.
+  - Sale Content, uses current date to determine known Australian popular Sales periods, and selects Inventory that was published at the same time on previous year minus 1 month.
+  - SEO links, links to resources to learn SEO for DIY.
+  - SEO Unsolicited Tips, Unsolicited tips from Candour on LinkedIn.
+  - Top Keywords, search keywords used via the front end search (on site search, not from Search Engines).
+  - Viewed pages, top ten viewed pages, and their view count.
+  - Visitor Stats, some visitors stats, like new bookings, orders, calls when clicking linked phone numbers.
+  - Weather, takes Longitude and Latitude values from Map Position to find weather for that area (usually business location), if not set, tries to get approximate location via Browser Connection Information.
+- Content Widgets, that can be enabled/disabled.
+  - Text Analysis, uses the Hemmingway Javascript implementation to analyse text and gives ratings.
+  - SEO Content Help, links to handy tools for writing content, or to get inspiration.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
   - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
   - [summernote-checkbox](https://github.com/DiemenDesign/summernote-checkbox)
@@ -187,7 +209,7 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [EntertainMe](https://entertainme.net.au/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
-- [Hays Computer World](https://hayscomputerworld.com.au/)
+- [Hays Technologies](https://haystechnologies.com.au/)
 - [K9FineDining](https://k9finedining.com/)
 - [Lone Wolf Anime](https://lonewolfanime.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)

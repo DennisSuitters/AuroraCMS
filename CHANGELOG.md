@@ -1,24 +1,27 @@
-### v0.2.7
-- Fix sitemap.xml listing items and exposing content that is only available to logged in accounts, and adjust listing so pages/content listed as noindex do not get listed.
-- Add more WordPress filtering methods for known attack attempts.
-- Add new option to Visitor Tracker to clear entries via Search Query.
-- Update Video Embedding within the content parser, as well as Summernote when adding video content.
-- Add a check for when an outside source is looking for ads.txt or sellers.json to avoid having those URL's added to the tracking database. (We may visit this as an option, as this is geared mostly towards when advertising is placed on pages, such as Google's AdSense.)
-- Add enterkeyhint attributes to form input element to improve mobile usage.
-- Remove Title and trailing / from RSS feed link meta tag.
-- Fix RSS Feed output listing items and exposing content that is only available to logged in accounts, and adjust listing so pages/content listed as noindex do not get listed.
-- Add regex to remove extraneous white space from RSS feed description text.
-- Fix Facebook and Twitter Share Icons.
-- Fix missing Twiiter Card information.
-- Fix .htaccess URL 301 Redirect to properly resolve to https and without www
-- Add response to access to security.txt saying to report security issues to the github repository.
-- Add new headers for Client Hints directives.
-- Improve how tracking site visitors works, now records more browsers, operating systems, screen width and Telephone Call Clicks.
-- Fix Item Count error in SQL when gathering content.
-- Add Calls count for current month to Dashboard.
-- Update Google Analytics Embed Code to self hosted GA4, self hosting helps speed up page speed.
-- Improve Schema output, now includes dynamic Organization rather than static.
-- Add Google Tag Manager and ID Entry.
-- Adjust Rank for Wholesale (Bronze and Silver were reversed), and add Standard Wholesale.
-- Add Free SEO Course links on Dashboard.
-- Fix issue when updating postcode values, which would not update, and throw error if null/empty value used.
+### v0.2.8
+- Adjust recommended Meta Title and Meta Description maximum text lengths.
+- Fix var exists checking for Administration Preferences page throwing error.
+- Add Widgets to Dashboard for starters, can be turned off (can toggle back on in Preferences/Interface), reordered and width resized.
+- Adjust tracktoblacklist to make blacklisted IP's permanent.
+- Improve Video Schema for Embedded Videos.
+- Add Playlist Video editing.
+- Add styling for embedding videos with Title and Description.
+- Add field for Google Data API Code, needed for Google Services like YouTube, and future integration of Analytics or Search Console information.
+- Fix Video Information extraction when adding Playlist videos.
+- Fix menu not checking if URL field is set.
+- Add new "Activities" Page and Content Type.
+- Fix Empty page being listed as an error page, with missing attributes.
+- Update Libraries:
+  - Summernote (skunkworks version)
+  - Stripe => 7.123.0
+  - elFinder => 2.1.61
+  - SwiperJS => 8.8.1
+  - FullCalendar => 5.11.0
+  - Leaflet => 1.8.0
+- Improve Validation for all sites.
+- Move Chat Widget from all theme footers, to reduce content size of pages.
+- Fix Checks for entered Webmaster Tools Services that weren't getting displayed.
+- Add links to Webmaster Tools Services in Preferences -> SEO for sign-up.
+- Remove Alexa Webmaster Tools fields as it is being closed down.
+- Fix Pages parser accessing incorrect offset in URL Var.
+- Add Sales Period options with 1 month offset to allow customers to purchase ahead of time, with suggested editing of older content in Administration Dashboard, and front end parsing, with adding of class to body tag for possible restyling of whole site for the Sales Period. Content is not shown if date is outside of the Sales Period.

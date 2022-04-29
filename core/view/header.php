@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -108,14 +108,14 @@ if(stristr($html,'<buildMenu')){
 		if($r['contentType']=='cart'&&$config['options'][30]==1&&(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false))continue;
 		if($r['contentType']!='index'){
 			if(isset($r['url'][0])&&$r['url'][0]=='#')
-				$menuURL.=URL.$r['url'].'/';
-			elseif(isset($r['url'])&&filter_var($r['url'],FILTER_VALIDATE_URL))
+				$menuURL.=URL.$r['url'];
+			elseif(isset($r['url'])&&$r['url']!='')
 				$menuURL.=$r['url'];
 			else{
 				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
 					$r['contentType'],
-					['aboutus','article','biography','bookings','cart','contactus','distributors',
+					['aboutus','activities','article','biography','bookings','cart','contactus','distributors',
 					'events','forum','gallery','inventory','news','newsletters','portfolio',
 					'proofs','search','service','testimonials','tos'],
 					true)

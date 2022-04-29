@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded",function(event) {
     if (youTubeVideos[i].hasAttribute('data-fancybox')) {
     } else {
       var thumbnail="https://img.youtube.com/vi/"+youTubeVideos[i].dataset.embed+"/maxresdefault.jpg";
-      youTubeVideos[i].style.cssText="max-width: 560px;margin: 60px auto;";
+//      youTubeVideos[i].style.cssText="max-width: 560px;margin: 60px auto;";
       youTubeVideos[i].setAttribute("itemprop","video");
       youTubeVideos[i].setAttribute("itemscope",'');
       youTubeVideos[i].setAttribute("itemtype","http://schema.org/VideoObject");

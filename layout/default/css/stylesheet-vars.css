@@ -268,6 +268,16 @@
 
   --jumbotron-background-color: transparent;
 
+  --playlist-background-color: #000;
+  --playlist-play-button-background-color: #3b3636;
+  --playlist-play-button-background-color-hover: #f00;
+  --playlist-play-button-color: #fff;
+  --playlist-play-button-arrow-color: rgba(255,255,255,.75);
+  --playlist-video-title-background-color: transparent;
+  --playlist-video-title-color: #fff;
+  --playlist-video-description-background-color: transparent;
+  --playlist-video-description-color: #fff;
+
   --starRating-color: #ffdf00;
   --starRating-outline-width: 1px;
   --starRating-outline-color: #888;

@@ -52,6 +52,34 @@
 			</div>
 		</div>
 	</section>
+</block>
+<block inbed="sale">
+	<salePeriod>
+		<settings items="4">
+		<section class="row mt-0 mt-sm-5 justify-content-center <print sale>">
+			<header>
+				<h2><saleHeading></h2>
+			</header>
+			<saleItems>
+				<article class="card col-12 col-sm-5 col-lg-2-5">
+					<json-ld>
+					<figure class="card-image">
+						<a href="<print content=linktitle>"><img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>"></a>
+					</figure>
+					<h5 class="card-header"><a href="<print content=linktitle>"><print content="title"></a></h5>
+					<div class="corner-ribbon small top-right"><print content="cost"></div>
+					<div class="card-body line-clamp">
+						<print content="notes">
+					</div>
+					<div class="card-footer">
+						<a class="btn" href="<print content=linktitle>">View</a>
+					</div>
+				</article>
+			</saleItems>
+		</section>
+	</salePeriod>
+</block>
+<block inbed="content2">
 	<section class="jumbotron mt-5">
 		<img class="filter" src="layout/default/images/index-jumbotron.jpg" alt="Index Jumbotron">
   	<header class="mt-5">
@@ -59,6 +87,8 @@
 		</header>
   	<p class="mt-5">This is a modified jumbotron that occupies the entire horizontal space, and 100% screen height (100vh) of its parent.</p>
 	</section>
+</block>
+<block inbed="content3">
 	<settings items="0" contenttype="all">
 	<section class="mt-5 justify-content-center">
 		<header>
@@ -89,8 +119,10 @@
 			</article>
 		</items>
 	</section>
+</block>
+<block inbed="content4">
 	<playlist>
-		<section class="row">
+		<section class="row playlist">
 			<article class="mx-auto mt-5">
 				<header>
 					<h2 class="text-center">Latest Videos</h2>
@@ -98,13 +130,21 @@
 				<div class="row">
 					<playlistitem>
 						<div class="col-11 col-sm-4 p-3 mx-auto">
-							<div class="note-video-wrapper youtube" data-fancybox href="<print playlist=url>?autoplay=1" data-fancybox-plyr data-embed="<print playlist=videoid>" itemprop="video" itemscope="" itemtype="http://schema.org/VideoObject"><meta itemprop="embedURL" content="<print playlist=url>"><img class="note-video-clip" src="https://img.youtube.com/vi/<print playlist=videoid>/maxresdefault.jpg" alt="Video <print playlist=videoid>"><div class="play"></div></div>
+							<div class="note-video-wrapper video" data-fancybox href="<print playlist=url>" data-fancybox-plyr data-embed="<print playlist=embedurl>">
+								<json-ld>
+								<img class="note-video-clip" src="<print playlist=thumbnail_url>" alt="<print playlist=title>">
+								<div class="play"></div>
+							</div>
+							<div class="video-title"><print playlist="title"></div>
+							<div class="video-description"><print playlist="notes"></div>
 						</div>
 					</playlistitem>
 				</div>
 			</article>
 		</section>
 	</playlist>
+</block>
+<block inbed="content5">
 	<section class="mt-5 justify-content-center">
 		<header>
 			<h2 class="text-center">Shop by Category</h2>

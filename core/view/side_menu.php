@@ -7,12 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require_once'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $sideTemp='';
 if(file_exists(THEME.'/side_menu.html')){
 	$sideTemp=file_get_contents(THEME.'/side_menu.html');
@@ -37,17 +35,17 @@ if(file_exists(THEME.'/side_menu.html')){
 		isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?'/<[\/]?admin>/':'~<admin>.*?<\/admin>~is'
 	],[
 		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook" rel="noopener noreferrer">'.frontsvg('i-social-facebook').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text=AuroraCMS%20Share%20Buttons&amp;hashtags='.(isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business']).'" title="Share to Twitter" rel="noopener noreferrer">'.frontsvg('i-social-twitter').'</a>'.
+		'<a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text='.urlencode((isset($r['title'])&&$r['title']!=''?$r['title']:$page['title'])).'&amp;hashtags='.urlencode((isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business'])).'" title="Share to Twitter" rel="noopener noreferrer">'.frontsvg('i-social-twitter').'</a>'.
 		'<a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest" rel="noopener noreferrer">'.frontsvg('i-social-pinterest').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Stumbleupon" rel="noopener noreferrer">'.frontsvg('i-social-stumbleupon').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.$config['business'].'" title="Share to Reddit" rel="noopener noreferrer">'.frontsvg('i-social-reddit').'</a>'.
+		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.urlencode($config['business']).'" title="Share to Stumbleupon" rel="noopener noreferrer">'.frontsvg('i-social-stumbleupon').'</a>'.
+		'<a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.urlencode($config['business']).'" title="Share to Reddit" rel="noopener noreferrer">'.frontsvg('i-social-reddit').'</a>'.
 		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin" rel="noopener noreferrer">'.frontsvg('i-social-linkedin').'</a>',
 		isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?URL.$settings['system']['admin'].'/content/edit/'.$r['id']:'',
 		''
 	],$sideTemp);
 	if($show=='item')
 		$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
-	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
+	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events'||$view=='activities')){
 		$sideCost='';
 		if($r['options'][0]==1){
 			if(is_numeric($r['cost'])&&$r['cost']!=0){
@@ -91,7 +89,6 @@ if(file_exists(THEME.'/side_menu.html')){
 			'',
 			number_format((float)$r['points'])
 		],$sideTemp);
-
 		if(isset($_SESSION['rank'])){
 			if($_SESSION['rank']>309&&$_SESSION['rank']<349){
 				if($r['rank']!=$_SESSION['rank']){
@@ -196,17 +193,17 @@ if(file_exists(THEME.'/side_menu.html')){
 			}
 		}else
 			$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
-		if($r['contentType']=='service'||$r['contentType']=='events'){
+		if($r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){
 			if($r['bookable']==1){
 				if(stristr($sideTemp,'<service>')){
 					$sideTemp=preg_replace([
 						'/<[\/]?service>/',
-						'/<print content=[\"\']?bookservice[\"\']?>/',
-						'~<inventory>.*?<\/inventory>~is'
+						'~<inventory>.*?<\/inventory>~is',
+						'/<print content=[\"\']?bookservice[\"\']?>/'
 					],[
 						'',
-						$r['id'],
-						''
+						'',
+						$r['id']
 					],$sideTemp);
 				}
 			}else
@@ -418,7 +415,7 @@ if(file_exists(THEME.'/side_menu.html')){
 			date('Y-m-d',$r['ti']),
 			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
 			$time,
-			$r['seoCaption']!=''?htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'):substr(strip_tags($purify->purify($r['notes'])),0,100).'...'
+			$r['seoCaption']!=''?htmlspecialchars($r['seoCaption'],ENT_QUOTES,'UTF-8'):substr(strip_tags($r['notes']),0,100).'...'
 		],$items);
 		$output.=$items;
 	}

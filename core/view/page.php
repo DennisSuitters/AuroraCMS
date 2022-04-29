@@ -7,15 +7,25 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $rank=0;
 $notification='';
 $html=str_replace('<print view>',$view,$html);
+if(!isset($args[0])){
+  $page['id']=0;
+  $page['cover']='';
+  $page['notes']='';
+  $page['seoTitle']='Pages List';
+  $page['heading']=' ';
+  $page['seoDescription']='Pages List of '.$config['business'];
+  $sp=$db->query("SELECT * FROM `".$prefix."menu` WHERE `contentType`='page' AND `title`!='' AND `active`=1 ORDER BY `ord` ASC");
+  while($rp=$sp->fetch(PDO::FETCH_ASSOC)){
+    $page['notes'].='<p><a href="'.URL.strtolower($rp['contentType']).'/'.str_replace(' ','-',$rp['title']).'/">'.$rp['title'].'</a></p>';
+  }
+}
 require'inc-cover.php';
 require'inc-breadcrumbs.php';
 $page['notes']=preg_replace([
@@ -51,7 +61,7 @@ $items=$html;
 require'core/parser.php';
 $html=$items;
 if(stristr($html,'<playlist')){
-	$sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY ord ASC");
+	$sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY ord ASC");
 	$sp->execute([
 		':rid'=>$page['id']
 	]);
@@ -62,13 +72,29 @@ if(stristr($html,'<playlist')){
 		$playlistoutput='';
 		while($pr=$sp->fetch(PDO::FETCH_ASSOC)){
 			$bpli='';
-			preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/",$pr['url'],$vidEmbed);
 			$bpli=preg_replace([
-				'/<print playlist=[\"\']?videoid[\"\']?>/',
-				'/<print playlist=[\"\']?url[\"\']?>/'
+				'/<json-ld>/',
+				'/<print playlist=[\"\']?title[\"\']?>/',
+				'/<print playlist=[\"\']?thumbnail_url[\"\']?>/',
+				'/<print playlist=[\"\']?url[\"\']?>/',
+				'/<print playlist=[\"\']?embedurl[\"\']?>/',
+				'/<print playlist=[\"\']?notes[\"\']?>/'
 			],[
-				$vidEmbed[1],
-				$pr['url']
+				'<script type="application/ld+json">{'.
+					'"@content":"https://schema.org",'.
+					'"@type":"VideoObject",'.
+					'"name":"'.$pr['title'].'",'.
+					'"description":"'.($pr['notes']!=''?strip_tags($pr['notes']):$pr['title']).'",'.
+					'"thumbnailUrl":['.
+						'"'.$pr['thumbnail_url'].'"'.
+					']'.
+					'"uploadDate":"'.$pr['dt'].'"'.
+				'}</script>',
+				$pr['title'],
+				$pr['thumbnail_url'],
+				$pr['url'],
+				$pr['embed_url'],
+				$pr['notes']
 			],$pli);
 			$playlistoutput.=$bpli;
 		}

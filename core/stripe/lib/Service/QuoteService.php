@@ -30,11 +30,30 @@ class QuoteService extends \Stripe\Service\AbstractService
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection
+     * @return \Stripe\Collection<\Stripe\Quote>
      */
     public function all($params = null, $opts = null)
     {
         return $this->requestCollection('get', '/v1/quotes', $params, $opts);
+    }
+
+    /**
+     * When retrieving a quote, there is an includable <a
+     * href="https://stripe.com/docs/api/quotes/object#quote_object-computed-upfront-line_items"><strong>computed.upfront.line_items</strong></a>
+     * property containing the first handful of those items. There is also a URL where
+     * you can retrieve the full (paginated) list of upfront line items.
+     *
+     * @param string $id
+     * @param null|array $params
+     * @param null|array|\Stripe\Util\RequestOptions $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return \Stripe\Collection<\Stripe\Quote>
+     */
+    public function allComputedUpfrontLineItems($id, $params = null, $opts = null)
+    {
+        return $this->requestCollection('get', $this->buildPath('/v1/quotes/%s/computed_upfront_line_items', $id), $params, $opts);
     }
 
     /**
@@ -48,7 +67,7 @@ class QuoteService extends \Stripe\Service\AbstractService
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection
+     * @return \Stripe\Collection<\Stripe\Quote>
      */
     public function allLineItems($id, $params = null, $opts = null)
     {

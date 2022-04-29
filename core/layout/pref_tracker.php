@@ -7,11 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $find=isset($_POST['find'])?$_POST['find']:'';
+if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';
 function desiminateVisit($u){
   $status='ok';
   if(stristr($u,'aws/'))$status='Suspicious';

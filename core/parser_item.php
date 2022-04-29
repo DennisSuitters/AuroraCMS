@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -271,7 +271,7 @@ if($skip==false){
   				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
   				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
   				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-  			'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" src="media/'.$cover.'" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+  			'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" src="media/'.$cover.'" alt="'.$page['title'].' Cover Image">'.
   				($page['attributionImageTitle']!=''?
   					'<figcaption>'.
   						$page['attributionImageTitle'].
@@ -461,7 +461,7 @@ if($skip==false){
       }else
         $item=preg_replace('~<mediaitems>.*?<\/mediaitems>~is','',$item,1);
     }
-    if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events')){
+    if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events'||$view=='activities')){
       if($r['bookable']==1){
         if(stristr($item,'<service>')){
           $item=preg_replace([
@@ -500,7 +500,7 @@ if($skip==false){
         $itemQuantity=$r['stockStatus']=='quantity'?($r['quantity']==0?'Out Of Stock':'In Stock'):($r['stockStatus']=='none'?'':ucwords($r['stockStatus']));
       }
     }
-    if(isset($r['contentType'])&&($r['contentType']=='inventory')){
+    if(isset($r['contentType'])&&($r['contentType']=='inventory'||$r['contentType']=='activities')){
       $item=preg_replace([
         ($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
   			'/<print content=[\"\']?quantitycolor[\"\']?>/',
@@ -513,7 +513,7 @@ if($skip==false){
         '',
   			str_replace(' ','-',strtolower($itemQuantity)),
         $r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
-        ($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])).'.',
+        ($r['contentType']!='activities'?($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])).'.':''),
         ($r['stockStatus']=='in stock'?$r['quantity'].' '.$r['stockStatus']:'').($r['cartonQuantity']>0?' ('.$r['cartonQuantity'].'per carton.)':''),
   			'',
   			number_format((float)$r['points'])

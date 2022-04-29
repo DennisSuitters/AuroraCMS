@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,8 +43,8 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
         </ol>
       </div>
     </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-3 py-3 overflow-visible">
+    <div class="container-fluid row p-0">
+      <div class="card col-sm border-radius-0 p-3 overflow-visible order-2 order-sm-1">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
@@ -86,7 +86,10 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                 </div>
               </div>
             <?php }?>
-            <label id="pageHeading" for="heading"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageHeading" data-tooltip="tooltip" aria-label="PermaLink to Page Heading Field">&#128279;</a>':'';?>Page Heading</label>
+            <div class="form-row mt-3">
+              <label id="pageHeading" for="heading"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageHeading" data-tooltip="tooltip" aria-label="PermaLink to Page Heading Field">&#128279;</a>':'';?>Page&nbsp;Heading</label>
+              <small class="form-text text-right">This text is normally used in the &lt;h1&gt; heading tag. If left empty, the SEO Meta Title will be used, otherwise an auto-generated text will be used.</small>
+            </div>
             <div class="form-row">
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -100,6 +103,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
               <input class="textinput" id="heading" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="heading" type="text" value="<?=$r['heading'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Heading..."':' readonly';?>>
               <?=$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="analyzeTitle" data-test="heading" data-tooltip="tooltip" aria-label="Analyze Page Heading Text">'.svg2('seo').'</button>'.
               '<button class="save" id="saveheading" data-dbid="heading" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
 <?php if($r['contentType']=='comingsoon'){?>
@@ -253,18 +257,20 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                 </form>
               <?php }?>
               <div class="row mt-3" id="pi">
-                <?php $sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='playlist' AND `rid`=:rid ORDER BY `ord` ASC");
+                <?php $sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY `ord` ASC");
                 $sp->execute([':rid'=>$r['id']]);
                 if($sp->rowCount()>0){
                   while($rp=$sp->fetch(PDO::FETCH_ASSOC)){?>
                     <div class="play items col-11 col-sm-4 p-3 mx-auto" id="pi_<?=$rp['id'];?>">
-        							<iframe width="100%" height="300" src="<?=$rp['url'];?>" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
                       <?php if($user['options'][1]==1){?>
                         <div class="btn-group float-right">
                           <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><?= svg2('drag');?></div>
+                          <a class="btn" href="<?= URL.$settings['system']['admin'].'/playlist/edit/'.$rp['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><?= svg2('edit');?></a>
                           <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rp['id'];?>`,`playlist`);"><?= svg2('trash');?></button>
                         </div>
                       <?php }?>
+        							<img src="<?=$rp['thumbnail_url'];?>">
+                      <?=$rp['title'];?>
         						</div>
                   <?php }?>
                   <script>
@@ -310,7 +316,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
                     if(file_exists('media/sm/'.basename($rm['file'])))$thumb='media/sm/'.basename($rm['file']);
                     else $thumb=ADMINNOIMAGE;?>
-                    <div class="card stats col-6 col-md-3 m-1" id="mi_<?=$rm['id'];?>">
+                    <div id="mi_<?=$rm['id'];?>" class="card stats col-6 col-smd m-1">
                       <?php if($user['options'][1]==1){?>
                         <div class="btn-group float-right">
                           <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><?= svg2('drag');?></div>
@@ -319,8 +325,8 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
                           <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rm['id'];?>`,`media`);"><?= svg2('trash');?></button>
                         </div>
                       <?php }?>
-                      <a data-fancybox data-type="image" data-caption="<?=($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?=$rm['file'];?>">
-                        <img src="<?=$thumb;?>" alt="Media <?=$rm['id'];?>">
+                      <a data-fancybox data-type="image" data-caption="<?=($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?=$rm['file'];?>" style="display:flex;max-height:150px;">
+                        <img src="<?=$thumb;?>" alt="Media <?=$rm['id'];?>" style="object-fit:cover;object-position:center;">
                       </a>
                     </div>
                   <?php }?>
@@ -382,11 +388,11 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
             </div>
             <div class="form-row mt-3">
               <label id="pageMetaTitle" for="seoTitle"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaTitle" data-tooltip="tooltip" aria-label="PermaLink to Page Meta Title Field">&#128279;</a>':'';?>Meta&nbsp;Title</label>
-              <small class="form-text text-right">The recommended character count for Title's is 70.</small>
+              <small class="form-text text-right">The recommended character count for Title's is 65.</small>
             </div>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><?= svg2('seo');?></button>
-              <?php $cntc=70-strlen($r['seoTitle']);
+              <?php $cntc=65-strlen($r['seoTitle']);
               if($cntc<0){
                 $cnt=abs($cntc);
                 $cnt=number_format($cnt)*-1;
@@ -404,6 +410,7 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
               }?>
               <input class="textinput" id="seoTitle" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="seoTitle" type="text" value="<?=$r['seoTitle'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Meta Title..."':' readonly';?>>
               <?=$user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=seoTitle" data-data-tooltip="tooltip" aria-label="Add Suggestion">'.svg2('idea').'</button>'.
+              '<button class="analyzeTitle" data-test="seoTitle" data-tooltip="tooltip" aria-label="Analyze Meta Title Text">'.svg2('seo').'</button>'.
               '<button class="save" id="saveseoTitle" data-dbid="seoTitle" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
             </div>
 <?php /*
@@ -432,11 +439,11 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
 */ ?>
             <div class="form-row mt-3">
               <label id="pageMetaDescription" for="seoDescription"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaDescription" data-tooltip="tooltip" aria-label="PermaLink to Page Meta Description Field">&#128279;</a>':'';?>Meta&nbsp;Description</label>
-              <small class="form-text text-right">The recommended character count for Descriptions is 160.</small>
+              <small class="form-text text-right">The recommended character count for Descriptions is 230.</small>
             </div>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><?= svg2('seo');?></button>
-              <?php $cntc=160-strlen($r['seoDescription']);
+              <?php $cntc=230-strlen($r['seoDescription']);
               if($cntc<0){
                 $cnt=abs($cntc);
                 $cnt=number_format($cnt)*-1;
@@ -641,6 +648,15 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
         </div>
         <?php require'core/layout/footer.php';?>
       </div>
+<?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
+$sw->execute();
+if($sw->rowCount()>0){
+  echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 border-0 order-1 order-sm-2">';
+  while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
+    include'core/layout/widget-'.$rw['file'];
+  }
+  echo'</div>';
+}?>
     </div>
   </section>
 </main>

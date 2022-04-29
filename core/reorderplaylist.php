@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
 $i=0;
-foreach($_POST['mi'] as$id){
-  $s=$db->prepare("UPDATE `".$prefix."choices` SET `ord`=:ord WHERE `id`=:id");
+foreach($_POST['pi'] as$id){
+  $s=$db->prepare("UPDATE `".$prefix."playlist` SET `ord`=:ord WHERE `id`=:id");
   $s->execute([
     ':ord'=>$i,
     ':id'=>$id

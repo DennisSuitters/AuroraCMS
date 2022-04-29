@@ -1,8 +1,6 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
 - Administration
-  - Widgets
-    - Ability to add/remove/reorder widgets on pages.
   - TODO/Joblist
     - Add ability to create Jobs from Bookings, and Invoices.
   - Fix update core system
@@ -21,16 +19,3 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Add Instructional [Videos to the AuroraCMS YouTube Channel](https://www.youtube.com/channel/UC9vFbrBKmnSgf8TNUBvDX2Q)
 - Create Free Templates
 - Testing, and Bug Squashing, as per the usual with ongoing projects
-
-- Possible Adjustments
-  - SEO
-    - When Administrator is logged in, viewing main site, highlights multiple H1's as a warning.
-    - Check Title lengths max=>65 600px add link and possible pick up text from text input.
-      - https://headlines.sharethrough.com/?headline=
-      -
-    - Check Meta Description lengths min=>40 max=>230
-    - Make it more clear that the Header when editing content will be placed inside H1 tags.
-    - Description text should generally be about 100 words per page. Exact match keywords in text roughly 2-3 times. Use Synonyms to hit different word usages that may mean the same thing to people as your keywords.
-    - Have suggestion about naming files.
-      - Make sure image names use hyphens instead of spaces or other characters to separate words.
-    - Make sure Image Alt tags are described correctly for Accessibility.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -35,6 +35,8 @@
           <label for="tab1-1">General</label>
           <input class="tab-control" id="tab1-2" name="tabs" type="radio">
           <label for="tab1-2">Sidebar Menu</label>
+          <input class="tab-control" id="tab1-3" name="tabs" type="radio">
+          <label for="tab1-3">Widgets</label>
           <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
           <?php if($user['rank']>999){?>
             <div class="row mt-3">
@@ -81,8 +83,16 @@
               <input id="prefTooltips" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4" type="checkbox"<?=$config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"';?> onchange="$('body').toggleClass('no-tooltip');">
               <label id="configoptions41" for="prefTooltips">Enable Tooltips</label>
             </div>
+            <div class="form-row mt-3">
+              <label id="prefhosterURL" for="hosterURL">Google&nbsp;Data&nbsp;API&nbsp;Key</label>
+              <small class="form-text text-right">This existing key belongs to AuroraCMS, but can be changed if you want to use a private key. This key works for YouTubeAPI3.</small>
+            </div>
+            <div class="form-row">
+              <input class="textinput" id="gd_api" data-dbid="1" data-dbt="config" data-dbc="gd_api" type="text" value="<?=$config['gd_api'];?>" placeholder="Enter a Google Data API Key...">
+              <button class="save" id="savegd_api" data-dbid="gd_api" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+            </div>
 <?php if($user['rank']==1000){?>
-            <div class="row">
+            <div class="row mt-3">
               <input id="prefAdminHoster" data-dbid="1" data-dbt="config" data-dbc="hoster" data-dbb="0" type="checkbox"<?=$config['hoster'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="confighoster01" for="prefAdminHoster">Hoster Site, for managing Web Hosting Accounts</label>
             </div>
@@ -316,6 +326,30 @@ $sm1->execute([
                 }
               </script>
             <?php }?>
+          </div>
+          <div class="tab1-3 border-top mb-3 p-3" data-tabid="tab1-3" role="tabpanel">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th class="text-center align-middle">Enable</th>
+                  <th class="align-middle">Interface</th>
+                  <th class="align-middle">Widget Title</th>
+                </tr>
+              </thead>
+              <tbody>
+<?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` ORDER BY `ref` ASC, `ord` ASC");
+$sw->execute();
+while($rw=$sw->fetch(PDO::FETCH_ASSOC)){?>
+            <tr>
+              <td class="text-center align-middle">
+                <input id="widget<?=$rw['id'];?>" data-dbid="<?=$rw['id'];?>" data-dbt="widgets" data-dbc="active" data-dbb="0" type="checkbox"<?=$rw['active'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              </td>
+              <td class="align-middle"><?= ucfirst($rw['ref']);?></td>
+              <td class="align-middle"><?=$rw['title'];?></td>
+            </tr>
+<?php }?>
+              </tbody>
+            </table>
           </div>
         </div>
 <?php   require'core/layout/footer.php';?>

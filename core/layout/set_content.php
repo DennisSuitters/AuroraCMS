@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.4
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -66,6 +66,51 @@
           <button class="save" id="savesearchItems" data-dbid="searchItems" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <small class="form-text text-muted">'0' to Default to 10 items.</small>
+        <div class="row mt-3">
+          <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableSalesPeriods" data-tooltip="tooltip" aria-label="PermaLink to Calculate Sales Periods Checkbox">&#128279;</a>':'';?>
+          <input id="enableSalesPeriods" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?=$config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <label for="enableSalesPeriods" id="configoptions281">Calculate Sales Periods</label>
+        </div>
+        <label id="saleHeadingValentineField" for="saleHeadingvalentine"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingValentineField" data-tooltip="tooltip" aria-label="PermaLink to Valentine Sale Heading Field">&#128279;</a>':'';?>Valentine Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingvalentine" data-dbid="1" data-dbt="config" data-dbc="saleHeadingvalentine" type="text" value="<?=$config['saleHeadingvalentine'];?>" placeholder="Enter Valentine Sale Heading...">
+          <button class="save" id="savesaleHeadingvalentine" data-dbid="saleHeadingvalentine" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingEasterField" for="saleHeadingeaster"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingEasterField" data-tooltip="tooltip" aria-label="PermaLink to Easter Sale Heading Field">&#128279;</a>':'';?>Easter Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingeaster" data-dbid="1" data-dbt="config" data-dbc="saleHeadingeaster" type="text" value="<?=$config['saleHeadingeaster'];?>" placeholder="Enter Easter Sale Heading...">
+          <button class="save" id="savesaleHeadingeaster" data-dbid="saleHeadingeaster" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingMothersDayField" for="saleHeadingmothersday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingMothersDayField" data-tooltip="tooltip" aria-label="PermaLink to Mother\'s Day Sale Heading Field">&#128279;</a>':'';?>Mother's Day Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingmothersday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingmothersday" type="text" value="<?=$config['saleHeadingmothersday'];?>" placeholder="Enter Mother's Day Sale Heading...">
+          <button class="save" id="savesaleHeadingmothersday" data-dbid="saleHeadingmothersday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingFathersDayField" for="saleHeadingfathersday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingFathersDayField" data-tooltip="tooltip" aria-label="PermaLink to Father\'s Day Sale Heading Field">&#128279;</a>':'';?>Father's Day Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingfathersday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingfathersday" type="text" value="<?=$config['saleHeadingfathersday'];?>" placeholder="Enter Father's Day Sale Heading...">
+          <button class="save" id="savesaleHeadingfathersday" data-dbid="saleHeadingfathersday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingBlackFridayField" for="saleHeadingblackfriday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingBlackFridayField" data-tooltip="tooltip" aria-label="PermaLink to Black Friday Sale Heading Field">&#128279;</a>':'';?>Black Friday Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingblackfriday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingblackfriday" type="text" value="<?=$config['saleHeadingblackfriday'];?>" placeholder="Enter Black Friday Sale Heading...">
+          <button class="save" id="savesaleHeadingblackfriday" data-dbid="saleHeadingblackfriday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingHalloweenField" for="saleHeadinghalloween"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingHalloweenField" data-tooltip="tooltip" aria-label="PermaLink to Halloween Sale Heading Field">&#128279;</a>':'';?>Halloween Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadinghalloween" data-dbid="1" data-dbt="config" data-dbc="saleHeadinghalloween" type="text" value="<?=$config['saleHeadinghalloween'];?>" placeholder="Enter Halloween Sale Heading...">
+          <button class="save" id="savesaleHeadinghalloween" data-dbid="saleHeadinghalloween" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingSmallBusinessDayField" for="saleHeadingsmallbusinessday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingSmallBusinessDayField" data-tooltip="tooltip" aria-label="PermaLink to Small Business Day Sale Heading Field">&#128279;</a>':'';?>Small Business Day Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingsmallbusinessday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingsmallbusinessday" type="text" value="<?=$config['saleHeadingsmallbusinessday'];?>" placeholder="Enter Small Business Day Sale Heading...">
+          <button class="save" id="savesaleHeadingsmallbusinessday" data-dbid="saleHeadingsmallbusinessday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
+        <label id="saleHeadingChristmasField" for="saleHeadingchristmas"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingChristmasField" data-tooltip="tooltip" aria-label="PermaLink to Christmas Sale Heading Field">&#128279;</a>':'';?>Christmas Sale Heading</label>
+        <div class="form-row">
+          <input class="textinput" id="saleHeadingchristmas" data-dbid="1" data-dbt="config" data-dbc="saleHeadingchristmas" type="text" value="<?=$config['saleHeadingchristmas'];?>" placeholder="Enter Christmas Sale Heading...">
+          <button class="save" id="savesaleHeadingchristmas" data-dbid="saleHeadingchristmas" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+        </div>
         <div class="row mt-3">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" data-tooltip="tooltip" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
           <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=$config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"';?>>

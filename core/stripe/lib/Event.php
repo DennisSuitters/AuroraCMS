@@ -72,7 +72,10 @@ class Event extends ApiResource
     const APPLICATION_FEE_REFUNDED = 'application_fee.refunded';
     const APPLICATION_FEE_REFUND_UPDATED = 'application_fee.refund.updated';
     const BALANCE_AVAILABLE = 'balance.available';
+    const BILLING_PORTAL_CONFIGURATION_CREATED = 'billing_portal.configuration.created';
+    const BILLING_PORTAL_CONFIGURATION_UPDATED = 'billing_portal.configuration.updated';
     const CAPABILITY_UPDATED = 'capability.updated';
+    const CASH_BALANCE_FUNDS_AVAILABLE = 'cash_balance.funds_available';
     const CHARGE_CAPTURED = 'charge.captured';
     const CHARGE_EXPIRED = 'charge.expired';
     const CHARGE_FAILED = 'charge.failed';
@@ -115,6 +118,12 @@ class Event extends ApiResource
     const CUSTOMER_TAX_ID_DELETED = 'customer.tax_id.deleted';
     const CUSTOMER_TAX_ID_UPDATED = 'customer.tax_id.updated';
     const FILE_CREATED = 'file.created';
+    const IDENTITY_VERIFICATION_SESSION_CANCELED = 'identity.verification_session.canceled';
+    const IDENTITY_VERIFICATION_SESSION_CREATED = 'identity.verification_session.created';
+    const IDENTITY_VERIFICATION_SESSION_PROCESSING = 'identity.verification_session.processing';
+    const IDENTITY_VERIFICATION_SESSION_REDACTED = 'identity.verification_session.redacted';
+    const IDENTITY_VERIFICATION_SESSION_REQUIRES_INPUT = 'identity.verification_session.requires_input';
+    const IDENTITY_VERIFICATION_SESSION_VERIFIED = 'identity.verification_session.verified';
     const INVOICE_CREATED = 'invoice.created';
     const INVOICE_DELETED = 'invoice.deleted';
     const INVOICE_FINALIZATION_FAILED = 'invoice.finalization_failed';
@@ -155,6 +164,7 @@ class Event extends ApiResource
     const PAYMENT_INTENT_AMOUNT_CAPTURABLE_UPDATED = 'payment_intent.amount_capturable_updated';
     const PAYMENT_INTENT_CANCELED = 'payment_intent.canceled';
     const PAYMENT_INTENT_CREATED = 'payment_intent.created';
+    const PAYMENT_INTENT_PARTIALLY_FUNDED = 'payment_intent.partially_funded';
     const PAYMENT_INTENT_PAYMENT_FAILED = 'payment_intent.payment_failed';
     const PAYMENT_INTENT_PROCESSING = 'payment_intent.processing';
     const PAYMENT_INTENT_REQUIRES_ACTION = 'payment_intent.requires_action';
@@ -220,6 +230,13 @@ class Event extends ApiResource
     const SUBSCRIPTION_SCHEDULE_UPDATED = 'subscription_schedule.updated';
     const TAX_RATE_CREATED = 'tax_rate.created';
     const TAX_RATE_UPDATED = 'tax_rate.updated';
+    const TERMINAL_READER_ACTION_FAILED = 'terminal.reader.action_failed';
+    const TERMINAL_READER_ACTION_SUCCEEDED = 'terminal.reader.action_succeeded';
+    const TEST_HELPERS_TEST_CLOCK_ADVANCING = 'test_helpers.test_clock.advancing';
+    const TEST_HELPERS_TEST_CLOCK_CREATED = 'test_helpers.test_clock.created';
+    const TEST_HELPERS_TEST_CLOCK_DELETED = 'test_helpers.test_clock.deleted';
+    const TEST_HELPERS_TEST_CLOCK_INTERNAL_FAILURE = 'test_helpers.test_clock.internal_failure';
+    const TEST_HELPERS_TEST_CLOCK_READY = 'test_helpers.test_clock.ready';
     const TOPUP_CANCELED = 'topup.canceled';
     const TOPUP_CREATED = 'topup.created';
     const TOPUP_FAILED = 'topup.failed';

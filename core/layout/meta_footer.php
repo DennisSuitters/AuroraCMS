@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -70,7 +70,7 @@
   <?php }?>
   $('#seoTitle').keyup(function(){
   	var length=$(this).val().length;
-  	var max=70;
+  	var max=65;
   	var length=max-length;
   	$("#seoTitlecnt").text(length);
     $('#google-title').text($(this).val());
@@ -82,7 +82,7 @@
   });
   $('#seoCaption').keyup(function(){
   	var length=$(this).val().length;
-  	var max=160;
+  	var max=230;
   	var length=max-length;
   	$("#seoCaptioncnt").text(length);
   	if(length<0){
@@ -93,7 +93,7 @@
   });
   $('#seoDescription').keyup(function(){
   	var length=$(this).val().length;
-  	var max=160;
+  	var max=230;
   	var length=max-length;
   	$("#seoDescriptioncnt").text(length);
     $('#google-description').text($(this).val());

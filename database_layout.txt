@@ -81,7 +81,7 @@ config
     25  Archive Bookings when Converted to Invoice
     26  Enable Discount Range
     27  Enable Map Display on Pages.
-    28  Enable Assistance.
+    28  Enable Sales Periods.
     29  Create Invoice from Booking Service for Payment online.
     30  Must be logged in to Purchase.
     31  Display Category Menu.

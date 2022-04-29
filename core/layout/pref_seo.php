@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.8
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -51,46 +51,50 @@
           </div>
         </div>
         <hr>
-        <legend>SEO Analytics</legend>
-        <label id="prefGoogleVerification" for="ga_verification"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google Verification Field">&#128279;</a>':'';?>Google&nbsp;Verification</label>
+        <legend>Webmaster Tools verification</legend>
+        <div class="form-row mt-3">
+          <label id="prefGoogleVerification" for="ga_verification"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google Verification Field">&#128279;</a>':'';?>Google&nbsp;Verification&nbsp;code</label>
+          <small class="form-text text-right">Get your Google verification code in <a target="_blank" href="https://www.google.com/webmasters/verification/verification?hl=en&tid=alternate&siteUrl=http%3A%2F%2Flocalhost%2Fwordpress/">Google Search Console</a>.</small>
+        </div>
         <div class="form-row">
           <input class="textinput" id="ga_verification" data-dbid="1" data-dbt="config" data-dbc="ga_verification" type="text" value="<?=$config['ga_verification'];?>" placeholder="Enter Google Site Verification Code...">
           <button class="save" id="savega_verification" data-dbid="ga_verification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <div class="form-row mt-3">
-          <label id="prefGoogleUACode" for="ga_tracking"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleUACode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google UA Code Field">&#128279;</a>':'';?>Google&nbsp;UA&nbsp;Code</label>
+          <label id="prefGoogleUACode" for="ga_tracking"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleUACode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google UA Code Field">&#128279;</a>':'';?>Google&nbsp;UA&nbsp;code</label>
           <small class="form-text text-right">Go to <a target="_blank" href="https://analytics.google.com/">Google Analytics</a> to setup a Google Analytics Account, and get your Page Tracking Code.<br>Only the UA code is required to enter below.</small>
         </div>
         <div class="form-row">
           <input class="textinput" id="ga_tracking" data-dbid="1" data-dbt="config" data-dbc="ga_tracking" type="text" value="<?=$config['ga_tracking'];?>" placeholder="Enter Google UA Code...">
           <button class="save" id="savega_tracking" data-dbid="ga_tracking" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label id="prefGoogleTagManagerCode" for="ga_tagmanager"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleTagManagerCode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google Tag Manager Code Field">&#128279;</a>':'';?>Google&nbsp;Tag&nbsp;Manager&nbsp;Code</label>
+        <label id="prefGoogleTagManagerCode" for="ga_tagmanager"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleTagManagerCode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google Tag Manager Code Field">&#128279;</a>':'';?>Google&nbsp;Tag&nbsp;Manager&nbsp;code</label>
         <div class="form-row">
           <input class="textinput" id="ga_tagmanager" data-dbid="1" data-dbt="config" data-dbc="ga_tagmanager" type="text" value="<?=$config['ga_tagmanager'];?>" placeholder="Enter Google Tag Manager Code...">
           <button class="save" id="savega_tagmanager" data-dbid="ga_tagmanager" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label id="prefMicrosoftValidate" for="seo_msvalidate"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefMicrosoftValidate" data-tooltip="tooltip" aria-label="PermaLink to Preferences Microsoft Validate Field">&#128279;</a>':'';?>Microsoft Validate</label>
+        <div class="form-row mt-3">
+          <label id="prefBingverification" for="seo_msvalidate"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefBingVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Microsoft Validate Field">&#128279;</a>':'';?>Bing&nbsp;Verification&nbsp;code</label>
+          <small class="form-text text-right">Get your Bing verification code in <a target="_blank" href="https://www.bing.com/toolbox/webmaster/#/Dashboard/?url=localhost%2Fwordpress">Bing Webmaster Tools</a></small>
+        </div>
         <div class="form-row">
-          <input class="textinput" id="seo_msvalidate" data-dbid="1" data-dbt="config" data-dbc="seo_msvalidate" type="text" value="<?=$config['seo_msvalidate'];?>" placeholder="Enter Microsoft Site Validation Code...">
+          <input class="textinput" id="seo_msvalidate" data-dbid="1" data-dbt="config" data-dbc="seo_msvalidate" type="text" value="<?=$config['seo_msvalidate'];?>" placeholder="Enter Bing Webmaster Tools verification Code...">
           <button class="save" id="saveseo_msvalidate" data-dbid="seo_msvalidate" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label id="prefYandexVerification" for="seo_yandexverification"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefYandexVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Yandex Verification Field">&#128279;</a>':'';?>Yandex Verification</label>
+        <div class="form-row mt-3">
+          <label id="prefYandexVerification" for="seo_yandexverification"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefYandexVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Yandex Verification Code Field...">&#128279;</a>':'';?>Yandex&nbsp;Verification&nbsp;code</label>
+          <small class="form-text text-right">Get your Yandex verification in <a target="_blank" href="https://webmaster.yandex.com/sites/add/">Yandex Webmaster Tools</a></small>
+        </div>
         <div class="form-row">
           <input class="textinput" id="seo_yandexverification" data-dbid="1" data-dbt="config" data-dbc="seo_yandexverification" type="text" value="<?=$config['seo_yandexverification'];?>" placeholder="Enter Yandex Site Verification Code...">
           <button class="save" id="saveseo_yandexverification" data-dbid="seo_yandexverification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
-        </div>
-        <label id="prefAlexaVerification" for="seo_alexaverification"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefAlexaVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Alexa Verification Field">&#128279;</a>':'';?>Alexa Verification</label>
-        <div class="form-row">
-          <input class="textinput" id="seo_alexaverification" data-dbid="1" data-dbt="config" data-dbc="seo_alexaverification" type="text" value="<?=$config['seo_alexaverification'];?>" placeholder="Enter Alexa Site Verification Code...">
-          <button class="save" id="saveseo_alexaverification" data-dbid="seo_alexaverification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
         <label id="prefDomainVerify" for="seo_domainverify"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefDomainVerify" data-tooltip="tooltip" aria-label="PermaLink to Preferences Domain Verify Field">&#128279;</a>':'';?>Domain Verify</label>
         <div class="form-row">
           <input class="textinput" id="seo_domainverify" data-dbid="1" data-dbt="config" data-dbc="seo_domainverify" type="text" value="<?=$config['seo_domainverify'];?>" placeholder="Enter Domain Verification Code...">
           <button class="save" id="saveseo_domainverify" data-dbid="seo_domainverify" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
         </div>
-        <label id="prefPinterestVerify" for="seo_domainverify"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefPinterestVerify" data-tooltip="tooltip" aria-label="PermaLink to Preferences Pinterest Verify Field">&#128279;</a>':'';?>Pinterest Verify</label>
+        <label id="prefPinterestVerify" for="seo_domainverify"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefPinterestVerify" data-tooltip="tooltip" aria-label="PermaLink to Preferences Pinterest Verify Field">&#128279;</a>':'';?>Pinterest&nbsp;Verification</label>
         <div class="form-row">
           <input class="textinput" id="seo_pinterestverify" data-dbid="1" data-dbt="config" data-dbc="seo_pinterestverify" type="text" value="<?=$config['seo_pinterestverify'];?>" placeholder="Enter Pinterest Verification Code...">
           <button class="save" id="saveseo_pinterestverify" data-dbid="seo_pinterestverify" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -42,9 +42,8 @@ $sale=getSalePeriod();
 $pti=$sale['timestamp'] - 31536000;
 $sty=date("Y",$pti);
 $sti=strtotime("1/1/$sty - 6 months");
-$ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='inventory' AND `sale`=:sale AND `pti` < :pti LIMIT 4");
+$ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='inventory' AND `pti` < :pti LIMIT 4");
 $ss->execute([
-  ':sale'=>$sale['sale'],
   ':pti'=>$pti
 ]);
 if($ss->rowCount()>0){?>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -68,7 +68,7 @@ if($fu!=''){
 					'th_width'=>$vidinfo_json['items'][0]['snippet']['thumbnails']['maxres']['height'],
 					'th_url'=>$vidinfo_json['items'][0]['snippet']['thumbnails']['maxres']['url'],
 					'height'=>$vidinfo_json2['height'],
-					'th_height'=>$vidinfo_json['items'][0]['snippet']['thumbnails']['maxres']['height'],
+					'th_height'=>$vidinfo_json['items'][0]['snippet']['thumbnails']['maxres']['high'],
 					'html'=>$vidinfo_json2['html'],
 					'url'=>$vidinfo_json2['url'],
 					'embed_url'=>$video,

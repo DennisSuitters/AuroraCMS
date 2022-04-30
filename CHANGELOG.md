@@ -1,27 +1,4 @@
-### v0.2.8
-- Adjust recommended Meta Title and Meta Description maximum text lengths.
-- Fix var exists checking for Administration Preferences page throwing error.
-- Add Widgets to Dashboard for starters, can be turned off (can toggle back on in Preferences/Interface), reordered and width resized.
-- Adjust tracktoblacklist to make blacklisted IP's permanent.
-- Improve Video Schema for Embedded Videos.
-- Add Playlist Video editing.
-- Add styling for embedding videos with Title and Description.
-- Add field for Google Data API Code, needed for Google Services like YouTube, and future integration of Analytics or Search Console information.
-- Fix Video Information extraction when adding Playlist videos.
-- Fix menu not checking if URL field is set.
-- Add new "Activities" Page and Content Type.
-- Fix Empty page being listed as an error page, with missing attributes.
-- Update Libraries:
-  - Summernote (skunkworks version)
-  - Stripe => 7.123.0
-  - elFinder => 2.1.61
-  - SwiperJS => 8.8.1
-  - FullCalendar => 5.11.0
-  - Leaflet => 1.8.0
-- Improve Validation for all sites.
-- Move Chat Widget from all theme footers, to reduce content size of pages.
-- Fix Checks for entered Webmaster Tools Services that weren't getting displayed.
-- Add links to Webmaster Tools Services in Preferences -> SEO for sign-up.
-- Remove Alexa Webmaster Tools fields as it is being closed down.
-- Fix Pages parser accessing incorrect offset in URL Var.
-- Add Sales Period options with 1 month offset to allow customers to purchase ahead of time, with suggested editing of older content in Administration Dashboard, and front end parsing, with adding of class to body tag for possible restyling of whole site for the Sales Period. Content is not shown if date is outside of the Sales Period.
+### v0.2.9
+- Fix wrong thumbnail reference in YouTube JSON response when adding playlist items.
+- Adjust date and inventory selection for suggested sale period suggestions.
+- Change how versioning is done with patch releases, releases and full frozen versions. Consult (CONTRIBUTING)[https://github.com/DiemenDesign/AuroraCMS/blob/master/CONTRIBUTING.md] for more information.

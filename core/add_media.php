@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -20,9 +20,6 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 	if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
 $rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
 $t=filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING);
@@ -47,10 +44,10 @@ if($fu!=''){
 			echo'<script>'.
 						'window.top.window.$("#mi").append(`<div id="mi_'.$iid.'" class="card stats col-6 col-sm m-1 swing-in-top-fwd">'.
 							'<div class="btn-group float-right">'.
-								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;">'.svg2('drag').'</div>'.
-								'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times">'.svg2('view').' &nbsp;0</div>'.
-								'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'">'.svg2('edit').'</a>'.
-								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'media\');">'.svg2('trash').'</button>'.
+								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;"><i class="i">drag</i></div>'.
+								'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times"><i class="i">view</i> &nbsp;0</div>'.
+								'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'"><i class="i">edit</i></a>'.
+								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'media\');"><i class="i">trash</i></button>'.
 							'</div>'.
 							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'" style="display:flex;max-height:150px;">'.
 								'<img src="media/sm/'.basename($file).'" alt="Media '.$iid.'" style="object-fit:cover;object-position:center;">'.

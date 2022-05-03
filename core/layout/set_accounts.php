@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,13 +16,13 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">users</i></div>
           <div>Accounts Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -59,35 +59,35 @@
             <label id="accountsMemberLimit" for="memberLimit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsMemberLimit" data-tooltip="tooltip" aria-label="PermaLink to Member Purchase Limit Field">&#128279;</a>':'';?><small>Member Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="memberLimit" data-dbid="1" data-dbt="config" data-dbc="memberLimit" type="number" value="<?=$config['memberLimit'];?>">
-              <button class="save" id="savememberLimit" data-dbid="memberLimit" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savememberLimit" data-dbid="memberLimit" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2 mr-4">
             <label id="accountsMemberLimitSilver" for="memberLimitSilver"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsMemberLimitSilver" data-tooltip="tooltip" aria-label="PermaLink to Member Purchase Limit Silver Field">&#128279;</a>':'';?><small>Member Silver Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="memberLimitSilver" data-dbid="1" data-dbt="config" data-dbc="memberLimitSilver" type="number" value="<?=$config['memberLimitSilver'];?>">
-              <button class="save" id="savememberLimitSilver" data-dbid="memberLimitSilver" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savememberLimitSilver" data-dbid="memberLimitSilver" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2 mr-4">
             <label id="accountsMemberLimitBronze" for="memberLimitBronze"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsMemberLimitBronze" data-tooltip="tooltip" aria-label="PermaLink to Member Purchase Limit Bronze Field">&#128279;</a>':'';?><small>Member Bronze Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="memberLimitBronze" data-dbid="1" data-dbt="config" data-dbc="memberLimitBronze" type="number" value="<?=$config['memberLimitBronze'];?>">
-              <button class="save" id="savememberLimitBronze" data-dbid="memberLimitBronze" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savememberLimitBronze" data-dbid="memberLimitBronze" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2 mr-4">
             <label id="accountsMemberLimitGold" for="memberLimitGold"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsMemberLimitGold" data-tooltip="tooltip" aria-label="PermaLink to Member Purchase Limit Gold Field">&#128279;</a>':'';?><small>Member Gold Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="memberLimitGold" data-dbid="1" data-dbt="config" data-dbc="memberLimitGold" type="number" value="<?=$config['memberLimitGold'];?>">
-              <button class="save" id="savememberLimitGold" data-dbid="memberLimitGold" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savememberLimitGold" data-dbid="memberLimitGold" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2">
             <label id="accountsMemberLimitPlatinum" for="memberLimitPlatinum"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsMemberLimitPlatinum" data-tooltip="tooltip" aria-label="PermaLink to Member Purchase Limit Platinum Field">&#128279;</a>':'';?><small>Member Platinum Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="memberLimitPlatinum" data-dbid="1" data-dbt="config" data-dbc="memberLimitPlatinum" type="number" value="<?=$config['memberLimitPlatinum'];?>">
-              <button class="save" id="savememberLimitPlatinum" data-dbid="memberLimitPlatinum" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savememberLimitPlatinum" data-dbid="memberLimitPlatinum" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
         </div>
@@ -97,35 +97,35 @@
             <label id="accountsWholesaleLimit" for="wholesaleLimit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimit" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Field">&#128279;</a>':'';?><small>Wholesale Bronze Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="wholesaleLimit" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimit" type="number" value="<?=$config['wholesaleLimit'];?>">
-              <button class="save" id="savewholesaleLimit" data-dbid="wholesaleLimit" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savewholesaleLimit" data-dbid="wholesaleLimit" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2 mr-4">
             <label id="accountsWholesaleLimitBronze" for="wholesaleLimitBronze"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitBronze" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Bronze Field">&#128279;</a>':'';?><small>Wholesale Bronze Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="wholesaleLimitBronze" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitBronze" type="number" value="<?=$config['wholesaleLimitBronze'];?>">
-              <button class="save" id="savewholesaleLimitBronze" data-dbid="wholesaleLimitBronze" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savewholesaleLimitBronze" data-dbid="wholesaleLimitBronze" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2 mr-4">
             <label id="accountsWholesaleLimitSilver" for="wholesaleLimitSilver"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitSilver" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Silver Field">&#128279;</a>':'';?><small>Wholesale Silver Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="wholesaleLimitSilver" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitSilver" type="number" value="<?=$config['wholesaleLimitSilver'];?>">
-              <button class="save" id="savewholesaleLimitSilver" data-dbid="wholesaleLimitSilver" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savewholesaleLimitSilver" data-dbid="wholesaleLimitSilver" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2 mr-4">
             <label id="accountsWholesaleLimitGold" for="wholesaleLimitGold"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitGold" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Gold Field">&#128279;</a>':'';?><small>Wholesale Gold Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="wholesaleLimitGold" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitGold" type="number" value="<?=$config['wholesaleLimitGold'];?>">
-              <button class="save" id="savewholesaleLimitGold" data-dbid="wholesaleLimitGold" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savewholesaleLimitGold" data-dbid="wholesaleLimitGold" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-2">
             <label id="accountsWholesaleLimitPlatinum" for="wholesaleLimitPlatinum"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#accountsWholesaleLimitPlatinum" data-tooltip="tooltip" aria-label="PermaLink to Wholesale Purchase Limit Platinum Field">&#128279;</a>':'';?><small>Wholesale Platinum Limit</small></label>
             <div class="form-row">
               <input class="textinput" id="wholesaleLimitPlatinum" data-dbid="1" data-dbt="config" data-dbc="wholesaleLimitPlatinum" type="number" value="<?=$config['wholesaleLimitPlatinum'];?>">
-              <button class="save" id="savewholesaleLimitPlatinum" data-dbid="wholesaleLimitPlatinum" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savewholesaleLimitPlatinum" data-dbid="wholesaleLimitPlatinum" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
         </div>
@@ -207,7 +207,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="pwdRstSub" data-dbid="1" data-dbt="config" data-dbc="passwordResetSubject" type="text" value="<?=$config['passwordResetSubject'];?>">
-          <button class="save" id="savepwdRstSub" data-dbid="pwdRstSub" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savepwdRstSub" data-dbid="pwdRstSub" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div id="passwordResetLayout" class="form-row mt-3">
           <div class="form-text text-right">
@@ -237,7 +237,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="aS" data-dbid="1" data-dbt="config" data-dbc="accountActivationSubject" type="text" value="<?=$config['accountActivationSubject'];?>">
-          <button class="save" id="saveaS" data-dbid="aS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveaS" data-dbid="aS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div id="activationLayout" class="form-row mt-3">
           <div class="form-text text-right">Tokens:

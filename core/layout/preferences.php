@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,7 +17,7 @@ if(!isset($args[0]) || $args[0]==''){?>
       <div class="content-title-wrapper mb-0">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?= svg2('settings','i-3x');?></div>
+            <div class="content-title-icon"><i class="i i-4x">settings</i></div>
             <div>Preferences</div>
             <div class="content-title-actions"></div>
           </div>
@@ -34,63 +34,63 @@ if(!isset($args[0]) || $args[0]==''){?>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('theme','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">theme</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/contact';?>" aria-label="Go to Contact Preferences">
               <span class="h5">Contact</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('address-card','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">address-card</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/social';?>" aria-label="Go to Social Preferences">
               <span class="h5">Social</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('user-group','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">user-group</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/interface';?>" aria-label="Go to Interface Preferences">
               <span class="h5">Interface</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('sliders','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">sliders</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/seo';?>" aria-label="Go to SEO Preferences">
               <span class="h5">SEO</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('plugin-seo','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">plugin-seo</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/activity';?>" aria-label="Go to Activity">
               <span class="h5">Activity</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('activity','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">activity</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/tracker';?>" aria-label="Go to Tracker">
               <span class="h5">Tracker</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('tracker','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">tracker</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/security';?>" aria-label="Go to Security Preferences">
               <span class="h5">Security</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('security','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">security</i></span>
             </a>
             <a class="card stats col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 p-2 m-md-1" href="<?= URL.$settings['system']['admin'].'/preferences/database';?>" aria-label="Go to Database Preferences">
               <span class="h5">Database</span>
               <span class="p-0">
                 <span class="text-3x">&nbsp;</span>
               </span>
-              <span class="icon"><?= svg2('database','i-5x');?></span>
+              <span class="icon"><i class="i i-5x">database</i></span>
             </a>
           </div>
           <?php require'core/layout/footer.php';?>

@@ -57,9 +57,6 @@ $html=preg_replace([
   '',
   ''
 ],$html);
-$items=$html;
-require'core/parser.php';
-$html=$items;
 if(stristr($html,'<playlist')){
 	$sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY ord ASC");
 	$sp->execute([

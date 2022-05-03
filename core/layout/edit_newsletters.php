@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,14 +19,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('newspaper','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">newspaper</i></div>
           <div>Edit Newsletter: <?=$r['title'];?></div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
-            <button class="email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$('#sp').load('core/newsletter.php?id=<?=$r['id'];?>&act=');return false;"><?= svg2('email-send');?></button>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$('#sp').load('core/newsletter.php?id=<?=$r['id'];?>&act=');return false;"><i class="i">email-send</i></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -43,7 +43,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
         <label id="newsletterTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#newsletterTitle" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Title Field">&#128279;</a>':'';?>Title</label>
         <div class="form-row">
           <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="title" type="text" value="<?=$r['title'];?>" placeholder="Enter a Title (Used as the Email Subject)..." onkeyup="$('#titleupdate').text($(this).val());">
-          <button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="newsletterDateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#newsletterDateCreated" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Date Created Field">&#128279;</a>':'';?>Created</label>
         <div class="form-row">
@@ -58,7 +58,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <label id="<?=$r['contentType'];?>tags" for="tags"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#'.$r['contentType'].'tags" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Tags">&#128279;</a>':'';?>Tags</label>
           <div class="form-row">
             <input class="textinput" id="tags" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?=$r['tags'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Tag or Select from List..."':' readonly';?>>
-            <?='<button class="save" id="savetags"  data-dbid="tags" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>';?>
+            <?='<button class="save" id="savetags"  data-dbid="tags" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';?>
           </div>
           <?php if($user['options'][1]==1){
             $tags=$tgs=array();

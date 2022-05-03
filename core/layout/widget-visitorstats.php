@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -15,7 +15,7 @@
   <div class="alert m-3 p-0 bg-white border-0">
     <div class="toolbar px-2 py-1 bg-white handle">
       <div class="btn-group">
-        <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><?= svg2('close');?></button>
+        <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
       </div>
     </div>
     <div class="row">
@@ -27,7 +27,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-messages"><?= number_format($rh['cnt']);?></span> <small><small>Overdue</small></small>
         </span>
-        <span class="icon"><?= svg2('hosting','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">hosting</i></span>
       </a>
 <?php       }
     $rso=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `siteStatus`='overdue'")->fetch(PDO::FETCH_ASSOC);
@@ -37,13 +37,13 @@
         <span class="p-0">
           <span class="text-3x" id="stats-messages"><?= number_format($rso['cnt']);?></span> <small><small>Overdue</small></small>
         </span>
-        <span class="icon"><?= svg2('hosting','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">hosting</i></span>
       </a>
 <?php       }
     $rss=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `siteStatus`='outstanding'")->fetch(PDO::FETCH_ASSOC);
     if($rss['cnt']>0){?>
       <a class="card stats warning p-2 m-1 col-6 col-sm-4 col-md-2" href="<?= URL.$settings['system']['admin'].'/payments';?>" style="border: 1px solid #deebfd;box-shadow: 2px 4px 12px 0 #dadee8;">
-        <span class="icon"><?= svg2('hosting','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">hosting</i></span>
         <span class="h5">Site Payments</span>
         <span class="p-0">
           <span class="text-3x" id="stats-messages"><?= number_format($rss['cnt']);?></span> <small><small>Oustanding</small></small>
@@ -65,7 +65,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-messages"><?= number_format($nm['cnt']);?></span> <small><small>New</small></small>
         </span>
-        <span class="icon"><?= svg2('inbox','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">inbox</i></span>
       </a>
     <?php }
   }
@@ -75,7 +75,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-bookings"><?= number_format($nb['cnt']);?></span> <small><small>New</small></small>
         </span>
-        <span class="icon"><?= svg2('calendar','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">calendar</i></span>
       </a>
   <?php }
   if($pc['cnt']>0){?>
@@ -84,7 +84,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-reviews"><?= number_format($pc['cnt']);?></span> <small><small>This Month</small></small>
         </span>
-        <span class="icon"><?= svg2('tech-mobile','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">tech-mobile</i></span>
       </a>
   <?php }
   if($nc['cnt']>0){?>
@@ -93,7 +93,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-comments"><?= number_format($nc['cnt']);?></span> <small><small>New</small></small>
         </span>
-        <span class="icon"><?= svg2('comments','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">comments</i></span>
       </a>
   <?php }
   if($nr['cnt']>0){?>
@@ -102,7 +102,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-reviews"><?= number_format($nr['cnt']);?></span> <small><small>New</small></small>
         </span>
-        <span class="icon"><?= svg2('review','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">review</i></span>
       </a>
   <?php }
   if($nt['cnt']>0){?>
@@ -111,7 +111,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-testimonials"><?= number_format($nt['cnt']);?></span> <small><small>New</small></small>
         </span>
-        <span class="icon"><?= svg2('testimonial','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">testimonial</i></span>
       </a>
   <?php }
   if($user['options'][4]==1){
@@ -121,7 +121,7 @@
         <span class="p-0">
           <span class="text-3x" id="stats-orders"><?= number_format($po['cnt']);?></span> <small><small>New</small></small>
         </span>
-        <span class="icon"><?= svg2('order','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">order</i></span>
       </a>
     <?php }
   }
@@ -131,7 +131,7 @@
         <span class="p-0">
           <span class="text-3x" id="browser-blacklist"><?= number_format($sa['cnt']);?></span> <small><small>Added Last 7 Days</small></small>
         </span>
-        <span class="icon"><?= svg2('security','i-5x');?></span>
+        <span class="icon"><i class="i i-5x">security</i></span>
       </a>
   <?php }?>
     </div>

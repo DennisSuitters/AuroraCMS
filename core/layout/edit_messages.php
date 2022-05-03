@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -34,11 +34,11 @@ if($args[0]!='compose'){
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">inbox</i></div>
           <div>Messages Edit</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
           </div>
         </div>
@@ -56,11 +56,11 @@ if($args[0]!='compose'){
           $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
           <div class="messages-menu col-12 col-md-2">
             <a class="btn mb-2" href="<?= URL.$settings['system']['admin'].'/messages/compose';?>">Compose</a><br>
-            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages';?>"><?= svg2('inbox');?> Inbox</a><br>
-            <a class="link badge mb-1" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><?= svg2('email');?> Unread</a><br>
-            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><?= svg2('email-send');?> Sent</a><br>
-            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><?= svg2('bookmark');?> Important</a><br>
-            <a class="link badge mb-1" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>"><?= svg2('email-spam');?> Spam</a>
+            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i">inbox</i> Inbox</a><br>
+            <a class="link badge mb-1" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><i class="i">email</i> Unread</a><br>
+            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i">email-send</i> Sent</a><br>
+            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i">bookmark</i> Important</a><br>
+            <a class="link badge mb-1" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>"><i class="i">email-spam</i> Spam</a>
           </div>
           <div class="col-12 col-md-10 pl-4">
             <form target="sp" method="post" action="core/email_message.php" enctype="multipart/form-data">
@@ -106,7 +106,7 @@ if($args[0]!='compose'){
               </div>
               <label id="messageAttachments" for="attachments"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageAttachments" data-tooltip="tooltip" aria-label="PermaLink to Message Attachments">&#128279;</a>':'';?>Attachments</label>
               <div class="form-row">
-                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','messages','attachments');return false;"><?= svg2('browse-media');?></button>
+                <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','messages','attachments');return false;"><i class="i">browse-media</i></button>
               </div>
               <div id="attachments">
                 <?php if($r['attachments']!=''){
@@ -115,17 +115,17 @@ if($args[0]!='compose'){
                   $attachments=explode(',',$r['attachments']);
                   foreach($attachments as$attachment){
                     $atts.=($atts!=''?',':'').$attachment;
-                    $attimg='core/images/i-file.svg';
+                    $attimg='file';
                     if(preg_match("/\.(gif|png|jpg|jpeg|bmp|webp|svg)$/",$attachment))$attimg=$attachment;
-                    if(preg_match("/\.(pdf)$/",$attachment))$attimg='core/images/i-file-pdf.svg';
-                    if(preg_match("/\.(zip|zipx|tar|gz|rar|7zip|7z|bz2)$/",$attachment))$attimg='core/images/i-file-archive.svg';
-                    if(preg_match("/\.(doc|docx|xls)$/",$attachment))$attimg='core/images/i-file-docs.svg';?>
+                    if(preg_match("/\.(pdf)$/",$attachment))$attimg='file-pdf';
+                    if(preg_match("/\.(zip|zipx|tar|gz|rar|7zip|7z|bz2)$/",$attachment))$attimg='file-archive';
+                    if(preg_match("/\.(doc|docx|xls)$/",$attachment))$attimg='file-docs';?>
                     <div class="form-row mt-1" id="a_<?=$ti;?>">
-                      <img src="<?=$attimg;?>" alt="<?= basename($attachment);?>">
+                      <i class="i i-4x"><?=$attimg;?></i>
                       <div class="input-text col-12">
                         <a data-tooltip="tooltip" aria-label="<?= basename($attachment);?>" target="_blank" href="<?=$attachment;?>"><?= basename($attachment);?></a>
                       </div>
-                      <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="attRemove('<?=$ti;?>');return false;"><?= svg2('trash');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="attRemove('<?=$ti;?>');return false;"><i class="i">trash</i></button>
                     </div>
                   <?php }
                 }?>

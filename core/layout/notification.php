@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,10 +35,10 @@ else{
       <div class="content-title-wrapper">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?php svg('notification','i-3x');?></div>
+            <div class="content-title-icon"><i class="i i-4x">notification</i></div>
             <div>Pages</div>
             <div class="content-title-actions">
-              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="tooltip" aria-label="Add Notification">'.svg2('add').'</a>':'';?>
+              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="tooltip" aria-label="Add Notification"><i class="i">add</i></a>':'';?>
             </div>
           </div>
           <ol class="breadcrumb">
@@ -76,8 +76,8 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                 <td id="controls_<?=$r['id'];?>" class="align-middle">
                   <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                     <div class="btn-group" role="group" aria-label="Item Controls">
-                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/notification/edit/'.$r['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit Notification"':' role="button" data-tooltip="tooltip" aria-label="View Notification"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                      <?=$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');">'.svg2('trash').'</button>':'';?>
+                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/notification/edit/'.$r['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit Notification"':' role="button" data-tooltip="tooltip" aria-label="View Notification"';?>"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
+                      <?=$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');"><i class="i">trash</i></button>':'';?>
                     </div>
                   </div>
                 </td>

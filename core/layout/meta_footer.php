@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -185,22 +185,22 @@
               if(t=='messages'&&c=='attachments'){
                 var path_splitted=file.url.split('.');
                 var fileExt=path_splitted.pop();
-                var filename="core/images/i-file.svg";
+                var filename="file";
                 var fileExtCheck=fileExt.toLowerCase();
                 if(fileExtCheck=="jpg"||fileExtCheck=="jpeg"||fileExtCheck=="png"||fileExtCheck=="gif"||fileExtCheck=="bmp"||fileExtCheck=="webp"||fileExtCheck=="svg"){
                   filename=file.url;
                 }
                 if(fileExtCheck=="pdf"){
-                  filename='core/images/i-file-pdf.svg';
+                  filename='file-pdf';
                 }
                 if(fileExtCheck=="zip"||fileExtCheck=="zipx"||fileExtCheck=="tar"||fileExtCheck=="gz"||fileExtCheck=="rar"||fileExtCheck=="7zip"||fileExtCheck=="7z"||fileExtCheck=="bz2"){
-                  filename='core/images/i-file-archive.svg';
+                  filename='file-archive';
                 }
                 if(fileExtCheck=="doc"||fileExtCheck=="docx"||fileExtCheck=="xls"){
-                  filename="core/images/i-file-docs.svg";
+                  filename="file-docs";
                 }
                 var timestamp = $.now();
-                $('#attachments').append('<div id="a_'+timestamp+'" class="form-row mt-1"><img src="'+filename+'" alt="'+file.url+'"><div class="input-text col-12"><a target="_blank" href="'+file.url+'" aria-label="'+file.url.replace(/^.*[\\\/]/,'')+'">'+file.url.replace(/^.*[\\\/]/,'')+'</a></div><button class="trash" onclick="attRemove(\''+timestamp+'\');return false;"><?php svg('trash');?></button></div>');
+                $('#attachments').append('<div id="a_'+timestamp+'" class="form-row mt-1"><i class="i i-5x">filename</i><div class="input-text col-12"><a target="_blank" href="'+file.url+'" aria-label="'+file.url.replace(/^.*[\\\/]/,'')+'">'+file.url.replace(/^.*[\\\/]/,'')+'</a></div><button class="trash" onclick="attRemove(\''+timestamp+'\');return false;"><i class="i">trash</i></button></div>');
                 var atts=$('#atts').val();
                 if(atts!='')atts+=',';
                 atts+=file.url;
@@ -393,8 +393,8 @@ else
           },1000);
         }
       });
-      function delay(time) {
-        return new Promise(resolve => setTimeout(resolve, time));
+      function delay(time){
+        return new Promise(resolve => setTimeout(resolve,time));
       }
       $(".trashall").on({
         click:function(event){
@@ -403,12 +403,12 @@ else
           var total=$('#l_tracker').data("dbtot");
           let i=1;
           let trackelements=document.getElementsByClassName('findtracker');
-          for (const element of trackelements) {
+          for(const element of trackelements){
             var id=$(element).data("dbid");
             purge(id,'tracker');
             delay(1000);
             i++;
-            if(i === total) break;
+            if(i===total)break;
           };
           $('.page-block').removeClass('d-block');
         }

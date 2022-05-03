@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -48,11 +48,13 @@ else{
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">users</i></div>
           <div>Accounts</div>
           <div class="content-title-actions">
-            <button class="accountview" data-tooltip="tooltip" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><?= svg2('list',($_COOKIE['accountview']=='list'?'d-none':'')).svg2('cards',($_COOKIE['accountview']=='cards'?'d-none':''));?></button>
-            <?=($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="tooltip" aria-label="Accounts Settings">'.svg2('settings').'</a>':'&nbsp;').($user['options'][0]==1?'&nbsp;<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="tooltip" aria-label="Add">'.svg2('add').'</a>':'&nbsp;');?>
+            <button class="accountview" data-tooltip="tooltip" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;">
+              <i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i>
+              <i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button>
+            <?=($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="tooltip" aria-label="Accounts Settings"><i class="i">settings</i></a>':'&nbsp;').($user['options'][0]==1?'&nbsp;<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></a>':'&nbsp;');?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -90,15 +92,15 @@ else{
                 <div id="controls_<?=$r['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar">
                     <div class="btn-group" role="group">
-                      <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit<?=' '.$r['username'].':'.$r['name'];?>"><?= svg2('edit');?></a>
+                      <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit<?=' '.$r['username'].':'.$r['name'];?>"><i class="i">edit</i></a>
                       <?php if($user['options'][0]==1){?>
-                        <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><?= svg2('untrash');?></button>
-                        <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><?= svg2('trash');?></button>
-                        <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><?= svg2('purge');?></button>
-                        <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('chevron-down').svg('chevron-up','d-none');?></button>
+                        <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><i class="i">untrash</i></button>
+                        <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><i class="i">trash</i></button>
+                        <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
+                        <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                       <?php }?>
+                      <span class="btn orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>
                     </div>
-                    <?php svg('drag','orderhandle');?>
                   </div>
                 </div>
               </div>

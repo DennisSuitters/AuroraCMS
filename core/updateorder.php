@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,9 +22,6 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 require'puconverter.php';
 define('THEME','layout/'.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
@@ -460,7 +457,7 @@ $html.='<tr class="'.($oi['status']=='back order'||$oi['status']=='pre order'||$
       '<input name="t" type="hidden" value="orderitems">'.
       '<input name="c" type="hidden" value="quantity">'.
       '<input name="da" type="hidden" value="0">'.
-      '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+      '<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
     '</form>'.
   '</td>'.
 '</tr>';
@@ -673,7 +670,7 @@ $html.='<tr>'.
       '<input name="t" type="hidden" value="orderitems">'.
       '<input name="c" type="hidden" value="quantity">'.
       '<input name="da" type="hidden" value="0">'.
-      '<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+      '<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
     '</form>'.
   '</td>'.
 '</tr>';

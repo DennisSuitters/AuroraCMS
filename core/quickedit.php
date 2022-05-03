@@ -7,16 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
   if(!defined('PROTOCOL'))define('PROTOCOL','https://');
 }else{
@@ -56,14 +53,14 @@ if($t=='content'||$t=='login'||$t=='orders'){
 						'<label for="qename'.$r['id'].'">Name</label>'.
 						'<div class="form-row">'.
 							'<input class="qetextinput" id="qename'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="name" type="text" value="'.$r['name'].'" placeholder="Enter a Name...">'.
-							'<button class="qesave" id="qesavename'.$r['id'].'" data-tooltip="tooltip" data-dbid="qename'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+							'<button class="qesave" id="qesavename'.$r['id'].'" data-tooltip="tooltip" data-dbid="qename'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 						'</div>'.
 					'</div>'.
 					'<div class="col-12 col-sm-6 pl-1">'.
 						'<label for="qebusiness'.$r['id'].'">Business</label>'.
 						'<div class="form-row">'.
 							'<input class="qetextinput" id="qebusiness'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="business" type="text" value="'.$r['business'].'" placeholder="Enter a Business...">'.
-							'<button class="qesave" id="qesavebusiness'.$r['id'].'" data-tooltip="tooltip" data-dbid="qebusiness'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+							'<button class="qesave" id="qesavebusiness'.$r['id'].'" data-tooltip="tooltip" data-dbid="qebusiness'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 						'</div>'.
 					'</div>'.
 				'</div>'.
@@ -83,7 +80,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 							echo'<input class="qetextinput" id="qeemail'.$r['id'].'" type="text" value="'.$r['email'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="email" placeholder="Enter an Email...">'.
 							'<button class="btn-input btn-ghost" data-tooltip="tooltip" aria-label="Send Email" onclick="window.open(`'.$email.'`+$(`#qeemail'.$r['id'].'`).val(),'.($emailwin==true?'`_blank`':'`_self`').');">'.svg2('email-send').'</button>'.
 						'</div>'.
-						'<button class="qesave" id="qesaveemail'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeemail'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesaveemail'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeemail'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="row">'.
@@ -93,7 +90,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 							'<input class="qetextinput" id="qeurl'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="url" type="text" value="'.$r['url'].'" placeholder="Enter a URL...">'.
 							'<button class="btn-input btn-ghost" data-tooltip="tooltip" aria-label="Open URL in New Window" onclick="window.open($(`#qeurl'.$r['id'].'`).val(),`_blank`);">'.svg2('new-window').'</button>'.
 						'</div>'.
-						'<button class="qesave" id="qesaveurl'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeurl'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesaveurl'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeurl'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="row">'.
@@ -101,14 +98,14 @@ if($t=='content'||$t=='login'||$t=='orders'){
 						'<label for="qephone'.$r['id'].'">Phone</label>'.
 						'<div class="form-row">'.
 							'<input class="qetextinput" id="qephone'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="phone" type="text" value="'.$r['phone'].'" placeholder="Enter a Phone...">'.
-							'<button class="qesave" id="qesavephone'.$r['id'].'" data-tooltip="tooltip" data-dbid="qephone'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+							'<button class="qesave" id="qesavephone'.$r['id'].'" data-tooltip="tooltip" data-dbid="qephone'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 						'</div>'.
 					'</div>'.
 					'<div class="col-12 col-sm-6 pl-1">'.
 						'<label for="qemobile'.$r['id'].'">Mobile</label>'.
 						'<div class="form-row">'.
 							'<input class="qetextinput" id="qemobile'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="mobile" type="text" value="'.$r['mobile'].'" placeholder="Enter a Mobile...">'.
-							'<button class="save" id="qesavemobile'.$r['id'].'" data-tooltip="tooltip" data-dbid="qemobile'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+							'<button class="save" id="qesavemobile'.$r['id'].'" data-tooltip="tooltip" data-dbid="qemobile'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 						'</div>'.
 					'</div>'.
 				'</div>';
@@ -127,7 +124,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	  				'<div class="form-row">'.
 	    				'<div class="input-text">$</div>'.
 	  					'<input class="qetextinput" id="qerrp'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="rrp" type="text" value="'.$r['rrp'].'">'.
-	  					'<button class="qesave" id="qesaverrp'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerrp'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	  					'<button class="qesave" id="qesaverrp'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerrp'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 						'</div>'.
 					'</div>'.
 					'<div class="col-6 pl-1">'.
@@ -135,7 +132,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	  				'<div class="form-row">'.
 	    				'<div class="input-text">$</div>'.
 	    				'<input class="qetextinput" id="qecost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="cost" type="text" value="'.$r['cost'].'" placeholder="Enter a Cost...">'.
-	    				'<button class="qesave" id="qesavecost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecost'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	    				'<button class="qesave" id="qesavecost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecost'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	  				'</div>'.
 					'</div>'.
 				'</div>'.
@@ -145,7 +142,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	  				'<div class="form-row">'.
 	    				'<div class="input-text">$</div>'.
 	    				'<input class="qetextinput" id="qerCost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="rCost" type="text" value="'.$r['rCost'].'" placeholder="Enter a Reduced Cost...">'.
-	    				'<button class="qesave" id="qesaverCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerCost'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	    				'<button class="qesave" id="qesaverCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerCost'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	  				'</div>'.
 					'</div>'.
 					'<div class="col-6 pl-1">'.
@@ -153,7 +150,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	  				'<div class="form-row">'.
 	    				'<div class="input-text">$</div>'.
 	    				'<input class="qetextinput" id="qedCost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="dCost" type="text" value="'.$r['dCost'].'" placeholder="Enter a Distributor Cost...">'.
-	    				'<button class="qesave" id="qesavedCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qedCost'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	    				'<button class="qesave" id="qesavedCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qedCost'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	  				'</div>'.
 					'</div>'.
 				'</div>';
@@ -163,7 +160,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 					'<label for="qequantity'.$r['id'].'">Quantity</label>'.
 					'<div class="form-row">'.
 	  				'<input class="qetextinput" id="qequantity'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="quantity" type="text" value="'.$r['quantity'].'">'.
-	  				'<button class="qesave" id="qesavequantity'.$r['id'].'" data-tooltip="tooltip" data-dbid="qequantity'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	  				'<button class="qesave" id="qesavequantity'.$r['id'].'" data-tooltip="tooltip" data-dbid="qequantity'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="row">'.
@@ -199,35 +196,35 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	        '<label for="qecategory_1'.$r['id'].'">Category One</label>'.
 	        '<div class="form-row">'.
 	          '<input class="qetextinput" id="qecategory_1'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_1" type="text" value="'.$r['category_1'].'">'.
-	          '<button class="qesave" id="qesavecategory_1'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_1'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	          '<button class="qesave" id="qesavecategory_1'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_1'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	        '</div>'.
 	      '</div>'.
 	      '<div class="row">'.
 	        '<label for="qecategory_2'.$r['id'].'">Category Two</label>'.
 	        '<div class="form-row">'.
 	          '<input class="qetextinput" id="qecategory_2'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_2" type="text" value="'.$r['category_2'].'">'.
-	          '<button class="qesave" id="qesavecategory_2'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_2'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	          '<button class="qesave" id="qesavecategory_2'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_2'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	        '</div>'.
 	      '</div>'.
 	      '<div class="row">'.
 	        '<label for="qecategory_3'.$r['id'].'">Category Three</label>'.
 	        '<div class="form-row">'.
 	          '<input class="qetextinput" id="qecategory_3'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_3" type="text" value="'.$r['category_3'].'">'.
-	          '<button class="qesave" id="qesavecategory_3'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_3'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	          '<button class="qesave" id="qesavecategory_3'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_3'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	        '</div>'.
 	      '</div>'.
 	      '<div class="row">'.
 	        '<label for="qecategory_4'.$r['id'].'">Category Four</label>'.
 	        '<div class="form-row">'.
 	          '<input class="qetextinput" id="qecategory_4'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_4" type="text" value="'.$r['category_4'].'">'.
-	          '<button class="qesave" id="qesavecategory_4'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_4'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+	          '<button class="qesave" id="qesavecategory_4'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_4'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 	        '</div>'.
 	      '</div>'.
 				'<div class="row">'.
 					'<label for="qetags'.$r['id'].'">Tags</label>'.
 					'<div class="form-row">'.
 						'<input class="qetextinput" id="qetags'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="'.$t.'" data-dbc="tags" type="text" value="'.$r['tags'].'" placeholder="Enter Tags...">'.
-						'<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>';
 				$tags=array();
 				$st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
@@ -251,7 +248,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 				'<label for="qeaddress'.$r['id'].'">Address</label>'.
 				'<div class="form-row">'.
 					'<input class="qetextinput" id="qeaddress'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="address" type="text" value="'.$r['address'].'" placeholder="Enter an Address...">'.
-					'<button class="qesave" id="qesaveaddress'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeaddress'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="qesave" id="qesaveaddress'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeaddress'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</div>'.
 			'</div>'.
 			'<div class="row">'.
@@ -259,14 +256,14 @@ if($t=='content'||$t=='login'||$t=='orders'){
 					'<label for="qesuburb'.$r['id'].'">Suburb</label>'.
 					'<div class="form-row">'.
 						'<input class="qetextinput" id="qesuburb'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="suburb" type="text" value="'.$r['suburb'].'" placeholder="Enter a Suburb...">'.
-						'<button class="qesave" id="qesavesuburb'.$r['id'].'" data-tooltip="tooltip" data-dbid="qesuburb'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavesuburb'.$r['id'].'" data-tooltip="tooltip" data-dbid="qesuburb'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="col-12 col-sm-6 pl-1">'.
 					'<label for="qecity'.$r['id'].'">City</label>'.
 					'<div class="form-row">'.
 						'<input class="qetextinput" id="qecity'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="city" type="text" value="'.$r['city'].'" placeholder="Enter a City...">'.
-						'<button class="qesave" id="qesavecity'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecity'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavecity'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecity'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 			'</div>'.
@@ -275,14 +272,14 @@ if($t=='content'||$t=='login'||$t=='orders'){
 					'<label for="qestate'.$r['id'].'">State</label>'.
 					'<div class="form-row">'.
 						'<input class="qetextinput" id="qestate'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="state" type="text" value="'.$r['state'].'" placeholder="Enter a State...">'.
-						'<button class="qesave" id="qesavestate'.$r['id'].'" data-tooltip="tooltip" data-dbid="qestate'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavestate'.$r['id'].'" data-tooltip="tooltip" data-dbid="qestate'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="col-12 col-sm-6 pl-1">'.
 					'<label for="qepostcode'.$r['id'].'">Postcode</label>'.
 					'<div class="form-row">'.
 						'<input class="qetextinput" id="qepostcode'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="postcode" type="text" value="'.($r['postcode']!=0?$r['postcode']:'').'" placeholder="Enter a Postcode...">'.
-						'<button class="qesave" id="qesavepostcode'.$r['id'].'" data-tooltip="tooltip" data-dbid="qepostcode'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavepostcode'.$r['id'].'" data-tooltip="tooltip" data-dbid="qepostcode'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 			'</div>'.
@@ -290,14 +287,14 @@ if($t=='content'||$t=='login'||$t=='orders'){
 				'<label for="qecountry'.$r['id'].'">Country</label>'.
 				'<div class="form-row">'.
 					'<input class="qetextinput" id="qecountry'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="country" type="text" value="'.$r['country'].'" placeholder="Enter a Country...">'.
-					'<button class="qesave" id="qesavecountry'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecountry'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="qesave" id="qesavecountry'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecountry'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</div>'.
 			'</div>'.
 			'<div class="row">'.
 				'<label for="qetags'.$r['id'].'">Tags</label>'.
 				'<div class="form-row">'.
 					'<input class="qetextinput" id="qetags'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="'.$t.'" data-dbc="tags" type="text" value="'.$r['tags'].'" placeholder="Enter Tags...">'.
-					'<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</div>';
 			$tags=array();
 			$st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
@@ -411,14 +408,14 @@ if($t=='content'||$t=='login'||$t=='orders'){
 					'<div class="form-row">'.
 						'<div class="input-text">$</div>'.
 						'<input class="qetextinput" id="qespent'.$r['id'].'" type="number" value="'.$r['spent'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="spent">'.
-						'<button class="qesave" id="qesavespent'.$r['id'].'" data-tooltip="tooltip" data-dbid="qespent'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavespent'.$r['id'].'" data-tooltip="tooltip" data-dbid="qespent'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="row">'.
 					'<label for="qepoints'.$r['id'].'">Points Earned</label>'.
 					'<div class="form-row">'.
 						'<input class="qetextinput" id="qepoints'.$r['id'].'" type="number" value="'.$r['points'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="points">'.
-						'<button class="qesave" id="qesavepoints'.$r['id'].'" data-tooltip="tooltip" data-dbid="qepoints'.$r['id'].'" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+						'<button class="qesave" id="qesavepoints'.$r['id'].'" data-tooltip="tooltip" data-dbid="qepoints'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
 				'</div>'.
 				'<div class="row">'.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,13 +16,13 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">users</i></div>
           <div>Newsletters Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -46,7 +46,7 @@
         </div>
         <div class="form-row mt-3">
           <input class="textinput" id="newslettersSendMax" type="text" value="<?=$config['newslettersSendMax'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendMax">
-          <button class="save" id="savenewslettersSendMax" data-dbid="newslettersSendMax" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savenewslettersSendMax" data-dbid="newslettersSendMax" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div id="sendDelay" class="form-row mt-3">
           <label id="sendDelay" for="newslettersSendDelay"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#sendDelay" data-tooltip="tooltip" aria-label="PermaLink to Send Delay">&#128279;</a>':'';?>Send&nbsp;Delay</label>
@@ -54,7 +54,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="newslettersSendDelay" data-dbid="1" data-dbt="config" data-dbc="newslettersSendDelay" type="text" value="<?=$config['newslettersSendDelay'];?>">
-          <button class="save" id="savenewslettersSendDelay" data-placement="top" data-dbid="newslettersSendDelay" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savenewslettersSendDelay" data-placement="top" data-dbid="newslettersSendDelay" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <hr>
         <legend id="optOutMessage" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#optOutMessage" data-tooltip="tooltip" aria-label="PermaLink to Opt Out Message">&#128279;</a>':'';?>Opt Out Message</legend>

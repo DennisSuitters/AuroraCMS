@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('user-group','i-3x');?></div>
+          <div class="content-title-icon"><i class="i">user-group</i></div>
           <div>Preferences - Social</div>
           <div class="content-title-actions"></div>
         </div>
@@ -126,7 +126,7 @@
           <div class="col-12 col-md-1">
             <label>&nbsp;</label>
             <div class="form-row">
-              <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
             </div>
           </div>
         </form>
@@ -137,7 +137,7 @@
             <div class="row mt-1" id="l_<?=$rs['id'];?>">
               <div class="col-12 col-md-3">
                 <div class="form-row">
-                  <div class="input-text col-12" data-tooltip="tooltip" aria-label="<?= ucfirst($rs['icon']);?>"><?= svg2('social-'.$rs['icon'],'i-social').'&nbsp;&nbsp'.ucfirst($rs['icon']);?></div>
+                  <div class="input-text col-12" data-tooltip="tooltip" aria-label="<?= ucfirst($rs['icon']);?>"><i class="i i-social <?=$rs['icon'];?>">social-<?=$rs['icon'].'</i>&nbsp;&nbsp'.ucfirst($rs['icon']);?></div>
                 </div>
               </div>
               <div class="col-12 col-md-8">
@@ -150,7 +150,7 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                    <button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                   </form>
                 </div>
               </div>

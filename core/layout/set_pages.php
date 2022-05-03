@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,11 +16,11 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('content','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">content</i></div>
           <div>Page <br class="d-block d-sm-none">Settings</div>
           <div class="content-title-actions">
-            <?= isset($_SERVER['HTTP_REFERER'])?'<a class="btn" href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="tooltip" aria-label="Back">'.svg2('back').'</a>':'';?>
-            <button class="btn saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <?= isset($_SERVER['HTTP_REFERER'])?'<a class="btn" href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>':'';?>
+            <button class="btn saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -61,7 +61,7 @@
               <button id="filesEditLoad">Load</button>
             </div>
             <div class="wysiwyg-toolbar">
-              <button id="codeSave" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><?= svg2('save');?></button>
+              <button id="codeSave" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><i class="i">save</i></button>
             </div>
             <div class="form-row">
               <?php $code=file_get_contents($fileDefault);?>

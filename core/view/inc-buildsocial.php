@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,7 +26,7 @@
  			],[
  				$r['url'],
  				ucfirst($r['icon']),
- 				frontsvg('i-social-'.$r['icon'])
+ 				'social-'.$r['icon']
  			],$buildSocial);
  			$socialItems.=$buildSocial;
  		}
@@ -36,7 +36,7 @@
  	if($config['options'][9]==1){
  		$html=preg_replace('/<[\/]?rss>/','',$html);
  		$html=$page['contentType']=='article'||$page['contentType']=='portfolio'||$page['contentType']=='event'||$page['contentType']=='news'||$page['contentType']=='inventory'||$page['contentType']=='service'?str_replace('<print rsslink>','rss/'.$page['contentType'].'/',$html):str_replace('<print rsslink>','rss',$html);
- 		$html=str_replace('<print rssicon>',frontsvg('i-social-rss'),$html);
+ 		$html=str_replace('<print rssicon>','social-rss',$html);
  	}else
  		$html=preg_replace('~<rss>.*?<\/rss>~is','',$html,1);
  }

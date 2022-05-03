@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('comments','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">comments</i></div>
           <div>Comments</div>
           <div class="content-title-actions"></div>
         </div>
@@ -68,11 +68,11 @@
                         if($scc->rowCount()<1){?>
                           <form class="d-inline-block" id="blacklist<?=$r['id'];?>" target="sp" method="post" action="core/add_commentblacklist.php">
                             <input name="id" type="hidden" value="<?=$r['id'];?>">
-                            <button data-tooltip="tooltip" aria-label="Add IP to Blacklist"><?= svg2('security');?></button>
+                            <button data-tooltip="tooltip" aria-label="Add IP to Blacklist"><i class="i">security</i></button>
                           </form>
                         <?php }?>
-                        <button class="add<?=$r['status']!='unapproved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Approve" onclick="update('<?=$r['id'];?>','comments','status','approved');"><?= svg2('approve');?></button>
-                        <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','comments');"><?= svg2('trash');?></button>
+                        <button class="add<?=$r['status']!='unapproved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Approve" onclick="update('<?=$r['id'];?>','comments','status','approved');"><i class="i">approve</i></button>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','comments');"><i class="i">trash</i></button>
                       <?php }?>
                     </div>
                   </div>

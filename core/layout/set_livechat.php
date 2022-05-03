@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,13 +16,13 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('users','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">users</i></div>
           <div>Live Chat Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -74,12 +74,12 @@
         <label id="facebookMessengerCode" for="messengerFBCode"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerCode" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Code">&#128279;</a>':'';?>Page ID</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBCode" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" type="text" value="<?=$config['messengerFBCode'];?>" placeholder="Enter Page ID...">
-          <button class="save" id="savemessengerFBCode" data-dbid="messengerFBCode" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savemessengerFBCode" data-dbid="messengerFBCode" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="facebookMessengerGreeting" for="messengerFBGreeting"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerGreeting" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Greeting">&#128279;</a>':'';?>Greeting</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBGreeting" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" type="text" value="<?=$config['messengerFBGreeting'];?>" placeholder="Enter Greeting...">
-          <button class="save" id="savemessengerFBGreeting" data-dbid="messengerFBGreeting" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savemessengerFBGreeting" data-dbid="messengerFBGreeting" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="facebookMessengerColor" for="messengerFBColor"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerColor" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Colour">&#128279;</a>':'';?>Colour</label>
         <div class="form-row">

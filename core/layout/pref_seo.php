@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,10 +16,10 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('plugin-seo','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">plugin-seo</i></div>
           <div>Preferences - SEO</div>
           <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -58,7 +58,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="ga_verification" data-dbid="1" data-dbt="config" data-dbc="ga_verification" type="text" value="<?=$config['ga_verification'];?>" placeholder="Enter Google Site Verification Code...">
-          <button class="save" id="savega_verification" data-dbid="ga_verification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savega_verification" data-dbid="ga_verification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div class="form-row mt-3">
           <label id="prefGoogleUACode" for="ga_tracking"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleUACode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google UA Code Field">&#128279;</a>':'';?>Google&nbsp;UA&nbsp;code</label>
@@ -66,12 +66,12 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="ga_tracking" data-dbid="1" data-dbt="config" data-dbc="ga_tracking" type="text" value="<?=$config['ga_tracking'];?>" placeholder="Enter Google UA Code...">
-          <button class="save" id="savega_tracking" data-dbid="ga_tracking" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savega_tracking" data-dbid="ga_tracking" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="prefGoogleTagManagerCode" for="ga_tagmanager"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefGoogleTagManagerCode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google Tag Manager Code Field">&#128279;</a>':'';?>Google&nbsp;Tag&nbsp;Manager&nbsp;code</label>
         <div class="form-row">
           <input class="textinput" id="ga_tagmanager" data-dbid="1" data-dbt="config" data-dbc="ga_tagmanager" type="text" value="<?=$config['ga_tagmanager'];?>" placeholder="Enter Google Tag Manager Code...">
-          <button class="save" id="savega_tagmanager" data-dbid="ga_tagmanager" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savega_tagmanager" data-dbid="ga_tagmanager" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div class="form-row mt-3">
           <label id="prefBingverification" for="seo_msvalidate"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefBingVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Microsoft Validate Field">&#128279;</a>':'';?>Bing&nbsp;Verification&nbsp;code</label>
@@ -79,7 +79,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="seo_msvalidate" data-dbid="1" data-dbt="config" data-dbc="seo_msvalidate" type="text" value="<?=$config['seo_msvalidate'];?>" placeholder="Enter Bing Webmaster Tools verification Code...">
-          <button class="save" id="saveseo_msvalidate" data-dbid="seo_msvalidate" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseo_msvalidate" data-dbid="seo_msvalidate" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div class="form-row mt-3">
           <label id="prefYandexVerification" for="seo_yandexverification"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefYandexVerification" data-tooltip="tooltip" aria-label="PermaLink to Preferences Yandex Verification Code Field...">&#128279;</a>':'';?>Yandex&nbsp;Verification&nbsp;code</label>
@@ -87,17 +87,17 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="seo_yandexverification" data-dbid="1" data-dbt="config" data-dbc="seo_yandexverification" type="text" value="<?=$config['seo_yandexverification'];?>" placeholder="Enter Yandex Site Verification Code...">
-          <button class="save" id="saveseo_yandexverification" data-dbid="seo_yandexverification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseo_yandexverification" data-dbid="seo_yandexverification" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="prefDomainVerify" for="seo_domainverify"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefDomainVerify" data-tooltip="tooltip" aria-label="PermaLink to Preferences Domain Verify Field">&#128279;</a>':'';?>Domain Verify</label>
         <div class="form-row">
           <input class="textinput" id="seo_domainverify" data-dbid="1" data-dbt="config" data-dbc="seo_domainverify" type="text" value="<?=$config['seo_domainverify'];?>" placeholder="Enter Domain Verification Code...">
-          <button class="save" id="saveseo_domainverify" data-dbid="seo_domainverify" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseo_domainverify" data-dbid="seo_domainverify" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="prefPinterestVerify" for="seo_domainverify"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefPinterestVerify" data-tooltip="tooltip" aria-label="PermaLink to Preferences Pinterest Verify Field">&#128279;</a>':'';?>Pinterest&nbsp;Verification</label>
         <div class="form-row">
           <input class="textinput" id="seo_pinterestverify" data-dbid="1" data-dbt="config" data-dbc="seo_pinterestverify" type="text" value="<?=$config['seo_pinterestverify'];?>" placeholder="Enter Pinterest Verification Code...">
-          <button class="save" id="saveseo_pinterestverify" data-dbid="seo_pinterestverify" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseo_pinterestverify" data-dbid="seo_pinterestverify" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <hr>
         <legend>Default SEO Fallback Information</legend>
@@ -105,18 +105,18 @@
         <label id="prefSEOTitle" for="seoTitle"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefSEOTitle" data-tooltip="tooltip" aria-label="PermaLink to Preferences SEO Title Field">&#128279;</a>':'';?>SEO Title</label>
         <div class="form-row">
           <input class="textinput" id="seoTitle" data-dbid="1" data-dbt="config" data-dbc="seoTitle" type="text" value="<?=$config['seoTitle'];?>" placeholder="Enter SEO Title...">
-          <button class="save" id="saveseoTitle" data-dbid="seoTitle" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseoTitle" data-dbid="seoTitle" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="prefSEODescription" for="seoDescription"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefSEODescription" data-tooltip="tooltip" aria-label="PermaLink to Preferences SEO Description Field">&#128279;</a>':'';?>SEO Description</label>
         <div class="form-row">
           <input class="textinput" id="seoDescription" data-dbid="1" data-dbt="config" data-dbc="seoDescription" type="text" value="<?=$config['seoDescription'];?>" placeholder="Enter an SEO Description...">
-          <button class="save" id="saveseoDescription" data-dbid="seoDescription" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseoDescription" data-dbid="seoDescription" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
 <?php /*
         <label for="seoCaption">SEO Caption</label>
         <div class="form-row">
           <input class="textinput" id="seoCaption" data-dbid="1" data-dbt="config" data-dbc="seoCaption" type="text" value="<?=$config['seoCaption'];?>" placeholder="Enter an SEO Caption...">
-          <button class="save" id="saveseoCaption" data-dbid="seoCaption" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveseoCaption" data-dbid="seoCaption" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
 */ ?>
         <?php if($user['rank']>899){?>
@@ -130,7 +130,7 @@
               </summary>
               <div class="summary-content">
                 <div class="btn-group float-right">
-                  <button data-fancybox data-type="ajax" data-src="core/layout/edit_seo.php?id=<?=$rh['id'];?>"><?= svg2('edit');?></button>
+                  <button data-fancybox data-type="ajax" data-src="core/layout/edit_seo.php?id=<?=$rh['id'];?>"><i class="i">edit</i></button>
                 </div>
                 <h3><?=$rh['title'];?></h3>
                 <div>
@@ -153,7 +153,7 @@
             <input name="w" type="hidden" value="before">
             <div class="form-row">
               <input id="ci" name="ci" placeholder="Enter SEO Tip Text...">
-              <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
             </div>
           </form>
           <hr>
@@ -165,7 +165,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
               <div class="row">
                 <div class="form-text col-11"><?=$rc['notes'];?></div>
                 <div class="col-1 text-right">
-                  <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rc['id'];?>`,'seo');"><?= svg2('trash');?></button>
+                  <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rc['id'];?>`,'seo');"><i class="i">trash</i></button>
                 </div>
               </div>
               <hr>

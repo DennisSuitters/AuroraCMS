@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.9
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -30,12 +30,12 @@
       <li class="d-none d-md-inline-block">
         <form class="form-row" method="post" action="<?= URL.$settings['system']['admin'].'/search';?>">
           <input name="s" type="text" placeholder="Enter a Search Term...">
-          <button type="submit" data-tooltip="bottom" aria-label="Search"><?= svg2('search');?></button>
+          <button type="submit" data-tooltip="bottom" aria-label="Search"><i class="i i-2x">search</i></button>
         </form>
       </li>
       <li class="badge text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
         <input class="d-none" id="notification-checkbox" type="checkbox">
-        <label class="mt-0 text-white" for="notification-checkbox"><?= svg2('bell','i-2x');?></label>
+        <label class="mt-0 text-white" for="notification-checkbox"><i class="i i-2x">bell</i></label>
         <ul class="p-0" id="nav-stat-list">
           <li class="dropdown-heading py-2">Notifications</li>
           <?=($nc['cnt']>0?'<li><span class="badger badge-primary">'.$nc['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/comments"> Comments</a></li>':'').
@@ -59,10 +59,10 @@
         </div>
       </li>
       <li data-tooltip="bottom" aria-label="View Site">
-        <a href="<?= URL;?>"><?= svg2('browser-general','i-2x mr-3');?></a>
+        <a href="<?= URL;?>" class="text-white"><i class="i i-2x">browser-general</i></a>
       </li>
       <li data-tooltip="bottom" aria-label="Logout">
-        <a href="<?= URL.$settings['system']['admin'].'/logout';?>"><?= svg2('sign-out','i-2x');?></a>
+        <a href="<?= URL.$settings['system']['admin'].'/logout';?>" class="text-white"><i class="i i-2x">sign-out</i></a>
       </li>
     </ul>
   </nav>

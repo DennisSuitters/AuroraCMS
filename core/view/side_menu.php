@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,12 +34,12 @@ if(file_exists(THEME.'/side_menu.html')){
 		'/<print adminlink>/',
 		isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?'/<[\/]?admin>/':'~<admin>.*?<\/admin>~is'
 	],[
-		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook" rel="noopener noreferrer">'.frontsvg('i-social-facebook').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text='.urlencode((isset($r['title'])&&$r['title']!=''?$r['title']:$page['title'])).'&amp;hashtags='.urlencode((isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business'])).'" title="Share to Twitter" rel="noopener noreferrer">'.frontsvg('i-social-twitter').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest" rel="noopener noreferrer">'.frontsvg('i-social-pinterest').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.urlencode($config['business']).'" title="Share to Stumbleupon" rel="noopener noreferrer">'.frontsvg('i-social-stumbleupon').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.urlencode($config['business']).'" title="Share to Reddit" rel="noopener noreferrer">'.frontsvg('i-social-reddit').'</a>'.
-		'<a class="i i-social i-2x m-1" target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin" rel="noopener noreferrer">'.frontsvg('i-social-linkedin').'</a>',
+		'<a target="_blank" href="http://www.facebook.com/sharer.php?u='.$site_url.'" title="Share to Facebook" rel="noopener noreferrer"><i class="i i-3x i-social social-facebook m-1">social-facebook</i></a>'.
+		'<a target="_blank" href="https://twitter.com/share?url='.$site_url.'&amp;text='.urlencode((isset($r['title'])&&$r['title']!=''?$r['title']:$page['title'])).'&amp;hashtags='.urlencode((isset($r['tags'])&&$r['tags']!=''?$r['tags']:$config['business'])).'" title="Share to Twitter" rel="noopener noreferrer"><i class="i i-3x i-social social-twitter m-1">social-twitter</i></a>'.
+		'<a target="_blank" href="javascript:void((function()%7Bvar%20e=document.createElement(\'script\');e.setAttribute(\'type\',\'text/javascript\');e.setAttribute(\'charset\',\'UTF-8\');e.setAttribute(\'src\',\'http://assets.pinterest.com/js/pinmarklet.js?r=\'+Math.random()*99999999);document.body.appendChild(e)%7D)());" title="Share to Pinterest" rel="noopener noreferrer"><i class="i i-3x i-social social-pinterest m-1">social-pinterest</i></a>'.
+		'<a target="_blank" href="http://www.stumbleupon.com/submit?url='.$site_url.'&amp;title='.urlencode($config['business']).'" title="Share to Stumbleupon" rel="noopener noreferrer"><i class="i i-3x i-social social-stumbleupon m-1">social-stumbleupon</i></a>'.
+		'<a target="_blank" href="http://reddit.com/submit?url='.$site_url.'&amp;title='.urlencode($config['business']).'" title="Share to Reddit" rel="noopener noreferrer"><i class="i i-3x i-social social-reddit m-1">social-reddit</i></a>'.
+		'<a target="_blank" href="http://www.linkedin.com/shareArticle?mini=true&amp;url='.$site_url.'" title="Share to Linkedin" rel="noopener noreferrer"><i class="i i-3x i-social social-linkedin m-1">social-linkedin</i></a>',
 		isset($_SESSION['rank'])&&$_SESSION['rank']>899&&isset($r['id'])?URL.$settings['system']['admin'].'/content/edit/'.$r['id']:'',
 		''
 	],$sideTemp);

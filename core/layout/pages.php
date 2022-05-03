@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -37,11 +37,11 @@ else{
       <div class="content-title-wrapper">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?= svg2('content','i-3x');?></div>
+            <div class="content-title-icon"><i class="i i-4x">content</i></div>
             <div>Pages</div>
             <div class="content-title-actions">
-              <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/pages/settings" role="button" data-tooltip="tooltip" aria-label="Pages Settings">'.svg2('settings').'</a>':'';?>
-              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/pages/add" role="button" data-tooltip="tooltip" aria-label="Add Page">'.svg2('add').'</a>':'';?>
+              <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/pages/settings" role="button" data-tooltip="tooltip" aria-label="Pages Settings"><i class="i">settings</i></a>':'';?>
+              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/pages/add" role="button" data-tooltip="tooltip" aria-label="Add Page"><i class="i">add</i></a>':'';?>
             </div>
           </div>
           <ol class="breadcrumb">
@@ -60,7 +60,7 @@ else{
                   Title<span class="ml-5 small">Submenu</span>
                 </th>
                 <th class="col text-center">Menu</th>
-                <th class="col text-center">Views<?=$user['options'][1]==1?' <button class="btn-sm trash" data-tooltip="right" aria-label="Clear All Page Views" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`pageviews`);">'.svg2('eraser').'</button>':'';?></th>
+                <th class="col text-center">Views<?=$user['options'][1]==1?' <button class="btn-sm trash" data-tooltip="right" aria-label="Clear All Page Views" onclick="$(`[data-views=\'views\']`).text(`0`);purge(`0`,`pageviews`);"><i class="i">eraser</i></button>':'';?></th>
                 <th class="col text-center">Active</th>
                 <th class="col"></th>
                 <th class="col"></th>
@@ -83,7 +83,7 @@ else{
                       $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:id");
                       $ss->execute([':id'=>$r['id']]);
                       $rs=$ss->fetch(PDO::FETCH_ASSOC);
-                      echo$rs['cnt']>0?'<span class="text-info" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions">'.svg2('lightbulb').'</span>':'';
+                      echo$rs['cnt']>0?'<span class="text-info" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions"><i class="i">lightbulb</i></span>':'';
                     }
                     echo'<br><small class="text-muted">Available to '.($r['rank']==0?'Everyone':ucfirst(rank($r['rank'])).' and above').'</small>';
                     $sm=$db->prepare("SELECT `id`,`rank`,`title`,`contentType`,`active`,`views` FROM `".$prefix."menu` WHERE `mid`=:mid ORDER BY `ord` ASC");
@@ -97,9 +97,9 @@ else{
                             <span style="position:absolute;top:0;right:0;" id="controls_<?=$rm['id'];?>" role="group">
                               <?=$user['options'][0]==1?'<button class="btn trash align-top" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);"><span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
                               <?=$r['contentType']!='index'?'<input id="active'.$rm['id'].'" data-dbid="'.$rm['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"'.($rm['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled').'>':'';?>
-                              <a class="btn btn-sm"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'];?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                              <?=$user['options'][0]==1&&$rm['contentType']=='page'?'<button class="btn trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$rm['id'].'\',\'menu\');">'.svg2('trash').'</button>':'';?>
-                              <?php svg('drag','subhandle');?>
+                              <a class="btn btn-sm"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'];?>"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
+                              <?=$user['options'][0]==1&&$rm['contentType']=='page'?'<button class="btn trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$rm['id'].'\',\'menu\');"><i class="i">trash</i></button>':'';?>
+                              <i class="i subhandle">drag</i>
                             </span>
                           </div>
                         <?php }?>
@@ -143,8 +143,8 @@ else{
                             <span style="position:absolute;top:0;right:0;" id="controls_<?=$rm['id'];?>" role="group">
                               <?=$user['options'][0]==1?'<button class="btn-sm trash align-top" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);"><span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
                               <span class="i" style="width:24px;">&nbsp;</span>
-                              <a class="btn-sm" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role=button data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                              <?=$user['options'][0]==1&&$rm['contentType']=='page'?'<button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$rm['id'].'\',\'menu\');">'.svg2('trash').'</button>':'';?>
+                              <a class="btn-sm" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role=button data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
+                              <?=$user['options'][0]==1&&$rm['contentType']=='page'?'<button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$rm['id'].'\',\'menu\');"><i class="i">trash</i></button>':'';?>
                               <span class="i">&nbsp;</span>
                             </span>
                           </div>
@@ -162,13 +162,13 @@ else{
                   <td class="align-middle" id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar">
                       <div class="btn-group" role="group">
-                        <?php if($r['active']==1){?><button data-social-share="<?= URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?>" data-social-desc="<?= $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?php svg('share');?></button><?php }?>
-                        <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
-                        <?=$user['options'][0]==1&&$r['contentType']=='page'?'<button class="btn purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');">'.svg2('trash').'</button>':'';?>
+                        <?php if($r['active']==1){?><button data-social-share="<?= URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/');?>" data-social-desc="<?= $r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button><?php }?>
+                        <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
+                        <?=$user['options'][0]==1&&$r['contentType']=='page'?'<button class="btn purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');"><i class="i">trash</i></button>':'';?>
                       </div>
                     </div>
                   </td>
-                  <td class="align-middle"><?php svg('drag','orderhandle');?></td>
+                  <td class="align-middle"><i class="i orderhandle">drag</i></td>
                 </tr>
               <?php }?>
 <?php $so=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='none' ORDER BY `title` ASC");
@@ -182,7 +182,7 @@ while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
                     $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:rid");
                     $ss->execute([':rid'=>$ro['id']]);
                     $rs=$ss->fetch(PDO::FETCH_ASSOC);
-                    echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions">'.$rs['cnt'].' '.svg2('lightbulb').'</span>':'';
+                    echo$rs['cnt']>0?'<span class="badge badge-pill badge-success" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions">'.$rs['cnt'].' <i class="i">lightbulb</i></span>':'';
                   }?>
                 </td>
                 <td>&nbsp;</td>
@@ -191,7 +191,7 @@ while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
                 <td class="align-middle" id="controls_">
                   <div class="btn-toolbar float-right" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">
                     <div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">
-                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"';?>"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
                     </div>
                   </div>
                 </td>
@@ -200,7 +200,7 @@ while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
 <?php }?>
               <tr>
                 <th colspan="6">Notifications</th>
-                <th><?=$user['options'][0]==1?'<a class="btn btn-sm add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="tooltip" aria-label="Add Notification">'.svg2('add').'</a>':'';?></td>
+                <th><?=$user['options'][0]==1?'<a class="btn btn-sm add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="tooltip" aria-label="Add Notification"><i class="i">add</i></a>':'';?></td>
               <tr>
 <?php $sn=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `file`='notification' ORDER BY `id` ASC");
 $sn->execute();
@@ -219,7 +219,7 @@ while($rn=$sn->fetch(PDO::FETCH_ASSOC)){?>
                 <td class="align-middle" id="controls_<?=$rn['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">
                     <div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">
-                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/notification/edit/'.$rn['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit Notification"':' role="button" data-tooltip="tooltip" aria-label="View Notification"';?>"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/notification/edit/'.$rn['id'];?>"<?=$user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit Notification"':' role="button" data-tooltip="tooltip" aria-label="View Notification"';?>"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
                     </div>
                   </div>
                 </td>

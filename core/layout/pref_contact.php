@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,10 +16,10 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('address-card','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">address-card</i></div>
           <div>Preferences - Contact</div>
           <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></a>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></a>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -116,8 +116,8 @@
           <div class="col-12 col-md-1">
             <label>&nbsp;</label>
             <div class="form-row">
-              <button class="trash" data-tooltip="tooltip" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><?= svg2('eraser');?></button>
-              <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+              <button class="trash" data-tooltip="tooltip" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><i class="i">eraser</i></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
             </div>
           </div>
         </form>
@@ -156,8 +156,8 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$rs['id'];?>">
                     <input name="t" type="hidden" value="choices">
-                    <button class="purge trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
-                    &nbsp;&nbsp;<?= svg2('drag','handle');?>
+                    <button class="purge trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                    &nbsp;&nbsp;<i class="i handle">drag</i>
                   </form>
                 </div>
               </div>
@@ -223,21 +223,21 @@
             <label id="prefBusinessName" for="business"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessName" data-tooltip="tooltip" aria-label="PermaLink to Preferences Business Name Field">&#128279;</a>':'';?>Business&nbsp;Name</label>
             <div class="form-row">
               <input class="textinput" id="business" data-dbid="1" data-dbt="config" data-dbc="business" type="text" value="<?=$config['business'];?>" placeholder="Enter a Business Name...">
-              <button class="save" id="savebusiness" data-dbid="business" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savebusiness" data-dbid="business" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-12 col-md-4 pr-md-2">
             <label id="prefABN" for="abn"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefABN" data-tooltip="tooltip" aria-label="PermaLink to Preferences ABN Field">&#128279;</a>':'';?>ABN</label>
             <div class="form-row">
               <input class="textinput" id="abn" data-dbid="1" data-dbt="config" data-dbc="abn" type="text" value="<?=$config['abn'];?>" placeholder="Enter an ABN...">
-              <button class="save" id="saveabn" data-dbid="abn" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="saveabn" data-dbid="abn" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-12 col-md-4" id="emailHasError">
             <label id="prefEmail" for="email"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefEmail" data-tooltip="tooltip" aria-label="PermaLink to Preferences Email Field">&#128279;</a>':'';?>Email</label>
             <div class="form-row">
               <input class="textinput" id="email" data-dbid="1" data-dbt="config" data-dbc="email" type="text" value="<?=$config['email'];?>" placeholder="Enter an Email...">
-              <button class="save" id="saveemail" data-dbid="email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="saveemail" data-dbid="email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
         </div>
@@ -246,68 +246,68 @@
             <label id="prefPhone" for="phone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefPhone" data-tooltip="tooltip" aria-label="PermaLink to Preferences Phone Field">&#128279;</a>':'';?>Phone</label>
             <div class="form-row">
               <input class="textinput" id="phone" data-dbid="1" data-dbt="config" data-dbc="phone" type="text" value="<?=$config['phone'];?>" placeholder="Enter a Phone...">
-              <button class="save" id="savephone" data-dbid="phone" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savephone" data-dbid="phone" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-12 col-md-6 pl-md-1">
             <label id="prefMobile" for="mobile"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMobile" data-tooltip="tooltip" aria-label="PermaLink to Preferences Mobile Field">&#128279;</a>':'';?>Mobile</label>
             <div class="form-row">
               <input class="textinput" id="mobile" data-dbid="1" data-dbt="config" data-dbc="mobile" type="text" value="<?=$config['mobile'];?>" placeholder="Enter a Mobile...">
-              <button class="save" id="savemobile" data-dbid="mobile" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savemobile" data-dbid="mobile" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
         </div>
         <label id="prefAddress" for="address"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefAddress" data-tooltip="tooltip" aria-label="PermaLink to Preferences Address Field">&#128279;</a>':'';?>Address</label>
         <div class="form-row">
           <input class="textinput" id="address" data-dbid="1" data-dbt="config" data-dbc="address" type="text" value="<?=$config['address'];?>" placeholder="Enter an Address...">
-          <button class="save" id="saveaddress" data-dbid="address" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveaddress" data-dbid="address" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div class="row">
           <div class="col-12 col-md-3 pr-md-1">
             <label id="prefSuburb" for="suburb"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefSuburb" data-tooltip="tooltip" aria-label="PermaLink to Preferences Suburb Field">&#128279;</a>':'';?>Suburb</label>
             <div class="form-row">
               <input class="textinput" id="suburb" data-dbid="1" data-dbt="config" data-dbc="suburb" type="text" value="<?=$config['suburb'];?>" placeholder="Enter a Suburb...">
-              <button class="save" id="savesuburb" data-dbid="suburb" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savesuburb" data-dbid="suburb" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1 pr-md-1">
             <label id="prefCity" for="city"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefCity" data-tooltip="tooltip" aria-label="PermaLink to Preferences City Field">&#128279;</a>':'';?>City</label>
             <div class="form-row">
               <input class="textinput" id="city" data-dbid="1" data-dbt="config" data-dbc="city" type="text" value="<?=$config['city'];?>" placeholder="Enter a City...">
-              <button class="save" id="savecity" data-dbid="city" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savecity" data-dbid="city" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1 pr-md-1">
             <label id="prefState" for="state"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefState" data-tooltip="tooltip" aria-label="PermaLink to Preferences State Field">&#128279;</a>':'';?>State</label>
             <div class="form-row">
               <input class="textinput" id="state" data-dbid="1" data-dbt="config" data-dbc="state" type="text" value="<?=$config['state'];?>" placeholder="Enter a State...">
-              <button class="save" id="savestate" data-dbid="state" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savestate" data-dbid="state" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
           <div class="col-12 col-md-3 pl-md-1">
             <label id="prefPostcode" for="postcode"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefPostcode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Postcode Field">&#128279;</a>':'';?>Postcode</label>
             <div class="form-row">
               <input class="textinput" id="postcode" data-dbid="1" data-dbt="config" data-dbc="postcode" type="text" value="<?=$config['postcode']!=0?$config['postcode']:'';?>" placeholder="Enter a Postcode...">
-              <button class="save" id="savepostcode" data-dbid="postcode" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savepostcode" data-dbid="postcode" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
           </div>
         </div>
         <label id="prefCountry" for="country"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefCountry" data-tooltip="tooltip" aria-label="PermaLink to Preferences Country Field">&#128279;</a>':'';?>Country</label>
         <div class="form-row">
           <input class="textinput" id="country" data-dbid="1" data-dbt="config" data-dbc="country" type="text" value="<?=$config['country'];?>" placeholder="Enter a Country...">
-          <button class="save" id="savecountry" data-dbid="country" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savecountry" data-dbid="country" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>https://openweathermap.org/
 
         <label id="prefgeo_weatherAPI" for="geo_weatherAPI"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefgeo_weatherAPI" data-tooltip="tooltip" aria-label="PermaLink to Preferences Open Weather API Key Field">&#128279;</a>':'';?>Open Weather API Key</label>
         <div class="form-row">
           <input class="textinput" id="geo_weatherAPI" data-dbid="1" data-dbt="config" data-dbc="geo_weatherAPI" type="text" value="<?=$config['geo_weatherAPI'];?>" placeholder="Enter an API Key from Open Weather...">
-          <button class="save" id="savegeo_weatherAPI" data-dbid="geo_weatherAPI" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savegeo_weatherAPI" data-dbid="geo_weatherAPI" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
 
         <label id="prefMapAPIKey" for="mapapikey"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMapAPIKey" data-tooltip="tooltip" aria-label="PermaLink to Preferences Map API Key Field">&#128279;</a>':'';?>Map Box API Key</label>
         <div class="form-row">
           <input class="textinput" id="mapapikey" data-dbid="1" data-dbt="config" data-dbc="mapapikey" type="text" value="<?=$config['mapapikey'];?>" placeholder="Enter an API Key from Map Box...">
-          <button class="save" id="savemapapikey" data-dbid="mapapikey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savemapapikey" data-dbid="mapapikey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div class="col-12 mt-3">
           <div class="row">

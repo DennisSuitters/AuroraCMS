@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.7
+* @version    0.2.10
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -16,10 +16,10 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('security','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">security</i></div>
           <div>Preferences - Security</div>
           <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -71,12 +71,12 @@
             <label id="prefreCaptchaClient" for="reCaptchaClient"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefreCaptchaClient" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google ReCaptcha Client API Key Field">&#128279;</a>':'';?>reCaptcha Client Key</label>
             <div class="form-row">
               <input class="textinput" id="reCaptchaClient" data-dbid="1" data-dbt="config" data-dbc="reCaptchaClient" type="text" value="<?=$config['reCaptchaClient'];?>" placeholder="Enter a Google ReCaptcha API Client Key...">
-              <button class="save" id="savereCaptchaClient" data-dbid="reCaptchaClient" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savereCaptchaClient" data-dbid="reCaptchaClient" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <label id="prefreCaptchaSecret" for="reCaptchaSecret"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefreCaptchaSecret" data-tooltip="tooltip" aria-label="PermaLink to Preferences Google ReCaptcha Server API Key Field">&#128279;</a>':'';?>reCaptcha Secret Key</label>
             <div class="form-row">
               <input class="textinput" id="reCaptchaSecret" data-dbid="1" data-dbt="config" data-dbc="reCaptchaServer" type="text" value="<?=$config['reCaptchaServer'];?>" placeholder="Enter a Google ReCaptcha API Secret Key...">
-              <button class="save" id="savereCaptchaSecret" data-dbid="reCaptchaSecret" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savereCaptchaSecret" data-dbid="reCaptchaSecret" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <legend class="mt-3">Project Honey Pot</legend>
             <?php if($config['php_APIkey']==''){?>
@@ -102,15 +102,15 @@
             <label id="prefPHPAPIKey" for="php_APIkey"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefPHPAPIKey" data-tooltip="tooltip" aria-label="PermaLink to Preferences Project Honey Pot API Key Field">&#128279;</a>':'';?>PHP API Key</label>
             <div class="form-row">
               <input class="textinput" id="php_APIkey" data-dbid="1" data-dbt="config" data-dbc="php_APIkey" type="text" value="<?=$config['php_APIkey'];?>" placeholder="Enter a Project Honey Pot API Key...">
-              <button class="save" id="savephp_APIkey" data-dbid="php_APIkey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savephp_APIkey" data-dbid="php_APIkey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <label id="prefPHPFile" for="php_honeypot"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefPHPFile" data-tooltip="tooltip" aria-label="PermaLink to Preferences Project Honey Pot File">&#128279;</a>':'';?>Honey Pot</label>
             <div class="form-row">
               <div class="input-text col-12" id="php_honeypot_link">
                 <?=$config['php_honeypot']!=''?'<a target="_blank" href="'.$config['php_honeypot'].'">'.$config['php_honeypot'].'</a>':'Honey Pot File Not Uploaded...';?>
               </div>
-              <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','php_honeypot');"><?= svg2('browse-media');?></button>
-              <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('1','config','php_honeypot','');"><?= svg2('trash');?></button>
+              <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','php_honeypot');"><i class="i">browse-media</i></button>
+              <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('1','config','php_honeypot','');"><i class="i">trash</i></button>
             </div>
             <div class="row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAttackScreen" data-tooltip="tooltip" aria-label="PermaLink to Preferences Project Honey Pot Quick Link Checkbox">&#128279;</a>':'';?>
@@ -122,7 +122,7 @@
               <input name="t" type="hidden" value="config">
               <input name="c" type="hidden" value="php_quicklink">
               <div class="wysiwyg-toolbar col-12">
-                <button id="php_quicklink_save" data-placement="bottom" type="submit" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+                <button id="php_quicklink_save" data-placement="bottom" type="submit" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
               </div>
               <div class="form-row col-12">
                 <textarea style="height:100px" id="php_quicklink" name="da" onkeyup="$('#php_quicklink_save').addClass('btn-danger');"><?= $config['php_quicklink'];?></textarea>
@@ -140,13 +140,13 @@
             <div class="form-row">
               <input class="textinput" id="formMinTime" data-dbid="1" data-dbt="config" data-dbc="formMinTime" type="text" value="<?=$config['formMinTime'];?>" placeholder="Enter a Time in Seconds...">
               <div class="input-text">seconds</div>
-              <button class="save" id="saveformMinTime" data-dbid="formMinTime" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="saveformMinTime" data-dbid="formMinTime" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <label id="prefFormMaxTime" for="formMaxTime"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFormMaxTime" data-tooltip="tooltip" aria-label="PermaLink to Preferences Form Maximum Time for Visitors to Fill in Form in Hours">&#128279;</a>':'';?>Form Maximum Time</label>
             <div class="form-row">
               <input class="textinput" id="formMaxTime" data-dbid="1" data-dbt="config" data-dbc="formMaxTime" type="text" value="<?=$config['formMaxTime'];?>" placeholder="Enter a Time in Minutes...">
               <div class="input-text">minutes</div>
-              <button class="save" id="saveformMaxTime" data-dbid="formMaxTime" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="saveformMaxTime" data-dbid="formMaxTime" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <legend class="mt-3" id="prefFilters"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFilters" data-tooltip="tooltip" aria-label="PermaLink to Preferences Filter Forms Checkbox">&#128279;</a>':'';?>Form Filters</legend>
             <div class="form-row">
@@ -170,7 +170,7 @@
                 <button id="filesEditLoad">Load</button>
               </div>
               <div class="wysiwyg-toolbar">
-                <button id="codeSave" data-placement="bottom" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><?= svg2('save');?></button>
+                <button id="codeSave" data-placement="bottom" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><i class="i">save</i></button>
               </div>
               <div class="row col-12">
                 <?php $code=file_get_contents($fileDefault);?>
@@ -215,7 +215,7 @@
                   <th class="text-center">Reason</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><?= svg2('purge');?></button>
+                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><i class="i">purge</i></button>
                     </div>
                   </th>
                 </tr>
@@ -234,9 +234,9 @@
                     <td class="text-left align-middle small"><?=$r['reason'];?></td>
                     <td id="controls_<?=$r['id'];?>">
                       <div class="btn-group float-right">
-                        <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?= svg2('brand-projecthoneypot');?></a>
-                        <a class="btn" target="_blank" href="https://dnschecker.org/ip-location.php?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?= svg2('search');?></a>
-                        <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','iplist');return false;"><?= svg2('purge');?></button>
+                        <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><i class="i">brand-projecthoneypot</i></a>
+                        <a class="btn" target="_blank" href="https://dnschecker.org/ip-location.php?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><i class="i">search</i></a>
+                        <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','iplist');return false;"><i class="i">purge</i></button>
                       </div>
                     </td>
                   </tr>
@@ -253,7 +253,7 @@
                   <th class="text-center">IP</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><?= svg2('purge');?></button>
+                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><i class="i">purge</i></button>
                     </div>
                   </th>
                 </tr>
@@ -268,9 +268,9 @@
                     <td class="text-center align-middle small"><?='<strong>'.$r['ip'].'</strong>';?></td>
                     <td id="controls_<?=$r['id'];?>">
                       <div class="btn-group float-right">
-                        <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><?= svg2('brand-projecthoneypot');?></a>
-                        <a class="btn" target="_blank" href="https://dnschecker.org/ip-location.php?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><?= svg2('search');?></a>
-                        <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','whitelist');return false;"><?= svg2('purge');?></button>
+                        <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using Project Honey Pot (Open in New Page)"><i class="i">brand-projecthoneypot</i></a>
+                        <a class="btn" target="_blank" href="https://dnschecker.org/ip-location.php?ip=<?=$r['ip'];?>" role="button" data-tooltip="tooltip" aria-label="Lookup IP using IP Address Finder .com (Opens in New Page)"><i class="i">search</i></a>
+                        <button class="purge trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','whitelist');return false;"><i class="i">purge</i></button>
                       </div>
                     </td>
                   </tr>

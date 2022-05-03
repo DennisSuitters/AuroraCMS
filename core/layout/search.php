@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,7 +19,7 @@ $search=isset($_POST['s'])?$_POST['s']:'%';?>
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('search','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">search</i></div>
           <div>Search</div>
           <div class="content-title-actions"></div>
         </div>

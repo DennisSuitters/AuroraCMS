@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -172,7 +172,18 @@ if($pid==0&&$tid==0&&$cid==0){ // Category
 		$lstu->execute([':uid'=>isset($lstget['uid'])?$lstget['uid']:0]);
 		$lastuser=$lstu->fetch(PDO::FETCH_ASSOC);
 		$items=$item;
-		$lastinfo=$lst->rowCount()>0?($lstget['help'][0]==0?'<a href="'.URL.'forum?cid='.$rc['id'].'&tid='.$lstget['tid'].'&pid='.$lstget['id'].'">':'').$lstget['title'].($lstget['help'][0]==0?'</a>':'').'<br>by '.($lastuser['name']==''?$lastuser['username']:$lastuser['name']).' '.date('jS, M Y',$lstget['ti']):'No Posts Yet';
+		$lastinfo=$lst->rowCount()>0?(
+      $lstget['help'][0]==0?'<a href="'.URL.'forum?cid='.
+        $rc['id'].'&tid='.
+        $lstget['tid'].'&pid='.
+        $lstget['id'].'">':'').
+        $lstget['title'].
+        ($lstget['help'][0]==0?'</a>':'').
+        '<br>by '.
+        (isset($lastuser['name'])&&$lastuser['name']==''?
+          $lastuser['username']:
+          (isset($lastuser['name'])?$lastuser['name']:'Anonymous')).' '.
+          (isset($lstget['ti'])?date('jS, M Y',$lstget['ti']):'No Posts Yet'):'No Posts Yet';
 		$items=preg_replace([
 			'/<print category=[\"\']?icon[\"\']?>/',
 			'/<print category=[\"\']?pinned[\"\']?>/',
@@ -183,8 +194,8 @@ if($pid==0&&$tid==0&&$cid==0){ // Category
 			'/<print posts=[\"\']?count[\"\']?>/',
 			'/<print post=[\"\']?last[\"\']?>/'
 		],[
-			svg2('forum-category','i-3x '.($psts->rowCount()>$spt->rowCount()&&(isset($_SESSION['uid'])&&$_SESSION['uid']>0)?'forum-unread':'forum-read')),
-			$rc['pin']==1?svg2('pin','forum-pin'):'',
+			'<i class="i i-4x'.($psts->rowCount()>$spt->rowCount()&&(isset($_SESSION['uid'])&&$_SESSION['uid']>0)?' forum-unread':' forum-read').'">forum-category</i>',
+			$rc['pin']==1?'<i class="i text-success">pin</i>':'',
 			URL.'forum?cid='.$rc['id'],
 			htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8'),
 			$purify->purify($rc['notes']),
@@ -309,9 +320,9 @@ if($pid==0&&$tid==0&&$cid>0){ // Topics
 			'/<print posts=[\"\']?count[\"\']?>/',
 			'/<print post=[\"\']?last[\"\']?>/',
 		],[
-			svg2('forum-category','i-3x '.($spt->rowCount()<$sp->rowCount()&&(isset($_SESSION['uid'])&&$_SESSION['uid'])>0?'forum-unread':'forum-read')),
+			'<i class="i i-4x'.($spt->rowCount()<$sp->rowCount()&&(isset($_SESSION['uid'])&&$_SESSION['uid'])>0?' forum-unread':' forum-read').'">forum-category</i>',
 			URL.'forum?cid='.$rc['id'].'&tid='.$rt['id'],
-			$rt['pin']==1?svg2('pin','i-color-success'):'',
+			$rt['pin']==1?'<i class="i text-success">pin</i>':'',
 			htmlspecialchars($rt['title'],ENT_QUOTES,'UTF-8'),
 			$purify->purify($rt['notes']),
 			$sp->rowCount(),
@@ -441,7 +452,7 @@ if($pid==0&&$tid!=0){ // Posts
 			if($ra['avatar']!='')
 				$avatar='<img class="forum-topic-avatar '.($spt->rowCount()==0&&(isset($_SESSION['uid'])&&$_SESSION['uid'])>0?'forum-unread':'forum-read').'" src="'.URL.'media/avatar/'.$ra['avatar'].'">';
 			else
-				$avatar=svg2('forum-category','i-3x '.($spt->rowCount()==0&&$_SESSION['uid']>0?'forum-unread':'forum-read'));
+				$avatar='<i class="i i-4x'.($spt->rowCount()==0&&$_SESSION['uid']>0?' forum-unread':' forum-read').'>forum-category</i>';
 		}
 		$items=preg_replace([
 			'/<print post=[\"\']?id[\"\']?>/',
@@ -461,7 +472,7 @@ if($pid==0&&$tid!=0){ // Posts
 			$rp['id'],
 			$avatar,
 			URL.'forum?cid='.$rc['id'].'&tid='.$rt['id'].'&pid='.$rp['id'],
-			$rp['pin']==1?svg2('pin','i-color-success'):'',
+			$rp['pin']==1?'<i class="i text-success">pin</i>':'',
 			htmlspecialchars($rp['title'],ENT_QUOTES,'UTF-8'),
 			date($config['dateFormat'],$rp['ti']),
 			$ra['name']==''?$ra['username']:$ra['name'],
@@ -662,10 +673,10 @@ if($pid!=0){ // Post
 				$rru['name']==''?$rru['username']:$rru['name'],
 				'<span class="badger badge-'.rank($rru['rank']).'">'.ucwords(rank(str_replace('-',' ',$rru['rank']))).'</span>',
 				$rp['cnt'],
-				date($config['dateFormat'],$rru['ti']),
+				isset($rru['ti'])?date($config['dateFormat'],$rru['ti']):'',
 				'',
-				$rru['id'],
-				$rru['options'][20]==1?' checked':'',
+				isset($rru['id'])?$rru['id']:0,
+				isset($rru['options'][20])&&$rru['options'][20]==1?' checked':'',
 				'',
 				'',
 				'',

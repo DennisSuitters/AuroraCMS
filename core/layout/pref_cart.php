@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.1.3
+* @version    0.2.10
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('shop-cart','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">shop-cart</i></div>
           <div>Preferences - Cart</div>
           <div class="content-title-actions"></div>
         </div>
@@ -39,7 +39,7 @@
               <th>Date</th>
               <th>
                 <div class="btn-group float-right">
-                  <button class="btn-sm purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','cart');return false;"><?= svg2('purge');?></button>
+                  <button class="btn-sm purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','cart');return false;"><i class="i">purge</i></button>
                 </div>
               </th>
             </tr>
@@ -59,7 +59,7 @@
                 <td class="text-center align-middle"><?=$r['cost'];?></td>
                 <td class="text-center align-middle"><?= date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-middle">
-                  <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','cart');"><?= svg2('trash');?></button>
+                  <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','cart');"><i class="i">trash</i></button>
                 </td>
               </tr>
             <?php }?>

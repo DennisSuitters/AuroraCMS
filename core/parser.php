@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -314,14 +314,14 @@ foreach($tags as$tag){
 		case'email':
 			if($attribute=='author'){
 				if($author['email'])
-					$parsing.='<a href="mailto:'.$author['email'].'">'.($type=='icon'?'<'.$theme['settings']['icon_container'].' class="'.$class.'">'.frontsvg('i-gui-email').'</'.$theme['settings']['icon_container'].'>':$author['email']).'</a>';
+					$parsing.='<a href="mailto:'.$author['email'].'">'.($type=='icon'?'<'.$theme['settings']['icon_container'].' class="'.$class.'"><i class="i">email</i></'.$theme['settings']['icon_container'].'>':$author['email']).'</a>';
 			}
 			break;
 		case'social':
 			if($attribute=='author'){
 				$sa =$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='social'");
 				$sa->execute([':uid'=>$r['uid']]);
-				while($sr=$sa->fetch(PDO::FETCH_ASSOC))$parsing.='<a href="'.$sr['url'].'" aria-label="'.ucfirst($sr['icon']).'">'.($type=='icon'?'<'.$theme['settings']['icon_container'].' class="'.$class.'">'.frontsvg('i-social-'.$sr['icon']).'</'.$theme['settings']['icon_container'].'>':$sr['title'].' ').'</a>';
+				while($sr=$sa->fetch(PDO::FETCH_ASSOC))$parsing.='<a href="'.$sr['url'].'" aria-label="'.ucfirst($sr['icon']).'"><i class="i i-social '.$sr['icon'].'">social-'.$sr['icon'].'</i></a>';
 			}
 			break;
 		case'time':

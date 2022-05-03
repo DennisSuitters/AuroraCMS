@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,13 +16,13 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">inbox</i></div>
           <div>Messages Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -48,7 +48,7 @@
             <input id="sub" name="sub" type="text" value="" placeholder="Enter a Subject...">
             <div class="input-text">Email</div>
             <input id="eml" name="eml" type="text" value="" placeholder="Enter an Email...">
-            <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+            <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
           </div>
         </form>
         <div id="subjects">
@@ -63,7 +63,7 @@
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?=$rs['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
               </form>
             </div>
           <?php }?>
@@ -113,7 +113,7 @@
             <input id="mailusr" name="mailusr" type="text" value="" placeholder="Enter a Username...">
             <div class="input-text">Password</div>
             <input id="mailpwd" name="mailpwd" type="text" value="" placeholder="Enter a Password">
-            <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+            <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
           </div>
         </form>
         <script>
@@ -155,7 +155,7 @@
               <form target="sp" action="core/purge.php">
                 <input name="id" type="hidden" value="<?=$rm['id'];?>">
                 <input name="t" type="hidden" value="choices">
-                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
               </form>
             </div>
           <?php }?>
@@ -171,7 +171,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="aRS" type="text" value="<?=$config['contactAutoReplySubject'];?>" data-dbid="1" data-dbt="config" data-dbc="contactAutoReplySubject">
-          <button class="save" id="saveaRS" data-dbid="aRS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="saveaRS" data-dbid="aRS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div id="autoreplyLayout" class="form-row mt-3">
           <small class="form-text text-right">Tokens:

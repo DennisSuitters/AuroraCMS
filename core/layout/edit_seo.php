@@ -7,16 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(!defined('DS'))define('DS',DIRECTORY_SEPARATOR);
 $getcfg=true;
 require'../db.php';
-function svg($svg,$class=null,$size=null){
-	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('../images/i-'.$svg.'.svg').'</i>';
-}
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $s=$db->prepare("SELECT * FROM `".$prefix."seo` WHERE `id`=:id");
 $s->execute([':id'=>$id]);
@@ -27,7 +24,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 		<label for="title">Title</label>
 		<div class="form-row mb-5">
 		  <input class="textinput2" id="title" data-dbid="<?=$r['id'];?>" data-dbt="seo" data-dbc="title" type="text" value="<?=$r['title'];?>" placeholder="Enter a Title...">
-		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+		  <button class="save2" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
 		</div>
 		<form class="w-100" target="sp" method="post" action="core/update.php">
 		  <input name="id" type="hidden" value="<?=$r['id'];?>">

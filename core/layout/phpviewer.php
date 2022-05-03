@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,9 +22,6 @@ echo'<div class="fancybox-ajax">'.
       '<div id="phpviewer'.$idh.'">';
 if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
 else{
-  function svg2($svg,$class=null,$size=null){
-  	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('../images/i-'.$svg.'.svg').'</i>';
-  }
   $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
   define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -53,7 +50,7 @@ else{
     <form id="blacklist<?=$idh;?>" method="post" action="core/add_blacklist.php">
       <input name="id" type="hidden" value="<?=$id;?>">
       <input name="t" type="hidden" value="<?=$t;?>">
-      <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><?= svg2('security');?></button>
+      <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><i class="i">security</i></button>
     </form>
   </div>
   </div>

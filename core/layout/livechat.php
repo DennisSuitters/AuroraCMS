@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,10 +18,10 @@ else{?>
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('chat','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">chat</i></div>
           <div>Live Chat</div>
           <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button"  data-tooltip="tooltip" aria-label="Live Chat Settings">'.svg2('settings').'</a>':'';?>
+            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/livechat/settings" role="button"  data-tooltip="tooltip" aria-label="Live Chat Settings"><i class="i">settings</i></a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -46,14 +46,14 @@ else{?>
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
                       <input name="t" type="hidden" value="livechat">
                       <input name="r" type="hidden" value="Added Manually via Live Chat">
-                      <button  data-tooltip="tooltip" aria-label="Add to Blacklist"><?= svg2('security');?></button>
+                      <button  data-tooltip="tooltip" aria-label="Add to Blacklist"><i class="i">security</i></button>
                     </form>
                   <?php } ?>
                   <form target="sp" method="get" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
                     <input name="t" type="hidden" value="livechat">
                     <input name="c" type="hidden" value="<?=$r['sid'];?>">
-                    <button class="trash"  data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><?= svg2('trash');?></button>
+                    <button class="trash"  data-tooltip="tooltip" aria-label="Delete" onclick="javascript:clearTimeout(chatTimer);"><i class="i">trash</i></button>
                   </form>
                 </span>
                 <small><?=$r['name'];?></small><br>

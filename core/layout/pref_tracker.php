@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,34 +43,48 @@ function deseminateReferer($u){
   }else{
     $pu=parse_url($u);
     $out=(isset($pu['host'])?$pu['host']:'<small>'.$u.'</small>').'<br>';
-    if(stristr($u,'500px'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-500px.svg').'</i><small class="d-flex pt-1 justify-content-center">500px</small>';
-    if(stristr($u,'amazon'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-amazon.svg').'</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
-    if(stristr($u,'ahref')||stristr($u,'as16276'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-ahrefs.svg').'</i><small class="d-flex pt-1 justify-content-center">AHrefs</small>';
-    if(stristr($u,'aws'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-amazon.svg').'</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
-    if(stristr($u,'bing'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-bing.svg').'</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
-    if(stristr($u,'facebook'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-facebook.svg').'</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
-    if(stristr($u,'fbclid='))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-facebook.svg').'</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
-    if(stristr($u,'msclkid='))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-bing.svg').'</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
-    if(stristr($u,'github'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-github.svg').'<small class="d-flex pt-1 justify-content-center">GitHub</small></i>';
-    if(stristr($u,'google'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-google.svg').'</i><small class="d-flex pt-1 justify-content-center">Google</small>';
-    if(stristr($u,'gclid='))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-google.svg').'</i><small class="d-flex pt-1 justify-content-center">Google</small>';
-    if(stristr($u,'instagram'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-instagram.svg').'</i><small class="d-flex pt-1 justify-content-center">Instagram</small>';
-    if(stristr($u,'duckduckgo'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-duckduckgo.svg').'</i><small class="d-flex pt-1 justify-content-center">DuckDuckGo</small>';
-    if(stristr($u,'Host Royale')||stristr($u,'as203020'))$out='<i class="i d-inline-table i-2x i-social border-danger">'.file_get_contents('core/images/i-social-fraud.svg').'</i><small class="d-flex pt-1 justify-content-center text-danger">Potential Fraud</small>';
-    if(stristr($u,'linkedin'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-linkedin.svg').'</i><small class="d-flex pt-1 justify-content-center">LinkedIn</small>';
-    if(stristr($u,'reddit'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-reddit.svg').'</i><small class="d-flex pt-1 justify-content-center">Reddit</small>';
-    if(stristr($u,'telstra')||stristr($u,'as1221'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-telstra.svg').'</i><small class="d-flex pt-1 justify-content-center">Telstra</small>';
-    if(stristr($u,'youtube'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-youtube.svg').'</i><small class="d-flex pt-1 justify-content-center">YouTube</small>';
-    if(stristr($u,'twitter')||stristr($u,'t.co/'))$out='<i class="i d-inline-table i-2x i-social">'.file_get_contents('core/images/i-social-twitter.svg').'</i><small class="d-flex pt-1 justify-content-center">Twitter</small>';
+    if(stristr($u,'500px'))$out='<i class="i d-inline-table i-3x i-social 500px">social-500px</i><small class="d-flex pt-1 justify-content-center">500px</small>';
+    if(stristr($u,'amazon'))$out='<i class="i d-inline-table i-3x i-social amazon">social-amazon</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
+    if(stristr($u,'ahref')||stristr($u,'as16276'))$out='<i class="i d-inline-table i-3x i-social ahrefs">social-ahrefs</i><small class="d-flex pt-1 justify-content-center">AHrefs</small>';
+    if(stristr($u,'aws'))$out='<i class="i d-inline-table i-3x i-social amazon">social-amazon</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
+    if(stristr($u,'bing'))$out='<i class="i d-inline-table i-3x i-social bing">social-bing</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
+    if(stristr($u,'facebook'))$out='<i class="i d-inline-table i-3x i-social facebook">social-facebook</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
+    if(stristr($u,'fbclid='))$out='<i class="i d-inline-table i-3x i-social facebook">social-facebook</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
+    if(stristr($u,'msclkid='))$out='<i class="i d-inline-table i-3x i-social bing">social-bing</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
+    if(stristr($u,'github'))$out='<i class="i d-inline-table i-3x i-social github">social-github</i><small class="d-flex pt-1 justify-content-center">GitHub</small>';
+    if(stristr($u,'google'))$out='<i class="i d-inline-table i-3x i-social google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
+    if(stristr($u,'gclid='))$out='<i class="i d-inline-table i-3x i-social google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
+    if(stristr($u,'instagram'))$out='<i class="i d-inline-table i-3x i-social instagram">social-instagram</i><small class="d-flex pt-1 justify-content-center">Instagram</small>';
+    if(stristr($u,'duckduckgo'))$out='<i class="i d-inline-table i-3x i-social duckduckgo">social-duckduckgo</i><small class="d-flex pt-1 justify-content-center">DuckDuckGo</small>';
+    if(stristr($u,'Host Royale')||stristr($u,'as203020'))$out='<i class="i d-inline-table i-3x i-social border-danger fraud">social-fraud</i><small class="d-flex pt-1 justify-content-center text-danger">Potential Fraud</small>';
+    if(stristr($u,'linkedin'))$out='<i class="i d-inline-table i-3x i-social linkedin">social-linkedin</i><small class="d-flex pt-1 justify-content-center">LinkedIn</small>';
+    if(stristr($u,'reddit'))$out='<i class="i d-inline-table i-3x i-social reddit">social-reddit</i><small class="d-flex pt-1 justify-content-center">Reddit</small>';
+    if(stristr($u,'telstra')||stristr($u,'as1221'))$out='<i class="i d-inline-table i-3x i-social telstra">social-telstra</i><small class="d-flex pt-1 justify-content-center">Telstra</small>';
+    if(stristr($u,'youtube'))$out='<i class="i d-inline-table i-3x i-social youtube">social-youtube</i><small class="d-flex pt-1 justify-content-center">YouTube</small>';
+    if(stristr($u,'twitter')||stristr($u,'t.co/'))$out='<i class="i d-inline-table i-3x i-social twitter">social-twitter</i><small class="d-flex pt-1 justify-content-center">Twitter</small>';
   }
   if($u=='Unknown')$out='<span class="badger badge-dark">'.$u.'</span><br>';
   return$out;
 }
 function getOSIcon($i){
-  if(file_exists('core/images/i-os-'.$i.'.svg'))
-    return'<i class="i d-inline-table i-2x">'.file_get_contents('core/images/i-os-'.$i.'.svg').'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
+  if(in_array($i,
+    ['android',
+    'apple',
+    'beos',
+    'bsd',
+    'linux',
+    'microsoft',
+    'windows7',
+    'windows8',
+    'windows95',
+    'windows98',
+    'windows2000',
+    'windowsme',
+    'windowsvista',
+    'windowsxp'],true
+  ))return'<i class="i d-inline-table i-3x">os-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
   else
-    return'<i class="i d-inline-table i-2x i-color-muted">'.file_get_contents('core/images/i-os-general.svg').'</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
+    return'<i class="i d-inline-table i-3x i-color-muted">os-general</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
 }
 function getBrowser($ua){
   $b='Unknown';
@@ -154,10 +168,16 @@ function getBrowser($ua){
   return$b;
 }
 function getBrowserIcon($i){
-  if(file_exists('core/images/i-browser-'.$i.'.svg'))
-    return'<i class="i d-inline-table i-2x">'.file_get_contents('core/images/i-browser-'.$i.'.svg').'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
+  if(in_array($i,
+    ['brave',
+    'chrome',
+    'edge',
+    'explorer',
+    'firefox',
+    'opera',
+    'safari'],true))return'<i class="i d-inline-table i-3x">browser-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
   else
-    return'<i class="i d-inline-table i-2x i-color-muted">'.file_get_contents('core/images/i-browser-general.svg').'</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
+    return'<i class="i d-inline-table i-3x i-color-muted">browser-general</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
 }
 function getDevice($ua){
   $osd='Unknown';
@@ -180,13 +200,24 @@ function getDevice($ua){
   return$osd;
 }
 function getDeviceIcon($i,$w){
-  if($i!=''&&$i!='unknown'&&file_exists('core/images/i-tech-'.$i.'.svg'))
-    return(is_numeric($w)?'<span class="m-0 p-0" style="font-size:8px">'.$w.'</span><br>':'').'<i class="i d-inline-table i-2x">'.file_get_contents('core/images/i-tech-'.$i.'.svg').'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
+  if($i!=''&&$i!='unknown'&&in_array($i,
+    [
+      'android',
+      'desktop',
+      'ipad',
+      'iphone',
+      'laptop',
+      'mobile',
+      'smartwatch',
+      'tablet',
+      'television'
+    ],true))
+    return'<i class="i d-inline-table i-3x">tech-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
   else
-    return(is_numeric($w)?'<span class="m-0 p-0" style="font-size:8px">'.$w.'</span><br>':'').'<i class="i d-inline-table i-2x i-color-muted">'.file_get_contents('core/images/i-tech-unknown.svg').'</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
+    return'<i class="i d-inline-table i-3x i-color-muted">tech-unknown</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
 }
 function getLocationInfoByIp($ip){
-  $result  = array(
+  $result=array(
     'countryCode'=>'',
     'countryName'=>'',
     'city'=>'',
@@ -221,7 +252,7 @@ function getIspInfo($ip) {
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('tracker','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">tracker</i></div>
           <div>Preferences - Tracker</div>
           <div class="content-title-actions"></div>
         </div>
@@ -262,9 +293,9 @@ function getIspInfo($ip) {
               <th class="text-center align-middle text-uppercase">
                 <div class="btn-group float-right">
                   <?php if($find){?>
-                    <button class="btn-sm trash trashall" data-tooltip="left" aria-label="Remove All Listed Results"><?= svg2('purge');?></button>
+                    <button class="btn-sm trash trashall" data-tooltip="left" aria-label="Remove All Listed Results"><i class="i">purge</i></button>
                   <?php }else{?>
-                    <button class="btn-sm purge trash" data-tooltip="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><?= svg2('purge');?></button>
+                    <button class="btn-sm purge trash" data-tooltip="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><i class="i">purge</i></button>
                   <?php }?>
                 </div>
               </th>
@@ -363,14 +394,14 @@ function getIspInfo($ip) {
                 </td>
                 <td class="align-middle">
                   <div class="btn-group float-right">
-                    <button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id=<?=$r['id'];?>" data-tooltip="left" aria-label="View Visitor Path"><?= svg2('seo-path');?></button>
+                    <button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id=<?=$r['id'];?>" data-tooltip="left" aria-label="View Visitor Path"><i class="i">seo-path</i></button>
                     <?php if($config['php_options'][0]==1){?>
-                      <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="left" aria-label="Lookup IP using Project Honey Pot (Opens in New Page)"><?= svg2('brand-projecthoneypot');?></a>
+                      <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="left" aria-label="Lookup IP using Project Honey Pot (Opens in New Page)"><i class="i">brand-projecthoneypot</i></a>
                     <?php }
                     if($r['status']!='blacklisted'){?>
-                      <button class="btn btn-dark" data-btnip="<?=$r['ip'];?>" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist('<?=$r['ip'];?>');"><?= svg2('security');?></button>
+                      <button class="btn btn-dark" data-btnip="<?=$r['ip'];?>" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist('<?=$r['ip'];?>');"><i class="i">security</i></button>
                     <?php }?>
-                    <button class="trash" data-tooltip="left" aria-label="Remove all of this IP" onclick="purge('<?=$r['ip'];?>','clearip');"><?= svg2('trash');?></button>
+                    <button class="trash" data-tooltip="left" aria-label="Remove all of this IP" onclick="purge('<?=$r['ip'];?>','clearip');"><i class="i">trash</i></button>
                   </div>
                 </td>
               </tr>

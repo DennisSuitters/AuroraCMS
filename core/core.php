@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -167,11 +167,10 @@ function rank($txt){
 	if($txt==1000)return'developer';
 }
 function svg($svg,$class=null,$size=null){
-	if($svg=='auroracms'||$svg=='auroracms-white')echo file_get_contents('core/images/'.$svg.'.svg');
-	else echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
+	echo'<i class="i bg-danger'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.$svg.'</i>';
 }
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/i-'.$svg.'.svg').'</i>';
+	return'<i class="i bg-danger'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.$svg.'</i>';
 }
 function frontsvg($svg){
 	if(file_exists(THEME.'/svg/'.$svg.'.svg'))

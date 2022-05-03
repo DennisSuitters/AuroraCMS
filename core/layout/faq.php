@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('faq','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">faq</i></div>
           <div>FAQ's</div>
         </div>
         <ol class="breadcrumb">
@@ -46,7 +46,7 @@
               <textarea class="summernote" id="da" name="da"></textarea>
             </div>
             <div class="col-1">
-              <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
             </div>
           </div>
         </form>
@@ -98,7 +98,7 @@ while($rf=$sf->fetch(PDO::FETCH_ASSOC)){?>
                   <div class="col-3 float-right text-right">
                     <input id="faqoptions9<?=$rf['id'];?>" data-dbid="<?=$rf['id'];?>" data-dbt="content" data-dbc="options" data-dbb="9" type="checkbox"<?=($rf['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
                     <label for="faqoptions9<?=$rf['id'];?>">Display as Open</label>
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rf['id'];?>`,'content');"><?= svg2('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`<?=$rf['id'];?>`,'content');"><i class="i">trash</i></button>
                   </div>
                 </summary>
                 <div class="ml-4">

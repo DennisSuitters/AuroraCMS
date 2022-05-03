@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('credit-card','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">credit-card</i></div>
           <div>Reviews</div>
           <div class="content-title-actions"></div>
         </div>
@@ -64,7 +64,7 @@
                     <input id="tie" name="tie" type="date" value="" onchange="$(`#tiex`).val(getTimestamp(`tie`));">
                     <input id="tiex" name="tiex" type="hidden" value="<?= time();?>">
                   </td>
-                  <td><button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button></td>
+                  <td><button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button></td>
                 </tr>
             </form>
           <?php }
@@ -84,7 +84,7 @@
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
                     <input name="t" type="hidden" value="rewards">
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                   </form>
                 <?php }?>
               </td>

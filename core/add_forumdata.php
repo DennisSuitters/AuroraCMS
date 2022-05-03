@@ -7,16 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 function rank($txt){
 	if($txt==0)return'visitor';
 	if($txt==100)return'subscriber';
@@ -67,10 +64,10 @@ if($act=='category'){
 					'<input type="hidden" name="id" value="'.$id.'">'.
 					'<input type="hidden" name="t" value="forumCategory">'.
 					'<input type="hidden" name="c" value="title">'.
-					'<div class="input-text">'.svg2('drag','cathandle').'</div>'.
+					'<div class="input-text"><i class="i cathandle">drag</i></div>'.
 					'<div class="input-text">Category</div>'.
 					'<input type="text" name="da" value="'.$t.'" placeholder="Enter a Category...">'.
-					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<form class="d-inline-flex" target="sp" method="post" action="core/update.php">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
@@ -78,7 +75,7 @@ if($act=='category'){
 					'<input type="hidden" name="c" value="notes">'.
 					'<div class="input-text">Description</div>'.
 					'<input type="text" name="da" value="'.$da.'" placeholder="Enter a Description...">'.
-					'<button class="save" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="save" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<div class="input-text">'.
 					'<form class="d-inline-flex" target="sp" method="post" action="core/toggle.php">'.
@@ -101,7 +98,7 @@ if($act=='category'){
 				'<form class="d-inline-flex" target="sp" method="post" action="core/purgeforum.php">'.
 					'<input type="hidden" name="t" value="forumCategory">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+					'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
 				'</form>'.
 			'</div>'.
 			'<small class="badger badge-'.rank($rank).'">Available to '.ucwords(($rank==0?'everyone':str_replace('-',' ',rank($rank)))).'</small>'.
@@ -116,7 +113,7 @@ if($act=='category'){
 					'<input type="text" name="t" value="" placeholder="Enter a Topic Title...">'.
 					'<div class="input-text">Description</div>'.
 					'<input type="text" name="da" value="" placeholder="Enter a Short Description...">'.
-					'<button class="add" data-tooltip="tooltip" aria-label="Add">'.svg2('add').'</button>'.
+					'<button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>'.
 				'</div>'.
 			'</form>'.
 		'</div>'.
@@ -151,10 +148,10 @@ if($act=='topic'){
 					'<input type="hidden" name="id" value="'.$id.'">'.
 					'<input type="hidden" name="t" value="forumTopics">'.
 					'<input type="hidden" name="c" value="title">'.
-					'<div class="input-text">'.svg2('drag','subhandle').'</div>'.
+					'<div class="input-text"><i class="i subhandle">drag</i></div>'.
 					'<div class="input-text">Topic</div>'.
 					'<input class="text-input" type="text" name="da" value="'.$t.'" placeholder="Enter a Topic...">'.
-					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<form class="d-inline-flex" target="sp" method="post" action="core/update.php">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
@@ -162,7 +159,7 @@ if($act=='topic'){
 					'<input type="hidden" name="c" value="notes">'.
 					'<div class="input-text">Description</div>'.
 					'<input type="text" name="da" value="'.$da.'" placeholder="Enter a Description...">'.
-					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save">'.svg2('save').'</button>'.
+					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<div class="input-text">'.
 					'<form class="d-inline-flex" target="sp" method="post" action="core/toggle.php">'.
@@ -176,7 +173,7 @@ if($act=='topic'){
 				'<form class="d-inline-flex" target="sp" method="post" action="core/purgeforum.php">'.
 					'<input type="hidden" name="t" value="forumTopics">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
-					'<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+					'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
 				'</form>'.
 			'</div>'.
     '</div>'.

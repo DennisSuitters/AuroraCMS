@@ -7,16 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 $tables=array();
 $db->setAttribute(PDO::ATTR_ORACLE_NULLS,PDO::NULL_TO_STRING);
 $compression=true;
@@ -104,7 +101,7 @@ if(file_exists('../media/backup/'.$file)){
   echo'<script>'.
 		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-row mt-2">'.
 			'<a class="btn btn-block" href="media/backup/'.$file.'">Click to Download '.$file.'</a>'.
-			'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');">'.svg2('trash').'</button>'.
+			'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');"><i class="i">trash</i></button>'.
 		'</div>`);'.
   	'window.top.window.$("#alert_backup").addClass("d-none");'.
 		'window.top.window.$(".page-block").removeClass("d-block");'.

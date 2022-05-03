@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,10 +16,10 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('sliders','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">sliders</i></div>
           <div>Preferences - Interface</div>
           <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -89,7 +89,7 @@
             </div>
             <div class="form-row">
               <input class="textinput" id="gd_api" data-dbid="1" data-dbt="config" data-dbc="gd_api" type="text" value="<?=$config['gd_api'];?>" placeholder="Enter a Google Data API Key...">
-              <button class="save" id="savegd_api" data-dbid="gd_api" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savegd_api" data-dbid="gd_api" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
 <?php if($user['rank']==1000){?>
             <div class="row mt-3">
@@ -102,7 +102,7 @@
             </div>
             <div class="form-row">
               <input class="textinput" id="hosterURL" data-dbid="1" data-dbt="config" data-dbc="hosterURL" type="text" value="<?=$config['hosterURL'];?>" placeholder="Enter a URL...">
-              <button class="save" id="savehosterURL" data-dbid="hosterURL" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savehosterURL" data-dbid="hosterURL" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
 <?php }?>
   <?php /* Fix
@@ -118,12 +118,12 @@
               <button onclick="$('#updatecheck').removeClass('hidden').load('core/layout/updatecheck.php');">Check&nbsp;Now</button>
             </div>
             <div id="updatecheck" class="form-row d-none">
-              <div class="col alert alert-warning" role="alert"><?= svg2('spinner','animated infinite spin').' Checking for new updates!';?></div>
+              <div class="col alert alert-warning" role="alert"><i class="i animated infinite spin">spinner</i> Checking for new updates!';?></div>
             </div>
             <label for="update_url">Update URL</label>
             <div class="form-row">
               <input id="update_url" class="textinput" data-dbid="1" data-dbt="config" data-dbc="update_url" type="text" value="<?=$config['update_url'];?>" placeholder="Enter an Update URL...">
-              <button class="save" id="saveupdate_url" data-dbid="update_url" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="saveupdate_url" data-dbid="update_url" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
   */ ?>
             <div class="form-row mt-3">
@@ -133,7 +133,7 @@
             <div class="form-row">
               <input class="textinput" id="idleTime" data-dbid="1" data-dbt="config" data-dbc="idleTime" type="text" value="<?=$config['idleTime'];?>" placeholder="Enter a Time in Minutes...">
               <div class="input-text">Minutes</div>
-              <button class="save" id="saveidleTime" data-dbid="idleTime" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="saveidleTime" data-dbid="idleTime" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <div class="form-row mt-3">
               <label id="prefDateFormat" for="dateFormat"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDateFormat" data-tooltip="tooltip" aria-label="PermaLink to Preferences Date Format Field">&#128279;</a>':'';?>Date/Time&nbsp;Format</label>
@@ -142,7 +142,7 @@
             <div class="form-row">
               <input class="textinput" id="dateFormat" data-dbid="1" data-dbt="config" data-dbc="dateFormat" type="text" value="<?=$config['dateFormat'];?>" placeholder="Enter a Date/Time Format...">
               <div class="input-text"><?= date($config['dateFormat'],time());?></div>
-              <button class="save" id="savedateFormat" data-dbid="dateFormat" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+              <button class="save" id="savedateFormat" data-dbid="dateFormat" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
             </div>
             <label id="prefTimezone" for="timezone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefTimezone" data-tooltip="tooltip" aria-label="PermaLink to Preferences Timezone Selector">&#128279;</a>':'';?>Timezone</label>
             <div class="form-row">
@@ -192,7 +192,7 @@ $sm1->execute([
                   <tr class="item subsortable" id="l_<?=$rm1['id'];?>">
                     <td class="px-2 py-0 m-0 text-center">
                       <?php if($rm1['contentType']=='dropdown'){?>
-                        <button class="btn-ghost sidebardropdownbtn" data-sdid="<?=$rm1['id'];?>" data-tooltip="tooltip" aria-label="Open/Close Dropdown"><?php svg('chevron-down').svg('chevron-up','d-none');?></button>
+                        <button class="btn-ghost sidebardropdownbtn" data-sdid="<?=$rm1['id'];?>" data-tooltip="tooltip" aria-label="Open/Close Dropdown"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                       <?php }?>
                     </td>
                     <td class="pt-2">
@@ -233,7 +233,7 @@ $sm1->execute([
                                     <input id="active<?=$rm2['id'];?>" data-dbid="<?=$rm2['id'];?>" data-dbt="sidebar" data-dbc="active" data-dbb="0" type="checkbox"<?=($rm2['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                                   </span>
                                   <span class="col-2 text-center">
-                                    <?php svg('drag','subhandle');?>
+                                    <i class="i subhandle">drag</i>
                                   </span>
                                 </div>
                               </div>
@@ -290,7 +290,7 @@ $sm1->execute([
                     </td>
                     <td class="px-2 py-1 text-center">
                       <?php if($rm1['contentType']!='dashboard'){?>
-                        <?= svg('drag','orderhandle');?>
+                        <i class="i orderhandle">drag</i>
                       <?php }?>
                     </td>
                   </tr>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -136,18 +136,18 @@ else{
         <div class="content-title-wrapper mb-0">
           <div class="content-title">
             <div class="content-title-heading">
-              <div class="content-title-icon"><?= svg2((isset($args[1])&&$args[1]!=''?$args[1]:'content'),'i-3x');?></div>
+              <div class="content-title-icon"><i class="i i-4x"><?=(isset($args[1])&&$args[1]!=''?$args[1]:'content');?></i></div>
               <div><?= isset($args[1])?ucfirst($args[1]):'All';?></div>
               <div class="content-title-actions">
-                <button class="contentview" data-tooltip="tooltip" aria-label="View Content as Cards or List" onclick="toggleContentView();return false;"><?= svg2('list',($_COOKIE['contentview']=='list'?'d-none':'')).svg2('cards',($_COOKIE['contentview']=='cards'?'d-none':''));?></button>
-                <a class="btn" href="<?= URL.$settings['system']['admin'].'/content/settings';?>" role="button" data-tooltip="tooltip" aria-label="Content Settings"><?= svg2('settings');?></a>
-                <?=(isset($args[1])&&$args[1]!=''&&$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" data-tooltip="tooltip" aria-label="Add '.ucfirst($args[1]).'">'.svg2('add').'</a>':'');?>
+                <button class="contentview" data-tooltip="tooltip" aria-label="View Content as Cards or List" onclick="toggleContentView();return false;"><i class="i<?=($_COOKIE['contentview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['contentview']=='cards'?' d-none':'');?>">cards</i></button>
+                <a class="btn" href="<?= URL.$settings['system']['admin'].'/content/settings';?>" role="button" data-tooltip="tooltip" aria-label="Content Settings"><i class="i">settings</i></a>
+                <?=(isset($args[1])&&$args[1]!=''&&$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" data-tooltip="tooltip" aria-label="Add '.ucfirst($args[1]).'"><i class="i">add</i></a>':'');?>
               </div>
             </div>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
               <li class="breadcrumb-item active breadcrumb-dropdown">
-                <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                 <ul class="breadcrumb-dropper">
                   <li><a href="<?= URL.$settings['system']['admin'].'/content';?>">All</a></li>
                   <?php $sc=$db->prepare("SELECT DISTINCT `contentType` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`!=:cT ORDER BY `contentType` ASC");
@@ -175,7 +175,7 @@ else{
                   <ol class="breadcrumb pl-0 bg-transparent">
                     <li class="breadcrumb-item">Categories</li>
                     <li class="breadcrumb-item breadcrumb-dropdown">
-                      <?= isset($args[3])&&$args[3]!=''?ucwords(str_replace('-',' ',$args[3])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                      <?= isset($args[3])&&$args[3]!=''?ucwords(str_replace('-',' ',$args[3])):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                       <ul class="breadcrumb-dropper">
                         <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>">All</a></li>
                         <?php $sc1=$db->prepare("SELECT DISTINCT `category_1` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`=:cT AND `category_1`!='' ORDER BY `category_1` ASC");
@@ -187,7 +187,7 @@ else{
                     </li>
                     <?php if(isset($args[3])&&$args[3]!=''){?>
                       <li class="breadcrumb-item breadcrumb-dropdown">
-                        <?= isset($args[4])&&$args[4]!=''?ucwords(str_replace('-',' ',$args[4])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                        <?= isset($args[4])&&$args[4]!=''?ucwords(str_replace('-',' ',$args[4])):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
                           <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]).'/cat/'.$args[3];?>">All</a></li>
                           <?php $sc2=$db->prepare("SELECT DISTINCT `category_2` FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:cat1) AND `contentType`=:cT AND `category_2`!='' ORDER BY `category_2` ASC");
@@ -203,7 +203,7 @@ else{
                     <?php }
                     if(isset($args[4])&&$args[4]!=''){?>
                       <li class="breadcrumb-item breadcrumb-dropdown">
-                        <?= isset($args[5])&&$args[5]!=''?ucwords(str_replace('-',' ',$args[5])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                        <?= isset($args[5])&&$args[5]!=''?ucwords(str_replace('-',' ',$args[5])):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
                           <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]).'/cat/'.$args[3].'/'.$args[4];?>">All</a></li>
                           <?php $sc3=$db->prepare("SELECT DISTINCT `category_3` FROM `".$prefix."content` WHERE LOWER(`category_2`) LIKE LOWER(:cat2) AND `contentType`=:cT AND `category_3`!='' ORDER BY `category_3` ASC");
@@ -219,7 +219,7 @@ else{
                     <?php }
                     if(isset($args[5])&&$args[5]!=''){?>
                       <li class="breadcrumb-item breadcrumb-dropdown">
-                        <?= isset($args[6])&&$args[6]!=''?ucwords(str_replace('-',' ',$args[6])):'All';?><span class="breadcrumb-dropdown ml-2"><?= svg2('chevron-down');?></span>
+                        <?= isset($args[6])&&$args[6]!=''?ucwords(str_replace('-',' ',$args[6])):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
                           <li><a href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]).'/cat/'.$args[3].'/'.$args[4].'/'.$args[5];?>">All</a></li>
                           <?php $sc4=$db->prepare("SELECT DISTINCT `category_4` FROM `".$prefix."content` WHERE LOWER(`category_3`) LIKE LOWER(:cat3) AND `contentType`=:cT AND `category_4`!='' ORDER BY `category_4` ASC");
@@ -299,9 +299,9 @@ else{
                   <div class="image-toolbar">
                     <?php echo !isset($args[1])?'<a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a><br>':'';
                     echo($r['pin'][0]==1?'<a class="badger badge-primary small text-white" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin">Pinned</a><br>':'');
-                    echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> '.svg2('view').'</button><br>':'';
-                    echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a><br>':'');
-                    echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' '.svg2('review').'</a><br>':'';?>
+                    echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button><br>':'';
+                    echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a><br>':'');
+                    echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a><br>':'';?>
                     <button class="badger badger-primary <?=($r['status']=='published'?'':'d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media">Share</button>
                   </div>
                 </div>
@@ -309,7 +309,7 @@ else{
                   <?= !isset($args[1])?'<span class="d-block"><a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a></span>':'';?>
                   <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                   <?php if($user['options'][1]==1){
-                    echo$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions">'.svg2('lightbulb','text-success').'</span>':'';
+                    echo$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></span>':'';
                     if($r['contentType']=='proofs'){
                       $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
                       $sp->execute([':id'=>$r['uid']]);
@@ -322,22 +322,22 @@ else{
                 <div class="card-footer">
                   <span class="code hidewhenempty"><?=$r['code'];?></span>
                   <span class="reviews hidewhenempty">
-                    <?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' '.svg2('review').'</a>':'';?>
+                    <?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a>':'';?>
                   </span>
                   <span class="comments hidewhenempty">
-                    <?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' '.svg2('comments').'</a>':'');?>
+                    <?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a>':'');?>
                   </span>
-                  <?=$r['views']>0?'<button class="btn views trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> '.svg2('view').'</button>':'';?>
+                  <?=$r['views']>0?'<button class="btn views trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'';?>
                   <div id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar">
                       <div class="btn-group" role="group">
                         <button class="share <?=($r['status']=='published'?'':'d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><?= svg2('share');?></button>
-                        <a class="btn" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                        <a class="btn" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
                         <?php if($user['options'][0]==1){?>
-                          <button class="btn add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><?= svg2('untrash');?></button>
-                          <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><?= svg2('trash');?></button>
-                          <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><?= svg2('purge');?></button>
-                          <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><?php svg('chevron-down').svg('chevron-up','d-none');?></button>
+                          <button class="btn add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
+                          <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
+                          <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">purge</i></button>
+                          <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                         <?php }?>
                       </div>
                     </div>

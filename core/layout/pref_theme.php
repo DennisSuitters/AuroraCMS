@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,10 +16,10 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('theme','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">theme</i></div>
           <div>Preferences - Theme</div>
           <div class="content-title-actions">
-            <?= ($user['options'][0]==1?'<form target="sp" method="post" action="core/upload_theme.php" enctype="multipart/form-data"><div class="custom-file" data-tooltip="tooltip" aria-label="Add Theme (Overwrites Existing)"><input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();"><label for="fu" class="btn add">'.svg2('add').'</label></div></form>':'');?>
+            <?= ($user['options'][0]==1?'<form target="sp" method="post" action="core/upload_theme.php" enctype="multipart/form-data"><div class="custom-file" data-tooltip="tooltip" aria-label="Add Theme (Overwrites Existing)"><input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();"><label for="fu" class="btn add"><i class="i">add</i></label></div></form>':'');?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -40,7 +40,7 @@
               <figure class="card-image position-relative overflow-visible">
                 <img src="<?php if(file_exists('layout/'.$folder.'/theme.jpg'))echo'layout/'.$folder.'/theme.jpg';elseif(file_exists('layout/'.$folder.'/theme.png'))echo'layout/'.$folder.'/theme.png';else echo ADMINNOIMAGE;?>" alt="<?=$theme['title'];?>">
                 <div class="image-toolbar overflow-visible">
-                  <?= svg2('approve','icon enable text-white i-3x pt-2 pr-1');?>
+                  <i class="i icon enable text-white i-4x pt-2 pr-1">approve</i>
                 </div>
               </figure>
               <div class="card-body pt-0 mt-2 mb-0 text-center">

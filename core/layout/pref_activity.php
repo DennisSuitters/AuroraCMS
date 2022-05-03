@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('activity','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">activity</i></div>
           <div>Preferences - Activity</div>
           <div class="content-title-actions"></div>
         </div>
@@ -38,7 +38,7 @@
                 <th class="col-7"></th>
                 <th class="col-2">
                   <div class="btn-group float-right">
-                    <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><?= svg2('purge');?></button>
+                    <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><i class="i">purge</i></button>
                   </div>
                 </th>
               </tr>
@@ -74,8 +74,8 @@
                   <td class="align-top" id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
-                        <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');">'.svg2('undo').'</button>':'';?>
-                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><?= svg2('trash');?></button>
+                        <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');"><i class="i">undo</i></button>':'';?>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><i class="i">trash</i></button>
                       </div>
                     </div>
                   </td>

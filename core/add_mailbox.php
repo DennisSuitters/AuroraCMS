@@ -7,17 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-define('ADMINNOAVATAR','core/images/libre-gui-noavatar.svg');
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
+define('ADMINNOAVATAR','core/images/noavatar.jpg');
 $uid=isset($_POST['uid'])?filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT):'';
 $type=$_POST['t'];
 $port=isset($_POST['port'])?filter_input(INPUT_POST,'port',FILTER_SANITIZE_NUMBER_INT):'';
@@ -54,7 +51,7 @@ if($port!=''&&$url!=''&&$mailusr!=''&&$mailpwd!=''){
 					'<form target="sp" action="core/purge.php">'.
 						'<input type="hidden" name="id" value="'.$id.'">'.
 						'<input type="hidden" name="t" value="choices">'.
-						'<button class="trash" data-tooltip="tooltip" aria-label="Delete">'.svg2('trash').'</button>'.
+						'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
 					'</form>'.
 				'</div>`);'.
 			'</script>';

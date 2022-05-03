@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -15,8 +15,8 @@
   <div id="weather-background" class="alert widget-weather background m-3 p-0">
     <div class="toolbar px-2 py-1 bg-transparent handle">
       <div class="btn-group">
-        <button id="refreshButton" class="btn btn-sm btn-ghost" data-tooltip="left" aria-label="Refresh"><?= svg2('refresh','i-color-white i-spin');?></button>
-        <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><?= svg2('close','i-color-white');?></button>
+        <button id="refreshButton" class="btn btn-sm btn-ghost" data-tooltip="left" aria-label="Refresh"><i class="i i-color-white i-spin">refresh</i></button>
+        <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i i-color-white">close</i></button>
       </div>
     </div>
     <div class="container m-0 p-0 position-relative">
@@ -62,7 +62,7 @@
           <div id="forecast-tooltip-1" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
               <div class="col-10 forecast-main">
-                <small id="forecast-day-1-name"></small><br><span id="forecast-day-1-main"></span>° <i class="wi forecast-icon" id="forecast-day-1-icon"><?= svg2('refresh','i-color-white i-spin');?></i>
+                <small id="forecast-day-1-name"></small><br><span id="forecast-day-1-main"></span>° <i class="wi forecast-icon" id="forecast-day-1-icon"><i class="i i-color-white i-spin">refresh</i></i>
               </div>
               <div class="col-2 forecast-min-low text-right">
                 <span class="high-temperature" id="forecast-day-1-ht"></span><br>
@@ -73,7 +73,7 @@
           <div id="forecast-tooltip-2" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
               <div class="col-10 forecast-main">
-                <small id="forecast-day-2-name"></small><br><span id="forecast-day-2-main"></span>° <i class="wi forecast-icon" id="forecast-day-2-icon"><?= svg2('refresh','i-color-white i-spin');?></i>
+                <small id="forecast-day-2-name"></small><br><span id="forecast-day-2-main"></span>° <i class="wi forecast-icon" id="forecast-day-2-icon"><i class="i i-color-white i-spin">refresh</i></i>
               </div>
               <div class="col-2 forecast-min-low text-right">
                 <span class="high-temperature" id="forecast-day-2-ht"></span><br>
@@ -84,7 +84,7 @@
           <div id="forecast-tooltip-3" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
               <div class="col-10 forecast-main">
-                <small id="forecast-day-3-name"></small><br><span id="forecast-day-3-main"></span>° <i class="wi forecast-icon" id="forecast-day-3-icon"><?= svg2('refresh','i-color-white i-spin');?></i>
+                <small id="forecast-day-3-name"></small><br><span id="forecast-day-3-main"></span>° <i class="wi forecast-icon" id="forecast-day-3-icon"><i class="i i-color-white i-spin">refresh</i></i>
               </div>
               <div class="col-2 forecast-min-low text-right">
                 <span class="high-temperature" id="forecast-day-3-ht"></span><br>
@@ -95,7 +95,7 @@
           <div id="forecast-tooltip-4" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
               <div class="col-10 forecast-main">
-                <small id="forecast-day-4-name"></small><br><span id="forecast-day-4-main"></span>° <i class="wi forecast-icon" id="forecast-day-4-icon"><?= svg2('refresh','i-color-white i-spin');?></i>
+                <small id="forecast-day-4-name"></small><br><span id="forecast-day-4-main"></span>° <i class="wi forecast-icon" id="forecast-day-4-icon"><i class="i i-color-white i-spin">refresh</i></i>
               </div>
               <div class="col-2 forecast-min-low text-right">
                 <span class="high-temperature" id="forecast-day-4-ht"></span><br>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -15,8 +15,8 @@
   <div class="toolbar px-2 py-1 bg-white">
     <?=$rw['title'];?>
     <div class="btn-group">
-      <button class="btn btn-sm btn-ghost" id="hemmingwayrefresh" onclick="format();" data-tooltip="left" aria-label="reExamine Text Area"><?= svg2('refresh');?></button>
-      <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><?= svg2('close');?></button>
+      <button class="btn btn-sm btn-ghost" id="hemmingwayrefresh" onclick="format();" data-tooltip="left" aria-label="reExamine Text Area"><i class="i">refresh</i></button>
+      <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
     </div>
   </div>
   <div class="alert m-2 p-1 px-2 border-0 small adverb"></div>

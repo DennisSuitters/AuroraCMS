@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,9 +15,6 @@ if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 require'sanitise.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 $user=filter_input(INPUT_POST,'user',FILTER_SANITIZE_NUMBER_INT);
 $icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
 $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
@@ -37,7 +34,7 @@ if(filter_var($url,FILTER_VALIDATE_URL)){
 						'window.top.window.$("#social").append(`<div id="l_'.$id.'" class="row mt-1">'.
 							'<div class="col-12 col-md-3">'.
 								'<div class="form-row">'.
-									'<div class="input-text col-12" data-tooltip="tooltip" aria-label="'.ucfirst($icon).'">'.svg2('social-'.$icon,'i-social').'&nbsp;&nbsp;'.ucfirst($icon).'</div>'.
+									'<div class="input-text col-12" data-tooltip="tooltip" aria-label="'.ucfirst($icon).'"><i class="i i-social '.$icon.'">social-'.$icon.'</i>&nbsp;&nbsp;'.ucfirst($icon).'</div>'.
 								'</div>'.
 							'</div>'.
 							'<div class="col-12 col-md-8">'.
@@ -50,7 +47,7 @@ if(filter_var($url,FILTER_VALIDATE_URL)){
 									'<form target="sp" action="core/purge.php">'.
 										'<input name="id" type="hidden" value="'.$id.'">'.
 										'<input name="t" type="hidden" value="choices">'.
-										'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button>'.
+										'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
 									'</form>'.
 								'</div>'.
 							'</div>'.

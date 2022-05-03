@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,10 +18,10 @@ else{?>
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('forum','i-3x');?></div>
+          <div class="content-title-icon"><i class="i">forum</i></div>
           <div>Forum</div>
           <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/forum/settings" role="button" aria-label="Forum Settings">'.svg2('settings').'</a>':'';?>
+            <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/forum/settings" role="button" aria-label="Forum Settings"><i class="i">settings</i></a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -63,7 +63,7 @@ else{?>
             <div class="input-text">
               <label for="help">Help: </label><input id="help" name="help" type="checkbox">
             </div>
-            <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+            <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
           </div>
         </form>
         <hr>
@@ -77,13 +77,13 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
           <div class="item row mb-3 border-1 bg-white" id="cats_<?=$rc['id'];?>">
             <div class="card col-12 border-0">
               <div class="form-row">
-                <div class="input-text"><?php svg('drag','cathandle');?></div>
+                <div class="input-text"><i class="i cathandle">drag</i></div>
                 <div class="input-text">Category</div>
                 <input class="text-input" id="category<?=$rc['id'];?>" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="title" type="text" value="<?=$rc['title'];?>" placeholder="Enter a Category...">
-                <button class="save" id="savecategory<?=$rc['id'];?>" data-tooltip="tooltip" data-dbid="category<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                <button class="save" id="savecategory<?=$rc['id'];?>" data-tooltip="tooltip" data-dbid="category<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>
                 <div class="input-text">Description</div>
                 <input class="text-input" id="notes<?=$rc['id'];?>" data-dbid="<?=$rc['id'];?>" data-dbt="forumCategory" data-dbc="notes" type="text" value="<?=$rc['notes'];?>" placeholder="Enter a Description...">
-                <button class="save" id="savenotes<?=$rc['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                <button class="save" id="savenotes<?=$rc['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>
                 <div class="input-text">
                   <label for="help<?=$rc['id'];?>">Help:</label>&nbsp;<input id="help<?=$rc['id'];?>" type="checkbox"<?=$rc['help']==1?' checked':'';?> disabled>
                 </div>
@@ -93,7 +93,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                 <form target="sp" method="post" action="core/purgeforum.php">
                   <input name="t" type="hidden" value="forumCategory">
                   <input name="id" type="hidden" value="<?=$rc['id'];?>">
-                  <button class="trash" data-tooltip="tooltip" aria-label="Delte"><?= svg2('trash');?></button>
+                  <button class="trash" data-tooltip="tooltip" aria-label="Delte"><i class="i">trash</i></button>
                 </form>
               </div>
               <small class="badger badge-<?= rank($rc['rank']);?>">Available to <?= ucwords(($rc['rank']==0?'everyone':str_replace('-',' ',rank($rc['rank']))));?></small>
@@ -109,7 +109,7 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                   <input name="t" placeholder="Enter a Topic Title...">
                   <div class="input-text">Description</div>
                   <input name="da" placeholder="Enter a Short Description...">
-                  <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+                  <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
                 </div>
               </form>
 <?php while($rt=$st->fetch(PDO::FETCH_ASSOC)){
@@ -118,20 +118,20 @@ $sp->execute([':tid'=>$rt['id']]);?>
               <div class="item row mt-3 bg-white" id="topic_<?=$rt['id'];?>">
                 <div class="card col-12">
                   <div class="form-row">
-                    <div class="input-text"><?php svg('drag','subhandle');?></div>
+                    <div class="input-text"><i class="i subhandle">drag</i></div>
                     <div class="input-text">Topic</div>
                     <input class="text-input" id="topic<?=$rt['id'];?>" data-dbid="<?=$rt['id'];?>" data-dbt="forumTopics" data-dbc="title" type="text" value="<?=$rt['title'];?>" placeholder="Enter a Topic...">
-                    <button class="save" id="savetopic<?=$rt['id'];?>" data-tooltip="tooltip" data-dbid="topic<?=$rt['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                    <button class="save" id="savetopic<?=$rt['id'];?>" data-tooltip="tooltip" data-dbid="topic<?=$rt['id'];?>" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>
                     <div class="input-text">Description</div>
                     <input class="text-input" id="notes<?=$rt['id'];?>" data-dbid="<?=$rt['id'];?>" data-dbt="forumTopics" data-dbc="notes" type="text" value="<?=$rt['notes'];?>" placeholder="Enter a Description...">
-                    <button class="save" id="savenotes<?=$rt['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><?= svg2('save');?></button>
+                    <button class="save" id="savenotes<?=$rt['id'];?>" data-tooltip="tooltip" data-dbid="notes<?=$rc['id'];?>" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>
                     <div class="input-text">
                       <label for="pin<?=$rt['id'];?>">Pin:</label>&nbsp;<input id="pin<?=$rt['id'];?>" data-dbid="<?=$rt['id'];?>" data-dbt="forumTopics" data-dbc="pin" data-dbb="0" type="checkbox"<?=$rt['pin']==1?' checked':'';?>>
                     </div>
                     <form target="sp" method="post" action="core/purgeforum.php">
                       <input name="t" type="hidden" value="forumTopics">
                       <input name="id" type="hidden" value="<?=$rt['id'];?>">
-                      <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                     </form>
                   </div>
                 </div>

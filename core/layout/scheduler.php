@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('calendar-time','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">calendar-time</i></div>
           <div>Scheduler</div>
           <div class="content-title-actions"></div>
         </div>
@@ -87,11 +87,11 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);?>
             title:`<?= ucfirst($r['contentType']).`: `.$r['title'];?>`,
             start:`<?= date("Y-m-d H:i:s",$r['pti']);?>`,
             allDay:true,
-            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>"><?=$r['title'];?><div class="events-buttons" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls"><div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">` +
+            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>"><?=$r['title'];?><div class="events-buttons" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls"><div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">`+
 <?php if($user['options'][2]==1){?>
-                  `<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit"><?= svg2('edit');?></a><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><?= svg2('trash');?></button>` +
+                  `<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><i class="i">trash</i></button>`+
 <?php }else{?>
-                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><?= svg2('view');?></a>' +
+                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><i class="i">view</i></a>'+
 <?php }?>
                 '</div></div></div>'
           },

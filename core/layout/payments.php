@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,7 @@ else{?>
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('hosting','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">hosting</i></div>
           <div>Payments</div>
           <div class="content-title-actions"></div>
         </div>
@@ -51,7 +51,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="hostitem<?=$rh['id'];?>" data-dbid="<?=$rh['id'];?>" data-dbt="login" data-dbc="hostStatus" draggable="true">
                     <h5>
                       <?=($rh['business']!=''?$rh['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><?= svg2('edit');?></a>
+                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       Hosting is <strong><?=$days;?></strong> days overdue.<br>
@@ -67,7 +67,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="siteitem<?=$rh['id'];?>" data-dbid="<?=$rh['id'];?>" data-dbt="login" data-dbc="siteStatus" draggable="true">
                     <h5>
                       <?=($rh['business']!=''?$rh['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><?= svg2('edit');?></a>
+                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       Site Payment is <strong><?=$days;?></strong> days overdue with <strong>$<?=$rh['siteCost'];?></strong> remaining.<br>
@@ -97,7 +97,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="hostitem<?=$rh['id'];?>" data-dbid="<?=$rh['id'];?>" data-dbt="login" data-dbc="hostStatus" draggable="true">
                     <h5>
                       <?=($rh['business']!=''?$rh['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><?= svg2('edit');?></a>
+                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       Hosting is due in <strong><?=$days;?></strong> days.<br>
@@ -113,7 +113,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="siteitem<?=$rh['id'];?>" data-dbid="<?=$rh['id'];?>" data-dbt="login" data-dbc="siteStatus" draggable="true">
                     <h5>
                       <?=($rh['business']!=''?$rh['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><?= svg2('edit');?></a>
+                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       Site Payment is due in <strong><?=$days;?></strong> days, with <strong>$<?=$rh['siteCost'];?></strong> remaining.<br>
@@ -143,7 +143,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="hostitem<?=$rh['id'];?>" data-dbid="<?=$rh['id'];?>" data-dbt="login" data-dbc="hostStatus" draggable="true">
                     <h5>
                       <?=($rh['business']!=''?$rh['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><?= svg2('edit');?></a>
+                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       Hosting is due in <strong><?=$days;?></strong> days.<br>
@@ -155,7 +155,7 @@ while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="siteitem<?=$rh['id'];?>" data-dbid="<?=$rh['id'];?>" data-dbt="login" data-dbc="siteStatus" draggable="true">
                     <h5>
                       <?=($rh['business']!=''?$rh['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><?= svg2('edit');?></a>
+                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$rh['id'].'#tab1-8';?>"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       Site Payment has been paid in full.<br>

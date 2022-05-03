@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,7 @@ $show='templates';?>
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('templates','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">templates</i></div>
           <div>Templates</div>
           <div class="content-title-actions">
           </div>
@@ -85,7 +85,7 @@ $show='templates';?>
           </div>
           <div class="row">
             <div class="col-12">
-              <button class="add float-right" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+              <button class="add float-right" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
             </div>
           </div>
         </form>
@@ -108,7 +108,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
               <div id="controls_<?=$r['id'];?>">
                 <div class="btn-toolbar float-right" role="toolbar">
                   <div class="btn-group" role="group">
-                    <button class="btn purge trash" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','templates');"><?= svg2('trash');?></button>
+                    <button class="btn purge trash" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','templates');"><i class="i">trash</i></button>
                   </div>
                 </div>
               </div>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('idea','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">idea</i></div>
           <div>Preferences - Suggestions</div>
         </div>
         <ol class="breadcrumb">
@@ -45,7 +45,7 @@ while($ruu=$suu->fetch(PDO::FETCH_ASSOC)){
               <textarea class="note" id="da" name="da" placeholder="Enter a Short Description..."></textarea>
             </div>
             <div class="col-1 col-sm--5">
-              <button class="add" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+              <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
             </div>
           </div>
         </form>
@@ -73,7 +73,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
 									<form class="float-right" target="sp" action="core/purge.php">
 										<input name="id" type="hidden" value="<?=$r['id'];?>">
 										<input name="t" type="hidden" value="suggestions">
-										<button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+										<button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
 									</form>
 								</summary>
 								<?=$r['notes'];?>

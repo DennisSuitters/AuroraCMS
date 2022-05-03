@@ -14,4 +14,4 @@ Information that will help us to rectify and duplicate issues:
 ## PR's for related Issues.
 We do welcome PR's to fix issues, which will obviously be vetted and checked before being merged.
 If you are unable to to create a PR, or unsure how to do, we also welcome possible fixes that we can check and merge into the project ourselves.
-Consult the (CONTRIBUTING.md)[https://github.com/DiemenDesign/AuroraCMS/blob/master/CONTRIBUTING.md] document for contribution guidelines.
+Consult the [CONTRIBUTING.md](https://github.com/DiemenDesign/AuroraCMS/blob/master/CONTRIBUTING.md) document for contribution guidelines.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -28,11 +28,11 @@ else{
       <div class="content-title-wrapper mb-0">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?= svg2('newspaper','i-3x');?></div>
+            <div class="content-title-icon"><i class="i i-4x">newspaper</i></div>
             <div>Newsletters</div>
             <div class="content-title-actions">
-              <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" data-tooltip="tooltip" aria-label="Newsletters Settings">'.svg2('settings').'</a>':'';?>
-              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" data-tooltip="tooltip" aria-label="Add">'.svg2('add').'</a>':'';?>
+              <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" data-tooltip="tooltip" aria-label="Newsletters Settings"><i class="i">settings</i></a>':'';?>
+              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></a>':'';?>
             </div>
           </div>
           <ol class="breadcrumb">
@@ -69,12 +69,12 @@ else{
                       <td class="align-middle" id="controls_<?=$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar">
                           <div class="btn-group" role="group">
-                            <?=$user['options'][1]==1?'<button class="btn email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);">'.svg2('email-send').'</button>':'';?>
-                            <a class="btn"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Edit"':' data-tooltip="tooltip" aria-label="View"';?> href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?=$user['options'][1]==1?svg2('edit'):svg2('view');?></a>
+                            <?=$user['options'][1]==1?'<button class="btn email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);"><i class="i">email-send</i></button>':'';?>
+                            <a class="btn"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Edit"':' data-tooltip="tooltip" aria-label="View"';?> href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="btn<?=$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');" data-tooltip="tooltip" aria-label="Restore"><?= svg2('untrash');?></button>
-                              <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
-                              <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?=$r['id'];?>','content');" data-tooltip="tooltip" aria-label="Purge"><?= svg2('purge');?></button>
+                              <button class="btn<?=$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');" data-tooltip="tooltip" aria-label="Restore"><i class="i">untrash</i></button>
+                              <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                              <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?=$r['id'];?>','content');" data-tooltip="tooltip" aria-label="Purge"><i class="i">purge</i></button>
                             <?php }?>
                           </div>
                         </div>
@@ -109,7 +109,7 @@ else{
                 <div class="form-row">
                   <div class="input-text">Email/s</div>
                   <input id="eml" name="emails" type="text" value="" placeholder="Enter Email/s (Comma Seperated)...">
-                  <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add Subscriber/s"><?= svg2('add');?></button>
+                  <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add Subscriber/s"><i class="i">add</i></button>
                 </div>
               </form>
               <table class="table-zebra">
@@ -130,7 +130,7 @@ else{
                       <td class="align-middle">
                         <div class="btn-toolbar float-right" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">
                           <div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">
-                            <?=$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`subscribers`);">'.svg2('trash').'</button>':'';?>
+                            <?=$user['options'][0]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`subscribers`);"><i class="i">trash</i></button>':'';?>
                           </div>
                         </div>
                       </td>

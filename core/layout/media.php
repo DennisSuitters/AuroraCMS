@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,10 +19,10 @@ else{?>
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('picture','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">picture</i></div>
           <div>Media</div>
           <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/settings" role="button" data-tooltip="tooltip" aria-label="Media Settings">'.svg2('settings').'</a>':'';?>
+            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/settings" role="button" data-tooltip="tooltip" aria-label="Media Settings"><i class="i">settings</i></a>':'';?>
           </div>
         </div>
         <ol class="breadcrumb">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,7 +16,7 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('review','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">review</i></div>
           <div>Reviews</div>
           <div class="content-title-actions"></div>
         </div>
@@ -63,8 +63,8 @@
                 <td class="small"><?= date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-top">
                   <div class="btn-group float-right" id="controls-<?=$r['id'];?>">
-                    <button class="btn<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" onclick="update('<?=$r['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><?= svg2('approve');?></button>
-                    <button class="btn trash" onclick="purge('<?=$r['id'];?>','comments');" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                    <button class="btn<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" onclick="update('<?=$r['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>
+                    <button class="btn trash" onclick="purge('<?=$r['id'];?>','comments');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                   </div>
                 </td>
               </tr>

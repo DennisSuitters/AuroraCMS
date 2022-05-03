@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,8 +26,8 @@ define('THEME','layout/'.$config['theme']);
 if(file_exists(THEME.'/images/noavatar.png'))define('NOAVATAR',THEME.'/images/noavatar.png');
 elseif(file_exists(THEME.'/images/noavatar.gif'))define('NOAVATAR',THEME.'/images/noavatar.gif');
 elseif(file_exists(THEME.'/images/noavatar.jpg'))define('NOAVATAR',THEME.'/images/noavatar.jpg');
-else define('NOAVATAR','core/images/i-noavatar.svg');
-define('ADMINNOAVATAR','core/images/i-noavatar.svg');
+else define('NOAVATAR','core/images/noavatar.jpg');
+define('ADMINNOAVATAR','core/images/noavatar.jpg');
 $aid=isset($_POST['aid'])?$_POST['aid']:0;
 $sid=isset($_POST['sid'])?$_POST['sid']:0;
 $who=isset($_POST['who'])?$_POST['who']:'none';

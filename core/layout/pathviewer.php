@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,7 +29,6 @@ function testURL($u){
   if(stristr($u,'.php'))$status='danger';
   if(stristr($u,'.asp'))$status='danger';
   if(stristr($u,'.aspx'))$status='danger';
-  if(stristr($u,'mail.'))$status='danger';
   if(stristr($u,'magento'))$status='danger';
   if(stristr($u,'/modules/'))$status='danger';
   if(stristr($u,'plesk'))$status='danger';
@@ -41,22 +40,53 @@ function testURL($u){
   return($status=='danger'?' text-'.$status:'');
 }
 function getOSIcon($i) {
-  if(file_exists('../images/i-os-'.$i.'.svg'))
-    return'<i class="i d-inline-table i-2x">'.file_get_contents('../images/i-os-'.$i.'.svg').'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
+  if(in_array($i,
+    ['android',
+    'apple',
+    'beos',
+    'bsd',
+    'linux',
+    'microsoft',
+    'windows7',
+    'windows8',
+    'windows95',
+    'windows98',
+    'windows2000',
+    'windowsme',
+    'windowsvista',
+    'windowsxp'],true
+  ))return'<i class="i d-inline-table i-2x">os-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
   else
-    return'<i class="i d-inline-table i-2x i-color-muted">'.file_get_contents('../images/i-os-general.svg').'</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
+    return'<i class="i d-inline-table i-2x i-color-muted">os-general</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
 }
 function getBrowserIcon($i) {
-  if(file_exists('../images/i-browser-'.$i.'.svg'))
-    return'<i class="i d-inline-table i-2x">'.file_get_contents('../images/i-browser-'.$i.'.svg').'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
+  if(in_array($i,
+    ['brave',
+    'chrome',
+    'edge',
+    'explorer',
+    'firefox',
+    'opera',
+    'safari'],true))return'<i class="i d-inline-table i-2x">'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
   else
-    return'<i class="i d-inline-table i-2x i-color-muted">'.file_get_contents('../images/i-browser-general.svg').'</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
+    return'<i class="i d-inline-table i-2x i-color-muted">browser-general</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
 }
 function getDeviceIcon($i,$w) {
-  if($i!=''&&$i!='unknown'&&file_exists('../images/i-tech-'.$i.'.svg'))
-    return'<i class="i d-inline-table i-2x">'.file_get_contents('../images/i-tech-'.$i.'.svg').'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
+  if($i!=''&&$i!='unknown'&&in_array($i,
+    [
+      'android',
+      'desktop',
+      'ipad',
+      'iphone',
+      'laptop',
+      'mobile',
+      'smartwatch',
+      'tablet',
+      'television'
+    ],true))
+    return'<i class="i d-inline-table i-2x">tech-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
   else
-    return'<i class="i d-inline-table i-2x i-color-muted">'.file_get_contents('../images/i-tech-unknown.svg').'</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
+    return'<i class="i d-inline-table i-2x i-color-muted">tech-unknown</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
 }
 echo'<div id="pathviewer'.$idh.'" class="table-responsive">';
 define('UNICODE','UTF-8');

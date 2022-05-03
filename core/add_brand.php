@@ -7,16 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('images/i-'.$svg.'.svg').'</i>';
-}
 $title=filter_var($_POST['brandtitle'],FILTER_SANITIZE_STRING);
 $url=isset($_POST['brandurl'])?filter_input(INPUT_POST,'brandurl',FILTER_SANITIZE_STRING):'';
 $icon=isset($_POST['brandicon'])?filter_input(INPUT_POST,'brandicon',FILTER_SANITIZE_STRING):'';
@@ -50,7 +47,7 @@ if($title!=''){
 							'<form target="sp" action="core/purge.php">'.
 								'<input name="id" type="hidden" value="'.$id.'">'.
 								'<input name="t" type="hidden" value="choices">'.
-								'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete">'.svg2('trash').'</button>'.
+								'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
 							'</form>'.
 						'</div>'.
 					'</div>'.

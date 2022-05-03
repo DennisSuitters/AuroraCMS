@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -59,15 +59,15 @@ else{?>
       <div class="content-title-wrapper mb-0">
         <div class="content-title">
           <div class="content-title-heading">
-            <div class="content-title-icon"><?= svg2('order','i-3x');?></div>
+            <div class="content-title-icon"><i class="i i-4x">order</i></div>
             <div>Edit Order <?=$r['qid'].$r['iid'];?></div>
             <div class="content-title-actions">
               <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+                <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
               <?php }?>
-              <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><?= svg2('print');?></button>
-              <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><?= svg2('email-send');?></button>
-              <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+              <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><i class="i">print</i></button>
+              <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><i class="i">email-send</i></button>
+              <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
             </div>
           </div>
           <ol class="breadcrumb">
@@ -88,7 +88,7 @@ else{?>
               <h4>Details</h4>
               <div class="row">
                 <div class="col-12 col-sm-6 col-md-3">
-                  <div class="input-text">Order #<a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' '.svg2('new-window');?></a></div>
+                  <div class="input-text">Order #<a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i i-4x">new-window</i>';?></a></div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3">
                   <div class="input-text">Created:&nbsp;<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?></div>
@@ -186,7 +186,7 @@ else{?>
                   <div class="col-12 col-md-6">
                     <div class="input-text py-0">Transaction ID:&nbsp;
                       <input class="textinput border-0" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">
-                      <?=$user['options'][1]==1?'<button class="save border-0" id="savetxn_id" data-dbid="txn_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savetxn_id" data-dbid="txn_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md">
@@ -197,13 +197,13 @@ else{?>
                   <div class="col-12 col-sm-6 col-md">
                     <div class="input-text py-0">Name:&nbsp;
                       <input class="textinput border-0" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name...">
-                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_name" data-dbid="paid_name" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_name" data-dbid="paid_name" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-sm-6 col-md">
                     <div class="input-text py-0">Email:&nbsp;
                       <input class="textinput border-0" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email...">
-                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_email" data-dbid="paid_email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_email" data-dbid="paid_email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                 </div>
@@ -225,7 +225,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                 <div class="col-12 col-md-6">
                   <div class="input-text py-0">Tracking #&nbsp;
                     <input class="textinput border-0" id="trackNumber" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="trackNumber" type="text" value="<?=$r['trackNumber'];?>" placeholder="Enter a Tracking Number...">
-                    <?=$user['options'][1]==1?'<button class="save border-0" id="savetrackNumber" data-dbid="trackNumber" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save">'.svg2('save').'</button>':'';?>
+                    <?=$user['options'][1]==1?'<button class="save border-0" id="savetrackNumber" data-dbid="trackNumber" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
               </div>
@@ -288,7 +288,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                     while($i=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$i['id'].'">'.ucfirst(rtrim($i['contentType'],'s')).$i['code'].':$'.$i['cost'].':'.$i['title'].'</option>';
                   }?>
                 </select>
-                <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><?= svg2('add');?></button>
+                <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
               </form>
               <div class="row">
                 <small class="form-text text-muted">Note: Adding or removing items does not recalculate Postage Costs, you will need to do that manually with the selection below</small>
@@ -429,7 +429,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                         <input name="t" type="hidden" value="orderitems">
                         <input name="c" type="hidden" value="quantity">
                         <input name="da" type="hidden" value="0">
-                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                       </form>
                     </td>
                   </tr>
@@ -651,7 +651,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                             <input name="t" type="hidden" value="orderitems">
                             <input name="c" type="hidden" value="quantity">
                             <input name="da" type="hidden" value="0">
-                            <button class="trash" data-tooltip="tooltip" aria-label="Delete"><?= svg2('trash');?></button>
+                            <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                           </form>
                         </td>
                       </tr>

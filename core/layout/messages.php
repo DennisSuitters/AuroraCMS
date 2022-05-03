@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -62,10 +62,10 @@ if($user['options'][3]==1){
         <div class="content-title-wrapper mb-0">
           <div class="content-title">
             <div class="content-title-heading">
-              <div class="content-title-icon"><?= svg2('inbox','i-3x');?></div>
+              <div class="content-title-icon"><i class="i i-4x">inbox</i></div>
               <div>Messages</div>
               <div class="content-title-actions">
-                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" aria-label="Messages Settings">'.svg2('settings').'</a>':'';?>
+                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
               </div>
             </div>
             <ol class="breadcrumb">
@@ -100,11 +100,11 @@ if($user['options'][3]==1){
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
               <div class="messages-menu col-12 col-md-2">
                 <?=$user['options'][0]==1?'<a class="btn mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose">Compose</a><br>':'';?>
-                <a class="link mb-1<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><?= svg2('inbox');?> Inbox</a><br>
-                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><?= svg2('email');?> Unread</a><br>
-                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><?= svg2('email-send');?> Sent</a><br>
-                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><?= svg2('bookmark');?> Important</a><br>
-                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>"><?= svg2('email-spam');?> Spam</a>
+                <a class="link mb-1<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i">inbox</i> Inbox</a><br>
+                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><i class="i">email</i> Unread</a><br>
+                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i">email-send</i> Sent</a><br>
+                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i">bookmark</i> Important</a><br>
+                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>"><i class="i">email-spam</i> Spam</a>
               </div>
               <div class="col-12 col-md-10 pl-3">
                 <div class="alert alert-warning col-12 text-center d-none" id="checkmessages">Checking for new Messages!!!</div>
@@ -144,7 +144,7 @@ if($user['options'][3]==1){
                                 if($scc->rowCount()<1){?>
                                   <form id="whitelist<?=$r['id'];?>" target="sp" method="post" action="core/add_messagewhitelist.php">
                                     <input name="id" type="hidden" value="<?=$r['id'];?>">
-                                    <button data-tooltip="tooltip" aria-label="Add to Whitelist"><?= svg2('whitelist');?></button>
+                                    <button data-tooltip="tooltip" aria-label="Add to Whitelist"><i class="i">whitelist</i></button>
                                   </form>
                                 <?php }
                                 $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
@@ -152,11 +152,11 @@ if($user['options'][3]==1){
                                 if($scc->rowCount()<1){?>
                                   <form id="blacklist<?=$r['id'];?>" target="sp" method="post" action="core/add_messageblacklist.php">
                                     <input name="id" type="hidden" value="<?=$r['id'];?>">
-                                    <button data-tooltip="tooltip" aria-label="Add to Blacklist"><?= svg2('security');?></button>
+                                    <button data-tooltip="tooltip" aria-label="Add to Blacklist"><i class="i">security</i></button>
                                   </form>
                                 <?php }?>
-                                <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?=$r['id'];?>','messages','folder','spam');"><?= svg2('email-spam');?></button>
-                                <button class="purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','messages')"><?= svg2('trash');?></button>
+                                <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?=$r['id'];?>','messages','folder','spam');"><i class="i">email-spam</i></button>
+                                <button class="purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','messages')"><i class="i">trash</i></button>
                               <?php }?>
                             </div>
                           </div>

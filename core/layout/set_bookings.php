@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.10
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -16,13 +16,13 @@
     <div class="content-title-wrapper mb-0">
       <div class="content-title">
         <div class="content-title-heading">
-          <div class="content-title-icon"><?= svg2('calendar','i-3x');?></div>
+          <div class="content-title-icon"><i class="i i-4x">calendar</i></div>
           <div>Bookings Settings</div>
           <div class="content-title-actions">
             <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><?= svg2('back');?></a>
+              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
             <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><?= svg2('save');?></button>
+            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
           </div>
         </div>
         <ol class="breadcrumb">
@@ -101,7 +101,7 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="bES" data-dbid="1" data-dbt="config" data-dbc="bookingEmailSubject" type="text" value="<?=$config['bookingEmailSubject'];?>">
-          <button class="save" id="savebES" data-dbid="bES" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savebES" data-dbid="bES" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <div id="bookingEmailLayout" class="form-row mt-3">
           <div class="form-text small text-muted text-right">Tokens:
@@ -137,13 +137,13 @@
         </div>
         <div class="form-row">
           <input class="textinput" id="aRS" data-dbid="1" data-dbt="config" data-dbc="bookingAutoReplySubject" type="text" value="<?=$config['bookingAutoReplySubject'];?>">
-          <button class="save" id="savebaRS" data-dbid="aRS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><?= svg2('save');?></button>
+          <button class="save" id="savebaRS" data-dbid="aRS" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
         </div>
         <label id="autoReplyAttachment" for="bookingAttachment"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#autoReplyAttachment" data-tooltip="tooltip" aria-label="PermaLink to AutoReply Attacment">&#128279;</a>':'';?>File Attachment</label>
         <div class="form-row">
           <input id="bookingAttachment" name="feature_image" data-dbid="1" data-dbt="config" data-dbc="bookingsAttachment" type="text" value="<?=$config['bookingAttachment'];?>" readonly>
-          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','bookingAttachment');"><?= svg2('browse-media');?></button>
-          <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate('1','config','bookingAttachment','');"><?= svg2('trash');?></button>
+          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','config','bookingAttachment');"><i class="i">browse-media</i></button>
+          <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate('1','config','bookingAttachment','');"><i class="i">trash</i></button>
         </div>
         <div id="bookingAutoReplyLayout" class="form-row mt-3">
           <div class="form-text text-right">Tokens:

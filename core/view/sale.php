@@ -32,7 +32,7 @@ if(stristr($html,'<saleItems')&&$config['options'][28]==1){
   $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `sale`=:sale AND `rank`<=:rank AND `status`='published' ORDER BY `tie` ASC");
   $ss->execute([
 		':sale'=>$sale['sale'],
-		':rank'=>$_SESSION['rank']
+		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 	if($ss->rowCount()>0){
 		$html=preg_replace([

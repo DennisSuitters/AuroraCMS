@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.11
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -321,7 +321,7 @@ foreach($tags as$tag){
 			if($attribute=='author'){
 				$sa =$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='social'");
 				$sa->execute([':uid'=>$r['uid']]);
-				while($sr=$sa->fetch(PDO::FETCH_ASSOC))$parsing.='<a href="'.$sr['url'].'" aria-label="'.ucfirst($sr['icon']).'"><i class="i i-social '.$sr['icon'].'">social-'.$sr['icon'].'</i></a>';
+				while($sr=$sa->fetch(PDO::FETCH_ASSOC))$parsing.='<a href="'.$sr['url'].'" aria-label="'.ucfirst($sr['icon']).'"><i class="i i-social i-3x mr-1 social-'.$sr['icon'].'">social-'.$sr['icon'].'</i></a>';
 			}
 			break;
 		case'time':

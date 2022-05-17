@@ -14,37 +14,47 @@
 function getSalePeriod(){
   $chkti=time();
   $sale=[
-    'timestamp'=>0,
+    'tis'=>0,
+    'tie'=>0,
     'sale'=>'none',
     'title'=>'none',
     'class'=>''
   ];
-  $year=date('Y',$chkti);
-  $va=strtotime("2/14/$year - 2 weeks"); // Valentine's Day
-  $ea=strtotime("last sunday of march $year - 1 month"); // Easter
-  $md=strtotime("5/8/$year - 1 month"); // Mother's Day
-  $fd=strtotime("9/4/$year - 1 month"); // Father's Day
-  $bf=strtotime("last friday of october $year - 1 month"); // Black Friday
-  $hw=strtotime("10/31/$year - 1 month"); // Halloween
-  $sb=strtotime("last saturday of november $year - 1 month"); // Small Business Day
-  $cd=strtotime("12/25/$year - 1 month"); // Christmas Day
-  if($chkti>$va)$sale=['timestamp'=>$va,'sale'=>'valentine','title'=>'Consider editing, enabling or pinning these products for Valentine\'s Day.','class'=>'valentine'];
-  if($chkti>$ea)$sale=['timestamp'=>$ea,'sale'=>'easter','title'=>'Consider editing, enabling or pinning these products for Easter.','class'=>'easter'];
-  if($chkti>$md)$sale=['timestamp'=>$md,'sale'=>'mothersday','title'=>'Consider editing, enabling or pinning these products for Mother\'s Day.','class'=>'mothersday'];
-  if($chkti>$fd)$sale=['timestamp'=>$fd,'sale'=>'fathersday','title'=>'Consider editing, enabling or pinning these products for Father\'s Day.','class'=>'fathersday'];
-  if($chkti>$bf)$sale=['timestamp'=>$bf,'sale'=>'blackfriday','title'=>'Consider editing, enabling or pinning these products for the Black Friday Sale.','class'=>'blackfriday'];
-  if($chkti>$hw)$sale=['timestamp'=>$hw,'sale'=>'halloween','title'=>'Consider editing, enabling or pinning these products for Halloween.','class'=>'halloween'];
-  if($chkti>$sb)$sale=['timestamp'=>$sb,'sale'=>'smallbusinessday','title'=>'Consider editing, enabling or pinning these products for the Small Business Day sale.','class'=>'smallbusinessday'];
-  if($chkti>$cd)$sale=['timestamp'=>$cd,'sale'=>'christmas','title'=>'Consider editing, enabling or pinning these products for Christmas.','class'=>'christmas'];
+  $year=date('Y',$chkti) - 1;
+  $month=strtotime("1 month");
+  $vatis=strtotime("2/14/$year"); // Valentine's Day
+	$vatie=$vatis - $month;
+  $eatis=strtotime("last sunday of march $year"); // Easter
+	$eatie=$eatis - $month;
+  $mdtis=strtotime("5/8/$year"); // Mother's Day
+	$mdtie=$mdtis - $month;
+  $fdtis=strtotime("9/4/$year"); // Father's Day
+	$fdtie=$fdtis - $month;
+  $bftis=strtotime("last friday of october $year"); // Black Friday
+	$bftie=$bftis - $month;
+  $hwtis=strtotime("10/31/$year"); // Halloween
+	$hwtie=$hwtis - $month;
+  $sbtis=strtotime("last saturday of november $year"); // Small Business Day
+	$sbtie=$sbtis - $month;
+  $cdtis=strtotime("12/25/$year"); // Christmas Day
+	$cdtie=$cdtis - $month;
+  if($chkti>$vatis&&$chkti<$vatie)$sale=['tis'=>$vatis,'tie'=>$vatie,'sale'=>'valentine','title'=>'Consider editing, enabling or pinning these products for Valentine\'s Day.','class'=>'valentine'];
+  if($chkti>$eatis&&$chkti<$eatie)$sale=['tis'=>$eatis,'tie'=>$eatie,'sale'=>'easter','title'=>'Consider editing, enabling or pinning these products for Easter.','class'=>'easter'];
+  if($chkti>$mdtis&&$chkti<$mdtie)$sale=['tis'=>$mdtis,'tie'=>$mdtie,'sale'=>'mothersday','title'=>'Consider editing, enabling or pinning these products for Mother\'s Day.','class'=>'mothersday'];
+  if($chkti>$fdtis&&$chkti<$fdtie)$sale=['tis'=>$fdtis,'tie'=>$fdtie,'sale'=>'fathersday','title'=>'Consider editing, enabling or pinning these products for Father\'s Day.','class'=>'fathersday'];
+  if($chkti>$bftis&&$chkti<$bftie)$sale=['tis'=>$bftis,'tie'=>$bftie,'sale'=>'blackfriday','title'=>'Consider editing, enabling or pinning these products for the Black Friday Sale.','class'=>'blackfriday'];
+  if($chkti>$hwtis&&$chkti<$hwtie)$sale=['tis'=>$hwtis,'tie'=>$hwtie,'sale'=>'halloween','title'=>'Consider editing, enabling or pinning these products for Halloween.','class'=>'halloween'];
+  if($chkti>$sbtis&&$chkti<$sbtie)$sale=['tis'=>$sbtis,'tie'=>$sbtie,'sale'=>'smallbusinessday','title'=>'Consider editing, enabling or pinning these products for the Small Business Day sale.','class'=>'smallbusinessday'];
+  if($chkti>$cdtis&&$chkti<$cdtie)$sale=['tis'=>$cdtis,'tie'=>$cdtie,'sale'=>'christmas','title'=>'Consider editing, enabling or pinning these products for Christmas.','class'=>'christmas'];
   return $sale;
 }
 $sale=getSalePeriod();
-$pti=$sale['timestamp'] - 31536000;
-$sty=date("Y",$pti);
-$sti=strtotime("1/1/$sty - 6 months");
-$ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='inventory' AND `pti` < :pti LIMIT 4");
+$tis=$sale['tie'] - 31536000;
+$tie=$sale['tie'] - 31536000;
+$ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='inventory' AND `pti` < :tis AND `pti` > :tie LIMIT 4");
 $ss->execute([
-  ':pti'=>$pti
+  ':tis'=>$tis,
+  ':tie'=>$tie
 ]);
 if($ss->rowCount()>0){?>
 <div class="item resize m-0 p-0 col-12 col-sm-<?=$rw['width'];?>" data-dbid="<?=$rw['id'];?>" data-resizeMin="2" resizeMax="12" id="l_<?=$rw['id'];?>">

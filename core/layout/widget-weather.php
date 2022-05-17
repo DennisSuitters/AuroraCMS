@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -34,7 +34,7 @@
             <span id="tempDescription" class="mt-0"></span>
           </div>
           <div class="col-4 text-center">
-            <i class="wi" id="main-icon" style="font-size: 70px;"></i>
+            <i class="i" id="main-icon"></i>
           </div>
           <div class="col-4 text-right">
             <div class="row">
@@ -59,47 +59,71 @@
       </div>
       <div class="container-fluid m-0 p-0">
         <div class="row m-0 p-0">
-          <div id="forecast-tooltip-1" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
+          <div id="forecast-tooltip-1" class="col-6 col-sm-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
-              <div class="col-10 forecast-main">
-                <small id="forecast-day-1-name"></small><br><span id="forecast-day-1-main"></span>° <i class="wi forecast-icon" id="forecast-day-1-icon"><i class="i i-color-white i-spin">refresh</i></i>
-              </div>
-              <div class="col-2 forecast-min-low text-right">
-                <span class="high-temperature" id="forecast-day-1-ht"></span><br>
-                <span class="low-temperature" id="forecast-day-1-lt"></span>
+              <div class="row">
+                <div class="col-12 d-block small pl-2" id="forecast-day-1-name"></div>
+                <div class="col-5 forecast-main text-left">
+                  <span id="forecast-day-1-main"></span>°
+                </div>
+                <div class="col-4">
+                  <i class="i i-4x forecast-icon" id="forecast-day-1-icon"><i class="i i-color-white i-spin">refresh</i></i>
+                </div>
+                <div class="col-3 forecast-min-low text-right">
+                  <span class="high-temperature" id="forecast-day-1-ht"></span><br>
+                  <span class="low-temperature" id="forecast-day-1-lt"></span>
+                </div>
               </div>
             </div>
           </div>
-          <div id="forecast-tooltip-2" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
+          <div id="forecast-tooltip-2" class="col-6 col-sm-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
-              <div class="col-10 forecast-main">
-                <small id="forecast-day-2-name"></small><br><span id="forecast-day-2-main"></span>° <i class="wi forecast-icon" id="forecast-day-2-icon"><i class="i i-color-white i-spin">refresh</i></i>
-              </div>
-              <div class="col-2 forecast-min-low text-right">
-                <span class="high-temperature" id="forecast-day-2-ht"></span><br>
-                <span class="low-temperature" id="forecast-day-2-lt"></span>
+              <div class="row">
+                <div class="col-12 d-block small pl-2" id="forecast-day-2-name"></div>
+                <div class="col-5 forecast-main text-left">
+                  <span id="forecast-day-2-main"></span>°
+                </div>
+                <div class="col-4">
+                  <i class="i i-4x forecast-icon" id="forecast-day-2-icon"><i class="i i-color-white i-spin">refresh</i></i>
+                </div>
+                <div class="col-3 forecast-min-low text-right">
+                  <span class="high-temperature" id="forecast-day-2-ht"></span><br>
+                  <span class="low-temperature" id="forecast-day-2-lt"></span>
+                </div>
               </div>
             </div>
           </div>
-          <div id="forecast-tooltip-3" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
+          <div id="forecast-tooltip-3" class="col-6 col-sm-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
-              <div class="col-10 forecast-main">
-                <small id="forecast-day-3-name"></small><br><span id="forecast-day-3-main"></span>° <i class="wi forecast-icon" id="forecast-day-3-icon"><i class="i i-color-white i-spin">refresh</i></i>
-              </div>
-              <div class="col-2 forecast-min-low text-right">
-                <span class="high-temperature" id="forecast-day-3-ht"></span><br>
-                <span class="low-temperature" id="forecast-day-3-lt"></span>
+              <div class="row">
+                <div class="col-12 d-block small pl-2" id="forecast-day-3-name"></div>
+                <div class="col-5 forecast-main text-left">
+                  <span id="forecast-day-3-main"></span>°
+                </div>
+                <div class="col-4">
+                  <i class="i i-4x forecast-icon" id="forecast-day-3-icon"><i class="i i-color-white i-spin">refresh</i></i>
+                </div>
+                <div class="col-3 forecast-min-low text-right">
+                  <span class="high-temperature" id="forecast-day-3-ht"></span><br>
+                  <span class="low-temperature" id="forecast-day-3-lt"></span>
+                </div>
               </div>
             </div>
           </div>
-          <div id="forecast-tooltip-4" class="col-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
+          <div id="forecast-tooltip-4" class="col-6 col-sm-3 day-weather-box" data-tooltip="tooltip" aria-label="N/A">
             <div class="col-12 day-weather-inner-box">
-              <div class="col-10 forecast-main">
-                <small id="forecast-day-4-name"></small><br><span id="forecast-day-4-main"></span>° <i class="wi forecast-icon" id="forecast-day-4-icon"><i class="i i-color-white i-spin">refresh</i></i>
-              </div>
-              <div class="col-2 forecast-min-low text-right">
-                <span class="high-temperature" id="forecast-day-4-ht"></span><br>
-                <span class="low-temperature" id="forecast-day-4-lt"></span>
+              <div class="row">
+                <div class="col-12 d-block small pl-2" id="forecast-day-4-name"></div>
+                <div class="col-5 forecast-main text-left">
+                  <span id="forecast-day-4-main"></span>°
+                </div>
+                <div class="col-4">
+                  <i class="i i-4x forecast-icon" id="forecast-day-4-icon"><i class="i i-color-white i-spin">refresh</i></i>
+                </div>
+                <div class="col-3 forecast-min-low text-right">
+                  <span class="high-temperature" id="forecast-day-4-ht"></span>
+                  <span class="low-temperature" id="forecast-day-4-lt"></span>
+                </div>
               </div>
             </div>
           </div>
@@ -114,7 +138,7 @@
   </div>
 </div>
 <script>
-  var weatherIconsMap={"01d":"wi-day-sunny","01n":"wi-night-clear","02d":"wi-day-cloudy","02n":"wi-night-cloudy","03d":"wi-cloud","03n":"wi-cloud","04d":"wi-cloudy","04n":"wi-cloudy","09d":"wi-showers","09n":"wi-showers","10d":"wi-day-hail","10n":"wi-night-hail","11d":"wi-thunderstorm","11n":"wi-thunderstorm","13d":"wi-snow","13n":"wi-snow","50d":"wi-fog","50n":"wi-fog"};
+  var weatherIconsMap={"01d":"weather-day-sunny","01n":"weather-night-clear","02d":"weather-day-cloudy","02n":"weather-night-cloudy","03d":"weather-cloud","03n":"weather-cloud","04d":"weather-cloudy","04n":"weather-cloudy","09d":"weather-showers","09n":"weather-showers","10d":"weather-day-hail","10n":"weather-night-hail","11d":"weather-thunderstorm","11n":"weather-thunderstorm","13d":"weather-snow","13n":"weather-snow","50d":"weather-fog","50n":"weather-fog"};
   $(function(){
     getClientPosition();
   });
@@ -171,7 +195,7 @@
     $("#tempDescription").text(toCamelCase(forecast.weather[0].description));
     $("#humidity").text(forecast.main.humidity);
     $("#wind").text(forecast.wind.speed);
-    $("#main-icon").addClass(weatherIconsMap[forecast.weather[0].icon]);
+    $("#main-icon").text(weatherIconsMap[forecast.weather[0].icon]);
     $("#mainTemperature").text(Math.round(forecast.main.temp));
     $('#mainSunrise').text(getFormattedTime(forecast.sys.sunset));
     $('#mainSunset').text(getFormattedTime(forecast.sys.sunrise));
@@ -182,12 +206,12 @@
   function updateDaily(forecast){
     for(var i=1;i<(forecast.daily).length;i++){
       var day=forecast.daily[i];
-      var dayName=getFormattedDate(day.dt).substring(0,3);
+      var dayName=getFormattedDate(day.dt).split(',')[0];
       var weatherIcon=weatherIconsMap[day.weather[0].icon];
       $("#forecast-tooltip-"+i).attr('aria-label',toCamelCase(day.weather[0].description));
       $("#forecast-day-"+i+"-name").text(dayName);
       $("#forecast-day-"+i+"-icon").text('');
-      $("#forecast-day-"+i+"-icon").addClass(weatherIcon);
+      $("#forecast-day-"+i+"-icon").text(weatherIcon);
       $("#forecast-day-"+i+"-main").text(Math.round(day.temp.day));
       $("#forecast-day-"+i+"-ht").text(Math.round(day.temp.max));
       $("#forecast-day-"+i+"-lt").text(Math.round(day.temp.min));

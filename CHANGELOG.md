@@ -10,3 +10,13 @@
 #### v0.2.11
 - Fix Author Social Buttons.
 - Modify Events display in Administration to display order based on Start Date of Event in descending order first, then Created Date if the Start Date isn't set.
+
+#### v0.2.12
+- Adjust area under footer so it is less obtrusive on the main design.
+- Remove HTMLPurifer from front end page processing, as we are already sanitising text input for safe output before database insertion. No point in doing it twice, which helps speed up site rendering.
+- Adjust Administration Favicon to use Favicon from theme.
+- Restyle Administration area, making it easier to use, and visually improved. Now uses less Styling.
+- Fix Descending order for widget referrers.
+- Add ctrl+s SaveAll keyboard shortcut, this override's the browser default, but makes it much more user friendly for user's.
+- Fix Admin Activity Page not clearing entries.
+- Fix Admin Side Menu not showing correct active page.

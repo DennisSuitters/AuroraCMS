@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -44,30 +44,23 @@ else{
     }
   }?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">users</i></div>
-          <div>Accounts</div>
-          <div class="content-title-actions">
-            <button class="accountview" data-tooltip="tooltip" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;">
-              <i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i>
-              <i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button>
-            <?=($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="tooltip" aria-label="Accounts Settings"><i class="i">settings</i></a>':'&nbsp;').($user['options'][0]==1?'&nbsp;<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></a>':'&nbsp;');?>
-          </div>
-        </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">Accounts</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 overflow-visible">
-        <div class="row p-3">
-          <div class="col-12 col-sm-6 ml-sm-auto">
-            <div class="form-row">
-              <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item active">Accounts</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="form-row justify-content-end">
+                <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+                <div class="btn-group">
+                  <button class="btn accountview" data-tooltip="left" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button><?=($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="left" aria-label="Accounts Settings"><i class="i">settings</i></a>':'').($user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'&nbsp;');?>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -99,7 +92,7 @@ else{
                         <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
                         <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                       <?php }?>
-                      <span class="btn orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>
+                      <span class="btn btn-ghost orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>
                     </div>
                   </div>
                 </div>
@@ -109,6 +102,7 @@ else{
           <?php }?>
           <article class="ghost hidden"></article>
         </section>
+      </div>
         <script>
           $('#accountview').sortable({
             items:"article.item",
@@ -132,8 +126,8 @@ else{
             return ui;
           }
         </script>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

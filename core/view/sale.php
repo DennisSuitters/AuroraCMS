@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,9 +29,11 @@ if(stristr($html,'<saleItems')&&$config['options'][28]==1){
 		$count=$config['showItems'];
   preg_match('/<saleItems>([\w\W]*?)<\/saleItems>/',$html,$matches);
   $item=$matches[1];
-  $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `sale`=:sale AND `rank`<=:rank AND `status`='published' ORDER BY `tie` ASC");
+  $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `sale`=:sale AND `rank`<=:rank AND `status`='published' AND `eti` > :tis AND `eti` < :tie ORDER BY `eti` ASC");
   $ss->execute([
 		':sale'=>$sale['sale'],
+		':tis'=>$sale['tis'],
+		':tie'=>$sale['tie'],
 		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 	if($ss->rowCount()>0){

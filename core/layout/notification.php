@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,24 +31,23 @@ else{
   if(isset($args[0])&&$args[0]=='edit')$show='item';
   if($show=='notification'){?>
   <main>
-    <section id="content">
-      <div class="content-title-wrapper">
-        <div class="content-title">
-          <div class="content-title-heading">
-            <div class="content-title-icon"><i class="i i-4x">notification</i></div>
-            <div>Pages</div>
-            <div class="content-title-actions">
-              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="tooltip" aria-label="Add Notification"><i class="i">add</i></a>':'';?>
+    <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+      <div class="container-fluid p-2">
+        <div class="card mt-3 p-4 border-radius-0 bg-white shadow border-0 overflow-visible">
+          <div class="card-actions">
+            <div class="row">
+              <div class="col-12 col-sm">
+                <ol class="breadcrumb m-0 pl-0 pt-0">
+                  <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Notifications</a></li>
+                </ol>
+              </div>
+              <div class="col-12 col-sm-2 text-right">
+                <div class="btn-group">
+                  <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/notification/add" role="button" data-tooltip="left" aria-label="Add Notification"><i class="i">add</i></a>':'';?>
+                </div>
+              </div>
             </div>
           </div>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-            <li class="breadcrumb-item active">Pages</li>
-          </ol>
-        </div>
-      </div>
-      <div class="container-fluid p-0">
-        <div class="card border-radius-0 overflow-visible">
           <table class="table-zebra">
             <thead>
               <tr>
@@ -85,8 +84,8 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
 <?php }?>
             </tbody>
           </table>
-          <?php require'core/layout/footer.php';?>
         </div>
+        <?php require'core/layout/footer.php';?>
       </div>
     </section>
   </main>

@@ -7,12 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `contentType`='comingsoon'");
 $s->execute();
 $page=$s->fetch(PDO::FETCH_ASSOC);
@@ -93,7 +91,7 @@ $html=preg_replace([
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
   ($config['ga_tracking']!=''?'<script async src="https://www.googletagmanager.com/gtag/js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':''),
   htmlspecialchars(($page['heading']!=''?$page['heading']:$page['seoTitle']),ENT_QUOTES,'UTF-8'),
-  $purify->purify($page['notes']),
+  $page['notes'],
   '',
   date('Y-m-d h:i',$page['tie']),
   stristr($html,'<countdownscript')?'<script>countdown();</script>':'',

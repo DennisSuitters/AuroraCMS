@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.11
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -134,46 +134,34 @@ else{
         }
       }?>
     <main>
-      <section id="content">
-        <div class="content-title-wrapper mb-0">
-          <div class="content-title">
-            <div class="content-title-heading">
-              <div class="content-title-icon"><i class="i i-4x"><?=(isset($args[1])&&$args[1]!=''?$args[1]:'content');?></i></div>
-              <div><?= isset($args[1])?ucfirst($args[1]):'All';?></div>
-              <div class="content-title-actions">
-                <button class="contentview" data-tooltip="tooltip" aria-label="View Content as Cards or List" onclick="toggleContentView();return false;"><i class="i<?=($_COOKIE['contentview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['contentview']=='cards'?' d-none':'');?>">cards</i></button>
-                <a class="btn" href="<?= URL.$settings['system']['admin'].'/content/settings';?>" role="button" data-tooltip="tooltip" aria-label="Content Settings"><i class="i">settings</i></a>
-                <?=(isset($args[1])&&$args[1]!=''&&$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" data-tooltip="tooltip" aria-label="Add '.ucfirst($args[1]).'"><i class="i">add</i></a>':'');?>
-              </div>
-            </div>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-              <li class="breadcrumb-item active breadcrumb-dropdown">
-                <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
-                <ul class="breadcrumb-dropper">
-                  <li><a href="<?= URL.$settings['system']['admin'].'/content';?>">All</a></li>
-                  <?php $sc=$db->prepare("SELECT DISTINCT `contentType` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`!=:cT ORDER BY `contentType` ASC");
-                  $sc->execute([':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%']);
-                  while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
-                    echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</a></li>';
-                  }?>
-                </ul>
-            </ol>
-          </div>
-        </div>
-        <div class="container-fluid p-0">
-          <div class="card border-radius-0 overflow-visible">
-            <div class="row p-3">
-              <div class="col-12 col-sm-9">
-                <small>View:
-                  <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" data-tooltip="tooltip" aria-label="Display All Content">All</a>&nbsp;
-                  <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" data-tooltip="tooltip" aria-label="Display Published Items">Published</a>&nbsp;
-                  <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" data-tooltip="tooltip" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
-                  <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" data-tooltip="tooltip" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
-                  <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" data-tooltip="tooltip" aria-label="Display Deleted Items">Deleted</a>&nbsp;
-                  <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
-                </small>
-                <div class="small">
+      <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+        <div class="container-fluid p-2">
+          <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+            <div class="card-actions">
+              <div class="row">
+                <div class="col-12 col-sm-6">
+                  <ol class="breadcrumb m-0 pl-0 pt-0">
+                    <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+                    <li class="breadcrumb-item active breadcrumb-dropdown">
+                      <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
+                      <ul class="breadcrumb-dropper">
+                        <li><a href="<?= URL.$settings['system']['admin'].'/content';?>">All</a></li>
+                        <?php $sc=$db->prepare("SELECT DISTINCT `contentType` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`!=:cT ORDER BY `contentType` ASC");
+                        $sc->execute([':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%']);
+                        while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
+                          echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</a></li>';
+                        }?>
+                      </ul>
+                  </ol>
+                  <div class="text-left mt-0 pt-0">
+                  View:
+                    <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1]);?>" data-tooltip="tooltip" aria-label="Display All Content">All</a>&nbsp;
+                    <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" data-tooltip="tooltip" aria-label="Display Published Items">Published</a>&nbsp;
+                    <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" data-tooltip="tooltip" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
+                    <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" data-tooltip="tooltip" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
+                    <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" data-tooltip="tooltip" aria-label="Display Deleted Items">Deleted</a>&nbsp;
+                    <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/content/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>
+                  </div>
                   <ol class="breadcrumb pl-0 bg-transparent">
                     <li class="breadcrumb-item">Categories</li>
                     <li class="breadcrumb-item breadcrumb-dropdown">
@@ -237,10 +225,15 @@ else{
                     <?php }?>
                   </ol>
                 </div>
-              </div>
-              <div class="col-12 col-sm-3">
-                <div class="form-row">
-                  <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+                <div class="col-12 col-sm-6 text-right">
+                  <div class="form-row justify-content-end">
+                    <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+                    <div class="btn-group">
+                      <button class="btn contentview" data-tooltip="left" aria-label="View Content as Cards or List" onclick="toggleContentView();return false;"><i class="i<?=($_COOKIE['contentview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['contentview']=='cards'?' d-none':'');?>">cards</i></button>
+                      <a class="btn" href="<?= URL.$settings['system']['admin'].'/content/settings';?>" role="button" data-tooltip="left" aria-label="Content Settings"><i class="i">settings</i></a>
+                      <?=(isset($args[1])&&$args[1]!=''&&$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/'.$args[1].'" role="button" data-tooltip="left" aria-label="Add '.ucfirst($args[1]).'"><i class="i">add</i></a>':'');?>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -349,8 +342,8 @@ else{
               <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
             <?php }?>
           </section>
-          <?php require'core/layout/footer.php';?>
         </div>
+        <?php require'core/layout/footer.php';?>
       </div>
     </section>
   </main>

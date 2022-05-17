@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -30,27 +30,27 @@ if($args[0]!='compose'){
   ];
 }?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper mb-0">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">inbox</i></div>
-          <div>Messages Edit</div>
-          <div class="content-title-actions">
-            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
-            <?php }?>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
+                <li class="breadcrumb-item"><?=$args[0]=='view'?'View':'Compose';?></li>
+                <li class="breadcrumb-item active"><strong id="titleupdate"><?=$r['subject'];?></strong></li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
+                <?php }?>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/messages';?>">Messages</a></li>
-          <li class="breadcrumb-item"><?=$args[0]=='view'?'View':'Compose';?></li>
-          <li class="breadcrumb-item active"><strong id="titleupdate"><?=$r['subject'];?></strong></li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 p-3">
         <div class="row">
           <?php $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
           $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
@@ -62,7 +62,7 @@ if($args[0]!='compose'){
             <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i">bookmark</i> Important</a><br>
             <a class="link badge mb-1" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>"><i class="i">email-spam</i> Spam</a>
           </div>
-          <div class="col-12 col-md-10 pl-4">
+          <div class="col-12 col-md-10 mt-3 pl-4">
             <form target="sp" method="post" action="core/email_message.php" enctype="multipart/form-data">
               <input name="id" type="hidden" value="<?=$r['id'];?>">
               <div class="row">
@@ -179,8 +179,8 @@ if($args[0]!='compose'){
             });
           </script>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

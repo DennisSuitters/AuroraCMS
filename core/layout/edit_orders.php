@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -55,34 +55,34 @@ if($error==1)
   echo'<div class="alert alert-danger" role="alert">'.$e[0].'</div>';
 else{?>
   <main>
-    <section id="content">
-      <div class="content-title-wrapper mb-0">
-        <div class="content-title">
-          <div class="content-title-heading">
-            <div class="content-title-icon"><i class="i i-4x">order</i></div>
-            <div>Edit Order <?=$r['qid'].$r['iid'];?></div>
-            <div class="content-title-actions">
-              <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
-              <?php }?>
-              <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><i class="i">print</i></button>
-              <button data-tooltip="tooltip" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><i class="i">email-send</i></button>
-              <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+    <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+      <div class="container-fluid p-2">
+        <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+          <div class="card-actions">
+            <div class="row">
+              <div class="col-12 col-sm">
+                <ol class="breadcrumb m-0 pl-0 pt-0">
+                  <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/orders';?>">Orders</a></li>
+                  <li class="breadcrumb-item">
+                    <?php if(isset($r['aid'])&&$r['aid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/archived">Archived</a>';
+                    elseif(isset($r['iid'])&&$r['iid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/invoices">Invoices</a>';
+                    elseif($r['qid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/quotes">Quotes</a>';?>
+                  </li>
+                  <li class="breadcrumb-item active"><span id="ordertitle"><?=$r['qid'].$r['iid'];?></span></li>
+                </ol>
+              </div>
+              <div class="col-12 col-sm-2 text-right">
+                <div class="btn-group">
+                  <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                    <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
+                  <?php }?>
+                  <button class="btn" data-tooltip="left" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><i class="i">print</i></button>
+                  <button class="btn" data-tooltip="left" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><i class="i">email-send</i></button>
+                  <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+                </div>
+              </div>
             </div>
           </div>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/orders';?>">Orders</a></li>
-            <li class="breadcrumb-item">
-              <?php if(isset($r['aid'])&&$r['aid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/archived">Archived</a>';
-              elseif(isset($r['iid'])&&$r['iid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/invoices">Invoices</a>';
-              elseif($r['qid']!='')echo'<a href="'.URL.$settings['system']['admin'].'/orders/quotes">Quotes</a>';?>
-            </li>
-            <li class="breadcrumb-item active"><span id="ordertitle"><?=$r['qid'].$r['iid'];?></span></li>
-          </ol>
-        </div>
-      </div>
-      <div class="container-fluid p-0">
-        <div class="card border-radius-0 px-4 py-3">
           <div class="row">
             <div class="col-12">
               <h4>Details</h4>
@@ -683,8 +683,8 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                 </form>
               <?php }else echo'<div class="well">'.$r['notes'].'</div>';?>
             </div>
-            <?php require'core/layout/footer.php';?>
           </div>
+          <?php require'core/layout/footer.php';?>
         </div>
       </section>
     </main>

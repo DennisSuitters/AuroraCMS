@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -15,31 +15,28 @@ $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 $q->execute([':id'=>$args[1]]);
 $r=$q->fetch(PDO::FETCH_ASSOC);?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper mb-0">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon">
-            <?php if($r['gravatar']!='')echo'<img src="https://www.gravatar.com/avatar/'.md5($r['gravatar']).'" alt="'.$r['username'].($r['name']!=''?':'.$r['name']:'').'">';
-            elseif($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'<img src="media/avatar/'.$r['avatar'].'" alt="'.$r['username'].($r['name']!=''?':'.$r['name']:'').'">';
-            else echo'<i class="i i-4x">user</i>';?></div>
-          <div>Edit Account <?=$r['username'].':'.$r['name'];?></div>
-          <div class="content-title-actions">
-            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
-            <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/accounts';?>">Accounts</a></li>
+                <li class="breadcrumb-item active">Edit</li>
+                <li class="breadcrumb-item active"><span id="usersusername"><?=$r['username'];?></span>:<span id="usersname"><?=$r['name'];?></span></li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
+                <?php }?>
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/accounts';?>">Accounts</a></li>
-          <li class="breadcrumb-item active">Edit</li>
-          <li class="breadcrumb-item active"><span id="usersusername"><?=$r['username'];?></span>:<span id="usersname"><?=$r['name'];?></span></li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
           <label for="tab1-1">General</label>
@@ -60,7 +57,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <label for="tab1-8">Hosting/Website Payments</label>
 <?php }?>
 <?php /* Tab 1 General */?>
-          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
             <?=$user['rank']==1000?'<div class="row">'.
               '<div id="accountIP" class="col-12">'.
                 ($user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountIP" data-tooltip="tooltip" aria-label="PermaLink to Account IP Field">&#128279;</a>':'').
@@ -190,7 +187,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             }?>
           </div>
 <?php /* Tab 2 Contact */ ?>
-          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
                 <label id="accountName" for="name"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountName" data-tooltip="tooltip" aria-label="PermaLink to Name Field">&#128279;</a>':'';?>Name</label>
@@ -303,7 +300,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
           </div>
 <?php /* Tab 3 Images */ ?>
-          <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
+          <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
             <label id="accountAvatar" for="avatar"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAvatar" data-tooltip="tooltip" aria-label="PermaLink to Avatar Field">&#128279;</a>':'';?>Avatar</label>
             <form class="form-row p-0" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
               <input type="text" value="<?=$r['avatar'];?>" readonly>
@@ -330,8 +327,8 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               <?=$user['options'][5]==1?'<button class="save" id="savegravatar" data-dbid="gravatar" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
           </div>
-<?php /* Tab 3 Proofs */ ?>
-          <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
+<?php /* Tab 4 Proofs */ ?>
+          <div class="tab1-4 border-top p-4" data-tabid="tab1-4" role="tabpanel">
             <div class="form-row" id="mi">
               <?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='proofs' AND `uid`=:id ORDER BY `ord` ASC");
               $sm->execute([
@@ -390,8 +387,8 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               </script>
             <?php }?>
           </div>
-  <?php /* Tab 4 Social */ ?>
-          <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
+  <?php /* Tab 5 Social */ ?>
+          <div class="tab1-5 border-top p-4" data-tabid="tab1-5" role="tabpanel">
             <?php if($user['options'][0]==1||$user['options'][5]==1){?>
               <form class="form-row p-0" target="sp" method="post" action="core/add_data.php">
                 <input name="user" type="hidden" value="<?=$r['id'];?>">
@@ -497,7 +494,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
           </div>
   <?php /* Tab 6 Messages */ ?>
-          <div class="tab1-6 border-top p-3" data-tabid="tab1-6" role="tabpanel">
+          <div class="tab1-6 border-top p-4" data-tabid="tab1-6" role="tabpanel">
             <label id="accountEmailSignature" for="email_signature"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEmailSignature" data-tooltip="tooltip" aria-label="PermaLink to Email Signature">&#128279;</a>':'';?>Email Signature</label>
             <div class="row">
               <?=$user['options'][5]==1?'<form target="sp" method="post" action="core/update.php">'.
@@ -510,19 +507,12 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
           </div>
   <?php /* Tab 7 Settings */ ?>
-          <div class="tab1-7 border-top p-3" data-tabid="tab1-7" role="tabpanel">
+          <div class="tab1-7 border-top p-4" data-tabid="tab1-7" role="tabpanel">
             <label id="accountAdminTheme" for="theme"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAdminTheme" data-tooltip="tooltip" aria-label="PermaLink to Administration Theme Selector">&#128279;</a>':'';?>Administration Theme</label>
-            <select id="theme" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="theme"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','theme',$(this).val(),'select');setTheme($(this).val());">
+            <select id="theme" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="theme"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','theme',$(this).val(),'select');toggleTheme($(this).val());">
               <option value="">Light</option>
               <option value="dark"<?=$r['theme']=='dark'?' selected':'';?>>Dark</option>
             </select>
-            <script>
-              function setTheme(theme){
-                $('body').attr('data-theme',theme);
-                document.cookie='theme=;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
-            		Cookies.set('theme',theme,{expires:14});
-              }
-            </script>
             <label id="accountTimezone" for="timezone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTimezone" data-tooltip="tooltip" aria-label="PermaLink to Timezone Selector">&#128279;</a>':'';?>Timezone</label>
             <select id="timezone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="timezone"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','timezone',$(this).val(),'select');">
               <option value="default">System Default</option>
@@ -691,7 +681,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
           <?php }?>
 <?php if($config['hoster'][0]==1){?>
-          <div class="tab1-8 border-top p-3" data-tabid="tab1-8" role="tabpanel">
+          <div class="tab1-8 border-top p-4" data-tabid="tab1-8" role="tabpanel">
             <legend>Hosting Payments</legend>
             <div class="row">
               <div class="col-12 col-sm-4 pr-sm-3">
@@ -748,8 +738,8 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
           </div>
 <?php }?>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

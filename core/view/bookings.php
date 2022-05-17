@@ -7,12 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'inc-cover.php';
 require'inc-breadcrumbs.php';
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
@@ -84,7 +82,7 @@ $html=preg_replace([
 	'/<itemreadonly>/'
 ],[
 	htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
-	$purify->purify($page['notes']),
+	$page['notes'],
   '',
   $config['reCaptchaClient']!=''&&$config['reCaptchaServer']!=''&&stristr($html,'g-recaptcha')?'<div class="g-recaptcha" data-sitekey="'.$config['reCaptchaClient'].'"></div>':'',
 	($eventDate>0?date('Y-m-d\TH:i',$eventDate):date('Y-m-d\TH:i',time())),

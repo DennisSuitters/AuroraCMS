@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -58,23 +58,23 @@ if($user['options'][3]==1){
       if($args[0]=='spam')$folder='spam';
     }?>
     <main>
-      <section id="content">
-        <div class="content-title-wrapper mb-0">
-          <div class="content-title">
-            <div class="content-title-heading">
-              <div class="content-title-icon"><i class="i i-4x">inbox</i></div>
-              <div>Messages</div>
-              <div class="content-title-actions">
-                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="tooltip" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
+      <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+        <div class="container-fluid p-2">
+          <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+            <div class="card-actions">
+              <div class="row">
+                <div class="col-12 col-sm">
+                  <ol class="breadcrumb m-0 pl-0 pt-0">
+                    <li class="breadcrumb-item active">Messages</li>
+                  </ol>
+                </div>
+                <div class="col-12 col-sm-2 text-right">
+                  <div class="btn-group">
+                    <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="left" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
+                  </div>
+                </div>
               </div>
             </div>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item active">Messages</li>
-            </ol>
-          </div>
-        </div>
-        <div class="container-fluid p-0">
-          <div class="card border-radius-0 p-3">
             <div class="row">
               <?php if($folder=='INBOX'){
                 $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `folder`='INBOX' ORDER BY `ti` DESC, `subject` ASC");
@@ -167,8 +167,8 @@ if($user['options'][3]==1){
                 </table>
               </div>
             </div>
-            <?php require'core/layout/footer.php';?>
           </div>
+          <?php require'core/layout/footer.php';?>
         </div>
       </section>
       <script>

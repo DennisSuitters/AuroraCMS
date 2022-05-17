@@ -7,26 +7,19 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
-  <section id="content" class="main">
-    <div class="content-title-wrapper mb-0">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">review</i></div>
-          <div>Reviews</div>
-          <div class="content-title-actions"></div>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <ol class="breadcrumb m-0 pl-0 pt-0">
+            <li class="breadcrumb-item active">Reviews</li>
+          </ol>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">Reviews</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0">
         <table class="table-zebra">
           <thead>
             <tr>
@@ -63,7 +56,7 @@
                 <td class="small"><?= date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-top">
                   <div class="btn-group float-right" id="controls-<?=$r['id'];?>">
-                    <button class="btn<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" onclick="update('<?=$r['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>
+                    <button class="btn add<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" onclick="update('<?=$r['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>
                     <button class="btn trash" onclick="purge('<?=$r['id'];?>','comments');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                   </div>
                 </td>
@@ -82,8 +75,8 @@
             <?php }?>
           </tbody>
         </table>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

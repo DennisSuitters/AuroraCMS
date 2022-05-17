@@ -7,27 +7,20 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">activity</i></div>
-          <div>Preferences - Activity</div>
-          <div class="content-title-actions"></div>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <ol class="breadcrumb m-0 pl-0 pt-0">
+            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+            <li class="breadcrumb-item active">Activity</li>
+          </ol>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">Activity</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 overflow-visible">
         <?=$config['options'][12]!=1?'<div class="alert alert-info">Administration Activity Tracking is Disabled.</div>':'';
         if($config['options'][12]==1){?>
           <table class="table-zebra">
@@ -74,7 +67,7 @@
                   <td class="align-top" id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
-                        <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');"><i class="i">undo</i></button>':'';?>
+                        <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');"><i class="i">restore</i></button>':'';?>
                         <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><i class="i">trash</i></button>
                       </div>
                     </div>
@@ -83,9 +76,9 @@
               <?php }?>
             </tbody>
           </table>
-        <?php }
-        require'core/layout/footer.php';?>
+        <?php }?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,32 +24,32 @@ else{
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ORDER BY `ti` DESC, `title` ASC");
   $s->execute([':contentType'=>'newsletters']);?>
   <main>
-    <section id="content">
-      <div class="content-title-wrapper mb-0">
-        <div class="content-title">
-          <div class="content-title-heading">
-            <div class="content-title-icon"><i class="i i-4x">newspaper</i></div>
-            <div>Newsletters</div>
-            <div class="content-title-actions">
-              <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" data-tooltip="tooltip" aria-label="Newsletters Settings"><i class="i">settings</i></a>':'';?>
-              <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></a>':'';?>
+    <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+      <div class="container-fluid p-2">
+        <div class="card mt-3 p-4 border-radius-0 bg-white border-0 overflow-visible">
+          <div class="card-actions">
+            <div class="row">
+              <div class="col-12 col-sm">
+                <ol class="breadcrumb m-0 pl-0 pt-0">
+                  <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+                  <li class="breadcrumb-item active">Newsletters</li>
+                </ol>
+              </div>
+              <div class="col-12 col-sm-2 text-right">
+                <div class="btn-group">
+                  <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" data-tooltip="left" aria-label="Newsletters Settings"><i class="i">settings</i></a>':'';?>
+                  <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'';?>
+                </div>
+              </div>
             </div>
           </div>
-          <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-            <li class="breadcrumb-item active">Newsletters</li>
-          </ol>
-        </div>
-      </div>
-      <div class="container-fluid p-0">
-        <div class="card border-radius-0 p-3 overflow-visible">
           <div class="tabs" role="tablist">
             <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
             <label for="tab1-1">Newsletters</label>
             <input class="tab-control" id="tab1-2" name="tabs" type="radio">
             <label for="tab1-2">Subscribers</label>
 <?php /* Newsletters */ ?>
-            <div class="tab1-1 border-top" role="tabpanel">
+            <div class="tab1-1 border-top p-4" role="tabpanel">
               <div id="notification"></div>
               <table class="table-zebra">
                 <thead>
@@ -84,7 +84,7 @@ else{
                 </tbody>
               </table>
             </div>
-            <div class="tab1-2 border-top" role="tabpanel">
+            <div class="tab1-2 border-top p-4" role="tabpanel">
               <table class="table-zebra">
                 <thead>
                   <tr>
@@ -140,9 +140,9 @@ else{
               </table>
             </div>
           </div>
-          <?php require'core/layout/footer.php';
-          }?>
         </div>
+        <?php require'core/layout/footer.php';?>
       </div>
     </section>
   </main>
+<?php }

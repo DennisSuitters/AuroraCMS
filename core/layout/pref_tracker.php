@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -248,35 +248,28 @@ function getIspInfo($ip) {
   return $ipinfo_json;
 }?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">tracker</i></div>
-          <div>Preferences - Tracker</div>
-          <div class="content-title-actions"></div>
-        </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">Tracker</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 overflow-visible">
-        <div class="row p-3">
-          <div class="col-12 col-sm-6">
-            <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="options11" id="configoptions111">Visitor Tracking</label>
-            <span class="small text-muted">Collected Data is Purged after 30 Days.</span>
-          </div>
-          <div class="col-12 col-sm-6">
-            <form action="" method="post">
-              <div class="form-row">
-                <input type="text" name="find" value="<?=$find;?>" placeholder="Enter text to search in URLs...">
-                <button type="submit">Go</button>
-              </div>
-            </form>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+                <li class="breadcrumb-item active">Tracker</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <form action="" method="post">
+                <div class="form-row">
+                  <input type="text" name="find" value="<?=$find;?>" placeholder="Enter text to search in URLs...">
+                  <button type="submit"><i class="i">search</i></button>
+                </div>
+              </form>
+              <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="options11" id="configoptions111">Visitor Tracking</label>
+              <span class="small text-muted">Collected Data is Purged after 30 Days.</span>
+            </div>
           </div>
         </div>
         <table class="table-zebra">
@@ -399,7 +392,7 @@ function getIspInfo($ip) {
                       <a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_<?=$r['ip'];?>" role="button" data-tooltip="left" aria-label="Lookup IP using Project Honey Pot (Opens in New Page)"><i class="i">brand-projecthoneypot</i></a>
                     <?php }
                     if($r['status']!='blacklisted'){?>
-                      <button class="btn btn-dark" data-btnip="<?=$r['ip'];?>" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist('<?=$r['ip'];?>');"><i class="i">security</i></button>
+                      <button class="btn" data-btnip="<?=$r['ip'];?>" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist('<?=$r['ip'];?>');"><i class="i">blacklist-add</i></button>
                     <?php }?>
                     <button class="trash" data-tooltip="left" aria-label="Remove all of this IP" onclick="purge('<?=$r['ip'];?>','clearip');"><i class="i">trash</i></button>
                   </div>
@@ -417,8 +410,8 @@ function getIspInfo($ip) {
             <?php }?>
           </tbody>
         </table>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

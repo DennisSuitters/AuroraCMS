@@ -7,12 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'core/puconverter.php';
 $html=preg_replace([
   isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==false?'~<orderlist>.*?<\/orderlist>~is':'/<[\/]?orderlist>/',
@@ -22,7 +20,7 @@ $html=preg_replace([
 ],[
   '',
   htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
-  $purify->purify($page['notes']),
+  $page['notes'],
   ''
 ],$html);
 if(stristr($html,'<order>')){
@@ -113,7 +111,7 @@ if(isset($args[0])&&$args[0]!=''){
       '/<print order=[\"\']?status[\"\']?>/',
       '/<tracklink>/'
     ],[
-      $purify->purify($r['notes']),
+      $r['notes'],
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['abn'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),

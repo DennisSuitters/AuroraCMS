@@ -7,29 +7,29 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">theme</i></div>
-          <div>Preferences - Theme</div>
-          <div class="content-title-actions">
-            <?= ($user['options'][0]==1?'<form target="sp" method="post" action="core/upload_theme.php" enctype="multipart/form-data"><div class="custom-file" data-tooltip="tooltip" aria-label="Add Theme (Overwrites Existing)"><input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();"><label for="fu" class="btn add"><i class="i">add</i></label></div></form>':'');?>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions text-right">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+                <li class="breadcrumb-item active">Theme</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <?= ($user['options'][0]==1?'<form target="sp" method="post" action="core/upload_theme.php" enctype="multipart/form-data"><div class="custom-file" data-tooltip="left" aria-label="Add Theme (Overwrites Existing)"><input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();"><label for="fu" class="btn add pb-0" role="button"><i class="i">upload</i></label></div></form>':'');?>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">Theme</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 overflow-visible">
         <?='<div class="alert alert-danger'.(file_exists(THEME.'/theme.ini')?' hidden':'').'" id="notheme" role="alert">A Website Theme has not been set.</div>';?>
         <section class="content overflow-visible theme-chooser" id="preference-theme">
           <?php $folders=preg_grep('/^([^.])/',scandir("layout"));
@@ -52,8 +52,8 @@
             </article>
           <?php }?>
         </section>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
     <script>
       $(".theme-chooser").not(".disabled").find("figure.card-image").on("click",function(){

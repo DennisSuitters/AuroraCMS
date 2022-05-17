@@ -7,36 +7,36 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">plugin-seo</i></div>
-          <div>Preferences - SEO</div>
-          <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+                <li class="breadcrumb-item active">SEO</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">SEO</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <?php if($user['rank']>899){?>
           <div class="tabs" role="tablist">
             <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
             <label for="tab1-1">Settings</label>
             <input class="tab-control" id="tab1-2" name="tabs" type="radio">
             <label for="tab1-2">Helper Information</label>
-            <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
+            <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
         <?php }?>
         <label id="prefSitemap"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/seo#prefSitemap" data-tooltip="tooltip" aria-label="PermaLink to Preferences Sitemap">&#128279;</a>':'';?>sitemap.xml</label>
         <div class="form-row">
@@ -121,7 +121,7 @@
 */ ?>
         <?php if($user['rank']>899){?>
         </div>
-        <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
+        <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
           <?php $sh=$db->query("SELECT * FROM `".$prefix."seo` WHERE `contentType`='all' ORDER BY `ti` DESC");
           while($rh=$sh->fetch(PDO::FETCH_ASSOC)){?>
             <details>
@@ -174,9 +174,9 @@ while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
           </div>
         </div>
       </div>
-<?php }
-require'core/layout/footer.php';?>
+<?php }?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

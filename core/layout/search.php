@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,25 +15,18 @@ $rank=0;
 $show='search';
 $search=isset($_POST['s'])?$_POST['s']:'%';?>
 <main>
-  <section id="content" class="main">
-    <div class="content-title-wrapper mb-0">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">search</i></div>
-          <div>Search</div>
-          <div class="content-title-actions"></div>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <ol class="breadcrumb m-0 pl-0 pt-0">
+            <li class="breadcrumb-item active">Search</li>
+          </ol>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">Search</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 p-3">
         <form method="post" action="<?= URL.$settings['system']['admin'].'/search';?>">
           <div class="form-row">
             <input name="s" type="text" value="<?= str_replace('%',' ',$search);?>" placeholder="What are you looking for?">
-            <button type="submit">Go</button>
+            <button type="submit"><i class="i">search</i></button>
           </div>
         </form>
         <div class="row pl-5">
@@ -64,8 +57,8 @@ $search=isset($_POST['s'])?$_POST['s']:'%';?>
             </div>
           <?php }?>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

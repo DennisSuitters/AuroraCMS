@@ -7,31 +7,31 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_forum.php';
 else{?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i">forum</i></div>
-          <div>Forum</div>
-          <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/forum/settings" role="button" aria-label="Forum Settings"><i class="i">settings</i></a>':'';?>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item active">Forum</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-2 text-right">
+              <div class="btn-group">
+                <?=$user['options'][7]==1?'<a class="btn" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/forum/settings" role="button" aria-label="Forum Settings"><i class="i">settings</i></a>':'';?>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">Forum</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
-        <form target="sp" method="post" action="core/add_forumdata.php">
+        <form class="mt-3" target="sp" method="post" action="core/add_forumdata.php">
           <input name="act" type="hidden" value="category">
           <div class="form-row">
             <div class="input-text">Category</div>
@@ -193,9 +193,9 @@ $sp->execute([':tid'=>$rt['id']]);?>
       return ui;
     }
   </script>
-<?php }
-require'core/layout/footer.php';?>
+<?php }?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

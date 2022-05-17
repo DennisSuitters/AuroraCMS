@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,23 +33,23 @@ else{
   if(isset($args[0])&&$args[0]=='edit')$show='item';
   if($show=='joblist'){?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">joblist</i></div>
-          <div>Job List</div>
-          <div class="content-title-actions">
-            <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/joblist/add" role="button" data-tooltip="tooltip" aria-label="Add Job"><i class="i">add</i></a>':'';?>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="kanban-board p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item active">Job List</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-2 text-right">
+              <div class="btn-group">
+                <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/joblist/add" role="button" data-tooltip="left" aria-label="Add Job"><i class="i">add</i></a>':'';?>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">Job List</li>
-        </ol>
-      </div>
-    </div>
-    <div class="kanban-board p-0">
-      <div class="card border-radius-0 p-2">
         <div class="row">
           <div class="alert alert-info d-block d-sm-none" role="alert"></div>
           <div class="col-sm-3">
@@ -81,7 +81,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                       <br>Start <strong><?= date($config['dateFormat'],$r['tis']);?></strong><br>
                       <?=($r['tie']>0?'End <strong>'.date($config['dateFormat'],$r['tie']).'</strong><br>':'');?>
                       <?=($r['rid']!=0&&isset($ri['id'])?'Booked <strong>'.$ri['title'].'</strong>':'');?>
-                      <button class="btn btn-xs p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
+                      <button class="btn btn-xs p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
                     </p>
                   </article>
 <?php }?>
@@ -234,8 +234,8 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
             </div>
           </div>
         </div>
-<?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
   <script>

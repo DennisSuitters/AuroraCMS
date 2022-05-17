@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,36 +15,36 @@ $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `id`=:id");
 $s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper mb-0">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">notification</i></div>
-          <div>Edit Notification: <?=$r['title'];?></div>
-          <div class="content-title-actions">
-            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
-            <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/notification';?>">Notifications</a></li>
+                <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
+                <li class="breadcrumb-item active breadcrumb-dropdown"><?=$r['title'];?></li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-2 text-right">
+              <div class="btn-group">
+                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
+                <?php }?>
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/notification';?>">Notifications</a></li>
-          <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
-          <li class="breadcrumb-item active breadcrumb-dropdown"><?=$r['title'];?></li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-3 py-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
           <input class="tab-control" id="tab1-2" name="tabs" type="radio">
           <label for="tab1-2">Images</label>
-          <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
+          <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Settings</label>':'';?>
 <?php /* Content */ ?>
-          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
             <label id="pageTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageTitle" data-tooltip="tooltip" aria-label="PermaLink to Page Title Field">&#128279;</a>':'';?>Title</label>
             <div class="form-row">
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="title" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?> onkeyup="genurl();$('#titleupdate').text($(this).val());">
@@ -104,8 +104,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
 <?php /* Images */ ?>
-          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
-            <legend class="mt-3">Cover</legend>
+          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+            <legend>Cover</legend>
             <label id="pageCoverImage" for="cover"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverImage" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image Field">&#128279;</a>':'';?>Image</label>
             <div class="form-row">
               <input id="cover" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="cover" type="text" value="<?=$r['cover'];?>" readonly onchange="coverUpdate('<?=$r['id'];?>','menu','cover',$(this).val());">
@@ -125,9 +125,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
 <?php /* Settings */
           if($r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
-            <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
+            <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
               <?php if($r['file']!='index'){?>
-                <div class="row mt-3">
+                <div class="row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
                   <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                   <label id="menuactive0<?=$r['id'];?>" for="pageActive">Active</label>
@@ -135,8 +135,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
             </div>
           <?php }?>
-        <?php require'core/layout/footer.php';?>
+        </div>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

@@ -11,7 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
-<div class="alert widget item m-3 p-0" data-dbid="<?=$rw['id'];?>" id="l_<?=$rw['id'];?>">
+<div class="alert widget item mt-3 ml-2 p-0" data-dbid="<?=$rw['id'];?>" id="l_<?=$rw['id'];?>">
   <div class="toolbar px-2 py-1 bg-white">
     <?=$rw['title'];?>
     <div class="btn-group">

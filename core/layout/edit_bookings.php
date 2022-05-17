@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,31 +18,31 @@ $sr=$db->prepare("SELECT `contentType` FROM `".$prefix."content` where `id`=:id"
 $sr->execute([':id'=>$r['rid']]);
 $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">calendar</i></div>
-          <div>Booking</div>
-          <div class="content-title-actions">
-            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
-            <?php }?>
-            <a class="btn" href="#" data-tooltip="tooltip" aria-label="Print Booking" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');return false;"><i class="i">print</i></a>
-            <?php if($user['options'][0]==1||$user['options'][2]==1){?>
-              <a class="btn" href="#" data-tooltip="tooltip" aria-label="Email Booking" onclick="$('#sp').load('core/email_booking.php?id=<?=$r['id'];?>');return false;"><i class="i">email-send</i></a>
-            <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/bookings';?>">Bookings</a></li>
+                <li class="breadcrumb-item active"><span id="bookingname"><?=$r['name'];?></span>:<span id="bookingbusiness"><?=$r['business'];?></span></li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
+                <?php }?>
+                <a class="btn" href="#" data-tooltip="left" aria-label="Print Booking" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');return false;"><i class="i">print</i></a>
+                <?php if($user['options'][0]==1||$user['options'][2]==1){?>
+                  <a class="btn" href="#" data-tooltip="left" aria-label="Email Booking" onclick="$('#sp').load('core/email_booking.php?id=<?=$r['id'];?>');return false;"><i class="i">email-send</i></a>
+                <?php }?>
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/bookings';?>">Bookings</a></li>
-          <li class="breadcrumb-item active"><span id="bookingname"><?=$r['name'];?></span>:<span id="bookingbusiness"><?=$r['business'];?></span></li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="row">
           <div class="col-12 col-md-4 pr-md-3">
             <label id="contenttis" for="tis"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingFor" data-tooltip="tooltip" aria-label="PermaLink to Booked For Date Field">&#128279;</a>':'';?>Booked <span class="labeldate" id="labeldatetis">(<?= date($config['dateFormat'],$r['tis']);?>)</span></label>
@@ -232,8 +232,8 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

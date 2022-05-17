@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -259,22 +259,31 @@ function getSaleTime(){
     'class'=>''
   ];
   $year=date('Y',$chkti);
-  $va=strtotime("2/14/$year - 2 weeks"); // Valentine's Day
-  $ea=strtotime("last sunday of march $year - 1 month"); // Easter
-  $md=strtotime("5/8/$year - 1 month"); // Mother's Day
-  $fd=strtotime("9/4/$year - 1 month"); // Father's Day
-  $bf=strtotime("last friday of october $year - 1 month"); // Black Friday
-  $hw=strtotime("10/31/$year - 1 month"); // Halloween
-  $sb=strtotime("last saturday of november $year - 1 month"); // Small Business Day
-  $cd=strtotime("12/25/$year - 1 month"); // Christmas Day
-  if($chkti>$va)$sale=['timestamp'=>$va,'sale'=>'valentine','class'=>'valentine','title'=>'Checkout our products in our Valentine\'s Day Sale!'];
-  if($chkti>$ea)$sale=['timestamp'=>$ea,'sale'=>'easter','class'=>'easter','title'=>'Checkout our products in our Easter Sale!'];
-  if($chkti>$md)$sale=['timestamp'=>$md,'sale'=>'mothersday','class'=>'mothersday','title'=>'Spoil your Mother with something from our Mother\'s Day Sale!'];
-  if($chkti>$fd)$sale=['timestamp'=>$fd,'sale'=>'fathersday','class'=>'fathersday','title'=>'Spoil your Father with something from our Father\'s Day Sale!'];
-  if($chkti>$bf)$sale=['timestamp'=>$bf,'sale'=>'blackfriday','class'=>'blackfriday','title'=>'Get something from our Black Friday Sale!'];
-  if($chkti>$hw)$sale=['timestamp'=>$hw,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
-  if($chkti>$sb)$sale=['timestamp'=>$sb,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
-  if($chkti>$cd)$sale=['timestamp'=>$cd,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
+	$month=strtotime("1 month");
+  $vatis=strtotime("2/14/$year"); // Valentine's Day
+	$vatie=$vatis - $month;
+  $eatis=strtotime("last sunday of march $year"); // Easter
+	$eatie=$eatis - $month;
+  $mdtis=strtotime("5/8/$year"); // Mother's Day
+	$mdtie=$mdtis - $month;
+  $fdtis=strtotime("9/4/$year"); // Father's Day
+	$fdtie=$fdtis - $month;
+  $bftis=strtotime("last friday of october $year"); // Black Friday
+	$bftie=$bftis - $month;
+  $hwtis=strtotime("10/31/$year"); // Halloween
+	$hwtie=$hwtis - $month;
+  $sbtis=strtotime("last saturday of november $year"); // Small Business Day
+	$sbtie=$sbtis - $month;
+  $cdtis=strtotime("12/25/$year"); // Christmas Day
+	$cdtie=$cdtis - $month;
+  if($chkti>$vatis&&$chkti<$vatie)$sale=['tis'=>$vatis,'tie'=>$vatie,'sale'=>'valentine','class'=>'valentine','title'=>'Checkout our products in our Valentine\'s Day Sale!'];
+  if($chkti>$eatis&&$chkti<$eatie)$sale=['tis'=>$eatis,'tie'=>$eatie,'sale'=>'easter','class'=>'easter','title'=>'Checkout our products in our Easter Sale!'];
+  if($chkti>$mdtis&&$chkti<$mdtie)$sale=['tis'=>$mdtis,'tie'=>$mdtie,'sale'=>'mothersday','class'=>'mothersday','title'=>'Spoil your Mother with something from our Mother\'s Day Sale!'];
+  if($chkti>$fdtis&&$chkti<$fdtie)$sale=['tis'=>$fdtis,'tie'=>$fdtie,'sale'=>'fathersday','class'=>'fathersday','title'=>'Spoil your Father with something from our Father\'s Day Sale!'];
+  if($chkti>$bftis&&$chkti<$bftie)$sale=['tis'=>$bftis,'tie'=>$bftie,'sale'=>'blackfriday','class'=>'blackfriday','title'=>'Get something from our Black Friday Sale!'];
+  if($chkti>$hwtis&&$chkti<$hwtie)$sale=['tis'=>$hwtis,'tie'=>$hwtie,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
+  if($chkti>$sbtis&&$chkti<$sbtie)$sale=['tis'=>$sbtis,'tie'=>$sbtie,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
+  if($chkti>$cdtis&&$chkti<$cdtie)$sale=['tis'=>$cdtis,'tie'=>$cdtie,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
   return $sale;
 }
 function size_format($B,$D=2){
@@ -335,7 +344,7 @@ class internal{
 	function manifestadmin($args=false){require'core/manifestadmin.php';}
 }
 class admin{
-	function favicon(){return'core/images/favicon.png';}
+	function favicon(){return FAVICON;}
 	function noimage(){return'core/images/noimage.jpg';}
 	function noavatar(){return'core/images/noavatar.jpg';}
 	function accounts($args=false){

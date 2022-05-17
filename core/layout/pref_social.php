@@ -7,34 +7,27 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i">user-group</i></div>
-          <div>Preferences - Social</div>
-          <div class="content-title-actions"></div>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <ol class="breadcrumb m-0 pl-0 pt-0">
+            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+            <li class="breadcrumb-item active">Social Networking</li>
+          </ol>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">Social Networking</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 p-3">
-        <div class="row mt-3">
+        <div class="row">
           <input id="options9" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="9" type="checkbox"<?=$config['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="options9" id="configoptions9">Show RSS Feed Icon</label>
         </div>
         <form class="row" target="sp" method="post" action="core/add_social.php">
           <input name="user" type="hidden" value="0">
-          <div class="col-12 col-md-3">
+          <div class="col-12 col-sm-3">
             <label for="icon">Network</label>
             <div class="form-row">
               <select id="icon" name="icon">
@@ -77,11 +70,10 @@
                 <option value="icq">ICQ</option>
                 <option value="kickstarter">Kickstarter</option>
                 <option value="last-fm">Last FM</option>
-                <option value="lego">Lego</option>
+                <option value="livejournal">LiveJournal</option>
                 <option value="lynda">Lynda</option>
                 <option value="massroots">Massroots</option>
                 <option value="medium">Medium</option>
-                <option value="myspace">MySpace</option>
                 <option value="netlify">Netlify</option>
                 <option value="ovh">OVH</option>
                 <option value="paypal">Paypal</option>
@@ -99,7 +91,6 @@
                 <option value="stackoverflow">Stackoverflow</option>
                 <option value="steam">Steam</option>
                 <option value="stumbleupon">StumbleUpon</option>
-                <option value="tsu">TSU</option>
                 <option value="tumblr">Tumblr</option>
                 <option value="twitch">Twitch</option>
                 <option value="ubiquiti">Ubiquiti</option>
@@ -112,18 +103,16 @@
                 <option value="xbox-live">Xbox Live</option>
                 <option value="yahoo">Yahoo</option>
                 <option value="yelp">Yelp</option>
-                <option value="zerply">Zerply</option>
-                <option value="zune">Zune</option>
               </select>
             </div>
           </div>
-          <div class="col-12 col-md-8">
+          <div class="col-12 col-sm-8">
             <label for="url">URL</label>
             <div class="form-row">
               <input id="url" name="url" type="text" value="" placeholder="Enter a URL...">
             </div>
           </div>
-          <div class="col-12 col-md-1">
+          <div class="col-12 col-sm-1">
             <label>&nbsp;</label>
             <div class="form-row">
               <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
@@ -135,17 +124,17 @@
           $ss->execute();
           while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
             <div class="row mt-1" id="l_<?=$rs['id'];?>">
-              <div class="col-12 col-md-3">
+              <div class="col-12 col-sm-3">
                 <div class="form-row">
-                  <div class="input-text col-12" data-tooltip="tooltip" aria-label="<?= ucfirst($rs['icon']);?>"><i class="i i-social <?=$rs['icon'];?>">social-<?=$rs['icon'].'</i>&nbsp;&nbsp'.ucfirst($rs['icon']);?></div>
+                  <div class="input-text col-12" data-tooltip="tooltip" aria-label="<?= ucfirst($rs['icon']);?>"><i class="i i-social i-2x social-<?=$rs['icon'];?>">social-<?=$rs['icon'].'</i>&nbsp;&nbsp'.ucfirst($rs['icon']);?></div>
                 </div>
               </div>
-              <div class="col-12 col-md-8">
+              <div class="col-12 col-sm-8">
                 <div class="form-row">
                   <input type="text" value="<?=$rs['url'];?>" readonly>
                 </div>
               </div>
-              <div class="col-12 col-md-1">
+              <div class="col-12 col-sm-1">
                 <div class="form-row">
                   <form target="sp" action="core/purge.php">
                     <input name="id" type="hidden" value="<?=$rs['id'];?>">
@@ -157,8 +146,8 @@
             </div>
           <?php }?>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

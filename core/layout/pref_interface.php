@@ -7,29 +7,29 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">sliders</i></div>
-          <div>Preferences - Interface</div>
-          <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+                <li class="breadcrumb-item active">Interface</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">Interface</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
           <label for="tab1-1">General</label>
@@ -37,9 +37,9 @@
           <label for="tab1-2">Sidebar Menu</label>
           <input class="tab-control" id="tab1-3" name="tabs" type="radio">
           <label for="tab1-3">Widgets</label>
-          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
           <?php if($user['rank']>999){?>
-            <div class="row mt-3">
+            <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevLock" data-tooltip="tooltip" aria-label="PermaLink to Preferences Developer Lock Checkbox">&#128279;</a>':'';?>
               <input id="prefDevLock" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="17" type="checkbox"<?=$config['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="configoptions171" for="prefDevLock">Developer Lock Down</label>
@@ -137,12 +137,235 @@
             </div>
             <div class="form-row mt-3">
               <label id="prefDateFormat" for="dateFormat"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDateFormat" data-tooltip="tooltip" aria-label="PermaLink to Preferences Date Format Field">&#128279;</a>':'';?>Date/Time&nbsp;Format</label>
-              <small class="form-text text-right">For information on Date Format Characters click <a target="_blank" href="https://www.php.net/manual/en/datetime.formats.php">here</a>.</small>
             </div>
             <div class="form-row">
               <input class="textinput" id="dateFormat" data-dbid="1" data-dbt="config" data-dbc="dateFormat" type="text" value="<?=$config['dateFormat'];?>" placeholder="Enter a Date/Time Format...">
               <div class="input-text"><?= date($config['dateFormat'],time());?></div>
               <button class="save" id="savedateFormat" data-dbid="dateFormat" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+              <button onclick="$('#dateFormats,.datedisp').toggleClass('d-none');" data-tooltip="tooltip" aria-label="Date Format Options"><i class="i datedisp">chevron-down</i><i class="i datedisp d-none">chevron-up</i></button>
+            </div>
+            <div class="form-row mt-0 d-none" id="dateFormats">
+              <table class="table border">
+                <thead>
+                  <tr class="bg-light">
+                    <th>Format character</th>
+                    <th>Description</th>
+                    <th>Example returned values</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Day</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>d</i></td>
+                    <td>Day of the month, 2 digits with leading zeros</td>
+                    <td><i>01</i> to <i>31</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>D</i></td>
+                    <td>A textual representation of a day, three letters</td>
+                    <td><i>Mon</i> through <i>Sun</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>j</i></td>
+                    <td>Day of the month without leading zeros</td>
+                    <td><i>1</i> to <i>31</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>l</i> (lowercase ‘L’)</td>
+                    <td>A full textual representation of the day of the week</td>
+                    <td><i>Sunday</i> through <i>Saturday</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>N</i></td>
+                    <td>ISO-8601 numeric representation of the day of the week.</td>
+                    <td><i>1</i> (for Monday) through <i>7</i> (for Sunday)</td>
+                  </tr>
+                  <tr>
+                    <td><i>S</i></td>
+                    <td>English ordinal suffix for the day of the month, 2 characters</td>
+                    <td><i>st</i>, <i>nd</i>, <i>rd</i> or<br><i>th</i>.  Works well with <i>j</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>w</i></td>
+                    <td>Numeric representation of the day of the week</td>
+                    <td><i>0</i> (for Sunday) through <i>6</i> (for Saturday)</td>
+                  </tr>
+                  <tr>
+                    <td><i>z</i></td>
+                    <td>The day of the year (starting from 0)</td>
+                    <td><i>0</i> through <i>365</i></td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Week</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>W</i></td>
+                    <td>ISO-8601 week number of year, weeks starting on Monday (added in PHP  4.1.0)</td>
+                    <td>Example: <i>42</i> (the 42nd week in the year)</td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Month</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>F</i></td>
+                    <td>A full textual representation of a month, such as January or March</td>
+                    <td><i>January</i> through <i>December</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>m</i></td>
+                    <td>Numeric representation of a month, with leading zeros</td>
+                    <td><i>01</i> through <i>12</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>M</i></td>
+                    <td>A short textual representation of a month, three letters</td>
+                    <td><i>Jan</i> through <i>Dec</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>n</i></td>
+                    <td>Numeric representation of a month, without leading zeros</td>
+                    <td><i>1</i> through <i>12</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>t</i></td>
+                    <td>Number of days in the given month</td>
+                    <td><i>28</i> through <i>31</i></td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Year</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>L</i></td>
+                    <td>Whether it’s a leap year</td>
+                    <td><i>1</i> if it is a leap year, <i>0</i> otherwise.</td>
+                  </tr>
+                  <tr>
+                    <td><i>o</i></td>
+                    <td>ISO-8601 year number. This has the same value as<br>
+                      <i>Y</i>, except that if the ISO week number<br>
+                      (<i>W</i>) belongs to the previous or next year, that year<br>
+                      is used instead. (added in PHP 5.1.0)</td>
+                    <td>Examples: <i>1999</i> or <i>2003</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>Y</i></td>
+                    <td>A full numeric representation of a year, 4 digits</td>
+                    <td>Examples: <i>1999</i> or <i>2003</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>y</i></td>
+                    <td>A two digit representation of a year</td>
+                    <td>Examples: <i>99</i> or <i>03</i></td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Time</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>a</i></td>
+                    <td>Lowercase Ante meridiem and Post meridiem</td>
+                    <td><i>am</i> or <i>pm</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>A</i></td>
+                    <td>Uppercase Ante meridiem and Post meridiem</td>
+                    <td><i>AM</i> or <i>PM</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>B</i></td>
+                    <td>Swatch Internet time</td>
+                    <td><i>000</i> through <i>999</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>g</i></td>
+                    <td>12-hour format of an hour without leading zeros</td>
+                    <td><i>1</i> through <i>12</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>G</i></td>
+                    <td>24-hour format of an hour without leading zeros</td>
+                    <td><i>0</i> through <i>23</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>h</i></td>
+                    <td>12-hour format of an hour with leading zeros</td>
+                    <td><i>01</i> through <i>12</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>H</i></td>
+                    <td>24-hour format of an hour with leading zeros</td>
+                    <td><i>00</i> through <i>23</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>i</i></td>
+                    <td>Minutes with leading zeros</td>
+                    <td><i>00</i> to <i>59</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>s</i></td>
+                    <td>Seconds, with leading zeros</td>
+                    <td><i>00</i> through <i>59</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>u</i></td>
+                    <td>Microseconds (added in PHP 5.2.2)</td>
+                    <td>Example: <i>654321</i></td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Timezone</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>e</i></td>
+                    <td>Timezone identifier (added in PHP 5.1.0)</td>
+                    <td>Examples: <i>UTC</i>, <i>GMT</i>, <i>Atlantic/Azores</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>I</i> (capital i)</td>
+                    <td>Whether or not the date is in daylight saving time</td>
+                    <td><i>1</i> if Daylight Saving Time, <i>0</i> otherwise.</td>
+                  </tr>
+                  <tr>
+                    <td><i>O</i></td>
+                    <td>Difference to Greenwich time (GMT) in hours</td>
+                    <td>Example: <i>+0200</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>P</i></td>
+                    <td>Difference to Greenwich time (GMT) with colon between hours and minutes (added in PHP 5.1.3)</td>
+                    <td>Example: <i>+02:00</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>T</i></td>
+                    <td>Timezone abbreviation</td>
+                    <td>Examples: <i>EST</i>, <i>MDT</i> …</td>
+                  </tr>
+                  <tr>
+                    <td><i>Z</i></td>
+                    <td>Timezone offset in seconds. The offset for timezones west of UTC is always<br>
+                    negative, and for those east of UTC is always positive.</td>
+                    <td><i>-43200</i> through <i>50400</i></td>
+                  </tr>
+                  <tr class="bg-light">
+                    <td colspan="3" class="text-center"><strong>Full Date/Time</strong></td>
+                  </tr>
+                  <tr>
+                    <td><i>c</i></td>
+                    <td>ISO 8601 date (added in PHP 5)</td>
+                    <td>2004-02-12T15:19:21+00:00</td>
+                  </tr>
+                  <tr>
+                    <td><i>r</i></td>
+                    <td><a class="link external" href="http://www.faqs.org/rfcs/rfc2822" rel="noopener">» RFC 2822</a> formatted date</td>
+                    <td>Example: <i>Thu, 21 Dec 2000 16:01:07 +0200</i></td>
+                  </tr>
+                  <tr>
+                    <td><i>U</i></td>
+                    <td>Seconds since the Unix Epoch (January 1 1970 00:00:00 GMT)</td>
+                    <td>&nbsp;</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
             <label id="prefTimezone" for="timezone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefTimezone" data-tooltip="tooltip" aria-label="PermaLink to Preferences Timezone Selector">&#128279;</a>':'';?>Timezone</label>
             <div class="form-row">
@@ -171,7 +394,7 @@
             </div>
           <?php }?>
           </div>
-          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
 <?php $sm1=$db->prepare("SELECT * FROM `".$prefix."sidebar` WHERE `mid`=0 AND `rank`<=:r ORDER BY `ord` ASC, `title` ASC");
 $sm1->execute([
   ':r'=>$user['rank']
@@ -202,12 +425,12 @@ $sm1->execute([
                       if($sm2->rowCount()>0){?>
                         <div class="mt-2 d-none" id="sidebardropdown<?=$rm1['id'];?>">
                           <div class="row">
-                            <div class="col-12 py-1 bg-dark">
+                            <div class="col-12 py-1">
                               <div class="row">
-                                <span class="col-7 pl-2 small">Title</span>
-                                <span class="col-2 small text-center">Available To</span>
-                                <span class="col-1 small text-center">Active</span>
-                                <span class="col-2 small text-center">ReOrder</span>
+                                <strong class="col-7 pl-2 small">Title</strong>
+                                <strong class="col-2 small text-center">Available To</strong>
+                                <strong class="col-1 small text-center">Active</strong>
+                                <strong class="col-2 small text-center">ReOrder</strong>
                               </div>
                             </div>
                           </div>
@@ -327,7 +550,7 @@ $sm1->execute([
               </script>
             <?php }?>
           </div>
-          <div class="tab1-3 border-top mb-3 p-3" data-tabid="tab1-3" role="tabpanel">
+          <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
             <table class="table">
               <thead>
                 <tr>
@@ -352,8 +575,8 @@ while($rw=$sw->fetch(PDO::FETCH_ASSOC)){?>
             </table>
           </div>
         </div>
-<?php   require'core/layout/footer.php';?>
       </div>
+      <?php   require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

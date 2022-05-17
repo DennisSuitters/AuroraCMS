@@ -1,6 +1,7 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
 - Administration
+  - Explore adding AVIF Image Compression to elFinder when uploading files.
   - TODO/Joblist
     - Add ability to create Jobs from Bookings, and Invoices.
   - Fix update core system

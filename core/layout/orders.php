@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -193,30 +193,30 @@ if($user['options'][4]==1){
       $s->execute();
     }?>
     <main>
-      <section id="content">
-        <div class="content-title-wrapper">
-          <div class="content-title">
-            <div class="content-title-heading">
-              <div class="content-title-icon"><i class="i i-4x">order</i></div>
-              <div>Orders</div>
-              <div class="content-title-actions">
-                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="tooltip" aria-label="Orders Settings"><i class="i">settings</i></a>':'';?>
-                <?php if(isset($args[0])&&$args[0]!=''){
-                  if($user['options'][4]==1){
-                    if(isset($args[0])&&$args[0]=='quotes')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" data-tooltip="tooltip" aria-label="Add Quote"><i class="i">add</i></a>';
-                    if(isset($args[0])&&$args[0]=='invoices')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" data-tooltip="tooltip" aria-label="Add Invoice"><i class="i">add</i></a>';
-                  }
-                }?>
+      <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+        <div class="container-fluid p-2">
+          <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+            <div class="card-actions">
+              <div class="row">
+                <div class="col-12 col-sm">
+                  <ol class="breadcrumb m-0 pl-0 pt-0">
+                    <li class="breadcrumb-item"><?= isset($args[0])&&$args[0]!=''?'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>':'Orders';?></li>
+                    <li class="breadcrumb-item active"><?= isset($args[0])&&$args[0]!=''?ucfirst($args[0]):'All';?></li>
+                  </ol>
+                </div>
+                <div class="col-12 col-sm-2 text-right">
+                  <div class="btn-group">
+                    <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="left" aria-label="Orders Settings"><i class="i">settings</i></a>':'';?>
+                    <?php if(isset($args[0])&&$args[0]!=''){
+                      if($user['options'][4]==1){
+                        if(isset($args[0])&&$args[0]=='quotes')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" data-tooltip="left" aria-label="Add Quote"><i class="i">add</i></a>';
+                        if(isset($args[0])&&$args[0]=='invoices')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" data-tooltip="left" aria-label="Add Invoice"><i class="i">add</i></a>';
+                      }
+                    }?>
+                  </div>
+                </div>
               </div>
             </div>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><?= isset($args[0])&&$args[0]!=''?'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>':'Orders';?></li>
-              <li class="breadcrumb-item active"><?= isset($args[0])&&$args[0]!=''?ucfirst($args[0]):'All';?></li>
-            </ol>
-          </div>
-        </div>
-        <div class="container-fluid p-0">
-          <div class="card border-radius-0 overflow-visible">
             <div id="notifications" role="alert"></div>
             <table class="table-zebra" id="stupidtable">
               <thead class="d-none d-md-table-header-group">
@@ -310,22 +310,30 @@ if($user['options'][4]==1){
                 <a class="badger badge-<?= !isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
               </small>
             </div>
-            <?php require'core/layout/footer.php';?>
           </div>
+          <?php require'core/layout/footer.php';?>
         </div>
       </div>
     </section>
 <?php }
   }else{?>
     <main>
-      <section id="content">
-        <div class="content-title-wrapper">
+      <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?> mr-3" id="content">
+        <div class="content-title-wrapper bg-aurora">
           <div class="content-title">
             <div class="content-title-heading">
-              <div class="content-title-icon"><i class="i i-4x">order</i></div>
-              <div>Orders</div>
-              <div class="content-title-actions">
-                <button data-tooltip="tooltip" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><i class="i">fullscreen</i></button>
+              <ol class="breadcrumb small">
+                <li class="breadcrumb-item"><?= isset($args[0])&&$args[0]!=''?'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>':'Orders';?></li>
+                <li class="breadcrumb-item active"><?=$args[0]!=''?ucfirst($args[0]):'All';?></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid p-0">
+          <div class="card border-radius-0 shadow">
+            <div class="content-title-actions text-right">
+              <div class="btn-group">
+                <button class="btn" data-tooltip="tooltip" aria-label="Toggle Fullscreen" onclick="toggleFullscreen();"><i class="i">fullscreen</i></button>
                 <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="tooltip" aria-label="Orders Settings"><i class="i">settings</i></a>':'';?>
                 <?php if($args[0]!=''){
                   if($user['options'][4]==1){
@@ -335,14 +343,6 @@ if($user['options'][4]==1){
                 }?>
               </div>
             </div>
-            <ol class="breadcrumb">
-              <li class="breadcrumb-item"><?= isset($args[0])&&$args[0]!=''?'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>':'Orders';?></li>
-              <li class="breadcrumb-item active"><?=$args[0]!=''?ucfirst($args[0]):'All';?></li>
-            </ol>
-          </div>
-        </div>
-        <div class="container-fluid p-0">
-          <div class="card border-radius-0 shadow">
             <div class="alert alert-info" role="alert">You don't have permissions to View this Area!</div>
           </div>
           <?php require'core/layout/footer.php';?>

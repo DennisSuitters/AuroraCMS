@@ -7,12 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 require'core/pagination.php';
 include'inc-cover.php';
 include'inc-breadcrumbs.php';
@@ -70,7 +68,7 @@ $html=preg_replace([
   '/<print page=[\"\']?notes[\"\']?>/',
 ],[
   '',
-	$purify->purify($page['notes']),
+	($page['notes'],
 ],$html);
 $forum='';
 $cid=isset($_GET['cid'])?filter_input(INPUT_GET,'cid',FILTER_SANITIZE_NUMBER_INT):0;
@@ -117,7 +115,7 @@ if($act=='search'){
 				],[
 					$searchlink,
 					htmlspecialchars($searchtitle,ENT_QUOTES,'UTF-8'),
-					$purify->purify($searchnotes)
+					$searchnotes
 				],$items);
 				$searchitems.=$items;
 			}
@@ -198,7 +196,7 @@ if($pid==0&&$tid==0&&$cid==0){ // Category
 			$rc['pin']==1?'<i class="i text-success">pin</i>':'',
 			URL.'forum?cid='.$rc['id'],
 			htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8'),
-			$purify->purify($rc['notes']),
+			$rc['notes'],
 			$tops->rowCount(),
 			$psts->rowCount(),
 			$lastinfo
@@ -324,7 +322,7 @@ if($pid==0&&$tid==0&&$cid>0){ // Topics
 			URL.'forum?cid='.$rc['id'].'&tid='.$rt['id'],
 			$rt['pin']==1?'<i class="i text-success">pin</i>':'',
 			htmlspecialchars($rt['title'],ENT_QUOTES,'UTF-8'),
-			$purify->purify($rt['notes']),
+			$rt['notes'],
 			$sp->rowCount(),
 			$lastinfo
 		],$items);
@@ -347,7 +345,7 @@ if($pid==0&&$tid==0&&$cid>0){ // Topics
 		'',
 		URL.'forum/',
 		htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8'),
-		$purify->purify($rc['notes']),
+		$rc['notes'],
 		$topics,
 		'',
 		'',
@@ -600,8 +598,8 @@ if($pid!=0){ // Post
 				$rr['vote']==0?'Vote':$rr['vote'],
 				htmlspecialchars($rr['title'],ENT_QUOTES,'UTF-8'),
 				date($config['dateFormat'],$rr['ti']),
-				$purify->purify($rr['notes']),
-				$rru['email_signature']!=''?'<hr>'.$purify->purify($rru['email_signature']):'',
+				$rr['notes'],
+				$rru['email_signature']!=''?'<hr>'.$rru['email_signature']:'',
 				$avatar,
 				$rru['name']==''?$rru['username']:$rru['name'],
 				'<span class="badger badge-'.rank($rru['rank']).'">'.ucwords(rank(str_replace('-',' ',$rru['rank']))).'</span>',
@@ -667,7 +665,7 @@ if($pid!=0){ // Post
 				$rr['vote']==0?'Vote':$rr['vote'],
 				'<span class="text-muted">Re: '.$rt['title'].'</span>',
 				date($config['dateFormat'],$rr['ti']),
-				$purify->purify($rr['notes']),
+				$rr['notes'],
 				htmlspecialchars($rru['email_signature'],ENT_QUOTES,'UTF-8'),
 				$avatar,
 				$rru['name']==''?$rru['username']:$rru['name'],

@@ -7,29 +7,29 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.10
+* @version    0.2.12
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">security</i></div>
-          <div>Preferences - Security</div>
-          <div class="content-title-actions">
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+                <li class="breadcrumb-item active">Security</li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
-          <li class="breadcrumb-item active">Security</li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 px-4 py-3 overflow-visible">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
           <label for="tab1-1">Settings</label>
@@ -39,7 +39,7 @@
           <label for="tab1-3">Blacklist</label>
           <input class="tab-control" id="tab1-4" name="tabs" type="radio">
           <label for="tab1-4">Whitelist</label>
-          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
             <legend>Administration Access Page</legend>
             <form target="sp" method="post" action="core/change_adminaccess.php">
               <div class="form-row">
@@ -129,7 +129,7 @@
               </div>
             </form>
           </div>
-          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
             <legend>Filter Settings</legend>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFilterForms" data-tooltip="tooltip" aria-label="PermaLink to Preferences Filter Forms Checkbox">&#128279;</a>':'';?>
@@ -204,7 +204,7 @@
               });
             </script>
           </div>
-          <div class="tab1-3 border-top py-3" data-tabid="tab1-3" role="tabpanel">
+          <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
             <table class="table-zebra">
               <thead>
                 <tr>
@@ -215,7 +215,7 @@
                   <th class="text-center">Reason</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><i class="i">purge</i></button>
+                      <button class="btn btn-sm purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','iplist');return false;"><i class="i">purge</i></button>
                     </div>
                   </th>
                 </tr>
@@ -244,7 +244,7 @@
               </tbody>
             </table>
           </div>
-          <div class="tab1-4 border-top py-3" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-4 border-top p-4" data-tabid="tab1-4" role="tabpanel">
             <table class="table-zebra">
               <thead>
                 <tr>
@@ -253,7 +253,7 @@
                   <th class="text-center">IP</th>
                   <th class="">
                     <div class="btn-group float-right">
-                      <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><i class="i">purge</i></button>
+                      <button class="btn btn-sm purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','whitelist');return false;"><i class="i">purge</i></button>
                     </div>
                   </th>
                 </tr>
@@ -279,8 +279,8 @@
             </table>
           </div>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

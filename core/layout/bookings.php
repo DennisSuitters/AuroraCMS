@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -45,51 +45,42 @@ else{
   $s2=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='booking'".$bookSearch.$bookStatus.$sortOrder);
   $s2->execute();?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">calendar</i></div>
-          <div>Bookings</div>
-          <div class="content-title-actions">
-            <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" data-tooltip="tooltip" aria-label="Bookings Settings"><i class="i">settings</i></a>':'';?>
-            <button class="<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><i class="i">table</i></button>
-            <button class="<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="tooltip" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><i class="i">calendar</i></button>
-            <?=$user['options'][2]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></a>':'';?>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-2">
+      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm-6">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item active">Bookings <?= isset($args[0])&&$args[0]!=''?' / '.$args[0]:'';?></li>
+              </ol>
+              <div class="text-left">Legend:
+                <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/bookings/';?>" data-tooltip="tooltip" aria-label="View All Bookings">All</a>
+                <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" data-tooltip="tooltip" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
+                <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/bookings/confirmed';?>" data-tooltip="tooltip" aria-label="View Confirmed Bookings">Confirmed</a>
+                <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/bookings/in-progress';?>" data-tooltip="tooltip" aria-label="View In Progress Bookings">In Progress</a>
+                <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/bookings/complete';?>" data-tooltip="tooltip" aria-label="View Complete Bookings">Complete</a>
+                <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/bookings/archived';?>" data-tooltip="tooltip" aria-label="View Archived Bookings">Archived</a>
+              </div>
+            </div>
+            <div class="col-12 col-sm-6 text-right">
+              <div class="btn-group">
+                <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" data-tooltip="left" aria-label="Bookings Settings"><i class="i">settings</i></a>':'';?>
+                <button class="btn calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><i class="i">table</i></button>
+                <button class="btn calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><i class="i">calendar</i></button>
+                <?=$user['options'][2]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'';?>
+              </div>
+              <form class="form-row justify-content-end" method="post" action="">
+                <input id="booksearch" name="booksearch" value="<?=(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
+                <select id="bookingsort" name="booksort">
+                  <option value="">Select Display Order</option>
+                  <option value="new"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
+                  <option value="old"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
+                </select>
+                <button class="btn" type="submit">Go</button>
+              </form>
+            </div>
           </div>
-        </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item active">Bookings <?= isset($args[0])&&$args[0]!=''?' / '.$args[0]:'';?></li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid p-0">
-      <div class="card border-radius-0 overflow-visible">
-        <div class="row p-3">
-          <div class="col-12 col-sm-6">
-            <small>Legend:
-              <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/bookings/';?>" data-tooltip="tooltip" aria-label="View All Bookings">All</a>
-              <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" data-tooltip="tooltip" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
-              <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/bookings/confirmed';?>" data-tooltip="tooltip" aria-label="View Confirmed Bookings">Confirmed</a>
-              <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/bookings/in-progress';?>" data-tooltip="tooltip" aria-label="View In Progress Bookings">In Progress</a>
-              <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/bookings/complete';?>" data-tooltip="tooltip" aria-label="View Complete Bookings">Complete</a>
-              <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/bookings/archived';?>" data-tooltip="tooltip" aria-label="View Archived Bookings">Archived</a>
-            </small>
-          </div>
-          <div class="col-12 col-sm-6">
-            <form class="form-row" method="post" action="">
-              <input id="booksearch" name="booksearch" value="<?=(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
-              <select id="bookingsort" name="booksort">
-                <option value="">Select Display Order</option>
-                <option value="new"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
-                <option value="old"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
-              </select>
-              <button type="submit">Go</button>
-            </form>
-          </div>
-        </div>
-        <div class="row p-3<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" id="calendar-view">
-          <div id="calendar"></div>
         </div>
         <table class="table-zebra<?=(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>">
           <thead>
@@ -134,9 +125,12 @@ else{
               <?php }?>
             </tbody>
           </table>
-          <?php require'core/layout/footer.php';?>
+          <div class="row p-3<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" id="calendar-view">
+            <div id="calendar"></div>
+          </div>
         </div>
       </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>
@@ -197,6 +191,7 @@ else{
         var event=calendar.getEventById(id);
         event.remove();
       }
+
     });
 <?php } ?>
 </script>

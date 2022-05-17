@@ -7,13 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <!DOCTYPE HTML>
 <!--
-     AuroraCMS - Administration - Copyright (C) Diemen Design 2019
+     AuroraCMS - Administration - Copyright (C) Diemen Design 2022
           the Australian MIT Licensed Open Source Content Management System.
 
      Project Maintained at https://github.com/DiemenDesign/AuroraCMS
@@ -38,7 +38,6 @@
     <Link rel="stylesheet" type="text/css" href="core/js/summernote/plugin/summernote-text-findnreplace/css/lite.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css" media="all">
-    <Link rel="stylesheet" type="text/css" href="core/images/weather/weather-icons.min.css" media="all">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css" media="all">
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/jquery/jquery-ui.min.js"></script>
@@ -62,4 +61,4 @@
     <script src="core/js/shuffle/shuffle.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
-  <body class="<?=$config['options'][4]==0?'no-tooltip':'';?>" data-theme="<?= (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?$_COOKIE['theme']:'';?>">
+  <body class="<?=$config['options'][4]==0?'no-tooltip':'';?>" data-theme="<?= (isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']!='')?$_COOKIE['admintheme']:'';?>">

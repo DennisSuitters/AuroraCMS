@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -129,8 +129,8 @@
       l.stop();
       $('#'+el).removeAttr('disabled');
       $('#'+el).removeClass('unsaved');
-      $('#save'+c).removeClass('btn-danger');
-      if($('.unsaved').length===0)$('.saveall').removeClass('btn-danger');
+      $('#save'+c).removeClass('addedtrash');
+      if($('.unsaved').length===0)$('.saveall').removeClass('addedtrash');
       unsaved=false;
       $('#sp').html(msg);
     });
@@ -156,17 +156,17 @@
                 $('#'+c).val(urls);
               }else{
                 $('#'+c).val(file.url);
-                $('#save'+c).addClass('btn-danger');
+                $('#save'+c).addClass('addedtrash');
               }
               if(t=='content'&&c=='file'){
                 var thumb=file.url.replace(/^.*[\\\/]/, '');
                 var thumbpath=file.url.replace(thumb,'')+"thumbs/"+thumb;
                 $('#thumb').val(thumbpath);
                 $('#thumbimage').attr('src',thumbpath);
-                $('#savethumb').addClass('btn-danger');
+                $('#savethumb').addClass('addedtrash');
               }
               if(t=='content'&&c=='fileDepth'){
-                $('#savefileDepth').addClass('btn-danger');
+                $('#savefileDepth').addClass('addedtrash');
               }
               if(t=='category'){
 
@@ -385,10 +385,10 @@ else
                 da:da
               }
             }).done(function(msg){
-              $('.saveall').removeClass('btn-danger');
+              $('.saveall').removeClass('addedtrash');
               unsaved=false;
             });
-            $('#save'+c).removeClass('btn-danger');
+            $('#save'+c).removeClass('addedtrash');
             if($('.unsaved').length===0)$('.page-block').removeClass('d-block');
           },1000);
         }
@@ -434,12 +434,12 @@ else
         },
         keypress:function(event){
           var save=$(this).data("dbc");
-          $('#save'+save).addClass('btn-danger');
+          $('#save'+save).addClass('addedtrash');
           console.log('keypress');
 //          if($('#qesave'+save).length > 0){
-            $('#qesave'+save).addClass('btn-danger');
+            $('#qesave'+save).addClass('addedtrash');
 //          }
-          $('.saveall').addClass('btn-danger');
+          $('.saveall').addClass('addedtrash');
           $('#'+save).addClass('unsaved');
           unsaved=true;
           if(event.which==13){
@@ -449,10 +449,10 @@ else
         change:function(event){
           var save=$(this).data("dbc");
           $('#'+save).addClass('unsaved');
-          $('#save'+save).addClass('btn-danger');
+          $('#save'+save).addClass('addedtrash');
           console.log('change');
 //          if($('#qesave'+save).length > 0){
-            $('#qesave'+save).addClass('btn-danger');
+            $('#qesave'+save).addClass('addedtrash');
 //          }
           unsaved=true;
         }

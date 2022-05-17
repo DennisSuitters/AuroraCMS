@@ -7,12 +7,10 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-require'core/sanitize/HTMLPurifier.php';
-$purify=new HTMLPurifier(HTMLPurifier_Config::createDefault());
 $rank=0;
 $notification='';
 $activation='<div class="alert alert-warning">There was an issue Activating your account, or an Activation token was not supplied!</div>';
@@ -53,7 +51,7 @@ $html=preg_replace([
 ],[
   $activation,
   htmlspecialchars(($page['heading']==''?$page['seoTitle']:$page['heading']),ENT_QUOTES,'UTF-8'),
-  $purify->purify($page['notes']),
+  $page['notes'],
   $page['contentType'],
 	'',
 	URL

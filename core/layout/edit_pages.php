@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.12
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,36 +15,37 @@ $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `id`=:id");
 $s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
-  <section id="content">
-    <div class="content-title-wrapper mb-0">
-      <div class="content-title">
-        <div class="content-title-heading">
-          <div class="content-title-icon"><i class="i i-4x">pages</i></div>
-          <div>Edit Page: <?=$r['title'];?></div>
-          <div class="content-title-actions">
-            <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-              <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="tooltip" aria-label="Back"><i class="i">back</i></a>
-            <?php }?>
-            <button class="saveall" data-tooltip="tooltip" aria-label="Save All Edited Fields"><i class="i">save</i></button>
+  <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
+    <div class="container-fluid p-0">
+      <div class="row p-2">
+      <div class="card col-12 col-sm mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible order-2 order-sm-1">
+        <div class="card-actions">
+          <div class="row">
+            <div class="col-12 col-sm">
+              <ol class="breadcrumb m-0 pl-0 pt-0">
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/pages';?>">Pages</a></li>
+                <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
+                <li class="breadcrumb-item active breadcrumb-dropdown">
+                  <span id="titleupdate"><?=$r['title'];?></span><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
+                  <ul class="breadcrumb-dropper">
+                    <?php $sd=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `menu`!='none' AND `file`!='notification' AND `id`!=:id ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+                    $sd->execute([':id'=>$r['id']]);
+                    while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$rd['id'].'">'.$rd['title'].'</a></li>';?>
+                  </ul>
+                </li>
+              </ol>
+            </div>
+            <div class="col-12 col-sm-2 text-right">
+              <div class="btn-group">
+                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
+                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
+                <?php }?>
+                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+              </div>
+            </div>
           </div>
         </div>
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-          <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/pages';?>">Pages</a></li>
-          <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
-          <li class="breadcrumb-item active breadcrumb-dropdown">
-            <span id="titleupdate"><?=$r['title'];?></span><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
-            <ul class="breadcrumb-dropper">
-<?php $sd=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `menu`!='none' AND `file`!='notification' AND `id`!=:id ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
-$sd->execute([':id'=>$r['id']]);
-while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$rd['id'].'">'.$rd['title'].'</a></li>';?>
-            </ul>
-          </li>
-        </ol>
-      </div>
-    </div>
-    <div class="container-fluid row p-0">
-      <div class="card col-sm border-radius-0 p-3 overflow-visible order-2 order-sm-1">
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
@@ -53,7 +54,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           <?=$r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">SEO</label>':'';?>
           <?=$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
-          <div class="tab1-1 border-top p-3" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
               <label id="menuTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#menuTitle" data-tooltip="tooltip" aria-label="PermaLink to Menu Title Field">&#128279;</a>':'';?>Menu Title</label>
               <div class="form-row">
@@ -161,8 +162,8 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           </div>
 <?php /* Images */ ?>
 <?php if($r['contentType']!='offline'){?>
-          <div class="tab1-2 border-top p-3" data-tabid="tab1-2" role="tabpanel">
-            <legend class="mt-3">Cover</legend>
+          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+            <legend>Cover</legend>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
               <label id="pageCoverURL" for="coverURL"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverURL" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image URL Field">&#128279;</a>':'';?>Cover&nbsp;Image&nbsp;URL</label>
               <div class="form-row">
@@ -246,7 +247,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
 <?php }
 /* Media */
           if($r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'){?>
-            <div class="tab1-3 border-top p-3" data-tabid="tab1-3" role="tabpanel">
+            <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
               <legend>Video Playlist</legend>
               <?php if($user['options'][1]==1){?>
                 <div class="form-text text-muted small">Videos will only show up on this page if the theme template contains the playlist elements.</div>
@@ -358,7 +359,7 @@ while($rd=$sd->fetch(PDO::FETCH_ASSOC))echo'<li><a href="'.URL.$settings['system
           <?php }
 /* SEO */
 if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
-          <div class="tab1-4 border-top p-3" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-4 border-top p-4" data-tabid="tab1-4" role="tabpanel">
             <label id="pageViews" for="views"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageViews" data-tooltip="tooltip" aria-label="PermaLink to Page Views Field">&#128279;</a>':'';?>Views</label>
             <div class="form-row">
               <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -484,9 +485,9 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
 <?php }
 /* Settings */
           if($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
-            <div class="tab1-5 border-top p-3" data-tabid="tab1-5" role="tabpanel">
+            <div class="tab1-5 border-top" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
-                <div class="row mt-3">
+                <div class="row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
                   <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                   <label for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
@@ -646,17 +647,18 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
             </div>
           <?php }?>
         </div>
-        <?php require'core/layout/footer.php';?>
       </div>
 <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
 $sw->execute();
 if($sw->rowCount()>0){
-  echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 border-0 order-1 order-sm-2">';
+  echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
   while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
     include'core/layout/widget-'.$rw['file'];
   }
   echo'</div>';
 }?>
+      </div>
+      <?php require'core/layout/footer.php';?>
     </div>
   </section>
 </main>

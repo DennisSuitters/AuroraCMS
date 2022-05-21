@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -36,11 +36,11 @@ function rank($txt){
 	if($txt==900)return'administrator';
 	if($txt==1000)return'developer';
 }
-$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):'';
+$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW):'';
 if($act=='category'){
-  $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
-  $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):'';
-	$rank=isset($_POST['rank'])?filter_input(INPUT_POST,'rank',FILTER_SANITIZE_STRING):0;
+  $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):'';
+  $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):'';
+	$rank=isset($_POST['rank'])?filter_input(INPUT_POST,'rank',FILTER_UNSAFE_RAW):0;
 	$help=isset($_POST['help'])?1:0;
 	$el='#cats';
   $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumCategory` (`rank`,`title`,`notes`,`help`,`ti`) VALUES (:rank,:title,:notes,:help,:ti)");
@@ -121,9 +121,9 @@ if($act=='category'){
 }
 if($act=='topic'){
   $cid=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):0;
-  $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
-  $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):'';
-	$rank=isset($_POST['rank'])?filter_input(INPUT_POST,'rank',FILTER_SANITIZE_STRING):0;
+  $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):'';
+  $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):'';
+	$rank=isset($_POST['rank'])?filter_input(INPUT_POST,'rank',FILTER_UNSAFE_RAW):0;
 	$help=isset($_POST['help'])?filter_input(INPUT_POST,'help',FILTER_SANITIZE_NUMBER_INT):0;
 	$el='#topics_'.$cid;
   $s=$db->prepare("INSERT IGNORE INTO `".$prefix."forumTopics` (`rank`,`cid`,`title`,`notes`,`help`,`ti`) VALUES (:rank,:cid,:title,:notes,:help,:ti)");

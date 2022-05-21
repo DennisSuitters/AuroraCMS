@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -23,7 +23,7 @@ echo'<div class="fancybox-ajax">'.
 if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
 else{
   $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-  $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
+  $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
   define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
   define('UNICODE','UTF-8');
   if($t=='comments')$s=$db->prepare("SELECT `ip` FROM `".$prefix."comments` WHERE `id`=:id");

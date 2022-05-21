@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -74,10 +74,10 @@ $forum='';
 $cid=isset($_GET['cid'])?filter_input(INPUT_GET,'cid',FILTER_SANITIZE_NUMBER_INT):0;
 $tid=isset($_GET['tid'])?filter_input(INPUT_GET,'tid',FILTER_SANITIZE_NUMBER_INT):0;
 $pid=isset($_GET['pid'])?filter_input(INPUT_GET,'pid',FILTER_SANITIZE_NUMBER_INT):0;
-$act=isset($_GET['act'])?filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
+$act=isset($_GET['act'])?filter_input(INPUT_GET,'act',FILTER_UNSAFE_RAW):filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
 $p=isset($_GET['p'])?filter_input(INPUT_GET,'p',FILTER_SANITIZE_NUMBER_INT):1;
 if($act=='search'){
-	$st=isset($_GET['s'])?filter_input(INPUT_GET,'s',FILTER_SANITIZE_STRING):'';
+	$st=isset($_GET['s'])?filter_input(INPUT_GET,'s',FILTER_UNSAFE_RAW):'';
 	preg_match('/<searchitem>([\w\W]*?)<\/searchitem>/',$html,$matches);
 	$item=$matches[1];
 	$searchitems='';

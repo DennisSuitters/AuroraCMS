@@ -941,7 +941,7 @@ ul.elfinder-help-integrations a:hover {
 
 /* for old jQuery UI */
 .ui-front {
-    z-index: 100;
+    z-index: 1100;
 }
 
 /* style reset */
@@ -2843,10 +2843,10 @@ tr.elfinder-cwd-file td .elfinder-cwd-select {
 
 .std42-dialog .ui-dialog-titlebar .elfinder-titlebar-button {
     position: relative;
-    float: left;
+    float: right;
     top: 10px;
-    left: -10px;
-    right: 10px;
+    left: 10px;
+    right: -10px;
     width: 20px;
     height: 20px;
     padding: 1px;
@@ -3145,7 +3145,6 @@ tr.elfinder-cwd-file td .elfinder-cwd-select {
     height: 18px;
     border-radius: 9px;
     border: none;
-    background-position: -80px -128px;
     cursor: pointer;
 }
 
@@ -3402,7 +3401,7 @@ button.elfinder-info-button {
 }
 
 .elfinder-rtl .dialogelfinder-drag-close {
-    left: 12px;
+    right: 12px;
 }
 
 /*********************** RM CONFIRM **************************/
@@ -4088,7 +4087,7 @@ button.elfinder-info-button {
 /* icon "close" in titlebar */
 .elfinder-quicklook-titlebar-icon {
     position: absolute;
-    left: 4px;
+    right: 4px;
     top: 50%;
     margin-top: -8px;
     height: 16px;
@@ -4100,7 +4099,7 @@ button.elfinder-info-button {
 
 .elfinder-quicklook-titlebar-icon .ui-icon {
     position: relative;
-    margin: -9px 3px 0px 0px;
+    margin: -9px 3px 0 0;
     cursor: pointer;
     border-radius: 10px;
     border: 1px solid;

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,13 +16,13 @@ require'db.php';
 require'sanitise.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
-$c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-$r=isset($_POST['dar'])?filter_input(INPUT_POST,'dar',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'dar',FILTER_SANITIZE_STRING);
+$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
+$c=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'c',FILTER_UNSAFE_RAW);
+$r=isset($_POST['dar'])?filter_input(INPUT_POST,'dar',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'dar',FILTER_UNSAFE_RAW);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 if($t=='content'||$t=='menu'||$t=='config'&&$c=='notes'||$c=='PasswordResetLayout'||$c=='orderEmailLayout'||$c=='orderEmailNotes'||$c=='passwordResetLayout'||$c=='accountActivationLayout'||$c=='bookingEmailLayout'||$c=='bookingAutoReplyLayout'||$c=='contactAutoReplyLayout'||$c=='dateFormat'||$c=='newslettersOptOutLayout')$da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
 else{
-  $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'da',FILTER_SANITIZE_STRING);
+  $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'da',FILTER_UNSAFE_RAW);
   $da=kses($da,array());
 }
 if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);

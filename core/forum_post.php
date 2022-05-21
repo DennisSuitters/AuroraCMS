@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -51,8 +51,8 @@ $cid=isset($_POST['cid'])?filter_input(INPUT_POST,'cid',FILTER_SANITIZE_NUMBER_I
 $tid=isset($_POST['tid'])?filter_input(INPUT_POST,'tid',FILTER_SANITIZE_NUMBER_INT):0;
 $uid=isset($_POST['uid'])?filter_input(INPUT_POST,'uid',FILTER_SANITIZE_NUMBER_INT):0;
 $h=isset($_POST['h'])?filter_input(INPUT_POST,'h',FILTER_SANITIZE_NUMBER_INT):0;
-$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
-$st=isset($_POST['st'])?filter_input(INPUT_POST,'st',FILTER_SANITIZE_STRING):'';
+$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):'';
+$st=isset($_POST['st'])?filter_input(INPUT_POST,'st',FILTER_UNSAFE_RAW):'';
 $rank=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_SANITIZE_NUMBER_INT):0;
 $da=isset($_POST['da'])?filter_input(INPUT_POST,'da',FILTER_UNSAFE_RAW):'';
 if(strlen($da)<12&&$da=='<p><br></p>')$da=str_replace('<p><br></p>','',$da);
@@ -111,7 +111,7 @@ if($t==''||$da==''){
     $subject='New Ticket: '.$t;
     $body='New Ticket created at <strong>'.$config['business'].'</strong><br>'.
       'Title: '.$t.'<br>'.
-      'Post: '.filter_var($da,FILTER_SANITIZE_STRING).'<br>'.
+      'Post: '.filter_var($da,FILTER_UNSAFE_RAW).'<br>'.
       'Ticket URL: <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'">'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'</a><br>';
     $mail=new PHPMailer;
     $mail->isHTML(true);

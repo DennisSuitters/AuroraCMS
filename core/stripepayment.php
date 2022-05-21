@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -20,7 +20,7 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-$orderID=filter_input(INPUT_POST,'orderID',FILTER_SANITIZE_STRING);
+$orderID=filter_input(INPUT_POST,'orderID',FILTER_UNSAFE_RAW);
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`=:id OR `iid`=:id AND `status`!='archived'");
 $s->execute([':id'=>$orderID]);
 $payment_id=0;

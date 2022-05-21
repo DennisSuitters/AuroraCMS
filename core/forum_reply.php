@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -152,7 +152,7 @@ if($da==''){
 				$body='There has been a new Reply to Ticket <strong>'.$pid.'</strong> on '.date($config['dateFormat'],$ti).'.<br>'.
 					'Status: <strong>'.ucwords($rt['status']).'</strong><br>'.
 					'Title: '.$rt['title'].'<br>'.
-					'Reply: '.filter_var($da,FILTER_SANITIZE_STRING).'<br>'.
+					'Reply: '.filter_var($da,FILTER_UNSAFE_RAW).'<br>'.
 					'URL: <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$pid.'">'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$pid.'</a>';
 				$mail=new PHPMailer;
 				$mail->isHTML(true);

@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-$ci=isset($_POST['ci'])?filter_input(INPUT_POST,'ci',FILTER_SANITIZE_STRING):'';
+$ci=isset($_POST['ci'])?filter_input(INPUT_POST,'ci',FILTER_UNSAFE_RAW):'';
 if($ci!=''){
   $s=$db->prepare("INSERT IGNORE INTO `".$prefix."seo` (`contentType`,`notes`) VALUES ('seotips',:ci)");
   $s->execute([':ci'=>$ci]);

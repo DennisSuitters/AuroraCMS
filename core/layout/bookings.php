@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,7 +34,7 @@ else{
   elseif(isset($args[0])&&$args[0]!='')$bookStatus=isset($args[0])?" AND `status`='".$args[0]."' AND `status`!='archived'":'';
   else$bookStatus=" AND `status`!='archived'";
   if(isset($_POST['booksort'])){
-  	$sort=isset($_POST['booksort'])?filter_input(INPUT_POST,'booksort',FILTER_SANITIZE_STRING):'';
+  	$sort=isset($_POST['booksort'])?filter_input(INPUT_POST,'booksort',FILTER_UNSAFE_RAW):'';
   	$sortOrder=" ORDER BY ";
   	if($sort=="")$sortOrder.="`ti` DESC";
   	if($sort=="new")$sortOrder.="`ti` ASC";
@@ -66,8 +66,8 @@ else{
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
                 <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" data-tooltip="left" aria-label="Bookings Settings"><i class="i">settings</i></a>':'';?>
-                <button class="btn calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Table View" onclick="toggleCalendar();return false;"><i class="i">table</i></button>
-                <button class="btn calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Calendar View" onclick="toggleCalendar();return false;"><i class="i">calendar</i></button>
+                <button class="btn calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Table View" onclick="toggleBookingView()"><i class="i">table</i></button>
+                <button class="btn calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Calendar View" onclick="toggleBookingView();"><i class="i">calendar</i></button>
                 <?=$user['options'][2]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'';?>
               </div>
               <form class="form-row justify-content-end" method="post" action="">
@@ -112,6 +112,7 @@ else{
                       <div class="btn-group" role="group">
                         <a class="btn" href="<?= URL.$settings['system']['admin'];?>/bookings/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
                         <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><i class="i">print</i></button>
+                        <button class="btn" data-tooltip="tooltip" aria-label="Copy Booking to Job List" onclick="$('#sp').load('core/bookingtojoblist.php?id=<?=$r['id'];?>');"><i class="i">joblist</i></button>
                         <button class="btn" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?=$r['id'];?>');"><i class="i">bookingtoinvoice</i></button>
                         <?php if($user['options'][0]==1){?>
                           <button class="btn<?=($r['status']!='delete'?' d-none':'');?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
@@ -171,9 +172,9 @@ else{
             allDay:false,
             customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left"><?=($r['business']!=''?$r['business']:'').($r['name']!=''?($r['business']!=''?' | ':'').$r['name']:'').($r['business']==''&&$r['name']==''?'Booking '.$r['id']:'');?><div class="events-buttons" role="toolbar"><div class="btn-group" role="group">` +
 <?php if($user['options'][2]==1){?>
-                  `<button class="btn" id="prbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><i class="i">print</i></button><a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a><button class="btn" id="bibut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?=$r['id'];?>');"><i class="i">bookingtoinvoice</i></button><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><i class="i">trash</i></button>`+
+                  `<button class="btn" id="prbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Print Booking" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><i class="i i-3x">print</i></button><a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i i-3x">edit</i></a><button class="btn" id="jlbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Copy Booking to Job List" onclick="$('#sp').load('core/bookingtojoblist.php?id=<?=$r['id'];?>');"><i class="i i-3x">joblist</i></button><button class="btn" id="bibut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Copy Booking to Invoice" onclick="$('#sp').load('core/bookingtoinvoice.php?id=<?=$r['id'];?>');"><i class="i i-3x">bookingtoinvoice</i></button><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><i class="i i-3x">trash</i></button>`+
 <?php }else{?>
-                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><i class="i">view</i></a>'+
+                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/bookings/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><i class="i i-3x">view</i></a>'+
 <?php }?>
                 `</div></div></div>`
           },

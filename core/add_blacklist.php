@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,8 @@ if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
-$reason=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'r',FILTER_SANITIZE_STRING);
+$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
+$reason=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'r',FILTER_UNSAFE_RAW);
 if($t=='comments')$s=$db->prepare("SELECT `ip`,`ti` FROM `".$prefix."comments` WHERE `id`=:id");
 elseif($t=='tracker')$s=$db->prepare("SELECT `ip`,`ti` FROM `".$prefix."tracker` WHERE `id`=:id");
 elseif($t=='livechat')$s=$db->prepare("SELECT `ip`,`ti` FROM `".$prefix."livechat` WHERE `id`=:id");

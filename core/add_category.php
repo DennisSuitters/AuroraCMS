@@ -7,15 +7,15 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
-$icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
-$ct=filter_input(INPUT_POST,'ct',FILTER_SANITIZE_STRING);
-$cat=filter_input(INPUT_POST,'cat',FILTER_SANITIZE_STRING);
+$icon=filter_input(INPUT_POST,'icon',FILTER_UNSAFE_RAW);
+$ct=filter_input(INPUT_POST,'ct',FILTER_UNSAFE_RAW);
+$cat=filter_input(INPUT_POST,'cat',FILTER_UNSAFE_RAW);
 if($cat!=''){
   $s=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`contentType`,`icon`,`url`,`title`) VALUES ('category',:icon,:url,:title)");
   $s->execute([

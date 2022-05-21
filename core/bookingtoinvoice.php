@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,11 +49,7 @@ if($id>0){
           ':ti'=>$ti
         ]);
       }
-      echo'<script>'.
-        'window.top.window.toastr["success"]("Service Items Imported into Order!");'.
-        'window.top.window.toastr["success"]("Order Created!");'.
-        'window.top.window.toastr["success"]("User Account Exists!");'.
-      '</script>';
+      echo'<script>window.top.window.toastr["success"](`Order Created!`);</script>';
     }
   }else{
     $su=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`username`,`rank`,`email`,`name`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`country`,`ti`) VALUES (:username,:rank,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:ti)");
@@ -99,18 +95,14 @@ if($id>0){
         ':status'=>'',
         ':ti'=>$ti
       ]);
-      echo'<script>'.
-        'window.top.window.toastr["success"]("Service Items Imported into Order!");'.
-        'window.top.window.toastr["success"]("Order Created!");'.
-        'window.top.window.toastr["success"]("User Account Created!");'.
-      '</script>';
+      echo'<script>window.top.window.toastr["success"](`Order and User Account Created!`);</script>';
     }
   }
   if($config['options'][25]==1){
     $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='archived' WHERE `id`=:id");
     $s->execute([':id'=>$id]);
     echo'<script>'.
-      'window.top.window.toastr["success"]("Booking Archived!");'.
+      'window.top.window.toastr["success"](`Booking Archived!`);'.
       'window.top.window.$("#l_'.$id.'").addClass("animated zoomOut");'.
       'window.top.window.setTimeout(function(){window.top.window.$("#l_'.$id.'").remove();},500);'.
     '</script>';

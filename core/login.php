@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.8
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-if(!isset($act))$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
+if(!isset($act))$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'act',FILTER_UNSAFE_RAW);
 if($act=='logout'){
   $_SESSION['loggedin']=false;
   $_SESSION['rank']=0;
@@ -19,8 +19,8 @@ if($act=='logout'){
   setcookie(session_name(),'',time()-42000,$params["path"],$params["domain"],$params["secure"],$params["httponly"]);
   session_destroy();
 }elseif($act=='login'||(isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)){
-  $username=isset($_POST['username'])?filter_input(INPUT_POST,'username',FILTER_SANITIZE_STRING):$_SESSION['username'];
-  $password=isset($_POST['password'])?filter_input(INPUT_POST,'password',FILTER_SANITIZE_STRING):$_SESSION['password'];
+  $username=isset($_POST['username'])?filter_input(INPUT_POST,'username',FILTER_UNSAFE_RAW):$_SESSION['username'];
+  $password=isset($_POST['password'])?filter_input(INPUT_POST,'password',FILTER_UNSAFE_RAW):$_SESSION['password'];
   $q=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username AND `activate`='' AND `active`='1' LIMIT 1");
   $q->execute([':username'=>$username]);
   $user=$q->fetch(PDO::FETCH_ASSOC);

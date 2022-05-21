@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -15,7 +15,7 @@
  * Button Toolbar: Edit, Restore (hidden), Delete, Purge (hidden)
  */
 if(isset($args[0])&&$args[0]=='add'){
-  $type=filter_input(INPUT_GET,'type',FILTER_SANITIZE_STRING);
+  $type=filter_input(INPUT_GET,'type',FILTER_UNSAFE_RAW);
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`active`,`timezone`,`ti`) VALUES ('1','default',:ti)");
   $q->execute([':ti'=>time()]);
   $args[1]=$db->lastInsertId();

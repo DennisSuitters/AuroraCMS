@@ -7,21 +7,21 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.5
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $error=0;
-$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING):'';
+$act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW):'';
 if($_POST['emailtrap']==''){
 	if($act=='step1'){
-		$dbprefix=isset($_POST['dbprefix'])?filter_input(INPUT_POST,'dbprefix',FILTER_SANITIZE_STRING):'';
-		$dbtype=isset($_POST['dbtype'])?filter_input(INPUT_POST,'dbtype',FILTER_SANITIZE_STRING):'';
-		$dbhost=isset($_POST['dbhost'])?filter_input(INPUT_POST,'dbhost',FILTER_SANITIZE_STRING):'';
+		$dbprefix=isset($_POST['dbprefix'])?filter_input(INPUT_POST,'dbprefix',FILTER_UNSAFE_RAW):'';
+		$dbtype=isset($_POST['dbtype'])?filter_input(INPUT_POST,'dbtype',FILTER_UNSAFE_RAW):'';
+		$dbhost=isset($_POST['dbhost'])?filter_input(INPUT_POST,'dbhost',FILTER_UNSAFE_RAW):'';
 		$dbport=isset($_POST['dbport'])?filter_input(INPUT_POST,'dbport',FILTER_SANITIZE_NUMBER_INT):'';
-		$dbschema=isset($_POST['dbschema'])?filter_input(INPUT_POST,'dbschema',FILTER_SANITIZE_STRING):'';
-		$dbusername=isset($_POST['dbusername'])?filter_input(INPUT_POST,'dbusername',FILTER_SANITIZE_STRING):'';
-		$dbpassword=isset($_POST['dbpassword'])?filter_input(INPUT_POST,'dbpassword',FILTER_SANITIZE_STRING):'';
+		$dbschema=isset($_POST['dbschema'])?filter_input(INPUT_POST,'dbschema',FILTER_UNSAFE_RAW):'';
+		$dbusername=isset($_POST['dbusername'])?filter_input(INPUT_POST,'dbusername',FILTER_UNSAFE_RAW):'';
+		$dbpassword=isset($_POST['dbpassword'])?filter_input(INPUT_POST,'dbpassword',FILTER_UNSAFE_RAW):'';
 		$txt='[database]'.PHP_EOL.
 				 'prefix = '.$dbprefix.PHP_EOL.
 				 'driver = '.$dbtype.PHP_EOL.
@@ -47,9 +47,9 @@ if($_POST['emailtrap']==''){
 	}
 	if($act=='step2'){
 		$config=parse_ini_file('config.ini',true);
-		$sysurl=isset($_POST['sysurl'])?filter_input(INPUT_POST,'sysurl',FILTER_SANITIZE_STRING):'';
-		$sysadmin=isset($_POST['sysadmin'])?filter_input(INPUT_POST,'sysadmin',FILTER_SANITIZE_STRING):'';
-		$aTheme=isset($_POST['aTheme'])?filter_input(INPUT_POST,'aTheme',FILTER_SANITIZE_STRING):'';
+		$sysurl=isset($_POST['sysurl'])?filter_input(INPUT_POST,'sysurl',FILTER_UNSAFE_RAW):'';
+		$sysadmin=isset($_POST['sysadmin'])?filter_input(INPUT_POST,'sysadmin',FILTER_UNSAFE_RAW):'';
+		$aTheme=isset($_POST['aTheme'])?filter_input(INPUT_POST,'aTheme',FILTER_UNSAFE_RAW):'';
 		$sysurl='/'.ltrim($sysurl,'/');
 		$sysurl=rtrim($sysurl,'/');
 		$txt='[database]'.PHP_EOL.
@@ -106,11 +106,11 @@ if($_POST['emailtrap']==''){
 	}
 	if($act=='step3'){
 		require'db.php';
-		$aname=isset($_POST['aname'])?filter_input(INPUT_POST,'aname',FILTER_SANITIZE_STRING):'';
-		$aemail=isset($_POST['aemail'])?filter_input(INPUT_POST,'aemail',FILTER_SANITIZE_STRING):'';
-		$ausername=isset($_POST['ausername'])?filter_input(INPUT_POST,'ausername',FILTER_SANITIZE_STRING):'';
-		$apassword=isset($_POST['apassword'])?filter_input(INPUT_POST,'apassword',FILTER_SANITIZE_STRING):'';
-		$atimezone=isset($_POST['atimezone'])?filter_input(INPUT_POST,'atimezone',FILTER_SANITIZE_STRING):'';
+		$aname=isset($_POST['aname'])?filter_input(INPUT_POST,'aname',FILTER_UNSAFE_RAW):'';
+		$aemail=isset($_POST['aemail'])?filter_input(INPUT_POST,'aemail',FILTER_UNSAFE_RAW):'';
+		$ausername=isset($_POST['ausername'])?filter_input(INPUT_POST,'ausername',FILTER_UNSAFE_RAW):'';
+		$apassword=isset($_POST['apassword'])?filter_input(INPUT_POST,'apassword',FILTER_UNSAFE_RAW):'';
+		$atimezone=isset($_POST['atimezone'])?filter_input(INPUT_POST,'atimezone',FILTER_UNSAFE_RAW):'';
 		$prefix=$settings['database']['prefix'];
 		$hash=password_hash($apassword,PASSWORD_DEFAULT);
 		$sql=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`options`,`bio_options`,`username`,`password`,`email`,`name`,`language`,`timezone`,`ti`,`active`,`rank`) VALUES ('11111111101111111100000000000000','11110000000000000000000000000000',:username,:password,:email,:name,'en-AU',:timezone,:ti,'1','1000')");

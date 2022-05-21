@@ -143,7 +143,7 @@
   ){?>
       function elfinderDialog(id,t,c){
         var fm=$('<div class="shadow light"/>').dialogelfinder({
-          url:"<?= URL.'/core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
+          url:"<?= URL.'core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
           lang:'en',
           width:840,
           height:450,
@@ -241,7 +241,7 @@
       if(($view=='seo'||$view=='media'||isset($args[0])&&$args[0]=='security')||($view=='accounts'||$view=='orders'||$view=='bookings'&&isset($args[0])&&$args[0]=='settings')){?>
         $().ready(function(){
           var fm=$('#elfinder').elfinder({
-            url:"<?= URL.'/core/elfinder/php/connector.php';?>",
+            url:"<?= URL.'core/elfinder/php/connector.php';?>",
             lang:'en',
             width:'85vw',
             height:$(window).height()-102,
@@ -512,7 +512,7 @@ else
       }
     }
     setInterval(function(){
-      $.get("<?= URL;?>/core/nav-stats.php",{},function(results){
+      $.get("<?= URL;?>core/nav-stats.php",{},function(results){
         var stats=results.split(",");
         var navStat=$('#nav-stat').html();
         var stats=results.split(",");

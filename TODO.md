@@ -2,13 +2,9 @@ This is a quick list of things what need to be fixed or worked on to help those 
 
 - Administration
   - Explore adding AVIF Image Compression to elFinder when uploading files.
-  - TODO/Joblist
-    - Add ability to create Jobs from Bookings, and Invoices.
   - Fix update core system
   - Inventory
     - Customer/Contact List, more of a selection Widget for emails and orders.
-  - Bookings
-    - Kanban Board Option for Display and Organising Bookings.
   - Orders
     - Add Orders Quick Edit Dropdown.
     - Mobile Display Formatting.

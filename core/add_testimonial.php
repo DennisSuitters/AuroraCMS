@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -41,7 +41,7 @@ if($config['reCaptchaServer']!=''){
   }
 }
 if($not['spammer']==false){
-  $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
+  $act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
   if($act=='add_test'){
     if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
       $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
@@ -49,11 +49,11 @@ if($not['spammer']==false){
     }
     if($_POST['fullname'.$hash]==''){
       $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-      $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-      $business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
-      $review=filter_input(INPUT_POST,'review',FILTER_SANITIZE_STRING);
-      $rating=filter_input(INPUT_POST,'rating',FILTER_SANITIZE_STRING);
-      $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
+      $name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+      $business=filter_input(INPUT_POST,'business',FILTER_UNSAFE_RAW);
+      $review=filter_input(INPUT_POST,'review',FILTER_UNSAFE_RAW);
+      $rating=filter_input(INPUT_POST,'rating',FILTER_UNSAFE_RAW);
+      $email=filter_input(INPUT_POST,'email',FILTER_UNSAFE_RAW);
       if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip!='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_email($email);

@@ -247,7 +247,7 @@ $content=preg_replace([
   md5($ip),
   base64_encode(time())
 ],$content);
-$schemaWebsite='<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","url":"'.$canonical.'","name":"'.$seoTitle.'","author":{"@type":"Person","name":"'.(isset($r['name'])&&$r['name']?$r['name']:$config['business']).'"},"description":"'.$seoDescription.'","publisher":"'.$seoTitle.'","potentialAction":{"@type":"SearchAction","target":"'.URL.'search/{search_term}","query-input":"required name=search_term"}}</script>';
+$schemaWebsite='<script type="application/ld+json">{"@context":"http://schema.org","@type":"WebSite","url":"'.$canonical.'","name":"'.$seoTitle.'","author":{"@type":"Person","name":"'.(isset($r['name'])&&$r['name']?$r['name']:$config['business']).'"},"description":"'.htmlspecialchars($seoDescription,ENT_QUOTES).'","publisher":"'.$seoTitle.'","potentialAction":{"@type":"SearchAction","target":"'.URL.'search/{search_term}","query-input":"required name=search_term"}}</script>';
 $schemaOrganization='<script type="application/ld+json">{"@context":"http://schema.org","@type":"Organization","name":"'.$config['business'].'","url":"'.URL.'"';
 if($config['phone']!=''||$config['mobile']!=''){
   $schemaOrganization.=',"contactPoint":[{"@type":"ContactPoint","telephone":"'.($config['phone']!=''?$config['phone']:$config['mobile']).'","contactType":"customer service"}]';

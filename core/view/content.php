@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -42,7 +42,7 @@ if($view=='newsletters'){
 	}
 }
 if(isset($_POST['act'])=='sort')
-	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_SANITIZE_STRING):'';
+	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_UNSAFE_RAW):'';
 else
 	$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
 $sortOrder=" ORDER BY ".($view=='events'||$view=='index'?"`tis` ASC, ":"`pin` DESC, ");
@@ -60,7 +60,7 @@ elseif($view=='search'){
 	if(isset($args[0])&&$args[0]!='')
 		$search='%'.html_entity_decode(str_replace('-','%',$args[0])).'%';
 	elseif(isset($_POST['search'])&&$_POST['search']!='')
-		$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_SANITIZE_STRING))).'%';
+		$search='%'.html_entity_decode(str_replace('-','%',filter_input(INPUT_POST,'search',FILTER_UNSAFE_RAW))).'%';
 	else
 		$search='%';
 	$search=str_replace(' ','%',$search);

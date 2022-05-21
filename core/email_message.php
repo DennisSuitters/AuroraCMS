@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,11 +29,11 @@ if(isset($_SESSION['uid'])&&$_SESSION['uid']!=0){
 }
 $theme=parse_ini_file(THEME.'/theme.ini',true);
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-$act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
-$subject=filter_input(INPUT_POST,'subject',FILTER_SANITIZE_STRING);
-$to=filter_input(INPUT_POST,'to_email',FILTER_SANITIZE_STRING);
-$from=filter_input(INPUT_POST,'from_email',FILTER_SANITIZE_STRING);
-$atts=filter_input(INPUT_POST,'atts',FILTER_SANITIZE_STRING);
+$act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
+$subject=filter_input(INPUT_POST,'subject',FILTER_UNSAFE_RAW);
+$to=filter_input(INPUT_POST,'to_email',FILTER_UNSAFE_RAW);
+$from=filter_input(INPUT_POST,'from_email',FILTER_UNSAFE_RAW);
+$atts=filter_input(INPUT_POST,'atts',FILTER_UNSAFE_RAW);
 $body=(isset($_POST['bod'])?$_POST['bod']:'').'<br>'.($user['email_signature']!=''?$user['email_signature']:$config['email_signature']).'<br>';
 $msgbody=$body;
 if($to!=''){

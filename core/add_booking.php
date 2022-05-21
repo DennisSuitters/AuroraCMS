@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,7 +49,7 @@ if($config['reCaptchaServer']!=''){
   }
 }
 if($not['spammer']==false){
-  $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
+  $act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
 	if($act=='add_booking'){
 		if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
 	    $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
@@ -57,16 +57,16 @@ if($not['spammer']==false){
 		}
 		if($_POST['fullname'.$hash]==''&&$not['spammer']==false){
 			$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
-			$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-			$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
-			$address=filter_input(INPUT_POST,'address',FILTER_SANITIZE_STRING);
-			$suburb=filter_input(INPUT_POST,'suburb',FILTER_SANITIZE_STRING);
-			$city=filter_input(INPUT_POST,'city',FILTER_SANITIZE_STRING);
-			$state=filter_input(INPUT_POST,'state',FILTER_SANITIZE_STRING);
-			$postcode=filter_input(INPUT_POST,'postcode',FILTER_SANITIZE_STRING);
-			$phone=filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING);
-			$notes=filter_input(INPUT_POST,'notes',FILTER_SANITIZE_STRING);
-			$tis=filter_input(INPUT_POST,'tis',FILTER_SANITIZE_STRING);
+			$name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+			$business=filter_input(INPUT_POST,'business',FILTER_UNSAFE_RAW);
+			$address=filter_input(INPUT_POST,'address',FILTER_UNSAFE_RAW);
+			$suburb=filter_input(INPUT_POST,'suburb',FILTER_UNSAFE_RAW);
+			$city=filter_input(INPUT_POST,'city',FILTER_UNSAFE_RAW);
+			$state=filter_input(INPUT_POST,'state',FILTER_UNSAFE_RAW);
+			$postcode=filter_input(INPUT_POST,'postcode',FILTER_UNSAFE_RAW);
+			$phone=filter_input(INPUT_POST,'phone',FILTER_UNSAFE_RAW);
+			$notes=filter_input(INPUT_POST,'notes',FILTER_UNSAFE_RAW);
+			$tis=filter_input(INPUT_POST,'tis',FILTER_UNSAFE_RAW);
 			$rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
 			if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip='127.0.0.1'){
 				$filter=new SpamFilter();

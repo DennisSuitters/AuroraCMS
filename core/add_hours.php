@@ -7,18 +7,18 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
-$from=filter_input(INPUT_POST,'from',FILTER_SANITIZE_STRING);
-$to=filter_input(INPUT_POST,'to',FILTER_SANITIZE_STRING);
+$from=filter_input(INPUT_POST,'from',FILTER_UNSAFE_RAW);
+$to=filter_input(INPUT_POST,'to',FILTER_UNSAFE_RAW);
 $timefrom=filter_input(INPUT_POST,'timefrom',FILTER_SANITIZE_NUMBER_INT);
 $timeto=filter_input(INPUT_POST,'timeto',FILTER_SANITIZE_NUMBER_INT);
-$info=filter_input(INPUT_POST,'info',FILTER_SANITIZE_STRING);
+$info=filter_input(INPUT_POST,'info',FILTER_UNSAFE_RAW);
 $q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`uid`,`contentType`,`username`,`password`,`tis`,`tie`,`title`) VALUES (0,'hours',:f,:t,:tis,:tie,:info)");
 $q->execute([
 	':f'=>$from,

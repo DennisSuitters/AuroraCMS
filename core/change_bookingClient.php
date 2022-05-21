@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $bid=filter_input(INPUT_GET,'bid',FILTER_SANITIZE_NUMBER_INT);
-$w=filter_input(INPUT_GET,'w',FILTER_SANITIZE_STRING);
+$w=filter_input(INPUT_GET,'w',FILTER_UNSAFE_RAW);
 if($id==0){
   $c=[
     'id'=>0,

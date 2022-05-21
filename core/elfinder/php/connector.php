@@ -4,11 +4,11 @@ if(session_status()==PHP_SESSION_NONE){
   define('SESSIONID',session_id());
 }
 $uid=$_SESSION['uid'];
-$view=isset($_GET['view'])&&$_GET['view']!=''?filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING):'';
+$view=isset($_GET['view'])&&$_GET['view']!=''?filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW):'';
 define('DS',DIRECTORY_SEPARATOR);
 $id=isset($_GET['id'])?filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT):'';
-$t=isset($_GET['t'])?filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING):'';
-$c=isset($_GET['c'])?filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING):'';
+$t=isset($_GET['t'])?filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW):'';
+$c=isset($_GET['c'])?filter_input(INPUT_GET,'c',FILTER_UNSAFE_RAW):'';
 include_once dirname(__FILE__).DS.'autoload.php';
 include_once dirname(__FILE__).DS.'elFinderConnector.class.php';
 include_once dirname(__FILE__).DS.'elFinder.class.php';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,7 @@ require'db.php';
 require'sanitise.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $user=filter_input(INPUT_POST,'user',FILTER_SANITIZE_NUMBER_INT);
-$icon=filter_input(INPUT_POST,'icon',FILTER_SANITIZE_STRING);
+$icon=filter_input(INPUT_POST,'icon',FILTER_UNSAFE_RAW);
 $url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_URL);
 if(filter_var($url,FILTER_VALIDATE_URL)){
 	if($icon=='none'||$url=='')echo'<script>window.top.window.toastr["error"]("Not all Fields were filled in!");</script>';

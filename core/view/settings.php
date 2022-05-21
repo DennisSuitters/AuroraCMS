@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,7 @@ $show='';
 $currentPassCSS=$matchPassCSS='';
 $currentPassHidden=$matchPassHidden=$successHidden=$success=$theme['settings']['hidden'];
 $successShow=$theme['settings']['show'];
-$act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
+$act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
 if(isset($_SESSION['uid'])&&$_SESSION['uid']>0){
 	$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
 	$s->execute([':id'=>$_SESSION['uid']]);
@@ -34,7 +34,7 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 	],$html);
 	if(isset($act)&&$act=='updatePassword'){
 		if(isset($_POST['emailtrap'])&&$_POST['emailtrap']=='none'){
-			$password=filter_input(INPUT_POST,'newPass',FILTER_SANITIZE_STRING);
+			$password=filter_input(INPUT_POST,'newPass',FILTER_UNSAFE_RAW);
 			$hashpwd=password_hash($password,PASSWORD_DEFAULT);
 			$su=$db->prepare("UPDATE `".$prefix."login` SET `password`=:hash WHERE `id`=:id");
 			$su->execute([
@@ -45,18 +45,18 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		}
 	}
 	if(isset($act)&&$act=='updateAccount'){
-		$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
-		$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-		$url=filter_input(INPUT_POST,'url',FILTER_SANITIZE_STRING);
-		$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
-		$phone=filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING);
-		$mobile=filter_input(INPUT_POST,'mobile',FILTER_SANITIZE_STRING);
-		$address=filter_input(INPUT_POST,'address',FILTER_SANITIZE_STRING);
-		$suburb=filter_input(INPUT_POST,'suburb',FILTER_SANITIZE_STRING);
-		$city=filter_input(INPUT_POST,'city',FILTER_SANITIZE_STRING);
-		$state=filter_input(INPUT_POST,'state',FILTER_SANITIZE_STRING);
-		$postcode=filter_input(INPUT_POST,'postcode',FILTER_SANITIZE_STRING);
-		$country=filter_input(INPUT_POST,'country',FILTER_SANITIZE_STRING);
+		$email=filter_input(INPUT_POST,'email',FILTER_UNSAFE_RAW);
+		$name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+		$url=filter_input(INPUT_POST,'url',FILTER_UNSAFE_RAW);
+		$business=filter_input(INPUT_POST,'business',FILTER_UNSAFE_RAW);
+		$phone=filter_input(INPUT_POST,'phone',FILTER_UNSAFE_RAW);
+		$mobile=filter_input(INPUT_POST,'mobile',FILTER_UNSAFE_RAW);
+		$address=filter_input(INPUT_POST,'address',FILTER_UNSAFE_RAW);
+		$suburb=filter_input(INPUT_POST,'suburb',FILTER_UNSAFE_RAW);
+		$city=filter_input(INPUT_POST,'city',FILTER_UNSAFE_RAW);
+		$state=filter_input(INPUT_POST,'state',FILTER_UNSAFE_RAW);
+		$postcode=filter_input(INPUT_POST,'postcode',FILTER_UNSAFE_RAW);
+		$country=filter_input(INPUT_POST,'country',FILTER_UNSAFE_RAW);
 		$s=$db->prepare("UPDATE `".$prefix."login` SET `email`=:email,`name`=:name,`url`=:url,`business`=:business,`phone`=:phone,`mobile`=:mobile,`address`=:address,`suburb`=:suburb,`city`=:city,`state`=:state,`postcode`=:postcode,`country`=:country WHERE `id`=:id");
 		$s->execute([
 			':email'=>$email,

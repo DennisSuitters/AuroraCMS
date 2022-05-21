@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $ti=time();
-$emls=isset($_POST['emails'])?filter_input(INPUT_POST,'emails',FILTER_SANITIZE_STRING):filter_input(INPUT_GET,'emails',FILTER_SANITIZE_STRING);
+$emls=isset($_POST['emails'])?filter_input(INPUT_POST,'emails',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'emails',FILTER_UNSAFE_RAW);
 $emails=explode(",",$emls);
 foreach($emails as$eml){
   if(filter_var($eml,FILTER_VALIDATE_EMAIL)){

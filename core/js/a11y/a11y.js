@@ -7,7 +7,6 @@ var aHC=localStorage.getItem("a11y-high-contrast");
 var aNC=localStorage.getItem("a11y-negative-contrast");
 var aLB=localStorage.getItem("a11y-light-background");
 var aLU=localStorage.getItem("a11y-links-underline");
-var aRF=localStorage.getItem("a11y-readable-font");
 if(aFS!==null){
   document.querySelector("body").classList.add("a11y-resize-font");
   document.documentElement.style.setProperty('--a11y-resize-font',aFS+`%`);
@@ -45,14 +44,11 @@ if(aLU==="true"){
   document.querySelector("body").classList.add("a11y-links-underline");
   document.querySelector(".a11y-btn-links-underline").classList.add('active');
 }
-if(aRF==="true"){
-  document.querySelector("body").classList.add("a11y-readable-font");
-  document.querySelector(".a11y-btn-readable-font").classList.add('active');
-}
 document.addEventListener('click',function(event){
   if(event.target.closest(".a11y-toolbar-toggle-link")){
     event.preventDefault();
     document.querySelector("#a11y-toolbar").classList.toggle("a11y-toolbar-open");
+    document.querySelector(".a11y-toolbar-toggle").classList.toggle("d-none");
     var tI=document.querySelectorAll(".a11y-toolbar-link");
     tI.forEach(function(tIItem){
       var tIS=tIItem.getAttribute("tabindex");

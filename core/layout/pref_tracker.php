@@ -56,7 +56,6 @@ function deseminateReferer($u){
     if(stristr($u,'gclid='))$out='<i class="i d-inline-table i-3x i-social google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
     if(stristr($u,'instagram'))$out='<i class="i d-inline-table i-3x i-social instagram">social-instagram</i><small class="d-flex pt-1 justify-content-center">Instagram</small>';
     if(stristr($u,'duckduckgo'))$out='<i class="i d-inline-table i-3x i-social duckduckgo">social-duckduckgo</i><small class="d-flex pt-1 justify-content-center">DuckDuckGo</small>';
-    if(stristr($u,'Host Royale')||stristr($u,'as203020'))$out='<i class="i d-inline-table i-3x i-social border-danger fraud">social-fraud</i><small class="d-flex pt-1 justify-content-center text-danger">Potential Fraud</small>';
     if(stristr($u,'linkedin'))$out='<i class="i d-inline-table i-3x i-social linkedin">social-linkedin</i><small class="d-flex pt-1 justify-content-center">LinkedIn</small>';
     if(stristr($u,'reddit'))$out='<i class="i d-inline-table i-3x i-social reddit">social-reddit</i><small class="d-flex pt-1 justify-content-center">Reddit</small>';
     if(stristr($u,'telstra')||stristr($u,'as1221'))$out='<i class="i d-inline-table i-3x i-social telstra">social-telstra</i><small class="d-flex pt-1 justify-content-center">Telstra</small>';
@@ -201,16 +200,15 @@ function getDevice($ua){
 }
 function getDeviceIcon($i,$w){
   if($i!=''&&$i!='unknown'&&in_array($i,
-    [
-      'android',
-      'desktop',
-      'ipad',
-      'iphone',
-      'laptop',
-      'mobile',
-      'smartwatch',
-      'tablet',
-      'television'
+    ['android',
+    'desktop',
+    'ipad',
+    'iphone',
+    'laptop',
+    'mobile',
+    'smartwatch',
+    'tablet',
+    'television'
     ],true))
     return'<i class="i d-inline-table i-3x">tech-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
   else
@@ -233,18 +231,18 @@ function getLocationInfoByIp($ip){
   }else{
     $ip_data=@json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ip));
     if($ip_data && $ip_data->geoplugin_countryName!=null){
-        $result['countryName']=$ip_data->geoplugin_countryName; //
-        $result['countryCode']=$ip_data->geoplugin_countryCode; // AU
-        $result['city']=$ip_data->geoplugin_city; // Launcestion
-        $result['region']=$ip_data->geoplugin_region; // Tasmania
-        $result['regionCode']=$ip_data->geoplugin_regionCode; // TAS
+      $result['countryName']=$ip_data->geoplugin_countryName;
+      $result['countryCode']=$ip_data->geoplugin_countryCode;
+      $result['city']=$ip_data->geoplugin_city;
+      $result['region']=$ip_data->geoplugin_region;
+      $result['regionCode']=$ip_data->geoplugin_regionCode;
     }
   }
   return$result;
 }
 function getIspInfo($ip) {
-  $ipinfo = file_get_contents("https://ipinfo.io/" . $ip);
-  $ipinfo_json = json_decode($ipinfo, true);
+  $ipinfo=file_get_contents("https://ipinfo.io/".$ip);
+  $ipinfo_json=json_decode($ipinfo,true);
   return $ipinfo_json;
 }?>
 <main>
@@ -318,11 +316,11 @@ function getIspInfo($ip) {
                   ':rC'=>$result['regionCode'],
                   ':ip'=>$r['ip']
                 ]);
-                $r['countryName']=$result['countryName']; // Australia
-                $r['countryCode']=$result['countryCode']; // AU
-                $r['city']=$result['city']; // Launceston
-                $r['region']=$result['region']; // Tasmania
-                $r['regionCode']=$result['regionCode']; // TAS
+                $r['countryName']=$result['countryName'];
+                $r['countryCode']=$result['countryCode'];
+                $r['city']=$result['city'];
+                $r['region']=$result['region'];
+                $r['regionCode']=$result['regionCode'];
               }
               if($r['isp']==''){
                 $isp=getIspInfo($r['ip']);

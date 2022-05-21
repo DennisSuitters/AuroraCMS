@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.6
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -41,17 +41,17 @@ if($config['reCaptchaServer']!=''){
   }
 }
 if($not['spammer']==false){
-  $act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING);
+  $act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW);
   if($act=='add_message'){
     if($config['php_options'][3]==1&&$config['php_APIkey']!=''&&$ip!='127.0.0.1'){
       $h=new ProjectHoneyPot($ip,$config['php_APIkey']);
       if($h->hasRecord()==1||$h->isSuspicious()==1||$h->isCommentSpammer()==1)$not=['spam'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'Your IP is classified as Malicious and has been added to our Blacklist, for more information visit the Project Honey Pot website.','reason'=>'Contact found Blacklisted IP via Project Honey Pot'];
     }
     if($_POST['fullname'.$hash]==''){
-      $email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
-      $name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-      $subject=filter_input(INPUT_POST,'subject',FILTER_SANITIZE_STRING);
-  		$notes=filter_input(INPUT_POST,'notes',FILTER_SANITIZE_STRING);
+      $email=filter_input(INPUT_POST,'email',FILTER_UNSAFE_RAW);
+      $name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+      $subject=filter_input(INPUT_POST,'subject',FILTER_UNSAFE_RAW);
+  		$notes=filter_input(INPUT_POST,'notes',FILTER_UNSAFE_RAW);
       if($config['spamfilter'][0]==1&&$note['spammer']==false&&$ip='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_email($email);

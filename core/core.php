@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -322,10 +322,11 @@ function sluggify($url){
 	return$url;
 }
 function escaper($val){
-  return str_replace(array("\\","/","\"","\n","\r","\t","\x08","\x0c"),array("\\\\","\\/","\\\"","\\n","\\r","\\t","\\f","\\b"),$val);
+  $val=str_replace(array("\\","/","\"","\n","\r","\t","\x08","\x0c"),array("\\\\","\\/","\\\"","\\n","\\r","\\t","\\f","\\b"),$val);
+	return htmlspecialchars($var,ENT_QUOTES);
 }
 function snippet($keyword,$txt,$span=15){
-	$txt=filter_var($txt,FILTER_SANITIZE_STRING);
+	$txt=filter_var($txt,FILTER_UNSAFE_RAW);
   $snip='';
   preg_match_all("#(\W.{0,$span}\W)($keyword)(\W.{0,$span}\W)#i","  $txt  ",$matches);
   foreach($matches[0] as$match){

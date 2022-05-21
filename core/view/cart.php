@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -69,12 +69,12 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 if(isset($args[0])&&$args[0]=='confirm'){
 	if($_POST['fullname'.$hash]==''){
 		$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
-		$rewards=filter_input(INPUT_POST,'rewards',FILTER_SANITIZE_STRING);
-		$pid=filter_input(INPUT_POST,'pid',FILTER_SANITIZE_STRING);
+		$rewards=filter_input(INPUT_POST,'rewards',FILTER_UNSAFE_RAW);
+		$pid=filter_input(INPUT_POST,'pid',FILTER_UNSAFE_RAW);
 		$postoption='';
 		if($pid=='AUS_PARCEL_REGULAR')$postoption='Australia Post Regular Post'; // AUS_PARCEL_REGULAR
 		if($pid=='AUS_PARCEL_EXPRESS')$postoption='Australia Post Express Post'; // AUS_PARCEL_EXPRESS
-		$payoption=filter_input(INPUT_POST,'payoption',FILTER_SANITIZE_STRING);
+		$payoption=filter_input(INPUT_POST,'payoption',FILTER_UNSAFE_RAW);
 		if($payoption!=0){
 			$spo=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
 			$spo->execute([':id'=>$payoption]);
@@ -98,15 +98,15 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				else
 					$uid=$ru['id'];
 			}else{
-				$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-				$business=filter_input(INPUT_POST,'business',FILTER_SANITIZE_STRING);
-				$address=filter_input(INPUT_POST,'address',FILTER_SANITIZE_STRING);
-				$suburb=filter_input(INPUT_POST,'suburb',FILTER_SANITIZE_STRING);
-				$city=filter_input(INPUT_POST,'city',FILTER_SANITIZE_STRING);
-				$state=filter_input(INPUT_POST,'state',FILTER_SANITIZE_STRING);
-				$postcode=filter_input(INPUT_POST,'postcode',FILTER_SANITIZE_STRING);
-				$country=filter_input(INPUT_POST,'country',FILTER_SANITIZE_STRING);
-				$phone=filter_input(INPUT_POST,'phone',FILTER_SANITIZE_STRING);
+				$name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+				$business=filter_input(INPUT_POST,'business',FILTER_UNSAFE_RAW);
+				$address=filter_input(INPUT_POST,'address',FILTER_UNSAFE_RAW);
+				$suburb=filter_input(INPUT_POST,'suburb',FILTER_UNSAFE_RAW);
+				$city=filter_input(INPUT_POST,'city',FILTER_UNSAFE_RAW);
+				$state=filter_input(INPUT_POST,'state',FILTER_UNSAFE_RAW);
+				$postcode=filter_input(INPUT_POST,'postcode',FILTER_UNSAFE_RAW);
+				$country=filter_input(INPUT_POST,'country',FILTER_UNSAFE_RAW);
+				$phone=filter_input(INPUT_POST,'phone',FILTER_UNSAFE_RAW);
 				$username=explode('@',$email);
 				$q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`username`,`password`,`email`,`name`,`business`,`address`,`suburb`,`city`,`state`,`postcode`,`country`,`phone`,`status`,`active`,`language`,`timezone`,`rank`,`ti`) VALUES (:username,:password,:email,:name,:business,:address,:suburb,:city,:state,:postcode,:country,:phone,'','1',:language,'default','200',:ti)");
 				$chars="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";

@@ -38,7 +38,7 @@
     <link rel="apple-touch-icon" href="<?= URL.$favicon;?>">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css">
   </head>
-  <body class="bg-white" data-theme="<?=(isset($_COOKIE['theme'])&&$_COOKIE['theme']!='')?$_COOKIE['theme']:''?>">
+  <body class="bg-white" data-theme="<?= (isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']!='')?$_COOKIE['admintheme']:'';?>">
     <main class="row m-0 p-0" style="height:100vh;">
       <div class="col-12 col-sm-4 bg-white waves p-5">
         <div class="m-0 m-sm-4">

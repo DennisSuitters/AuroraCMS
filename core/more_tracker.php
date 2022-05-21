@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -72,7 +72,6 @@ function deseminateReferer($u){
     if(stristr($u,'gclid='))$out='<i class="i d-inline-table i-3x i-social google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
     if(stristr($u,'instagram'))$out='<i class="i d-inline-table i-3x i-social instagram">social-instagram</i><small class="d-flex pt-1 justify-content-center">Instagram</small>';
     if(stristr($u,'duckduckgo'))$out='<i class="i d-inline-table i-3x i-social duckduckgo">social-duckduckgo</i><small class="d-flex pt-1 justify-content-center">DuckDuckGo</small>';
-    if(stristr($u,'Host Royale')||stristr($u,'as203020'))$out='<i class="i d-inline-table i-3x i-social border-danger fraud">social-fraud</i><small class="d-flex pt-1 justify-content-center text-danger">Potential Fraud</small>';
     if(stristr($u,'linkedin'))$out='<i class="i d-inline-table i-3x i-social linkedin">social-linkedin</i><small class="d-flex pt-1 justify-content-center">LinkedIn</small>';
     if(stristr($u,'reddit'))$out='<i class="i d-inline-table i-3x i-social reddit">social-reddit</i><small class="d-flex pt-1 justify-content-center">Reddit</small>';
     if(stristr($u,'telstra')||stristr($u,'as1221'))$out='<i class="i d-inline-table i-3x i-social telstra">social-telstra</i><small class="d-flex pt-1 justify-content-center">Telstra</small>';
@@ -217,16 +216,15 @@ function getDevice($ua){
 }
 function getDeviceIcon($i,$w){
 	if($i!=''&&$i!='unknown'&&in_array($i,
-    [
-      'android',
-      'desktop',
-      'ipad',
-      'iphone',
-      'laptop',
-      'mobile',
-      'smartwatch',
-      'tablet',
-      'television'
+    ['android',
+    'desktop',
+    'ipad',
+    'iphone',
+    'laptop',
+    'mobile',
+    'smartwatch',
+    'tablet',
+    'television'
     ],true))
     return'<i class="i d-inline-table i-3x">tech-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>'.(is_numeric($w)?'<span class="m-0 p-0" style="font-size:9px">'.$w.'</span><br>':'');
   else
@@ -249,11 +247,11 @@ function getLocationInfoByIp($ip){
   }else{
     $ip_data=@json_decode(file_get_contents("http://www.geoplugin.net/json.gp?ip=".$ip));
     if($ip_data && $ip_data->geoplugin_countryName!=null){
-        $result['countryName']=$ip_data->geoplugin_countryName; //
-        $result['countryCode']=$ip_data->geoplugin_countryCode; // AU
-        $result['city']=$ip_data->geoplugin_city; // Launcestion
-        $result['region']=$ip_data->geoplugin_region; // Tasmania
-        $result['regionCode']=$ip_data->geoplugin_regionCode; // TAS
+      $result['countryName']=$ip_data->geoplugin_countryName;
+      $result['countryCode']=$ip_data->geoplugin_countryCode;
+      $result['city']=$ip_data->geoplugin_city;
+      $result['region']=$ip_data->geoplugin_region;
+      $result['regionCode']=$ip_data->geoplugin_regionCode;
     }
   }
   return$result;
@@ -263,9 +261,9 @@ function getIspInfo($ip){
 	$ipij=json_decode($ipi,true);
 	return$ipij;
 }
-$t=filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING);
-$c=filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING);
-$b=filter_input(INPUT_GET,'b',FILTER_SANITIZE_STRING);
+$t=filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
+$c=filter_input(INPUT_GET,'c',FILTER_UNSAFE_RAW);
+$b=filter_input(INPUT_GET,'b',FILTER_UNSAFE_RAW);
 $s=$db->prepare("SELECT *, MAX(`ti`) AS `cti`, COUNT(`ip`) AS `v` FROM `".$prefix."tracker` GROUP BY `ip` ORDER BY `cti` DESC LIMIT $c,20");
 $s->execute();
 $c=$c+$c;
@@ -282,11 +280,11 @@ if($s->rowCount()>0){
 				':rC'=>$result['regionCode'],
 				':ip'=>$r['ip']
 			]);
-			$r['countryName']=$result['countryName']; // Australia
-			$r['countryCode']=$result['countryCode']; // AU
-			$r['city']=$result['city']; // Launceston
-			$r['region']=$result['region']; // Tasmania
-			$r['regionCode']=$result['regionCode']; // TAS
+			$r['countryName']=$result['countryName'];
+			$r['countryCode']=$result['countryCode'];
+			$r['city']=$result['city'];
+			$r['region']=$result['region'];
+			$r['regionCode']=$result['regionCode'];
 		}
 		if($r['isp']==''){
 			$isp=getIspInfo($r['ip']);
@@ -313,7 +311,7 @@ if($s->rowCount()>0){
 		    ':ip'=>$r['ip']
 		  ]);
 		}
-    echo'<tr class="small'.(isset($find)&&$find!=''?' findtracker':'').'" data-dbid="'.$r['id'].'" id="l_'.$r['id'].'" data-ip="'.$r['ip'].'">'.
+    echo'<tr class="small '.(isset($find)&&$find!=''?' findtracker':'').'" data-dbid="'.$r['id'].'" id="l_'.$r['id'].'" data-ip="'.$r['ip'].'">'.
 			'<td class="text-center align-middle">'.
 				$r['v'].'<br><small>'.date('D M d Y',$r['cti']).'<br>'.date('h:i:s A',$r['cti']).'</small>'.
 			'</td>'.
@@ -331,7 +329,7 @@ if($s->rowCount()>0){
 					'<img src="core/images/flags/'.($r['countryCode']==''?'localhost':strtolower($r['countryCode'])).'.png" alt="'.$r['countryName'].'">'.
 				'</div>'.
 				'<div class="d-inline-block">'.
-					'<small>'.($r['countryName']==''?'<span class="text-danger">Unresolved</span>':$r['countryName']).' - <a target="_blank" href="https://dnschecker.org/ip-location.php?ip='.$r['ip'].'">'.$r['ip'].'</a></small>'.
+					'<small>'.($r['countryName']==''?'Unresolved':$r['countryName']).' - <a target="_blank" href="https://dnschecker.org/ip-location.php?ip='.$r['ip'].'">'.$r['ip'].'</a></small>'.
 					($r['city']!=''?'<br><small>'.$r['city'].($r['city']!=''&&$r['region']!=''?' - ':'').$r['region'].'</small>':'<br>').
 					($r['isp']!='Unknown'?'<br><small>'.$r['isp'].'</small>':'').
 				'</div>'.
@@ -355,7 +353,7 @@ if($s->rowCount()>0){
 if($config['php_options'][0]==1){
 						echo'<a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_'.$r['ip'].'" role="button" data-tooltip="left" aria-label="Lookup IP using Project Honey Pot (Opens in New Page)"><i class="i">brand-projecthoneypot</i></a>';
 }
-					echo($r['status']!='blacklisted'?'<button class="btn btn-dark" data-btnip="'.$r['ip'].'" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist(`'.$r['ip'].'`);"><i class="i">security</i></button>':'').
+					echo($r['status']!='blacklisted'?'<button class="btn" data-btnip="'.$r['ip'].'" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist(`'.$r['ip'].'`);"><i class="i">blacklist-add</i></button>':'').
 					'<button class="trash" data-tooltip="left" aria-label="Remove all of this IP" onclick="purge(`'.$r['ip'].'`,`clearip`);"><i class="i">trash</i></button>'.
 				'</div>'.
 			'</td>'.

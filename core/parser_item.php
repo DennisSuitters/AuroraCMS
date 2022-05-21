@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -41,10 +41,10 @@ if($skip==false){
     $gst=$r['rCost']+$gst;
     $r['rCost']=number_format((float)$gst,2,'.','');
   }
-  $seoTitle=$r['seoTitle']==''?$r['title']:$r['seoTitle'];
+  $seoTitle=escaper($r['seoTitle']==''?$r['title']:$r['seoTitle']);
   $metaRobots=$r['metaRobots']==''?$r['metaRobots']:$page['metaRobots'];
-  $seoCaption=$r['seoCaption']==''?$r['seoCaption']:$page['seoCaption'];
-  $seoDescription=$r['seoDescription']!=''?$r['seoDescription']:($r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags($r['notes']),0,160));
+  $seoCaption=escaper($r['seoCaption']==''?$r['seoCaption']:$page['seoCaption']);
+  $seoDescription=escaper($r['seoDescription']!=''?$r['seoDescription']:($r['seoCaption']!=''?$r['seoCaption']:substr(strip_tags($r['notes']),0,160)));
   $seoKeywords=$r['seoKeywords']==''?$r['seoKeywords']:$page['seoKeywords'];
   $su=$db->prepare("UPDATE `".$prefix."content` SET `views`=:views WHERE `id`=:id");
   $su->execute([
@@ -666,8 +666,8 @@ if($skip==false){
         '"datePublished":"'.date('Y-m-d',$r['pti']).'",'.
         '"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
         '"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
-        '"description":"'.$seoDescription.'",'.
-        '"articleBody":"'.htmlspecialchars(strip_tags($r['notes']),ENT_QUOTES,'UTF-8').'",'.
+        '"description":"'.escaper($seoDescription).'",'.
+        '"articleBody":"'.escaper(strip_tags($r['notes'])).'",'.
         '"author":{'.
           '"@type":"Person",'.
           '"name":"'.($ua['name']!=''?$ua['name']:$ua['username']).'"'.
@@ -680,10 +680,10 @@ if($skip==false){
           '"@type":"ImageObject",'.
           '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
         '},'.
-        '"description":"'.($seoDescription!=''?$seoDescription:strip_tags(escaper($r['notes']))).'",'.
+        '"description":"'.escaper($seoDescription!=''?$seoDescription:strip_tags($r['notes'])).'",'.
         '"mpn":"'.($r['barcode']==''?$r['id']:$r['barcode']).'",'.
         '"sku":"'.($r['fccid']==''?$r['id']:$r['fccid']).'",'.
-        '"brand":"'.($r['brand']!=''?$r['brand']:$config['business']).'",';
+        '"brand":{"@type":"Brand","name":"'.($r['brand']!=''?$r['brand']:$config['business']).'"},';
         $jss=$db->prepare("SELECT AVG(`cid`) as rate, COUNT(`id`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid AND `status`='approved'");
         $jss->execute([':rid'=>$r['id']]);
         $jrr=$jss->fetch(PDO::FETCH_ASSOC);
@@ -727,16 +727,24 @@ if($skip==false){
           '"@type":"Offer",'.
           '"url":"'.$canonical.'",';
         if(is_numeric($r['cost'])||is_numeric($r['rCost'])){
-          $jsonld.='"priceCurrency":"AUD",'.
-          '"price":"'.($r['rCost']!=0?$r['rCost']:($r['cost']==''?0:$r['cost'])).'",'.
-          '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+          if(is_numeric($r['rCost'])&&$r['rCost']!=0){
+            $jsonld.='"priceCurrency":"AUD",'.
+              '"price":"'.$r['rCost'].'"'.
+              '"price":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+          }elseif(is_numeric($r['cost'])&&$r['cost']!=0){
+            $jsonld.='"priceCurrency":"AUD",'.
+              '"price":"'.$r['cost'].'",'.
+              '"priceValidUntil":"'.date('Y-m-d',strtotime('+6 month',time())).'",';
+          }
         }
-        $jsonld.='"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'http://schema.org/OutOfStock':'http://schema.org/InStock'):($r['stockStatus']=='none'?'http://schema.org/OutOfStock':'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus'])))).'",'.
+        if($r['stockStatus']!='none'){
+          $jsonld.='"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'http://schema.org/OutOfStock':'http://schema.org/InStock'):($r['stockStatus']=='none'?'http://schema.org/OutOfStock':'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus'])))).'",'.
           '"seller":{'.
             '"@type":"Organization",'.
             '"name":"'.$config['business'].'"'.
-          '}'.
-        '}';
+            '}'.
+          '}';
+        }
       }elseif($r['schemaType']=='Service'){
         $jsonld.=
         '"@type":"Service",'.
@@ -774,8 +782,8 @@ if($skip==false){
         '"datePublished":"'.date('Y-m-d',$r['pti']).'",'.
         '"dateCreated":"'.date('Y-m-d',$r['ti']).'",'.
         '"dateModified":"'.date('Y-m-d',$r['eti']).'",'.
-        '"description":"'.strip_tags(rawurldecode($seoDescription)).'",'.
-        '"articleBody":"'.strip_tags(escaper($r['notes'])).'"';
+        '"description":"'.escaper(strip_tags(rawurldecode($seoDescription))).'",'.
+        '"articleBody":"'.escaper(strip_tags($r['notes'])).'"';
       }
       $jsonld.='}</script>';
       $item=str_replace('<json-ld>',$jsonld,$item);

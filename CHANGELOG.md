@@ -20,3 +20,13 @@
 - Add ctrl+s SaveAll keyboard shortcut, this override's the browser default, but makes it much more user friendly for user's.
 - Fix Admin Activity Page not clearing entries.
 - Fix Admin Side Menu not showing correct active page.
+
+#### v0.2.13
+- Fix Login not using correct variable name for setting theme.
+- Replace deprecated filter option "FILTER_SANITIZE_STRING" in favour of "FILTER_UNSAFE_RAW".
+- Adjust AuroraCMS logo size, Firefox was showing image too large, pushing elements off page.
+- Improve the Accessibility Widget.
+- Fix Admin theme switcher displaying both icons if theme not set.
+- Fix Schema not encoding single or double quotes, causing issues of malformed Schema Data.
+- Add button to Bookings items to copy booking to Job List.
+- Fix z-index of elFinder so it opens above Summernote's dialogs.

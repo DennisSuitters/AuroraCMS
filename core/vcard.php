@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -18,7 +18,7 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }else{
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
-$username=isset($_GET['u'])?filter_input(INPUT_GET,'u',FILTER_SANITIZE_STRING):0;
+$username=isset($_GET['u'])?filter_input(INPUT_GET,'u',FILTER_UNSAFE_RAW):0;
 if($username!=0){
   $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `username`=:username");
   $s->execute([':username'=>$username]);

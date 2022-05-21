@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -81,7 +81,7 @@ if(stristr($html,'<playlist')){
 					'"@content":"https://schema.org",'.
 					'"@type":"VideoObject",'.
 					'"name":"'.$pr['title'].'",'.
-					'"description":"'.($pr['notes']!=''?strip_tags($pr['notes']):$pr['title']).'",'.
+					'"description":"'.htmlspecialchars(($pr['notes']!=''?strip_tags($pr['notes']):$pr['title'],ENT_QUOTES).'",'.
 					'"thumbnailUrl":['.
 						'"'.$pr['thumbnail_url'].'"'.
 					']'.
@@ -106,12 +106,12 @@ if(stristr($html,'<playlist')){
 		$html=preg_replace('~<playlist>.*?<\/playlist>~is','',$html);
 	}
 }
-$seoTitle=empty($page['seoTitle'])?trim(htmlspecialchars($page['title'],ENT_QUOTES,'UTF-8')):htmlspecialchars($page['seoTitle'],ENT_QUOTES,'UTF-8');
-$metaRobots=!empty($page['metaRobots'])?htmlspecialchars($page['metaRobots'],ENT_QUOTES,'UTF-8'):'index,follow';
-$seoCaption=!empty($page['seoCaption'])?htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8'):htmlspecialchars($page['seoCaption'],ENT_QUOTES,'UTF-8');
-$seoCaption=empty($seoCaption)?htmlspecialchars($config['seoCaption'],ENT_QUOTES,'UTF-8'):$seoCaption;
-$seoDescription=!empty($page['seoDescription'])?htmlspecialchars($page['seoDescription'],ENT_QUOTES,'UTF-8'):htmlspecialchars($page['seoDescription'],ENT_QUOTES,'UTF-8');
-$seoDescription=empty($seoDescrption)?htmlspecialchars($config['seoDescription'],ENT_QUOTES,'UTF-8'):$seoDescription;
-$seoKeywords=!empty($page['seoKeywods'])?htmlspecialchars($page['seoKeywords'],ENT_QUOTES,'UTF-8'):htmlspecialchars($page['seoKeywords'],ENT_QUOTES,'UTF-8');
-$seoKeywords=empty($seoKeywords)?htmlspecialchars($config['seoKeywords'],ENT_QUOTES,'UTF-8'):$seoKeywords;
+$seoTitle=empty($page['seoTitle'])?trim(escaper($page['title'])):escaper($page['seoTitle']);
+$metaRobots=!empty($page['metaRobots'])?escaper($page['metaRobots']):'index,follow';
+$seoCaption=!empty($page['seoCaption'])?escaper($page['seoCaption']):escaper($page['seoCaption']);
+$seoCaption=empty($seoCaption)?escaper($config['seoCaption']):escaper($seoCaption);
+$seoDescription=!empty($page['seoDescription'])?escaper($page['seoDescription']):escaper($page['seoDescription']);
+$seoDescription=empty($seoDescrption)?escaper($config['seoDescription']):escaper($seoDescription);
+$seoKeywords=!empty($page['seoKeywods'])?escaper($page['seoKeywords']):escaper($page['seoKeywords']);
+$seoKeywords=empty($seoKeywords)?escaper($config['seoKeywords']):escaper($seoKeywords);
 $content.=$html;

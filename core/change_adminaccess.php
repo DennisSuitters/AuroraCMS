@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.1.3
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,7 +19,7 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
-$adminfolder=isset($_POST['adminfolder'])?filter_input(INPUT_POST,'adminfolder',FILTER_SANITIZE_STRING):'';
+$adminfolder=isset($_POST['adminfolder'])?filter_input(INPUT_POST,'adminfolder',FILTER_UNSAFE_RAW):'';
 if($adminfolder==''){
   echo'<script>'.
     'window.top.window.$("#adminfolder").addClass("is-invalid");'.

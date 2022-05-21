@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -88,7 +88,7 @@ else{?>
               <h4>Details</h4>
               <div class="row">
                 <div class="col-12 col-sm-6 col-md-3">
-                  <div class="input-text">Order #<a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i i-4x">new-window</i>';?></a></div>
+                  <div class="input-text">Order #<a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i">new-window</i>';?></a></div>
                 </div>
                 <div class="col-12 col-sm-6 col-md-3">
                   <div class="input-text">Created:&nbsp;<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?></div>

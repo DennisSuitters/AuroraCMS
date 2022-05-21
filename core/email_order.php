@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -21,8 +21,8 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');
 $id=filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-$w=filter_input(INPUT_GET,'w',FILTER_SANITIZE_STRING);
-$act=filter_input(INPUT_GET,'act',FILTER_SANITIZE_STRING);
+$w=filter_input(INPUT_GET,'w',FILTER_UNSAFE_RAW);
+$act=filter_input(INPUT_GET,'act',FILTER_UNSAFE_RAW);
 $q=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
 $q->execute([':id'=>$id]);
 $r=$q->fetch(PDO::FETCH_ASSOC);

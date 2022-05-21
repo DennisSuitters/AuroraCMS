@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.5
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,11 +15,11 @@ require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-$name=filter_input(INPUT_POST,'name',FILTER_SANITIZE_STRING);
-$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_STRING);
-$txnid=filter_input(INPUT_POST,'txnid',FILTER_SANITIZE_STRING);
+$name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
+$email=filter_input(INPUT_POST,'email',FILTER_UNSAFE_RAW);
+$txnid=filter_input(INPUT_POST,'txnid',FILTER_UNSAFE_RAW);
 $paidAmount=filter_input(INPUT_POST,'amount',FILTER_SANITIZE_NUMBER_INT);
-$act=filter_input(INPUT_POST,'act',FILTER_SANITIZE_STRING;
+$act=filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW;
 $msg='error';
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
 $s->execute([':id'=>$id]);

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.13
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,7 @@ $notification='';
 $activation='<div class="alert alert-warning">There was an issue Activating your account, or an Activation token was not supplied!</div>';
 $activated=false;
 if(isset($_GET['activate'])&&$_GET['activate']!=''){
-	$activate=filter_input(INPUT_GET,'activate',FILTER_SANITIZE_STRING);
+	$activate=filter_input(INPUT_GET,'activate',FILTER_UNSAFE_RAW);
 	$sa=$db->prepare("UPDATE `".$prefix."login` SET `active`='1',`activate`='',`rank`='200' WHERE `activate`=:activate");
 	$sa->execute([':activate'=>$activate]);
   if($sa->rowCount()>0){

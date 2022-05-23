@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,25 +26,22 @@
       </li>
     </ul>
     <ul class="ml-auto">
-      <li class="d-none d-md-inline-block">
-        <form class="form-row" method="post" action="<?= URL.$settings['system']['admin'].'/search';?>">
-          <input name="s" type="text" placeholder="Enter a Search Term...">
-          <button type="submit" data-tooltip="bottom" aria-label="Search"><i class="i i-2x">search</i></button>
-        </form>
+      <li class="text-center px-3" data-tooltip="bottom" aria-label="Search">
+        <a href="<?= URL.$settings['system']['admin'].'/search';?>"><i class="i i-3x">search</i></a>
       </li>
       <li class="badge text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
         <input class="d-none" id="notification-checkbox" type="checkbox">
-        <label class="mt-0" for="notification-checkbox"><i class="i i-3x">bell</i></label>
+        <label class="m-0" for="notification-checkbox"><i class="i i-3x">bell</i></label>
         <ul class="p-0" id="nav-stat-list">
           <li class="dropdown-heading py-2">Notifications</li>
-          <?=($nc['cnt']>0?'<li><span class="badger badge-primary">'.$nc['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/comments"> Comments</a></li>':'').
-          ($nr['cnt']>0?'<li><span class="badger badge-primary">'.$nr['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/reviews"> Reviews</a></li>':'').
-          ($nm['cnt']>0?'<li><span class="badger badge-primary">'.$nm['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/messages"> Messages</a></li>':'').
-          ($po['cnt']>0?'<li><span class="badger badge-primary">'.$po['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/orders/pending"> Orders</a></li>':'').
-          ($nb['cnt']>0?'<li><span class="badger badge-primary">'.$nb['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/bookings"> Bookings</a></li>':'').
-          ($nu['cnt']>0?'<li><span class="badger badge-primary">'.$nu['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/accounts"> Users</a></li>':'').
-          ($nt['cnt']>0?'<li><span class="badger badge-primary">'.$nt['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/content/type/testimonials"> Testimonials</a></li>':'').
-          ($nou['cnt']>0?'<li><span class="badger badge-primary">'.$nou['cnt'].'</span>&nbsp;&nbsp;<a href="'.URL.$settings['system']['admin'].'/accounts"> Active Users</a></li>':'');?>
+          <?=($nc['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/comments"><span class="badger badge-primary mr-2">'.$nc['cnt'].'</span>Comments</a></li>':'').
+          ($nr['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/reviews"><span class="badger badge-primary mr-2">'.$nr['cnt'].'</span>Reviews</a></li>':'').
+          ($nm['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/messages"><span class="badger badge-primary mr-2">'.$nm['cnt'].'</span>Messages</a></li>':'').
+          ($po['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/orders/pending"><span class="badger badge-primary mr-2">'.$po['cnt'].'</span>Orders</a></li>':'').
+          ($nb['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/bookings"><span class="badger badge-primary mr-2">'.$nb['cnt'].'</span>Bookings</a></li>':'').
+          ($nu['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts"><span class="badger badge-primary mr-2">'.$nu['cnt'].'</span>Users</a></li>':'').
+          ($nt['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/content/type/testimonials"><span class="badger badge-primary mr-2">'.$nt['cnt'].'</span>Testimonials</a></li>':'').
+          ($nou['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts"><span class="badger badge-primary mr-2">'.$nou['cnt'].'</span>Active Users</a></li>':'');?>
         </ul>
       </li>
       <li data-tooltip="bottom" aria-label="View Site">
@@ -56,9 +53,9 @@
           <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'||$_COOKIE['admintheme']==''?' d-none':'');?>" data-tooltip="bottom" aria-label="Switch to Light Mode">light-mode</i>
         </button>
       </li>
-      <li>
-        <input class="d-none" id="notification-checkbox" type="checkbox">
-        <label class="m-0" for="notification-checkbox">
+      <li class="text-center" id="nav-accounts" aria-label="Account Settings">
+        <input class="d-none" id="header-account-checkbox" type="checkbox">
+        <label class="m-0" for="header-account-checkbox">
           <span class="d-inline" id="account">
             <img class="img-avatar" src="<?php if($user['avatar']!=''&&file_exists('media/avatar/'.basename($user['avatar'])))echo'media/avatar/'.basename($user['avatar']);
               elseif($user['gravatar']!=''){
@@ -73,9 +70,9 @@
         </label>
         <ul class="p-0" id="nav-account-list">
           <li class="dropdown-heading py-2">Account Settings</li>
-          <li class="p-1"><a href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>"> <i class="i i-2x mr-3">user</i>My Account</a></li>
-          <li class="p-1"><a target="_blank" href="https://github.com/DiemenDesign/AuroraCMS/issues"><i class="i i-2x mr-3">social-github</i>Support</a></li>
-          <li class="p-1"><a href="<?= URL.$settings['system']['admin'].'/logout';?>"><i class="i i-2x mr-3">signout</i>Logout</a></li>
+          <li><a class="p-1" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>"><i class="i i-2x mr-3">user</i>My Account</a></li>
+          <li><a class="p-1" target="_blank" href="https://github.com/DiemenDesign/AuroraCMS/issues"><i class="i i-2x mr-3">social-github</i>Support</a></li>
+          <li><a class="p-1" href="<?= URL.$settings['system']['admin'].'/logout';?>"><i class="i i-2x mr-3">signout</i>Logout</a></li>
         </ul>
       </li>
     </ul>

@@ -30,3 +30,14 @@
 - Fix Schema not encoding single or double quotes, causing issues of malformed Schema Data.
 - Add button to Bookings items to copy booking to Job List.
 - Fix z-index of elFinder so it opens above Summernote's dialogs.
+
+#### v0.2.14
+- Fix reference to Share icon on Administration Content list page.
+- Fix wrong icon references in quickedit dropdown.
+- Comment out array functions, that look to currently be deprecated or not added to PHP 8.1
+- Adjust Administration content dropdowns for status, and stock so they don't appear of the top of elements other than the image.
+- Adjust Administraion Tabs font size to avoid wrapping when widget's are present.
+- Add Fill style to correctly change the AuroraCMS logo colour when theme modes are changed.
+- Fix Administration header menu dropdown styling.
+- Fix Safari button styling not rendering button elements as expected styling.
+- Fix missing vars for sales array when checking for sale dates.

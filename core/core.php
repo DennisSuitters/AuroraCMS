@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -254,9 +254,11 @@ function elapsed_time($b=0,$e=0){
 function getSaleTime(){
   $chkti=time();
   $sale=[
-    'timestamp'=>0,
+    'tis'=>0,
+		'tie'=>0,
     'sale'=>'',
-    'class'=>''
+    'class'=>'',
+		'title'=>'',
   ];
   $year=date('Y',$chkti);
 	$month=strtotime("1 month");
@@ -284,7 +286,7 @@ function getSaleTime(){
   if($chkti>$hwtis&&$chkti<$hwtie)$sale=['tis'=>$hwtis,'tie'=>$hwtie,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
   if($chkti>$sbtis&&$chkti<$sbtie)$sale=['tis'=>$sbtis,'tie'=>$sbtie,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
   if($chkti>$cdtis&&$chkti<$cdtie)$sale=['tis'=>$cdtis,'tie'=>$cdtie,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
-  return $sale;
+  return$sale;
 }
 function size_format($B,$D=2){
   $S='kMGTPEZY';

@@ -25,7 +25,7 @@
     <meta name="robots" content="noindex,nofollow">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title><?=(isset($navStat)&&$navStat>0?'('.$navStat.') ':'');?>Administration <?=($config['business']!=''?' for '.$config['business']:'');?> - AuroraCMS</title>
+    <title><?=(isset($navStat)&&$navStat>0?'('.$navStat.') ':'');?><?=($config['business']!=''?$config['business']:'');?> Administration</title>
     <base href="<?= URL;?>">
     <link rel="alternate" media="handheld" href="<?= URL;?>">
     <link rel="alternate" hreflang="<?=$config['language'];?>" href="<?= URL;?>">

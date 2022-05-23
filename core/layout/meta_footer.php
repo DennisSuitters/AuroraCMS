@@ -519,20 +519,20 @@ else
         var navStat=$('#nav-stat').html();
         if(stats[0]==0)stats[0]='';
         var stathtml='<li class="dropdown-heading py-2">Notifications</li>';
-        if(stats[3]>0)stathtml+='<li><span class="badger badge-primary">'+stats[3]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/comments"> Comments</a></li>';
-        if(stats[4]>0)stathtml+='<li><span class="badger badge-primary">'+stats[4]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/reviews"> Reviews</a></li>';
-        if(stats[5]>0)stathtml+='<li><span class="badger badge-primary">'+stats[5]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/messages"> Messages</a></li>';
-        if(stats[6]>0)stathtml+='<li><span class="badger badge-primary">'+stats[6]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/orders/pending"> Orders</a></li>';
-        if(stats[7]>0)stathtml+='<li><span class="badger badge-primary">'+stats[7]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/bookings"> Bookings</a></li>';
-        if(stats[8]>0)stathtml+='<li><span class="badger badge-primary">'+stats[8]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/accounts"> Users</a></li>';
-        if(stats[9]>0)stathtml+='<li><span class="badger badge-primary">'+stats[9]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"> Testimonials</a></li>';
-        if(stats[2]>0)stathtml+='<li><span class="badger badge-primary">'+stats[2]+'</span>&nbsp;&nbsp;<a href="<?= URL.$settings['system']['admin'];?>/accounts"> Active Users</a></li>';
+        if(stats[3]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/comments"><span class="badger badge-primary mr-2">'+stats[3]+'</span>Comments</a></li>';
+        if(stats[4]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/reviews"><span class="badger badge-primary mr-2">'+stats[4]+'</span>Reviews</a></li>';
+        if(stats[5]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/messages"><span class="badger badge-primary mr-2">'+stats[5]+'</span>Messages</a></li>';
+        if(stats[6]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/orders/pending"><span class="badger badge-primary mr-2">'+stats[6]+'</span>Orders</a></li>';
+        if(stats[7]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/bookings"><span class="badger badge-primary mr-2">'+stats[7]+'</span>Bookings</a></li>';
+        if(stats[8]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/accounts"><span class="badger badge-primary mr-2">'+stats[8]+'</span>Users</a></li>';
+        if(stats[9]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/content/type/testimonials"><span class="badger badge-primary mr-2">'+stats[9]+'</span>Testimonials</a></li>';
+        if(stats[2]>0)stathtml+='<li><a href="<?= URL.$settings['system']['admin'];?>/accounts"><span class="badger badge-primary mr-2">'+stats[2]+'</span>Active Users</a></li>';
         $('#nav-stat').attr('data-badge',stats[0]);
         $('#nav-stat-list').html(stathtml);
         if(stats[1]==0){
-          document.title='Administration <?=$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';
+          document.title='<?=$config['business']!=''?$config['business']:'';?> Administration';
         }
-        if(stats[0]>0)document.title='('+stats[0]+') Administration<?=$config['business']!=''?' for '.$config['business']:'';?> - AuroraCMS';
+        if(stats[0]>0)document.title='('+stats[0]+') <?=$config['business']!=''?$config['business']:'';?> Administration';
       });
     },30000);
     $(document).on("click","[data-social-share]",function(){

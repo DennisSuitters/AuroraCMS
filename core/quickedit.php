@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.14
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -78,7 +78,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 							$emailwin=true;
 						}
 							echo'<input class="qetextinput" id="qeemail'.$r['id'].'" type="text" value="'.$r['email'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="email" placeholder="Enter an Email...">'.
-							'<button class="btn-input btn-ghost" data-tooltip="tooltip" aria-label="Send Email" onclick="window.open(`'.$email.'`+$(`#qeemail'.$r['id'].'`).val(),'.($emailwin==true?'`_blank`':'`_self`').');">'.svg2('email-send').'</button>'.
+							'<button class="btn-input btn-ghost" data-tooltip="tooltip" aria-label="Send Email" onclick="window.open(`'.$email.'`+$(`#qeemail'.$r['id'].'`).val(),'.($emailwin==true?'`_blank`':'`_self`').');"><i class="i">email-send</i></button>'.
 						'</div>'.
 						'<button class="qesave" id="qesaveemail'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeemail'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
@@ -88,7 +88,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 					'<div class="form-row">'.
 						'<div class="input-icon">'.
 							'<input class="qetextinput" id="qeurl'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="login" data-dbc="url" type="text" value="'.$r['url'].'" placeholder="Enter a URL...">'.
-							'<button class="btn-input btn-ghost" data-tooltip="tooltip" aria-label="Open URL in New Window" onclick="window.open($(`#qeurl'.$r['id'].'`).val(),`_blank`);">'.svg2('new-window').'</button>'.
+							'<button class="btn-input btn-ghost" data-tooltip="tooltip" aria-label="Open URL in New Window" onclick="window.open($(`#qeurl'.$r['id'].'`).val(),`_blank`);"><i class="i">new-window</i></button>'.
 						'</div>'.
 						'<button class="qesave" id="qesaveurl'.$r['id'].'" data-tooltip="tooltip" data-dbid="qeurl'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>'.
@@ -114,7 +114,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	    	echo'<div class="row">'.
 	      	'<label for="qegenurl'.$r['id'].'">URL Slug</label>'.
         	'<div class="form-row col-12">'.
-          	'<a id="qegenurl'.$r['id'].'" target="_blank" href="'.URL.$r['contentType'].'/'.$r['urlSlug'].'">'.URL.$r['contentType'].'/'.$r['urlSlug'].' '.svg2('new-window').'</a>'.
+          	'<a id="qegenurl'.$r['id'].'" target="_blank" href="'.URL.$r['contentType'].'/'.$r['urlSlug'].'">'.URL.$r['contentType'].'/'.$r['urlSlug'].' <i class="i">new-window</i></a>'.
         	'</div>'.
       	'</div>';
 			if($r['contentType']=='inventory'||$r['contentType']=='service'){
@@ -226,21 +226,17 @@ if($t=='content'||$t=='login'||$t=='orders'){
 						'<input class="qetextinput" id="qetags'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="'.$t.'" data-dbc="tags" type="text" value="'.$r['tags'].'" placeholder="Enter Tags...">'.
 						'<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
 					'</div>';
-				$tags=array();
 				$st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
-				if($st->rowCount()>0){
-					while($rt=$st->fetch(PDO::FETCH_ASSOC)){
-						$tagslist=explode(",",$rt['tags']);
-						foreach($tagslist as$ts)$tgs[]=$ts;
-					}
-				}
-				$tags=array_unique($tgs);
-				asort($tags);
-					echo'<select id="tags_options" onchange="qeaddTag(`'.$r['id'].'`,$(this).val());">'.
-							'<option value="none">Clear All</option>';
-					foreach($tags as$ts)echo'<option value="'.$ts.'">'.$ts.'</option>';
-						echo'</select>'.
-					'</div>';
+        echo'<select id="tags_options" onchange="qeaddTag(`'.$r['id'].'`,$(this).val());">'.
+          '<option value="none">Clear All</option>';
+			  if($st->rowCount()>0){
+          while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+            $tagslist=explode(",",$rt['tags']);
+            foreach($tagslist as$ts)echo'<option value="'.$ts.'">'.$ts.'</option>';
+          }
+        }
+        echo'</select>';
+				echo'</div>';
 			}
 		}
 		if($t=='login'){

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -81,7 +81,7 @@ if(stristr($html,'<playlist')){
 					'"@content":"https://schema.org",'.
 					'"@type":"VideoObject",'.
 					'"name":"'.$pr['title'].'",'.
-					'"description":"'.htmlspecialchars(($pr['notes']!=''?strip_tags($pr['notes']):$pr['title'],ENT_QUOTES).'",'.
+					'"description":"'.($pr['notes']!=''?strip_tags($pr['notes']):$pr['title']).'",'.
 					'"thumbnailUrl":['.
 						'"'.$pr['thumbnail_url'].'"'.
 					']'.

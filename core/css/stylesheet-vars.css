@@ -2,7 +2,7 @@
 
 :root {
   --aurora-background-color: #f5f6fa;
-  --aurora-background-image: url(../images/auroracms.avif);
+  --aurora-background-image: url(../images/auroracms.jpg);
   --aurora-logo-color: #000;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
@@ -101,13 +101,20 @@
   --button-background-color-active: #eef2f7;
   --button-background-color-disabled: #888;
   --button-border-width: 1px;
+  --button-border-width-hover: 1px;
+  --button-border-width-active: 1px;
+  --button-border-width-disabled: 1px;
   --button-border-style: solid;
+  --button-border-style-hover: solid;
+  --button-border-style-active: solid;
+  --button-border-style-disabled: solid;
   --button-border-color: #dee2e6;
   --button-border-color-hover: #dee2e6;
   --button-border-color-active: #dee2e6;
   --button-border-color-disabled: #888;
   --button-border-radius: .15rem;
   --button-shadow: 0 2px 6px 0 rgb(238 242 247 / 50%);
+  --button-shadow-hover: 0 3px 7px 0 rgb(238 242 247 / 50%);
 
   --table-background-color: #fff;
   --table-color: #000;
@@ -223,15 +230,22 @@
 
   --form-background-color: #fff;
   --form-background-color-hover: #fff;
-  --form-background-disabled: #e9ecef;
+  --form-background-color-disabled: #e9ecef;
+  --form-border-width: 1px;
+  --form-border-width-focus: 1px;
+  --form-border-width-disabled: 1px;
+  --form-border-style: solid;
+  --form-border-style-focus: solid;
+  --form-border-style-disabled: solid;
   --form-border-color: #dee2e6;
   --form-border-color-hover: #c8cbcf;
+  --form-border-color-focus: #c8cbcf;
+  --form-border-color-disabled: #888;
   --form-color: #6c757d;
-  --form-color-disabled: #6c757d;
+  --form-color-focus: #495057;
+  --form-color-disabled: #000;
   --form-placeholder-color: #999;
-  --form-focus-color: #495057;
-  --form-focus-border-color: #c8cbcf;
-  --form-focus-shadow: none;
+  --form-shadow-focus: none;
   --form-required-color: #dc3545;
   --form-required-border-color: #dc3545;
   --form-focus-required-shadow: none;
@@ -330,7 +344,7 @@
 
 [data-theme="dark"] {
   --aurora-background-color: #353a40;
-  --aurora-background-image: url(../images/auroracms.avif);
+  --aurora-background-image: url(../images/auroracms.jpg);
   --aurora-logo-color: #fff;
   --body-background-color: #353a40;
   --color: #8391a2;

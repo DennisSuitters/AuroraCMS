@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.14
+ * @version    0.2.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -85,13 +85,14 @@ else{
             ':contentType'=>$args[1]
           ]);
         }else{
-          if($args[1]=='events')
-            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC, `tis` DESC, `ti` DESC, `title` ASC");
-          else
-            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
-          $s->execute([
-            ':contentType'=>$args[1]
-          ]);
+//          if($args[1]=='events'){
+            if(isset($_GET['field'])&&($_GET['field']=='tis'||$_GET['field']=='tie'||$_GET['field']=='ti'))
+              $eventsort='`'.$_GET['field'].'` '.(isset($_GET['by'])&&$_GET['by']=='ASC'?'ASC':'DESC');
+            else
+              $eventsort='`pin` DESC, `ti` DESC, `title` ASC';
+            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ".$getStatus."ORDER BY ".$eventsort);
+            $s->execute([':contentType'=>$args[1]]);
+//          }
         }
       }elseif(isset($args[1])&&($args[1]=='archived'||$args[1]=='unpublished'||$args[1]=='autopublish'||$args[1]=='published'||$args[1]=='delete'||$args[1]=='all')){
         $getStatus=" AND `status`!='archived'";
@@ -226,6 +227,21 @@ else{
                   </ol>
                 </div>
                 <div class="col-12 col-sm-6 text-right">
+                  <?php if($args[1]=='events'){?>
+                      <form class="form-row justify-content-end" method="get" action="">
+                        <div class="input-text">Display&nbsp;Events&nbsp;By</div>
+                        <select id="eventfield" name="field">
+                          <option value="tis"<?=(isset($_GET['field'])&&$_GET['field']=='tis'?' selected':'');?>>Start Date</option>
+                          <option value="tie"<?=(isset($_GET['field'])&&$_GET['field']=='tie'?' selected':'');?>>End Date</option>
+                          <option value="ti"<?=(isset($_GET['field'])&&$_GET['field']=='ti'?' selected':'');?>>Created</option>
+                        </select>
+                        <select id="eventdirection" name="by">
+                          <option value="DESC"<?=(isset($_GET['by'])&&$_GET['by']=='DESC'?' selected':'');?>>Descending</option>
+                          <option value="ASC"<?=(isset($_GET['by'])&&$_GET['by']=='ASC'?' selected':'');?>>Ascending</option>
+                        </select>
+                        <button type="submit">Go</button>
+                      </form>
+                  <?php }?>
                   <div class="form-row justify-content-end">
                     <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
                     <div class="btn-group">
@@ -256,7 +272,7 @@ else{
                 ]);
                 $sccc=$scc->rowCount();
               }?>
-              <article class="card overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
+              <article class="card m-2 overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
                 <div class="card-image overflow-visible">
                   <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))
                     echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -297,7 +313,7 @@ else{
                     echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button><br>':'';
                     echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a><br>':'');
                     echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a><br>':'';?>
-                    <button class="badger badger-primary <?=($r['status']=='published'?'':'d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media">Share</button>
+                    <button class="badger badger-primary <?=($r['status']=='published'?'':' d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
                   </div>
                 </div>
                 <div class="card-header overflow-visible pt-2 line-clamp">
@@ -316,12 +332,8 @@ else{
                 </div>
                 <div class="card-footer">
                   <span class="code hidewhenempty"><?=$r['code'];?></span>
-                  <span class="reviews hidewhenempty">
-                    <?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a>':'';?>
-                  </span>
-                  <span class="comments hidewhenempty">
-                    <?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a>':'');?>
-                  </span>
+                  <span class="reviews hidewhenempty"><?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a>':'';?></span>
+                  <span class="comments hidewhenempty"><?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a>':'');?></span>
                   <?=$r['views']>0?'<button class="btn views trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'';?>
                   <div id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar">
@@ -330,8 +342,8 @@ else{
                         <a class="btn" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
                         <?php if($user['options'][0]==1){?>
                           <button class="btn add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
-                          <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
-                          <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">purge</i></button>
+                          <button class="btn trash <?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
+                          <button class="btn purge trash <?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">purge</i></button>
                           <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                         <?php }?>
                       </div>

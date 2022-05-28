@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -53,7 +53,7 @@ $page=$sp->fetch(PDO::FETCH_ASSOC);
 $seoTitle=isset($page['seoTitle'])?$page['seoTitle']:'';
 $metaRobots=isset($page['metaRobots'])?$page['metaRobots']:'';
 $seoCaption=isset($page['seoCaption'])?$page['seoCaption']:'';
-$seoDescription=isset($page['seoDescription'])?$page['seoDescription']:'';
+$seoDescription=isset($r['seoDescription'])?$r['seoDescription']:$page['seoDescription'];
 $seoKeywords=isset($page['seoKeywords'])?$page['seoKeywords']:'';
 if(isset($page['id'])){
   $pu=$db->prepare("UPDATE `".$prefix."menu` SET `views`=`views`+1 WHERE `id`=:id");
@@ -164,17 +164,17 @@ $head=preg_replace([
 	'/<print geo>/',
   '/<print sale>/'
 ],[
-  trim(htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($theme['creator_url'],ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($metaRobots,ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($seoTitle,ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($seoCaption,ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($seoCaption,ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($seoDescription,ENT_QUOTES,'UTF-8')),
-  trim(htmlspecialchars($seoKeywords,ENT_QUOTES,'UTF-8')),
+  trim($config['business']),
+  trim($theme['title']),
+  trim($theme['creator']),
+  trim($theme['creator_url']),
+  trim($metaRobots),
+  trim($seoTitle),
+  trim($seoCaption),
+  trim($seoDescription),
+  trim($seoCaption),
+  trim($seoDescription),
+  trim($seoKeywords),
   $contentTime,
   $canonical,
   URL,

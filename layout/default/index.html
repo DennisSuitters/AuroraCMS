@@ -17,7 +17,7 @@
 				<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events" aria-label="Go to Events">Events</a></div>
 				<eventsitems items="3">
 					<eventitem>
-						<article class="card event col-5 mx-auto mx-md-3">
+						<article class="card event col-11 col-sm-5 mx-auto mx-md-3">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
@@ -33,7 +33,7 @@
 						</article>
 					</eventitem>
 				</eventsitems>
-				<article id="newsletters" class="card event col-5 mx-auto mx-md-3 mt-3 p-3">
+				<article id="newsletters" class="card event col-11 col-sm-5 mx-auto mx-md-3 mt-3 p-3">
 					<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
 						<input type="hidden" name="act" value="add_subscriber">
 						<input type="hidden" name="<print hash>" value="<print timecode>">
@@ -61,7 +61,7 @@
 				<h2><saleHeading></h2>
 			</header>
 			<saleItems>
-				<article class="card col-12 col-sm-5 col-lg-2-5">
+				<article class="card col-12 col-sm-5 col-lg-2-5 m-3">
 					<json-ld>
 					<figure class="card-image">
 						<a href="<print content=linktitle>"><img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>"></a>
@@ -95,7 +95,7 @@
 			<h2 class="text-center">Latest Content Additions</h2>
 		</header>
 		<items>
-			<article class="card col-12 col-sm-5 col-lg-2-5">
+			<article class="card col-12 col-sm-5 col-lg-2-5 m-3">
 				<figure class="card-image">
 					<a href="<print content=linktitle>">
 						<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">

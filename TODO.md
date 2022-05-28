@@ -1,8 +1,9 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
-- Add toggleable option for Facebook Instant Article/Content autopublishing.
 - Administration
   - Explore adding AVIF Image Compression to elFinder when uploading files.
+    - Safari still does not fully support displaying AVIF. Image elements work, but using AVIF via background-image doesn't work.
+    - Using @supports in CSS isn't fully supported in Safari yet either.
   - Fix update core system
   - Inventory
     - Customer/Contact List, more of a selection Widget for emails and orders.

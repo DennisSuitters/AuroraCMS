@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.14
+ * @version    0.2.15
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -73,6 +73,10 @@
           <li><a class="p-1" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$user['id'];?>"><i class="i i-2x mr-3">user</i>My Account</a></li>
           <li><a class="p-1" target="_blank" href="https://github.com/DiemenDesign/AuroraCMS/issues"><i class="i i-2x mr-3">social-github</i>Support</a></li>
           <li><a class="p-1" href="<?= URL.$settings['system']['admin'].'/logout';?>"><i class="i i-2x mr-3">signout</i>Logout</a></li>
+          <li class="dropdown-heading">Help</li>
+          <li><a class="p-1" href="https://github.com/DiemenDesign/AuroraCMS"><i class="i i-2x social mr-3">social-github</i>AuroraCMS Home Page</a></li>
+          <li><a class="p-1" href="https://github.com/DiemenDesign/AuroraCMS/issues"><i class="i i-2x social mr-3">social-github</i>Report an issue</a></li>
+          <li><a class="p-1" href="https://github.com/DiemenDesign/AuroraCMS/wiki"><i class="i i-2x mr-3">content</i>Documentation</a></li>
         </ul>
       </li>
     </ul>

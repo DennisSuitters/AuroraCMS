@@ -41,3 +41,14 @@
 - Fix Administration header menu dropdown styling.
 - Fix Safari button styling not rendering button elements as expected styling.
 - Fix missing vars for sales array when checking for sale dates.
+
+#### v0.2.15
+- Fix typo in escaper function.
+- Fix escaping that was removing Meta Dscription information if it contained some already escaped characters.
+- Fix wrong ID value for A11Y Checkbox option.
+- Remove margin declaration for `section article` styling, due to the margin pushing elements outside of the viewport area on mobile devices.
+- Fix Page view parser typo causing a 500 error.
+- Add check for empty thumbnail_url for Playlist parser.
+- Fix Playlist editing not retrieving thumbnail URL.
+- Add project links to Administration dropdown account menu.
+- Add extra variable style for more consistent and customisable form elements.

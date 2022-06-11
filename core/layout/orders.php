@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -203,78 +203,68 @@ if($user['options'][4]==1){
                     <li class="breadcrumb-item"><?= isset($args[0])&&$args[0]!=''?'<a href="'.URL.$settings['system']['admin'].'/orders">Orders</a>':'Orders';?></li>
                     <li class="breadcrumb-item active"><?= isset($args[0])&&$args[0]!=''?ucfirst($args[0]):'All';?></li>
                   </ol>
-                </div>
-                <div class="col-12 col-sm-2 text-right">
-                  <div class="btn-group">
-                    <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="left" aria-label="Orders Settings"><i class="i">settings</i></a>':'';?>
-                    <?php if(isset($args[0])&&$args[0]!=''){
-                      if($user['options'][4]==1){
-                        if(isset($args[0])&&$args[0]=='quotes')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" data-tooltip="left" aria-label="Add Quote"><i class="i">add</i></a>';
-                        if(isset($args[0])&&$args[0]=='invoices')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" data-tooltip="left" aria-label="Add Invoice"><i class="i">add</i></a>';
-                      }
-                    }?>
+                  <div class="text-left">
+                    <small>View:
+                      <a class="badger badge-<?= !isset($args[0])?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders" data-tooltip="tooltip" aria-label="Display All Orders">All</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='quotes'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/quotes" data-tooltip="tooltip" aria-label="Display Quote Orders">Quotes</a>&nbsp;
+                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='invoices'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/invoices" data-tooltip="tooltip" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
+                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='pending'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/pending" data-tooltip="tooltip" aria-label="Display Pending Orders">Pending</a>&nbsp;
+                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" data-tooltip="tooltip" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
+                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" data-tooltip="tooltip" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
+                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
+                    </small>
                   </div>
+
+                </div>
+                <div class="col-12 col-sm-6 text-right">
+                  <div class="form-row justify-content-end">
+                    <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+                    <div class="btn-group">
+                      <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/orders/settings" role="button" data-tooltip="left" aria-label="Orders Settings"><i class="i">settings</i></a>':'';?>
+                      <?php if(isset($args[0])&&$args[0]!=''){
+                        if($user['options'][4]==1){
+                          if(isset($args[0])&&$args[0]=='quotes')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addquote" role="button" data-tooltip="left" aria-label="Add Quote"><i class="i">add</i></a>';
+                          if(isset($args[0])&&$args[0]=='invoices')echo'<a class="btn add" href="'.URL.$settings['system']['admin'].'/orders/addinvoice" role="button" data-tooltip="left" aria-label="Add Invoice"><i class="i">add</i></a>';
+                        }
+                      }?>
+                    </div>
+                  <div>
                 </div>
               </div>
             </div>
             <div id="notifications" role="alert"></div>
-            <table class="table-zebra" id="stupidtable">
-              <thead class="d-none d-md-table-header-group">
-                <tr>
-                  <th>Order Number</th>
-                  <th>Client</th>
-                  <th>Date</th>
-                  <th>Status</th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                  if($r['due_ti']<$ti&&$r['status']!='paid'){
-                    $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id AND `status`!='paid'");
-                    $us->execute([':id'=>$r['id']]);
-                    $r['status']='overdue';
-                  }
-                  $cs=$db->prepare("SELECT `username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
-                  $cs->execute([':id'=>$r['cid']]);
-                  $c=$cs->fetch(PDO::FETCH_ASSOC);?>
-                  <tr id="l_<?=$r['id'];?>">
-                    <td class="align-middle">
-                      <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
-                      <div class="d-block d-md-none small">Client:&nbsp;
-                        <?php
-                        if(isset($c['username'])&&isset($c['name'])){
-                        echo$c['username'].(isset($c['name'])&&$c['name']!=''?' ['.$c['name'].']':'').
-                          ':'.
-                          ($c['name']!=''&&$c['business']!=''?'<br>':'').
-                          ($c['business']!=''?$c['business']:'');
-                      }?></div>
-                      <div class="d-block d-md-none small">Date:&nbsp;
-                        <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
-                        <small>Due: <?= date($config['dateFormat'],$r['due_ti']);?></small>
-                      </div>
-                      <div class="d-block d-md-none small">
-                        <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
-                      </div>
-                    </td>
-                    <td class="align-middle d-none d-md-table-cell">
+            <section class="content overflow-visible list" id="contentview">
+              <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
+                if($r['due_ti']<$ti&&$r['status']!='paid'){
+                  $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id AND `status`!='paid'");
+                  $us->execute([':id'=>$r['id']]);
+                  $r['status']='overdue';
+                }
+                $cs=$db->prepare("SELECT `username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+                $cs->execute([':id'=>$r['cid']]);
+                $c=$cs->fetch(PDO::FETCH_ASSOC);?>
+                <article class="card mx-2 mt-3 mb-0 p-2 overflow-visible card-list" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
+                  <div class="col-3 overflow-visible">
+                    <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
+                    <div class="small">Client:&nbsp;
                       <?php if(isset($c['username'])&&isset($c['name'])){
                         echo$c['username'].(isset($c['name'])&&$c['name']!=''?' ['.$c['name'].']':'').
                           ':'.
-                          ($c['name']!=''&&$c['business']!=''?'<br>':'').
-                          ($c['business']!=''?$c['business']:'').
-                          (($c['rank']>200&&$c['rank']<300)||($c['rank']>300&&$c['rank']<400)?'<br><small class="badger badge-'.rank($c['rank']).'">'.ucwords(str_replace('-',' ',rank($c['rank']))).'</small>':'');
+                        ($c['name']!=''&&$c['business']!=''?'<br>':'').
+                        ($c['business']!=''?$c['business']:'');
                       }?>
-                    </td>
-                    <td class="align-middle d-none d-md-table-cell">
+                    </div>
+                  </div>
+                  <div class="col-3 overflow-visible pt-2 line-clamp small">
+                    Date:&nbsp;
                       <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
                       <small>Due: <?= date($config['dateFormat'],$r['due_ti']);?></small>
-                    </td>
-                    <td class="align-middle d-none d-md-table-cell">
-                      <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
-                    </td>
-                    <td class="align-middle" style="display:block;width:100%;flex:auto;" id="controls_<?=$r['id'];?>">
+                  </div>
+                  <div class="col-2 p-2 align-middle justify-content-center">
+                    <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
+                  </div>
+                  <div class="col-sm align-middle">
+                    <div id="controls_<?=$r['id'];?>" class="justify-content-end">
                       <div class="btn-toolbar float-right" role="toolbar">
                         <div class="btn-group" role="group">
                           <?php if($user['options'][0]==1){
@@ -289,27 +279,16 @@ if($user['options'][4]==1){
                             <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','orders','status','');"><i class="i">untrash</i></button>
                             <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','orders','status','delete');"><i class="i">trash</i></button>
                             <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','orders')"><i class="i">purge</i></button>
+                            <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                           <?php }?>
                         </div>
                       </div>
-                    </td>
-                    <td class="align-middle d-none d-md-table-cell"><button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button></td>
-                  </tr>
-                  <tr class="quickedit d-none" id="quickedit<?=$r['id'];?>"></tr>
-                <?php }?>
-              </tbody>
-            </table>
-            <div class="col-12 mt-0 text-right">
-              <small>View:
-                <a class="badger badge-<?= !isset($args[0])?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders" data-tooltip="tooltip" aria-label="Display All Orders">All</a>&nbsp;
-                <a class="badger badge-<?= isset($args[0])&&$args[0]=='quotes'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/quotes" data-tooltip="tooltip" aria-label="Display Quote Orders">Quotes</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='invoices'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/invoices" data-tooltip="tooltip" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='pending'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/pending" data-tooltip="tooltip" aria-label="Display Pending Orders">Pending</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" data-tooltip="tooltip" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" data-tooltip="tooltip" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
-                <a class="badger badge-<?= !isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
-              </small>
-            </div>
+                    </div>
+                  </div>
+                </article>
+                <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
+              <?php }?>
+            </section>
           </div>
           <?php require'core/layout/footer.php';?>
         </div>

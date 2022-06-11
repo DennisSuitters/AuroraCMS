@@ -66,7 +66,7 @@ else{
         </div>
         <section class="content overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>" id="accountview">
           <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card overflow-visible card-list item" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
+            <article class="card mx-2 mt-3 mb-0 overflow-visible card-list item" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
               <div class="card-image overflow-visible">
                 <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><img src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
                 elseif($r['gravatar']!='')echo$r['gravatar'];

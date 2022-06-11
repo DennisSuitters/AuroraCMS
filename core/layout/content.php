@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.15
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -85,14 +85,16 @@ else{
             ':contentType'=>$args[1]
           ]);
         }else{
-//          if($args[1]=='events'){
+          if($args[1]=='events'){
             if(isset($_GET['field'])&&($_GET['field']=='tis'||$_GET['field']=='tie'||$_GET['field']=='ti'))
               $eventsort='`'.$_GET['field'].'` '.(isset($_GET['by'])&&$_GET['by']=='ASC'?'ASC':'DESC');
             else
               $eventsort='`pin` DESC, `ti` DESC, `title` ASC';
             $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ".$getStatus."ORDER BY ".$eventsort);
-            $s->execute([':contentType'=>$args[1]]);
-//          }
+          }else{
+            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          }
+          $s->execute([':contentType'=>$args[1]]);
         }
       }elseif(isset($args[1])&&($args[1]=='archived'||$args[1]=='unpublished'||$args[1]=='autopublish'||$args[1]=='published'||$args[1]=='delete'||$args[1]=='all')){
         $getStatus=" AND `status`!='archived'";
@@ -227,7 +229,7 @@ else{
                   </ol>
                 </div>
                 <div class="col-12 col-sm-6 text-right">
-                  <?php if($args[1]=='events'){?>
+                  <?php if(isset($args[1])&&$args[1]=='events'){?>
                       <form class="form-row justify-content-end" method="get" action="">
                         <div class="input-text">Display&nbsp;Events&nbsp;By</div>
                         <select id="eventfield" name="field">
@@ -272,9 +274,9 @@ else{
                 ]);
                 $sccc=$scc->rowCount();
               }?>
-              <article class="card m-2 overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
+              <article class="card mx-2 mt-3 mb-0 overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
                 <div class="card-image overflow-visible">
-                  <?php if($r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb'])))
+                  <?php if($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb'])))
                     echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
                   elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))
                     echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img src="media/sm/'.basename($r['file']).'" alt="'.$r['title'].'"></a>';
@@ -316,7 +318,7 @@ else{
                     <button class="badger badger-primary <?=($r['status']=='published'?'':' d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
                   </div>
                 </div>
-                <div class="card-header overflow-visible pt-2 line-clamp">
+                <div class="card-header overflow-visible mt-0 pt-0 line-clamp">
                   <?= !isset($args[1])?'<span class="d-block"><a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a></span>':'';?>
                   <a href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                   <?php if($user['options'][1]==1){

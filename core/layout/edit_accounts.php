@@ -344,14 +344,10 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
                     <a class="btn" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$rm['id'];?>"><i class="i">edit</i></a>
                     <?php $scn=$sccn=0;
                     $sc=$db->prepare("SELECT COUNT(`rid`) as cnt FROM `".$prefix."comments` WHERE `rid`=:rid AND `contentType`='proofs'");
-                    $sc->execute([
-                      ':rid'=>$rm['id']
-                    ]);
+                    $sc->execute([':rid'=>$rm['id']]);
                     $scn=$sc->fetch(PDO::FETCH_ASSOC);
                     $scc=$db->prepare("SELECT COUNT(`rid`) as cnt FROM `".$prefix."comments` WHERE `rid`=:rid AND `status`!='approved'");
-                    $scc->execute([
-                      ':rid'=>$rm['id']
-                    ]);
+                    $scc->execute([':rid'=>$rm['id']]);
                     $sccn=$scc->fetch(PDO::FETCH_ASSOC);?>
                     <a class="btn<?=$sccn['cnt']>0?' add':'';?>" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?=($sccn['cnt']>0?' data-tooltip="tooltip" aria-label="'.$sccn['cnt'].' New Comments"':'');?> aria-label="View Comments"><?= svg2('comments').'&nbsp;'.$scn['cnt'];?></a>
                     <?=$user['options'][5]==1?'<span class="btn handle" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><i class="i">drag</i></span>':'';?>

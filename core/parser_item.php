@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -266,11 +266,11 @@ if($skip==false){
   		$cover=basename($page['cover']);
   		if(file_exists('media/'.$cover)){
   			$coverHTML=(file_exists('media/'.$cover)?'<img srcset="'.
-  				(file_exists('media/'.basename($cover))?'media/'.'lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
-  				(file_exists('media/'.'lg/'.basename($cover))?'media/'.'lg/'.$cover.' 1000w,':'').
-  				(file_exists('media/'.'md/'.basename($cover))?'media/'.'md/'.$cover.' 600w,':'').
-  				(file_exists('media/'.'sm/'.basename($cover))?'media/'.'sm/'.$cover.' 400w,':'').
-  				(file_exists('media/'.'thumbs/'.basename($cover))?'media/'.'thumbs/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
+  				(file_exists('media/'.basename($cover))?'media/lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
+  				(file_exists('media/lg/'.basename($cover))?'media/lg/'.$cover.' 1000w,':'').
+  				(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
+  				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
+  				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
   			'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" src="media/'.$cover.'" alt="'.$page['title'].' Cover Image">'.
   				($page['attributionImageTitle']!=''?
   					'<figcaption>'.
@@ -422,7 +422,7 @@ if($skip==false){
         $mediaoutput='';
         while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
           $mediaitems=$mediaitem;
-          if(!file_exists('media/thumbs/'.basename($rm['file'])))continue;
+          if(!file_exists('media/sm/'.basename($rm['file'])))continue;
           $rm['file']=rawurldecode($rm['file']);
           $mediaitems=preg_replace([
             '/<print media=[\"\']?id[\"\']?>/',
@@ -436,14 +436,14 @@ if($skip==false){
           ],[
             $rm['id'],
             'srcset="'.
-              ($rm['file']!=''&&file_exists('media/thumbs/'.basename($rm['file']))?'media/thumbs/'.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
+              ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
               ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" ',
             ($rm['file']!=''&&file_exists('media/'.basename($rm['file']))?'media/'.basename($rm['file']).' '.$config['mediaMaxWidth'].'w, ':'').
               ($rm['file']!=''&&file_exists('media/lg/'.basename($rm['file']))?'media/lg/'.basename($rm['file']).' 1000w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
               ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':''),
-            ($rm['file']!=''&&file_exists('media/thumbs/'.basename($rm['file']))?'media/thumbs/'.basename($rm['file']):NOIMAGESM),
+            ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']):NOIMAGESM),
             $rm['file'],
             htmlspecialchars(($rm['title']!=''?$rm['title']:$r['title'].': Image '.$rm['id']),ENT_QUOTES,'UTF-8'),
             htmlspecialchars(($rm['fileALT']!=''?$rm['fileALT']:basename($rm['file'])),ENT_QUOTES,'UTF-8'),
@@ -840,7 +840,7 @@ if($skip==false){
             if($si->rowCount()>0){
               $ri=$si->fetch(PDO::FETCH_ASSOC);
               $ri['thumb']=rawurldecode($ri['thumb']);
-              if($ri['thumb']==''||!file_exists('media/thumbs/'.basename($ri['thumb'])))$ri['thumb']=NOIMAGESM;
+              if($ri['thumb']==''||!file_exists('media/sm/'.basename($ri['thumb'])))$ri['thumb']=NOIMAGESM;
               $relatedQuantity='';
               if(isset($ri['quantity'])&&is_numeric($ri['quantity'])&&$ri['quantity']!=0)
                 $relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
@@ -856,8 +856,8 @@ if($skip==false){
                 '/<print related=[\"\']?cssrank[\'"\']?>/',
               ],[
                 (isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/':''),
-                (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ':''),
-                (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/thumbs/'.basename($ri['thumb']))?'media/thumbs/'.$ri['thumb']:NOIMAGESM),
+                (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ':''),
+                (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.$ri['thumb']:NOIMAGESM),
                 (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),
                 (isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):''),
                 (isset($ri['contentType'])?$ri['contentType']:''),
@@ -876,6 +876,37 @@ if($skip==false){
         $item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
     }else
       $item=preg_replace('~<related.*>.*?<\/related>~is','',$item,1);
+  /* Downloads */
+    if(stristr($item,'<downloads')){
+      preg_match('/<downloads>([\w\W]*?)<\/downloads>/',$item,$matches);
+      $downloads=$matches[1];
+      preg_match('/<downloaditems>([\w\W]*?)<\/downloaditems>/',$downloads,$matches);
+      $ditem=$matches[1];
+      $ditems='';
+      $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='download' AND `password`='0' AND `rid`=:rid ORDER BY `url` ASC, `title` ASC");
+      $sd->execute([':rid'=>$r['id']]);
+      if($sd->rowCount()>0){
+        while($rd=$sd->fetch(PDO::FETCH_ASSOC)){
+          $di=$ditem;
+          $di=preg_replace([
+            '/<print download=[\"\']?url[\"\']?>/',
+            '/<print download=[\"\']?title[\"\']?>/'
+          ],[
+            URL.'downloads/'.$rd['url'],
+            $rd['title']!=''?$rd['title']:$rd['url']
+          ],$di);
+          $ditems.=$di;
+        }
+        $item=preg_replace([
+          '/<[\/]?downloads>/',
+          '~<downloaditems>.*?<\/downloaditems>~is',
+        ],[
+          '',
+          $ditems
+        ],$item,1);
+      }else
+        $item=preg_replace('~<downloads>.*?<\/downloads>~is','',$item,1);
+    }
   /* Reviews */
     if($view!='page'&&stristr($item,'<review')){
       preg_match('/<review>([\w\W]*?)<\/review>/',$item,$matches);

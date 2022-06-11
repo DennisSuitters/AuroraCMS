@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -24,8 +24,9 @@
       There's no reason you can't do your own SEO, however, do keep in mind that if you hire a reputable professional consultant that you will get a lot better results.<br>
       Here's a list of Free SEO Courses, which I do recommend that you at least have a look at the simple ones so you have an understanding of what SEO is, and what you can do to help your business along, even if using a consultant. Plus, it will give you more understanding of what they're talking about.<br>
       <br>
-      <a target="_blank" rel="nofollow noreferrer" href="https://moz.com/learn/seo/one-hour-guide-to-seo">Moz's One Hour Guide to SEO (6 Part Video Series)</a><br>
+      <a target="_blank" rel="nofollow noreferrer" href="https://learningseo.io/">Learning SEO – A Roadmap with Free Guides & Tools</a> &larr; <small>Best Free Resource.</small><br>
       <a target="_blank" rel="nofollow noreferrer" href="https://members.clickminded.com/courses/seo-mini-course/lessons/getting-started-5/">Free SEO Course by ClickMinded</a><br>
+      <a target="_blank" rel="nofollow noreferrer" href="https://moz.com/learn/seo/one-hour-guide-to-seo">Moz's One Hour Guide to SEO (6 Part Video Series)</a><br>
       <a target="_blank" rel="nofollow noreferrer" href="https://www.semrush.com/academy/courses/seo-toolkit-course">Semrush SEO Toolkit Course</a>
     </p>
   </div>

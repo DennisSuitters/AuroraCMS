@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -731,7 +731,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php if($user['options'][1]==1){?>
                 <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','content','thumb');"><i class="i">browse-media</i></button>
               <?php }
-              echo$r['thumb']!=''&&file_exists('media/thumbs/'.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
+              echo$r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">';
               echo$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);"><i class="i">trash</i></button>'.
               '<button class="save" id="savethumb" data-dbid="thumb" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
@@ -853,6 +853,84 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <?php if($r['contentType']!='testimonials'){?>
           <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
             <?php if($user['options'][1]==1){?>
+              <legend>Files for Downloads</legend>
+              <form class="row mb-3" target="sp" method="post" action="core/add_download.php" enctype="multipart/form-data">
+                <input name="id" type="hidden" value="<?=$r['id'];?>">
+                <div class="form-row">
+                  <div class="input-text border-right-0 border-bottom-0">
+                    <label for="downloadt">Title:</label>
+                  </div>
+                  <input class="border-bottom-0 border-left-0" type="text" name="t" value="" placeholder="Enter a Title, leave empty to use filename...">
+                </div>
+                <?php if($r['contentType']=='inventory'){?>
+                  <div class="form-row">
+                    <div class="input-text border-right-0 border-bottom-0">
+                      <label for="downloadr">Requires Order</label>&nbsp;<input id="downloadr" type="checkbox" name="r" value="1">
+                    </div>
+                    <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
+                      <label for="downloada">and&nbsp;is&nbsp;available&nbsp;for:</label>
+                    </div>
+                    <select class="border-bottom-0 border-left-0" id="downloada" name="a">
+                      <option value="3600" selected>1 Hour</option>
+                      <option value="7200">2 Hours</option>
+                      <option value="14400">4 Hours</option>
+                      <option value="28800">8 Hours</option>
+                      <option value="86400">24 Hours</option>
+                      <option value="172800">48 Hours</option>
+                      <option value="604800">1 Week</option>
+                      <option value="1209600">2 Weeks</option>
+                      <option value="2592000">1 Month</option>
+                      <option value="7776000">3 Months</option>
+                      <option value="15552000">6 Months</option>
+                      <option value="31536000">1 Year</option>
+                    </select>
+                  </div>
+                <?php }?>
+                <div class="form-row">
+                  <input class="border" style="opacity:1;" id="downloadfu" name="fu" type="file" placeholder="Select File from your computer to upload..." onchange="$(`#downloadfile`).val($(this).val());">
+                  <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
+                </div>
+              </form>
+              <div id="downloads">
+<?php $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='download' AND `rid`=:id");
+$sd->execute([':id'=>$r['id']]);
+if($sd->rowCount()>0){
+  while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
+    <div class="row mt-1" id="l_<?=$rd['id'];?>">
+      <div class="form-row">
+        <input type="text" name="t" value="<?=$rd['title'];?>" placeholder="Uses Filename in place of title..." readonly>
+    <?php if($r['contentType']=='inventory'){?>
+        <div class="input-text">
+          <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
+          <label>Available for </label>
+          <?php if($rd['tie']==3600)echo' 1 Hour';
+          if($rd['tie']==7200)echo' 2 Hours';
+          if($rd['tie']==14400)echo' 4 Hours';
+          if($rd['tie']==28800)echo' 8 Hours';
+          if($rd['tie']==86400)echo' 24 Hours';
+          if($rd['tie']==172800)echo' 48 Hours';
+          if($rd['tie']==604800)echo' 1 Week';
+          if($rd['tie']==1209600)echo' 2 Weeks';
+          if($rd['tie']==2592000)echo' 1 Month';
+          if($rd['tie']==7776000)echo' 3 Months';
+          if($rd['tie']==15552000)echo' 6 Months';
+          if($rd['tie']==31536000)echo' 1 Year';?>
+        </div>
+    <?php }?>
+      </div>
+      <div class="form-row">
+        <input id="url<?=$rd['id'];?>" name="url" type="text" value="<?=$rd['url'];?>">
+        <form target="sp" action="core/purge.php">
+          <input name="id" type="hidden" value="<?=$rd['id'];?>">
+          <input name="t" type="hidden" value="choices">
+          <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+        </form>
+      </div>
+    </div>
+<?php }
+}?>
+</div>
+              <hr>
               <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
                 <input name="rid" type="hidden" value="<?=$r['id'];?>">

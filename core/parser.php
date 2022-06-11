@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.11
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -211,10 +211,10 @@ foreach($tags as$tag){
 			}
 			break;
 		case'thumb':
-			if($r['thumb']!=''&&(file_exists('media/'.'thumbs/'.basename($r['thumb']))))
-				$parsing.='<img src="media/'.'thumbs/'.basename($r['thumb']).'" alt="'.$r['title'].'">';
-			elseif($r['file']!=''&&(file_exists('media/'.'thumbs/'.basename($r['file']))))
-				$parsing.='<img src="media/'.'thumbs/'.basename($r['file']).'" alt="'.$r['title'].'">';
+			if($r['thumb']!=''&&(file_exists('media/sm/'.basename($r['thumb']))))
+				$parsing.='<img src="media/sm/'.basename($r['thumb']).'" alt="'.$r['title'].'">';
+			elseif($r['file']!=''&&(file_exists('media/sm/'.basename($r['file']))))
+				$parsing.='<img src="media/sm/'.basename($r['file']).'" alt="'.$r['title'].'">';
 			else
 				$parsing.=NOIMAGESM;
 			break;

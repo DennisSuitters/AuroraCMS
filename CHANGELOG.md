@@ -52,3 +52,15 @@
 - Fix Playlist editing not retrieving thumbnail URL.
 - Add project links to Administration dropdown account menu.
 - Add extra variable style for more consistent and customisable form elements.
+
+#### v0.2.16
+- Improve styling of Login Form.
+- Fix previous update that added an !important directive to button styling, that was overriding button appearance and interaction.
+- Improve QuickEdit dropdowns, may require more information added.
+- Fix Login inputs not being selectable when clicking on them.
+- Add and reorder SEO Links to Dashboard SEO Links Widget.
+- Add Downloadable Media, such as eBooks or other files from secure folder.
+- Adjust Thumbnail display to use generated SM, MD, LG images instead of elFinder's auto thumbnails.
+- Remove unnecessary comments.
+- Change AVIF format images to WEBP, due to Safari (and Chrome, which is actually Safari on iOS and Mac) not having AVIF capabilities.
+- Adjust "Maintenance", and "Coming Soon" pages to check if unavailable background could be AVIF, WEBP, JPG, JPEG, or PNG.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -82,7 +82,7 @@ if(stristr($html,'<items')){
 	]);
   $output='';
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    if(!file_exists('media/thumbs/'.basename($r['file'])))continue;
+    if(!file_exists('media/sm/'.basename($r['file'])))continue;
     $items=$gal;
 		$caption=$r['fileALT']!=''?$r['fileALT']:ucwords(str_replace('-',' ',basename($r['file'])));
     $items=preg_replace([

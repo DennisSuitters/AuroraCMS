@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.15
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -339,6 +339,7 @@ function snippet($keyword,$txt,$span=15){
   return$snip;
 }
 class internal{
+	function downloads($args=false){require'core/downloads.php';}
 	function humans($args=false){require'core/humans.php';}
 	function sitemap($args=false){require'core/sitemap.php';}
 	function robots($args=false){require'core/robots.php';}
@@ -660,6 +661,7 @@ $routes=[
   $settings['system']['admin'].'/tracker'=>['admin','tracker'],
 	$settings['system']['admin']=>['admin','dashboard'],
 	$settings['system']['admin'].'/manifest.json'=>['internal','manifestadmin'],
+	'downloads'=>['internal','downloads'],
 	'humans.txt'=>['internal','humans'],
 	'sitemap.xml'=>['internal','sitemap'],
 	'robots.txt'=>['internal','robots'],

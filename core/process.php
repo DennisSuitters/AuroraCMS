@@ -260,12 +260,12 @@ if($config['address']!=''){
     ($config['country']!=''?',"addressCountry":"'.$config['country'].'"':'').
   '}';
 }
-$ssO=$db->query("SELECT `url` FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `url` ASC");
-if($ssO->rowCount()>0){
+$sO=$db->query("SELECT `url` FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=0 ORDER BY `url` ASC");
+if($sO->rowCount()>0){
   $schemaOrganization.=',"sameAs":[';
-  $scnt=$ssO->rowCount() - 1;
-  while($srO=$ssO->fetch(PDO::FETCH_ASSOC)){
-    $schemaOrganization.='"'.$srO['url'].'"'.($scnt>0?',':'');
+  $scnt=$sO->rowCount() - 1;
+  while($rO=$sO->fetch(PDO::FETCH_ASSOC)){
+    $schemaOrganization.='"'.$rO['url'].'"'.($scnt>0?',':'');
     $scnt--;
   }
   $schemaOrganization.=']';

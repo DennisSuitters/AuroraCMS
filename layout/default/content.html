@@ -144,6 +144,18 @@
 						</div>
 					</map>
 				</div>
+				<downloads>
+					<div class="card border-0">
+						<div class="card-header h5">Downloads</div>
+						<div class="card-body">
+							<ul>
+								<downloaditems>
+									<li><a href="<print download=url>"><print download="title"></a></li>
+								</downloaditems>
+							</ul>
+						</div>
+					</div>
+				</downloads>
 				<author>
 					<hr>
 					<aside class="card border-0">
@@ -228,25 +240,27 @@
 						</nav>
 					</div>
 				</pagination>
-				<items>
-					<article class="card col-11 col-sm-5 mx-auto my-3">
-						<div class="card-image">
-							<a href="<print content=linktitle>">
-								<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
-							</a>
-						</div>
-						<div class="card-header h5"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></div>
-						<div class="corner-ribbon small top-right"><print content="cost"></div>
-						<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
-						<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
-						<div class="card-footer">
-							<a class="btn" href="<print content=linktitle>" role="button">View</a>
-							<quickview>
-								<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
-							</quickview>
-						</div>
-					</article>
-				</items>
+				<div class="row justify-content-center">
+					<items>
+						<article class="card col-11 col-sm-5 m-3">
+							<div class="card-image">
+								<a href="<print content=linktitle>">
+									<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
+								</a>
+							</div>
+							<div class="card-header h5"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></div>
+							<div class="corner-ribbon small top-right"><print content="cost"></div>
+							<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
+							<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
+							<div class="card-footer">
+								<a class="btn" href="<print content=linktitle>" role="button">View</a>
+								<quickview>
+									<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+								</quickview>
+							</div>
+						</article>
+					</items>
+				</div>
 				<pagination>
 					<div class="row">
 						<nav class="pagination justify-content-center">

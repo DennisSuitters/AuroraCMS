@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,12 +17,18 @@ $page=$s->fetch(PDO::FETCH_ASSOC);
 if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
 if($page['cover']!='')
   $image=$page['cover'];
+elseif(file_exists(THEME.'/images/unavailable.avif'))
+  $image=URL.THEME.'/images/unavaliable.avif';
+elseif(file_exists(THEME.'/images/unavailable.webp'))
+  $image=URL.THEME.'/images/unavaliable.webp';
 elseif(file_exists(THEME.'/images/unavailable.png'))
   $image=URL.THEME.'/images/unavaliable.png';
+elseif(file_exists(THEME.'/images/unavailable.jpeg'))
+  $image=URL.THEME.'/images/unavailable.jpeg';
 elseif(file_exists(THEME.'/images/unavailable.jpg'))
   $image=URL.THEME.'/images/unavailable.jpg';
 else
-  $image='core/images/unavailable.png';
+  $image='core/images/unavailable.webp';
 $html=preg_replace([
   '/<print background>/',
   '/<print theme>/',

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -32,81 +32,108 @@ $s->execute([':id'=>$r['cid']]);
 $c=$s->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 if($r['qid']!='')$oid=$r['qid'];
-if($r['iid']!='')$oid=$r['iid'];
-  $head='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'.
-    '<html xmlns="http://www.w3.org/1999/xhtml">'.
-      '<head>'.
-        '<title>View Order #'.$oid.'</title>'.
-        '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">'.
-        '<style type="text/css">'.
-            '@media print{body{-webkit-print-color-adjust:exact;color-adjust:exact;border: 0 none !important;color: #000 !important}body * {visibility: hidden}#section-to-print a {color: #00f !important}#section-to-print a[href^="http"]::after{content: " (" attr(href)") "}#section-to-print{position: absolute;margin: 0 0 0 0;top: 0;left: 0}#section-to-print *{visibility: visible !important;text-shadow: none !important}#section-to-print.orderstheme.col-11{width: 100%}#section-to-print article.col-12{width: 33%}#section-to-print table thead tr th{background-color: #000 !important;color: #fff !important}#section-to-print h1,#section-to-print h2,#section-to-print h3,#section-to-print h4,#section-to-print h5,#section-to-print h6 {font-family: Arial !important;color: #000 !important;text-shadow: none !important;}#section-to-print #paypal-button-container{display: none !important}}#section-to-print {font-family: Arial !important;font-size: 1rem !important;width: 800px !important;background-color: #fff !important;text-shadow: none !important}@media (max-width: 360px){#section-to-print {width: auto !important}}#section-to-print h1,#section-to-print .h1,#section-to-print h2,#section-to-print .h2,#section-to-print h3,#section-to-print .h3,#section-to-print h4,#section-to-print .h4,#section-to-print h5,#section-to-print .h5,#section-to-print h6,#section-to-print .h6{font-family: Arial !important;color: #000 !important;text-shadow: none !important;margin-top: 0 !important;margin-bottom: .5rem !important;font-weight: 500 !important;line-height: 1.2 !important}#section-to-print h1,#section-to-print .h1{font-size: calc(1.375rem + 1.5vw) !important}#section-to-print h2,#section-to-print .h2{font-size: calc(1.325rem + .9vw) !important}#section-to-print h3,#section-to-print .h3{font-size: calc(1.3rem + .6vw) !important}#section-to-print h4,#section-to-print .h4{font-size: calc(1.275rem + .3vw) !important}#section-to-print h5,#section-to-print .h5{font-size: 1.25rem !important}#section-to-print h6,#section-to-print .h6 {font-size: 1rem !important}#section-to-print table thead tr th{background-color: #000 !important;color: #fff !important}@media (min-width:1200px){#section-to-print h1,#section-to-print .h1{font-size: 2.5rem !important}#section-to-print h2,#section-to-print .h2{font-size: 2rem !important}#section-to-print h3,#section-to-print .h3{font-size: 1.75rem !important}#section-to-print h4,#section-to-print .h4{font-size: 1.5rem!important}}'.
-        '</style>'.
-      '</head>'.
-      '<body style="outline:0;width:100%;min-width:100%;height:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:Helvetica,Arial,sans-serif;line-height:24px;font-weight:normal;font-size:16px;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;color:#000000;margin:0 auto;padding:0;border:0;" bgcolor="#ffffff">';
-  $html='<div style="width:800px;height:30px;text-align:right;">'.
-          '<button class="float-right mr-1" onclick="window.print();" aria-label="Print">Print</button>'.
-        '</div>'.
-        '<div id="section-to-print">'.
-          '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 0 auto;width:800px;">'.
-            '<tr>'.
-              '<td class="col-4" style="width:33%;vertical-align:top;">'.
-                '<h3>From</h3>'.
-                '<p>'.
-                  '<strong>'.$config['business'].'</strong><br />ABN: <strong>'.$config['abn'].'</strong><br />'.
-                  $config['address'].', '.$config['suburb'].',<br />'.$config['city'].', '.$config['state'].', '.$config['postcode'].
-                '</p>'.
-              '</td>'.
-              '<td class="col-4" style="vertical-align:top;">'.
-                '<h3>To</h3>'.
-                '<p>'.
-                  '<strong>'.$c['business'] . '</strong><br />'.
-                  $c['name'].'<br />'.$c['address'].', '.$c['suburb'].',<br />'.$c['city'].', '.$c['state'].', '.$c['postcode'].
-                '</p>'.
-              '</td>'.
-              '<td class="col-4" style="width:33%;vertical-align:top;">'.
-                '<h3>Details</h3>'.
-                '<p>'.
-                  '<small>Order <strong>#'.$r['qid'] . $r['iid'].'</strong><br />'.
-                  'Order Date: <strong>'.date($config['dateFormat'],$r['qid_ti'].$r['iid_ti']) . '</strong><br />'.
-                  'Due Date: <strong class="'.$r['status'].'">'.date($config['dateFormat'], $r['due_ti']) . '</strong><br />'.
-                  'Status: <strong class="'.$r['status'].'"'.($r['status']=='overdue'?' style="color: red;"':'').'>'.ucfirst($r['status']).'</strong></small><br />';
-                  $tracklink='';
-                  if($r['status']=='paid'){
-                    $strack=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
-                    $strack->execute([':id'=>$r['trackOption']]);
-                    if($strack->rowCount()>0){
-                      $rtrack=$strack->fetch(PDO::FETCH_ASSOC);
-                      $tracklink='<small>Tracking Link: <strong><a target="_blank" href="'.$rtrack['url'].$r['trackNumber'].'">'.$rtrack['title'].'</a></strong><br />Tracking ID: <strong> '.$r['trackNumber'].'</strong></small>';
-                    }
+$downloads='';
+if($r['iid']!=''){
+  $oid=$r['iid'];
+  $downloads='<br />Your order has downloads that you can access directly below:<br />';
+}
+$head='<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'.
+  '<html xmlns="http://www.w3.org/1999/xhtml">'.
+    '<head>'.
+      '<title>View Order #'.$oid.'</title>'.
+      '<meta http-equiv="Content-Type" content="text/html; charset=utf-8">'.
+      '<style type="text/css">'.
+        '@media print{body{-webkit-print-color-adjust:exact;color-adjust:exact;border:0 none!important;color:#000!important}body *{visibility:hidden}#section-to-print a{color:#00f!important}#section-to-print a[href^="http"]::after{content: " (" attr(href)") "}#section-to-print{position:absolute;margin:0 0 0 0;top:0;left:0}#section-to-print *{visibility: visible !important;text-shadow:none!important}#section-to-print.orderstheme.col-11{width:100%}#section-to-print article.col-12{width:33%}#section-to-print table thead tr th{background-color:#000!important;color:#fff!important}#section-to-print h1,#section-to-print h2,#section-to-print h3,#section-to-print h4,#section-to-print h5,#section-to-print h6 {font-family:Arial!important;color:#000!important;text-shadow:none!important;}#section-to-print #paypal-button-container{display:none!important}}#section-to-print{font-family:Arial!important;font-size:1rem!important;width:800px!important;background-color:#fff!important;text-shadow:none!important}@media (max-width:360px){#section-to-print{width:auto!important}}#section-to-print h1,#section-to-print .h1,#section-to-print h2,#section-to-print .h2,#section-to-print h3,#section-to-print .h3,#section-to-print h4,#section-to-print .h4,#section-to-print h5,#section-to-print .h5,#section-to-print h6,#section-to-print .h6{font-family:Arial!important;color:#000!important;text-shadow:none!important;margin-top:0!important;margin-bottom:.5rem!important;font-weight:500!important;line-height:1.2!important}#section-to-print h1,#section-to-print .h1{font-size:calc(1.375rem + 1.5vw)!important}#section-to-print h2,#section-to-print .h2{font-size:calc(1.325rem + .9vw)!important}#section-to-print h3,#section-to-print .h3{font-size:calc(1.3rem + .6vw)!important}#section-to-print h4,#section-to-print .h4{font-size:calc(1.275rem + .3vw) !important}#section-to-print h5,#section-to-print .h5{font-size:1.25rem!important}#section-to-print h6,#section-to-print .h6{font-size:1rem!important}#section-to-print table thead tr th{background-color:#000!important;color:#fff!important}@media (min-width:1200px){#section-to-print h1,#section-to-print .h1{font-size:2.5rem!important}#section-to-print h2,#section-to-print .h2{font-size:2rem!important}#section-to-print h3,#section-to-print .h3{font-size:1.75rem!important}#section-to-print h4,#section-to-print .h4{font-size:1.5rem!important}}'.
+      '</style>'.
+    '</head>'.
+    '<body style="outline:0;width:100%;min-width:100%;height:100%;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;font-family:Helvetica,Arial,sans-serif;line-height:24px;font-weight:normal;font-size:16px;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;color:#000000;margin:0 auto;padding:0;border:0;" bgcolor="#ffffff">';
+$html='<div style="width:800px;height:30px;text-align:right;">'.
+        '<button class="float-right mr-1" onclick="window.print();" aria-label="Print">Print</button>'.
+      '</div>'.
+      '<div id="section-to-print">'.
+        '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 0 auto;width:800px;">'.
+          '<tr>'.
+            '<td class="col-4" style="width:33%;vertical-align:top;">'.
+              '<h3>From</h3>'.
+              '<p>'.
+                '<strong>'.$config['business'].'</strong><br />ABN: <strong>'.$config['abn'].'</strong><br />'.
+                $config['address'].', '.$config['suburb'].',<br />'.$config['city'].', '.$config['state'].', '.$config['postcode'].
+              '</p>'.
+            '</td>'.
+            '<td class="col-4" style="vertical-align:top;">'.
+              '<h3>To</h3>'.
+              '<p>'.
+                '<strong>'.$c['business'] . '</strong><br />'.
+                $c['name'].'<br />'.$c['address'].', '.$c['suburb'].',<br />'.$c['city'].', '.$c['state'].', '.$c['postcode'].
+              '</p>'.
+            '</td>'.
+            '<td class="col-4" style="width:33%;vertical-align:top;">'.
+              '<h3>Details</h3>'.
+              '<p>'.
+                '<small>Order <strong>#'.$r['qid'] . $r['iid'].'</strong><br />'.
+                'Order Date: <strong>'.date($config['dateFormat'],$r['qid_ti'].$r['iid_ti']) . '</strong><br />'.
+                'Due Date: <strong class="'.$r['status'].'">'.date($config['dateFormat'], $r['due_ti']) . '</strong><br />'.
+                'Status: <strong class="'.$r['status'].'"'.($r['status']=='overdue'?' style="color: red;"':'').'>'.ucfirst($r['status']).'</strong></small><br />';
+                $tracklink='';
+                if($r['status']=='paid'){
+                  $strack=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+                  $strack->execute([':id'=>$r['trackOption']]);
+                  if($strack->rowCount()>0){
+                    $rtrack=$strack->fetch(PDO::FETCH_ASSOC);
+                    $tracklink='<small>Tracking Link: <strong><a target="_blank" href="'.$rtrack['url'].$r['trackNumber'].'">'.$rtrack['title'].'</a></strong><br />Tracking ID: <strong> '.$r['trackNumber'].'</strong></small>';
                   }
-                $html.=$tracklink.'</p>'.
-              '</td>'.
+                }
+              $html.=$tracklink.'</p>'.
+            '</td>'.
+          '</tr>'.
+        '</table>'.
+        '<br />'.
+        '<br />'.
+        '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 0 auto;width:800px;">'.
+          '<thead style="background-color:#000000;color:#ffffff;">'.
+            '<tr>'.
+              '<th class="">Code</th>'.
+              '<th class="">Title</th>'.
+              '<th class="">Option</th>'.
+              '<th style="text-align:center;">Qty</th>'.
+              '<th style="text-align:right;">Cost</th>'.
+              '<th style="text-align:center;">GST</th>'.
+              '<th style="text-align:right;">Total</th>'.
             '</tr>'.
-          '</table>'.
-          '<br />'.
-          '<br />'.
-          '<table cellpadding="0" cellspacing="0" border="0" align="center" style="margin:0 auto 0 auto;width:800px;">'.
-            '<thead style="background-color:#000000;color:#ffffff;">'.
-              '<tr>'.
-                '<th class="">Code</th>'.
-                '<th class="">Title</th>'.
-                '<th class="">Option</th>'.
-                '<th style="text-align:center;">Qty</th>'.
-                '<th style="text-align:right;">Cost</th>'.
-                '<th style="text-align:center;">GST</th>'.
-                '<th style="text-align:right;">Total</th>'.
-              '</tr>'.
-            '</thead>'.
-            '<tbody>';
+          '</thead>'.
+          '<tbody>';
   $i=13;
   $ot=$st=$pwc=0;
   $zeb=1;
   $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='delete' AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC, `title` ASC");
   $s->execute([':oid'=>$id]);
   while($ro=$s->fetch(PDO::FETCH_ASSOC)){
-  	$si=$db->prepare("SELECT `code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+  	$si=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
   	$si->execute([':id'=>$ro['iid']]);
   	$i=$si->fetch(PDO::FETCH_ASSOC);
+    if($r['iid']!=''){
+      $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id AND `password`='1' AND `contentType`='download'");
+      $sd->execute([':id'=>$i['id']]);
+      if($sd->rowCount()>0){
+        while($rd=$sd->fetch(PDO::FETCH_ASSOC)){
+          $downloads.='<a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> (Available for ';
+          if($rd['tie']==3600)$downloads.=' 1 Hour';
+          if($rd['tie']==7200)$downloads.=' 2 Hours';
+          if($rd['tie']==14400)$downloads.=' 4 Hours';
+          if($rd['tie']==28800)$downloads.=' 8 Hours';
+          if($rd['tie']==86400)$downloads.=' 24 Hours';
+          if($rd['tie']==172800)$downloads.=' 48 Hours';
+          if($rd['tie']==604800)$downloads.=' 1 Week';
+          if($rd['tie']==1209600)$downloads.=' 2 Weeks';
+          if($rd['tie']==2592000)$downloads.=' 1 Month';
+          if($rd['tie']==7776000)$downloads.=' 3 Months';
+          if($rd['tie']==15552000)$downloads.=' 6 Months';
+          if($rd['tie']==31536000)$downloads.=' 1 Year';
+          $downloads.=')<br />';
+        }
+      }
+      $downloads.='<br /><hr>';
+    }
   	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
   	$sc->execute([':id'=>$ro['cid']]);
   	$ch=$sc->fetch(PDO::FETCH_ASSOC);
@@ -282,7 +309,8 @@ if($act=='print'){
     $oid
   ],$subject);
 	$mail->Subject=$subject;
-	$msg=isset($config['orderEmailLayout'])&&$config['orderEmailLayout']!=''?rawurldecode($config['orderEmailLayout']):'<P>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href="{order_link}">{order_link}</a></p><hr>';
+	$msg=isset($config['orderEmailLayout'])&&$config['orderEmailLayout']!=''?rawurldecode($config['orderEmailLayout']):'<p>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href="{order_link}">{order_link}</a></p><hr>';
+  $msg.=$downloads;
   $msg=str_replace([
     '{business}',
     '{name}',

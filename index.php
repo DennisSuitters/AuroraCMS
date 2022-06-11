@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -28,7 +28,7 @@ header("Accept-CH:UA,Full-Version,Platform,Platform-Version,Arch,Mobile,Model,Vi
 header("Accept-CH-Lifetime:86400");
 header ("Access-Control-Allow-Origin: *");
 header ("Access-Control-Expose-Headers: Content-Length, X-JSON");
-header ("Access-Control-Allow-Methods: GET"); //, POST, PATCH, PUT, DELETE, OPTIONS");
+header ("Access-Control-Allow-Methods: GET");
 header ("Access-Control-Allow-Headers: *");
 $whitelist=array('127.0.0.1','::1');
 if(!in_array($_SERVER['REMOTE_ADDR'],$whitelist)){

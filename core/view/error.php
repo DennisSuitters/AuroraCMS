@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.16
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -41,8 +41,8 @@ if(stristr($html,'<items')){
       $filechk=$r['fileURL'];
       $shareImage=$r['fileURL'];
     }else{
-      if($r['thumb']!=''&&file_exists('media/thumbs'.basename($r['thumb'])))
-        $shareImage='media/thumbs'.basename($r['thumb']);
+      if($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb'])))
+        $shareImage='media/sm/'.basename($r['thumb']);
       elseif($r['file']!=''&&file_exists('media/'.basename($r['file'])))
         $shareImage='media/'.basename($r['file']);
       else

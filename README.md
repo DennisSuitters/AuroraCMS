@@ -1,7 +1,7 @@
-![AuroraCMS](core/images/readmelogo.jpg)
+![AuroraCMS](core/images/readmelogo.webp)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.15
+Current version is v0.2.16
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -41,6 +41,10 @@ Current version is v0.2.15
     - Sales Content.
       - Determines Sales periods to current date to suggest edits a month in advance for items older than 11 months in a Dashboard widget, for Valentine's Day, Easter, Mother's Day, Father's Day, Black Friday, Halloween, Small Business Day, and Christmas.
       - Front End parsing for Sales periods to promote items set with Sale periods for sales promotion.
+      - File Download options for electronic products, such as documents, ebooks.
+        - Download available directly from page when Order required isn't set.
+        - Option that file/s only available via Invoice, and time limit.
+        - Download link sent via Invoice when Invoice is Paid.
   - Newsletters.
   - Proofs.
     - User accessible area.
@@ -198,7 +202,6 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [AAAEarthworx](https://aaaearthworx.com.au/)
 - [Anime Excess](https://animeexcess.com.au/)
 - [BizzyKnits](https://bizzyknits.biz/)
-- [Budget Skips Express](https://budgetskipsexpress.com.au/)
 - [Corner Life Coach](https://corner.net.au/)
 - [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
 - [Cradle Mountain Message](https://cradlemountainmassage.com.au/)
@@ -208,5 +211,6 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
 - [Hays Technologies](https://haystechnologies.com.au/)
 - [K9FineDining](https://k9finedining.com/)
+- [Live Lightly Centre](https://livelightlycentre.com.au/)
 - [Lone Wolf Anime](https://lonewolfanime.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)

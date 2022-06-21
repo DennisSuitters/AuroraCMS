@@ -64,3 +64,11 @@
 - Remove unnecessary comments.
 - Change AVIF format images to WEBP, due to Safari (and Chrome, which is actually Safari on iOS and Mac) not having AVIF capabilities.
 - Adjust "Maintenance", and "Coming Soon" pages to check if unavailable background could be AVIF, WEBP, JPG, JPEG, or PNG.
+
+#### v0.2.17
+- Fix Open Weather Map API Link. Preferences -> Contact.
+- Remove Cover Image SrcSet extra image size causing some images to not display as intended.
+- Add option to change available time for file downloads.
+- Fix Summernote WYSIWYG Styling showing wrong colour when scrolling editable area.
+- Add removing line breaks /r and /n characters causing unnecessary space between elements.
+- Fix Inventory items showing options if reference ID happens to match the Inventory Items ID.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -171,7 +171,7 @@ if(file_exists(THEME.'/side_menu.html')){
 					$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
 			}
 			if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order'||$r['stockStatus']=='available'){
-				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
+				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='option' AND `rid`=:id ORDER BY `title` ASC");
 				$scq->execute([':id'=>$r['id']]);
 				if($scq->rowCount()>0){
 					$choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';

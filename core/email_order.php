@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -116,19 +116,20 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
       $sd->execute([':id'=>$i['id']]);
       if($sd->rowCount()>0){
         while($rd=$sd->fetch(PDO::FETCH_ASSOC)){
-          $downloads.='<a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> (Available for ';
-          if($rd['tie']==3600)$downloads.=' 1 Hour';
-          if($rd['tie']==7200)$downloads.=' 2 Hours';
-          if($rd['tie']==14400)$downloads.=' 4 Hours';
-          if($rd['tie']==28800)$downloads.=' 8 Hours';
-          if($rd['tie']==86400)$downloads.=' 24 Hours';
-          if($rd['tie']==172800)$downloads.=' 48 Hours';
-          if($rd['tie']==604800)$downloads.=' 1 Week';
-          if($rd['tie']==1209600)$downloads.=' 2 Weeks';
-          if($rd['tie']==2592000)$downloads.=' 1 Month';
-          if($rd['tie']==7776000)$downloads.=' 3 Months';
-          if($rd['tie']==15552000)$downloads.=' 6 Months';
-          if($rd['tie']==31536000)$downloads.=' 1 Year';
+          $downloads.='<a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> (Available ';
+          if($rd['tie']==0)$downloads.=' forever';
+          if($rd['tie']==3600)$downloads.=' for 1 Hour';
+          if($rd['tie']==7200)$downloads.=' for 2 Hours';
+          if($rd['tie']==14400)$downloads.=' for 4 Hours';
+          if($rd['tie']==28800)$downloads.=' for 8 Hours';
+          if($rd['tie']==86400)$downloads.=' for 24 Hours';
+          if($rd['tie']==172800)$downloads.=' for 48 Hours';
+          if($rd['tie']==604800)$downloads.=' for 1 Week';
+          if($rd['tie']==1209600)$downloads.=' for 2 Weeks';
+          if($rd['tie']==2592000)$downloads.=' for 1 Month';
+          if($rd['tie']==7776000)$downloads.=' for 3 Months';
+          if($rd['tie']==15552000)$downloads.=' for 6 Months';
+          if($rd['tie']==31536000)$downloads.=' for 1 Year';
           $downloads.=')<br />';
         }
       }

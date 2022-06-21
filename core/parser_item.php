@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -266,7 +266,6 @@ if($skip==false){
   		$cover=basename($page['cover']);
   		if(file_exists('media/'.$cover)){
   			$coverHTML=(file_exists('media/'.$cover)?'<img srcset="'.
-  				(file_exists('media/'.basename($cover))?'media/lg/'.$cover.' '.$config['mediaMaxWidth'].'w,':'').
   				(file_exists('media/lg/'.basename($cover))?'media/lg/'.$cover.' 1000w,':'').
   				(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
   				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
@@ -606,7 +605,7 @@ if($skip==false){
         $item=preg_replace('~<brand>.*?<\/brand>~is','',$item);
     }
     if(stristr($item,'<choices')){
-      $scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
+      $scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='option' AND `rid`=:id ORDER BY `title` ASC");
       $scq->execute([':id'=>isset($r['id'])?$r['id']:$page['id']]);
       if($scq->rowCount()>0){
         $choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());">'.

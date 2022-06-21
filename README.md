@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.webp)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.16
+Current version is v0.2.17
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -42,9 +42,9 @@ Current version is v0.2.16
       - Determines Sales periods to current date to suggest edits a month in advance for items older than 11 months in a Dashboard widget, for Valentine's Day, Easter, Mother's Day, Father's Day, Black Friday, Halloween, Small Business Day, and Christmas.
       - Front End parsing for Sales periods to promote items set with Sale periods for sales promotion.
       - File Download options for electronic products, such as documents, ebooks.
-        - Download available directly from page when Order required isn't set.
-        - Option that file/s only available via Invoice, and time limit.
-        - Download link sent via Invoice when Invoice is Paid.
+    - Download available directly from page when Order required isn't set.
+      - Option that file/s only available via Invoice, and time limit.
+      - Download link sent via Invoice when Invoice is Paid.
   - Newsletters.
   - Proofs.
     - User accessible area.

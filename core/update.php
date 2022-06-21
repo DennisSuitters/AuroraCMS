@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -37,6 +37,7 @@ function htmlentitiesOutsideHTMLTags($htmlText,$ent){
   for($i=0;$i<count($tmp);$i++)$tmp[$i]=htmlentities($tmp[$i],$ent,'UTF-8',false);
   $tmp=join($sep,$tmp);
   for($i=0;$i<count($matches[0]);$i++)$tmp=preg_replace(":$sep:",$matches[0][$i],$tmp,1);
+	$tmp=str_replace(array("\n","\r"),'',$tmp);
   return$tmp;
 }
 $e='';

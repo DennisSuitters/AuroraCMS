@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -296,12 +296,14 @@
         <div class="form-row">
           <input class="textinput" id="country" data-dbid="1" data-dbt="config" data-dbc="country" type="text" value="<?=$config['country'];?>" placeholder="Enter a Country...">
           <button class="save" id="savecountry" data-dbid="country" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
-        </div>https://openweathermap.org/
-
+        </div>
         <label id="prefgeo_weatherAPI" for="geo_weatherAPI"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefgeo_weatherAPI" data-tooltip="tooltip" aria-label="PermaLink to Preferences Open Weather API Key Field">&#128279;</a>':'';?>Open Weather API Key</label>
         <div class="form-row">
           <input class="textinput" id="geo_weatherAPI" data-dbid="1" data-dbt="config" data-dbc="geo_weatherAPI" type="text" value="<?=$config['geo_weatherAPI'];?>" placeholder="Enter an API Key from Open Weather...">
           <button class="save" id="savegeo_weatherAPI" data-dbid="geo_weatherAPI" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+        </div>
+        <div class="form-row">
+          <small class="form-text text-right">Visit <a target="_blank" href="https://openweatermap.org/">Open Weather Map</a> for an API Key.</small>
         </div>
 
         <label id="prefMapAPIKey" for="mapapikey"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMapAPIKey" data-tooltip="tooltip" aria-label="PermaLink to Preferences Map API Key Field">&#128279;</a>':'';?>Map Box API Key</label>

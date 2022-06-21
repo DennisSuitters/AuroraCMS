@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.17
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -853,7 +853,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <?php if($r['contentType']!='testimonials'){?>
           <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
             <?php if($user['options'][1]==1){?>
-              <legend>Files for Downloads</legend>
+              <legend>Downloadable Media</legend>
               <form class="row mb-3" target="sp" method="post" action="core/add_download.php" enctype="multipart/form-data">
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
                 <div class="form-row">
@@ -868,10 +868,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                       <label for="downloadr">Requires Order</label>&nbsp;<input id="downloadr" type="checkbox" name="r" value="1">
                     </div>
                     <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
-                      <label for="downloada">and&nbsp;is&nbsp;available&nbsp;for:</label>
+                      <label for="downloada">and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
                     </div>
                     <select class="border-bottom-0 border-left-0" id="downloada" name="a">
-                      <option value="3600" selected>1 Hour</option>
+                      <option value="0" selected>Forever</option>
+                      <option value="3600">1 Hour</option>
                       <option value="7200">2 Hours</option>
                       <option value="14400">4 Hours</option>
                       <option value="28800">8 Hours</option>
@@ -898,26 +899,36 @@ if($sd->rowCount()>0){
   while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
     <div class="row mt-1" id="l_<?=$rd['id'];?>">
       <div class="form-row">
-        <input type="text" name="t" value="<?=$rd['title'];?>" placeholder="Uses Filename in place of title..." readonly>
-    <?php if($r['contentType']=='inventory'){?>
-        <div class="input-text">
-          <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
-          <label>Available for </label>
-          <?php if($rd['tie']==3600)echo' 1 Hour';
-          if($rd['tie']==7200)echo' 2 Hours';
-          if($rd['tie']==14400)echo' 4 Hours';
-          if($rd['tie']==28800)echo' 8 Hours';
-          if($rd['tie']==86400)echo' 24 Hours';
-          if($rd['tie']==172800)echo' 48 Hours';
-          if($rd['tie']==604800)echo' 1 Week';
-          if($rd['tie']==1209600)echo' 2 Weeks';
-          if($rd['tie']==2592000)echo' 1 Month';
-          if($rd['tie']==7776000)echo' 3 Months';
-          if($rd['tie']==15552000)echo' 6 Months';
-          if($rd['tie']==31536000)echo' 1 Year';?>
+        <div class="input-text border-right-0 border-bottom-0">
+          <label>Title:</label>
         </div>
-    <?php }?>
+        <input class="border-bottom-0 border-left-0" type="text" name="t" value="<?=$rd['title'];?>" placeholder="Uses Filename in place of title..." readonly>
       </div>
+      <?php if($r['contentType']=='inventory'){?>
+        <div class="form-row">
+          <div class="input-text border-right-0 border-bottom-0">
+            <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
+          </div>
+          <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
+            <label>and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
+          </div>
+          <select class="border-bottom-0 border-left-0" id="downloada" name="a" onchange="update('<?=$rd['id'];?>','choices','tie',$(this).val(),'select');">
+            <option value="0"<?=($rd['tie']==0?' selected':'');?>>Forever</option>
+            <option value="3600"<?=($rd['tie']==3600?' selected':'');?>>1 Hour</option>
+            <option value="7200"<?=($rd['tie']==7200?' selected':'');?>>2 Hours</option>
+            <option value="14400"<?=($rd['tie']==14400?' selected':'');?>>4 Hours</option>
+            <option value="28800"<?=($rd['tie']==28800?' selected':'');?>>8 Hours</option>
+            <option value="86400"<?=($rd['tie']==86400?' selected':'');?>>24 Hours</option>
+            <option value="172800"<?=($rd['tie']==172800?' selected':'');?>>48 Hours</option>
+            <option value="604800"<?=($rd['tie']==604800?' selected':'');?>>1 Week</option>
+            <option value="1209600"<?=($rd['tie']==1209600?' selected':'');?>>2 Weeks</option>
+            <option value="2592000"<?=($rd['tie']==2592000?' selected':'');?>>1 Month</option>
+            <option value="7776000"<?=($rd['tie']==7776000?' selected':'');?>>3 Months</option>
+            <option value="15552000"<?=($rd['tie']==15552000?' selected':'');?>>6 Months</option>
+            <option value="31536000"<?=($rd['tie']==31536000?' selected':'');?>>1 Year</option>
+          </select>
+        </div>
+      <?php }?>
       <div class="form-row">
         <input id="url<?=$rd['id'];?>" name="url" type="text" value="<?=$rd['url'];?>">
         <form target="sp" action="core/purge.php">

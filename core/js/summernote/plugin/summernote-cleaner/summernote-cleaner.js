@@ -175,7 +175,7 @@
         }
         return output;
       }
-      
+
       var cleanHtmlPaste = function(input, badTags, keepTagContents, badAttributes, imagePlaceholder) {
         var stringStripper = /(\n|\r| class=(")?Mso[a-zA-Z]+(")? ^p)/g;
         var output = input.replace(stringStripper, '');

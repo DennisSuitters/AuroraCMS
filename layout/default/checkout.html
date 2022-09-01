@@ -4,13 +4,11 @@
   <section id="payment-info" class="row my-5">
     <article class="col-12 mx-auto text-center">
       <h3>Options to Pay Order #<print checkout="orderid"></h3>
+      <pagenotes>
+        <print page="notes">
+      </pagenotes>
     </article>
-    <pagenotes>
-      <article class="col-12 mx-auto p-0 px-3 text-center hidewhenempty"><print page="notes"></article>
-    </pagenotes>
-    <article class="col-12 col-sm-5">
-      <error>
-      <paypal>
+    <article class="col-12 col-sm-5 mx-auto hidewhenempty"><error><paypal>
         <div class="card p-3 mb-3">
           <div id="smart-button-container">
             <div class="text-center">
@@ -47,7 +45,7 @@
                       type:"POST",
                       url:"core/paypalpayment.php",
                       data:{
-                        id:<print orderid>,
+                        id:<print order="id">,
                         name:name,
                         email:email,
                         txnid:txnid,
@@ -73,9 +71,7 @@
             initPayPalButton();
           </script>
         </div>
-      </paypal>
-      <direct>
-        <div class="card p-3">
+      </paypal><direct><div class="card p-3">
           <h4>Direct Deposit</h4>
           <p>
             <strong>Bank:</strong> <print checkout="bank"><br>
@@ -87,16 +83,13 @@
             Note: When paying via Direct Deposit, please use the Order Number above in the payment description so we can easily determine your payment.
           </p>
         </div>
-      </direct>
-    </article>
-    <stripe>
-      <article id="stripe" class="col-12 col-sm-5 border-0">
+      </direct></article><stripe><article id="stripe" class="col-12 col-sm-5 mx-auto border-0">
         <div class="card p-3 d-block">
           <afterpay>
             <a data-fancybox="afterpay" data-type="ajax" href="core/afterpay/afterpay.php?oid=<print checkout=orderid>" class="btn btn-block" role="button">Pay via <img src="core/images/afterpay-white.svg" style="height:22px;" alt="AfterPay"></a>
           </afterpay>
           <form target="sp" action="core/stripepayment.php" method="post" id="paymentFrm">
-            <input type="hidden" name="orderID" value="<print checkout=orderid>">
+            <input type="hidden" name="oid" value="<print checkout=orderid>">
             <label class="required" for="email">Email</label>
             <div class="form-row flex-wrap">
               <input type="email" name="email" id="email" class="field" placeholder="Enter your Email..." required aria-reqired="true" enterkeyhint="next">
@@ -109,11 +102,11 @@
             <label>Card Number</label>
             <div id="card_number" class="field"></div>
             <div class="row">
-              <div class="col-6">
+              <div class="col-12 col-sm-6">
                 <label>Expiry</label>
                 <div id="card_expiry" class="field"></div>
               </div>
-              <div class="col-6">
+              <div class="col-12 col-sm-6">
                 <label>CVC Number <small>(Back of Card)</small></label>
                 <div id="card_cvc" class="field"></div>
               </div>
@@ -222,8 +215,7 @@
           }
           setOutcome(event);
         });
-      </script>
-    </stripe>
+      </script></stripe>
   </section>
 </block>
 <block include="footer.html">

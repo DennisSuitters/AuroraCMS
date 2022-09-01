@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -53,6 +53,112 @@
           <input id="configoptions0" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="0" type="checkbox"<?=$config['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label id="configoptions01" for="configoptions0" data-tooltip="tooltip" aria-label="Enable Points Value Display.">Display Points Value</label>
         </div>
+        <legend id="exportAccountsSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#exportAccountsSection" data-tooltip="tooltip" aria-label="PermaLink to Export Accounts Section">&#128279;</a>':'';?>Export Accounts Information</legend>
+        <form class="row" target="sp" method="post" action="core/export_accounts.php">
+          <div class="col-4 exports" style="display:none;">
+            <div class="mt-5">
+              <div class="row">
+                <input id="exportID" type="checkbox" name="id" value="1" checked>
+                <label for="exportID">ID</label>
+              </div>
+              <div class="row">
+                <input id="exportActive" type="checkbox" name="act" value="1" checked>
+                <label for="act">Active Account</label>
+              </div>
+              <div class="row">
+                <input id="exportDate" type="checkbox" name="dte" value="1" checked>
+                <label for="exportDate">Date</label>
+              </div>
+              <div class="row">
+                <input id="exportRank" type="checkbox" name="rnk" value="1" checked>
+                <label for="exportRank">Rank</label>
+              </div>
+              <div class="row">
+                <input id="exportUsername" type="checkbox" name="usr" value="1" checked>
+                <label for="exportUsername">Username</label>
+              </div>
+              <div class="row">
+                <input id="exportName" type="checkbox" name="nme" value="1" checked>
+                <label for="exportName">Name</label>
+              </div>
+              <div class="row">
+                <input id="exportEmail" type="checkbox" name="eml" value="1" checked>
+                <label for="exportEmail">Email</label>
+              </div>
+              <div class="row">
+                <input id="exportPhone" type="checkbox" name="phn" value="1" checked>
+                <label for="exportPhone">Phone</label>
+              </div>
+              <div class="row">
+                <input id="exportMobile" type="checkbox" name="mob" value="1" checked>
+                <label for="exportMobile">Mobile</label>
+              </div>
+              <div class="row">
+                <input id="exportWebsite" type="checkbox" name="url" value="1" checked>
+                <label for="exportWebsite">Website</label>
+              </div>
+              <div class="row">
+                <input id="exportBusiness" type="checkbox" name="bus" value="1" checked>
+                <label for="exportBusiness">Business</label>
+              </div>
+              <div class="row">
+                <input id="exportABN" type="checkbox" name="abn" value="1" checked>
+                <label for="exportABN">ABN</label>
+              </div>
+              <div class="row">
+                <input id="exportAddress" type="checkbox" name="adr" value="1" checked>
+                <label for="exportAddress">Address</label>
+              </div>
+              <div class="row">
+                <input id="exportSpent" type="checkbox" name="spnt" value="1" checked>
+                <label for="exportSpent">Spent</label>
+              </div>
+              <div class="row">
+                <input id="exportPoints" type="checkbox" name="pnts" value="1" checked>
+                <label for="exportPoints">Points</label>
+              </div>
+              <div class="row">
+                <input id="exportNewsletter" type="checkbox" name="nws" value="1" checked>
+                <label for="exportNewsletter">Newsletter Subscriber</label>
+              </div>
+            </div>
+          </div>
+          <div class="col-8">
+            <div class="row m-0">
+              <div class="col">
+                <label>&nbsp;</label>
+                <div class="form-row">
+                  <button onclick="$('.exports').toggle('d-none');return false;"><span class="exports" style="display:none;">Hide</span><span class="exports">Show</span> Options</button>
+                </div>
+              </div>
+              <div class="col">
+                <label for="exportDeliminator">Deliminator</label>
+                <div class="form-row">
+                  <select name="d">
+                    <option value="0" selected>, (comma)</option>
+                    <option value="1">| (pipe)</option>
+                    <option value="2">; (semicolon)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <label for="exportFormat">Format</label>
+                <div class="form-row">
+                  <select name="f">
+                    <option value="0">CSV</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col">
+                <label>&nbsp;</label>
+                <div class="form-row">
+                  <button type="submit">Export</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+
         <legend id="purchaseLimitsSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#purchaseLimitsSection" data-tooltip="tooltip" aria-label="PermaLink to Purchase Limits Section">&#128279;</a>':'';?>Purchase Item Limits</legend>
         <div class="row">
           <div class="col-2 mr-4">

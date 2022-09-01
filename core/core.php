@@ -7,10 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+require'db.php';
+$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+if($config['php_options'][6]==1){
+	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `permanent`!=1 AND `ti`<:ti");
+	$s->execute([':ti'=>time()-2592000]);
+}
 if(stristr($_SERVER['REQUEST_URI'],'security.txt')||stristr($_SERVER['REQUEST_URI'],'sellers.json')){
 	echo'# Report Security Issues at the AuroraCMS GitHub Repository: https://github.com/DiemenDesign/AuroraCMS';
 	die();
@@ -74,12 +80,6 @@ if(isset($config['php_options'])&&$config['php_options'][5]==1){
 		require'core/xmlrpc.php';
 		die();
 	}
-}
-require'db.php';
-$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-if($config['php_options'][6]==1){
-	$s=$db->prepare("DELETE FROM `".$prefix."iplist` WHERE `permanent`!=1 AND `ti`<:ti");
-	$s->execute([':ti'=>time()-2592000]);
 }
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
@@ -251,6 +251,34 @@ function elapsed_time($b=0,$e=0){
   }else$b=number_format($td,3).'s';
   return trim($b);
 }
+function secondsToWords($inputSeconds) {
+  $secondsInAMinute = 60;
+  $secondsInAnHour = 3600;
+  $secondsInADay = 86400;
+	$secondsInAMonth = 2592000;
+	$months = floor($inputSeconds / $secondsInAMonth);
+  $days = floor($inputSeconds / $secondsInADay);
+  $hourSeconds = $inputSeconds % $secondsInADay;
+  $hours = floor($hourSeconds / $secondsInAnHour);
+  $minuteSeconds = $hourSeconds % $secondsInAnHour;
+  $minutes = floor($minuteSeconds / $secondsInAMinute);
+  $remainingSeconds = $minuteSeconds % $secondsInAMinute;
+  $seconds = ceil($remainingSeconds);
+  $timeParts = [];
+  $sections = [
+		'month'=>(int)$months,
+    'day'=>(int)$days,
+    'hour'=>(int)$hours,
+    'minute'=>(int)$minutes,
+    'second'=>(int)$seconds,
+  ];
+  foreach ($sections as $name => $value){
+      if ($value > 0){
+          $timeParts[] = $value. ' '.$name.($value == 1 ? '' : 's');
+      }
+  }
+  return implode(', ', $timeParts);
+}
 function getSaleTime(){
   $chkti=time();
   $sale=[
@@ -377,6 +405,10 @@ class admin{
 	}
 	function content($args=false){
 		$view='content';
+		require'admin.php';
+	}
+	function course($args=false){
+		$view='course';
 		require'admin.php';
 	}
 	function dashboard($args=false){
@@ -518,6 +550,14 @@ class front{
 		$view='contactus';
 		require'process.php';
 	}
+	function course($args=false){
+		$view='course';
+		require'process.php';
+	}
+	function courses($args=false){
+		$view='courses';
+		require'process.php';
+	}
   function distributors($args=false){
     $view='distributors';
     require'process.php';
@@ -638,6 +678,7 @@ $routes=[
 	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
 	$settings['system']['admin'].'/comments'=>['admin','comments'],
 	$settings['system']['admin'].'/content'=>['admin','content'],
+	$settings['system']['admin'].'/course'=>['admin','course'],
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],
 	$settings['system']['admin'].'/faq'=>['admin','faq'],
 	$settings['system']['admin'].'/forum'=>['admin','forum'],
@@ -675,6 +716,7 @@ $routes=[
 	'sitemap'=>['front','sitemap'],
 	'orders'=>['front','orders'],
 	'checkout'=>['front','checkout'],
+	'courses'=>['front','courses'],
 	'proofs'=>['front','proofs'],
 	'login'=>['front','login'],
 	'settings'=>['front','settings'],

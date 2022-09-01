@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -128,7 +128,9 @@ if($da==''){
 	$st->execute([':id'=>$pid]);
 	$rt=$st->fetch(PDO::FETCH_ASSOC);
 	if($h==1&&$config['forumOptions'][0]==1){
-		require'phpmailer/class.phpmailer.php';
+    require'phpmailer/PHPMailer.php';
+    require'phpmailer/SMTP.php';
+    require'phpmailer/Exception.php';
 		$gsu=$db->prepare("SELECT `uid`,`pid` FROM `".$prefix."forumPosts` WHERE `pid`=:pid AND `uid`!=:uid ORDER BY `ti` DESC LIMIT 1");
 		$gsu->execute([
 			':pid'=>$pid,
@@ -154,7 +156,7 @@ if($da==''){
 					'Title: '.$rt['title'].'<br>'.
 					'Reply: '.filter_var($da,FILTER_UNSAFE_RAW).'<br>'.
 					'URL: <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$pid.'">'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$pid.'</a>';
-				$mail=new PHPMailer;
+				$mail = new PHPMailer\PHPMailer\PHPMailer;
 				$mail->isHTML(true);
 				$mail->SetFrom($config['email'],$config['business']);
 				$mail->Subject=$subject;

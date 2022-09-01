@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -19,7 +19,7 @@ $tbl=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_in
 $col=isset($_POST['c'])?filter_input(INPUT_POST,'c',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'c',FILTER_UNSAFE_RAW);
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $el='l_';
-if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTopics'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'){
+if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTopics'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'&&$tbl!='courseTrack'){
   $s=$db->prepare("SELECT * FROM `".$prefix.$tbl."` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
   $r=$s->fetch(PDO::FETCH_ASSOC);
@@ -86,7 +86,7 @@ if($tbl=='playlist'){
   $s=$db->prepare("DELETE FROM `".$prefix."playlist` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
 }
-if($tbl!='logs'&&$tbl!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'){
+if($tbl!='logs'&&$tbl!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'&&$tbl!='courseTrack'){
   if($id!=0){
     $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
     $q->execute([':id'=>$id]);
@@ -117,5 +117,19 @@ if($tbl=='choices'){
   echo'<script>'.
     'window.top.window.$("#l_'.$id.'").addClass("zoom-out");'.
     'window.top.window.setTimeout(function(){window.top.window.$("#l_'.$id.'").remove();},500);'.
+  '</script>';
+}
+if($tbl=='courseTrack'){
+  $s=$db->prepare("DELETE FROM `".$prefix."courseTrack` WHERE `id`=:id");
+  $s->execute([':id'=>$id]);
+  echo'<script>'.
+    'window.top.window.$("#student_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.setTimeout(function(){window.top.window.$("#student_'.$id.'").remove();},500);'.
+  '</script>';
+}
+if($tbl=='modules'){
+  echo'<script>'.
+    'window.top.window.$("#modules_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.setTimeout(function(){window.top.window.$("#modules_'.$id.'").remove();},500);'.
   '</script>';
 }

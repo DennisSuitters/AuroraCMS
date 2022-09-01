@@ -40,7 +40,7 @@ $html=preg_replace([
   URL,
   $config['business'].' - Administration - AuroraCMS',
   '',
- 'data:'.mime_content_type('../images/readmelogo.jpg').';base64,'.base64_encode(file_get_contents('../images/readmelogo.jpg'))
+ 'data:'.mime_content_type('../images/readmelogo.webp').';base64,'.base64_encode(file_get_contents('../images/readmelogo.webp'))
 ],$html);?>
 const CACHE=`AuroraCMSadministration`;
 const offlineFallbackPage=`<?=$html;?>`;

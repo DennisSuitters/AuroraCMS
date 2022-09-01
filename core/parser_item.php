@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.17
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -491,6 +491,41 @@ if($skip==false){
       if($r['options'][3]==1)$showCountdown=true;
     }else
       $item=preg_replace('~<countdown>.*?<\/countdown>~is','',$item);
+
+    if($r['contentType']=='course'){
+      preg_match('/<moduleitems>([\w\W]*?)<\/moduleitems>/',$item,$matches);
+      $moduleitem=$matches[1];
+      $scm=$db->prepare("SELECT * FROM `".$prefix."modules` WHERE `rid`=:rid ORDER BY `ord` ASC");
+      $scm->execute([':rid'=>$r['id']]);
+      $mout='';
+      $mti=0;
+      while($rcm=$scm->fetch(PDO::FETCH_ASSOC)){
+        $mti=$mti + $rcm['tti'];
+        $out=preg_replace([
+          '/<print module=[\"\']?title[\"\']?>/',
+          $rcm['tti']>0?'/<print module=[\"\']?time[\"\']?>/':'~<moduletime>.*?<\/moduletime>~is',
+          '/<print module=[\"\']?caption[\"\']?>/'
+        ],[
+          $rcm['title'],
+          $rcm['tti']>0?secondsToWords($rcm['tti']):'',
+          $rcm['caption']
+        ],$moduleitem);
+        $mout.=$out;
+      }
+      $item=preg_replace([
+        '/<[\/]?coursemodules>/',
+        '~<moduleitems>.*?<\/moduleitems>~is',
+        $mti > 0?'/<[\/]?totaltime>/':'~<totaltime>.*?<\/totaltime>~is',
+        '/<print module=[\"\']?totaltime[\"\']?>/'
+      ],[
+        '',
+        $mout,
+        '',
+        secondsToWords($mti),
+      ],$item);
+    }else
+      $item=preg_replace('~<coursemodules>.*?<\/coursemodules>~is','',$item);
+
     $itemQuantity='';
     if($r['coming'][0]==1&&$r['contentType']=='inventory'){
       $itemQuantity='Coming Soon';
@@ -620,6 +655,7 @@ if($skip==false){
         $item=str_replace('<choices>','',$item);
     }else
       $item=str_replace('<choices>','',$item);
+
     if(stristr($item,'<map>')){
       $item=preg_replace([
         ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
@@ -769,7 +805,7 @@ if($skip==false){
           '"@type":"ImageObject",'.
           '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
         '},'.
-        '"author":"'.($ua['name']!=''?$ua['name']:$ua['username']).'",'.
+        '"author":"'.(isset($ua['name'])&&$ua['name']!=''?$ua['name']:(isset($ua['username'])&&$ua['username']!=''?$ua['username']:'')).'",'.
         '"genre":"'.($r['category_1']!=''?$r['category_1']:'None').($r['category_2']!=''?' > '.$r['category_2']:'').($r['category_3']!=''?' > '.$r['category_3']:'').($r['category_4']!=''?' > '.$r['category_4']:'').'",'.
         '"keywords":"'.$seoKeywords.'",'.
         '"wordcount":"'.strlen(strip_tags(escaper($r['notes']))).'",'.
@@ -791,7 +827,7 @@ if($skip==false){
     $item=preg_replace([
       '/<print author=[\"\']?name[\"\']?>/'
     ],[
-      $ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8')
+      isset($ua['name'])&&$ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):(isset($ua['username'])&&$ua['username']!=''?htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8'):'')
     ],$item);
   /* Related */
     if($view=='article'||$view=='inventory'||$view=='service'||$view=='portfolio'&&stristr($item,'<related')){

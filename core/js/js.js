@@ -167,6 +167,18 @@ function clean0(timeto0){
 	else var timeto0=timeto0;
 	return timeto0;
 }
+function checkboxNotify(){
+  const checkboxes=Array.from(document.querySelectorAll(".module-check"));
+  var check=checkboxes.reduce((acc,curr)=>acc||curr.checked,false);
+  if(check == false){
+    var not=document.getElementById('module-notification');
+    not.innerHTML='At least one option must be selected or completed!';
+    not.classList.toggle("d-none");
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
 function updateChat(){
   chatTimer=null;
   fetch("core/chat.php",{

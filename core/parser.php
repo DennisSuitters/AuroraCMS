@@ -231,7 +231,7 @@ foreach($tags as$tag){
 			$parsing.=$r['fileURL'];
 		case'avatar':
 			$parsing.='<img class="'.$class.'" src="';
-			if($attribute=='author'){
+			if($attribute=='author'&&isset($author['avatar'])){
 				if($author['avatar']!=''&&file_exists('media/'.'avatar/'.basename($author['avatar'])))
 					$parsing.='media/'.'avatar/'.basename($author['avatar']).'"';
 				elseif(isset($author['gravatar'])&&$author['gravatar']!=''){
@@ -287,7 +287,7 @@ foreach($tags as$tag){
 		case'caption':
 			$parsing.=$length!=0?strtok(wordwrap($r['seoCaption'],$length,"...\n"),"\n"):$r['seoCaption'];
 		case'notes':
-			if($attribute=='author')
+			if($attribute=='author'&&isset($author['notes']))
 				$notes=rawurldecode($author['notes']);
 			if($attribute=='comments')
 				$notes=rawurldecode($rc['notes']);

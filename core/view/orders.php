@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -80,6 +80,7 @@ if(isset($args[0])&&$args[0]!=''){
       }
     }
     $order=preg_replace([
+      ($r['notes']==''?'~<orderNotes>.*?<\/orderNotes>~is':'/<[\/]?orderNotes>/'),
       '/<print order=[\"\']?notes[\"\']?>/',
       '/<print config=[\"\']?business[\"\']?>/',
       '/<print config=[\"\']?abn[\"\']?>/',
@@ -111,6 +112,7 @@ if(isset($args[0])&&$args[0]!=''){
       '/<print order=[\"\']?status[\"\']?>/',
       '/<tracklink>/'
     ],[
+      '',
       $r['notes'],
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
       htmlspecialchars($config['abn'],ENT_QUOTES,'UTF-8'),
@@ -208,8 +210,8 @@ if(isset($args[0])&&$args[0]!=''){
       '/<print dimensions>/',
       '/<print weight>/'
     ],[
-      'W: '.$dimW.'cm X L: '.$dimL.'cm X H: '.$dimH.'cm',
-      $weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':'')
+      ($dimW>0&&$dimL>0&&$dimH>0?'Estimated Dimensions: W: '.$dimW.'cm X L: '.$dimL.'cm X H: '.$dimH.'cm':''),
+      ($weight>0?'Total Weight: '.$weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''):'')
     ],$order);
     $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:id");
     $sr->execute([':id'=>$r['rid']]);
@@ -334,18 +336,22 @@ if(isset($args[0])&&$args[0]!=''){
       ':total'=>$total
     ]);
     $html=preg_replace('~<order>~is',$order,$html,1);
-    if(($config['iconsColor'][0]==1&&$ru['rank']<310)&&$ru['address']==''||$ru['city']==''||$ru['suburb']==''||$ru['country']=''||$ru['state']==''||$ru['postcode']==0){
-      $html=preg_replace([
-          '~<bankdetails>.*?<\/bankdetails>~is',
-          '/<print checkoutlink>/',
-        ],
-        '<a class="btn" href="'.URL.'settings#address">Please fill in Address Information for Shipping</a>',
-      $html,1);
+    if($config['iconsColor'][0]==1){
+      if($ru['address']==''||$ru['city']==''||$ru['suburb']==''||$ru['country']=''||$ru['state']==''||$ru['postcode']==0){
+        $html=preg_replace([
+            '~<bankdetails>.*?<\/bankdetails>~is',
+            '/<print checkoutlink>/',
+          ],
+          '<a class="btn" href="'.URL.'settings#address">Please fill in Address Information for Shipping</a>',
+        $html,1);
+      }
     }else{
       $html=preg_replace([
+        ($r['status']!='paid'?'/<[\/]?ordercheckout>/':'~<ordercheckout>.*?<\/ordercheckout>~is'),
         '/<print checkoutlink>/',
-        '/<[\/]?bankdetails>/'
+        '~<bankdetails>.*?<\/bankdetails>~is'
       ],[
+        '',
         $r['status']!='paid'?'<a class="btn" href="'.URL.'checkout/'.$r['qid'].$r['iid'].'">Proceed to Checkout</a>':'<div class="alert alert-success">Order Already Paid</div>',
         ''
       ],$html,1);

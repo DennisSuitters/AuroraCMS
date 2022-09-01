@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -105,7 +105,9 @@ if($t==''||$da==''){
     ':uid'=>$uid
   ]);
   if($st=='urgent'&&$config['forumOptions'][0]==1){
-    require'phpmailer/class.phpmailer.php';
+    require'phpmailer/PHPMailer.php';
+    require'phpmailer/SMTP.php';
+    require'phpmailer/Exception.php';
     $su=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `email`!='' AND `rank`>599 AND `helpResponder`=1 AND `active`=1");
     $su->execute();
     $subject='New Ticket: '.$t;
@@ -113,7 +115,7 @@ if($t==''||$da==''){
       'Title: '.$t.'<br>'.
       'Post: '.filter_var($da,FILTER_UNSAFE_RAW).'<br>'.
       'Ticket URL: <a href="'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'">'.URL.'forum?cid='.$cid.'&tid='.$tid.'&pid='.$id.'</a><br>';
-    $mail=new PHPMailer;
+    $mail = new PHPMailer\PHPMailer\PHPMailer;
     $mail->isHTML(true);
     $mail->SetFrom($config['email'],$config['business']);
     $mail->Subject=$subject;

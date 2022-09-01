@@ -16,7 +16,7 @@ $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO:
 $iid=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
 $cid=filter_input(INPUT_POST,'cid',FILTER_SANITIZE_NUMBER_INT);
 $ti=time();
-$uid=isset($_SESSION['uid'])?$_SESSION['uid']:$_SESSION['uid'];
+$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $rank=isset($_SESSION['rank'])?$_SESSION['rank']:0;
 $limit=0;
 $add=true;

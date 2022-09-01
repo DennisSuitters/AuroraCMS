@@ -7,12 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'core/puconverter.php';
-require'core/phpmailer/class.phpmailer.php';
+require'core/phpmailer/PHPMailer.php';
+require'core/phpmailer/SMTP.php';
+require'core/phpmailer/Exception.php';
 $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];
 $hash=md5($ip);
 $html=preg_replace([
@@ -45,8 +47,8 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 		    $limit=$user['purchaseLimit'];
 		  else{
 		    if($rank==200)$limit=$config['memberLimit'];
-		    if($rank==210)$limit=$config['memberLimitSilver'];
-		    if($rank==220)$limit=$config['memberLimitBronze'];
+				if($rank==210)$limit=$config['memberLimitBronze'];
+		    if($rank==220)$limit=$config['memberLimitSilver'];
 		    if($rank==230)$limit=$config['memberLimitGold'];
 		    if($rank==240)$limit=$config['memberLimitPlatinum'];
 				if($rank==310)$limit=$config['wholesaleLimit'];
@@ -89,7 +91,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 		}
 		$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 		if(filter_var($email,FILTER_VALIDATE_EMAIL)){
-			$s=$db->prepare("SELECT `id`,`status` FROM `".$prefix."login` WHERE `email`=:email");
+			$s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `email`=:email");
 			$s->execute([':email'=>$email]);
 			if($s->rowCount()>0){
 				$ru=$s->fetch(PDO::FETCH_ASSOC);
@@ -134,9 +136,9 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					':id'=>$uid,
 					':username'=>$username[0].$uid
 				]);
-				if($email!=''){
+				if($email!=''&&$config['options'][3]==1){
 					$name=$name!=''?$name:$business;
-					$mail=new PHPMailer;
+					$mail = new PHPMailer\PHPMailer\PHPMailer;
 					$mail->isSendmail();
 					$mail->SetFrom($config['email'],$config['business']);
 					$mail->AddAddress($email,$name);
@@ -144,7 +146,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					$mail->Subject='Order at '.$config['business'];
 					$msg='Thank you for placing an Order at '.$config['business'].'<br />You can view your order after logging in using the below credentials.<br />Username: '.$username[0].$uid.'<br />Password: '.$pass.'<br />We suggest changing this once you log in to something you will more easily remember.';
 					$mail->Body=$msg;
-					$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
+					$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
 					if($mail->Send()){}
 				}
 			}
@@ -184,12 +186,24 @@ if(isset($args[0])&&$args[0]=='confirm'){
 			$oid=$db->lastInsertId();
 			$s=$db->prepare("SELECT * FROM `".$prefix."cart` WHERE `si`=:si");
 			$s->execute([':si'=>SESSIONID]);
+			$total=0;
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
-				$si=$db->prepare("SELECT `title`,`quantity`,`sold`,`points` FROM `".$prefix."content` WHERE `id`=:id");
+				$si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 				$si->execute([':id'=>$r['iid']]);
 				$i=$si->fetch(PDO::FETCH_ASSOC);
 				$quantity=$i['quantity']-$r['quantity'];
 				$sold=$i['quantity']+$r['quantity'];
+				$gst=0;
+				if($i['status']!='pre order'||$i['status']!='back order'){
+					if($config['gst']>0){
+						$gst=$i['cost']*($config['gst']/100);
+						if($i['quantity']>1)
+							$gst=$gst*$r['quantity'];
+						$gst=number_format((float)$gst, 2, '.', '');
+					}
+				}
+				if($i['status']!='pre order'||$i['status']!='back order')
+	        $total=$total+($r['cost']*$r['quantity'])+$gst;
 				$qry=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`sold`=:sold WHERE `id`=:id");
 				$qry->execute([
 					':quantity'=>$quantity<1?0:$quantity,
@@ -209,11 +223,16 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					':ti'=>$ti
 				]);
 			}
+			$q=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE `id`=:id");
+			$q->execute([
+				':id'=>$oid,
+				':total'=>$total
+			]);
 			$q=$db->prepare("DELETE FROM `".$prefix."cart` WHERE `si`=:si");
 			$q->execute([':si'=>SESSIONID]);
 			$config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 			if($config['email']!=''){
-				$mail=new PHPMailer;
+				$mail = new PHPMailer\PHPMailer\PHPMailer;
 				$mail->isSendmail();
 				$mail->SetFrom($config['email'],$config['business']);
 				$mail->AddAddress($config['email']);
@@ -224,7 +243,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
 				if($mail->Send()){}
 			}
-			$notification.=preg_replace(['/<print alert/','/<print text>/'],['success','Thank you for placing an Order, a representative will process your order as soon as humanly possible'],$theme['settings']['alert']);
+			$notification.=preg_replace(['/<print alert>/','/<print text>/'],['success','Thank you for placing an Order.<br>Once payment is made, you will receive an invoice, containing links to content associated with your purchase.<br><br>'.(isset($qid)&&$qid!=0?'You can use this link to view your order:<br><a href="'.URL.'orders/'.$qid.'">Order #'.$qid.'</a><br><br>':'').'<a class="btn" href="'.URL.'checkout/'.$qid.'">Proceed to Checkout</a>'],$theme['settings']['alert']);
 		}else
 			$notification.=preg_replace(['/<print alert>/','/<print text>/'],['danger','The account associated with the details provided has been suspended, or the email supplied is invalid.'],$theme['settings']['alert']);
 		$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$notification,$html,1);
@@ -286,8 +305,12 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					$image,
 					htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
 					($i['code']!=''?' : ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
-					$i['weight'].$i['weightunit'],
-					'W:'.$i['width'].$i['widthunit'].' x L:'.$i['length'].$i['lengthunit'].' H:'.$i['height'].$i['heightunit'],
+					$i['weight']>0?'Weight: '.$i['weight'].$i['weightunit'].'<br>':'',
+					($i['width']>0||$i['length']>0||$i['height']>0?'Dimensions:'.
+						($i['width']>0?' W:'.$i['width'].$i['widthunit']:'').
+						($i['length']>0?' L:'.$i['length'].$i['lengthunit']:'').
+						($i['height']>0?' H:'.$i['height'].$i['heightunit']:'')
+					:''),
 					isset($c['title'])&&$c['title']!=''?' : '.htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'):'',
 					$ci['id'],
 					$ci['cost'],
@@ -313,8 +336,12 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				'/<print totalcalculate>/'
 			],[
 		 		$cartitems,
-				'W: '.$dimW.'cm X L: '.$dimL.'cm X H: '.$dimH.'cm',
-				$weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''),
+				($dimW>0||$dimL>0||$dimH>0?'<small>Estimated Dimensions:'.
+					($dimW>0?' W: '.$dimW.'cm':'').
+					($dimL>0?' L: '.$dimL.'cm':'').
+					($dimH>0?' H: '.$dimH.'cm':'').
+				'</small>':''),
+				($weight>0?'<small>Total Weight: '.$weight.'kg</small>'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''):''),
 				$total
 			],$html);
 
@@ -330,7 +357,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					''
 				],$html);
 			}else{
-				if($user['rank']>300&&$user['rank']<400){
+				if(isset($user['rank'])&&$user['rank']>300&&$user['rank']<400){
 					$html=preg_replace([
 						'~<postageoptions>.*?<\/postageoptions>~is',
 						'/<[\/]?emptycart>/',
@@ -342,12 +369,13 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					],
 						$html);
 				}else{
-					$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
-					$sco->execute();
-					$postageoptions='<option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>'. // AUS_PARCEL_REGULAR
-													'<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS
-					if($sco->rowCount()>0){
-						while($rco=$sco->fetch(PDO::FETCH_ASSOC))$postageoptions.='<option value="'.$rco['id'].'">'.htmlspecialchars($rco['title'],ENT_QUOTES,'UTF-8').'</option>';
+					$spo=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postoption' ORDER BY `title` ASC");
+					$spo->execute();
+					$postageoptions='';
+//					$postageoptions='<option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>'. // AUS_PARCEL_REGULAR
+//						'<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>'; // AUS_PARCEL_EXPRESS
+					if($spo->rowCount()>0){
+						while($rpo=$spo->fetch(PDO::FETCH_ASSOC))$postageoptions.='<option value="'.$rpo['id'].'">'.htmlspecialchars($rpo['title'],ENT_QUOTES,'UTF-8').'</option>';
 					}
 					$sco=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY `title` ASC");
 					$sco->execute();
@@ -360,14 +388,14 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					}
 					$html=preg_replace([
 						$sco->rowCount()>0?'/<[\/]?paymentoptions>/':'~<paymentoptions>.*?<\/paymentoptions>~is',
+						$spo->rowCount()>0?'/<[\/]?postageoptions>/':'~<postageoptions>.*?<\/postageoptions>~is',
 						'/<postoptions>/',
-						'/<[\/]?postageoptions>/',
 						'/<payoptions>/',
 						'/<[\/]?emptycart>/'
 					],[
 						$sco->rowCount()>0?'':'<input type="hidden" name="payoption" value="0">',
+						$spo->rowCount()>0?'':'<input type="hidden" name="postoption" value="0">',
 						$postageoptions,
-						'',
 						$payoptions,
 						''
 					],$html);

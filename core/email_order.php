@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.17
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -107,6 +107,7 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
   $zeb=1;
   $s=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='delete' AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC, `title` ASC");
   $s->execute([':oid'=>$id]);
+  $msgd=$msgl=$msge=$msgc='';
   while($ro=$s->fetch(PDO::FETCH_ASSOC)){
   	$si=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
   	$si->execute([':id'=>$ro['iid']]);
@@ -116,25 +117,69 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
       $sd->execute([':id'=>$i['id']]);
       if($sd->rowCount()>0){
         while($rd=$sd->fetch(PDO::FETCH_ASSOC)){
-          $downloads.='<a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> (Available ';
-          if($rd['tie']==0)$downloads.=' forever';
-          if($rd['tie']==3600)$downloads.=' for 1 Hour';
-          if($rd['tie']==7200)$downloads.=' for 2 Hours';
-          if($rd['tie']==14400)$downloads.=' for 4 Hours';
-          if($rd['tie']==28800)$downloads.=' for 8 Hours';
-          if($rd['tie']==86400)$downloads.=' for 24 Hours';
-          if($rd['tie']==172800)$downloads.=' for 48 Hours';
-          if($rd['tie']==604800)$downloads.=' for 1 Week';
-          if($rd['tie']==1209600)$downloads.=' for 2 Weeks';
-          if($rd['tie']==2592000)$downloads.=' for 1 Month';
-          if($rd['tie']==7776000)$downloads.=' for 3 Months';
-          if($rd['tie']==15552000)$downloads.=' for 6 Months';
-          if($rd['tie']==31536000)$downloads.=' for 1 Year';
-          $downloads.=')<br />';
+          $msgd.='<a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> (Available ';
+          if($rd['tie']==0)$msgd.=' forever';
+          if($rd['tie']==3600)$msgd.=' for 1 Hour';
+          if($rd['tie']==7200)$msgd.=' for 2 Hours';
+          if($rd['tie']==14400)$msgd.=' for 4 Hours';
+          if($rd['tie']==28800)$msgd.=' for 8 Hours';
+          if($rd['tie']==86400)$msgd.=' for 24 Hours';
+          if($rd['tie']==172800)$msgd.=' for 48 Hours';
+          if($rd['tie']==604800)$msgd.=' for 1 Week';
+          if($rd['tie']==1209600)$msgd.=' for 2 Weeks';
+          if($rd['tie']==2592000)$msgd.=' for 1 Month';
+          if($rd['tie']==7776000)$msgd.=' for 3 Months';
+          if($rd['tie']==15552000)$msgd.=' for 6 Months';
+          if($rd['tie']==31536000)$msgd.=' for 1 Year';
+          $msgd.=')<br />';
         }
       }
-      $downloads.='<br /><hr>';
+      $msgd.='<br /><hr>';
     }
+    $sl=$db->prepare("SELECT `contentType`,`title`,`url`,`tie` FROM `".$prefix."choices` WHERE `contentType`='link' AND `rid`=:id");
+    $sl->execute([':id'=>$roi['iid']]);
+    if($sl->rowCount()>0){
+      while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+        $msgl.='Link for <a href="'.$rl['url'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> available';
+        if($rl['tie']==0)$msgl.=' forever';
+        if($rl['tie']==3600)$msgl.=' for 1 Hour';
+        if($rl['tie']==7200)$msgl.=' for 2 Hours';
+        if($rl['tie']==14400)$msgl.=' for 4 Hours';
+        if($rl['tie']==28800)$msgl.=' for 8 Hours';
+        if($rl['tie']==86400)$msgl.=' for 24 Hours';
+        if($rl['tie']==172800)$msgl.=' for 48 Hours';
+        if($rl['tie']==604800)$msgl.=' for 1 Week';
+        if($rl['tie']==1209600)$msgl.=' for 2 Weeks';
+        if($rl['tie']==2592000)$msgl.=' for 1 Month';
+        if($rl['tie']==7776000)$msgl.=' for 3 Months';
+        if($rl['tie']==15552000)$msgl.=' for 6 Months';
+        if($rl['tie']==31536000)$msgl.=' for 1 Year';
+        $msgl.='<br />';
+        $i++;
+      }
+    }
+    $se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+    $se->execute([':id'=>$roi['iid']]);
+    if($se->rowCount()>0){
+      while($re=$se->fetch(PDO::FETCH_ASSOC)){
+        if($re['contentType']=='event'){
+          $msge.='Link for '.$re['title'].'<br /><a href="'.$re['exturl'].'">'.$re['title'].'</a><br />';
+        }
+        if($re['contentType']=='course'){
+          $sct=$db->prepare("INSERT INTO `".$prefix."courseTrack` (`rid`,`uid`,`complete`,`progress`,`attempts`,`score`,`ti`) VALUES (:rid,:uid,'',0,:attempts,0,:ti)");
+          $sct->execute([
+            ':rid'=>$re['id'],
+            ':uid'=>$ru['id'],
+            ':attempts'=>$re['attempts'],
+            ':ti'=>$ti
+          ]);
+          $msgc='<p>To access the Course/s purchased, it is required to be logged in. You can view purchased Courses via the "Courses" in the logged in menu area.</p>';
+        }
+        $i++;
+      }
+    }
+
+
   	$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
   	$sc->execute([':id'=>$ro['cid']]);
   	$ch=$sc->fetch(PDO::FETCH_ASSOC);
@@ -267,7 +312,6 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
               '</p>'.
             '</td>'.
             '<td style="width:33%;vertical-align:top;">'.
-
             '</td>'.
           '</tr>'.
         '</tbody>'.
@@ -279,8 +323,10 @@ if($act=='print'){
     'win.top.document.body.innerHTML = `'.$head.$html.'`;'.
   '</script>';
 }else{
-	require'phpmailer/class.phpmailer.php';
-	$mail=new PHPMailer;
+  require'phpmailer/PHPMailer.php';
+  require'phpmailer/SMTP.php';
+  require'phpmailer/Exception.php';
+	$mail = new PHPMailer\PHPMailer\PHPMailer;
 	$mail->isSendmail();
 	$toname=$c['name']!=''?$c['name']:$c['business'];
 	$mail->SetFrom($config['email'],$config['business']);
@@ -311,7 +357,7 @@ if($act=='print'){
   ],$subject);
 	$mail->Subject=$subject;
 	$msg=isset($config['orderEmailLayout'])&&$config['orderEmailLayout']!=''?rawurldecode($config['orderEmailLayout']):'<p>Hello {first},</p><p>Please find below Order {order_number} for payment.</p><p>To make a payment, refer to the Bank Details, or click the link directly below to pay via a Payment Gateway through our Website.</p><p><a href="{order_link}">{order_link}</a></p><hr>';
-  $msg.=$downloads;
+  $msg.=$msgd.$msgl.$msge;
   $msg=str_replace([
     '{business}',
     '{name}',

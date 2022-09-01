@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -139,7 +139,7 @@
   <?php  if(
     (isset($args[0])&&($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'))
     ||
-    (isset($args[0])&&($view=='content'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view'))
+    (isset($args[0])&&($view=='content'||$view=='course'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view'))
   ){?>
       function elfinderDialog(id,t,c){
         var fm=$('<div class="shadow light"/>').dialogelfinder({
@@ -274,7 +274,7 @@
         });
       <?php }?>
       document.addEventListener("DOMContentLoaded",function(event){
-      <?php if(isset($args[0])&&($args[0]=='settings'||$args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply')||($view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages')){?>
+      <?php if(isset($args[0])&&($args[0]=='settings'||$args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply')||($view=='accounts'||$view=='course'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages')){?>
         $('.summernote').summernote({
           codemirror:{
             lineNumbers:true,

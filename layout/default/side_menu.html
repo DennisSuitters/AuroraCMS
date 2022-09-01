@@ -1,13 +1,8 @@
 <aside class="col-12 col-md-3 mb-5 mb-md-5 px-3">
-	<div class="card mb-3">
+	<div class="card mt-3 mt-sm-0 mb-3">
 		<div class="card-body mt-4 mb-3 no-clamp">
 			<h3>Share this:</h3>
 			<div class="text-center"><share></div>
-			<admin>
-				<div class="text-right">
-					<a class="btn" role="button" target="_blank" href="<print adminlink>" title="Go directly to the Edit Page for this Content in Administration."><i class="i">edit</i></a>
-				</div>
-			</admin>
 		</div>
 	</div>
 	<sort>
@@ -36,7 +31,7 @@
 		</div>
 	</sort>
 	<controls>
-		<div class="card mb-3 d-none d-md-block text-center">
+		<div class="card mb-3 text-center">
 			<div class="card-body my-4 no-clamp">
 				<quantity>
 					<div class="content-quantity"><print content="quantity"> <print content="stock"></div>
@@ -50,7 +45,7 @@
 						<choices>
 						<addtocart>
 							<points><small class="points d-block mb-3 text-center">Earn <print content="points"> points when purchasing this item.</small></points>
-							<button class="addCart mt-3" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
+							<button class="addCart btn-block mt-3" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
 						</addtocart>
 						<condition>
 							<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
@@ -128,7 +123,7 @@
 		<settings items="4" contenttype="current">
 		<div class="row jusitfy-content-center">
 			<items>
-				<article class="card col-11 col-sm-5 event m-2">
+				<article class="card col-11 event m-2">
 					<figure class="card-image">
 						<a href="<print content=linktitle>">
 							<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">

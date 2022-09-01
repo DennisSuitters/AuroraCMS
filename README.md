@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.webp)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.17
+Current version is v0.2.18
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -45,6 +45,9 @@ Current version is v0.2.17
     - Download available directly from page when Order required isn't set.
       - Option that file/s only available via Invoice, and time limit.
       - Download link sent via Invoice when Invoice is Paid.
+    - Link/s to other services or content.
+      - Option that Link/s only available via Invoice, and time limit.
+      - Link/s sent via Invoice when Invoice is Paid.
   - Newsletters.
   - Proofs.
     - User accessible area.
@@ -76,6 +79,13 @@ Current version is v0.2.17
   - Post, Reply as per other Forums.
   - Integrated Help Tickets as Forum Posts.
   - Upvote or Downvote posts and comments.
+- Course Management.
+  - Add/Edit Courses.
+    - Add Multiple-Choice Questions.
+    - Add Multiple Questions, with Answer Entry.
+  - Track User Progression.
+  - Display available courses, with online Payments.
+  - Display Paid Courses when User is logged in, including Current Progression.
 - Banner Notifications with Entrance Animation choice. Dissmissable with local storage variable.
 - Media.
   - Upload and manage various types of files for addition into content using elFinder.

@@ -1,0 +1,31 @@
+<aside class="col-12 col-md-3 mt-5 mb-5 mb-md-5 px-3 hideifempty"><sort>
+		<div class="card mx-auto mb-3">
+			<div class="card-body my-4">
+				<div class="h3">Item Display Options</div>
+				<form method="post" action="<print sort=self>">
+					<input type="hidden" name="act" value="sort">
+					<div class="row">
+						<label for="sort" class="col-4">Sort Order</label>
+						<select id="sort" class="col-8" name="sort" enterkeyhint="next">
+							<option value="">Select a Sort Option</option>
+							<sortOptions>
+						</select>
+					</div>
+					<showItems>
+						<div class="row mt-3">
+							<label for="itemCount" class="col-4">Show</label>
+							<input id="itemCount" class="col-3" type="number" name="itemCount" value="<itemCount>" enterkeyhint="next">
+							<label class="col-2 ml-3">items</label>
+						</div>
+					</showItems>
+					<button class="btn-block mt-3" type="submit" enterkeyhint="done">Sort</button>
+				</form>
+			</div>
+		</div>
+	</sort><stats>
+		<div class="card mx-auto mb-3">
+			<div class="card-body no-clamp my-4">
+				Courses Complete: <print stats="complete">
+			</div>
+		</div>
+	</stats></aside>

@@ -11,11 +11,11 @@
 				<li role="menuitem"><a href="<print administrationLink>">Administration</a></li>
 			</administration>
 			<li role="menuitem"><form method="post" action="<print currenturl>"><input type="hidden" name="act" value="logout"><button type="submit" role="link">Logout</button></form></li>
-			<li class="d-none d-sm-inline-block" role="menuitem">
-				<img class="img-avatar avatar" src="<print user=avatar>" alt="<print user=name>">
+			<li role="menuitem">
+				<span class="badger badge-<print user=cssrank>"><print user="points"> <print user="rank"></span>
 			</li>
+			<li class="d-none d-md-inline-block" role="menuitem"><img class="img-avatar avatar" src="<print user=avatar>" alt="<print user=name>"></li>
 		</ul>
-		<div class="account-rank badger badge-<print user=cssrank>"><print user="points"> <print user="rank"></div>
 	</nav>
 </accountmenu>
 <div class="d-block d-md-none text-center">
@@ -80,7 +80,7 @@
 			<a href="<print rsslink>" aria-label="RSS Feed"><i class="i i-social <print rssicon> i-4x"><print rssicon></i></a>
 		</rss>
 		<a href="cart/" class="navbar-cart d-inline d-md-none"><i class="i">cart</i><span class="cart"><print cart="quantity"></span></a>
-		<a href="bookings" role="button">Make a Booking</a>
+		<a class="mt-3" href="bookings" role="button">Make a Booking</a>
 	</aside>
 </address>
 <header class="row shadow-bottom py-3">

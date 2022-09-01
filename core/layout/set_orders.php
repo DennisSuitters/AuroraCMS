@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -39,9 +39,20 @@
         <form target="sp" method="post" action="core/add_postoption.php">
           <div class="form-row">
             <div class="input-text">Code</div>
-            <input name="c" type="text" value="" placeholder="Enter Code...">
+            <input id="pco" name="c" type="text" value="" placeholder="Enter Code..." list="post_code_options" oninput="getPostCodeOption();">
+            <datalist id="post_code_options">
+              <option label="Australia Post Regular Post" data-title="Australia Post Regular Post" value="AUS_PARCEL_REGULAR">
+              <option label="Australia Post Express Post" data-title="Australia Post Express Post" value="AUS_PARCEL_EXPRESS">
+            </datalist>
+            <script>
+              function getPostCodeOption(){
+                var selectedTitle = document.getElementById("pco").value;
+                document.querySelector('#post_title').value = document.querySelector(`#post_code_options option[value='${selectedTitle}']`).dataset.title;
+              }
+            </script>
             <div class="input-text">Title</div>
-            <input name="t" type="text" value="" placeholder="Enter an Option...">
+            <input id="post_title" name="t" type="text" value="" placeholder="Enter an Option...">
+
             <div class="input-text">Cost</div>
             <input name="v" type="text" value="" placeholder="Enter Cost...">
             <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>

@@ -23,7 +23,7 @@
 					</thead>
 					<tbody>
 						<items>
-							<tr class="border-bottom">
+							<tr>
 								<td class="text-center">
 									<a href="<print link>"><print order="ordernumber"></a><small class="d-block d-sm-none"><small><print order="date"><br>
 									Due: <print order="duedate"></small></small>
@@ -158,11 +158,11 @@
 							</orderDeduction>
 							<tr>
 								<td></td>
-								<td colspan="5" class="">Estimated Dimensions: <print dimensions></td>
+								<td colspan="5"><print dimensions></td>
 							</tr>
 							<tr>
 								<td></td>
-								<td colspan="5" class="">Total Weight: <print weight></td>
+								<td colspan="5"><print weight></td>
 							</tr>
 						</tfoot>
 					</table>
@@ -171,16 +171,18 @@
 			<section class="row p-0 m-0 border-top">
 				<article class="col-12 col-sm mx-0 my-1 px-1 border-right">
 					<div id="paymenttransaction"></div>
-					<h4>Notes:</h4>
-					<div>
-						<small>
-							<print order="notes">
-						</small>
-					</div>
+					<orderNotes>
+						<h4>Notes:</h4>
+						<div>
+							<small>
+								<print order="notes">
+							</small>
+						</div>
+					</orderNotes>
 				</article>
 				<article class="col-12 col-sm mx-0 my-1 px-1 border-right">
-					<h4>Banking Details:</h4>
 					<bankdetails>
+						<h4>Banking Details:</h4>
 						<div>
 							<strong>Bank: </strong><print config="bank"><br>
 							<strong>Account Name: </strong><print config="bankAccountName"><br>
@@ -190,8 +192,10 @@
 					</bankdetails>
 				</article>
 				<article class="col-12 col-sm mx-0 my-1 px-1">
-					<h4>Pay Online:</h4>
-					<print checkoutlink>
+					<orderCheckout>
+						<h4>Pay Online:</h4>
+						<print checkoutlink>
+					</orderCheckout>
 				</article>
 			</section>
 		</div>

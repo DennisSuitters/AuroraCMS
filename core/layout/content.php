@@ -65,7 +65,8 @@ else{
     $s->execute([':id'=>$args[1]]);
     $show='item';
   }
-  if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_content.php';
+  if(isset($args[0])&&$args[0]=='settings')
+    require'core/layout/set_content.php';
   else{
     if($show=='categories'){
       if(isset($args[0])&&$args[0]=='type'){

@@ -17,7 +17,7 @@
 			</ol>
 		</nav>
 	</breadcrumb>
-	<section class="row">
+	<section class="row mb-5">
 		<aside class="col-11 col-md-2-5 p-md-2 mt-0 mb-3 mx-auto hidewhenempty"><category-nav>
 			<div class="row">
 				<div class="card">
@@ -29,11 +29,10 @@
 				</div>
 			</div>
 		</category-nav><eventsitems items="4">
-				<hr>
 				<div class="row mt-3">
 					<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events/" aria-label="Go to Events">Events</a></div>
 					<eventitem>
-						<article class="card col-5 col-md-8 event side mx-auto">
+						<article class="card col-5 col-md-8 event side mt-3 mx-auto">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
@@ -53,7 +52,7 @@
 				</div>
 			</eventsitems></aside>
 		<item>
-			<article class="card col-11 col-md mx-auto mx-md-3">
+			<article class="card col-11 col-md mx-auto mx-md-3 mb-5">
 				<json-ld>
 				<image>
 					<figure class="card-image full">
@@ -90,43 +89,6 @@
 							</div>
 						</div>
 					</countdown>
-					<cost>
-						<quantity>
-							<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="stock"></div>
-						</quantity>
-						<div class="my-4 d-block d-md-none text-center">
-							<div class="price"><print content="cost"></div>
-							<div class="quantity"><print content="cartonQuantity"></div>
-							<div class="text-right">
-								<service>
-									<a class="btn" href="bookings/<print content=bookservice>" role="button">Book Now</a>
-								</service>
-								<inventory>
-									<choices>
-									<addtocart>
-										<points><small class="points d-block mb-3 text-center">Earn <print content="points"> points when purchasing this item.</small></points>
-										<button class="addCart btn-block" data-cartid="<print content=id>" data-cartchoice="0">Buy Now</button>
-									</addtocart>
-									<condition>
-										<div class="content-condition col-12 mt-3 text-left">Condition: <print content="condition"></div>
-									</condition>
-									<weight>
-										<div class="content-weight col-12 col-md-6 mt-3 text-left">Weight: <print content="weight"></div>
-									</weight>
-									<size>
-										<div class="content-size col-12 col-md-6 mt-3 text-right">Size:
-											<span class="content-width">Width: <print content="width"></span><br>
-											<span class="content-height">Height: <print content="height"></span><br>
-											<span class="content-length">Length: <print content="length"></span>
-										</div>
-									</size>
-									<brand>
-										<div class="content-brand text-center mt-3"><print brand></div>
-									</brand>
-								</inventory>
-							</div>
-						</div>
-					</cost>
 					<mediaitems>
 						<div class="row">
 							<div class="media m-0 my-2 text-center"
@@ -138,6 +100,21 @@
 						</div>
 					</mediaitems>
 					<print content="notes">
+					<coursemodules>
+						<div class="h5">Course Modules:</div>
+						<ol>
+							<moduleitems>
+								<li>
+									<print module="title">
+									<small class="d-block"><print module="caption"></small>
+									<moduletime><small class="d-block text-muted"><small>Estimated time: <print module="time"></small></small></moduletime>
+								</li>
+							</moduleitems>
+						</ol>
+						<totaltime>
+							<p>Estimated total time to complete: <print module="totaltime"></p>
+						</totaltime>
+					</coursemodules>
 					<map>
 						<div class="col-12 mt-5">
 							<div class="row" id="map"></div>

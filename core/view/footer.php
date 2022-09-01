@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,6 +29,7 @@ $html=preg_replace([
 	'/<print config=[\"\']?address[\"\']?>/',
 	'/<print config=[\"\']?suburb[\"\']?>/',
 	'/<print config=[\"\']?postcode[\"\']?>/',
+	'/<print config=[\"\']?state[\"\']?>/',
 	'/<print config=[\"\']?country[\"\']?>/',
 	'/<print config=[\"\']?phone[\"\']?>/',
 	'/<print config=[\"\']?mobile[\"\']?>/',
@@ -65,6 +66,7 @@ $html=preg_replace([
 	htmlspecialchars($config['address'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['suburb'],ENT_QUOTES,'UTF-8'),
 	$config['postcode']==0?'':htmlspecialchars($config['postcode'],ENT_QUOTES,'UTF-8'),
+	htmlspecialchars($config['state'],ENT_QUOTES,'UTF-8'),
 	htmlspecialchars($config['country'],ENT_QUOTES,'UTF-8'),
 	$config['phone']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['phone']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['phone'],ENT_QUOTES,'UTF-8').'</a>':'',
 	$config['mobile']!=''?'<a href="tel:'.htmlspecialchars(str_replace(' ','',$config['mobile']),ENT_QUOTES,'UTF-8').'">'.htmlspecialchars($config['mobile'],ENT_QUOTES,'UTF-8').'</a>':'',

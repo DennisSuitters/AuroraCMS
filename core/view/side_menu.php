@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.17
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -45,7 +45,7 @@ if(file_exists(THEME.'/side_menu.html')){
 	],$sideTemp);
 	if($show=='item')
 		$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
-	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events'||$view=='activities')){
+	if($show=='item'&&($view=='service'||$view=='inventory'||$view=='events'||$view=='activities'||$view=='course')){
 		$sideCost='';
 		if($r['options'][0]==1){
 			if(is_numeric($r['cost'])&&$r['cost']!=0){
@@ -76,19 +76,7 @@ if(file_exists(THEME.'/side_menu.html')){
 					'</div>';
 			}
 		}
-		$sideTemp=preg_replace([
-			'/<print content=[\"\']?stockStatus[\"\']?>/',
-			'/<print content=[\"\']?cost[\"\']?>/',
-			'/<print content=[\"\']?id[\"\']?>/',
-			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
-			'/<print content=[\"\']?points[\"\']?>/'
-		],[
-			$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
-			$sideCost,
-			$r['id'],
-			'',
-			number_format((float)$r['points'])
-		],$sideTemp);
+
 		if(isset($_SESSION['rank'])){
 			if($_SESSION['rank']>309&&$_SESSION['rank']<349){
 				if($r['rank']!=$_SESSION['rank']){
@@ -104,56 +92,43 @@ if(file_exists(THEME.'/side_menu.html')){
 		}else
 			$sideTemp=preg_replace('/<[\/]?addtocart>/','',$sideTemp);
 		$sideQuantity='';
+		$quantity='';
+		$sideTemp=preg_replace([
+			($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
+			'/<print content=[\"\']?quantity[\"\']?>/',
+			'/<print content=[\"\']?stock[\"\']?>/',
+			$r['itemCondition']!=''?'/<[\/]?condition>/':'~<condition>.*?<\/condition>~is',
+			'/<print content=[\"\']?condition[\"\']?>/',
+			$r['weight']!=''?'/<[\/]?weight>/':'~<weight>.*?<\/weight>~is',
+			'/<print content=[\"\']?weight[\"\']?>/',
+			($r['width']!=''&&$r['height']!=''&&$r['length']!=''?'/<[\/]?size>/':'~<size>.*?<\/size>~is'),
+			'/<print content=[\"\']?width[\"\']?>/',
+			'/<print content=[\"\']?height[\"\']?>/',
+			'/<print content=[\"\']?length[\"\']?>/',
+			'/<print content=[\"\']?stockStatus[\"\']?>/',
+			'/<print content=[\"\']?cost[\"\']?>/',
+			'/<print content=[\"\']?id[\"\']?>/',
+			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
+			'/<print content=[\"\']?points[\"\']?>/'
+		],[
+			'',
+			($r['contentType']=='course'?($r['attempts']==0?'':$r['attempts'].' attempts are available with this course'):($r['quantity']==0?($r['stockStatus']=='sold out'?'<div class="qauntity">Sold Out</div>':''):$r['quantity'])),
+			($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])).'.'.($r['cartonQuantity']>0?' ('.$r['cartonQuantity'].'per carton.)':''),
+			'',
+			$r['itemCondition'],
+			'',
+			$r['weight'].$r['weightunit'],
+			'',
+			$r['width'].$r['widthunit'],
+			$r['height'].$r['heightunit'],
+			$r['length'].$r['lengthunit'],
+			$r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']!='none'?'':$r['stockStatus']),
+			$sideCost,
+			$r['id'],
+			'',
+			number_format((float)$r['points'])
+		],$sideTemp);
 		if(isset($r['contentType'])&&$r['contentType']=='inventory'){
-			$sideTemp=preg_replace([
-				($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
-				'/<print content=[\"\']?quantity[\"\']?>/',
-				'/<print content=[\"\']?stock[\"\']?>/'
-			],[
-				'',
-				($r['quantity']==0?($r['stockStatus']=='sold out'?'<div class="qauntity">Sold Out</div>':''):$r['quantity']),
-				($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])).'.'.($r['cartonQuantity']>0?' ('.$r['cartonQuantity'].'per carton.)':'')
-			],$sideTemp);
-			if(stristr($sideTemp,'<condition>')){
-				if($r['itemCondition']!=''){
-					$sideTemp=preg_replace([
-						'/<[\/]?condition>/',
-						'/<print content=[\"\']?condition[\"\']?>/'
-					],[
-						'',
-						$r['itemCondition'],
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<condition>.*?<\/condition>~is','',$sideTemp);
-			}
-			if(stristr($sideTemp,'<weight>')){
-				if($r['weight']!=''){
-					$sideTemp=preg_replace([
-						'/<[\/]?weight>/',
-						'/<print content=[\"\']?weight[\"\']?>/'
-					],[
-						'',
-						$r['weight'].$r['weightunit'],
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<weight>.*?<\/weight>~is','',$sideTemp);
-			}
-			if(stristr($sideTemp,'<size>')){
-				if($r['width']!=''&&$r['height']!=''&&$r['length']!=''){
-					$sideTemp=preg_replace([
-						'/<[\/]?size>/',
-						'/<print content=[\"\']?width[\"\']?>/',
-						'/<print content=[\"\']?height[\"\']?>/',
-						'/<print content=[\"\']?length[\"\']?>/'
-					],[
-						'',
-						$r['width'].$r['widthunit'],
-						$r['height'].$r['heightunit'],
-						$r['length'].$r['lengthunit']
-					],$sideTemp);
-				}else
-					$sideTemp=preg_replace('~<size>.*?<\/size>~is','',$sideTemp);
-			}
 			if(stristr($sideTemp,'<brand>')){
 				if($r['brand']!=0){
 					$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
@@ -180,20 +155,27 @@ if(file_exists(THEME.'/side_menu.html')){
 						$choices.='<option value="'.$rcq['id'].'">'.$rcq['title'].':'.$rcq['ti'].'</option>';
 					}
 					$choices.='</select>';
-					$sideTemp=str_replace('<choices>',$choices,$sideTemp);
+					$sideTemp=preg_replace('/<choices>/',$choices,$sideTemp);
 				}else
-					$sideTemp=str_replace('<choices>','',$sideTemp);
+					$sideTemp=preg_replace('/<choices>/','',$sideTemp);
 			}else{
 				$sideTemp=preg_replace([
-					'<choices>',
+					'/<choices>/',
 					'~<inventory>.*?<\/inventory>~is'
 				],
 				'',
 				$sideTemp);
 			}
-		}else
-			$sideTemp=preg_replace('~<quantity>.*?<\/quantity>~is','',$sideTemp);
-		if($r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){
+		}else{
+			$sideTemp=preg_replace([
+				'/<[\/]?choices>/',
+				'~<brand>.*?<\/brand>~is',
+				'~<quantity>.*?<\/quantity>~is'
+			],
+				''
+			,$sideTemp);
+		}
+		if($r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'||$r['contentType']=='course'){
 			if($r['bookable']==1){
 				if(stristr($sideTemp,'<service>')){
 					$sideTemp=preg_replace([
@@ -210,13 +192,13 @@ if(file_exists(THEME.'/side_menu.html')){
 				$sideTemp=preg_replace('~<service.*?>.*?<\/service>~is','',$sideTemp,1);
 		}else
 			$sideTemp=preg_replace('~<service.*?>.*?<\/service>~is','',$sideTemp,1);
-		if($r['contentType']=='inventory'&&is_numeric($r['cost'])){
+		if($r['contentType']=='inventory'||$r['contentType']=='course'&&is_numeric($r['cost'])){
 			if(stristr($sideTemp,'<inventory>')){
 				$sideTemp=preg_replace([
 					($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/'),
 					'~<service>.*?<\/service>~is'
 				],'',$sideTemp);
-			}elseif(stristr($sideTemp,'<inventory>')&&$r['contentType']!='inventory')
+			}elseif(stristr($sideTemp,'<inventory>')&&$r['contentType']!='inventory'||$r['contentType']!='course')
 				$sideTemp=preg_replace('~<inventory>.*?<\/inventory>~is','',$sideTemp,1);
 		}else
 			$sideTemp=preg_replace('~<inventory>.*?<\/inventory>~is','',$sideTemp,1);
@@ -232,9 +214,9 @@ if(file_exists(THEME.'/side_menu.html')){
 		if(stristr($sideTemp,'<sort>')){
 			if($show=='item')
 				$sideTemp=preg_replace('~<sort>.*?<\/sort>~is','',$sideTemp);
-			elseif($view=='inventory'||$view=='service'||$view=='article'||$view=='news'||$view=='events'||$view=='portfolio'||$view=='gallery'){
+			elseif($view=='course'||$view=='inventory'||$view=='service'||$view=='article'||$view=='news'||$view=='events'||$view=='portfolio'||$view=='gallery'){
 				$sortOptions='';
-				if($view=='inventory'){
+				if($view=='inventory'||$view=='course'){
 					$sortOptions=
 						'<option value="new"'.(isset($sort)&&$sort=='new'?' selected':'').'>Newest</option>'.
 						'<option value="old"'.(isset($sort)&&$sort=='old'?' selected':'').'>Oldest</option>'.
@@ -275,7 +257,7 @@ if(file_exists(THEME.'/side_menu.html')){
 					'/<[\/]?sort>/',
 					'/<print sort=[\"\']?self[\"\/]?>/',
 					'/<sortOptions>/',
-					$config['showItems']>0?'/<[]\/]?showItems>/':'~<showItems>.*?<\/showItems>~is',
+					$config['showItems']>0?'/<[\/]?showItems>/':'~<showItems>.*?<\/showItems>~is',
 					'/<itemCount>/'
 				],[
 					'',

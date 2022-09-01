@@ -205,13 +205,13 @@ if($user['options'][4]==1){
                   </ol>
                   <div class="text-left">
                     <small>View:
-                      <a class="badger badge-<?= !isset($args[0])?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders" data-tooltip="tooltip" aria-label="Display All Orders">All</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders" data-tooltip="tooltip" aria-label="Display All Orders">All</a>&nbsp;
                       <a class="badger badge-<?= isset($args[0])&&$args[0]=='quotes'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/quotes" data-tooltip="tooltip" aria-label="Display Quote Orders">Quotes</a>&nbsp;
-                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='invoices'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/invoices" data-tooltip="tooltip" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
-                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='pending'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/pending" data-tooltip="tooltip" aria-label="Display Pending Orders">Pending</a>&nbsp;
-                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" data-tooltip="tooltip" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
-                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" data-tooltip="tooltip" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
-                      <a class="badger badge-<?= !isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='invoices'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/invoices" data-tooltip="tooltip" aria-label="Display Invoices Orders">Invoices</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='pending'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/pending" data-tooltip="tooltip" aria-label="Display Pending Orders">Pending</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" data-tooltip="tooltip" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" data-tooltip="tooltip" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>
                     </small>
                   </div>
 

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -37,13 +37,15 @@ $atts=filter_input(INPUT_POST,'atts',FILTER_UNSAFE_RAW);
 $body=(isset($_POST['bod'])?$_POST['bod']:'').'<br>'.($user['email_signature']!=''?$user['email_signature']:$config['email_signature']).'<br>';
 $msgbody=$body;
 if($to!=''){
-  require'phpmailer/class.phpmailer.php';
+  require'phpmailer/PHPMailer.php';
+  require'phpmailer/SMTP.php';
+  require'phpmailer/Exception.php';
   if($id!=0){
     $ms=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `id`=:id");
     $ms->execute([':id'=>$id]);
     if($ms->rowCount()>0)$mr=$ms->fetch(PDO::FETCH_ASSOC);
   }
-  $mail=new PHPMailer;
+  $mail = new PHPMailer\PHPMailer\PHPMailer;
   $mail->isSendmail();
   $mail->isHTML(true);
   if($act=='reply'){

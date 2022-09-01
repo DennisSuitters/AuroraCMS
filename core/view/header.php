@@ -115,7 +115,7 @@ if(stristr($html,'<buildMenu')){
 				$menuURL.=URL.$r['contentType'].'/';
 				if(!in_array(
 					$r['contentType'],
-					['aboutus','activities','article','biography','bookings','cart','contactus','distributors',
+					['aboutus','activities','article','biography','bookings','cart','contactus','course','distributors',
 					'events','forum','gallery','inventory','news','newsletters','portfolio',
 					'proofs','search','service','testimonials','tos'],
 					true)
@@ -163,7 +163,7 @@ if(stristr($html,'<buildMenu')){
 						$subURL.=URL.$rm['contentType'].'/';
 						if(!in_array(
 							$rm['contentType'],
-							['aboutus','article','biography','bookings','cart','contactus','distributors',
+							['aboutus','article','biography','bookings','cart','contactus','course','distributors',
 							'events','gallery','inventory','news','newsletters','portfolio',
 							'proofs','search','service','testimonials','tos'],
 							true)

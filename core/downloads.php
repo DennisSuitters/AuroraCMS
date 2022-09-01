@@ -44,6 +44,8 @@ if($file!=''){
 }else
   echo'No file/s to download';
 function SendFileDownload($file){
+  header("Content-Type: application/octet-stream"); // 1
   header('Content-Disposition: attachment; filename='.basename($file));
+  header("Content-Type: application/download"); // 2
   readfile('media/downloads/'.$file);
 }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -87,8 +87,10 @@ if($not['spammer']==false){
           }
   				if($config['email']!=''){
   					if($not['spammer']==false){
-  						require'phpmailer/class.phpmailer.php';
-  						$mail=new PHPMailer;
+              require'phpmailer/PHPMailer.php';
+              require'phpmailer/SMTP.php';
+              require'phpmailer/Exception.php';
+  						$mail = new PHPMailer\PHPMailer\PHPMailer;
               $mail->isSendmail();
     					$mail->SetFrom($email, $name);
   						$toname=$config['email'];

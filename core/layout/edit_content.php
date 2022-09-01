@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.17
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -106,7 +106,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <div class="col-12 col-sm-6 pr-md-3">
                   <label id="<?=$r['contentType'];?>DateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DateCreated" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Created Date">&#128279;</a>':'';?>Created</label>
                   <div class="form-row">
-                    <input id="ti" type="text" value="<?= date($config['dateFormat'],$r['ti']);?>" readonly>
+                    <input id="ti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['ti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`ti`,getTimestamp(`ti`),`select`);"':' readonly';?>>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 pl-md-3">
@@ -897,51 +897,143 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 $sd->execute([':id'=>$r['id']]);
 if($sd->rowCount()>0){
   while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
-    <div class="row mt-1" id="l_<?=$rd['id'];?>">
-      <div class="form-row">
-        <div class="input-text border-right-0 border-bottom-0">
-          <label>Title:</label>
-        </div>
-        <input class="border-bottom-0 border-left-0" type="text" name="t" value="<?=$rd['title'];?>" placeholder="Uses Filename in place of title..." readonly>
-      </div>
+                <div class="row mt-1" id="l_<?=$rd['id'];?>">
+                  <div class="form-row">
+                    <div class="input-text border-right-0 border-bottom-0">
+                      <label>Title:</label>
+                    </div>
+                    <input class="border-bottom-0 border-left-0" type="text" name="t" value="<?=$rd['title'];?>" placeholder="Uses Filename in place of title..." readonly>
+                  </div>
       <?php if($r['contentType']=='inventory'){?>
-        <div class="form-row">
-          <div class="input-text border-right-0 border-bottom-0">
-            <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
-          </div>
-          <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
-            <label>and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
-          </div>
-          <select class="border-bottom-0 border-left-0" id="downloada" name="a" onchange="update('<?=$rd['id'];?>','choices','tie',$(this).val(),'select');">
-            <option value="0"<?=($rd['tie']==0?' selected':'');?>>Forever</option>
-            <option value="3600"<?=($rd['tie']==3600?' selected':'');?>>1 Hour</option>
-            <option value="7200"<?=($rd['tie']==7200?' selected':'');?>>2 Hours</option>
-            <option value="14400"<?=($rd['tie']==14400?' selected':'');?>>4 Hours</option>
-            <option value="28800"<?=($rd['tie']==28800?' selected':'');?>>8 Hours</option>
-            <option value="86400"<?=($rd['tie']==86400?' selected':'');?>>24 Hours</option>
-            <option value="172800"<?=($rd['tie']==172800?' selected':'');?>>48 Hours</option>
-            <option value="604800"<?=($rd['tie']==604800?' selected':'');?>>1 Week</option>
-            <option value="1209600"<?=($rd['tie']==1209600?' selected':'');?>>2 Weeks</option>
-            <option value="2592000"<?=($rd['tie']==2592000?' selected':'');?>>1 Month</option>
-            <option value="7776000"<?=($rd['tie']==7776000?' selected':'');?>>3 Months</option>
-            <option value="15552000"<?=($rd['tie']==15552000?' selected':'');?>>6 Months</option>
-            <option value="31536000"<?=($rd['tie']==31536000?' selected':'');?>>1 Year</option>
-          </select>
-        </div>
-      <?php }?>
-      <div class="form-row">
-        <input id="url<?=$rd['id'];?>" name="url" type="text" value="<?=$rd['url'];?>">
-        <form target="sp" action="core/purge.php">
-          <input name="id" type="hidden" value="<?=$rd['id'];?>">
-          <input name="t" type="hidden" value="choices">
-          <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-        </form>
-      </div>
-    </div>
+                  <div class="form-row">
+                    <div class="input-text border-right-0 border-bottom-0">
+                      <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
+                    </div>
+                    <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
+                      <label>and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
+                    </div>
+                    <select class="border-bottom-0 border-left-0" id="downloada" name="a" onchange="update('<?=$rd['id'];?>','choices','tie',$(this).val(),'select');">
+                      <option value="0"<?=($rd['tie']==0?' selected':'');?>>Forever</option>
+                      <option value="3600"<?=($rd['tie']==3600?' selected':'');?>>1 Hour</option>
+                      <option value="7200"<?=($rd['tie']==7200?' selected':'');?>>2 Hours</option>
+                      <option value="14400"<?=($rd['tie']==14400?' selected':'');?>>4 Hours</option>
+                      <option value="28800"<?=($rd['tie']==28800?' selected':'');?>>8 Hours</option>
+                      <option value="86400"<?=($rd['tie']==86400?' selected':'');?>>24 Hours</option>
+                      <option value="172800"<?=($rd['tie']==172800?' selected':'');?>>48 Hours</option>
+                      <option value="604800"<?=($rd['tie']==604800?' selected':'');?>>1 Week</option>
+                      <option value="1209600"<?=($rd['tie']==1209600?' selected':'');?>>2 Weeks</option>
+                      <option value="2592000"<?=($rd['tie']==2592000?' selected':'');?>>1 Month</option>
+                      <option value="7776000"<?=($rd['tie']==7776000?' selected':'');?>>3 Months</option>
+                      <option value="15552000"<?=($rd['tie']==15552000?' selected':'');?>>6 Months</option>
+                      <option value="31536000"<?=($rd['tie']==31536000?' selected':'');?>>1 Year</option>
+                    </select>
+                  </div>
+                <?php }?>
+                <div class="form-row">
+                  <input id="url<?=$rd['id'];?>" name="url" type="text" value="<?=$rd['url'];?>">
+                  <form target="sp" action="core/purge.php">
+                    <input name="id" type="hidden" value="<?=$rd['id'];?>">
+                    <input name="t" type="hidden" value="choices">
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                  </form>
+                </div>
+              </div>
 <?php }
 }?>
-</div>
+            </div>
+            <hr>
+            <legend>Links to Services/Content</legend>
+            <form class="row mb-3" target="sp" method="post" action="core/add_link.php">
+              <input name="id" type="hidden" value="<?=$r['id'];?>">
+              <div class="form-row">
+                <div class="input-text border-right-0 border-bottom-0">
+                  <label for="linkt">Title:</label>
+                </div>
+                <input class="border-bottom-0 border-left-0" id="linkt" type="text" name="t" value="" placeholder="Enter a Title...">
+              </div>
+              <?php if($r['contentType']=='inventory'){?>
+                <div class="form-row">
+                  <div class="input-text border-right-0 border-bottom-0">
+                    <label for="downloadr">Requires Order</label>&nbsp;<input id="linkr" type="checkbox" name="r" value="1">
+                  </div>
+                  <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
+                    <label for="linka">and&nbsp;is&nbsp;available&nbsp;for:</label>
+                  </div>
+                  <select class="border-bottom-0 border-left-0" id="linka" name="a">
+                    <option value="0" selected>Forever</option>
+                    <option value="3600">1 Hour</option>
+                    <option value="7200">2 Hours</option>
+                    <option value="14400">4 Hours</option>
+                    <option value="28800">8 Hours</option>
+                    <option value="86400">24 Hours</option>
+                    <option value="172800">48 Hours</option>
+                    <option value="604800">1 Week</option>
+                    <option value="1209600">2 Weeks</option>
+                    <option value="2592000">1 Month</option>
+                    <option value="7776000">3 Months</option>
+                    <option value="15552000">6 Months</option>
+                    <option value="31536000">1 Year</option>
+                  </select>
+                </div>
+              <?php }?>
+              <div class="form-row">
+                <input class="border" style="opacity:1;" id="downloadfu" name="l" type="text" placeholder="Enter Link to Service/Content...">
+                <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
+              </div>
+            </form>
+            <div id="links">
+              <?php $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='link' AND `rid`=:id");
+              $sd->execute([':id'=>$r['id']]);
+              if($sd->rowCount()>0){
+              while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
+                <div class="row mt-1" id="l_<?=$rd['id'];?>">
+                  <div class="form-row">
+                    <div class="input-text border-right-0 border-bottom-0">
+                      <label>Title:</label>
+                    </div>
+                    <input class="border-bottom-0 border-left-0" type="text" name="t" value="<?=$rd['title'];?>" placeholder="Title..." readonly>
+                  </div>
+              <?php if($r['contentType']=='inventory'){?>
+                  <div class="form-row">
+                    <div class="input-text border-right-0 border-bottom-0">
+                      <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
+                    </div>
+                    <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
+                      <label>and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
+                    </div>
+                    <select class="border-bottom-0 border-left-0" id="downloada" name="a" onchange="update('<?=$rd['id'];?>','choices','tie',$(this).val(),'select');">
+                      <option value="0"<?=($rd['tie']==0?' selected':'');?>>Forever</option>
+                      <option value="3600"<?=($rd['tie']==3600?' selected':'');?>>1 Hour</option>
+                      <option value="7200"<?=($rd['tie']==7200?' selected':'');?>>2 Hours</option>
+                      <option value="14400"<?=($rd['tie']==14400?' selected':'');?>>4 Hours</option>
+                      <option value="28800"<?=($rd['tie']==28800?' selected':'');?>>8 Hours</option>
+                      <option value="86400"<?=($rd['tie']==86400?' selected':'');?>>24 Hours</option>
+                      <option value="172800"<?=($rd['tie']==172800?' selected':'');?>>48 Hours</option>
+                      <option value="604800"<?=($rd['tie']==604800?' selected':'');?>>1 Week</option>
+                      <option value="1209600"<?=($rd['tie']==1209600?' selected':'');?>>2 Weeks</option>
+                      <option value="2592000"<?=($rd['tie']==2592000?' selected':'');?>>1 Month</option>
+                      <option value="7776000"<?=($rd['tie']==7776000?' selected':'');?>>3 Months</option>
+                      <option value="15552000"<?=($rd['tie']==15552000?' selected':'');?>>6 Months</option>
+                      <option value="31536000"<?=($rd['tie']==31536000?' selected':'');?>>1 Year</option>
+                    </select>
+                  </div>
+                <?php }?>
+                <div class="form-row">
+                  <div class="input-text col-sm">
+                    <a target="_blank" href="<?=$rd['url'];?>"><?=$rd['url'];?></a>
+                  </div>
+                  <form target="sp" action="core/purge.php">
+                    <input name="id" type="hidden" value="<?=$rd['id'];?>">
+                    <input name="t" type="hidden" value="choices">
+                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                  </form>
+                </div>
+              </div>
+              <?php }
+              }?>
+              </div>
               <hr>
+              <legend>On Page Media</legend>
               <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
                 <input name="rid" type="hidden" value="<?=$r['id'];?>">

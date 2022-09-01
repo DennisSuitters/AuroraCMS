@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.17
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -68,7 +68,7 @@ if(stristr($html,'<cover>')){
 				(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
 				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
 				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-			'" src="media/'.$cover.'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" loading="lazy" alt="'.$page['title'].' Cover Image">'.
+			'" src="media/'.$cover.'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" alt="'.$page['title'].' Cover Image">'.
 				($page['attributionImageTitle']!=''?
 					'<figcaption>'.
 						$page['attributionImageTitle'].
@@ -355,7 +355,7 @@ if(stristr($html,'<items')){
 		$su->execute([':id'=>$r['uid']]);
 		$ua=$su->fetch(PDO::FETCH_ASSOC);
 		$itemQuantity='';
-		if($r['coming'][0]==1&&$r['contentType']=='inventory')
+		if($r['coming']==1&&$r['contentType']=='inventory')
 			$itemQuantity='Coming Soon';
 		else{
 			if(is_numeric($r['quantity']))
@@ -365,7 +365,7 @@ if(stristr($html,'<items')){
 		$r['thumb']=trim(rawurldecode($r['thumb']));
 		$items=preg_replace([
 			$r['contentType']=='inventory'&&$config['options'][5]==1?'/<[\/]?quickview>/':'~<quickview>.*?<\/quickview>~is',
-			'/<print content=srcset>/',
+			'/<print content=[\"\']?srcset[\"\']?>/',
 			'/<print content=[\"\']?thumb[\"\']?>/',
 			'/<print content=[\"\']?image[\"\']?>/',
 			'/<print content=[\"\']?imageALT[\"\']?>/',
@@ -397,11 +397,11 @@ if(stristr($html,'<items')){
 			($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
 			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
 			(file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
-			htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),
-			URL.'profile/'.strtolower(str_replace(' ','-',htmlspecialchars($r['login_user'],ENT_QUOTES,'UTF-8'))).'/',
-			URL.str_replace(' ','-',htmlspecialchars($r['contentType'],ENT_QUOTES,'UTF-8')),
+			$r['title'],
+			URL.'profile/'.strtolower(str_replace(' ','-',$r['login_user'])).'/',
+			URL.str_replace(' ','-',$r['contentType']),
 			URL.$r['contentType'].'/'.$r['urlSlug'].'/',
-			htmlspecialchars(($ua['name']!=''?$ua['name']:$ua['username']),ENT_QUOTES,'UTF-8'),
+			($ua['name']!=''?$ua['name']:$ua['username']),
 			date($config['dateFormat'],$r['ti']),
 			date($theme['settings']['dateFormat'],$r['pti']),
 			date($theme['settings']['dateFormat'],$r['eti']),
@@ -411,7 +411,7 @@ if(stristr($html,'<items')){
 			$r['contentType'],
 			str_replace(' ','-',strtolower($itemQuantity)),
 			$itemQuantity,
-			$r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
+			isset($r['rank'])&&$r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
 			rank($r['rank']),
 			($view=='index'?substr(strip_tags($r['notes']),0,300):strip_tags($r['notes']))
 		],$items); /* help */

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.18
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -129,14 +129,16 @@ if($message == "|*|*|*|*|*|"){
 		$cua=$db->prepare("SELECT `id` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND `lti`>:lti");
 		$cua->execute([':lti'=>$cuati]);
 		if($cua->rowCount()<1){
-			require'phpmailer/class.phpmailer.php';
+			require'phpmailer/PHPMailer.php';
+			require'phpmailer/SMTP.php';
+			require'phpmailer/Exception.php';
 			$sa=$db->prepare("SELECT `id`,`username`,`name`,`email` FROM `".$prefix."login` WHERE `rank`>699 AND `active`=1 AND liveChatNotification=1");
 			$sa->execute();
 			echo'<div class="alert alert-info" role="alert">There are currently no operators available to answer your queries, however you may leave a message here so a representative can get back to you.</div>';
 			if($sa->rowCount()>0){
 				$cfgsent=0;
 				while($ra=$sa->fetch(PDO::FETCH_ASSOC)){
-					$mail=new PHPMailer;
+					$mail = new PHPMailer\PHPMailer\PHPMailer;
 					$mail->isSendmail();
 					$mail->SetFrom($email,$name);
 					$mail->AddAddress($ra['email']);
@@ -152,7 +154,7 @@ if($message == "|*|*|*|*|*|"){
 					if($mail->Send())echo'<br>Nominated Operators have been notified!';
 				}
 			}else{
-				$mail=new PHPMailer;
+				$mail = new PHPMailer\PHPMailer\PHPMailer;
 				$mail->isSendmail();
 				$mail->SetFrom($email,$name);
 				$mail->AddAddress($config['email'],$config['business']);

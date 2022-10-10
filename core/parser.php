@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -141,7 +141,7 @@ foreach($tags as$tag){
 				}
 				if($r['options'][0]==1){
 					if(is_numeric($r['cost'])&&$r['cost']!=0){
-						if($r['coming'][0]==1)$parsing.='<div class="sold">Coming Soon</div>';
+						if($r['coming']==1)$parsing.='<div class="sold">Coming Soon</div>';
 					}
 					if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order')
 						$r['quantity']=0;

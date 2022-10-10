@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -907,7 +907,7 @@ if($sd->rowCount()>0){
       <?php if($r['contentType']=='inventory'){?>
                   <div class="form-row">
                     <div class="input-text border-right-0 border-bottom-0">
-                      <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
+                      <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password']==1?' checked':''?> disabled>
                     </div>
                     <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
                       <label>and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
@@ -996,7 +996,7 @@ if($sd->rowCount()>0){
               <?php if($r['contentType']=='inventory'){?>
                   <div class="form-row">
                     <div class="input-text border-right-0 border-bottom-0">
-                      <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password'][0]==1?' checked':''?> disabled>
+                      <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password']==1?' checked':''?> disabled>
                     </div>
                     <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
                       <label>and&nbsp;is&nbsp;available&nbsp;for&nbsp;download&nbsp;for:</label>
@@ -1050,11 +1050,13 @@ if($sd->rowCount()>0){
               ]);
               if($sm->rowCount()>0){
                 while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-                  if(file_exists('media/md/'.basename($rm['file'])))
-                    $thumb='media/md/'.basename($rm['file']);
+                  if(file_exists('media/sm/'.basename($rm['file'])))
+                    $thumb='media/sm/'.basename($rm['file']);
+                  elseif(file_exists('media/'.basename($rm['file'])))
+                    $thumb='media/'.basename($rm['file']);
                   else
                     $thumb=ADMINNOIMAGE;?>
-                  <div id="mi_<?=$rm['id'];?>" class="card stats col-6 col-sm m-1">
+                  <div id="mi_<?=$rm['id'];?>" class="card stats col-6">
                     <?php if($user['options'][1]==1){?>
                       <div class="btn-group float-right">
                         <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><i class="i">drag</i></div>
@@ -1538,20 +1540,20 @@ if($sd->rowCount()>0){
             </div>
             <div class="row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Pinned Checkbox">&#128279;</a>':'';?>
-              <input id="pin" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="pin" data-dbb="0" type="checkbox"<?=($r['pin'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+              <input id="pin" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="pin" data-dbb="0" type="checkbox"<?=($r['pin']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
               <label id="contentpin0<?=$r['id'];?>" for="pin">Pinned</label>
             </div>
             <?php if($r['contentType']=='inventory'){?>
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#coming" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Coming Soon Checkbox">&#128279;</a>':'';?>
-                <input id="coming" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?=($r['coming'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <input id="coming" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?=($r['coming']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                 <label id="contentcoming0<?=$r['id'];?>" for="coming">Coming Soon</label>
               </div>
             <?php }
             if($r['contentType']!='proofs'){?>
               <div class="row mt-3<?=$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Featured" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Featured Checkbox">&#128279;</a>':'';?>
-                <input id="<?=$r['contentType'];?>Featured" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0" type="checkbox"<?=($r['featured'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <input id="<?=$r['contentType'];?>Featured" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0" type="checkbox"<?=($r['featured']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                 <label id="contentfeatured0<?=$r['id'];?>" for="<?=$r['contentType'];?>Featured">Featured</label>
               </div>
             <?php }?>

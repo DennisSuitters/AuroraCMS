@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -68,7 +68,7 @@ if($not['spammer']==false){
 			$notes=filter_input(INPUT_POST,'notes',FILTER_UNSAFE_RAW);
 			$tis=filter_input(INPUT_POST,'tis',FILTER_UNSAFE_RAW);
 			$rid=filter_input(INPUT_POST,'rid',FILTER_SANITIZE_NUMBER_INT);
-			if($config['spamfilter'][0]==1&&$not['spammer']==false&&$ip='127.0.0.1'){
+			if($config['spamfilter']==1&&$not['spammer']==false&&$ip='127.0.0.1'){
 				$filter=new SpamFilter();
 				$result=$filter->check_email($email);
 				if($result)$not=['spammer'=>true,'target'=>'booking','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Booking Form, Spam Detected via Form Field Data.'];

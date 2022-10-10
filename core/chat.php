@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -44,7 +44,7 @@ if($message!=""&&$message!="|*|*|*|*|*|"){
 	$q->execute([':notes'=>'Hello, how can we assist you?']);
 	if($q->rowCount()==0){
 		if($who=='page'){
-			if($config['spamfilter'][0]==1&&$spam==FALSE&&$ip!='admin'){
+			if($config['spamfilter']==1&&$spam==FALSE&&$ip!='admin'){
 				$filter=new SpamFilter();
 				$result=$filter->check_text($name.' '.$message);
 				if($result){
@@ -104,7 +104,7 @@ if($message == "|*|*|*|*|*|"){
 			echo$blacklisted;
 		}
 	}
-	if($config['spamfilter'][0]==1&&$spam==false&&$ip!='admin'){
+	if($config['spamfilter']==1&&$spam==false&&$ip!='admin'){
 		$filter=new SpamFilter();
 		$result=$filter->check_email($email);
 		if($result){

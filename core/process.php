@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.15
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -71,13 +71,13 @@ if($config['php_options'][4]==1){
     die();
   }
 }
-if($config['comingsoon'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
+if($config['comingsoon']==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
     if(file_exists(THEME.'/comingsoon.html'))$template=file_get_contents(THEME.'/comingsoon.html');
     else{
       require'core/view/comingsoon.php';
       die();
     }
-}elseif($config['maintenance'][0]==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
+}elseif($config['maintenance']==1&&(isset($_SESSION['rank'])&&$_SESSION['rank']<400)){
   if(file_exists(THEME.'/maintenance.html'))$template=file_get_contents(THEME.'/maintenance.html');
   else{
   	require'core/view/maintenance.php';
@@ -278,7 +278,7 @@ $head=preg_replace([
   '/<schemaWebsite>/',
   '/<schemaOrganization>/'
 ],[
-  (isset($config['ga_tracking'])&&$config['ga_tracking']!=''?'<script defer async src="/core/js/googleanalytics/gtag/js.js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':''),
+  (isset($config['ga_tracking'])&&$config['ga_tracking']!=''?'<script async src="/core/js/googleanalytics/gtag/js.js?id='.$config['ga_tracking'].'"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag(\'js\',new Date());gtag(\'config\',\''.$config['ga_tracking'].'\');</script>':''),
   (isset($config['ga_tagmanager'])&&$config['ga_tagmanager']!=''?'<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({\'gtm.start\':new Date().getTime(),event:\'gtm.js\'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!=\'dataLayer\'?\'&l=\'+l:\'\';j.async=true;j.src=\'https://www.googletagmanager.com/gtm.js?id=\'+i+dl;f.parentNode.insertBefore(j,f);})(window,document,\'script\',\'dataLayer\',\''.$config['ga_tagmanager'].'\');</script>':''),
   (isset($config['ga_tagmanager'])&&$config['ga_tagmanager']!=''?'<noscript><iframe src="https://www.googletagmanager.com/ns.html?id='.$config['ga_tagmanager'].'"
   height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>':''),

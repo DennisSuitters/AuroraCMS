@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.2
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -115,7 +115,7 @@ $html='<table cellpadding="0" cellspacing="0" border="0" align="center" style="m
           '<tr><td colspan="2"></td></tr>'.
           '<tr><td colspan="2"></td></tr>'.
           '<tr>'.
-            '<td class="col-2" style="text-align: center; vertical-align: top;"><input type="checkbox"'.($r['agreementCheck'][0]==1?' checked="checked" aria-checked="true"':' aria-checked="false"').'></td>'.
+            '<td class="col-2" style="text-align: center; vertical-align: top;"><input type="checkbox"'.($r['agreementCheck']==1?' checked="checked" aria-checked="true"':' aria-checked="false"').'></td>'.
             '<td class="col-10">'.$config['bookingAgreement'].'</td>'.
           '</tr>'.
           '<tr><td colspan="2"></td></tr>'.

@@ -401,7 +401,7 @@ if(stristr($html,'<items')){
 			URL.'profile/'.strtolower(str_replace(' ','-',$r['login_user'])).'/',
 			URL.str_replace(' ','-',$r['contentType']),
 			URL.$r['contentType'].'/'.$r['urlSlug'].'/',
-			($ua['name']!=''?$ua['name']:$ua['username']),
+			(isset($ua['name'])&&$ua['name']!=''?$ua['name']:(isset($ua['username'])&&$ua['username']!=''?$ua['username']:'Anonymous')),
 			date($config['dateFormat'],$r['ti']),
 			date($theme['settings']['dateFormat'],$r['pti']),
 			date($theme['settings']['dateFormat'],$r['eti']),

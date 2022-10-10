@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * @changes    Fix URL Slug reference going to brokwn URL.
@@ -17,7 +17,7 @@ require'db.php';
 $config=$db->query("SELECT `comingsoon`,`maintenance` FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 echo'<?xml version="1.0" encoding="UTF-8"?>'.
   '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
-if($config['comingsoon'][0]==1||$config['maintenance'][0]==1){
+if($config['comingsoon']==1||$config['maintenance']==1){
   echo'<url>'.
     '<loc>'.URL.'</loc>'.
     '<changefreq>daily</changefreq>'.

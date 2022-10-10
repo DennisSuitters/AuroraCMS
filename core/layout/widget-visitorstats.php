@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="row">
-<?php if($config['hoster'][0]==1&&$user['rank']==1000){
+<?php if($config['hoster']==1&&$user['rank']==1000){
   $rh=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `hostStatus`='overdue'")->fetch(PDO::FETCH_ASSOC);
   if($rh['cnt']>0){?>
       <a class="card stats danger col-6 col-sm-4 m-0 p-2 m-sm-1" href="<?= URL.$settings['system']['admin'].'/payments';?>">

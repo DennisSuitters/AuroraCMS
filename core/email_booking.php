@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,7 +35,7 @@ if($c['email']!=''){
   $mail->SetFrom($config['email'],$config['business']);
   $mail->AddAddress($r['email']);
   $mail->IsHTML(true);
-  if($config['bookingEmailReadNotification'][0]==1){
+  if($config['bookingEmailReadNotification']==1){
     $mail->AddCustomHeader("X-Confirm-Reading-To:".$config['email']);
     $mail->AddCustomHeader("Return-receipt-to:".$config['email']);
     $mail->AddCustomHeader("Disposition-Notification-To:".$config['email']);

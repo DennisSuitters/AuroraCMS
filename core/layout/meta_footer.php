@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -48,7 +48,7 @@
   }
   var unsaved=false;
   window.onbeforeunload=function(e){
-    if(unsaved)return'You have unsaved changes. Do you ant to leave this page and discard your changes or stay on this page?';
+    if(unsaved)return'You have unsaved changes. Do you want to leave this page and discard your changes or stay on this page?';
   }
   <?php if($config['idleTime']!=0){?>
     $(document).ready(function(){
@@ -282,7 +282,7 @@
             theme:'base16-dark',
           },
           isNotSplitEdgePoint:true,
-          height:300,
+          stickyToolbar: true,
           tabsize:2,
           disableUpload:true,
           fileExplorer:'elfinderDialog',
@@ -582,7 +582,7 @@ else
         </div>
       </div>
     </div>
-<?php if($view=='dashboard'&&$user['accountsContact'][0]==1&&$config['hosterURL']!=''){?>
+<?php if($view=='dashboard'&&$user['accountsContact']==1&&$config['hosterURL']!=''){?>
     <script>
       $(document).ready(function(){
         $.getJSON('<?=$config['hosterURL'];?>core/hostinginfo.php?h=<?=$user['infoHash'];?>',function(data){

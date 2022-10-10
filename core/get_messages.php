@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -78,7 +78,7 @@ if($config['message_check_interval']!=0){
       foreach($imap->emails() as$email){
         $folder='INBOX';
         $status='unread';
-        if($config['spamfilter'][0]==1){
+        if($config['spamfilter']==1){
           $filter=new SpamFilter();
           $result=$filter->check_email($email->fromEmail());
           if($result)$folder='spam';

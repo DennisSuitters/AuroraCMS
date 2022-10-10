@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -68,7 +68,7 @@ $html=preg_replace([
   '/<print page=[\"\']?notes[\"\']?>/',
 ],[
   '',
-	($page['notes'],
+	$page['notes'],
 ],$html);
 $forum='';
 $cid=isset($_GET['cid'])?filter_input(INPUT_GET,'cid',FILTER_SANITIZE_NUMBER_INT):0;
@@ -171,12 +171,12 @@ if($pid==0&&$tid==0&&$cid==0){ // Category
 		$lastuser=$lstu->fetch(PDO::FETCH_ASSOC);
 		$items=$item;
 		$lastinfo=$lst->rowCount()>0?(
-      $lstget['help'][0]==0?'<a href="'.URL.'forum?cid='.
+      $lstget['help']==0?'<a href="'.URL.'forum?cid='.
         $rc['id'].'&tid='.
         $lstget['tid'].'&pid='.
         $lstget['id'].'">':'').
         $lstget['title'].
-        ($lstget['help'][0]==0?'</a>':'').
+        ($lstget['help']==0?'</a>':'').
         '<br>by '.
         (isset($lastuser['name'])&&$lastuser['name']==''?
           $lastuser['username']:
@@ -308,7 +308,7 @@ if($pid==0&&$tid==0&&$cid>0){ // Topics
 		$lstu->execute([':uid'=>isset($lstget['uid'])?$lstget['uid']:0]);
 		$lastuser=$lstu->fetch(PDO::FETCH_ASSOC);
 		$items=$item;
-		$lastinfo=$lst->rowCount()>0?($lstget['help'][0]==0?'<a href="'.URL.'forum?cid='.$rc['id'].'&tid='.$lstget['tid'].'&pid='.$lstget['id'].'">':'').$lstget['title'].($lstget['help'][0]==0?'</a>':'').' by '.($lastuser['name']==''?$lastuser['username']:$lastuser['name']).'<br>'.date($config['dateFormat'],$lstget['ti']):'No Posts Yet';
+		$lastinfo=$lst->rowCount()>0?($lstget['help']==0?'<a href="'.URL.'forum?cid='.$rc['id'].'&tid='.$lstget['tid'].'&pid='.$lstget['id'].'">':'').$lstget['title'].($lstget['help']==0?'</a>':'').' by '.($lastuser['name']==''?$lastuser['username']:$lastuser['name']).'<br>'.date($config['dateFormat'],$lstget['ti']):'No Posts Yet';
 		$items=preg_replace([
 			'/<print topic=[\"\']?icon[\"\']?>/',
 			'/<print topic=[\"\']?link[\"\']?>/',
@@ -552,7 +552,7 @@ if($pid!=0){ // Post
 	$posts='';
 	$posttitle=htmlspecialchars($rr['title'],ENT_QUOTES,'UTF-8');
 	$skip=0;
-	if($rr['help'][0]==1){
+	if($rr['help']==1){
 		if($_SESSION['rank']>599){
 		}else{
 			if(isset($_SESSION['uid'])&&$_SESSION['uid']==$rr['uid']){

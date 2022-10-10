@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,7 +22,11 @@ if(($tbl!='NaN'&&$col!='NaN')||($tbl!=''&&$col!='')){
     $q=$db->prepare("SELECT `".$col."` as c FROM `".$prefix.$tbl."` WHERE `id`=:id");
     $q->execute([':id'=>$id]);
     $r=$q->fetch(PDO::FETCH_ASSOC);
-    $r['c'][$bit]=$r['c'][$bit]==1?0:1;
+    if($bit==0){
+      $r['c']=$r['c']==1?0:1;
+    }else{
+      $r['c'][$bit]=$r['c'][$bit]==1?0:1;
+    }
     $q=$db->prepare("UPDATE `".$prefix.$tbl."` SET `".$col."`=:c WHERE `id`=:id");
     $q->execute([
       ':c'=>$r['c'],

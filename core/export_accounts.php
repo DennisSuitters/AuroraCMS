@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -67,7 +67,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
   if($f==0){
     $result.=
       ($id==1?$r['id']:'').
-      ($act==1?($id==1?$d:'').($r['active'][0]==1?'Yes':'No'):'').
+      ($act==1?($id==1?$d:'').($r['active']==1?'Yes':'No'):'').
       ($dte==1?($act==1?$d:'').'"'.date($config['dateFormat'],$r['ti']).'"':'').
       ($rnk==1?($dte==1?$d:'').$r['rank']:'').
       ($usr==1?($rnk==1?$d:'').'"'.$r['username'].'"':'').
@@ -88,7 +88,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
       '"':'').
       ($spnt==1?($adr==1?$d:'').$r['spent']:'').
       ($pnts==1?($spnt==1?$d:'').$r['points']:'').
-      ($nws==1?($nws==1?$d:'').($r['newsletter'][0]==1?'Yes':'No'):'')."\n";
+      ($nws==1?($nws==1?$d:'').($r['newsletter']==1?'Yes':'No'):'')."\n";
   }
   echo$result;
 }

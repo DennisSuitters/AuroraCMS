@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -99,7 +99,7 @@ else{
                     <tr>
                       <td class="align-middle"><?=$r['email'];?></td>
                       <td class="text-right align-middle">
-                        <input id="newsletter<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][0]==1?'':' disabled');?>>
+                        <input id="newsletter<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][0]==1?'':' disabled');?>>
                       </td>
                     </tr>
                   <?php }?>

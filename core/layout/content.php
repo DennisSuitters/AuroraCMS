@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -312,7 +312,7 @@ else{
 <?php }?>
                   <div class="image-toolbar">
                     <?php echo !isset($args[1])?'<a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a><br>':'';
-                    echo($r['pin'][0]==1?'<a class="badger badge-primary small text-white" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin">Pinned</a><br>':'');
+                    echo($r['pin']==1?'<a class="badger badge-primary small text-white" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin">Pinned</a><br>':'');
                     echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button><br>':'';
                     echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a><br>':'');
                     echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a><br>':'';?>

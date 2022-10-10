@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -52,7 +52,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <label for="tab1-6">Messages</label>
           <input class="tab-control" id="tab1-7" name="tabs" type="radio">
           <label for="tab1-7">Settings</label>
-<?php if($config['hoster'][0]==1){?>
+<?php if($config['hoster']==1){?>
           <input class="tab-control" id="tab1-8" name="tabs" type="radio">
           <label for="tab1-8">Hosting/Website Payments</label>
 <?php }?>
@@ -274,7 +274,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               </div>
             </div>
             <div class="row mt-3">
-              <input id="bio0" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input id="bio0" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
             </div>
             <label id="accountCaption" for="caption"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountCaption" data-tooltip="tooltip" aria-label="PermaLink to Caption Field">&#128279;</a>':'';?>Caption</label>
@@ -294,7 +294,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
             <div class="row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountsContact" data-tooltip="tooltip" aria-label="PermaLink to Accounts Contact Checkbox">&#128279;</a>':'';?>
-              <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label id="loginaccountsContact0<?=$r['id'];?>" for="accountsContact">Accounts Contact</label>
               <small class="help-text">Set this to indicate Accounts that belong to the Accounts Payable Person</small>
             </div>
@@ -538,7 +538,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             <?php }?>
             <div class="row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountActive" data-tooltip="tooltip" aria-label="PermaLink to Active Checkbox">&#128279;</a>':'';?>
-              <input id="accountActive" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input id="accountActive" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label for="accountActive" id="loginactive0<?=$r['id'];?>">Active</label>
             </div>
             <label id="accountRank" for="rank"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountRank" data-tooltip="tooltip" aria-label="PermaLink to Rank Selector">&#128279;</a>':'';?>Rank</label>
@@ -578,12 +578,12 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#loginForumHelpResponder" data-tooltip="tooltip" aria-label="PermaLink to Forum Help Responder">&#128279;</a>':'';?>
-              <input id="loginForumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input id="loginForumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label id="loginForumHelpResponder0<?=$r['id'];?>" for="loginForumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
             </div>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNewsletterSubscriber" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Subscriber Checkbox">&#128279;</a>':'';?>
-              <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label id="loginnewsletter0<?=$r['id'];?>" for="accountNewsletterSubscriber">Newsletter Subscriber</label>
             </div>
             <div class="row">
@@ -628,7 +628,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
             </div>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountLiveChatNotifications" data-tooltip="tooltip" aria-label="PermaLink to Email LiveChat Notifications Checkbox">&#128279;</a>':'';?>
-              <input id="accountLiveChatNotifications" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0" type="checkbox"<?=($r['liveChatNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input id="accountLiveChatNotifications" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0" type="checkbox"<?=($r['liveChatNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label id="loginliveChatNotification0<?=$r['id'];?>" for="accountLiveChatNotifications">Email LiveChat notifications</label>
             </div>
             <div class="row">
@@ -676,7 +676,7 @@ if($purchaseLimit==0||$purchaseLimit=='')$purchaseLimit='Unlimited';?>
               <?php }?>
             </div>
           <?php }?>
-<?php if($config['hoster'][0]==1){?>
+<?php if($config['hoster']==1){?>
           <div class="tab1-8 border-top p-4" data-tabid="tab1-8" role="tabpanel">
             <legend>Hosting Payments</legend>
             <div class="row">

@@ -1,71 +1,11 @@
-### v0.2.18
-- Fix wrong thumbnail reference in YouTube JSON response when adding playlist items.
-- Adjust date and inventory selection for suggested sale period suggestions.
-- Change how versioning is done with patch releases, releases and full frozen versions. Consult [CONTRIBUTING.md](https://github.com/DiemenDesign/AuroraCMS/blob/master/CONTRIBUTING.md) for more information.
-- Reduce file access times and latency by combining icons for Administration and Front End into Separate Font files, and combining them directly into the icons stylesheets.
-- Improve icons stylesheets, removing unnecessary style declarations.
-- Fix Author Social Buttons.
-- Modify Events display in Administration to display order based on Start Date of Event in descending order first, then Created Date if the Start Date isn't set.
-- Adjust area under footer so it is less obtrusive on the main design.
-- Remove HTMLPurifer from front end page processing, as we are already sanitising text input for safe output before database insertion. No point in doing it twice, which helps speed up site rendering.
-- Adjust Administration Favicon to use Favicon from theme.
-- Restyle Administration area, making it easier to use, and visually improved. Now uses less Styling.
-- Fix Descending order for widget referrers.
-- Add ctrl+s SaveAll keyboard shortcut, this override's the browser default, but makes it much more user friendly for user's.
-- Fix Admin Activity Page not clearing entries.
-- Fix Admin Side Menu not showing correct active page.
-- Fix Login not using correct variable name for setting theme.
-- Replace deprecated filter option "FILTER_SANITIZE_STRING" in favour of "FILTER_UNSAFE_RAW".
-- Adjust AuroraCMS logo size, Firefox was showing image too large, pushing elements off page.
-- Improve the Accessibility Widget.
-- Fix Admin theme switcher displaying both icons if theme not set.
-- Fix Schema not encoding single or double quotes, causing issues of malformed Schema Data.
-- Add button to Bookings items to copy booking to Job List.
-- Fix z-index of elFinder so it opens above Summernote's dialogs.
-- Fix reference to Share icon on Administration Content list page.
-- Fix wrong icon references in quickedit dropdown.
-- Comment out array functions, that look to currently be deprecated or not added to PHP 8.1
-- Adjust Administration content dropdowns for status, and stock so they don't appear of the top of elements other than the image.
-- Adjust Administraion Tabs font size to avoid wrapping when widget's are present.
-- Add Fill style to correctly change the AuroraCMS logo colour when theme modes are changed.
-- Fix Administration header menu dropdown styling.
-- Fix Safari button styling not rendering button elements as expected styling.
-- Fix missing vars for sales array when checking for sale dates.
-- Fix typo in escaper function.
-- Fix escaping that was removing Meta Dscription information if it contained some already escaped characters.
-- Fix wrong ID value for A11Y Checkbox option.
-- Remove margin declaration for `section article` styling, due to the margin pushing elements outside of the viewport area on mobile devices.
-- Fix Page view parser typo causing a 500 error.
-- Add check for empty thumbnail_url for Playlist parser.
-- Fix Playlist editing not retrieving thumbnail URL.
-- Add project links to Administration dropdown account menu.
-- Add extra variable style for more consistent and customisable form elements.
-- Improve styling of Login Form.
-- Fix previous update that added an !important directive to button styling, that was overriding button appearance and interaction.
-- Improve QuickEdit dropdowns, may require more information added.
-- Fix Login inputs not being selectable when clicking on them.
-- Add and reorder SEO Links to Dashboard SEO Links Widget.
-- Add Downloadable Media, such as eBooks or other files from secure folder.
-- Adjust Thumbnail display to use generated SM, MD, LG images instead of elFinder's auto thumbnails.
-- Remove unnecessary comments.
-- Change AVIF format images to WEBP, due to Safari (and Chrome, which is actually Safari on iOS and Mac) not having AVIF capabilities.
-- Adjust "Maintenance", and "Coming Soon" pages to check if unavailable background could be AVIF, WEBP, JPG, JPEG, or PNG.
-- Fix Open Weather Map API Link. Preferences -> Contact.
-- Remove Cover Image SrcSet extra image size causing some images to not display as intended.
-- Add option to change available time for file downloads.
-- Fix Summernote WYSIWYG Styling showing wrong colour when scrolling editable area.
-- Add removing line breaks /r and /n characters causing unnecessary space between elements.
-- Fix Inventory items showing options if reference ID happens to match the Inventory Items ID.
-- Add new Content Type "course".
-- Add Course Mangement to Administration.
-- Add ability to change Created Content Date.
-- Remove the previously missed loading="lazy" attribute when previously adjusting the cover images, the attribute is unnecessary for above the fold content.
-- Fix missing parsing for State information on contact page.
-- Adjust cart display parser to not show weight or dimensions if they are zero.
-- Update PHPMailer and adjust mail sending code.
-- Fix Stripe and PayPal payment processing.
-- Adjust Account Menu z-index and active colour.
-- Add Accounts Information export to .csv
-- Fix typo in side content menu sort parser.
-- Add including purchasable Links to Inventory.
-- Add Purchased Links to Orders.
+### v0.2.19
+- Fix bitwise toggling issue for entries with only 1 offset value.
+- Fix error of Administration theme mode throwing error if cookie not set.
+- Add User details check for set values in parser_items.php Line 404.
+- Adjust script loading to be async within the head area.
+- Add Meta-Tag viewer for Administrators to enable checking information on content pages.
+- Fix media display size in pages and content, and add webp format.
+- Refine Visitor Tracker viewer to load visitors after page loaded to show activity.
+- Fix Administration Tooltips.
+- Update Summernote and Plugins.
+- Add button to view Theme Changelog.

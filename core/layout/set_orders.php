@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -323,7 +323,7 @@
         <legend id="emailLayout"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#emailLayout" data-tooltip="tooltip" aria-label="PermaLink to Email Layout">&#128279;</a>':'';?>Email Layout</legend>
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#readNotification" data-tooltip="tooltip" aria-label="PermaLink to Email Read Notification Checkbox">&#128279;</a>':'';?>
-          <input id="readNotification" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" type="checkbox"<?=$config['orderEmailReadNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <input id="readNotification" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" type="checkbox"<?=$config['orderEmailReadNotification']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="readNotification" id="configorderEmailReadNotification01">Read Reciept</label>
         </div>
         <div id="orderEmailSubject" class="form-row mt-3">

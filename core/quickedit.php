@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -267,7 +267,7 @@ if($t=='content'||$t=='login'||$t=='orders'){
         '</div>'.
       '</div>'.
       '<div class="row">'.
-        'User is'.($r['newsletter'][0]==1?'':' not').' a Newsletter Subscriber'.
+        'User is'.($r['newsletter']==1?'':' not').' a Newsletter Subscriber'.
       '</div>'.
       '<div class="row">'.
         'IP: '.$r['userIP'].

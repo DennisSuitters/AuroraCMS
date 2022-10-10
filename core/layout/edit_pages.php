@@ -315,9 +315,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 $sm->execute([':id'=>$r['id']]);
                 if($sm->rowCount()>0){
                   while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-                    if(file_exists('media/sm/'.basename($rm['file'])))$thumb='media/sm/'.basename($rm['file']);
-                    else $thumb=ADMINNOIMAGE;?>
-                    <div id="mi_<?=$rm['id'];?>" class="card stats col-6 col-smd m-1">
+                    if(file_exists('media/sm/'.basename($rm['file'])))
+                      $thumb='media/sm/'.basename($rm['file']);
+                    elseif(file_exists('media/'.basename($rm['file'])))
+                      $thumb='media/'.basename($rm['file']);
+                    else
+                      $thumb=ADMINNOIMAGE;?>
+                    <div id="mi_<?=$rm['id'];?>" class="card stats col-6">
                       <?php if($user['options'][1]==1){?>
                         <div class="btn-group float-right">
                           <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><i class="i">drag</i></div>

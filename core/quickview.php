@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -92,7 +92,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
     if($r['file']=='')$r['file']=NOIMAGE;
     $sideCost='';
 		if($r['options'][0]==1){
-			if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+			if($r['coming']==1)$sideCost.='<div class="sold">Coming Soon</div>';
 			else{
 				if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
 				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
@@ -150,8 +150,8 @@ if(file_exists('../'.THEME.'/quickview.html')){
       $r['file'],
 			$r['fileALT'],
       $r['id'],
-      ($r['coming'][0]!=1?($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])):''),
-      ($r['coming'][0]!=1?($r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])):''),
+      ($r['coming']!=1?($r['stockStatus']=='quantity'?($r['quantity']>0?'in stock':'out of stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])):''),
+      ($r['coming']!=1?($r['stockStatus']=='quantity'?($r['quantity']==0?'out of stock':'in stock'):($r['stockStatus']=='none'?'':$r['stockStatus'])):''),
       $sideCost,
 			$choices,
 			'',

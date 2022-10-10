@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -58,19 +58,19 @@
           <?php if($user['rank']>999){?>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevMode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Development Mode Checkbox">&#128279;</a>':'';?>
-              <input id="prefDevMode" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0" type="checkbox"<?=$config['development'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <input id="prefDevMode" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0" type="checkbox"<?=$config['development']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="configdevelopment01" for="prefDevMode">Development Mode</label>
             </div>
           <?php }
           if($user['rank']==1000||$config['options'][17]==0){?>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefComingSoon" data-tooltip="tooltip" aria-label="PermaLink to Preferences Coming Soon Mode Checkbox">&#128279;</a>':'';?>
-              <input id="prefComingSoon" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0" type="checkbox"<?=$config['comingsoon'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <input id="prefComingSoon" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0" type="checkbox"<?=$config['comingsoon']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="configcomingsoon01" for="prefComingSoon">Coming Soon Mode</label>
             </div>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefMaintenance" data-tooltip="tooltip" aria-label="PermaLink to Preferences Maintenance Mode Checkbox">&#128279;</a>':'';?>
-              <input id="prefMaintenance" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0" type="checkbox"<?=$config['maintenance'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <input id="prefMaintenance" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0" type="checkbox"<?=$config['maintenance']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="configmaintenance01" for="prefMaintenance">Maintenance Mode</label>
             </div>
             <div class="row">
@@ -93,7 +93,7 @@
             </div>
 <?php if($user['rank']==1000){?>
             <div class="row mt-3">
-              <input id="prefAdminHoster" data-dbid="1" data-dbt="config" data-dbc="hoster" data-dbb="0" type="checkbox"<?=$config['hoster'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <input id="prefAdminHoster" data-dbid="1" data-dbt="config" data-dbc="hoster" data-dbb="0" type="checkbox"<?=$config['hoster']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="confighoster01" for="prefAdminHoster">Hoster Site, for managing Web Hosting Accounts</label>
             </div>
             <div class="form-row mt-3">
@@ -565,7 +565,7 @@ $sw->execute();
 while($rw=$sw->fetch(PDO::FETCH_ASSOC)){?>
             <tr>
               <td class="text-center align-middle">
-                <input id="widget<?=$rw['id'];?>" data-dbid="<?=$rw['id'];?>" data-dbt="widgets" data-dbc="active" data-dbb="0" type="checkbox"<?=$rw['active'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                <input id="widget<?=$rw['id'];?>" data-dbid="<?=$rw['id'];?>" data-dbt="widgets" data-dbc="active" data-dbb="0" type="checkbox"<?=$rw['active']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               </td>
               <td class="align-middle"><?= ucfirst($rw['ref']);?></td>
               <td class="align-middle"><?=$rw['title'];?></td>

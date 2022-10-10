@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -45,7 +45,7 @@
         </div>
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/settings#CheckAddress" data-tooltip="tooltip" aria-label="PermaLink to Check for Logged in Account Address Information">&#128279;</a>':'';?>
-          <input id="configiconsColor0" data-dbid="1" data-dbt="config" data-dbc="iconsColor" data-dbb="0" type="checkbox"<?=$config['iconsColor'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <input id="configiconsColor0" data-dbid="1" data-dbt="config" data-dbc="iconsColor" data-dbb="0" type="checkbox"<?=$config['iconsColor']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label id="CheckAddress" for="configiconsColor0" data-tooltip="tooltip" aria-label="Check for Address Information for Logged in Account.">Check for Address Information for Logged in Account.</label>
         </div>
         <div class="row">

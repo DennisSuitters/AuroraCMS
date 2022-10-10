@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -121,7 +121,7 @@ while($rq=$sq->fetch(PDO::FETCH_ASSOC)){?>
                 <li class="question mb-2" id="questions_<?=$rq['id'];?>">
                   <div class="form-row">
                     <div class="input-text"><?= ucwords($rq['type']);?></div>
-                    <div class="input-text">Choice <input type="checkbox"<?=($rq['check_answer'][0]==1?' checked':'');?> disabled></div>
+                    <div class="input-text">Choice <input type="checkbox"<?=($rq['check_answer']==1?' checked':'');?> disabled></div>
                     <div class="input-text">Answer:</div>
                     <input type="text" value="<?=$rq['title'];?>" readonly>
                     <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rq['id'];?>','module_questions');"><i class="i">trash</i></button>

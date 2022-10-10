@@ -46,7 +46,7 @@ if($config['email']!=''){
   $mail->SetFrom($config['email'],$config['business']);
   $mail->Subject=$news['title'];
   $mail->AltBody='To view this message, please use an HTML compatible email viewer! Or view online at '.URL.'newsletters/'.str_replace(' ','-',$news['title']);
-  if($config['newslettersEmbedImages'][0]==1){
+  if($config['newslettersEmbedImages']==1){
     preg_match_all('/<img.*?>/',$body,$matches);
     if(isset($matches[0])){
       $i=1001;

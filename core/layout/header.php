@@ -49,8 +49,9 @@
       </li>
       <li>
         <button class="btn btn-ghost" onclick="toggleTheme();">
+<?php if(!isset($_COOKIE['admintheme'])){$_COOKIE['admintheme']='light';}?>
           <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='dark'?' d-none':'');?>" data-tooltip="bottom" aria-label="Switch to Dark Mode">dark-mode</i>
-          <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'||$_COOKIE['admintheme']==''?' d-none':'');?>" data-tooltip="bottom" aria-label="Switch to Light Mode">light-mode</i>
+          <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'?' d-none':'');?>" data-tooltip="bottom" aria-label="Switch to Light Mode">light-mode</i>
         </button>
       </li>
       <li class="text-center" id="nav-accounts" aria-label="Account Settings">

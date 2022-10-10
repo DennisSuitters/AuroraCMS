@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -47,8 +47,8 @@
                 <?= isset($theme['title'])&&$theme['title']!=''?$theme['title']:'No Title Assigned';?><br>
                 <small>Version <?=$theme['version'];?> created by <?=(isset($theme['creator_url'])&&$theme['creator_url']!=''?'<a target="_blank" href="'.$theme['creator_url'].'">'.$theme['creator'].'</a>':$theme['creator']);?><br>
                 using the <?=(isset($theme['framework_url'])&&$theme['framework_url']!=''?'<a target="_blank" href="'.$theme['framework_url'].'">'.$theme['framework_name'].'</a>':$theme['framework_name']);?> CSS Framework</small>
+                <button class="theme-extra-info" data-fancybox data-type="ajax" data-src="core/theme-info.php?theme=<?=$folder;?>" data-tooltip="tooltip" aria-label="View Theme Changelog"><i class="i i-3x">info</i></button>
               </div>
-
             </article>
           <?php }?>
         </section>

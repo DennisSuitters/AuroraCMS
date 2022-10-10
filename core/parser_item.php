@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -475,7 +475,7 @@ if($skip==false){
         }
       }
     }else
-      $item=preg_replace(['~<service.*?>.*?<\/service>~is',($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')],'',$item,1);
+      $item=preg_replace(['~<service.*?>.*?<\/service>~is',($r['coming']==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/')],'',$item,1);
     $address=$edit=$contentQuantity='';
     $showCountdown=false;
     if(isset($r['contentType'])&&($r['contentType']=='events')){
@@ -527,7 +527,7 @@ if($skip==false){
       $item=preg_replace('~<coursemodules>.*?<\/coursemodules>~is','',$item);
 
     $itemQuantity='';
-    if($r['coming'][0]==1&&$r['contentType']=='inventory'){
+    if($r['coming']==1&&$r['contentType']=='inventory'){
       $itemQuantity='Coming Soon';
     }else{
       if(is_numeric($r['quantity'])){
@@ -536,7 +536,7 @@ if($skip==false){
     }
     if(isset($r['contentType'])&&($r['contentType']=='inventory'||$r['contentType']=='activities')){
       $item=preg_replace([
-        ($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
+        ($r['coming']==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
   			'/<print content=[\"\']?quantitycolor[\"\']?>/',
         '/<print content=[\"\']?quantity[\"\']?>/',
         '/<print content=[\"\']?stock[\"\']?>/',

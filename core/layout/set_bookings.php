@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -86,7 +86,7 @@
         <legend id="setBookingEmailTemplate" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#setBookingEmailTemplate" data-tooltip="tooltip" aria-label="PermaLink to Booking Email Template">&#128279;</a>':'';?>Email Layout</legend>
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#setBookingReadReceipt" data-tooltip="tooltip" aria-label="PermaLink to Booking Read Reciept Checkbox">&#128279;</a>':'';?>
-          <input id="setBookingReadReceipt" data-dbid="1" data-dbt="config" data-dbc="bookingEmailReadNotification" data-dbb="0" type="checkbox"<?=$config['bookingEmailReadNotification'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <input id="setBookingReadReceipt" data-dbid="1" data-dbt="config" data-dbc="bookingEmailReadNotification" data-dbb="0" type="checkbox"<?=$config['bookingEmailReadNotification']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="setBookingReadReceipt" id="configbookingEmailReadNotification01">Read Reciept</label>
         </div>
         <div id="bookingEmailSubject" class="form-row mt-3">

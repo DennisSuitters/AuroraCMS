@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.12
+* @version    0.2.19
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -133,7 +133,7 @@
             <legend>Filter Settings</legend>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFilterForms" data-tooltip="tooltip" aria-label="PermaLink to Preferences Filter Forms Checkbox">&#128279;</a>':'';?>
-              <input id="prefFilterForms" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0" type="checkbox"<?=$config['spamfilter'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <input id="prefFilterForms" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0" type="checkbox"<?=$config['spamfilter']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
               <label id="configspamfilter01" for="prefFilterForms">Filter Forms</label>
             </div>
             <label id="prefFormMinTime" for="formMinTime"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFormMinTime" data-tooltip="tooltip" aria-label="PermaLink to Preferences Form Minimum Time for Visitors to Fill in Form in Seconds">&#128279;</a>':'';?>Form Minimum Time</label>
@@ -226,7 +226,7 @@
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                   <tr id="l_<?=$r['id'];?>">
                     <td class="text-center align-middle">
-                      <input data-dbid="<?=$r['id'];?>" data-dbt="iplist" data-dbc="permanent" data-dbb="0" type="checkbox"<?=$r['permanent'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                      <input data-dbid="<?=$r['id'];?>" data-dbt="iplist" data-dbc="permanent" data-dbb="0" type="checkbox"<?=$r['permanent']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
                     </td>
                     <td class="text-center align-middle small"><?= date($config['dateFormat'],$r['ti']);?></td>
                     <td class="text-center align-middle small"><?= date($config['dateFormat'],$r['oti']);?></td>

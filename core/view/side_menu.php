@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,7 +49,7 @@ if(file_exists(THEME.'/side_menu.html')){
 		$sideCost='';
 		if($r['options'][0]==1){
 			if(is_numeric($r['cost'])&&$r['cost']!=0){
-				if($r['coming'][0]==1)$sideCost.='<div class="sold">Coming Soon</div>';
+				if($r['coming']==1)$sideCost.='<div class="sold">Coming Soon</div>';
 			}
 			if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order')
 				$r['quantity']=0;
@@ -94,7 +94,7 @@ if(file_exists(THEME.'/side_menu.html')){
 		$sideQuantity='';
 		$quantity='';
 		$sideTemp=preg_replace([
-			($r['coming'][0]==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
+			($r['coming']==1?'~<quantity>.*?<\/quantity>~is':'/<[\/]?quantity>/'),
 			'/<print content=[\"\']?quantity[\"\']?>/',
 			'/<print content=[\"\']?stock[\"\']?>/',
 			$r['itemCondition']!=''?'/<[\/]?condition>/':'~<condition>.*?<\/condition>~is',
@@ -195,7 +195,7 @@ if(file_exists(THEME.'/side_menu.html')){
 		if($r['contentType']=='inventory'||$r['contentType']=='course'&&is_numeric($r['cost'])){
 			if(stristr($sideTemp,'<inventory>')){
 				$sideTemp=preg_replace([
-					($r['coming'][0]==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/'),
+					($r['coming']==1?'~<inventory>.*?<\/inventory>~is':'/<[\/]?inventory>/'),
 					'~<service>.*?<\/service>~is'
 				],'',$sideTemp);
 			}elseif(stristr($sideTemp,'<inventory>')&&$r['contentType']!='inventory'||$r['contentType']!='course')
@@ -342,7 +342,7 @@ if(file_exists(THEME.'/side_menu.html')){
 			$contentType='';
 	}
 	$r=$db->query("SELECT * FROM `".$prefix."menu` WHERE `id`=17")->fetch(PDO::FETCH_ASSOC);
-	$sideTemp=preg_replace($r['active'][0]==1?'/<[\/]?newsletters>/':'/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
+	$sideTemp=preg_replace($r['active']==1?'/<[\/]?newsletters>/':'/<newsletters>([\w\W]*?)<\/newsletters>/','',$sideTemp,1);
 	preg_match('/<items>([\w\W]*?)<\/items>/',$outside,$matches);
 	$insides=isset($matches[1])?$matches[1]:'';
 	if(isset($sidecat)&&$sidecat!=''){

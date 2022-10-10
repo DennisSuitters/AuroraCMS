@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -36,7 +36,7 @@
         <legend id="contactForm" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#contactForm" data-tooltip="tooltip" aria-label="PermaLink to Contact Form Section">&#128279;</a>':'';?>Contact Form</legend>
         <div class="row">
           <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#storeMessages" data-tooltip="tooltip" aria-label="PermaLink to Enable Store Messages Checkbox">&#128279;</a>':'';?>
-          <input id="storeMessages" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?=$config['storemessages'][0]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+          <input id="storeMessages" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?=$config['storemessages']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
           <label for="storeMessages" id="configstoremessages01">Store Contact Form Messages</label>
         </div>
         <div class="form-row mt-3">

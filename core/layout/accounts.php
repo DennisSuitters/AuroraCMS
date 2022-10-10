@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -73,13 +73,13 @@ else{
                 else echo ADMINNOAVATAR;?>" alt="<?=$r['username'];?>"></a>
                 <?='<span class="status badger badge-'.rank($r['rank']).'" id="accountrank'.$r['id'].'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span>';?>
                 <div class="image-toolbar">
-                  <?=$r['active'][0]==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
+                  <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
                 </div>
               </div>
               <div class="card-header overflow-visible pt-2 line-clamp">
                 <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><?=$r['username'].':'.$r['name'];?></a><br>
                 <small class="text-muted"><small><?= _agologgedin($r['lti']);?></small></small>
-                <?=$r['active'][0]==1?'<br><span class="badger badge-success">Active</span>':'<br><span class="badger badge-dark">Inactive</span>';?>
+                <?=$r['active']==1?'<br><span class="badger badge-success">Active</span>':'<br><span class="badger badge-dark">Inactive</span>';?>
               </div>
               <div class="card-footer">
                 <div id="controls_<?=$r['id'];?>">

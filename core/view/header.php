@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.8
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -51,6 +51,7 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	$html=preg_replace([
 		$user['rank']>399?'/<[\/]?accountmenu>/':'/<[\/]?accountmenu>/',
 		$user['rank']>399?'/<[\/]?administration>/':'~<administration>.*?<\/administration>~is',
+		'/<seolook>/',
 		'/<print administrationLink>/',
 		'/<print user=[\"\']?name[\"\']?>/',
 		'/<print user=[\"\']?cssrank[\"\']?>/',
@@ -61,13 +62,14 @@ if(isset($_SESSION['rank'])&&$_SESSION['rank']>0){
 	],[
 		'',
 		'',
+		$user['rank']>899?'<div class="seolook-toggle" onclick="head.classList.toggle(`seo-in`);">View Meta-Tags</div>':'',
 		URL.$settings['system']['admin'].'/',
 		str_replace(' ','-',$user['name']),
 		rank($user['rank']),
 		($user['points']>0?' | '.number_format((float)$user['points']).' Points Earned':''),
 		($user['name']!=''?$user['name']:$user['username']).' ('.ucwords(str_replace('-',' ',rank($user['rank']))).')',
 		$_SERVER['REQUEST_URI'],
-		$user['rank']<301?($config['iconsColor'][0]==1&&$user['address']==''||$user['suburb']==''||$user['city']==''||$user['country']==''||$user['state']==''||$user['postcode']==0?'<div class="alert alert-info m-0">There is missing Address Information that is required for calculating Shipping Costs, and Destination. Please go to your <a href="'.URL.'settings#address">Settings</a> to update the information.</div>':''):''
+		$user['rank']<301?($config['iconsColor']==1&&$user['address']==''||$user['suburb']==''||$user['city']==''||$user['country']==''||$user['state']==''||$user['postcode']==0?'<div class="alert alert-info m-0">There is missing Address Information that is required for calculating Shipping Costs, and Destination. Please go to your <a href="'.URL.'settings#address">Settings</a> to update the information.</div>':''):''
 	],$html);
 }else{
 	$html=preg_replace([

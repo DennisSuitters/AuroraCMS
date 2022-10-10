@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.19
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -267,6 +267,8 @@ $b=filter_input(INPUT_GET,'b',FILTER_UNSAFE_RAW);
 $s=$db->prepare("SELECT *, MAX(`ti`) AS `cti`, COUNT(`ip`) AS `v` FROM `".$prefix."tracker` GROUP BY `ip` ORDER BY `cti` DESC LIMIT $c,20");
 $s->execute();
 $c=$c+$c;
+$trackercnt=$s->rowCount();
+$cnt=$s->rowCount();
 if($s->rowCount()>0){
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
 		if($r['countryName']==''){
@@ -359,6 +361,7 @@ if($config['php_options'][0]==1){
 			'</td>'.
 		'</tr>';
   }
+	if($cnt>19&&$b==''){
       echo'<tr id="more_'.$c.'">'.
             '<td colspan="9">'.
               '<div class="form-row load-more justify-content-center">'.
@@ -366,4 +369,5 @@ if($config['php_options'][0]==1){
               '</div>'.
             '</td>'.
           '</tr>';
+	}
 }else echo'nomore';

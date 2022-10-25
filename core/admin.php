@@ -59,6 +59,7 @@ if($_SESSION['rank']>399){
   if($view=='add'){
     if($args[0]=='bookings')require'core/layout/bookings.php';
     elseif($args[0]=='course')require'core/layout/course.php';
+    elseif($args[0]=='adverts')require'core/layout/adverts.php';
     else require'core/layout/content.php';
   }else require'core/layout/'.$view.'.php';
   require'core/layout/meta_footer.php';

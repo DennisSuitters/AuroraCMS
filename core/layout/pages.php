@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -78,6 +78,31 @@ else{
 }?>
                   </td>
                   <td class="align-top">
+<?php               $seoerrors=0;
+              if(strlen($r['seoTitle'])<50){
+                $seoerrors++;
+              }elseif(strlen($r['seoTitle'])>70){
+                $seoerrors++;
+              }
+              if(strlen($r['seoDescription'])<1){
+                $seoerrors++;
+              }elseif(strlen($r['seoDescription'])>70){
+                $seoerrors++;
+              }
+              if($r['cover']!=''&&strlen($r['fileALT'])<1){
+                $seoerrors++;
+              }
+              if(strlen(strip_tags($r['notes']))<100){
+                $seoerrors++;
+              }
+              preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+              if(isset($h1[1])){
+                $seoerrors++;
+              }
+              if($r['heading']==''){
+                $seoerrors++;
+              }
+              echo$seoerrors>0?'<div class="alert alert-warning m-0 p-1 small text-black">There are '.$seoerrors.' things that could affect the SEO of this page!!!</div>':'';?>
                     <a href="<?= URL.$settings['system']['admin'].'/pages/edit/'.$r['id'];?>"><?=$r['title'];?></a>
                     <?php if($user['options'][1]==1){
                       $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:id");

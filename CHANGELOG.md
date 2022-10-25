@@ -1,11 +1,13 @@
-### v0.2.19
-- Fix bitwise toggling issue for entries with only 1 offset value.
-- Fix error of Administration theme mode throwing error if cookie not set.
-- Add User details check for set values in parser_items.php Line 404.
-- Adjust script loading to be async within the head area.
-- Add Meta-Tag viewer for Administrators to enable checking information on content pages.
-- Fix media display size in pages and content, and add webp format.
-- Refine Visitor Tracker viewer to load visitors after page loaded to show activity.
-- Fix Administration Tooltips.
-- Update Summernote and Plugins.
-- Add button to view Theme Changelog.
+### v0.2.20
+- Fix Canonical URL for pages.
+- Adjust page parser to include elements encoded with entities.
+- Fix Product Schema missing comma and priceValidUntil.
+- Improve CSS Styling.
+- Add SEO Warnings for various content with highlights.
+- Fix some styling in Administration.
+- Allow all Reviews to display in Administration Reviews Page.
+- Add Template Parser and Administration Editing for Advertisements.
+- Add Impressions Count.
+- Add Click Count.
+- Add Cost for monetising Advertisements.
+- Add Date restriction for start and end of Impressions.

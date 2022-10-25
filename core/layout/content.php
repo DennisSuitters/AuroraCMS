@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -77,7 +77,7 @@ else{
           $getStatus=" ";
         }else$getStatus=" AND `status`!='archived'";
         if(isset($args[2])&&$args[2]=='cat'){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute([
             ':category_1'=>isset($args[3])&&$args[3]!=''?'%'.str_replace('-','%',$args[3]).'%':'%',
             ':category_2'=>isset($args[4])&&$args[4]!=''?'%'.str_replace('-','%',$args[4]).'%':'%',
@@ -93,7 +93,7 @@ else{
               $eventsort='`pin` DESC, `ti` DESC, `title` ASC';
             $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ".$getStatus."ORDER BY ".$eventsort);
           }else{
-            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           }
           $s->execute([':contentType'=>$args[1]]);
         }
@@ -103,11 +103,11 @@ else{
           $getStatus=" ";
         else
           $getStatus=" AND `status`='".$args[1]."' ";
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
         $s->execute([':contentType'=>$view]);
       }else{
         if(isset($args[5])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
@@ -115,25 +115,25 @@ else{
             ':category_4'=>str_replace('-',' ',strtolower($args[5]))
           ]);
         }elseif(isset($args[4])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
             ':category_3'=>str_replace('-',' ',strtolower($args[4]))
           ]);
         }elseif(isset($args[3])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3]))
           ]);
         }elseif(isset($args[2])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` ASC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` ASC, `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2]))
           ]);
         }else{
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           $s->execute();
         }
       }?>
@@ -274,7 +274,29 @@ else{
                   'contentType'=>$r['contentType']
                 ]);
                 $sccc=$scc->rowCount();
-              }?>
+              }
+              $seoerrors=0;
+              if(strlen($r['seoTitle'])<50){
+                $seoerrors++;
+              }elseif(strlen($r['seoTitle'])>70){
+                $seoerrors++;
+              }
+              if(strlen($r['seoDescription'])<1){
+                $seoerrors++;
+              }elseif(strlen($r['seoDescription'])>70){
+                $seoerrors++;
+              }
+              if($r['file']!=''&&strlen($r['fileALT'])<1){
+                $seoerrors++;
+              }
+              if(strlen(strip_tags($r['notes']))<100){
+                $seoerrors++;
+              }
+              preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+              if(isset($h1[1])){
+                $seoerrors++;
+              }
+              ?>
               <article class="card mx-2 mt-3 mb-0 overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
                 <div class="card-image overflow-visible">
                   <?php if($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb'])))
@@ -328,16 +350,17 @@ else{
                       $sp=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
                       $sp->execute([':id'=>$r['uid']]);
                       $sr=$sp->fetch(PDO::FETCH_ASSOC);?>
-                  <div class="small">Belongs to <a href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" data-tooltip="tooltip" aria-label="View Proofs"><?=$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
+                      <div class="small">Belongs to <a href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" data-tooltip="tooltip" aria-label="View Proofs"><?=$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
                     <?php }
                   }
-                  echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+                  echo$seoerrors>0?'<div class="alert alert-warning m-2 p-1 small text-black">There are '.$seoerrors.' things that could affect the SEO of this content!!!</div>':'';?>
+                  <?='<small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
                 </div>
                 <div class="card-footer">
                   <span class="code hidewhenempty"><?=$r['code'];?></span>
-                  <span class="reviews hidewhenempty"><?php echo$rr['num']>0?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a>':'';?></span>
+                  <span class="reviews hidewhenempty"><?php echo$rr['num']>0?'<a class="btn" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a>':'';?></span>
                   <span class="comments hidewhenempty"><?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a>':'');?></span>
-                  <?=$r['views']>0?'<button class="btn views trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'';?>
+                  <?=$r['views']>0?'<button class="btn views" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'';?>
                   <div id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar">
                       <div class="btn-group" role="group">

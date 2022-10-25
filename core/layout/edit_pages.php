@@ -7,13 +7,61 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `id`=:id");
 $s->execute([':id'=>$args[1]]);
-$r=$s->fetch(PDO::FETCH_ASSOC);?>
+$r=$s->fetch(PDO::FETCH_ASSOC);
+$seo=[
+  'heading' => '',
+  'seoTitle' => '',
+  'seoDescription' => '',
+  'fileALT' => '',
+  'notes' => ''
+];
+$seoerrors=0;
+if($r['seoTitle']==''){
+  $seoerrors++;
+  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+}elseif(strlen($r['seoTitle'])<50){
+  $seoerrors++;
+  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+}elseif(strlen($r['seoTitle'])>70){
+  $seoerrors++;
+  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+}
+if($r['seoDescription']==''){
+  $seoerrors++;
+  $seo['seoDescription'] = '<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
+}elseif(strlen($r['seoDescription'])<1){
+  $seoerrors++;
+  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty!';
+}elseif(strlen($r['seoDescription'])>160){
+  $seoerrors++;
+  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+}
+if($r['cover']!=''&&strlen($r['fileALT'])<1){
+  $seoerrors++;
+  $seo['fileALT'] = '<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
+}
+if(strip_tags($r['notes'])==''){
+  $seoerrors++;
+  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
+}elseif(strlen(strip_tags($r['notes']))<100){
+  $seoerrors++;
+  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
+}
+preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+if(isset($h1[1])){
+  $seoerrors++;
+  $seo['notesHeading'] = '<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Heading</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+}
+if($r['heading']==''){
+  $seoerrors++;
+  $seo['heading'] = '<br>The <strong><a href="javascript:seoLink(`heading`,`tab1-1`);">Heading</a></strong> Field is empty, this is what is used for your H1 heading!';
+}?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid p-0">
@@ -47,6 +95,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
         </div>
         <div class="tabs" role="tablist">
+          <?=$seoerrors>0?'<div class="alert alert-warning">There are '.$seoerrors.' things that could affect the SEO of this page!!! (Each item is highlighted.)'.
+            $seo['heading'].
+            $seo['notesHeading'].
+            $seo['notes'].
+            $seo['fileALT'].
+            $seo['seoTitle'].
+            $seo['seoDescription'].
+          '</div>':'';?>
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
           <?=$r['file']!='offline'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>':'';?>
@@ -91,7 +147,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <label id="pageHeading" for="heading"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageHeading" data-tooltip="tooltip" aria-label="PermaLink to Page Heading Field">&#128279;</a>':'';?>Page&nbsp;Heading</label>
               <small class="form-text text-right">This text is normally used in the &lt;h1&gt; heading tag. If left empty, the SEO Meta Title will be used, otherwise an auto-generated text will be used.</small>
             </div>
-            <div class="form-row">
+            <?=$seo['heading']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['heading'],'<strong>').'</div>':'';?>
+            <div class="form-row<?=$seo['heading']!=''?' border-danger border-2 border-top-0':'';?>">
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
                 $ss->execute([
@@ -116,7 +173,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
 <?php }?>
-            <div class="row mt-3" id="pageNotes">
+            <div class="row mt-3<?=$seo['notes']!=''||$seo['notesHeading']!=''?' border-danger border-2':'';?>" id="pageNotes">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" data-tooltip="tooltip" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'';?>
               <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
@@ -137,6 +194,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
                   '</div>'.
                 '</div>';?>
+                <?=$seo['notes']!=''?'<div class="alert alert-warning m-0">'.strip_tags($seo['notes'],'<strong>').'</div>':'';?>
                 <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
                 <form id="summernote" method="post" target="sp" action="core/update.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -183,7 +241,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
               <label id="pageImageALT" for="fileALT"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageImageALT" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image ALT Field">&#128279;</a>':'';?>Image ALT</label>
-              <div class="form-row">
+              <?=$seo['fileALT']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['fileALT'],'<strong>').'</div>':'';?>
+              <div class="form-row<?=$r['cover']!=''&&$seo['fileALT']!=''?' border-danger border-2 border-top-0':'';?>">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
                 <input class="textinput" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Image ALT Test..."':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-dbid="fileALT" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -382,7 +441,7 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
             <div class="card google-result mt-3 p-3 overflow-visible" id="pageSearchResult">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageSearchResult" data-tooltip="tooltip" aria-label="PermaLink to Page Search Result">&#128279;</a>':'';?>
               <div id="google-title" data-tooltip="tooltip" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
-                <?=$r['seoTitle'].' | '.$config['business'];?>
+                <?=$r['seoTitle'];?>
               </div>
               <div id="google-link">
                 <?= URL;?>
@@ -393,16 +452,12 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
             </div>
             <div class="form-row mt-3">
               <label id="pageMetaTitle" for="seoTitle"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaTitle" data-tooltip="tooltip" aria-label="PermaLink to Page Meta Title Field">&#128279;</a>':'';?>Meta&nbsp;Title</label>
-              <small class="form-text text-right">The recommended character count for Title's is 65.</small>
+              <small class="form-text text-right">The recommended character count for Titles is a minimum of 50 and maximum of 70.</small>
             </div>
-            <div class="form-row">
+            <?=$seo['seoTitle']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoTitle'],'<strong>').'</div>':'';?>
+            <div class="form-row<?=$seo['seoTitle']!=''?' border-danger border-2 border-top-0':'';?>">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
-              <?php $cntc=65-strlen($r['seoTitle']);
-              if($cntc<0){
-                $cnt=abs($cntc);
-                $cnt=number_format($cnt)*-1;
-              }else$cnt=number_format($cntc);?>
-              <div class="input-text text-success<?=$cnt<0?' text-danger':'';?>" id="seoTitlecnt"><?=$cnt;?></div>
+              <div id="seoTitlecnt" class="input-text text-success<?= strlen($r['seoTitle'])<1||strlen($r['seoTitle'])>65?' text-danger':'';?>"><?= strlen($r['seoTitle']);?></div>
               <?php if($user['options'][1]==1){
                 echo'<button onclick="removeStopWords(`seoTitle`,$(`#seoTitle`).val());" data-tooltip="tooltip" aria-label="Remove Stop Words"><i class="i">magic</i></button>';
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -444,16 +499,12 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
 */ ?>
             <div class="form-row mt-3">
               <label id="pageMetaDescription" for="seoDescription"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageMetaDescription" data-tooltip="tooltip" aria-label="PermaLink to Page Meta Description Field">&#128279;</a>':'';?>Meta&nbsp;Description</label>
-              <small class="form-text text-right">The recommended character count for Descriptions is 230.</small>
+              <small class="form-text text-right">The recommended character count for Descriptions is a minimum of 50 and a maximum of 160.</small>
             </div>
-            <div class="form-row">
+            <?=$seo['seoDescription']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoDescription'],'<strong>').'</div>':'';?>
+            <div class="form-row<?=$seo['seoDescription']!=''?' border-danger border-2 border-top-0':'';?>">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><i class="i">seo</i></button>
-              <?php $cntc=230-strlen($r['seoDescription']);
-              if($cntc<0){
-                $cnt=abs($cntc);
-                $cnt=number_format($cnt)*-1;
-              }else$cnt=number_format($cntc);?>
-              <div class="input-text text-success<?=$cnt<0?' text-danger':'';?>" id="seoDescriptioncnt"><?=$cnt;?></div>
+              <div id="seoDescriptioncnt" class="input-text text-success<?= strlen($r['seoDescription'])<50||strlen($r['seoDescription'])>160?' text-danger':'';?>"><?= strlen($r['seoDescription']);?></div>
               <?php if($user['options'][1]==1){
                 $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
                 $ss->execute([

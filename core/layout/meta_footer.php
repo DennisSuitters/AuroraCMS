@@ -70,19 +70,20 @@
   <?php }?>
   $('#seoTitle').keyup(function(){
   	var length=$(this).val().length;
-  	var max=65;
-  	var length=max-length;
+  	var max=70;
   	$("#seoTitlecnt").text(length);
     $('#google-title').text($(this).val());
-  	if(length<0){
+  	if(length<50){
   		$("#seoTitlecnt").addClass('text-danger');
-  	}else{
+  	}else if(length>max){
+      $("#seoTitlecnt").addClass('text-danger');
+    }else{
   		$("#seoTitlecnt").removeClass('text-danger');
   	}
   });
   $('#seoCaption').keyup(function(){
   	var length=$(this).val().length;
-  	var max=230;
+  	var max=160;
   	var length=max-length;
   	$("#seoCaptioncnt").text(length);
   	if(length<0){
@@ -93,15 +94,16 @@
   });
   $('#seoDescription').keyup(function(){
   	var length=$(this).val().length;
-  	var max=230;
-  	var length=max-length;
+  	var max=160;
   	$("#seoDescriptioncnt").text(length);
     $('#google-description').text($(this).val());
-  	if(length<0){
+  	if(length<50){
+  		$("#seoDescriptioncnt").addClass('text-danger');
+  	}else if(length>max){
   		$("#seoDescriptioncnt").addClass('text-danger');
   	}else{
-  		$("#seoDescriptioncnt").removeClass('text-danger');
-  	}
+      $("#seoDescriptioncnt").removeClass('text-danger');
+    }
   });
   $('.save').click(function(e){
 	 	e.preventDefault();

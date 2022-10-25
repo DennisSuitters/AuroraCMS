@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -115,6 +115,7 @@ foreach($tag as$tag1){
 }
 $contentTime=(!isset($contentTime)?((isset($page['eti'])&&$page['eti'])>(isset($config['ti'])&&$config['ti'])?$page['eti']:$config['ti']):$contentTime);
 if(!isset($canonical)||$canonical=='')$canonical=($view=='index'?URL:URL.$view.'/');
+if($view=='page')$canonical.=str_replace(' ','-',$page['title']);
 if($seoTitle==''){
   if($page['seoTitle']=='')$seoTitle=$page['title'];
   else$seoTitle=$page['seoTitle'];

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -391,6 +391,10 @@ class admin{
 		$view='add';
 		require'admin.php';
 	}
+	function adverts($args=false){
+		$view='adverts';
+		require'admin.php';
+	}
 	function bookings($args=false){
 		$view='bookings';
 		require'admin.php';
@@ -674,6 +678,7 @@ $routes=[
   $settings['system']['admin'].'/add'=>['admin','add'],
 	$settings['system']['admin'].'/accounts'=>['admin','accounts'],
 	$settings['system']['admin'].'/activity'=>['admin','activity'],
+	$settings['system']['admin'].'/adverts'=>['admin','adverts'],
 	$settings['system']['admin'].'/bookings'=>['admin','bookings'],
 	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
 	$settings['system']['admin'].'/comments'=>['admin','comments'],

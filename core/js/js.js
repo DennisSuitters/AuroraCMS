@@ -29,6 +29,13 @@ document.addEventListener("click",function(event){
     }
   }
 });
+function trackAdClick(id){
+  fetch("core/trackad.php",{
+    method:"POST",
+    headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
+    body:'id='+id
+  });
+}
 document.addEventListener("submit",function(event){
 	if(event.target.closest('.auroraForm')){
     event.preventDefault();
@@ -297,3 +304,7 @@ document.addEventListener("DOMContentLoaded",function(event){
     }
   }
 });
+function showAdInfo(el){
+  var adEl=document.getElementById(el);
+  adEl.style.display=adEl.style.display==='none'?'block':'none';
+}

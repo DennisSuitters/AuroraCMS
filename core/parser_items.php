@@ -343,7 +343,7 @@ if(stristr($html,'<items')){
 		}else{
 			$items=$item;
 		}
-		if($view=='search'&&$r['contentType']=='testimonials'||$r['contentType']=='proofs')continue;
+		if($view=='search'&&$r['contentType']=='testimonials'||$r['contentType']=='proofs'||$r['contentType']=='advert')continue;
 		$sr=$db->prepare("SELECT `active` FROM `".$prefix."menu` WHERE `contentType`=:contentType");
 		$sr->execute([':contentType'=>$r['contentType']]);
 		$pr=$sr->fetch(PDO::FETCH_ASSOC);

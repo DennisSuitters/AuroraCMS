@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.webp)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.19
+Current version is v0.2.20
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -144,6 +144,12 @@ Current version is v0.2.19
 - Content Widgets, that can be enabled/disabled.
   - Text Analysis, uses the Hemmingway Javascript implementation to analyse text and gives ratings.
   - SEO Content Help, links to handy tools for writing content, or to get inspiration.
+- Advertisements.
+  - Home page for Horizontal Banners, Side Menu for Vertical Banners.
+  - Add Cost so Advertisements can be monetised and added to Orders.
+  - Count Impressions of times Advertisement has been displayed.
+  - Count Clicks.
+  - Date restriction for start displaying advertisements, and end date.
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
   - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
   - [summernote-checkbox](https://github.com/DiemenDesign/summernote-checkbox)

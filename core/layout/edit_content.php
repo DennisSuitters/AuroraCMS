@@ -7,11 +7,55 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$r=$s->fetch(PDO::FETCH_ASSOC);?>
+$r=$s->fetch(PDO::FETCH_ASSOC);
+$seo=[
+  'seoTitle' => '',
+  'seoDescription' => '',
+  'fileALT' => '',
+  'notes' => '',
+  'notesHeading' => ''
+];
+$seoerrors=0;
+if($r['seoTitle']==''){
+  $seoerrors++;
+  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+}elseif(strlen($r['seoTitle'])<50){
+  $seoerrors++;
+  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+}elseif(strlen($r['seotitle'])>70){
+  $seoerrors++;
+  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+}
+if($r['seoDescription']==''){
+  $seoerrors++;
+  $seo['seoDescription'] = '<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
+}elseif(strlen($r['seoDescription'])<1){
+  $seoerrors++;
+  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty!';
+}elseif(strlen($r['seoDescription'])>160){
+  $seoerrors++;
+  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+}
+if(strlen($r['fileALT'])<1){
+  $seoerrors++;
+  $seo['fileALT'] = '<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
+}
+if(strip_tags($r['notes'])==''){
+  $seoerrors++;
+  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
+}elseif(strlen(strip_tags($r['notes']))<100){
+  $seoerrors++;
+  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
+}
+preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+if(isset($h1[1])){
+  $seoerrors++;
+  $seo['notesHeading'] = '<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+}?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid p-2">
@@ -40,6 +84,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
           <div class="tabs" role="tablist">
+            <?=$seoerrors>0?'<div class="alert alert-warning">There are '.$seoerrors.' things that could affect the SEO of this content!!! (Each item is highlighted.)'.
+              $seo['heading'].
+              $seo['notesHeading'].
+              $seo['notes'].
+              $seo['fileALT'].
+              $seo['seoTitle'].
+              $seo['seoDescription'].
+            '</div>':'';?>
             <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
             <label for="tab1-1">Content</label>
             <input class="tab-control" id="tab1-2" name="tabs" type="radio">
@@ -49,7 +101,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?=($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'');?>
             <?=($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'');?>
             <?=($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'');?>
-            <?=($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8">SEO</label>':'');?>
+            <?=($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8" id="seo">SEO</label>':'');?>
             <input class="tab-control" id="tab1-9" name="tabs" type="radio">
             <label for="tab1-9">Settings</label>
             <?=($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'');?>
@@ -640,7 +692,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
             <?php }?>
-            <div class="row mt-3">
+            <div class="row mt-3<?=$seo['notes']!=''||$seo['notesHeading']!=''?' border-danger border-2':'';?>">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#summernote" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Notes">&#128279;</a>':'';?>
               <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
@@ -661,6 +713,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button>'.
                   '</div>'.
                 '</div>';?>
+                <?=$seo['notes']!=''?'<div class="alert alert-warning m-0">'.strip_tags($seo['notes'],'<strong>').'</div>':'';?>
                 <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
                 <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -736,7 +789,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               '<button class="save" id="savethumb" data-dbid="thumb" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
             <label id="<?=$r['contentType'];?>ImageALT" for="fileALT"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ImageALT" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Alt Field">&#128279;</a>':'';?>Image ALT</label>
-            <div class="form-row">
+            <?=$seo['fileALT']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['fileALT'],'<strong>').'</div>':'';?>
+            <div class="form-row<?=$r['file']!=''&&$seo['fileALT']!=''?' border-danger border-2 border-top-0':'';?>">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
               <input class="textinput" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
               <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in"><i class="i">save</i></button>':'';?>
@@ -888,7 +942,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 <?php }?>
                 <div class="form-row">
-                  <input class="border" style="opacity:1;" id="downloadfu" name="fu" type="file" placeholder="Select File from your computer to upload..." onchange="$(`#downloadfile`).val($(this).val());">
+                  <input class="field" style="opacity:1;" id="downloadfu" name="fu" type="file" placeholder="Select File from your computer to upload..." onchange="$(`#downloadfile`).val($(this).val());">
                   <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
                 </div>
               </form>
@@ -977,7 +1031,7 @@ if($sd->rowCount()>0){
                 </div>
               <?php }?>
               <div class="form-row">
-                <input class="border" style="opacity:1;" id="downloadfu" name="l" type="text" placeholder="Enter Link to Service/Content...">
+                <input class="field" style="opacity:1;" id="downloadfu" name="l" type="text" placeholder="Enter Link to Service/Content...">
                 <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
               </div>
             </form>
@@ -1212,25 +1266,26 @@ if($sd->rowCount()>0){
             if($sr->rowCount()>0){
               while($rr=$sr->fetch(PDO::FETCH_ASSOC)){?>
                 <div class="media<?=$rr['status']=='unapproved'?' danger':'';?>" id="l_<?=$rr['id'];?>">
-                  <div class="media-body well p-1 p-sm-3 border-top border-dark">
+                  <div class="media-body well p-1 m-0">
                     <?php if($user['options'][1]==1){?>
                       <div class="btn-group float-right" id="controls-<?=$rr['id'];?>" role="group">
                         <button class="<?=$rr['status']=='approved'?' hidden':'';?>" id="approve_<?=$rr['id'];?>" onclick="update('<?=$rr['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>
                         <button class="trash" onclick="purge('<?=$rr['id'];?>','comments');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
                       </div>
                     <?php }?>
-                    <h6 class="media-heading">
-                      <span class="rating d-block d-sm-inline-block">
-                        <span<?=$rr['cid']>=1?' class="set"':'';?>></span>
-                        <span<?=$rr['cid']>=2?' class="set"':'';?>></span>
-                        <span<?=$rr['cid']>=3?' class="set"':'';?>></span>
-                        <span<?=$rr['cid']>=4?' class="set"':'';?>></span>
-                        <span<?=$rr['cid']==5?' class="set"':'';?>></span>
-                      </span>
-                      <?=$rr['name']==''?'Anonymous':$rr['name'].' &lt;'.$rr['email'].'&gt; on '.date($config['dateFormat'],$rr['ti']);?>
+                    <span class="rating d-block d-sm-inline-block">
+                      <span<?=$rr['cid']>=1?' class="set"':'';?>></span>
+                      <span<?=$rr['cid']>=2?' class="set"':'';?>></span>
+                      <span<?=$rr['cid']>=3?' class="set"':'';?>></span>
+                      <span<?=$rr['cid']>=4?' class="set"':'';?>></span>
+                      <span<?=$rr['cid']==5?' class="set"':'';?>></span>
+                    </span>
+                    <h6 class="media-heading m-0"><?=($rr['name']==''?'Anonymous':$rr['name']);?>
                     </h6>
-                    <p><?=$rr['notes'];?></p>
+                    <div class="small text-muted ml-2"><?='&lt;'.$rr['email'].'&gt; on '.date($config['dateFormat'],$rr['ti']);?></div>
+                    <p class="small m-0 ml-2 p-0"><?=$rr['notes'];?></p>
                   </div>
+                  <hr class="m-0 p-0">
                 </div>
               <?php }
             }?>
@@ -1323,7 +1378,7 @@ if($sd->rowCount()>0){
             <div class="card google-result mt-3 p-3 overflow-visible" id="<?=$r['contentType'];?>SearchResult">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SearchResult" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Search Result Example">&#128279;</a>':'';?>
               <div id="google-title" data-tooltip="tooltip" aria-label="This is the underlined clickable link in search results and comes from the text that is displayed in the Tab in the Browser. If the Meta Title is empty below the information is then tried to be used from the Pages Meta Title, if that is empty then an auto-generated text will be used from the text in the Title, the content type, and Business Name, otherwise this text is made up from Meta Title, content type, and business name.">
-                <?=($r['seoTitle']!=''?$r['seoTitle']:$r['title']).' | '.$config['business'];?>
+                <?=($r['seoTitle']!=''?$r['seoTitle']:$r['title']);?>
               </div>
               <div id="google-link">
                 <?= URL.$r['contentType'].'/'.$r['urlSlug'];?>
@@ -1337,19 +1392,12 @@ if($sd->rowCount()>0){
             </div>
             <div class="form-row mt-3">
               <label id="<?=$r['contentType'];?>SEOTitle" for="seoTitle"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SEOTitle" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Title Field">&#128279;</a>':'';?>Meta&nbsp;Title</label>
-              <small class="form-text text-right">The recommended character count for Title\'s is 65.</small>
+              <small class="form-text text-right">The recommended character count for Titles is a minimum of 50 and maximum of 70.</small>
             </div>
-            <div class="form-row">
+            <?=$seo['seoTitle']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoTitle'],'<strong>').'</div>':'';?>
+            <div class="form-row<?=$seo['seoTitle']!=''?' border-danger border-2 border-top-0':'';?>">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
-              <?php $cntc=65-strlen($r['seoTitle']);
-              if($cntc<0){
-                $cnt=abs($cntc);
-                $cnt=number_format($cnt)*-1;
-              }else
-                $cnt=number_format($cntc);?>
-              <div class="input-text">
-                <span class="text-success<?=$cnt<0?' text-danger':'';?>" id="seoTitlecnt"><?=$cnt;?></span>
-              </div>
+              <div id="seoTitlecnt" class="input-text text-success<?= strlen($r['seoTitle'])<1||strlen($r['seoTitle'])>65?' text-danger':'';?>"><?= strlen($r['seoTitle']);?></div>
               <?php if($user['options'][1]==1){?>
                 <button data-tooltip="tooltip" aria-label="Remove Stop Words" onclick="removeStopWords('seoTitle',$('#seoTitle').val());"><i class="i">magic</i></button>
                 <?php if($r['suggestions']==1){
@@ -1401,19 +1449,12 @@ if($sd->rowCount()>0){
 */ ?>
             <div class="form-row mt-3">
               <label id="<?=$r['contentType'];?>SEODescription" for="seoDescription"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'SEODescription" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Meta Description Field">&#128279;</a>':'';?>Meta&nbsp;Description</label>
-              <small class="form-text text-right">The recommended character count for Descriptions is 230.</small>
+              <small class="form-text text-right">The recommended character count for Descriptions is a minimum of 50 and a maximum of 160.</small>
             </div>
-            <div class="form-row">
+            <?=$seo['seoDescription']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoDescription'],'<strong>').'</div>':'';?>
+            <div class="form-row<?=$seo['seoDescription']!=''?' border-danger border-2 border-top-0':'';?>">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><i class="i">seo</i></button>
-              <?php $cntc=230-strlen($r['seoDescription']);
-              if($cntc<0){
-                $cnt=abs($cntc);
-                $cnt=number_format($cnt)*-1;
-              }else
-                $cnt=number_format($cntc);?>
-              <div class="input-text">
-                <span class="text-success<?=$cnt<0?' text-danger':'';?>" id="seoDescriptioncnt"><?=$cnt;?></span>
-              </div>
+              <div id="seoDescriptioncnt" class="input-text text-success<?= strlen($r['seoDescription'])<50||strlen($r['seoDescription'])>160?' text-danger':'';?>"><?= strlen($r['seoDescription']);?></div>
               <?php if($user['options'][1]==1){
                 if($r['suggestions']==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -1735,7 +1776,7 @@ if($sd->rowCount()>0){
 <?php if($r['contentType']!='testimonials'){?>
           <div class="tab1-11 border-top p-4" data-tabid="tab1-11" role="tabpanel">
             <section class="content overflow-visible theme-chooser" id="templates">
-              <article class="card overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
+              <article class="card col-12 col-sm-3 m-2 overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
                 <figure class="card-image">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none"></svg>
                   <div class="image-toolbar overflow-visible">
@@ -1752,7 +1793,7 @@ if($sd->rowCount()>0){
 <?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
 $st->execute();
 while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
-              <article class="card overflow-visible theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
+              <article class="card col-12 col-sm-3 m-2 overflow-visible theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
                 <figure class="card-image position-relative overflow-visible">
                   <?=$rt['image'];?>
                   <div class="image-toolbar overflow-visible">

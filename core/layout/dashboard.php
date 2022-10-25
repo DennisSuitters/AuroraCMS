@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.20
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,7 +31,64 @@ else{?>
         if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
         $tid=$ti-2592000;
         if($config['business']=='')echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
-        if($config['email']=='')echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';?>
+        if($config['email']=='')echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
+$pageerrors=$contenterrors=0;
+
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE `cover`!='' AND `fileALT`='' AND `active`=1");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$pageerrors=$pageerrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$pageerrors=$pageerrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$pageerrors=$pageerrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE `heading`=''");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$pageerrors=$pageerrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT `notes` FROM `".$prefix."menu` WHERE `notes`!=''");
+$sseo->execute();
+while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
+  if(strlen(strip_tags($rseo['notes']))<100)$pageerrors++;
+  preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
+  if(isset($h1[1])){
+    $pageerrors++;
+  }
+}
+
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE `file`!='' AND `fileALT`=''");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$contenterrors=$contenterrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$contenterrors=$contenterrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160");
+$sseo->execute();
+$rseo=$sseo->fetch(PDO::FETCH_ASSOC);
+$contenterrors=$contenterrors+$rseo['cnt'];
+$sseo=$db->prepare("SELECT `notes` FROM `".$prefix."content` WHERE `notes`!=''");
+$sseo->execute();
+while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
+  if(strlen(strip_tags($rseo['notes']))<100)$contenterrors++;
+  preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
+  if(isset($h1[1])){
+    $contenterrors++;
+  }
+}
+
+if($pageerrors>0 || $contenterrors>0){
+  echo'<div class="alert alert-warning">'.
+    ($pageerrors>0?'There are <strong>'.$pageerrors.'</strong> SEO issues with various Pages that could affect their ranking!!!':'').
+    ($contenterrors>0?($pageerrors>0?'<br>':'').'There are <strong>'.$contenterrors.'</strong> SEO issues with various Content items that could affect their ranking!!!':'').
+  '</div>';
+}
+?>
         <div class="row" id="dashboardview">
 <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='dashboard' AND `active`=1 ORDER BY `ord` ASC");
 $sw->execute();

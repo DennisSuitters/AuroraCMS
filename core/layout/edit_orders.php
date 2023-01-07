@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -102,7 +102,7 @@ else{?>
                   <div class="input-text py-0">Status:&nbsp;
                     <?php if($r['status']=='archived'||$r['status']=='paid')echo'<input type="text" value="'.ucfirst($r['status']).'" readonly>';
                     else{?>
-                      <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
+                      <select class="border-0" id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
                         <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
                         <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
                         <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
@@ -608,8 +608,8 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                     <td></td>
                   </tr>
                   <tr>
-                    <td class="text-right" colspan="7"><strong>Total</strong></td>
-                    <td class="total text-right border-2 border-black border-top border-bottom px-0"><strong><?=$total;?></strong></td>
+                    <td class="text-right font-weight-bold" colspan="7">Total</td>
+                    <td class="total text-right font-weight-bold border-2 border-black border-left-0 border-right-0 px-0"><?=$total;?></td>
                     <td>&nbsp;</td>
                   </tr>
                   <?php $su=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE `id`=:id");

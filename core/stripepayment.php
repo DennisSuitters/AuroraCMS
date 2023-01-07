@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -107,11 +107,17 @@ if($error==''){
               ':status'=>($payment_status=='succeeded'?'paid':$r['status'])
             ]);
             $payment_id=$r['id'];
-            $sp=$db->prepare("SELECT `id`,`points`,`quantity` FROM `".$prefix."content` WHERE `id`=:id");
-            $sp->execute([':id'=>$r['id']]);
+            $sp=$db->prepare("SELECT `id`,`iid`,`quantity`,`points` FROM `".$prefix."orderitems` WHERE `oid`=:oid");
+            $sp->execute([':oid'=>$r['id']]);
             $points=0;
             while($rp=$sp->fetch(PDO::FETCH_ASSOC)){
               if($rp['points']>0)$points=$points+($rp['points']*$rp['quantity']);
+              $sss=$db->prepare("INSERT IGNORE INTO `".$prefix."contentStats` (`rid`,`sales`,`ti`) VALUES (:rid,:sales,:ti)");
+              $sss->execute([
+                ':rid'=>$rp['iid'],
+                ':sales'=>$rp['quantity'],
+                ':ti'=>$ti
+              ]);
             }
             $sc=$db->prepare("UPDATE `".$prefix."login` SET `spent`=:spent,`points`=:points,`pti`=:pti WHERE `id`=:id");
             $sc->execute([

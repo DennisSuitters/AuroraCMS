@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,19 +60,19 @@ while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
   }
 }
 
-$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE `file`!='' AND `fileALT`=''");
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE `file`!='' AND `fileALT`='' AND `contentType` NOT LIKE 'testimonial%'");
 $sseo->execute();
 $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
 $contenterrors=$contenterrors+$rseo['cnt'];
-$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70");
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70 AND `contentType` NOT LIKE 'testimonial%'");
 $sseo->execute();
 $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
 $contenterrors=$contenterrors+$rseo['cnt'];
-$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160");
+$sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160 AND `contentType` NOT LIKE 'testimonial%'");
 $sseo->execute();
 $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
 $contenterrors=$contenterrors+$rseo['cnt'];
-$sseo=$db->prepare("SELECT `notes` FROM `".$prefix."content` WHERE `notes`!=''");
+$sseo=$db->prepare("SELECT `notes` FROM `".$prefix."content` WHERE `notes`!='' AND `contentType` NOT LIKE 'testimonial%'");
 $sseo->execute();
 while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
   if(strlen(strip_tags($rseo['notes']))<100)$contenterrors++;

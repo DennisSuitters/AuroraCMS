@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -195,12 +195,18 @@ if($tbl=='orders'&&$col=='status'&&$da=='paid'){
 	$q=$db->prepare("SELECT `id`,`cid`,`total`,`points` FROM `".$prefix."orders` WHERE `id`=:id");
 	$q->execute([':id'=>$id]);
 	$r=$q->fetch(PDO::FETCH_ASSOC);
-	$sp=$db->prepare("SELECT `quantity`,`points` FROM `".$prefix."orderitems` WHERE `oid`=:id");
+	$sp=$db->prepare("SELECT `id`,`iid`,`quantity`,`points` FROM `".$prefix."orderitems` WHERE `oid`=:id");
 	$sp->execute([
 		':id'=>$r['id']
 	]);
 	while($rp=$sp->fetch(PDO::FETCH_ASSOC)){
 		if($rp['points']>0)$points=$points+($rp['points'] * $rp['quantity']);
+		$sss=$db->prepare("INSERT IGNORE INTO `".$prefix."contentStats` (`rid`,`sales`,`ti`) VALUES (:rid,:sales,:ti)");
+		$sss->execute([
+			':rid'=>$rp['iid'],
+			':sales'=>$rp['quantity'],
+			':ti'=>$ti
+		]);
 	}
 	$s=$db->prepare("UPDATE `".$prefix."login` SET `spent`=`spent`+:spent,`points`=`points`+:points,`pti`=:pti WHERE `id`=:cid");
 	$s->execute([

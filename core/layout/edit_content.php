@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -20,41 +20,43 @@ $seo=[
   'notesHeading' => ''
 ];
 $seoerrors=0;
-if($r['seoTitle']==''){
-  $seoerrors++;
-  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
-}elseif(strlen($r['seoTitle'])<50){
-  $seoerrors++;
-  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
-}elseif(strlen($r['seotitle'])>70){
-  $seoerrors++;
-  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
-}
-if($r['seoDescription']==''){
-  $seoerrors++;
-  $seo['seoDescription'] = '<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
-}elseif(strlen($r['seoDescription'])<1){
-  $seoerrors++;
-  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty!';
-}elseif(strlen($r['seoDescription'])>160){
-  $seoerrors++;
-  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
-}
-if(strlen($r['fileALT'])<1){
-  $seoerrors++;
-  $seo['fileALT'] = '<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
-}
-if(strip_tags($r['notes'])==''){
-  $seoerrors++;
-  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
-}elseif(strlen(strip_tags($r['notes']))<100){
-  $seoerrors++;
-  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
-}
-preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
-if(isset($h1[1])){
-  $seoerrors++;
-  $seo['notesHeading'] = '<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+if($r['contentType']!='testimonials'){
+  if($r['seoTitle']==''){
+    $seoerrors++;
+    $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+  }elseif(strlen($r['seoTitle'])<50){
+    $seoerrors++;
+    $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+  }elseif(strlen($r['seotitle'])>70){
+    $seoerrors++;
+    $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+  }
+  if($r['seoDescription']==''){
+    $seoerrors++;
+    $seo['seoDescription'] = '<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
+  }elseif(strlen($r['seoDescription'])<1){
+    $seoerrors++;
+    $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty!';
+  }elseif(strlen($r['seoDescription'])>160){
+    $seoerrors++;
+    $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+  }
+  if(strlen($r['fileALT'])<1){
+    $seoerrors++;
+    $seo['fileALT'] = '<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
+  }
+  if(strip_tags($r['notes'])==''){
+    $seoerrors++;
+    $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
+  }elseif(strlen(strip_tags($r['notes']))<100){
+    $seoerrors++;
+    $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
+  }
+  preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+  if(isset($h1[1])){
+    $seoerrors++;
+    $seo['notesHeading'] = '<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+  }
 }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
@@ -84,8 +86,7 @@ if(isset($h1[1])){
             </div>
           </div>
           <div class="tabs" role="tablist">
-            <?=$seoerrors>0?'<div class="alert alert-warning">There are '.$seoerrors.' things that could affect the SEO of this content!!! (Each item is highlighted.)'.
-              $seo['heading'].
+            <?=$seoerrors>0?'<div class="alert alert-warning">There are <strong>'.$seoerrors.'</strong> things that could affect the SEO of this content!!! (Each item is highlighted.)'.
               $seo['notesHeading'].
               $seo['notes'].
               $seo['fileALT'].
@@ -113,7 +114,7 @@ if(isset($h1[1])){
             <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
               <div class="form-row">
                 <label id="<?=$r['contentType'];?>Title" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Title" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Title Field">&#128279;</a>':'';?>Title</label>
-                <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won\'t be accessible. This Title is also used For H1 Headings on pages.</small>
+                <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages.</small>
               </div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
@@ -569,25 +570,25 @@ if(isset($h1[1])){
                       <div class="form-row">
                         <select id="stockStatus"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');">
                           <option value="quantity"<?=$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
+                          <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
+                          <option value="discontinued"<?=$r['stockStatus']=='discontinued'?' selected':'';?>>Discontinued</option>
                           <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
                           <option value="in store only"<?=$r['stockStatus']=='in store only'?' selected':'';?>>In Store Only</option>
-                          <option value="online only"<?=$r['stockStatus']=='online only'?' selected':'';?>>Online Only</option>
                           <option value="limited availability"<?=$r['stockStatus']=='limited availability'?' selected':'';?>>Limited Availability</option>
+                          <option value="online only"<?=$r['stockStatus']=='online only'?' selected':'';?>>Online Only</option>
                           <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
-                          <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
                           <option value="pre order"<?=$r['stockStatus']=='pre order'?' selected':'';?>>Pre Order</option>
                           <option value="pre sale"<?=$r['stockStatus']=='pre sale'?' selected':'';?>>Pre Sale</option>
-                      <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
-                      <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
-                      <option value="discontinued"<?=$r['stockStatus']=='discontinued'?' selected':'';?>>Discontinued</option>
-                      <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'');?>>No Display</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="col-12 col-sm pl-sm-3">
-                  <label id="<?=$r['contentType'];?>ItemCondition" for="itemCondition"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ItemCondition" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Condition Selector">&#128279;</a>':'';?>Condition</label>
-                  <div class="form-row">
-                    <select id="itemCondition"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?=$r['id'];?>','content','itemCondition',$(this).val(),'select');">
+                          <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
+                          <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
+                          <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'');?>>No Display</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm pl-sm-3">
+                      <label id="<?=$r['contentType'];?>ItemCondition" for="itemCondition"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ItemCondition" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Condition Selector">&#128279;</a>':'';?>Condition</label>
+                      <div class="form-row">
+                        <select id="itemCondition"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?=$r['id'];?>','content','itemCondition',$(this).val(),'select');">
                       <option value=""<?=$r['itemCondition']==''?' selected':'';?>>None</option>
                       <option value="acceptable"<?=$r['itemCondition']=='acceptable'?' selected':'';?>>Acceptable</option>
                       <option value="brand new"<?=$r['itemCondition']=='brand new'?' selected':'';?>>Brand New</option>

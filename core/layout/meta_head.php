@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -43,7 +43,7 @@
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.min.js"></script>
     <script src="core/js/summernote/plugin/summernote-save-button/summernote-save-button.js"></script>
-<?php /*    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script> */ ?>
+    <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script>
     <script src="core/js/summernote/plugin/summernote-image-captionit/summernote-image-captionit.js"></script>
     <script src="core/js/summernote/plugin/summernote-classes/summernote-classes.js"></script>
     <script src="core/js/summernote/plugin/summernote-checkbox/summernote-checkbox.js"></script>
@@ -59,6 +59,7 @@
     <script src="core/js/fancybox/jquery.fancybox.min.js"></script>
     <script src="core/js/leaflet/leaflet.js"></script>
     <script src="core/js/shuffle/shuffle.js"></script>
+    <script src="core/js/chartjs/chart.umd.min.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
   <body class="<?=$config['options'][4]==0?'no-tooltip':'';?>" data-theme="<?= (isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']!='')?$_COOKIE['admintheme']:'';?>">

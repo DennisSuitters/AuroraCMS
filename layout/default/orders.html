@@ -117,32 +117,32 @@
 		        	</items>
 							<rewards>
 								<tr>
-									<td class="align-middle"><strong>Rewards</strong></td>
+									<td class="align-middle font-weight-bold">Rewards</td>
 									<td colspan="5" class="text-right align-middle">Code: <print rewards="code">: <print rewards="method"></td>
 									<td class="text-right"><print rewards="value"></td>
 								</tr>
 							</rewards>
 							<discountRange>
 								<tr>
-									<td colspan="6" class="align-middle"><strong><print discount="method"></strong></td>
+									<td colspan="6" class="align-middle font-weight-bold"><print discount="method"></td>
 									<td class="text-right">-<print discount="total"></td>
 								</tr>
 							</discountRange>
 							<tr>
-								<td class="align-middle"><strong>Shipping</strong></td>
+								<td class="align-middle font-weight-bold">Shipping</td>
 								<td colspan="5" class="text-right align-middle"><print order="postOption"></td>
 								<td class="text-right align-middle"><print order="postCost"></td>
 							</tr>
 							<tr>
-								<td class="align-middle"><strong>Payment</strong></td>
+								<td class="align-middle font-weight-bold">Payment</td>
 								<td colspan="5" class="text-right align-middle"><print order="paymentOption"></td>
 								<td class="text-right align-middle"><print order="paymentCost"></td>
 							</tr>
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="6" class="text-right"><strong>Total</strong></td>
-								<td class="text-right border-2 border-top border-bottom border-black font-weight-bold"><strong><print order="total"></strong></td>
+								<td colspan="6" class="text-right font-weight-bold">Total</td>
+								<td class="total"><print order="total"></td>
 							</tr>
 							<orderDeduction>
 								<deductionItems>
@@ -152,8 +152,8 @@
 									</tr>
 								</deductionItems>
 								<tr>
-									<td colspan="6" class="text-right"><strong>Balance</strong></td>
-									<td class="text-right border-2 border-top border-bottom border-black"><strong><print deduction="total"></strong></td>
+									<td colspan="6" class="text-right font-weight-bold">Balance</td>
+									<td class="total"><print deduction="total"></td>
 								</tr>
 							</orderDeduction>
 							<tr>
@@ -169,34 +169,28 @@
 				</article>
 			</section>
 			<section class="row p-0 m-0 border-top">
-				<article class="col-12 col-sm mx-0 my-1 px-1 border-right">
+				<article class="col-12 col-sm mx-0 my-1 px-1 border-right hidewhenempty"><orderNotes>
 					<div id="paymenttransaction"></div>
-					<orderNotes>
-						<h4>Notes:</h4>
-						<div>
-							<small>
-								<print order="notes">
-							</small>
-						</div>
-					</orderNotes>
-				</article>
-				<article class="col-12 col-sm mx-0 my-1 px-1 border-right">
-					<bankdetails>
-						<h4>Banking Details:</h4>
-						<div>
-							<strong>Bank: </strong><print config="bank"><br>
-							<strong>Account Name: </strong><print config="bankAccountName"><br>
-							<strong>Account Number: </strong><print config="bankAccountNumber"><br>
-							<strong>Bank BSB: </strong><print config="bankBSB"><br>
-						</div>
-					</bankdetails>
-				</article>
-				<article class="col-12 col-sm mx-0 my-1 px-1">
-					<orderCheckout>
-						<h4>Pay Online:</h4>
-						<print checkoutlink>
-					</orderCheckout>
-				</article>
+					<h4>Notes:</h4>
+					<div>
+						<small>
+							<print order="notes">
+						</small>
+					</div>
+				</orderNotes></article>
+				<article class="col-12 col-sm mx-0 my-1 px-1 border-right hidewhenempty"><bankdetails>
+					<h4>Banking Details:</h4>
+					<div>
+						<strong>Bank: </strong><print config="bank"><br>
+						<strong>Account Name: </strong><print config="bankAccountName"><br>
+						<strong>Account Number: </strong><print config="bankAccountNumber"><br>
+						<strong>Bank BSB: </strong><print config="bankBSB"><br>
+					</div>
+				</bankdetails></article>
+				<article class="col-12 col-sm mx-0 my-1 px-1 hidewhenempty"><orderCheckout>
+					<h4>Pay Online:</h4>
+					<print checkoutlink>
+				</orderCheckout></article>
 			</section>
 		</div>
 		<iframe id="sp" name="sp" class="d-none"></iframe>

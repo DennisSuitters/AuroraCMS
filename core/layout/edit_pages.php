@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -540,7 +540,7 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
 <?php }
 /* Settings */
           if($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
-            <div class="tab1-5 border-top" data-tabid="tab1-5" role="tabpanel">
+            <div class="tab1-5 border-top p-4" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
                 <div class="row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>

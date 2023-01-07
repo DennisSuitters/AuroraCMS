@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -773,12 +773,14 @@ if($skip==false){
           }
         }
         if($r['stockStatus']!='none'){
-          $jsonld.='"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']==0?'http://schema.org/OutOfStock':'http://schema.org/InStock'):($r['stockStatus']=='none'?'http://schema.org/OutOfStock':'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus'])))).'",'.
+          if($r['stockStatus']!=''){
+            $jsonld.='"availability":"'.($r['stockStatus']=='quantity'?($r['quantity']>0?'http://schema.org/InStock':'http://schema.org/OutOfStock'):'http://schema.org/'.str_replace(' ','',ucwords($r['stockStatus']))).'",'.
           '"seller":{'.
             '"@type":"Organization",'.
             '"name":"'.$config['business'].'"'.
             '}'.
           '}';
+          }
         }
       }elseif($r['schemaType']=='Service'){
         $jsonld.=
@@ -892,7 +894,7 @@ if($skip==false){
               ],[
                 (isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/':''),
                 (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ':''),
-                (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.$ri['thumb']:NOIMAGESM),
+                (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']):NOIMAGESM),
                 (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),
                 (isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):''),
                 (isset($ri['contentType'])?$ri['contentType']:''),

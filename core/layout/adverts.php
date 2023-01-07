@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -98,7 +98,8 @@ else{?>
               </div>
               <div class="card-footer">
                 <span class="code hidewhenempty"><?=$r['code'];?></span>
-                <?=$r['views']>0?'<button class="btn views" data-tooltip="tooltip" aria-label="'.$r['views'].' impressions. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span>'.($r['quantity']>0?' of '.$r['quantity']:'').' <i class="i">view</i></button>':'';?>
+                <?=($r['views']>0?'<button class="btn views" data-tooltip="tooltip" aria-label="'.$r['views'].' impressions. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span>'.($r['quantity']>0?' of '.$r['quantity']:'').' <i class="i">view</i></button>':'');?>
+                <span class="btn" data-tooltip="tooltip" aria-label="<?=$r['lti'];?> Clicks"><?=$r['lti'];?> <i class="i">opennew</i></span>
                 <div id="controls_<?=$r['id'];?>">
                   <div class="btn-toolbar float-right" role="toolbar">
                     <div class="btn-group" role="group">

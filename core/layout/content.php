@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.21
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -276,25 +276,27 @@ else{
                 $sccc=$scc->rowCount();
               }
               $seoerrors=0;
-              if(strlen($r['seoTitle'])<50){
-                $seoerrors++;
-              }elseif(strlen($r['seoTitle'])>70){
-                $seoerrors++;
-              }
-              if(strlen($r['seoDescription'])<1){
-                $seoerrors++;
-              }elseif(strlen($r['seoDescription'])>70){
-                $seoerrors++;
-              }
-              if($r['file']!=''&&strlen($r['fileALT'])<1){
-                $seoerrors++;
-              }
-              if(strlen(strip_tags($r['notes']))<100){
-                $seoerrors++;
-              }
-              preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
-              if(isset($h1[1])){
-                $seoerrors++;
+              if($r['contentType']!='testimonials'){
+                if(strlen($r['seoTitle'])<50){
+                  $seoerrors++;
+                }elseif(strlen($r['seoTitle'])>70){
+                  $seoerrors++;
+                }
+                if(strlen($r['seoDescription'])<1){
+                  $seoerrors++;
+                }elseif(strlen($r['seoDescription'])>70){
+                  $seoerrors++;
+                }
+                if($r['file']!=''&&strlen($r['fileALT'])<1){
+                  $seoerrors++;
+                }
+                if(strlen(strip_tags($r['notes']))<100){
+                  $seoerrors++;
+                }
+                preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+                if(isset($h1[1])){
+                  $seoerrors++;
+                }
               }
               ?>
               <article class="card mx-2 mt-3 mb-0 overflow-visible card-list" data-content="<?=$r['contentType'].' '.$r['title'];?>" id="l_<?=$r['id'];?>">
@@ -335,10 +337,20 @@ else{
                   <div class="image-toolbar">
                     <?php echo !isset($args[1])?'<a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a><br>':'';
                     echo($r['pin']==1?'<a class="badger badge-primary small text-white" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin">Pinned</a><br>':'');
-                    echo$r['views']>0?'<button class="views badger badge-danger trash" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button><br>':'';
-                    echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger badge-'.($sccc>0?'success':'default').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a><br>':'');
-                    echo$rr['num']>0?'<a class="badger badge-success add" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a><br>':'';?>
-                    <button class="badger badger-primary <?=($r['status']=='published'?'':' d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
+                    echo$r['views']>0?'<button class="views badger" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times, click to Clear" onclick="$(`[data-views=\''.$r['id'].'\']`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button><br>':'';
+                    $sss=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:ti");
+                    $currentMonthStart=mktime(0, 0, 0, date("n"), 1);
+                    $sss->execute([
+                      ':rid'=>$r['id'],
+                      ':ti'=>$currentMonthStart -1
+                    ]);
+                    if($sss->rowCount()>0){
+                      $rss=$sss->fetch(PDO::FETCH_ASSOC);
+                      echo$rss['cnt']>0?'<button class="badger" data-tooltip="tooltip" aria-label="'.$rss['cnt'].' Sales this Month">'.$rss['cnt'].' <i class="i">shipping</i></button><br>':'';
+                    }
+                    echo(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="comments badger" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a><br>':'');
+                    echo$rr['num']>0?'<a class="badger" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a><br>':'';?>
+                    <button class="badger <?=($r['status']=='published'?'':' d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
                   </div>
                 </div>
                 <div class="card-header overflow-visible mt-0 pt-0 line-clamp">
@@ -354,13 +366,14 @@ else{
                     <?php }
                   }
                   echo$seoerrors>0?'<div class="alert alert-warning m-2 p-1 small text-black">There are '.$seoerrors.' things that could affect the SEO of this content!!!</div>':'';?>
-                  <?='<small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+                  <?='<small class="text-muted d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
                 </div>
                 <div class="card-footer">
                   <span class="code hidewhenempty"><?=$r['code'];?></span>
                   <span class="reviews hidewhenempty"><?php echo$rr['num']>0?'<a class="btn" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" data-tooltip="tooltip" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a>':'';?></span>
                   <span class="comments hidewhenempty"><?=(isset($cnt['cnt'])&&$cnt['cnt']>0?'<a class="btn'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$cnt['cnt'].' <i class="i">comments</i></a>':'');?></span>
-                  <?=$r['views']>0?'<button class="btn views" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'';?>
+                  <?=$r['views']>0?'<button class="btn views" data-tooltip="tooltip" aria-label="Content Viewed '.$r['views'].' times. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'';
+                  echo$rss['cnt']>0?'<button class="btn" data-tooltip="tooltip" aria-label="'.$rss['cnt'].' Sales this Month">'.$rss['cnt'].' <i class="i">shipping</i></button>':'';?>
                   <div id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar">
                       <div class="btn-group" role="group">

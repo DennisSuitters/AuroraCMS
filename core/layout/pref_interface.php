@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm-6">
@@ -37,7 +37,7 @@
           <label for="tab1-2">Sidebar Menu</label>
           <input class="tab-control" id="tab1-3" name="tabs" type="radio">
           <label for="tab1-3">Widgets</label>
-          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
           <?php if($user['rank']>999){?>
             <div class="row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevLock" data-tooltip="tooltip" aria-label="PermaLink to Preferences Developer Lock Checkbox">&#128279;</a>':'';?>
@@ -394,7 +394,7 @@
             </div>
           <?php }?>
           </div>
-          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border" data-tabid="tab1-2" role="tabpanel">
 <?php $sm1=$db->prepare("SELECT * FROM `".$prefix."sidebar` WHERE `mid`=0 AND `rank`<=:r ORDER BY `ord` ASC, `title` ASC");
 $sm1->execute([
   ':r'=>$user['rank']
@@ -550,7 +550,7 @@ $sm1->execute([
               </script>
             <?php }?>
           </div>
-          <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
+          <div class="tab1-3 border" data-tabid="tab1-3" role="tabpanel">
             <table class="table">
               <thead>
                 <tr>

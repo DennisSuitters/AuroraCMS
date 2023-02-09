@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Sep 01, 2022 at 10:01 PM
--- Server version: 8.0.30-0ubuntu0.20.04.2
--- PHP Version: 8.1.9
+-- Generation Time: Feb 10, 2023 at 02:13 AM
+-- Server version: 8.0.32-0ubuntu0.20.04.2
+-- PHP Version: 8.1.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -34,11 +34,11 @@ CREATE TABLE `cart` (
   `rid` bigint NOT NULL,
   `quantity` mediumint UNSIGNED NOT NULL,
   `cost` decimal(10,2) UNSIGNED NOT NULL,
-  `stockStatus` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `stockStatus` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `points` int NOT NULL,
-  `si` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `si` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -50,16 +50,16 @@ CREATE TABLE `choices` (
   `id` bigint UNSIGNED NOT NULL,
   `uid` bigint UNSIGNED NOT NULL,
   `rid` bigint UNSIGNED NOT NULL,
-  `contentType` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `type` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `username` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `password` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `contentType` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rank` int UNSIGNED NOT NULL,
-  `icon` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `port` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `flag` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `title` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `icon` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `port` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `flag` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `value` int NOT NULL,
   `f` decimal(10,2) NOT NULL,
   `t` decimal(10,2) NOT NULL,
@@ -68,7 +68,7 @@ CREATE TABLE `choices` (
   `tie` int NOT NULL,
   `ord` bigint NOT NULL,
   `ti` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -78,21 +78,21 @@ CREATE TABLE `choices` (
 
 CREATE TABLE `comments` (
   `id` bigint UNSIGNED NOT NULL,
-  `contentType` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `contentType` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rid` bigint UNSIGNED NOT NULL,
   `uid` bigint UNSIGNED NOT NULL,
   `cid` bigint UNSIGNED NOT NULL,
-  `ip` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `avatar` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `gravatar` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `email` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `name` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `status` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `ip` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gravatar` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint UNSIGNED NOT NULL,
   `tie` int NOT NULL,
   `ti` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -106,131 +106,131 @@ CREATE TABLE `config` (
   `maintenance` int NOT NULL,
   `comingsoon` int NOT NULL,
   `hoster` tinyint(1) NOT NULL,
-  `hosterURL` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `options` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `forumOptions` varchar(32) COLLATE utf8mb3_bin NOT NULL,
-  `inventoryFallbackStatus` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `defaultPage` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `theme` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoTitle` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoDescription` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoCaption` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoKeywords` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingvalentine` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingeaster` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingmothersday` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingfathersday` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingblackfriday` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadinghalloween` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingsmallbusinessday` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `saleHeadingchristmas` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `metaRobots` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoRSSTitle` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoRSSNotes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoRSSLink` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoRSSAuthor` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `hosterURL` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `options` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `forumOptions` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `inventoryFallbackStatus` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `defaultPage` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `theme` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoTitle` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoCaption` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoKeywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingvalentine` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingeaster` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingmothersday` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingfathersday` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingblackfriday` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadinghalloween` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingsmallbusinessday` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `saleHeadingchristmas` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metaRobots` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoRSSTitle` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoRSSNotes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoRSSLink` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoRSSAuthor` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `seoRSSti` bigint NOT NULL,
-  `business` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `abn` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `address` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `suburb` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `city` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `state` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `country` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `business` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abn` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `suburb` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `postcode` mediumint UNSIGNED NOT NULL,
-  `phone` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `mobile` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `email` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `phone` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `vti` int UNSIGNED NOT NULL,
   `sti` int UNSIGNED NOT NULL,
-  `dateFormat` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `dateFormat` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_check` int NOT NULL,
   `email_interval` int NOT NULL,
-  `email_signature` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `email_signature` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `storemessages` int NOT NULL,
   `message_check_interval` int NOT NULL,
   `chatAutoRemove` int NOT NULL,
-  `messengerFBCode` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `messengerFBColor` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `messengerFBGreeting` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `language` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `timezone` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `messengerFBCode` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `messengerFBColor` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `messengerFBGreeting` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `language` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `timezone` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `orderPayti` int UNSIGNED NOT NULL,
-  `orderEmailSubject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `orderEmailLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `orderEmailNotes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `orderEmailSubject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orderEmailLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `orderEmailNotes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `orderEmailReadNotification` tinyint(1) NOT NULL,
-  `austPostAPIKey` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `gst` varchar(4) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `memberLimit` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `memberLimitSilver` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `memberLimitBronze` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `memberLimitGold` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `memberLimitPlatinum` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `wholesaleLimit` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `wholesaleLimitSilver` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `wholesaleLimitBronze` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `wholesaleLimitGold` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `wholesaleLimitPlatinum` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `austPostAPIKey` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gst` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `memberLimit` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `memberLimitSilver` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `memberLimitBronze` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `memberLimitGold` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `memberLimitPlatinum` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wholesaleLimit` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wholesaleLimitSilver` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wholesaleLimitBronze` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wholesaleLimitGold` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `wholesaleLimitPlatinum` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `wholesaleTime` int NOT NULL,
   `wholesaleTimeSilver` int NOT NULL,
   `wholesaleTimeBronze` int NOT NULL,
   `wholesaleTimeGold` int NOT NULL,
   `wholesaleTimePlatinum` int NOT NULL,
-  `passwordResetLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `passwordResetSubject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `accountActivationSubject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `accountActivationLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bookingNoteTemplate` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bookingEmailSubject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bookingEmailLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `passwordResetLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `passwordResetSubject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `accountActivationSubject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `accountActivationLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookingNoteTemplate` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookingEmailSubject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookingEmailLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bookingEmailReadNotification` tinyint(1) NOT NULL,
-  `bookingAutoReplySubject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bookingAutoReplyLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bookingAttachment` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bookingAgreement` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `bookingAutoReplySubject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookingAutoReplyLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookingAttachment` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bookingAgreement` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bookingBuffer` int NOT NULL,
-  `contactAutoReplySubject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `contactAutoReplyLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `contactAutoReplySubject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contactAutoReplyLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `newslettersEmbedImages` int NOT NULL,
   `newslettersSendMax` int NOT NULL,
   `newslettersSendDelay` int NOT NULL,
-  `newslettersOptOutLayout` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bank` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bankAccountName` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bankAccountNumber` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `bankBSB` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `payPalClientID` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `payPalSecret` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `stripe_publishkey` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `stripe_secretkey` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `defaultOrder` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'old',
+  `newslettersOptOutLayout` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bank` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bankAccountName` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bankAccountNumber` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `bankBSB` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payPalClientID` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `payPalSecret` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_publishkey` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stripe_secretkey` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `defaultOrder` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'old',
   `showItems` int NOT NULL,
   `searchItems` int NOT NULL,
   `idleTime` int NOT NULL,
-  `ga_clientID` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `ga_tracking` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `ga_tagmanager` varchar(32) COLLATE utf8mb3_bin NOT NULL,
-  `ga_verification` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `gd_api` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `reCaptchaClient` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `reCaptchaServer` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seo_msvalidate` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seo_yandexverification` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seo_alexaverification` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seo_domainverify` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seo_pinterestverify` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `mapapikey` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `geo_region` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `geo_placename` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `geo_position` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `geo_weatherAPI` varchar(255) COLLATE utf8mb3_bin NOT NULL,
-  `php_options` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `php_APIkey` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `php_honeypot` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `php_quicklink` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `formMinTime` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `formMaxTime` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `ga_clientID` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ga_tracking` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ga_tagmanager` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ga_verification` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gd_api` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reCaptchaClient` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reCaptchaServer` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_msvalidate` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_yandexverification` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_alexaverification` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_domainverify` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seo_pinterestverify` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mapapikey` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geo_region` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geo_placename` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geo_position` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `geo_weatherAPI` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `php_options` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `php_APIkey` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `php_honeypot` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `php_quicklink` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `formMinTime` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `formMaxTime` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `spamfilter` int NOT NULL,
   `notification_volume` int NOT NULL,
   `mediaMaxWidth` int NOT NULL,
@@ -245,19 +245,19 @@ CREATE TABLE `config` (
   `backup_ti` int NOT NULL,
   `uti` int NOT NULL,
   `uti_freq` int NOT NULL,
-  `update_url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `update_url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `navstat` int NOT NULL,
   `iconsColor` int NOT NULL,
-  `a11yPosition` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `a11yPosition` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `config`
 --
 
 INSERT INTO `config` (`id`, `development`, `maintenance`, `comingsoon`, `hoster`, `hosterURL`, `options`, `forumOptions`, `inventoryFallbackStatus`, `defaultPage`, `theme`, `seoTitle`, `seoDescription`, `seoCaption`, `seoKeywords`, `saleHeadingvalentine`, `saleHeadingeaster`, `saleHeadingmothersday`, `saleHeadingfathersday`, `saleHeadingblackfriday`, `saleHeadinghalloween`, `saleHeadingsmallbusinessday`, `saleHeadingchristmas`, `metaRobots`, `seoRSSTitle`, `seoRSSNotes`, `seoRSSLink`, `seoRSSAuthor`, `seoRSSti`, `business`, `abn`, `address`, `suburb`, `city`, `state`, `country`, `postcode`, `phone`, `mobile`, `email`, `vti`, `sti`, `dateFormat`, `email_check`, `email_interval`, `email_signature`, `storemessages`, `message_check_interval`, `chatAutoRemove`, `messengerFBCode`, `messengerFBColor`, `messengerFBGreeting`, `language`, `timezone`, `orderPayti`, `orderEmailSubject`, `orderEmailLayout`, `orderEmailNotes`, `orderEmailReadNotification`, `austPostAPIKey`, `gst`, `memberLimit`, `memberLimitSilver`, `memberLimitBronze`, `memberLimitGold`, `memberLimitPlatinum`, `wholesaleLimit`, `wholesaleLimitSilver`, `wholesaleLimitBronze`, `wholesaleLimitGold`, `wholesaleLimitPlatinum`, `wholesaleTime`, `wholesaleTimeSilver`, `wholesaleTimeBronze`, `wholesaleTimeGold`, `wholesaleTimePlatinum`, `passwordResetLayout`, `passwordResetSubject`, `accountActivationSubject`, `accountActivationLayout`, `bookingNoteTemplate`, `bookingEmailSubject`, `bookingEmailLayout`, `bookingEmailReadNotification`, `bookingAutoReplySubject`, `bookingAutoReplyLayout`, `bookingAttachment`, `bookingAgreement`, `bookingBuffer`, `contactAutoReplySubject`, `contactAutoReplyLayout`, `newslettersEmbedImages`, `newslettersSendMax`, `newslettersSendDelay`, `newslettersOptOutLayout`, `bank`, `bankAccountName`, `bankAccountNumber`, `bankBSB`, `payPalClientID`, `payPalSecret`, `stripe_publishkey`, `stripe_secretkey`, `defaultOrder`, `showItems`, `searchItems`, `idleTime`, `ga_clientID`, `ga_tracking`, `ga_tagmanager`, `ga_verification`, `gd_api`, `reCaptchaClient`, `reCaptchaServer`, `seo_msvalidate`, `seo_yandexverification`, `seo_alexaverification`, `seo_domainverify`, `seo_pinterestverify`, `mapapikey`, `geo_region`, `geo_placename`, `geo_position`, `geo_weatherAPI`, `php_options`, `php_APIkey`, `php_honeypot`, `php_quicklink`, `formMinTime`, `formMaxTime`, `spamfilter`, `notification_volume`, `mediaMaxWidth`, `mediaMaxHeight`, `mediaMaxWidthThumb`, `mediaMaxHeightThumb`, `mediaQuality`, `templateID`, `templateQTY`, `suggestions`, `bti`, `backup_ti`, `uti`, `uti_freq`, `update_url`, `navstat`, `iconsColor`, `a11yPosition`, `ti`) VALUES
-(1, 0, 0, 0, 0, '', '11101010011100000001101110101101', '0000000000000000000000000000000', 'back order', 'dashboard', 'default', '', '', '', 'Clippy', '', '', '', '', '', '', '', '', 'index,follow', '', '', '', '', 0, 'Example Name', '000 000 000', '92 Cradle Mountain Rd', 'Wilmot', 'Wilmot', 'TAS', 'Australia', 7310, '+61367111092', '', 'diemendesign@gmail.com', 0, 3600, 'M jS, Y g:i A', 1425893894, 3600, '<p>Sent using <a href=\"https://github.com/DiemenDesign/AuroraCMS\">AuroraCMS</a> the Australian Open Source Content Management System.</p>', 0, 300, 0, '', '#5484ed', '', 'en-AU', 'Australia/Hobart', 1209600, 'Order {order_number}', '<p>Hi {first}!</p>\r\n<p>Thank you for your payment, and choosing to support {business}.</p>\r\n{downloads}\r\n{courses}\r\n<p>You can view your invoice here: {order_link}</p>\r\n<p>Regards,<br>\r\n{business}</p>\r\n<hr>\r\n', '', 1, '', '0', '0', '0', '0', '0', '0', '5', '5', '5', '5', '5', 0, 0, 0, 0, 0, '%3Cp%3EHi%20%7Bname%7D%2C%3C/p%3E%3Cp%3EA%20Password%20Reset%20was%20requested%2C%20it%20is%20now%3A%20%7Bpassword%7D%3C/p%3E%3Cp%3EWe%20recommend%20changing%20the%20above%20password%20after%20logging%20in.%3C/p%3E', 'Password Reset {business}.', 'Account Activation for {username} from {site}.', '<p>Hi {username},</p><p>Below is the Activation Link to enable your Account at {site}.<br>{activation_link}</p><p>The username you signed up with was: {username}</p><p>The AutoGenerated password is: {password}</p><p><br></p><p>If this email is in error, and you did not sign up for an Account, please take the time to contact us to let us know, or alternatively ignore this email and your email will be purged from our system in a few days.</p>', '<p>This is a test template</p><p>Backup:</p><p><input type=\"checkbox\"> Music</p><p><input type=\"checkbox\"> Software</p><p><input type=\"checkbox\"> Emails</p><p><br></p>', '{business} Booking Confirmation on {date}', '<p>Hi {first},</p>\r\n\r\n<p>{details}</p>\r\n\r\n<p>Please check the details above, and get in touch if any need correcting.</p>\r\n\r\n<p>Kind Regards,<br>\r\n\r\n{business}</p>\r\n\r\n\r\n\r\n', 0, '{business} Booking Confirmation on {date}', '<p>Hi {first},</p>\r\n\r\n<p>Thank you for contacting {business}, someone will get back to you ASAP.<br>Please note, this email is not a confirmed booking - we will contact you to confirm the time and date of your booking.</p>\r\n\r\n<p>{externalLink}</p>\r\n\r\n<p>Kind Regards,<br>\r\n\r\n{business}</p>', '', '<p>By clicking this checkbox and or signing below, you agree that we are not responsible for any data loss.</p>', 3600, '{business} Contact Confirmation on {date}', '<p>Hi {first},</p><p>Thank you for contacting {business}, someone will get back to you ASAP.</p><p>Kind Regards,</p><p>{business}</p><p><br></p>', 0, 50, 5, '<br>\r\n<br>\r\n<p style=\"font-size: 10px;text-align: center;\">If you don\'t wish to continue to receive these Newsletters you can <a href=\"{optOutLink}\">Unsubscribe</a>.</p>', 'Westpac', 'D & A Suitters', '0000 0000 0000', '000000', 'test', '', 'pk_test_51JC3eiEqAm9jcrHKP7oecRmQoIYC0SioG94Nd8kCeXOFPddqfP2QVXc6d7idZU0uxuKkl4RAp3yyEGGDsUfc8GQz00o1PDZ848', 'sk_test_51JC3eiEqAm9jcrHK3o0hVEsXTJUKbfFZ7cPCgEkGLY3bUuz7yR6jXs2Fc64OzoHuOx3ZfSvDMkW2JCoJ9Xiw3cOv004v2JjyE6', 'new', 10, 0, 30, '', '', '', '', 'AIzaSyD88WkGT3JFrVYo-qL5bKOyIpvvx5yIf_o', '', '', '', '', '', '', '', 'pk.eyJ1IjoiZGllbWVuZGVzaWduIiwiYSI6ImNraXZ2NnR4eDBlMGUyeHF0czRmNTd1cHQifQ.35xKSiAHcPT2L7CsNfSmlw', '', '', '-41.18382187627851,146.16142272949222', '282ab8bfbbcd4fda80958b6d3184ba1d', '1011111000000000', '', '', '', '5', '60', 1, 0, 1280, 1280, 250, 250, 88, 0, 0, 0, 0, 1602516248, 0, 0, '', 1, 0, 'right bottom', 0);
+(1, 0, 0, 0, 1, '', '11101010011101000001101110101101', '0000000000000000000000000000000', 'back order', 'dashboard', 'raycraftcomputerconsultants', '', '', '', 'Clippy', '', '', '', '', '', '', '', '', 'index,follow', '', '', '', '', 0, 'Example Name', '000 000 000', '92 Cradle Mountain Rd', 'Wilmot', 'Wilmot', 'TAS', 'Australia', 7310, '+61367111092', '', 'diemendesign@gmail.com', 0, 3600, 'M jS, Y g:i A', 1425893894, 3600, '<p>Sent using <a href=\"https://github.com/DiemenDesign/AuroraCMS\">AuroraCMS</a> the Australian Open Source Content Management System.</p>', 0, 300, 0, '', '#5484ed', '', 'en-AU', 'Australia/Hobart', 1209600, 'Order {order_number}', '<p>Hi {first}!</p>\r\n<p>Thank you for your payment, and choosing to support {business}.</p>\r\n{downloads}\r\n{courses}\r\n<p>You can view your invoice here: {order_link}</p>\r\n<p>Regards,<br>\r\n{business}</p>\r\n<hr>\r\n', '', 1, '', '0', '0', '0', '0', '0', '0', '5', '5', '5', '5', '5', 0, 0, 0, 0, 0, '%3Cp%3EHi%20%7Bname%7D%2C%3C/p%3E%3Cp%3EA%20Password%20Reset%20was%20requested%2C%20it%20is%20now%3A%20%7Bpassword%7D%3C/p%3E%3Cp%3EWe%20recommend%20changing%20the%20above%20password%20after%20logging%20in.%3C/p%3E', 'Password Reset {business}.', 'Account Activation for {username} from {site}.', '<p>Hi {username},</p><p>Below is the Activation Link to enable your Account at {site}.<br>{activation_link}</p><p>The username you signed up with was: {username}</p><p>The AutoGenerated password is: {password}</p><p><br></p><p>If this email is in error, and you did not sign up for an Account, please take the time to contact us to let us know, or alternatively ignore this email and your email will be purged from our system in a few days.</p>', '<p>This is a test template</p><p>Backup:</p><p><input type=\"checkbox\"> Music</p><p><input type=\"checkbox\"> Software</p><p><input type=\"checkbox\"> Emails</p><p><br></p>', '{business} Booking Confirmation on {date}', '<p>Hi {first},</p>\r\n\r\n<p>{details}</p>\r\n\r\n<p>Please check the details above, and get in touch if any need correcting.</p>\r\n\r\n<p>Kind Regards,<br>\r\n\r\n{business}</p>\r\n\r\n\r\n\r\n', 0, '{business} Booking Confirmation on {date}', '<p>Hi {first},</p>\r\n\r\n<p>Thank you for contacting {business}, someone will get back to you ASAP.<br>Please note, this email is not a confirmed booking - we will contact you to confirm the time and date of your booking.</p>\r\n\r\n<p>{externalLink}</p>\r\n\r\n<p>Kind Regards,<br>\r\n\r\n{business}</p>', '', '<p>By clicking this checkbox and or signing below, you agree that we are not responsible for any data loss.</p>', 3600, '{business} Contact Confirmation on {date}', '<p>Hi {first},</p><p>Thank you for contacting {business}, someone will get back to you ASAP.</p><p>Kind Regards,</p><p>{business}</p><p><br></p>', 0, 50, 5, '<br>\r\n<br>\r\n<p style=\"font-size: 10px;text-align: center;\">If you don\'t wish to continue to receive these Newsletters you can <a href=\"{optOutLink}\">Unsubscribe</a>.</p>', 'Westpac', 'D & A Suitters', '0000 0000 0000', '000000', 'test', '', 'pk_test_51JC3eiEqAm9jcrHKP7oecRmQoIYC0SioG94Nd8kCeXOFPddqfP2QVXc6d7idZU0uxuKkl4RAp3yyEGGDsUfc8GQz00o1PDZ848', 'sk_test_51JC3eiEqAm9jcrHK3o0hVEsXTJUKbfFZ7cPCgEkGLY3bUuz7yR6jXs2Fc64OzoHuOx3ZfSvDMkW2JCoJ9Xiw3cOv004v2JjyE6', 'new', 10, 0, 30, '', '', '', '', 'AIzaSyD88WkGT3JFrVYo-qL5bKOyIpvvx5yIf_o', '', '', '', '', '', '', '', 'pk.eyJ1IjoiZGllbWVuZGVzaWduIiwiYSI6ImNraXZ2NnR4eDBlMGUyeHF0czRmNTd1cHQifQ.35xKSiAHcPT2L7CsNfSmlw', '', '', '-41.18382187627851,146.16142272949222', '282ab8bfbbcd4fda80958b6d3184ba1d', '1011111000000000', '', '', '', '5', '60', 1, 0, 1280, 1280, 250, 250, 88, 0, 0, 0, 0, 1602516248, 0, 0, '', 2, 0, 'right bottom', 0);
 
 -- --------------------------------------------------------
 
@@ -268,102 +268,102 @@ INSERT INTO `config` (`id`, `development`, `maintenance`, `comingsoon`, `hoster`
 CREATE TABLE `content` (
   `id` bigint UNSIGNED NOT NULL,
   `mid` bigint DEFAULT NULL,
-  `options` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '0000000000000000',
+  `options` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0000000000000000',
   `rank` int DEFAULT '0',
   `rid` bigint UNSIGNED DEFAULT NULL,
   `uid` bigint UNSIGNED NOT NULL,
-  `login_user` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `login_user` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `cid` bigint UNSIGNED DEFAULT NULL,
-  `ip` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `contentType` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `schemaType` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoKeywords` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `barcode` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `fccid` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `code` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `brand` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `title` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin,
-  `urlSlug` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `sale` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `category_1` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `category_2` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `category_3` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `category_4` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `name` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `url` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exturl` varchar(256) COLLATE utf8mb3_bin NOT NULL,
-  `email` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `business` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `address` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `suburb` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `city` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `state` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `country` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `ip` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `contentType` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `schemaType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoKeywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `barcode` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fccid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `code` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `brand` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `title` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `urlSlug` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sale` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category_2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `category_3` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_4` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `url` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exturl` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `business` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `suburb` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `country` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `postcode` mediumint UNSIGNED NOT NULL,
-  `phone` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `mobile` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `thumb` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `file` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `fileURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `fileALT` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `videoURL` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `signature` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `phone` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumb` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fileURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `fileALT` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `videoURL` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `signature` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `agreementCheck` int NOT NULL,
-  `attributionImageTitle` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageName` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifISO` varchar(4) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifAperture` varchar(2) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifFocalLength` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifShutterSpeed` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifCamera` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifLens` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifFilename` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `attributionImageTitle` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifISO` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifAperture` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifFocalLength` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifShutterSpeed` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifCamera` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifLens` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifFilename` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `exifti` bigint NOT NULL,
   `rrp` decimal(10,2) NOT NULL,
   `cost` decimal(10,2) DEFAULT '0.00',
   `rCost` decimal(10,2) NOT NULL,
   `dCost` decimal(10,2) NOT NULL,
   `sold` bigint NOT NULL,
-  `weight` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `weightunit` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'kg',
-  `width` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `widthunit` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'mm',
-  `height` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `heightunit` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'mm',
-  `length` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `lengthunit` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT 'mm',
-  `subject` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes2` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionContentName` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionContentURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `weight` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `weightunit` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'kg',
+  `width` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `widthunit` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'mm',
+  `height` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `heightunit` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'mm',
+  `length` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `lengthunit` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'mm',
+  `subject` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` longblob NOT NULL,
+  `notes2` longblob NOT NULL,
+  `attributionContentName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionContentURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `quantity` mediumint UNSIGNED NOT NULL,
   `cartonQuantity` mediumint NOT NULL,
-  `itemCondition` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `tags` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoTitle` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoCaption` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoDescription` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `metaRobots` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `status` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `stockStatus` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `itemCondition` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoTitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoCaption` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `metaRobots` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `stockStatus` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `service` bigint UNSIGNED NOT NULL,
   `internal` tinyint UNSIGNED NOT NULL,
   `featured` tinyint UNSIGNED NOT NULL,
   `bookable` tinyint(1) NOT NULL,
   `fti` bigint UNSIGNED NOT NULL,
-  `assoc` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `assoc` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint UNSIGNED NOT NULL,
   `views` bigint UNSIGNED NOT NULL,
   `points` int NOT NULL,
   `rating` int NOT NULL,
   `attempts` int NOT NULL,
   `suggestions` int NOT NULL,
-  `checklist` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '0000000000000000',
+  `checklist` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0000000000000000',
   `active` tinyint UNSIGNED NOT NULL,
   `coming` tinyint NOT NULL DEFAULT '0',
-  `geo_position` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `geo_position` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `pin` tinyint(1) NOT NULL,
   `tis` bigint UNSIGNED NOT NULL,
   `tie` bigint UNSIGNED NOT NULL,
@@ -372,7 +372,21 @@ CREATE TABLE `content` (
   `eti` bigint NOT NULL,
   `pti` bigint NOT NULL,
   `templatelist` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contentStats`
+--
+
+CREATE TABLE `contentStats` (
+  `id` bigint NOT NULL,
+  `rid` bigint NOT NULL,
+  `views` bigint NOT NULL,
+  `sales` bigint NOT NULL,
+  `ti` int NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -384,12 +398,12 @@ CREATE TABLE `courseTrack` (
   `id` bigint NOT NULL,
   `rid` bigint NOT NULL,
   `uid` bigint NOT NULL,
-  `complete` varchar(16) COLLATE utf8mb3_bin NOT NULL,
+  `complete` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `progress` int NOT NULL,
   `attempts` int NOT NULL,
   `score` int NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -400,14 +414,14 @@ CREATE TABLE `courseTrack` (
 CREATE TABLE `forumCategory` (
   `id` bigint NOT NULL,
   `rank` int NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_category` int NOT NULL,
   `ti` int NOT NULL,
   `pin` int NOT NULL,
   `help` int NOT NULL,
   `ord` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -422,15 +436,15 @@ CREATE TABLE `forumPosts` (
   `tid` bigint NOT NULL,
   `pid` bigint NOT NULL,
   `uid` bigint NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text COLLATE utf8mb3_bin NOT NULL,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `views` bigint NOT NULL,
   `vote` bigint NOT NULL,
   `pin` int NOT NULL,
   `help` int NOT NULL,
-  `status` varchar(16) COLLATE utf8mb3_bin NOT NULL,
+  `status` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -444,8 +458,8 @@ CREATE TABLE `forumPostTrack` (
   `tid` bigint NOT NULL,
   `pid` bigint NOT NULL,
   `uid` bigint NOT NULL,
-  `notes` tinytext COLLATE utf8mb3_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+  `notes` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -456,15 +470,15 @@ CREATE TABLE `forumPostTrack` (
 CREATE TABLE `forumTopics` (
   `id` bigint NOT NULL,
   `rank` int NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `cid` bigint NOT NULL,
   `uid` bigint NOT NULL,
   `ti` int NOT NULL,
   `pin` int NOT NULL,
   `help` int NOT NULL,
   `ord` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -476,8 +490,8 @@ CREATE TABLE `forumVoteTrack` (
   `id` bigint NOT NULL,
   `pid` bigint NOT NULL,
   `uid` bigint NOT NULL,
-  `notes` tinytext COLLATE utf8mb3_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+  `notes` text COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -487,12 +501,12 @@ CREATE TABLE `forumVoteTrack` (
 
 CREATE TABLE `iplist` (
   `id` bigint NOT NULL,
-  `ip` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `oti` int NOT NULL,
-  `reason` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `reason` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `permanent` tinyint(1) NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -503,17 +517,17 @@ CREATE TABLE `iplist` (
 CREATE TABLE `livechat` (
   `id` bigint NOT NULL,
   `aid` bigint NOT NULL,
-  `sid` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `who` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `name` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `email` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `ip` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `user_agent` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `sid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `who` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_agent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `phpChecked` int DEFAULT NULL,
-  `status` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `status` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -523,72 +537,72 @@ CREATE TABLE `livechat` (
 
 CREATE TABLE `login` (
   `id` bigint UNSIGNED NOT NULL,
-  `options` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '00000000000000000000000000000000',
-  `theme` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `options` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000000000000000000000000000000',
+  `theme` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `bio` tinyint(1) NOT NULL,
-  `bio_options` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '00000000000000000000000000000000',
-  `username` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `password` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `tags` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `cover` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `coverURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageTitle` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageName` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `avatar` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `gravatar` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `business` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `name` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `email` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `www` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `bio_options` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000000000000000000000000000000',
+  `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `password` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tags` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cover` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `coverURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageTitle` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `avatar` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gravatar` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `business` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `www` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `experience` int NOT NULL,
-  `hash` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `emailPassword` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `hash` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `emailPassword` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_check` int NOT NULL,
   `liveChatNotification` int NOT NULL,
-  `email_signature` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `url` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `address` varchar(80) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `suburb` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `city` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `state` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `email_signature` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `address` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `suburb` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `state` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `postcode` mediumint UNSIGNED NOT NULL,
-  `country` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `abn` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `phone` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `mobile` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `caption` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoDescription` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `resume_notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `status` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `country` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `abn` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `phone` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mobile` varchar(14) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `caption` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoDescription` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `resume_notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `active` tinyint UNSIGNED NOT NULL,
   `helpResponder` tinyint(1) NOT NULL,
-  `activate` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `activate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `newsletter` int NOT NULL DEFAULT '0',
-  `language` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `timezone` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `language` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `timezone` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rank` int UNSIGNED NOT NULL,
-  `discount` varchar(4) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `discount` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `spent` decimal(10,2) NOT NULL,
   `points` int NOT NULL,
-  `purchaseLimit` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `purchaseLimit` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `purchaseTime` int NOT NULL,
-  `infoHash` varchar(32) COLLATE utf8mb3_bin NOT NULL,
+  `infoHash` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
   `hostCost` decimal(8,2) NOT NULL,
   `siteCost` decimal(8,2) NOT NULL,
-  `hostStatus` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `siteStatus` varchar(16) COLLATE utf8mb3_bin NOT NULL,
+  `hostStatus` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `siteStatus` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
   `lti` int NOT NULL,
   `hti` int NOT NULL,
   `sti` int NOT NULL,
   `accountsContact` tinyint(1) NOT NULL,
-  `userAgent` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `userIP` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `userAgent` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userIP` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `pti` int NOT NULL,
   `ord` bigint NOT NULL,
   `ti` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -600,17 +614,17 @@ CREATE TABLE `logs` (
   `id` bigint NOT NULL,
   `uid` bigint NOT NULL,
   `rid` bigint NOT NULL,
-  `username` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `name` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `view` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `contentType` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `refTable` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `refColumn` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `username` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `view` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contentType` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `refTable` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `refColumn` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `oldda` longblob,
   `newda` longblob NOT NULL,
-  `action` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `action` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -623,33 +637,33 @@ CREATE TABLE `media` (
   `rank` int DEFAULT '0',
   `pid` bigint NOT NULL,
   `rid` bigint NOT NULL,
-  `file` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `fileALT` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `title` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `category_1` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `category_2` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `category_3` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `category_4` varchar(30) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageName` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifISO` varchar(4) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifAperture` varchar(2) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifFocalLength` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifShutterSpeed` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifCamera` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifLens` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `exifFilename` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `file` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fileALT` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_1` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_2` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_3` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `category_4` varchar(30) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifISO` varchar(4) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifAperture` varchar(2) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifFocalLength` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifShutterSpeed` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifCamera` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifLens` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `exifFilename` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `exifti` int NOT NULL,
-  `tags` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoTitle` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoCaption` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoDescription` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `status` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `tags` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoTitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoCaption` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `views` bigint NOT NULL,
   `suggestions` int NOT NULL,
   `ord` bigint NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -662,81 +676,82 @@ CREATE TABLE `menu` (
   `rank` int DEFAULT NULL,
   `mid` bigint NOT NULL DEFAULT '0',
   `uid` bigint NOT NULL,
-  `options` varchar(8) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '00000000',
-  `login_user` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `title` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `heading` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `seoTitle` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin DEFAULT NULL,
-  `metaRobots` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `url` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `file` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `fileALT` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `cover` varchar(128) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `coverURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `coverVideo` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `sliderOptions` varchar(16) COLLATE utf8mb3_bin NOT NULL DEFAULT '0000000000000000',
-  `sliderDirection` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `sliderEffect` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `options` varchar(8) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '00000000',
+  `login_user` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `heading` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoTitle` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `metaRobots` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `fileALT` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `cover` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coverURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `coverVideo` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sliderOptions` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0000000000000000',
+  `sliderDirection` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sliderEffect` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `sliderSpeed` int NOT NULL DEFAULT '300',
   `sliderAutoplayDelay` int NOT NULL DEFAULT '3000',
-  `attributionImageTitle` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageName` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attributionImageURL` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `contentType` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `schemaType` varchar(40) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoKeywords` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoDescription` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `seoCaption` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `menu` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `attributionImageTitle` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageName` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attributionImageURL` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `contentType` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `schemaType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoKeywords` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoDescription` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `seoCaption` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `menu` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint UNSIGNED NOT NULL,
-  `checklist` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL DEFAULT '0000000000000000',
+  `checklist` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '0000000000000000',
   `active` tinyint UNSIGNED NOT NULL,
   `views` bigint NOT NULL,
   `suggestions` int NOT NULL,
   `tie` int NOT NULL,
   `eti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `menu`
 --
 
 INSERT INTO `menu` (`id`, `rank`, `mid`, `uid`, `options`, `login_user`, `title`, `heading`, `seoTitle`, `metaRobots`, `url`, `file`, `fileALT`, `cover`, `coverURL`, `coverVideo`, `sliderOptions`, `sliderDirection`, `sliderEffect`, `sliderSpeed`, `sliderAutoplayDelay`, `attributionImageTitle`, `attributionImageName`, `attributionImageURL`, `contentType`, `schemaType`, `seoKeywords`, `seoDescription`, `seoCaption`, `menu`, `notes`, `ord`, `checklist`, `active`, `views`, `suggestions`, `tie`, `eti`) VALUES
-(1, 0, 0, 1, '00000000', 'Dennis Suitters', 'Home', 'We are Diemen Design, Creators of Beautiful and Iconic Tasmanian Handcrafted and Timber Items from Tasmania.', '', '', '', 'index', 'Live Lightly Centre Reception', '', '', '', '0111110000000000', 'horizontal', 'fade', 300, 3000, '', '', '', 'index', '', 'wood,turning,woodturned,timber,open,source,photography,digital,artwork,websit,design,development', '', '', 'head', '<p>Diemen Design &dollar;100&period;00 is a &num; Tasmanian &lpar;Lutruwita&rpar; based Maker Studio of Handcrafted Wood and Timber Products&comma; producing Office&comma; Kitchen and Home-ware Utensil&apos;s and everyday items&period; We endeavour to produce products that are aesthetically pleasing&comma; easy to use and useful for everyone from all walks of life&period;</p>&NewLine;<p>Our Handcrafted Products&comma; mainly consist of Wood Turned Products&comma; using mainly Tasmanian locally sourced timbers&comma; in an ecological and sustainable process&period; We prefer to use Tree Timber material that has long been felled&comma; taken down for safety reasons&comma; or has fallen without intervention&period;</p>&NewLine;<p>Diemen Design is situated within <a href=\"https://happyvalleygoat.farm/\">Happy Valley Goat Farm</a>&comma; where we look after Sheep&comma; Goats and Chickens&comma; in an eco-friendly and animal friendly manner&comma; with the help of our Dog &quot;Bella&quot;&comma; our cheeky Maremma&period; We look after our animals better than ourselves&period;</p><p>Have a <a href=\"https://www.tasmanian.com.au/tools-and-resources/podcasts\">Listen</a> to what it&apos;s like to be a Tasmanian Owned and run Business&comma; presented by <a href=\"https://www.tasmanian.com.au/\">Brand Tasmania</a> or follow them on <a href=\"https://twitter.com/brandtasmania\">Twitter</a>&period;</p>', 0, '0000000000000000', 1, 1542, 0, 0, 1661697975),
-(2, 0, 0, 1, '00000000', 'Dennis Suitters', 'Blog', 'Blog Heading', '', '', '', 'article', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'article', '', '', '', '', 'head', '<p>Paddock bottlo ugg boots fair go, mate fossicker. Mickey mouse mate esky ciggy roadie boardies cream stonkered. Icy pole bikie slacker as busy as a give it a burl. Pissed bitzer rort blind outback defo galah fairy floss bradman. Bruce how stickybeak ya cut lunch booze bus how. Chock a block hottie daks sleepout pash pretty spiffy built like a holden skite coppers. Carrying on like a pork chop dero gyno bloody oath ciggies dead horse jumbuck bail up dill. Cockie ridgy-didge cane toad strewth ripper better than a ham sandwich fair crack of the whip bonzer. Ankle biter longneck slab whinge not my bowl of rice booze true blue mad as a gobful up the duff accadacca ironman. Dero what\'s the john dory? lollies struth strides buggered up the duff chokkie. Heaps vinnie\'s joey outback paddock crikey blow in the bag. Shazza skite ropeable lippy freo six of one, half a dozen of the other flick beauty. When amber fluid tucker full blown fly wire head like a dropped pie barrack avo slaps catcus spewin\'. Knickers dead horse put a sock in it buck\'s night shoot through bushie rollie fisho bogan donga.</p><p>Roo bundy whinge gobful and holy dooley bodgy root rat. Budgie smugglers lets get some brekkie compo brolly cut lunch commando flanno. Crikey bikie u-ie lizard drinking rello freo. Offsider throw-down jillaroo ciggy bastards skite. Leg it crow eaters rotten to skite ciggies drongo. No worries trackie dacks hottie clacker ocker truckie. Rotten bunyip toads dob fair suck of the sauce bottle stonkered accadacca. Whinge cane toad a few sandwiches short of a picnic christmas as cunning as a gutful of bradman.</p><p>He hasn\'t got a rollie bushranger oi she\'ll be right. Bazza turps boardies truckie bonzer. Smokes better than a kick up the backside ambo aerial pingpong. Tell him he\'s dreaming fairy floss dole bludger wouldn\'t piss on them if they\'re on fire. Longneck blowie leg it off chops bingle lets get some tosser avo bloody. Squizz blimey buckley\'s chance thunderbox deadset he\'s dreaming. Dry as as dead dingo\'s donga struth fairy floss stubby oi as stands out like dry as as dead dingo\'s donga fair go, mate. G\'day bushranger donger apples pozzy strides crack the shits built like a squizz good oil better than a kick up the backside reckon. Flake thongs sandgroppers u-ie chuck a spaz ace cockie. Donga bush bash furthy donga brolly beauty barbie tucker-bag as cunning as a.</p>', 6, '0000000000000000', 0, 56, 0, 0, 1631882095),
+(1, 0, 0, 1, '00000000', 'Dennis Suitters', 'Home', 'We are Diemen Design, Creators of Beautiful and Iconic Tasmanian Handcrafted and Timber Items from Tasmania.', '', '', '', 'index', 'Live Lightly Centre Reception', 'http://localhost/AuroraCMS2/media/img-6116.jpg', '', '', '0111110000000000', 'horizontal', 'fade', 300, 3000, '', '', '', 'index', '', 'wood,turning,woodturned,timber,open,source,photography,digital,artwork,websit,design,development', '', '', 'head', '<p>🪘Diemen Design &dollar;100&period;00 is a &num; Tasmanian &lpar;Lutruwita&rpar; based Maker Studio of Handcrafted Wood and Timber Products&comma; producing Office&comma; Kitchen and Home-ware Utensil&apos;s and everyday items&period; We endeavour to produce products that are aesthetically pleasing&comma; easy to use and useful for everyone from all walks of life&period;</p>&NewLine;<p>Our Handcrafted Products&comma; 🇨🇴mainly consist of Wood Turned Products&comma; using mainly Tasmanian locally sourced timbers&comma; in an ecological and sustainable process&period; We prefer to use Tree Timber material that has long been felled&comma; taken down for safety reasons&comma; or has fallen without intervention&period;</p>&NewLine;<p>Diemen Design is situated within <a href=\"https://happyvalleygoat.farm/\">Happy Valley Goat Farm</a>&comma; where we look after Sheep&comma; Goats and Chickens&comma; in an eco-friendly and animal friendly manner&comma; with the help of our Dog &quot;Bella&quot;&comma; our cheeky Maremma&period; We look after our animals better than ourselves&period;</p><p>Have a <a href=\"https://www.tasmanian.com.au/tools-and-resources/podcasts\">Listen</a> to what it&apos;s like to be a Tasmanian Owned and run Business&comma; presented by <a href=\"https://www.tasmanian.com.au/\">Brand Tasmania</a> or follow them on <a href=\"https://twitter.com/brandtasmania\">Twitter</a>&period;</p>', 0, '0000000000000000', 1, 3002, 0, 0, 1675869756),
+(2, 0, 0, 1, '00000000', 'Dennis Suitters', 'Blog', 'Blog Heading', '', '', '', 'article', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'article', '', '', '', '', 'head', '<p>Paddock bottlo ugg boots fair go, mate fossicker. Mickey mouse mate esky ciggy roadie boardies cream stonkered. Icy pole bikie slacker as busy as a give it a burl. Pissed bitzer rort blind outback defo galah fairy floss bradman. Bruce how stickybeak ya cut lunch booze bus how. Chock a block hottie daks sleepout pash pretty spiffy built like a holden skite coppers. Carrying on like a pork chop dero gyno bloody oath ciggies dead horse jumbuck bail up dill. Cockie ridgy-didge cane toad strewth ripper better than a ham sandwich fair crack of the whip bonzer. Ankle biter longneck slab whinge not my bowl of rice booze true blue mad as a gobful up the duff accadacca ironman. Dero what\'s the john dory? lollies struth strides buggered up the duff chokkie. Heaps vinnie\'s joey outback paddock crikey blow in the bag. Shazza skite ropeable lippy freo six of one, half a dozen of the other flick beauty. When amber fluid tucker full blown fly wire head like a dropped pie barrack avo slaps catcus spewin\'. Knickers dead horse put a sock in it buck\'s night shoot through bushie rollie fisho bogan donga.</p><p>Roo bundy whinge gobful and holy dooley bodgy root rat. Budgie smugglers lets get some brekkie compo brolly cut lunch commando flanno. Crikey bikie u-ie lizard drinking rello freo. Offsider throw-down jillaroo ciggy bastards skite. Leg it crow eaters rotten to skite ciggies drongo. No worries trackie dacks hottie clacker ocker truckie. Rotten bunyip toads dob fair suck of the sauce bottle stonkered accadacca. Whinge cane toad a few sandwiches short of a picnic christmas as cunning as a gutful of bradman.</p><p>He hasn\'t got a rollie bushranger oi she\'ll be right. Bazza turps boardies truckie bonzer. Smokes better than a kick up the backside ambo aerial pingpong. Tell him he\'s dreaming fairy floss dole bludger wouldn\'t piss on them if they\'re on fire. Longneck blowie leg it off chops bingle lets get some tosser avo bloody. Squizz blimey buckley\'s chance thunderbox deadset he\'s dreaming. Dry as as dead dingo\'s donga struth fairy floss stubby oi as stands out like dry as as dead dingo\'s donga fair go, mate. G\'day bushranger donger apples pozzy strides crack the shits built like a squizz good oil better than a kick up the backside reckon. Flake thongs sandgroppers u-ie chuck a spaz ace cockie. Donga bush bash furthy donga brolly beauty barbie tucker-bag as cunning as a.</p>', 5, '0000000000000000', 1, 59, 0, 0, 1631882095),
 (3, 0, 0, 1, '00000000', 'Dennis Suitters', 'Portfolio', '', '', '', '', 'portfolio', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'portfolio', '', '', '', '', 'head', '', 10, '0000000000000000', 0, 0, 0, 0, 1624603960),
-(4, 0, 0, 1, '00000000', 'Dennis Suitters', 'Bookings', 'Bookings Page', '', '', '', 'bookings', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'bookings', '', '', '', '', 'head', '<p>Loose cannon struth ratbag hit the frog and toad no wuckin&apos; furries dunny deadset carry on like a pork chop&period; &dollar;100&period;00 Bottle-o you little ripper she&apos;ll be right cobber&period; Rage on better than a kick up the backside garbo boogie board flick and&period; Better than a ham sandwich no wuckin&apos; furries bail up prezzy boogie board mates&period; Dry as as dead dingo&apos;s donga brass razoo shark biscuit brolly bingle freckle&period; Ratbag two up avos knackered defo&period; Skull trackies chook butcher loose cannon blue pash not my cup of tea sheila what&apos;s crackin&apos; rage on footy&period; Ankle biter cut snake sunnies chin wag coppers fair dinkum&period; Maccas bloody hard yakka fossicker&period; Dardy bottlo amber fluid porky lippy&period;</p><p>Blow in the bag outback slappa home grown where cracker dill suss it out&period; Up the duff g&apos;day dinky-di grab us a catcus lappy&period; Mullet onya bike tucker-bag a few sandwiches short of a picnic roo bar freo vb&period; Deadset tucker plonk fairy floss&period; Tucker-bag bloke servo bloke grouse&period; Battler flanny a few sandwiches short of a picnic also pozzy jumbuck defo pav&period;</p><p>Compo sandgropper grouse crow eaters&period; Digger pull the wool over their eyes cark it goon bag&period; Chock a block parma doovalacky bonza oi heaps stickybeak&period; Dag ugg boots corker mate&apos;s rates shoey&period; Ten clicks away furthy rapt pav fair suck of the sauce bottle chuck a spaz how&period; Bloody ripper rack off fisho boil-over skull aussie salute milk bar mates eureka as dry as a lippy dardy&period; Ken oath middy bities spit the dummy shag on a rock bloody oath&period;</p><p>Dero shazza got us some metho brizzie tucker-bag mickey mouse mate rock up offsider carry on like a pork chop&period; Cobber iffy swag bingle bushman&apos;s handkerchief bastard chock a block decent nik pull the wool over their eyes&period; Tradie better than a kick up the backside throw-down laughing gear middy fremantle doctor kindie&period; Shazza sickie footy slaps as dry as a gutta&period; Brass razoo ciggies arvo thunderbox gutta dog&apos;s breakfast furthy&period; Sick drongo fruit loop accadacca buckley&apos;s chance offsider nuddy chewie stubby pissed suss it out bradman&period; Slacker bushranger goon bag barbie chuck a yewy carrying on like a pork chop dead horse bushman&apos;s handkerchief smokes&period; Shazza built like a bazza ugg piss up dog&apos;s eye come a tosser road train taking the piss&period; Butcher schooner goon whit shazza got us some middy prezzy lollies&period;</p><p>Pozzy leg it chunder mozzie&period; Throw-down longneck parma going off&period; Avo brizzie to he&apos;s got a massive he&apos;s dreaming&period; Cark it trackie dacks footy moolah bogged skeg piker shoey&period; Bush he&apos;s got a massive thunderbox piss off&period; Brisvegas like a madwoman&apos;s shit down under billy&period; Flamin&apos; good oil as dry as a sook hottie&period;</p>', 1, '0000000000000000', 1, 103, 0, 0, 1651895042),
+(4, 0, 15, 1, '00000000', 'Dennis Suitters', 'Bookings', 'Bookings Page', '', '', '', 'bookings', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'bookings', '', '', '', '', 'head', '<p>Loose cannon struth ratbag hit the frog and toad no wuckin&apos; furries dunny deadset carry on like a pork chop&period; &dollar;100&period;00 Bottle-o you little ripper she&apos;ll be right cobber&period; Rage on better than a kick up the backside garbo boogie board flick and&period; Better than a ham sandwich no wuckin&apos; furries bail up prezzy boogie board mates&period; Dry as as dead dingo&apos;s donga brass razoo shark biscuit brolly bingle freckle&period; Ratbag two up avos knackered defo&period; Skull trackies chook butcher loose cannon blue pash not my cup of tea sheila what&apos;s crackin&apos; rage on footy&period; Ankle biter cut snake sunnies chin wag coppers fair dinkum&period; Maccas bloody hard yakka fossicker&period; Dardy bottlo amber fluid porky lippy&period;</p><p>Blow in the bag outback slappa home grown where cracker dill suss it out&period; Up the duff g&apos;day dinky-di grab us a catcus lappy&period; Mullet onya bike tucker-bag a few sandwiches short of a picnic roo bar freo vb&period; Deadset tucker plonk fairy floss&period; Tucker-bag bloke servo bloke grouse&period; Battler flanny a few sandwiches short of a picnic also pozzy jumbuck defo pav&period;</p><p>Compo sandgropper grouse crow eaters&period; Digger pull the wool over their eyes cark it goon bag&period; Chock a block parma doovalacky bonza oi heaps stickybeak&period; Dag ugg boots corker mate&apos;s rates shoey&period; Ten clicks away furthy rapt pav fair suck of the sauce bottle chuck a spaz how&period; Bloody ripper rack off fisho boil-over skull aussie salute milk bar mates eureka as dry as a lippy dardy&period; Ken oath middy bities spit the dummy shag on a rock bloody oath&period;</p><p>Dero shazza got us some metho brizzie tucker-bag mickey mouse mate rock up offsider carry on like a pork chop&period; Cobber iffy swag bingle bushman&apos;s handkerchief bastard chock a block decent nik pull the wool over their eyes&period; Tradie better than a kick up the backside throw-down laughing gear middy fremantle doctor kindie&period; Shazza sickie footy slaps as dry as a gutta&period; Brass razoo ciggies arvo thunderbox gutta dog&apos;s breakfast furthy&period; Sick drongo fruit loop accadacca buckley&apos;s chance offsider nuddy chewie stubby pissed suss it out bradman&period; Slacker bushranger goon bag barbie chuck a yewy carrying on like a pork chop dead horse bushman&apos;s handkerchief smokes&period; Shazza built like a bazza ugg piss up dog&apos;s eye come a tosser road train taking the piss&period; Butcher schooner goon whit shazza got us some middy prezzy lollies&period;</p><p>Pozzy leg it chunder mozzie&period; Throw-down longneck parma going off&period; Avo brizzie to he&apos;s got a massive he&apos;s dreaming&period; Cark it trackie dacks footy moolah bogged skeg piker shoey&period; Bush he&apos;s got a massive thunderbox piss off&period; Brisvegas like a madwoman&apos;s shit down under billy&period; Flamin&apos; good oil as dry as a sook hottie&period;</p>', 1, '0000000000000000', 1, 0, 0, 0, 1675607735),
 (5, 0, 0, 1, '00000000', 'Dennis Suitters', 'Events', '', '', '', '', 'events', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'events', '', '', '', '', 'head', '', 11, '0000000000000000', 0, 14, 0, 0, 1649512297),
 (6, 0, 0, 1, '00000000', 'Anonymous', 'News', '', '', 'index,follow', '', 'news', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'news', '', '', '', '', 'head', '', 13, '0000000000000000', 0, 0, 0, 0, 1585466222),
-(7, 0, 0, 1, '00000000', 'Dennis Suitters', 'Testimonials', 'Testimonials Heading', '', '', '', 'testimonials', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'testimonials', '', '', '', '', 'head', '<p>Boardies she\'ll be apples blow in the bag schooner postie dole bludger dunny rat knackered rort. Frog in a sock crow eaters ankle biter freckle dry as as dead dingo\'s donga she\'ll be apples have a captain cook bush oyster. Trackies blowie brizzie shoey stubby vinnie\'s beauty apples chuck a sickie. Beauty snag chokkie better than a kick up the backside squizz piss off. Bloke skeg bluey bloody stickybeak manchester mickey mouse mate no wuckin\' furries shazza laughing gear suss. Bull bar like a madwoman\'s shit muster pelican grouse pozzy and chin wag. Road train gyno thunderbox cark it fossicker. Dog\'s breakfast fruit loop too right a few stubbies short of a six-pack as cross as a. Dipstick beauty straight to the pool room devo ford longneck. Gnarly avo bathers bail up bounce. Kelpie show pony donga bottlo galah.</p>', 5, '0000000000000000', 1, 37, 0, 0, 1648201613),
-(8, 0, 0, 1, '00000000', 'Dennis Suitters', 'Products', 'Products Heading', '', '', '', 'inventory', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'inventory', '', '', '', '', 'head', '<p>Trackie dacks on the cans divvy van piss off esky as stands out like. His blood\'s worth bottling cobber ironman joey furthy devo toads mate no dramas bounce. Whinge offsider bog standard jackaroo sleepout pelican. Bail  offsider bluey middy flick. Sunnies bloody oath thingo postie flanny cleanskin bingle grouse. Cut lunch commando jackaroo grab us a skull back of bourke chokkie lurk dog\'s breakfast bingle. Cranky full boar yobbo stubby holder servo gobsmacked ute. Booze bus billy dunny brisvegas good onya. Furthy servo plonk op shop bitzer aussie salute brisvegas pissed off barrack up the duff. Fruit loop no dramas two pot screamer and bloody ripper galah full blown. She\'ll be apples root rat dero flick ugg.</p><p>Amber fluid strewth iffy flat out like a. Brickie dog\'s breakfast my bodgy bail jumbuck. Dipstick heaps knock throw a shrimp on the barbie waratah feral. Crack the shits bonzer battler come a fisho cab sav bushie show pony mate. Your shout oldies rip snorter fair go, mate bloody ripper. Chin wag burk compo trackie dacks.</p>', 8, '0000000000000000', 1, 453, 0, 0, 1631882174),
-(9, 0, 0, 1, '11000000', 'Dennis Suitters', 'Services', '', '', '', '', 'services', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'service', '', '', '', '', 'head', '', 7, '0000000000000000', 0, 0, 0, 0, 1629879786),
-(10, 0, 0, 1, '00000000', 'Dennis Suitters', 'Gallery', 'Gallery Heading', '', '', '', 'gallery', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'gallery', '', '', '', '', 'head', '<p>Gyno off chops no worries buggered bushranger back of bourke. Shark biscuit flick flamin\' feral bush telly good oil sunnies hooroo. Rego chewie moolah dardy sunnies one for the road ten clicks away flat out. Sickie mates she\'ll be apples gobsmacked piker dunny shark biscuit outback too right strewth cockie. Gobsmacked top end dinky-di flick squizz stands out like a tickets on yourself to. Fairy floss donga also and fair suck of the sauce bottle ambo. Chin wag his blood\'s worth bottling road train dardy galah smoko budgie smugglers woop woop bush telly sickie eureka. As stands out like dropkick rack off loose cannon stonkered grog loose cannon. Dill op shop trackies kindie brisvegas.</p><p>Burk snag chokkie to chokkie bruce. Battler bundy mates ridgy-didge slab tosser fair go, mate. Beauty when yobbo bushman\'s handkerchief goon bag pissed off. Tucker-bag carrying on like a pork chop piece of piss avos it\'ll be dob sick cook shonky. Rapt truckie cane toad feral mad as a fair go, mate eureka piece of piss it\'ll be.</p>', 12, '0000000000000000', 1, 26, 0, 0, 1631882769),
-(11, 0, 0, 1, '00000000', 'Dennis Suitters', 'Contact', 'Contact Heading', '', '', '', 'contactus', '', '', '', '', '0000000000000000', '', '', 300, 3000, 'Contact Page Attribution', 'Anonymous', 'https://diemen.design/', 'contactus', '', '', '', '', 'head', '<p>Bastard bruce dunny rat fisho taking the piss accadacca chuck a yewy. Kindie off chops suss what\'s crackin\' gnarly. Fair crack of the whip skeg fair go one for the road snag prezzy maccas. Tinny waggin\' school bush bash plonk. Apples skull lets throw a sunnies as busy as a. Loose cannon two pot screamer as stands out like pint ciggies.</p>', 9, '0000000000000000', 1, 74, 0, 0, 1648201587),
-(12, 0, 0, 1, '00000000', 'Dennis Suitters', 'Cart', 'Cart Heading', '', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'cart', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'cart', '', '', '', '', 'head', '<p>Leg it pissed flick ford throw-down. Thunderbox garbo fair dinkum two pot screamer. Two up stoked flanny full blown two pot screamer burk boogie board better than a kick up the backside. Rock up hit the turps cut lunch commando nipper yakka. Home grown galah chook bonza ratbag. Ken oath knackered devo waggin\' school and servo. Chunder better than a ham sandwich troppo heaps gutful of. Divvy van strewth troppo garbo fair crack of the whip road train up the duff arvo. Chokkie blue bushranger aerial pingpong shonky sickie. Drongo burk goon two up flanny. Burk frothy smoko gone walkabout billabong defo. Bush bash butcher bodgy paddock two pot screamer.</p>', 14, '0000000000000000', 1, 436, 0, 0, 1648430722),
-(13, 0, 0, 1, '00000000', 'dev', 'Terms of Service', 'Terms of Service', '', 'index,follow', '', 'page', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'page', '', '', '', '', 'footer', '<p>Please read these Terms of Service (\"Terms\", \"Terms of Service\") carefully before using the {url} website (the \"Service\") operated by {business} (\"us\", \"we\", or \"our\").</p>\r\n<p>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>\r\n<p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>\r\n<h2>Accounts</h2>\r\n<p>When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>\r\n<p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service.</p>\r\n<p>You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>\r\n<h2>Links To Other Web Sites</h2>\r\n<p>Our Service may contain links to third-party web sites or services that are not owned or controlled by {business}.</p>\r\n<p>{business} has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that {business} shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.</p>\r\n<p>We strongly advise you to read the terms and conditions and privacy policies of any third-party web sites or services that you visit.</p>\r\n<h2>Termination</h2>\r\n<p>We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>\r\n<p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.</p>\r\n<p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>\r\n<p>Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service.</p>\r\n<p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.</p>\r\n<h2>Governing Law</h2>\r\n<p>These Terms shall be governed and construed in accordance with the laws of Tasmania, Australia, without regard to its conflict of law provisions.</p>\r\n<p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service.</p>\r\n<h2>Changes</h2>\r\n<p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>\r\n<p>By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>\r\n', 20, '0000000000000000', 1, 11, 0, 0, 1641913095),
+(7, 0, 0, 1, '00000000', 'Dennis Suitters', 'Testimonials', 'Testimonials Heading', '', '', '', 'testimonials', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'testimonials', '', '', '', '', 'head', '<p>Boardies she\'ll be apples blow in the bag schooner postie dole bludger dunny rat knackered rort. Frog in a sock crow eaters ankle biter freckle dry as as dead dingo\'s donga she\'ll be apples have a captain cook bush oyster. Trackies blowie brizzie shoey stubby vinnie\'s beauty apples chuck a sickie. Beauty snag chokkie better than a kick up the backside squizz piss off. Bloke skeg bluey bloody stickybeak manchester mickey mouse mate no wuckin\' furries shazza laughing gear suss. Bull bar like a madwoman\'s shit muster pelican grouse pozzy and chin wag. Road train gyno thunderbox cark it fossicker. Dog\'s breakfast fruit loop too right a few stubbies short of a six-pack as cross as a. Dipstick beauty straight to the pool room devo ford longneck. Gnarly avo bathers bail up bounce. Kelpie show pony donga bottlo galah.</p>', 6, '0000000000000000', 1, 44, 0, 0, 1648201613),
+(8, 0, 0, 1, '00000000', 'Dennis Suitters', 'Products', 'Products Heading', '', '', '', 'inventory', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'inventory', '', '', '', '', 'head', '<p>Trackie dacks on the cans divvy van piss off esky as stands out like. His blood\'s worth bottling cobber ironman joey furthy devo toads mate no dramas bounce. Whinge offsider bog standard jackaroo sleepout pelican. Bail  offsider bluey middy flick. Sunnies bloody oath thingo postie flanny cleanskin bingle grouse. Cut lunch commando jackaroo grab us a skull back of bourke chokkie lurk dog\'s breakfast bingle. Cranky full boar yobbo stubby holder servo gobsmacked ute. Booze bus billy dunny brisvegas good onya. Furthy servo plonk op shop bitzer aussie salute brisvegas pissed off barrack up the duff. Fruit loop no dramas two pot screamer and bloody ripper galah full blown. She\'ll be apples root rat dero flick ugg.</p><p>Amber fluid strewth iffy flat out like a. Brickie dog\'s breakfast my bodgy bail jumbuck. Dipstick heaps knock throw a shrimp on the barbie waratah feral. Crack the shits bonzer battler come a fisho cab sav bushie show pony mate. Your shout oldies rip snorter fair go, mate bloody ripper. Chin wag burk compo trackie dacks.</p>', 9, '0000000000000000', 1, 543, 0, 0, 1631882174),
+(9, 0, 0, 1, '11000000', 'Dennis Suitters', 'Services', '', '', '', '', 'services', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'service', '', '', '', '', 'head', '', 8, '0000000000000000', 0, 0, 0, 0, 1629879786),
+(10, 0, 0, 1, '00000000', 'Dennis Suitters', 'Gallery', 'Gallery Heading', '', '', '', 'gallery', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'gallery', '', '', '', '', 'head', '<p>Gyno off chops no worries buggered bushranger back of bourke. Shark biscuit flick flamin\' feral bush telly good oil sunnies hooroo. Rego chewie moolah dardy sunnies one for the road ten clicks away flat out. Sickie mates she\'ll be apples gobsmacked piker dunny shark biscuit outback too right strewth cockie. Gobsmacked top end dinky-di flick squizz stands out like a tickets on yourself to. Fairy floss donga also and fair suck of the sauce bottle ambo. Chin wag his blood\'s worth bottling road train dardy galah smoko budgie smugglers woop woop bush telly sickie eureka. As stands out like dropkick rack off loose cannon stonkered grog loose cannon. Dill op shop trackies kindie brisvegas.</p><p>Burk snag chokkie to chokkie bruce. Battler bundy mates ridgy-didge slab tosser fair go, mate. Beauty when yobbo bushman\'s handkerchief goon bag pissed off. Tucker-bag carrying on like a pork chop piece of piss avos it\'ll be dob sick cook shonky. Rapt truckie cane toad feral mad as a fair go, mate eureka piece of piss it\'ll be.</p>', 12, '0000000000000000', 0, 26, 0, 0, 1631882769),
+(11, 0, 0, 1, '00000000', 'Dennis Suitters', 'Contact', 'Contact Heading', '', '', '', 'contactus', '', '', '', '', '0000000000000000', '', '', 300, 3000, 'Contact Page Attribution', 'Anonymous', 'https://diemen.design/', 'contactus', '', '', '', '', 'head', '<p>Bastard bruce dunny rat fisho taking the piss accadacca chuck a yewy. Kindie off chops suss what\'s crackin\' gnarly. Fair crack of the whip skeg fair go one for the road snag prezzy maccas. Tinny waggin\' school bush bash plonk. Apples skull lets throw a sunnies as busy as a. Loose cannon two pot screamer as stands out like pint ciggies.</p>', 7, '0000000000000000', 1, 79, 0, 0, 1648201587),
+(12, 0, 0, 1, '00000000', 'Dennis Suitters', 'Cart', 'Cart Heading', '', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'cart', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'cart', '', '', '', '', 'head', '<p>Leg it pissed flick ford throw-down. Thunderbox garbo fair dinkum two pot screamer. Two up stoked flanny full blown two pot screamer burk boogie board better than a kick up the backside. Rock up hit the turps cut lunch commando nipper yakka. Home grown galah chook bonza ratbag. Ken oath knackered devo waggin\' school and servo. Chunder better than a ham sandwich troppo heaps gutful of. Divvy van strewth troppo garbo fair crack of the whip road train up the duff arvo. Chokkie blue bushranger aerial pingpong shonky sickie. Drongo burk goon two up flanny. Burk frothy smoko gone walkabout billabong defo. Bush bash butcher bodgy paddock two pot screamer.</p>', 14, '0000000000000000', 1, 448, 0, 0, 1648430722),
+(13, 0, 0, 1, '00000000', 'dev', 'Terms of Service', 'Terms of Service', '', 'index,follow', '', 'page', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'page', '', '', '', '', 'footer', '<p>Please read these Terms of Service (\"Terms\", \"Terms of Service\") carefully before using the {url} website (the \"Service\") operated by {business} (\"us\", \"we\", or \"our\").</p>\r\n<p>Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms. These Terms apply to all visitors, users and others who access or use the Service.</p>\r\n<p>By accessing or using the Service you agree to be bound by these Terms. If you disagree with any part of the terms then you may not access the Service.</p>\r\n<h2>Accounts</h2>\r\n<p>When you create an account with us, you must provide us information that is accurate, complete, and current at all times. Failure to do so constitutes a breach of the Terms, which may result in immediate termination of your account on our Service.</p>\r\n<p>You are responsible for safeguarding the password that you use to access the Service and for any activities or actions under your password, whether your password is with our Service or a third-party service.</p>\r\n<p>You agree not to disclose your password to any third party. You must notify us immediately upon becoming aware of any breach of security or unauthorized use of your account.</p>\r\n<h2>Links To Other Web Sites</h2>\r\n<p>Our Service may contain links to third-party web sites or services that are not owned or controlled by {business}.</p>\r\n<p>{business} has no control over, and assumes no responsibility for, the content, privacy policies, or practices of any third party web sites or services. You further acknowledge and agree that {business} shall not be responsible or liable, directly or indirectly, for any damage or loss caused or alleged to be caused by or in connection with use of or reliance on any such content, goods or services available on or through any such web sites or services.</p>\r\n<p>We strongly advise you to read the terms and conditions and privacy policies of any third-party web sites or services that you visit.</p>\r\n<h2>Termination</h2>\r\n<p>We may terminate or suspend access to our Service immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>\r\n<p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.</p>\r\n<p>We may terminate or suspend your account immediately, without prior notice or liability, for any reason whatsoever, including without limitation if you breach the Terms.</p>\r\n<p>Upon termination, your right to use the Service will immediately cease. If you wish to terminate your account, you may simply discontinue using the Service.</p>\r\n<p>All provisions of the Terms which by their nature should survive termination shall survive termination, including, without limitation, ownership provisions, warranty disclaimers, indemnity and limitations of liability.</p>\r\n<h2>Governing Law</h2>\r\n<p>These Terms shall be governed and construed in accordance with the laws of Tasmania, Australia, without regard to its conflict of law provisions.</p>\r\n<p>Our failure to enforce any right or provision of these Terms will not be considered a waiver of those rights. If any provision of these Terms is held to be invalid or unenforceable by a court, the remaining provisions of these Terms will remain in effect. These Terms constitute the entire agreement between us regarding our Service, and supersede and replace any prior agreements we might have between us regarding the Service.</p>\r\n<h2>Changes</h2>\r\n<p>We reserve the right, at our sole discretion, to modify or replace these Terms at any time. If a revision is material we will try to provide at least 30 days notice prior to any new terms taking effect. What constitutes a material change will be determined at our sole discretion.</p>\r\n<p>By continuing to access or use our Service after those revisions become effective, you agree to be bound by the revised terms. If you do not agree to the new terms, please stop using the Service.</p>\r\n', 21, '0000000000000000', 1, 13, 0, 0, 1641913095),
 (14, 0, 0, 1, '00000000', 'Dennis Suitters', 'Search', '', 'Search Meta title', '', '', 'search', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'search', '', '', '', '', 'other', '', 28, '0000000000000000', 1, 19, 0, 0, 1604631971),
-(15, 0, 0, 1, '00000000', 'Dennis Suitters', 'About', '', '', '', '', 'aboutus', '', '', '', '', '0000000000000000', '', '', 300, 3000, 'Contact Cover Attribution', 'Anonymous', 'https://diemen.design/', 'aboutus', '', '', '', '', 'head', '<p>Kindie struth sleepout bonza donga banana bender&period; Mate yakka shazza got us some crack the shits mate sandgroppers rubbish&period; Trackie dacks gyno mullet give it a burl bathers to fossicker chuck a spaz&period; Fly wire amber fluid watch out for the pozzy ironman up yours roo&period; Battler pissed lizard drinking slappa&period; Vee dub cubby house yabber boardies apples&period; No wucka&apos;s bizzo she&apos;ll be apples vee dub pozzy bloody muster&period;</p><p>Reckon ken oath frog in a sock bities galah bazza unit ripper frog in a sock he&apos;s got a massive rapt&period; Cream yabber yakka smokes ford road train&period; Bikie tucker crook going off burk flanno&period; Trackie dacks bush bash bruce accadacca catcus&period; Outback lollies mates cut snake mickey mouse mate avo aussie salute feral defo&period; Ken oath sick shazza got us some bloody ute fair crack of the whip&period; Boardies mate&apos;s rates yabber what&apos;s crackin&apos; roo&period; Butcher knackered wrap your laughing gear &apos;round that better than a kick up the backside suss ankle biter bazza better than a kick up the backside&period; Footy freo grog mickey mouse mate dinky-di budgie smugglers bizzo two pot screamer&period; Bush gone walkabout bitzer throw a shrimp on the barbie rollie chuck a spaz ken oath&period; Roadie brizzie stubby holder she&apos;ll be right&period; Footy holy dooley trackies lets throw a&period;</p><p>Fair go&comma; mate sunnies bodgy aerial pingpong built like a lollies vinnie&apos;s a cold one shoot through&period; Tell your story walkin&apos; full boar crow eaters no worries&comma; mate&comma; she&apos;ll be right&period; Brizzie grab us a sunnies waggin&apos; school ratbag vb gutful of few roos loose in the top paddock roo&period; Suss a few stubbies short of a six-pack christmas put a sock in it lippy&period; Blow in the bag damper dog&apos;s eye to dog&apos;s eye&period; Brekkie six of one&comma; half a dozen of the other furthy mickey mouse mate no worries&period; Jillaroo top bloke digger roo bar accadacca fair dinkum burk scratchy also op shop&period;</p>', 2, '0000000000000000', 1, 61, 0, 0, 1654933931),
-(16, 300, 0, 1, '00000000', 'Dennis Suitters', 'Proofs', '', 'Proofs', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'proofs', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'proofs', '', '', '', '', 'account', '', 24, '0000000000000000', 1, 9, 0, 0, 1624604287),
-(17, 0, 0, 1, '00000000', 'Dennis Suitters', 'Newsletters', '', '', '', '', 'newsletters', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'newsletters', '', '', '', '', 'other', '', 26, '0000000000000000', 0, 0, 0, 0, 1646612236),
-(19, 0, 0, 1, '00000000', 'Dennis Suitters', 'Distributors', 'Distributors Heading', 'Distributors', '', '', 'distributors', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'distributors', '', '', '', '', 'footer', '', 17, '0000000000000000', 1, 6, 0, 0, 1631883780),
-(20, 0, 0, 1, '00000000', 'dev', 'Privacy Policy', 'Privacy Policy', '', '', '', 'page', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'page', 'Article', '', '', '', 'footer', '<p>{business} (\"us\", \"we\", or \"our\") operates the {url} website (hereinafter referred to as the \"Service\").</p>\r\n<p>This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.</p>\r\n<p>We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy.</p>\r\n<h2>Definitions</h2>\r\n<ul>\r\n <li>\r\n  <p><strong>Service</strong></p>\r\n  <p>Service is the {url} website operated by {business}</p>\r\n </li>\r\n <li>\r\n  <p><strong>Personal Data</strong></p>\r\n  <p>Personal Data means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession).</p>\r\n </li>\r\n <li>\r\n  <p><strong>Usage Data</strong></p>\r\n  <p>Usage Data is data collected automatically either generated by the use of the Service or from the Service infrastructure itself (for example, the duration of a page visit).</p>\r\n </li>\r\n <li>\r\n  <p><strong>Cookies</strong></p>\r\n  <p>Cookies are small files stored on your device (computer or mobile device).</p>\r\n </li>\r\n</ul>\r\n<h2>Information Collection and Use</h2>\r\n<p>We collect several different types of information for various purposes to provide and improve our Service to you.</p>\r\n<h3>Types of Data Collected</h3>\r\n<h4>Personal Data</h4>\r\n<p>While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you (\"Personal Data\"). Personally identifiable information may include, but is not limited to:</p>\r\n<ul>\r\n <li>Email address</li>\r\n <li>First name and last name</li>\r\n <li>Phone number</li>\r\n <li>Address, State, Province, ZIP/Postal code, City</li>\r\n <li>Cookies and Usage Data</li>\r\n</ul>\r\n<h4>Usage Data</h4>\r\n<p>We may also collect information how the Service is accessed and used (\"Usage Data\"). This Usage Data may include information such as your computer\'s Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>\r\n<h4>Tracking &amp; Cookies Data</h4>\r\n<p>We use cookies and similar tracking technologies to track the activity on our Service and we hold certain information.</p>\r\n<p>Cookies are files with a small amount of data which may include an anonymous unique identifier. Cookies are sent to your browser from a website and stored on your device. Other tracking technologies are also used such as beacons, tags and scripts to collect and track information and to improve and analyse our Service.</p>\r\n<p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>\r\n<p>Examples of Cookies we use:</p>\r\n<ul>\r\n <li><strong>Session Cookies.</strong> We use Session Cookies to operate our Service.</li>\r\n <li><strong>Preference Cookies.</strong> We use Preference Cookies to remember your preferences and various settings.</li>\r\n <li><strong>Security Cookies.</strong> We use Security Cookies for security purposes.</li>\r\n</ul>\r\n<h2>Use of Data</h2>\r\n<p>Diemen Design uses the collected data for various purposes:</p>    \r\n<ul>\r\n <li>To provide and maintain the Service</li>\r\n <li>To notify you about changes to our Service</li>\r\n <li>To allow you to participate in interactive features of our Service when you choose to do so</li>\r\n <li>To provide customer care and support</li>\r\n <li>To provide analysis or valuable information so that we can improve the Service</li>\r\n <li>To monitor the usage of the Service</li>\r\n <li>To detect, prevent and address technical issues</li>\r\n</ul>\r\n<h2>Transfer Of Data</h2>\r\n<p>Your information, including Personal Data, may be transferred to, and maintained on computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from your jurisdiction.</p>\r\n<p>If you are located outside Australia and choose to provide information to us, please note that we transfer the data, including Personal Data, to Australia and process it there.</p>\r\n<p>Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.</p>\r\n<p>{business} will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of your data and other personal information.</p>\r\n<h2>Disclosure Of Data</h2>\r\n<h3>Legal Requirements</h3>\r\n<p>Diemen Design may disclose your Personal Data in the good faith belief that such action is necessary to:</p>\r\n<ul>\r\n <li>To comply with a legal obligation</li>\r\n <li>To protect and defend the rights or property of Diemen Design</li>\r\n <li>To prevent or investigate possible wrongdoing in connection with the Service</li>\r\n <li>To protect the personal safety of users of the Service or the public</li>\r\n <li>To protect against legal liability</li>\r\n</ul>\r\n<p>As an European citizen, under GDPR, you have certain individual rights. You can learn more about these guides in the <a href=\"https://termsfeed.com/blog/gdpr/#Individual_Rights_Under_the_GDPR\">GDPR Guide</a>.</p>\r\n<h2>Security of Data</h2>\r\n<p>The security of your data is important to us but remember that no method of transmission over the Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>\r\n<h2>Service Providers</h2>\r\n<p>We may employ third party companies and individuals to facilitate our Service (\"Service Providers\"), to provide the Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.</p>\r\n<p>These third parties have access to your Personal Data only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>\r\n<h2>Links to Other Sites</h2>\r\n<p>Our Service may contain links to other sites that are not operated by us. If you click a third party link, you will be directed to that third party\'s site. We strongly advise you to review the Privacy Policy of every site you visit.</p>\r\n<p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.</p>\r\n<h2>Children\'s Privacy</h2>\r\n<p>Our Service does not address anyone under the age of 18 (\"Children\").</p>\r\n<p>We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your Child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.</p>\r\n<h2>Changes to This Privacy Policy</h2>\r\n<p>We may update our Privacy Policy from time to time.</p>\r\n<p>Changes will appear on this URL.</p>\r\n<p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>\r\n', 19, '0000000000000000', 1, 24, 0, 0, 1641914276),
-(21, 0, 0, 1, '00000000', 'Dennis Suitters', 'Login', '', 'Login Meta Title', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'login', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'login', '', '', '', '', 'other', '', 27, '0000000000000000', 1, 40, 0, 0, 1648434730),
-(22, 0, 0, 1, '00000000', 'Dennis Suitters', 'Sitemap', 'Sitemap Heading', 'Sitemap Meta Title', '', '', 'sitemap', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'sitemap', '', '', '', '', 'footer', '<p>Budgie smugglers ute off chops joey rack off. Whinge waggin\' school put a sock in it loose cannon yous troppo ironman stonkered larrikin. Vb flamin\' fairy floss tell him he\'s dreaming throw-down up the duff dill no dramas it\'ll be. Blimey gutful of chrissie dunny skull stands out like a roo bar heaps fly wire. Bruce knock crook sickie coathanger gutta pinga. Counter meal off chops bull bar bonzer. Rego boogie board good oil bushie damper. As cunning as a ratbag have a go, you mug jumbuck barrack slacker cracker.</p>', 18, '0000000000000000', 1, 8, 0, 0, 1632150630),
+(15, 0, 0, 1, '00000000', 'Dennis Suitters', 'About', '', '', '', '', 'aboutus', '', '', '', '', '0000000000000000', '', '', 300, 3000, 'Contact Cover Attribution', 'Anonymous', 'https://diemen.design/', 'aboutus', '', '', '', '', 'head', '<p>Kindie struth sleepout bonza donga banana bender&period; Mate yakka shazza got us some crack the shits mate sandgroppers rubbish&period; Trackie dacks gyno mullet give it a burl bathers to fossicker chuck a spaz&period; Fly wire amber fluid watch out for the pozzy ironman up yours roo&period; Battler pissed lizard drinking slappa&period; Vee dub cubby house yabber boardies apples&period; No wucka&apos;s bizzo she&apos;ll be apples vee dub pozzy bloody muster&period;</p><p>Reckon ken oath frog in a sock bities galah bazza unit ripper frog in a sock he&apos;s got a massive rapt&period; Cream yabber yakka smokes ford road train&period; Bikie tucker crook going off burk flanno&period; Trackie dacks bush bash bruce accadacca catcus&period; Outback lollies mates cut snake mickey mouse mate avo aussie salute feral defo&period; Ken oath sick shazza got us some bloody ute fair crack of the whip&period; Boardies mate&apos;s rates yabber what&apos;s crackin&apos; roo&period; Butcher knackered wrap your laughing gear &apos;round that better than a kick up the backside suss ankle biter bazza better than a kick up the backside&period; Footy freo grog mickey mouse mate dinky-di budgie smugglers bizzo two pot screamer&period; Bush gone walkabout bitzer throw a shrimp on the barbie rollie chuck a spaz ken oath&period; Roadie brizzie stubby holder she&apos;ll be right&period; Footy holy dooley trackies lets throw a&period;</p><p>Fair go&comma; mate sunnies bodgy aerial pingpong built like a lollies vinnie&apos;s a cold one shoot through&period; Tell your story walkin&apos; full boar crow eaters no worries&comma; mate&comma; she&apos;ll be right&period; Brizzie grab us a sunnies waggin&apos; school ratbag vb gutful of few roos loose in the top paddock roo&period; Suss a few stubbies short of a six-pack christmas put a sock in it lippy&period; Blow in the bag damper dog&apos;s eye to dog&apos;s eye&period; Brekkie six of one&comma; half a dozen of the other furthy mickey mouse mate no worries&period; Jillaroo top bloke digger roo bar accadacca fair dinkum burk scratchy also op shop&period;</p>', 1, '0000000000000000', 1, 68, 0, 0, 1667736312),
+(16, 300, 0, 1, '00000000', 'Dennis Suitters', 'Proofs', '', 'Proofs', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'proofs', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'proofs', '', '', '', '', 'account', '', 25, '0000000000000000', 1, 9, 0, 0, 1624604287),
+(17, 0, 0, 1, '00000000', 'Dennis Suitters', 'Newsletters', '', '', '', '', 'newsletters', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'newsletters', '', '', '', '', 'head', '', 17, '0000000000000000', 1, 1, 0, 0, 1675055019),
+(19, 0, 0, 1, '00000000', 'Dennis Suitters', 'Distributors', 'Distributors Heading', 'Distributors', '', '', 'distributors', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'distributors', '', '', '', '', 'footer', '', 18, '0000000000000000', 1, 6, 0, 0, 1631883780),
+(20, 0, 0, 1, '00000000', 'dev', 'Privacy Policy', 'Privacy Policy', '', '', '', 'page', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'page', 'Article', '', '', '', 'footer', '<p>{business} (\"us\", \"we\", or \"our\") operates the {url} website (hereinafter referred to as the \"Service\").</p>\r\n<p>This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.</p>\r\n<p>We use your data to provide and improve the Service. By using the Service, you agree to the collection and use of information in accordance with this policy.</p>\r\n<h2>Definitions</h2>\r\n<ul>\r\n <li>\r\n  <p><strong>Service</strong></p>\r\n  <p>Service is the {url} website operated by {business}</p>\r\n </li>\r\n <li>\r\n  <p><strong>Personal Data</strong></p>\r\n  <p>Personal Data means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession).</p>\r\n </li>\r\n <li>\r\n  <p><strong>Usage Data</strong></p>\r\n  <p>Usage Data is data collected automatically either generated by the use of the Service or from the Service infrastructure itself (for example, the duration of a page visit).</p>\r\n </li>\r\n <li>\r\n  <p><strong>Cookies</strong></p>\r\n  <p>Cookies are small files stored on your device (computer or mobile device).</p>\r\n </li>\r\n</ul>\r\n<h2>Information Collection and Use</h2>\r\n<p>We collect several different types of information for various purposes to provide and improve our Service to you.</p>\r\n<h3>Types of Data Collected</h3>\r\n<h4>Personal Data</h4>\r\n<p>While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you (\"Personal Data\"). Personally identifiable information may include, but is not limited to:</p>\r\n<ul>\r\n <li>Email address</li>\r\n <li>First name and last name</li>\r\n <li>Phone number</li>\r\n <li>Address, State, Province, ZIP/Postal code, City</li>\r\n <li>Cookies and Usage Data</li>\r\n</ul>\r\n<h4>Usage Data</h4>\r\n<p>We may also collect information how the Service is accessed and used (\"Usage Data\"). This Usage Data may include information such as your computer\'s Internet Protocol address (e.g. IP address), browser type, browser version, the pages of our Service that you visit, the time and date of your visit, the time spent on those pages, unique device identifiers and other diagnostic data.</p>\r\n<h4>Tracking &amp; Cookies Data</h4>\r\n<p>We use cookies and similar tracking technologies to track the activity on our Service and we hold certain information.</p>\r\n<p>Cookies are files with a small amount of data which may include an anonymous unique identifier. Cookies are sent to your browser from a website and stored on your device. Other tracking technologies are also used such as beacons, tags and scripts to collect and track information and to improve and analyse our Service.</p>\r\n<p>You can instruct your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies, you may not be able to use some portions of our Service.</p>\r\n<p>Examples of Cookies we use:</p>\r\n<ul>\r\n <li><strong>Session Cookies.</strong> We use Session Cookies to operate our Service.</li>\r\n <li><strong>Preference Cookies.</strong> We use Preference Cookies to remember your preferences and various settings.</li>\r\n <li><strong>Security Cookies.</strong> We use Security Cookies for security purposes.</li>\r\n</ul>\r\n<h2>Use of Data</h2>\r\n<p>Diemen Design uses the collected data for various purposes:</p>    \r\n<ul>\r\n <li>To provide and maintain the Service</li>\r\n <li>To notify you about changes to our Service</li>\r\n <li>To allow you to participate in interactive features of our Service when you choose to do so</li>\r\n <li>To provide customer care and support</li>\r\n <li>To provide analysis or valuable information so that we can improve the Service</li>\r\n <li>To monitor the usage of the Service</li>\r\n <li>To detect, prevent and address technical issues</li>\r\n</ul>\r\n<h2>Transfer Of Data</h2>\r\n<p>Your information, including Personal Data, may be transferred to, and maintained on computers located outside of your state, province, country or other governmental jurisdiction where the data protection laws may differ than those from your jurisdiction.</p>\r\n<p>If you are located outside Australia and choose to provide information to us, please note that we transfer the data, including Personal Data, to Australia and process it there.</p>\r\n<p>Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.</p>\r\n<p>{business} will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organization or a country unless there are adequate controls in place including the security of your data and other personal information.</p>\r\n<h2>Disclosure Of Data</h2>\r\n<h3>Legal Requirements</h3>\r\n<p>Diemen Design may disclose your Personal Data in the good faith belief that such action is necessary to:</p>\r\n<ul>\r\n <li>To comply with a legal obligation</li>\r\n <li>To protect and defend the rights or property of Diemen Design</li>\r\n <li>To prevent or investigate possible wrongdoing in connection with the Service</li>\r\n <li>To protect the personal safety of users of the Service or the public</li>\r\n <li>To protect against legal liability</li>\r\n</ul>\r\n<p>As an European citizen, under GDPR, you have certain individual rights. You can learn more about these guides in the <a href=\"https://termsfeed.com/blog/gdpr/#Individual_Rights_Under_the_GDPR\">GDPR Guide</a>.</p>\r\n<h2>Security of Data</h2>\r\n<p>The security of your data is important to us but remember that no method of transmission over the Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>\r\n<h2>Service Providers</h2>\r\n<p>We may employ third party companies and individuals to facilitate our Service (\"Service Providers\"), to provide the Service on our behalf, to perform Service-related services or to assist us in analyzing how our Service is used.</p>\r\n<p>These third parties have access to your Personal Data only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>\r\n<h2>Links to Other Sites</h2>\r\n<p>Our Service may contain links to other sites that are not operated by us. If you click a third party link, you will be directed to that third party\'s site. We strongly advise you to review the Privacy Policy of every site you visit.</p>\r\n<p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.</p>\r\n<h2>Children\'s Privacy</h2>\r\n<p>Our Service does not address anyone under the age of 18 (\"Children\").</p>\r\n<p>We do not knowingly collect personally identifiable information from anyone under the age of 18. If you are a parent or guardian and you are aware that your Child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from children without verification of parental consent, we take steps to remove that information from our servers.</p>\r\n<h2>Changes to This Privacy Policy</h2>\r\n<p>We may update our Privacy Policy from time to time.</p>\r\n<p>Changes will appear on this URL.</p>\r\n<p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>\r\n', 20, '0000000000000000', 1, 26, 0, 0, 1641914276),
+(21, 0, 0, 1, '00000000', 'Dennis Suitters', 'Login', '', 'Login Meta Title', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'login', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'login', '', '', '', '', 'other', '', 27, '0000000000000000', 1, 107, 0, 0, 1648434730),
+(22, 0, 0, 1, '00000000', 'Dennis Suitters', 'Sitemap', 'Sitemap Heading', 'Sitemap Meta Title', '', '', 'sitemap', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'sitemap', '', '', '', '', 'footer', '<p>Budgie smugglers ute off chops joey rack off. Whinge waggin\' school put a sock in it loose cannon yous troppo ironman stonkered larrikin. Vb flamin\' fairy floss tell him he\'s dreaming throw-down up the duff dill no dramas it\'ll be. Blimey gutful of chrissie dunny skull stands out like a roo bar heaps fly wire. Bruce knock crook sickie coathanger gutta pinga. Counter meal off chops bull bar bonzer. Rego boogie board good oil bushie damper. As cunning as a ratbag have a go, you mug jumbuck barrack slacker cracker.</p>', 19, '0000000000000000', 1, 8, 0, 0, 1632150630),
 (23, 0, 0, 1, '00000000', 'Dennis Suitters', 'Coming Soon', 'Coming Soon title', 'Coming Soon Meta Title', '', '', 'comingsoon', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'comingsoon', '', '', '', '', 'none', '<p>No-hoper roo bar lippy boozer stoked. Mokkies cream gutta op shop galah pretty spiffy cut lunch commando his blood\'s worth bottling. Bodgy leg it ace oi facey rage on. Brass razoo apples cut lunch sandgropper also runners loose cannon bizzo. Dropkick holden whit dipstick two up cane toad cockie damper bitzer as stands out like off chops. Arvo crook brickie when a cold one crow eaters good onya troppo flanny. Thongs on the cans sandgropper donger pinga buggered oi bloody oath icy pole. Bail out middy troppo a cold one piece of piss bizzo roadie paddock. Rort slab eureka brisvegas pissed off.</p>', 23, '0000000000000000', 1, 0, 0, 0, 1633704557),
-(24, 0, 0, 1, '00000000', 'Dennis Suitters', 'Maintenance', 'Maintenance', 'Maintenance Meta Title', '', '', 'maintenance', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'maintenance', '', '', '', '', 'none', '<p>We are currently doing Maintenance.</p>', 24, '0000000000000000', 1, 0, 0, 0, 1633692252),
-(25, 0, 0, 1, '00000000', 'Dennis Suitters', 'FAQ', 'FAQ Heading', NULL, '', '', 'faq', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'faq', '', '', '', '', 'footer', '<p>Boardies avos avo bottlo snag devo snag bail lappy. Tradie bonza counter meal sleepout his blood\'s worth bottling have a captain cook rego down under. As cross as a no worries schooner donga avo slab pinga. Bog standard bathers holden vb avo as busy as a middy. Tickets on yourself swag blimey blind where bloody shark biscuit pub flamin\'. Pokies dob rego mate\'s rates cobber watch out for the bushie slacker jug. Gutta barbie tosser rock up bail.</p>', 21, '0000000000000000', 1, 33, 0, 0, 1631882640),
-(26, 0, 0, 1, '00000000', 'Dennis Suitters', 'Forum', '', NULL, '', '', 'forum', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'forum', 'Forum', '', '', '', 'head', '', 16, '0000000000000000', 0, 0, 0, 0, 1646815269),
-(27, 300, 0, 1, '00000000', 'Dennis Suitters', 'Orders', 'Orders Heading', 'Orders', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'orders', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'orders', '', '', '', '', 'account', '<p>Doovalacky a cold one two up reckon shark biscuit icy pole slaps chokkie. Fair go, mate mad as a postie jumbuck bities whit. Muster greenie stoked fisho icy pole slacker tell him he\'s dreaming. Straya we\'re going avo ugg boots compo back of bourke jackaroo rello grouse. No dramas shark biscuit tradie as stands out like damper rotten bush oyster. Carry on like a pork chop knock corker brolly. Booze bus rego you little ripper middy dag rotten he hasn\'t got a cubby house.</p>', 23, '0000000000000000', 1, 239, 0, 0, 1632139675),
-(29, 300, 0, 1, '00000000', 'Dennis Suitters', 'Settings', 'Settings Heading', '', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'settings', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'settings', '', '', '', '', 'account', '<p>Show pony ankle biter put a sock in it ten clicks away thingo shoey offsider&period; Taking the piss pozzy bastard to dead horse coathanger&period; Tinny bazza bush oyster frothy gyno boozer stickybeak barbie&period; Get a dog up ya buggered bush oyster suss it out you little ripper&period; Veg out gyno manchester bogan blue kelpie nipper&period; Bradman thongs counter meal you little ripper roadie&period; Ratbag rapt stubby holder also dinky-di one for the road amber fluid bunyip&period;</p>', 25, '0000000000000000', 1, 36, 0, 0, 1648454125),
-(30, 0, 0, 1, '00000000', 'Dennis Suitters', 'Checkout', 'Payment Options', 'Checkout', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'checkout', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'checkout', '', '', '', '', 'other', '<p>To ensure our user\'s privacy, we don\'t store Credit Card details,<br>only the chosen Payment Method, Name, Email and Date of Payment.</p>', 29, '0000000000000000', 1, 202, 0, 0, 1632139970),
+(24, 0, 0, 1, '00000000', 'Dennis Suitters', 'Maintenance', 'Maintenance', 'Maintenance Meta Title', '', '', 'maintenance', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'maintenance', '', '', '', '', 'none', '<p>We are currently doing Maintenance.</p>', 24, '0000000000000000', 1, 0, 0, 0, 1675688348),
+(25, 0, 0, 1, '00000000', 'Dennis Suitters', 'FAQ', 'FAQ Heading', NULL, '', '', 'faq', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'faq', '', '', '', '', 'footer', '<p>Boardies avos avo bottlo snag devo snag bail lappy. Tradie bonza counter meal sleepout his blood\'s worth bottling have a captain cook rego down under. As cross as a no worries schooner donga avo slab pinga. Bog standard bathers holden vb avo as busy as a middy. Tickets on yourself swag blimey blind where bloody shark biscuit pub flamin\'. Pokies dob rego mate\'s rates cobber watch out for the bushie slacker jug. Gutta barbie tosser rock up bail.</p>', 22, '0000000000000000', 1, 33, 0, 0, 1631882640),
+(26, 0, 0, 1, '00000000', 'Dennis Suitters', 'Forum', '', NULL, '', '', 'forum', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'forum', 'Forum', '', '', '', 'head', '', 16, '0000000000000000', 1, 13, 0, 0, 1646815269),
+(27, 300, 0, 1, '00000000', 'Dennis Suitters', 'Orders', 'Orders Heading', 'Orders', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'orders', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'orders', '', '', '', '', 'account', '<p>Doovalacky a cold one two up reckon shark biscuit icy pole slaps chokkie. Fair go, mate mad as a postie jumbuck bities whit. Muster greenie stoked fisho icy pole slacker tell him he\'s dreaming. Straya we\'re going avo ugg boots compo back of bourke jackaroo rello grouse. No dramas shark biscuit tradie as stands out like damper rotten bush oyster. Carry on like a pork chop knock corker brolly. Booze bus rego you little ripper middy dag rotten he hasn\'t got a cubby house.</p>', 24, '0000000000000000', 1, 344, 0, 0, 1632139675),
+(29, 300, 0, 1, '00000000', 'Dennis Suitters', 'Settings', 'Settings Heading', '', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'settings', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'settings', '', '', '', '', 'account', '<p>Show pony ankle biter put a sock in it ten clicks away thingo shoey offsider&period; Taking the piss pozzy bastard to dead horse coathanger&period; Tinny bazza bush oyster frothy gyno boozer stickybeak barbie&period; Get a dog up ya buggered bush oyster suss it out you little ripper&period; Veg out gyno manchester bogan blue kelpie nipper&period; Bradman thongs counter meal you little ripper roadie&period; Ratbag rapt stubby holder also dinky-di one for the road amber fluid bunyip&period;</p>', 26, '0000000000000000', 1, 42, 0, 0, 1648454125),
+(30, 0, 0, 1, '00000000', 'Dennis Suitters', 'Checkout', 'Payment Options', 'Checkout', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'checkout', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'checkout', '', '', '', '', 'other', '<p>To ensure our user\'s privacy, we don\'t store Credit Card details,<br>only the chosen Payment Method, Name, Email and Date of Payment.</p>', 29, '0000000000000000', 1, 208, 0, 0, 1632139970),
 (31, 0, 0, 1, '00000000', 'Dennis Suitters', 'Offline', 'Offline Heading', 'Offline', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'offline', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'offline', '', '', '', '', 'none', '<p>This is some Offline Page information for when the Internet is down, and someone has the PWA installed from this site. This way they can get contact information.</p>', 31, '0000000000000000', 1, 0, 0, 0, 1634119863),
-(41, 0, 0, 1, '00000000', 'Anonymous', 'Biography', '', 'Biography SEO Title', '', '', 'biography', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'biography', '', '', '', '', 'head', '<p>Kindie struth sleepout bonza donga banana bender. Mate yakka shazza got us some crack the shits mate sandgroppers rubbish. Trackie dacks gyno mullet give it a burl bathers to fossicker chuck a spaz. Fly wire amber fluid watch out for the pozzy ironman up yours roo. Battler pissed lizard drinking slappa. Vee dub cubby house yabber boardies apples. No wucka\'s bizzo she\'ll be apples vee dub pozzy bloody muster.</p><p>Reckon ken oath frog in a sock bities galah bazza unit ripper frog in a sock he\'s got a massive rapt. Cream yabber yakka smokes ford road train. Bikie tucker crook going off burk flanno. Trackie dacks bush bash bruce accadacca catcus. Outback lollies mates cut snake mickey mouse mate avo aussie salute feral defo. Ken oath sick shazza got us some bloody ute fair crack of the whip. Boardies mate\'s rates yabber what\'s crackin\' roo. Butcher knackered wrap your laughing gear \'round that better than a kick up the backside suss ankle biter bazza better than a kick up the backside. Footy freo grog mickey mouse mate dinky-di budgie smugglers bizzo two pot screamer. Bush gone walkabout bitzer throw a shrimp on the barbie rollie chuck a spaz ken oath. Roadie brizzie stubby holder she\'ll be right. Footy holy dooley trackies lets throw a.</p><p>Fair go, mate sunnies bodgy aerial pingpong built like a lollies vinnie\'s a cold one shoot through. Tell your story walkin\' full boar crow eaters no worries, mate, she\'ll be right. Brizzie grab us a sunnies waggin\' school ratbag vb gutful of few roos loose in the top paddock roo. Suss a few stubbies short of a six-pack christmas put a sock in it lippy. Blow in the bag damper dog\'s eye to dog\'s eye. Brekkie six of one, half a dozen of the other furthy mickey mouse mate no worries. Jillaroo top bloke digger roo bar accadacca fair dinkum burk scratchy also op shop.</p>', 4, '0000000000000000', 1, 32, 0, 0, 1638696355),
+(41, 0, 0, 1, '00000000', 'Anonymous', 'Biography', '', 'Biography SEO Title', '', '', 'biography', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'biography', '', '', '', '', 'head', '<p>Kindie struth sleepout bonza donga banana bender. Mate yakka shazza got us some crack the shits mate sandgroppers rubbish. Trackie dacks gyno mullet give it a burl bathers to fossicker chuck a spaz. Fly wire amber fluid watch out for the pozzy ironman up yours roo. Battler pissed lizard drinking slappa. Vee dub cubby house yabber boardies apples. No wucka\'s bizzo she\'ll be apples vee dub pozzy bloody muster.</p><p>Reckon ken oath frog in a sock bities galah bazza unit ripper frog in a sock he\'s got a massive rapt. Cream yabber yakka smokes ford road train. Bikie tucker crook going off burk flanno. Trackie dacks bush bash bruce accadacca catcus. Outback lollies mates cut snake mickey mouse mate avo aussie salute feral defo. Ken oath sick shazza got us some bloody ute fair crack of the whip. Boardies mate\'s rates yabber what\'s crackin\' roo. Butcher knackered wrap your laughing gear \'round that better than a kick up the backside suss ankle biter bazza better than a kick up the backside. Footy freo grog mickey mouse mate dinky-di budgie smugglers bizzo two pot screamer. Bush gone walkabout bitzer throw a shrimp on the barbie rollie chuck a spaz ken oath. Roadie brizzie stubby holder she\'ll be right. Footy holy dooley trackies lets throw a.</p><p>Fair go, mate sunnies bodgy aerial pingpong built like a lollies vinnie\'s a cold one shoot through. Tell your story walkin\' full boar crow eaters no worries, mate, she\'ll be right. Brizzie grab us a sunnies waggin\' school ratbag vb gutful of few roos loose in the top paddock roo. Suss a few stubbies short of a six-pack christmas put a sock in it lippy. Blow in the bag damper dog\'s eye to dog\'s eye. Brekkie six of one, half a dozen of the other furthy mickey mouse mate no worries. Jillaroo top bloke digger roo bar accadacca fair dinkum burk scratchy also op shop.</p>', 4, '0000000000000000', 0, 32, 0, 0, 1638696355),
 (42, 0, 0, 1, '00000000', 'Dennis Suitters', 'Activation', '', NULL, 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'activate', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'activate', 'Page', '', '', '', 'none', '<p>Please login with the credentials emailed to you when signing up, and update your address details, thank you.</p>', 27, '0000000000000000', 1, 0, 0, 0, 1642059636),
-(43, 0, 0, 1, '00000000', 'Dennis Suitters', 'Activities', 'Activities Heading', '', '', '', 'activities', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'activities', '', '', '', '', 'head', '<p>Paddock bottlo ugg boots fair go, mate fossicker. Mickey mouse mate esky ciggy roadie boardies cream stonkered. Icy pole bikie slacker as busy as a give it a burl. Pissed bitzer rort blind outback defo galah fairy floss bradman. Bruce how stickybeak ya cut lunch booze bus how. Chock a block hottie daks sleepout pash pretty spiffy built like a holden skite coppers. Carrying on like a pork chop dero gyno bloody oath ciggies dead horse jumbuck bail up dill. Cockie ridgy-didge cane toad strewth ripper better than a ham sandwich fair crack of the whip bonzer. Ankle biter longneck slab whinge not my bowl of rice booze true blue mad as a gobful up the duff accadacca ironman. Dero what\'s the john dory? lollies struth strides buggered up the duff chokkie. Heaps vinnie\'s joey outback paddock crikey blow in the bag. Shazza skite ropeable lippy freo six of one, half a dozen of the other flick beauty. When amber fluid tucker full blown fly wire head like a dropped pie barrack avo slaps catcus spewin\'. Knickers dead horse put a sock in it buck\'s night shoot through bushie rollie fisho bogan donga.</p><p>Roo bundy whinge gobful and holy dooley bodgy root rat. Budgie smugglers lets get some brekkie compo brolly cut lunch commando flanno. Crikey bikie u-ie lizard drinking rello freo. Offsider throw-down jillaroo ciggy bastards skite. Leg it crow eaters rotten to skite ciggies drongo. No worries trackie dacks hottie clacker ocker truckie. Rotten bunyip toads dob fair suck of the sauce bottle stonkered accadacca. Whinge cane toad a few sandwiches short of a picnic christmas as cunning as a gutful of bradman.</p><p>He hasn\'t got a rollie bushranger oi she\'ll be right. Bazza turps boardies truckie bonzer. Smokes better than a kick up the backside ambo aerial pingpong. Tell him he\'s dreaming fairy floss dole bludger wouldn\'t piss on them if they\'re on fire. Longneck blowie leg it off chops bingle lets get some tosser avo bloody. Squizz blimey buckley\'s chance thunderbox deadset he\'s dreaming. Dry as as dead dingo\'s donga struth fairy floss stubby oi as stands out like dry as as dead dingo\'s donga fair go, mate. G\'day bushranger donger apples pozzy strides crack the shits built like a squizz good oil better than a kick up the backside reckon. Flake thongs sandgroppers u-ie chuck a spaz ace cockie. Donga bush bash furthy donga brolly beauty barbie tucker-bag as cunning as a.</p>', 3, '0000000000000000', 0, 0, 0, 0, 1631882095),
-(44, 0, 0, 1, '00000000', 'Dennis Suitters', 'Courses', '', NULL, '', '', 'content', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'course', 'Course', '', '', '', 'head', '', 15, '0000000000000000', 1, 403, 0, 0, 1656076670),
-(45, 300, 0, 1, '00000000', 'Dennis Suitters', 'Courses', '', 'Courses', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'courses', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'courses', '', '', '', '', 'account', '<p>These are the courses that you&apos;ve signed up for&period;</p>', 22, '0000000000000000', 1, 969, 0, 0, 1658454900);
+(43, 0, 15, 1, '00000000', 'Dennis Suitters', 'Activities', 'Activities Heading', '', '', '', 'activities', '', 'http://localhost/AuroraCMS2/media/3-reception.jpg', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'activities', '', '', '', '', 'head', '<p>Paddock bottlo ugg boots fair go, mate fossicker. Mickey mouse mate esky ciggy roadie boardies cream stonkered. Icy pole bikie slacker as busy as a give it a burl. Pissed bitzer rort blind outback defo galah fairy floss bradman. Bruce how stickybeak ya cut lunch booze bus how. Chock a block hottie daks sleepout pash pretty spiffy built like a holden skite coppers. Carrying on like a pork chop dero gyno bloody oath ciggies dead horse jumbuck bail up dill. Cockie ridgy-didge cane toad strewth ripper better than a ham sandwich fair crack of the whip bonzer. Ankle biter longneck slab whinge not my bowl of rice booze true blue mad as a gobful up the duff accadacca ironman. Dero what\'s the john dory? lollies struth strides buggered up the duff chokkie. Heaps vinnie\'s joey outback paddock crikey blow in the bag. Shazza skite ropeable lippy freo six of one, half a dozen of the other flick beauty. When amber fluid tucker full blown fly wire head like a dropped pie barrack avo slaps catcus spewin\'. Knickers dead horse put a sock in it buck\'s night shoot through bushie rollie fisho bogan donga.</p><p>Roo bundy whinge gobful and holy dooley bodgy root rat. Budgie smugglers lets get some brekkie compo brolly cut lunch commando flanno. Crikey bikie u-ie lizard drinking rello freo. Offsider throw-down jillaroo ciggy bastards skite. Leg it crow eaters rotten to skite ciggies drongo. No worries trackie dacks hottie clacker ocker truckie. Rotten bunyip toads dob fair suck of the sauce bottle stonkered accadacca. Whinge cane toad a few sandwiches short of a picnic christmas as cunning as a gutful of bradman.</p><p>He hasn\'t got a rollie bushranger oi she\'ll be right. Bazza turps boardies truckie bonzer. Smokes better than a kick up the backside ambo aerial pingpong. Tell him he\'s dreaming fairy floss dole bludger wouldn\'t piss on them if they\'re on fire. Longneck blowie leg it off chops bingle lets get some tosser avo bloody. Squizz blimey buckley\'s chance thunderbox deadset he\'s dreaming. Dry as as dead dingo\'s donga struth fairy floss stubby oi as stands out like dry as as dead dingo\'s donga fair go, mate. G\'day bushranger donger apples pozzy strides crack the shits built like a squizz good oil better than a kick up the backside reckon. Flake thongs sandgroppers u-ie chuck a spaz ace cockie. Donga bush bash furthy donga brolly beauty barbie tucker-bag as cunning as a.</p>', 0, '0000000000000000', 1, 0, 0, 0, 1675687535),
+(44, 0, 0, 1, '00000000', 'Dennis Suitters', 'Courses', '', NULL, '', '', 'content', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'course', 'Course', '', '', '', 'head', '', 15, '0000000000000000', 0, 403, 0, 0, 1656076670),
+(45, 300, 0, 1, '00000000', 'Dennis Suitters', 'Courses', '', 'Courses', 'noindex,noimageindex,nofollow,noarchive,nocache,nosnippet,noodp,noydir', '', 'courses', '', '', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'courses', '', '', '', '', 'account', '<p>These are the courses that you&apos;ve signed up for&period;</p>', 23, '0000000000000000', 1, 972, 0, 0, 1658454900),
+(46, NULL, 0, 0, '00000000', 'Dennis Suitters', 'Notification 1673599052', '', '', '', '', 'notification', '', 'http://localhost/AuroraCMS2/media/blue-pattern-twitter-background.jpg', '', '', '0000000000000000', '', '', 300, 3000, '', '', '', 'notification', 'Article', '', '', '', 'notification', '', 1673599052, '0000000000000000', 0, 0, 0, 0, 1675688505);
 
 -- --------------------------------------------------------
 
@@ -747,35 +762,35 @@ INSERT INTO `menu` (`id`, `rank`, `mid`, `uid`, `options`, `login_user`, `title`
 CREATE TABLE `messages` (
   `id` bigint NOT NULL,
   `uid` bigint NOT NULL,
-  `ip` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `mid` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `ip` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mid` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `rmid` bigint NOT NULL,
-  `folder` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `to_email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `to_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_name` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_business` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_phone` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_mobile` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_address` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_suburb` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_city` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_state` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `from_postcode` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `subject` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `status` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `folder` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `to_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_name` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_business` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_phone` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_mobile` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_address` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_suburb` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_city` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_state` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `from_postcode` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `subject` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `starred` int NOT NULL,
   `important` int NOT NULL,
-  `notes_raw` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin,
-  `notes_raw_mime` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes_html` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes_html_mime` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `attachments` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `notes_raw` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `notes_raw_mime` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes_html` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes_html_mime` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `attachments` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `email_date` int NOT NULL,
   `size` bigint NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -786,11 +801,11 @@ CREATE TABLE `messages` (
 CREATE TABLE `moduleQuestions` (
   `id` bigint NOT NULL,
   `rid` bigint NOT NULL,
-  `type` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `type` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `check_answer` int NOT NULL,
-  `title` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -804,7 +819,7 @@ CREATE TABLE `moduleQuestionsTrack` (
   `cid` bigint NOT NULL,
   `mid` bigint NOT NULL,
   `qid` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -815,14 +830,14 @@ CREATE TABLE `moduleQuestionsTrack` (
 CREATE TABLE `modules` (
   `id` bigint NOT NULL,
   `rid` bigint NOT NULL,
-  `title` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `caption` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `notes` text COLLATE utf8mb3_bin NOT NULL,
-  `question` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `caption` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `question` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint NOT NULL,
   `tti` int NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -835,13 +850,13 @@ CREATE TABLE `orderitems` (
   `oid` bigint UNSIGNED NOT NULL,
   `iid` bigint UNSIGNED NOT NULL,
   `cid` bigint NOT NULL,
-  `title` varchar(60) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `title` varchar(60) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `quantity` mediumint UNSIGNED NOT NULL,
   `cost` decimal(10,2) UNSIGNED NOT NULL,
-  `status` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `points` int NOT NULL,
   `ti` int UNSIGNED NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -853,40 +868,40 @@ CREATE TABLE `orders` (
   `id` bigint NOT NULL,
   `cid` bigint UNSIGNED NOT NULL,
   `uid` bigint UNSIGNED NOT NULL,
-  `contentType` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `qid` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `contentType` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `qid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `qid_ti` bigint UNSIGNED NOT NULL,
-  `iid` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `iid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `iid_ti` bigint UNSIGNED NOT NULL,
-  `did` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `did` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `did_ti` bigint UNSIGNED NOT NULL,
-  `aid` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `aid` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `aid_ti` bigint UNSIGNED NOT NULL,
   `due_ti` bigint UNSIGNED NOT NULL,
   `rid` bigint NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `status` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `postageCode` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `postageOption` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `status` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postageCode` varchar(6) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `postageOption` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `postageCost` decimal(6,2) NOT NULL,
-  `payOption` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `payOption` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `payMethod` int NOT NULL,
   `payCost` decimal(6,2) NOT NULL,
   `trackOption` bigint NOT NULL,
-  `trackNumber` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `trackNumber` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `recurring` int NOT NULL,
   `total` decimal(10,2) NOT NULL,
   `points` int NOT NULL,
-  `paid_via` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `txn_id` varchar(50) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `paid_email` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `paid_name` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `paid_amount` varchar(10) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `paid_via` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `txn_id` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `paid_email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `paid_name` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `paid_amount` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `paid_ti` int NOT NULL,
-  `payment_status` varchar(25) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `payment_status` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` bigint UNSIGNED NOT NULL,
   `eti` bigint NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -897,27 +912,27 @@ CREATE TABLE `orders` (
 CREATE TABLE `playlist` (
   `id` bigint NOT NULL,
   `rid` bigint NOT NULL,
-  `width` varchar(6) COLLATE utf8mb3_bin NOT NULL,
-  `author_name` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `author_url` varchar(256) COLLATE utf8mb3_bin NOT NULL,
-  `version` varchar(6) COLLATE utf8mb3_bin NOT NULL,
-  `provider_url` varchar(256) COLLATE utf8mb3_bin NOT NULL,
-  `provider_name` varchar(32) COLLATE utf8mb3_bin NOT NULL,
-  `thumbnail_width` varchar(6) COLLATE utf8mb3_bin NOT NULL,
-  `thumbnail_url` varchar(256) COLLATE utf8mb3_bin NOT NULL,
-  `height` varchar(6) COLLATE utf8mb3_bin NOT NULL,
-  `thumbnail_height` varchar(6) COLLATE utf8mb3_bin NOT NULL,
-  `html` text COLLATE utf8mb3_bin NOT NULL,
-  `url` varchar(256) COLLATE utf8mb3_bin NOT NULL,
-  `embed_url` varchar(256) COLLATE utf8mb3_bin NOT NULL,
-  `type` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `title` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `notes` text COLLATE utf8mb3_bin NOT NULL,
+  `width` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author_name` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `author_url` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `version` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `provider_url` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `provider_name` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumbnail_width` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumbnail_url` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `height` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `thumbnail_height` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `html` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `embed_url` varchar(256) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint NOT NULL,
   `active` tinyint(1) NOT NULL,
-  `dt` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `dt` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -927,15 +942,15 @@ CREATE TABLE `playlist` (
 
 CREATE TABLE `rewards` (
   `id` bigint NOT NULL,
-  `code` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `code` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `method` int NOT NULL,
   `value` int NOT NULL,
   `quantity` int NOT NULL,
   `tis` int NOT NULL,
   `tie` int NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -945,12 +960,12 @@ CREATE TABLE `rewards` (
 
 CREATE TABLE `seo` (
   `id` bigint NOT NULL,
-  `contentType` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `type` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `title` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `contentType` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `type` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `seo`
@@ -1092,13 +1107,13 @@ CREATE TABLE `sidebar` (
   `id` bigint NOT NULL,
   `rank` int NOT NULL,
   `mid` bigint NOT NULL,
-  `contentType` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `view` varchar(16) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `icon` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `title` tinytext COLLATE utf8mb3_bin NOT NULL,
+  `contentType` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `view` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `icon` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint NOT NULL,
   `active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `sidebar`
@@ -1106,7 +1121,7 @@ CREATE TABLE `sidebar` (
 
 INSERT INTO `sidebar` (`id`, `rank`, `mid`, `contentType`, `view`, `icon`, `title`, `ord`, `active`) VALUES
 (1, 400, 0, 'dashboard', 'dashboard', 'dashboard', 'Dashboard', 0, 1),
-(2, 400, 0, 'livechat', 'livechat', 'chat', 'Livechat', 12, 1),
+(2, 400, 0, 'livechat', 'livechat', 'chat', 'Livechat', 13, 1),
 (3, 400, 0, 'dropdown', 'content', 'content', 'Content', 3, 1),
 (4, 400, 3, 'media', 'media', 'picture', 'Media', 12, 1),
 (5, 400, 0, 'pages', 'pages', 'content', 'Pages', 2, 1),
@@ -1121,10 +1136,10 @@ INSERT INTO `sidebar` (`id`, `rank`, `mid`, `contentType`, `view`, `icon`, `titl
 (14, 400, 3, 'rewards', 'rewards', 'credit-card', 'Rewards', 10, 1),
 (15, 400, 3, 'service', 'content', 'service', 'Services', 3, 1),
 (16, 400, 3, 'proofs', 'content', 'proof', 'Proofs', 9, 1),
-(17, 400, 0, 'messages', 'messages', 'inbox', 'Messages', 11, 1),
-(18, 400, 0, 'forum', 'forum', 'forum', 'Forum', 6, 1),
-(19, 400, 0, 'newsletters', 'newsletters', 'newspaper', 'Newsletters', 10, 1),
-(20, 400, 0, 'bookings', 'bookings', 'calendar', 'Bookings', 7, 1),
+(17, 400, 0, 'messages', 'messages', 'inbox', 'Messages', 12, 1),
+(18, 400, 0, 'forum', 'forum', 'forum', 'Forum', 7, 1),
+(19, 400, 0, 'newsletters', 'newsletters', 'newspaper', 'Newsletters', 11, 1),
+(20, 400, 0, 'bookings', 'bookings', 'calendar', 'Bookings', 8, 1),
 (21, 400, 0, 'dropdown', 'orders', 'order', 'Orders', 4, 1),
 (22, 400, 21, 'all', 'orders', 'order-quote', 'All', 0, 1),
 (23, 400, 21, 'quotes', 'orders', 'order-quote', 'Quotes', 1, 1),
@@ -1134,9 +1149,9 @@ INSERT INTO `sidebar` (`id`, `rank`, `mid`, `contentType`, `view`, `icon`, `titl
 (27, 400, 21, 'orderdue', 'orders', 'order-pending', 'Overdue', 5, 1),
 (28, 400, 21, 'archived', 'orders', 'order-archived', 'Archived', 6, 1),
 (29, 400, 0, 'accounts', 'accounts', 'users', 'Accounts', 1, 1),
-(30, 400, 0, 'comments', 'comments', 'comments', 'Comments', 8, 1),
-(31, 400, 0, 'reviews', 'reviews', 'review', 'Reviews', 9, 1),
-(32, 400, 0, 'dropdown', 'settings', 'settings', 'Settings', 14, 1),
+(30, 400, 0, 'comments', 'comments', 'comments', 'Comments', 9, 1),
+(31, 400, 0, 'reviews', 'reviews', 'review', 'Reviews', 10, 1),
+(32, 400, 0, 'dropdown', 'settings', 'settings', 'Settings', 15, 1),
 (33, 400, 32, 'livechat', 'settings', 'chat', 'Livechat', 8, 1),
 (34, 400, 32, 'media', 'settings', 'picture', 'Media', 1, 1),
 (35, 400, 32, 'pages', 'settings', 'content', 'Pages', 3, 1),
@@ -1147,7 +1162,7 @@ INSERT INTO `sidebar` (`id`, `rank`, `mid`, `contentType`, `view`, `icon`, `titl
 (40, 400, 32, 'bookings', 'settings', 'calendar', 'Bookings', 4, 1),
 (41, 400, 32, 'orders', 'settings', 'order', 'Orders', 9, 1),
 (42, 400, 32, 'accounts', 'settings', 'users', 'Accounts', 0, 1),
-(43, 400, 0, 'dropdown', 'preferences', 'settings', 'Preferences', 13, 1),
+(43, 400, 0, 'dropdown', 'preferences', 'settings', 'Preferences', 14, 1),
 (44, 400, 43, 'theme', 'preferences', 'theme', 'Theme', 2, 1),
 (45, 400, 43, 'contact', 'preferences', 'address-card', 'Contact', 3, 1),
 (46, 400, 43, 'social', 'preferences', 'user-group', 'Social', 4, 1),
@@ -1159,13 +1174,14 @@ INSERT INTO `sidebar` (`id`, `rank`, `mid`, `contentType`, `view`, `icon`, `titl
 (52, 400, 43, 'database', 'preferences', 'database', 'Database', 11, 1),
 (53, 400, 43, 'suggestion', 'preferences', 'idea', 'Suggestions', 7, 1),
 (54, 400, 43, 'security', 'preferences', 'security', 'Security', 9, 1),
-(55, 1000, 0, 'payments', 'payments', 'hosting', 'Payments', 16, 1),
-(56, 400, 0, 'notification', 'notification', 'notification', 'Notifications', 15, 1),
-(57, 400, 0, 'joblist', 'joblist', 'joblist', 'Job List', 17, 1),
-(58, 900, 0, 'templates', 'templates', 'templates', 'Templates', 18, 1),
+(55, 1000, 0, 'payments', 'payments', 'hosting', 'Payments', 17, 1),
+(56, 400, 0, 'notification', 'notification', 'notification', 'Notifications', 16, 1),
+(57, 400, 0, 'joblist', 'joblist', 'joblist', 'Job List', 18, 1),
+(58, 900, 0, 'templates', 'templates', 'templates', 'Templates', 19, 1),
 (59, 400, 43, 'a11y', 'preferences', 'a11y', 'Accessibility', 1, 1),
 (60, 400, 3, 'activities', 'content', 'activities', 'Activities', 2, 1),
-(61, 400, 0, 'course', 'course', 'education-cap', 'Courses', 5, 1);
+(61, 400, 0, 'course', 'course', 'education-cap', 'Courses', 6, 1),
+(62, 400, 0, 'adverts', 'adverts', 'blocks', 'Adverts', 5, 1);
 
 -- --------------------------------------------------------
 
@@ -1175,12 +1191,12 @@ INSERT INTO `sidebar` (`id`, `rank`, `mid`, `contentType`, `view`, `icon`, `titl
 
 CREATE TABLE `subscribers` (
   `id` bigint NOT NULL,
-  `email` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `name` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `hash` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `tags` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `name` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `hash` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `tags` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1192,15 +1208,15 @@ CREATE TABLE `suggestions` (
   `id` bigint NOT NULL,
   `rid` bigint NOT NULL,
   `uid` bigint NOT NULL,
-  `t` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `c` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `notes` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `reason` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `t` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `c` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `reason` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `popup` int NOT NULL,
   `seen` int NOT NULL,
   `sti` int NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1210,13 +1226,13 @@ CREATE TABLE `suggestions` (
 
 CREATE TABLE `templates` (
   `id` bigint NOT NULL,
-  `contentType` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `section` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `title` tinytext COLLATE utf8mb3_bin NOT NULL,
-  `html` text COLLATE utf8mb3_bin NOT NULL,
-  `notes` text COLLATE utf8mb3_bin NOT NULL,
-  `image` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+  `contentType` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `section` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `html` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `notes` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `image` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `templates`
@@ -1237,27 +1253,27 @@ INSERT INTO `templates` (`id`, `contentType`, `section`, `title`, `html`, `notes
 CREATE TABLE `tracker` (
   `id` bigint NOT NULL,
   `pid` bigint NOT NULL,
-  `status` varchar(32) COLLATE utf8mb3_bin NOT NULL,
-  `urlDest` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `urlFrom` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `userAgent` varchar(255) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `keywords` text CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `ip` varchar(15) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `host` varchar(255) COLLATE utf8mb3_bin NOT NULL,
-  `isp` varchar(255) COLLATE utf8mb3_bin NOT NULL,
-  `action` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `countryName` varchar(128) COLLATE utf8mb3_bin NOT NULL,
-  `countryCode` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `city` varchar(128) COLLATE utf8mb3_bin NOT NULL,
-  `region` varchar(32) COLLATE utf8mb3_bin NOT NULL,
-  `regionCode` varchar(8) COLLATE utf8mb3_bin NOT NULL,
-  `browser` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `device` varchar(32) COLLATE utf8mb3_bin NOT NULL,
-  `viewportwidth` varchar(6) COLLATE utf8mb3_bin NOT NULL,
-  `os` varchar(32) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `sid` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `status` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `urlDest` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `urlFrom` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `userAgent` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `keywords` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ip` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `host` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `isp` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `action` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `countryName` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `countryCode` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `city` varchar(128) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `region` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `regionCode` varchar(8) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `browser` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `device` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `viewportwidth` varchar(6) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `os` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sid` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1267,10 +1283,10 @@ CREATE TABLE `tracker` (
 
 CREATE TABLE `whitelist` (
   `id` bigint NOT NULL,
-  `ip` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `email` tinytext CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
+  `ip` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ti` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -1280,35 +1296,38 @@ CREATE TABLE `whitelist` (
 
 CREATE TABLE `widgets` (
   `id` bigint NOT NULL,
-  `ref` varchar(16) COLLATE utf8mb3_bin NOT NULL,
-  `title` varchar(256) CHARACTER SET utf8mb3 COLLATE utf8mb3_bin NOT NULL,
-  `file` varchar(64) COLLATE utf8mb3_bin NOT NULL,
-  `layout` text COLLATE utf8mb3_bin NOT NULL,
-  `width` varchar(3) COLLATE utf8mb3_bin NOT NULL,
+  `ref` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `title` varchar(256) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `file` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `layout` mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  `width` varchar(3) COLLATE utf8mb4_unicode_ci NOT NULL,
   `ord` bigint NOT NULL,
   `active` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `widgets`
 --
 
 INSERT INTO `widgets` (`id`, `ref`, `title`, `file`, `layout`, `width`, `ord`, `active`) VALUES
-(1, 'dashboard', 'SEO Tutorial Links', 'seolinks.php', '', '6', 3, 1),
-(2, 'dashboard', 'Unsolicited SEO Tips', 'seounsolicited.php', '', '6', 4, 1),
-(3, 'dashboard', 'Visitor Stats', 'visitorstats.php', '', '6', 1, 1),
-(4, 'dashboard', 'Top Ten Highest Viewed Pages', 'viewedpages.php', '', '6', 9, 1),
+(1, 'dashboard', 'SEO Tutorial Links', 'seolinks.php', '', '6', 8, 1),
+(2, 'dashboard', 'Unsolicited SEO Tips', 'seounsolicited.php', '', '6', 9, 1),
+(3, 'dashboard', 'Visitor Stats', 'visitorstats.php', '', '6', 0, 1),
+(4, 'dashboard', 'Top Ten Highest Viewed Pages', 'viewedpages.php', '', '6', 10, 1),
 (8, 'dashboard', 'Top Ten Search Keywords This Month', 'topkeywords.php', '', '6', 8, 1),
-(9, 'dashboard', 'Recent Admin Activity', 'recentadminactivity.php', '', '6', 10, 1),
-(10, 'dashboard', 'Latest AuroraCMS Updates', 'auroracmsupdates.php', '', '6', 11, 1),
+(9, 'dashboard', 'Recent Admin Activity', 'recentadminactivity.php', '', '6', 11, 1),
+(10, 'dashboard', 'Latest AuroraCMS Updates', 'auroracmsupdates.php', '', '6', 12, 1),
 (11, 'content', 'SEO Content Help', 'seocontenthelp.php', '', '', 2, 1),
 (12, 'content', 'Text Analysis', 'hemmingway.php', '', '', 1, 1),
-(13, 'dashboard', 'Devices', 'devices.php', '', '3', 5, 1),
-(14, 'dashboard', 'Browsers', 'browsers.php', '', '3', 6, 1),
-(15, 'dashboard', 'Referrers', 'referrers.php', '', '3', 8, 1),
+(13, 'dashboard', 'Devices', 'devices.php', '', '3', 6, 1),
+(14, 'dashboard', 'Browsers', 'browsers.php', '', '3', 4, 1),
+(15, 'dashboard', 'Referrers', 'referrers.php', '', '3', 5, 1),
 (16, 'dashboard', 'Countries', 'countries.php', '', '3', 7, 1),
-(17, 'dashboard', 'Weather', 'weather.php', '', '6', 2, 1),
-(18, 'dashboard', 'Sale Content Suggestions', 'salecontent.php', '', '12', 0, 1);
+(17, 'dashboard', 'Weather', 'weather.php', '', '6', 1, 1),
+(18, 'dashboard', 'Sale Content Suggestions', 'salecontent.php', '', '12', 0, 1),
+(20, 'content', 'Content Stats', 'contentstats.php', '', '', 3, 1),
+(21, 'dashboard', 'Sales Stats', 'dashboardsalesstats.php', '', '6', 2, 1),
+(22, 'dashboard', 'Latest Orders', 'dashboardlatestorders.php', '', '6', 3, 1);
 
 --
 -- Indexes for dumped tables
@@ -1342,6 +1361,12 @@ ALTER TABLE `config`
 -- Indexes for table `content`
 --
 ALTER TABLE `content`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `contentStats`
+--
+ALTER TABLE `contentStats`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -1547,6 +1572,12 @@ ALTER TABLE `content`
   MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `contentStats`
+--
+ALTER TABLE `contentStats`
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `courseTrack`
 --
 ALTER TABLE `courseTrack`
@@ -1616,7 +1647,7 @@ ALTER TABLE `media`
 -- AUTO_INCREMENT for table `menu`
 --
 ALTER TABLE `menu`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
 -- AUTO_INCREMENT for table `messages`
@@ -1676,7 +1707,7 @@ ALTER TABLE `seo`
 -- AUTO_INCREMENT for table `sidebar`
 --
 ALTER TABLE `sidebar`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `subscribers`
@@ -1712,7 +1743,7 @@ ALTER TABLE `whitelist`
 -- AUTO_INCREMENT for table `widgets`
 --
 ALTER TABLE `widgets`
-  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` bigint NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,8 +16,8 @@ $s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 p-4 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -51,7 +51,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
           <div class="col-12 col-sm-3 order-1 order-md-2 mb-4 mb-md-0">
-            <div class="card m2">
+            <div class="card m-3">
               <figure class="card-image">
                 <a data-fancybox="playlist" href="<?=$r['thumbnail_url'];?>">
                   <img src="<?=$r['thumbnail_url'];?>" alt="Playlist <?=$r['id'];?>">

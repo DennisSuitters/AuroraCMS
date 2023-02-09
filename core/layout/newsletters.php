@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,8 +25,8 @@ else{
   $s->execute([':contentType'=>'newsletters']);?>
   <main>
     <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-      <div class="container-fluid p-2">
-        <div class="card mt-3 p-4 border-radius-0 bg-white border-0 overflow-visible">
+      <div class="container-fluid">
+        <div class="card mt-3 bg-transparent border-0 overflow-visible">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm">
@@ -49,7 +49,7 @@ else{
             <input class="tab-control" id="tab1-2" name="tabs" type="radio">
             <label for="tab1-2">Subscribers</label>
 <?php /* Newsletters */ ?>
-            <div class="tab1-1 border-top p-4" role="tabpanel">
+            <div class="tab1-1 border" role="tabpanel">
               <div id="notification"></div>
               <table class="table-zebra">
                 <thead>
@@ -84,7 +84,7 @@ else{
                 </tbody>
               </table>
             </div>
-            <div class="tab1-2 border-top p-4" role="tabpanel">
+            <div class="tab1-2 border" role="tabpanel">
               <table class="table-zebra">
                 <thead>
                   <tr>

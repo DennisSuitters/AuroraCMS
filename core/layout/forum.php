@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,8 @@ if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_forum.php';
 else{?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -74,7 +74,7 @@ $sc->execute();
 while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
   $st=$db->prepare("SELECT * FROM `".$prefix."forumTopics` WHERE `cid`=:cid ORDER BY `pin` DESC, `ord` ASC, `ti` ASC");
   $st->execute([':cid'=>$rc['id']]);?>
-          <div class="item row mb-3 border-1 bg-white" id="cats_<?=$rc['id'];?>">
+          <div class="card item row mb-3" id="cats_<?=$rc['id'];?>">
             <div class="card col-12 border-0">
               <div class="form-row">
                 <div class="input-text"><i class="i cathandle">drag</i></div>

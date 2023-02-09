@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -87,8 +87,8 @@ else{
     }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 border-radius-0 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm-6">
@@ -97,12 +97,12 @@ else{
               </ol>
               <div class="text-left mt-0 pt-0">
                 View:
-                <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1]);?>" data-tooltip="tooltip" aria-label="Display All Content">All</a>&nbsp;
-                <a class="badger badge-success" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" data-tooltip="tooltip" aria-label="Display Published Items">Published</a>&nbsp;
-                <a class="badger badge-info" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" data-tooltip="tooltip" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
-                <a class="badger badge-warning" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" data-tooltip="tooltip" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
-                <a class="badger badge-danger" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" data-tooltip="tooltip" aria-label="Display Deleted Items">Deleted</a>&nbsp;
-                <a class="badger badge-secondary" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>
+                <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1]);?>" aria-label="Display All Content">All</a>&nbsp;
+                <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>published" aria-label="Display Published Items">Published</a>&nbsp;
+                <a class="badger badge-info" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>autopublish" aria-label="Display Auto Published Items">Auto Published</a>&nbsp;
+                <a class="badger badge-warning" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>unpublished" aria-label="Display Unpublished Items">Unpublished</a>&nbsp;
+                <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>delete" aria-label="Display Deleted Items">Deleted</a>&nbsp;
+                <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/course/'.(!isset($args[1])?'':'type/'.$args[1].'/');?>archived" aria-label="Display Archived Items">Archived</a>
               </div>
               <ol class="breadcrumb pl-0 bg-transparent">
                 <li class="breadcrumb-item">Categories</li>
@@ -148,9 +148,9 @@ else{
         </div>
       </div>
     </div>
-    <section class="content overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
+    <section class="content mt-3 overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
       <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-        <article class="card mx-2 mt-3 mb-0 overflow-visible card-list" data-content="course<?=' '.$r['title'];?>" id="l_<?=$r['id'];?>">
+        <article class="card zebra mx-2 mb-0 overflow-visible card-list" data-content="course<?=' '.$r['title'];?>" id="l_<?=$r['id'];?>">
           <div class="card-image overflow-visible">
             <?php if($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb'])))
               echo'<a data-fancybox="media" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -176,7 +176,7 @@ else{
             <?php if($user['options'][1]==1){
               echo$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></span>':'';
             }
-            echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+            echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badger badge-'.rank($r['rank']).' text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
             </div>
             <div class="card-footer">
               <span class="code hidewhenempty"><?=$r['code'];?></span>

@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <div class="alert widget item mt-3 ml-2 p-0" data-dbid="<?=$rw['id'];?>" id="l_<?=$rw['id'];?>">
-  <div class="toolbar px-2 py-1 bg-white">
+  <div class="toolbar px-2 py-1">
     <?=$rw['title'];?>
     <div class="btn-group">
       <button class="btn btn-sm btn-ghost" id="hemmingwayrefresh" onclick="format();" data-tooltip="left" aria-label="reExamine Text Area"><i class="i">refresh</i></button>

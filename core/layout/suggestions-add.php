@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,9 +24,11 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');?>
 <div class="fancybox-ajax">
-  <h6 class="bg-dark p-2">Add an Editing Suggestion</h6>
-  <div class="m-3" id="suggestions_add">
-    <form id="suggestionsform" method="post" action="core/add_suggestion.php">
+  <div class="modal-header">
+    <h3 class="p-2">Add an Editing Suggestion</h3>
+  </div>
+  <form id="suggestionsform" method="post" action="core/add_suggestion.php">
+    <div class="m-3" id="suggestions_add">
       <input name="id" type="hidden" value="<?=$id;?>">
       <input name="t" type="hidden" value="<?=$t;?>">
       <input name="c" type="hidden" value="<?=$c;?>">
@@ -45,11 +47,13 @@ define('UNICODE','UTF-8');?>
       <div class="form-row">
         <input id="suggestreason" name="dar" type="text" value="" placeholder="Enter a Reason...">
       </div>
-      <div class="form-row mt-4">
-        <button class="btn-block add" type="submit">Add Suggestion</button>
+    </div>
+    <div class="modal-footer">
+      <div class="form-row p-3 justify-content-end">
+        <button class="add" type="submit">Add Suggestion</button>
       </div>
-    </form>
-  </div>
+    </div>
+  </form>
 </div>
 <script>
   <?php if($c=='notes'){?>

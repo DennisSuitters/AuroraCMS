@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,8 @@ $find=isset($_POST['find'])?$_POST['find']:'';
 if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm-6">
@@ -40,7 +40,7 @@ if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';?>
         </div>
         <table class="table-zebra">
           <thead>
-            <tr class="sticky-header small">
+            <tr class="small">
               <th class="text-center align-middle text-uppercase" data-tooltip="bottom" aria-label="The total visits from the same IP over time, the number is not an indicator of visits during a single session.">Visits</th>
               <th class="text-center align-middle text-uppercase">Status</th>
               <th class="text-center align-middle text-uppercase">Referrer</th>
@@ -71,8 +71,6 @@ if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';?>
             $trackercnt=$s->rowCount();
             $cnt=$s->rowCount();?>
             <tbody id="l_tracker"<?=($trackercnt>0?' data-dbtot="'.$trackercnt.'"':'');?>>
-              <?php /*
-            if($cnt>19&&$find==''){ */?>
               <tr id="more_0">
                 <td colspan="9">
                   <div class="form-row load-more justify-content-center">
@@ -82,7 +80,6 @@ if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';?>
                   </div>
                 </td>
               </tr>
-            <?php /* }*/?>
           </tbody>
         </table>
       </div>

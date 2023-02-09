@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm-6">
@@ -32,74 +32,76 @@
             </div>
           </div>
         </div>
-        <?php if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
-        else{?>
-          <legend id="quickPageEdit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/settings#quickPageEdit" data-tooltip="tooltip" aria-label="PermaLink to Quick Page Edit Section">&#128279;</a>':'';?>Quick Page Edit</legend>
-          <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('trash');">
-            <label for="fileEditSelect">File:</label>
-            <div class="form-row">
-              <select id="filesEditSelect" name="file">
-                <?php $fileDefault=($user['rank']==1000?'meta_head.html':'meta_head.html');
-                $files=array();
-                foreach(glob("layout/".$config['theme']."/*.{html}",GLOB_BRACE)as$file){
-                  echo'<option value="'.$file.'"';
-                  if(stristr($file,$fileDefault)){
-                    echo' selected';
-                    $fileDefault=$file;
+        <div class="m-4">
+          <?php if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
+          else{?>
+            <legend id="quickPageEdit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/settings#quickPageEdit" data-tooltip="tooltip" aria-label="PermaLink to Quick Page Edit Section">&#128279;</a>':'';?>Quick Page Edit</legend>
+            <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('trash');">
+              <label for="fileEditSelect">File:</label>
+              <div class="form-row">
+                <select id="filesEditSelect" name="file">
+                  <?php $fileDefault=($user['rank']==1000?'meta_head.html':'meta_head.html');
+                  $files=array();
+                  foreach(glob("layout/".$config['theme']."/*.{html}",GLOB_BRACE)as$file){
+                    echo'<option value="'.$file.'"';
+                    if(stristr($file,$fileDefault)){
+                      echo' selected';
+                      $fileDefault=$file;
+                    }
+                    echo'>'.basename($file).'</option>';
                   }
-                  echo'>'.basename($file).'</option>';
+                  foreach(glob("media/carousel/*.{html}",GLOB_BRACE)as$file){
+                    echo'<option value="'.$file.'"';
+                    if(stristr($file,$fileDefault)){
+                      echo' selected';
+                      $fileDefault=$file;
+                    }
+                    echo'>'.basename($file).' (Carousel)</option>';
+                  }?>
+                </select>
+                <button id="filesEditLoad">Load</button>
+              </div>
+              <div class="wysiwyg-toolbar">
+                <button id="codeSave" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><i class="i">save</i></button>
+              </div>
+              <div class="row">
+                <?php $code=file_get_contents($fileDefault);?>
+                <textarea id="code" name="code"><?=$code;?></textarea>
+              </div>
+            </form>
+          </div>
+          <?php require'core/layout/footer.php';?>
+          <script>
+            $(document).ready(function (){
+              var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
+                lineNumbers:true,
+                lineWrapping:true,
+                mode:"text/html",
+                theme:"base16-dark",
+                autoRefresh:true
+              });
+              var charWidth=editor.defaultCharWidth(),basePadding=4;
+              editor.refresh();
+              editor.on('change',function(cMirror){
+                $('#codeSave').addClass('trash');
+              });
+              $('#filesEditLoad').on({
+                click:function(event){
+                  event.preventDefault();
+                  var url=$('#filesEditSelect').val();
+                  $.ajax({
+                    url:url+'?<?= time();?>',
+                    dataType:"text",
+                    success:function(data){
+                      editor.setValue(data);
+                    }
+                  });
                 }
-                foreach(glob("media/carousel/*.{html}",GLOB_BRACE)as$file){
-                  echo'<option value="'.$file.'"';
-                  if(stristr($file,$fileDefault)){
-                    echo' selected';
-                    $fileDefault=$file;
-                  }
-                  echo'>'.basename($file).' (Carousel)</option>';
-                }?>
-              </select>
-              <button id="filesEditLoad">Load</button>
-            </div>
-            <div class="wysiwyg-toolbar">
-              <button id="codeSave" data-tooltip="tooltip" aria-label="Save" onclick="populateTextarea();"><i class="i">save</i></button>
-            </div>
-            <div class="form-row">
-              <?php $code=file_get_contents($fileDefault);?>
-              <textarea class="w-100" id="code" name="code"><?=$code;?></textarea>
-            </div>
-          </form>
-        </div>
-        <?php require'core/layout/footer.php';?>
-        <script>
-          $(document).ready(function (){
-            var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
-              lineNumbers:true,
-              lineWrapping:true,
-              mode:"text/html",
-              theme:"base16-dark",
-              autoRefresh:true
+              });
             });
-            var charWidth=editor.defaultCharWidth(),basePadding=4;
-            editor.refresh();
-            editor.on('change',function(cMirror){
-              $('#codeSave').addClass('trash');
-            });
-            $('#filesEditLoad').on({
-              click:function(event){
-                event.preventDefault();
-                var url=$('#filesEditSelect').val();
-                $.ajax({
-                  url:url+'?<?= time();?>',
-                  dataType:"text",
-                  success:function(data){
-                    editor.setValue(data);
-                  }
-                });
-              }
-            });
-          });
-        </script>
-      <?php }?>
+          </script>
+        <?php }?>
+      </div>
     </div>
   </section>
 </main>

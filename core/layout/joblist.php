@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,8 +34,8 @@ else{
   if($show=='joblist'){?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="kanban-board p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid kanban-board">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -71,7 +71,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="l_<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="status" draggable="true">
                     <h5>
                       <?=($r['business']!=''?$r['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
+                      <a class="btn btn-sm float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       <?=($r['email']!=''?'Email <strong><a href="mailto:'.$r['email'].'">'.$r['email'].'</a></strong>':'');?>
@@ -81,7 +81,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                       <br>Start <strong><?= date($config['dateFormat'],$r['tis']);?></strong><br>
                       <?=($r['tie']>0?'End <strong>'.date($config['dateFormat'],$r['tie']).'</strong><br>':'');?>
                       <?=($r['rid']!=0&&isset($ri['id'])?'Booked <strong>'.$ri['title'].'</strong>':'');?>
-                      <button class="btn btn-xs p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
+                      <button class="btn btn-sm trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
                     </p>
                   </article>
 <?php }?>
@@ -107,7 +107,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="l_<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="status" draggable="true">
                     <h5>
                       <?=($r['business']!=''?$r['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
+                      <a class="btn btn-sm p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       <?=($r['email']!=''?'Email <strong><a href="mailto:'.$r['email'].'">'.$r['email'].'</a></strong>':'');?>
@@ -117,7 +117,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                       <br>Start <strong><?= date($config['dateFormat'],$r['tis']);?></strong><br>
                       <?=($r['tie']>0?'End <strong>'.date($config['dateFormat'],$r['tie']).'</strong><br>':'');?>
                       <?=($r['rid']!=0&&isset($ri['id'])?'Booked <strong>'.$ri['title'].'</strong>':'');?>
-                      <button class="btn btn-xs p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
+                      <button class="btn btn-sm p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
                     </p>
                   </article>
 <?php }?>
@@ -143,7 +143,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="l_<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="status" draggable="true">
                     <h5>
                       <?=($r['business']!=''?$r['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
+                      <a class="btn btn-sm p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       <?=($r['email']!=''?'Email <strong><a href="mailto:'.$r['email'].'">'.$r['email'].'</a></strong>':'');?>
@@ -153,7 +153,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                       <br>Start <strong><?= date($config['dateFormat'],$r['tis']);?></strong><br>
                       <?=($r['tie']>0?'End <strong>'.date($config['dateFormat'],$r['tie']).'</strong><br>':'');?>
                       <?=($r['rid']!=0&&isset($ri['id'])?'Booked <strong>'.$ri['title'].'</strong>':'');?>
-                      <button class="btn btn-xs p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');">trash</i></button>
+                      <button class="btn btn-sm p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
                     </p>
                   </article>
 <?php }?>
@@ -179,7 +179,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   <article class="kanban-item m-0 my-1 p-1 grab" id="l_<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="status" draggable="true">
                     <h5>
                       <?=($r['business']!=''?$r['business']:($r['url']!=''?$r['url']:''));?>
-                      <a class="btn btn-xs p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
+                      <a class="btn btn-sm p-1 float-right" href="<?= URL.$settings['system']['admin'].'/joblist/edit/'.$r['id'];?>" data-tooltip="left" aria-label="Edit"><i class="i">edit</i></a>
                     </h5>
                     <p class="small">
                       <?=($r['email']!=''?'Email <strong><a href="mailto:'.$r['email'].'">'.$r['email'].'</a></strong>':'');?>
@@ -189,7 +189,7 @@ while($r=$s->fetch(PDO::FETCH_ASSOC)){
                       <br>Start <strong><?= date($config['dateFormat'],$r['tis']);?></strong><br>
                       <?=($r['tie']>0?'End <strong>'.date($config['dateFormat'],$r['tie']).'</strong><br>':'');?>
                       <?=($r['rid']!=0&&isset($ri['id'])?'Booked <strong>'.$ri['title'].'</strong>':'');?>
-                      <button class="btn btn-xs p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
+                      <button class="btn btn-sm p-1 trash float-right" id="purge<?=$r['id'];?>" data-tooltip="left" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">trash</i></button>
                     </p>
                   </article>
 <?php }?>

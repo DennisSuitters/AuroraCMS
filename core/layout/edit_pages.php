@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,58 +15,59 @@ $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `id`=:id");
 $s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);
 $seo=[
-  'heading' => '',
-  'seoTitle' => '',
-  'seoDescription' => '',
-  'fileALT' => '',
-  'notes' => ''
+  'heading'=>'',
+  'seoTitle'=>'',
+  'seoDescription'=>'',
+  'fileALT'=>'',
+  'notes'=>'',
+  'notesHeading'=>''
 ];
 $seoerrors=0;
 if($r['seoTitle']==''){
   $seoerrors++;
-  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+  $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
 }elseif(strlen($r['seoTitle'])<50){
   $seoerrors++;
-  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+  $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
 }elseif(strlen($r['seoTitle'])>70){
   $seoerrors++;
-  $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+  $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
 }
 if($r['seoDescription']==''){
   $seoerrors++;
-  $seo['seoDescription'] = '<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
+  $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
 }elseif(strlen($r['seoDescription'])<1){
   $seoerrors++;
-  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty!';
+  $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty!';
 }elseif(strlen($r['seoDescription'])>160){
   $seoerrors++;
-  $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+  $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
 }
 if($r['cover']!=''&&strlen($r['fileALT'])<1){
   $seoerrors++;
-  $seo['fileALT'] = '<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
+  $seo['fileALT']='<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
 }
 if(strip_tags($r['notes'])==''){
   $seoerrors++;
-  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
+  $seo['notes']='<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
 }elseif(strlen(strip_tags($r['notes']))<100){
   $seoerrors++;
-  $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
+  $seo['notes']='<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
 }
 preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
 if(isset($h1[1])){
   $seoerrors++;
-  $seo['notesHeading'] = '<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Heading</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+  $seo['notesHeading']='<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Heading</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
 }
 if($r['heading']==''){
   $seoerrors++;
-  $seo['heading'] = '<br>The <strong><a href="javascript:seoLink(`heading`,`tab1-1`);">Heading</a></strong> Field is empty, this is what is used for your H1 heading!';
+  $seo['heading']='<br>The <strong><a href="javascript:seoLink(`heading`,`tab1-1`);">Heading</a></strong> Field is empty, this is what is used for your H1 heading!';
 }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-0">
-      <div class="row p-2">
-      <div class="card col-12 col-sm mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible order-2 order-sm-1">
+    <div class="container-fluid">
+      <div class="row">
+      <div class="card col-12 col-sm mt-3 bg-transparent border-0 overflow-visible order-2 order-sm-1">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -110,7 +111,7 @@ if($r['heading']==''){
           <?=$r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">SEO</label>':'';?>
           <?=$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
 <?php /* Content */ ?>
-          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
+          <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
               <label id="menuTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#menuTitle" data-tooltip="tooltip" aria-label="PermaLink to Menu Title Field">&#128279;</a>':'';?>Menu Title</label>
               <div class="form-row">
@@ -220,7 +221,7 @@ if($r['heading']==''){
           </div>
 <?php /* Images */ ?>
 <?php if($r['contentType']!='offline'){?>
-          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border p-4" data-tabid="tab1-2" role="tabpanel">
             <legend>Cover</legend>
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
               <label id="pageCoverURL" for="coverURL"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverURL" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image URL Field">&#128279;</a>':'';?>Cover&nbsp;Image&nbsp;URL</label>
@@ -306,7 +307,7 @@ if($r['heading']==''){
 <?php }
 /* Media */
           if($r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'){?>
-            <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
+            <div class="tab1-3 border p-4" data-tabid="tab1-3" role="tabpanel">
               <legend>Video Playlist</legend>
               <?php if($user['options'][1]==1){?>
                 <div class="form-text text-muted small">Videos will only show up on this page if the theme template contains the playlist elements.</div>
@@ -422,7 +423,7 @@ if($r['heading']==''){
           <?php }
 /* SEO */
 if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
-          <div class="tab1-4 border-top p-4" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-4 border p-4" data-tabid="tab1-4" role="tabpanel">
             <label id="pageViews" for="views"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageViews" data-tooltip="tooltip" aria-label="PermaLink to Page Views Field">&#128279;</a>':'';?>Views</label>
             <div class="form-row">
               <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -540,7 +541,7 @@ if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
 <?php }
 /* Settings */
           if($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
-            <div class="tab1-5 border-top p-4" data-tabid="tab1-5" role="tabpanel">
+            <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
                 <div class="row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -56,8 +56,8 @@ if($error==1)
 else{?>
   <main>
     <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-      <div class="container-fluid p-2">
-        <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+      <div class="container-fluid">
+        <div class="card col-12 col-sm mt-3 bg-transparent border-0 overflow-visible">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm">
@@ -87,21 +87,21 @@ else{?>
             <div class="col-12">
               <h4>Details</h4>
               <div class="row">
-                <div class="col-12 col-sm-6 col-md-3">
-                  <div class="input-text">Order #<a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i">new-window</i>';?></a></div>
+                <div class="col-12 col-sm-3">
+                  <div class="input-text border-bottom-left-radius-0 border-right-radius-0"><strong>Order #</strong><a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i">new-window</i>';?></a></div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                  <div class="input-text">Created:&nbsp;<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?></div>
+                <div class="col-12 col-sm-3">
+                  <div class="input-text border-radius-0"><strong>Created:</strong>&nbsp;<?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?></div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                  <div class="input-text py-0">Due:&nbsp;
+                <div class="col-12 col-sm-3">
+                  <div class="input-text py-0 border-radius-0"><strong>Due:</strong>&nbsp;
                     <input class="border-0" id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3">
-                  <div class="input-text py-0">Status:&nbsp;
-                    <?php if($r['status']=='archived'||$r['status']=='paid')echo'<input type="text" value="'.ucfirst($r['status']).'" readonly>';
-                    else{?>
+                <div class="col-12 col-sm-3">
+                  <?php if($r['status']=='archived'||$r['status']=='paid')echo'<div class="input-text border-left-radius-0 border-bottom-right-radius-0"><strong>Status:</strong>&nbsp;<span class="badger badge-'.$r['status'].'">'.ucfirst($r['status']).'</span>';
+                  else{?>
+                    <div class="input-text py-0 pr-0 border-left-radius-0 border-bottom-right-radius-0"><strong>Status:</strong>&nbsp;
                       <select class="border-0" id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
                         <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
                         <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
@@ -113,11 +113,11 @@ else{?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm-6 col-md">
-                  <div class="input-text">Rank:&nbsp;<span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span></div>
+                <div class="col-12 col-sm">
+                  <div class="input-text border-top-left-radius-0 border-right-radius-0"><strong>Rank:</strong>&nbsp;<span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span></div>
                 </div>
-                <div class="col-12 col-sm-6 col-md">
-                  <div class="input-text">
+                <div class="col-12 col-sm">
+                  <div class="input-text border-radius-0">
                     <?php if($client['purchaseLimit']==0){
                       if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
                       if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
@@ -130,46 +130,44 @@ else{?>
                       if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
                       if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
                     }?>
-                    Purchase Limit:&nbsp;<span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span>
+                    <strong>Purchase Limit:</strong>&nbsp;<span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 col-md">
-                  <div class="input-text">Spent:&nbsp;$<span id="clientSpent"><?=$client['spent'];?></span></div>
+                <div class="col-12 col-sm">
+                  <div class="input-text border-radius-0"><strong>Spent:</strong>&nbsp;$<span id="clientSpent"><?=$client['spent'];?></span></div>
                 </div>
-                <div class="col-12 col-sm-6 col-md">
-                  <div class="input-text">Points Earned:&nbsp;<span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
+                <div class="col-12 col-sm">
+                  <div class="input-text border-radius-0"><strong>Points Earned:</strong>&nbsp;<span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
                 </div>
-                <div class="col-12 col-md">
-                  <div class="input-text">Last Purchase:&nbsp;<span id="clientpti"><?= _ago($client['pti']);?></span></div>
+                <div class="col-12 col-sm">
+                  <div class="input-text border-left-radius-0 border-top-right-radius-0"><strong>Last Purchase:</strong>&nbsp;<span id="clientpti"><?= _ago($client['pti']);?></span></div>
                 </div>
               </div>
               <legend class="mt-3 h5">Payment Details</legend>
               <?php if($r['status']=='paid'){?>
                 <div class="row">
                   <div class="col-12 col-sm-6">
-                    <div class="input-text">Paid Via:&nbsp; <?= ucwords($r['paid_via']);?></div>
+                    <div class="input-text border-bottom-left-radius-0 border-right-radius-0"><strong>Paid Via:</strong>&nbsp; <?= ucwords($r['paid_via']);?></div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <div class="input-text border-left-radius-0 border-bottom-right-radius-0"><strong>Transaction ID:</strong>&nbsp;<?=$r['txn_id'];?></div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="input-text">Transaction ID:&nbsp;<?=$r['txn_id'];?></div>
+                  <div class="col-12 col-sm-4">
+                    <div class="input-text border-top-left-radius-0 border-right-radius-0"><strong>Date Paid:</strong>&nbsp;<?=$r['paid_ti']>0?date($config['dateFormat'],$r['paid_ti']):'';?></div>
                   </div>
-                  <div class="col-12 col-sn-6">
-                    <div class="input-text">Date Paid:&nbsp;<?=$r['paid_ti']>0?date($config['dateFormat'],$r['paid_ti']):'';?></div>
+                  <div class="col-12 col-sm-4">
+                    <div class="input-text border-radius-0"><strong>Name:</strong>&nbsp;<?=$r['paid_name'];?></div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-6">
-                    <div class="input-text">Name:&nbsp;<?=$r['paid_name'];?></div>
-                  </div>
-                  <div class="col-12 col-sm-6">
-                    <div class="input-text">Email:&nbsp;<?=$r['paid_email'];?></div>
+                  <div class="col-12 col-sm-4">
+                    <div class="input-text border-left-radius-0 border-top-right-radius-0"><strong>Email:</strong>&nbsp;<?=$r['paid_email'];?></div>
                   </div>
                 </div>
               <?php }else{?>
                 <div class="row">
                   <div class="col-12 col-md-6">
-                    <div class="input-text py-0">Paid Via:&nbsp;
+                    <div class="input-text py-0"><strong>Paid Via:</strong>&nbsp;
                       <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
                         <option value="">Select an Option</option>
                         <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
@@ -184,24 +182,24 @@ else{?>
                     </div>
                   </div>
                   <div class="col-12 col-md-6">
-                    <div class="input-text py-0">Transaction ID:&nbsp;
+                    <div class="input-text py-0"><strong>Transaction ID:</strong>&nbsp;
                       <input class="textinput border-0" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">
                       <?=$user['options'][1]==1?'<button class="save border-0" id="savetxn_id" data-dbid="txn_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md">
-                    <div class="input-text py-0">Paid Date:&nbsp;
+                    <div class="input-text py-0"><strong>Paid Date:</strong>&nbsp;
                       <input class="border-0" id="paid_ti" type="datetime-local" value="<?=$r['paid_ti']>0?date('Y-m-d\TH:i',$r['paid_ti']):'';?>" autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`paid_ti`,getTimestamp(`paid_ti`));">
                     </div>
                   </div>
                   <div class="col-12 col-sm-6 col-md">
-                    <div class="input-text py-0">Name:&nbsp;
+                    <div class="input-text py-0"></strong>Name:<strong>&nbsp;
                       <input class="textinput border-0" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name...">
                       <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_name" data-dbid="paid_name" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-sm-6 col-md">
-                    <div class="input-text py-0">Email:&nbsp;
+                    <div class="input-text py-0"></strong>Email:<strong>&nbsp;
                       <input class="textinput border-0" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email...">
                       <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_email" data-dbid="paid_email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
@@ -210,8 +208,8 @@ else{?>
               <?php }?>
               <legend class="mt-3 h5">Tracking Details</legend>
               <div class="row">
-                <div class="col-12 col-md-6">
-                  <div class="input-text py-0">Service&nbsp;
+                <div class="col-12 col-sm">
+                  <div class="input-text py-0 pr-0 border-right-radius-0"><strong>Service</strong>&nbsp;
                     <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Tracking Service" onchange="update('<?=$r['id'];?>','orders','trackOption',$(this).val(),'select');">
                       <option value="">Select a Tracking Service</option>
 <?php $sto=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' ORDER BY `title` ASC");
@@ -222,8 +220,8 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                     </select>
                   </div>
                 </div>
-                <div class="col-12 col-md-6">
-                  <div class="input-text py-0">Tracking #&nbsp;
+                <div class="col-12 col-sm">
+                  <div class="input-text py-0 pr-0 border-left-radius-0"><strong>Tracking #</strong>&nbsp;
                     <input class="textinput border-0" id="trackNumber" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="trackNumber" type="text" value="<?=$r['trackNumber'];?>" placeholder="Enter a Tracking Number...">
                     <?=$user['options'][1]==1?'<button class="save border-0" id="savetrackNumber" data-dbid="trackNumber" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
@@ -233,7 +231,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
           </div>
           <hr>
           <div class="row mt-3">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-sm">
               <h4>From</h4>
               <p>
                 <?='<strong>'.$config['business'].'</strong><br>'.
@@ -247,7 +245,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                 '</small>';?>
               </p>
             </div>
-            <div class="col-12 col-md-6 text-right">
+            <div class="col-12 col-sm text-right">
               <h4>To</h4>
               <p id="to">
                 <?='<strong>'.$client['username'].($client['name']!=''?' ['.$client['name'].']':'').'<br>'.
@@ -466,10 +464,10 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                       <td class="align-middle px-0" colspan="3">
                         <input id="rewardselect" name="da" type="text" value="<?=$sr->rowCount()==1?$reward['code']:'';?>" onchange="$('#rewardsinput:first').submit();">
                       </td>
-                      </form>
-                    </td>
-                    <td class="text-center align-middle px-0">
-                      <?php if($sr->rowCount()==1){
+                    </form>
+                  </td>
+                  <td class="text-center align-middle px-0">
+                    <?php if($sr->rowCount()==1){
                         if($reward['method']==1){
                           echo'$';
                           $total=$total-$reward['value'];
@@ -479,7 +477,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                           echo'%';
                           $total=($total*((100-$reward['value'])/100));
                         }
-                        $total=number_format((float)$total, 2, '.', '');
+                        $total=number_format((float)$total,2,'.','');
                         echo' Off';
                       }?>
                     </td>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,8 @@ if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_dashboard.php';
 else{?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 border-radius-0 bg-aurora border-0">
+    <div class="container-fluid">
+      <div class="card mt-3 border-radius-0 bg-transparent border-0 overflow-visible">
         <?php $curHr=date('G');
         $msg='<h5 class="welcome-message">';
         if($curHr<12)$msg.='Good Morning ';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,9 +16,9 @@ $q->execute([':id'=>$args[1]]);
 $r=$q->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid row p-2">
+    <div class="container-fluid">
       <div class="row">
-        <div class="card col-12 col-sm mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible order-2 order-sm-1">
+        <div class="card col-12 col-sm m-4 mt-3 bg-transparent border-0 overflow-visible order-2 order-sm-1">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm">

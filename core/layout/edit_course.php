@@ -7,16 +7,16 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
+    <div class="container-fluid">
       <div class="row">
-        <div class="card col-12 col-sm mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible order-2 order-sm-1">
+        <div class="card col-12 col-sm mt-3 bg-transparent border-0 overflow-visible order-2 order-sm-1">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm-6">
@@ -538,13 +538,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
             </form>
             <hr>
-            <ol id="modules" class="modules-list">
+            <ol id="modules" class="modules-list overflow-visible">
 <?php $sm=$db->prepare("SELECT * FROM `".$prefix."modules` WHERE `rid`=:id ORDER BY `ord` ASC, `title` ASC");
 $sm->execute([':id'=>$r['id']]);
 while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
               <li class="module mb-2" id="modules_<?=$rm['id'];?>">
                 <div class="form-row">
-                  <div class="input-text col-sm ml-2" data-tooltip="tooltip" aria-label="<?=$rm['caption'];?>"><?=$rm['title'];?></div>
+                  <div class="input-text col-sm ml-2"<?=$rm['caption']!=''?' data-tooltip="tooltip" aria-label="'.$rm['caption'].'"':'';?>><?=$rm['title'];?></div>
                   <a class="btn" href="<?= URL.$settings['system']['admin'];?>/course/module/<?=$rm['id'];?>" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
                   <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rm['id'];?>','modules');"><i class="i">trash</i></button>
                   <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;"><i class="i">drag</i></div>

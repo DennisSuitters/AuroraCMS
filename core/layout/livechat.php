@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,8 +15,8 @@ if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_livechat.php';
 else{?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -33,7 +33,7 @@ else{?>
         </div>
         <div class="row chat">
           <input id="chatactive" type="hidden" value="0">
-          <div class="chatList card col-12 col-md-4" id="chatList">
+          <div class="chatList card col-12 col-md-4 overflow-visible" id="chatList">
             <?php $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
             $s->execute();
             while($r=$s->fetch(PDO::FETCH_ASSOC)){?>

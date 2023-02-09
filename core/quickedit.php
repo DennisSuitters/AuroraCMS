@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -472,88 +472,174 @@ if($t=='orders'){
     $st->execute([':id'=>$r['trackOption']]);
     $track=$st->fetch(PDO::FETCH_ASSOC);
   }
-  echo'<div class="row">'.
-    '<div class="col-12 col-sm-4 p-1">'.
-      '<div class="row">'.
-        '<label>Rank</label>'.
-        '<div class="input-text">'.
-          '<span class="badger badge-'.rankclass($ru['rank']).'">'.ucwords(rank($ru['rank'])).'</span>'.
+  echo'<div class="mx-auto p-2 border-0 orderstheme">'.
+    '<section class="row">'.
+      '<article class="col-12 col-sm mx-0 px-0 py-0 pl-1 border-right text-left">'.
+        '<h3>To</h3>'.
+        '<div class="ml-2">'.
+          $ru['name'].'<br>'.
+          $ru['address'].', '.$ru['suburb'].'<br>'.
+          $ru['city'].', '.$ru['state'].', '.$ru['postcode'].'<br>'.
+          'Email: '.$ru['email'].'<br>'.
+          ($ru['phone']!=''?'Phone: '.$ru['phone'].'<br>':'').
+          ($ru['mobile']!=''?'Mobile: '.$ru['mobile']:'').
         '</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label for="qeemail'.$r['id'].'">Email</label>'.
-        '<div class="input-text">'.$ru['email'].'</div>'.
-      '</div>'.
-      ($ru['url']!=''?'<div class="row"><label for="qeurl'.$r['id'].'">URL</label><div class="input-text">'.$ru['url'].'</div></div>':'').
-      ($ru['phone']!=''?'<div class="row"><label for="qephone'.$r['id'].'">Phone</label><div class="input-text">'.$ru['phone'].'</div></div>':'').
-      ($ru['mobile']!=''?'<div class="row"><label for="qemobile'.$r['id'].'">Mobile</label><div class="input-text">'.$ru['mobile'].'</div></div>':'').
-      '<div class="row">'.
-        '<label for="qeaddress'.$r['id'].'">Address</label>'.
-        '<div class="input-text">'.$ru['address'].'</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<div class="col-12 col-sm-6 pr-1 text-left">'.
-          '<label for="qesuburb'.$r['id'].'">Suburb</label>'.
-          '<div class="input-text">'.$ru['suburb'].'</div>'.
+      '</article>'.
+      '<article class="col-12 col-sm mx-0 px-0 py-0 pl-1 text-left">'.
+        '<div class="">'.
+          '<strong>Paid Via: </strong>'.ucwords($r['paid_via']).'<br>'.
+          '<strong>Transaction ID: </strong>'.$r['txn_id'].'<br>'.
+          '<strong>Date Paid: </strong>'.($r['paid_ti']!=0?date($config['dateFormat'],$r['paid_ti']):'<span class="badger badge-danger">Unpaid</span>').'<br>'.
+          '<strong>Paid Name: </strong>'.$r['paid_name'].'<br>'.
+          '<strong>Paid Email: </strong>'.$r['paid_email'].'<br>'.
+          ($track['title']!='none'?'<strong>Tracking Details</strong><br><strong>Service: '.$track['title'].'<br><strong>Tracking Number: </strong>'.$track['trackNumber'].'<br>':'').
         '</div>'.
-        '<div class="col-12 col-sm-6 pl-1 text-left">'.
-          '<label for="qecity'.$r['id'].'">City</label>'.
-          '<div class="input-text">'.$ru['city'].'</div>'.
-        '</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<div class="col-12 col-sm-6 pr-1 text-left">'.
-          '<label for="qestate'.$r['id'].'">State</label>'.
-          '<div class="input-text">'.$ru['state'].'</div>'.
-        '</div>'.
-        '<div class="col-12 col-sm-6 pl-1 text-left">'.
-          '<label for="qepostcode'.$r['id'].'">Postcode</label>'.
-          '<div class="input-text">'.($ru['postcode']!=0?$ru['postcode']:'').'</div>'.
-        '</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label for="qecountry'.$r['id'].'">Country</label>'.
-        '<div class="input-text">'.$ru['country'].'</div>'.
-      '</div>'.
-    '</div>'.
-    '<div class="col-12 col-sm-4 p-1">'.
-      '<legend>Payment Details</legend>'.
-      '<div class="row">'.
-        '<label>Paid Via</label>'.
-        '<div class="input-text">'.ucwords($r['paid_via']).'</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label>Transaction ID</label>'.
-        '<div class="input-text">'.$r['txn_id'].'</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label>Date Paid</label>'.
-        '<div class="input-text">'.($r['paid_ti']!=0?date($config['dateFormat'],$r['paid_ti']):'<span class="badger badge-danger">Unpaid</span>').'</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label>Paid Name</label>'.
-        '<div class="input-text">'.$r['paid_name'].'</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label>Paid Email</label>'.
-        '<div class="input-text">'.$r['paid_email'].'</div>'.
-      '</div>'.
-      ($track['title']!='none'?'<legend>Tracking Details</legend><div class="row"><label>Service</label><div class="input-text">'.$track['title'].'</div></div><div class="row"><label>Tracking Number</label><div class="input-text">'.$track['trackNumber'].'</div></div>':'').
-    '</div>'.
-    '<div class="col-12 col-sm-4 p-1">'.
-      '<div class="row">'.
-        '<label for="qestatus'.$r['id'].'">Status</label>'.
-        '<div class="input-text"><span class="badger badge-'.$r['status'].'">'.ucwords($r['status']).'</span></div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label for="qeti'.$r['id'].'">Created</label>'.
-        '<div class="input-text">'.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti'])).'</div>'.
-      '</div>'.
-      '<div class="row">'.
-        '<label for="qedueti'.$r['id'].'">Due</label>'.
-        '<div class="input-text">'.date($config['dateFormat'],$r['due_ti']).'</div>'.
-      '</div>'.
-    '</div>'.
+      '</article>'.
+    '</section>'.
+    '<section class="row m-0">'.
+      '<article class="m-0 p-0">'.
+        '<table class="table zebra text-black">'.
+          '<thead>'.
+            '<tr class="bg-black text-white">'.
+              '<th class="col-1 text-left">Code</th>'.
+              '<th class="col-auto text-left">Title</th>'.
+              '<th class="col-auto text-left">Option</th>'.
+              '<th class="col-1 text-center">Qty</th>'.
+              '<th class="col-1 text-right">Cost</th>'.
+              '<th class="text-center" title="Goods &amp; Services Tax">GST</th>'.
+              '<th class="col-1 text-right">Total</th>'.
+            '</tr>'.
+          '</thead>'.
+          '<tbody>';
+  $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`!='neg' ORDER BY `status` ASC, `ti` ASC,`title` ASC");
+  $ss->execute([':oid'=>$r['id']]);
+  $total=0;
+  while($oi=$ss->fetch(PDO::FETCH_ASSOC)){
+    $is=$db->prepare("SELECT `id`,`thumb`,`file`,`fileURL`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+    $is->execute([':id'=>$oi['iid']]);
+    $i=$is->fetch(PDO::FETCH_ASSOC);
+    $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
+    $sc->execute([':id'=>$oi['cid']]);
+    $c=$sc->fetch(PDO::FETCH_ASSOC);
+        echo'<tr class="'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'').'">'.
+              '<td class="text-left align-middle small px-0">'.(isset($i['code'])?$i['code']:'').'</td>'.
+              '<td class="text-left align-middle px-0">'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'].'</td>'.
+              '<td class="text-left align-middle px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
+              '<td class="text-center align-middle px-0">'.($r['iid']!=0?$oi['quantity']:'').'</td>'.
+              '<td class="text-right align-middle">'.($r['iid_ti']!=0?number_format((float)$oi['cost'],2,'.',''):'').'</td>'.
+              '<td class="text-right align-middle">';
+              $gst=0;
+              if($oi['status']!='pre order'||$oi['status']!='back order'){
+                if($config['gst']>0){
+                  $gst=$oi['cost']*($config['gst']/100);
+                  if($oi['quantity']>1)$gst=$gst*$oi['quantity'];
+                  $gst=number_format((float)$gst,2,'.','');
+                }
+                echo$gst>0?$gst:'';
+              }
+              echo'</td>'.
+              '<td class="text-right align-middle">';
+              if($oi['status']!='pre order'||$oi['status']!='back order'){
+                echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
+              }else{
+                echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
+              }
+              echo'</td>'.
+            '</tr>';
+            if($oi['status']!='pre order'||$oi['status']!='back order'){
+              if($oi['iid']!=0){
+                $total=$total+($oi['cost']*$oi['quantity'])+$gst;
+                $total=number_format((float)$total,2,'.','');
+              }
+            }
+          }
+          if($r['rid']>0){
+            $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
+            $sr->execute([':rid'=>$r['rid']]);
+            $reward=$sr->fetch(PDO::FETCH_ASSOC);
+            echo'<tr>'.
+              '<td class="text-right align-middle px-0 font-weight-bold">Rewards</td>'.
+              '<td colspan="5" class="text-right align-middle">Code: '.($reward['method']==1?'$':'%').' Off</td>'.
+              '<td class="text-right">'.$reward['value'].'</td>'.
+              '<td class="align-middle px-0" colspan="3">'.$reward['code'].'</td>'.
+              '<td class="text-center align-middle px-0">';
+                if($sr->rowCount()==1){
+                  if($reward['method']==1){
+                    echo'$';
+                    $total=$total-$reward['value'];
+                  }
+                  echo$reward['value'];
+                  if($reward['method']==0){
+                    echo'%';
+                    $total=($total*((100-$reward['value'])/100));
+                  }
+                  $total=number_format((float)$total,2,'.','');
+                  echo' Off';
+                }
+              '</td>'.
+              '<td class="text-right align-middle">'.(isset($reward['value'])?($reward['value']>0?$total:''):'').'</td>'.
+            '</tr>';
+          }
+
+          if($config['options'][26]==1){
+            $dedtot=0;
+            $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
+            $sd->execute([
+              ':f'=>$ru['spent'],
+              ':t'=>$ru['spent']
+            ]);
+            if($sd->rowCount()>0){
+              $rd=$sd->fetch(PDO::FETCH_ASSOC);
+              if($rd['value']==1)$dedtot=$rd['cost'];
+              if($rd['value']==2)$dedtot=$total*($rd['cost']/100);
+              $total=$total - $dedtot;
+            echo'<tr>'.
+              '<td colspan="2" class="align-middle text-right font-px-0 weight-bold">Spent</td>'.
+              '<td colspan="5" class="align-middle text-right px-0">&#36;'.$ru['spent'].' within Discount Range &#36;'.$rd['f'].'-&#36;'.$rd['t'].' granting '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off').'</td>'.
+              '<td colspan="5" class="align-middle text-right">-'.$dedtot.'</td>'.
+            '</tr>';
+          }
+        }
+
+        if($r['postageOption']!=''){
+          echo'<tr>'.
+            '<td class="text-right align-middle font-weight-bolod">Shipping</td>'.
+            '<td colspan="5" class="text-right align-middle">'.$r['postageOption'].'</td>'.
+            '<td class="text-right align-middle">'.$r['postageCost'].'</td>'.
+          '</tr>';
+          if($r['postageCost']>0){
+            $total=$total+$r['postageCost'];
+            $total=number((float)$total,2,'.','');
+          }
+        }
+          echo'</tbody>'.
+          '<tfoot>'.
+            '<tr>'.
+              '<td colspan="6" class="text-right align-middle font-weight-bold">Total</td>'.
+              '<td class="total align-middle">'.$total.'</td>'.
+            '</tr>';
+
+  $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
+  $sn->execute([':oid'=>$r['id']]);
+  if($sn->rowCount()>0){
+    while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
+            echo'<tr>'.
+              '<td colspan="2" class="small align-middle">'.date($config['dateFormat'],$rn['ti']).'</td>'.
+              '<td colspan="4" class="align-middle">'.$rn['title'].'</td>'.
+              '<td class="align-middle text-right">-'.number_format((float)$rn['cost'],2,'.','').'</td>'.
+            '</tr>';
+            $total=$total-$rn['cost'];
+            $total=number_format((float)$total,2,'.','');
+    }
+            echo'<tr>'.
+              '<td colspan="6" class="text-right font-weight-bold">Balance</td>'.
+              '<td class="total">'.$total.'</td>'.
+            '</tr>';
+  }
+          echo'</tfoot>'.
+        '</table>'.
+      '</article>'.
+    '</section>'.
   '</div>';
 }
 echo'<script>'.

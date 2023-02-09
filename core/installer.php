@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -39,11 +39,21 @@ if($_POST['emailtrap']==''){
 		$oFH=fopen("config.ini",'w');
 		fwrite($oFH,$txt);
 		fclose($oFH);
-		echo'<script>'.
-			'window.top.window.$("#step1").addClass("d-none");'.
-			'window.top.window.$("#step2").removeClass("d-none");'.
-			'window.top.window.$("#block").removeClass("d-block");'.
-		'</script>';
+		require'db.php';
+		if(!isset($db)){
+			$error=1;
+			echo'<script>'.
+				'window.top.window.$("#dbsuccess").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);'.
+				'window.top.window.$("#block").removeClass("d-block");'.
+			'</script>';
+		}
+		if($error==0){
+			echo'<script>'.
+				'window.top.window.$("#step1").addClass("d-none");'.
+				'window.top.window.$("#step2").removeClass("d-none");'.
+				'window.top.window.$("#block").removeClass("d-block");'.
+			'</script>';
+		}
 	}
 	if($act=='step2'){
 		$config=parse_ini_file('config.ini',true);
@@ -69,7 +79,6 @@ if($_POST['emailtrap']==''){
 		$oFH=fopen("config.ini",'w');
 		fwrite($oFH,$txt);
 		fclose($oFH);
-		require'db.php';
 		if(!isset($db)){
 			$error=1;
 			echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);</script>';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,13 +26,14 @@ if(isset($_FILES['fu'])){
 		'application/epub+zip','application/gzip','application/java-archive','application/msword','application/ogg','application/pdf','application/rtf','application/vnd.amazon.ebook','application/vnd.ms-excel','application/vnd.ms-powerpoint','application/vnd.oasis.opendocument.presentation','application/vnd.oasis.opendocument.spreadsheet','application/vnd.oasis.opendocument.text','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet','application/vnd.openxmlformats-officedocument.presentationml.presentation','application/vnd.openxmlformats-officedocument.wordprocessingml.document','application/vnd.rar','application/x-7z-compressed','application/x-bzip','application/x-bzip2','application/x-freearc','application/x-tar','application/zip',
 		'text/plain','video/mp4','video/mpeg','video/ogg'
 	])){
-		$tp='../media/downloads/'.basename($_FILES['fu']['name']);
+		$renamed=str_replace(array('\\','/',':','*','?','"','<','>','|','&',' '),'-',basename($_FILES['fu']['name']));
+		$tp='../media/downloads/'.$renamed;
 		$file=basename($_FILES['fu']['name']);
 		if(move_uploaded_file($_FILES['fu']['tmp_name'],$tp)){
 			$q=$db->prepare("INSERT IGNORE INTO `".$prefix."choices` (`rid`,`contentType`,`url`,`title`,`password`,`tie`,`ti`) VALUES (:rid,'download',:file,:title,:p,:tie,:ti)");
 			$q->execute([
 				':rid'=>$id,
-				':file'=>$file,
+				':file'=>$renamed,
 				':title'=>$t,
 				':p'=>$r,
 				':tie'=>$a,
@@ -78,7 +79,7 @@ if(isset($_FILES['fu'])){
 						'</div>';
 					}
 					echo'<div class="form-row">'.
-  					'<input id="url'.$iid.'" name="url" type="text" value="'.$file.'" readonly>'.
+  					'<input id="url'.$iid.'" name="url" type="text" value="'.$renamed.'" readonly>'.
   					'<form target="sp" action="core/purge.php">'.
     					'<input name="id" type="hidden" value="'.$iid.'">'.
     					'<input name="t" type="hidden" value="choices">'.

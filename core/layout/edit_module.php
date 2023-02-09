@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,9 +16,9 @@ $s->execute([':id'=>$args[1]]);
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
+    <div class="container-fluid">
       <div class="row">
-        <div class="card col-12 col-sm mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible order-2 order-sm-1">
+        <div class="card col-12 col-sm mt-3 bg-transparent border-0 overflow-visible">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm-6">
@@ -115,7 +115,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </form>
               <hr>
               <ol id="questions" class="modules-list">
-<?php $sq=$db->prepare("SELECT * FROM `".$prefix."module_questions` WHERE `rid`=:id ORDER BY `ord` ASC, `title` ASC");
+<?php $sq=$db->prepare("SELECT * FROM `".$prefix."moduleQuestions` WHERE `rid`=:id ORDER BY `ord` ASC, `title` ASC");
 $sq->execute([':id'=>$r['id']]);
 while($rq=$sq->fetch(PDO::FETCH_ASSOC)){?>
                 <li class="question mb-2" id="questions_<?=$rq['id'];?>">
@@ -154,9 +154,9 @@ while($rq=$sq->fetch(PDO::FETCH_ASSOC)){?>
                 return ui;
               }
             </script>
-        <?php }?>
+<?php }?>
+          </div>
         </div>
-      </div>
 <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
 $sw->execute();
 if($sw->rowCount()>0){

@@ -8,7 +8,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.0
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -45,7 +45,7 @@ $prefix=$settings['database']['prefix'];
 try{
   $dns=((!empty($settings['database']['driver']))?($settings['database']['driver']):'').((!empty($settings['database']['host']))?(':host='.$settings['database']['host']):'').((!empty($settings['database']['port']))?(';port='.$settings['database']['port']):'').((!empty($settings['database']['schema']))?(';dbname='.$settings['database']['schema']):'');
   $db=new PDO($dns,$settings['database']['username'],$settings['database']['password']);
-  $db->exec("set names utf8");
+  $db->exec("SET NAMES 'utf8mb4'");
 //  $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_WARNING);
   $db->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
   if($settings['system']['devmode']==true){

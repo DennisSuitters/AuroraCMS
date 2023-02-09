@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -194,8 +194,8 @@ if($user['options'][4]==1){
     }?>
     <main>
       <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-        <div class="container-fluid p-2">
-          <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="container-fluid">
+          <div class="card mt-3 bg-transparent border-0 overflow-visible">
             <div class="card-actions">
               <div class="row">
                 <div class="col-12 col-sm">
@@ -233,8 +233,10 @@ if($user['options'][4]==1){
               </div>
             </div>
             <div id="notifications" role="alert"></div>
-            <section class="content overflow-visible list" id="contentview">
-              <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
+            <section class="content mt-4 overflow-visible list" id="contentview">
+              <?php
+              $zeb=0;
+              while($r=$s->fetch(PDO::FETCH_ASSOC)){
                 if($r['due_ti']<$ti&&$r['status']!='paid'){
                   $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id AND `status`!='paid'");
                   $us->execute([':id'=>$r['id']]);
@@ -243,7 +245,7 @@ if($user['options'][4]==1){
                 $cs=$db->prepare("SELECT `username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
                 $cs->execute([':id'=>$r['cid']]);
                 $c=$cs->fetch(PDO::FETCH_ASSOC);?>
-                <article class="card mx-2 mt-3 mb-0 p-2 overflow-visible card-list" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
+                <article class="card zebra mb-0 p-2 border-0 overflow-visible" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
                   <div class="col-3 overflow-visible">
                     <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     <div class="small">Client:&nbsp;
@@ -258,7 +260,7 @@ if($user['options'][4]==1){
                   <div class="col-3 overflow-visible pt-2 line-clamp small">
                     Date:&nbsp;
                       <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
-                      <small>Due: <?= date($config['dateFormat'],$r['due_ti']);?></small>
+                      <small>Due:&nbsp;<?= date($config['dateFormat'],$r['due_ti']);?></small>
                   </div>
                   <div class="col-2 p-2 align-middle justify-content-center">
                     <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
@@ -267,19 +269,19 @@ if($user['options'][4]==1){
                     <div id="controls_<?=$r['id'];?>" class="justify-content-end">
                       <div class="btn-toolbar float-right" role="toolbar">
                         <div class="btn-group" role="group">
-                          <?php if($user['options'][0]==1){
-                            echo$r['qid']!=''&&$r['aid']==''?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice"><i class="i">order-quotetoinvoice</i></a>':'';
-                            echo$r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');"><i class="i">archive</i></button>':'';
-                          }?>
+<?php if($user['options'][0]==1){
+  echo$r['qid']!=''&&$r['aid']==''?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice"><i class="i">order-quotetoinvoice</i></a>':'';
+  echo$r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');"><i class="i">archive</i></button>':'';
+}?>
                           <button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');"><i class="i">print</i></button>
-                          <?= isset($c['email'])&&$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');"><i class="i">email-send</i></button>':'';
+                          <?php echo isset($c['email'])&&$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');"><i class="i">email-send</i></button>':'';
                           echo$user['options'][0]==1?'<a class="btn'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Duplicate"><i class="i">copy</i></a>':'';?>
                           <a class="btn<?=$user['options'][0]==1?' rounded-right':'';echo$r['status']=='delete'?' d-none':'';?>" href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
                           <?php if($user['options'][0]==1){?>
                             <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','orders','status','');"><i class="i">untrash</i></button>
                             <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','orders','status','delete');"><i class="i">trash</i></button>
                             <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','orders')"><i class="i">purge</i></button>
-                            <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
+                            <button class="btn quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
                           <?php }?>
                         </div>
                       </div>

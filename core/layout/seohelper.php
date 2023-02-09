@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -20,7 +20,7 @@ $s->execute([':t'=>$t]);
 if($s->rowCount()>0){
   $r=$s->fetch(PDO::FETCH_ASSOC);
   echo'<div class="fancybox-ajax m-5">'.
-    '<h6 class="bg-dark p-2">'.$r['title'].'</h6>'.
+    '<h6 class="p-2">'.$r['title'].'</h6>'.
     '<div class="m-3">'.
       $r['notes'].
     '</div>'.

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -23,46 +23,43 @@ $seoerrors=0;
 if($r['contentType']!='testimonials'){
   if($r['seoTitle']==''){
     $seoerrors++;
-    $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+    $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
   }elseif(strlen($r['seoTitle'])<50){
     $seoerrors++;
-    $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+    $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
   }elseif(strlen($r['seotitle'])>70){
     $seoerrors++;
-    $seo['seoTitle'] = '<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+    $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
   }
   if($r['seoDescription']==''){
     $seoerrors++;
-    $seo['seoDescription'] = '<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
+    $seo['seoDescription']='<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
   }elseif(strlen($r['seoDescription'])<1){
     $seoerrors++;
-    $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty!';
+    $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty!';
   }elseif(strlen($r['seoDescription'])>160){
     $seoerrors++;
-    $seo['seoDescription'] = '<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+    $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
   }
   if(strlen($r['fileALT'])<1){
     $seoerrors++;
-    $seo['fileALT'] = '<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
+    $seo['fileALT']='<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
   }
-  if(strip_tags($r['notes'])==''){
+  if(strlen(strip_tags($r['notes']))<100){
     $seoerrors++;
-    $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
-  }elseif(strlen(strip_tags($r['notes']))<100){
-    $seoerrors++;
-    $seo['notes'] = '<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
+    $seo['notes']='<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
   }
   preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
   if(isset($h1[1])){
     $seoerrors++;
-    $seo['notesHeading'] = '<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+    $seo['notesHeading']='<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
   }
 }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
+    <div class="container-fluid">
       <div class="row">
-        <div class="card col-12 col-sm mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible order-2 order-sm-1">
+        <div class="card col-12 col-sm mt-3 bg-transparent border-0 overflow-visible order-2 order-sm-1">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm-6">
@@ -110,8 +107,12 @@ if($r['contentType']!='testimonials'){
               <input class="tab-control" id="tab1-11" name="tabs" type="radio">
               <label for="tab1-11">Template</label>
             <?php }?>
+            <?php if($r['contentType']=='inventory'){?>
+              <input class="tab-control" id="tab1-12" name="tabs" type="radio">
+              <label for="tab1-12">Purchases</label>
+            <?php }?>
 <?php /* Content */?>
-            <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
+            <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
               <div class="form-row">
                 <label id="<?=$r['contentType'];?>Title" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Title" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Title Field">&#128279;</a>':'';?>Title</label>
                 <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages.</small>
@@ -735,7 +736,7 @@ if($r['contentType']!='testimonials'){
             <div class="form-text small text-muted">Edited: <?=$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></div>
           </div>
 <?php /* Images */ ?>
-          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border p-4" data-tabid="tab1-2" role="tabpanel">
             <div id="error"></div>
             <?php if($r['contentType']=='testimonials'){?>
               <div class="alert alert-info<?=$r['cid']==0?' hidden':'';?>" id="tstavinfo" role="alert">Currently using the Avatar associated with the selected Client Account.</div>
@@ -906,7 +907,7 @@ if($r['contentType']!='testimonials'){
           </div>
 <?php /* Media */ ?>
           <?php if($r['contentType']!='testimonials'){?>
-          <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
+          <div class="tab1-3 border p-4" data-tabid="tab1-3" role="tabpanel">
             <?php if($user['options'][1]==1){?>
               <legend>Downloadable Media</legend>
               <form class="row mb-3" target="sp" method="post" action="core/add_download.php" enctype="multipart/form-data">
@@ -1154,7 +1155,7 @@ if($sd->rowCount()>0){
           </div>
         <?php }?>
 <?php /* Options */ ?>
-          <div class="tab1-4 border-top p-4" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-4 border p-4" data-tabid="tab1-4" role="tabpanel">
             <?php if($user['options'][1]==1){?>
               <form target="sp" method="post" action="core/add_option.php">
                 <input name="rid" type="hidden" value="<?=$r['id'];?>">
@@ -1190,7 +1191,7 @@ if($sd->rowCount()>0){
             </div>
           </div>
 <?php /* Comments */ ?>
-          <div class="tab1-5 border-top p-4" data-tabid="tab1-5" role="tabpanel">
+          <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
             <div class="row">
               <input id="options1" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
               <label id="contentoptions1<?=$r['id'];?>" for="options1">Enable</label>
@@ -1210,13 +1211,13 @@ if($sd->rowCount()>0){
                     <div class="col-1">
                       <img style="max-width:64px;height:64px;" src="<?php if($ru['avatar']!=''&&file_exists('media/avatar/'.$ru['avatar']))echo'media/avatar/'.$ru['avatar'];elseif($ru['gravatar']!='')echo md5($ru['gravatar']);else echo ADMINNOAVATAR;?>" alt="<?=$rc['name'];?>">
                     </div>
-                    <div class="col-9">
+                    <div class="col-sm pl-3">
                       <h6>Name: <?=$rc['name']==''?'Anonymous':$rc['name'].' &lt;'.$rc['email'].'&gt;';?></h6>
                       <time class="small"><?= date($config['dateFormat'],$rc['ti']);?></time><br>
                       <?= strip_tags($rc['notes']);?>
                     </div>
                     <?php if($user['options'][1]==1){?>
-                      <div class="col-2 text-right align-top" id="controls-<?=$rc['id'];?>">
+                      <div class="col-2-5 text-right align-top" id="controls-<?=$rc['id'];?>">
                         <?php $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
                         $scc->execute([
                           ':ip'=>$rc['ip']
@@ -1261,7 +1262,7 @@ if($sd->rowCount()>0){
             <?php }?>
           </div>
 <?php /* Reviews */ ?>
-          <div class="tab1-6 border-top p-4" data-tabid="tab1-6" role="tabpanel">
+          <div class="tab1-6 border p-4" data-tabid="tab1-6" role="tabpanel">
             <?php $sr=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid ORDER BY `ti` DESC");
             $sr->execute([':rid'=>$r['id']]);
             if($sr->rowCount()>0){
@@ -1293,7 +1294,7 @@ if($sd->rowCount()>0){
           </div>
 <?php /* Related */ ?>
         <?php if($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-          <div class="tab1-7 border-top p-4"  data-tabid="tab1-7" role="tabpanel">
+          <div class="tab1-7 border p-4"  data-tabid="tab1-7" role="tabpanel">
             <?php if($user['options'][1]==1){?>
               <form target="sp" method="post" action="core/add_related.php">
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -1333,7 +1334,7 @@ if($sd->rowCount()>0){
         <?php }
 /* SEO */
         if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
-          <div class="tab1-8 border-top p-4" data-tabid="tab1-8" role="tabpanel">
+          <div class="tab1-8 border p-4" data-tabid="tab1-8" role="tabpanel">
             <label id="<?=$r['contentType'];?>Views" for="views"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Views" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Views Field">&#128279;</a>':'';?>Views</label>
             <div class="form-row">
               <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -1482,7 +1483,7 @@ if($sd->rowCount()>0){
 
         <?php }
 /* Settings */ ?>
-          <div class="tab1-9 border-top p-4" data-tabid="tab1-9" role="tabpanel">
+          <div class="tab1-9 border p-4" data-tabid="tab1-9" role="tabpanel">
             <div class="row">
               <div class="col-12 col-sm-6 pr-md-3">
                 <label id="<?=$r['contentType'];?>Status" for="status"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Status" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Status Selector">&#128279;</a>':'';?>Status</label>
@@ -1741,7 +1742,7 @@ if($sd->rowCount()>0){
               }?>
           </div>
 <?php if($r['contentType']=='events'){?>
-          <div class="tab1-10 border-top p-4" data-tabid="tab1-10" role="tabpanel">
+          <div class="tab1-10 border p-4" data-tabid="tab1-10" role="tabpanel">
             <div class="row">
               <?php
               $sbb=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='booking' AND `rid`=:rid ORDER BY `ti` DESC");
@@ -1775,7 +1776,7 @@ if($sd->rowCount()>0){
           </div>
 <?php }?>
 <?php if($r['contentType']!='testimonials'){?>
-          <div class="tab1-11 border-top p-4" data-tabid="tab1-11" role="tabpanel">
+          <div class="tab1-11 border p-4" data-tabid="tab1-11" role="tabpanel">
             <section class="content overflow-visible theme-chooser" id="templates">
               <article class="card col-12 col-sm-3 m-2 overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
                 <figure class="card-image">
@@ -1827,6 +1828,54 @@ while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
                 });
               });
             </script>
+          </div>
+<?php }?>
+<?php if($r['contentType']=='inventory'){?>
+          <div class="tab1-12 border" data-tabid="tab1-12" role="tabpanel">
+            <section class="row list">
+<?php $si=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `iid`=:iid ORDER BY `ti` DESC");
+$si->execute([':iid'=>$r['id']]);
+while($ri=$si->fetch(PDO::FETCH_ASSOC)){
+  $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+  $so->execute([':id'=>$ri['oid']]);
+  if($so->rowCount()>0){
+    $ro=$so->fetch(PDO::FETCH_ASSOC);
+    $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+    $su->execute([':id'=>$ro['uid']]);
+    $ru=$su->fetch(PDO::FETCH_ASSOC);?>
+    <article class="card zebra m-0 p-2 border-0 overflow-visible" id="l_<?=$ro['id'];?>">
+      <div class="row">
+        <div class="col-sm">
+          <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$ro['id']?>"><?=($ro['aid']!=''?$ro['aid'].'<br>':'').$ro['qid'].$ro['iid'];?></a>
+        </div>
+        <div class="col-sm small">
+          Date:&nbsp;<?=' '.date($config['dateFormat'],($ro['iid_ti']==0?$ro['qid_ti']:$ro['iid_ti']));?><br>
+          <small>Due:&nbsp;<?= date($config['dateFormat'],$ro['dui_ti']);?></small>
+        </div>
+        <div class="col-sm text-center">
+          <span class="badger badge-<?=$ro['status'];?> badge-2x"><?= ucfirst($ro['status']);?></span>
+        </div>
+        <div class="col-sm">
+          <div id="controls_<?=$ro['id'];?>" class="justify-content-end">
+            <div class="btn-group float-right" role="group">
+              <button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$ro['id'];?>&act=print');"><i class="i">print</i></button>
+              <?= isset($ru['email'])&&$ru['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$ro['id'].'&act=\');"><i class="i">email-send</i></button>':'';?>
+              <a class="btn<?=$user['options'][0]==1?' rounded-right':'';echo$ro['status']=='delete'?' d-none':'';?>" href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
+              <?php if($user['options'][0]==1){?>
+                <button class="btn add<?=$ro['status']!='delete'?' d-none':'';?>" id="untrash<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$ro['id'];?>','orders','status','');"><i class="i">untrash</i></button>
+                <button class="btn trash<?=$ro['status']=='delete'?' d-none':'';?>" id="delete<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$ro['id'];?>','orders','status','delete');"><i class="i">trash</i></button>
+                <button class="btn purge trash<?=$ro['status']!='delete'?' d-none':'';?>" id="purge<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$ro['id'];?>','orders')"><i class="i">purge</i></button>
+                <button class="btn quickeditbtn" data-qeid="<?=$ro['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
+              <?php }?>
+            </div>
+          </div>
+        </div>
+      </div>
+    </article>
+    <div class="quickedit d-none" id="quickedit<?=$ro['id'];?>"></div>
+<?php }
+}?>
+            </section>
           </div>
 <?php }?>
         </div>

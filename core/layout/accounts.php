@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -45,8 +45,8 @@ else{
   }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 border-radius-0 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm-6">
@@ -58,77 +58,83 @@ else{
               <div class="form-row justify-content-end">
                 <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
                 <div class="btn-group">
-                  <button class="btn accountview" data-tooltip="left" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button><?=($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="left" aria-label="Accounts Settings"><i class="i">settings</i></a>':'').($user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'&nbsp;');?>
+                  <button class="btn accountview" data-tooltip="left" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button>
+                  <?php echo($user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="left" aria-label="Accounts Settings"><i class="i">settings</i></a>':'');
+                  echo($user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'&nbsp;');?>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <section class="content overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>" id="accountview">
-          <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card mx-2 mt-3 mb-0 overflow-visible card-list item" data-content="<?=$r['username'].' '.$r['name']?>" id="l_<?=$r['id'];?>">
-              <div class="card-image overflow-visible">
-                <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><img src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))echo'media/avatar/'.basename($r['avatar']);
-                elseif($r['gravatar']!='')echo$r['gravatar'];
-                else echo ADMINNOAVATAR;?>" alt="<?=$r['username'];?>"></a>
-                <?='<span class="status badger badge-'.rank($r['rank']).'" id="accountrank'.$r['id'].'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span>';?>
-                <div class="image-toolbar">
-                  <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
-                </div>
+        <section class="content mt-3 overflow-visible<?= isset($_COOKIE['accountview'])&&$_COOKIE['accountview']=='list'?' list':'';?>" id="accountview">
+  <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+          <article class="card zebra mx-2 mb-0 overflow-visible card-list item" id="l_<?=$r['id'];?>" data-content="<?=$r['username'].' '.$r['name']?>">
+            <div class="card-image overflow-visible">
+              <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>">
+          <?php $avatarimg=ADMINNOAVATAR;
+          if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
+            $avatarimg='media/avatar/'.basename($r['avatar']);
+          elseif($r['gravatar']!='')
+            $avatarimg=$r['gravatar'];?>
+                <img src="<?=$avatarimg;?>" alt="<?=$r['username'];?>">
+              </a>
+              <span class="status badger badge-<?= rank($r['rank']);?>" id="accountrank<?=$r['id'];?>"><?= ucwords(str_replace('-',' ',rank($r['rank'])));?></span>
+              <div class="image-toolbar">
+                <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
               </div>
-              <div class="card-header overflow-visible pt-2 line-clamp">
-                <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><?=$r['username'].':'.$r['name'];?></a><br>
-                <small class="text-muted"><small><?= _agologgedin($r['lti']);?></small></small>
-                <?=$r['active']==1?'<br><span class="badger badge-success">Active</span>':'<br><span class="badger badge-dark">Inactive</span>';?>
-              </div>
-              <div class="card-footer">
-                <div id="controls_<?=$r['id'];?>">
-                  <div class="btn-toolbar float-right" role="toolbar">
-                    <div class="btn-group" role="group">
-                      <a href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit<?=' '.$r['username'].':'.$r['name'];?>"><i class="i">edit</i></a>
-                      <?php if($user['options'][0]==1){?>
-                        <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><i class="i">untrash</i></button>
-                        <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><i class="i">trash</i></button>
-                        <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
-                        <button class="btn-ghost quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
-                      <?php }?>
-                      <span class="btn btn-ghost orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>
-                    </div>
+            </div>
+            <div class="card-header overflow-visible pt-2 line-clamp">
+              <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>"><?=$r['username'].':'.$r['name'];?></a><br>
+              <small class="text-muted"><small><?= _agologgedin($r['lti']);?></small></small>
+              <?=$r['active']==1?'<br><span class="badger badge-success">Active</span>':'<br><span class="badger badge-dark">Inactive</span>';?>
+            </div>
+            <div class="card-footer">
+              <div id="controls_<?=$r['id'];?>">
+                <div class="btn-toolbar float-right" role="toolbar">
+                  <div class="btn-group" role="group">
+                    <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="Edit<?=' '.$r['username'].':'.$r['name'];?>"><i class="i">edit</i></a>
+    <?php if($user['options'][0]==1){?>
+                    <button class="btn add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><i class="i">untrash</i></button>
+                    <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><i class="i">trash</i></button>
+                    <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
+                    <button class="btn quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
+    <?php }?>
+                    <span class="btn orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>
                   </div>
                 </div>
               </div>
-            </article>
-            <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
-          <?php }?>
+            </div>
+          </article>
+          <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
+  <?php }?>
           <article class="ghost hidden"></article>
         </section>
       </div>
-        <script>
-          $('#accountview').sortable({
-            items:"article.item",
-            handle:'.orderhandle',
-            placeholder:".ghost",
-            helper:fixWidthHelper,
-            update:function(e,ui){
-              var order=$("#accountview").sortable("serialize");
-              $.ajax({
-                type:"POST",
-                dataType:"json",
-                url:"core/reorderaccounts.php",
-                data:order
-              });
-            }
-          }).disableSelection();
-          function fixWidthHelper(e,ui){
-            ui.children().each(function(){
-              $(this).width($(this).width());
+      <script>
+        $('#accountview').sortable({
+          items:"article.item",
+          handle:'.orderhandle',
+          placeholder:".ghost",
+          helper:fixWidthHelper,
+          update:function(e,ui){
+            var order=$("#accountview").sortable("serialize");
+            $.ajax({
+              type:"POST",
+              dataType:"json",
+              url:"core/reorderaccounts.php",
+              data:order
             });
-            return ui;
           }
-        </script>
-      </div>
-      <?php require'core/layout/footer.php';?>
+        }).disableSelection();
+        function fixWidthHelper(e,ui){
+          ui.children().each(function(){
+            $(this).width($(this).width());
+          });
+          return ui;
+        }
+      </script>
     </div>
+  <?php require'core/layout/footer.php';?>
   </section>
 </main>
 <?php }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -105,7 +105,7 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);
 ?>
 <div class="item resize m-0 p-0 col-12 col-sm-<?=$rw['width'];?>" data-dbid="<?=$rw['id'];?>" data-resizeMin="6" resizeMax="12" id="l_<?=$rw['id'];?>">
   <div class="alert widget m-3 p-0">
-    <div class="toolbar px-2 py-1 bg-white handle">
+    <div class="toolbar px-2 py-1 handle">
       <?=$rw['title'];?>
       <div class="btn-group">
         <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
@@ -114,8 +114,8 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);
     <div class="mx-2 my-1 small">
       <canvas id="barChart" style="min-height:220px;height:220px;max-height:220px;max-width:100%;"></canvas>
       <div class="d-flex flex-row justify-content-end my-2">
-        <span class="mr-3"><i class="i" style="background-color:#efefef;color:#efefef;">square</i> Last year</span>
-        <span><i class="i" style="background-color:#007bff;color:#007bff;">square</i> This year</span>
+        <span class="mr-3"><i class="i" style="background-color:var(--graph-background-color-prev);color:var(--graph-color-prev);">square</i> Last year</span>
+        <span><i class="i" style="background-color:var(--graph-background-color-current);color:var(--graph-color-current);">square</i> This year</span>
       </div>
     </div>
   </div>
@@ -127,6 +127,10 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);
   }
   var mode='index';
   var intersect=true;
+  var bgColorCurrent=getComputedStyle(document.body).getPropertyValue('--graph-color-current');
+  var colorCurrent=getComputedStyle(document.body).getPropertyValue('--graph-color-current');
+  var bgColorPrev=getComputedStyle(document.body).getPropertyValue('--graph-color-prev');
+  var colorPrev=getComputedStyle(document.body).getPropertyValue('--graph-color-prev');
   var areaChartData={
     labels:[
       '<?= date("M",$times[1][0]);?>',
@@ -145,15 +149,15 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);
     datasets:[
       {
         backgroundColor:'transparent',
-        borderColor:'#4a6cf7',
-        pointBackgroundColor: "transparent",
-        pointHoverBackgroundColor: "#4a6cf7",
-        pointBorderColor: "transparent",
-        pointHoverBorderColor: "#fff",
-        pointHoverBorderWidth: 5,
-        pointBorderWidth: 5,
-        pointRadius: 8,
-        pointHoverRadius: 8,
+        borderColor:bgColorCurrent,
+        pointBackgroundColor:"transparent",
+        pointHoverBackgroundColor:bgColorCurrent,
+        pointBorderColor:"transparent",
+        pointHoverBorderColor:"rgba(0,0,0,.15)",
+        pointHoverBorderWidth:5,
+        pointBorderWidth:5,
+        pointRadius:8,
+        pointHoverRadius:8,
         data:[
           <?=$m1r['cnt']>0?$m1r['cnt']:0;?>,
           <?=$m2r['cnt']>0?$m2r['cnt']:0;?>,
@@ -171,15 +175,15 @@ $my12r=$my12s->fetch(PDO::FETCH_ASSOC);
       },
       {
         backgroundColor:'transparent',
-        borderColor:'#efefef',
-        pointBackgroundColor: "transparent",
-        pointHoverBackgroundColor: "#efefef",
-        pointBorderColor: "transparent",
-        pointHoverBorderColor: "#fff",
-        pointHoverBorderWidth: 5,
-        pointBorderWidth: 5,
-        pointRadius: 8,
-        pointHoverRadius: 8,
+        borderColor:bgColorPrev,
+        pointBackgroundColor:"transparent",
+        pointHoverBackgroundColor:bgColorPrev,
+        pointBorderColor:"transparent",
+        pointHoverBorderColor:"rgba(0,0,0,.15)",
+        pointHoverBorderWidth:5,
+        pointBorderWidth:5,
+        pointRadius:8,
+        pointHoverRadius:8,
         data:[
           <?=$my1r['cnt']>0?$my1r['cnt']:0;?>,
           <?=$my2r['cnt']>0?$my2r['cnt']:0;?>,

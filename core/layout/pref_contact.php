@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.17
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-    <div class="container-fluid p-2">
-      <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+    <div class="container-fluid">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions text-right">
           <div class="row">
             <div class="col-12 col-sm-6">
@@ -30,6 +30,7 @@
             </div>
           </div>
         </div>
+        <div class="m-4">
         <legend id="prefBusinessHoursSection"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessHoursSection" data-tooltip="tooltip" aria-label="PermaLink to Preferences Business Hours Section">&#128279;</a>':'';?>Business Hours</legend>
         <div class="row mt-3">
           <div class="col-12 col-md-4">
@@ -434,6 +435,7 @@
         <?php }?>
         </script>
 <?php }?>
+</div>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

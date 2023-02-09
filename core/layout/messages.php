@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.22
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -59,8 +59,8 @@ if($user['options'][3]==1){
     }?>
     <main>
       <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
-        <div class="container-fluid p-2">
-          <div class="card mt-3 p-4 border-radius-0 bg-white border-0 shadow overflow-visible">
+        <div class="container-fluid">
+          <div class="card mt-3 bg-transparent border-0 overflow-visible">
             <div class="card-actions">
               <div class="row">
                 <div class="col-12 col-sm">
@@ -98,35 +98,35 @@ if($user['options'][3]==1){
               }
               $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
-              <div class="messages-menu col-12 col-md-2">
+              <div class="messages-menu col-12 col-sm-2">
                 <?=$user['options'][0]==1?'<a class="btn mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose">Compose</a><br>':'';?>
                 <a class="link mb-1<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i">inbox</i> Inbox</a><br>
                 <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><i class="i">email</i> Unread</a><br>
                 <a class="link mb-1<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i">email-send</i> Sent</a><br>
                 <a class="link mb-1<?=(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i">bookmark</i> Important</a><br>
                 <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>"><i class="i">email-spam</i> Spam</a>
+                <div class="alert alert-warning col-12 text-center m-0 d-none" id="checkmessages">Checking for new Messages!!!</div>
               </div>
-              <div class="col-12 col-md-10 pl-3">
-                <div class="alert alert-warning col-12 text-center d-none" id="checkmessages">Checking for new Messages!!!</div>
+              <div class="col-12 col-sm-10 pl-3">
                 <table class="table-zebra">
                   <thead>
                     <tr>
-                      <th><input name="message[]" type="checkbox"></th>
-                      <th>
+                      <th class="col-1"><input type="checkbox"></th>
+                      <th class="text-left">
                         From<br>
                         <small>Subject</small>
                       </th>
-                      <th>Date</th>
+                      <th class="align-top">Date</th>
                       <th></th>
                     </tr>
                   </thead>
                   <tbody>
                     <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                       <tr class="<?=$r['status']=='unread'?' font-weight-bold':' font-weight-light';?>" id="l_<?=$r['id'];?>">
-                        <td>
+                        <td class="col-1">
                           <input name="message[]" type="checkbox">
                         </td>
-                        <td>
+                        <td class="text-left">
                           <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>">
                             <span class="from"><?=$r['from_name']!=''?$r['from_name'].'<small> &lt;'.$r['from_email'].'&gt;</small>':'&lt;'.$r['from_email'].'&gt;';?></span><br>
                             <small class="subject"><?=$r['subject'];?></small>

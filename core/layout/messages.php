@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -70,7 +70,7 @@ if($user['options'][3]==1){
                 </div>
                 <div class="col-12 col-sm-2 text-right">
                   <div class="btn-group">
-                    <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/messages/settings" data-tooltip="left" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
+                    <?=$user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/messages/settings" role="button" data-tooltip="left" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
                   </div>
                 </div>
               </div>
@@ -99,7 +99,7 @@ if($user['options'][3]==1){
               $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
               <div class="messages-menu col-12 col-sm-2">
-                <?=$user['options'][0]==1?'<a class="btn mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose">Compose</a><br>':'';?>
+                <?=$user['options'][0]==1?'<a class="mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose" role="button">Compose</a><br>':'';?>
                 <a class="link mb-1<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i">inbox</i> Inbox</a><br>
                 <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><i class="i">email</i> Unread</a><br>
                 <a class="link mb-1<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i">email-send</i> Sent</a><br>
@@ -156,7 +156,7 @@ if($user['options'][3]==1){
                                   </form>
                                 <?php }?>
                                 <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?=$r['id'];?>','messages','folder','spam');"><i class="i">email-spam</i></button>
-                                <button class="purge trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','messages')"><i class="i">trash</i></button>
+                                <button class="purge" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','messages')"><i class="i">trash</i></button>
                               <?php }?>
                             </div>
                           </div>

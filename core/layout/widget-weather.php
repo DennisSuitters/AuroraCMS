@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
-<div class="item m-0 p-0 col-12 col-sm-<?=$rw['width'];?>" id="l_<?=$rw['id'];?>">
+<div class="item m-0 p-0 col-12 col-sm-12 col-md-12 col-lg-7 col-xl-6 col-xxl-4" id="l_<?=$rw['id'];?>">
   <div id="weather-background" class="alert widget-weather background m-3 p-0">
     <div class="toolbar px-2 py-1 bg-transparent handle">
       <div class="btn-group">
@@ -22,35 +22,35 @@
     <div class="container m-0 p-0 position-relative">
       <div id="current-weather">
         <div class="row">
-          <div class="col-6">
+          <div class="col-12">
             <h5><span id="cityName"></span>, <span id="cityCode"></span></h5>
           </div>
         </div>
         <div class="row">
-          <div class="col-4">
+          <div class="col-6 col-sm-4 text-center justify-content-center">
             <p style="font-size: 1rem">
               <span id="mainTemperature"></span>°C
             </p>
             <span id="tempDescription" class="mt-0"></span>
           </div>
-          <div class="col-4 text-center">
+          <div class="col-6 col-sm-4 text-center justify-content-center">
             <i class="i" id="main-icon"></i>
           </div>
-          <div class="col-4 text-right">
+          <div class="col-12 col-sm-4 mt-3 mt-sm-0 text-right">
             <div class="row">
-              <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+              <div class="col-6 col-sm-12 side-weather-info">
                 <h6>Humidity: <span id="humidity">N/A</span>%</h6>
               </div>
-              <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+              <div class="col-6 col-sm-12 side-weather-info">
                 <h6>Wind: <span id="wind">N/A</span> m/s</h6>
               </div>
-              <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+              <div class="col-6 col-sm-12 side-weather-info">
                 <h6>Feels Like: <span id="mainFeelsLike">N/A</span>°</h6>
               </div>
-              <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+              <div class="col-6 col-sm-12 side-weather-info">
                 <h6>Sunrise: <span id="mainSunrise"></span></h6>
               </div>
-              <div class="col-md-12 col-sm-3 col-xs-3 side-weather-info">
+              <div class="col-6 col-sm-12 side-weather-info">
                 <h6>Sunset: <span id="mainSunset"></span></h6>
               </div>
             </div>
@@ -143,14 +143,14 @@
     getClientPosition();
   });
   function getClientPosition(){
-<?php if($config['geo_position']!=''){
-    $geo=explode(',',$config['geo_position']);?>
-    getWeatherData(<?=$geo['0'];?>,<?=$geo[1]?>);
-<?php }else{?>
-    $.getJSON("https://ipapi.co/json/",function(position){
-      getWeatherData(position.latitude,position.longitude);
-    });
-<?php }?>
+    <?php if($config['geo_position']!=''){
+      $geo=explode(',',$config['geo_position']);?>
+      getWeatherData(<?=$geo['0'];?>,<?=$geo[1]?>);
+    <?php }else{?>
+      $.getJSON("https://ipapi.co/json/",function(position){
+        getWeatherData(position.latitude,position.longitude);
+      });
+    <?php }?>
   }
   function getWeatherData(latitude,longitude){
     $.ajax({

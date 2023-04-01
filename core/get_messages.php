@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -142,7 +142,7 @@ if($config['message_check_interval']!=0){
 		}
 					echo'<form target="sp" method="post" action="core/purge.php">'.
 								'<input name="id" type="hidden" value="'.$r['id'].'">'.
-								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`messages`);"><i class="i">purge</i></button>'.
+								'<button class="btn-danger" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`messages`);"><i class="i">purge</i></button>'.
 							'</form>'.
 						'</div>'.
 					'</div>'.

@@ -18,7 +18,7 @@
 		</nav>
 	</breadcrumb>
 	<section class="row mb-5">
-		<aside class="col-11 col-md-2-5 p-md-2 mt-0 mb-3 mx-auto hidewhenempty"><category-nav>
+		<aside class="col-12 col-md-3 p-md-2 mt-0 mb-3 mx-auto hidewhenempty"><category-nav>
 			<div class="row">
 				<div class="card">
 					<nav class="category-nav">
@@ -32,7 +32,7 @@
 				<div class="row mt-3">
 					<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events/" aria-label="Go to Events">Events</a></div>
 					<eventitem>
-						<article class="card col-5 col-md-8 event side mt-3 mx-auto">
+						<article class="card col-5 col-sm-3 col-md-8 col-lg-5 col-xxl-4 event side mt-3 mx-auto">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
@@ -181,7 +181,7 @@
 						<div class="card-body">
 							<section class="justify-content-center">
 								<relitems>
-									<article class="card col-12 col-sm-5 m-2">
+									<article class="card col-12 col-sm-4 col-md-5 col-lg-5 col-xl-4 col-xxl-2 m-2">
 										<a href="<print related=linktitle>" class="card-image">
 											<img <print thumb=srcset>src="<print related=thumb>" loading="lazy" alt="<print related=imageALT>">
 										</a>
@@ -219,7 +219,7 @@
 				</pagination>
 				<div class="row justify-content-center">
 					<items>
-						<article class="card col-11 col-sm-5 m-3">
+						<article class="card col-11 col-sm-4 col-md-5 col-xl-4 col-xxl-3 m-3">
 							<div class="card-image">
 								<a href="<print content=linktitle>">
 									<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
@@ -232,7 +232,7 @@
 							<div class="card-footer">
 								<a class="btn" href="<print content=linktitle>" role="button">View</a>
 								<quickview>
-									<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+									<a class="btn" data-fancybox="products" data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
 								</quickview>
 							</div>
 						</article>

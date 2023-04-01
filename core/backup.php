@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -100,7 +100,7 @@ if(file_exists('../media/backup/'.$file)){
   $q->execute([':backup_ti'=>$ti]);
   echo'<script>'.
 		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-row mt-2">'.
-			'<a class="btn btn-block" href="media/backup/'.$file.'">Click to Download '.$file.'</a>'.
+			'<a class="btn-block" href="media/backup/'.$file.'" role="button">Click to Download '.$file.'</a>'.
 			'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');"><i class="i">trash</i></button>'.
 		'</div>`);'.
   	'window.top.window.$("#alert_backup").addClass("d-none");'.

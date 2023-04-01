@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,8 +26,8 @@
           <form target="sp" method="post" action="core/changeprefix.php">
             <label id="tablePrefix" for="prefix"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#tablePrefix" data-tooltip="tooltip" aria-label="PermaLink to Database Table Prefix Field">&#128279;</a>':'';?>Table Prefix</label>
             <div class="form-row">
-              <input class="textinput" id="prefix" name="dbprefix" type="text" value="<?=$prefix;?>" placeholder="Enter a Table Prefix...">
-              <button type="submit" onclick="$('body').append('<div id=blocker><div></div></div>');">Update</button>
+              <input class="textinput" id="prefix" name="dbprefix" type="text" value="<?=$prefix;?>"<?=($user['options'][7]==1?' placeholder="Enter a Table Prefix..."':' disabled');?>>
+              <?=($user['options'][7]==1?'<button type="submit" onclick="$(`body`).append(`<div id=blocker><div></div></div>`);">Update</button>':'');?>
             </div>
           </form>
           <legend id="databaseBackupSection" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#databaseBackupSection" data-tooltip="tooltip" aria-label="PermaLink to Preferences Database Backup/Restore">&#128279;</a>':'';?>Database Backup/Restore</legend>
@@ -39,10 +39,10 @@
             <form target="sp" method="post" action="core/backup.php" onsubmit="$('.page-block').addClass('d-block');">
               <div class="form-row">
                 <label>Backup</label>
-                <small class="form-text text-right">Note: Only the database is backed up.</small>
+                <?=($user['options'][7]==1?'<small class="form-text text-right">Note: Only the database is backed up.</small>':'');?>
               </div>
               <div class="form-row">
-                <button class="btn-block" type="submit">Perform Backup</button>
+                <?=($user['options'][7]==1?'<button class="btn-block" type="submit">Perform Backup</button>':'');?>
               </div>
             </form>
             <div id="backups">
@@ -50,23 +50,25 @@
                 $filename=basename($file);
                 $filename=rtrim($filename,'.sql.gz');?>
                 <div id="l_<?=$filename;?>" class="form-row mt-2">
-                  <a class="btn btn-block" href="<?=$file;?>">Click to Download <?= ltrim($file,'media/backup/');?></a>
-                  <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup('<?=$filename;?>');"><i class="i">trash</i></button>
+                  <?=($user['options'][7]==1?'<a class="btn btn-block" href="'.$file.'">Click to Download <?= ltrim($file,`media/backup/`);?></a>':'<div class="input-text">'.$file.'</div>').
+                  ($user['options'][7]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(`'.$filename.'`);"><i class="i">trash</i></button>':'');?>
                 </div>
               <?php }?>
             </div>
-            <div class="row mt-3">
-              <div class="col-12">
-                To restore a Database Backup, you will need to upload the .sql/.sql.gz file to PHPMyAdmin or other Database Configuration tool.
+            <?php if($user['options'][7]==1){?>
+              <div class="row mt-3">
+                <div class="col-12">
+                  To restore a Database Backup, you will need to upload the .sql/.sql.gz file to PHPMyAdmin or other Database Configuration tool.
+                </div>
               </div>
-            </div>
+            <?php }?>
 <?php /*
-          <form class="mt-3" target="sp" method="post" action="core/restorebackup.php" enctype="multipart/form-data">
-            <div class="custom-file">
-              <input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();">
-              <label for="fu" class="btn add">Choose File and Restore Database</label>
-            </div>
-          </form>
+            <form class="mt-3" target="sp" method="post" action="core/restorebackup.php" enctype="multipart/form-data">
+              <div class="custom-file">
+                <input class="custom-file-input hidden" id="fu" type="file" name="fu" onchange="$(`.page-block`).addClass(`d-block`);form.submit();">
+                <label for="fu" class="btn add">Choose File and Restore Database</label>
+              </div>
+            </form>
 */?>
           </div>
         </div>

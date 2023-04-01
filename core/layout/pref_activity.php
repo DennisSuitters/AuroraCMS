@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -31,7 +31,7 @@
                 <th class="col-7"></th>
                 <th class="col-2">
                   <div class="btn-group float-right">
-                    <button class="purge trash" data-tooltip="tooltip" aria-label="Purge All" onclick="purge('0','logs');return false;"><i class="i">purge</i></button>
+                    <?=($user['options'][7]==1?'<button class="purge" data-tooltip="tooltip" aria-label="Purge All" onclick="purge(`0`,`logs`);return false;"><i class="i">purge</i></button>':'');?>
                   </div>
                 </th>
               </tr>
@@ -67,8 +67,10 @@
                   <td class="align-top" id="controls_<?=$r['id'];?>">
                     <div class="btn-toolbar float-right" role="toolbar" aria-label="Item Toolbar Controls">
                       <div class="btn-group" role="group" aria-label="Item Controls">
-                        <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');"><i class="i">restore</i></button>':'';?>
-                        <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><i class="i">trash</i></button>
+                        <?php if($user['options'][7]==1){?>
+                          <?=$r['action']=='update'?'<button class="restore" data-tooltip="tooltip" aria-label="Restore" onclick="restore(\''.$r['id'].'\');"><i class="i">restore</i></button>':'';?>
+                          <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><i class="i">trash</i></button>
+                        <?php }?>
                       </div>
                     </div>
                   </td>

@@ -1,6 +1,8 @@
 /* stylesheet v0.9 - Vars - https://github.com/DiemenDesign/stylesheet */
 
 :root {
+  --tile-length: 17.5vmin;
+  --animation-duration: 8s;
   --aurora-background-color: #f5f6fa;
   --aurora-background-image: url(../images/auroracms.webp);
   --aurora-logo-color: transparent;
@@ -32,7 +34,9 @@
   --border-width: 1px;
   --border-style: solid;
   --mark-background-color: #ff0;
-  --figcaption-color: #888;
+  --figure-height: 100vh;
+  --figcaption-background-color: rgba(0,0,0,.5);
+  --figcaption-color: #eee;
 
   --header-background-color: #000;
   --header-color: #eee;
@@ -80,7 +84,7 @@
   --sidebar-color: #6c757d;
   --sidebar-color-hover: #000;
   --sidebar-color-active: #000;
-  --sidebar-open: #fff;
+  --sidebar-open: #fbfbfb;
 
   --tab-background-color: #fff;
   --tab-background-color-hover: #fff;
@@ -103,11 +107,11 @@
   --button-color: #313a46;
   --button-color-hover: #313a46;
   --button-color-active: #313a46;
-  --button-color-disabled: #000;
+  --button-color-disabled: #888;
   --button-background-color: #fff;
   --button-background-color-hover: #eef2f7;
   --button-background-color-active: #eef2f7;
-  --button-background-color-disabled: #888;
+  --button-background-color-disabled: #f5f5f5;
   --button-border-width: 1px;
   --button-border-width-hover: 1px;
   --button-border-width-active: 1px;
@@ -119,7 +123,7 @@
   --button-border-color: #dee2e6;
   --button-border-color-hover: #dee2e6;
   --button-border-color-active: #dee2e6;
-  --button-border-color-disabled: #888;
+  --button-border-color-disabled: #f5f5f5;
   --button-border-radius: .15rem;
   --button-shadow: 0 2px 6px 0 rgb(238 242 247 / 50%);
   --button-shadow-hover: 0 3px 7px 0 rgb(238 242 247 / 50%);
@@ -251,6 +255,7 @@
   --form-border-color-hover: #c8cbcf;
   --form-border-color-focus: #c8cbcf;
   --form-border-color-disabled: rgba(255,255,255,.25);
+  --form-border-radius: 0;
   --form-color: #6c757d;
   --form-color-focus: #495057;
   --form-color-disabled: #000;
@@ -264,12 +269,15 @@
   --form-input-color: #000;
   --form-input-color-focus: #000;
   --form-input-color-checked: #fff;
-  --form-input-background-color: #fafafa;
-  --form-input-background-color-focus: #fff;
+  --form-input-color-disabled: #000;
+  --form-input-background-color: #f5f5f5;
+  --form-input-background-color-focus: #f8f8f8;
   --form-input-background-color-checked: #0044ff;
+  --form-input-background-color-disabled: #fafafa;
   --form-input-border-color: #ced4da;
   --form-input-border-color-focus: #ced4da;
   --form-input-border-color-checked: #ced4da;
+  --form-input-border-color-disabled: #ced4da;
   --form-valid-color: #28a745;
   --form-valid-border-color: #28a745;
   --form-valid-shadow: none;
@@ -287,6 +295,8 @@
 
   --card-background-color: #fff;
   --card-background-color-zebra: #f8f8f8;
+  --card-extra-fade-1: rgba(255,255,255,.093);
+  --card-extra-fade-2: rgba(255,255,255,.0);
   --card-header-background-color: transparent;
   --card-hover: #f5f5f5;
   --card-link-color: #000;
@@ -296,7 +306,7 @@
   --card-border-radius: .25rem;
   --card-border-color: #e9e9e9;
   --card-figcaption-background-color: rgba(0, 0, 0, .5);
-  --card-figcaption-color: #fff;
+  --card-figcaption-color: #eee;
   --card-body-lines: 3;
   --width-card: 230px;
   --width-card-medium: 460px;
@@ -379,7 +389,7 @@
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size: 1rem;
   --accent-color: #007bff;
-  --body-background-color: #3f4245;
+  --body-background-color: radial-gradient(circle farthest-side at 0% 100%, rgb(28, 28, 28) 0%, rgba(28, 28, 28, 0) 100%), radial-gradient(circle farthest-side at 100% 100%, rgb(38, 38, 38) 0%, rgba(38, 38, 38, 0) 100%), radial-gradient(circle farthest-side at 100% 0%, rgb(32, 32, 32) 0%, rgba(32, 32, 32, 0) 100%), radial-gradient(circle farthest-side at 0% 0%, rgb(51, 51, 51) 0%, rgba(51, 51, 51, 0) 100%), black;
   --body-color: #ddd;
   --color: #eee;
   --color-muted: #ccc;
@@ -399,7 +409,7 @@
   --shadow-md-color: rgb(0 0 0 / 10%);
   --shadow-lg-color: rgba(0, 0, 0, .175);
   --border-radius: .25rem;
-  --border-color: #464f5b;
+  --border-color: rgba(0,0,0,.15);
   --border-width: 1px;
   --border-style: solid;
   --mark-background-color: #ff0;
@@ -454,28 +464,28 @@
   --sidebar-color-active: #e5a00d;
   --sidebar-open: rgba(0,0,0,.15);
 
-  --tab-background-color: #4c4c4c;
-  --tab-background-color-hover: #555;
-  --tab-background-color-active: #4a525d;
-  --tab-background-color-active-hover: #4a525d;
-  --tab-background-color-disabled: #aaa;
+  --tab-background-color: rgba(0,0,0,.15);
+  --tab-background-color-hover: rgba(0,0,0,.15);
+  --tab-background-color-active: rgba(0,0,0,.15);
+  --tab-background-color-active-hover: rgba(0,0,0,.15);
+  --tab-background-color-disabled: rgba(0,0,0,0);
   --tab-color: #ddd;
   --tab-color-hover: #fff;
   --tab-color-active: #fff;
   --tab-color-disabled: #aaa;
   --tab-border-width: 1px;
   --tab-border-style: solid;
-  --tab-border-color: #464f5b;
-  --tab-border-color-hover: #dee2e6;
-  --tab-border-color-active: #464f5b;
-  --tab-border-color-disabled: #aaa;
+  --tab-border-color: rgba(0,0,0,.15);
+  --tab-border-color-hover: rgba(0,0,0,.15);
+  --tab-border-color-active: rgba(0,0,0,.15);
+  --tab-border-color-disabled: rgba(0,0,0,0);
   --tab-border-active-color: #e5a00d;
   --tab-border-radius: .25rem;
 
-  --button-color: #fff;
+  --button-color: #ccc;
   --button-color-hover: #fff;
   --button-color-active: #fff;
-  --button-color-disabled: #000;
+  --button-color-disabled: #aaa;
   --button-background-color: #777;
   --button-background-color-hover: #888;
   --button-background-color-active: #888;
@@ -544,12 +554,15 @@
   --form-input-color: #eee;
   --form-input-color-focus: #000;
   --form-input-color-checked: #fff;
+  --form-input-color-disabled: #eee;
   --form-input-background-color: #888;
   --form-input-background-color-focus: #ddd;
   --form-input-background-color-checked: #0044ff;
+  --form-input-background-color-disabled: #888;
   --form-input-border-color: #888;
   --form-input-border-color-focus: #888;
   --form-input-border-color-checked: #ced4da;
+  --form-input-border-color-disabled: #888;
   --form-valid-color: #28a745;
   --form-valid-border-color: #28a745;
   --form-valid-shadow: none;
@@ -565,8 +578,10 @@
   --badge-background-color: #d92550;
   --badge-color: #fff;
 
-  --card-background-color: rgba(0,0,0,.05);
+  --card-background-color: rgba(0,0,0,.45);
   --card-background-color-zebra: rgba(0,0,0,.15);
+  --card-extra-fade-1: #3b3f41;
+  --card-extra-fade-2: #3b3f41;
   --card-header-background-color: transparent;
   --card-hover: #37404a;
   --card-link-color: #eee;
@@ -617,7 +632,7 @@
   --slidertron-background-color: #ddd;
 
   --jumbotron-background-color: #ddd;
-  --starRating-color: #f40;
+  --starRating-color: #ffdf00;
   --starRating-outline-width: 1px;
   --starRating-outline-color: #888;
 

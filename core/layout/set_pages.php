@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,17 +26,19 @@
             </div>
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
-                <?= isset($_SERVER['HTTP_REFERER'])?'<a class="btn" href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'';?>
-                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save</i></button>
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                ($user['options'][7]==1?'<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save</i></button>':'');?>
               </div>
             </div>
           </div>
         </div>
         <div class="m-4">
-          <?php if(!file_exists('layout/'.$config['theme'].'/theme.ini'))echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
+        <?php if($user['options'][7]==1){
+          if(!file_exists('layout/'.$config['theme'].'/theme.ini'))
+            echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
           else{?>
             <legend id="quickPageEdit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/settings#quickPageEdit" data-tooltip="tooltip" aria-label="PermaLink to Quick Page Edit Section">&#128279;</a>':'';?>Quick Page Edit</legend>
-            <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('trash');">
+            <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('btn-danger');">
               <label for="fileEditSelect">File:</label>
               <div class="form-row">
                 <select id="filesEditSelect" name="file">
@@ -83,7 +85,7 @@
               var charWidth=editor.defaultCharWidth(),basePadding=4;
               editor.refresh();
               editor.on('change',function(cMirror){
-                $('#codeSave').addClass('trash');
+                $('#codeSave').addClass('btn-danger');
               });
               $('#filesEditLoad').on({
                 click:function(event){
@@ -100,7 +102,8 @@
               });
             });
           </script>
-        <?php }?>
+        <?php }
+      }?>
       </div>
     </div>
   </section>

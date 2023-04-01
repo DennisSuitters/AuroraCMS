@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -62,27 +62,23 @@ if(stristr($html,'<cover>')){
 	}
 	if($page['cover']!=''&&$coverHTML==''){
 		$cover=basename($page['cover']);
-		if(file_exists('media/'.$cover)){
-			$coverHTML=(file_exists('media/'.$cover)?'<img srcset="'.
-				(file_exists('media/lg/'.basename($cover))?'media/lg/'.$cover.' 1000w,':'').
-				(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
-				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
-				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-			'" src="media/'.$cover.'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" alt="'.$page['title'].' Cover Image">'.
-				($page['attributionImageTitle']!=''?
-					'<figcaption>'.
-						$page['attributionImageTitle'].
-						($page['attributionImageName']!=''?
-							' by '.
-								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'" rel="noopener noreferrer">':'').
-								$page['attributionImageName'].
-								($page['attributionImageURL']!=''?'</a>':'')
-						:'').
-					'</figcaption>'
-				:'')
-			:'');
-			$iscover=true;
-		}
+		$coverHTML='<img srcset="'.
+			(file_exists('media/lg/'.basename($cover))?'media/lg/'.$cover.' 1000w,':'').
+			(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
+			(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
+			(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
+		'" src="'.$page['cover'].'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" alt="'.$page['title'].' Cover Image">'.
+		($page['attributionImageTitle']!=''?
+			'<figcaption>'.
+				($page['attributionImageTitle']!=''?$page['attributionImageTitle']:'').
+				($page['attributionImageName']!=''?' by '.
+						($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'" rel="noopener noreferrer">':'').
+						$page['attributionImageName'].
+						($page['attributionImageURL']!=''?'</a>':'').
+				(stristr($page['attributionImageURL'],'unsplash.com')?' on <a target="_blank" href="https://unsplash.com/?utm_source='.$config['unsplash_appname'].'&utm_medium=referral">Unsplash</a>':''):'').
+			'</figcaption>'
+		:'');
+		$iscover=true;
 	}
 	$html=preg_replace([
 		$coverHTML==''?'~<cover>.*?</cover>~is':'/<[\/]?cover>/',
@@ -115,7 +111,7 @@ if(stristr($html,'<mediaitems')){
 		$mediaoutput='';
 		while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
 			$mediaitems=$mediaitem;
-			if(!file_exists('media/sm/'.basename($rm['file'])))continue;
+			if($rm['file']=='')continue;
 			$rm['file']=rawurldecode($rm['file']);
 			$mediaitems=preg_replace([
 				'/<print thumb=[\"\']?srcset[\"\']?>/',
@@ -151,8 +147,8 @@ if(stristr($html,'<mediaitems')){
 					(file_exists('media/lg/'.basename($rm['file']))?'media/lg/'.basename($rm['file']).' 1000w,':'').
 					(file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
 					(file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':''),
-				($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']):NOIMAGESM),
-				($rm['file']!=''&&file_exists('media/'.basename($rm['file']))?'media/'.basename($rm['file']):NOIMAGE),
+				$rm['thumb']!=''?$rm['thumb']:NOIMAGESM,
+				$rm['file']!=''?$rm['file']:NOIMAGE,
 				htmlspecialchars(($rm['title']!=''?$rm['title']:$r['title'].': Image '.$rm['id']),ENT_QUOTES,'UTF-8'),
 				htmlspecialchars($rm['fileALT']!=''?$rm['fileALT']:$rm['title'],ENT_QUOTES,'UTF-8'),
 				htmlspecialchars($rm['title'],ENT_QUOTES,'UTF-8'),
@@ -251,7 +247,7 @@ if(stristr($html,'<categories>')){
 					($rc['icon']!=''&&file_exists('media/sm/'.basename($rc['icon']))?'media/sm/'.basename($rc['icon']).' '.$config['mediaMaxWidthThumb'].'w,':'').
 					($rc['icon']!=''&&file_exists('media/sm/'.basename($rc['icon']))?'media/sm/'.basename($rc['icon']).' 400w,':'').
 					($rc['icon']!=''&&file_exists('media/md/'.basename($rc['icon']))?'media/md/'.basename($rc['icon']).' 600w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
-				($rc['icon']!=''&&file_exists('media/sm/'.basename($rc['icon']))?$rc['icon']:NOIMAGESM),
+				$rc['icon']!=''?$rc['icon']:NOIMAGESM,
 				htmlspecialchars('Category '.$rc['title'],ENT_QUOTES,'UTF-8'),
 				URL.$rc['url'].'/category/'.str_replace(' ','-',strtolower($rc['title'])).'/',
 				htmlspecialchars($rc['title'],ENT_QUOTES,'UTF-8'),
@@ -296,7 +292,7 @@ if(stristr($html,'<eventsitems')){
 					($re['thumb']!=''&&file_exists('media/sm/'.basename($re['thumb']))?'media/sm/'.basename($re['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 					($re['thumb']!=''&&file_exists('media/md/'.basename($re['thumb']))?'media/md/'.basename($re['thumb']).' 600w,':NOIMAGE.' 600w,').
 					($re['thumb']!=''&&file_exists('media/sm/'.basename($re['thumb']))?'media/sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
-				($re['thumb']!=''&&file_exists('media/sm/'.basename($re['thumb']))?'media/sm/'.basename($re['thumb']):NOIMAGESM),
+				$re['thumb']!=''?$re['thumb']:NOIMAGESM,
 				htmlspecialchars($re['fileALT']!=''?$re['fileALT']:$re['title'],ENT_QUOTES,'UTF-8'),
 				$re['contentType'],
 				URL.$re['contentType'].'/'.$re['urlSlug'].'/',
@@ -389,14 +385,15 @@ if(stristr($html,'<items')){
 			'/<print content=[\"\']?notes[\"\']?>/'
 		],[
 			'',
-			'srcset="'.
+		 	($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'srcset="'.
 				($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'media/sm/'.basename($r['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
-				($r['thumb']!=''&&file_exists('media/md/'.basename($r['thumb']))?'media/md/'.basename($r['thumb']).' 600w,':NOIMAGE.' 600w,').
-				($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'media/sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
-			($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'media/sm/'.basename($r['thumb']):NOIMAGESM),
-			($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
+				($r['thumb']!=''&&file_exists('media/md/'.basename($r['thumb']))?'media/md/'.basename($r['thumb']).' 600w,':$r['thumb'].' 600w,').
+				($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'media/sm/'.basename($r['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" '
+			:''),
+			$r['thumb']!=''?$r['thumb']:NOIMAGESM,
+			$r['file']!=''?$r['file']:NOIMAGE,
 			htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
-			(file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
+			$r['file']!=''?$r['file']:NOIMAGE,
 			$r['title'],
 			URL.'profile/'.strtolower(str_replace(' ','-',$r['login_user'])).'/',
 			URL.str_replace(' ','-',$r['contentType']),

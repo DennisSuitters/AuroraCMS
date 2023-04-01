@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,7 +60,7 @@ echo'<script>'.
 						'<form target="sp" action="core/purge.php">'.
 							'<input name="id" type="hidden" value="'.$id.'">'.
 							'<input name="t" type="hidden" value="choices">'.
-							'<button class="purge trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>&nbsp;&nbsp;<i class="i handle">drag</i>'.
+							'<button class="purge" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>&nbsp;&nbsp;<i class="i handle">drag</i>'.
 						'</form>'.
 					'</div>'.
 				'</div>'.

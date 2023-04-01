@@ -61,11 +61,12 @@ if($s->rowCount()>0){?>
           <td class="text-right">
             <div class="btn-group">
               <?php if($r['action']=='update'){?><button class="btn btn-secondary" data-tooltip="tooltip" aria-label="Restore" onclick="restore('<?=$r['id'];?>');"><i class="i">undo</i></button> <?php }?>
-              <button class="btn btn-secondary trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><i class="i">purge</i></button>
+              <button class="btn btn-danger" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','logs');"><i class="i">purge</i></button>
             </div>
           </td>
         </tr>
       <?php }?>
     </tbody>
   </table>
-<?php }else echo'<div class="alert alert-info" role="alert">No Results Found!</div>';
+<?php }else
+echo'<div class="alert alert-info" role="alert">No Results Found!</div>';

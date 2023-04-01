@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -61,7 +61,7 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);?>
       },
       initialView:'dayGridMonth',
       navLinks:true,
-      <?php if($user['options'][2]==1){?>editable:true,<?php }?>
+      <?php if($user['options'][1]==1){?>editable:true,<?php }?>
       height:'100vh',
       selectable:true,
       nowIndicator:true,
@@ -80,13 +80,19 @@ $s->execute([':contentType'=>!isset($args[1])||$args[1]==''?'%':$args[1]]);?>
             title:`<?= ucfirst($r['contentType']).`: `.$r['title'];?>`,
             start:`<?= date("Y-m-d H:i:s",$r['pti']);?>`,
             allDay:true,
-            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>"><?=$r['title'];?><div class="events-buttons" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls"><div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">`+
-<?php if($user['options'][2]==1){?>
-                  `<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a><button class="btn trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><i class="i">trash</i></button>`+
-<?php }else{?>
-                  '<a class="btn" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><i class="i">view</i></a>'+
-<?php }?>
-                '</div></div></div>'
+            customHtml:`<div class="badger badge-<?=$eColor;?> events-layer text-left" data-contentType="<?= ucfirst($r['contentType']);?>">`+
+              `<?=$r['title'];?>`+
+              `<div class="events-buttons" role="toolbar" data-tooltip="tooltip" aria-label="Item Toolbar Controls">`+
+                `<div class="btn-group" role="group" data-tooltip="tooltip" aria-label="Item Controls">`+
+                <?php if($user['options'][1]==1){?>
+                  `<a class="btn btn-sm" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>`+
+                  `<button class="btn-sm trash" id="delbut<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','content');$(this).closest('.events-layer').remove();"><i class="i">trash</i></button>`+
+                <?php }else{?>
+                  `<a class="btn btn-sm" id="edbut<?=$r['id'];?>" href="<?=$settings['system']['admin'].'/content/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="View"><i class="i">view</i></a>`+
+                <?php }?>
+                `</div>`+
+              `</div>`+
+            `</div>`
           },
         <?php	}?>
       ],

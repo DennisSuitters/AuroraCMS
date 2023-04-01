@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -56,8 +56,8 @@
                 <td class="align-middle small"><?= date($config['dateFormat'],$r['ti']);?></td>
                 <td class="align-middle">
                   <div class="btn-group float-right" id="controls-<?=$r['id'];?>">
-                    <button class="btn add<?=$r['status']=='approved'?' hidden':'';?>" id="approve_<?=$r['id'];?>" onclick="update('<?=$r['id'];?>','comments','status','approved');" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>
-                    <button class="btn trash" onclick="purge('<?=$r['id'];?>','comments');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                    <?=($user['options'][0]==1?'<button class="add'.($r['status']=='approved'?' hidden':'').'" id="approve_'.$r['id'].'" onclick="update(`'.$r['id'].'`,`comments`,`status`,`approved`);" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>'.
+                    '<button class="trash" onclick="purge(`'.$r['id'].'`,`comments`);" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>':'');?>
                   </div>
                 </td>
               </tr>

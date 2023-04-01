@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -64,7 +64,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
             '/<print thumbs=[\"\']?image[\"\']?>/',
             '/<print thumbs=[\"\']?imageALT[\"\']?>/'
           ],[
-            URL.'media/sm/'.basename($rm['file']),
+            file_exists('../media/sm/'.basename($rm['file']))?URL.'media/sm/'.basename($rm['file']):$rm['file'],
             $rm['file'],
             $rm['fileALT']
           ],$item);
@@ -146,7 +146,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
 			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
 			'/<print content=[\"\']?points[\"\']?>/'
     ],[
-      URL.'media/sm/'.basename($r['file']),
+      file_exists(URL.'media/sm/'.basename($r['file']))?URL.'media/sm/'.basename($r['file']):$r['file'],
       $r['file'],
 			$r['fileALT'],
       $r['id'],

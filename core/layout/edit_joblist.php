@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,11 +31,9 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
-                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                <?php }?>
-                <a class="btn" href="#" data-tooltip="left" aria-label="Print Job" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');return false;"><i class="i">print</i></a>
-                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                '<a href="#" role="button" data-tooltip="left" aria-label="Print Job" onclick="$(`#sp`).load(`core/print_booking.php?id='.$r['id'].'`);return false;"><i class="i">print</i></a>'.
+                ($user['options'][1]==1?'<button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
               </div>
             </div>
           </div>
@@ -96,21 +94,21 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           <label id="bookingEmail" for="email"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingEmail" data-tooltip="tooltip" aria-label="PermaLink to Booking Email Field">&#128279;</a>':'';?>Email</label>
           <div class="form-row">
             <input class="textinput" id="email" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="email" type="text" value="<?=$r['email'];?>"<?=$user['options'][2]==1?' placeholder="Enter an Email..."':' readonly';?>>
-            <?=$user['options'][2]==1?'<button class="save" id="saveemail" data-dbid="email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+            <?=$user['options'][2]==1?'<button class="save" id="saveemail" data-dbid="email" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
           </div>
           <div class="row">
             <div class="col-12 col-md-6 pr-md-3">
               <label id="bookingPhone" for="phone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingPhone" data-tooltip="tooltip" aria-label="PermaLink to Booking Phone Field">&#128279;</a>':'';?>Phone</label>
               <div class="form-row">
                 <input class="textinput" id="phone" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="phone" type="text" value="<?=$r['phone'];?>"<?=$user['options'][2]==1?' placeholder="Enter a Phone Number..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savephone" data-dbid="phone" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savephone" data-dbid="phone" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
             <div class="col-12 col-sm-6 pl-md-3">
               <label id="bookingMobile" for="mobile"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingMobile" data-tooltip="tooltip" aria-label="PermaLink to Booking Mobile Field">&#128279;</a>':'';?>Mobile</label>
               <div class="form-row">
                 <input class="textinput" id="mobile" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="mobile" type="text" value="<?=$r['mobile'];?>"<?=$user['options'][2]==1?' placeholder="Enter a Phone Number..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savemobile" data-dbid="mobile" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savemobile" data-dbid="mobile" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
           </div>
@@ -119,49 +117,49 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
               <label id="bookingName" for="name"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingName" data-tooltip="tooltip" aria-label="PermaLink to Booking Name Field">&#128279;</a>':'';?>Name</label>
               <div class="form-row">
                 <input class="textinput" id="name" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="name" type="text" value="<?=$r['name'];?>"<?=$user['options'][2]==1?' placeholder="Enter a Name..."':' readonly';?> onkeyup="$('#bookingname').html($(this).val());">
-                <?=$user['options'][2]==1?'<button class="save" id="savename" data-dbid="name" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savename" data-dbid="name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
             <div class="col-12 col-sm-6 pl-md-3">
               <label id="bookingBusiness" for="business"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingBusiness" data-tooltip="tooltip" aria-label="PermaLink to Booking Buiness Field">&#128279;</a>':'';?>Business</label>
               <div class="form-row">
                 <input class="textinput" id="business" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="business" type="text" value="<?=$r['business'];?>"<?=$user['options'][2]==1?' placeholder="Enter a Business..."':' readonly';?> onkeyup="$('#bookingbusiness').html($(this).val());">
-                <?=$user['options'][2]==1?'<button class="save" id="savebusiness" data-dbid="business" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savebusiness" data-dbid="business" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
           </div>
           <label id="bookingAddress" for="address"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingAddress" data-tooltip="tooltip" aria-label="PermaLink to Booking Address Field">&#128279;</a>':'';?>Address</label>
           <div class="form-row">
             <input class="textinput" id="address" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="address" type="text" value="<?=$r['address'];?>"<?=$user['options'][2]==1?' placeholder="Enter an Address..."':' readonly';?>>
-            <?=$user['options'][2]==1?'<button class="save" id="saveaddress" data-dbid="address" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+            <?=$user['options'][2]==1?'<button class="save" id="saveaddress" data-dbid="address" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
           </div>
           <div class="row">
             <div class="col-12 col-sm-3 pr-md-3">
               <label id="bookingSuburb" for="suburb"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingSuburb" data-tooltip="tooltip" aria-label="PermaLink to Booking Suburb Field">&#128279;</a>':'';?>Suburb</label>
               <div class="form-row">
                 <input class="textinput" id="suburb" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="suburb" type="text" value="<?=$r['suburb'];?>"<?=$user['options'][2]==1?' placeholder="Enter a Suburb..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savesuburb" data-dbid="suburb" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savesuburb" data-dbid="suburb" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
             <div class="col-12 col-sm-3 pr-md-3">
               <label id="bookingCity" for="city"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingCity" data-tooltip="tooltip" aria-label="PermaLink to Booking City Field">&#128279;</a>':'';?>City</label>
               <div class="form-row">
                 <input class="textinput" id="city" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="city" type="text" value="<?=$r['city'];?>"<?=$user['options'][2]==1?' placeholder="Enter a City..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savecity" data-dbid="city" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savecity" data-dbid="city" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
             <div class="col-12 col-sm-3 pr-md-3">
               <label id="bookingState" for="state"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingState" data-tooltip="tooltip" aria-label="PermaLink to Booking State Field">&#128279;</a>':'';?>State</label>
               <div class="form-row">
                 <input class="textinput" id="state" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="state" type="text" value="<?=$r['state'];?>"<?=$user['options'][2]==1?' placeholder="Enter a State..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savestate" data-dbid="state" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savestate" data-dbid="state" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
             <div class="col-12 col-sm-3">
               <label id="bookingPostcode" for="postcode"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingPostcode" data-tooltip="tooltip" aria-label="PermaLink to Booking Postcode Field">&#128279;</a>':'';?>Postcode</label>
               <div class="form-row">
                 <input class="textinput" id="postcode" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="postcode" type="text" value="<?=$r['postcode']!=0?$r['postcode']:'';?>"<?=$user['options'][2]==1?' placeholder="Enter a Postcode..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savepostcode" data-dbid="postcode" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savepostcode" data-dbid="postcode" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
           </div>
@@ -169,7 +167,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           <div class="form-row">
             <select id="rid" name="rid" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rid"<?=$user['options'][2]==0?' disabled':'';?> onchange="update('<?=$r['id'];?>','content','rid',$(this).val(),'select');">
               <option value="0">Select an Item...</option>
-  <?php $sql=$db->query("SELECT `id`,`contentType`,`code`,`title`,`assoc` FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC,`title` ASC");
+              <?php $sql=$db->query("SELECT `id`,`contentType`,`code`,`title`,`assoc` FROM `".$prefix."content` WHERE `bookable`='1' AND `title`!='' AND `status`='published' AND `internal`!='1' ORDER BY `code` ASC,`title` ASC");
               if($sql->rowCount()>0){
                 while($row=$sql->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$row['id'].'"'.($r['rid']==$row['id']?' selected':'').'>'.ucfirst($row['contentType']).':'.$row['code'].':'.$row['title'].'</option>';
               }?>
@@ -205,7 +203,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="col-12 col-md-1">
-              <button class="btn-block trash" onclick="clearSignature(`<?=$r['id'];?>`,`content`,`signature`);">Reset</button>
+              <button class="trash" onclick="clearSignature(`<?=$r['id'];?>`,`content`,`signature`);">Reset</button>
             </div>
           </div>
           <div class="row mt-3">
@@ -226,7 +224,7 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
               <label id="bookingHours" for="cost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingHours" data-tooltip="tooltip" aria-label="PermaLink to Booking Hours Field">&#128279;</a>':'';?>Hours</label>
               <div class="form-row">
                 <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost']!=0?$r['cost']:'';?>"<?=$user['options'][2]==1?' placeholder="Enter Hours..."':' readonly';?>>
-                <?=$user['options'][2]==1?'<button class="save" id="savecost" data-dbid="cost" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][2]==1?'<button class="save" id="savecost" data-dbid="cost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
           </div>
@@ -282,9 +280,9 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           }
         }
     });
-    $("#signature").jSignature({color:"#000"});
-<?php if($r['signature']!=''){?>
-    $("#signature").jSignature("importData",'<?=$r['signature'];?>');
-<?php }?>
+    $("#signature").jSignature();
+    <?php if($r['signature']!=''){?>
+      $("#signature").jSignature("importData",'<?=$r['signature'];?>');
+    <?php }?>
   });
 </script>

@@ -15,8 +15,8 @@
   <div class="toolbar px-2 py-1">
     <?=$rw['title'];?>
     <div class="btn-group">
-      <button class="btn btn-sm btn-ghost" id="hemmingwayrefresh" onclick="format();" data-tooltip="left" aria-label="reExamine Text Area"><i class="i">refresh</i></button>
-      <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
+      <button class="btn-sm btn-ghost" id="hemmingwayrefresh" onclick="format();" data-tooltip="left" aria-label="reExamine Text Area"><i class="i">refresh</i></button>
+      <button class="btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
     </div>
   </div>
   <div class="alert m-2 p-1 px-2 border-0 small adverb"></div>
@@ -24,7 +24,7 @@
   <div class="alert m-2 p-1 px-2 border-0 small complex"></div>
   <div class="alert m-2 p-1 px-2 border-0 small hardSentence"></div>
   <div class="alert m-2 p-1 px-2 border-0 small veryHardSentence"></div>
-  <button class="btn btn-sm m-2" data-fancybox data-src="#hemmingway"><small>Examine text with highlighted issues.</small></button>
+  <button class="btn-sm m-2" data-fancybox data-src="#hemmingway"><small>Examine text with highlighted issues.</small></button>
   <div id="hemmingway" class="p-5" style="display:none;">
     <div class="row">
       <div id="hemmingway-result" class="note-editable col-9" role="textbox"></div>

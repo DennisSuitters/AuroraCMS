@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -49,16 +49,16 @@ if($fu!=''){
 			else
 				$thumb=ADMINNOIMAGE;
 			echo'<script>'.
-						'window.top.window.$("#mi").append(`<div id="mi_'.$iid.'" class="card stats col-6 swing-in-top-fwd">'.
-							'<div class="btn-group float-right">'.
-								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;"><i class="i">drag</i></div>'.
-								'<div class="btn" data-tooltip="tooltip" aria-label="Viewed 0 times"><i class="i">view</i> &nbsp;0</div>'.
-								'<a class="btn" href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'"><i class="i">edit</i></a>'.
-								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'media\');"><i class="i">trash</i></button>'.
-							'</div>'.
-							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'" style="display:flex;max-height:150px;">'.
-								'<img src="'.$file.'" alt="Media '.$iid.'" style="object-fit:cover;object-position:center;">'.
+						'window.top.window.$("#mi").append(`<div id="mi_'.$iid.'" class="card stats gallery col-12 col-sm-3 m-0 border-0">'.
+							'<a class="card bg-dark m-0" data-fancybox="media" data-caption="" href="'.$file.'">'.
+								'<img src="'.$file.'" alt="Media '.$iid.'">'.
 							'</a>'.
+							'<div class="btn-group tools">'.
+								'<div class="btn" data-tooltip="right" aria-label="0 views"><small>0</small></div>'.
+								'<a href="'.URL.$settings['system']['admin'].'/media/edit/'.$iid.'" role="button"><i class="i">edit</i></a>'.
+								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'media\');"><i class="i">trash</i></button>'.
+								'<div class="btn handle" data-tooltip="left" aria-label="Drag to Reorder" onclick="return false;"><i class="i">drag</i></div>'.
+							'</div>'.
 						'</div>`);'.
 						'window.top.window.$().fancybox({selector:`[data-fancybox="media"]`});'.
 					'</script>';

@@ -23,7 +23,9 @@
   --border-width: 1px;
   --border-style: solid;
   --mark-background-color: #ff0;
-  --figcaption-color: #888;
+  --figure-height: 100vh;
+  --figcaption-background-color: #000;
+  --figcaption-color: #ddd;
 
   --header-background-color: #fff;
   --header-color: #fff;

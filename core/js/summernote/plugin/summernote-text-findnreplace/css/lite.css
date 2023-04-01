@@ -1,11 +1,16 @@
 #findnreplaceToolbar {
   padding: 5px;
   background-color: var(--note-toolbar-background-color) !important;
-  border-bottom: var(--note-toolbar-border-width) var(--note-toolbar-border-style) var(--note-toolbar-border-color);
 }
-#findnreplaceToolbar .note-form-group {
-  padding: 0;
-}
+
+#findnreplaceToolbar .note-form-row {
+  position: relative;
+  display: flex;
+  flex: 1 0 100%;
+  flex-wrap: nowrap;
+  vertical-align: middle;
+  padding: 0; }
+
 .note-display-none {
   display: none !important; }
 

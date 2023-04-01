@@ -41,36 +41,36 @@
 				<hr>
 				<div id="step1">
 					<div id="dbinfo"></div>
-<?php $error=0;
-if(version_compare(phpversion(),'7.0','<'))echo'<div class="alert alert-danger" role="alert">AuroraCMS was built using PHP v7.0, your installed version is lower. While AuroraCMS may operate on your system, some functionality may not work or be available. We recommend using PHP 7.3 if available on you\'re services!</div>';
-if(extension_loaded('pdo')){
-	if(empty(PDO::getAvailableDrivers())){
-		$error++;
-		echo'<div class="alert alert-danger" role="alert">Great PDO is Installed and Active, but there are no Database Drivers Installed!</div>';
-	}
-}else{
-	$error++;
-	echo'<div class="alert alert-danger" role="alert">AuroraCMS uses PDO for Database Interaction, please Install or Enable PDO!</div>';
-}
-if(file_exists('core/config.ini')&&!is_writable('core/config.ini')){
-	$error++;
-	echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, but is not writeable. There is two ways to fix this, either make <code>core/config.ini</code> writable, or remove the file!</div>';
-}
-if(!isset($_SERVER['HTTP_MOD_REWRITE'])){
-	$error++;
-	echo'<div class="alert alert-danger" role="alert"><code>mod_rewrite</code> must be available and enabled for AuroraCMS to function correctly!</div>';
-}
-if(!extension_loaded('gd')&&!function_exists('gd_info')){
-	$error++;
-	echo'<div class="alert alert-danger" role="alert">GD-Image is NOT Installed or Enabled!</div>';
-}
-if(!function_exists('curl_version')){
-	$error++;
-	echo'<div class="alert alert-info" role="alert">CURL Function is NOT enabled or Installed. Please install or enable the CURL extension!</div>';
-}
-echo(!function_exists('exif_read_data')?'<div class="alert alert-info" role="alert">EXIF Functions are NOT enabled or installed. While not Mandatory, some features won\'t work.</div>':'');
-echo($error>0?'<div class="alert alert-danger" role="alert">Please fix the above '.$error.' Issue\'s outlined within the Red Sections, then Refresh the page to Check Again.</div>':'');
-if($error==0){?>
+					<?php $error=0;
+					if(version_compare(phpversion(),'7.0','<'))echo'<div class="alert alert-danger" role="alert">AuroraCMS was built using PHP v7.0, your installed version is lower. While AuroraCMS may operate on your system, some functionality may not work or be available. We recommend using PHP 7.3 if available on you\'re services!</div>';
+					if(extension_loaded('pdo')){
+						if(empty(PDO::getAvailableDrivers())){
+							$error++;
+							echo'<div class="alert alert-danger" role="alert">Great PDO is Installed and Active, but there are no Database Drivers Installed!</div>';
+						}
+					}else{
+						$error++;
+						echo'<div class="alert alert-danger" role="alert">AuroraCMS uses PDO for Database Interaction, please Install or Enable PDO!</div>';
+					}
+					if(file_exists('core/config.ini')&&!is_writable('core/config.ini')){
+						$error++;
+						echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, but is not writeable. There is two ways to fix this, either make <code>core/config.ini</code> writable, or remove the file!</div>';
+					}
+					if(!isset($_SERVER['HTTP_MOD_REWRITE'])){
+						$error++;
+						echo'<div class="alert alert-danger" role="alert"><code>mod_rewrite</code> must be available and enabled for AuroraCMS to function correctly!</div>';
+					}
+					if(!extension_loaded('gd')&&!function_exists('gd_info')){
+						$error++;
+						echo'<div class="alert alert-danger" role="alert">GD-Image is NOT Installed or Enabled!</div>';
+					}
+					if(!function_exists('curl_version')){
+						$error++;
+						echo'<div class="alert alert-info" role="alert">CURL Function is NOT enabled or Installed. Please install or enable the CURL extension!</div>';
+					}
+					echo(!function_exists('exif_read_data')?'<div class="alert alert-info" role="alert">EXIF Functions are NOT enabled or installed. While not Mandatory, some features won\'t work.</div>':'');
+					echo($error>0?'<div class="alert alert-danger" role="alert">Please fix the above '.$error.' Issue\'s outlined within the Red Sections, then Refresh the page to Check Again.</div>':'');
+					if($error==0){?>
 						<h4>Database Settings</h4>
 						<div class="alert alert-info">Be sure that the database uses "utf8mb4_unicode_ci" collation encoding.</div>
 						<form target="sp" method="post" action="core/installer.php" onsubmit="isValid();">
@@ -78,8 +78,8 @@ if($error==0){?>
 							<input name="act" type="hidden" value="step1">
 							<label for="dbtype">Type</label>
 							<select id="dbtype" name="dbtype">
-	<?php	foreach(PDO::getAvailableDrivers() as$DRIVER)
-		echo'<option value="'.$DRIVER.'">'.strtoupper($DRIVER).'</option>';?>
+								<?php	foreach(PDO::getAvailableDrivers() as$DRIVER)
+								echo'<option value="'.$DRIVER.'">'.strtoupper($DRIVER).'</option>';?>
 							</select>
 							<label for="dbhost">Host</label>
 							<input id="dbhost" name="dbhost" type="text" value="localhost" placeholder="Enter a Host..." required>
@@ -111,13 +111,13 @@ if($error==0){?>
 							<div class="form-text small">Leave blank to use default: \"admin\". e.g. http://www.sitename.com/admin/</div>
 							<label for="aTheme">Theme</label>
 							<select id="aTheme" name="aTheme">
-	<?php foreach(new DirectoryIterator('layout') as$folder){
-		if($folder->isDOT())continue;
-		if($folder->isDir()){
-			$theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
-								<option value="<?=$folder;?>"<?=(stristr($folder,'default')?' selected':'');?>><?=$theme['title'];?></option>
-		<?php }
-	}?>
+								<?php foreach(new DirectoryIterator('layout') as$folder){
+									if($folder->isDOT())continue;
+									if($folder->isDir()){
+										$theme=parse_ini_file('layout/'.$folder.'/theme.ini',true);?>
+										<option value="<?=$folder;?>"<?=(stristr($folder,'default')?' selected':'');?>><?=$theme['title'];?></option>
+									<?php }
+								}?>
 							</select>
 							<div class="row mt-4">
 								<button type="submit" aria-label="Go to Next Step">Next</button>
@@ -140,25 +140,25 @@ if($error==0){?>
 							<label for="atimezone">Timezone</label>
 							<select id="atimezone" name="atimezone">
 								<option value="default">System Default</option>
-	<?php $o=array(
-		'Australia/Perth'      => "(GMT+08:00) Perth",
-	  'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
-	  'Australia/Darwin'     => "(GMT+09:30) Darwin",
-	  'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
-	  'Australia/Canberra'   => "(GMT+10:00) Canberra",
-	  'Australia/Hobart'     => "(GMT+10:00) Hobart",
-	  'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
-	  'Australia/Sydney'     => "(GMT+10:00) Sydney"
-	);
-	foreach($o as$tz=>$label)
-		echo'<option value="'.$tz.'">'.$label.'</option>';?>
+								<?php $o=array(
+									'Australia/Perth'      => "(GMT+08:00) Perth",
+								  'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
+								  'Australia/Darwin'     => "(GMT+09:30) Darwin",
+								  'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
+								  'Australia/Canberra'   => "(GMT+10:00) Canberra",
+								  'Australia/Hobart'     => "(GMT+10:00) Hobart",
+								  'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
+								  'Australia/Sydney'     => "(GMT+10:00) Sydney"
+								);
+								foreach($o as$tz=>$label)
+									echo'<option value="'.$tz.'">'.$label.'</option>';?>
 							</select>
 							<div class="row mt-4">
 								<button type="submit" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
 					</div>
-<?php }?>
+				<?php }?>
 				<div class="d-none" id="step4">
 					<div class="alert alert-success text-center" role="alert">Installation Complete!<br>Website is Ready to use!</div>
 					<div class="alert alert-info text-center" role="alert">NOTE: Website is currently in Maintenance Mode!</div>
@@ -169,18 +169,16 @@ if($error==0){?>
 			</div>
 		</main>
 		<iframe class="hidden" id="sp" name="sp"></iframe>
-		<div class="page-block" id="block">
-			<div class="spinner">
-				<div class="sk-chase">
-					<div class="sk-chase-dot"></div>
-					<div class="sk-chase-dot"></div>
-					<div class="sk-chase-dot"></div>
-					<div class="sk-chase-dot"></div>
-					<div class="sk-chase-dot"></div>
-					<div class="sk-chase-dot"></div>
-				</div>
-			</div>
-		</div>
+		<div class="page-block d-none">
+      <div class="plane main">
+        <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+       </div>
+    </div>
 		<script src="core/js/jquery/jquery.min.js"></script>
 		<script src="core/js/aurora.min.js"></script>
 		<script>

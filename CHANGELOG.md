@@ -1,4 +1,27 @@
-### v0.2.22
+### v0.2.23
+- Update Summernote, fix Summernote plugins.
+- Add multiline editing to some text inputs.
+- Add FileRobot Image Editor in a dropdown section where images are added to content.
+- Make sure edited images are saved in their appropriate folders.
+- Fix Light & Dark styling for FileRobot Image Editing.
+- Add Search for Images via Unsplash.com.
+- Fix checkbox toggling.
+- Add duplicate title check for content and pages.
+- Change Country Flag lookup to Emoji's, reducing footprint.
+- Adjust Dashboard widgets to resize and remember size depending on different screen widths to differentriate between SM, MD, LG, XL and XXL.
+- Adjust administration menu to not completely disappear, and to not save it's state on mobile devices.
+- Fix permissions for accounts to correctly respond to settings.
+- Change content items images to link to content to edit/view rather than open in lightbox.
+- Fix Calendar not rendering correctly when switch between table and calendar views.
+- Adjust weather widget columns to collapse correctly when viewed on mobile devices.
+- Remove Ladda, reducing CSS and Javascript footprint.
+- Improve Page Blocking and update animation.
+- Sort CSS Styles removing duplicates and unused declarations.
+- Fix Save All to now save text editor contents.
+- Fix Event/News side area display showing out of date and events from incorrect account levels.
+- Fix Quickview Products now showing information, and allow multiple product viewing.
+
+#### v0.2.22
 - Retheme primary Administration Interface.
 - Fix Summernote Editor custom plugin button sizes to fit in better with default toolbar buttons.
 - Fix filename renaming for media uploads, emailed links were creating encoded entities making files seem unavailable due to filename mismatch.

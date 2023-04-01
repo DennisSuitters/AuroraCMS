@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -173,12 +173,13 @@ if($fu!=''){
 			':ord'=>$iid+1
 		]);
 		echo'<script>'.
-					'window.top.window.$("#pi").append(`<div class="play items col-11 col-sm-4 p-3 mx-auto" id="pi_'.$iid.'">'.
+					'window.top.window.$("#pi").append(`<div class="play items card gallery col-6 col-sm-3 m-0 border-0" id="pi_'.$iid.'">'.
 						'<img src="'.$vidarray['th_url'].'">'.
-							'<div class="btn-group float-right">'.
-								'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item"><i class="i">drag</i></div>'.
-								'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'playlist\');"><i class="i">trash</i></button>'.
-							'</div>'.
+						'<div class="btn-group tools">'.
+							'<a href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$iid.'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
+							'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'playlist\');"><i class="i">trash</i></button>'.
+							'<div class="handle btn" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>'.
+						'</div>'.
 					'</div>`);'.
 				'</script>';
 	}

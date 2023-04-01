@@ -1,12 +1,12 @@
 .wysiwyg .note-frame {
-  border: 1px solid var(--forum-wysiwyg-border-color) !important; }
+  border: 1px solid var(--forum-wysiwyg-border-color) !important }
 
 .wysiwyg .note-toolbar {
   background-color: var(--forum-wysiwyg-toolbar-background-color) !important;
-  border-bottom-color: var(--forum-wysiwyg-toolbar-border-color) !important; }
+  border-bottom-color: var(--forum-wysiwyg-toolbar-border-color) !important }
 
 .wysiwyg .note-icon-caret {
-  visibility: hidden !important; }
+  visibility: hidden !important }
 
 .wysiwyg .note-btn {
   background-color: var(--forum-wysiwyg-button-background-color) !important;
@@ -15,7 +15,7 @@
   border-right-color: var(--forum-wysiwyg-button-background-color) !important;
   color: var(--forum-wysiwyg-button-color) !important;
   fill: var(--forum-wysiwyg-button-color) !important;
-  border-radius: 0 !important; }
+  border-radius: 0 !important }
 
 .wysiwyg .note-btn:hover,
 .wysiwyg .note-btn:focus {
@@ -25,23 +25,23 @@
   border-right-color: var(--forum-wysiwyg-button-background-color-hover) !important;
   color: var(--forum-wysiwyg-button-color-hover) !important;
   fill: var(--forum-wysiwyg-button-color-hover) !important;
-  border-radius: 0 !important; }
+  border-radius: 0 !important }
 
 .wysiwyg .note-btn:first-of-type {
   border-left-color: var(--forum-wysiwyg-button-border-color) !important;
   border-top-left-radius: var(--forum-wysiwyg-button-border-radius) !important;
-  border-bottom-left-radius: var(--forum-wysiwyg-button-border-radius) !important; }
+  border-bottom-left-radius: var(--forum-wysiwyg-button-border-radius) !important }
 
 .wysiwyg .note-btn:last-of-type {
   border-right-color: var(--forum-wysiwyg-button-border-color) !important;
   border-top-right-radius: var(--forum-wysiwyg-button-border-radius) !important;
-  border-bottom-right-radius: var(--forum-wysiwyg-button-border-radius) !important; }
+  border-bottom-right-radius: var(--forum-wysiwyg-button-border-radius) !important }
 
 .wysiwyg .note-editor.note-frame .note-editing-area .note-viewport-area .note-editable {
   background-color: var(--forum-wysiwyg-editable-background-color) !important;
-  color: var(--forum-wysiwyg-editable-color) !important; }
+  color: var(--forum-wysiwyg-editable-color) !important }
 
 .wysiwyg .note-statusbar,
 .wysiwyg .note-status-output {
   background-color: var(--forum-wysiwyg-background-color) !important;
-  border-top-color: var(--forum-wysiwyg-background-color) !important; }
+  border-top-color: var(--forum-wysiwyg-background-color) !important }

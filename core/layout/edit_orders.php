@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -73,12 +73,10 @@ else{?>
               </div>
               <div class="col-12 col-sm-2 text-right">
                 <div class="btn-group">
-                  <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                    <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                  <?php }?>
-                  <button class="btn" data-tooltip="left" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=print');return false;"><i class="i">print</i></button>
-                  <button class="btn" data-tooltip="left" aria-label="Email Order" onclick="$('#sp').load('core/email_order.php?id=<?=$r['id'];?>&act=');return false;"><i class="i">email-send</i></button>
-                  <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+                  <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                  '<button data-tooltip="left" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=print`);return false;"><i class="i">print</i></button>'.
+                  '<button data-tooltip="left" aria-label="Email Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=`);return false;"><i class="i">email-send</i></button>'.
+                  '<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>';?>
                 </div>
               </div>
             </div>
@@ -99,7 +97,8 @@ else{?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-3">
-                  <?php if($r['status']=='archived'||$r['status']=='paid')echo'<div class="input-text border-left-radius-0 border-bottom-right-radius-0"><strong>Status:</strong>&nbsp;<span class="badger badge-'.$r['status'].'">'.ucfirst($r['status']).'</span>';
+                  <?php if($r['status']=='archived'||$r['status']=='paid')
+                    echo'<div class="input-text border-left-radius-0 border-bottom-right-radius-0"><strong>Status:</strong>&nbsp;<span class="badger badge-'.$r['status'].'">'.ucfirst($r['status']).'</span>';
                   else{?>
                     <div class="input-text py-0 pr-0 border-left-radius-0 border-bottom-right-radius-0"><strong>Status:</strong>&nbsp;
                       <select class="border-0" id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status" onchange="update('<?=$r['id'];?>','orders','status',$(this).val(),'select');">
@@ -108,8 +107,8 @@ else{?>
                         <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
                         <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
                       </select>
-                    <?php }?>
-                  </div>
+                    </div>
+                  <?php }?>
                 </div>
               </div>
               <div class="row">
@@ -184,7 +183,7 @@ else{?>
                   <div class="col-12 col-md-6">
                     <div class="input-text py-0"><strong>Transaction ID:</strong>&nbsp;
                       <input class="textinput border-0" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code...">
-                      <?=$user['options'][1]==1?'<button class="save border-0" id="savetxn_id" data-dbid="txn_id" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savetxn_id" data-dbid="txn_id" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-md">
@@ -195,13 +194,13 @@ else{?>
                   <div class="col-12 col-sm-6 col-md">
                     <div class="input-text py-0"></strong>Name:<strong>&nbsp;
                       <input class="textinput border-0" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name...">
-                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_name" data-dbid="paid_name" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_name" data-dbid="paid_name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                   <div class="col-12 col-sm-6 col-md">
                     <div class="input-text py-0"></strong>Email:<strong>&nbsp;
                       <input class="textinput border-0" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email...">
-                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_email" data-dbid="paid_email" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      <?=$user['options'][1]==1?'<button class="save border-0" id="savepaid_email" data-dbid="paid_email" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                 </div>
@@ -212,18 +211,18 @@ else{?>
                   <div class="input-text py-0 pr-0 border-right-radius-0"><strong>Service</strong>&nbsp;
                     <select class="border-0" id="status" data-tooltip="tooltip" aria-label="Tracking Service" onchange="update('<?=$r['id'];?>','orders','trackOption',$(this).val(),'select');">
                       <option value="">Select a Tracking Service</option>
-<?php $sto=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' ORDER BY `title` ASC");
-$sto->execute();
-while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
-  echo'<option value="'.$rto['id'].'"'.($rto['id']==$r['trackOption']?' selected':'').'>'.$rto['title'].'</option>';
-}?>
+                      <?php $sto=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' ORDER BY `title` ASC");
+                      $sto->execute();
+                      while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
+                        echo'<option value="'.$rto['id'].'"'.($rto['id']==$r['trackOption']?' selected':'').'>'.$rto['title'].'</option>';
+                      }?>
                     </select>
                   </div>
                 </div>
                 <div class="col-12 col-sm">
                   <div class="input-text py-0 pr-0 border-left-radius-0"><strong>Tracking #</strong>&nbsp;
                     <input class="textinput border-0" id="trackNumber" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="trackNumber" type="text" value="<?=$r['trackNumber'];?>" placeholder="Enter a Tracking Number...">
-                    <?=$user['options'][1]==1?'<button class="save border-0" id="savetrackNumber" data-dbid="trackNumber" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                    <?=$user['options'][1]==1?'<button class="save border-0" id="savetrackNumber" data-dbid="trackNumber" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
               </div>
@@ -361,7 +360,8 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                     </td>
                     <td class="text-left align-middle small px-0"><?=(isset($i['code'])?$i['code']:'');?></td>
                     <td class="text-left align-middle px-0">
-                      <?php if($r['iid_ti']!=0)echo($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
+                      <?php if($r['iid_ti']!=0)
+                        echo($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
                       else{?>
                         <form target="sp" method="post" action="core/updateorder.php">
                           <input name="act" type="hidden" value="title">
@@ -400,8 +400,7 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                       <?php }?>
                     </td>
                     <td class="text-right align-middle px-0">
-                      <?php
-                      $gst=0;
+                      <?php $gst=0;
                       if($oi['status']!='pre order'||$oi['status']!='back order'){
                         if($config['gst']>0){
                           $gst=$oi['cost']*($config['gst']/100);
@@ -409,12 +408,10 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                           $gst=number_format((float)$gst,2,'.','');
                         }
                         echo$gst>0?$gst:'';
-                      }
-                      ?>
+                      }?>
                     </td>
                     <td class="text-right align-middle px-0">
-                      <?php
-                      if($oi['status']!='pre order'||$oi['status']!='back order'){
+                      <?php if($oi['status']!='pre order'||$oi['status']!='back order'){
                         echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
                       }else{
                         echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
@@ -431,259 +428,258 @@ while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
                       </form>
                     </td>
                   </tr>
-                  <?php
-                    if($oi['status']!='pre order'||$oi['status']!='back order'){
-                      if($oi['iid']!=0){
-                        $total=$total+($oi['cost']*$oi['quantity'])+$gst;
-                        $total=number_format((float)$total,2,'.','');
-                      }
+                  <?php if($oi['status']!='pre order'||$oi['status']!='back order'){
+                    if($oi['iid']!=0){
+                      $total=$total+($oi['cost']*$oi['quantity'])+$gst;
+                      $total=number_format((float)$total,2,'.','');
                     }
                   }
-                  $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
-                  $sr->execute([':rid'=>$r['rid']]);
-                  $reward=$sr->fetch(PDO::FETCH_ASSOC);?>
-                  <tr>
-                    <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Rewards</div></td>
-                    <form class="form-row" id="rewardsinput" target="sp" method="post" action="core/updateorder.php">
-                      <td class="text-center px-0" colspan="1">
-                        <input name="act" type="hidden" value="reward">
-                        <input name="id" type="hidden" value="<?=$r['id'];?>">
-                        <input name="t" type="hidden" value="orders">
-                        <input name="c" type="hidden" value="rid">
-                        <?php $ssr=$db->prepare("SELECT * FROM `".$prefix."rewards` ORDER BY `code` ASC, `title` ASC");
-                        $ssr->execute();
-                        if($ssr->rowCount()>0){?>
-                          <select onchange="$('#rewardselect').val($(this).val());$('#rewardsinput:first').submit();">
-                            <option value="">Rewards Codes</option>
-                            <?php while($srr=$ssr->fetch(PDO::FETCH_ASSOC)){?>
-                              <option value="<?=$srr['code'];?>"<?=$srr['code']==$reward['code']?' selected':'';?>><?=$srr['code'].':'.($srr['method']==1?'$'.$srr['value']:$srr['value'].'%').' Off';?></option>
-                            <?php }?>
-                          </select>
-                        <?php }?>
-                      </td>
-                      <td class="align-middle px-0" colspan="3">
-                        <input id="rewardselect" name="da" type="text" value="<?=$sr->rowCount()==1?$reward['code']:'';?>" onchange="$('#rewardsinput:first').submit();">
-                      </td>
-                    </form>
-                  </td>
-                  <td class="text-center align-middle px-0">
-                    <?php if($sr->rowCount()==1){
-                        if($reward['method']==1){
-                          echo'$';
-                          $total=$total-$reward['value'];
-                        }
-                        echo$reward['value'];
-                        if($reward['method']==0){
-                          echo'%';
-                          $total=($total*((100-$reward['value'])/100));
-                        }
-                        $total=number_format((float)$total,2,'.','');
-                        echo' Off';
-                      }?>
-                    </td>
-                    <td class="text-right align-middle px-0"><?=(isset($reward['value'])?($reward['value']>0?$total:''):'');?></td>
-                    <td>&nbsp;</td>
-                  </tr>
-<?php if($config['options'][26]==1){
-  $dedtot=0;
-  $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
-  $sd->execute([
-    ':f'=>$client['spent'],
-    ':t'=>$client['spent']
-  ]);
-  if($sd->rowCount()>0){
-    $rd=$sd->fetch(PDO::FETCH_ASSOC);
-    if($rd['value']==1)$dedtot=$rd['cost'];
-    if($rd['value']==2)$dedtot=$total*($rd['cost']/100);
-    $total=$total - $dedtot;?>
-                      <tr>
-                        <td class="align-middle text-right px-0" colspan="2"><div class="input-text">Spent</div></td>
-                        <td class="align-middle" colspan="5">&#36;<?=$client['spent'];?> within Discount Range &#36;<?=$rd['f'].'-&#36;'.$rd['t'];?> granting <?=($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off');?></td>
-                        <td class="text-right align-middle px-0">-<?=$dedtot;?></td>
-                        <td>&nbsp;</td>
-                      </tr>
-<?php }
-}?>
-                  <tr>
-                    <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Shipping</div></td>
-                    <td class="align-middle px-0" colspan="1">
-                      <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input name="act" type="hidden" value="postselect">
-                        <input name="id" type="hidden" value="<?=$r['id'];?>">
-                        <input name="t" type="hidden" value="orders">
-                        <input name="c" type="hidden" value="postageCode">
-                        <select name="da">
-                          <option value="">Shipping Options</option>
-                          <option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>
-            							<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>
-                          <?php $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postageoption' ORDER BY `title` ASC");
-                          if($spo->rowCount()>0){
-                            while($rpo=$spo->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rpo['id'].'">'.$rpo['title'].'</option>';
-                          }?>
+                }
+                $sr=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `id`=:rid");
+                $sr->execute([':rid'=>$r['rid']]);
+                $reward=$sr->fetch(PDO::FETCH_ASSOC);?>
+                <tr>
+                  <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Rewards</div></td>
+                  <form class="form-row" id="rewardsinput" target="sp" method="post" action="core/updateorder.php">
+                    <td class="text-center px-0" colspan="1">
+                      <input name="act" type="hidden" value="reward">
+                      <input name="id" type="hidden" value="<?=$r['id'];?>">
+                      <input name="t" type="hidden" value="orders">
+                      <input name="c" type="hidden" value="rid">
+                      <?php $ssr=$db->prepare("SELECT * FROM `".$prefix."rewards` ORDER BY `code` ASC, `title` ASC");
+                      $ssr->execute();
+                      if($ssr->rowCount()>0){?>
+                        <select onchange="$('#rewardselect').val($(this).val());$('#rewardsinput:first').submit();">
+                          <option value="">Rewards Codes</option>
+                          <?php while($srr=$ssr->fetch(PDO::FETCH_ASSOC)){?>
+                            <option value="<?=$srr['code'];?>"<?=$srr['code']==$reward['code']?' selected':'';?>><?=$srr['code'].':'.($srr['method']==1?'$'.$srr['value']:$srr['value'].'%').' Off';?></option>
+                          <?php }?>
                         </select>
-                      </form>
-                    </td>
-                    <td class="text-right align-middle px-0" colspan="4">
-                      <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input name="act" type="hidden" value="postoption">
-                        <input name="id" type="hidden" value="<?=$r['id'];?>">
-                        <input name="t" type="hidden" value="orders">
-                        <input name="c" type="hidden" value="postageOption">
-                        <input name="da" type="text" value="<?=$r['postageOption'];?>">
-                      </form>
-                    </td>
-                    <td class="text-right px-0">
-                      <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input name="act" type="hidden" value="postcost">
-                        <input name="id" type="hidden" value="<?=$r['id'];?>">
-                        <input name="t" type="hidden" value="orders">
-                        <input name="c" type="hidden" value="postageCost">
-                        <input class="text-right" name="da" type="text" value="<?=$r['postageCost'];?>">
-                        <?php if($r['postageCost']>0){
-                          $total=$total+$r['postageCost'];
-                          $total=number_format((float)$total, 2, '.', '');
-                        }?>
-                      </form>
-                    </td>
-                    <td></td>
-                  </tr>
-                  <tr>
-                    <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Payment</div></td>
-                    <td class="align-middle px-0" colspan="1">
-                      <?php $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY title ASC");
-                      if($spo->rowCount()>0){?>
-                        <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                          <input name="act" type="hidden" value="payselect">
-                          <input name="id" type="hidden" value="<?=$r['id'];?>">
-                          <input name="t" type="hidden" value="orders">
-                          <input name="c" type="hidden" value="payOption">
-                          <select name="da">
-                            <option value="0">Payment Options</option>
-                            <?php while($rpo=$spo->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rpo['id'].'">'.$rpo['title'].($rpo['value']!=0?' (Surcharge '.($rpo['type']==1?$rpo['value'].'%':'$'.$rpo['value']).')':'').'</option>';?>
-                          </select>
-                        </form>
                       <?php }?>
                     </td>
-                    <td class="text-right align-middle px-0" colspan="3">
-                      <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input name="act" type="hidden"value="paytext">
-                        <input name="id" type="hidden"value="<?=$r['id'];?>">
-                        <input name="t" type="hidden"value="orders">
-                        <input name="c" type="hidden"value="payOption">
-                        <input name="da" type="text" value="<?=$r['payOption'];?>">
+                    <td class="align-middle px-0" colspan="3">
+                      <input id="rewardselect" name="da" type="text" value="<?=$sr->rowCount()==1?$reward['code']:'';?>" onchange="$('#rewardsinput:first').submit();">
+                    </td>
+                  </form>
+                </td>
+                <td class="text-center align-middle px-0">
+                  <?php if($sr->rowCount()==1){
+                    if($reward['method']==1){
+                      echo'$';
+                      $total=$total-$reward['value'];
+                    }
+                    echo$reward['value'];
+                    if($reward['method']==0){
+                      echo'%';
+                      $total=($total*((100-$reward['value'])/100));
+                    }
+                    $total=number_format((float)$total,2,'.','');
+                    echo' Off';
+                  }?>
+                </td>
+                <td class="text-right align-middle px-0"><?=(isset($reward['value'])?($reward['value']>0?$total:''):'');?></td>
+                <td>&nbsp;</td>
+              </tr>
+              <?php if($config['options'][26]==1){
+                $dedtot=0;
+                $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `f`<:f AND `t`>:t");
+                $sd->execute([
+                  ':f'=>$client['spent'],
+                  ':t'=>$client['spent']
+                ]);
+                if($sd->rowCount()>0){
+                  $rd=$sd->fetch(PDO::FETCH_ASSOC);
+                  if($rd['value']==1)$dedtot=$rd['cost'];
+                  if($rd['value']==2)$dedtot=$total*($rd['cost']/100);
+                  $total=$total - $dedtot;?>
+                  <tr>
+                    <td class="align-middle text-right px-0" colspan="2"><div class="input-text">Spent</div></td>
+                    <td class="align-middle" colspan="5">&#36;<?=$client['spent'];?> within Discount Range &#36;<?=$rd['f'].'-&#36;'.$rd['t'];?> granting <?=($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off');?></td>
+                    <td class="text-right align-middle px-0">-<?=$dedtot;?></td>
+                    <td>&nbsp;</td>
+                  </tr>
+                <?php }
+              }?>
+              <tr>
+                <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Shipping</div></td>
+                <td class="align-middle px-0" colspan="1">
+                  <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                    <input name="act" type="hidden" value="postselect">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="orders">
+                    <input name="c" type="hidden" value="postageCode">
+                    <select name="da">
+                      <option value="">Shipping Options</option>
+                      <option value="AUS_PARCEL_REGULAR">Australia Post Regular Post</option>
+        							<option value="AUS_PARCEL_EXPRESS">Australia Post Express Post</option>
+                      <?php $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='postageoption' ORDER BY `title` ASC");
+                      if($spo->rowCount()>0){
+                        while($rpo=$spo->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rpo['id'].'">'.$rpo['title'].'</option>';
+                      }?>
+                    </select>
+                  </form>
+                </td>
+                <td class="text-right align-middle px-0" colspan="4">
+                  <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                    <input name="act" type="hidden" value="postoption">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="orders">
+                    <input name="c" type="hidden" value="postageOption">
+                    <input name="da" type="text" value="<?=$r['postageOption'];?>">
+                  </form>
+                </td>
+                <td class="text-right px-0">
+                  <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                    <input name="act" type="hidden" value="postcost">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="orders">
+                    <input name="c" type="hidden" value="postageCost">
+                    <input class="text-right" name="da" type="text" value="<?=$r['postageCost'];?>">
+                    <?php if($r['postageCost']>0){
+                      $total=$total+$r['postageCost'];
+                      $total=number_format((float)$total, 2, '.', '');
+                    }?>
+                  </form>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Payment</div></td>
+                <td class="align-middle px-0" colspan="1">
+                  <?php $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY title ASC");
+                  if($spo->rowCount()>0){?>
+                    <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                      <input name="act" type="hidden" value="payselect">
+                      <input name="id" type="hidden" value="<?=$r['id'];?>">
+                      <input name="t" type="hidden" value="orders">
+                      <input name="c" type="hidden" value="payOption">
+                      <select name="da">
+                        <option value="0">Payment Options</option>
+                        <?php while($rpo=$spo->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rpo['id'].'">'.$rpo['title'].($rpo['value']!=0?' (Surcharge '.($rpo['type']==1?$rpo['value'].'%':'$'.$rpo['value']).')':'').'</option>';?>
+                      </select>
+                    </form>
+                  <?php }?>
+                </td>
+                <td class="text-right align-middle px-0" colspan="3">
+                  <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                    <input name="act" type="hidden"value="paytext">
+                    <input name="id" type="hidden"value="<?=$r['id'];?>">
+                    <input name="t" type="hidden"value="orders">
+                    <input name="c" type="hidden"value="payOption">
+                    <input name="da" type="text" value="<?=$r['payOption'];?>">
+                  </form>
+                </td>
+                <td class="text-right align-middle px-0">
+                  <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                    <input name="act" type="hidden" value="paymethod">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="orders">
+                    <input name="c" type="hidden" value="payMethod">
+                    <select class="pl-1 pr-1" name="da">
+                      <option value="2"<?=$r['payMethod']==2?' selected':'';?>>Add &#36;</option>
+                      <option vlaue="1"<?=$r['payMethod']==1?' selected':'';?>>Add &#37;</option>
+                    </select>
+                  </form>
+                  <?php if($r['payMethod']==1){
+                    $paytot=$total*($r['payCost']/100);
+                  }else{
+                    $paytot=$r['payCost'];
+                  }?>
+                </td>
+                <td class="align-middle text-right px-0">
+                  <?php if($r['payMethod']==2){?>
+                    <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
+                      <input name="act" type="hidden" value="paycost">
+                      <input name="id" type="hidden" value="<?=$r['id'];?>">
+                      <input name="t" type="hidden" value="orders">
+                      <input name="c" type="hidden" value="payCost">
+                      <input class="text-right" name="da" type="text" value="<?= number_format((float)$paytot,2,'.','');?>">
+                    </form>
+                  <?php }else echo number_format((float)$paytot,2,'.','');
+                  $total=$total+$paytot;
+                  $total=number_format((float)$total,2,'.','');?>
+                </td>
+                <td></td>
+              </tr>
+              <tr>
+                <td class="text-right font-weight-bold" colspan="7">Total</td>
+                <td class="total text-right font-weight-bold border-2 border-black border-left-0 border-right-0 px-0"><?=$total;?></td>
+                <td>&nbsp;</td>
+              </tr>
+              <?php $su=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE `id`=:id");
+              $su->execute([
+                ':id'=>$r['id'],
+                ':total'=>$total
+              ]);
+              $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
+              $sn->execute([':oid'=>$r['id']]);
+              if($sn->rowCount()>0){
+                while($rn=$sn->fetch(PDO::FETCH_ASSOC)){?>
+                  <tr>
+                    <td class="small align-middle px-0" colspan="2"><small><?= date($config['dateFormat'],$rn['ti']);?></small></td>
+                    <td class="align-middle px-0" colspan="5">
+                      <form target="sp" method="post" action="core/updateorder.php">
+                        <input name="act" type="hidden" value="title">
+                        <input name="id" type="hidden" value="<?=$rn['id'];?>">
+                        <input name="t" type="hidden" value="orderitems">
+                        <input name="c" type="hidden" value="title">
+                        <div class="form-row">
+                          <input name="da" type="text" value="<?=$rn['title'];?>">
+                          <div class="input-text">minus</div>
+                        </div>
                       </form>
                     </td>
                     <td class="text-right align-middle px-0">
-                      <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                        <input name="act" type="hidden" value="paymethod">
-                        <input name="id" type="hidden" value="<?=$r['id'];?>">
-                        <input name="t" type="hidden" value="orders">
-                        <input name="c" type="hidden" value="payMethod">
-                        <select class="pl-1 pr-1" name="da">
-                          <option value="2"<?=$r['payMethod']==2?' selected':'';?>>Add &#36;</option>
-                          <option vlaue="1"<?=$r['payMethod']==1?' selected':'';?>>Add &#37;</option>
-                        </select>
+                      <form target="sp" method="post" action="core/updateorder.php">
+                        <input name="act" type="hidden" value="cost">
+                        <input name="id" type="hidden" value="<?=$rn['id'];?>">
+                        <input name="t" type="hidden" value="orderitems">
+                        <input name="c" type="hidden" value="cost">
+                        <input class="text-right" name="da" value="<?=$rn['cost'];?>">
                       </form>
-                      <?php if($r['payMethod']==1){
-                        $paytot=$total*($r['payCost']/100);
-                      }else{
-                        $paytot=$r['payCost'];
-                      }?>
                     </td>
-                    <td class="align-middle text-right px-0">
-                      <?php if($r['payMethod']==2){?>
-                        <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
-                          <input name="act" type="hidden" value="paycost">
-                          <input name="id" type="hidden" value="<?=$r['id'];?>">
-                          <input name="t" type="hidden" value="orders">
-                          <input name="c" type="hidden" value="payCost">
-                          <input class="text-right" name="da" type="text" value="<?= number_format((float)$paytot,2,'.','');?>">
-                        </form>
-                      <?php }else echo number_format((float)$paytot,2,'.','');
-                      $total=$total+$paytot;
-                      $total=number_format((float)$total,2,'.','');?>
+                    <td class="text-right px-0">
+                      <form target="sp" method="post" action="core/updateorder.php">
+                        <input name="act" type="hidden" value="trash">
+                        <input name="id" type="hidden" value="<?=$rn['id'];?>">
+                        <input name="t" type="hidden" value="orderitems">
+                        <input name="c" type="hidden" value="quantity">
+                        <input name="da" type="hidden" value="0">
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                      </form>
                     </td>
-                    <td></td>
                   </tr>
-                  <tr>
-                    <td class="text-right font-weight-bold" colspan="7">Total</td>
-                    <td class="total text-right font-weight-bold border-2 border-black border-left-0 border-right-0 px-0"><?=$total;?></td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  <?php $su=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE `id`=:id");
-                  $su->execute([
-                    ':id'=>$r['id'],
-                    ':total'=>$total
-                  ]);
-                  $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
-                  $sn->execute([':oid'=>$r['id']]);
-                  if($sn->rowCount()>0){
-                     while($rn=$sn->fetch(PDO::FETCH_ASSOC)){?>
-                       <tr>
-                        <td class="small align-middle px-0" colspan="2"><small><?= date($config['dateFormat'],$rn['ti']);?></small></td>
-                        <td class="align-middle px-0" colspan="5">
-                          <form target="sp" method="post" action="core/updateorder.php">
-                            <input name="act" type="hidden" value="title">
-                            <input name="id" type="hidden" value="<?=$rn['id'];?>">
-                            <input name="t" type="hidden" value="orderitems">
-                            <input name="c" type="hidden" value="title">
-                            <div class="form-row">
-                              <input name="da" type="text" value="<?=$rn['title'];?>">
-                              <div class="input-text">minus</div>
-                            </div>
-                          </form>
-                        </td>
-                        <td class="text-right align-middle px-0">
-                          <form target="sp" method="post" action="core/updateorder.php">
-                            <input name="act" type="hidden" value="cost">
-                            <input name="id" type="hidden" value="<?=$rn['id'];?>">
-                            <input name="t" type="hidden" value="orderitems">
-                            <input name="c" type="hidden" value="cost">
-                            <input class="text-right" name="da" value="<?=$rn['cost'];?>">
-                          </form>
-                        </td>
-                        <td class="text-right px-0">
-                          <form target="sp" method="post" action="core/updateorder.php">
-                            <input name="act" type="hidden" value="trash">
-                            <input name="id" type="hidden" value="<?=$rn['id'];?>">
-                            <input name="t" type="hidden" value="orderitems">
-                            <input name="c" type="hidden" value="quantity">
-                            <input name="da" type="hidden" value="0">
-                            <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                          </form>
-                        </td>
-                      </tr>
-                      <?php $total=$total-$rn['cost'];
-                    }
-                    $total=number_format((float)$total,2,'.','');?>
-                    <tr>
-                      <td class="text-right" colspan="7"><strong>Balance</strong></td>
-                      <td class="total text-right border-2 border-black border-top border-bottom px-0"><strong><?=$total;?></td>
-                      <td></td>
-                    </tr>
-                  <?php
-                  $so=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE id=:id");
-                  $so->execute([
-                    ':id'=>$r['id'],
-                    ':total'=>$total
-                  ]);
-                }?>
-                </tbody>
-              </table>
-            </div>
-            <div class="col-12 col-md-6">
-              <?php if($r['status']!='archived'&&$user['rank']>699){?>
-                <form target="sp" method="post" action="core/update.php">
-                  <input name="id" type="hidden" value="<?=$r['id'];?>">
-                  <input name="t" type="hidden" value="orders">
-                  <input name="c" type="hidden" value="notes">
-                  <textarea class="summernote" name="da"><?= rawurldecode($r['notes']);?></textarea>
-                </form>
-              <?php }else echo'<div class="well">'.$r['notes'].'</div>';?>
-            </div>
-          </div>
-          <?php require'core/layout/footer.php';?>
+                  <?php $total=$total-$rn['cost'];
+                }
+                $total=number_format((float)$total,2,'.','');?>
+                <tr>
+                  <td class="text-right" colspan="7"><strong>Balance</strong></td>
+                  <td class="total text-right border-2 border-black border-top border-bottom px-0"><strong><?=$total;?></td>
+                  <td></td>
+                </tr>
+                <?php $so=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE id=:id");
+                $so->execute([
+                  ':id'=>$r['id'],
+                  ':total'=>$total
+                ]);
+              }?>
+            </tbody>
+          </table>
         </div>
-      </section>
-    </main>
+        <div class="col-12 col-md-6">
+          <?php if($r['status']!='archived'&&$user['rank']>699){?>
+            <form target="sp" method="post" action="core/update.php">
+              <input name="id" type="hidden" value="<?=$r['id'];?>">
+              <input name="t" type="hidden" value="orders">
+              <input name="c" type="hidden" value="notes">
+              <textarea class="summernote" name="da"><?= rawurldecode($r['notes']);?></textarea>
+            </form>
+          <?php }else
+            echo'<div class="well">'.$r['notes'].'</div>';?>
+        </div>
+      </div>
+      <?php require'core/layout/footer.php';?>
+    </div>
+  </section>
+</main>
 <?php }

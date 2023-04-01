@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -30,33 +30,34 @@ $s->execute([
   ':c'=>$c
 ]);
 echo'<div class="fancybox-ajax">';
-if($s->rowCount()>0){?>
-  <h6 class="p-2">Suggestions</h6>
-  <table class="table-zebra">
-    <thead>
-      <tr>
-        <th class="text-center">Data</th>
-        <th class="text-center">Date</th>
-        <th class="text-right"></th>
-      </tr>
-    </thead>
-    <tbody id="l_activity">
-      <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-        <tr id="l_<?=$r['id'];?>">
-          <td>
-            <?='Suggestion: '.$c=='notes'?'Data too large to display.':$r['notes'].'<br>';?>
-            <small><?='Reason: '.$r['reason'];?></small>
-          </td>
-          <td class="small text-center"><small><?= date($config['dateFormat'], $r['ti']);?></small></td>
-          <td class="text-right">
-            <div class="btn-group">
-              <button class="add" data-tooltip="tooltip" aria-label="Approve" onclick="suggest('<?=$r['id'];?>');"><i class="i">add</i></button>
-              <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','suggestions');"><i class="i">trash</i></button>
-            </div>
-          </td>
+  if($s->rowCount()>0){?>
+    <h6 class="p-2">Suggestions</h6>
+    <table class="table-zebra">
+      <thead>
+        <tr>
+          <th class="text-center">Data</th>
+          <th class="text-center">Date</th>
+          <th class="text-right"></th>
         </tr>
-      <?php }?>
-    </tbody>
-  </table>
-<?php }else echo'No Results Found...';
+      </thead>
+      <tbody id="l_activity">
+        <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+          <tr id="l_<?=$r['id'];?>">
+            <td>
+              <?='Suggestion: '.$c=='notes'?'Data too large to display.':$r['notes'].'<br>';?>
+              <small><?='Reason: '.$r['reason'];?></small>
+            </td>
+            <td class="small text-center"><small><?= date($config['dateFormat'], $r['ti']);?></small></td>
+            <td class="text-right">
+              <div class="btn-group">
+                <button class="add" data-tooltip="tooltip" aria-label="Approve" onclick="suggest('<?=$r['id'];?>');"><i class="i">add</i></button>
+                <button class="trash" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','suggestions');"><i class="i">trash</i></button>
+              </div>
+            </td>
+          </tr>
+        <?php }?>
+      </tbody>
+    </table>
+<?php }else
+  echo'No Results Found...';
 echo'</div>';

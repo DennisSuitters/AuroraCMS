@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.webp)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.22
+Current version is v0.2.23
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -193,6 +193,7 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - [Zebra_Image](https://github.com/stefangabos/Zebra_Image)
 - [kses](https://github.com/RichardVasquez/kses)
 - [elFinder](https://github.com/Studio-42/elFinder)
+- [FileRobot Image Editor](https://github.com/scaleflex/filerobot-image-editor)
 
 ### Tested on:
 - CentOS Linux 7.2.1511 with Webmin 1.791

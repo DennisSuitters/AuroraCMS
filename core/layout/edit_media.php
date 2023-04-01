@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,10 +29,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
-                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                <?php }?>
-                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></a>
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                '<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></a>';?>
               </div>
             </div>
           </div>
@@ -43,18 +41,22 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="title" data-bs="trash" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Media Item Title...."':' readonly';?>>
-              <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+              <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
             <label id="mediaImageALT" for="fileALT"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaImageALT" data-tooltip="tooltip" aria-label="PermaLink to Media Image ALT Field">&#128279;</a>':'';?>Image ALT</label>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
               <input class="textinput" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Image ALT Text..."':' readonly';?>>
-              <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-dbid="fileALT" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+              <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-dbid="fileALT" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
           </div>
           <div class="col-12 col-sm-3 order-1 order-md-2 mb-4 mb-md-0">
-            <?php if(file_exists('media/sm/'.basename($r['file'])))$thumb='media/sm/'.basename($r['file']);
-            else$thumb=NOIMAGE;?>
+            <?php if(file_exists('media/sm/'.basename($r['file'])))
+              $thumb='media/sm/'.basename($r['file']);
+            elseif($r['file']!='')
+              $thumb=$r['file'];
+            else
+              $thumb=NOIMAGE;?>
             <div class="card m-2">
               <figure class="card-image">
                 <a data-fancybox="media" href="<?=$r['file'];?>">
@@ -67,7 +69,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <label id="mediaTags" for="tags"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaTags" data-tooltip="tooltip" aria-label="PermaLink to Media Tags Field">&#128279;</a>':'';?>Tags</label>
         <div class="form-row">
           <input class="textinput" id="tags" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="tags" type="text" value="<?=$r['tags'];?>"<?=$user['options'][1]==1?' placeholder="Enter Tags..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="savetags" data-dbid="tags" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaDateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaDateCreated" data-tooltip="tooltip" aria-label="PermaLink to Media Date Created Field">&#128279;</a>':'';?>Created</label>
         <div class="form-row">
@@ -77,7 +79,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <div class="form-row">
           <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
           <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`media`,`views`,`0`);"><i class="i">eraser</i></button>'.
-          '<button class="save" id="saveviews" data-dbid="views" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          '<button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <div class="row">
           <div class="col-12 col-sm-6 pr-3">
@@ -91,7 +93,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_1'].'"/>';
                   echo'</datalist>';
                 }
-                echo'<button class="save" id="savecategory_1" data-dbid="category_1" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
+                echo'<button class="save" id="savecategory_1" data-dbid="category_1" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
               }?>
             </div>
           </div>
@@ -106,7 +108,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_2'].'"/>';
                   echo'</datalist>';
                 }
-                echo'<button class="save" id="savecategory_2" data-dbid="category_2" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
+                echo'<button class="save" id="savecategory_2" data-dbid="category_2" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
               }?>
             </div>
           </div>
@@ -123,7 +125,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_3'].'"/>';
                   echo'</datalist>';
                 }
-                echo'<button class="save" id="savecategory_3" data-dbid="category_3" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
+                echo'<button class="save" id="savecategory_3" data-dbid="category_3" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
               }?>
             </div>
           </div>
@@ -138,7 +140,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['category_4'].'"/>';
                   echo'</datalist>';
                 }
-                echo'<button class="save" id="savecategory_4" data-dbid="category_4" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
+                echo'<button class="save" id="savecategory_4" data-dbid="category_4" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>';
               }?>
             </div>
           </div>
@@ -147,42 +149,42 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <label id="mediaEXIFFilename" for="exifFilename"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFFilename" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Filename Field">&#128279;</a>':'';?>Original Filename</label>
         <div class="form-row">
           <input class="textinput" id="exifFilename" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifFilename" type="text" value="<?=$r['exifFilename'];?>"<?=$user['options'][1]==1?' placeholder="Original Filename..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-dbid="exifFilename" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifFilename" data-dbid="exifFilename" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFCamera" for="exifCamera"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFCamera" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Camera Field">&#128279;</a>':'';?>Camera</label>
         <div class="form-row">
           <input class="textinput" id="exifCamera" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifCamera" type="text" value="<?=$r['exifCamera'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Camera"':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-dbid="exifCamera" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifCamera" data-dbid="exifCamera" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFLens" for="exifLens"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFLens" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Lens Field">&#128279;</a>':'';?>Lens</label>
         <div class="form-row">
           <input class="textinput" id="exifLens" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifLens" type="text" value="<?=$r['exifLens'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifLens" data-dbid="exifLens" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifLens" data-dbid="exifLens" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFAperture" for="exifAperture"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFAperture" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Aperture Field">&#128279;</a>':'';?>Aperture</label>
         <div class="form-row">
           <input class="textinput" id="exifAperture" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifAperture" type="text" value="<?=$r['exifAperture'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-dbid="exifAperture" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifAperture" data-dbid="exifAperture" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFFocalLength" for="exifFocalLength"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFFocalLength" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Focal Length Field">&#128279;</a>':'';?>Focal Length</label>
         <div class="form-row">
           <input class="textinput" id="exifFocalLength" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifFocalLength" type="text" value="<?=$r['exifFocalLength'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-dbid="exifFocalLength" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-dbid="exifFocalLength" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFShutterSpeed" for="exifShutterSpeed"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFShutterSpeed" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Shutter Speed Field">&#128279;</a>':'';?>Shutter Speed</label>
         <div class="form-row">
           <input class="textinput" id="exifShutterSpeed" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifShutterSpeed" type="text" value="<?=$r['exifShutterSpeed'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-dbid="exifShutterSpeed" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-dbid="exifShutterSpeed" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFISO" for="exifISO"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFISO" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF ISO Field">&#128279;</a>':'';?>ISO</label>
         <div class="form-row">
           <input class="textinput" id="exifISO" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifISO" type="text" value="<?=$r['exifISO'];?>"<?=$user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifISO" data-dbid="exifISO" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifISO" data-dbid="exifISO" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaEXIFDateTaken" for="exifti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaEXIFDateTaken" data-tooltip="tooltip" aria-label="PermaLink to Media EXIF Date Taken Field">&#128279;</a>':'';?>Date&nbsp;Taken</label>
         <div class="form-row">
           <input class="textinput" id="exifti" data-dbid="<?=$r['id'];?>" data-dbt="media" data-dbc="exifti" type="text" value="<?=$r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'';?>"<?=$user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly';?>>
-          <?=$user['options'][1]==1?'<button class="save" id="saveexifti" data-dbid="exifti" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          <?=$user['options'][1]==1?'<button class="save" id="saveexifti" data-dbid="exifti" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <legend class="mt-3">Image Attribution</legend>
         <label id="mediaAttributionImageName" for="attributionImageName"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediaAttributionImageName" data-tooltip="tooltip" aria-label="PermaLink to Media Image Attribution Name Field">&#128279;</a>':'';?>Name</label>
@@ -196,7 +198,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               echo'</datalist>';
             }
           }
-          echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-dbid="attributionImageName" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-dbid="attributionImageName" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
         <label id="mediaAttributionImageURL" for="attributionImageURL"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/edit/'.$r['id'].'#mediAttributionImageURL" data-tooltip="tooltip" aria-label="PermaLink to Media Image Attribution URL Field">&#128279;</a>':'';?>URL</label>
         <div class="form-row">
@@ -209,7 +211,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               echo'</datalist>';
             }
           }
-          echo$user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-dbid="attributionImageURL" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+          echo$user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-dbid="attributionImageURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
         </div>
       </div>
       <?php require'core/layout/footer.php';?>

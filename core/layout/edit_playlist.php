@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,10 +29,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="col-12 col-sm-2 text-right">
               <div class="btn-group">
-                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                <?php }?>
-                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields"><i class="i">save-all</i></a>
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                ($user['options'][1]==1?'<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields"><i class="i">save-all</i></a>':'');?>
               </div>
             </div>
           </div>
@@ -43,7 +41,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="playlist" data-dbc="title" data-bs="trash" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Playlist Item Title...."':' readonly';?>>
-              <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+              <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
             <label id="playlistDateCreated" for="dt"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$r['id'].'#playlistDateCreated" data-tooltip="tooltip" aria-label="PermaLink to Playlist Date Created Field">&#128279;</a>':'';?>Published&nbsp;Date</label>
             <div class="form-row">
@@ -73,7 +71,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <input type="hidden" name="t" value="playlist">
           <input type="hidden" name="c" value="notes">
           <div class="wysiwyg-toolbar mt-4">
-            <button id="savenotes" data-dbid="notes" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button id="savenotes" data-dbid="notes" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <div class="form-row">
             <textarea id="notes" style="min-height:200px;" name="da"><?=$r['notes'];?></textarea>

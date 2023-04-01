@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -67,7 +67,7 @@ if($act=='category'){
 					'<div class="input-text"><i class="i cathandle">drag</i></div>'.
 					'<div class="input-text">Category</div>'.
 					'<input type="text" name="da" value="'.$t.'" placeholder="Enter a Category...">'.
-					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
+					'<button class="save d-inline-flex" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<form class="d-inline-flex" target="sp" method="post" action="core/update.php">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
@@ -75,7 +75,7 @@ if($act=='category'){
 					'<input type="hidden" name="c" value="notes">'.
 					'<div class="input-text">Description</div>'.
 					'<input type="text" name="da" value="'.$da.'" placeholder="Enter a Description...">'.
-					'<button class="save" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
+					'<button class="save" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<div class="input-text">'.
 					'<form class="d-inline-flex" target="sp" method="post" action="core/toggle.php">'.
@@ -151,7 +151,7 @@ if($act=='topic'){
 					'<div class="input-text"><i class="i subhandle">drag</i></div>'.
 					'<div class="input-text">Topic</div>'.
 					'<input class="text-input" type="text" name="da" value="'.$t.'" placeholder="Enter a Topic...">'.
-					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
+					'<button class="save d-inline-flex" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<form class="d-inline-flex" target="sp" method="post" action="core/update.php">'.
 					'<input type="hidden" name="id" value="'.$id.'">'.
@@ -159,7 +159,7 @@ if($act=='topic'){
 					'<input type="hidden" name="c" value="notes">'.
 					'<div class="input-text">Description</div>'.
 					'<input type="text" name="da" value="'.$da.'" placeholder="Enter a Description...">'.
-					'<button class="save d-inline-flex" data-tooltip="tooltip" data-style="zoom-in" aria-label="Save"><i class="i">save</i></button>'.
+					'<button class="save d-inline-flex" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'.
 				'</form>'.
 				'<div class="input-text">'.
 					'<form class="d-inline-flex" target="sp" method="post" action="core/toggle.php">'.

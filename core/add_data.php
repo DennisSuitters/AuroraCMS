@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,6 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }else{
   if(!defined('PROTOCOL'))define('PROTOCOL','http://');
 }
-echo'<script>';
 require'zebraimage/zebra_image.php';
 require'sanitise.php';
 define('THEME','../layout/'.$config['theme']);
@@ -26,6 +25,7 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');
 $theme=parse_ini_file(THEME.'/theme.ini',true);
 $act=isset($_POST['act'])?filter_input(INPUT_POST,'act',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'act',FILTER_UNSAFE_RAW);
+echo'<script>';
 if($act!=''){
   $uid=isset($_SESSION['uid'])?(int)$_SESSION['uid']:0;
   $ip=$_SERVER['REMOTE_ADDR']=='::1'?'127.0.0.1':$_SERVER['REMOTE_ADDR'];

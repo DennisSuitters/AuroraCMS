@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -70,9 +70,9 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
             '<td class="col-4" style="width:33%;vertical-align:top;">'.
               '<h3>Details</h3>'.
               '<p>'.
-                '<small>Order <strong>#'.$r['qid'] . $r['iid'].'</strong><br />'.
-                'Order Date: <strong>'.date($config['dateFormat'],$r['qid_ti'].$r['iid_ti']) . '</strong><br />'.
-                'Due Date: <strong class="'.$r['status'].'">'.date($config['dateFormat'], $r['due_ti']) . '</strong><br />'.
+                '<small>Order <strong>#'.$r['qid'].$r['iid'].'</strong><br />'.
+                'Order Date: <strong>'.date($config['dateFormat'],$r['qid_ti'].$r['iid_ti']).'</strong><br />'.
+                'Due Date: <strong class="'.$r['status'].'">'.date($config['dateFormat'],$r['due_ti']).'</strong><br />'.
                 'Status: <strong class="'.$r['status'].'"'.($r['status']=='overdue'?' style="color: red;"':'').'>'.ucfirst($r['status']).'</strong></small><br />';
                 $tracklink='';
                 if($r['status']=='paid'){

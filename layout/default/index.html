@@ -5,19 +5,19 @@
 	<cover>
 		<figure class="covertron"><print page="coverItem"></figure>
 	</cover>
-	<section class="row">
+	<section class="row justify-content-center">
 		<pagenotes>
-			<article class="col-12 col-md mx-auto">
+			<article class="col-12 col-md p-5">
 				<h1><print page="heading"></h1>
 				<print page="notes">
 			</article>
 		</pagenotes>
-		<div class="col-12 col-md-6 mt-5">
+		<div class="col-12 col-md-5 col-lg-7 col-xl-5 col-xxl-4 m-5">
 			<div class="row justify-content-center">
 				<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events" aria-label="Go to Events">Events</a></div>
 				<eventsitems items="3">
 					<eventitem>
-						<article class="card event col-11 col-sm-5 mx-auto mx-md-3">
+						<article class="card event col-11 col-sm-4 col-md-11 col-lg-5 col-xl-5 mx-auto">
 							<figure class="card-image">
 								<a href="<print event=linktitle>">
 									<img <print event=srcset>src="<print event=thumb>" loading="lazy" alt="<print event=imageALT>">
@@ -33,7 +33,7 @@
 						</article>
 					</eventitem>
 				</eventsitems>
-				<article id="newsletters" class="card event col-11 col-sm-5 m-3 p-3">
+				<article id="newsletters" class="card event col-11 col-sm-4 col-md-5 col-lg-11 col-xl-5 p-3">
 					<form id="newslettersform" class="auroraForm" data-formtype="newsletters" method="post" action="core/add_subscriber.php">
 						<input type="hidden" name="act" value="add_subscriber">
 						<input type="hidden" name="<print hash>" value="<print timecode>">
@@ -61,7 +61,7 @@
 				<h2><saleHeading></h2>
 			</header>
 			<saleItems>
-				<article class="card col-12 col-sm-5 col-lg-2-5 m-3">
+				<article class="card col-12 col-sm-5 col-md-3 col-xl-2 m-3">
 					<json-ld>
 					<figure class="card-image">
 						<a href="<print content=linktitle>"><img src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>"></a>
@@ -95,7 +95,7 @@
 			<h2 class="text-center">Latest Content Additions</h2>
 		</header>
 		<items>
-			<article class="card col-12 col-sm-5 col-lg-2-5 m-3">
+			<article class="card col-12 col-sm-5 col-md-3 col-xl-2 m-3">
 				<figure class="card-image">
 					<a href="<print content=linktitle>">
 						<img <print content=srcset>src="<print content=thumb>" loading="lazy" alt="<print content=imageALT>">
@@ -113,7 +113,7 @@
 				<div class="card-footer">
 					<a class="btn" href="<print content=linktitle>">View</a>
 					<quickview>
-						<a class="btn" data-fancybox data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+						<a class="btn" data-fancybox="products" data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
 					</quickview>
 				</div>
 			</article>
@@ -125,11 +125,11 @@
 		<section class="row playlist">
 			<article class="mx-auto mt-5">
 				<header>
-					<h2 class="text-center">Latest Videos</h2>
+					<h2 class="text-center text-white">Latest Videos</h2>
 				</header>
-				<div class="row">
+				<div class="row justify-content-center show-1 show-sm-1 show-md-2 show-lg-2 show-xl-3 show-xxl-4">
 					<playlistitem>
-						<div class="col-11 col-sm-4 p-3 mx-auto">
+						<div class="show-items col-11 col-sm m-3">
 							<div class="note-video-wrapper video" data-fancybox href="<print playlist=url>" data-fancybox-plyr data-embed="<print playlist=embedurl>">
 								<json-ld>
 								<img class="note-video-clip" src="<print playlist=thumbnail_url>" alt="<print playlist=title>">
@@ -150,7 +150,7 @@
 			<h2 class="text-center">Shop by Category</h2>
 		</header>
 		<categories>
-			<article class="card m-3">
+			<article class="card col-12 col-sm-5 col-md-3 col-xl-2 m-3">
 				<a href="<print category=link>" class="card-image">
 					<img <print thumb=srcset>src="<print category=thumb>" loading="lazy" alt="<print category=imageALT>">
 				</a>
@@ -162,14 +162,14 @@
 	</section>
 </block>
 <block inbed="testimonials">
-	<settings items="3">
+	<settings items="6">
 	<section class="my-5">
 		<header>
 			<h2 class="text-center"><a href="testimonials/">Testimonials</a> <small><small>Our Clients Love Us!</small></small></h2>
 		</header>
-		<div class="row testimonial-block">
+		<div class="row testimonial-block show-1 show-sm-2 show-md-2 show-lg-2 show-xl-3 show-xxl-4">
 			<items>
-				<blockquote class="testimonials col-11 col-sm-3">
+				<blockquote class="testimonials show-items col-11 col-sm">
 					<img src="<print content=avatar>" loading="lazy" alt="<print content=name>">
 					<footer>
 						<div class="h3"><print content="name"></div>

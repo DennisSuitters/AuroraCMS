@@ -38,6 +38,11 @@
           options  = context.options,
           lang     = options.langInfo,
           interface = $.summernote.interface;
+      $('<link/>', {
+        rel: 'stylesheet',
+        type: 'text/css',
+        href: '../summernote-text-findnreplace/css/lite.css'
+      }).appendTo('head');
       context.memo('button.findnreplace', function() {
         var button = ui.button({
           contents: options.findnreplace.icon,
@@ -60,16 +65,16 @@
       this.initialize = function () {
         var fnrBody =
         '<div id="findnreplaceToolbar" class="note-display-none">' +
-          '<div class="note-form-group">' +
+          '<div class="note-form-row">' +
             '<input id="note-findnreplace-find" type="text" class="note-findnreplace-find note-input" value="" placeholder="' + lang.findnreplace.findPlaceholder + '">' +
             '<button class="note-findnreplace-find-btn note-btn">' + lang.findnreplace.findBtn + '</button>' +
           '</div>' +
-          '<div class="note-form-group">' +
+          '<div class="note-form-row">' +
             '<input id="note-findnreplace-replace" type="text" class="note-findnreplace-replace note-input" value="" placeholder="' + lang.findnreplace.replacePlaceholder + '">' +
             '<button class="note-findnreplace-replace-btn btn btn-default note-btn" style="width:100px;">' + lang.findnreplace.replaceBtn + '</button>' +
           '</div>' +
         '</div>';
-        $('.note-toolbar-wrapper').append(fnrBody);
+        $('.note-toolbar').append(fnrBody);
         this.show();
       };
       this.findnreplace = function() {

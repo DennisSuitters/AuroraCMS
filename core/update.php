@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -56,6 +56,36 @@ if(strlen($da)<24&&$da=='%3Cp%3E%3Cbr%3E%3C/p%3E')$da=str_replace('%3Cp%3E%3Cbr%
 if($col=='notes')$da=htmlentitiesOutsideHTMLTags($da,ENT_QUOTES|ENT_HTML5);
 $si=session_id();
 $ti=time();
+if(($tbl=='content'||$tbl=='menu')&&$col=='title'&&$da!=''){
+	$titlecheck=0;
+	$titlehtml='';
+	if($tbl=='content'){
+		$sc=$db->prepare("SELECT `id`,`contentType` FROM `".$prefix."content` WHERE `id`=:id");
+		$sc->execute([':id'=>$id]);
+		$rc=$sc->fetch(PDO::FETCH_ASSOC);
+		$s=$db->prepare("SELECT `id`,`title` FROM `".$prefix."content` WHERE `contentType`=:contentType AND `title`=:title");
+		$s->execute([
+			':contentType'=>$rc['contentType'],
+			':title'=>$da
+		]);
+		if($s->rowCount()>0){
+			$titlecheck++;
+			$titlehtml=ucwords($rc['contentType']).' already exists with the title <strong>'.$da.'</strong>';
+		}
+	}
+	if($tbl=='menu'){
+		$s=$db->prepare("SELECT `id`,`title` FROM `".$prefix."menu` WHERE `title`=:title");
+		$s->execute([':title'=>$da]);
+		if($s->rowCount()>0){
+			$titlecheck++;
+			$titlehtml='Page already exists with the title <strong>'.$da.'</strong>';
+		}
+	}
+	if($titlecheck>0){
+		echo'<script>window.top.window.toastr["error"](`'.$titlehtml.'`);</script>';
+		die();
+	}
+}
 if($col!='messengerFBCode'){
 	$s=$db->prepare("SELECT `".$col."` AS 'col' FROM `".$prefix.$tbl."` WHERE `id`=:id");
 	$s->execute([':id'=>$id]);
@@ -247,6 +277,7 @@ if($col=='status'&&$tbl!='forumPosts'){
 	else echo'<script>window.top.window.$("#l_'.$id.'").removeClass("danger");</script>';
 }
 if($col=='password')echo'<script>window.top.window.$("#passButton").removeClass("btn-danger");window.top.window.$(".page-block").removeClass("d-block");</script>';
+if($col=='notes')echo'<script>window.top.window.$(".page-block").addClass("d-none");window.top.window.$(".note-save button").removeClass("btn-danger");</script>';
 if($config['options'][12]==1){
 	$s=$db->prepare("INSERT IGNORE INTO `".$prefix."logs` (`uid`,`rid`,`username`,`name`,`view`,`contentType`,`refTable`,`refColumn`,`oldda`,`newda`,`action`,`ti`) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");
 	$s->execute([

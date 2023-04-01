@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,10 +26,8 @@
             </div>
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
-                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                <?php }?>
-                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                '<button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>';?>
               </div>
             </div>
           </div>
@@ -59,13 +57,13 @@
           <label id="itemCount" for="showItems"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#itemCount" data-tooltip="tooltip" aria-label="PermaLink to Content Item Count Field">&#128279;</a>':'';?>Item Count</label>
           <div class="form-row">
             <input class="textinput" id="showItems" data-dbid="1" data-dbt="config" data-dbc="showItems" type="text" value="<?=$config['showItems'];?>" placeholder="Enter Item Count...">
-            <button class="save" id="saveshowItems" data-dbid="showItems" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="saveshowItems" data-dbid="showItems" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <small class="form-text text-muted">'0' to Disable and display all items.</small>
           <label id="searchItemCount" for="searchItems"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#searchItemCount" data-tooltip="tooltip" aria-label="PermaLink to Search Item Count Field">&#128279;</a>':'';?>Search Items Count</label>
           <div class="form-row">
             <input class="textinput" id="searchItems" data-dbid="1" data-dbt="config" data-dbc="searchItems" type="text" value="<?=$config['searchItems'];?>" placeholder="Enter Search Items Count...">
-            <button class="save" id="savesearchItems" data-dbid="searchItems" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesearchItems" data-dbid="searchItems" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <small class="form-text text-muted">'0' to Default to 10 items.</small>
           <div class="row mt-3">
@@ -76,42 +74,42 @@
           <label id="saleHeadingValentineField" for="saleHeadingvalentine"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingValentineField" data-tooltip="tooltip" aria-label="PermaLink to Valentine Sale Heading Field">&#128279;</a>':'';?>Valentine Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingvalentine" data-dbid="1" data-dbt="config" data-dbc="saleHeadingvalentine" type="text" value="<?=$config['saleHeadingvalentine'];?>" placeholder="Enter Valentine Sale Heading...">
-            <button class="save" id="savesaleHeadingvalentine" data-dbid="saleHeadingvalentine" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingvalentine" data-dbid="saleHeadingvalentine" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingEasterField" for="saleHeadingeaster"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingEasterField" data-tooltip="tooltip" aria-label="PermaLink to Easter Sale Heading Field">&#128279;</a>':'';?>Easter Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingeaster" data-dbid="1" data-dbt="config" data-dbc="saleHeadingeaster" type="text" value="<?=$config['saleHeadingeaster'];?>" placeholder="Enter Easter Sale Heading...">
-            <button class="save" id="savesaleHeadingeaster" data-dbid="saleHeadingeaster" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingeaster" data-dbid="saleHeadingeaster" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingMothersDayField" for="saleHeadingmothersday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingMothersDayField" data-tooltip="tooltip" aria-label="PermaLink to Mother\'s Day Sale Heading Field">&#128279;</a>':'';?>Mother's Day Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingmothersday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingmothersday" type="text" value="<?=$config['saleHeadingmothersday'];?>" placeholder="Enter Mother's Day Sale Heading...">
-            <button class="save" id="savesaleHeadingmothersday" data-dbid="saleHeadingmothersday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingmothersday" data-dbid="saleHeadingmothersday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingFathersDayField" for="saleHeadingfathersday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingFathersDayField" data-tooltip="tooltip" aria-label="PermaLink to Father\'s Day Sale Heading Field">&#128279;</a>':'';?>Father's Day Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingfathersday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingfathersday" type="text" value="<?=$config['saleHeadingfathersday'];?>" placeholder="Enter Father's Day Sale Heading...">
-            <button class="save" id="savesaleHeadingfathersday" data-dbid="saleHeadingfathersday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingfathersday" data-dbid="saleHeadingfathersday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingBlackFridayField" for="saleHeadingblackfriday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingBlackFridayField" data-tooltip="tooltip" aria-label="PermaLink to Black Friday Sale Heading Field">&#128279;</a>':'';?>Black Friday Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingblackfriday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingblackfriday" type="text" value="<?=$config['saleHeadingblackfriday'];?>" placeholder="Enter Black Friday Sale Heading...">
-            <button class="save" id="savesaleHeadingblackfriday" data-dbid="saleHeadingblackfriday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingblackfriday" data-dbid="saleHeadingblackfriday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingHalloweenField" for="saleHeadinghalloween"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingHalloweenField" data-tooltip="tooltip" aria-label="PermaLink to Halloween Sale Heading Field">&#128279;</a>':'';?>Halloween Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadinghalloween" data-dbid="1" data-dbt="config" data-dbc="saleHeadinghalloween" type="text" value="<?=$config['saleHeadinghalloween'];?>" placeholder="Enter Halloween Sale Heading...">
-            <button class="save" id="savesaleHeadinghalloween" data-dbid="saleHeadinghalloween" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadinghalloween" data-dbid="saleHeadinghalloween" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingSmallBusinessDayField" for="saleHeadingsmallbusinessday"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingSmallBusinessDayField" data-tooltip="tooltip" aria-label="PermaLink to Small Business Day Sale Heading Field">&#128279;</a>':'';?>Small Business Day Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingsmallbusinessday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingsmallbusinessday" type="text" value="<?=$config['saleHeadingsmallbusinessday'];?>" placeholder="Enter Small Business Day Sale Heading...">
-            <button class="save" id="savesaleHeadingsmallbusinessday" data-dbid="saleHeadingsmallbusinessday" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingsmallbusinessday" data-dbid="saleHeadingsmallbusinessday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="saleHeadingChristmasField" for="saleHeadingchristmas"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingChristmasField" data-tooltip="tooltip" aria-label="PermaLink to Christmas Sale Heading Field">&#128279;</a>':'';?>Christmas Sale Heading</label>
           <div class="form-row">
             <input class="textinput" id="saleHeadingchristmas" data-dbid="1" data-dbt="config" data-dbc="saleHeadingchristmas" type="text" value="<?=$config['saleHeadingchristmas'];?>" placeholder="Enter Christmas Sale Heading...">
-            <button class="save" id="savesaleHeadingchristmas" data-dbid="saleHeadingchristmas" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savesaleHeadingchristmas" data-dbid="saleHeadingchristmas" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <div class="row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" data-tooltip="tooltip" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
@@ -247,7 +245,7 @@
           <label id="templateQTYField" for="templateQTY"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#templateQTYField" data-tooltip="tooltip" aria-label="PermaLink to Item Template Quantity Field">&#128279;</a>':'';?>Item Template Quantity</label>
           <div class="form-row">
             <input class="textinput" id="templateQTY" data-dbid="1" data-dbt="config" data-dbc="templateQTY" type="text" value="<?=$config['templateQTY'];?>" placeholder="Enter Template Item Quantity...">
-            <button class="save" id="savetemplateQTY" data-dbid="templateQTY" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savetemplateQTY" data-dbid="templateQTY" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <small class="form-text text-muted">'0' to Disable.</small>
           <section class="content overflow-visible theme-chooser" id="templates">
@@ -265,24 +263,24 @@
                 <p class="small"><small>This selection uses the item template in the theme file.</small></p>
               </div>
             </article>
-  <?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
-  $st->execute();
-  while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card overflow-visible theme<?=$rt['id']==$config['templateID']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
-              <figure class="card-image position-relative overflow-visible">
-                <?=$rt['image'];?>
-                <div class="image-toolbar overflow-visible">
-                  <i class="i icon enable text-white i-4x pt-2 pr-1">approve</i>
+            <?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
+            $st->execute();
+            while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
+              <article class="card overflow-visible theme<?=$rt['id']==$config['templateID']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
+                <figure class="card-image position-relative overflow-visible">
+                  <?=$rt['image'];?>
+                  <div class="image-toolbar overflow-visible">
+                    <i class="i icon enable text-white i-4x pt-2 pr-1">approve</i>
+                  </div>
+                </figure>
+                <div class="card-header line-clamp">
+                  <?=$rt['title'];?>
                 </div>
-              </figure>
-              <div class="card-header line-clamp">
-                <?=$rt['title'];?>
-              </div>
-              <div class="card-body no-clamp">
-                <p class="small"><small><?=$rt['notes'];?></small></p>
-              </div>
-            </article>
-  <?php }?>
+                <div class="card-body no-clamp">
+                  <p class="small"><small><?=$rt['notes'];?></small></p>
+                </div>
+              </article>
+            <?php }?>
           </section>
           <script>
             $(".theme-chooser").not(".disabled").find("figure.card-image").on("click",function(){

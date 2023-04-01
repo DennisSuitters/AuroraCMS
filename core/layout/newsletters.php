@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,8 +18,10 @@ if(isset($args[0])&&$args[0]=='add'){
   $args[0]='edit';
   echo'<script>history.replaceState("","","'.URL.$settings['system']['admin'].'/newsletters/edit/'.$args[1].'");</script>';
 }
-if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_newsletters.php';
-elseif(isset($args[0])&&$args[0]=='edit')require'core/layout/edit_newsletters.php';
+if(isset($args[0])&&$args[0]=='settings')
+  require'core/layout/set_newsletters.php';
+elseif(isset($args[0])&&$args[0]=='edit')
+  require'core/layout/edit_newsletters.php';
 else{
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ORDER BY `ti` DESC, `title` ASC");
   $s->execute([':contentType'=>'newsletters']);?>
@@ -37,8 +39,8 @@ else{
               </div>
               <div class="col-12 col-sm-2 text-right">
                 <div class="btn-group">
-                  <?=$user['options'][7]==1?'<a class="btn" href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" data-tooltip="left" aria-label="Newsletters Settings"><i class="i">settings</i></a>':'';?>
-                  <?=$user['options'][0]==1?'<a class="btn add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'';?>
+                  <?=($user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/newsletters/settings" role="button" data-tooltip="left" aria-label="Newsletters Settings"><i class="i">settings</i></a>':'').
+                  ($user['options'][0]==1?'<a class="add" href="'.URL.$settings['system']['admin'].'/newsletters/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'');?>
                 </div>
               </div>
             </div>
@@ -69,12 +71,12 @@ else{
                       <td class="align-middle" id="controls_<?=$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar">
                           <div class="btn-group" role="group">
-                            <?=$user['options'][1]==1?'<button class="btn email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);"><i class="i">email-send</i></button>':'';?>
-                            <a class="btn"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Edit"':' data-tooltip="tooltip" aria-label="View"';?> href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
+                            <?=$user['options'][1]==1?'<button class="email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);"><i class="i">email-send</i></button>':'';?>
+                            <a<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Edit"':' data-tooltip="tooltip" aria-label="View"';?> href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>" role="button"><?=$user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>';?></a>
                             <?php if($user['options'][0]==1){?>
-                              <button class="btn<?=$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');" data-tooltip="tooltip" aria-label="Restore"><i class="i">untrash</i></button>
-                              <button class="btn trash<?=$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                              <button class="btn purge trash<?=$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?=$r['id'];?>','content');" data-tooltip="tooltip" aria-label="Purge"><i class="i">purge</i></button>
+                              <button class="<?=$r['status']!='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');" data-tooltip="tooltip" aria-label="Restore"><i class="i">untrash</i></button>
+                              <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                              <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" onclick="purge('<?=$r['id'];?>','content');" data-tooltip="tooltip" aria-label="Purge"><i class="i">purge</i></button>
                             <?php }?>
                           </div>
                         </div>
@@ -105,13 +107,15 @@ else{
                   <?php }?>
                 </tbody>
               </table>
-              <form target="sp" method="post" action="core/add_subscribers.php">
-                <div class="form-row">
-                  <div class="input-text">Email/s</div>
-                  <input id="eml" name="emails" type="text" value="" placeholder="Enter Email/s (Comma Seperated)...">
-                  <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add Subscriber/s"><i class="i">add</i></button>
-                </div>
-              </form>
+              <?php if($user['options'][0]==1){?>
+                <form target="sp" method="post" action="core/add_subscribers.php">
+                  <div class="form-row">
+                    <div class="input-text">Email/s</div>
+                    <input id="eml" name="emails" type="text" value="" placeholder="Enter Email/s (Comma Seperated)...">
+                    <button class="add" type="submit" role="button" data-tooltip="tooltip" aria-label="Add Subscriber/s"><i class="i">add</i></button>
+                  </div>
+                </form>
+              <?php }?>
               <table class="table-zebra">
                 <thead>
                   <tr>

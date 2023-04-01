@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -82,7 +82,7 @@ if(stristr($html,'<items')){
 	]);
   $output='';
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    if(!file_exists('media/sm/'.basename($r['file'])))continue;
+//    if(!file_exists('media/sm/'.basename($r['file'])))continue;
     $items=$gal;
 		$caption=$r['fileALT']!=''?$r['fileALT']:ucwords(str_replace('-',' ',basename($r['file'])));
     $items=preg_replace([
@@ -96,12 +96,12 @@ if(stristr($html,'<items')){
       '/<print media=[\"\']?attributionImageName[\"\']?>/',
       '/<print media=[\"\']?attributionImageURL[\"\']?>/'
     ],[
-			' srcset="'.
+			(stristr($r['file'],'unsplash')?' srcset="'.
 				($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 				($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':NOIMAGE.' 600w,').
-				($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px"',
-      'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w,'.(file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').(file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w':''),
-      'media/sm/'.basename($r['file']),
+				($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px"':''),
+			(stristr($r['file'],'unsplash')?'':'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w,'.(file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').(file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w':'')),
+      $r['thumb']!=''?$r['thumb']:$r['file'],
       $r['file'],
 			htmlspecialchars($caption,ENT_QUOTES,'UTF-8'),
       htmlspecialchars($r['title'],ENT_QUOTES,'UTF-8'),

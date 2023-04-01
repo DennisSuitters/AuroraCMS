@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -57,25 +57,25 @@ $ss->execute([
   ':tie'=>$tie
 ]);
 if($ss->rowCount()>0){?>
-<div class="item resize m-0 p-0 col-12 col-sm-<?=$rw['width'];?>" data-dbid="<?=$rw['id'];?>" data-resizeMin="2" resizeMax="12" id="l_<?=$rw['id'];?>">
+<div class="item resize m-0 p-0 col-12 col-sm-<?=$rw['width_sm'];?> col-md-<?=$rw['width_md'];?> col-lg-<?=$rw['width_lg'];?> col-xl-<?=$rw['width_xl'];?> col-xxl-<?=$rw['width_xxl'];?>" data-dbid="<?=$rw['id'];?>" data-smmin="6" data-smmax="12" data-mdmin="3" data-mdmax="12" data-lgmin="1" data-lgmax="12" data-xlmin="5" data-xlmax="12" data-xxlmin="3" data-xxlmax="12" id="l_<?=$rw['id'];?>">
   <div class="alert widget <?=$sale['class'];?> m-3 p-0">
     <div class="toolbar px-2 py-1 handle">
-      <?=$sale['title']!=''?$sale['title']:$rw['title'];?>
+      <?=$sale['title']!=''?$sale['title']:$rw['title'];?> | salecontent.php
       <div class="btn-group">
         <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
       </div>
     </div>
     <div class="row p-2">
-<?php while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-      <div class="card col-6 col-sm-2-5 m-0 m-sm-3">
-        <figure class="card-image">
-          <img src="<?=($rs['thumb']!=''?$rs['thumb']:NOIMAGE);?>">
-        </figure>
-        <h2 class="card-title text-center py-3 noclamp">
-          <a href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$rs['id'];?>" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><?=$rs['title'];?></a>
-        </h2>
-      </div>
-<?php }?>
+      <?php while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+        <div class="card col-6 col-sm-2-5 m-0 m-sm-3">
+          <figure class="card-image">
+            <img src="<?=($rs['thumb']!=''?$rs['thumb']:NOIMAGE);?>">
+          </figure>
+          <h2 class="card-title text-center py-3 noclamp">
+            <a href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$rs['id'];?>" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><?=$rs['title'];?></a>
+          </h2>
+        </div>
+      <?php }?>
     </div>
   </div>
 </div>

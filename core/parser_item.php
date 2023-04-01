@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -24,7 +24,7 @@ if($r['rank']-1 < $_SESSION['rank'])
   $skip=false;
 else
   $skip=true;
-if($r['options'][2]==1){
+if(isset($r['options'][2])&&$r['options'][2]==1){
   if($_SESSION['rank']>399)
     $skip=false;
   elseif($_SESSION['rank']==$r['rank'])
@@ -264,27 +264,25 @@ if($skip==false){
   	}
   	if($page['cover']!=''&&$coverHTML==''){
   		$cover=basename($page['cover']);
-  		if(file_exists('media/'.$cover)){
-  			$coverHTML=(file_exists('media/'.$cover)?'<img srcset="'.
-  				(file_exists('media/lg/'.basename($cover))?'media/lg/'.$cover.' 1000w,':'').
-  				(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
-  				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
-  				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
-  			'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" src="media/'.$cover.'" alt="'.$page['title'].' Cover Image">'.
-  				($page['attributionImageTitle']!=''?
-  					'<figcaption>'.
-  						$page['attributionImageTitle'].
-  						($page['attributionImageName']!=''?
-  							' by '.
-  								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'" rel="noopener noreferrer">':'').
-  								$page['attributionImageName'].
-  								($page['attributionImageURL']!=''?'</a>':'')
-  						:'').
-  					'</figcaption>'
-  				:'')
-  			:'');
-  			$iscover=true;
-  		}
+			$coverHTML=($page['cover']?'<img srcset="'.
+				(file_exists('media/lg/'.basename($cover))?'media/lg/'.$cover.' 1000w,':'').
+				(file_exists('media/md/'.basename($cover))?'media/md/'.$cover.' 600w,':'').
+				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' 400w,':'').
+				(file_exists('media/sm/'.basename($cover))?'media/sm/'.$cover.' '.$config['mediaMaxWidthThumb'].'w':'').
+			'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" src="'.$page['cover'].'" alt="'.$page['title'].' Cover Image">'.
+				($page['attributionImageTitle']!=''?
+					'<figcaption>'.
+						$page['attributionImageTitle'].
+						($page['attributionImageName']!=''?
+							' by '.
+								($page['attributionImageURL']!=''?'<a target="_blank" href="'.$page['attributionImageURL'].'" rel="noopener noreferrer">':'').
+								$page['attributionImageName'].
+								($page['attributionImageURL']!=''?'</a>':'')
+						:'').(stristr($page['attributionImageURL'],'unsplash.com')?' on <a target="_blank" href="https://unsplash.com/?utm_source='.$config['unsplash_appname'].'&utm_medium=referral">Unsplash</a>':'').
+					'</figcaption>'
+				:'')
+			:'');
+			$iscover=true;
   	}
   	$html=preg_replace([
   		$coverHTML==''?'~<cover>.*?</cover>~is':'/<[\/]?cover>/',
@@ -338,9 +336,9 @@ if($skip==false){
       '~<image>.*?<\/image>~is',
       '~<videoviewer>.*?<\/videoviewer>~is'
     ],'',$html);
-    if($r['fileURL'])
+    if($r['fileURL']!='')
       $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-    elseif($r['file']&&file_exists('media/'.basename($r['file'])))
+    elseif($r['file']!='')
       $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['file'],$html);
     else
       $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',NOIMAGE,$html);
@@ -358,18 +356,7 @@ if($skip==false){
     $html=preg_replace('~<videoviewer>.*?<\/videoviewer>~is','',$html);
     if($r['fileURL'])
       $html=preg_replace('/<print content=[\"\']?image[\"\']?>/',$r['fileURL'],$html);
-    elseif($r['file']!=''&&file_exists('media/'.basename($r['file']))){
-      $caption='';
-      if($r['attributionImageTitle']!='')
-        $caption.=$r['attributionImageTitle'];
-      if($r['attributionImageName']!=''){
-        $caption.=$caption!=''?' by ':'';
-        if($r['attributionImageURL']!='')
-          $caption.='<a href="'.$r['attributionImageURL'].'" target="_blank" rel="noopener noreferrer">';
-        $caption.=$r['attributionImageName'];
-        if($r['attributionImageURL']!='')
-          $caption.='</a>';
-      }
+    elseif($r['file']!=''){
       $html=preg_replace([
         '/<[\/]?image>/',
         '/<print content=[\"\']?srcset[\"\']?>/',
@@ -385,8 +372,10 @@ if($skip==false){
           ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file'].' 1000w,'):'').
           ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file'].' 600w,'):'').
           ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file'].' 400w'):'').'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" ',
-        ($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):NOIMAGE),
-        $caption,
+        $r['file']!=''?$r['file']:NOIMAGE,
+        ($r['attributionImageTitle']!=''?$r['attributionImageTitle']:'').
+          ($r['attributionImageName']!=''?' by '.($r['attributionImageURL']!=''?'<a href="'.$r['attributionImageURL'].'">'.$r['attributionImageName'].'</a>':$r['attributionImageName']).
+          (stristr($r['attributionImageURL'],'unsplash.com')?' on <a href="https://unsplash.com/?utm_source='.$config['unsplash_appname'].'&utm_medium=referral">Unsplash</a>':''):''),
         htmlspecialchars($r['fileALT']!=''?$r['fileALT']:$r['title'],ENT_QUOTES,'UTF-8'),
         $r['rank']>300?ucwords(str_replace('-',' ',rank($r['rank']))):'',
         rank($r['rank'])
@@ -421,7 +410,7 @@ if($skip==false){
         $mediaoutput='';
         while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
           $mediaitems=$mediaitem;
-          if(!file_exists('media/sm/'.basename($rm['file'])))continue;
+          if($rm['file']=='')continue;
           $rm['file']=rawurldecode($rm['file']);
           $mediaitems=preg_replace([
             '/<print media=[\"\']?id[\"\']?>/',
@@ -442,8 +431,8 @@ if($skip==false){
               ($rm['file']!=''&&file_exists('media/lg/'.basename($rm['file']))?'media/lg/'.basename($rm['file']).' 1000w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
               ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':''),
-            ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']):NOIMAGESM),
-            $rm['file'],
+            $rm['thumb']!=''?$rm['thumb']:NOIMAGESM,
+            $rm['file']!=''?$rm['file']:NOIMAGE,
             htmlspecialchars(($rm['title']!=''?$rm['title']:$r['title'].': Image '.$rm['id']),ENT_QUOTES,'UTF-8'),
             htmlspecialchars(($rm['fileALT']!=''?$rm['fileALT']:basename($rm['file'])),ENT_QUOTES,'UTF-8'),
             isset($rm['title'])&&$rm['title']!=''?htmlspecialchars(($rm['title']!=''?basename($rm['title']):basename($rm['file'])),ENT_QUOTES,'UTF-8'):basename($rm['file'])
@@ -626,7 +615,7 @@ if($skip==false){
         if(isset($rb['url']))
           $brand=$rb['url']!=''?'<a href="'.$rb['url'].'">':'';
         if(isset($rb['title']))
-          $brand.=$rb['icon']==''?$rb['title']:'<img src="media/'.basename($rb['icon']).'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
+          $brand.=$rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">';
         if(isset($rb['url']))
           $brand.=$rb['url']!=''?'</a>':'';
         $item=preg_replace([
@@ -658,10 +647,10 @@ if($skip==false){
 
     if(stristr($item,'<map>')){
       $item=preg_replace([
-        ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
+        (isset($r['options'][7])&&$r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'/<\/map>/':'~<map>.*?<\/map>~is'),
         '/<map>/'
       ],[
-        ($r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css"><script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$r['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$r['geo_position'].'],{draggable:false}).addTo(map);'.($r['title']==''?'':'var popupHtml=`<strong>'.$r['title'].'</strong>'.($r['address']==''?'':'<br><small>'.$r['address'].'<br>'.$r['suburb'].', '.$r['city'].', '.$r['state'].', '.$r['postcode'].',<br>'.$r['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':''),
+        (isset($r['options'][7])&&$r['options'][7]==1&&$r['geo_position']!=''&&$config['mapapikey']!=''?'<link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css"><script src="core/js/leaflet/leaflet.js"></script><script>var map=L.map("map").setView(['.$r['geo_position'].'],13);L.tileLayer("https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token='.$config['mapapikey'].'",{attribution:`Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>`,maxZoom:18,id:"mapbox/streets-v11",tileSize:512,zoomOffset:-1,accessToken:`'.$config['mapapikey'].'`}).addTo(map);var marker=L.marker(['.$r['geo_position'].'],{draggable:false}).addTo(map);'.($r['title']==''?'':'var popupHtml=`<strong>'.$r['title'].'</strong>'.($r['address']==''?'':'<br><small>'.$r['address'].'<br>'.$r['suburb'].', '.$r['city'].', '.$r['state'].', '.$r['postcode'].',<br>'.$r['country'].'</small>').'`;marker.bindPopup(popupHtml,{closeButton:false,closeOnClick:false,closeOnEscapeKey:false,autoClose:false}).openPopup();').'marker.off("click");</script>':''),
         ''
       ],$item);
     }
@@ -680,7 +669,7 @@ if($skip==false){
         '"alternativeHeadline":"'.$r['title'].'",'.
         '"image":{'.
           '"@type":"ImageObject",'.
-          '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
+          '"url":"'.($r['file']!=''?$r['file']:FAVICON).'"'.
         '},'.
         '"editor":"'.($ua['name']!=''?$ua['name']:$ua['username']).'",'.
         '"genre":"'.($r['category_1']!=''?$r['category_1']:'None').($r['category_2']!=''?' > '.$r['category_2']:'').($r['category_3']!=''?' > '.$r['category_3']:'').($r['category_4']!=''?' > '.$r['category_4']:'').'",'.
@@ -713,7 +702,7 @@ if($skip==false){
         '"name":"'.$r['title'].'",'.
         '"image":{'.
           '"@type":"ImageObject",'.
-          '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
+          '"url":"'.($r['file']!=''?$r['file']:FAVICON).'"'.
         '},'.
         '"description":"'.escaper($seoDescription!=''?$seoDescription:strip_tags($r['notes'])).'",'.
         '"mpn":"'.($r['barcode']==''?$r['id']:$r['barcode']).'",'.
@@ -805,7 +794,7 @@ if($skip==false){
         '"alternativeHeadline":"'.$r['title'].'",'.
         '"image":{'.
           '"@type":"ImageObject",'.
-          '"url":"'.($r['file']!=''&&file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'"'.
+          '"url":"'.($r['file']!=''?$r['file']:FAVICON).'"'.
         '},'.
         '"author":"'.(isset($ua['name'])&&$ua['name']!=''?$ua['name']:(isset($ua['username'])&&$ua['username']!=''?$ua['username']:'')).'",'.
         '"genre":"'.($r['category_1']!=''?$r['category_1']:'None').($r['category_2']!=''?' > '.$r['category_2']:'').($r['category_3']!=''?' > '.$r['category_3']:'').($r['category_4']!=''?' > '.$r['category_4']:'').'",'.
@@ -877,7 +866,7 @@ if($skip==false){
             if($si->rowCount()>0){
               $ri=$si->fetch(PDO::FETCH_ASSOC);
               $ri['thumb']=rawurldecode($ri['thumb']);
-              if($ri['thumb']==''||!file_exists('media/sm/'.basename($ri['thumb'])))$ri['thumb']=NOIMAGESM;
+              if($ri['thumb']=='')$ri['thumb']=NOIMAGESM;
               $relatedQuantity='';
               if(isset($ri['quantity'])&&is_numeric($ri['quantity'])&&$ri['quantity']!=0)
                 $relatedQuantity.=$ri['stockStatus']=='quantity'?($ri['quantity']==0?'<div class="quantity">Out Of Stock</div>':'<div class="quantity">'.htmlspecialchars($ri['quantity'],ENT_QUOTES,'UTF-8').' <span class="quantity-text">In Stock</span></div>'):($ri['stockStatus']=='none'?'':'<div class="quantity">'.ucwords($ri['stockStatus']).'</div>');
@@ -892,12 +881,12 @@ if($skip==false){
                 '/<print related=[\"\']?rank[\'"\']?>/',
                 '/<print related=[\"\']?cssrank[\'"\']?>/',
               ],[
-                (isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/':''),
+                isset($ri['contentType'])?URL.$ri['contentType'].'/'.urlencode(str_replace(' ','-',strtolower($ri['urlSlug']))).'/':'',
                 (isset($ri['file'])?'srcset="'.($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':'').($ri['file']!=''&&file_exists('media/md/'.basename($ri['thumb']))?'media/md/'.basename($ri['thumb']).' 600w,':'').($ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ':''),
-                (isset($ri['file'])&&$ri['file']!=''&&file_exists('media/sm/'.basename($ri['thumb']))?'media/sm/'.basename($ri['thumb']):NOIMAGESM),
-                (isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):''),
-                (isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):''),
-                (isset($ri['contentType'])?$ri['contentType']:''),
+                isset($ri['thumb'])&&$ri['thumb']!=''?$ri['thumb']:NOIMAGESM,
+                isset($ri['fileALT'])?htmlspecialchars($ri['fileALT']!=''?$ri['fileALT']:$ri['title'],ENT_QUOTES,'UTF-8'):'',
+                isset($ri['title'])?htmlspecialchars($ri['title'],ENT_QUOTES,'UTF-8'):'',
+                isset($ri['contentType'])?$ri['contentType']:'',
                 $relatedQuantity,
                 $ri['rank']>300?ucwords(str_replace('-',' ',rank($ri['rank']))):'',
                 rank($ri['rank'])
@@ -959,7 +948,8 @@ if($skip==false){
             '"@type":"Review",'.
             '"itemReviewed":{'.
               '"@type":"Product",'.
-              '"image":"'.(file_exists('media/'.basename($r['file']))?'media/'.basename($r['file']):FAVICON).'","name":"'.$r['title'].'"'.
+              '"image":"'.($r['file']!=''?$r['file']:FAVICON).'",'.
+              '"name":"'.$r['title'].'"'.
             '},'.
             '"reviewRating":{'.
               '"@type":"Rating",'.

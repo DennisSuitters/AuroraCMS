@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,9 +18,10 @@ require'../projecthoneypot/class.projecthoneypot.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $idh=time();
 echo'<div class="fancybox-ajax">'.
-      '<h6 class="bg-dark p-2">Project Honey Pot IP Checker</h6>'.
-      '<div id="phpviewer'.$idh.'">';
-if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
+  '<h6 class="bg-dark p-2">Project Honey Pot IP Checker</h6>'.
+  '<div id="phpviewer'.$idh.'">';
+if(!isset($config['php_APIkey'])||$config['php_APIkey']=='')
+  echo'<div class="alert alert-info" role="alert">The Project Honey Pot API Key has not been entered in the Security Settings.</div>';
 else{
   $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
   $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
@@ -46,26 +47,26 @@ else{
       $sql->execute([':ip'=>$r['ip']]);
       $row=$sql->fetch(PDO::FETCH_ASSOC);
       if($row['cnt']<1){?>
-  <div class="btn-group pull-right" id="phpbuttons" role="group">
-    <form id="blacklist<?=$idh;?>" method="post" action="core/add_blacklist.php">
-      <input name="id" type="hidden" value="<?=$id;?>">
-      <input name="t" type="hidden" value="<?=$t;?>">
-      <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><i class="i">security</i></button>
-    </form>
-  </div>
-  </div>
-  <script>
-    $("#blacklist<?=$idh;?>").submit(function(){
-        $.post($(this).attr("action"),$(this).serialize(),function(data){
-          $('#phpviewer<?=$idh;?>').html(data);
+        <div class="btn-group pull-right" id="phpbuttons" role="group">
+          <form id="blacklist<?=$idh;?>" method="post" action="core/add_blacklist.php">
+            <input name="id" type="hidden" value="<?=$id;?>">
+            <input name="t" type="hidden" value="<?=$t;?>">
+            <button data-tooltip="tooltip" aria-label="Add Oringinators IP to Blacklist"><i class="i">security</i></button>
+          </form>
+        </div>
+      </div>
+      <script>
+        $("#blacklist<?=$idh;?>").submit(function(){
+          $.post($(this).attr("action"),$(this).serialize(),function(data){
+            $('#phpviewer<?=$idh;?>').html(data);
+          });
+          return false;
         });
-        return false;
-    });
-<?php if($config['options'][4]==1){?>
-        $('[data-tooltip="tooltip"]').tooltip();
-<?php }?>
-  </script>
-<?php }
+        <?php if($config['options'][4]==1){?>
+          $('[data-tooltip="tooltip"]').tooltip();
+        <?php }?>
+      </script>
+    <?php }
     }else echo'The IP Recorded isn\'t valid.';
   }else echo'No Results Found.';
 }

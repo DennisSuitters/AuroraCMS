@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -30,10 +30,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
               <div class="col-12 col-sm-6 text-right">
                 <div class="btn-group">
-                  <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                    <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                  <?php }?>
-                  <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>
+                  <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                  ($user['options'][1]==1?'<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
                 </div>
               </div>
             </div>
@@ -51,7 +49,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <div class="form-row">
                 <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="title" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?
-                '<button class="save" id="savetitle" data-dbid="title" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                '<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
               <div class="form-row mt-3">
                 <label id="moduleTime" for="tti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleTime" data-tooltip="tooltip" aria-label="PermaLink to Module Time Field">&#128279;</a>':'';?>Time to complete</label>
@@ -79,93 +77,108 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
               <div class="form-row">
                 <input class="textinput" id="caption" type="text" value="<?=$r['caption'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="caption" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=$user['options'][1]==1?
-                '<button class="save" id="savecaption" data-dbid="caption" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                <?=$user['options'][1]==1?'<button class="save" id="savecaption" data-dbid="caption" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
               <div class="row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/edit/'.$r['id'].'#summernote" data-tooltip="tooltip" aria-label="PermaLink to Course Notes">&#128279;</a>':'';?>
               </div>
-              <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="notes"></div>
-              <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
-                <input name="id" type="hidden" value="<?=$r['id'];?>">
-                <input name="t" type="hidden" value="modules">
-                <input name="c" type="hidden" value="notes">
-                <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
-              </form>
+              <?php if($user['options'][1]==1){?>
+                <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="notes"></div>
+                <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
+                  <input name="id" type="hidden" value="<?=$r['id'];?>">
+                  <input name="t" type="hidden" value="modules">
+                  <input name="c" type="hidden" value="notes">
+                  <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
+                </form>
+              <?php }else{ ?>
+                <div class="note-admin">
+                  <div class="note-editor note-frame">
+                    <div class="note-editing-area">
+                      <div class="note-viewport-area">
+                        <div class="note-editable">
+                          <?= rawurldecode($r['notes']);?>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <?php }?>
             </div>
             <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
-              <div class="form-row">
-                <label id="moduleQuestion" for="question"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleQuestion" data-tooltip="tooltip" aria-label="PermaLink to Module Question Field">&#128279;</a>':'';?>Question</label>
-              </div>
-              <div class="form-row">
-                <input class="textinput" id="question" type="text" value="<?=$r['question'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="question" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=$user['options'][1]==1?
-                '<button class="save" id="savequestion" data-dbid="question" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-              </div>
-              <legend class="mt-3">Multiple-Choice Answers</legend>
-              <form class="form-row" target="sp" method="post" action="core/add_question.php">
-                <input name="rid" type="hidden" value="<?=$r['id'];?>">
-                <select name="ct">
-                  <option value="radio">Single Answer Option (Radio)</option>
-                  <option value="checkbox">Multuple Answers Option (Checkbox)</option>
-                </select>
-                <div class="input-text">Correct Choice <input type="checkbox" name="a" value="1"></div>
-                <input type="text" name="t" value="" placeholder="Enter Answer Selection...">
-                <button class="add" data-tooltip="tooltip" aria-label="Add Answer" type="submit"><i class="i">add</i></button>
-              </form>
-              <hr>
+              <?php if($user['options'][1]==1){?>
+                <div class="form-row">
+                  <label id="moduleQuestion" for="question"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleQuestion" data-tooltip="tooltip" aria-label="PermaLink to Module Question Field">&#128279;</a>':'';?>Question</label>
+                </div>
+                <div class="form-row">
+                  <div class="input-text" data-el="question" contenteditable="<?=$user['options'][1]==1?'true':'false';?>"><?=$r['question'];?></div>
+                  <input class="textinput d-none" id="question" type="text" value="<?=$r['question'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="question" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
+                  <?=$user['options'][1]==1?'<button class="save" id="savequestion" data-dbid="question" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                </div>
+                <legend class="mt-3">Multiple-Choice Answers</legend>
+                <form class="form-row" target="sp" method="post" action="core/add_question.php">
+                  <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                  <select name="ct">
+                    <option value="radio">Single Answer Option (Radio)</option>
+                    <option value="checkbox">Multuple Answers Option (Checkbox)</option>
+                  </select>
+                  <div class="input-text">Correct Choice <input type="checkbox" name="a" value="1"></div>
+                  <input type="text" name="t" value="" placeholder="Enter Answer Selection...">
+                  <button class="add" data-tooltip="tooltip" aria-label="Add Answer" type="submit"><i class="i">add</i></button>
+                </form>
+                <hr>
+              <?php }?>
               <ol id="questions" class="modules-list">
-<?php $sq=$db->prepare("SELECT * FROM `".$prefix."moduleQuestions` WHERE `rid`=:id ORDER BY `ord` ASC, `title` ASC");
-$sq->execute([':id'=>$r['id']]);
-while($rq=$sq->fetch(PDO::FETCH_ASSOC)){?>
-                <li class="question mb-2" id="questions_<?=$rq['id'];?>">
-                  <div class="form-row">
-                    <div class="input-text"><?= ucwords($rq['type']);?></div>
-                    <div class="input-text">Choice <input type="checkbox"<?=($rq['check_answer']==1?' checked':'');?> disabled></div>
-                    <div class="input-text">Answer:</div>
-                    <input type="text" value="<?=$rq['title'];?>" readonly>
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rq['id'];?>','module_questions');"><i class="i">trash</i></button>
-                    <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;"><i class="i">drag</i></div>
-                  </div>
-                </li>
-<?php }?>
+                <?php $sq=$db->prepare("SELECT * FROM `".$prefix."moduleQuestions` WHERE `rid`=:id ORDER BY `ord` ASC, `title` ASC");
+                $sq->execute([':id'=>$r['id']]);
+                while($rq=$sq->fetch(PDO::FETCH_ASSOC)){?>
+                  <li class="question mb-2" id="questions_<?=$rq['id'];?>">
+                    <div class="form-row">
+                      <div class="input-text"><?= ucwords($rq['type']);?></div>
+                      <div class="input-text">Choice <input type="checkbox"<?=($rq['check_answer']==1?' checked':'');?> disabled></div>
+                      <div class="input-text">Answer:</div>
+                      <input type="text" value="<?=$rq['title'];?>" readonly>
+                      <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rq['id'];?>','module_questions');"><i class="i">trash</i></button>
+                      <div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;"><i class="i">drag</i></div>
+                    </div>
+                  </li>
+                <?php }?>
               </ol>
             </div>
-<?php if($user['options'][1]==1){?>
-            <script>
-              $('#questions').sortable({
-                items:".question",
-                placeholder:".ghost",
-                helper:fixWidthHelper,
-                update:function(e,ui){
-                  var order=$("#questions").sortable("serialize");
-                  $.ajax({
-                    type:"POST",
-                    dataType:"json",
-                    url:"core/reorderquestions.php",
-                    data:order
+            <?php if($user['options'][1]==1){?>
+              <script>
+                $('#questions').sortable({
+                  items:".question",
+                  placeholder:"ghost",
+                  helper:fixWidthHelper,
+                  update:function(e,ui){
+                    var order=$("#questions").sortable("serialize");
+                    $.ajax({
+                      type:"POST",
+                      dataType:"json",
+                      url:"core/reorderquestions.php",
+                      data:order
+                    });
+                  }
+                }).disableSelection();
+                function fixWidthHelper(e,ui){
+                  ui.children().each(function(){
+                    $(this).width($(this).width());
                   });
+                  return ui;
                 }
-              }).disableSelection();
-              function fixWidthHelper(e,ui){
-                ui.children().each(function(){
-                  $(this).width($(this).width());
-                });
-                return ui;
-              }
-            </script>
-<?php }?>
+              </script>
+            <?php }?>
           </div>
         </div>
-<?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
-$sw->execute();
-if($sw->rowCount()>0){
-  echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
-  while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
-    include'core/layout/widget-'.$rw['file'];
-  }
-  echo'</div>';
-}?>
+        <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
+        $sw->execute();
+        if($sw->rowCount()>0){
+          echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
+          while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
+            include'core/layout/widget-'.$rw['file'];
+          }
+          echo'</div>';
+        }?>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

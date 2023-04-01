@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.22
+* @version    0.2.23
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -33,7 +33,7 @@
                 <th>Date</th>
                 <th>
                   <div class="btn-group float-right">
-                    <button class="btn-sm purge trash" data-tooltip="left" aria-label="Purge All" onclick="purge('0','cart');return false;"><i class="i">purge</i></button>
+                    <?=($user['options'][7]==1?'<button class="btn-sm purge" data-tooltip="left" aria-label="Purge All" onclick="purge(`0`,`cart`);return false;"><i class="i">purge</i></button>':'');?>
                   </div>
                 </th>
               </tr>
@@ -53,7 +53,7 @@
                   <td class="text-center align-middle"><?=$r['cost'];?></td>
                   <td class="text-center align-middle"><?= date($config['dateFormat'],$r['ti']);?></td>
                   <td class="align-middle">
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','cart');"><i class="i">trash</i></button>
+                    <?=($user['options'][7]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`cart`);"><i class="i">trash</i></button>':'');?>
                   </td>
                 </tr>
               <?php }?>

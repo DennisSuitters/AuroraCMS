@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -202,25 +202,25 @@ foreach($tags as$tag){
 			break;
 		case'cover':
 			if($attribute=='page'){
-				if($page['cover']!=''&&file_exists('media/'.basename($page['cover'])))
-					$parsing.='<img class="'.$class.'" src="media/'.basename($page['cover']).'">';
-				elseif($page['coverURL']!='')
+				if(isset($page['cover'])&&$page['cover']!='')
+					$parsing.='<img class="'.$class.'" src="'.$page['cover'].'">';
+				elseif(isset($page['coverURL'])&&$page['coverURL']!='')
 					$parsing.='<img class="'.$class.'" src="'.$page['coverURL'].'">';
 				else
 					$parsing.='';
 			}
 			break;
 		case'thumb':
-			if($r['thumb']!=''&&(file_exists('media/sm/'.basename($r['thumb']))))
-				$parsing.='<img src="media/sm/'.basename($r['thumb']).'" alt="'.$r['title'].'">';
-			elseif($r['file']!=''&&(file_exists('media/sm/'.basename($r['file']))))
-				$parsing.='<img src="media/sm/'.basename($r['file']).'" alt="'.$r['title'].'">';
+			if(isset($r['thumb'])&&$r['thumb']!='')
+				$parsing.='<img src="'.$r['thumb'].'" alt="'.$r['title'].'">';
+			elseif(isset($r['file'])&&$r['file']!='')
+				$parsing.='<img src="'.$r['file'].'" alt="'.$r['title'].'">';
 			else
 				$parsing.=NOIMAGESM;
 			break;
 		case'image':
 			if(isset($r['file'])&&$r['file']!='')
-				$parsing.=$r['file']!=''&&(file_exists('media/'.basename($r['file'])))?'<img class="'.$class.'" src="media/'.basename($r['file']).'" alt="'.$r['title'].'">':'';
+				$parsing.=$r['file']!=''?'<img class="'.$class.'" src="'.$r['file'].'" alt="'.$r['title'].'">':'';
 			elseif(isset($r['fileURL'])&&$r['fileURL']!='')
 				$parsing.=$r['fileURL'];
 			else
@@ -232,8 +232,8 @@ foreach($tags as$tag){
 		case'avatar':
 			$parsing.='<img class="'.$class.'" src="';
 			if($attribute=='author'&&isset($author['avatar'])){
-				if($author['avatar']!=''&&file_exists('media/'.'avatar/'.basename($author['avatar'])))
-					$parsing.='media/'.'avatar/'.basename($author['avatar']).'"';
+				if($author['avatar']!=''&&file_exists('media/avatar/'.basename($author['avatar'])))
+					$parsing.='media/avatar/'.basename($author['avatar']).'"';
 				elseif(isset($author['gravatar'])&&$author['gravatar']!=''){
 					if(stristr($author['avatar'],'@'))
 						$parsing.='http://gravatar.com/avatar/'.md5($author['gravatar']).'"';
@@ -261,8 +261,8 @@ foreach($tags as$tag){
 					$rc['gravatar']=$rcu['gravatar'];
 				}
 				$rc['avatar']=basename($rc['avatar']);
-				if($rc['avatar']&&file_exists('media/'.'avatar/'.$rc['avatar']))
-					$parsing.='media/'.'avatar/'.$rc['avatar'];
+				if($rc['avatar']&&file_exists('media/avatar/'.$rc['avatar']))
+					$parsing.='media/avatar/'.$rc['avatar'];
 				elseif($rc['gravatar']!=''){
 					if(stristr($rc['gravatar'],'@'))
 						$parsing.='http://gravatar.com/avatar/'.md5($rc['gravatar']);

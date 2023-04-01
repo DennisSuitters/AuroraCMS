@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -32,7 +32,7 @@ if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';?>
                   <button type="submit"><i class="i">search</i></button>
                 </div>
               </form>
-              <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=$config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <input id="options11" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=($config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
               <label for="options11" id="configoptions111">Visitor Tracking</label>
               <span class="small text-muted">Collected Data is Purged after 30 Days.</span>
             </div>
@@ -51,17 +51,18 @@ if($find=='')$find=isset($_GET['find'])?$_GET['find']:'';?>
               <th class="text-center align-middle text-uppercase">Device</th>
               <th class="text-center align-middle text-uppercase">
                 <div class="btn-group float-right">
-                  <?php if($find){?>
+                  <?php if($user['options'][7]==1){
+                    if($find){?>
                     <button class="btn-sm trash trashall" data-tooltip="left" aria-label="Remove All Listed Results"><i class="i">purge</i></button>
                   <?php }else{?>
-                    <button class="btn-sm purge trash" data-tooltip="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><i class="i">purge</i></button>
-                  <?php }?>
+                    <button class="btn-sm purge" data-tooltip="left" aria-label="Purge All" onclick="purge('0','tracker');return false;"><i class="i">purge</i></button>
+                  <?php }
+                  }?>
                 </div>
               </th>
             </tr>
           </thead>
-          <?php
-            if($find!=''){
+          <?php if($find!=''){
               $s=$db->prepare("SELECT *, MAX(`ti`) AS `cti`, COUNT(`ip`) AS `v` FROM `".$prefix."tracker` WHERE LOWER(`urlDest`) LIKE LOWER(:find) OR LOWER(`urlFrom`) LIKE LOWER(:find) OR LOWER(`action`) LIKE LOWER(:find) GROUP BY `ip` ORDER BY `cti` DESC");
               $s->execute([':find'=>'%'.strtolower($find).'%']);
             }else{

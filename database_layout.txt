@@ -229,6 +229,9 @@ config
   `php_quicklink` tinytext
   `spamfilter` int(1)
   `notification_volume` int(4)
+  `mediaOptions` VARCHAR(16)
+  `unsplash_publickey` MEDIUMTEXT
+  `unsplash_secretkey` MEDIUMTEXT
   `mediaMaxWidth` int(4)
   `mediaMaxHeight` int(4)
   `mediaMaxWidthThumb` int(4)
@@ -398,7 +401,7 @@ login
     4   Orders Viewing or Editing
     5   User Accounts Viewing or Editing
     6   SEO Editing
-    7   Preferences Viewing or Editing
+    7   Preferences/Settings Viewing or Editing
     8   System Utilization Viewing
     9   Delete Messages When Retrieved
     10  elFinder Create Folders

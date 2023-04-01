@@ -33,8 +33,8 @@
     <meta name="theme-color" content="#000000">
     <link rel="alternate" media="handheld" href="<?= URL;?>">
     <link rel="alternate" hreflang="<?=$config['language'];?>" href="<?= URL;?>">
-    <link rel="icon" href="<?=$favicon;?>">
-    <link rel="apple-touch-icon" href="<?= URL.$favicon;?>">
+    <link rel="icon" href="core/images/favicon-64.jpg">
+    <link rel="apple-touch-icon" href="core/images/favicon-64.jpg">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css">
   </head>
   <body class="login-bg">
@@ -77,6 +77,9 @@
         </div>
       </div>
     </main>
+    <footer class="loginattribution">
+      Photo by&nbsp;<a href="https://unsplash.com/@saluken?utm_source=AuroraCMS&utm_medium=referral">Luke Tanis</a>&nbsp;on&nbsp;<a href="https://unsplash.com/photos/dt24DUzzggE?utm_source=AuroraCMS&utm_medium=referral">Unsplash</a>
+    </footer>
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </body>

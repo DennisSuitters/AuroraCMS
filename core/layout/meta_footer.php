@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -26,30 +26,147 @@
       $('#content,#sidebar').toggleClass('navsmall');
       document.getElementById('notification-checkbox').checked=false;
       if($('#sidebar').hasClass('navsmall')){
-        Cookies.set('sidebar','small');
         if($(window).width() < 577){
           $(this).attr('aria-expanded','true');
         }else{
+          Cookies.set('sidebar','small');
           $(this).attr('aria-expanded','false');
         }
       }else{
-        Cookies.remove('sidebar');
         if($(window).width() < 577){
           $(this).attr('aria-expanded','false');
         }else{
+          Cookies.remove('sidebar');
           $(this).attr('aria-expanded','true');
         }
       }
       return false;
     }
   );
-  if ($(window).width() < 577) {
+  if($(window).width() < 577){
     $('.nav-toggle').attr('aria-expanded','false');
   }
+  <?php if($user['rank']==1000){?>
+    $('.quickinfo').text('Window Width > '+$(window).width()+'px | ');
+  <?php }?>
   var unsaved=false;
   window.onbeforeunload=function(e){
     if(unsaved)return'You have unsaved changes. Do you want to leave this page and discard your changes or stay on this page?';
   }
+  $(document).on(
+    "click",
+    ".openimageeditor",function(){
+      var imageeditor=$(this).data('imageeditor');
+      var fileAlt=$(this).data('alt');
+      if($(this).data('image').length>0){
+        if(fileAlt==''){fileAlt=`<?=$config['business'];?>`;}
+        const {TABS,TOOLS}=FilerobotImageEditor;
+        const config={
+          source:$(this).data('image'),
+          onSave:(editedImageObject,designState)=>{
+            var id=$(this).data('id'),
+                t=$(this).data('t'),
+                c=$(this).data('c'),
+                w=$(this).data('w'),
+                url=`<?= URL;?>media/`+(w!=''?w+'/':'');
+            if(editedImageObject.fullName.match(/\.(jpeg)$/i)){
+              filename=editedImageObject.fullName.replace(/\.[^/.]+$/,"")+'.jpg';
+            }else{
+              filename=editedImageObject.fullName;
+            }
+            $.ajax({
+              type:"POST",
+              url:'core/savebase64.php',
+              data:{
+                filename:filename,
+                where:w,
+                imgBase64:editedImageObject.imageBase64
+              }
+            }).done(function(){
+              $.ajax({
+                type:"GET",
+                url:'core/update.php',
+                data:{
+                  id:id,
+                  t:t,
+                  c:c,
+                  da:url+filename
+                }
+              }).done(function(){
+                $('#'+c).val(url+filename);
+                $('#'+c+'image').attr('src',url+filename);
+              });
+            });
+          },
+          annotationsCommon:{
+            fill:'#ff0000',
+          },
+          Text:{text:fileAlt},
+          Rotate:{angle:90,componentType:'slider'},
+          translations:{
+            profile:'Profile',
+            coverPhoto:'Cover photo',
+            facebook:'Facebook',
+            socialMedia:'Social Media',
+            fbProfileSize:'180x180px',
+            fbCoverPhotoSize:'820x312px',
+          },
+          Crop:{
+            presetsItems:[
+              {
+                titleKey:'classicTv',
+                descriptionKey:'4:3',
+                ratio:4 / 3,
+              },
+              {
+                titleKey:'cinemascope',
+                descriptionKey:'21:9',
+                ratio:21 / 9,
+              },
+            ],
+            presetsFolders:[
+              {
+                titleKey:'socialMedia',
+                groups:[
+                  {
+                    titleKey:'facebook',
+                    items:[
+                      {
+                        titleKey:'profile',
+                        width:180,
+                        height:180,
+                        descriptionKey:'fbProfileSize',
+                      },
+                      {
+                        titleKey:'coverPhoto',
+                        width:820,
+                        height:312,
+                        descriptionKey:'fbCoverPhotoSize',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          tabsIds:[TABS.FINETUNE,TABS.FILTERS,TABS.WATERMARK,TABS.DRAW,TABS.RESIZE,TABS.ADJUST,TABS.ANNOTATE,],
+          defaultTabId:TABS.FINETUNE,
+          defaultToolId:TOOLS.TEXT,
+        };
+        const filerobotImageEditor=new FilerobotImageEditor(
+          document.querySelector('#'+imageeditor),
+          config,
+        );
+        filerobotImageEditor.render({
+          onClose:(closingReason)=>{
+            filerobotImageEditor.terminate();
+          },
+        });
+      } else {
+        toastr["info"](`Save the image to update the field data to allow opening in editor!`);
+      }
+    }
+  );
   <?php if($config['idleTime']!=0){?>
     $(document).ready(function(){
       idleTimer=null;
@@ -107,7 +224,6 @@
   });
   $('.save').click(function(e){
 	 	e.preventDefault();
-	 	var l=Ladda.create(this);
     var el=$(this).data("dbid");
     var id=$('#'+el).data("dbid"),
         t=$('#'+el).data("dbt"),
@@ -116,7 +232,6 @@
     if(c=='tis'||c=='tie'||c=='pti'||c=='due_ti'){
       da=$('#'+c+'x').val();
     }
-	 	l.start();
     $('#'+el).attr('disabled','disabled');
     $.ajax({
       type:"GET",
@@ -128,11 +243,10 @@
         da:da
       }
     }).done(function(msg){
-      l.stop();
       $('#'+el).removeAttr('disabled');
       $('#'+el).removeClass('unsaved');
-      $('#save'+c).removeClass('addedtrash');
-      if($('.unsaved').length===0)$('.saveall').removeClass('addedtrash');
+      $('#save'+c).removeClass('btn-danger');
+      if($('.unsaved').length===0)$('.saveall').removeClass('btn-danger');
       unsaved=false;
       $('#sp').html(msg);
     });
@@ -158,17 +272,18 @@
                 $('#'+c).val(urls);
               }else{
                 $('#'+c).val(file.url);
-                $('#save'+c).addClass('addedtrash');
+                $('[data-id="'+id+'"]').attr('data-image',file.url);
+                $('#save'+c).addClass('btn-danger');
               }
               if(t=='content'&&c=='file'){
-                var thumb=file.url.replace(/^.*[\\\/]/, '');
+                var thumb=file.url.replace(/^.*[\\\/]/,'');
                 var thumbpath=file.url.replace(thumb,'')+"sm/"+thumb;
                 $('#thumb').val(thumbpath);
                 $('#thumbimage').attr('src',thumbpath);
-                $('#savethumb').addClass('addedtrash');
+                $('#savethumb').addClass('btn-danger');
               }
               if(t=='content'&&c=='fileDepth'){
-                $('#savefileDepth').addClass('addedtrash');
+                $('#savefileDepth').addClass('btn-danger');
               }
               if(t=='category'){
 
@@ -330,7 +445,7 @@
           ],
 <?php if($view=='newsletters'){?>
           pageTemplates: {
-            icon: '<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="12" height="12"><path d="m 10,10.696915 -6,0 0,-1.071288 6,0 z m -0.00114,-1.9788834 -2.3368368,0 0,-1.0712886 2.3368368,0 z m 0,-1.9759562 -2.3368368,0 0,-1.071288 2.3368368,0 z m -3.3029604,1.9759562 -2.6958966,0 0,-3.0472086 2.6958966,0 z M 7.640148,1.26517 C 7.49432,1.11934 7.20625,1 7,1 L 2.5,1 C 2.29375,1 2.125,1.16875 2.125,1.375 l 0,11.25 C 2.125,12.83125 2.29375,13 2.5,13 l 9,0 c 0.20625,0 0.375,-0.16875 0.375,-0.375 l 0,-6.75 c 0,-0.20625 -0.11932,-0.49432 -0.265148,-0.64015 L 7.640148,1.26517 Z M 11.125,12.25 l -8.25,0 0,-10.5 4.115133,0 c 0.03417,0.006 0.09853,0.0323 0.12668,0.0525 l 3.955734,3.95571 c 0.02018,0.0281 0.04683,0.0925 0.05245,0.12668 l 0,6.36513 z M 11.5,1 9.25,1 C 9.04375,1 8.99432,1.11932 9.140148,1.26515 l 2.46968,2.46968 C 11.75568,3.88068 11.875,3.83125 11.875,3.625 l 0,-2.25 C 11.875,1.16875 11.70625,1 11.5,1 Z"/></svg></i>',
+            icon: '<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="16" height="16" style="fill:currentColor"><path d="m 10,10.696915 -6,0 0,-1.071288 6,0 z m -0.00114,-1.9788834 -2.3368368,0 0,-1.0712886 2.3368368,0 z m 0,-1.9759562 -2.3368368,0 0,-1.071288 2.3368368,0 z m -3.3029604,1.9759562 -2.6958966,0 0,-3.0472086 2.6958966,0 z M 7.640148,1.26517 C 7.49432,1.11934 7.20625,1 7,1 L 2.5,1 C 2.29375,1 2.125,1.16875 2.125,1.375 l 0,11.25 C 2.125,12.83125 2.29375,13 2.5,13 l 9,0 c 0.20625,0 0.375,-0.16875 0.375,-0.375 l 0,-6.75 c 0,-0.20625 -0.11932,-0.49432 -0.265148,-0.64015 L 7.640148,1.26517 Z M 11.125,12.25 l -8.25,0 0,-10.5 4.115133,0 c 0.03417,0.006 0.09853,0.0323 0.12668,0.0525 l 3.955734,3.95571 c 0.02018,0.0281 0.04683,0.0925 0.05245,0.12668 l 0,6.36513 z M 11.5,1 9.25,1 C 9.04375,1 8.99432,1.11932 9.140148,1.26515 l 2.46968,2.46968 C 11.75568,3.88068 11.875,3.83125 11.875,3.625 l 0,-2.25 C 11.875,1.16875 11.70625,1 11.5,1 Z"/></svg></i>',
             insertDetails: true,
             dateFormat:    'longDate',
             yourName:      '<?=$user['name'];?>',
@@ -370,28 +485,36 @@ else
       $(".saveall").on({
         click:function(event){
           event.preventDefault();
-          if($('.unsaved').length>0)$('.page-block').addClass('d-block');
+          if($('.unsaved').length>0)$('.page-block').removeClass('d-none');
           $(".unsaved").ogni(function(event){
-            var id=$(this).data("dbid");
-            var t=$(this).data("dbt");
-            var c=$(this).data("dbc");
-            var da=$(this).val();
             $(this).removeClass('unsaved');
-            $.ajax({
-              type:"GET",
-              url:"core/update.php",
-              data:{
-                id:id,
-                t:t,
-                c:c,
-                da:da
-              }
-            }).done(function(msg){
-              $('.saveall').removeClass('addedtrash');
-              unsaved=false;
-            });
-            $('#save'+c).removeClass('addedtrash');
-            if($('.unsaved').length===0)$('.page-block').removeClass('d-block');
+            var id=$(this).data("dbid");
+            if(id=='summernote'){
+              $('#'+id).submit();
+            } else {
+              var t=$(this).data("dbt");
+              var c=$(this).data("dbc");
+              var da=$(this).val();
+              $.ajax({
+                type:"GET",
+                url:"core/update.php",
+                data:{
+                  id:id,
+                  t:t,
+                  c:c,
+                  da:da
+                }
+              }).done(function(msg){
+                $('.saveall').removeClass('btn-danger');
+                unsaved=false;
+                $('#sp').html(msg);
+              });
+              $('#save'+c).removeClass('btn-danger');
+            }
+            if($('.unsaved').length===0){
+              $('.page-block').addClass('d-none');
+              $('.saveall').removeClass('btn-danger');
+            }
           },1000);
         }
       });
@@ -401,7 +524,7 @@ else
       $(".trashall").on({
         click:function(event){
           event.preventDefault();
-          $('.page-block').addClass('d-block');
+          $('.page-block').removeClass('d-none');
           var total=$('#l_tracker').data("dbtot");
           let i=1;
           let trackelements=document.getElementsByClassName('findtracker');
@@ -412,7 +535,40 @@ else
             i++;
             if(i===total)break;
           };
-          $('.page-block').removeClass('d-block');
+          $('.page-block').addClass('d-none');
+        }
+      });
+      $(".input-text").on('input change', function(){
+        var el=$(this).data('el');
+        var txt=$(this).text();
+        $('#'+el).val(txt);
+        $('.saveall').addClass('btn-danger');
+        $('#save'+el).addClass('btn-danger');
+        $('#'+el).addClass('unsaved');
+        unsaved=true;
+        if(el='seoTitle'){
+          var length=$('#'+el).val().length;
+        	var max=70;
+        	$("#seoTitlecnt").text(length);
+          $('#google-title').text($('#'+el).val());
+        	if(length<50){
+        		$("#seoTitlecnt").addClass('text-danger');
+        	}else if(length>max){
+            $("#seoTitlecnt").addClass('text-danger');
+          }else{
+        		$("#seoTitlecnt").removeClass('text-danger');
+        	}
+        }
+        if(el=='seoDescription'){
+          var length=$('#'+el).val().length;
+        	var max=160;
+        	var length=max-length;
+        	$("#seoCaptioncnt").text(length);
+        	if(length<0){
+        		$("#seoCaptioncnt").addClass('text-danger');
+        	}else{
+        		$("#seoCaptioncnt").removeClass('text-danger');
+        	}
         }
       });
       $(".textinput").on({
@@ -436,12 +592,12 @@ else
         },
         keypress:function(event){
           var save=$(this).data("dbc");
-          $('#save'+save).addClass('addedtrash');
+          $('#save'+save).addClass('btn-danger');
           console.log('keypress');
 //          if($('#qesave'+save).length > 0){
-            $('#qesave'+save).addClass('addedtrash');
+            $('#qesave'+save).addClass('btn-danger');
 //          }
-          $('.saveall').addClass('addedtrash');
+          $('.saveall').addClass('btn-danger');
           $('#'+save).addClass('unsaved');
           unsaved=true;
           if(event.which==13){
@@ -451,10 +607,10 @@ else
         change:function(event){
           var save=$(this).data("dbc");
           $('#'+save).addClass('unsaved');
-          $('#save'+save).addClass('addedtrash');
+          $('#save'+save).addClass('btn-danger');
           console.log('change');
 //          if($('#qesave'+save).length > 0){
-            $('#qesave'+save).addClass('addedtrash');
+            $('#qesave'+save).addClass('btn-danger');
 //          }
           unsaved=true;
         }
@@ -471,8 +627,6 @@ else
     			var t=$(this).data("dbt");
     			var c=$(this).data("dbc");
     			var b=$(this).data("dbb");
-          $('#'+t+c+b+id).parent().find(".dot-pulse").remove();
-          $('#'+t+c+b+id).append(`<div class="dot-pulse"></div>`);
           $.ajax({
             type:"GET",
             url:"core/toggle.php",
@@ -483,7 +637,6 @@ else
               b:b
             }
           }).done(function(msg){
-            $('#'+t+c+b+id).parent().find(".dot-pulse").remove();
         });
     	}
     );
@@ -572,17 +725,15 @@ else
   }
 </script>
     <iframe id="sp" name="sp" class="d-none"></iframe>
-    <div class="page-block">
-      <div class="spinner">
-        <div class="sk-chase">
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-          <div class="sk-chase-dot"></div>
-        </div>
-      </div>
+    <div class="page-block d-none">
+      <div class="plane main">
+        <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+         <div class="circle"></div>
+       </div>
     </div>
 <?php if($view=='dashboard'&&$user['accountsContact']==1&&$config['hosterURL']!=''){?>
     <script>

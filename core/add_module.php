@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -39,8 +39,8 @@ if($t!=''){
 			'window.top.window.$("#modules").append(`<li class="module mb-2" id="modules_'.$iid.'">'.
 				'<div class="form-row">'.
 					'<input type="text" value="'.$t.'" readonly>'.
-					'<a class="btn" href="'.URL.$settings['system']['admin'].'/course/module/'.$iid.'" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
-					'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'modules\');"><i class="i">trash</i></button>'.
+					'<a href="'.URL.$settings['system']['admin'].'/course/module/'.$iid.'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
+					'<button data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$iid.'\',\'modules\');"><i class="i">trash</i></button>'.
 					'<div class="handle btn" data-tooltip="tooltip" aria-label="Drag to ReOrder this item" onclick="return false;"><i class="i">drag</i></div>'.
 				'</div>'.
 			'</li>`);'.

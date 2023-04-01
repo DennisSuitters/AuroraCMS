@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -289,7 +289,7 @@ if($show=='item'){
 }
 require'inc-categorynav.php';
 if(stristr($html,'<playlist')){
-	$sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY ord ASC");
+	$sp=$db->prepare("SELECT * FROM `".$prefix."playlist` WHERE `rid`=:rid ORDER BY ord ASC LIMIT 0,6");
 	$sp->execute([
 		':rid'=>$page['id']
 	]);
@@ -342,15 +342,17 @@ if(stristr($html,'<eventsitems')){
 	$limit=isset($match[1])&&$match[1]==0?4:$match[1];
 	preg_match('/<eventitem>([\w\W]*?)<\/eventitem>/',$html,$match);
 	$eventitem=$match[1];
-	$se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :ct1 AND `status` LIKE :status OR `contentType` LIKE :ct2 AND `status` LIKE :status".$sqlrank." ORDER BY `tis` ASC LIMIT $limit");
+	$eventoutput='';
+	$se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType` LIKE :ct1 AND `status` LIKE :status AND `rank`<:rank OR `contentType` LIKE :ct2 AND `status` LIKE :status AND `rank`<:rank ORDER BY `tis` ASC LIMIT $limit");
 	$se->execute([
 		':ct1'=>'events',
 		':ct2'=>'news',
-		':status'=>'published'
+		':status'=>'published',
+		':rank'=>(isset($_SESSION['rank'])?$_SESSION['rank'] + 1:0)
 	]);
-	$eventoutput='';
 	if($se->rowCount()>0){
 		while($re=$se->fetch(PDO::FETCH_ASSOC)){
+			if($re['tis']>0&&$re['tis'] < time())continue;
 			$eventitems=$eventitem;
 			$re['file']=rawurldecode($re['file']);
 			$eventitems=preg_replace([
@@ -368,7 +370,7 @@ if(stristr($html,'<eventsitems')){
 					($re['thumb']!=''&&file_exists('media/sm/'.basename($re['thumb']))?'media/sm/'.basename($re['thumb']).' '.$config['mediaMaxWidthThumb'].'w,':NOIMAGESM.' '.$config['mediaMaxWidthThumb'].'w,').
 					($re['thumb']!=''&&file_exists('media/md/'.basename($re['thumb']))?'media/md/'.basename($re['thumb']).' 600w,':NOIMAGE.' 600w,').
 					($re['thumb']!=''&&file_exists('media/sm/'.basename($re['thumb']))?'media/sm/'.basename($re['thumb']).' 400w':NOIMAGESM.' 400w').'" sizes="(min-width: '.$config['mediaMaxWidthThumb'].'px) '.$config['mediaMaxWidthThumb'].'px" ',
-				($re['thumb']!=''&&file_exists('media/sm/'.basename($re['thumb']))?'media/sm/'.basename($re['thumb']):NOIMAGESM),
+				$re['thumb']!=''?$re['thumb']:NOIMAGESM,
 				htmlspecialchars(($re['fileALT']!=''?$re['fileALT']:$re['title']),ENT_QUOTES,'UTF-8'),
 				$re['contentType'],
 				URL.$re['contentType'].'/'.$re['urlSlug'].'/',

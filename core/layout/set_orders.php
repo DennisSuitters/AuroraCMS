@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.23
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -27,10 +27,8 @@
             </div>
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
-                <?php if(isset($_SERVER['HTTP_REFERER'])){?>
-                  <a class="btn" href="<?=$_SERVER['HTTP_REFERER'];?>" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>
-                <?php }?>
-                <button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save</i></button>
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                '<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save</i></button>';?>
               </div>
             </div>
           </div>
@@ -53,7 +51,6 @@
               </script>
               <div class="input-text">Title</div>
               <input id="post_title" name="t" type="text" value="" placeholder="Enter an Option...">
-
               <div class="input-text">Cost</div>
               <input name="v" type="text" value="" placeholder="Enter Cost...">
               <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
@@ -114,7 +111,7 @@
           </div>
           <div class="form-row">
             <input class="textinput" id="austPostAPIKey" data-dbid="1" data-dbt="config" data-dbc="austPostAPIKey" type="text" value="<?=$config['austPostAPIKey'];?>" placeholder="Enter your Australia Post API Code...">
-            <button class="save" id="saveaustPostAPIKey" data-dbid="austPostAPIKey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="saveaustPostAPIKey" data-dbid="austPostAPIKey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <legend id="paymentOptions" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#paymentOptions" data-tooltip="tooltip" aria-label="PermaLink to Payment Options Section">&#128279;</a>':'';?>Payment Options</legend>
           <div class="row">
@@ -122,7 +119,7 @@
             <input id="displayPaymentOptions" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="7" type="checkbox"<?=$config['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
             <label for="displayPaymentOptions" id="configoptions71">Display Payment Options Logo's (Logo's should be contained within the Template tags).</label>
           </div>
-  <?php /* Payment Options to Pay Orders */?>
+<?php /* Payment Options to Pay Orders */?>
           <div class="form-row mt-3">
             <label id="payOptions"><?=$user['rank']>899?'<a class="permalink" data-tooltip" href="'.URL.$settings['system']['admin'].'/orders/settings#payOptions" data-tooltip="tooltip" aria-label="Permalink to Payment Options Section">&#128279;</a>':''?>Payment&nbsp;Options</label>
             <small class="form-text text-right">A value of `0` disables the Surcharge being added to the Order.</small>
@@ -161,7 +158,7 @@
           <label id="orderGST" for="gst"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#orderGST" data-tooltip="tooltip" aria-label="PermaLink to GST">&#128279;</a>':'';?>Add&nbsp;GST&nbsp;as&nbsp;Percentage</label>
           <div class="form-row">
             <input class="textinput" id="gst" data-dbid="1" data-dbt="config" data-dbc="gst" type="number" value="<?=$config['gst'];?>" placeholder="Enter a GST Value...">
-            <button class="save" id="savegst" data-dbid="gst" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savegst" data-dbid="gst" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <hr>
           <legend id="discountRanges"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#discountRanges" data-tooltip="tooltip" aria-label="PermaLink to Discount Ranges Options Section">&#128279;</a>':'';?>Discount Ranges</legend>
@@ -214,14 +211,14 @@
               <label id="bankName" for="bank"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#bankName" data-tooltip="tooltip" aria-label="PermaLink to Bank">&#128279;</a>':'';?>Bank</label>
               <div class="form-row">
                 <input class="textinput" id="bank" data-dbid="1" data-dbt="config" data-dbc="bank" type="text" value="<?=$config['bank'];?>" placeholder="Enter Bank...">
-                <button class="save" id="savebank" data-dbid="bank" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                <button class="save" id="savebank" data-dbid="bank" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
               </div>
             </div>
             <div class="col-12 col-sm-6 pl-md-3">
               <label id="accountName" for="bankAccountName"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#accountName" data-tooltip="tooltip" aria-label="PermaLink to Account Name">&#128279;</a>':'';?>Account Name</label>
               <div class="form-row">
                 <input class="textinput" id="bankAccountName" data-dbid="1" data-dbt="config" data-dbc="bankAccountName" type="text" value="<?=$config['bankAccountName'];?>" placeholder="Enter an Account Name...">
-                <button class="save" id="savebankAccountName" data-dbid="bankAccountName" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                <button class="save" id="savebankAccountName" data-dbid="bankAccountName" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
               </div>
             </div>
           </div>
@@ -230,14 +227,14 @@
               <label id="accountNumber" for="bankAccountNumber"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#accountNumber" data-tooltip="tooltip" aria-label="PermaLink to Account Number">&#128279;</a>':'';?>Account Number</label>
               <div class="form-row">
                 <input class="textinput" id="bankAccountNumber" data-dbid="1" data-dbt="config" data-dbc="bankAccountNumber" type="text" value="<?=$config['bankAccountNumber'];?>" placeholder="Enter an Account Number...">
-                <button class="save" id="savebankAccountNumber" data-dbid="bankAccountNumber" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                <button class="save" id="savebankAccountNumber" data-dbid="bankAccountNumber" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
               </div>
             </div>
             <div class="col-12 col-sm-6 pl-md-3">
               <label id="accountBSB" for="bankBSB"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#accountBSB" data-tooltip="tooltip" aria-label="PermaLink to Account BSB">&#128279;</a>':'';?>BSB</label>
               <div class="form-row">
                 <input class="textinput" id="bankBSB" data-dbid="1" data-dbt="config" data-dbc="bankBSB" type="text" value="<?=$config['bankBSB'];?>" placeholder="Enter a BSB...">
-                <button class="save" id="savebankBSB" data-dbid="bankBSB" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+                <button class="save" id="savebankBSB" data-dbid="bankBSB" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
               </div>
             </div>
           </div>
@@ -251,14 +248,14 @@
           </div>
           <div class="form-row">
             <input class="textinput" id="payPalClientID" data-dbid="1" data-dbt="config" data-dbc="payPalClientID" type="text" value="<?=$config['payPalClientID'];?>" placeholder="Enter a PayPal Client ID...">
-            <button class="save" id="savepayPalClientID" data-dbid="payPalClientID" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savepayPalClientID" data-dbid="payPalClientID" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
   <?php /*
           <div class="form-group row">
             <label for="payPalSecret" class="col-form-label col-4 col-sm-3 col-md-2 col-lg-3 col-xl-2">PayPal Secret</label>
             <div class="input-group col-8 col-sm-9 col-md-10 col-lg-9 col-xl-10">
               <input type="text" id="payPalSecret" class="form-control textinput" value="<?=$config['payPalSecret'];?>" data-dbid="1" data-dbt="config" data-dbc="payPalSecret" placeholder="Enter a PayPal Secret...">
-              <div class="input-group-append"><button id="savepayPalSecret" class="btn btn-secondary save" data-dbid="payPalSecret" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button></div>
+              <div class="input-group-append"><button id="savepayPalSecret" class="btn btn-secondary save" data-dbid="payPalSecret" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button></div>
             </div>
           </div>
           <div class="form-group row">
@@ -276,12 +273,12 @@
           </div>
           <div class="form-row">
             <input class="textinput" id="stripe_publishkey" data-dbid="1" data-dbt="config" data-dbc="stripe_publishkey" type="text" value="<?=$config['stripe_publishkey'];?>" placeholder="Enter a Stripe Publish Key...">
-            <button class="save" id="savestripe_publishkey" data-dbid="stripe_publishkey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savestripe_publishkey" data-dbid="stripe_publishkey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <label id="stripeSecretKey" for="stripe_secretkey"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#stripeSecretKey" data-tooltip="tooltip" aria-label="PermaLink to Stripe Secret Key">&#128279;</a>':'';?>Secret&nbsp;Key</label>
           <div class="form-row">
             <input class="textinput" id="stripe_secretkey" data-dbid="1" data-dbt="config" data-dbc="stripe_secretkey" type="text" value="<?=$config['stripe_secretkey'];?>" placeholder="Enter a Stripe Secret Key...">
-            <button class="save" id="savestripe_secretkey" data-dbid="stripe_secretkey" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="savestripe_secretkey" data-dbid="stripe_secretkey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <div class="row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#enableAfterpay" data-tooltip="tooltip" aria-label="PermaLink to Enable AfterPay Checkbox">&#128279;</a>':'';?>
@@ -339,7 +336,7 @@
           </div>
           <div class="form-row">
             <input class="textinput" id="oES" data-dbid="1" data-dbt="config" data-dbc="orderEmailSubject" type="text" value="<?=$config['orderEmailSubject'];?>">
-            <button class="save" id="saveoES" data-dbid="oES" data-style="zoom-in" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
+            <button class="save" id="saveoES" data-dbid="oES" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <div id="orderEmailLayout" class="form-row mt-3">
             <label for="oEL"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#orderEmailLayout" data-tooltip="tooltip" aria-label="PermaLink to Order Email Notes">&#128279;</a>':'';?>Layout</label>

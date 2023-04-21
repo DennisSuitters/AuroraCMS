@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -408,6 +408,36 @@ if($skip==false){
         preg_match('/<mediaimages>([\w\W]*?)<\/mediaimages>/',$item,$matches3);
         $mediaitem=$matches3[1];
         $mediaoutput='';
+        if($config['options'][5]==0){
+          $mediaitems=$mediaitem;
+          $r['file']=rawurldecode($r['file']);
+          $mediaitems=preg_replace([
+            '/<print media=[\"\']?id[\"\']?>/',
+            '/<print thumb=[\"\']?srcset[\"\']?>/',
+            '/<print lightbox=[\"\']?srcset[\"\']?>/',
+            '/<print media=[\"\']?thumb[\"\']?>/',
+            '/<print media=[\"\']?file[\"\']?>/',
+            '/<print media=[\"\']?caption[\"\']?>/',
+            '/<print media=[\"\']?fileALT[\"\']?>/',
+            '/<print media=[\"\']?title[\"\']?>/'
+          ],[
+            $r['id'],
+            'srcset="'.
+              ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' '.$config['mediaMaxWidthThumb'].'w,':'').
+              ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':'').
+              ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':'').'" sizes="(min-width: '.$config['mediaMaxWidth'].'px) '.$config['mediaMaxWidth'].'px" ',
+            ($r['file']!=''&&file_exists('media/'.basename($rm['file']))?'media/'.basename($r['file']).' '.$config['mediaMaxWidth'].'w, ':'').
+              ($r['file']!=''&&file_exists('media/lg/'.basename($r['file']))?'media/lg/'.basename($r['file']).' 1000w,':'').
+              ($r['file']!=''&&file_exists('media/md/'.basename($r['file']))?'media/md/'.basename($r['file']).' 600w,':'').
+              ($r['file']!=''&&file_exists('media/sm/'.basename($r['file']))?'media/sm/'.basename($r['file']).' 400w':''),
+            $r['thumb']!=''?$r['thumb']:NOIMAGESM,
+            $r['file']!=''?$r['file']:NOIMAGE,
+            htmlspecialchars(($r['title']!=''?$r['title']:$r['title'].': Image '.$r['id']),ENT_QUOTES,'UTF-8'),
+            htmlspecialchars(($r['fileALT']!=''?$r['fileALT']:basename($r['file'])),ENT_QUOTES,'UTF-8'),
+            isset($r['title'])&&$r['title']!=''?htmlspecialchars(($r['title']!=''?basename($r['title']):basename($r['file'])),ENT_QUOTES,'UTF-8'):basename($r['file'])
+          ],$mediaitems);
+          $mediaoutput.=$mediaitems;
+        }
         while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
           $mediaitems=$mediaitem;
           if($rm['file']=='')continue;
@@ -431,7 +461,7 @@ if($skip==false){
               ($rm['file']!=''&&file_exists('media/lg/'.basename($rm['file']))?'media/lg/'.basename($rm['file']).' 1000w,':'').
               ($rm['file']!=''&&file_exists('media/md/'.basename($rm['file']))?'media/md/'.basename($rm['file']).' 600w,':'').
               ($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file']))?'media/sm/'.basename($rm['file']).' 400w':''),
-            $rm['thumb']!=''?$rm['thumb']:NOIMAGESM,
+            $rm['thumb']!=''?$rm['thumb']:$rm['file'],
             $rm['file']!=''?$rm['file']:NOIMAGE,
             htmlspecialchars(($rm['title']!=''?$rm['title']:$r['title'].': Image '.$rm['id']),ENT_QUOTES,'UTF-8'),
             htmlspecialchars(($rm['fileALT']!=''?$rm['fileALT']:basename($rm['file'])),ENT_QUOTES,'UTF-8'),
@@ -480,6 +510,55 @@ if($skip==false){
       if($r['options'][3]==1)$showCountdown=true;
     }else
       $item=preg_replace('~<countdown>.*?<\/countdown>~is','',$item);
+
+    if($r['contentType']=='article'){
+      if(stristr($item,'<list>')){
+        $sl=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `rid`=:rid AND `contentType`='list' ORDER BY `ord` ASC, `ti` ASC");
+        $sl->execute([':rid'=>$r['id']]);
+        if($sl->rowCount()>0){
+          preg_match('/<listitems>([\w\W]*?)<\/listitems>/',$item,$matches);
+          $listitem=$matches[1];
+          $lout='';
+          while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+            $out=preg_replace([
+              '/<print list=[\"\']?id[\"\']?>/',
+              '/<print list=[\"\']?code[\"\']?>/',
+              ($rl['file']!=''?'/<[\/]?listimage>/':'~<listimage>.*?<\/listimage>~is'),
+              '/<print list=[\"\']?image[\"\']?>/',
+              '/<print list=[\"\']?imagealt[\"\']?>/',
+              ($rl['title']!=''?'/<[\/]?listheading>/':'~<listheading>.*?<\/listheading>~is'),
+              '/<print list=[\"\']?heading[\"\']?>/',
+              '/<print list=[\"\']?caption[\"\']?>/',
+              '/<print list=[\"\']?notes[\"\']?>/',
+              '/<print list=[\"\']?url[\"\']?>/',
+              '/<print list=[\"\']?permalink[\"\']?>/'
+            ],[
+              $rl['id'],
+              ($rl['code']!=''?$rl['code']:'list'.$rl['id']),
+              '',
+              $rl['file'],
+              ($rl['title']!=''?$rl['title']:$rl['code']),
+              '',
+              $rl['title'],
+              htmlspecialchars($rl['notes'],ENT_QUOTES),
+              $rl['notes'],
+              ($rl['url']!=''?' <a href="'.$rl['url'].'">More...</a>':''),
+              URL.$r['contentType'].'/'.$r['urlSlug'].'#'.($rl['code']!=''?$rl['code']:'list'.$rl['id'])
+            ],$listitem);
+            $lout.=$out;
+          }
+          $item=preg_replace([
+            '~<listitems>.*?<\/listitems>~is',
+            '/<[\/]?list>/'
+          ],[
+            $lout,
+            ''
+          ],$item);
+        }else
+          $item=preg_replace('~<list>.*?<\/list>~is','',$item);
+      }
+    }else
+      $item=preg_replace('~<list>.*?<\/list>~is','',$item);
 
     if($r['contentType']=='course'){
       preg_match('/<moduleitems>([\w\W]*?)<\/moduleitems>/',$item,$matches);

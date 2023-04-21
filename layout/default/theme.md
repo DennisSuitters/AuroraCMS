@@ -1,6 +1,10 @@
 # Default Changelog
 
-### v0.1.4
+### v0.1.5
+- Improve Content Gallery, move thumbnails to under hero image.
+- Fix theme css variables.
+
+#### v0.1.4
 - Fix responsive item widths.
 - Reduce duplicate CSS classes.
 - Fix Product Quick View and allow multiple items.

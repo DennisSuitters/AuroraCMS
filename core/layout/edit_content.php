@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -99,7 +99,8 @@ if($r['contentType']!='testimonials'){
             '<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Settings</label>'.
             ($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'').
             ($r['contentType']!='testimonials'?'<input class="tab-control" id="tab1-11" name="tabs" type="radio"><label for="tab1-11">Template</label>':'').
-            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">Purchases</label>':'');
+            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">Purchases</label>':'').
+            ($r['contentType']=='article'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">List</label>':'');
 /* Content */?>
             <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
               <div class="form-row">
@@ -178,7 +179,7 @@ if($r['contentType']!='testimonials'){
                   while($ru=$su->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$ru['id'].'"'.($ru['id']==$r['uid']?' selected':'').'>'.$ru['username'].':'.$ru['name'].'</option>';?>
                 </select>
               </div>
-              <?php if($r['contentType']=='inventory'||$r['contentType']=='service'){?>
+              <?php if($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='list'){?>
                 <label id="<?=$r['contentType'];?>Code" for="code"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Code" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Code Field">&#128279;</a>':'';?>Code</label>
                 <div class="form-row">
                   <input class="textinput" id="code" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?=$r['code'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
@@ -1908,6 +1909,102 @@ if($r['contentType']!='testimonials'){
                   }?>
                 </section>
               </div>
+            <?php }
+/* List */
+            if($r['contentType']=='article'){?>
+              <div class="tab1-13 border" data-tabid="tab1-13" role="tabpanel">
+                <?php if($user['options'][1]==1){?>
+                  <form target="sp" method="post" action="core/add_list.php">
+                    <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                    <div class="row">
+                      <div class="col-12 col-sm-3">
+                        <div class="form-row">
+                          <div class="input-text">Link ID</div>
+                          <input id="lid" name="lid" type="text" value="" placeholder="Link ID...">
+                        </div>
+                      </div>
+                      <div class="col-12 col-sm-9">
+                        <div class="form-row">
+                          <div class="input-text">Heading</div>
+                          <input id="lh" name="lh" type="text" value="" placeholder="Heading...">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row">
+                      <div class="input-text col-2">Image</div>
+                      <input id="limage" name="li" type="text" value="" placeholder="Image...">
+                      <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`limage`);return false;"><i class="i">browse-media</i></button>
+                    </div>
+                    <div class="form-row">
+                      <div class="input-text col-2">URL</div>
+                      <input name="lu" type="text" value="" placeholder="URL...">
+                    </div>
+                    <div class="form-row">
+                      <div class="input-text col-2">Notes</div>
+                      <textarea name="lda"></textarea>
+                    </div>
+                    <div class="text-right">
+                      <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                    </div>
+                  </form>
+                <?php }?>
+                <section id="list" class="row m-1">
+                  <?php $sl=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='list' AND `rid`=:rid ORDER BY `ord` ASC, `ti` ASC");
+                  $sl->execute([':rid'=>$r['id']]);
+                  while($rl=$sl->fetch(PDO::FETCH_ASSOC)){?>
+                    <div id="l_<?=$rl['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">
+                      <div class="row">
+                        <?php if($rl['file']!=''){?>
+                          <div class="card-image col-12 col-sm-2 h-auto">
+                            <img src="<?=$rl['file'];?>" style="max-height:100px;" alt="<?=$rl['title'];?>">
+                          </div>
+                        <?php }?>
+                        <div class="card-footer col-12 col-sm m-0 p-1">
+                          <div class="row m-0 p-0">
+                            <div class="col-12 small m-0 p-0">
+                              <?=($rl['title']!=''?'<div class="h6 col-12">'.$rl['title'].'</div>':'');?>
+                              <?=$rl['notes'];?>
+                              <?=($rl['urlSlug']!=''?' <a target="_blank" href="'.$rl['urlSlug'].'">More...</a>':'');?>
+                            </div>
+                            <?php if($user['options'][0]==1){?>
+                              <div class="col-12 text-right">
+                                <a class="btn-sm" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$rl['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
+                                <button class="btn-sm trash" id="purge<?=$rl['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rl['id'];?>','content')"><i class="i">trash</i></button>
+                                <span class="btn btn-sm orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
+                              </div>
+                            <?php }?>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <?php }?>
+                  <div class="ghost hidden">&nbsp;</div>
+                </section>
+              </div>
+              <script>
+                $('#list').sortable({
+                  items:".card",
+                  handle:'.orderhandle',
+                  placeholder:".ghost",
+                  helper:fixWidthHelper,
+                  axis:"y",
+                  update:function(e,ui){
+                    var order=$("#list").sortable("serialize");
+                    $.ajax({
+                      type:"POST",
+                      dataType:"json",
+                      url:"core/reorderlist.php",
+                      data:order
+                    });
+                  }
+                }).disableSelection();
+                function fixWidthHelper(e,ui){
+                  ui.children().each(function(){
+                    $(this).width($(this).width());
+                  });
+                  return ui;
+                }
+              </script>
             <?php }?>
           </div>
         </div>

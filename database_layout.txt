@@ -1,3 +1,48 @@
+agronomy_areas
+  `id` bigint(20)
+  `rid` bigint(20) Reference to areas inside area, for strip grazing
+  `type` text Pasture/Crop/Orchard/Veg Patch
+  `code` varchar(256)
+  `name` text
+  `geo_position` TEXT
+  `geo_layout` TEXT
+  `condition` TEXT
+  `activity` varchar(64)
+  `color` varchar(8)
+  `options` varchar(16)
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+  `notes` TEXT
+  `ti` int(10) Date Added
+
+agronomy_livestock
+  `id` bigint(20)
+  `code` varchar(256)
+  `name` TEXT
+  `species` TEXT
+  `breed` TEXT
+  `sex` varchar(8)
+  `dob` int(10) Date of Birth
+  `dod` int(10) Date of Death
+  `rid` bigint(20) Reference to other livestock for lineage.
+  `aid` bigint(20) Reference to agronomy_area id
+  `notes` TEXT
+  `ti` int(10) Date Added
+
 cart
   `id` bigint(20)
   `iid` bigint(20)

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -236,7 +236,7 @@ if($user['options'][4]==1){
               </div>
             </div>
             <div id="notifications" role="alert"></div>
-            <section class="content mt-4 overflow-visible list" id="contentview">
+            <section class="content mt-3 overflow-visible list" id="contentview">
               <?php $zeb=0;
               while($r=$s->fetch(PDO::FETCH_ASSOC)){
                 if($r['due_ti']<$ti&&$r['status']!='paid'){
@@ -247,7 +247,7 @@ if($user['options'][4]==1){
                 $cs=$db->prepare("SELECT `username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
                 $cs->execute([':id'=>$r['cid']]);
                 $c=$cs->fetch(PDO::FETCH_ASSOC);?>
-                <article class="card zebra mb-0 p-2 border-0 overflow-visible" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
+                <article class="card zebra mx-2 mt-2 mb-0 p-2 border-0 overflow-visible shadow" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
                   <div class="col-3 overflow-visible">
                     <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     <div class="small">Client:&nbsp;
@@ -300,7 +300,7 @@ if($user['options'][4]==1){
                     </div>
                   </div>
                 </article>
-                <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
+                <div class="quickedit" id="quickedit<?=$r['id'];?>"></div>
               <?php }?>
             </section>
           </div>

@@ -509,6 +509,9 @@ nav.navigation ul li a:hover,
 nav.navigation ul li a:focus{
   color:var(--menu-link-color-hover) }
 
+nav.navigation ul li.active{
+  color:var(--menu-dropdown-color-active) }
+
 nav.navigation ul li.active a{
   color:var(--menu-link-color-active) }
 
@@ -529,6 +532,14 @@ nav.navigation ul li.active a{
 
   nav.navigation ul{
     display:none }
+
+  nav.navigation ul li{
+    background-color: var(--menu-dropdown-background-color);
+    color:var(--menu-color) }
+
+  nav.navigation ul li.active{
+    background-color: var(--menu-dropdown-background-color-active);
+    color:var(--menu-dropdown-color-active) }
 
   nav.navigation label.menubar-label{
     display:inline-block;

@@ -113,7 +113,7 @@
           <div class="row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" data-tooltip="tooltip" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
             <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=($config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="enableQuickView" id="configoptions51">Quick View for Products</label>
+            <label for="enableQuickView" id="configoptions51">Quick View for Products &amp; Gallery</label>
           </div>
           <label id="fallbackStatus" for="inventoryFallbackStatus"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#fallbackStatus" data-tooltip="tooltip" aria-label="PermaLink to Inventory Fallback Status Selector">&#128279;</a>':'';?>Fallback Status</label>
           <div class="form-row">

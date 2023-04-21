@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -67,6 +67,10 @@ function rankclass($rank){
 }
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
+$o=isset($_POST['o'])?filter_input(INPUT_POST,'o',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'o',FILTER_UNSAFE_RAW);
+if($o=='modal'){
+  echo'<div class="fancybox-ajax quickedit p-2">';
+}
 if($t=='content'||$t=='login'||$t=='orders'){
 	$s=$db->prepare("SELECT * FROM `".$prefix.$t."` WHERE id=:id");
 	$s->execute([':id'=>$id]);
@@ -81,7 +85,9 @@ if($t=='content'||$t=='login'||$t=='orders'){
 	if(!isset($r['rank']))$r['rank']=0;
   if($t=='login'){
     echo'<div class="row">'.
-      '<div class="col-12 col-sm-4 p-1">';
+      '<div class="col-12">'.
+        '<div class="row">'.
+          '<div class="col-12 col-sm-4 p-1">';
         if($r['name']!=''&&$r['bio_options'][0]==1){
           echo'<div class="row">'.
             '<label for="qeprofilelink'.$r['id'].'">Profile Link</label>'.
@@ -276,186 +282,192 @@ if($t=='content'||$t=='login'||$t=='orders'){
         'Browser Info: '.$r['userAgent'].
       '</div>'.
     '</div>'.
+  '</div>'.
+  '</div>'.
   '</div>';
   }
 
 if($t=='content'){
   echo'<div class="row">'.
-    '<div class="col-12 col-sm-4 p-1">'.
-      '<div class="row">'.
-        '<label for="qegenurl'.$r['id'].'">URL Slug</label>'.
-        '<div class="form-row col-12">'.
-          '<a id="qegenurl'.$r['id'].'" target="_blank" href="'.URL.$r['contentType'].'/'.$r['urlSlug'].'">'.URL.$r['contentType'].'/'.$r['urlSlug'].' <i class="i">new-window</i></a>'.
-        '</div>'.
-      '</div>';
-      if($r['contentType']=='inventory'||$r['contentType']=='service'){
-        echo'<div class="row">'.
-          '<div class="col-6 pr-1">'.
-            '<label for="qerrp'.$r['id'].'" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>'.
-            '<div class="form-row">'.
-              '<div class="input-text">$</div>'.
-              '<input class="qetextinput" id="qerrp'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="rrp" type="text" value="'.$r['rrp'].'">'.
-              '<button class="qesave" id="qesaverrp'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerrp'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-            '</div>'.
-          '</div>'.
-          '<div class="col-6 pl-1">'.
-            '<label for="qecost'.$r['id'].'">Cost</label>'.
-            '<div class="form-row">'.
-              '<div class="input-text">$</div>'.
-              '<input class="qetextinput" id="qecost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="cost" type="text" value="'.$r['cost'].'" placeholder="Enter a Cost...">'.
-              '<button class="qesave" id="qesavecost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecost'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-            '</div>'.
-          '</div>'.
-        '</div>'.
+      '<div class="col-12">'.
         '<div class="row">'.
-          '<div class="col-6 pr-1">'.
-            '<label for="qerCost'.$r['id'].'">Reduced Cost</label>'.
-            '<div class="form-row">'.
-              '<div class="input-text">$</div>'.
-              '<input class="qetextinput" id="qerCost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="rCost" type="text" value="'.$r['rCost'].'" placeholder="Enter a Reduced Cost...">'.
-              '<button class="qesave" id="qesaverCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerCost'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-            '</div>'.
-          '</div>'.
-          '<div class="col-6 pl-1">'.
-            '<label for="qedCost'.$r['id'].'">Distributor Cost</label>'.
-            '<div class="form-row">'.
-              '<div class="input-text">$</div>'.
-              '<input class="qetextinput" id="qedCost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="dCost" type="text" value="'.$r['dCost'].'" placeholder="Enter a Distributor Cost...">'.
-              '<button class="qesave" id="qesavedCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qedCost'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-            '</div>'.
-          '</div>'.
-        '</div>';
-      }
-      if($r['contentType']=='inventory'){
-        echo'<div class="row">'.
-          '<label for="qequantity'.$r['id'].'">Quantity</label>'.
-          '<div class="form-row">'.
-            '<input class="qetextinput" id="qequantity'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="quantity" type="text" value="'.$r['quantity'].'">'.
-            '<button class="qesave" id="qesavequantity'.$r['id'].'" data-tooltip="tooltip" data-dbid="qequantity'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-          '</div>'.
-        '</div>'.
-        '<div class="row">'.
-          '<label for="qestockStatus'.$r['id'].'">Stock Status</label>'.
-            '<select id="qestockStatus'.$r['id'].'" onchange="update(`'.$r['id'].'`,`content`,`stockStatus`,$(this).val());">'.
-              '<option value="quantity"'.($r['stockStatus']=='quantity'?' selected':'').'>Dependant on Quantity (In Stock/Out Of Stock)</option>'.
-              '<option value="in stock"'.($r['stockStatus']=='in stock'?' selected':'').'>In Stock</option>'.
-              '<option value="out of stock"'.($r['stockStatus']=='out of stock'?' selected':'').'>Out Of Stock</option>'.
-              '<option value="back order"'.($r['stockStatus']=='back order'?' selected':'').'>Back Order</option>'.
-              '<option value="pre order"'.($r['stockStatus']=='pre order'?' selected':'').'>Pre Order</option>'.
-              '<option value="available"'.($r['stockStatus']=='available'?' selected':'').'>Available</option>'.
-              '<option value="sold out"'.($r['stockStatus']=='sold out'?' selected':'').'>Sold Out</option>'.
-              '<option value="none"'.($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'').'>No Display</option>'.
-            '</select>'.
-          '</div>';
-        }
-        echo'</div>'.
-        '<div class="col-12 col-sm-4 p-1">';
-          if($r['contentType']=='events'){
-            echo'<div class="row">'.
-              '<label for="qetis'.$r['id'].'">Event Start <span class="labeldate small ml-2" id="labeldatetis'.$r['id'].'">('.date($config['dateFormat'],$r['tis']).')</span></label>'.
-              '<input id="qetis'.$r['id'].'" type="datetime-local" value="'.($r['tis']!=0?date('Y-m-d\TH:i',$r['tis']):'').'" autocomplete="off" onchange="update(`'.$r['id'].'`,`content`,`tis`,getTimestamp(`qetis'.$r['id'].'`));">'.
-            '</div>'.
-            '<div class="row">'.
-              '<label for="qetie'.$r['id'].'">Event End <span class="labeldate small ml-2" id="labeldatetie'.$r['id'].'">('.date($config['dateFormat'],$r['tie']).')</span></label>'.
-              '<input id="qetie'.$r['id'].'" type="datetime-local" value="'.($r['tie']!=0?date('Y-m-d\TH:i',$r['tie']):'').'" autocomplete="off" onchange="update(`'.$r['id'].'`,`content`,`tie`,getTimestamp(`qetie'.$r['id'].'`));">'.
-            '</div>';
-          }
-          if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){
-            echo'<div class="row">'.
-              '<label for="qecategory_1'.$r['id'].'">Category One</label>'.
-              '<div class="form-row">'.
-                '<input class="qetextinput" id="qecategory_1'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_1" type="text" value="'.$r['category_1'].'">'.
-                '<button class="qesave" id="qesavecategory_1'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_1'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-              '</div>'.
-            '</div>'.
-            '<div class="row">'.
-              '<label for="qecategory_2'.$r['id'].'">Category Two</label>'.
-              '<div class="form-row">'.
-                '<input class="qetextinput" id="qecategory_2'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_2" type="text" value="'.$r['category_2'].'">'.
-                '<button class="qesave" id="qesavecategory_2'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_2'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-              '</div>'.
-            '</div>'.
-            '<div class="row">'.
-              '<label for="qecategory_3'.$r['id'].'">Category Three</label>'.
-              '<div class="form-row">'.
-                '<input class="qetextinput" id="qecategory_3'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_3" type="text" value="'.$r['category_3'].'">'.
-                '<button class="qesave" id="qesavecategory_3'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_3'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-              '</div>'.
-            '</div>'.
-            '<div class="row">'.
-              '<label for="qecategory_4'.$r['id'].'">Category Four</label>'.
-              '<div class="form-row">'.
-                '<input class="qetextinput" id="qecategory_4'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_4" type="text" value="'.$r['category_4'].'">'.
-                '<button class="qesave" id="qesavecategory_4'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_4'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-              '</div>'.
-            '</div>'.
-            '<div class="row">'.
-              '<label for="qetags'.$r['id'].'">Tags</label>'.
-              '<div class="form-row">'.
-                '<input class="qetextinput" id="qetags'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="'.$t.'" data-dbc="tags" type="text" value="'.$r['tags'].'" placeholder="Enter Tags...">'.
-                '<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
-              '</div>';
-              $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
-              echo'<select id="tags_options" onchange="qeaddTag(`'.$r['id'].'`,$(this).val());">'.
-                '<option value="none">Clear All</option>';
-                if($st->rowCount()>0){
-                  while($rt=$st->fetch(PDO::FETCH_ASSOC)){
-                    $tagslist=explode(",",$rt['tags']);
-                    foreach($tagslist as$ts)echo'<option value="'.$ts.'">'.$ts.'</option>';
-                  }
-                }
-              echo'</select>'.
-            '</div>';
-          }
-          echo'</div>'.
           '<div class="col-12 col-sm-4 p-1">'.
             '<div class="row">'.
-              '<label for="qeti'.$r['id'].'">Created</label>'.
-              '<input id="qeti'.$r['id'].'" type="text" value="'.date($config['dateFormat'],$r['ti']).'" readonly>'.
-            '</div>'.
-            '<div class="row">'.
-            '<label for="qepti'.$r['id'].'">Published On <span class="labeldate small ml-2" id="labeldatepti'.$r['id'].'">('.date($config['dateFormat'],$r['pti']).')</span></label>'.
-            '<input id="qepti'.$r['id'].'" type="datetime-local" value="'.date('Y-m-d\TH:i',$r['pti']).'" autocomplete="off" onchange="update(`'.$r['id'].'`,`content`,`pti`,getTimestamp(`qepti'.$r['id'].'`));">'.
-          '</div>'.
-          '<div class="row">'.
-            '<label for="qestatus'.$r['id'].'">Status</label>'.
-            '<select id="qestatus'.$r['id'].'" onchange="update(`'.$r['id'].'`,`content`,`status`,$(this).val());statusSet(`'.$r['id'].'`,$(this).val());">'.
-              '<option value="unpublished"'.($r['status']=='unpublished'?' selected':'').'>Unpublished</option>'.
-              '<option value="autopublish"'.($r['status']=='autopublish'?' selected':'').'>AutoPublish</option>'.
-              '<option value="published"'.($r['status']=='published'?' selected':'').'>Published</option>'.
-              '<option value="delete"'.($r['status']=='delete'?' selected':'').'>Delete</option>'.
-              '<option value="archived"'.($r['status']=='archived'?' selected':'').'>Archived</option>'.
-            '</select>'.
-          '</div>'.
-          '<div class="row">'.
-            '<label for="qerank'.$r['id'].'">Access</label>'.
-            '<select id="qerank'.$r['id'].'" onchange="update(`'.$r['id'].'`,`content`,`rank`,$(this).val());$(`#rank'.$r['id'].'`).html($(this).find(`:selected`).text());">'.
-              '<option value="0"'.($r['rank']==0?' selected':'').'>Available to Everyone</option>'.
-              '<option value="100"'.($r['rank']==100?' selected':'').'>Available to Subscriber and Above</option>'.
-              '<option value="200"'.($r['rank']==200?' selected':'').'>Available to Member and Above</option>'.
-              '<option value="200"'.($r['rank']==200?' selected':'').'>Available to Member and Above</option>'.
-              '<option value="210"'.($r['rank']==210?' selected':'').'>Available to Member Bronze and Above</option>'.
-              '<option value="220"'.($r['rank']==220?' selected':'').'>Available to Member Silver and Above</option>'.
-              '<option value="230"'.($r['rank']==230?' selected':'').'>Available to Member Gold and Above</option>'.
-              '<option value="240"'.($r['rank']==240?' selected':'').'>Available to Member Platinum and Above</option>'.
-              '<option value="300"'.($r['rank']==300?' selected':'').'>Available to Client and Above</option>'.
-              '<option value="310"'.($r['rank']==310?' selected':'').'>Available to Wholesaler and Above</option>'.
-              '<option value="320"'.($r['rank']==320?' selected':'').'>Available to Wholesaler Bronze and Above</option>'.
-              '<option value="330"'.($r['rank']==330?' selected':'').'>Available to Wholesaler Silver and Above</option>'.
-              '<option value="340"'.($r['rank']==340?' selected':'').'>Available to Wholesaler Gold and Above</option>'.
-              '<option value="350"'.($r['rank']==350?' selected':'').'>Available to Wholesaler Platinum and Above</option>'.
-              '<option value="400"'.($r['rank']==400?' selected':'').'>Available to Contributor and Above</option>'.
-              '<option value="500"'.($r['rank']==500?' selected':'').'>Available to Author and Above</option>'.
-              '<option value="600"'.($r['rank']==600?' selected':'').'>Available to Editor and Above</option>'.
-              '<option value="700"'.($r['rank']==700?' selected':'').'>Available to Moderator and Above</option>'.
-              '<option value="800"'.($r['rank']==800?' selected':'').'>Available to Manager and Above</option>'.
-              '<option value="900"'.($r['rank']==900?' selected':'').'>Available to Administrator and Above</option>'.
-            '</select>'.
-          '</div>'.
-          '<div class="row">'.
-            '<label for="qelastedited'.$r['id'].'">Last Edited</label>'.
-            '<div class="col-12">'.
-              ($r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user']).
+              '<label for="qegenurl'.$r['id'].'">URL Slug</label>'.
+              '<div class="form-row col-12">'.
+                '<a id="qegenurl'.$r['id'].'" target="_blank" href="'.URL.$r['contentType'].'/'.$r['urlSlug'].'">'.URL.$r['contentType'].'/'.$r['urlSlug'].' <i class="i">new-window</i></a>'.
+              '</div>'.
+            '</div>';
+            if($r['contentType']=='inventory'||$r['contentType']=='service'){
+              echo'<div class="row">'.
+                '<div class="col-6 pr-1">'.
+                  '<label for="qerrp'.$r['id'].'" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>'.
+                  '<div class="form-row">'.
+                    '<div class="input-text">$</div>'.
+                    '<input class="qetextinput" id="qerrp'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="rrp" type="text" value="'.$r['rrp'].'">'.
+                    '<button class="qesave" id="qesaverrp'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerrp'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                  '</div>'.
+                '</div>'.
+                '<div class="col-6 pl-1">'.
+                  '<label for="qecost'.$r['id'].'">Cost</label>'.
+                  '<div class="form-row">'.
+                    '<div class="input-text">$</div>'.
+                    '<input class="qetextinput" id="qecost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="cost" type="text" value="'.$r['cost'].'" placeholder="Enter a Cost...">'.
+                    '<button class="qesave" id="qesavecost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecost'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                  '</div>'.
+                '</div>'.
+              '</div>'.
+              '<div class="row">'.
+                '<div class="col-6 pr-1">'.
+                  '<label for="qerCost'.$r['id'].'">Reduced Cost</label>'.
+                  '<div class="form-row">'.
+                    '<div class="input-text">$</div>'.
+                    '<input class="qetextinput" id="qerCost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="rCost" type="text" value="'.$r['rCost'].'" placeholder="Enter a Reduced Cost...">'.
+                    '<button class="qesave" id="qesaverCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qerCost'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                  '</div>'.
+                '</div>'.
+                '<div class="col-6 pl-1">'.
+                  '<label for="qedCost'.$r['id'].'">Distributor Cost</label>'.
+                  '<div class="form-row">'.
+                    '<div class="input-text">$</div>'.
+                    '<input class="qetextinput" id="qedCost'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="dCost" type="text" value="'.$r['dCost'].'" placeholder="Enter a Distributor Cost...">'.
+                    '<button class="qesave" id="qesavedCost'.$r['id'].'" data-tooltip="tooltip" data-dbid="qedCost'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                  '</div>'.
+                '</div>'.
+              '</div>';
+            }
+            if($r['contentType']=='inventory'){
+              echo'<div class="row">'.
+                '<label for="qequantity'.$r['id'].'">Quantity</label>'.
+                '<div class="form-row">'.
+                  '<input class="qetextinput" id="qequantity'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="quantity" type="text" value="'.$r['quantity'].'">'.
+                  '<button class="qesave" id="qesavequantity'.$r['id'].'" data-tooltip="tooltip" data-dbid="qequantity'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qestockStatus'.$r['id'].'">Stock Status</label>'.
+                '<select id="qestockStatus'.$r['id'].'" onchange="update(`'.$r['id'].'`,`content`,`stockStatus`,$(this).val());">'.
+                  '<option value="quantity"'.($r['stockStatus']=='quantity'?' selected':'').'>Dependant on Quantity (In Stock/Out Of Stock)</option>'.
+                  '<option value="in stock"'.($r['stockStatus']=='in stock'?' selected':'').'>In Stock</option>'.
+                  '<option value="out of stock"'.($r['stockStatus']=='out of stock'?' selected':'').'>Out Of Stock</option>'.
+                  '<option value="back order"'.($r['stockStatus']=='back order'?' selected':'').'>Back Order</option>'.
+                  '<option value="pre order"'.($r['stockStatus']=='pre order'?' selected':'').'>Pre Order</option>'.
+                  '<option value="available"'.($r['stockStatus']=='available'?' selected':'').'>Available</option>'.
+                  '<option value="sold out"'.($r['stockStatus']=='sold out'?' selected':'').'>Sold Out</option>'.
+                  '<option value="none"'.($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'').'>No Display</option>'.
+                '</select>'.
+              '</div>';
+            }
+          echo'</div>'.
+          '<div class="col-12 col-sm-4 p-1">';
+            if($r['contentType']=='events'){
+              echo'<div class="row">'.
+                '<label for="qetis'.$r['id'].'">Event Start <span class="labeldate small ml-2" id="labeldatetis'.$r['id'].'">('.date($config['dateFormat'],$r['tis']).')</span></label>'.
+                '<input id="qetis'.$r['id'].'" type="datetime-local" value="'.($r['tis']!=0?date('Y-m-d\TH:i',$r['tis']):'').'" autocomplete="off" onchange="update(`'.$r['id'].'`,`content`,`tis`,getTimestamp(`qetis'.$r['id'].'`));">'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qetie'.$r['id'].'">Event End <span class="labeldate small ml-2" id="labeldatetie'.$r['id'].'">('.date($config['dateFormat'],$r['tie']).')</span></label>'.
+                '<input id="qetie'.$r['id'].'" type="datetime-local" value="'.($r['tie']!=0?date('Y-m-d\TH:i',$r['tie']):'').'" autocomplete="off" onchange="update(`'.$r['id'].'`,`content`,`tie`,getTimestamp(`qetie'.$r['id'].'`));">'.
+              '</div>';
+            }
+            if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){
+              echo'<div class="row">'.
+                '<label for="qecategory_1'.$r['id'].'">Category One</label>'.
+                '<div class="form-row">'.
+                  '<input class="qetextinput" id="qecategory_1'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_1" type="text" value="'.$r['category_1'].'">'.
+                  '<button class="qesave" id="qesavecategory_1'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_1'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qecategory_2'.$r['id'].'">Category Two</label>'.
+                '<div class="form-row">'.
+                  '<input class="qetextinput" id="qecategory_2'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_2" type="text" value="'.$r['category_2'].'">'.
+                  '<button class="qesave" id="qesavecategory_2'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_2'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qecategory_3'.$r['id'].'">Category Three</label>'.
+                '<div class="form-row">'.
+                  '<input class="qetextinput" id="qecategory_3'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_3" type="text" value="'.$r['category_3'].'">'.
+                  '<button class="qesave" id="qesavecategory_3'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_3'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qecategory_4'.$r['id'].'">Category Four</label>'.
+                '<div class="form-row">'.
+                  '<input class="qetextinput" id="qecategory_4'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="category_4" type="text" value="'.$r['category_4'].'">'.
+                  '<button class="qesave" id="qesavecategory_4'.$r['id'].'" data-tooltip="tooltip" data-dbid="qecategory_4'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qetags'.$r['id'].'">Tags</label>'.
+                '<div class="form-row">'.
+                  '<input class="qetextinput" id="qetags'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="'.$t.'" data-dbc="tags" type="text" value="'.$r['tags'].'" placeholder="Enter Tags...">'.
+                  '<button class="qesave" id="qesavetags'.$r['id'].'" data-tooltip="tooltip" data-dbid="qetags'.$r['id'].'" aria-label="Save"><i class="i">save</i></button>'.
+                '</div>';
+                $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+                echo'<select id="tags_options" onchange="qeaddTag(`'.$r['id'].'`,$(this).val());">'.
+                  '<option value="none">Clear All</option>';
+                  if($st->rowCount()>0){
+                    while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                      $tagslist=explode(",",$rt['tags']);
+                      foreach($tagslist as$ts)echo'<option value="'.$ts.'">'.$ts.'</option>';
+                    }
+                  }
+                echo'</select>'.
+              '</div>';
+            }
+            echo'</div>'.
+            '<div class="col-12 col-sm-4 p-1">'.
+              '<div class="row">'.
+                '<label for="qeti'.$r['id'].'">Created</label>'.
+                '<input id="qeti'.$r['id'].'" type="text" value="'.date($config['dateFormat'],$r['ti']).'" readonly>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qepti'.$r['id'].'">Published On <span class="labeldate small ml-2" id="labeldatepti'.$r['id'].'">('.date($config['dateFormat'],$r['pti']).')</span></label>'.
+                '<input id="qepti'.$r['id'].'" type="datetime-local" value="'.date('Y-m-d\TH:i',$r['pti']).'" autocomplete="off" onchange="update(`'.$r['id'].'`,`content`,`pti`,getTimestamp(`qepti'.$r['id'].'`));">'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qestatus'.$r['id'].'">Status</label>'.
+                '<select id="qestatus'.$r['id'].'" onchange="update(`'.$r['id'].'`,`content`,`status`,$(this).val());statusSet(`'.$r['id'].'`,$(this).val());">'.
+                  '<option value="unpublished"'.($r['status']=='unpublished'?' selected':'').'>Unpublished</option>'.
+                  '<option value="autopublish"'.($r['status']=='autopublish'?' selected':'').'>AutoPublish</option>'.
+                  '<option value="published"'.($r['status']=='published'?' selected':'').'>Published</option>'.
+                  '<option value="delete"'.($r['status']=='delete'?' selected':'').'>Delete</option>'.
+                  '<option value="archived"'.($r['status']=='archived'?' selected':'').'>Archived</option>'.
+                '</select>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qerank'.$r['id'].'">Access</label>'.
+                '<select id="qerank'.$r['id'].'" onchange="update(`'.$r['id'].'`,`content`,`rank`,$(this).val());$(`#rank'.$r['id'].'`).html($(this).find(`:selected`).text());">'.
+                  '<option value="0"'.($r['rank']==0?' selected':'').'>Available to Everyone</option>'.
+                  '<option value="100"'.($r['rank']==100?' selected':'').'>Available to Subscriber and Above</option>'.
+                  '<option value="200"'.($r['rank']==200?' selected':'').'>Available to Member and Above</option>'.
+                  '<option value="200"'.($r['rank']==200?' selected':'').'>Available to Member and Above</option>'.
+                  '<option value="210"'.($r['rank']==210?' selected':'').'>Available to Member Bronze and Above</option>'.
+                  '<option value="220"'.($r['rank']==220?' selected':'').'>Available to Member Silver and Above</option>'.
+                  '<option value="230"'.($r['rank']==230?' selected':'').'>Available to Member Gold and Above</option>'.
+                  '<option value="240"'.($r['rank']==240?' selected':'').'>Available to Member Platinum and Above</option>'.
+                  '<option value="300"'.($r['rank']==300?' selected':'').'>Available to Client and Above</option>'.
+                  '<option value="310"'.($r['rank']==310?' selected':'').'>Available to Wholesaler and Above</option>'.
+                  '<option value="320"'.($r['rank']==320?' selected':'').'>Available to Wholesaler Bronze and Above</option>'.
+                  '<option value="330"'.($r['rank']==330?' selected':'').'>Available to Wholesaler Silver and Above</option>'.
+                  '<option value="340"'.($r['rank']==340?' selected':'').'>Available to Wholesaler Gold and Above</option>'.
+                  '<option value="350"'.($r['rank']==350?' selected':'').'>Available to Wholesaler Platinum and Above</option>'.
+                  '<option value="400"'.($r['rank']==400?' selected':'').'>Available to Contributor and Above</option>'.
+                  '<option value="500"'.($r['rank']==500?' selected':'').'>Available to Author and Above</option>'.
+                  '<option value="600"'.($r['rank']==600?' selected':'').'>Available to Editor and Above</option>'.
+                  '<option value="700"'.($r['rank']==700?' selected':'').'>Available to Moderator and Above</option>'.
+                  '<option value="800"'.($r['rank']==800?' selected':'').'>Available to Manager and Above</option>'.
+                  '<option value="900"'.($r['rank']==900?' selected':'').'>Available to Administrator and Above</option>'.
+                '</select>'.
+              '</div>'.
+              '<div class="row">'.
+                '<label for="qelastedited'.$r['id'].'">Last Edited</label>'.
+                '<div class="col-12">'.
+                  ($r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user']).
+                '</div>'.
+              '</div>'.
             '</div>'.
           '</div>'.
         '</div>'.
@@ -764,4 +776,7 @@ echo'<script>'.
 		'if(rank==1000){return "developer";}'.
 	'}'.
 '</script>';
+}
+if($o=='modal'){
+  echo'</div>';
 }

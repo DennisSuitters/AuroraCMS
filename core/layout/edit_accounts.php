@@ -506,7 +506,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               '<textarea class="field" disabled>'.rawurldecode($r['email_signature']).'</textarea>';?>
             </div>
           </div>
-<?php /* Tab 8 Orders */ ?>
+<?php /* Tab 7 Orders */ ?>
           <?php if($user['options'][4]==1){?>
             <div class="tab1-7 border" data-tabid="tab1-7" role="tabpanel">
               <section class="row list">
@@ -540,7 +540,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                       </div>
                     </div>
                   </article>
-                  <div class="quickedit d-none" id="quickedit<?=$ro['id'];?>"></div>
+                  <div class="quickedit" id="quickedit<?=$ro['id'];?>"></div>
                 <?php }?>
               </section>
             </div>

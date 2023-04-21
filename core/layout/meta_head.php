@@ -36,6 +36,7 @@
     <link rel="stylesheet" type="text/css" href="core/elfinder/css/elfinder.min.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/simplecolorpicker/jquery.simplecolorpicker.css" media="all">
     <Link rel="stylesheet" type="text/css" href="core/js/summernote/plugin/summernote-text-findnreplace/css/lite.css" media="all">
+    <Link rel="stylesheet" type="text/css" href="core/js/summernote/plugin/summernote-templates/css/summernote-templates.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css" media="all">
     <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css" media="all">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css" media="all">

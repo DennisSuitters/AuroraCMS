@@ -46,7 +46,7 @@
       socialLinkEmail:'example@example.com/',
       socialLinkLinkedIn:'https://linkedin.com/',
       templates:'../summernote-templates/page-templates/',
-      cssFile:'../summernote-templates/css/newsletter.css'
+      cssFile:'../summernote-templates/css/summernote-newsletter.css'
     },
     blocks:{
       icon:'<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="16" height="16" style="fill:currentColor"><path d="M 1,6.249111 H 6.25031 V 1 H 1 V 6.249111 z M 7.74969,1 V 6.249111 H 13 V 1 H 7.74969 z m 0,12 H 13 V 7.750444 H 7.74969 V 13 z M 1,13 H 6.25031 V 7.750444 H 1 V 13 z"/></svg></i>',
@@ -63,7 +63,7 @@
           $editable = context.layoutInfo.editable,
           options   = context.options,
           lang      = options.langInfo;
-      if (!$("link[href='../summernote-templates/css/summernote-templates.css']").length){
+/*      if (!$("link[href='../summernote-templates/css/summernote-templates.css']").length){
         $('<link/>', {
           rel: 'stylesheet',
           type: 'text/css',
@@ -76,7 +76,7 @@
           type: 'text/css',
           href: options.pageTemplates.cssFile
         }).appendTo('head');
-      }
+      }*/
       context.memo('button.pageTemplates', function () {
         var button = ui.button({
           contents: options.pageTemplates.icon,
@@ -224,13 +224,6 @@
           $editable = context.layoutInfo.editable,
           options   = context.options,
           lang      = options.langInfo;
-      if (!$("link[href='../summernote-templates/css/summernote-templates.css']").length){
-        $('<link/>', {
-          rel: 'stylesheet',
-          type: 'text/css',
-          href: '../summernote-templates/css/summernote-templates.css'
-        }).appendTo('head');
-      }
       context.memo('button.blocks',function () {
         var button = ui.button({
           contents: options.blocks.icon,
@@ -245,7 +238,32 @@
       });
       this.initialize = function () {
         var $container = options.dialogsInBody ? $(document.body) : $editor;
-        var body = '<div id="note-blocks" class="container"></div>';
+        var body = '<div class="quickedit">' +
+          '<div class="row">' +
+            '<div class="col-12 col-sm-2">' +
+              '<label for="note-dialog-blocks-id" class="note-form-label">ID</label>' +
+              '<div class="note-form-group">' +
+                '<input id="note-dialog-blocks-id" class="note-blocks-id note-input" type="text"/>' +
+                '</div>' +
+            '</div>' +
+            '<div class="col-12 col-sm-10">' +
+              '<label for="note-dialog-blocks-heading" class="note-form-label">Heading</label>' +
+              '<div class="note-form-group">' +
+                '<input id="note-dialog-blocks-heading" class="note-blocks-heading note-input" type="text"/>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<label for="note-dialog-blocks-image" class="note-form-label">Image</label>' +
+          '<div class="note-form-group">' +
+            '<input id="note-dialog-blocks-image" class="note-blocks-image note-input" type="text"/>' +
+            '<button class="note-btn" onclick="elfinderDialog(`note-dialog-blocks-image`);">File&nbsp;Browser</button>' +
+          '</div>' +
+          '<label for="note-dialog-blocks-notes" class="note-form-label">Notes</label>' +
+          '<div class="note-form-group">' +
+            '<textarea id="note-dialog-blocks-notes" class="note-blocks-notes" note-input"></textarea>' +
+          '</div>' +
+        '</div>' +
+        '<div id="note-blocks" class="container"></div>';
         this.$dialog = ui.dialog({
           title:  lang.blocks.dialogTitle,
           body:   body,
@@ -282,10 +300,10 @@
               options.blocks.generatedBlockTemplates.forEach((template, index) => {
                 pT = '<div class="note-blocks">' +
                   '<input id="note-select-' + ii + '" type="radio" value="' + ii + '" name="note-blocks-select" hidden>' +
-                    '<label for="note-select-' + ii + '" class="note-blocks-label">' +
+                  '<label for="note-select-' + ii + '" class="note-blocks-label">' +
                     template +
-                    '</label>' +
-                  '</div>';
+                  '</label>' +
+                '</div>';
                 $('#note-blocks').append(pT);
                ii++;
              });
@@ -297,7 +315,7 @@
                     var name = val.replace(/.html|%20|_/gi, ' ');
                     pT = '<div class="note-blocks">' +
                       '<input id="note-select-' + ii + '" type="radio" value="' + val + '" name="note-blocks-select" hidden>' +
-                      '<label for="note-select-' + ii + '" class="">' +
+                      '<label for="note-select-' + ii + '" class="note-blocks-label">' +
                         '<img src="' + options.blocks.templates + filename + '" class="note-thumb-selection">' +
                       '</label>' +
                     '</div>';
@@ -310,14 +328,78 @@
             $blocksBtn.click(function (e) {
               var blocksSelected = $('input[name=note-blocks-select]:checked').val();
               if (blocksSelected) {
+                const blocksId = self.$dialog.find('.note-blocks-id').val();
+                const blocksHeading = self.$dialog.find('.note-blocks-heading').val();
+                const blocksImage = self.$dialog.find('.note-blocks-image').val();
+                const blocksNotes = self.$dialog.find('.note-blocks-notes').val();
+                console.log(blocksHeading);
                 if(options.blocks.generatedBlockTemplates != '') {
                   if ($('input[name=note-blocks-replaceContent]:checked').length > 0) {
-                    $note.summernote('code', options.blocks.generatedBlockTemplates[blocksSelected]);
+                    let data=options.blocks.generatedBlockTemplates[blocksSelected];
+                    var find = [
+                      "[id]",
+                      "[heading]",
+                      "[image]",
+                      "[notes]"
+                    ];
+                    var replace = [
+                      blocksId,
+                      blocksHeading,
+                      blocksImage,
+                      blocksNotes
+                    ];
+                    data = data.replaceAll(
+                      new RegExp("(" + find.map(function (i) {
+                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
+                      }).join("|") + ")", "g"),function (s) {
+                        return replace[find.indexOf(s)];
+                      }
+                    );
+                    $note.summernote('pasteHTML', data);
                   } else {
-                    $note.summernote('pasteHTML', options.blocks.generatedBlockTemplates[blocksSelected]);
+                    let data=options.blocks.generatedBlockTemplates[blocksSelected];
+                    var find = [
+                      "[id]",
+                      "[heading]",
+                      "[image]",
+                      "[notes]"
+                    ];
+                    var replace = [
+                      blocksId,
+                      blocksHeading,
+                      blocksImage,
+                      blocksNotes
+                    ];
+                    data = data.replaceAll(
+                      new RegExp("(" + find.map(function (i) {
+                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
+                      }).join("|") + ")", "g"),function (s) {
+                        return replace[find.indexOf(s)];
+                      }
+                    );
+                    $note.summernote('pasteHTML', data);
                   }
                 } else {
                   $.get(options.blocks.templates + blocksSelected).done(function (data) {
+                    var find = [
+                      "[id]",
+                      "[heading]",
+                      "[image]",
+                      "[notes]"
+                    ];
+                    var replace = [
+                      blocksId,
+                      blocksHeading,
+                      blocksImage,
+                      blocksNotes
+                    ];
+                    data = data.replaceAll(
+                      new RegExp("(" + find.map(function (i) {
+                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
+                      }).join("|") + ")", "g"),function (s) {
+                        return replace[find.indexOf(s)];
+                      }
+                    );
                     $note.summernote('pasteHTML', data);
                   });
                 }

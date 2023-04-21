@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -56,7 +56,7 @@ else{
               <?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `file`!='notification' ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <article class="card zebra mx-2 mb-0 p-0 overflow-visible card-list item subsortable" id="l_<?=$r['id'];?>">
+                <article class="card zebra mx-2 mt-2 mb-0 p-0 overflow-visible card-list item shadow subsortable" id="l_<?=$r['id'];?>">
                   <div class="row">
                     <div class="col-12 col-sm p-2 align-top">
                       <?php if($user['options'][1]==1){
@@ -100,7 +100,7 @@ else{
                     if($sm->rowCount()>0){?>
                       <div id="subsortable_<?=$r['id'];?>">
                         <?php while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
-                          <article class="card zebra m-0 overflow-visible item" id="l_<?=$rm['id'];?>">
+                          <article class="card zebra mx-2 mt-2 mb-0 overflow-visible item" id="l_<?=$rm['id'];?>">
                             <div class="row">
                               <div class="col--5 pr-2 text-center text-muted i-2x">&rdsh;</div>
                               <div class="col--5">
@@ -182,7 +182,7 @@ else{
               <?php $so=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='none' AND `contentType`!='notification' ORDER BY `title` ASC");
               $so->execute();
               while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
-                <article class="card zebra mx-2 mb-0 p-0 overflow-visible card-list item" id="<?=$ro['id'];?>">
+                <article class="card zebra mx-2 mt-2 mb-0 p-0 overflow-visible card-list shadow item" id="<?=$ro['id'];?>">
                   <div class="row">
                     <div class="col-12 col-sm p-2 align-top">
                       <?php if($user['options'][1]==1){

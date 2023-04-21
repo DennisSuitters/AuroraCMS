@@ -40,7 +40,18 @@ section.content .card-image .image-toolbar{
   right:-3px;
   text-align:right }
 
+section.content .card-footer .comments,
+section.content .card-footer .quickeditbtn,
+section.content .card-footer .reviews,
+section.content .card-footer .share,
+section.content .card-footer .views,
+section.content .card-header .badger,
+section.content.list .card-footer .quickitemsbtn,
+section.content.list .card-image .image-toolbar{
+  display:none!important }
+
 section.content .status,
+section.content .card-footer .quickitemsbtn,
 section.content.list .card-footer .comments,
 section.content.list .card-footer .quickeditbtn,
 section.content.list .card-footer .reviews,
@@ -108,15 +119,6 @@ section.content .status.archived{
 
 section.content .card-image .image-toolbar .badger{
   margin-top:1px }
-
-section.content .card-footer .comments,
-section.content .card-footer .quickeditbtn,
-section.content .card-footer .reviews,
-section.content .card-footer .share,
-section.content .card-footer .views,
-section.content .card-header .badger,
-section.content.list .card-image .image-toolbar{
-  display:none!important }
 
 section.list article{
   margin:.1rem .1rem .15rem }

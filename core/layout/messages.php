@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -68,14 +68,17 @@ if($user['options'][3]==1){
                     <li class="breadcrumb-item active">Messages</li>
                   </ol>
                 </div>
-                <div class="col-12 col-sm-2 text-right">
-                  <div class="btn-group">
-                    <?=$user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/messages/settings" role="button" data-tooltip="left" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
+                <div class="col-12 col-sm-6 text-right">
+                  <div class="form-row justify-content-end">
+                    <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
+                    <div class="btn-group">
+                      <?=$user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/messages/settings" role="button" data-tooltip="left" aria-label="Messages Settings"><i class="i">settings</i></a>':'';?>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="row">
+            <div class="row mt-3">
               <?php if($folder=='INBOX'){
                 $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `folder`='INBOX' ORDER BY `ti` DESC, `subject` ASC");
                 $s->execute();
@@ -98,44 +101,66 @@ if($user['options'][3]==1){
               }
               $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
-              <div class="messages-menu col-12 col-sm-2">
-                <?=$user['options'][0]==1?'<a class="mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose" role="button">Compose</a><br>':'';?>
-                <a class="link mb-1<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i">inbox</i> Inbox</a><br>
-                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><i class="i">email</i> Unread</a><br>
-                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i">email-send</i> Sent</a><br>
-                <a class="link mb-1<?=(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i">bookmark</i> Important</a><br>
-                <a class="link badge mb-1<?=(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>"><i class="i">email-spam</i> Spam</a>
+              <div class="messages-menu col-12 col-sm-5 col-lg-4 col-xl-3 col-xxl-2 p-3 shadow">
+                <?=$user['options'][0]==1?'<a class="btn-block mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose" role="button">Compose New Email</a>':'';?>
+                <nav class="mt-3">
+                  <ul>
+                    <li>
+                      <a class="<?=(isset($args[0])?'':' active');?>" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i i-2x mr-2">inbox</i> Inbox</a>
+                    </li>
+                    <li>
+                      <a class="<?=(isset($args[0])&&$args[0]=='unread'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>">
+                        <i class="i i-2x mr-2">email</i> Unread
+                      </a>
+                      <?=($ur['cnt']>0?'<span class="badge" data-badge="'.$ur['cnt'].'"></span>':'');?>
+                    </li>
+                    <li>
+                      <a class="<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i i-2x mr-2">email-send</i> Sent</a>
+                    </li>
+                    <li>
+                      <a class="<?=(isset($args[0])&&$args[0]=='important'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i i-2x mr-2">bookmark</i> Important</a>
+                    </li>
+                    <li>
+                      <a class="<?=(isset($args[0])&&$args[0]=='spam'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>"><i class="i i-2x mr-2">email-spam</i> Spam</a>
+                      <?=($sp['cnt']>0?'<span class="badge" data-badge="'.$sp['cnt'].'"></span>':'');?>
+                    </li>
+                  </ul>
+                </nav>
                 <div class="alert alert-warning col-12 text-center m-0 d-none" id="checkmessages">Checking for new Messages!!!</div>
               </div>
-              <div class="col-12 col-sm-10 pl-3">
-                <table class="table-zebra">
-                  <thead>
-                    <tr>
-                      <th class="col-1"><input type="checkbox"></th>
-                      <th class="text-left">
-                        From<br>
-                        <small>Subject</small>
-                      </th>
-                      <th class="align-top">Date</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                      <tr class="<?=$r['status']=='unread'?' font-weight-bold':' font-weight-light';?>" id="l_<?=$r['id'];?>">
-                        <td class="col-1">
-                          <input name="message[]" type="checkbox">
-                        </td>
-                        <td class="text-left">
-                          <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>">
-                            <span class="from"><?=$r['from_name']!=''?$r['from_name'].'<small> &lt;'.$r['from_email'].'&gt;</small>':'&lt;'.$r['from_email'].'&gt;';?></span><br>
-                            <small class="subject"><?=$r['subject'];?></small>
-                          </a>
-                        </td>
-                        <td>
-                          <span class="date"><?= date('M j \a\t G:i',$r['ti']);?></span>
-                        </td>
-                        <td class="align-middle" id="controls_<?=$r['id'];?>">
+              <section class="col-12 col-sm ml-3 overflow-visible list" id="accountview">
+                <article class="card overflow-visible card-list item m-0 px-2 py-3">
+                  <span class="btn pl-1">
+                    <input class="d-inline-block" name="message[]" type="checkbox">
+                    <ul class="breadcrumb d-inline-block m-0 p-0">
+                      <li class="breadcrumb-item active breadcrumb-dropdown">
+                        <span class="breadcrumb-dropdown ml-2"><i class="i mt-1">chevron-down</i></span>
+                        <ul class="breadcrumb-dropper">
+                          <li><a href="http://localhost/AuroraCMS2/admin/content">All</a></li>
+                          <li><a href="http://localhost/AuroraCMS2/admin/content/type/activities">Activities</a></li>
+                          <li><a href="http://localhost/AuroraCMS2/admin/content/type/advert">Advert</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </span>
+                  <button class="ml-2"><i class="i">reload</i></button>
+                </article>
+                <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
+                  <article class="card zebra overflow-visible card-list item m-0 px-3 py-2" id="l_<?=$r['id'];?>" data-content="<?=$r['from_name'].' '.$r['from_email'].' '.$r['subject'];?>">
+                    <div class="row">
+                      <div class="col-1 p-2">
+                        <input name="message[]" type="checkbox">
+                      </div>
+                      <div class="col-sm small">
+                        <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>"><?=$r['from_name']!=''?$r['from_name']:'&lt;'.$r['from_email'].'&gt;';?><br>
+                        <small class="date"><?= date('M j \a\t G:i',$r['ti']);?></small>
+                        </a>
+                      </div>
+                      <div class="col-sm small">
+                        <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>"><?=$r['subject'];?></a>
+                      </div>
+                      <div class="col-3">
+                        <div id="controls_<?=$r['id'];?>">
                           <div class="btn-toolbar float-right" role="toolbar">
                             <div class="btn-group" role="group">
                               <?php if($user['options'][0]==1){
@@ -156,16 +181,16 @@ if($user['options'][3]==1){
                                   </form>
                                 <?php }?>
                                 <button data-tooltip="tooltip" aria-label="Move to Spam Folder" onclick="update('<?=$r['id'];?>','messages','folder','spam');"><i class="i">email-spam</i></button>
-                                <button class="purge" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$r['id'];?>','messages')"><i class="i">trash</i></button>
+                                <button class="purge" data-tooltip="tooltip" aria-label="Delete"  onclick="purge('<?=$r['id'];?>','messages')"><i class="i">trash</i></button>
                               <?php }?>
                             </div>
                           </div>
-                        </td>
-                      </tr>
-                    <?php }?>
-                  </tbody>
-                </table>
-              </div>
+                        </div>
+                      </div>
+                    </div>
+                  </article>
+                <?php }?>
+              </section>
             </div>
           </div>
           <?php require'core/layout/footer.php';?>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -167,10 +167,11 @@ function rank($txt){
 	if($txt==1000)return'developer';
 }
 function svg($svg,$class=null,$size=null){
-	echo'<i class="i bg-danger'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.$svg.'</i>';
+	$svg=file_get_contents('core/images/icons/'.$svg.'.svg');
+	echo$svg;
 }
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i bg-danger'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.$svg.'</i>';
+	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.$svg.'</i>';
 }
 function frontsvg($svg){
 	if(file_exists(THEME.'/svg/'.$svg.'.svg'))
@@ -393,6 +394,10 @@ class admin{
 	}
 	function adverts($args=false){
 		$view='adverts';
+		require'admin.php';
+	}
+	function agronomy($args=false){
+		$view='agronomy';
 		require'admin.php';
 	}
 	function bookings($args=false){
@@ -679,6 +684,7 @@ $routes=[
 	$settings['system']['admin'].'/accounts'=>['admin','accounts'],
 	$settings['system']['admin'].'/activity'=>['admin','activity'],
 	$settings['system']['admin'].'/adverts'=>['admin','adverts'],
+	$settings['system']['admin'].'/agronomy'=>['admin','agronomy'],
 	$settings['system']['admin'].'/bookings'=>['admin','bookings'],
 	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
 	$settings['system']['admin'].'/comments'=>['admin','comments'],

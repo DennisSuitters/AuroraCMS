@@ -1,7 +1,7 @@
 ![AuroraCMS](core/images/readmelogo.webp)
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.23
+Current version is v0.2.24
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -90,6 +90,8 @@ Current version is v0.2.23
 - Media.
   - Upload and manage various types of files for addition into content using elFinder.
   - Auto resizing, makes thumbnails and Large, Medium and Small versions of images for use with srcset.
+  - Browse Unsplash Free Photo's to adding to content.
+  - FileRobot Image editing in page.
 - Featured Content.
   - Can use Content Items as Featured Content, or Images and HTML Templates uploaded into the `media/carousel/` folder. Which then will get sorted, and number of items displayed depending on the settings attributes in the `featured.html` template file.
 - Accounts.

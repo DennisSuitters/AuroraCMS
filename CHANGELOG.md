@@ -1,4 +1,11 @@
-### v0.2.23
+### v0.2.24
+- Fix style variables that were missing, and make improvements.
+- Improve visibilty and functionality of quiededit/quickview content dropdowns.
+- Improve Gallery & Content Media items, can now view thumbnails via click replacement of main image, or use modal viewer.
+- Add Jumpbar for content lists to quickly find content alphabetically.
+- Fix the content category navigation menu not display all categories.
+
+#### v0.2.23
 - Update Summernote, fix Summernote plugins.
 - Add multiline editing to some text inputs.
 - Add FileRobot Image Editor in a dropdown section where images are added to content.

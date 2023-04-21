@@ -523,7 +523,7 @@ svg.leaflet-image-layer.leaflet-interactive path{
 .leaflet-touch .leaflet-bar a{
   width:30px;
   height:30px;
-  line-height:9px }
+  line-height:4px!important }
 
 .leaflet-touch .leaflet-bar a:first-child{
   border-bottom-left-radius:0;
@@ -540,7 +540,7 @@ svg.leaflet-image-layer.leaflet-interactive path{
 
 .leaflet-touch .leaflet-control-zoom-in,
 .leaflet-touch .leaflet-control-zoom-out{
-  font-size:22px }
+  font-size:22px!important }
 
 .leaflet-control-layers{
   box-shadow:0 1px 5px rgba(0,0,0,.4);
@@ -1050,7 +1050,9 @@ nav.navigation.account-menu button[role="link"]{
   text-transform:none!important;
   text-shadow:none!important;
   -webkit-text-stroke:0!important;
-  border-radius:0!important }
+  border-radius:0!important;
+  -webit-box-shadow:none!important;
+  box-shadow:none!important }
 
 nav.navigation.account-menu ul li a:hover,
 nav.navigation.account-menu button[role="link"]:hover{

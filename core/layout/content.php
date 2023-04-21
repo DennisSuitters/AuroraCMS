@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -77,7 +77,7 @@ else{
           $getStatus=" ";
         }else$getStatus=" AND `status`!='archived'";
         if(isset($args[2])&&$args[2]=='cat'){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>isset($args[3])&&$args[3]!=''?'%'.str_replace('-','%',$args[3]).'%':'%',
             ':category_2'=>isset($args[4])&&$args[4]!=''?'%'.str_replace('-','%',$args[4]).'%':'%',
@@ -103,11 +103,11 @@ else{
           $getStatus=" ";
         else
           $getStatus=" AND `status`='".$args[1]."' ";
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `title` ASC");
         $s->execute([':contentType'=>$view]);
       }else{
         if(isset($args[5])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC,`ti` DESC,`title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
@@ -115,25 +115,25 @@ else{
             ':category_4'=>str_replace('-',' ',strtolower($args[5]))
           ]);
         }elseif(isset($args[4])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
             ':category_3'=>str_replace('-',' ',strtolower($args[4]))
           ]);
         }elseif(isset($args[3])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3]))
           ]);
         }elseif(isset($args[2])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` ASC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2]))
           ]);
         }else{
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
           $s->execute();
         }
       }?>
@@ -256,8 +256,10 @@ else{
                     </div>
                   </div>
                 </div>
-                <section class="content overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
-                  <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
+                <section class="content mt-3 overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
+                  <?php
+                  $jump=['num'=>0,'a'=>0,'b'=>0,'c'=>0,'d'=>0,'e'=>0,'f'=>0,'g'=>0,'h'=>0,'i'=>0,'j'=>0,'k'=>0,'l'=>0,'m'=>0,'n'=>0,'o'=>0,'p'=>0,'q'=>0,'r'=>0,'s'=>0,'t'=>0,'u'=>0,'v'=>0,'w'=>0,'x'=>0,'y'=>0,'z'=>0];
+                  while($r=$s->fetch(PDO::FETCH_ASSOC)){
                     $sr=$db->prepare("SELECT COUNT(`id`) as num,SUM(`cid`) as cnt FROM `".$prefix."comments` WHERE `contentType`='review' AND `rid`=:rid");
                     $sr->execute([':rid'=>$r['id']]);
                     $rr=$sr->fetch(PDO::FETCH_ASSOC);
@@ -287,8 +289,17 @@ else{
                       if(strlen(strip_tags($r['notes']))<100)$seoerrors++;
                       preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
                       if(isset($h1[1]))$seoerrors++;
+                    }
+                    $jumpcheck=strtolower($r['title'][0]);
+                    if(is_numeric($jumpcheck)&&$jump['num']==0){
+                      echo'<div id="jumpnum"></div>';
+                      $jump['num']=1;
+                    }
+                    if($jump[$jumpcheck]==0){
+                      echo'<div id="jump'.$jumpcheck.'"></div>';
+                      $jump[$jumpcheck]=1;
                     }?>
-                    <article class="card zebra m-2 overflow-visible card-list" id="l_<?=$r['id'];?>" data-content="<?=$r['contentType'].' '.$r['title'];?>">
+                    <article class="card zebra mx-2 mt-2 mb-0 overflow-visible card-list shadow" id="l_<?=$r['id'];?>" data-content="<?=$r['contentType'].' '.$r['title'];?>">
                       <div class="card-image overflow-visible">
                         <?php if($r['thumb']!='')
                           echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -367,6 +378,7 @@ else{
                             <div class="btn-group" role="group">
                               <button class="share <?=($r['status']=='published'?'':'d-none');?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
                               <a href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
+                              <a href="javascript:;" class="btn quickitemsbtn" data-fancybox="quickitems" data-type="ajax" data-src="core/quickedit.php?id=<?=$r['id'];?>&t=content&o=modal" data-tooltip="tooltip" aria-label="View Quick Edit Modal"><i class="i">view</i></a>
                               <?php if($user['options'][0]==1){?>
                                 <button class="add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
                                 <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
@@ -378,13 +390,26 @@ else{
                         </div>
                       </div>
                     </article>
-                    <div class="quickedit d-none" id="quickedit<?=$r['id'];?>"></div>
+                    <div class="quickedit shadow" id="quickedit<?=$r['id'];?>"></div>
                   <?php }?>
-                </section>
-              </div>
+                  </section>
+                <div class="jumpBar">
+                  <a class="jumpBar-character" href="<?=$_SERVER['REQUEST_URI'];?>#back-to-top"><i class="i">arrow-up</i></a>
+                  <?php
+                  foreach($jump as $jumplink => $val) {
+                    if($jumplink=='num'&&$val==1){
+                      echo'<a class="jumpBar-character" href="'.$_SERVER['REQUEST_URI'].'#jumpnum">#</a>';
+                    }else
+                    if(!is_numeric($jumplink)&&$val==1){
+                      echo'<a class="jumpBar-character" href="'.$_SERVER['REQUEST_URI'].'#jump'.$jumplink.'">'.$jumplink.'</a>';
+                    }
+                  }?>
+                  <a class="jumpBar-character" href="<?=$_SERVER['REQUEST_URI'];?>#jumpbottom"><i class="i rotate-180">arrow-up</i></a>
+                </div>
               <?php require'core/layout/footer.php';?>
             </div>
           </section>
+          <div id="jumpbottom"></div>
         </main>
       <?php }
       if($show=='item')require'core/layout/edit_content.php';

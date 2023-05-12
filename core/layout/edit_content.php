@@ -775,6 +775,10 @@ if($r['contentType']!='testimonials'){
                   <label id="<?=$r['contentType'];?>Image" for="file"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Image" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Field">&#128279;</a>':'';?>Image</label>
                   <div class="form-row">
                     <?php $w='';
+                    if(stristr($r['file'],'youtu')){
+                      preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$r['file'],$vidMatch);
+                      $r['file']='https://i.ytimg.com/vi/'.$vidMatch[0].'/maxresdefault.jpg';
+                    }
                     if(stristr($r['file'],'/thumbs/'))$w='thumbs';
                     if(stristr($r['file'],'/lg/'))$w='lg';
                     if(stristr($r['file'],'/md/'))$w='md';
@@ -791,7 +795,8 @@ if($r['contentType']!='testimonials'){
                       '<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">'
                     );?>
                     <input class="textinput" id="file" type="text" value="<?=$r['file'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="file"<?=($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled');?>>
-                    <?=($user['options'][1]==1?
+                    <?php
+                    echo($user['options'][1]==1?
                       '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`file`);"><i class="i">browse-media</i></button>'.
                       ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=file" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
                       ($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editfile" data-image="'.$r['file'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="file"><i class="i">magic</i></button>':'').
@@ -1141,16 +1146,21 @@ if($r['contentType']!='testimonials'){
                     $sm->execute([':id'=>$r['id']]);
                     if($sm->rowCount()>0){
                       while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-                        if(file_exists('media/sm/'.basename($rm['file'])))
-                          $thumb='media/sm/'.basename($rm['file']);
-                        elseif($rm['file']!='')
-                          $thumb=$rm['file'];
-                        else
-                          $thumb=ADMINNOIMAGE;?>
-                        <div id="mi_<?=$rm['id'];?>" class="card stats gallery col-12 col-sm-3 m-0 border-0">
-                          <a data-fancybox="media" data-type="image" data-caption="<?=($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Content Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?=$rm['file'];?>">
-                            <img src="<?=$thumb;?>" alt="Media <?=$rm['id'];?>">
-                          </a>
+                        echo'<div id="mi_'.$rm['id'].'" class="card stats gallery col-12 col-sm-3 m-0 border-0">';
+                        if(stristr($rm['file'],'youtu')){
+                          preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$rm['file'],$vidMatch);
+                          echo'<div class="note-video-wrapper video" style="padding-bottom:67%;" data-fancybox="media" href="'.$rm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'">'.
+                            '<img class="note-video-clip" src="'.$rm['thumb'].'">'.
+                            '<div class="play"></div>'.
+                          '</div>';
+                        }elseif(stristr($rm['file'],'vimeo')){
+                          preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$rm['file'],$vidMatch);
+                          echo'<div class="note-video-wrapper video" style="padding-bottom:67%;" data-fancybox="media" href="'.$rm['file'].'" data-fancybox-plyr data-embed="https://vimeo.com/'.$vidMatch[5].'">'.
+                            '<img class="note-video-clip" src="'.$rm['thumb'].'">'.
+                            '<div class="play"></div>'.
+                          '</div>';
+                        }else
+                          echo'<a data-fancybox="media" href="'.$rm['file'].'"><img src="'.$rm['thumb'].'" alt="'.$rm['title'].'"></a>';?>
                           <div class="btn-group tools">
                             <div class="btn" data-tooltip="right" aria-label="<?=$rm['views'];?> views"><small><?=$rm['views'];?></small></div>
                             <?php if($user['options'][1]==1){?>
@@ -1917,31 +1927,80 @@ if($r['contentType']!='testimonials'){
                   <form target="sp" method="post" action="core/add_list.php">
                     <input name="rid" type="hidden" value="<?=$r['id'];?>">
                     <div class="row">
-                      <div class="col-12 col-sm-3">
-                        <div class="form-row">
-                          <div class="input-text">Link ID</div>
-                          <input id="lid" name="lid" type="text" value="" placeholder="Link ID...">
-                        </div>
+                      <div class="col-2">
+                        <label for="lid" class="m-2">Link ID</label>
                       </div>
-                      <div class="col-12 col-sm-9">
-                        <div class="form-row">
-                          <div class="input-text">Heading</div>
-                          <input id="lh" name="lh" type="text" value="" placeholder="Heading...">
-                        </div>
+                      <div class="col-10">
+                        <input id="lid" name="lid" type="text" value="" placeholder="Link ID...">
                       </div>
                     </div>
-                    <div class="form-row">
-                      <div class="input-text col-2">Image</div>
-                      <input id="limage" name="li" type="text" value="" placeholder="Image...">
-                      <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`limage`);return false;"><i class="i">browse-media</i></button>
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="lh" class="m-2">Heading</label>
+                      </div>
+                      <div class="col-10">
+                        <input id="lh" name="lh" type="text" value="" placeholder="Heading...">
+                      </div>
                     </div>
-                    <div class="form-row">
-                      <div class="input-text col-2">URL</div>
-                      <input name="lu" type="text" value="" placeholder="URL...">
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="limage" class="m-2">Image/Video</label>
+                      </div>
+                      <div class="col-10">
+                        <div class="form-row">
+                          <input id="limage" name="li" type="text" value="" placeholder="Image/Video...">
+                          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`limage`);return false;"><i class="i">browse-media</i></button>
+                        </div>
+                      </div>
                     </div>
-                    <div class="form-row">
-                      <div class="input-text col-2">Notes</div>
-                      <textarea name="lda"></textarea>
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="limage2" class="m-2">Image/Video 2</label>
+                      </div>
+                      <div class="col-10">
+                        <div class="form-row">
+                          <input id="limage2" name="li2" type="text" value="" placeholder="Image/Video 2...">
+                          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`limage2`);return false;"><i class="i">browse-media</i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="limage3" class="m-2">Image/Video 3</label>
+                      </div>
+                      <div class="col-10">
+                        <div class="form-row">
+                          <input id="limage3" name="li3" type="text" value="" placeholder="Image/Video 3...">
+                          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`limage3`);return false;"><i class="i">browse-media</i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="limage4" class="m-2">Image/Video 4</label>
+                      </div>
+                      <div class="col-10">
+                        <div class="form-row">
+                          <input id="limage4" name="li4" type="text" value="" placeholder="Image/Video 4...">
+                          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`limage4`);return false;"><i class="i">browse-media</i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="lu" class="m-2">URL</label>
+                      </div>
+                      <div class="col-10">
+                        <input id="lu" name="lu" type="text" value="" placeholder="URL...">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-2">
+                        <label for="lda" class="m-2">Notes</label>
+                      </div>
+                      <div class="col-10">
+                        <textarea id="lda" name="lda"></textarea>
+                      </div>
                     </div>
                     <div class="text-right">
                       <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
@@ -1954,11 +2013,29 @@ if($r['contentType']!='testimonials'){
                   while($rl=$sl->fetch(PDO::FETCH_ASSOC)){?>
                     <div id="l_<?=$rl['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">
                       <div class="row">
-                        <?php if($rl['file']!=''){?>
-                          <div class="card-image col-12 col-sm-2 h-auto">
-                            <img src="<?=$rl['file'];?>" style="max-height:100px;" alt="<?=$rl['title'];?>">
-                          </div>
-                        <?php }?>
+                        <?php $slm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `rid`=:id ORDER BY `ord` ASC, `ti` ASC LIMIT 4");
+                        $slm->execute([':id'=>$rl['id']]);
+                        $slmc=$slm->rowCount();
+                        if($slmc>0){
+                          echo'<div class="col-12 col-sm-4 list-images-'.$slmc.' overflow-hidden">';
+                          while($rlm=$slm->fetch(PDO::FETCH_ASSOC)){
+                            if(stristr($rlm['file'],'youtu')){
+                              preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$rlm['file'],$vidMatch);
+                              echo'<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'">'.
+                                '<img class="note-video-clip" src="'.$rlm['thumb'].'">'.
+                                '<div class="play"></div>'.
+                              '</div>';
+                            }elseif(stristr($rlm['file'],'vimeo')){
+                              preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$rlm['file'],$vidMatch);
+                              echo'<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://vimeo.com/'.$vidMatch[5].'">'.
+                                '<img class="note-video-clip" src="https://vumbnail.com/'.$vidMatch[5].'.jpg">'.
+                                '<div class="play"></div>'.
+                              '</div>';
+                            }else
+                              echo'<a data-fancybox="list" href="'.$rlm['file'].'"><img src="'.$rlm['thumb'].'" alt="'.$lh.'"></a>';
+                          }
+                          echo'</div>';
+                        }?>
                         <div class="card-footer col-12 col-sm m-0 p-1">
                           <div class="row m-0 p-0">
                             <div class="col-12 small m-0 p-0">

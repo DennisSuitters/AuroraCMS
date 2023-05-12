@@ -889,6 +889,12 @@ td img.avatar{
   color: var(--link-active);
   font-weight:700;
 }
+.messages-important + label{
+  color: #ccc!important;
+}
+.messages-important:checked + label {
+  color: #000!important;
+}
 @-webkit-keyframes swing-in-top-fwd{
   0%{
     -webkit-transform:rotateX(-100deg);

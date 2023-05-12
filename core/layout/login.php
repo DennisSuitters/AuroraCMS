@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -78,7 +78,7 @@
       </div>
     </main>
     <footer class="loginattribution">
-      Photo by&nbsp;<a href="https://unsplash.com/@saluken?utm_source=AuroraCMS&utm_medium=referral">Luke Tanis</a>&nbsp;on&nbsp;<a href="https://unsplash.com/photos/dt24DUzzggE?utm_source=AuroraCMS&utm_medium=referral">Unsplash</a>
+      Photo by&nbsp;<a href="https://unsplash.com/@nelly?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nelly Volkovich</a>&nbsp;on&nbsp;<a href="https://unsplash.com/photos/dt24DUzzggE?utm_source=AuroraCMS&utm_medium=referral">Unsplash</a>
     </footer>
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/aurora.min.js"></script>

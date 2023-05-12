@@ -19,6 +19,7 @@ else{?>
       <div class="container-fluid">
         <div class="card mt-3 border-radius-0 bg-transparent border-0 overflow-visible">
           <?php $curHr=date('G');
+          $msg='';
           if($curHr<12)
             $msg.='Good Morning ';
           elseif($curHr<18)

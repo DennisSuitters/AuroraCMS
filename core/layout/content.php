@@ -77,7 +77,7 @@ else{
           $getStatus=" ";
         }else$getStatus=" AND `status`!='archived'";
         if(isset($args[2])&&$args[2]=='cat'){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list'".$getStatus."ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>isset($args[3])&&$args[3]!=''?'%'.str_replace('-','%',$args[3]).'%':'%',
             ':category_2'=>isset($args[4])&&$args[4]!=''?'%'.str_replace('-','%',$args[4]).'%':'%',
@@ -93,7 +93,7 @@ else{
               $eventsort='`pin` DESC, `ti` DESC, `title` ASC';
             $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType ".$getStatus."ORDER BY ".$eventsort);
           }else{
-            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
+            $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list'".$getStatus."ORDER BY `pin` DESC, `ti` DESC, `title` ASC");
           }
           $s->execute([':contentType'=>$args[1]]);
         }
@@ -103,11 +103,11 @@ else{
           $getStatus=" ";
         else
           $getStatus=" AND `status`='".$args[1]."' ";
-        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert'".$getStatus."ORDER BY `title` ASC");
+        $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list'".$getStatus."ORDER BY `title` ASC");
         $s->execute([':contentType'=>$view]);
       }else{
         if(isset($args[5])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND LOWER(`category_4`) LIKE LOWER(:category_4) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
@@ -115,25 +115,25 @@ else{
             ':category_4'=>str_replace('-',' ',strtolower($args[5]))
           ]);
         }elseif(isset($args[4])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND LOWER(`category_3`) LIKE LOWER(:category_3) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3])),
             ':category_3'=>str_replace('-',' ',strtolower($args[4]))
           ]);
         }elseif(isset($args[3])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND LOWER(`category_2`) LIKE LOWER(:category_2) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2])),
             ':category_2'=>str_replace('-',' ',strtolower($args[3]))
           ]);
         }elseif(isset($args[2])){
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE LOWER(`category_1`) LIKE LOWER(:category_1) AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list' ORDER BY `title` ASC");
           $s->execute([
             ':category_1'=>str_replace('-',' ',strtolower($args[2]))
           ]);
         }else{
-          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' ORDER BY `title` ASC");
+          $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list' ORDER BY `title` ASC");
           $s->execute();
         }
       }?>
@@ -150,7 +150,7 @@ else{
                         <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
                           <li><a href="<?= URL.$settings['system']['admin'].'/content';?>">All</a></li>
-                          <?php $sc=$db->prepare("SELECT DISTINCT `contentType` FROM `".$prefix."content` WHERE `contentType`!='' AND `contentType`!=:cT ORDER BY `contentType` ASC");
+                          <?php $sc=$db->prepare("SELECT DISTINCT `contentType` FROM `".$prefix."content` WHERE `contentType`!=''AND`contentType`!='booking' AND `contentType`!='message_primary' AND `contentType`!='newsletters' AND `contentType`!='job' AND `contentType`!='faq' AND `contentType`!='course' AND `contentType`!='advert' AND `contentType`!='list' AND `contentType`!=:cT ORDER BY `contentType` ASC");
                           $sc->execute([':cT'=>isset($args[1])&&$args[1]!=''?$args[1]:'%']);
                           while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
                             echo'<li><a href="'.URL.$settings['system']['admin'].'/content/type/'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</a></li>';

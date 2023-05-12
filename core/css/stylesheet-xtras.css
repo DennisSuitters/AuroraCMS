@@ -2344,7 +2344,7 @@ dialog footer{
   padding-top:30px;
   height:0;
   overflow:hidden;
-  width:100% }
+  width:100%; }
 
 .note-video-wrapper embed,
 .note-video-wrapper iframe,

@@ -520,30 +520,54 @@ if($skip==false){
           $listitem=$matches[1];
           $lout='';
           while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+            $listmediaitems='';
+            $slm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `rid`=:rid ORDER BY `ord` ASC, `ti` ASC LIMIT 4");
+            $slm->execute([':rid'=>$rl['id']]);
+            $sli=0;
+            if($slm->rowCount()>0){
+              while($rlm=$slm->fetch(PDO::FETCH_ASSOC)){
+                if(stristr($rlm['file'],'youtu')){
+                  preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$rlm['file'],$vidMatch);
+                  $listmediaitems.='<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'">'.
+                    '<img class="note-video-clip" src="https://i.ytimg.com/vi/'.$vidMatch[0].'/maxresdefault.jpg" alt="'.$rlm['title'].'">'.
+                    '<div class="play"></div>'.
+                  '</div>';
+                }elseif(stristr($rlm['file'],'vimeo')){
+                  preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$rlm['file'],$vidMatch);
+                  $listmediaitems.='<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://vimeo.com/'.$vidMatch[5].'">'.
+                    '<img class="note-video-clip" src="https://vumbnail.com/'.$vidMatch[5].'.jpg">'.
+                    '<div class="play"></div>'.
+                  '</div>';
+                }else{
+                  $listmediaitems.='<a data-fancybox="list" href="'.$rlm['file'].'" data-caption="&lt;h5&gt;'.$rl['title'].'&lt;/h5&gt;'.$rl['notes'].'"><img src="'.$rlm['file'].'" alt="'.$rl['title'].'"></a>';
+                }
+                $sli++;
+              }
+            }
             $out=preg_replace([
               '/<print list=[\"\']?id[\"\']?>/',
               '/<print list=[\"\']?code[\"\']?>/',
-              ($rl['file']!=''?'/<[\/]?listimage>/':'~<listimage>.*?<\/listimage>~is'),
-              '/<print list=[\"\']?image[\"\']?>/',
-              '/<print list=[\"\']?imagealt[\"\']?>/',
               ($rl['title']!=''?'/<[\/]?listheading>/':'~<listheading>.*?<\/listheading>~is'),
               '/<print list=[\"\']?heading[\"\']?>/',
               '/<print list=[\"\']?caption[\"\']?>/',
               '/<print list=[\"\']?notes[\"\']?>/',
               '/<print list=[\"\']?url[\"\']?>/',
-              '/<print list=[\"\']?permalink[\"\']?>/'
+              '/<print list=[\"\']?permalink[\"\']?>/',
+              '/<print list=[\"\']?imagecount[\"\']?>/',
+              ($listmediaitems!=''?'/<[\/]?listmedia>/':'~<listmedia>.*?<\/listmedia>~is'),
+              '/<listmediaitems>/'
             ],[
               $rl['id'],
               ($rl['code']!=''?$rl['code']:'list'.$rl['id']),
-              '',
-              $rl['file'],
-              ($rl['title']!=''?$rl['title']:$rl['code']),
               '',
               $rl['title'],
               htmlspecialchars($rl['notes'],ENT_QUOTES),
               $rl['notes'],
               ($rl['url']!=''?' <a href="'.$rl['url'].'">More...</a>':''),
-              URL.$r['contentType'].'/'.$r['urlSlug'].'#'.($rl['code']!=''?$rl['code']:'list'.$rl['id'])
+              URL.$r['contentType'].'/'.$r['urlSlug'].'#'.($rl['code']!=''?$rl['code']:'list'.$rl['id']),
+              $sli,
+              '',
+              $listmediaitems,
             ],$listitem);
             $lout.=$out;
           }

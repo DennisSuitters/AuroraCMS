@@ -310,7 +310,7 @@ else{?>
               <thead>
                 <tr class="bg-black text-white">
                   <th style="width:30px;">
-                    <input type="checkbox" id="itemchecker" onClick="orderitemstoggle(this);">
+                    <input type="checkbox" id="itemchecker" onclick="itemstoggle(this,'toggle');">
                   </th>
                   <th>Code</th>
                   <th class="col text-left">Title</th>

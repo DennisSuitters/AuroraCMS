@@ -24,6 +24,7 @@ Current version is v0.2.24
 - Content Types with pages, and individual item pages.
   - Activities
   - Articles
+    - Add lists of items in Articles with images that can be opened in quickview and cycled through including the description.
   - Portfolio
   - Events.
     - Book Events and Invoice for immediate payment.

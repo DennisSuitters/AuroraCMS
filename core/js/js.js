@@ -11,8 +11,8 @@ function serialize(form){
   });
   if(requestArray.length > 0)return requestArray.join('&');else return false;
 }
-function quickview(src,el){
-  document.getElementById('quickview-image').setAttribute('src',src);
+function quickview(id,src,el){
+  document.getElementById('quickview-image'+id).src=src;
   var elh=document.querySelectorAll(".quickview-thumbs img");
   elh.forEach(function(elItem){elItem.classList.remove("active")});
   el.classList.add('active');

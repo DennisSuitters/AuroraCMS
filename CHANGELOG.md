@@ -4,6 +4,12 @@
 - Improve Gallery & Content Media items, can now view thumbnails via click replacement of main image, or use modal viewer.
 - Add Jumpbar for content lists to quickly find content alphabetically.
 - Fix the content category navigation menu not display all categories.
+- Fix Banners not being displayed if Heading is empty.
+- Adjust content type display for content and dropdown content selection in Administration.
+- Add ability to add listed items to Articles.
+  - Quickview on front end for cyclying through list.
+- Fix display and responsivness for quickview products.
+- Fix display layout of Messages in Administration.
 
 #### v0.2.23
 - Update Summernote, fix Summernote plugins.

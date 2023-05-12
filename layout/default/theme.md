@@ -1,6 +1,10 @@
 # Default Changelog
 
-### v0.1.5
+### v0.1.6
+- Add current Theme Changelog to Dashboard.
+- Add list parsing for Articles, enabling display of lists including Images/Videos (YouTube, Vimeo).
+
+#### v0.1.5
 - Improve Content Gallery, move thumbnails to under hero image.
 - Fix theme css variables.
 

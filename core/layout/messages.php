@@ -130,26 +130,74 @@ if($user['options'][3]==1){
               </div>
               <section class="col-12 col-sm ml-3 overflow-visible list" id="accountview">
                 <article class="card overflow-visible card-list item m-0 px-2 py-3">
-                  <span class="btn pl-1">
-                    <input class="d-inline-block" name="message[]" type="checkbox">
+                  <span class="btn pl-1" data-tooltip="tooltip" aria-label="Select">
+                    <input class="d-inline-block" type="checkbox" id="itemchecker" onclick="itemstoggle(this,'toggle');">
                     <ul class="breadcrumb d-inline-block m-0 p-0">
                       <li class="breadcrumb-item active breadcrumb-dropdown">
-                        <span class="breadcrumb-dropdown ml-2"><i class="i mt-1">chevron-down</i></span>
+                        <span class="breadcrumb-dropdown ml-2" data-tooltip="tooltip" aria-label="Select"><i class="i mt-1">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
-                          <li><a href="http://localhost/AuroraCMS2/admin/content">All</a></li>
-                          <li><a href="http://localhost/AuroraCMS2/admin/content/type/activities">Activities</a></li>
-                          <li><a href="http://localhost/AuroraCMS2/admin/content/type/advert">Advert</a></li>
+                          <li><a onclick="itemstoggle(this,'all');">All</a></li>
+                          <li><a onclick="itemstoggle(this,'none');">None</a></li>
+                          <li><a onclick="itemstoggle(this,'swap');">Swap</a></li>
+                          <li><a onclick="itemstoggle(this,'read');">Read</a></li>
+                          <li><a onclick="itemstoggle(this,'unread');">Unread</a></li>
+                          <li><a onclick="itemstoggle(this,'important');">Important</a></li>
                         </ul>
                       </li>
                     </ul>
                   </span>
-                  <button class="ml-2"><i class="i">reload</i></button>
+                  <button class="ml-2" data-tooltip="tooltip" aria-label="Refresh" onclick="refreshmessages();"><i class="i">reload</i></button>
+                  <button class="ml-2" data-tooltip="tooltip" aria-label="Delete" onclick="actionItems('delete');"><i class="i">trash</i></button>
+                  <input type="hidden" id="actionda" value=""/>
+                  <script>
+                  function actionItems(act){
+                    var items=$.map($('input[name="item"]:checked'),function(c){return c.value;});
+                    var ci=0;
+                    for(var i=0,n=items.length;i<n;i++){
+                      if(items[i].checked=true){
+                        ci++;
+                      }
+                    }
+                    if(ci==0){
+                      toastr["error"]("No Messages have been selected!");
+                    }else{
+                      var items=$.map($('input[name="item"]:checked'),function(c){return c.value;});
+                      $('#actionda').val(items);
+                      var da=$('#actionda').val();
+                      $.ajax({
+                        type:"GET",
+                        url:"core/messageactions.php",
+                        data:{
+                          act:act,
+                          da:da
+                        }
+                      }).done(function(msg){
+                        if(msg=='success'){
+                          $('#actionda').val(items);
+                          var items=$.map($('input[name="item"]:checked'),function(c){return c.value;});
+                          if(act=='delete'){
+                            for(var i=0,n=items.length;i<n;i++){
+                              $(`#l_`+items[i]).remove();
+                            }
+                            $('#itemchecker').prop("checked",false);
+                          }
+                        }else{
+                          toastr["error"]("There was an issue processing the request!");
+                        }
+                      });
+                    }
+                  }
+                  </script>
                 </article>
                 <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                  <article class="card zebra overflow-visible card-list item m-0 px-3 py-2" id="l_<?=$r['id'];?>" data-content="<?=$r['from_name'].' '.$r['from_email'].' '.$r['subject'];?>">
+                  <article id="l_<?=$r['id'];?>" class="card zebra overflow-visible card-list item m-0 px-3 py-2" data-content="<?=$r['from_name'].' '.$r['from_email'].' '.$r['subject'];?>" data-status="<?=$r['status'];?>">
                     <div class="row">
                       <div class="col-1 p-2">
-                        <input name="message[]" type="checkbox">
+                        <input type="checkbox" name="item" value="<?=$r['id'];?>" data-status="<?=$r['status'];?>">
+                      </div>
+                      <div class="col-1">
+                        <input id="imp<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="messages" data-dbc="important" data-dbb="0" type="checkbox" class="messages-important d-none"<?=($r['important']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+                        <label class="m-0 mt-2 p-0" for="imp<?=$r['id'];?>"><i class="i i-2x">bookmark</i></label>
                       </div>
                       <div class="col-sm small">
                         <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>"><?=$r['from_name']!=''?$r['from_name']:'&lt;'.$r['from_email'].'&gt;';?><br>
@@ -205,7 +253,7 @@ if($user['options'][3]==1){
                 url:"core/get_messages.php?folder=<?=$folder;?>",
                 success:function(data){
                   $('#allmessages').append(data);
-                  $('#checkmessages').addClass('d-none');
+                  setTimeout(function(){$('#checkmessages').addClass('d-none');},1000);
                 }
               });
             };
@@ -213,6 +261,20 @@ if($user['options'][3]==1){
             f();
           });
         <?php }?>
+        function refreshmessages(){
+          var f=function(){
+            $('#checkmessages').removeClass('d-none');
+            $.ajax({
+              url:"core/get_messages.php?folder=<?=$folder;?>",
+              success:function(data){
+                $('#allmessages').append(data);
+                setTimeout(function(){$('#checkmessages').addClass('d-none');},1000);
+              }
+            });
+          };
+          window.setInterval(f,<?=$config['message_check_interval'];?>*1000);
+          f();
+        }
       </script>
     </main>
   <?php }

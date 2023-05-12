@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -50,17 +50,7 @@ if($args[0]!='compose'){
           </div>
         </div>
         <div class="row">
-          <?php $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
-          $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
-          <div class="messages-menu col-12 col-md-2">
-            <a class="mb-2" href="<?= URL.$settings['system']['admin'].'/messages/compose';?>" role="button">Compose</a><br>
-            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages';?>"><i class="i">inbox</i> Inbox</a><br>
-            <a class="link badge mb-1" href="<?= URL.$settings['system']['admin'].'/messages/unread';?>" data-badge="<?=$ur['cnt']>0?$ur['cnt']:'';?>"><i class="i">email</i> Unread</a><br>
-            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i">email-send</i> Sent</a><br>
-            <a class="link mb-1" href="<?= URL.$settings['system']['admin'].'/messages/important';?>"><i class="i">bookmark</i> Important</a><br>
-            <a class="link badge mb-1" data-badge="<?=$sp['cnt']>0?$sp['cnt']:'';?>" href="<?= URL.$settings['system']['admin'].'/messages/spam';?>"><i class="i">email-spam</i> Spam</a>
-          </div>
-          <div class="col-12 col-md-10 mt-3 pl-4">
+          <div class="col-12 mt-3 pl-4">
             <form target="sp" method="post" action="core/email_message.php" enctype="multipart/form-data">
               <input name="id" type="hidden" value="<?=$r['id'];?>">
               <div class="row">
@@ -144,7 +134,7 @@ if($args[0]!='compose'){
                 </div>
               <?php }?>
               <label id="messageReply" for="bod"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/edit/'.$r['id'].'#messageReply" data-tooltip="tooltip" aria-label="PermaLink to Message">&#128279;</a>':'';?>Reply</label>
-              <div class="form-row">
+              <div class="row">
                 <textarea id="bod" name="bod"></textarea>
               </div>
             </div>

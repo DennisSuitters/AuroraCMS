@@ -246,21 +246,7 @@ body:not(.is-using-mouse) .fancybox__container :focus{
   outline:thin dotted;
   box-shadow:none }
 
-.fancybox__caption{
-  align-self: center;
-  max-width: 50%;
-  margin: 1rem 0 0 0;
-  padding: 1rem;
-  line-height: 1.375;
-  background-color: #fff;
-  color: #000;
-  visibility: visible;
-  cursor: auto;
-  flex-shrink: 0;
-  overflow-wrap: anywhere;
-  border-radius: 20px; }
-
-.is-loading .fancybox__caption{
+.is-loading .fancybox__caption {
   visibility:hidden }
 
 .fancybox__container>.carousel__dots{

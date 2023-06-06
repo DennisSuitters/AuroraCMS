@@ -153,6 +153,11 @@ Current version is v0.2.24
   - Count Impressions of times Advertisement has been displayed.
   - Count Clicks.
   - Date restriction for start displaying advertisements, and end date.
+- Agronomy for managing Farms.
+  - Area map plotting for managing pasture/paddock areas.
+  - Livestock management, incl. selecting which area they are currently in.
+  - Cropping for crop management, incl. whole paddock area cropping as well as small plots.
+  - Logging for area, livestock and crop history. (WIP)
 - Multiple Custom Summernote (WYSIWYG Editor) Addons, created by Diemen Design.
   - [summernote-audio](https://github.com/DiemenDesign/summernote-audio)
   - [summernote-checkbox](https://github.com/DiemenDesign/summernote-checkbox)
@@ -224,7 +229,6 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 - [BizzyKnits](https://bizzyknits.biz/)
 - [Corner Life Coach](https://corner.net.au/)
 - [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
-- [Cradle Mountain Message](https://cradlemountainmassage.com.au/)
 - [Diemen Design](https://diemen.design/)
 - [EntertainMe](https://entertainme.net.au/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)

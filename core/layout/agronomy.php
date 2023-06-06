@@ -2,20 +2,43 @@
 /**
  * AurouraCMS - Copyright (C) Diemen Design 2019
  *
- * @category   Administration - Livestock
- * @package    core/layout/livestock.php
+ * @category   Administration - Agronomy
+ * @package    core/layout/agronomy.php
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
  * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
+ https://github.com/ProminentEdge/leaflet-measure-path
+
+ agronomy_log
+  id
+  rid
+  agtype
+  weight
+  height
+  length
+  stage
+  behaviour
+  preg scan data
+  Feedlot growth rate data
+  Condition scores
+  Mid side sample
+  geo_location
+  notes
+  ti
  */
-if(isset($args[0])&&$args[0]=='settings')require'core/layout/set_livestock.php';
-else{?>
+if(isset($args[0])){
+  if($args[0]=='area')
+    require'core/layout/edit_agronomyarea.php';
+  elseif($args[0]=='settings')
+    require'core/layout/set_livestock.php';
+}else{?>
   <main>
     <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
       <div class="container-fluid">
+        <div class="alert alert-warning">The Agronomy section is still under development, use at your own peril.</div>
         <div class="card mt-3 bg-transparent border-0 overflow-visible">
           <div class="card-actions">
             <div class="row">
@@ -50,64 +73,66 @@ else{?>
                   <?=($user['options'][0]==1?'<button class="btn-sm add mr-0" data-fancybox data-type="ajax" data-src="" data-tooltip="left" href="core/layout/agronomycrop-add.php" role="button" aria-label="Add Crop"><i class="i">add</i></button>':'');?>
                 </label>
                 <div id="agronomy_areas" class="tab1-1 border-top" data-tabid="tab1-1" role="tabpanel">
-                  <div id="l_0" class="card my-1 p-2 overflow-visible">
-                    <h6>Pasture Name <span class="small text-muted">(Code)</span></h6>
-                    <div class="row">
-                      <div class="col-4 small text-center">
-                        <small>Type</small><br>
-                        <i class="a a-3x"><?= svg('area-pasture');?></i>
-                      </div>
-                      <div class="col-4 small text-center">
-                        <small>Condition</small><br>
-                        <i class="a a-3x"><?= svg('agronomy');?></i>
-                      </div>
-                      <div class="col-4 small text-center">
-                        <small>Activity</small><br>
-                        <i class="a a-3x"><?= svg('activity-grazing');?></i>
-                      </div>
-                    </div>
-                    <div class="row">
-                      <div class="col-6 text-left m-0 p-0">
-                        <a class="btn btn-sm" href="" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
-                      </div>
-                      <div class="col-6 text-right m-0 p-0">
-                        <button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('0','agronomy_areas');"><i class="i">trash</i></button>
-                      </div>
-                    </div>
-                  </div>
                   <?php $sa=$db->prepare("SELECT * FROM `".$prefix."agronomy_areas` ORDER BY `ti` ASC");
                   $sa->execute();
                   while($ra=$sa->fetch(PDO::FETCH_ASSOC)){?>
-                    <div id="l_<?=$ra['id'];?>" class="card my-1 p-2 small overflow-visible">
-                      <h6><?=$ra['name'];?></h6>
-                      <?=($ra['code']!=''?'<div class="small">Code: '.$ra['code'].'</div>':'');?>
+                    <div id="l_<?=$ra['id'];?>" class="card area my-1 p-2 small overflow-visible" data-dbid="<?=$ra['id'];?>">
+                      <h6><?=$ra['name'].($ra['code']!=''?'<small class="ml-2">('.$ra['code'].')</small>':'');?></h6>
                       <div class="row">
-                        <div class="col-4">
+                        <div class="col">
                           <div class="small text-center">Type</div>
-                          <div class="text-center">
+                          <div class="text-center small" data-tooltip="tooltip" aria-label="<?=$ra['type'];?>">
+                            <i class="i i-4x">area-<?= strtolower($ra['type']);?></i>
+                            <div class="small"><?=$ra['type'];?></div>
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col">
                           <div class="small text-center">Stock</div>
-                          <div class="text-center">
+                          <div class="text-center i-2x pt-3">
+                            <?php $sl=$db->prepare("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."agronomy_livestock` WHERE `aid`=:aid");
+                            $sl->execute([':aid'=>$ra['id']]);
+                            $rl=$sl->fetch(PDO::FETCH_ASSOC);
+                            echo short_number($rl['cnt']);?>
                           </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col">
+                          <div class="small text-center">Condition</div>
+                          <div class="text-center small" data-tooltip="tooltip" aria-label="<?=$ra['condition'];?>">
+                            <i class="i i-4x">condition-<?= strtolower($ra['condition']);?></i>
+                            <div class="small"><?=$ra['condition'];?></div>
+                          </div>
+                        </div>
+                        <div class="col">
                           <div class="small text-center">Activity</div>
-                          <div class="text-center">
+                          <div class="text-center small" data-tooltip="tooltip" aria-label="<?=$ra['activity'];?>">
+                            <i class="i i-4x">activity-<?= strtolower($ra['activity']);?></i>
+                            <div class="small"><?=$ra['activity'];?></div>
                           </div>
                         </div>
                       </div>
-                      <div class="row m-0 p-0">
+                      <div class="row m-0 mt-3 p-0">
                         <div class="col-6 text-left m-0 p-0">
-                          <a class="btn btn-sm" href="" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
+                          <a class="btn btn-sm" href="<?= URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'];?>" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
                         </div>
                         <div class="col-6 text-right m-0 p-0">
                           <button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$ra['id'];?>','agronomy_areas');"><i class="i">trash</i></button>
                         </div>
                       </div>
                     </div>
-                  <?php }?>
+                  <?php }
+                  /*?>
+                  <script>
+                    document.addEventListener('click',function(event){
+                      if(event.target.closest(".area")){
+                        var el=event.target.closest(".area");
+                        event.preventDefault();
+                        var elh=document.querySelectorAll(".area");
+                        elh.forEach(function(elItem){elItem.classList.remove("area-selected");});
+                        el.classList.add("area-selected");
+                      }
+                    });
+                  </script>
+                  */?>
                 </div>
                 <div id="agronomy_livestock" class="tab1-2 border-top" data-tabid="tab1-2" role="tabpanel">
                   <div id="l_0" class="card my-1 p-2 small overflow-visible">
@@ -135,7 +160,7 @@ else{?>
                         <a class="btn btn-sm" href="" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
                       </div>
                       <div class="col-6 text-right m-0 p-0">
-                        <button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rl['id'];?>','agronomy_livestock');"><i class="i">trash</i></button>
+                        <button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge('0','agronomy_livestock');"><i class="i">trash</i></button>
                       </div>
                     </div>
                   </div>
@@ -181,107 +206,44 @@ else{?>
               <div id="map" style="height:100vh;"></div>
             </div>
           </div>
+          <script src="core/js/leaflet/leaflet.draw.js"></script>
+          <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.draw.css" media="all">
           <script>
-            <?php if($config['geo_position']==''){?>
-              navigator.geolocation.getCurrentPosition(
-                function(position){
-                  var map=L.map('map').setView([position.coords.latitude,position.coords.longitude],13);
-                  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
-                    attribution:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                    maxZoom:20,
-                    id:'mapbox/streets-v11',
-                    tileSize:512,
-                    zoomOffset:-1,
-                    accessToken:'<?=$config['mapapikey'];?>'
-                  }).addTo(map);
-                  var myIcon=L.icon({
-                    iconUrl:'<?= URL;?>core/js/leaflet/images/marker-icon.png',
-                    iconSize:[38,95],
-                    iconAnchor:[22,94],
-                    popupAnchor:[-3,-76],
-                    shadowUrl:'<?= URL;?>core/js/leaflet/images/marker-shadow.png',
-                    shadowSize:[68,95],
-                    shadowAnchor:[22,94]
-                  });
-                  var marker=L.marker([position.coords.latitude,position.coords.longitude],{draggable:<?=($user['options'][7]==1?'true':'false');?>,}).addTo(map);
-                  window.top.window.toastr["info"]("Best location guess has been made from your browser location API!");
-                  window.top.window.toastr["info"]("Reposition the marker to update your address coordinates!");
-<?php /*                  var popupHtml=`<strong><?=($config['business']!=''?$config['business']:'<mark>Fill in Business Field above</mark>');?></strong><small><?=($config['address']!=''?'<br>'.$config['address'].',<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country']:'');?></small>`;
-                  marker.bindPopup(popupHtml).openPopup(); */ ?>
-                  marker.on('dragend',function(event){
-                    var marker=event.target;
-                    var position=marker.getLatLng();
-                    update('1','config','geo_position',position.lat+','+position.lng);
-                    window.top.window.toastr["success"]("Map Marker position updated!");
-                    marker.setLatLng(new L.LatLng(position.lat,position.lng),{draggable:'true'});
-                    map.panTo(new L.LatLng(position.lat,position.lng))
-                  });
-                },
-                function(){
-                  var map=L.map('map').setView([-24.287,136.406],4);
-                  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
-                    attribution:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                    maxZoom:19,
-                    id:'mapbox/streets-v11',
-                    tileSize:512,
-                    zoomOffset:-1,
-                    accessToken:'<?=$config['mapapikey'];?>'
-                  }).addTo(map);
-                  var myIcon=L.icon({
-                    iconUrl:'<?= URL;?>core/js/leaflet/images/marker-icon.png',
-                    iconSize:[38,95],
-                    iconAnchor:[22,94],
-                    popupAnchor:[-3,-76],
-                    shadowUrl:'<?= URL;?>core/js/leaflet/images/marker-shadow.png',
-                    shadowSize:[68,95],
-                    shadowAnchor:[22,94]
-                  });
-                  var marker=L.marker([-24.287,136.406],{draggable:<?=($user['options'][7]==1?'true':'false');?>,}).addTo(map);
-                  window.top.window.toastr["info"]("Unable to get your location via browser, location has been set so you can choose!");
-<?php /*                  window.top.window.toastr["info"]("Reposition the marker to update your address coordinates!");
-                  var popupHtml=`<strong><?=($config['business']!=''?$config['business']:'<mark>Fill in Business Field above</mark>');?></strong><small><?=($config['address']!=''?'<br>'.$config['address'].',<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country']:'');?></small>`;
-                  marker.bindPopup(popupHtml).openPopup(); */ ?>
-                  marker.on('dragend',function(event){
-                    var marker=event.target;
-                    var position=marker.getLatLng();
-                    update('1','config','geo_position',position.lat+','+position.lng);
-                    window.top.window.toastr["success"]("Map Marker position updated!");
-                    marker.setLatLng(new L.LatLng(position.lat,position.lng),{draggable:'true'});
-                    map.panTo(new L.LatLng(position.lat,position.lng))
-                  });
-                }
-              );
-            <?php }else{?>
               var map=L.map('map').setView([<?=$config['geo_position'];?>],19);
               L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
-                attribution:'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                attribution:'',
                 maxZoom:19,
                 id:'mapbox/streets-v11',
                 tileSize:512,
                 zoomOffset:-1,
                 accessToken:'<?=$config['mapapikey'];?>'
               }).addTo(map);
-              var myIcon=L.icon({
-                iconUrl:'<?= URL;?>core/js/leaflet/images/marker-icon.png',
-                iconSize:[38,95],
-                iconAnchor:[22,94],
-                popupAnchor:[-3,-76],
-                shadowUrl:'<?= URL;?>core/js/leaflet/images/marker-shadow.png',
-                shadowSize:[68,95],
-                shadowAnchor:[22,94]
-              });
-              var marker=L.marker([<?=$config['geo_position'];?>],{draggable:<?=($user['options'][7]==1?'true':'false');?>,}).addTo(map);
-<?php /*              var popupHtml=`<strong><?=($config['business']!=''?$config['business']:'<mark>Fill in Business Field above</mark>');?></strong><small><?=($config['address']!=''?'<br>'.$config['address'].',<br>'.$config['suburb'].', '.$config['city'].', '.$config['state'].', '.$config['postcode'].',<br>'.$config['country']:'');?></small>`;
-              marker.bindPopup(popupHtml).openPopup(); */?>
-              marker.on('dragend',function(event){
-                var marker=event.target;
-                var position=marker.getLatLng();
-                update('1','config','geo_position',position.lat+','+position.lng);
-                window.top.window.toastr["success"]("Map Marker position updated!");
-                marker.setLatLng(new L.LatLng(position.lat,position.lng),{draggable:'true'});
-                map.panTo(new L.LatLng(position.lat,position.lng))
-              });
-            <?php }?>
+              map.attributionControl.setPrefix('');
+              var editableLayers=new L.FeatureGroup();
+              map.addLayer(editableLayers);
+              var agronomy=L.icon({iconUrl:'<?= URL;?>core/js/leaflet/images/marker-icon.png'});
+<?php $sa=$db->prepare("SELECT * FROM `".$prefix."agronomy_areas` ORDER BY `ti` ASC");
+$sa->execute();
+while($ra=$sa->fetch(PDO::FETCH_ASSOC)){
+              $area=str_replace('LatLng(','[',$ra['geo_layout']);
+              $area=str_replace(')',']',$area);?>
+              var area=[<?=$area;?>];
+              var polygon<?=$ra['id'];?>=L.polygon(area,{color:'<?=($ra['color']!=''?$ra['color']:'#3388ff');?>',weight:1,fillColor:'<?=($ra['color']!=''?$ra['color']:'#3388ff');?>',fillOpacity:.15}).addTo(map);
+              <?php if($ra['geo_position']!=''){?>
+                var marker<?=$ra['id'];?>=L.marker([<?=$ra['geo_position'];?>],{icon:agronomy,draggable:false,}).addTo(map);
+                var popupHtml<?=$ra['id'];?>=`<div>`+
+                  `<strong id="popupname"><?=$ra['name'];?></strong><span class="small text-muted ml-2 hidewhenempty" id="popupcode"><?=$ra['code'];?></span>`+
+                `</div>`+
+                `<div class="small hidewhenempty" id="popuptype"><?=($ra['type']!=''?'<strong>Type: </strong>'.$ra['type']:'');?></div>`+
+                `<div class="small hidewhenempty" id="popupcondition"><?=($ra['condition']!=''?'<strong>Condition: </strong>'.$ra['condition']:'');?></div>`+
+                `<div class="small hidewhenempty" id="popupactivity"><?=($ra['activity']!=''?'<strong>Activity: </strong>'.$ra['activity']:'');?></div>`;
+                var popup<?=$ra['id'];?>=L.popup({
+                  closeOnClick:null,
+                  closeButton:false,
+                }).setContent(popupHtml<?=$ra['id'];?>);
+                marker<?=$ra['id'];?>.bindPopup(popup<?=$ra['id'];?>,{autoClose:false}).addTo(map).openPopup();
+              <?php }?>
+<?php }?>
           </script>
         </div>
         <?php require'core/layout/footer.php';?>

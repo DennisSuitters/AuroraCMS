@@ -10,6 +10,11 @@
   - Quickview on front end for cyclying through list.
 - Fix display and responsivness for quickview products.
 - Fix display layout of Messages in Administration.
+- Add feature to add login background images.
+- Update jQuery for Administration.
+- Adjust Administration styling for better visuals.
+- Update Summernote-Cleaner.
+- Improve Livechat Administration interface, add a filter field for finding chats.
 
 #### v0.2.23
 - Update Summernote, fix Summernote plugins.

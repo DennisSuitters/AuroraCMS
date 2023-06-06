@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -32,8 +32,10 @@
         </div>
         <div class="tabs" role="tablist">
           <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked><label for="tab1-1">General</label>
-          <?=($user['options'][7]==1?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Sidebar Menu</label>'.
-          '<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Widgets</label>':'');?>
+          <?=($user['options'][7]==1?
+          '<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Sidebar Menu</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Widgets</label>'.
+          '<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Login</label>':'');?>
           <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
           <?php if($user['rank']>999){?>
             <div class="row">
@@ -572,8 +574,86 @@
               </tbody>
             </table>
           </div>
+          <div class="tab1-4 border" data-tabid="tab1-4" role="tabpanel">
+            <label id="LoginImage" for="file"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface/#LoginImage" data-tooltip="tooltip" aria-label="PermaLink to Login Image." Image Field">&#128279;</a>':'';?>Login Images</label>
+            <form target="sp" method="post" action="core/add_loginimages.php">
+              <div class="row">
+                <div class="col-2">
+                  <label for="limage" class="m-2">Image</label>
+                </div>
+                <div class="col-10">
+                  <div class="form-row">
+                    <input id="limage" name="li" type="text" value="" placeholder="Image...">
+                    <?=($user['options'][1]==1?
+                      '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`0`,`widgets`,`limage`);return false;"><i class="i">browse-media</i></button>'.
+                      ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id=0&t=loginimage" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'')
+                    :'');?>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lit" class="m-2">Title</label>
+                </div>
+                <div class="col-10">
+                  <input id="lit" name="lit" type="text" value="" placeholder="Image Title...">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lia" class="m-2">Author Name</label>
+                </div>
+                <div class="col-10">
+                  <input id="lia" name="lia" type="text" value="" placeholder="Author Name...">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="liau" class="m-2">Author URL</label>
+                </div>
+                <div class="col-10">
+                  <input id="liau" name="liau" type="text" value="" placeholder="Author URL...">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lis" class="m-2">Service</label>
+                </div>
+                <div class="col-10">
+                  <input id="lis" name="lis" type="text" value="" placeholder="Image Service...">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-2">
+                  <label for="lisu" class="m-2">Service URL</label>
+                </div>
+                <div class="col-10">
+                  <input id="lisu" name="lisu" type="text" value="" placeholder="Image Service URL...">
+                </div>
+              </div>
+              <div class="text-right">
+                <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+              </div>
+            </form>
+            <section id="loginimages" class="row m-1">
+              <?php $sl=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='loginimage' ORDER BY `ord` ASC");
+              $sl->execute();
+              if($sl->rowCount()>0){
+                while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                  echo'<div id="li_'.$rl['id'].'" class="card stats gallery col-12 col-sm-3 m-0 border-0">'.
+                    '<a data-fancybox="loginimage" href="'.$rl['file'].'"><img src="'.$rl['file'].'" alt="'.$rl['title'].'"></a>'.
+                    '<div class="btn-group tools">'.
+                      ($user['options'][1]==1?
+                        '<button class="trash" onclick="purge(`'.$rl['id'].'`,`widgets`)" data-tooltip="right" aria-label="Delete"><i class="i">trash</i></button>'.
+                        '<div class="btn handle" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>'
+                      :'').
+                    '</div>'.
+                  '</div>';
+                }
+              }?>
+            </section>
+          </div>
         <?php }?>
-        </div>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

@@ -152,6 +152,8 @@ header.aurora{
 }
 
 .login-bg{
+  margin:0;
+  padding:0;
   height:100vh!important;
   color:#fff;
   background-color:#000;
@@ -159,7 +161,8 @@ header.aurora{
   background-size:cover;
   background-position:center;
   background-attachment:fixed;
-  background-image:url(../images/login/login.webp) }
+  background-image:url(../images/login/bg.avif);
+  transition: background 1.2s linear }
 
 .loginattribution{
   position:absolute;
@@ -173,7 +176,9 @@ header.aurora{
   box-shadow:0 4px 8px #000;
   overflow:hidden;
   font-size:13px;
-  padding:6px 10px }
+  padding:6px 10px;
+  opacity:1;
+  transition:opacity 2s linear }
 
 .loginattribution a{
   color:#aaa!important;
@@ -184,6 +189,9 @@ header.aurora{
 .loginattribution a:hover{
   color:#fff!important;
   text-decoration:underline }
+
+.loginattribution:empty{
+  opacity:0 }
 
 .bg-login{
   background-color:rgba(40,40,40,.75);
@@ -208,7 +216,10 @@ header.aurora{
   color:#fff }
 
 .theme-selected,
-.certificate-selected{
+.certificate-selected,
+.area-selected,
+.livestock-selected,
+.crop-selected{
   transition:transform .3s,-webkit-transform .3s!important;
   box-shadow:0 .3px .4px rgba(0,0,0,.025),0 .9px 1.5px rgba(0,0,0,.05),0 3.5px 6px rgba(0,0,0,.1),0 0 0 2px var(--success-border-color)!important }
 
@@ -859,42 +870,40 @@ td img.avatar{
 .messages-menu{
   background-color: var(--sidebar-background-color) }
 
-.messages-menu nav ul {
+.messages-menu nav ul{
   position:relative;
-  width: 100%;
-}
+  width:100% }
 
-.messages-menu nav ul .badge {
-  position: absolute;
+.messages-menu nav ul .badge{
+  position:absolute;
   top:16px;
-  right: 0;
-}
-
-.messages-menu nav li {
-  display: block;
-  margin: 0;
-  padding: 10px 0;
-  font-weight: 400;
-}
+  right:0 }
 
 .messages-menu nav li{
-  width: 100%;
-}
+  display:block;
+  margin:0;
+  padding:10px 0;
+  font-weight:400 }
+
+.messages-menu nav li{
+  width:100% }
 
 .messages-menu nav li a{
-  display: block;
-  width: 100%;
-}
+  display:block;
+  width:100% }
+
 .messages-menu nav li a.active{
-  color: var(--link-active);
-  font-weight:700;
-}
+  color:var(--link-active);
+  font-weight:700 }
+
 .messages-important + label{
-  color: #ccc!important;
-}
-.messages-important:checked + label {
-  color: #000!important;
-}
+  color:var(--link-active)!important;
+  opacity:.1 }
+
+.messages-important:checked + label{
+  color:var(--link-active)!important;
+  opacity:1}
+
 @-webkit-keyframes swing-in-top-fwd{
   0%{
     -webkit-transform:rotateX(-100deg);
@@ -909,6 +918,7 @@ td img.avatar{
     transform-origin:top;
     opacity:1 }
 }
+
 @keyframes swing-in-top-fwd{
   0%{
     -webkit-transform:rotateX(-100deg);
@@ -923,6 +933,10 @@ td img.avatar{
     transform-origin:top;
     opacity:1 }
 }
+
+#messagesview .unread a{
+  font-weight:700!important;
+  color: var(--link-active)!important }
 
 .card{
   overflow:none!important }
@@ -1365,7 +1379,7 @@ input[type=text]~.input-text{
   -webkit-text-stroke-color:var(--starRating-outline-color)!important }
 
 .chat .chatList{
-  border-right:0;
+  border-bottom:0;
   border-top-right-radius:0;
   border-bottom-right-radius:0 }
 

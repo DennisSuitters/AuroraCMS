@@ -37,6 +37,17 @@
     <link rel="apple-touch-icon" href="core/images/favicon-64.jpg">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css">
   </head>
+  <?php $sl=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='loginimage' AND `file`!='' ORDER BY rand() LIMIT 1");
+  $sl->execute();
+  $timetofadein=1000;
+  $bg='';
+  $attribution='';
+  if($sl->rowCount()>0){
+    $rl=$sl->fetch(PDO::FETCH_ASSOC);
+    $timetofadein=3000;
+    $attribution=$rl['layout'];
+    if($rl['file']!='')$bg=$rl['file'];
+  }?>
   <body class="login-bg">
     <main class="row m-0 p-0 justify-content-center">
       <div class="col-12 col-sm-4 m-0 mt-5 px-5 py-3 bg-login">
@@ -77,10 +88,18 @@
         </div>
       </div>
     </main>
-    <footer class="loginattribution">
-      Photo by&nbsp;<a href="https://unsplash.com/@nelly?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText">Nelly Volkovich</a>&nbsp;on&nbsp;<a href="https://unsplash.com/photos/dt24DUzzggE?utm_source=AuroraCMS&utm_medium=referral">Unsplash</a>
-    </footer>
+    <footer class="loginattribution"></footer>
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/aurora.min.js"></script>
+<?php if($bg!=''){?>
+    <script>
+      $(document).ready(function(){
+        setTimeout(function(){
+          $('.login-bg').css("background-image","url(<?=$bg;?>)");
+          $('.loginattribution').html(`<?=$attribution;?>`);
+        },<?=$timetofadein;?>);
+      });
+    </script>
+<?php }?>
   </body>
 </html>

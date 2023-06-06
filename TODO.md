@@ -10,6 +10,7 @@ This is a quick list of things what need to be fixed or worked on to help those 
   - Fix update core system
   - Inventory
     - Customer/Contact List, more of a selection Widget for emails and orders.
+    - Improve options selection to include other associated inventory, or add options exclusive to views inventory. 
   - Orders
     - Mobile Display Formatting.
   - Newsletters

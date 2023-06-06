@@ -255,10 +255,10 @@
   <?php  if(
     (isset($args[0])&&($args[0]=='edit'||$args[0]=='compose'||$args[0]=='reply'||$args[0]=='settings'||$args[0]=='security'))
     ||
-    (isset($args[0])&&($view=='content'||$view=='course'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view'))
+    (isset($args[0])&&($view=='content'||$view=='course'||$view=='accounts'||$view=='orders'||$view=='bookings'||$view=='newsletters'||$view=='messages'&&$args[0]=='settings'||$args[0]=='view'||$args[0]=='interface'))
   ){?>
       function elfinderDialog(id,t,c){
-        var fm=$('<div class="shadow light"/>').dialogelfinder({
+        var fm=$('<div class="shadow-lg"/>').dialogelfinder({
           url:"<?= URL.'core/elfinder/php/connector.php';?>?id="+id+"&t="+t+"&c="+c,
           lang:'en',
           width:840,
@@ -266,15 +266,19 @@
           destroyOnClose:true,
           useBrowserHistory:false,
           getFileCallback:function(file,fm){
-            if(id>0||c=='attachments'){
+            if(id>0||c=='attachments'||t=='widgets'){
               if(c=='mediafile'){
                 var urls=$.each(file,function(i,f){return f.url;});
                 $('#'+c).val(urls);
+              }else if(t=='widgets'&&c=='limage'){
+                $('#limage').val(file.url);
+                console.log('login image:' + file.url);
               }else{
                 $('#'+c).val(file.url);
                 $('[data-id="'+id+'"]').attr('data-image',file.url);
                 $('#save'+c).addClass('btn-danger');
               }
+
               if(t=='content'&&c=='file'){
                 var thumb=file.url.replace(/^.*[\\\/]/,'');
                 var thumbpath=file.url.replace(thumb,'')+"sm/"+thumb;

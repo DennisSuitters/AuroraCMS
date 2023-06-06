@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,11 +33,15 @@ else{?>
           </div>
           <div class="row chat">
             <input id="chatactive" type="hidden" value="0">
-            <div class="chatList card col-12 col-md-4 overflow-visible" id="chatList">
+            <div class="col-12 col-md-4 px-3">
+              <div class="form-row mb-3">
+                <input id="filter-input" type="text" value="" placeholder="Search for People, Email..." onkeyup="filterTextInput2();">
+              </div>
+              <div id="chatList" class="chatList card overflow-visible">
               <?php $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_<?=$r['id'];?>" data-sid="<?=$r['sid'];?>" data-chatname="<?=$r['name'];?>" data-chatemail="<?=$r['email'];?>">
+                <span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_<?=$r['id'];?>" data-sid="<?=$r['sid'];?>" data-chatname="<?=$r['name'];?>" data-chatemail="<?=$r['email'];?>" data-content="<?=$r['name'].' '.$r['email'];?>">
                   <span class="btn-group float-right">
                     <?php $scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
                     $scc->execute([':ip'=>$r['ip']]);
@@ -62,6 +66,7 @@ else{?>
                   <?=$r['status']=='unseen'?'<span class="btn-group float-right"><small class="badger badge-danger">Unread</small></span>':'<span class="btn-group float-right"><small class="badger badge-success">Read</small></span>';?>
                 </span>
               <?php }?>
+              </div>
             </div>
             <div class="col-12 col-md-8">
               <div class="card chatBody">

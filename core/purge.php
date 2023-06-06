@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -86,7 +86,12 @@ if($tbl=='playlist'){
   $s=$db->prepare("DELETE FROM `".$prefix."playlist` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
 }
-if($tbl!='logs'&&$tbl!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'&&$tbl!='courseTrack'){
+if($tbl=='widgets'){
+  $s=$db->prepare("DELETE FROM `".$prefix."widgets` WHERE `id`=:id");
+  $s->execute([':id'=>$id]);
+}
+
+if($tbl!='logs'&&$tbl!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='findtracker'&&$tbl!='courseTrack'&&$tbl!='widgets'){
   if($id!=0){
     $q=$db->prepare("DELETE FROM `".$prefix.$tbl."` WHERE `id`=:id");
     $q->execute([':id'=>$id]);
@@ -131,5 +136,11 @@ if($tbl=='modules'){
   echo'<script>'.
     'window.top.window.$("#modules_'.$id.'").addClass("zoom-out");'.
     'window.top.window.setTimeout(function(){window.top.window.$("#modules_'.$id.'").remove();},500);'.
+  '</script>';
+}
+if($tbl=='widgets'){
+  echo'<script>'.
+    'window.top.window.$("#li_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.setTimeout(function(){window.top.window.$("#li_'.$id.'").remove();},500);'.
   '</script>';
 }

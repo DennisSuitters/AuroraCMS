@@ -35,24 +35,36 @@ define('UNICODE','UTF-8');?>
         <?php $s=$db->prepare("SELECT DISTINCT `type` FROM `".$prefix."agronomy_areas` WHERE `type`!='' ORDER BY `type` ASC ");
         $s->execute();
         echo'<datalist id="agronomy_types">'.
+          '<option value="Barbecue"/>'.
+          '<option value="Barn"/>'.
           '<option value="Beehive"/>'.
           '<option value="Coup"/>'.
           '<option value="Crop"/>'.
           '<option value="Dam"/>'.
+          '<option value="Firewood"/>'.
           '<option value="Forage"/>'.
           '<option value="Forest"/>'.
-          '<option value="Hive"/>'.
-          '<option value="Grazing"/'. // icon
-          '<option value="Paddock"/>'. // icon
-          '<option value="Pasture"/>'. // icon
-          '<option value="Pen"/>'. // icon done
-          '<option value="Shed"/>'. // icon done
-          '<option value="Silvopasture"/>'. // icon
+          '<option value="Fuel"/>'.
+          '<option value="Grazing"/'.
+          '<option value="Greenhouse"/>'.
+          '<option value="House"/>'.
+          '<option value="Jungle"/>'.
+          '<option value="Paddock"/>'.
+          '<option value="Pasture"/>'.
+          '<option value="Pen"/>'.
+          '<option value="Sawmill"/>'.
+          '<option value="Shed"/>'.
+          '<option value="Silo"/>'.
+          '<option value="Silvopasture"/>'.
           '<option value="Stable"/>'.
+          '<option value="Swamp"/>'.
           '<option value="Water"/>'.
+          '<option value="Wind Turbine"/>'.
           '<option value="Woodland"/>';
         if($s->rowCount()>0){
           while($r=$s->fetch(PDO::FETCH_ASSOC)){
+            if($r['type']=='Barbecue')continue;
+            if($r['type']=='Barn')continue;
             if($r['type']=='Beehive')continue;
             if($r['type']=='Coup')continue;
             if($r['type']=='Crop')continue;
@@ -60,14 +72,20 @@ define('UNICODE','UTF-8');?>
             if($r['type']=='Forage')continue;
             if($r['type']=='Forest')continue;
             if($r['type']=='Grazing')continue;
-            if($r['type']=='Hive')continue;
+            if($r['type']=='Greenhouse')continue;
+            if($r['type']=='House')continue;
+            if($r['type']=='Jungle')continue;
             if($r['type']=='Paddock')continue;
             if($r['type']=='Pasture')continue;
             if($r['type']=='Pen')continue;
+            if($r['type']=='Sawmill')continue;
             if($r['type']=='Shed')continue;
+            if($r['type']=='Silo')continue;
             if($r['type']=='Silvopasture')continue;
             if($r['type']=='Stable')continue;
+            if($r['type']=='Swamp')continue;
             if($r['type']=='Water')continue;
+            if($r['type']=='Wind Turbine')continue;
             if($r['type']=='Woodland')continue;
             echo'<option value="'.$r['type'].'"/>';
           }
@@ -86,19 +104,18 @@ define('UNICODE','UTF-8');?>
             <datalist id="agronomy_conditions">
               <?php $s=$db->prepare("SELECT DISTINCT `condition` FROM `".$prefix."agronomy_areas` WHERE `condition`!='' ORDER BY `condition` ASC ");
               $s->execute();
-              echo'<option value="Arable"/>'. // icon
-                '<option value="Arid"/>'. // icon
-                '<option value="Degraded"/>'. // icon
-                '<option value="Desertified"/>'. // icon
-                '<option value="Dry"/>'. // icon
-                '<option value="Dust"/>'. // icon
-                '<option value="Fair"/>'. // icon
-                '<option value="Fallow"/>'. // icon
-                '<option value="Fantastic"/>'. // icon
-                '<option value="NonArable"/>'. // icon
-                '<option value="Swamp"/>'. // icon
-                '<option value="wet"/>'. // icon
-                '<option value="Wetland"/>'; // icon
+              echo
+                '<option value="Arable"/>'.
+                '<option value="Arid"/>'.
+                '<option value="Degraded"/>'.
+                '<option value="Desertified"/>'.
+                '<option value="Dry"/>'.
+                '<option value="Dusty"/>'.
+                '<option value="Fallow"/>'.
+                '<option value="NonArable"/>'.
+                '<option value="Swamp"/>'.
+                '<option value="wet"/>'.
+                '<option value="Wetland"/>';
               if($s->rowCount()>0){
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   if($r['type']=='Arable')continue;
@@ -106,10 +123,8 @@ define('UNICODE','UTF-8');?>
                   if($r['type']=='Degraded')continue;
                   if($r['type']=='Desertified')continue;
                   if($r['type']=='Dry')continue;
-                  if($r['type']=='Dust')continue;
-                  if($r['type']=='Fair')continue;
+                  if($r['type']=='Dusty')continue;
                   if($r['type']=='Fallow')continue;
-                  if($r['type']=='Fantastic')continue;
                   if($r['type']=='NonArable')continue;
                   if($r['type']=='Swamp')continue;
                   if($r['type']=='wet')continue;
@@ -127,11 +142,12 @@ define('UNICODE','UTF-8');?>
             <datalist id="agronomy_activity">
               <?php $s=$db->prepare("SELECT DISTINCT `activity` FROM `".$prefix."agronomy_areas` WHERE `activity`!='' ORDER BY `activity` ASC");
               $s->execute();
-              echo'<option value="Cultivating"/>'. // icon done
-                '<option value="Grazing"/>'. // icon
+              echo
+                '<option value="Cultivating"/>'.
+                '<option value="Grazing"/>'.
                 '<option value="Growing"/>'.
                 '<option value="Irrigation"/>'.
-                '<option value="Resting"/>'; // icon
+                '<option value="Resting"/>';
               if($s->rowCount()>0){
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){
                   if($r['type']=='Cultivating')continue;

@@ -167,11 +167,14 @@ function rank($txt){
 	if($txt==1000)return'developer';
 }
 function svg($svg,$class=null,$size=null){
-	$svg=file_get_contents('core/images/icons/'.$svg.'.svg');
-	echo$svg;
+	$svg=str_replace(' ','-',$svg);
+	if(file_exists('core/images/icons/'.$svg.'.svg'))
+		return'<i class="a'.($size!=null?' a-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents('core/images/icons/'.$svg.'.svg').'</i>';
+	else
+		return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">blank</i>';
 }
 function svg2($svg,$class=null,$size=null){
-	return'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.$svg.'</i>';
+	echo'<i class="i'.($size!=null?' i-'.$size:'').($class!=null?' '.$class:'').'">'.file_get_contents($svg.'.svg').'</i>';
 }
 function frontsvg($svg){
 	if(file_exists(THEME.'/svg/'.$svg.'.svg'))
@@ -321,6 +324,13 @@ function size_format($B,$D=2){
   $S='kMGTPEZY';
   $F=floor((strlen($B) - 1) / 3);
   return @sprintf("%.{$D}f",$B / pow(1024, $F)).' '.@$S[$F-1].'B';
+}
+function short_number($num){
+  $units=['','K','M','B','T'];
+  for ($i=0;$num>=1000;$i++){
+    $num /= 1000;
+  }
+  return round($num,1).$units[$i];
 }
 function tomoment($f){
   $r=['d'=>'DD','D'=>'ddd','j'=>'D','l'=>'dddd','N'=>'E','S'=>'o','w'=>'e','z'=>'DDD','W'=>'W','F'=>'MMMM','m'=>'MM','M'=>'MMM','n'=>'M','t'=>'','L'=>'','o'=>'YYYY','Y'=>'YYYY','y'=>'YY','a'=>'a','A'=>'A','B'=>'','g'=>'h','G'=>'H','h'=>'hh','H'=>'HH','i'=>'mm','s'=>'ss','u'=>'SSS','e'=>'zz','I'=>'','O'=>'','P'=>'','T'=>'','Z'=>'','c'=>'','r'=>'','U'=>'X'];

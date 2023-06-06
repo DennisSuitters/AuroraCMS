@@ -128,26 +128,39 @@ if($user['options'][3]==1){
                 </nav>
                 <div class="alert alert-warning col-12 text-center m-0 d-none" id="checkmessages">Checking for new Messages!!!</div>
               </div>
-              <section class="col-12 col-sm ml-3 overflow-visible list" id="accountview">
+              <section class="col-12 col-sm ml-3 overflow-visible list" id="messagesview">
                 <article class="card overflow-visible card-list item m-0 px-2 py-3">
                   <span class="btn pl-1" data-tooltip="tooltip" aria-label="Select">
                     <input class="d-inline-block" type="checkbox" id="itemchecker" onclick="itemstoggle(this,'toggle');">
                     <ul class="breadcrumb d-inline-block m-0 p-0">
                       <li class="breadcrumb-item active breadcrumb-dropdown">
-                        <span class="breadcrumb-dropdown ml-2" data-tooltip="tooltip" aria-label="Select"><i class="i mt-1">chevron-down</i></span>
+                        <span class="breadcrumb-dropdown ml-2"><i class="i mt-1">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
-                          <li><a onclick="itemstoggle(this,'all');">All</a></li>
-                          <li><a onclick="itemstoggle(this,'none');">None</a></li>
-                          <li><a onclick="itemstoggle(this,'swap');">Swap</a></li>
-                          <li><a onclick="itemstoggle(this,'read');">Read</a></li>
-                          <li><a onclick="itemstoggle(this,'unread');">Unread</a></li>
-                          <li><a onclick="itemstoggle(this,'important');">Important</a></li>
+                          <li><a onclick="itemstoggle(this,'all');" aria-label="Select All">All</a></li>
+                          <li><a onclick="itemstoggle(this,'none');" aria-label="Select None">None</a></li>
+                          <li><a onclick="itemstoggle(this,'swap');" aria-label="Swap Selections">Swap</a></li>
+                          <li><a onclick="itemstoggle(this,'read');" aria-label="Select Read">Read</a></li>
+                          <li><a onclick="itemstoggle(this,'unread');" aria-label="Select Unread">Unread</a></li>
+                          <li><a onclick="itemstoggle(this,'important');" aria-label="Select Important">Important</a></li>
                         </ul>
                       </li>
                     </ul>
                   </span>
                   <button class="ml-2" data-tooltip="tooltip" aria-label="Refresh" onclick="refreshmessages();"><i class="i">reload</i></button>
-                  <button class="ml-2" data-tooltip="tooltip" aria-label="Delete" onclick="actionItems('delete');"><i class="i">trash</i></button>
+                  <button class="ml-2 mr-2" data-tooltip="tooltip" aria-label="Delete" onclick="actionItems('delete');"><i class="i">trash</i></button>
+                  <span class="btn pl-1" data-tooltip="tooltip" aria-label="Actions on Selected Items">
+                    <ul class="breadcrumb d-inline-block m-0 p-0">
+                      <li class="breadcrumb-item active breadcrumb-dropdown">
+                        <span class="breadcrumb-dropdown"><i class="i mt-1">chevron-down</i></span>
+                        <ul class="breadcrumb-dropper">
+                          <li><a onclick="actionItems('read');">Mark as Read</a></li>
+                          <li><a onclick="actionItems('unread');">Mark as Unread</a></li>
+                          <li><a onclick="actionItems('important');">Mark as Important</a></li>
+                          <li><a onclick="actionItems('unimportant');">Mark as not Important</a></li>
+                        </ul>
+                      </li>
+                    </ul>
+                  </span>
                   <input type="hidden" id="actionda" value=""/>
                   <script>
                   function actionItems(act){
@@ -159,7 +172,7 @@ if($user['options'][3]==1){
                       }
                     }
                     if(ci==0){
-                      toastr["error"]("No Messages have been selected!");
+                      toastr["error"]("No Items have been selected!");
                     }else{
                       var items=$.map($('input[name="item"]:checked'),function(c){return c.value;});
                       $('#actionda').val(items);
@@ -172,15 +185,31 @@ if($user['options'][3]==1){
                           da:da
                         }
                       }).done(function(msg){
-                        if(msg=='success'){
+                        if(msg!='failed'){
                           $('#actionda').val(items);
                           var items=$.map($('input[name="item"]:checked'),function(c){return c.value;});
-                          if(act=='delete'){
-                            for(var i=0,n=items.length;i<n;i++){
+                          for(var i=0,n=items.length;i<n;i++){
+                            if(msg=='delete'){
                               $(`#l_`+items[i]).remove();
                             }
-                            $('#itemchecker').prop("checked",false);
+                            if(msg=='read'){
+                              $('#date_'+items[i]).removeClass('unread');
+                              $('#subject_'+items[i]).removeClass('unread');
+                              $('#l_'+items[i]).attr("data-status","read");
+                            }
+                            if(msg=='unread'){
+                              $('#subject_'+items[i]).addClass('unread');
+                              $('#date_'+items[i]).addClass('unread');
+                              $('#l_'+items[i]).attr("data-status","unread");
+                            }
+                            if(msg=='important'){
+                              $('#imp'+items[i]).prop("checked",true);
+                            }
+                            if(msg=='unimportant'){
+                              $('#imp'+items[i]).prop("checked",false);
+                            }
                           }
+                          $('#itemchecker').prop("checked",false);
                         }else{
                           toastr["error"]("There was an issue processing the request!");
                         }
@@ -199,12 +228,12 @@ if($user['options'][3]==1){
                         <input id="imp<?=$r['id'];?>" data-dbid="<?=$r['id'];?>" data-dbt="messages" data-dbc="important" data-dbb="0" type="checkbox" class="messages-important d-none"<?=($r['important']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
                         <label class="m-0 mt-2 p-0" for="imp<?=$r['id'];?>"><i class="i i-2x">bookmark</i></label>
                       </div>
-                      <div class="col-sm small">
+                      <div class="col-sm small <?=$r['status'];?>" id="date_<?=$r['id'];?>">
                         <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>"><?=$r['from_name']!=''?$r['from_name']:'&lt;'.$r['from_email'].'&gt;';?><br>
                         <small class="date"><?= date('M j \a\t G:i',$r['ti']);?></small>
                         </a>
                       </div>
-                      <div class="col-sm small">
+                      <div class="col-sm small <?=$r['status'];?>" id="subject_<?=$r['id'];?>">
                         <a href="<?= URL.$settings['system']['admin'].'/messages/view/'.$r['id'];?>"><?=$r['subject'];?></a>
                       </div>
                       <div class="col-3">

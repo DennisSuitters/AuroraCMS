@@ -89,24 +89,29 @@ if($r['contentType']!='testimonials'){
               $seo['seoDescription'].
             '</div>':'').
             '<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked><label for="tab1-1">Content</label>'.
-            '<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>'.
+            ($r['contentType']!='list'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>':'').
             ($r['contentType']!='testimonials'?'<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Media</label>':'').
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'').
             ($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'').
             ($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'').
             ($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'').
-            ($r['contentType']!='testimonials'&&$r['contentType']!='proofs'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8" id="seo">SEO</label>':'').
-            '<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Settings</label>'.
+            ($r['contentType']!='testimonials'&&$r['contentType']!='proofs'&&$r['contentType']!='list'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8" id="seo">SEO</label>':'').
+            ($r['contentType']!='list'?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Settings</label>':'').
             ($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'').
-            ($r['contentType']!='testimonials'?'<input class="tab-control" id="tab1-11" name="tabs" type="radio"><label for="tab1-11">Template</label>':'').
+            ($r['contentType']!='testimonials'&&$r['contentType']!='list'?'<input class="tab-control" id="tab1-11" name="tabs" type="radio"><label for="tab1-11">Template</label>':'').
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">Purchases</label>':'').
             ($r['contentType']=='article'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">List</label>':'');
 /* Content */?>
             <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
-              <div class="form-row">
+              <?php if($r['contentType']=='list'){?>
+                <label id="<?=$r['contentType'];?>Code" for="code"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Code" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Code Field">&#128279;</a>':'';?>Code</label>
+                <div class="form-row">
+                  <input class="textinput" id="code" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?=$r['code'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
+                  <?=$user['options'][1]==1?'<button class="save" id="savecode" data-dbid="code" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                </div>
+              <?php }?>
                 <label id="<?=$r['contentType'];?>Title" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Title" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Title Field">&#128279;</a>':'';?>Title</label>
                 <small class="form-text text-right">Content MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages.</small>
-              </div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
                 <?php if($user['options'][1]==1){
@@ -140,26 +145,36 @@ if($r['contentType']!='testimonials'){
                   return str;
                 }
               </script>
-              <label id="<?=$r['contentType'];?>URLSlug" for="genurl"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URLSlug" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL Slug">&#128279;</a>':'';?>URL Slug</label>
-              <div class="form-row">
-                <div class="input-text col-12">
-                  <a id="genurl" target="_blank" href="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>"><?= URL.$r['contentType'].'/'.$r['urlSlug'].' <i class="i">new-window</i>';?></a>
+              <?php if($r['contentType']=='list'){?>
+                <label id="<?=$r['contentType'];?>URL" for="urlSlug"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URL" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL">&#128279;</a>':'';?>URL</label>
+                <div class="form-row">
+                  <input class="textinput" id="urlSlug" type="text" value="<?=$r['urlSlug'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="urlSlug" data-bs="trash"<?=$user['options'][1]==1?' placeholder="URL..."':' readonly';?>>
+                  <?=$user['options'][1]==1?'<button class="save" id="saveurlSlug" data-dbid="urlSlug" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-12 col-sm-6 pr-md-3">
-                  <label id="<?=$r['contentType'];?>DateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DateCreated" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Created Date">&#128279;</a>':'';?>Created</label>
-                  <div class="form-row">
-                    <input id="ti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['ti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`ti`,getTimestamp(`ti`),`select`);"':' readonly';?>>
+              <?php }else{?>
+                <label id="<?=$r['contentType'];?>URLSlug" for="genurl"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URLSlug" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL Slug">&#128279;</a>':'';?>URL Slug</label>
+                <div class="form-row">
+                  <div class="input-text col-12">
+                    <a id="genurl" target="_blank" href="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>"><?= URL.$r['contentType'].'/'.$r['urlSlug'].' <i class="i">new-window</i>';?></a>
                   </div>
                 </div>
-                <div class="col-12 col-sm-6 pl-md-3">
-                  <label id="<?=$r['contentType'];?>PublishedDate" for="pti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'PublishedDate" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Published Date Field">&#128279;</a>':'';?>Published On <span class="labeldate" id="labeldatepti">(<?= date($config['dateFormat'],$r['pti']);?>)</span></label>
-                  <div class="form-row">
-                    <input id="pti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['pti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`pti`,getTimestamp(`pti`),`select`);"':' readonly';?>>
+              <?php }?>
+              <?php if($r['contentType']!='list'){?>
+                <div class="row">
+                  <div class="col-12 col-sm-6 pr-md-3">
+                    <label id="<?=$r['contentType'];?>DateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DateCreated" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Created Date">&#128279;</a>':'';?>Created</label>
+                    <div class="form-row">
+                      <input id="ti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['ti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`ti`,getTimestamp(`ti`),`select`);"':' readonly';?>>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-6 pl-md-3">
+                    <label id="<?=$r['contentType'];?>PublishedDate" for="pti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'PublishedDate" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Published Date Field">&#128279;</a>':'';?>Published On <span class="labeldate" id="labeldatepti">(<?= date($config['dateFormat'],$r['pti']);?>)</span></label>
+                    <div class="form-row">
+                      <input id="pti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['pti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`pti`,getTimestamp(`pti`),`select`);"':' readonly';?>>
+                    </div>
                   </div>
                 </div>
-              </div>
+              <?php }?>
               <?php if($r['contentType']=='proofs'){?>
                 <label id="<?=$r['contentType'];?>Client" for="cid"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Client" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Client Field">&#128279;</a>':'';?>Client</label>
                 <div class="form-row">
@@ -172,14 +187,16 @@ if($r['contentType']!='testimonials'){
                   </select>
                 </div>
               <?php }?>
-              <label id="<?=$r['contentType'];?>Author" for="uid"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Author" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Author Field">&#128279;</a>':'';?>Author</label>
-              <div class="form-row">
-                <select id="uid" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="uid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','uid',$(this).val(),'select');">
-                  <?php $su=$db->query("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `username`!='' AND `status`!='delete' ORDER BY `username` ASC, `name` ASC");
-                  while($ru=$su->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$ru['id'].'"'.($ru['id']==$r['uid']?' selected':'').'>'.$ru['username'].':'.$ru['name'].'</option>';?>
-                </select>
-              </div>
-              <?php if($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='list'){?>
+              <?php if($r['contentType']!='list'){?>
+                <label id="<?=$r['contentType'];?>Author" for="uid"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Author" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Author Field">&#128279;</a>':'';?>Author</label>
+                <div class="form-row">
+                  <select id="uid" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="uid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','uid',$(this).val(),'select');">
+                    <?php $su=$db->query("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `username`!='' AND `status`!='delete' ORDER BY `username` ASC, `name` ASC");
+                    while($ru=$su->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$ru['id'].'"'.($ru['id']==$r['uid']?' selected':'').'>'.$ru['username'].':'.$ru['name'].'</option>';?>
+                  </select>
+                </div>
+              <?php }
+              if($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']!='list'){?>
                 <label id="<?=$r['contentType'];?>Code" for="code"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Code" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Code Field">&#128279;</a>':'';?>Code</label>
                 <div class="form-row">
                   <input class="textinput" id="code" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?=$r['code'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
@@ -2031,6 +2048,8 @@ if($r['contentType']!='testimonials'){
                                 '<img class="note-video-clip" src="https://vumbnail.com/'.$vidMatch[5].'.jpg">'.
                                 '<div class="play"></div>'.
                               '</div>';
+                            }elseif(stristr($rl['urlSlug'],'twitter')){
+                              echo'<a target="_blank" src="'.$rl['urlSlug'].'" href="'.$rl['urlSlug'].'"><img src="'.$rlm['thumb'].'" alt="'.$lh.'"></a>';
                             }else
                               echo'<a data-fancybox="list" href="'.$rlm['file'].'"><img src="'.$rlm['thumb'].'" alt="'.$lh.'"></a>';
                           }

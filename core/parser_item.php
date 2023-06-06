@@ -538,9 +538,11 @@ if($skip==false){
                     '<img class="note-video-clip" src="https://vumbnail.com/'.$vidMatch[5].'.jpg">'.
                     '<div class="play"></div>'.
                   '</div>';
-                }else{
+                }elseif(stristr($rl['urlSlug'],'twitter')){
+                  $listmediaitems.='<a target="_blank" src="'.$rl['urlSlug'].'" href="'.$rl['urlSlug'].'"><img src="'.$rlm['thumb'].'" alt="'.$lh.'"></a>';
+                }else
                   $listmediaitems.='<a data-fancybox="list" href="'.$rlm['file'].'" data-caption="&lt;h5&gt;'.$rl['title'].'&lt;/h5&gt;'.$rl['notes'].'"><img src="'.$rlm['file'].'" alt="'.$rl['title'].'"></a>';
-                }
+
                 $sli++;
               }
             }

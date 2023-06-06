@@ -1,9 +1,6 @@
 :root {
   --tile-length: 17.5vmin;
   --animation-duration: 8s;
-  --aurora-background-color: #f5f6fa;
-  --aurora-background-image: url(../images/auroracms.webp);
-  --aurora-logo-color: transparent;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size: 1rem;
@@ -397,9 +394,6 @@
 }
 
 [data-theme="dark"] {
-  --aurora-background-color: #3f4245;
-  --aurora-background-image: url(../images/auroracms.webp);
-  --aurora-logo-color: #fff;
   --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size: 1rem;

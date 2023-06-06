@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,7 @@ $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP 
 $s->execute();
 if($s->rowCount()>0){
   while($r=$s->fetch(PDO::FETCH_ASSOC)){
-    echo'<span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_'.$r['id'].'" data-sid="'.$r['sid'].'" data-chatname="'.$r['name'].'" data-chatemail="'.$r['email'].'"><span class="btn-group float-right">';
+    echo'<span class="chatListItem list-group-item list-group-item-action border-top-0 border-right-0 border-left-0 border-bottom" id="l_'.$r['id'].'" data-sid="'.$r['sid'].'" data-chatname="'.$r['name'].'" data-chatemail="'.$r['email'].'" data-content="'.$r['name'].' '.$r['email'].'"><span class="btn-group float-right">';
 		$scc=$db->prepare("SELECT `ip` FROM `".$prefix."iplist` WHERE `ip`=:ip");
 		$scc->execute([':ip'=>$r['ip']]);
 		if($scc->rowCount()<1)echo'<form id="blacklist'.$r['id'].'" target="sp" method="post" action="core/add_blacklist.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="livechat"><input name="r" type="hidden" value="Added Manually via Live Chat"><button data-tooltip="tooltip" aria-label="Add to Blacklist"><i class="i">security</i></button></form>';
@@ -36,4 +36,5 @@ echo'<script>'.
   	'$(this).addClass("active");'.
   	'updateChat("seen");'.
 	'});'.
+  'filterTextInput2();'.
 '</script>';

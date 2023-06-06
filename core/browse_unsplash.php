@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.24
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,6 @@ $tbl=isset($_GET['t'])?filter_input(INPUT_GET,'t',FILTER_SANITIZE_STRING):'';
 $col=isset($_GET['c'])?filter_input(INPUT_GET,'c',FILTER_SANITIZE_STRING):'';
 require'db.php';
 $config=$db->query("SELECT mediaOptions,mediaMaxWidth,mediaMaxWidthThumb,unsplash_appname,unsplash_publickey,unsplash_secretkey FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-if($id!=0){
   if($config['mediaOptions'][0]==1||$config['unsplash_publickey']!=''){?>
     <div class="container p-5">
       <form class="unsplash-form">
@@ -182,57 +181,67 @@ if($id!=0){
       };
       function addUnsplash(iid,id,t,c,da,dt){
         da=da.substring(0,da.indexOf('?'));
-        if(c=='thumb'){
-          da=da+'?w=<?=$config['mediaMaxWidthThumb'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+        if(t=='loginimage'){
+          da=da+'?w=1900&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+          $('#limage').val(da);
+          $('#lit').val($('#unsplash_'+iid).data('alt'));
+          $('#lia').val($('#unsplash_'+iid).data('name'));
+          $('#liau').val($('#unsplash_'+iid).data('url'));
+          $('#lisu').val($('#unsplash_'+iid).data('url'));
+          $('#lis').val('Unsplash');
         }else{
-          var da2=da+'?w=<?=$config['mediaMaxWidthThumb'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
-          da=da+'?w=<?=$config['mediaMaxWidth'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
-        }
-        $('#'+c).val(da);
-        $('#'+c+'image').attr('src',da);
-        $('[data-fancybox="'+c+'"]').attr('href',da);
-        $('[data-imageeditor="edit'+c+'"]').data('image',da);
-        $('[data-imageeditor="edit'+c+'"]').data('name',$('#unsplash_'+iid).data('name'));
-        $('#save'+c).addClass('btn-danger');
-        $('#'+c).addClass('unsaved');
-        if(c=='file'){
+          if(c=='thumb'){
+            da=da+'?w=<?=$config['mediaMaxWidthThumb'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+          }else{
+            var da2=da+'?w=<?=$config['mediaMaxWidthThumb'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+            da=da+'?w=<?=$config['mediaMaxWidth'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+          }
           $('#'+c).val(da);
           $('#'+c+'image').attr('src',da);
-          <?php if($config['mediaOptions'][1]==1){?>
-            if($('#thumb').length>0){
-              $('#thumb').val(da2);
-              $('#thumbimage').attr('src',da2);
-              $('[data-fancybox="thumb"]').attr('href',da2);
-              $('[data-imageeditor="editthumb"]').data('image',da2);
-              $('#savethumb').addClass('btn-danger');
-              $('#thumb').addClass('unsaved');
-            }
-          <?php }?>
-        }
-        if(c!='thumb'){
-          $('[data-el="fileALT"]').text($('#unsplash_'+iid).data('alt'));
-          $('#fileALT').val($('#unsplash_'+iid).data('alt'));
-          $('#savefileALT').addClass('btn-danger');
-          $('#fileALT').addClass('unsaved');
-          $('#attributionImageTitle').val($('#unsplash_'+iid).data('alt'));
-          $('#saveattributionImageTitle').addClass('btn-danger');
-          $('#attributionImageTitle').addClass('unsaved');
-          $('#attributionImageName').val($('#unsplash_'+iid).data('name'));
-          $('#saveattributionImageName').addClass('btn-danger');
-          $('#attributionImageName').addClass('unsaved');
-          $('#attributionImageURL').val($('#unsplash_'+iid).data('url'));
-          $('#saveattributionImageURL').addClass('btn-danger');
-          $('#attributionImageURL').addClass('unsaved');
-        }
-        $.ajax({
-          type:"GET",
-          url:dt,
-          data:{
-            client_id:'<?=$config['unsplash_publickey'];?>'
+          $('[data-fancybox="'+c+'"]').attr('href',da);
+          $('[data-imageeditor="edit'+c+'"]').data('image',da);
+          $('[data-imageeditor="edit'+c+'"]').data('name',$('#unsplash_'+iid).data('name'));
+          $('#save'+c).addClass('btn-danger');
+          $('#'+c).addClass('unsaved');
+          if(c=='file'){
+            $('#'+c).val(da);
+            $('#'+c+'image').attr('src',da);
+            <?php if($config['mediaOptions'][1]==1){?>
+              if($('#thumb').length>0){
+                $('#thumb').val(da2);
+                $('#thumbimage').attr('src',da2);
+                $('[data-fancybox="thumb"]').attr('href',da2);
+                $('[data-imageeditor="editthumb"]').data('image',da2);
+                $('#savethumb').addClass('btn-danger');
+                $('#thumb').addClass('unsaved');
+              }
+            <?php }?>
           }
-        }).done(function(){});
-        $('.saveall').addClass('btn-danger');
-        unsaved=true;
+          if(c!='thumb'){
+            $('[data-el="fileALT"]').text($('#unsplash_'+iid).data('alt'));
+            $('#fileALT').val($('#unsplash_'+iid).data('alt'));
+            $('#savefileALT').addClass('btn-danger');
+            $('#fileALT').addClass('unsaved');
+            $('#attributionImageTitle').val($('#unsplash_'+iid).data('alt'));
+            $('#saveattributionImageTitle').addClass('btn-danger');
+            $('#attributionImageTitle').addClass('unsaved');
+            $('#attributionImageName').val($('#unsplash_'+iid).data('name'));
+            $('#saveattributionImageName').addClass('btn-danger');
+            $('#attributionImageName').addClass('unsaved');
+            $('#attributionImageURL').val($('#unsplash_'+iid).data('url'));
+            $('#saveattributionImageURL').addClass('btn-danger');
+            $('#attributionImageURL').addClass('unsaved');
+          }
+          $.ajax({
+            type:"GET",
+            url:dt,
+            data:{
+              client_id:'<?=$config['unsplash_publickey'];?>'
+            }
+          }).done(function(){});
+          $('.saveall').addClass('btn-danger');
+          unsaved=true;
+        }
         parent.jQuery.fancybox.close();
       }
     </script>
@@ -242,4 +251,3 @@ if($id!=0){
       ($config['unsplash_publickey']==''?'<div class="alert alert-info">The Unsplash API Public Key is not set.</div>':'').
     '</div>';
   }
-}

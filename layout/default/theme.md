@@ -1,6 +1,9 @@
 # Default Changelog
 
-### v0.1.6
+### v0.1.7
+- Improve Sales display area.
+
+#### v0.1.6
 - Add current Theme Changelog to Dashboard.
 - Add list parsing for Articles, enabling display of lists including Images/Videos (YouTube, Vimeo).
 

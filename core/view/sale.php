@@ -7,21 +7,31 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$sale=getSaleTime();
-if($sale['sale']=='valentine'&&$config['saleHeadingvalentine']!='')$sale['title']=$config['saleHeadingvalentine'];
-if($sale['sale']=='easter'&&$config['saleHeadingeaster']!='')$sale['title']=$config['saleHeadingeaster'];
-if($sale['sale']=='mothersday'&&$config['saleHeadingmothersday']!='')$sale['title']=$config['saleHeadingmothersday'];
-if($sale['sale']=='fathersday'&&$config['saleHeadingfathersday']!='')$sale['title']=$config['saleHeadingfathersday'];
-if($sale['sale']=='blackfriday'&&$config['saleHeadingblackfriday']!='')$sale['title']=$config['saleHeadingblackfriday'];
-if($sale['sale']=='halloween'&&$config['saleHeadinghalloween']!='')$sale['title']=$config['saleHeadinghalloween'];
-if($sale['sale']=='smallbusinessday'&&$config['saleHeadingsmallbusinessday']!='')$sale['title']=$config['saleHeadingsmallbusinessday'];
-if($sale['sale']=='christmas'&&$config['saleHeadingchristmas']!='')$sale['title']=$config['saleHeadingchristmas'];
 $sIs='';
 if(stristr($html,'<saleItems')&&$config['options'][28]==1){
+	$sale=getSaleTime();
+	if($sale['sale']=='valentine'&&$config['saleHeadingvalentine']!='')
+		$sale['title']=$config['saleHeadingvalentine'];
+	if($sale['sale']=='easter'&&$config['saleHeadingeaster']!='')
+		$sale['title']=$config['saleHeadingeaster'];
+	if($sale['sale']=='mothersday'&&$config['saleHeadingmothersday']!='')
+		$sale['title']=$config['saleHeadingmothersday'];
+	if($sale['sale']=='fathersday'&&$config['saleHeadingfathersday']!='')
+		$sale['title']=$config['saleHeadingfathersday'];
+	if($sale['sale']=='blackfriday'&&$config['saleHeadingblackfriday']!='')
+		$sale['title']=$config['saleHeadingblackfriday'];
+	if($sale['sale']=='halloween'&&$config['saleHeadinghalloween']!='')
+		$sale['title']=$config['saleHeadinghalloween'];
+	if($sale['sale']=='smallbusinessday'&&$config['saleHeadingsmallbusinessday']!='')
+		$sale['title']=$config['saleHeadingsmallbusinessday'];
+	if($sale['sale']=='christmas'&&$config['saleHeadingchristmas']!='')
+		$sale['title']=$config['saleHeadingchristmas'];
+	if($sale['sale']=='eofy'&&$config['saleHeadingEOFY']!='')
+		$sale['title']=$config['saleHeadingEOFY'];
 	if(stristr($html,'<settings')){
 		preg_match('/<settings.*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
 		$count=isset($matches[1])&&$matches[1]!=0?$matches[1]:$config['showItems'];
@@ -29,11 +39,9 @@ if(stristr($html,'<saleItems')&&$config['options'][28]==1){
 		$count=$config['showItems'];
   preg_match('/<saleItems>([\w\W]*?)<\/saleItems>/',$html,$matches);
   $item=$matches[1];
-  $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `sale`=:sale AND `rank`<=:rank AND `status`='published' AND `eti` > :tis AND `eti` < :tie ORDER BY `eti` ASC");
+  $ss=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='inventory' AND `sale`=:sale AND `rank`<=:rank AND `status`='published'");
   $ss->execute([
 		':sale'=>$sale['sale'],
-		':tis'=>$sale['tis'],
-		':tie'=>$sale['tie'],
 		':rank'=>isset($_SESSION['rank'])?$_SESSION['rank']:0
 	]);
 	if($ss->rowCount()>0){
@@ -61,6 +69,8 @@ if(stristr($html,'<saleItems')&&$config['options'][28]==1){
 		  }
 	    $items=preg_replace([
 				'/<json-ld>/',
+				$config['options'][5]==1?'/<[\/]?quickview>/':'~<quickview>.*?<\/quickview>~is',
+				'/<print content=[\"\']?id[\"\']?>/',
 				'/<print content=[\"\']?thumb[\"\']?>/',
 				'/<print content=[\"\']?imageALT[\"\']?>/',
 	      '/<print content=[\"\']?linktitle[\"\']?>/',
@@ -94,7 +104,9 @@ if(stristr($html,'<saleItems')&&$config['options'][28]==1){
 						'}'.
 					'}'.
 				'}</script>',
-	      file_exists('media/sm/'.basename($rs['file']))&&$rs['file']!=''?'media/sm/'.basename($rs['file']):'core/images/noimage-sm.jpg',
+				'',
+				$rs['id'],
+	      $rs['thumb']!=''?$rs['thumb']:NOIMAGESM,
 	      $rs['fileALT']==''?$rs['title']:$rs['fileALT'],
 	      URL.$rs['contentType'].'/'.$rs['urlSlug'].'/',
 	      htmlspecialchars($rs['title'],ENT_QUOTES,'UTF-8'),

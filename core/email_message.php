@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -120,5 +120,5 @@ if($to!=''){
   if(!empty($mail->ErrorInfo)){
     echo'<script>window.top.window.toastr["error"](`'.$mail->ErrorInfo.'`);</script>';
     exit();
-  }else echo'<script>window.top.window.location.href="'.ADMINURL.'"messages/";</script>';
+  }else echo'<script>window.top.window.location.href="'.ADMINURL.'messages/";</script>';
 }

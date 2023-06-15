@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -59,24 +59,24 @@ function deseminateReferer($u){
   }else{
     $pu=parse_url($u);
 		$out=(isset($pu['host'])?$pu['host']:'<small>'.$u.'</small>').'<br>';
-    if(stristr($u,'500px'))$out='<i class="i d-inline-table i-3x i-social 500px">social-500px</i><small class="d-flex pt-1 justify-content-center">500px</small>';
-    if(stristr($u,'amazon'))$out='<i class="i d-inline-table i-3x i-social amazon">social-amazon</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
-    if(stristr($u,'ahref')||stristr($u,'as16276'))$out='<i class="i d-inline-table i-3x i-social ahrefs">social-ahrefs</i><small class="d-flex pt-1 justify-content-center">AHrefs</small>';
-    if(stristr($u,'aws'))$out='<i class="i d-inline-table i-3x i-social amazon">social-amazon</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
-    if(stristr($u,'bing'))$out='<i class="i d-inline-table i-3x i-social bing">social-bing</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
-    if(stristr($u,'facebook'))$out='<i class="i d-inline-table i-3x i-social facebook">social-facebook</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
-    if(stristr($u,'fbclid='))$out='<i class="i d-inline-table i-3x i-social facebook">social-facebook</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
-    if(stristr($u,'msclkid='))$out='<i class="i d-inline-table i-3x i-social bing">social-bing</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
-    if(stristr($u,'github'))$out='<i class="i d-inline-table i-3x i-social github">social-github</i><small class="d-flex pt-1 justify-content-center">GitHub</small>';
-    if(stristr($u,'google'))$out='<i class="i d-inline-table i-3x i-social google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
-    if(stristr($u,'gclid='))$out='<i class="i d-inline-table i-3x i-social google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
-    if(stristr($u,'instagram'))$out='<i class="i d-inline-table i-3x i-social instagram">social-instagram</i><small class="d-flex pt-1 justify-content-center">Instagram</small>';
-    if(stristr($u,'duckduckgo'))$out='<i class="i d-inline-table i-3x i-social duckduckgo">social-duckduckgo</i><small class="d-flex pt-1 justify-content-center">DuckDuckGo</small>';
-    if(stristr($u,'linkedin'))$out='<i class="i d-inline-table i-3x i-social linkedin">social-linkedin</i><small class="d-flex pt-1 justify-content-center">LinkedIn</small>';
-    if(stristr($u,'reddit'))$out='<i class="i d-inline-table i-3x i-social reddit">social-reddit</i><small class="d-flex pt-1 justify-content-center">Reddit</small>';
-    if(stristr($u,'telstra')||stristr($u,'as1221'))$out='<i class="i d-inline-table i-3x i-social telstra">social-telstra</i><small class="d-flex pt-1 justify-content-center">Telstra</small>';
-    if(stristr($u,'youtube'))$out='<i class="i d-inline-table i-3x i-social youtube">social-youtube</i><small class="d-flex pt-1 justify-content-center">YouTube</small>';
-    if(stristr($u,'twitter')||stristr($u,'t.co/'))$out='<i class="i d-inline-table i-3x i-social twitter">social-twitter</i><small class="d-flex pt-1 justify-content-center">Twitter</small>';
+    if(stristr($u,'500px'))$out='<i class="i d-inline-table i-3x i-social social-500px">social-500px</i><small class="d-flex pt-1 justify-content-center">500px</small>';
+    if(stristr($u,'amazon'))$out='<i class="i d-inline-table i-3x i-social social-amazon">social-amazon</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
+    if(stristr($u,'ahref')||stristr($u,'as16276'))$out='<i class="i d-inline-table i-3x i-social social-ahrefs">social-ahrefs</i><small class="d-flex pt-1 justify-content-center">AHrefs</small>';
+    if(stristr($u,'aws'))$out='<i class="i d-inline-table i-3x i-social social-amazon">social-amazon</i><small class="d-flex pt-1 justify-content-center">Amazon</small>';
+    if(stristr($u,'bing'))$out='<i class="i d-inline-table i-3x i-social social-bing">social-bing</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
+    if(stristr($u,'facebook'))$out='<i class="i d-inline-table i-3x i-social social-facebook">social-facebook</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
+    if(stristr($u,'fbclid='))$out='<i class="i d-inline-table i-3x i-social social-facebook">social-facebook</i><small class="d-flex pt-1 justify-content-center">Facebook</small>';
+    if(stristr($u,'msclkid='))$out='<i class="i d-inline-table i-3x i-social social-bing">social-bing</i><small class="d-flex pt-1 justify-content-center">Bing</small>';
+    if(stristr($u,'github'))$out='<i class="i d-inline-table i-3x i-social social-github">social-github</i><small class="d-flex pt-1 justify-content-center">GitHub</small>';
+    if(stristr($u,'google'))$out='<i class="i d-inline-table i-3x i-social social-google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
+    if(stristr($u,'gclid='))$out='<i class="i d-inline-table i-3x i-social social-google">social-google</i><small class="d-flex pt-1 justify-content-center">Google</small>';
+    if(stristr($u,'instagram'))$out='<i class="i d-inline-table i-3x i-social social-instagram">social-instagram</i><small class="d-flex pt-1 justify-content-center">Instagram</small>';
+    if(stristr($u,'duckduckgo'))$out='<i class="i d-inline-table i-3x i-social social-duckduckgo">social-duckduckgo</i><small class="d-flex pt-1 justify-content-center">DuckDuckGo</small>';
+    if(stristr($u,'linkedin'))$out='<i class="i d-inline-table i-3x i-social social-linkedin">social-linkedin</i><small class="d-flex pt-1 justify-content-center">LinkedIn</small>';
+    if(stristr($u,'reddit'))$out='<i class="i d-inline-table i-3x i-social social-reddit">social-reddit</i><small class="d-flex pt-1 justify-content-center">Reddit</small>';
+    if(stristr($u,'telstra')||stristr($u,'as1221'))$out='<i class="i d-inline-table i-3x i-social social-telstra">social-telstra</i><small class="d-flex pt-1 justify-content-center">Telstra</small>';
+    if(stristr($u,'youtube'))$out='<i class="i d-inline-table i-3x i-social social-youtube">social-youtube</i><small class="d-flex pt-1 justify-content-center">YouTube</small>';
+    if(stristr($u,'twitter')||stristr($u,'t.co/'))$out='<i class="i d-inline-table i-3x i-social social-twitter">social-twitter</i><small class="d-flex pt-1 justify-content-center">Twitter</small>';
   }
 	if($u=='Unknown')$out='<span class="badger badge-dark">'.$u.'</span><br>';
   return$out;
@@ -262,7 +262,7 @@ function getIspInfo($ip){
 	return$ipij;
 }
 function country2flag($countryCode){
-	$code=strtoupper($code);
+	$code=strtoupper($countryCode);
 	if($code=='AD')return'🇦🇩';
 	if($code=='AE')return'🇦🇪';
 	if($code=='AF')return'🇦🇫';
@@ -616,12 +616,12 @@ if($config['php_options'][0]==1){
 		'</tr>';
   }
 	if($cnt>19&&$b==''){
-      echo'<tr id="more_'.$c.'">'.
-            '<td colspan="9">'.
-              '<div class="form-row load-more justify-content-center">'.
-                '<button class="btn-block btn-more" onclick="more(`tracker`,`'.$c.'`,`'.$b.'`);">More</button>'.
-              '</div>'.
-            '</td>'.
-          '</tr>';
+    echo'<tr id="more_'.$c.'">'.
+          '<td colspan="9">'.
+            '<div class="form-row load-more justify-content-center">'.
+              '<button class="btn-block btn-more" onclick="more(`tracker`,`'.$c.'`,`'.$b.'`);">More</button>'.
+            '</div>'.
+          '</td>'.
+        '</tr>';
 	}
 }else echo'nomore';

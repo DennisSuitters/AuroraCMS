@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -25,8 +25,8 @@
     <meta name="robots" content="noindex,nofollow">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
 		<title>Install - AuroraCMS</title>
-		<link rel="icon" href="core/images/favicon.png">
-		<link rel="apple-touch-icon" href="core/images/favicon.png">
+		<link rel="icon" href="core/images/favicon-64.jpg">
+    <link rel="apple-touch-icon" href="core/images/favicon-64.jpg">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
 		<link rel="stylesheet" type="text/css" href="core/css/style.css">
 	</head>
@@ -52,9 +52,9 @@
 						$error++;
 						echo'<div class="alert alert-danger" role="alert">AuroraCMS uses PDO for Database Interaction, please Install or Enable PDO!</div>';
 					}
-					if(file_exists('core/config.ini')&&!is_writable('core/config.ini')){
+					if(file_exists('core/config.ini')){
 						$error++;
-						echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, but is not writeable. There is two ways to fix this, either make <code>core/config.ini</code> writable, or remove the file!</div>';
+						echo'<div class="alert alert-danger" role="alert"><code>core/config.ini</code> Exists, please remove the file!</div>';
 					}
 					if(!isset($_SERVER['HTTP_MOD_REWRITE'])){
 						$error++;
@@ -97,7 +97,7 @@
 								<button type="submit" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
-						<div id="dbsuccess"></div>
+						<div id="dbsuccess1"></div>
 					</div>
 					<div class="d-none" id="step2">
 						<h4>System Settings</h4>
@@ -108,7 +108,7 @@
 							<input id="sysurl" name="sysurl" type="text" value="" placeholder="Enter URL Folder if Site isn't in Domain Root...">
 							<label for="sysadmin">Administration Folder</label>
 							<input id="sysadmin" name="sysadmin" type="text" value="" placeholder="Enter Administration Page Folder...">
-							<div class="form-text small">Leave blank to use default: \"admin\". e.g. http://www.sitename.com/admin/</div>
+							<div class="form-text small">Leave blank to use default: "admin". e.g. http://www.sitename.com/admin/</div>
 							<label for="aTheme">Theme</label>
 							<select id="aTheme" name="aTheme">
 								<?php foreach(new DirectoryIterator('layout') as$folder){
@@ -123,6 +123,7 @@
 								<button type="submit" aria-label="Go to Next Step">Next</button>
 							</div>
 						</form>
+						<div id="dbsuccess2"></div>
 					</div>
 					<div class="d-none" id="step3">
 						<h4>Developer Account Settings</h4>
@@ -183,7 +184,7 @@
 		<script src="core/js/aurora.min.js"></script>
 		<script>
 			function isValid(){
-				$('#block').addClass('d-block');
+				$('.page-block').removeClass('d-none');
 			}
 		</script>
 	</body>

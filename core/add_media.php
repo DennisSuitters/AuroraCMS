@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -32,8 +32,12 @@ if($fu!=''){
 			if(stristr($file,'youtu')){
       	preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$file,$vidMatch);
 				$thumb='https://i.ytimg.com/vi/'.$vidMatch[0].'/maxresdefault.jpg';
-			}else
-				$thumb='';
+			}else{
+				if(stristr($file,URL))
+					$thumb=URL.'media/thumbs/'.basename($file);
+				else
+					$thumb=$file;
+			}
 			$q=$db->prepare("INSERT IGNORE INTO `".$prefix."media` (`rid`,`pid`,`file`,`thumb`,`ti`) VALUES (:rid,:pid,:file,:thumb,:ti)");
 			$q->execute([
 				':rid'=>$rid,

@@ -27,8 +27,8 @@ else{?>
           else
             $msg.='Good Evening ';
           echo'<h5 class="welcome-message">'.$msg.($user['name']!=''?strtok($user['name'], " "):$user['username']).'!'."<br>The date is ".date($config['dateFormat'])."</h5>";
-          if($user['accountsContact']==1&&$config['hosterURL']!='')
-            echo'<div id="hostinginfo"></div>';
+          echo'<div id="updatecheck" class="alert alert-info hidewhenempty"></div>';
+          if($user['accountsContact']==1&&$config['hosterURL']!='')echo'<div id="hostinginfo"></div>';
           echo($config['maintenance']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').($config['comingsoon']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
           if(!file_exists('layout/'.$config['theme'].'/theme.ini'))
             echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
@@ -252,7 +252,14 @@ else{?>
           });
         </script>
       </div>
-      <?php require'core/layout/footer.php';?>
+      <?php require'core/layout/footer.php';
+      $currentversion=file_get_contents('VERSION');
+      $repoversion=file_get_contents('https://raw.githubusercontent.com/DiemenDesign/AuroraCMS/master/VERSION');
+      if($repoversion>$currentversion){?>
+        <script>
+          $('#updatecheck').html(`<?=$repoversion;?> of <a href="https://github.com/DiemenDesign/AuroraCMS">AuroraCMS</a> is available to update to, you are currently using <?=$currentversion;?>`);
+        </script>
+      <?php }?>
     </div>
   </section>
   <?php $ss=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE `popup`=1 AND `seen`=0 AND `uid`=:uid ORDER BY `ti` ASC");

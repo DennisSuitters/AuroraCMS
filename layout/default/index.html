@@ -56,9 +56,9 @@
 <block inbed="sale">
 	<salePeriod>
 		<settings items="4">
-		<section class="row mt-0 mt-sm-5 justify-content-center <print sale>">
+		<section class="row mt-5 justify-content-center <print sale>">
 			<header>
-				<h2><saleHeading></h2>
+				<h2 class="text-center"><saleHeading></h2>
 			</header>
 			<saleItems>
 				<article class="card col-12 col-sm-5 col-md-3 col-xl-2 m-3">
@@ -73,6 +73,9 @@
 					</div>
 					<div class="card-footer">
 						<a class="btn" href="<print content=linktitle>">View</a>
+						<quickview>
+							<a class="btn" data-fancybox="sale" data-type="ajax" data-src="core/quickview.php?id=<print content=id>" href="javascript:;">Quick View</a>
+						</quickview>
 					</div>
 				</article>
 			</saleItems>
@@ -191,7 +194,7 @@
 		</div>
 	</section>
 </block>
-<block inbed="content2">
+<block inbed="content6">
 	<map>
 		<div class="col-12 m-0">
 			<div class="row" id="map"></div>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -109,6 +109,11 @@
           <div class="form-row">
             <input class="textinput" id="saleHeadingchristmas" data-dbid="1" data-dbt="config" data-dbc="saleHeadingchristmas" type="text" value="<?=$config['saleHeadingchristmas'];?>"<?=($user['options'][7]==1?' placeholder="Enter Christmas Sale Heading..."':' disabled');?>>
             <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingchristmas" data-dbid="saleHeadingchristmas" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+          </div>
+          <label id="saleHeadingEOFYField" for="saleHeadingEOFY"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingEOFYField" data-tooltip="tooltip" aria-label="PermaLink to EOFY Sale Heading Field">&#128279;</a>':'';?>End Of Financial Year Sale Heading</label>
+          <div class="form-row">
+            <input class="textinput" id="saleHeadingEOFY" data-dbid="1" data-dbt="config" data-dbc="saleHeadingEOFY" type="text" value="<?=$config['saleHeadingEOFY'];?>"<?=($user['options'][7]==1?' placeholder="Enter End Of Financial Year Sale Heading..."':' disabled');?>>
+            <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingEOFY" data-dbid="saleHeadingEOFY" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
           </div>
           <div class="row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" data-tooltip="tooltip" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>

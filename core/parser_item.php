@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -541,7 +541,7 @@ if($skip==false){
                 }elseif(stristr($rl['urlSlug'],'twitter')){
                   $listmediaitems.='<a target="_blank" src="'.$rl['urlSlug'].'" href="'.$rl['urlSlug'].'"><img src="'.$rlm['thumb'].'" alt="'.$lh.'"></a>';
                 }else
-                  $listmediaitems.='<a data-fancybox="list" href="'.$rlm['file'].'" data-caption="&lt;h5&gt;'.$rl['title'].'&lt;/h5&gt;'.$rl['notes'].'"><img src="'.$rlm['file'].'" alt="'.$rl['title'].'"></a>';
+                  $listmediaitems.='<a data-fancybox="list" href="'.$rlm['file'].'" data-caption="&lt;h5&gt;'.$rl['title'].'&lt;/h5&gt;'.str_replace('"','`',strip_tags($rl['notes'])).'"><img src="'.$rlm['file'].'" alt="'.$rl['title'].'"></a>';
 
                 $sli++;
               }

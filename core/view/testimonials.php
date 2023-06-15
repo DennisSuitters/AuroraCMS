@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.12
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,6 +33,7 @@ $html=preg_replace([
 ],$html);
 preg_match('/<items>([\w\W]*?)<\/items>/',$html,$matches);
 $item=$matches[1];
+if($count==0)$count='all';
 $s=$db->query("SELECT * FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `status`='published' ORDER BY `ti` DESC".($count!='all'?" LIMIT 0,".$count:""));
 $s->execute();
 $i=0;

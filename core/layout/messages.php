@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -50,8 +50,9 @@ if($user['options'][3]==1){
     $folder="INBOX";
     if(isset($args[0])){
       if($args[0]=='unread')$folder='unread';
+      if($args[0]=='read')$folder='read';
       if($args[0]=='trash')$folder='trash';
-//     if($args[0]=='trash')$folder='DELETE';
+      if($args[0]=='trash')$folder='DELETE';
       if($args[0]=='starred')$folder='starred';
       if($args[0]=='important')$folder='important';
       if($args[0]=='sent')$folder='sent';
@@ -87,6 +88,10 @@ if($user['options'][3]==1){
                 $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `status`='unread' ORDER BY `ti` DESC, `subject` ASC");
                 $s->execute();
               }
+              if($folder=='read'){
+                $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `status`='read' ORDER BY `ti` DESC, `subject` ASC");
+                $s->execute();
+              }
               if($folder=='important'){
                 $s=$db->prepare("SELECT * FROM `".$prefix."messages` WHERE `important`=1 ORDER BY `ti` DESC, `subject` ASC");
                 $s->execute();
@@ -101,7 +106,7 @@ if($user['options'][3]==1){
               }
               $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
-              <div class="messages-menu col-12 col-sm-5 col-lg-4 col-xl-3 col-xxl-2 p-3 shadow">
+              <div class="messages-menu col-12 col-sm-5 col-lg-4 col-xl-3 col-xxl-2 p-3 border">
                 <?=$user['options'][0]==1?'<a class="btn-block mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose" role="button">Compose New Email</a>':'';?>
                 <nav class="mt-3">
                   <ul>
@@ -113,6 +118,11 @@ if($user['options'][3]==1){
                         <i class="i i-2x mr-2">email</i> Unread
                       </a>
                       <?=($ur['cnt']>0?'<span class="badge" data-badge="'.$ur['cnt'].'"></span>':'');?>
+                    </li>
+                    <li>
+                      <a class="<?=(isset($args[0])&&$args[0]=='read'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/read';?>">
+                        <i class="i i-2x mr-2">email-read</i> Read
+                      </a>
                     </li>
                     <li>
                       <a class="<?=(isset($args[0])&&$args[0]=='sent'?' active':'');?>" href="<?= URL.$settings['system']['admin'].'/messages/sent';?>"><i class="i i-2x mr-2">email-send</i> Sent</a>

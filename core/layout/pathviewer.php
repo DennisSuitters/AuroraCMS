@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.10
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -67,7 +67,7 @@ function getBrowserIcon($i) {
     'explorer',
     'firefox',
     'opera',
-    'safari'],true))return'<i class="i d-inline-table i-2x">'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
+    'safari'],true))return'<i class="i d-inline-table i-2x">browser-'.$i.'</i><small class="d-flex pt-1 justify-content-center">'.ucfirst($i).'</small>';
   else
     return'<i class="i d-inline-table i-2x i-color-muted">browser-general</i><small class="d-flex pt-1 justify-content-center i-color-muted">Unknown</small>';
 }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -294,30 +294,33 @@ function getSaleTime(){
   ];
   $year=date('Y',$chkti);
 	$month=strtotime("1 month");
-  $vatis=strtotime("2/14/$year"); // Valentine's Day
-	$vatie=$vatis - $month;
-  $eatis=strtotime("last sunday of march $year"); // Easter
-	$eatie=$eatis - $month;
-  $mdtis=strtotime("5/8/$year"); // Mother's Day
-	$mdtie=$mdtis - $month;
-  $fdtis=strtotime("9/4/$year"); // Father's Day
-	$fdtie=$fdtis - $month;
-  $bftis=strtotime("last friday of october $year"); // Black Friday
-	$bftie=$bftis - $month;
-  $hwtis=strtotime("10/31/$year"); // Halloween
-	$hwtie=$hwtis - $month;
-  $sbtis=strtotime("last saturday of november $year"); // Small Business Day
-	$sbtie=$sbtis - $month;
-  $cdtis=strtotime("12/25/$year"); // Christmas Day
-	$cdtie=$cdtis - $month;
-  if($chkti>$vatis&&$chkti<$vatie)$sale=['tis'=>$vatis,'tie'=>$vatie,'sale'=>'valentine','class'=>'valentine','title'=>'Checkout our products in our Valentine\'s Day Sale!'];
-  if($chkti>$eatis&&$chkti<$eatie)$sale=['tis'=>$eatis,'tie'=>$eatie,'sale'=>'easter','class'=>'easter','title'=>'Checkout our products in our Easter Sale!'];
-  if($chkti>$mdtis&&$chkti<$mdtie)$sale=['tis'=>$mdtis,'tie'=>$mdtie,'sale'=>'mothersday','class'=>'mothersday','title'=>'Spoil your Mother with something from our Mother\'s Day Sale!'];
-  if($chkti>$fdtis&&$chkti<$fdtie)$sale=['tis'=>$fdtis,'tie'=>$fdtie,'sale'=>'fathersday','class'=>'fathersday','title'=>'Spoil your Father with something from our Father\'s Day Sale!'];
-  if($chkti>$bftis&&$chkti<$bftie)$sale=['tis'=>$bftis,'tie'=>$bftie,'sale'=>'blackfriday','class'=>'blackfriday','title'=>'Get something from our Black Friday Sale!'];
-  if($chkti>$hwtis&&$chkti<$hwtie)$sale=['tis'=>$hwtis,'tie'=>$hwtie,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
-  if($chkti>$sbtis&&$chkti<$sbtie)$sale=['tis'=>$sbtis,'tie'=>$sbtie,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
-  if($chkti>$cdtis&&$chkti<$cdtie)$sale=['tis'=>$cdtis,'tie'=>$cdtie,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
+  $vatie=strtotime("2/14/$year"); // Valentine's Day
+	$vatis=$vatie - $month;
+	if($chkti>$vatis&&$chkti<$vatie)$sale=['tis'=>$vatis,'tie'=>$vatie,'sale'=>'valentine','class'=>'valentine','title'=>'Checkout our products in our Valentine\'s Day Sale!'];
+  $eatie=strtotime("last sunday of march $year"); // Easter
+	$eatis=$eatie - $month;
+	if($chkti>$eatis&&$chkti<$eatie)$sale=['tis'=>$eatis,'tie'=>$eatie,'sale'=>'easter','class'=>'easter','title'=>'Checkout our products in our Easter Sale!'];
+  $mdtie=strtotime("5/8/$year"); // Mother's Day
+	$mdtis=$mdtie - $month;
+	if($chkti>$mdtis&&$chkti<$mdtie)$sale=['tis'=>$mdtis,'tie'=>$mdtie,'sale'=>'mothersday','class'=>'mothersday','title'=>'Spoil your Mother with something from our Mother\'s Day Sale!'];
+  $fdtie=strtotime("9/4/$year"); // Father's Day
+	$fdtis=$fdtie - $month;
+	if($chkti>$fdtis&&$chkti<$fdtie)$sale=['tis'=>$fdtis,'tie'=>$fdtie,'sale'=>'fathersday','class'=>'fathersday','title'=>'Spoil your Father with something from our Father\'s Day Sale!'];
+  $bftie=strtotime("last friday of october $year"); // Black Friday
+	$bftis=$bftie - $month;
+	if($chkti>$bftis&&$chkti<$bftie)$sale=['tis'=>$bftis,'tie'=>$bftie,'sale'=>'blackfriday','class'=>'blackfriday','title'=>'Get something from our Black Friday Sale!'];
+  $hwtie=strtotime("10/31/$year"); // Halloween
+	$hwtis=$hwtie - $month;
+	if($chkti>$hwtis&&$chkti<$hwtie)$sale=['tis'=>$hwtis,'tie'=>$hwtie,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
+  $sbtie=strtotime("last saturday of november $year"); // Small Business Day
+	$sbtis=$sbtie - $month;
+	if($chkti>$sbtis&&$chkti<$sbtie)$sale=['tis'=>$sbtis,'tie'=>$sbtie,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
+  $cdtie=strtotime("12/25/$year"); // Christmas Day
+	$cdtis=$cdtie - $month;
+	if($chkti>$cdtis&&$chkti<$cdtie)$sale=['tis'=>$cdtis,'tie'=>$cdtie,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
+	$eofytie=strtotime("7/30/$year"); // End Of Financial Year
+	$eofytis=$eofytie - $month;
+	if($chkti>$eofytis&&$chkti<$eofytie)$sale=['tis'=>$eofytis,'tie'=>$eofytie,'sale'=>'eofy','class'=>'eofy','title'=>'Get a great deal with our recommended End Of Financial Year selected products!'];
   return$sale;
 }
 function size_format($B,$D=2){

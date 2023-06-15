@@ -33,6 +33,7 @@ header.aurora{
   transform-style:preserve-3d }
 
 .plane.main{
+  z-index:2000!important;
   position:absolute;
   top:0;
   right:0;

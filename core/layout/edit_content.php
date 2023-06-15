@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -373,7 +373,7 @@ if($r['contentType']!='testimonials'){
                 </div>
               <?php }
               if($r['contentType']=='inventory'){?>
-                <label id="<?=$r['contentType'];?>Sale" for="sale"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Sale" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Sale Selector">&#128279;</a>':'';?>Associate&nbsp;with&nbsp;Sale</label>
+                <label id="<?=$r['contentType'];?>Sale" for="sale"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Sale" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Sale Selector">&#128279;</a>':'';?>Associate&nbsp;with&nbsp;Sale&nbsp;Period</label>
                 <div class="form-row">
                   <select id="sale"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Sale"':' disabled';?> onchange="update('<?=$r['id'];?>','content','sale',$(this).val(),'select');">
                     <option value=""<?=$r['sale']==''?' selected':''?>>No Holiday</option>
@@ -385,6 +385,7 @@ if($r['contentType']!='testimonials'){
                     <option value="halloween"<?=$r['sale']=='halloween'?' selected':''?>>Halloween</option>
                     <option value="smallbusinessday"<?=$r['sale']=='smallbusinessday'?' selected':''?>>Small Business Day</option>
                     <option value="christmas"<?=$r['sale']=='christmas'?' selected':''?>>Christmas</option>
+                    <option value="eofy"<?=$r['sale']=='eofy'?' selected':''?>>End Of Financial Year</option>
                   </select>
                 </div>
               <?php }
@@ -967,7 +968,8 @@ if($r['contentType']!='testimonials'){
 <?php /* Media */ ?>
               <?php if($r['contentType']!='testimonials'){?>
                 <div class="tab1-3 border p-4" data-tabid="tab1-3" role="tabpanel">
-                  <?php if($user['options'][1]==1){?>
+                  <?php if($user['options'][1]==1){
+                    if($r['contentType']!='list'){?>
                     <legend>Downloadable Media</legend>
                     <form class="row mb-3" target="sp" method="post" action="core/add_download.php" enctype="multipart/form-data">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -977,7 +979,7 @@ if($r['contentType']!='testimonials'){
                         </div>
                         <input class="border-bottom-0 border-left-0" type="text" name="t" value="" placeholder="Enter a Title, leave empty to use filename...">
                       </div>
-                      <?php if($r['contentType']=='inventory'){?>
+                    <?php if($r['contentType']=='inventory'){?>
                         <div class="form-row">
                           <div class="input-text border-right-0 border-bottom-0">
                             <label for="downloadr">Requires Order</label>&nbsp;<input id="downloadr" type="checkbox" name="r" value="1">
@@ -1057,6 +1059,8 @@ if($r['contentType']!='testimonials'){
                       }?>
                     </div>
                     <hr>
+                  <?php }
+                  if($r['contentType']!='list'){?>
                     <legend>Links to Services/Content</legend>
                     <form class="row mb-3" target="sp" method="post" action="core/add_link.php">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -1148,6 +1152,7 @@ if($r['contentType']!='testimonials'){
                       }?>
                     </div>
                     <hr>
+                    <?php }?>
                     <legend>On Page Media</legend>
                     <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">

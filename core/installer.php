@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.25
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,15 +43,15 @@ if($_POST['emailtrap']==''){
 		if(!isset($db)){
 			$error=1;
 			echo'<script>'.
-				'window.top.window.$("#dbsuccess").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);'.
-				'window.top.window.$("#block").removeClass("d-block");'.
+				'window.top.window.$("#dbsuccess1").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);'.
+				'window.top.window.$(".page-block").addClass("d-none");'.
 			'</script>';
 		}
 		if($error==0){
 			echo'<script>'.
 				'window.top.window.$("#step1").addClass("d-none");'.
 				'window.top.window.$("#step2").removeClass("d-none");'.
-				'window.top.window.$("#block").removeClass("d-block");'.
+				'window.top.window.$(".page-block").addClass("d-none");'.
 			'</script>';
 		}
 	}
@@ -79,9 +79,10 @@ if($_POST['emailtrap']==''){
 		$oFH=fopen("config.ini",'w');
 		fwrite($oFH,$txt);
 		fclose($oFH);
+			require'db.php';
 		if(!isset($db)){
 			$error=1;
-			echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);</script>';
+			echo'<script>window.top.window.$("#dbsuccess2").html(`<div class="alert alert-danger" role="alert">Database Connection Error!</div>`);</script>';
 		}
 		if($error==0){
 			$prefix=$settings['database']['prefix'];
@@ -97,8 +98,8 @@ if($_POST['emailtrap']==''){
 				],$sql);
 			$q=$db->exec($sql);
 			$e=$db->errorInfo();
-			if(is_null($e[2]))echo'<script>window.top.window.$("#dbsuccess").html(`<div class="alert alert-success" role="alert">Database Import Succeeded!</div>`);</script>';
-			require'db.php';
+			if(is_null($e[2]))echo'<script>window.top.window.$("#dbsuccess2").html(`<div class="alert alert-success" role="alert">Database Import Succeeded!</div>`);</script>';
+
 			$prefix=$settings['database']['prefix'];
 			$sql=$db->prepare("UPDATE `".$prefix."config` SET `theme`=:theme,`maintenance`=1 WHERE `id`=1");
 			$sql->execute([':theme'=>$aTheme]);
@@ -108,7 +109,7 @@ if($_POST['emailtrap']==''){
 				echo'<script>'.
 					'window.top.window.$("#step2").addClass("d-none");'.
 					'window.top.window.$("#step3").removeClass("d-none");'.
-					'window.top.window.$("#block").removeClass("d-block");'.
+					'window.top.window.$(".page-block").addClass("d-none");'.
 				'</script>';
 			}
 		}
@@ -137,7 +138,7 @@ if($_POST['emailtrap']==''){
 			echo'<script>'.
 				'window.top.window.$("#step3").addClass("d-none");'.
 				'window.top.window.$("#step4").removeClass("d-none");'.
-				'window.top.window.$("#block").removeClass("d-block");'.
+				'window.top.window.$(".page-block").addClass("d-none");'.
 			'</script>';
 		}
 	}

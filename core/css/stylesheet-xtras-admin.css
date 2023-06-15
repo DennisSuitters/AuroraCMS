@@ -777,8 +777,8 @@ dialog section{
   font-weight:700;
   background:rgba(0,0,0,.15) }
 
-.alert.toolbar.handle:hover{
-  cursor:grab!important }
+.alert .toolbar.handle:hover{
+  cursor:move!important }
 
 .alert .toolbar .btn-group{
   position:absolute;
@@ -1491,6 +1491,20 @@ dialog footer{
 .alert.widget a:hover{
   color:var(--card-link-color-hover)!important }
 
+.widget-limit .widget-items:nth-child(n+8),
+.widget-limit .widget-items ul:nth-child(n+4),
+.widget-limit .widget-items h4{
+  display:none }
+
+.widget-more-btn{
+  border:0 !important;
+  padding:0 !important }
+
+.widget-more-btn:hover,
+.widget-more-btn:focus{
+  border:0 !important;
+  padding:0 !important }
+
 .widget-weather{
   color:#fff;
   border:0 }
@@ -1533,7 +1547,7 @@ dialog footer{
 
 .widget-weather.background{
   background-color:rgba(0,0,0,0);
-  background-image:url(../images/weather/weather-aurora.webp);
+  background-image:url(../images/weather/weather-aurora.avif);
   background-repeat:no-repeat;
   background-position:center;
   background-origin:content-box;
@@ -1543,74 +1557,75 @@ dialog footer{
   transition:background-image 2s ease-in-out }
 
 .Ash{
-  background-image:url(../images/weather/weather-ash.webp)!important }
+  background-image:url(../images/weather/weather-ash.avif)!important }
 
 .Ash.night{
-  background-image:url(../images/weather/weather-ash-night.webp)!important }
+  background-image:url(../images/weather/weather-ash-night.avif)!important }
 
 .Clear{
-  background-image:url(../images/weather/weather-clear.webp)!important }
+  background-image:url(../images/weather/weather-clear.avif)!important }
 
 .Clear.night{
-  background-image:url(../images/weather/weather-clear-night.webp)!important }
+  background-image:url(../images/weather/weather-clear-night.avif)!important }
 
 .Clouds{
-  background-image:url(../images/weather/weather-clouds.webp)!important }
+  background-image:url(../images/weather/weather-clouds.avif)!important }
 
 .Clouds.night{
-  background-image:url(../images/weather/weather-clouds-night.webp)!important }
+  background-image:url(../images/weather/weather-clouds-night.avif)!important }
 
 .Dust,
 .Sand{
-  background-image:url(../images/weather/weather-dust.webp)!important }
+  background-image:url(../images/weather/weather-dust.avif)!important }
 
 .Dust.night,
 .Sand.night{
-  background-image:url(../images/weather/weather-dust-night.webp)!important }
+  background-image:url(../images/weather/weather-dust-night.avif)!important }
 
 .Fog,
 .Haze,
 .Mist{
-  background-image:url(../images/weather/weather-fog.webp)!important }
+  background-image:url(../images/weather/weather-fog.avif)!important }
 
 .Fog.night,
 .Haze.night,
 .Mist.night{
-  background-image:url(../images/weather/weather-fog-night.webp)!important }
+  background-image:url(../images/weather/weather-fog-night.avif)!important }
 
 .Rain{
-  background-image:url(../images/weather/weather-rain.webp)!important }
+  background-image:url(../images/weather/weather-rain.avif)!important }
 
 .Rain.night{
-  background-image:url(../images/weather/weather-rain-night.webp)!important }
+  background-image:url(../images/weather/weather-rain-night.avif)!important }
 
 .Snow{
-  background-image:url(../images/weather/weather-snow.webp)!important }
+  background-image:url(../images/weather/weather-snow.avif)!important }
 
 .Snow.night{
-  background-image:url(../images/weather/weather-snow-night.webp)!important }
+  background-image:url(../images/weather/weather-snow-night.avif)!important }
 
 .Squall{
-  background-image:url(../images/weather/weather-squall.webp)!important }
+  background-image:url(../images/weather/weather-squall.avif)!important }
 
 .Squall.night{
-  background-image:url(../images/weather/weather-squall-night.webp)!important }
+  background-image:url(../images/weather/weather-squall-night.avif)!important }
 
 .Thunderstorm{
-  background-image:url(../images/weather/weather-thunderstorm.webp)!important }
+  background-image:url(../images/weather/weather-thunderstorm.avif)!important }
 
 .Thunderstorm.night{
-  background-image:url(../images/weather/weather-thunderstorm-night.webp)!important }
+  background-image:url(../images/weather/weather-thunderstorm-night.avif)!important }
 
 .Tornado{
-  background-image:url(../images/weather/weather-tornado.webp)!important }
+  background-image:url(../images/weather/weather-tornado.avif)!important }
 
 .Tornado.night{
-  background-image:url(../images/weather/weather-tornado-night.webp)!important }
+  background-image:url(../images/weather/weather-tornado-night.avif)!important }
 
 .alert.blackfriday,
 .alert.christmas,
 .alert.easter,
+.alert.eofy,
 .alert.fathersday,
 .alert.halloween,
 .alert.mothersday,
@@ -1620,14 +1635,19 @@ dialog footer{
   background-position:top right!important;
   background-size:contain!important }
 
+.alert.eofy{
+  background-position:center right!important }
+
 .alert.blackfriday,
 .alert.christmas,
+.alert.eofy,
 .alert.halloween{
   background-size:cover!important }
 
 .alert.blackfriday .toolbar,
 .alert.christmas .toolbar,
 .alert.easter .toolbar,
+.alert.eofy .toolbar,
 .alert.fathersday .toolbar,
 .alert.halloween .toolbar,
 .alert.mothersday .toolbar,
@@ -1635,6 +1655,13 @@ dialog footer{
 .alert.valentine .toolbar{
   background-color:transparent!important;
   color:#000!important }
+
+.alert.eofy .toolbar{
+  background-color:rgba(0,0,0,.75)!important;
+  color:#fff!important }
+
+.alert.eofy .toolbar svg{
+  fill:#fff!important }
 
 .alert.christmas .toolbar svg,
 .alert.easter .toolbar svg,
@@ -1646,6 +1673,7 @@ dialog footer{
 
 .alert.christmas .card,
 .alert.easter .card,
+.alert.eofy .card,
 .alert.fathersday .card,
 .alert.halloween .card,
 .alert.mothersday .card,
@@ -1660,6 +1688,7 @@ dialog footer{
 .alert.blackfriday .card .card-title,
 .alert.christmas .card .card-title,
 .alert.easter .card .card-title,
+.alert.eofy .card .card-title,
 .alert.fathersday .card .card-title,
 .alert.halloween .card .card-title,
 .alert.mothersday .card .card-title,
@@ -1668,7 +1697,7 @@ dialog footer{
   font-weight:700!important }
 
 .alert.valentine{
-  background-image:url(../images/sale-valentine.webp)!important;
+  background-image:url(../images/sale-valentine.avif)!important;
   border-color:#f7b4bb!important;
   box-shadow:2px 4px 12px 0 #f7d7dc!important }
 
@@ -1677,7 +1706,7 @@ dialog footer{
   background-color:#f76c73!important }
 
 .alert.easter{
-  background-image:url(../images/sale-easter.webp)!important;
+  background-image:url(../images/sale-easter.avif)!important;
   border-color:#8d82de!important;
   box-shadow:2px 4px 12px 0 #8d82de!important }
 
@@ -1686,12 +1715,22 @@ dialog footer{
   background-color:#cdb2d5!important;
   box-shadow:2px 4px 12px 0 #cdb2d5!important }
 
+.alert.eofy{
+  background-image:url(../images/sale-eofy.avif)!important;
+  border-color:#ea2338!important;
+  box-shadow:2px 4px 12px 0 #ea2338!important }
+
+.alert.eofy .card{
+  border-color:#075898!important;
+  background-color:#e4e4e4!important;
+  box-shadow:2px 4px 12px 0 #075898!important }
+
 .alert.mothersday,
 .alert.mothersday .card{
   box-shadow:2px 4px 12px 0 #fd9fff!important }
 
 .alert.mothersday{
-  background-image:url(../images/sale-mothersday.webp)!important;
+  background-image:url(../images/sale-mothersday.avif)!important;
   border-color:#fd9fff!important }
 
 .alert.mothersday .card{
@@ -1699,7 +1738,7 @@ dialog footer{
   background-color:#ffd6ff!important }
 
 .alert.fathersday{
-  background-image:url(../images/sale-fathersday.webp)!important;
+  background-image:url(../images/sale-fathersday.avif)!important;
   border-color:#83b9df!important;
   box-shadow:2px 4px 12px 0 #83b9df!important }
 
@@ -1715,7 +1754,7 @@ dialog footer{
 
 .alert.blackfriday{
   background-color:#000!important;
-  background-image:url(../images/sale-blackfriday.webp)!important }
+  background-image:url(../images/sale-blackfriday.avif)!important }
 
 .alert.blackfriday .toolbar svg{
   fill:#fff!important }
@@ -1729,7 +1768,7 @@ dialog footer{
   box-shadow:2px 4px 12px 0 #f40!important }
 
 .alert.halloween{
-  background-image:url(../images/sale-halloween.webp)!important;
+  background-image:url(../images/sale-halloween.avif)!important;
   background-position:top center!important }
 
 .alert.halloween .card{
@@ -1754,7 +1793,7 @@ dialog footer{
   box-shadow:1px 4px 12px 0 #123048!important }
 
 .alert.christmas{
-  background-image:url(../images/sale-christmas.webp)!important;
+  background-image:url(../images/sale-christmas.avif)!important;
   border:3px solid #b52427!important;
   box-shadow:2px 4px 14px 0 #126837!important }
 

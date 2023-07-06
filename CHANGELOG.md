@@ -1,4 +1,32 @@
-### v0.2.24
+### v0.2.26
+- Update logo and background image.
+- Update Favicons.
+- Add option check for Sales to stop Widget appearing in Dashboard if disabled.
+- Remove resize facility from the Sales widget.
+- Improve Inventory Options to allow descriptions, images, and selection.
+- Fix Cart view not showing correct calculation total of multiple individual items.
+- Update Stripe library to v10.16.0
+- Improve size display indicator when Development mode is active.
+- Remove "Content" link from Pages breadcrumbs.
+
+#### v0.2.25
+- Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.
+- Fix quotes display with List text for Fancybox.
+- Fix thumbnail not displaying in media, wasn't being added to the `thumb` field.
+- Fix Tracker Flag Icon and Referrer Icon displays.
+- Add version checker, installed version against github repository version, with info alert on Dashboard if behind.
+- Add Unread options to Messages.
+- Fix error of compose messages not redirecting back to main messages page when sending.
+- Improve Messages view/compose/ interface.
+- Add View more button to Dashboard Widgets.
+- Add EOFY (End Of Financial Year) sales period, with selection of less popular products suggested.
+- Fix Sales Periods not being calculated on dates correctly.
+- Reduce Weather and Sales period images by converting them to AVIF.
+- Improve Installer interface.
+- Fix Installer not always importing database.
+- Update elFinder to v2.1.62
+
+#### v0.2.24
 - Fix style variables that were missing, and make improvements.
 - Improve visibilty and functionality of quiededit/quickview content dropdowns.
 - Improve Gallery & Content Media items, can now view thumbnails via click replacement of main image, or use modal viewer.

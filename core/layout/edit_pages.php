@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -72,7 +72,6 @@ if($r['heading']==''){
           <div class="row">
             <div class="col-12 col-sm">
               <ol class="breadcrumb m-0 pl-0 pt-0">
-                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                 <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/pages';?>">Pages</a></li>
                 <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
                 <li class="breadcrumb-item active breadcrumb-dropdown">
@@ -273,20 +272,20 @@ if($r['heading']==''){
                   '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverVideo`,``);"><i class="i">trash</i></button>':'';?>
                   <?=$user['options'][1]==1?'<button class="save" id="savecoverVideo" data-dbid="coverVideo" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
-                <div class="row mt-3">
+                <div class="form-row mt-3">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoAutoplay" data-tooltip="tooltip" aria-label="PermaLink to Page Video AutoPlay Checkbox">&#128279;</a>':'';?>
                   <input id="pageVideoAutoplay" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="menuoptions0<?=$r['id'];?>" for="pageVideoAutoplay">AutoPlay Cover Video</label>
+                  <label class="p-0 mt-0 ml-3" id="menuoptions0<?=$r['id'];?>" for="pageVideoAutoplay">AutoPlay Cover Video</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoLoop" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image">&#128279;</a>':'';?>
                   <input id="pageVideoLoop" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="menuoptions1<?=$r['id'];?>" for="pageVideoLoop">Loop Cover Video</label>
+                  <label class="p-0 mt-0 ml-3" id="menuoptions1<?=$r['id'];?>" for="pageVideoLoop">Loop Cover Video</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageVideoControls" data-tooltip="tooltip" aria-label="PermaLink to Page Video Show Controls Checkbox">&#128279;</a>':'';?>
                   <input id="pageVideoControls" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="menuoptions2<?=$r['id'];?>" for="pageVideoControls">Show Controls</label>
+                  <label class="p-0 mt-0 ml-3" id="menuoptions2<?=$r['id'];?>" for="pageVideoControls">Show Controls</label>
                 </div>
                 <legend class="mt-3">Image Attribution</legend>
                 <label id="pageAttributionImageTitle" for="attributionImageTitle"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageAttributionImageTitle" data-tooltip="tooltip" aria-label="PermaLink to Page Image Attribution Title Field">&#128279;</a>':'';?>Title</label>
@@ -565,10 +564,10 @@ if($r['heading']==''){
           if($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
             <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
-                <div class="row">
+                <div class="form-row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>
                   <input id="pageActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
+                  <label class="p-0 mt-0 ml-3" for="pageActive" id="menuactive0<?=$r['id'];?>">Active</label>
                 </div>
               <?php }
               if($r['file']=='offline'){?>

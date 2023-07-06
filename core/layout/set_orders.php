@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -114,10 +114,10 @@
             <button class="save" id="saveaustPostAPIKey" data-dbid="austPostAPIKey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
           <legend id="paymentOptions" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#paymentOptions" data-tooltip="tooltip" aria-label="PermaLink to Payment Options Section">&#128279;</a>':'';?>Payment Options</legend>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#displayPaymentOptions" data-tooltip="tooltip" aria-label="PermaLink to Display Payment Options Checkbox">&#128279;</a>':'';?>
             <input id="displayPaymentOptions" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="7" type="checkbox"<?=$config['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="displayPaymentOptions" id="configoptions71">Display Payment Options Logo's (Logo's should be contained within the Template tags).</label>
+            <label class="p-0 mt-0 ml-3" for="displayPaymentOptions" id="configoptions71">Display Payment Options Logo's (Logo's should be contained within the Template tags).</label>
           </div>
 <?php /* Payment Options to Pay Orders */?>
           <div class="form-row mt-3">
@@ -162,10 +162,10 @@
           </div>
           <hr>
           <legend id="discountRanges"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#discountRanges" data-tooltip="tooltip" aria-label="PermaLink to Discount Ranges Options Section">&#128279;</a>':'';?>Discount Ranges</legend>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#discountRangeCalculations" data-tooltip="tooltip" aria-label="PermaLink to Discount Ranges Calculations Checkbox">&#128279;</a>':'';?>
             <input id="discountRangeCalculations" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="26" type="checkbox"<?=$config['options'][26]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="discountRangeCalculations" id="configoptions261">Discount Range Calculations</label>
+            <label class="p-0 mt-0 ml-3" for="discountRangeCalculations" id="configoptions261">Discount Range Calculations</label>
           </div>
           <form target="sp" method="post" action="core/add_discountrange.php">
             <div class="form-row">
@@ -280,10 +280,10 @@
             <input class="textinput" id="stripe_secretkey" data-dbid="1" data-dbt="config" data-dbc="stripe_secretkey" type="text" value="<?=$config['stripe_secretkey'];?>" placeholder="Enter a Stripe Secret Key...">
             <button class="save" id="savestripe_secretkey" data-dbid="stripe_secretkey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#enableAfterpay" data-tooltip="tooltip" aria-label="PermaLink to Enable AfterPay Checkbox">&#128279;</a>':'';?>
             <input id="enableAfterpay" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="16" type="checkbox"<?=$config['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="enableAfterpay" id="configoptions161">Enable AfterPay</label>
+            <label class="p-0 mt-0 ml-3" for="enableAfterpay" id="configoptions161">Enable AfterPay</label>
           </div>
           <hr>
           <legend id="orderProcessing"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#orderProcessing" data-tooltip="tooltip" aria-label="PermaLink to Order Processing Section">&#128279;</a>':'';?>Order Processing</legend>
@@ -319,10 +319,10 @@
           </div>
           <hr>
           <legend id="emailLayout"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#emailLayout" data-tooltip="tooltip" aria-label="PermaLink to Email Layout">&#128279;</a>':'';?>Email Layout</legend>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#readNotification" data-tooltip="tooltip" aria-label="PermaLink to Email Read Notification Checkbox">&#128279;</a>':'';?>
             <input id="readNotification" data-dbid="1" data-dbt="config" data-dbc="orderEmailReadNotification" data-dbb="0" type="checkbox"<?=$config['orderEmailReadNotification']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-            <label for="readNotification" id="configorderEmailReadNotification01">Read Reciept</label>
+            <label class="p-0 mt-0 ml-3" for="readNotification" id="configorderEmailReadNotification01">Read Reciept</label>
           </div>
           <div id="orderEmailSubject" class="form-row mt-3">
             <label for="oES"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/orders/settings#orderEmailSubject" data-tooltip="tooltip" aria-label="PermaLink to Order Email Subject">&#128279;</a>':'';?>Subject</label>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -145,17 +145,52 @@ if(file_exists(THEME.'/side_menu.html')){
 				}else
 					$sideTemp=preg_replace('~<brand>.*?<\/brand>~is','',$sideTemp);
 			}
-			if(stristr($sideTemp,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order'||$r['stockStatus']=='available'){
-				$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='option' AND `rid`=:id ORDER BY `title` ASC");
-				$scq->execute([':id'=>$r['id']]);
-				if($scq->rowCount()>0){
-					$choices='<select class="choices form-control" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
-					while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
-						if($rcq['ti']==0)continue;
-						$choices.='<option value="'.$rcq['id'].'">'.$rcq['title'].':'.$rcq['ti'].'</option>';
+			if(stristr($sideTemp,'<choices>')){
+				$soc=$db->prepare("SELECT DISTINCT(`category`) AS 'category' FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
+				$soc->execute([':rid'=>$r['id']]);
+				if($soc->rowCount()>0){
+					$options=$oco=$oc2='';
+					while($roc=$soc->fetch(PDO::FETCH_ASSOC)){
+						$soi=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid AND `category`=:cat AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
+						$soi->execute([
+							':cat'=>$roc['category'],
+							':rid'=>$r['id']
+						]);
+						if($soi->rowCount()>0){
+							$options.='<div class="col-12 mt-3">'.
+							'<div class="h3 text-left m-0 p-0">'.$roc['category'].'</div>';
+							$options.='<div class="row">'.
+													'<div class="col-12 m-0 p-0 pl-2 text-left">'.
+														'<select id="'.strtolower(str_replace(' ','',$roc['category'])).'options" name="options[]">'.
+															'<option value="">Select '.($roc['category']==''?'an ':'a ').$roc['category'].' Option</option>';
+							while($roi=$soi->fetch(PDO::FETCH_ASSOC)){
+								if($roi['oid']!=0){
+									$soic=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+									$soic->execute([':id'=>$roi['oid']]);
+									$roic=$soic->fetch(PDO::FETCH_ASSOC);
+									if($roi['quantity']==0||$roi['quantity']==''){
+										$roi['quantity']=$roic['quantity'];
+									}
+									if($roi['cost']==0||$roi['cost']==''){
+										if($roic['rrp']!=0)$roi['cost']=$roic['rrp'];
+										if($roic['cost']!=0)$roi['cost']=$roic['cost'];
+										if($roic['rCost']!=0)$roi['cost']=$roic['rCost'];
+										if(isset($user['options'])&&$user['options'][19]==1){
+											if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+										}
+									}
+								}
+								if($roi['quantity']>0&&$roi['quantity']!=''){
+									$options.='<option value="'.$roi['id'].'">'.$roi['title'].($roi['cost']>0||$roi['cost']!=''?' - &dollar;'.$roi['cost']:'').'</option>';
+								}
+							}
+							$options.='</select>'.
+											'</div>'.
+										'</div>'.
+									'</div>';
+						}
 					}
-					$choices.='</select>';
-					$sideTemp=preg_replace('/<choices>/',$choices,$sideTemp);
+					$sideTemp=preg_replace('/<choices>/',$options,$sideTemp);
 				}else
 					$sideTemp=preg_replace('/<choices>/','',$sideTemp);
 			}else{

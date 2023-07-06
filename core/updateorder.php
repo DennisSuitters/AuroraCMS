@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -151,11 +151,14 @@ if($act=='additem'){
 		$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 		$q->execute([':id'=>$da]);
 		$r=$q->fetch(PDO::FETCH_ASSOC);
-		if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
-		if($r['rCost']!=0)$r['cost']=$r['rCost'];
     $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
     $so->execute([':id'=>$id]);
     $ro=$so->fetch(PDO::FETCH_ASSOC);
+    $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+    $su->execute([':id'=>$ro['uid']]);
+    $ru=$su->fetch(PDO::FETCH_ASSOC);
+    if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
+    if($r['rCost']!=0)$r['cost']=$r['rCost'];
     if($ro['iid_ti']!=0&&$r['contentType']=='inventory'){
       $r['quantity']=$r['quantity'] - 1;
       if($r['quantity']<1){
@@ -191,6 +194,74 @@ if($act=='additem'){
 		':status'=>$r['stockStatus'],
     ':ti'=>time()
   ]);
+}
+if($act=='addoption'){
+  if(is_numeric($da)&&$da!=0){
+    $q=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
+    $q->execute([':id'=>$da]);
+    $r=$q->fetch(PDO::FETCH_ASSOC);
+    if($r['rid']>0){
+      $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
+      $so->execute([':id'=>$id]);
+      $ro=$so->fetch(PDO::FETCH_ASSOC);
+      $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+      $su->execute([':id'=>$ro['uid']]);
+      $ru=$su->fetch(PDO::FETCH_ASSOC);
+      $si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
+      $si->execute([':id'=>$r['rid']]);
+      $ri=$si->fetch(PDO::FETCH_ASSOC);
+      if($r['cost']==0||$r['cost']==''){
+        $r['cost']=$ri['cost'];
+        if($ri['rCost']!=0)$r['cost']=$ri['rCost'];
+      }
+      if($r['quantity']==0||$r['quantity']==''){
+        $ri['quantity']=$ri['quantity'] - 1;
+        if($ri['quantity']<1){
+          $ri['quantity']=0;
+          $ri['stockStatus']=$config['inventoryFallbackStatus'];
+        }
+        $sq=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:stockStatus WHERE `id`=:id");
+        $sq->execute([
+          ':id'=>$ro['id'],
+          ':quantity'=>$ri['quantity'],
+          ':stockStatus'=>$ri['stockStatus']
+        ]);
+        $r['quantity']=$ri['quantity'];
+      }
+      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
+      $q->execute([
+        ':oid'=>$id,
+        ':iid'=>$da,
+        ':title'=>$r['title'],
+        ':cost'=>$r['cost'],
+        ':status'=>$ri['stockStatus'],
+        ':ti'=>time()
+      ]);
+    }else{
+      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
+      $q->execute([
+        ':oid'=>$id,
+        ':iid'=>$da,
+        ':title'=>$r['title'],
+        ':cost'=>$r['cost'],
+        ':status'=>$r['stockStatus'],
+        ':ti'=>time()
+      ]);
+      if($r['quantity']>0){
+        $r['quantity']=$r['quantity'] - 1;
+        if($r['quantity']<0){
+          $r['quantity']=0;
+          $r['status']='unavailable';
+        }
+      }
+      $q=$db->prepare("UPDATE `".$prefix."choices` SET `quantity`=:quantity,`status`=:status WHERE `id`=:id");
+      $q->execute([
+        ':id'=>$da,
+        ':quantity'=>$r['quantity'],
+        ':status'=>$r['status']
+      ]);
+    }
+  }
 }
 if($act=='title'){
   $ss=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `id`=:id");

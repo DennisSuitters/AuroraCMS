@@ -19,7 +19,7 @@
   --box-shadow-x: 0;
   --box-shadow-y: 1px;
   --box-shadow-spread: 0;
-  --box-shadow-color: rgba(27,31,36,0.04);
+  --box-shadow-color: rgba(27,31,36,.04);
   --shadow: 0 3px 6px rgba(140,149,159,0.15);
   --shadow-sm: 0 1px 0 rgba(27,31,36,0.04);
   --shadow-md: 0 3px 6px rgba(140,149,159,0.15);
@@ -301,6 +301,8 @@
 
   --card-background-color: #fff;
   --card-background-color-zebra: #f8f8f8;
+  --card-background-color-gradient-from: rgba(255,255,255,0);
+  --card-background-color-gradient-to: rgba(255,255,255,1);
   --card-extra-fade-1: rgba(255,255,255,.093);
   --card-extra-fade-2: rgba(255,255,255,.0);
   --card-header-background-color: transparent;
@@ -589,6 +591,8 @@
 
   --card-background-color: rgba(0,0,0,.45);
   --card-background-color-zebra: rgba(0,0,0,.15);
+  --card-background-color-gradient-from: rgba(0,0,0,0);
+  --card-background-color-gradient-to: #101010;
   --card-extra-fade-1: #3b3f41;
   --card-extra-fade-2: #3b3f41;
   --card-header-background-color: transparent;

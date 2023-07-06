@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -232,10 +232,10 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
           </div>
           <hr>
           <?php if($config['bookingAgreement']!=''){?>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#agreementCheck" data-tooltip="tooltip" aria-label="PermaLink to Booking Agreement Confirmation Checkbox">&#128279;</a>':'';?>
               <input id="agreementCheck" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="agreementCheck" data-dbb="0" type="checkbox"<?=($r['agreementCheck']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][2]==1?'':' disabled');?>>
-              <label for="agreementCheck" id="contentagreementCheck0<?=$r['id'];?>"><?=$config['bookingAgreement'];?></label>
+              <label class="p-0 mt-0 ml-3" for="agreementCheck" id="contentagreementCheck0<?=$r['id'];?>"><?=$config['bookingAgreement'];?></label>
             </div>
           <?php }?>
           <label id="bookingSignature" for="signature" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/edit/'.$r['id'].'#bookingSignature" data-tooltip="tooltip" aria-label="PermaLink to Booking Signature">&#128279;</a>':'';?>Signature</label>

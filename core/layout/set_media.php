@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -34,15 +34,15 @@
        </div>
        <div class="m-4">
          <legend id="mediaProcessing" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/settings#mediaProcessing" data-tooltip="tooltip" aria-label="PermaLink to Enable Image Processing Checkbox">&#128279;</a>':'';?>Image Processing</legend>
-         <div class="row mt-3">
+         <div class="form-row mt-3">
            <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/settings#mediaOptions2" data-tooltip="tooltip" aria-label="PermaLink to Enable On Page Image Editor">&#128279;</a>':'';?>
            <input id="mediaOptions2" data-dbid="1" data-dbt="config" data-dbc="mediaOptions" data-dbb="2" type="checkbox"<?=($config['mediaOptions'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-           <label for="mediaOptions2" id="configmediaOptions2">On Page Image Editor</label>
+           <label class="p-0 mt-0 ml-3" for="mediaOptions2" id="configmediaOptions2">On Page Image Editor</label>
          </div>
-         <div class="row mt-3">
+         <div class="form-row mt-3">
            <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/settings#imageResizing" data-tooltip="tooltip" aria-label="PermaLink to Enable Image Resizing Checkbox">&#128279;</a>':'';?>
            <input id="mediaResizing" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="2" type="checkbox"<?=($config['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-           <label for="mediaResizing" id="configoptions21">Image Resizing</label>
+           <label class="p-0 mt-0 ml-3" for="mediaResizing" id="configoptions21">Image Resizing</label>
          </div>
          <small class="form-text text-right">Uploaded Images larger than the above size will be resized to their long edge. If either value is '0', resizing will be disabled.</small>
          <div class="row">
@@ -98,15 +98,15 @@
            <input class="textinput" id="unsplash_secretkey" data-dbid="1" data-dbt="config" data-dbc="unsplash_secretkey" type="text" value="<?=$config['unsplash_secretkey'];?>"<?=($user['options'][7]==1?'':' disabled');?>>
            <?=($user['options'][7]==1?'<button class="save" id="saveunsplash_secretkey" data-dbid="unsplash_secretkey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
          </div>
-         <div class="row mt-3">
+         <div class="form-row mt-3">
            <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/settings#mediaOptions0" data-tooltip="tooltip" aria-label="PermaLink to Enable Unsplash Search Browser">&#128279;</a>':'';?>
            <input id="mediaOptions0" data-dbid="1" data-dbt="config" data-dbc="mediaOptions" data-dbb="0" type="checkbox"<?=($config['mediaOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-           <label for="mediaOptions0" id="configmedioaOptions0">Unsplash Search Browser</label>
+           <label class="p-0 mt-0 ml-3" for="mediaOptions0" id="configmedioaOptions0">Unsplash Search Browser</label>
          </div>
-         <div class="row mt-3">
+         <div class="form-row mt-3">
            <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/media/settings#mediaOptions1" data-tooltip="tooltip" aria-label="PermaLink to Enable Get Thumbnail from Unsplash">&#128279;</a>':'';?>
            <input id="mediaOptions1" data-dbid="1" data-dbt="config" data-dbc="mediaOptions" data-dbb="1" type="checkbox"<?=($config['mediaOptions'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-           <label for="mediaOptions1" id="configmediaOptions1">Get Thumbnail</label>
+           <label class="p-0 mt-0 ml-3" for="mediaOptions1" id="configmediaOptions1">Get Thumbnail</label>
          </div>
        </div>
      </div>

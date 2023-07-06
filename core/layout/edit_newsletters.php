@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -48,10 +48,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <div class="form-row">
             <input id="ti" type="text" value="<?= date($config['dateFormat'],$r['ti']);?>" disabled>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#matchTags" data-tooltip="tooltip" aria-label="PermaLink to Newsletters Match Tags Checkbox">&#128279;</a>':'';?>
             <input id="matchTags" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="8" type="checkbox"<?=($r['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-            <label id="contentoptions8<?=$r['id'];?>" for="matchTags">Match Tags to Subscribers</label>
+            <label class="p-0 mt-0 ml-3" id="contentoptions8<?=$r['id'];?>" for="matchTags">Match Tags to Subscribers</label>
           </div>
           <div class="row mt-3">
             <label id="<?=$r['contentType'];?>tags" for="tags"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#'.$r['contentType'].'tags" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Tags">&#128279;</a>':'';?>Tags</label>

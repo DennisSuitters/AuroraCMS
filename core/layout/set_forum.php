@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -32,10 +32,10 @@
           </div>
         </div>
         <div class="m-4">
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/forum/settings#forumEnableHelpNotifications" data-tooltip="tooltip" aria-label="PermaLink to Enable Forum Email Notifications Checkbox">&#128279;</a>':'';?>
             <input id="helpTicketEmailNotifications" data-dbid="1" data-dbt="config" data-dbc="forumOptions" data-dbb="0" type="checkbox"<?=($config['forumOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="helpTicketEmailNotifications" id="helpTicketEmailNotifications0">Help Ticket Email Notifications</label>
+            <label class="p-0 mt-0 ml-3" for="helpTicketEmailNotifications" id="helpTicketEmailNotifications0">Help Ticket Email Notifications</label>
           </div>
         </div>
       </div>

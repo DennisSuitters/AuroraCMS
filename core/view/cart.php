@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -210,12 +210,14 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					':sold'=>$sold,
 					':id'=>$r['iid']
 				]);
-				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`title`,`quantity`,`cost`,`status`,`points`,`ti`) VALUES (:oid,:iid,:cid,:title,:quantity,:cost,:status,:points,:ti)");
+				$sq=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`cid`,`contentType`,`title`,`file`,`quantity`,`cost`,`status`,`points`,`ti`) VALUES (:oid,:iid,:cid,:contentType,:title,:file,:quantity,:cost,:status,:points,:ti)");
 				$sq->execute([
 					':oid'=>$oid,
 					':iid'=>$r['iid'],
 					':cid'=>$r['cid'],
-					':title'=>$i['title'],
+					':contentType'=>$r['contentType'],
+					':title'=>$r['title'],
+					':file'=>$r['file'],
 					':quantity'=>$r['quantity'],
 					':cost'=>$r['cost'],
 					':status'=>$r['stockStatus'],
@@ -267,16 +269,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$i=$si->fetch(PDO::FETCH_ASSOC);
 				$sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `id`=:id");
 				$sc->execute([':id'=>$ci['cid']]);
-				$image=NOIMAGE;
 				$c=$sc->fetch(PDO::FETCH_ASSOC);
-				if($i['thumb']!=''&&file_exists('media/sm/'.basename(strtolower($i['thumb']))))
-					$image='media/sm/'.basename(strtolower($i['thumb']));
-				elseif($i['fileURL']!='')
-					$image=$i['fileURL'];
-				elseif($i['file']!=''&&file_exists('media/'.basename($i['file'])))
-					$image='media/'.basename($i['file']);
-				else
-					$image=NOIMAGE;
 				$gst=0;
 				if($config['gst']>0){
 					$gst=$ci['cost']*($config['gst']/100);
@@ -284,6 +277,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					$gst=number_format((float)$gst,2,'.','');
 				}
 				$total=$total+($ci['cost']*$ci['quantity'])+$gst;
+				$itemtotal=($ci['cost']*$ci['quantity'])+$gst;
 				$total=number_format((float)$total,2,'.','');
 				$cartitem=preg_replace([
 					'/<print zebra>/',
@@ -302,21 +296,21 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				],[
 					'zebra'.$zebra,
 					URL.'cart',
-					$image,
+					($ci['file']!=''?$ci['file']:NOIMAGE),
 					htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
-					($i['code']!=''?' : ':'').htmlspecialchars($i['title'],ENT_QUOTES,'UTF-8'),
+					($i['code']!=''?$i['code'].' : ':''),
 					$i['weight']>0?'Weight: '.$i['weight'].$i['weightunit'].'<br>':'',
 					($i['width']>0||$i['length']>0||$i['height']>0?'Dimensions:'.
 						($i['width']>0?' W:'.$i['width'].$i['widthunit']:'').
 						($i['length']>0?' L:'.$i['length'].$i['lengthunit']:'').
 						($i['height']>0?' H:'.$i['height'].$i['heightunit']:'')
 					:''),
-					isset($c['title'])&&$c['title']!=''?' : '.htmlspecialchars($c['title'],ENT_QUOTES,'UTF-8'):'',
+					$ci['title'],
 					$ci['id'],
 					$ci['cost'],
 					$ci['quantity'],
 					$gst,
-					$total
+					$itemtotal
 				],$cartitem);
 				$cartitems.=$cartitem;
 				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');

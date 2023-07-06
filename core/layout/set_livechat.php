@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -32,10 +32,10 @@
           </div>
         </div>
         <div class="m-4">
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#enableChat" data-tooltip="tooltip" aria-label="PermaLink to Enable Chat Checkbox">&#128279;</a>':'';?>
             <input id="enableChat" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13" type="checkbox"<?=($config['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="enableChat" id="configoptions131">Enable Live Chat</label>
+            <label class="p-0 mt-0 ml-3" for="enableChat" id="configoptions131">Enable Live Chat</label>
           </div>
           <label id="removeMessages" for="chatAutoRemove"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#removeMessages" data-tooltip="tooltip" aria-label="PermaLink to Remove Messages Selector">&#128279;</a>':'';?>Remove Messages</label>
           <div class="form-row">
@@ -48,16 +48,16 @@
               <option value="2592000"<?=$config['chatAutoRemove']==2592000?' selected':'';?>>Older than 30 Days</option>
             </select>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#chatNotifications" data-tooltip="tooltip" aria-label="PermaLink to Chat Notifications Checkbox">&#128279;</a>':'';?>
             <input id="chatNotifications" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15" type="checkbox"<?=($config['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="chatNotifications" id="configoptions151">Email new LiveChat notifications to nominated accounts.</label>
+            <label class="p-0 mt-0 ml-3" for="chatNotifications" id="configoptions151">Email new LiveChat notifications to nominated accounts.</label>
           </div>
           <hr>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessenger" data-tooltip="tooltip" aria-label="PermaLink to Enable Facebook Messenger Checkbox">&#128279;</a>':'';?>
             <input id="facebookMessenger" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14" type="checkbox"<?=($config['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="facebookMessenger" id="configoptions141">Facebook Messenger</label>
+            <label class="p-0 mt-0 ml-3" for="facebookMessenger" id="configoptions141">Facebook Messenger</label>
           </div>
           <?php if($user['options'][7]==1){
             if($config['messengerFBCode']==''){?>

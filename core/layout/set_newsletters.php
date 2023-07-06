@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -36,7 +36,7 @@
           <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/settings#embedImages" data-tooltip="tooltip" aria-label="PermaLink to Embed Image Checkbox">&#128279;</a>':'';?>
             <input id="embedImages" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0" type="checkbox"<?=($config['newslettersEmbedImages']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="embedImages" id="confignewslettersEmbedImages01">&nbsp;&nbsp;Embed&nbsp;Images</label>
+            <label class="p-0 mt-0 ml-3" for="embedImages" id="confignewslettersEmbedImages01">&nbsp;&nbsp;Embed&nbsp;Images</label>
             <?=($user['options'][7]==1?'<small class="form-text text-right">Enable if your hosting doesn\'t support remote image access.</small>':'');?>
           </div>
           <div id="sendMax" class="form-row mt-3">

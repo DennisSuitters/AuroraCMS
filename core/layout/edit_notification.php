@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -139,10 +139,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           if($r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
             <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
               <?php if($r['file']!='index'){?>
-                <div class="row">
+                <div class="form-row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/notification/edit/'.$r['id'].'#notificationActive" data-tooltip="tooltip" aria-label="PermaLink to Notification Active Checkbox">&#128279;</a>':'';?>
                   <input id="notificationActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="notificationactive0<?=$r['id'];?>" for="notificationActive">Active</label>
+                  <label class="p-0 mt-0 ml-3" id="notificationactive0<?=$r['id'];?>" for="notificationActive">Active</label>
                 </div>
               <?php }?>
             </div>

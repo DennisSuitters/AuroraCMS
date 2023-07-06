@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -38,49 +38,49 @@
           '<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Login</label>':'');?>
           <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
           <?php if($user['rank']>999){?>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevLock" data-tooltip="tooltip" aria-label="PermaLink to Preferences Developer Lock Checkbox">&#128279;</a>':'';?>
               <input id="prefDevLock" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="17" type="checkbox"<?=($config['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configoptions171" for="prefDevLock">Developer Lock Down</label>
+              <label class="p-0 mt-0 ml-3" id="configoptions171" for="prefDevLock">Developer Lock Down</label>
             </div>
           <?php }?>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefGDPR" data-tooltip="tooltip" aria-label="PermaLink to Preferences GDPR Banner Checkbox">&#128279;</a>':'';?>
             <input id="prefGDPR" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="8" type="checkbox"<?=($config['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label id="configoptions81" for="prefGDPR">Display GDPR Banner.</label>
+            <label class="p-0 mt-0 ml-3" id="configoptions81" for="prefGDPR">Display GDPR Banner.</label>
           </div>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefPWA" data-tooltip="tooltip" aria-label="PermaLink to Preferences PWA (Progressive Web Application) Checkbox">&#128279;</a>':'';?>
             <input id="prefPWA" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="18" type="checkbox"<?=($config['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label id="configoptions181" for="prefPWA">Enable Offline Page (Progressive Web Application).</label>
+            <label class="p-0 mt-0 ml-3" id="configoptions181" for="prefPWA">Enable Offline Page (Progressive Web Application).</label>
           </div>
           <?php if($user['rank']>999){?>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefDevMode" data-tooltip="tooltip" aria-label="PermaLink to Preferences Development Mode Checkbox">&#128279;</a>':'';?>
               <input id="prefDevMode" data-dbid="1" data-dbt="config" data-dbc="development" data-dbb="0" type="checkbox"<?=($config['development']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configdevelopment01" for="prefDevMode">Development Mode</label>
+              <label class="p-0 mt-0 ml-3" id="configdevelopment01" for="prefDevMode">Development Mode</label>
             </div>
           <?php }
           if($user['rank']==1000||$config['options'][17]==0){?>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefComingSoon" data-tooltip="tooltip" aria-label="PermaLink to Preferences Coming Soon Mode Checkbox">&#128279;</a>':'';?>
               <input id="prefComingSoon" data-dbid="1" data-dbt="config" data-dbc="comingsoon" data-dbb="0" type="checkbox"<?=($config['comingsoon']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configcomingsoon01" for="prefComingSoon">Coming Soon Mode</label>
+              <label class="p-0 mt-0 ml-3" id="configcomingsoon01" for="prefComingSoon">Coming Soon Mode</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefMaintenance" data-tooltip="tooltip" aria-label="PermaLink to Preferences Maintenance Mode Checkbox">&#128279;</a>':'';?>
               <input id="prefMaintenance" data-dbid="1" data-dbt="config" data-dbc="maintenance" data-dbb="0" type="checkbox"<?=($config['maintenance']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configmaintenance01" for="prefMaintenance">Maintenance Mode</label>
+              <label class="p-0 mt-0 ml-3" id="configmaintenance01" for="prefMaintenance">Maintenance Mode</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefAdminActivityTracking" data-tooltip="tooltip" aria-label="PermaLink to Preferences Administration Activity Tracking Checkbox">&#128279;</a>':'';?>
               <input id="prefAdminActivityTracking" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="12" type="checkbox"<?=($config['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configoptions121" for="prefAdminActivityTracking">Admin Activity Tracking</label>
+              <label class="p-0 mt-0 ml-3" id="configoptions121" for="prefAdminActivityTracking">Admin Activity Tracking</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#prefTooltips" data-tooltip="tooltip" aria-label="PermaLink to Preferences Enable Tooltips Checkbox">&#128279;</a>':'';?>
               <input id="prefTooltips" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="4" type="checkbox"<?=($config['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?> onchange="$('body').toggleClass('no-tooltip');">
-              <label id="configoptions41" for="prefTooltips">Enable Tooltips</label>
+              <label class="p-0 mt-0 ml-3" id="configoptions41" for="prefTooltips">Enable Tooltips</label>
             </div>
             <div class="form-row mt-3">
               <label id="prefhosterURL" for="hosterURL">Google&nbsp;Data&nbsp;API&nbsp;Key</label>
@@ -91,9 +91,9 @@
               <?=($user['options'][7]==1?'<button class="save" id="savegd_api" data-dbid="gd_api" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
             </div>
             <?php if($user['rank']==1000){?>
-              <div class="row mt-3">
+              <div class="form-row mt-3">
                 <input id="prefAdminHoster" data-dbid="1" data-dbt="config" data-dbc="hoster" data-dbb="0" type="checkbox"<?=($config['hoster']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                <label id="confighoster01" for="prefAdminHoster">Hoster Site, for managing Web Hosting Accounts</label>
+                <label class="p-0 mt-0 ml-3" id="confighoster01" for="prefAdminHoster">Hoster Site, for managing Web Hosting Accounts</label>
               </div>
               <div class="form-row mt-3">
                 <label id="prefhosterURL" for="hosterURL">Hoster&nbsp;URL</label>

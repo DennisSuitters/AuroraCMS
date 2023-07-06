@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -34,24 +34,24 @@
         <legend id="prefBusinessHoursSection"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessHoursSection" data-tooltip="tooltip" aria-label="PermaLink to Preferences Business Hours Section">&#128279;</a>':'';?>Business Hours</legend>
         <div class="row mt-3">
           <div class="col-12 col-md-4">
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefBusinessHours" data-tooltip="tooltip" aria-label="PermaLink to Preferences Business Hours Checkbox">&#128279;</a>':'';?>
               <input id="prefBusinessHours" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="19" type="checkbox"<?=($config['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label for="prefBusinessHours" id="configoptions191">Business Hours</label>
+              <label class="p-0 mt-0 ml-3" for="prefBusinessHours" id="configoptions191">Business Hours</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefShortDayNames" data-tooltip="tooltip" aria-label="PermaLink to Preferences Short Day Names Checkbox">&#128279;</a>':'';?>
               <input id="prefShortDayNames" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="20" type="checkbox"<?=($config['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');;?>>
-              <label for="prefShortDayNames" id="configoptions201">Use Short Day Names</label>
+              <label class="p-0 mt-0 ml-3" for="prefShortDayNames" id="configoptions201">Use Short Day Names</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#pref24HourDigits" data-tooltip="tooltip" aria-label="PermaLink to Preferences 24 Hour Digits Checkbox">&#128279;</a>':'';?>
               <input id="pref24HourDigits" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="21" type="checkbox"<?=($config['options'][21]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');;?>>
-              <label for="pref24HourDigits" id="configoptions211">Use 24 Hour Digits</label>
+              <label class="p-0 mt-0 ml-3" for="pref24HourDigits" id="configoptions211">Use 24 Hour Digits</label>
             </div>
           </div>
         </div>
@@ -209,24 +209,24 @@
         <legend>Business Contact Details</legend>
         <div class="row mt-5">
           <div class="col-12 col-md-4">
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefDisplayAddress" data-tooltip="tooltip" aria-label="PermaLink to Preferences Display Address Checkbox">&#128279;</a>':'';?>
               <input id="prefDisplayAddress" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="22" type="checkbox"<?=($config['options'][22]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configoptions221" for="prefDisplayAddress">Display Address</label>
+              <label class="p-0 mt-0 ml-3" id="configoptions221" for="prefDisplayAddress">Display Address</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefDisplayEmail" data-tooltip="tooltip" aria-label="PermaLink to Preferences Display Email Checkbox">&#128279;</a>':'';?>
               <input id="prefDisplayEmail" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="23" type="checkbox"<?=($config['options'][23]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configoptions231" for="prefDisplayEmail">Display Email</label>
+              <label class="p-0 mt-0 ml-3" id="configoptions231" for="prefDisplayEmail">Display Email</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefDisplayPhone" data-tooltip="tooltip" aria-label="PermaLink to Preferences Display Phone Checkbox">&#128279;</a>':'';?>
               <input id="prefDisplayPhone" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="24" type="checkbox"<?=($config['options'][24]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configoptions241" for="prefDisplayPhone">Display Phone Numbers</label>
+              <label class="p-0 mt-0 ml-3" id="configoptions241" for="prefDisplayPhone">Display Phone Numbers</label>
             </div>
           </div>
         </div>
@@ -327,10 +327,10 @@
           <?=($user['options'][7]==1?'<button class="save" id="savemapapikey" data-dbid="mapapikey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
         <div class="col-12 mt-3">
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/contact#prefMapDisplay" data-tooltip="tooltip" aria-label="PermaLink to Preferences Map Display Checkbox">&#128279;</a>':'';?>
             <input id="prefMapDisplay" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="27" type="checkbox"<?=($config['options'][27]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="prefMapDisplay" id="configoptions271">Enable Map Display</label>
+            <label class="p-0 mt-0 ml-3" for="prefMapDisplay" id="configoptions271">Enable Map Display</label>
           </div>
         </div>
         <?php if($config['mapapikey']==''){

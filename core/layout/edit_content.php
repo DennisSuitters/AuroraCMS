@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -251,7 +251,7 @@ if($r['contentType']!='testimonials'){
                     <div class="form-row">
                       <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCountdown" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Countdown Checkbox">&#128279;</a>':'';?>
                       <input id="<?=$r['contentType'];?>showCountdown" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                      <label for="<?=$r['contentType'];?>showCountdown" id="contentoptions3<?=$r['id'];?>">&nbsp;Show Countdown</label>
+                      <label class="p-0 mt-0 ml-3" for="<?=$r['contentType'];?>showCountdown" id="contentoptions3<?=$r['id'];?>">&nbsp;Show Countdown</label>
                     </div>
                   </div>
                 </div>
@@ -484,10 +484,10 @@ if($r['contentType']!='testimonials'){
                   </div>
                 <?php }
                 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
-                  <div class="row mt-3">
+                  <div class="form-row mt-3">
                     <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Cost Checkbox">&#128279;</a>':'';?>
                     <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label for="<?=$r['contentType'];?>showCost" id="contentoptions0<?=$r['id'];?>">Show Cost</label>
+                    <label class="p-0 mt-0 ml-3" for="<?=$r['contentType'];?>showCost" id="contentoptions0<?=$r['id'];?>">Show Cost</label>
                   </div>
                   <div class="row">
                     <?php if($r['contentType']!='activities'){?>
@@ -864,20 +864,20 @@ if($r['contentType']!='testimonials'){
                     :
                       '';?>
                   </div>
-                  <div class="row mt-3">
+                  <div class="form-row mt-3">
                     <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options4" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Video Autoplay Checkbox">&#128279;</a>':'';?>
                     <input id="options4" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="4" type="checkbox"<?=($r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label id="contentoptions4<?=$r['id'];?>" for="options4">AutoPlay Video</label>
+                    <label class="p-0 mt-0 ml-3" id="contentoptions4<?=$r['id'];?>" for="options4">AutoPlay Video</label>
                   </div>
-                  <div class="row">
+                  <div class="form-row">
                     <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options5" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Video Loop Checkbox">&#128279;</a>':'';?>
                     <input id="options5" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="5" type="checkbox"<?=($r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label id="contentoptions5<?=$r['id'];?>" for="options5">Loop Video</label>
+                    <label class="p-0 mt-0 ml-3" id="contentoptions5<?=$r['id'];?>" for="options5">Loop Video</label>
                   </div>
-                  <div class="row">
+                  <div class="form-row">
                     <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#options6" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Video Show Controls Checkbox">&#128279;</a>':'';?>
                     <input id="options6" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="6" type="checkbox"<?=($r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label id="contentoptions6<?=$r['id'];?>" for="options6">Show Controls</label>
+                    <label class="p-0 mt-0 ml-3" id="contentoptions6<?=$r['id'];?>" for="options6">Show Controls</label>
                   </div>
                   <legend class="mt-3">EXIF Information</legend>
                   <div class="form-row">
@@ -1227,42 +1227,173 @@ if($r['contentType']!='testimonials'){
                 <?php if($user['options'][1]==1){?>
                   <form target="sp" method="post" action="core/add_option.php">
                     <input name="rid" type="hidden" value="<?=$r['id'];?>">
-                    <div class="form-row">
-                      <div class="input-text">Option</div>
-                      <input name="ttl" type="text" value="" placeholder="Title">
-                      <div class="input-text">Quantity</div>
-                      <input name="qty" type="text" value="" placeholder="Quantity">
+                    <?php $so=$db->prepare("SELECT `id`,`title`,`code` FROM `".$prefix."content` WHERE `contentType`='inventory' AND `id`!=:id ORDER BY `code` ASC, `title` ASC");
+                    $so->execute([':id'=>$r['id']]);
+                    if($so->rowCount()>0){?>
+                      <div class="row">
+                        <div class="col-12 col-sm-4">
+                          <label for="ooid" class="m-2">Link to Inventory Item</label>
+                        </div>
+                        <div class="col-12 col-sm">
+                          <select id="ooid" name="oid" onchange="selectInvOption($(this).val(),$('#ooid'+$(this).val()).attr('data-title'));">
+                            <option id="ooid0" value="0" data-title="">Select or Clear an Inventory Item to Link to this Option</option>
+                            <?php while($ro=$so->fetch(PDO::FETCH_ASSOC)){
+                              echo'<option id="ooid'.$ro['id'].'" value="'.$ro['id'].'" data-title="'.$ro['title'].'">'.($ro['code']!=''?$ro['code'].':':'').$ro['title'].'</option>';
+                            }?>
+                          </select>
+                        </div>
+                      </div>
+                    <?php }?>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="otitle"class="m-2">Title</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <input id="otitle" name="ttl" type="text" value="" placeholder="Enter a Title...">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="ocategory"class="m-2">Category</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <input id="ocategory" name="cat" type="text" value="" placeholder="Category for Options Grouping...">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="oqty" class="m-2">Quantity</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <input id="oqty" name="qty" type="text" value="" placeholder="Set to 0 or leave empty to use Linked Product Quantity...">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="ocost" class="m-2">Cost</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <input id="ocost" name="cost" type="text" value="" placeholder="Set to 0 or leave empty to use Linked Product Cost...">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="oimage" class="m-2">Image/Video</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <div class="form-row">
+                          <input id="oimage" name="oi" type="text" value="" placeholder="Leave empty to use Linked Product image...">
+                          <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`oimage`);return false;"><i class="i">browse-media</i></button>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="ostatus" class="m-2">Status</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <select id="ostatus" name="status">
+                          <option value="unavailable">Unavailable</option>
+                          <option value="available">Available</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm-2">
+                        <label for="oda" class="m-2">Notes</label>
+                      </div>
+                      <div class="col-12 col-sm-10">
+                        <textarea id="oda" name="da" placeholder="Leave empty to use Linked Product Text..."></textarea>
+                      </div>
+                    </div>
+                    <div class="text-right">
                       <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
                     </div>
                   </form>
+                  <script>
+                    function selectInvOption(id,da){
+                      if(id==0){
+                        $('#otitle,#oqty,#ocost,#oimage,#oda').val('');
+                      }else{
+                        $('#otitle').val(da);
+                      }
+                    }
+                  </script>
                 <?php }?>
-                <div id="itemoptions">
-                  <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid ORDER BY `title` ASC");
-                  $ss->execute([':rid'=>$r['id']]);
-                  if($ss->rowCount()>0){
-                    while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-                      <div class="form-row mt-1" id="l_<?=$rs['id'];?>">
-                        <div class="input-text">Option</div>
-                        <input type="text" value="<?=$rs['title'];?>"<?=$user['options'][1]==1?' onchange="update(`'.$rs['id'].'`,`choices`,`title`,$(this).val());" placeholder="Title"':' readonly';?>>
-                        <div class="input-text">Quantity</div>
-                        <input type="text" value="<?=$rs['ti'];?>"<?=$user['options'][1]==1?' onchange="update(`'.$rs['id'].'`,`choices`,`ti`,$(this).val());" placeholder="Quantity"':' readonly';?>>
-                        <?php if($user['options'][1]==1){?>
-                          <form target="sp" action="core/purge.php">
-                            <input name="id" type="hidden" value="<?=$rs['id'];?>">
-                            <input name="t" type="hidden" value="choices">
-                            <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                          </form>
-                        <?php }?>
+                <div id="options" class="row m-1">
+                  <?php $so=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid ORDER BY `ord` ASC");
+                  $so->execute([':rid'=>$r['id']]);
+                  if($so->rowCount()>0){
+                    while($ro=$so->fetch(PDO::FETCH_ASSOC)){
+                      if($ro['oid']!=0){
+                        $soo=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+                        $soo->execute([':id'=>$ro['oid']]);
+                        $roo=$soo->fetch(PDO::FETCH_ASSOC);
+                      }?>
+                      <div id="l_<?=$ro['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">
+                        <div class="row">
+                          <?=($ro['file']!=''?'<div class="col-12 col-sm-3 list-images-1 overflow-hidden"><a data-fancybox href="'.$ro['file'].'"><img src="'.$ro['file'].'"></a></div>':(isset($roo['file'])&&$roo['file']!=''?'<div class="col-12 col-sm-3 list-images-1 overflow-hidden"><a data-fancybox href="'.$roo['file'].'"><img src="'.($roo['thumb']!=''?$roo['thumb']:$roo['file']).'"></a></div>':''));?>
+                          <div class="card-footer col-12 col-sm m-0 p-1">
+                            <div class="row m-0 p-0">
+                              <div class="col-12 small m-0 p-0">
+                                <div class="col-12">
+                                  <select class="status <?=$ro['status'];?>" onchange="update('<?=$ro['id'];?>','choices','status',$(this).val(),'select');$(this).removeClass().addClass('status '+$(this).val());changeShareStatus($(this).val());"<?=$user['options'][1]==1?'':' disabled';?>>
+                                    <option class="unavailable" value="unavailable"<?=$ro['status']=='unavailable'?' selected':'';?>>Unavailable</option>
+                                    <option class="available" value="available"<?=$ro['status']=='available'?' selected':'';?>>Available</option>
+                                  </select>
+                                </div>
+                                <?=($ro['category']!=''?'<div class="h6 col-12">Category: '.$ro['category'].'</div>':'');?>
+                                <div class="h6 col-12">Title: <?=$ro['title'];?></div>
+                                <?=($ro['quantity']>0?'<div class="col-12">Quantity: '.$ro['quantity'].'</div>':(isset($roo['quantity'])&&$roo['quantity']>0?'<div class="col-12">Quantity: '.$roo['quantity'].' (Linked)</div>':''));?>
+                                <div class="row">
+                                  <?=($ro['cost']>0?'<div class="col-12">$'.$ro['cost'].'</div>':(isset($roo['rrp'])&&$roo['rrp']>0?'<div class="col-12 col-sm-6">RRP $'.$roo['rrp'].' (Linked)</div>':'').(isset($roo['cost'])&&$roo['cost']>0?'<div class="col-12 col-sm-6">Cost $'.$roo['cost'].' (Linked)</div>':'').(isset($roo['rCost'])&&$roo['rCost']>0?'<div class="col-12 col-sm-6">Reduced $'.$roo['rCost'].' (Linked)</div>':'').(isset($roo['dCost'])&&$roo['dCost']>0?'<div class="col-12 col-sm-6">Wholesale $'.$roo['dCost'].' (Linked)</div>':''));?>
+                                </div>
+                                <?=($ro['notes']!=''?'<div id="listmore'.$ro['id'].'" class="'.(strlen($ro['notes'])>100?'list-more ':'').'col-12">'.$ro['notes'].'</div>'.(strlen($ro['notes'])>100?'<div class="col-12"><button class="btn-block p-0 mb-3" onclick="$(`#listmore'.$ro['id'].'`).toggleClass(`list-more`);$(`.list-arrow-'.$ro['id'].'`).toggleClass(`d-none`);"><i class="i list-arrow-'.$ro['id'].'">down</i><i class="i list-arrow-'.$ro['id'].' d-none">up</i></button></div>':''):(isset($roo['notes'])&&$roo['notes']!=''?'<div id="listmore'.$ro['id'].'" class="'.(strlen($roo['notes'])>100?'list-more ':'').'col-12">'.$roo['notes'].'</div>'.(strlen($roo['notes'])>100?'<div class="col-12"><button class="btn-block p-0 mb-3" onclick="$(`#listmore'.$ro['id'].'`).toggleClass(`list-more`);$(`.list-arrow-'.$ro['id'].'`).toggleClass(`d-none`);"><i class="i list-arrow-'.$ro['id'].'">down</i><i class="i list-arrow-'.$ro['id'].' d-none">up</i></button></div>':''):''));?>
+                              </div>
+                              <?php if($user['options'][0]==1){?>
+                                <div class="col-12 text-right">
+                                  <button class="btn-sm trash" id="purge<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$ro['id'];?>','choices')"><i class="i">trash</i></button>
+                                  <span class="btn btn-sm orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
+                                </div>
+                              <?php }?>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    <?php }
-                  }?>
+                    <?php }?>
+                    <div class="ghost hidden">&nbsp;</div>
+                    <script>
+                      $('#options').sortable({
+                        items:".card",
+                        handle:'.orderhandle',
+                        placeholder:".ghost",
+                        helper:fixWidthHelper,
+                        axis:"y",
+                        update:function(e,ui){
+                          var order=$("#options").sortable("serialize");
+                          $.ajax({
+                            type:"POST",
+                            dataType:"json",
+                            url:"core/reorderoptions.php",
+                            data:order
+                          });
+                        }
+                      }).disableSelection();
+                      function fixWidthHelper(e,ui){
+                        ui.children().each(function(){
+                          $(this).width($(this).width());
+                        });
+                        return ui;
+                      }
+                    </script>
+                  <?php }?>
                 </div>
               </div>
 <?php /* Comments */ ?>
               <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
-                <div class="row">
+                <div class="form-row">
                   <input id="options1" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="contentoptions1<?=$r['id'];?>" for="options1">Enable</label>
+                  <label class="p-0 mt-0 ml-3" id="contentoptions1<?=$r['id'];?>" for="options1">Enable</label>
                 </div>
                 <div class="mt-3" id="comments">
                   <?php $sc=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`=:contentType AND `rid`=:rid ORDER BY `ti` ASC");
@@ -1647,43 +1778,43 @@ if($r['contentType']!='testimonials'){
                   </div>
                 </div>
               </div>
-              <div class="row mt-3">
+              <div class="form-row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#pin" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Pinned Checkbox">&#128279;</a>':'';?>
                 <input id="pin" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="pin" data-dbb="0" type="checkbox"<?=($r['pin']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label id="contentpin0<?=$r['id'];?>" for="pin">Pinned</label>
+                <label class="p-0 mt-0 ml-3" id="contentpin0<?=$r['id'];?>" for="pin">Pinned</label>
               </div>
               <?php if($r['contentType']=='inventory'){?>
-                <div class="row mt-3">
+                <div class="form-row mt-3">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#coming" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Coming Soon Checkbox">&#128279;</a>':'';?>
                   <input id="coming" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?=($r['coming']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="contentcoming0<?=$r['id'];?>" for="coming">Coming Soon</label>
+                  <label class="p-0 mt-0 ml-3" id="contentcoming0<?=$r['id'];?>" for="coming">Coming Soon</label>
                 </div>
               <?php }
               if($r['contentType']!='proofs'){?>
-                <div class="row mt-3<?=$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
+                <div class="form-row mt-3<?=$r['contentType']=='portfolio'||$r['contentType']=='events'||$r['contentType']=='news'||$r['contentType']=='testimonials'||$r['contentType']=='proofs'?' hidden':'';?>">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Featured" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Featured Checkbox">&#128279;</a>':'';?>
                   <input id="<?=$r['contentType'];?>Featured" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="featured" data-dbb="0" type="checkbox"<?=($r['featured']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="contentfeatured0<?=$r['id'];?>" for="<?=$r['contentType'];?>Featured">Featured</label>
+                  <label class="p-0 mt-0 ml-3" id="contentfeatured0<?=$r['id'];?>" for="<?=$r['contentType'];?>Featured">Featured</label>
                 </div>
               <?php }?>
-              <div class="row mt-3">
+              <div class="form-row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Internal" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Internal Checkbox">&#128279;</a>':'';?>
                 <input id="<?=$r['contentType'];?>Internal" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="internal" data-dbb="0" type="checkbox"<?=($r['internal']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label id="contentinternal0<?=$r['id'];?>" for="<?=$r['contentType'];?>Internal">Internal</label>
+                <label class="p-0 mt-0 ml-3" id="contentinternal0<?=$r['id'];?>" for="<?=$r['contentType'];?>Internal">Internal</label>
               </div>
               <?php if($r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
-                <div class="row mt-3">
+                <div class="form-row mt-3">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Bookable" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Bookable Checkbox">&#128279;</a>':'';?>
                   <input id="<?=$r['contentType'];?>Bookable" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="bookable" data-dbb="0" type="checkbox"<?=($r['bookable']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="contentbookable0<?=$r['id'];?>" for="<?=$r['contentType'];?>Bookable">Bookable</label>
+                  <label class="p-0 mt-0 ml-3" id="contentbookable0<?=$r['id'];?>" for="<?=$r['contentType'];?>Bookable">Bookable</label>
                 </div>
               <?php }
               if($r['contentType']=='events'){?>
                 <div class="col-12 mt-3">
-                  <div class="row">
+                  <div class="form-row">
                     <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'EnableMap" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Enable Map Checkbox">&#128279;</a>':'';?>
                     <input id="<?=$r['contentType'];?>Map" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="7" type="checkbox"<?=($r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label id="contentoptions7<?=$r['id'];?>" for="<?=$r['contentType'];?>EnableMap">Enable Map Display</label>
+                    <label class="p-0 mt-0 ml-3" id="contentoptions7<?=$r['id'];?>" for="<?=$r['contentType'];?>EnableMap">Enable Map Display</label>
                   </div>
                 </div>
                 <?php if($config['mapapikey']==''){?>
@@ -1929,14 +2060,14 @@ if($r['contentType']!='testimonials'){
                                   <button class="add<?=$ro['status']!='delete'?' d-none':'';?>" id="untrash<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$ro['id'];?>','orders','status','');"><i class="i">untrash</i></button>
                                   <button class="trash<?=$ro['status']=='delete'?' d-none':'';?>" id="delete<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$ro['id'];?>','orders','status','delete');"><i class="i">trash</i></button>
                                   <button class="purge<?=$ro['status']!='delete'?' d-none':'';?>" id="purge<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$ro['id'];?>','orders')"><i class="i">purge</i></button>
-                                  <button class="quickeditbtn" data-qeid="<?=$ro['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
+                                  <button class="quickeditbtn" data-qeid="<?=$ro['id'];?>" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">down</i><i class="i d-none">up</i></button>
                                 <?php }?>
                               </div>
                             </div>
                           </div>
                         </div>
                       </article>
-                      <div class="quickedit d-none" id="quickedit<?=$ro['id'];?>"></div>
+                      <div class="quickedit" id="quickedit<?=$ro['id'];?>"></div>
                     <?php }
                   }?>
                 </section>

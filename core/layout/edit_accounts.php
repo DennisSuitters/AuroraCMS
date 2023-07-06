@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -264,9 +264,9 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
             </div>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <input id="bio0" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
+              <label class="p-0 mt-0 ml-3" id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
             </div>
             <label id="accountCaption" for="caption"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountCaption" data-tooltip="tooltip" aria-label="PermaLink to Caption Field">&#128279;</a>':'';?>Caption</label>
             <div class="form-row">
@@ -286,10 +286,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 '<textarea class="field" disabled>'.rawurldecode($r['notes']).'</textarea>'
               );?>
             </div>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountsContact" data-tooltip="tooltip" aria-label="PermaLink to Accounts Contact Checkbox">&#128279;</a>':'';?>
               <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginaccountsContact0<?=$r['id'];?>" for="accountsContact">Accounts Contact</label>
+              <label class="p-0 mt-0 ml-3" id="loginaccountsContact0<?=$r['id'];?>" for="accountsContact">Accounts Contact</label>
               <small class="help-text">Set this to indicate Accounts that belong to the Accounts Payable Person</small>
             </div>
           </div>
@@ -578,10 +578,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </form>
             <?php }?>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountActive" data-tooltip="tooltip" aria-label="PermaLink to Active Checkbox">&#128279;</a>':'';?>
               <input id="accountActive" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label for="accountActive" id="loginactive0<?=$r['id'];?>">Active</label>
+              <label class="p-0 mt-0 ml-3" for="accountActive" id="loginactive0<?=$r['id'];?>">Active</label>
             </div>
             <label id="accountRank" for="rank"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountRank" data-tooltip="tooltip" aria-label="PermaLink to Rank Selector">&#128279;</a>':'';?>Rank</label>
             <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="rank"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','rank',$(this).val(),'select');">
@@ -608,112 +608,112 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </select>
             <hr>
             <legend>Account Permissions</legend>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountWholesalerAccepted" data-tooltip="tooltip" aria-label="PermaLink to Wholesaler Accepted Checkbox">&#128279;</a>':'';?>
               <input id="accountWholesalerAccepted" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"<?=($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="accountWholesalerAccepted0<?=$r['id'];?>" for="accountWholesalerAccepted">Wholesaler Accepted to Purchase</label>
+              <label class="p-0 mt-0 ml-3" id="accountWholesalerAccepted0<?=$r['id'];?>" for="accountWholesalerAccepted">Wholesaler Accepted to Purchase</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountForumBanned" data-tooltip="tooltip" aria-label="PermaLink to Forum Banned Checkbox">&#128279;</a>':'';?>
               <input id="accountForumBanned" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="20" type="checkbox"<?=($r['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label for="accountForumBanned" id="loginforumbanned20<?=$r['id'];?>">Banned From Posting or Replying on Forum</label>
+              <label class="p-0 mt-0 ml-3" for="accountForumBanned" id="loginforumbanned20<?=$r['id'];?>">Banned From Posting or Replying on Forum</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#loginForumHelpResponder" data-tooltip="tooltip" aria-label="PermaLink to Forum Help Responder">&#128279;</a>':'';?>
               <input id="loginForumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginForumHelpResponder0<?=$r['id'];?>" for="loginForumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
+              <label class="p-0 mt-0 ml-3" id="loginForumHelpResponder0<?=$r['id'];?>" for="loginForumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNewsletterSubscriber" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Subscriber Checkbox">&#128279;</a>':'';?>
               <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginnewsletter0<?=$r['id'];?>" for="accountNewsletterSubscriber">Newsletter Subscriber</label>
+              <label class="p-0 mt-0 ml-3" id="loginnewsletter0<?=$r['id'];?>" for="accountNewsletterSubscriber">Newsletter Subscriber</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAddRemoveContent" data-tooltip="tooltip" aria-label="PermaLink to Add or Remove Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountAddRemoveContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions0<?=$r['id'];?>" for="accountAddRemoveContent">Add or Remove Content</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions0<?=$r['id'];?>" for="accountAddRemoveContent">Add or Remove Content</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEditContent" data-tooltip="tooltip" aria-label="PermaLink to Edit Content Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountEditContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions1<?=$r['id'];?>" for="accountEditContent">Edit Content</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions1<?=$r['id'];?>" for="accountEditContent">Edit Content</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAddEditBookings" data-tooltip="tooltip" aria-label="PermaLink to Add or Edit Bookings Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountAddEditBookings" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions2<?=$r['id'];?>" for="accountAddEditBookings">Add or Edit Bookings</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions2<?=$r['id'];?>" for="accountAddEditBookings">Add or Edit Bookings</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditMessages" data-tooltip="tooltip" aria-label="PermaLink to Message Viewing or Editing Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountViewEditMessages" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions3<?=$r['id'];?>" for="accountViewEditMessages">Messages Viewing or Editing</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions3<?=$r['id'];?>" for="accountViewEditMessages">Messages Viewing or Editing</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditOrders" data-tooltip="tooltip" aria-label="PermaLink to Add or Orders Viewing or Editing Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountViewEditOrders" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4" type="checkbox"<?=($r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions4<?=$r['id'];?>" for="accountViewEditOrders">Orders Viewing or Editing</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions4<?=$r['id'];?>" for="accountViewEditOrders">Orders Viewing or Editing</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditAccounts" data-tooltip="tooltip" aria-label="PermaLink to View orEdit Users Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountViewEditAccounts" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5" type="checkbox"<?=($r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions5<?=$r['id'];?>" for="accountViewEditAccounts">User Accounts Viewing or Editing</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions5<?=$r['id'];?>" for="accountViewEditAccounts">User Accounts Viewing or Editing</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEditSEO" data-tooltip="tooltip" aria-label="PermaLink to SEO Editing Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountEditSEO" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6" type="checkbox"<?=($r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions6<?=$r['id'];?>" for="accountEditSEO">SEO Editing</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions6<?=$r['id'];?>" for="accountEditSEO">SEO Editing</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditPreferences" data-tooltip="tooltip" aria-label="PermaLink to View or Edit Preferences Permissions Checkbox">&#128279;</a>':'';?>
               <input id="accountViewEditPreferences" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7" type="checkbox"<?=($r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions7<?=$r['id'];?>" for="accountViewEditPreferences">Preferences/Settings Viewing or Editing</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions7<?=$r['id'];?>" for="accountViewEditPreferences">Preferences/Settings Viewing or Editing</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountLiveChatNotifications" data-tooltip="tooltip" aria-label="PermaLink to Email LiveChat Notifications Checkbox">&#128279;</a>':'';?>
               <input id="accountLiveChatNotifications" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0" type="checkbox"<?=($r['liveChatNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginliveChatNotification0<?=$r['id'];?>" for="accountLiveChatNotifications">Email LiveChat notifications</label>
+              <label class="p-0 mt-0 ml-3" id="loginliveChatNotification0<?=$r['id'];?>" for="accountLiveChatNotifications">Email LiveChat notifications</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTrackIP" data-tooltip="tooltip" aria-label="PermaLink to Do Not Track IP Checkbox">&#128279;</a>':'';?>
               <input id="accountTrackIP" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="18" type="checkbox"<?=($r['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginoptions18<?=$r['id'];?>" for="accountTrackIP">Do Not Track IP</label>
+              <label class="p-0 mt-0 ml-3" id="loginoptions18<?=$r['id'];?>" for="accountTrackIP">Do Not Track IP</label>
             </div>
             <?php if($user['rank']>899){?>
               <?php if($user['rank']==1000||$config['options'][17]==1){?>
                 <legend class="mt-3">Media Permissions</legend>
-                <div class="row mt-3">
+                <div class="form-row mt-3">
                   <input id="options17" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="17" type="checkbox"<?=($r['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions17<?=$r['id'];?>" for="options17">Allow this Administrator to change below Permissions</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions17<?=$r['id'];?>" for="options17">Allow this Administrator to change below Permissions</label>
                 </div>
               <?php }
               if($r['options'][17]==1||$user['rank']==1000){?>
-                <div class="row">
+                <div class="form-row">
                   <input id="options16" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="16" type="checkbox"<?=($r['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions16<?=$r['id'];?>" for="options16">Hide Folders</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions16<?=$r['id'];?>" for="options16">Hide Folders</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="options10" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="10" type="checkbox"<?=($r['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions10<?=$r['id'];?>" for="options10">Create Folders</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions10<?=$r['id'];?>" for="options10">Create Folders</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="options11" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="11" type="checkbox"<?=($r['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions11<?=$r['id'];?>" for="options11">Read Files</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions11<?=$r['id'];?>" for="options11">Read Files</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="options12" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="12" type="checkbox"<?=($r['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions12<?=$r['id'];?>" for="options12">Write Files</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions12<?=$r['id'];?>" for="options12">Write Files</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="options13" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="13" type="checkbox"<?=($r['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions13<?=$r['id'];?>" for="options13">Extract Archives</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions13<?=$r['id'];?>" for="options13">Extract Archives</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="options14" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="14" type="checkbox"<?=($r['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions14<?=$r['id'];?>" for="options14">Create Archives</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions14<?=$r['id'];?>" for="options14">Create Archives</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="options15" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="15" type="checkbox"<?=($r['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label id="loginoptions15<?=$r['id'];?>" for="options15">Upload Files (pdf,doc,php)</label>
+                  <label class="p-0 mt-0 ml-3" id="loginoptions15<?=$r['id'];?>" for="options15">Upload Files (pdf,doc,php)</label>
                 </div>
               <?php }?>
             </div>

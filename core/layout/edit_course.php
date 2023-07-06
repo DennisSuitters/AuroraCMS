@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -149,10 +149,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
               </div>
-              <div class="row mt-3">
+              <div class="form-row mt-3">
                 <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/edit/'.$r['id'].'#courseShowCost" data-tooltip="tooltip" aria-label="PermaLink to Course Show Cost Checkbox">&#128279;</a>':'';?>
                 <input id="courseshowCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
+                <label class="p-0 mt-0 ml-3" for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
               </div>
               <div class="row">
                 <div class="col-12 col-sm">
@@ -607,42 +607,42 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
               <div class="row mt-3 certificate-chooser justify-content-center">
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==0?' certificate-selected':'';?>" data-certificate="0">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==0?' certificate-selected':'';?>" data-certificate="0">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-0.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==1?' certificate-selected':'';?>" data-certificate="1">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==1?' certificate-selected':'';?>" data-certificate="1">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-1.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==2?' certificate-selected':'';?>" data-certificate="2">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==2?' certificate-selected':'';?>" data-certificate="2">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-2.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==3?' certificate-selected':'';?>" data-certificate="3">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==3?' certificate-selected':'';?>" data-certificate="3">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-3.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==4?' certificate-selected':'';?>" data-certificate="4">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==4?' certificate-selected':'';?>" data-certificate="4">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-4.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==5?' certificate-selected':'';?>" data-certificate="5">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==5?' certificate-selected':'';?>" data-certificate="5">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-5.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==6?' certificate-selected':'';?>" data-certificate="6">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==6?' certificate-selected':'';?>" data-certificate="6">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-6.png">
                   </figure>
                 </article>
-                <article class="card col-6 col-sm-2-5 m-1 overflow-visible certificate<?=$r['cid']==7?' certificate-selected':'';?>" data-certificate="7">
+                <article class="card col-6 col-sm-2 m-1 overflow-visible certificate<?=$r['cid']==7?' certificate-selected':'';?>" data-certificate="7">
                   <figure class="card-image position-relative overflow-visible">
                     <img src="media/certificate/certificate-7.png">
                   </figure>

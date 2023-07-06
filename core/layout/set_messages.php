@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -33,10 +33,10 @@
         </div>
         <div class="m-4">
           <legend id="contactForm" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#contactForm" data-tooltip="tooltip" aria-label="PermaLink to Contact Form Section">&#128279;</a>':'';?>Contact Form</legend>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#storeMessages" data-tooltip="tooltip" aria-label="PermaLink to Enable Store Messages Checkbox">&#128279;</a>':'';?>
             <input id="storeMessages" data-dbid="1" data-dbt="config" data-dbc="storemessages" data-dbb="0" type="checkbox"<?=($config['storemessages']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="storeMessages" id="configstoremessages01">Store Contact Form Messages</label>
+            <label class="p-0 mt-0 ml-3" for="storeMessages" id="configstoremessages01">Store Contact Form Messages</label>
           </div>
           <div class="form-row mt-3">
             <small class="form-text text-right">If no entries are made, an input text box will be used instead of a dropdown. If email's are left blank, the messages will be sent to the site email set in <a href="<?= URL.$settings['system']['admin'];?>/preferences/contact#email">Preferences</a>.</small>
@@ -83,10 +83,10 @@
               <option value="3600"<?=$config['message_check_interval']==3600?' selected':'';?>>1 Hour</option>
             </select>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#deleteRetrievedMessages" data-tooltip="tooltip" aria-label="PermaLink to Delete Retrieved Messages Checkbox">&#128279;</a>':'';?>
             <input id="deleteRetrievedMessages" data-dbid="1" data-dbt="login" data-dbc="options" data-dbb="9" type="checkbox"<?=($user['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="deleteRetrievedMessages" id="loginoptions91">Delete Retrieved Messages</label>
+            <label class="p-0 mt-0 ml-3" for="deleteRetrievedMessages" id="loginoptions91">Delete Retrieved Messages</label>
           </div>
           <legend id="mailboxes" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/messages/settings#mailboxes" data-tooltip="tooltip" aria-label="PermaLink to Mailboxes Section">&#128279;</a>':'';?>Mailboxes</legend>
           <?php if($user['options'][7]==1){?>

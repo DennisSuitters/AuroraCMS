@@ -7,14 +7,14 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $iid=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-$cid=filter_input(INPUT_POST,'cid',FILTER_SANITIZE_NUMBER_INT);
+$opt=$_POST['opt'];//filter_input(INPUT_POST,'opt',FILTER_UNSAFE_RAW);
 $ti=time();
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 $rank=isset($_SESSION['rank'])?$_SESSION['rank']:0;
@@ -61,10 +61,10 @@ if($rank!=0){
 }
 
 if($add==true){
-  $sc=$db->prepare("SELECT `id` FROM `".$prefix."cart` WHERE `iid`=:iid AND `cid`=:cid AND `si`=:si");
+  $sc=$db->prepare("SELECT `id` FROM `".$prefix."cart` WHERE `iid`=:iid AND `si`=:si");
   $sc->execute([
     ':iid'=>$iid,
-    ':cid'=>$cid,
+//    ':cid'=>$cid,
     ':si'=>SESSIONID
   ]);
   if($sc->rowCount()>0){
@@ -75,7 +75,7 @@ if($add==true){
     ]);
   }else{
     if(isset($iid)&&$iid!=0){
-      $q=$db->prepare("SELECT `cost`,`rCost`,`dCost`,`stockStatus`,`points` FROM `".$prefix."content` WHERE `id`=:id");
+      $q=$db->prepare("SELECT `title`,`file`,`thumb`,`cost`,`rCost`,`dCost`,`stockStatus`,`points` FROM `".$prefix."content` WHERE `id`=:id");
       $q->execute([':id'=>$iid]);
       $r=$q->fetch(PDO::FETCH_ASSOC);
       if(is_numeric($r['cost'])||is_numeric($r['rCost'])||is_numeric($r['dCost'])){
@@ -83,16 +83,54 @@ if($add==true){
         if($rank>300||$rank<400){
           if($r['dCost']!=0)$r['cost']=$r['dCost'];
         }
-        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`cid`,`quantity`,`cost`,`stockStatus`,`points`,`si`,`ti`) VALUES (:iid,:cid,'1',:cost,:stockStatus,:points,:si,:ti)");
+        $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`contentType`,`title`,`file`,`quantity`,`cost`,`stockStatus`,`points`,`si`,`ti`) VALUES (:iid,'inventory',:title,:file,'1',:cost,:stockStatus,:points,:si,:ti)");
         $q->execute([
           ':iid'=>$iid,
-          ':cid'=>$cid,
+          ':title'=>$r['title'],
+          ':file'=>($r['thumb']!=''?$r['thumb']:$r['file']),
           ':cost'=>$r['cost'],
           ':stockStatus'=>$r['stockStatus'],
           ':points'=>$r['points'],
           ':si'=>SESSIONID,
           ':ti'=>$ti
         ]);
+
+        if($opt!=''){
+          $opts=explode(",",$opt);
+          foreach($opts as $oid){
+            $soi=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='option' AND `id`=:id");
+            $soi->execute([':id'=>$oid]);
+            while($roi=$soi->fetch(PDO::FETCH_ASSOC)){
+              if($roi['oid']){
+                $soic=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+                $soic->execute(['id'=>$roi['oid']]);
+                $roic=$soic->fetch(PDO::FETCH_ASSOC);
+                if($roi['quantity']==0||$roi['quantity']=='')$roi['quantity']=$roic['quantity'];
+                if($roi['cost']==0||$roi['cost']==''){
+                  if($roic['rrp']!=0)$roi['cost']=$roic['rrp'];
+                  if($roic['cost']!=0)$roi['cost']=$roic['cost'];
+                  if($roic['rCost']!=0)$roi['cost']=$roic['rCost'];
+                  if(isset($user['options'])&&$user['options'][19]==1){
+                    if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+                  }
+                }
+                $roi['id']=$roic['id'];
+              }
+              $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`contentType`,`title`,`file`,`quantity`,`cost`,`stockStatus`,`points`,`si`,`ti`) VALUES (:iid,:contentType,:title,:file,'1',:cost,:stockStatus,:points,:si,:ti)");
+              $q->execute([
+                ':iid'=>$roi['id'],
+                ':contentType'=>($roi['id']>0?'inventory':'option'),
+                ':title'=>($roi['title']!=''?$roi['title']:(isset($roic['title'])?$roic['title']:'')),
+                ':file'=>($roi['file']!=''?$roi['file']:($roic['thumb']!=''?$roic['thumb']:$roic['file'])),
+                ':cost'=>$roi['cost'],
+                ':stockStatus'=>$roi['status'],
+                ':points'=>(isset($roic['points'])?$roic['points']:0),
+                ':si'=>SESSIONID,
+                ':ti'=>$ti
+              ]);
+            }
+          }
+        }
 
       }
     }

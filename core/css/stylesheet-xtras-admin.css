@@ -93,7 +93,9 @@ select.select-sm{
   border-radius:.25rem!important }
 
 section.content .status .published,
-section.content .status.published{
+section.content .status.published,
+.status .available,
+.status.available{
   color:#fff!important;
   background-color:#28a745!important }
 
@@ -108,7 +110,9 @@ section.content .status.unpublished{
   background-color:#ffc107!important }
 
 section.content .status .delete,
-section.content .status.delete{
+section.content .status.delete,
+.status .unavailable,
+.status.unavailable{
   color:#fff!important;
   background-color:#dc3545!important }
 
@@ -289,7 +293,6 @@ nav[role=menubar] label.menubar-label{
   cursor:pointer;
   -webkit-user-select:none;
   -moz-user-select:none;
-  -ms-user-select:none;
   user-select:none }
 
 nav[role=menubar] ul{
@@ -335,7 +338,6 @@ nav[role=menubar] ul li.active a{
     line-height:1.5;
     -webkit-user-select:none;
     -moz-user-select:none;
-    -ms-user-select:none;
     user-select:none;
     text-align:center;
     text-decoration:none }
@@ -366,7 +368,6 @@ nav[role=menubar] ul li.active a{
   left:50%;
   visibility:hidden;
   opacity:0;
-  -webkit-transition:.1s;
   transition:.1s;
   will-change:transform;
   pointer-events:none }
@@ -377,7 +378,6 @@ nav[role=menubar] ul li.active a{
   border-radius:var(--tooltip-border-radius);
   background-color:var(--tooltip-background-color)!important;
   padding:.25rem .5rem;
-  width:-webkit-max-content;
   width:max-content;
   width:-moz-max-content;
   min-width:50px;
@@ -524,13 +524,9 @@ nav[role=menubar] ul li.active a{
   padding:0;
   border-radius:0;
   background-color:var(--jumbotron-background-color);
-  -webkit-background-size:cover;
-  -moz-background-size:cover;
-  -o-background-size:cover;
   background-size:cover;
-  object-fit:contain;
-  -webkit-box-shadow:inset 0 -30px 30px -30px rgba(0,0,0,.5);
-  -moz-box-shadow:inset 0 -30px 30px -30px rgba(0,0,0,.5);
+  -o-object-fit:contain;
+     object-fit:contain;
   box-shadow:inset 0 -30px 30px -30px rgba(0,0,0,.5) }
 
 .jumbotron[style*=background-image]{
@@ -544,7 +540,8 @@ nav[role=menubar] ul li.active a{
   top:50%;
   left:50%;
   transform:translate3d(-50%,-50%,0);
-  object-fit:cover }
+  -o-object-fit:cover;
+     object-fit:cover }
 
 .jumbotron h1,
 .jumbotron h2,
@@ -693,7 +690,8 @@ figcaption:empty{
 
 .card .card-image.full img{
   height:30rem;
-  object-position:center }
+  -o-object-position:center;
+     object-position:center }
 
 .card .card-image:first-child{
   padding-top:0 }
@@ -1226,12 +1224,10 @@ dialog{
   background:#fff;
   padding:0;
   width:-moz-fit-content;
-  width:-webkit-fit-content;
   width:fit-content;
   min-width:var(--dialog-min-width);
   max-width:var(--dialog-max-width);
   height:-moz-fit-content;
-  height:-webkit-fit-content;
   height:fit-content;
   pointer-events:auto;
   color:#000 }
@@ -1241,20 +1237,10 @@ dialog::backdrop{
   background-color:rgba(0,0,0,.4) }
 
 dialog[open]{
-  -webkit-animation:dialog-show .45s cubic-bezier(.5,.61,.355,1) normal;
   animation:dialog-show .45s cubic-bezier(.5,.61,.355,1) normal }
 
-dialog[open]::-webkit-backdrop{
-  -webkit-animation:dialog-backdrop-show .45s cubic-bezier(.5,.61,.355,1) normal;
-  animation:dialog-backdrop-show .45s cubic-bezier(.5,.61,.355,1) normal }
-
 dialog[open]::backdrop{
-  -webkit-animation:dialog-backdrop-show .45s cubic-bezier(.5,.61,.355,1) normal;
   animation:dialog-backdrop-show .45s cubic-bezier(.5,.61,.355,1) normal }
-
-dialog::-webkit-backdrop{
-  z-index:1050;
-  background-color:rgba(0,0,0,.4) }
 
 dialog::backdrop{
   z-index:1050 }
@@ -1317,17 +1303,6 @@ dialog footer{
   border-bottom-left-radius:var(--dialog-border-radius);
   padding:.75rem }
 
-@-webkit-keyframes dialog-show{
-  0%{
-    transform:translateY(-25%);
-    opacity:0 }
-  50%{
-    opacity:1 }
-  100%{
-    transform:translateY(-50%);
-    opacity:1 }
-}
-
 @keyframes dialog-show{
   0%{
     transform:translateY(-25%);
@@ -1336,13 +1311,6 @@ dialog footer{
     opacity:1 }
   100%{
     transform:translateY(-50%);
-    opacity:1 }
-}
-
-@-webkit-keyframes dialog-backdrop-show{
-  0%{
-    opacity:0 }
-  100%{
     opacity:1 }
 }
 
@@ -1357,7 +1325,6 @@ dialog footer{
   overflow-y:auto!important }
 
 .grab{
-  cursor:-moz-grab;
   cursor:-webkit-grab }
 
 .kanban-item{
@@ -1390,53 +1357,23 @@ dialog footer{
   border-color:var(--alert-success-color) }
 
 .shake-horizontal{
-  -webkit-animation:shake-horizontal .8s cubic-bezier(.455,.030,.515,.955) both;
   animation:shake-horizontal .8s cubic-bezier(.455,.030,.515,.955) both }
-
-@-webkit-keyframes shake-horizontal{
-  0%,
-  100%{
-    -webkit-transform:translateX(0);
-    transform:translateX(0) }
-  10%,
-  30%,
-  50%,
-  70%{
-    -webkit-transform:translateX(-10px);
-    transform:translateX(-10px) }
-  20%,
-  40%,
-  60%{
-    -webkit-transform:translateX(10px);
-    transform:translateX(10px) }
-  80%{
-    -webkit-transform:translateX(8px);
-    transform:translateX(8px) }
-  90%{
-    -webkit-transform:translateX(-8px);
-    transform:translateX(-8px) }
-}
 @keyframes shake-horizontal{
   0%,
   100%{
-    -webkit-transform:translateX(0);
     transform:translateX(0) }
   10%,
   30%,
   50%,
   70%{
-    -webkit-transform:translateX(-10px);
     transform:translateX(-10px) }
   20%,
   40%,
   60%{
-    -webkit-transform:translateX(10px);
     transform:translateX(10px) }
   80%{
-    -webkit-transform:translateX(8px);
     transform:translateX(8px) }
   90%{
-    -webkit-transform:translateX(-8px);
     transform:translateX(-8px) }
 }
 
@@ -1462,7 +1399,8 @@ dialog footer{
   width:40px;
   height:40px;
   font-size:2.5em;
-  object-position:center }
+  -o-object-position:center;
+     object-position:center }
 
 .adverb,
 .qualifier{
@@ -1504,6 +1442,23 @@ dialog footer{
 .widget-more-btn:focus{
   border:0 !important;
   padding:0 !important }
+
+.list-more {
+  position:relative;
+  height:150px;
+  overflow:hidden;
+}
+
+.list-more:after,
+[data-theme="dark"].list-more:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: linear-gradient( var(--card-background-color-gradient-from) 50%, var(--card-background-color-gradient-to) 100% );
+}
 
 .widget-weather{
   color:#fff;
@@ -1553,7 +1508,6 @@ dialog footer{
   background-origin:content-box;
   background-size:cover;
   background-blend-mode:darken;
-  -webkit-transition:background-image 2s ease-in-out;
   transition:background-image 2s ease-in-out }
 
 .Ash{
@@ -1848,9 +1802,6 @@ dialog footer{
   transition:all 150ms ease-out;
   width:4em;
   top:50%;
-  -webkit-transform:translateY(-50%);
-  -moz-transform:translateY(-50%);
-  -ms-transform:translateY(-50%);
   transform:translateY(-50%) }
 
 .note-video-wrapper .play::before{

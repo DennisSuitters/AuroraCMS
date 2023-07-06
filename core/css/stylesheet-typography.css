@@ -320,3 +320,11 @@ sup{
 
 .list-inline-item:not(:last-child){
   margin-right:.5rem }
+
+.optionslist{
+  background-color:var(--card-background-color);
+  border:var(--card-border-width) var(--card-border-style) var(--card-border-color);
+  border-radius:var(--card-border-radius) }
+
+.optionselected{
+  background-color:var(--card-background-color-zebra) }

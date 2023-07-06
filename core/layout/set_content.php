@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -33,15 +33,15 @@
         </div>
         <div class="m-4">
           <legend id="relatedContentSection"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#relatedContentSection" data-tooltip="tooltip" aria-label="PermaLink to Content Related Content Section">&#128279;</a>':'';?>Related Content</legend>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableRelated" data-tooltip="tooltip" aria-label="PermaLink to Enable Related Content Checkbox">&#128279;</a>':'';?>
             <input id="enableRelated" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=($config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="enableRelated" id="configoptions111">Enable Related Content</label>
+            <label class="p-0 mt-0 ml-3" for="enableRelated" id="configoptions111">Enable Related Content</label>
           </div>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#displaySimilar" data-tooltip="tooltip" aria-label="PermaLink to Content Display Similar Content Checkbox">&#128279;</a>':'';?>
             <input id="displaySimilar" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10" type="checkbox"<?=($config['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="displaySimilar" id="configoptions101">Display Similar Category if no Related Content items are selected</label>
+            <label class="p-0 mt-0 ml-3" for="displaySimilar" id="configoptions101">Display Similar Category if no Related Content items are selected</label>
           </div>
           <label id="contentDefaultOrder" for="defaultOrder"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#contentDefaultOrder" data-tooltip="tooltip" aria-label="PermaLink to Content Display Order Selector">&#128279;</a>':'';?>Default Order for Content Items</label>
           <div class="form-row">
@@ -65,10 +65,10 @@
             <input class="textinput" id="searchItems" data-dbid="1" data-dbt="config" data-dbc="searchItems" type="text" value="<?=$config['searchItems'];?>"<?=($user['options'][7]==1?' placeholder="Enter Search Items Count..."':' disabled');?>>
             <?=($user['options'][7]==1?'<button class="save" id="savesearchItems" data-dbid="searchItems" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableSalesPeriods" data-tooltip="tooltip" aria-label="PermaLink to Calculate Sales Periods Checkbox">&#128279;</a>':'';?>
             <input id="enableSalesPeriods" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?=($config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="enableSalesPeriods" id="configoptions281">Calculate Sales Periods</label>
+            <label class="p-0 mt-0 ml-3" class="p-0 mt-0 ml-3" for="enableSalesPeriods" id="configoptions281">Calculate Sales Periods</label>
           </div>
           <label id="saleHeadingValentineField" for="saleHeadingvalentine"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#saleHeadingValentineField" data-tooltip="tooltip" aria-label="PermaLink to Valentine Sale Heading Field">&#128279;</a>':'';?>Valentine Sale Heading</label>
           <div class="form-row">
@@ -115,10 +115,10 @@
             <input class="textinput" id="saleHeadingEOFY" data-dbid="1" data-dbt="config" data-dbc="saleHeadingEOFY" type="text" value="<?=$config['saleHeadingEOFY'];?>"<?=($user['options'][7]==1?' placeholder="Enter End Of Financial Year Sale Heading..."':' disabled');?>>
             <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingEOFY" data-dbid="saleHeadingEOFY" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableQuickView" data-tooltip="tooltip" aria-label="PermaLink to Content Quick View Checkbox">&#128279;</a>':'';?>
             <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=($config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="enableQuickView" id="configoptions51">Quick View for Products &amp; Gallery</label>
+            <label class="p-0 mt-0 ml-3" for="enableQuickView" id="configoptions51">Quick View for Products &amp; Gallery</label>
           </div>
           <label id="fallbackStatus" for="inventoryFallbackStatus"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#fallbackStatus" data-tooltip="tooltip" aria-label="PermaLink to Inventory Fallback Status Selector">&#128279;</a>':'';?>Fallback Status</label>
           <div class="form-row">
@@ -131,10 +131,10 @@
             </select>
           </div>
           <legend id="categoriesSection" class="mt-3 mb-0"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#categoriesSection" data-tooltip="tooltip" aria-label="PermaLink to Categories Section">&#128279;</a>':'';?>Categories</legend>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/settings#enableCategoryNavigation" data-tooltip="tooltip" aria-label="PermaLink to Category Navigation Checkbox">&#128279;</a>':'';?>
             <input id="enableCategoryNavigation" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="31" type="checkbox"<?=($config['options'][31]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="enableCategoryNavigation" id="configoptions311">Category Navigation</label>
+            <label class="p-0 mt-0 ml-3" for="enableCategoryNavigation" id="configoptions311">Category Navigation</label>
           </div>
           <?php if($user['options'][7]==1){?>
             <form target="sp" method="post" action="core/add_category.php">

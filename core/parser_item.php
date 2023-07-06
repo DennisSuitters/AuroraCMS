@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -510,6 +510,106 @@ if($skip==false){
       if($r['options'][3]==1)$showCountdown=true;
     }else
       $item=preg_replace('~<countdown>.*?<\/countdown>~is','',$item);
+
+    if($r['contentType']=='inventory'){
+      if(stristr($item,'<options>')){
+        $so=$db->prepare("SELECT DISTINCT(`category`) AS 'category' FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
+        $so->execute([':rid'=>$r['id']]);
+        if($so->rowCount()>0){
+          preg_match('/<options>([\w\W]*?)<\/options>/',$item,$matches);
+          $options=$matches[1];
+          preg_match('/<optionsitems>([\w\W]*?)<\/optionsitems>/',$options,$matches);
+          $oitems=$matches[1];
+          $oout=$oco=$oc2='';
+          while($ro=$so->fetch(PDO::FETCH_ASSOC)){
+            $oout.=preg_replace('/<print options=[\"\']?category[\"\']?>/',$ro['category'],$options);
+            $soi=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid AND `category`=:cat AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
+            $soi->execute([
+              ':cat'=>$ro['category'],
+              ':rid'=>$r['id']
+            ]);
+            $out='';
+            while($roi=$soi->fetch(PDO::FETCH_ASSOC)){
+              $ofile='';
+              $ofile=($roi['file']!=''?'<img src="'.$roi['file'].'" alt="'.$roi['title'].'">':'');
+              if($roi['oid']!=0){
+                $soic=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+                $soic->execute([':id'=>$roi['oid']]);
+                $roic=$soic->fetch(PDO::FETCH_ASSOC);
+                if($roic['file']!='')$ofile.='<img src="'.$roic['file'].'" alt="'.$roi['title'].'">';
+                $soim=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `rid`=:rid ORDER BY `ord` ASC");
+                $soim->execute([':rid'=>$roic['id']]);
+                if($soim->rowCount()>0){
+                  while($roim=$soim->fetch(PDO::FETCH_ASSOC)){
+                    $ofile.='<img src="'.$roim['file'].'" alt="'.$roic['title'].'">';
+                  }
+                }
+              }
+              $ocost=$oquantity='';
+              if($roi['quantity']==0||$roi['quantity']==''){
+                if(isset($roic['quantity'])&&$roic['quantity']==0){
+                  $oquantity='<div class="text-5 text-danger">Out of Stock</div>';
+                }
+              }else{
+                $oquantity='<div class="text-5 text-danger">Out of Stock</div>';
+              }
+              if($roi['cost']==0||$roi['cost']==''&&$oquantity==0){
+                if(isset($roic['options'])&&$roic['options'][0]==1){
+                  if($roic['rrp']!=0){
+                    $ocost.='<div class="text-2x"><abbr title="Recommended Retail Price">RRP</abbr>: &dollar;'.$roic['rrp'].'</div>';
+                  }
+                  if($roic['cost']!=0){
+                    $ocost.='<div class="text-';
+                    if($roic['rCost']!=0)$ocost.='3x"><strike>&nbsp;&nbsp;&dollar;'.$roic['cost'].'&nbsp;&nbsp;</strike>';
+                    else$ocost.='5x">&dollar;'.$roic['cost'];
+                    $ocost.='</div>';
+                  }
+                  if($roic['rCost']!=0){
+                    $ocost.='<div class="text-5x">&dollar;'.$roic['rCost'].'</div>';
+                  }
+                  if(isset($user['options'])&&$user['options'][19]==1){
+                    if($roic['dCost']!=0){
+                      $ocost.='<div class="text-3x">Wholesale: &dollar;'.$roic['dCost'].'</div>';
+                    }
+                  }
+                }
+              }else{
+                $ocost='<div class="text-5x">&dollar;'.$roi['cost'].'</div>';
+              }
+              $out.=preg_replace([
+                ($ofile!=''?'/<[\/]?optionsmedia>/':'~<optionsmedia>.*?<\/optionsmedia>~is'),
+                '/<optionsmediaitems>/',
+                '/<print options=[\"\']?categoryunspaced[\"\']?>/',
+                '/<print options=[\"\']?id[\"\']?>/',
+                '/<print options=[\"\']?heading[\"\']>?/',
+                '/<print options=[\"\']?notes[\"\']?>/',
+                '/<print options=[\"\']?cost[\"\']?>/'
+              ],[
+                '',
+                $ofile,
+                strtolower(str_replace(' ','',$ro['category'])),
+                $roi['id'],
+                $roi['title'],
+                ($roi['notes']!=''?$roi['notes']:(isset($roic['notes'])?$roic['notes']:'')),
+                ($oquantity!=''?$oquantity:$ocost)
+              ],$oitems);
+            }
+            $oout=preg_replace([
+              '~<optionsitems>.*?<\/optionsitems>~is',
+            ],[
+              $out
+            ],$oout);
+          }
+          $item=preg_replace([
+            '~<options>.*?<\/options>~is',
+          ],[
+            $oout
+          ],$item);
+        }else
+          $item=preg_replace('~<options>.*?<\/options>~is','',$item);
+      }
+    }else
+      $item=preg_replace('~<options>.*?<\/options>~is','',$item);
 
     if($r['contentType']=='article'){
       if(stristr($item,'<list>')){

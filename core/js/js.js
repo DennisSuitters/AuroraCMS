@@ -123,10 +123,20 @@ document.addEventListener('click',function(event){
 		$('#da').summernote('pasteHTML','<blockquote><cite>'+user+' wrote:</cite>'+quote+'</blockquote>');
 	}
 	if(event.target.closest('.addCart')){
-		fetch('core/add_cart.php',{
+    var opts=document.querySelectorAll('select[name="options[]"]');
+    let opt='';
+    if(opts.length>0){
+      for(var i=0;i<opts.length;i++){
+        if(opts[i].value!=''){
+          opt+=opts[i].value+',';
+        }
+      }
+      opt=opt.replace(/[, ]+$/,"").trim();
+    }
+    fetch('core/add_cart.php',{
 			method:"POST",
 			headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
-	  	body:'id='+document.querySelector('.addCart').getAttribute("data-cartid")+'&cid='+document.querySelector('.addCart').getAttribute("data-cartchoice")
+	  	body:'id='+document.querySelector('.addCart').getAttribute("data-cartid")+'&opt='+opt
 		}).then(function(response){
 			return response.json();
 		}).then(function(j){
@@ -152,6 +162,11 @@ document.addEventListener('click',function(event){
 		});
 	}
 });
+function selectOption(id,cat){
+  document.querySelector(`#`+cat+`options`).value=id;
+  document.querySelector(`.optionslist`+cat).classList.remove('optionselected')
+  document.querySelector(`#optionselected`+id).classList.add('optionselected');
+}
 document.addEventListener("DOMContentLoaded",function(event) {
   var youTubeVideos=document.querySelectorAll('.youtube');
   for (var i=0;i<youTubeVideos.length;i++){

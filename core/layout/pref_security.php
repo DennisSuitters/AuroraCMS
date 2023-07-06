@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.23
+* @version    0.2.26
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -54,15 +54,15 @@
                 <?=($user['options'][7]==1?'<button type="submit">Update</button>':'');?>
               </div>
             </form>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAttackScreen" data-tooltip="tooltip" aria-label="PermaLink to Preferences Screen Attacks Checkbox">&#128279;</a>':'';?>
               <input id="prefAttackScreen" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="5" type="checkbox"<?=($config['php_options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configphp_options51" for="prefAttackScreen">Screen Against Attacks</label>
+              <label class="p-0 mt-0 ml-3" id="configphp_options51" for="prefAttackScreen">Screen Against Attacks</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#pref30DayBlacklist" data-tooltip="tooltip" aria-label="PermaLink to Preferences Screen Attacks Checkbox">&#128279;</a>':'';?>
               <input id="pref30DayBlacklist" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="6" type="checkbox"<?=($config['php_options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configphp_options61" for="pref30DayBlacklist">30 Day Blacklist</label>
+              <label class="p-0 mt-0 ml-3" id="configphp_options61" for="pref30DayBlacklist">30 Day Blacklist</label>
             </div>
             <legend class="mt-3">Google reCaptcha v2 for Forms</legend>
             <?=($user['options'][7]==1?'<div class="form-row">'.
@@ -84,20 +84,20 @@
                 <div class="form-text">We recommend signing up to Project Honey Pot to take full advantage of protecting your website from spammers, and in turn help Project Honey Pot protect other sites. You can find more information at <a target="_blank" href="http://www.projecthoneypot.org?rf=113735">Project Honey Pot</a>.</div>
               </div>
             <?php }?>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefEnablePHP" data-tooltip="tooltip" aria-label="PermaLink to Preferences Enable Project Honey Pot Checkbox">&#128279;</a>':'';?>
               <input id="prefEnablePHP" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="0" type="checkbox"<?=($config['php_options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configphp_options01" for="prefEnablePHP">Enable Project Honey Pot</label>
+              <label class="p-0 mt-0 ml-3" id="configphp_options01" for="prefEnablePHP">Enable Project Honey Pot</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAutoBlacklist" data-tooltip="tooltip" aria-label="PermaLink to Preferences Auto Blacklist Checkbox">&#128279;</a>':'';?>
               <input id="prefAutoBlacklist" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="3" type="checkbox"<?=($config['php_options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configphp_options31" for="prefAutoBlacklist">Auto Blacklist</label>
+              <label class="p-0 mt-0 ml-3" id="configphp_options31" for="prefAutoBlacklist">Auto Blacklist</label>
             </div>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefBlockBlacklistIP" data-tooltip="tooltip" aria-label="PermaLink to Preferences Screen Attacks Checkbox">&#128279;</a>':'';?>
               <input id="prefBlockBlacklistIP" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="4" type="checkbox"<?=($config['php_options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configphp_options41" for="prefBlockBlacklistIP">Block Blacklisted IP's</label>
+              <label class="p-0 mt-0 ml-3" id="configphp_options41" for="prefBlockBlacklistIP">Block Blacklisted IP's</label>
             </div>
             <label id="prefPHPAPIKey" for="php_APIkey"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefPHPAPIKey" data-tooltip="tooltip" aria-label="PermaLink to Preferences Project Honey Pot API Key Field">&#128279;</a>':'';?>PHP API Key</label>
             <div class="form-row">
@@ -112,10 +112,10 @@
               <?=($user['options'][7]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`1`,`config`,`php_honeypot`);"><i class="i">browse-media</i></button>'.
               '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`1`,`config`,`php_honeypot`,``);"><i class="i">trash</i></button>':'');?>
             </div>
-            <div class="row mt-3">
+            <div class="form-row mt-3">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefAttackScreen" data-tooltip="tooltip" aria-label="PermaLink to Preferences Project Honey Pot Quick Link Checkbox">&#128279;</a>':'';?>
               <input id="prefPHPQuickLink" data-dbid="1" data-dbt="config" data-dbc="php_options" data-dbb="2" type="checkbox"<?=($config['php_options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configphp_options21" for="prefPHPQuickLink">Quick Link</label>
+              <label class="p-0 mt-0 ml-3" id="configphp_options21" for="prefPHPQuickLink">Quick Link</label>
             </div>
             <?php if($user['options'][7]==1){?>
               <form target="sp" method="post" action="core/update.php" onsubmit="$('#php_quicklink_save').removeClass('btn-danger');">
@@ -145,10 +145,10 @@
           </div>
           <div class="tab1-2 border p-4" data-tabid="tab1-2" role="tabpanel">
             <legend>Filter Settings</legend>
-            <div class="row">
+            <div class="form-row">
               <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFilterForms" data-tooltip="tooltip" aria-label="PermaLink to Preferences Filter Forms Checkbox">&#128279;</a>':'';?>
               <input id="prefFilterForms" data-dbid="1" data-dbt="config" data-dbc="spamfilter" data-dbb="0" type="checkbox"<?=($config['spamfilter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label id="configspamfilter01" for="prefFilterForms">Filter Forms</label>
+              <label class="p-0 mt-0 ml-3" id="configspamfilter01" for="prefFilterForms">Filter Forms</label>
             </div>
             <label id="prefFormMinTime" for="formMinTime"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/security#prefFormMinTime" data-tooltip="tooltip" aria-label="PermaLink to Preferences Form Minimum Time for Visitors to Fill in Form in Seconds">&#128279;</a>':'';?>Form Minimum Time</label>
             <div class="form-row">

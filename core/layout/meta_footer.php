@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -46,8 +46,27 @@
   if($(window).width() < 577){
     $('.nav-toggle').attr('aria-expanded','false');
   }
-  <?php if($user['rank']==1000){?>
-    $('.quickinfo').text('Window Width > '+$(window).width()+'px | ');
+  <?php if($user['rank']==1000&&$config['development']==1){?>
+    var ww=$(window).width(),
+        wt='';
+    if(ww<577)wt+=ww+'px';
+    if(ww>576&&ww<769)wt=ww+'px (SM';
+    if(ww>768&&ww<993)wt=ww+'px (MD';
+    if(ww>992&&ww<1201)wt=ww+'px (LG';
+    if(ww>1200&&ww<1401)wt=ww+'px (XL';
+    if(ww>1400)wt+=ww+'px (XXL';
+    document.querySelector(".dev").setAttribute("data-width", "Window Width > "+wt+")");
+    window.onresize=function(){
+      var ww=$(window).width(),
+          wt='';
+      if(ww<577)wt+=ww+'px';
+      if(ww>576&&ww<769)wt=ww+'px (SM';
+      if(ww>768&&ww<993)wt=ww+'px (MD';
+      if(ww>992&&ww<1201)wt=ww+'px (LG';
+      if(ww>1200&&ww<1401)wt=ww+'px (XL';
+      if(ww>1400)wt+=ww+'px (XXL';
+      document.querySelector(".dev").setAttribute("data-width", "Window Width > "+wt+")");
+    };
   <?php }?>
   var unsaved=false;
   window.onbeforeunload=function(e){

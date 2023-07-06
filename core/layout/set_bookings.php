@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -32,15 +32,15 @@
           </div>
         </div>
         <div class="m-4">
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#sendBookedEventInvoice" data-tooltip="tooltip" aria-label="PermaLink to Send Invoice when Event Booked Checkbox">&#128279;</a>':'';?>
             <input id="createEventInvoice" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="6" type="checkbox"<?=($config['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="createEventInvoice" id="configoptions61">Create Invoice when Event is Booked.</label>
+            <label class="p-0 mt-0 ml-3" for="createEventInvoice" id="configoptions61">Create Invoice when Event is Booked.</label>
           </div>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#sendBookedServiceInvoice" data-tooltip="tooltip" aria-label="PermaLink to Send Invoice when Service Booked Checkbox">&#128279;</a>':'';?>
             <input id="createServiceInvoice" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="29" type="checkbox"<?=($config['options'][29]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="createServiceInvoice" id="configoptions291">Create Invoice when Service is Booked.</label>
+            <label class="p-0 mt-0 ml-3" for="createServiceInvoice" id="configoptions291">Create Invoice when Service is Booked.</label>
           </div>
           <label id="bufferTime" for="bookingBuffer"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/preferences/interface#bufferTime" data-tooltip="tooltip" aria-label="PermaLink to Booking Buffer Time Selector">&#128279;</a>':'';?>Buffer Time</label>
           <div class="form-row">
@@ -57,10 +57,10 @@
               <option value="86400"<?=$config['bookingBuffer']==86400?' selected':'';?>>24 Hours</option>
             </select>
           </div>
-          <div class="row mt-3">
+          <div class="form-row mt-3">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#setArchiveBookings" data-tooltip="tooltip" aria-label="PermaLink to Account Activation Layout">&#128279;</a>':'';?>
             <input id="setArchiveBookings" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25" type="checkbox"<?=($config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="setArchiveBookings" id="configoptions251">Archive Bookings when Converted to Invoice</label>
+            <label class="p-0 mt-0 ml-3" for="setArchiveBookings" id="configoptions251">Archive Bookings when Converted to Invoice</label>
           </div>
           <legend id="setBookingAgreementTemplate" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#setBookingAgreementTemplate" data-tooltip="tooltip" aria-label="PermaLink to Booking Agreement Template">&#128279;</a>':'';?>Booking Agreement Template</legend>
           <div class="row">
@@ -111,10 +111,10 @@
           </div>
           <hr>
           <legend id="setBookingEmailTemplate" class="mt-3"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#setBookingEmailTemplate" data-tooltip="tooltip" aria-label="PermaLink to Booking Email Template">&#128279;</a>':'';?>Email Layout</legend>
-          <div class="row">
+          <div class="form-row">
             <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#setBookingReadReceipt" data-tooltip="tooltip" aria-label="PermaLink to Booking Read Reciept Checkbox">&#128279;</a>':'';?>
             <input id="setBookingReadReceipt" data-dbid="1" data-dbt="config" data-dbc="bookingEmailReadNotification" data-dbb="0" type="checkbox"<?=($config['bookingEmailReadNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label for="setBookingReadReceipt" id="configbookingEmailReadNotification01">Read Reciept</label>
+            <label class="p-0 mt-0 ml-3" for="setBookingReadReceipt" id="configbookingEmailReadNotification01">Read Reciept</label>
           </div>
           <div id="bookingEmailSubject" class="form-row mt-3">
             <label for="bookingEmailSubject"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/bookings/settings#bookingEmailSubject" data-tooltip="tooltip" aria-label="PermaLink to Booking Email Subject">&#128279;</a>':'';?>Subject</label>

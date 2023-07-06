@@ -148,38 +148,41 @@ if($act=='statusBackorder'){
 }
 if($act=='additem'){
 	if(is_numeric($da)&&$da!=0){
-		$q=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-		$q->execute([':id'=>$da]);
-		$r=$q->fetch(PDO::FETCH_ASSOC);
     $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
     $so->execute([':id'=>$id]);
     $ro=$so->fetch(PDO::FETCH_ASSOC);
+		$sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+		$sc->execute([':id'=>$da]);
+		$rc=$sc->fetch(PDO::FETCH_ASSOC);
     $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
     $su->execute([':id'=>$ro['uid']]);
     $ru=$su->fetch(PDO::FETCH_ASSOC);
-    if($r['cost']==''||!is_numeric($r['cost']))$r['cost']=0;
-    if($r['rCost']!=0)$r['cost']=$r['rCost'];
-    if($ro['iid_ti']!=0&&$r['contentType']=='inventory'){
-      $r['quantity']=$r['quantity'] - 1;
-      if($r['quantity']<1){
-        $r['quantity']=0;
-        $r['stockStatus']=$config['inventoryFallbackStatus'];
+    if($rc['cost']=='')$rc['cost']=0;
+    if($rc['rCost']!=0)$rc['cost']=$rc['rCost'];
+    if($rc['dCost']!=0){
+      if($ru['options'][19]==1)$rc['cost']=$rc['dCost'];
+    }
+    if($ro['iid_ti']!=0&&$rc['contentType']=='inventory'){
+      $rc['quantity']=$rc['quantity'] - 1;
+      if($rc['quantity']<1){
+        $rc['quantity']=0;
+        $rc['stockStatus']=$config['inventoryFallbackStatus'];
       }
-      $si=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:sS WHERE `id`=:id");
-      $si->execute([
-        ':id'=>$r['id'],
-        ':quantity'=>$r['quantity'],
-        ':sS'=>$r['stockStatus']
+      $q=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:sS WHERE `id`=:id");
+      $q->execute([
+        ':id'=>$rc['id'],
+        ':quantity'=>$rc['quantity'],
+        ':sS'=>$rc['stockStatus']
       ]);
     }
 	}elseif($da=='neg'){
-		$r=[
+		$rc=[
 			'title'=>'',
 			'cost'=>0,
 			'stockStatus'=>'neg'
 		];
 	}else{
-    $r=[
+    $rc=[
       'title'=>'',
       'cost'=>0,
 			'stockStatus'=>''
@@ -189,18 +192,19 @@ if($act=='additem'){
 	$q->execute([
     ':oid'=>$id,
     ':iid'=>$da,
-    ':title'=>$r['title'],
-    ':cost'=>$r['cost'],
-		':status'=>$r['stockStatus'],
+    ':title'=>$rc['title'],
+    ':cost'=>$rc['cost'],
+		':status'=>$rc['stockStatus'],
     ':ti'=>time()
   ]);
 }
 if($act=='addoption'){
-  if(is_numeric($da)&&$da!=0){
-    $q=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
-    $q->execute([':id'=>$da]);
-    $r=$q->fetch(PDO::FETCH_ASSOC);
-    if($r['rid']>0){
+  if($da!=0){
+    $sc=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE id=:id");
+    $sc->execute([':id'=>$da]);
+    $rc=$sc->fetch(PDO::FETCH_ASSOC);
+    if($rc['quantity']=='')$rc['quantity']=0;
+    if($rc['rid']>0){
       $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
       $so->execute([':id'=>$id]);
       $ro=$so->fetch(PDO::FETCH_ASSOC);
@@ -208,57 +212,66 @@ if($act=='addoption'){
       $su->execute([':id'=>$ro['uid']]);
       $ru=$su->fetch(PDO::FETCH_ASSOC);
       $si=$db->prepare("SELECT * FROM `".$prefix."content` WHERE id=:id");
-      $si->execute([':id'=>$r['rid']]);
+      $si->execute([':id'=>$rc['rid']]);
       $ri=$si->fetch(PDO::FETCH_ASSOC);
-      if($r['cost']==0||$r['cost']==''){
-        $r['cost']=$ri['cost'];
-        if($ri['rCost']!=0)$r['cost']=$ri['rCost'];
+      if($rc['cost']==0)$rc['cost']=0;
+      if($rc['cost']==0){
+        if($ri['rCost']!=0)$rc['cost']=$ri['rCost'];
+        if($ri['dCost']!=0){
+          if($ru['options'][19]==1)$rc['cost']=$ri['dCost'];
+        }
       }
-      if($r['quantity']==0||$r['quantity']==''){
+      if($rc['quantity']==0){
         $ri['quantity']=$ri['quantity'] - 1;
         if($ri['quantity']<1){
           $ri['quantity']=0;
           $ri['stockStatus']=$config['inventoryFallbackStatus'];
         }
-        $sq=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:stockStatus WHERE `id`=:id");
-        $sq->execute([
+        $q=$db->prepare("UPDATE `".$prefix."content` SET `quantity`=:quantity,`stockStatus`=:stockStatus WHERE `id`=:id");
+        $q->execute([
           ':id'=>$ro['id'],
           ':quantity'=>$ri['quantity'],
           ':stockStatus'=>$ri['stockStatus']
         ]);
-        $r['quantity']=$ri['quantity'];
+        $rc['quantity']=$ri['quantity'];
       }
       $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
       $q->execute([
         ':oid'=>$id,
         ':iid'=>$da,
-        ':title'=>$r['title'],
-        ':cost'=>$r['cost'],
+        ':title'=>$rc['title'],
+        ':cost'=>$rc['cost'],
         ':status'=>$ri['stockStatus'],
         ':ti'=>time()
       ]);
     }else{
+      if($rc['quantity']>0){
+        $rc['quantity']=$rc['quantity'] - 1;
+        if($rc['quantity']<1){
+          $rc['quantity']=0;
+        }
+      }
       $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`iid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:iid,:title,'1',:cost,:status,:ti)");
       $q->execute([
         ':oid'=>$id,
         ':iid'=>$da,
-        ':title'=>$r['title'],
-        ':cost'=>$r['cost'],
-        ':status'=>$r['stockStatus'],
+        ':title'=>$rc['title'],
+        ':cost'=>$rc['cost'],
+        ':status'=>$rc['status'],
         ':ti'=>time()
       ]);
-      if($r['quantity']>0){
-        $r['quantity']=$r['quantity'] - 1;
-        if($r['quantity']<0){
-          $r['quantity']=0;
-          $r['status']='unavailable';
+      if($rc['quantity']>0){
+        $rc['quantity']=$rc['quantity'] - 1;
+        if($rc['quantity']<0){
+          $rc['quantity']=0;
+          $rc['status']='unavailable';
         }
       }
       $q=$db->prepare("UPDATE `".$prefix."choices` SET `quantity`=:quantity,`status`=:status WHERE `id`=:id");
       $q->execute([
         ':id'=>$da,
-        ':quantity'=>$r['quantity'],
-        ':status'=>$r['status']
+        ':quantity'=>$rc['quantity'],
+        ':status'=>$rc['status']
       ]);
     }
   }

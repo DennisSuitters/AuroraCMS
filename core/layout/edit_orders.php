@@ -291,9 +291,18 @@ else{?>
                 <select name="da" data-tooltip="tooltip" aria-label="Select Inventory, Service, Event or Empty Entry">
                   <option value="0">Add Empty Entry...</option>
                   <option value="neg">Add Deducation Entry...</option>
-                  <?php $si=$db->query("SELECT `id`,`contentType`,`code`,`cost`,`title` FROM `".$prefix."content` WHERE `contentType`='inventory' OR `contentType`='service' OR `contentType`='events' OR `contentType`='course' OR `contentType`='advert' ORDER BY `contentType` ASC, `code` ASC");
+                  <?php $si=$db->query("SELECT `id`,`contentType`,`code`,`cost`,`rCost`,`dCost`,`title` FROM `".$prefix."content` WHERE `contentType`='inventory' OR `contentType`='service' OR `contentType`='events' OR `contentType`='course' OR `contentType`='advert' ORDER BY `contentType` ASC, `code` ASC");
                   if($si->rowCount()>0){
-                    while($ri=$si->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$ri['id'].'">'.ucfirst(rtrim($ri['contentType'],'s')).($ri['code']!=''?$ri['code'].' ':'').':$'.$ri['cost'].':'.$ri['title'].'</option>';
+                    while($ri=$si->fetch(PDO::FETCH_ASSOC)){
+                      echo'<option value="'.$ri['id'].'">'.
+                            ucfirst(rtrim($ri['contentType'],'s')).
+                            ($ri['code']!=''?':'.$ri['code'].' ':'').
+                            ':'.$ri['title'].
+                            ($ri['cost']!=0?':Cost $'.$ri['cost']:'').
+                            ($ri['rCost']!=0?':Reduced $'.$ri['rCost']:'').
+                            ($ri['dCost']!=0?':Wholesale $'.$ri['dCost']:'').
+                      '</option>';
+                    }
                   }?>
                 </select>
                 <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
@@ -320,7 +329,7 @@ else{?>
                           ($rl['rCost']!=0?':Reduced $'.$rl['rCost']:'').
                           ($rl['dCost']!=0?':Wholesale $'.$rl['dCost']:'');
                       }
-                      echo'<option value="'.$ro['id'].'">'.($ro['code']!=''?$ro['code'].':':'').'$'.$ro['cost'].':'.$ro['title'].($as!=''?$as:'').'</option>';
+                      echo'<option value="'.$ro['id'].'">'.($ro['code']!=''?$ro['code'].':':'').($r['cost']!=0?'$'.$ro['cost'].':':'').$ro['title'].($as!=''?$as:'').'</option>';
                     }?>
                   </select>
                   <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>

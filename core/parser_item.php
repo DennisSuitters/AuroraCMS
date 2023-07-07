@@ -546,11 +546,11 @@ if($skip==false){
                 }
               }
               $ocost=$oquantity='';
-              if($roi['quantity']==0||$roi['quantity']==''){
+              if($roi['quantity']==''){
                 if(isset($roic['quantity'])&&$roic['quantity']==0){
                   $oquantity='<div class="text-5 text-danger">Out of Stock</div>';
                 }
-              }else{
+              }elseif($roi['quantity']<1){
                 $oquantity='<div class="text-5 text-danger">Out of Stock</div>';
               }
               if($roi['cost']==0||$roi['cost']==''&&$oquantity==0){

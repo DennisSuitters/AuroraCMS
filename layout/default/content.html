@@ -105,6 +105,28 @@
 						</div>
 					</countdown>
 					<print content="notes">
+					<options>
+						<details class="mt-5" open>
+							<summary class="h3"><print options="category"></summary>
+							<optionsitems>
+								<div class="row mx-4 mt-4 optionslist<print options=categoryunspaced>" id="optionselected<print options=id>">
+									<optionsmedia>
+										<div class="col-12 col-sm-4">
+											<optionsmediaitems>
+										</div>
+									</optionsmedia>
+									<div class="col-12 col-sm px-3">
+										<div class="h3"><print options="heading"></div>
+										<div class="pull-right mx-3 mb-3 text-center">
+											<print options="cost">
+											<label for="<print options=categoryunspaced>options" class="btn mt-3 pt-2" onclick="selectOption(<print options=id>,`<print options=categoryunspaced>`);return false;">Select this option</label>
+										</div>
+										<print options="notes">
+									</div>
+								</div>
+							</optionsitems>
+						</details>
+					</options>
 					<list>
 						<div class="row justify-content-center">
 							<listitems>

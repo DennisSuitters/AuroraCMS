@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.23
+* @version    0.2.26
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -42,13 +42,13 @@
               <?php $s=$db->prepare("SELECT * FROM `".$prefix."cart` ORDER BY `ti` DESC");
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                $ci=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-                $ci->execute([':id'=>$r['iid']]);
-                $cr=$ci->fetch(PDO::FETCH_ASSOC);?>
+                $si=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+                $si->execute([':id'=>$r['iid']]);
+                $ri=$si->fetch(PDO::FETCH_ASSOC);?>
                 <tr id="l_<?=$r['id'];?>">
                   <td class="text-wrap align-middle"><?= trim($r['id']);?></td>
                   <td class="text-wrap align-middle"><?= trim($r['si']);?></td>
-                  <td class="text-center align-middle"><?=($cr['code']!=''?$cr['code'].' | ':'').$cr['title'];?></td>
+                  <td class="text-center align-middle"><?=($ri['code']!=''?$ri['code'].' | ':'').$r['title'];?></td>
                   <td class="text-center align-middle"><?=$r['quantity'];?></td>
                   <td class="text-center align-middle"><?=$r['cost'];?></td>
                   <td class="text-center align-middle"><?= date($config['dateFormat'],$r['ti']);?></td>

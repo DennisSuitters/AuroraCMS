@@ -314,16 +314,22 @@ if(file_exists(THEME.'/side_menu.html')){
 			$cs->execute([':id'=>$cr['iid']]);
 			$ci=$cs->fetch(PDO::FETCH_ASSOC);
 			$cartitem=$theme['settings']['cartage_menu'];
-			if($ci['thumb']=='')
-				$ci['thumb']=NOIMAGE;
+			if($cr['file']==''){
+				if($ci['thumb']!='')
+					$cr['file']=$ci['thumb'];
+				else
+					$cr['file']=NOIMAGE;
+			}
 			$cartitem=preg_replace([
 				'/<print cartageitem=[\"\']?thumb[\"\']?>/',
 				'/<print cartageitem=[\"\']?title[\"\']?>/',
-				'/<print cartageitem=[\"\']?quantity[\"\']?>/'
+				'/<print cartageitem=[\"\']?quantity[\"\']?>/',
+				'/<print cartageitem=[\"\']?cost[\"\']?>/'
 			],[
-				$ci['thumb'],
-				$ci['title'],
-				$cr['quantity']
+				$cr['file'],
+				$cr['title'],
+				$cr['quantity'],
+				$cr['cost']
 			],$cartitem);
 			$cartage.=$cartitem;
 		}

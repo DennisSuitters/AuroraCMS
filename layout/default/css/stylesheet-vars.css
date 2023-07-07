@@ -244,10 +244,10 @@
   --form-input-border-style: solid;
   --form-input-border-style-focus: solid;
   --form-input-border-style-disabled: solid;
-  --form-input-color: #fff;
-  --form-input-color-focus: #fff;
+  --form-input-color: #000;
+  --form-input-color-focus: #000;
   --form-input-color-checked: #fff;
-  --form-input-color-disabled: #000;
+  --form-input-color-disabled: #888;
   --form-input-background-color: transparent;
   --form-input-background-color-focus: transparent;
   --form-input-background-color-checked: #0044ff;

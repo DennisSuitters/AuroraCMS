@@ -31,19 +31,18 @@ $cq->execute([':si'=>SESSIONID]);
 if($cq->rowCount()>0){
   $cartitem=$cartage='';
   while($cr=$cq->fetch(PDO::FETCH_ASSOC)){
-    $cs=$db->prepare("SELECT * from `".$prefix."content` WHERE `id`=:id");
-    $cs->execute([':id'=>$cr['iid']]);
-    $ci=$cs->fetch(PDO::FETCH_ASSOC);
     $cartitem=$theme['settings']['cartage_menu'];
-    if($ci['thumb']=='')$ci['thumb']=NOIMAGE;
+    if($cr['file']=='')$cr['file']=NOIMAGE;
     $cartitem=preg_replace([
       '/<print cartageitem=[\"\']?thumb[\"\']?>/',
       '/<print cartageitem=[\"\']?title[\"\']?>/',
-      '/<print cartageitem=[\"\']?quantity[\"\']?>/'
+      '/<print cartageitem=[\"\']?quantity[\"\']?>/',
+      '/<print cartageitem=[\"\']?cost[\"\']?>/'
     ],[
       $cr['file'],
-      $ci['title'],
-      $cr['quantity']
+      $cr['title'],
+      $cr['quantity'],
+      $cr['cost']
     ],$cartitem);
     $cartage.=$cartitem;
   }

@@ -1,4 +1,4 @@
-### v0.2.26
+### v0.2.26-1
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.

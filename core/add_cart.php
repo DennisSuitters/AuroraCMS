@@ -21,7 +21,6 @@ $rank=isset($_SESSION['rank'])?$_SESSION['rank']:0;
 $limit=0;
 $add=true;
 if($rank!=0){
-  $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
   $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
   $us->execute([':id'=>$uid]);
   $user=$us->fetch(PDO::FETCH_ASSOC);
@@ -114,6 +113,9 @@ if($add==true){
                     if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
                   }
                 }
+                if($roi['file']==''){
+                  if($roic['thumb']!='')$roi['file']=($roic['thumb']!=''?$roic['thumb']:$roic['file']);
+                }
                 $roi['id']=$roic['id'];
               }
               $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`contentType`,`title`,`file`,`quantity`,`cost`,`stockStatus`,`points`,`si`,`ti`) VALUES (:iid,:contentType,:title,:file,'1',:cost,:stockStatus,:points,:si,:ti)");
@@ -121,7 +123,7 @@ if($add==true){
                 ':iid'=>$roi['id'],
                 ':contentType'=>($roi['id']>0?'inventory':'option'),
                 ':title'=>($roi['title']!=''?$roi['title']:(isset($roic['title'])?$roic['title']:'')),
-                ':file'=>($roi['file']!=''?$roi['file']:($roic['thumb']!=''?$roic['thumb']:$roic['file'])),
+                ':file'=>$roi['file'],
                 ':cost'=>$roi['cost'],
                 ':stockStatus'=>$roi['status'],
                 ':points'=>(isset($roic['points'])?$roic['points']:0),

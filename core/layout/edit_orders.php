@@ -307,7 +307,7 @@ else{?>
                 </select>
                 <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
               </form>
-              <?php $so=$db->query("SELECT `id`,`rid`,`code`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='option' AND `oid`!=0");
+              <?php $so=$db->query("SELECT `id`,`rid`,`code`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='option' ORDER BY `code` ASC,`title` ASC");
               if($so->rowCount()>0){?>
                 <form class="form-row mt-1" target="sp" method="post" action="core/updateorder.php">
                   <input name="act" type="hidden" value="addoption">
@@ -325,11 +325,13 @@ else{?>
                         $as=' -> Linked to '.
                           ($rl['code']!=''?$rl['code'].':':'').
                           $rl['title'].
-                          ($rl['cost']!=''?':Cost $'.$rl['cost']:'').
-                          ($rl['rCost']!=0?':Reduced $'.$rl['rCost']:'').
-                          ($rl['dCost']!=0?':Wholesale $'.$rl['dCost']:'');
+                          ($ro['cost']==0?
+                            ($rl['cost']!=''?':Cost $'.$rl['cost']:'').
+                            ($rl['rCost']!=0?':Reduced $'.$rl['rCost']:'').
+                            ($rl['dCost']!=0?':Wholesale $'.$rl['dCost']:'')
+                          :'');
                       }
-                      echo'<option value="'.$ro['id'].'">'.($ro['code']!=''?$ro['code'].':':'').($r['cost']!=0?'$'.$ro['cost'].':':'').$ro['title'].($as!=''?$as:'').'</option>';
+                      echo'<option value="'.$ro['id'].'">'.($ro['code']!=''?$ro['code'].':':'').($ro['cost']!=0?'$'.$ro['cost'].':':'').$ro['title'].($as!=''?$as:'').'</option>';
                     }?>
                   </select>
                   <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>

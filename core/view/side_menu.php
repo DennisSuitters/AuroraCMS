@@ -158,29 +158,32 @@ if(file_exists(THEME.'/side_menu.html')){
 						]);
 						if($soi->rowCount()>0){
 							$options.='<div class="col-12 mt-3">'.
-							'<div class="h3 text-left m-0 p-0">'.$roc['category'].'</div>';
-							$options.='<div class="row">'.
-													'<div class="col-12 m-0 p-0 pl-2 text-left">'.
-														'<select id="'.strtolower(str_replace(' ','',$roc['category'])).'options" name="options[]">'.
-															'<option value="">Select '.($roc['category']==''?'an ':'a ').$roc['category'].' Option</option>';
+							'<div class="h3 text-left m-0 p-0">'.$roc['category'].'</div>'.
+							'<div class="row">'.
+								'<div class="col-12 m-0 p-0 pl-2 text-left">'.
+									'<select id="'.strtolower(str_replace(' ','',$roc['category'])).'options" name="options[]">'.
+										'<option value="">Select '.($roc['category']==''?'an ':'a ').$roc['category'].' Option</option>';
 							while($roi=$soi->fetch(PDO::FETCH_ASSOC)){
 								if($roi['oid']!=0){
 									$soic=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
 									$soic->execute([':id'=>$roi['oid']]);
 									$roic=$soic->fetch(PDO::FETCH_ASSOC);
-									if($roi['quantity']==0||$roi['quantity']==''){
+									if($roi['quantity']==''){
 										$roi['quantity']=$roic['quantity'];
 									}
-									if($roi['cost']==0||$roi['cost']==''){
-										if($roic['rrp']!=0)$roi['cost']=$roic['rrp'];
+									if($roi['cost']==''){
 										if($roic['cost']!=0)$roi['cost']=$roic['cost'];
 										if($roic['rCost']!=0)$roi['cost']=$roic['rCost'];
-										if(isset($user['options'])&&$user['options'][19]==1){
-											if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+										if(isset($user['rank'])){
+											if($user['rank']>300&&$user['rank']<400){
+												if(isset($user['options'])&&$user['options'][19]==1){
+													if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+												}
+											}
 										}
 									}
 								}
-								if($roi['quantity']>0&&$roi['quantity']!=''){
+								if($roi['quantity']!=''){
 									$options.='<option value="'.$roi['id'].'">'.$roi['title'].($roi['cost']>0||$roi['cost']!=''?' - &dollar;'.$roi['cost']:'').'</option>';
 								}
 							}

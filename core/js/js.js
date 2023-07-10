@@ -13,7 +13,7 @@ function serialize(form){
 }
 function quickview(id,src,el){
   document.getElementById('quickview-image'+id).src=src;
-  var elh=document.querySelectorAll(".quickview-thumbs img");
+  var elh=document.querySelectorAll(".quickview-image-"+id+" img");
   elh.forEach(function(elItem){elItem.classList.remove("active")});
   el.classList.add('active');
 }

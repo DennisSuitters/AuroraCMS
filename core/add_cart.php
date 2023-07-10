@@ -21,11 +21,11 @@ $rank=isset($_SESSION['rank'])?$_SESSION['rank']:0;
 $limit=0;
 $add=true;
 if($rank!=0){
-  $us=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-  $us->execute([':id'=>$uid]);
-  $user=$us->fetch(PDO::FETCH_ASSOC);
-  if($user['purchaseLimit']!=0)
-    $limit=$user['purchaseLimit'];
+  $su=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
+  $su->execute([':id'=>$uid]);
+  $ru=$su->fetch(PDO::FETCH_ASSOC);
+  if($ru['purchaseLimit']!=0)
+    $limit=$ru['purchaseLimit'];
   else{
     if($rank==200)$limit=$config['memberLimit'];
     if($rank==210)$limit=$config['memberLimitSilver'];
@@ -58,7 +58,6 @@ if($rank!=0){
     }
   }
 }
-
 if($add==true){
   $sc=$db->prepare("SELECT `id` FROM `".$prefix."cart` WHERE `iid`=:iid AND `si`=:si");
   $sc->execute([
@@ -80,7 +79,9 @@ if($add==true){
       if(is_numeric($r['cost'])||is_numeric($r['rCost'])||is_numeric($r['dCost'])){
         if($r['rCost']!=0)$r['cost']=$r['rCost'];
         if($rank>300||$rank<400){
-          if($r['dCost']!=0)$r['cost']=$r['dCost'];
+          if($ru['options'][19]==1){
+            if($r['dCost']!=0)$r['cost']=$r['dCost'];
+          }
         }
         $q=$db->prepare("INSERT IGNORE INTO `".$prefix."cart` (`iid`,`contentType`,`title`,`file`,`quantity`,`cost`,`stockStatus`,`points`,`si`,`ti`) VALUES (:iid,'inventory',:title,:file,'1',:cost,:stockStatus,:points,:si,:ti)");
         $q->execute([
@@ -93,7 +94,6 @@ if($add==true){
           ':si'=>SESSIONID,
           ':ti'=>$ti
         ]);
-
         if($opt!=''){
           $opts=explode(",",$opt);
           foreach($opts as $oid){
@@ -109,8 +109,10 @@ if($add==true){
                   if($roic['rrp']!=0)$roi['cost']=$roic['rrp'];
                   if($roic['cost']!=0)$roi['cost']=$roic['cost'];
                   if($roic['rCost']!=0)$roi['cost']=$roic['rCost'];
-                  if(isset($user['options'])&&$user['options'][19]==1){
-                    if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+                  if($rank>300||$rank<400){
+                    if($ru['options'][19]==1){
+                      if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+                    }
                   }
                 }
                 if($roi['file']==''){

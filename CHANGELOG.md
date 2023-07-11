@@ -1,4 +1,4 @@
-### v0.2.26-1
+### v0.2.26-3
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.
@@ -8,6 +8,7 @@
 - Update Stripe library to v10.16.0
 - Improve size display indicator when Development mode is active.
 - Remove "Content" link from Pages breadcrumbs.
+- Improve QuickView modal to include Product Options, and styling.
 
 #### v0.2.25
 - Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.

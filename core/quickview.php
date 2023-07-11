@@ -115,7 +115,11 @@ if(file_exists('../'.THEME.'/quickview.html')){
       $soc=$db->prepare("SELECT DISTINCT(`category`) AS 'category' FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
       $soc->execute([':rid'=>$r['id']]);
       if($soc->rowCount()>0){
-        $options='';
+        $options='<div class="row">'.
+          '<div class="col-12">'.
+            '<a href="'.URL.$r['contentType'].'/'.$r['urlSlug'].'">Click to View Options on Product page.</a>'.
+          '</div>'.
+        '</div>';
         while($roc=$soc->fetch(PDO::FETCH_ASSOC)){
           $soi=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid AND `category`=:cat AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
           $soi->execute([

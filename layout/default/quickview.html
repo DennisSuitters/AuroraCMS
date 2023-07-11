@@ -1,15 +1,15 @@
 <div class="row">
-  <div class="col-12 col-md p-0 p-sm-3">
+  <div class="col-12 col-md p-0 p-md-3">
     <div class="row">
-      <figure class="quickview-image col-12 col-sm p-0">
+      <figure class="quickview-image col-12 col-md p-0">
         <img id="quickview-image<print content=id>" src="<print content=image>" loading="lazy" alt="<print content=imageALT>">
       </figure>
       <quickviewallthumbs>
-        <div class="quickview-thumbs quickview-image-<print content=id> col-12 col-sm-1 p-0">
+        <div class="quickview-thumbs quickview-image-<print content=id> col-12 col-md-1 p-0">
           <div class="row justify-content-center">
-            <img class="col-2 col-sm-12 m-0 mb-1 p-0 active" src="<print content=thumb>" data-image="<print content=image>" loading="lazy" alt="<print content=imageALT>" onclick="quickview(`<print content=id>`,`<print content=image>`,this);">
+            <img class="col-2 col-md-12 m-0 mb-1 p-0 active" src="<print content=thumb>" data-image="<print content=image>" loading="lazy" alt="<print content=imageALT>" onclick="quickview(`<print content=id>`,`<print content=image>`,this);">
             <quickviewthumbs>
-              <img class="col-2 col-sm-12 m-0 mb-1 p-0" src="<print thumbs=thumb>" data-image="<print thumbs=image>" loading="lazy" alt="<print thumbs=imageALT>" onclick="quickview(`<print content=id>`,`<print thumbs=image>`,this);">
+              <img class="col-2 col-md-12 m-0 mb-1 p-0" src="<print thumbs=thumb>" data-image="<print thumbs=image>" loading="lazy" alt="<print thumbs=imageALT>" onclick="quickview(`<print content=id>`,`<print thumbs=image>`,this);">
             </quickviewthumbs>
           </div>
         </div>
@@ -40,7 +40,7 @@
           </brand>
         </div>
       </div>
-      <div class="col-12 col-md">
+      <div class="col-12 col-md-8">
         <div class="quickview-choices row mt-2">
           <choices>
         </div>
@@ -58,8 +58,10 @@
   </div>
   <footer class="col-12 quickview-footer p-2 py-0 my-0">
     <div class="row">
-      <h3>
-        Share this product:
+      <div class="col-12 col-md">
+        <h3 class="text-center text-md-left">Share this product:</h3>
+      </div>
+      <div class="col-12 col-md-9 text-center text-md-left">
         <a href="https://www.facebook.com/sharer/sharer.php?u=<print URLENCODED_URL>" target="_blank"><i class="i i-social social-facebook i-4x">social-facebook</i></a>
         <a href="https://twitter.com/intent/tweet?url=<print URLENCODED_URL>" target="_blank"><i class="i i-social social-twitter i-4x">social-twitter</i></a>
         <a href="http://pinterest.com/pin/create/link/?url=<print URLENCODED_URL>" target="_blank"><i class="i i-social social-pinterest i-4x">social-pinterest</i></a>

@@ -1,6 +1,11 @@
 # Default Changelog
 
-### v0.1.8
+### v0.1.9
+- Add Options markup to Content template.
+- Improve Cart display, to calculate Options taking into account, Discount and Wholesale Prices.
+- Improve QuickView modal display.
+
+#### v0.1.8
 - Fix input form colour.
 
 #### v0.1.7

@@ -976,7 +976,7 @@ td img.avatar{
 .input-text{
   display:flex;
   align-items:center;
-  padding:.55rem .75rem 0 .75rem;
+  padding:0 .75rem;
   margin-bottom:0;
   font-size:1rem;
   font-weight:400;

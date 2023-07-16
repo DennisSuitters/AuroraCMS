@@ -484,10 +484,26 @@ if($r['contentType']!='testimonials'){
                   </div>
                 <?php }
                 if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
-                  <div class="form-row mt-3">
-                    <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Cost Checkbox">&#128279;</a>':'';?>
-                    <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="<?=$r['contentType'];?>showCost" id="contentoptions0<?=$r['id'];?>">Show Cost</label>
+                  <div class="row">
+                    <div class="col-12 col-sm-6">
+                      <div class="form-row mt-3">
+                        <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'ShowCost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Show Cost Checkbox">&#128279;</a>':'';?>
+                        <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                        <label class="p-0 mt-0 ml-3" for="<?=$r['contentType'];?>showCost" id="contentoptions0<?=$r['id'];?>">Show Cost</label>
+                      </div>
+                    </div>
+                    <div class="col-12 col-sm-6">
+                      <label id="<?=$r['contentType'];?>expense" for="expense" data-tooltip="tooltip" aria-label="Expenses Cost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'expense" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Expense Cost Field">&#128279;</a>':'';?>Expense</label>
+                      <div class="form-row">
+                        <div class="input-text">$</div>
+                        <input class="textinput" id="expense" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="expense" type="text" value="<?=$r['expense'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Expenses Value..."':' readonly';?>>
+                        <?=$user['options'][1]==1?
+                          '<button class="expense" data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Recalculate Expense"><i class="i">recalculate-expenses</i></button>'.
+                          '<button class="save" id="saveexpense" data-dbid="expense" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                        :
+                          '';?>
+                      </div>
+                    </div>
                   </div>
                   <div class="row">
                     <?php if($r['contentType']!='activities'){?>
@@ -2243,7 +2259,7 @@ if($r['contentType']!='testimonials'){
         <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
         $sw->execute();
         if($sw->rowCount()>0){
-          echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
+          echo'<div id="widgets" class="card col-12 col-md-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
           while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
             include'core/layout/widget-'.$rw['file'];
           }

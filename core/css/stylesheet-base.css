@@ -6,6 +6,10 @@
 [tabindex="-1"]:focus:not(:focus-visible){
   outline:0!important }
 
+@media (prefers-reduced-motion){
+  animation-duration:0s!important;
+  animation-delay:0s!important }
+
 base,
 DOCTYPE,
 head,

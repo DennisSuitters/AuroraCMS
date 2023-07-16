@@ -1,4 +1,4 @@
-### v0.2.26-3
+### v0.2.26-4
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.
@@ -9,6 +9,8 @@
 - Improve size display indicator when Development mode is active.
 - Remove "Content" link from Pages breadcrumbs.
 - Improve QuickView modal to include Product Options, and styling.
+- Add icon to represent "recalculate expenses".
+- Add Expenses editable field.
 
 #### v0.2.25
 - Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.

@@ -914,7 +914,8 @@ h3.quickview-header,
 h4.quickview-header,
 h5.quickview-header,
 h6.quickview-header,
-.quickview-footer h3{
+.quickview-footer h3,
+.quickview-footer .h3{
   font-family:var(--font)!important;
   color:#fff!important;
   text-shadow:none!important }

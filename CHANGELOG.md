@@ -1,4 +1,4 @@
-### v0.2.26-4
+### v0.2.26-5
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.
@@ -11,6 +11,12 @@
 - Improve QuickView modal to include Product Options, and styling.
 - Add icon to represent "recalculate expenses".
 - Add Expenses editable field.
+- Improve Administration Theme selector, now includes System option.
+- Improve Sales Period styling.
+- Adjust Account Recovery to only find accounts that are active.
+- Add Account Deactivation section to User Account Settings.
+- Added Toast Notification when list item added.
+- Add Pricing page, along with editable list, highlighting items and highlight message.
 
 #### v0.2.25
 - Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.

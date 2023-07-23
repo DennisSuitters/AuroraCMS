@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -1799,7 +1799,14 @@ if($r['contentType']!='testimonials'){
                 <input id="pin" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="pin" data-dbb="0" type="checkbox"<?=($r['pin']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                 <label class="p-0 mt-0 ml-3" id="contentpin0<?=$r['id'];?>" for="pin">Pinned</label>
               </div>
-              <?php if($r['contentType']=='inventory'){?>
+              <?php if($r['contentType']=='inventory'||$r['contentType']=='service'){?>
+                <div class="form-row mt-3">
+                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#price" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Price Checkbox">&#128279;</a>':'';?>
+                  <input id="price" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="price" data-dbb="0" type="checkbox"<?=($r['price']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                  <label class="p-0 mt-0 ml-3" id="contentprice0<?=$r['id'];?>" for="price">Appear on Pricing Page</label>
+                </div>
+              <?php }
+              if($r['contentType']=='inventory'){?>
                 <div class="form-row mt-3">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#coming" data-tooltip="tooltip" aria-label="PermaLink to '.$r['contentType'].' Coming Soon Checkbox">&#128279;</a>':'';?>
                   <input id="coming" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="coming" data-dbb="0" type="checkbox"<?=($r['coming']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
@@ -2093,7 +2100,7 @@ if($r['contentType']!='testimonials'){
             if($r['contentType']=='article'){?>
               <div class="tab1-13 border" data-tabid="tab1-13" role="tabpanel">
                 <?php if($user['options'][1]==1){?>
-                  <form target="sp" method="post" action="core/add_list.php">
+                  <form target="sp" method="post" action="core/add_list.php" enctype="multipart/form-data">
                     <input name="rid" type="hidden" value="<?=$r['id'];?>">
                     <div class="row">
                       <div class="col-2">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -55,7 +55,7 @@ if($not['spammer']==false){
         if($result)$not=['spammer'=>true,'target'=>'resetemail','element'=>'div','action'=>'replace','class'=>'not mt-3 alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Reset Password Form, Spam Detected via Form Field Data.'];
       }
       if($not['spammer']==false){
-        $s=$db->prepare("SELECT `id`,`name`,`email` FROM `".$prefix."login` WHERE `email`=:email LIMIT 1");
+        $s=$db->prepare("SELECT `id`,`name`,`email` FROM `".$prefix."login` WHERE `email`=:email AND `active`=1 LIMIT 1");
         $s->execute([':email'=>$email]);
         $c=$s->fetch(PDO::FETCH_ASSOC);
         if($s->rowCount()>0){

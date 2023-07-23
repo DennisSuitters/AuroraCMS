@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -80,7 +80,7 @@ else{
                   </a>
                   <span class="status badger badge-<?= rank($r['rank']);?>" id="accountrank<?=$r['id'];?>"><?= ucwords(str_replace('-',' ',rank($r['rank'])));?></span>
                   <div class="image-toolbar">
-                    <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
+                    <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">'.($r['status']=='deactivated'?'Deactivated':'Inactive').'</span>';?>
                   </div>
                 </div>
                 <div class="card-header overflow-visible pt-2 line-clamp">

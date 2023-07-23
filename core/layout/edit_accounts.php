@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -547,11 +547,6 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <?php }
 /* Tab 7 Settings */ ?>
           <div class="tab1-8 border p-4" data-tabid="tab1-8" role="tabpanel">
-            <label id="accountAdminTheme" for="theme"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAdminTheme" data-tooltip="tooltip" aria-label="PermaLink to Administration Theme Selector">&#128279;</a>':'';?>Administration Theme</label>
-            <select id="theme" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="theme"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','theme',$(this).val(),'select');toggleTheme($(this).val());">
-              <option value="">Light</option>
-              <option value="dark"<?=$r['theme']=='dark'?' selected':'';?>>Dark</option>
-            </select>
             <label id="accountTimezone" for="timezone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTimezone" data-tooltip="tooltip" aria-label="PermaLink to Timezone Selector">&#128279;</a>':'';?>Timezone</label>
             <select id="timezone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="timezone"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','timezone',$(this).val(),'select');">
               <option value="default">System Default</option>

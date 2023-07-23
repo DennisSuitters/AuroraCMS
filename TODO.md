@@ -1,8 +1,6 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
 - Address itemCount config setting not display all items if set to '0'.
-- Add Account Deactivation.
-- Add Pricing Content Type & Page with Service/Inventory selection.
 - Update Checkout Layout for Themes.
 - Explore adding Notification or Sale/Enquiries of Products/Services.
 - Explore adding Shipping Activity to Orders.
@@ -14,7 +12,6 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Administration.
   - Config database, add how to adjust total costs for items, by percentage, fixed value, or multiplying value.
   - Explore update Livechat Layout.
-  - Explore improving Theme Modes to include System Default.
   - Improve KanBan Item Layout.
   - Explore including Shipping Activity to Orders.
   - Dashboard.

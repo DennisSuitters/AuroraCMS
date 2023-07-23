@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -758,9 +758,16 @@ else
          <div class="circle"></div>
        </div>
     </div>
-<?php if($view=='dashboard'&&$user['accountsContact']==1&&$config['hosterURL']!=''){?>
     <script>
       $(document).ready(function(){
+        <?php if(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='system'){?>
+          if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+            $('body').attr('data-theme','dark');
+            $('.theme-mode').addClass('d-none');
+            $('.theme-system').removeClass('d-none');
+          }
+        <?php }
+        if($view=='dashboard'&&$user['accountsContact']==1&&$config['hosterURL']!=''){?>
         $.getJSON('<?=$config['hosterURL'];?>core/hostinginfo.php?h=<?=$user['infoHash'];?>',function(data){
           var html=(data.hostStatus=='overdue'?'<div class="alert alert-danger shake-horizontal">Hosting was Due <strong>'+data.hostDays+'</strong> days ago.</div></div>':'')+
           (data.hostStatus=='outstanding'?'<div class="alert alert-warning">Hosting Payment is currently Outstanding, due in <strong>'+data.hostDays+'</strong> days.</div>':'')+
@@ -770,8 +777,8 @@ else
             $("#hostinginfo").html(html);
           }
         });
+        <?php }?>
       });
     </script>
-<?php }?>
   </body>
 </html>

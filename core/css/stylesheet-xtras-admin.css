@@ -1584,10 +1584,27 @@ dialog footer{
 .alert.halloween,
 .alert.mothersday,
 .alert.valentine{
-  background-color:#fff!important;
   background-repeat:no-repeat!important;
   background-position:top right!important;
   background-size:contain!important }
+
+.alert.easter,
+.alert.fathersday,
+.alert.mothersday,
+.alert.valentine {
+  background-color:#fff!important;
+}
+
+.alert.blackfriday .card-title a,
+.alert.christmas .card-title a,
+.alert.easter .card-title a,
+.alert.eofy .card-title a,
+.alert.fathersday .card-title a,
+.alert.halloween .card-title a,
+.alert.mothersday .card-title a,
+.alert.valentine .card-title a{
+  color:#000!important;
+}
 
 .alert.eofy{
   background-position:center right!important }

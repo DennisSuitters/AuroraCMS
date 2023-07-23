@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -640,6 +640,10 @@ class front{
 	}
 	function portfolio($args=false){
 		$view='portfolio';
+		require'process.php';
+	}
+	function pricing($args=false){
+		$view='pricing';
 		require'process.php';
 	}
 	function proof($args=false){

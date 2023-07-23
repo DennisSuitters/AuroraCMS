@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -103,10 +103,11 @@ if($r['heading']==''){
           '</div>':'';?>
           <input class="tab-control" id="tab1-1" name="tabs" type="radio">
           <label for="tab1-1">Content</label>
-          <?=$r['file']!='offline'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>':'';?>
-          <?=$r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'';?>
-          <?=$r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">SEO</label>':'';?>
-          <?=$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'';?>
+          <?=($r['file']!='offline'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Images</label>':'').
+          ($r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Media</label>':'').
+          ($r['file']=='pricing'?'<input id="tab1-4" class="tab-control" name="tabs" type="radio"><label for="tab1-4">Price Items</label>':'').
+          ($r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">SEO</label>':'').
+          ($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-6" class="tab-control" name="tabs" type="radio"><label for="tab1-6">Settings</label>':'');?>
 <?php /* Content */ ?>
           <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
@@ -440,9 +441,98 @@ if($r['heading']==''){
               <?php }?>
             </div>
           <?php }
+/* Price Items */
+          if($r['file']=='pricing'){?>
+            <div class="tab1-4 border" data-tabid="tab1-4" role="tabpanel">
+              <section class="row list" id="prices">
+                <?php $sp=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `price`='1' ORDER BY `priceord` ASC");
+                $sp->execute();
+                while($rp=$sp->fetch(PDO::FETCH_ASSOC)){?>
+                  <article class="card zebra m-0 p-2 border-0" id="l_<?=$rp['id'];?>">
+                    <div class="row">
+                      <div class="col-sm">
+                        <?=$rp['title'];?>
+                      </div>
+                      <div class="col-sm">
+                        <div class="form-row">
+                          <input id="highlight<?=$rp['id'];?>" data-dbid="<?=$rp['id'];?>" data-dbt="content" data-dbc="highlight" data-dbb="0" type="checkbox"<?=($rp['highlight']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                          <label class="p-0 mt-0 ml-3" for="highlight<?=$rp['id'];?>">Highlighted</label>
+                        </div>
+                      </div>
+                      <div class="col-sm">
+                        <div id="controls_<?=$rp['id'];?>" class="justify-content-end">
+                          <div class="btn-group float-right" role="group">
+                            <span class="btn btn-sm pricehandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <div class="form-row">
+                          <div class="input-text">Highlight Text</div>
+                          <input class="textinput" id="highlighttext<?=$rp['id'];?>" data-dbid="<?=$rp['id'];?>" data-dbt="content" data-dbc="highlighttext" type="text" value="<?=$rp['highlighttext'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Highlight Text..."':' readonly';?>>
+                          <?=$user['options'][1]==1?'<button class="save" id="savehighlighttext'.$rp['id'].'" data-dbid="highlighttext'.$rp['id'].'" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                        </div>
+                      </div>
+                      <div class="col-12">
+                        <form target="sp" method="post" action="core/add_pricelist.php">
+                          <input type="hidden" name="rid" value="<?=$rp['id'];?>">
+                          <div class="form-row">
+                            <div class="input-text">Item</div>
+                            <input type="text" name="t" value="">
+                            <button class="btn add" type="submit"><i class="i">add</i></button>
+                          </div>
+                        </form>
+                      </div>
+                      <div id="pricelist<?=$rp['id'];?>">
+                      <?php $spl=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='price' AND `rid`=:rid ORDER BY `ord` ASC");
+                      $spl->execute([':rid'=>$rp['id']]);
+                      while($rpl=$spl->fetch(PDO::FETCH_ASSOC)){?>
+                        <div id="l_<?=$rpl['id'];?>" class="col-12">
+                          <div class="form-row">
+                            <div class="input-text">Item</div>
+                            <input type="text" name="t" value="<?=$rpl['title'];?>">
+                            <form target="sp" method="post" action="core/purge.php">
+                              <input type="hidden" name="id" value="<?=$rpl['id'];?>">
+                              <input type="hidden" name="t" value="choices">
+                              <button class="btn trash" type="submit"><i class="i">trash</i></button>
+                            </form>
+                          </div>
+                        </div>
+                      <?php }?>
+                    </div>
+                  </article>
+                <?php }?>
+                <article class="ghost hidden">&nbsp;</article>
+                <script>
+                  $('#prices').sortable({
+                    items:".card",
+                    handle:'.pricehandle',
+                    placeholder:".ghost",
+                    helper:fixWidthHelper,
+                    axis:"y",
+                    update:function(e,ui){
+                      var order=$("#prices").sortable("serialize");
+                      $.ajax({
+                        type:"POST",
+                        dataType:"json",
+                        url:"core/reorderprices.php",
+                        data:order
+                      });
+                    }
+                  }).disableSelection();
+                  function fixWidthHelper(e,ui){
+                    ui.children().each(function(){
+                      $(this).width($(this).width());
+                    });
+                    return ui;
+                  }
+                </script>
+              </section>
+            </div>
+          <?php }
 /* SEO */
           if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
-            <div class="tab1-4 border p-4" data-tabid="tab1-4" role="tabpanel">
+            <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
               <label id="pageViews" for="views"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageViews" data-tooltip="tooltip" aria-label="PermaLink to Page Views Field">&#128279;</a>':'';?>Views</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -562,7 +652,7 @@ if($r['heading']==''){
           <?php }
 /* Settings */
           if($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
-            <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
+            <div class="tab1-6 border p-4" data-tabid="tab1-6" role="tabpanel">
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
                 <div class="form-row">
                   <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageActive" data-tooltip="tooltip" aria-label="PermaLink to Page Active Checkbox">&#128279;</a>':'';?>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -28,10 +28,23 @@
       </li>
     </ul>
     <ul class="ml-auto mt-3">
-      <li class="text-center px-3" data-tooltip="bottom" aria-label="Search">
+      <li class="text-center" data-tooltip="left" aria-label="Search">
         <a href="<?= URL.$settings['system']['admin'].'/search';?>"><i class="i i-3x">search</i></a>
       </li>
-      <li class="badge text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
+      <li class="ml-3" data-tooltip="left" aria-label="Switch Theme Mode">
+        <input class="d-none" id="theme-checkbox" type="checkbox">
+        <label class="m-0" for="theme-checkbox">
+          <i class="i i-3x theme-mode theme-light<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'?'':' d-none');?>">light-mode</i>
+          <i class="i i-3x theme-mode theme-dark<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='dark'?'':' d-none');?>">dark-mode</i>
+          <i class="i i-3x theme-mode theme-system<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='system'?'':' d-none');?>">system-mode</i>
+        </label>
+        <ul class="p-0" id="nav-theme-list">
+          <li><a class="p-2 px-3" onclick="selectTheme('light');">Light</a></li>
+          <li><a class="p-2 px-3" onclick="selectTheme('dark');">Dark</a></li>
+          <li><a class="p-2 px-3" onclick="selectTheme('system');">System</a></li>
+        </ul>
+      </li>
+      <li class="badge ml-3 text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
         <input class="d-none" id="notification-checkbox" type="checkbox">
         <label class="m-0" for="notification-checkbox"><i class="i i-3x">bell</i></label>
         <ul class="p-0" id="nav-stat-list">
@@ -46,10 +59,10 @@
           ($nou['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts"><span class="badger badge-primary mr-2">'.$nou['cnt'].'</span>Active Users</a></li>':'');?>
         </ul>
       </li>
-      <li data-tooltip="bottom" aria-label="View Site">
+      <li data-tooltip="left" aria-label="View Site">
         <a href="<?= URL;?>"><i class="i i-3x">browser-general</i></a>
       </li>
-      <li class="text-center ml-3" id="nav-accounts" data-tooltip="bottom" aria-label="Account Settings">
+      <li class="text-center ml-3" id="nav-accounts" data-tooltip="left" aria-label="Account Settings">
         <input class="d-none" id="header-account-checkbox" type="checkbox">
         <label class="m-0" for="header-account-checkbox">
           <span class="d-inline" id="account">
@@ -81,13 +94,6 @@
           <li><a class="p-2 px-3" href="https://github.com/DiemenDesign/AuroraCMS/issues">Report an issue</a></li>
           <li><a class="p-2 px-3" href="https://github.com/DiemenDesign/AuroraCMS/wiki">Documentation</a></li>
         </ul>
-      </li>
-      <li data-tooltip="bottom" aria-label="Switch to Theme Mode">
-        <button class="btn btn-ghost" onclick="toggleTheme();">
-          <?php if(!isset($_COOKIE['admintheme'])){$_COOKIE['admintheme']='light';}?>
-          <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='dark'?' d-none':'');?>">dark-mode</i>
-          <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'?' d-none':'');?>">light-mode</i>
-        </button>
       </li>
     </ul>
   </nav>

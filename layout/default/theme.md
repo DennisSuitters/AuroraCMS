@@ -4,6 +4,8 @@
 - Add Options markup to Content template.
 - Improve Cart display, to calculate Options taking into account, Discount and Wholesale Prices.
 - Improve QuickView modal display.
+- Add Account Deactivation section in Account Settings.
+- Add Pricing Page and Pricing Parser.
 
 #### v0.1.8
 - Fix input form colour.

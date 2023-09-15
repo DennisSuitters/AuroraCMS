@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -41,7 +41,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <input class="tab-control" id="tab1-2" name="tabs" type="radio">
           <label for="tab1-2">Contact</label>
           <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-          <label for="tab1-3">Images</label>
+          <label for="tab1-3">Media</label>
           <input class="tab-control" id="tab1-4" name="tabs" type="radio">
           <label for="tab1-4">Proofs</label>
           <input class="tab-control" id="tab1-5" name="tabs" type="radio">
@@ -53,17 +53,17 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <label for="tab1-8">Settings</label>
           <?=($config['hoster']==1?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Hosting/Website Payments</label>':'');?>
 <?php /* Tab 1 General */?>
-          <div class="tab1-1 border p-4" data-tabid="tab1-1" role="tabpanel">
-            <?=($user['rank']==1000?'<div class="row"><div id="accountIP" class="col-12">'.($user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountIP" data-tooltip="tooltip" aria-label="PermaLink to Account IP Field">&#128279;</a>':'').'<div class="form-text text-muted"><small>IP: '.$r['userIP'].' | '.$r['userAgent'].'</small></div></div></div>':'');?>
+          <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
+            <?=($user['rank']==1000?'<div class="row"><div id="accountIP" class="col-12"><div class="form-text text-muted"><small>IP: '.$r['userIP'].' | '.$r['userAgent'].'</small></div></div></div>':'');?>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountDateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountDateCreated" data-tooltip="tooltip" aria-label="PermaLink to Created Field">&#128279;</a>':'';?>Created</label>
+                <label for="ti">Created</label>
                 <div class="form-row">
                   <input id="ti" type="text" value="<?= date($config['dateFormat'],$r['ti']);?>" readonly>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label id="accountLastLogin" for="lti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountLastLogin" data-tooltip="tooltip" aria-label="PermaLink to Last Login Field">&#128279;</a>':'';?>Last Login</label>
+                <label for="lti">Last Login</label>
                 <div class="form-row">
                   <input id="lti" type="text" value="<?= _ago($r['lti']);?>" readonly>
                 </div>
@@ -71,15 +71,15 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountUsername" for="username"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountUsername" data-tooltip="tooltip" aria-label="PermaLink to Username Field">&#128279;</a>':'';?>Username</label>
+                <label for="username">Username</label>
                 <div class="form-row">
                   <input class="textinput" id="username" type="text" value="<?=$r['username'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="saveusername" data-dbid="username" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
+                <div class="alert alert-danger d-none" id="uerror" role="alert">Username already exists!</div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <div class="alert alert-danger d-none" id="uerror" role="alert">Username already exists!</div>
-                <label id="accountEmail" for="email"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEmail" data-tooltip="tooltip" aria-label="PermaLink to Email Field">&#128279;</a>':'';?>Email</label>
+                <label for="email">Email</label>
                 <div class="form-row">
                   <input class="textinput" id="email" type="text" value="<?=$r['email'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="saveemail" data-dbid="email" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -104,16 +104,16 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             if($purchaseLimit==0||$purchaseLimit=='')
               $purchaseLimit='Unlimited';?>
             <div class="row">
-              <div class="col-12 col-sm-6 pr-2">
-                <label id="accountpurchaseLimit" for="purchaseLimit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountpurchaseLimit" data-tooltip="tooltip" aria-label="PermaLink to Purchase Limit Field">&#128279;</a>':'';?>Purchase Limit Override</label>
+              <div class="col-12 col-sm-6 pr-md-3">
+                <label for="purchaseLimit">Purchase Limit Override</label>
                 <div class="form-row">
                   <input class="textinput" id="purchaseLimit" type="number" value="<?=$r['purchaseLimit'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseLimit"<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savepurchaseLimit" data-dbid="purchaseLimit" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
                 <small class="form-text">(Set to "0" or no value to use default for this account level, currently allowed to purchase <?=$purchaseLimit;?> items.)</small>
               </div>
-              <div class="col-12 col-sm-6 pl-2">
-                <label id="accountPurchaseTime" for="purchaseTime"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPurchaseTime" data-tooltip="tooltip" aria-label="PermaLink to Purchase Time Selector">&#128279;</a>':'';?>Wholesale Purchase Time</label>
+              <div class="col-12 col-sm-6">
+                <label for="purchaseTime">Wholesale Purchase Time</label>
                 <select id="purchaseTime" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseTime"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','purchaseTime',$(this).val(),'select');">
                   <option value="0"<?=$r['purchaseTime']==0?' selected':'';?>>Use System Default</option>
                   <option value="2629743"<?=$r['purchaseTime']==2629743?' selected':'';?>>1 Month</option>
@@ -127,22 +127,22 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-sm-4 pr-2">
-                <label id="accountpti" for="pti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountpti" data-tooltip="tooltip" aria-label="PermaLink to Last Purchase Date">&#128279;</a>':'';?>Last Purchase Date</label>
+              <div class="col-12 col-sm-4 pr-md-3">
+                <label for="pti">Last Purchase Date</label>
                 <div class="form-row">
-                  <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('._ago($r['pti']).')';?>
+                  <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('.timeago($r['pti']).')';?>
                 </div>
               </div>
-              <div class="col-12 col-sm-4 pl-2">
-                <label id="accountSpent" for="spent"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountSpent" data-tooltip="tooltip" aria-label="PermaLink to Spent Field">&#128279;</a>':'';?>Spent</label>
+              <div class="col-12 col-sm-4 pr-md-3">
+                <label for="spent">Spent</label>
                 <div class="form-row">
                   <div class="input-text">$</div>
                   <input class="textinput" id="spent" type="number" value="<?=$r['spent'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="spent"<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savespent" data-dbid="spent" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
-              <div class="col-12 col-sm-4 pl-2">
-                <label id="accountPoints" for="points"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPoints" data-tooltip="tooltip" aria-label="PermaLink to Points Earned Field">&#128279;</a>':'';?>Points Earned</label>
+              <div class="col-12 col-sm-4">
+                <label for="points">Points Earned</label>
                 <div class="form-row">
                   <input class="textinput" id="points" type="number" value="<?=$r['points'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="points"<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savepoints" data-dbid="points" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -151,7 +151,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <hr>
             <legend role="heading">Subject Tags</legend>
-            <label id="accountTags" for="tags"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTags" data-tooltip="tooltip" aria-label="PermaLink to Tags Field">&#128279;</a>':'';?>Tags</label>
+            <label for="tags">Tags</label>
             <div class="form-row">
               <input class="textinput" id="tags" type="text" value="<?=$r['tags'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="tags"<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -178,38 +178,38 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             }?>
           </div>
 <?php /* Tab 2 Contact */ ?>
-          <div class="tab1-2 border p-4" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountName" for="name"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountName" data-tooltip="tooltip" aria-label="PermaLink to Name Field">&#128279;</a>':'';?>Name</label>
+                <label for="name">Name</label>
                 <div class="form-row">
                   <input class="textinput" id="name" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="name" type="text" value="<?=$r['name'];?>" placeholder="Enter a Name..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savename" data-dbid="name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label id="accountBusiness" for="business"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountBusiness" data-tooltip="tooltip" aria-label="PermaLink to Business Field">&#128279;</a>':'';?>Business</label>
+                <label for="business">Business</label>
                 <div class="form-row">
                   <input class="textinput" id="business" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="business" type="text" value="<?=$r['business'];?>" placeholder="Enter a Business..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savebusiness" data-dbid="business" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
             </div>
-            <label id="accountURL" for="url"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountURL" data-tooltip="tooltip" aria-label="PermaLink to URL Field">&#128279;</a>':'';?>URL</label>
+            <label for="url">URL</label>
             <div class="form-row">
               <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="url" type="text" value="<?=$r['url'];?>" placeholder="Enter a URL..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="saveurl" data-dbid="url" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountPhone" for="phone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPhone" data-tooltip="tooltip" aria-label="PermaLink to Phone Field">&#128279;</a>':'';?>Phone</label>
+                <label for="phone">Phone</label>
                 <div class="form-row">
                   <input class="textinput" id="phone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="phone" type="text" value="<?=$r['phone'];?>" placeholder="Enter a Phone..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savephone" data-dbid="phone" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label id="accountMobile" for="mobile"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountMobile" data-tooltip="tooltip" aria-label="PermaLink to Mobile Field">&#128279;</a>':'';?>Mobile</label>
+                <label for="mobile">Mobile</label>
                 <div class="form-row">
                   <input class="textinput" id="mobile" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="mobile" type="text" value="<?=$r['mobile'];?>" placeholder="Enter a Mobile..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savemobile" data-dbid="mobile" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -218,14 +218,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountAddress" for="address"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAddress" data-tooltip="tooltip" aria-label="PermaLink to Address Field">&#128279;</a>':'';?>Address</label>
+                <label for="address">Address</label>
                 <div class="form-row">
                   <input class="textinput" id="address" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="address" type="text" value="<?=$r['address'];?>" placeholder="Enter an Address..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="saveaddress" data-dbid="address" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label id="accountSuburb" for="suburb"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountSuburb" data-tooltip="tooltip" aria-label="PermaLink to Suburb Field">&#128279;</a>':'';?>Suburb</label>
+                <label for="suburb">Suburb</label>
                 <div class="form-row">
                   <input class="textinput" id="suburb" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="suburb" type="text" value="<?=$r['suburb'];?>" placeholder="Enter a Suburb..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savesuburb" data-dbid="suburb" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -234,14 +234,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountCity" for="city"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountCity" data-tooltip="tooltip" aria-label="PermaLink to City Field">&#128279;</a>':'';?>City</label>
+                <label for="city">City</label>
                 <div class="form-row">
                   <input class="textinput" id="city" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="city" type="text" value="<?=$r['city'];?>" placeholder="Enter a City..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savecity" data-dbid="city" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label id="accountState" for="state"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountState" data-tooltip="tooltip" aria-label="PermaLink to State Field">&#128279;</a>':'';?>State</label>
+                <label for="state">State</label>
                 <div class="form-row">
                   <input class="textinput" id="state" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="state" type="text" value="<?=$r['state'];?>" placeholder="Enter a State..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savestate" data-dbid="state" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -250,14 +250,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label id="accountPostcode" for="postcode"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPostcode" data-tooltip="tooltip" aria-label="PermaLink to Postcode Field">&#128279;</a>':'';?>Postcode</label>
+                <label for="postcode">Postcode</label>
                 <div class="form-row">
                   <input class="textinput" id="postcode" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="postcode" type="text" value="<?=$r['postcode']!=0?$r['postcode']:'';?>" placeholder="Enter a Postcode..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savepostcode" data-dbid="postcode" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label id="accountCountry" for="country"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountCountry" data-tooltip="tooltip" aria-label="PermaLink to Country Field">&#128279;</a>':'';?>Country</label>
+                <label for="country">Country</label>
                 <div class="form-row">
                   <input class="textinput" id="country" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="country" type="text" value="<?=$r['country'];?>" placeholder="Enter a Country..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savecountry" data-dbid="country" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -265,15 +265,15 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="form-row mt-3">
-              <input id="bio0" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <input data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
               <label class="p-0 mt-0 ml-3" id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
             </div>
-            <label id="accountCaption" for="caption"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountCaption" data-tooltip="tooltip" aria-label="PermaLink to Caption Field">&#128279;</a>':'';?>Caption</label>
+            <label for="caption">Caption</label>
             <div class="form-row">
               <input class="textinput" id="caption" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="caption" type="text" value="<?=$r['caption'];?>" placeholder="Enter a Caption..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savecaption" data-dbid="caption" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <label id="accountNotes" for="notes"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNotes" data-tooltip="tooltip" aria-label="PermaLink to Bio Notes">&#128279;</a>':'';?>Bio Notes</label>
+            <label for="notes">Bio Notes</label>
             <div class="row">
               <?=($user['options'][5]==1?
                 '<form target="sp" method="post" action="core/update.php">'.
@@ -287,46 +287,35 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               );?>
             </div>
             <div class="form-row mt-3">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountsContact" data-tooltip="tooltip" aria-label="PermaLink to Accounts Contact Checkbox">&#128279;</a>':'';?>
               <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginaccountsContact0<?=$r['id'];?>" for="accountsContact">Accounts Contact</label>
+              <label class="p-0 mt-0 ml-3" for="accountsContact">Accounts Contact</label>
               <small class="help-text">Set this to indicate Accounts that belong to the Accounts Payable Person</small>
             </div>
           </div>
-<?php /* Tab 3 Images */ ?>
-          <div class="tab1-3 border p-4" data-tabid="tab1-3" role="tabpanel">
-            <label id="accountAvatar" for="avatar"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAvatar" data-tooltip="tooltip" aria-label="PermaLink to Avatar Field">&#128279;</a>':'';?>Avatar</label>
-            <form class="form-row p-0" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
-              <img class="img-avatar border-radius-0" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
-                echo'media/avatar/'.basename($r['avatar']);
-              elseif($r['gravatar']!='')
-                echo$r['gravatar'];
-              else
-                echo ADMINNOAVATAR;?>" alt="<?=$r['username'];?>">
-              <input type="text" value="<?=$r['avatar'];?>" readonly>
-              <?=($user['options'][5]==1?
-                '<input name="id" type="hidden" value="'.$r['id'].'">'.
-                '<input name="act" type="hidden" value="add_avatar">'.
-                '<div class="btn">'.
-                  '<label for="avatarfu" data-tooltip="tooltip" aria-label="Browse Computer for Files."><i class="i">browse-computer</i>'.
-                    '<input class="hidden" id="avatarfu" name="fu" type="file" onchange="form.submit();">'.
-                  '</label>'.
-                '</div>'.
-                '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);"><i class="i">trash</i></button>'
-              :
-                '');?>
+<?php /* Tab 3 Media */ ?>
+          <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
+            <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
+              <label for="avatar">Avatar</label>
+              <div class="form-row">
+                <img class="img-avatar border-radius-0" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
+                  echo'media/avatar/'.basename($r['avatar']);
+                elseif($r['gravatar']!='')
+                  echo$r['gravatar'];
+                else
+                  echo ADMINNOAVATAR;?>" alt="<?=$r['username'];?>">
+                <input type="text" value="<?=$r['avatar'];?>" readonly>
+                <?=($user['options'][5]==1?'<input name="id" type="hidden" value="'.$r['id'].'"><input name="act" type="hidden" value="add_avatar"><div class="btn"><label class="m-0" for="avatarfu" data-tooltip="tooltip" aria-label="Browse Computer for Files."><i class="i">browse-computer</i><input class="hidden" id="avatarfu" name="fu" type="file" onchange="form.submit();"></label></div><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`login`,`avatar`,``);"><i class="i">trash</i></button>':'');?>
+              </div>
             </form>
-            <div class="form-row mt-3">
-              <label id="accountGravatar" for="gravatar"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountGravatar" data-tooltip="tooltip" aria-label="PermaLink to Gravatar Field">&#128279;</a>':'';?>Gravatar</label>
-              <div class="form-text text-right"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
-            </div>
+            <label for="gravatar">Gravatar</label>
             <div class="form-row">
               <input class="textinput" id="gravatar" type="text" value="<?=$r['gravatar'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savegravatar" data-dbid="gravatar" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
+            <div class="form-text small text-muted text-right"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
           </div>
 <?php /* Tab 4 Proofs */ ?>
-          <div class="tab1-4 border p-4" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
             <div class="row" id="mi">
               <?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='proofs' AND `uid`=:id ORDER BY `ord` ASC");
               $sm->execute([':id'=>$r['id']]);
@@ -350,12 +339,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   </a>
                   <div class="btn-group tools">
                     <a class="btn" data-tooltip="right" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'#d43';?>"<?=($sccn['cnt']>0?' data-tooltip="tooltip" aria-label="'.$sccn['cnt'].' Comments"':'');?> aria-label="Comments"><?=$scn['cnt'];?></a>
-                    <?=($user['options'][1]==1?
-                      '<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
-                      '<div class="btn handle" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>'
-                    :
-                      ''
-                    );?>
+                    <?=($user['options'][1]==1?'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rm['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a><div class="btn handle" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>':'');?>
                   </div>
                 </div>
               <?php }?>
@@ -388,154 +372,172 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <?php }?>
           </div>
 <?php /* Tab 5 Social */ ?>
-          <div class="tab1-5 border p-4" data-tabid="tab1-5" role="tabpanel">
-            <?php if($user['options'][0]==1||$user['options'][5]==1){?>
-              <form class="form-row p-0" target="sp" method="post" action="core/add_data.php">
-                <input name="user" type="hidden" value="<?=$r['id'];?>">
-                <input name="act" type="hidden" value="add_social">
-                <div class="input-text">Network</div>
-                <select name="icon">
-                  <option value="">Select a Social Network...</option>
-                  <option value="discord">Discord</option>
-                  <option value="facebook">Facebook</option>
-                  <option value="github">GitHub</option>
-                  <option value="instagram">Instagram</option>
-                  <option value="linkedin">Linkedin</option>
-                  <option value="twitter">Twitter</option>
-                  <option value="youtube">YouTube</option>
-                  <option value="500px">500px</option>
-                  <option value="aboutme">About Me</option>
-                  <option value="airbnb">AirBNB</option>
-                  <option value="amazon">Amazon</option>
-                  <option value="behance">Behance</option>
-                  <option value="bitcoin">Bitcoin</option>
-                  <option value="blogger">Blogger</option>
-                  <option value="buffer">Buffer</option>
-                  <option value="cargo">Cargo</option>
-                  <option value="codepen">Codepen</option>
-                  <option value="coroflot">Coroflot</option>
-                  <option value="creattica">Creattica</option>
-                  <option value="delicious">Delcicious</option>
-                  <option value="deviantart">DeviantArt</option>
-                  <option value="diaspora">Diaspora</option>
-                  <option value="digg">Digg</option>
-                  <option value="discourse">Discourse</option>
-                  <option value="disqus">Disqus</option>
-                  <option value="dribbble">Dribbble</option>
-                  <option value="dropbox">Dropbox</option>
-                  <option value="envato">Envato</option>
-                  <option value="etsy">Etsy</option>
-                  <option value="feedburner">Feedburner</option>
-                  <option value="flickr">Flickr</option>
-                  <option value="forrst">Forrst</option>
-                  <option value="gitlab">GitLab</option>
-                  <option value="gravatar">Gravatar</option>
-                  <option value="hackernews">Hackernews</option>
-                  <option value="icq">ICQ</option>
-                  <option value="kickstarter">Kickstarter</option>
-                  <option value="last-fm">Last FM</option>
-                  <option value="lego">Lego</option>
-                  <option value="lynda">Lynda</option>
-                  <option value="massroots">Massroots</option>
-                  <option value="medium">Medium</option>
-                  <option value="myspace">MySpace</option>
-                  <option value="netlify">Netlify</option>
-                  <option value="ovh">OVH</option>
-                  <option value="paypal">Paypal</option>
-                  <option value="periscope">Periscope</option>
-                  <option value="picasa">Picasa</option>
-                  <option value="pinterest">Pinterest</option>
-                  <option value="play-store">Play Store</option>
-                  <option value="quora">Quora</option>
-                  <option value="redbubble">Red Bubble</option>
-                  <option value="reddit">Reddit</option>
-                  <option value="sharethis">Sharethis</option>
-                  <option value="skype">Skype</option>
-                  <option value="snapchat">Snapchat</option>
-                  <option value="soundcloud">Soundcloud</option>
-                  <option value="stackoverflow">Stackoverflow</option>
-                  <option value="steam">Steam</option>
-                  <option value="stumbleupon">StumbleUpon</option>
-                  <option value="tsu">TSU</option>
-                  <option value="tumblr">Tumblr</option>
-                  <option value="twitch">Twitch</option>
-                  <option value="ubiquiti">Ubiquiti</option>
-                  <option value="unsplash">Unsplash</option>
-                  <option value="vimeo">Vimeo</option>
-                  <option value="vine">Vine</option>
-                  <option value="whatsapp">Whatsapp</option>
-                  <option value="wikipedia">Wikipedia</option>
-                  <option value="windows-store">Windows Store</option>
-                  <option value="xbox-live">Xbox Live</option>
-                  <option value="yahoo">Yahoo</option>
-                  <option value="yelp">Yelp</option>
-                  <option value="zerply">Zerply</option>
-                  <option value="zune">Zune</option>
-                </select>
-                <div class="input-text">URL</div>
-                <input id="socialurl" name="url" type="text" value="" placeholder="Enter a URL...">
-                <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">plus</i></button>
-              </form>
-            <?php }?>
-            <div class="mt-3" id="social">
+          <div class="tab1-5 border" data-tabid="tab1-5" role="tabpanel">
+            <div class="sticky-top">
+              <div class="row">
+                <article class="card mb-0 p-0 overflow-visible card-list card-list-header bg-white shadow">
+                  <div class="row">
+                    <div class="col-12 col-md-3 align-middle pl-2 py-1">Social Network</div>
+                    <div class="col-12 col-md-9 align-middle pl-2 py-1">URL</div>
+                  </div>
+                </article>
+              </div>
+              <?php if($user['options'][0]==1||$user['options'][5]==1){?>
+                <form class="row m-0 p-0" target="sp" method="post" action="core/add_social.php">
+                  <input name="user" type="hidden" value="<?=$r['id'];?>">
+                  <input name="act" type="hidden" value="add_social">
+                  <div class="col-12 col-md-3">
+                    <select name="icon">
+                      <option value="">Select a Social Network...</option>
+                      <option value="discord">Discord</option>
+                      <option value="facebook">Facebook</option>
+                      <option value="github">GitHub</option>
+                      <option value="instagram">Instagram</option>
+                      <option value="linkedin">Linkedin</option>
+                      <option value="twitter">Twitter</option>
+                      <option value="youtube">YouTube</option>
+                      <option value="500px">500px</option>
+                      <option value="aboutme">About Me</option>
+                      <option value="airbnb">AirBNB</option>
+                      <option value="amazon">Amazon</option>
+                      <option value="behance">Behance</option>
+                      <option value="bitcoin">Bitcoin</option>
+                      <option value="blogger">Blogger</option>
+                      <option value="buffer">Buffer</option>
+                      <option value="cargo">Cargo</option>
+                      <option value="codepen">Codepen</option>
+                      <option value="coroflot">Coroflot</option>
+                      <option value="creattica">Creattica</option>
+                      <option value="delicious">Delcicious</option>
+                      <option value="deviantart">DeviantArt</option>
+                      <option value="diaspora">Diaspora</option>
+                      <option value="digg">Digg</option>
+                      <option value="discourse">Discourse</option>
+                      <option value="disqus">Disqus</option>
+                      <option value="dribbble">Dribbble</option>
+                      <option value="dropbox">Dropbox</option>
+                      <option value="envato">Envato</option>
+                      <option value="etsy">Etsy</option>
+                      <option value="feedburner">Feedburner</option>
+                      <option value="flickr">Flickr</option>
+                      <option value="forrst">Forrst</option>
+                      <option value="gitlab">GitLab</option>
+                      <option value="gravatar">Gravatar</option>
+                      <option value="hackernews">Hackernews</option>
+                      <option value="icq">ICQ</option>
+                      <option value="kickstarter">Kickstarter</option>
+                      <option value="last-fm">Last FM</option>
+                      <option value="lego">Lego</option>
+                      <option value="lynda">Lynda</option>
+                      <option value="massroots">Massroots</option>
+                      <option value="medium">Medium</option>
+                      <option value="myspace">MySpace</option>
+                      <option value="netlify">Netlify</option>
+                      <option value="ovh">OVH</option>
+                      <option value="paypal">Paypal</option>
+                      <option value="periscope">Periscope</option>
+                      <option value="picasa">Picasa</option>
+                      <option value="pinterest">Pinterest</option>
+                      <option value="play-store">Play Store</option>
+                      <option value="quora">Quora</option>
+                      <option value="redbubble">Red Bubble</option>
+                      <option value="reddit">Reddit</option>
+                      <option value="sharethis">Sharethis</option>
+                      <option value="skype">Skype</option>
+                      <option value="snapchat">Snapchat</option>
+                      <option value="soundcloud">Soundcloud</option>
+                      <option value="stackoverflow">Stackoverflow</option>
+                      <option value="steam">Steam</option>
+                      <option value="stumbleupon">StumbleUpon</option>
+                      <option value="tsu">TSU</option>
+                      <option value="tumblr">Tumblr</option>
+                      <option value="twitch">Twitch</option>
+                      <option value="ubiquiti">Ubiquiti</option>
+                      <option value="unsplash">Unsplash</option>
+                      <option value="vimeo">Vimeo</option>
+                      <option value="vine">Vine</option>
+                      <option value="whatsapp">Whatsapp</option>
+                      <option value="wikipedia">Wikipedia</option>
+                      <option value="windows-store">Windows Store</option>
+                      <option value="xbox-live">Xbox Live</option>
+                      <option value="yahoo">Yahoo</option>
+                      <option value="yelp">Yelp</option>
+                      <option value="zerply">Zerply</option>
+                      <option value="zune">Zune</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <div class="form-row">
+                      <input id="socialurl" name="url" type="text" value="" placeholder="Enter a URL...">
+                      <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">plus</i></button>
+                    </div>
+                  </div>
+                </form>
+              <?php }?>
+            </div>
+            <div id="social">
               <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=:uid ORDER BY `icon` ASC");
               $ss->execute([':uid'=>$r['id']]);
               while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-                <form class="form-row" id="l_<?=$rs['id'];?>" target="sp" action="core/purge.php" role="form">
-                  <div class="input-text" aria-label="<?= ucfirst($rs['icon']);?>"><?= ucfirst($rs['icon']);?></div>
-                  <input type="text" value="<?=$rs['url'];?>" readonly>
-                  <?php if($user['options'][0]==1||$user['options'][5]==1){?>
-                    <input name="id" type="hidden" value="<?=$rs['id'];?>">
-                    <input name="t" type="hidden" value="choices">
-                    <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                  <?php }?>
-                </form>
+                <div class="row" id="l_<?=$rs['id'];?>">
+                  <div class="col-12 col-md-3">
+                    <div class="input-text col-12" data-tooltip="tooltip" aria-label="<?= ucfirst($rs['icon']);?>"><i class="i i-social i-2x social-<?=$rs['icon'];?>">social-<?=$rs['icon'].'</i>&nbsp;&nbsp'.ucfirst($rs['icon']);?></div>
+                  </div>
+                  <div class="col-12 col-md-9">
+                    <div class="form-row">
+                      <div class="input-text col-md"><?=$rs['url'];?></div>
+                      <?php if($user['options'][7]==1){?>
+                        <form target="sp" action="core/purge.php">
+                          <input name="id" type="hidden" value="<?=$rs['id'];?>">
+                          <input name="t" type="hidden" value="choices">
+                          <button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                        </form>
+                      <?php }?>
+                    </div>
+                  </div>
+                </div>
               <?php }?>
             </div>
           </div>
 <?php /* Tab 6 Messages */ ?>
-          <div class="tab1-6 border p-4" data-tabid="tab1-6" role="tabpanel">
-            <label id="accountEmailSignature" for="email_signature"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEmailSignature" data-tooltip="tooltip" aria-label="PermaLink to Email Signature">&#128279;</a>':'';?>Email Signature</label>
+          <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
+            <label for="email_signature">Email Signature</label>
             <div class="row">
-              <?=$user['options'][5]==1?'<form target="sp" method="post" action="core/update.php">'.
-                '<input name="id" type="hidden" value="'.$r['id'].'">'.
-                '<input name="t" type="hidden" value="login">'.
-                '<input name="c" type="hidden" value="email_signature">'.
-                '<textarea class="summernote" id="email_signature" name="da">'.rawurldecode($r['email_signature']).'</textarea></form>'
-              :
-              '<textarea class="field" disabled>'.rawurldecode($r['email_signature']).'</textarea>';?>
+              <?=($user['options'][5]==1?'<form target="sp" method="post" action="core/update.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="login"><input name="c" type="hidden" value="email_signature"><textarea class="summernote" id="email_signature" name="da">'.rawurldecode($r['email_signature']).'</textarea></form>':'<textarea class="field" disabled>'.rawurldecode($r['email_signature']).'</textarea>');?>
             </div>
           </div>
 <?php /* Tab 7 Orders */ ?>
           <?php if($user['options'][4]==1){?>
             <div class="tab1-7 border" data-tabid="tab1-7" role="tabpanel">
+              <div class="row sticky-top">
+                <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
+                  <div class="row">
+                    <div class="col-12 col-md text-center">Order Number</div>
+                    <div class="col-12 col-md text-center">Date</div>
+                    <div class="col-12 col-md text-center">Status</div>
+                    <div class="col-12 col-md"></div>
+                  </div>
+                </article>
+              </div>
               <section class="row list">
                 <?php $so=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `cid`=:cid ORDER BY `ti` DESC");
                 $so->execute([':cid'=>$r['id']]);
                 while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
-                  <article class="card zebra m-0 p-2 border-0 overflow-visible" id="l_<?=$ro['id'];?>">
-                    <div class="row">
-                      <div class="col-sm">
-                        <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$ro['id']?>"><?=($ro['aid']!=''?$ro['aid'].'<br>':'').$ro['qid'].$ro['iid'];?></a>
-                      </div>
-                      <div class="col-sm small">
-                        Date:&nbsp;<?=' '.date($config['dateFormat'],($ro['iid_ti']==0?$ro['qid_ti']:$ro['iid_ti']));?><br>
-                        <small>Due:&nbsp;<?= date($config['dateFormat'],$ro['due_ti']);?></small>
-                      </div>
-                      <div class="col-sm text-center">
-                        <span class="badger badge-<?=$ro['status'];?> badge-2x"><?= ucfirst($ro['status']);?></span>
-                      </div>
-                      <div class="col-sm">
-                        <div id="controls_<?=$ro['id'];?>" class="justify-content-end">
-                          <div class="btn-group float-right" role="group">
-                            <button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/email_order.php?id=<?=$ro['id'];?>&act=print');"><i class="i">print</i></button>
-                            <?=(isset($r['email'])&&$r['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=`);"><i class="i">email-send</i></button>':'').
-                            '<a class="rounded-right '.($ro['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit Order"><i class="i">edit</i></a>'.
-                            '<button class="add'.($ro['status']!='delete'?' d-none':'').'" id="untrash'.$ro['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,``);"><i class="i">untrash</i></button>'.
-                            '<button class="trash'.($ro['status']=='delete'?' d-none':'').'" id="delete'.$ro['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,`delete`);"><i class="i">trash</i></button>'.
-                            '<button class="purge'.($ro['status']!='delete'?' d-none':'').'" id="purge'.$ro['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$ro['id'].'`,`orders`);"><i class="i">purge</i></button>'.
-                            '<button class="quickeditbtn" data-qeid="'.$ro['id'].'" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>';?>
-                          </div>
+                  <article class="card zebra m-0 mt-2 mb-0 p-2 border-0 overflow-visible shadow" id="l_<?=$ro['id'];?>">
+                    <div class="col-md pt-2 text-center">
+                      <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$ro['id']?>"><?=($ro['aid']!=''?$ro['aid'].'<br>':'').$ro['qid'].$ro['iid'];?></a>
+                    </div>
+                    <div class="col-md pt-2 text-center">
+                      Date:&nbsp;<?=' '.date($config['dateFormat'],($ro['iid_ti']==0?$ro['qid_ti']:$ro['iid_ti']));?><br>
+                      <small>Due:&nbsp;<?= date($config['dateFormat'],$ro['due_ti']);?></small>
+                    </div>
+                    <div class="col-md pt-2 text-center">
+                      <span class="badger badge-<?=$ro['status'];?> badge-2x"><?= ucfirst($ro['status']);?></span>
+                    </div>
+                    <div class="col-md">
+                      <div id="controls_<?=$ro['id'];?>" class="justify-content-end">
+                        <div class="btn-group float-right" role="group">
+                          <?='<button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=print`);"><i class="i">print</i></button>'.(isset($r['email'])&&$r['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=`);"><i class="i">email-send</i></button>':'').'<a class="rounded-right '.($ro['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit Order"><i class="i">edit</i></a><button class="add'.($ro['status']!='delete'?' d-none':'').'" id="untrash'.$ro['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,``);"><i class="i">untrash</i></button><button class="trash'.($ro['status']=='delete'?' d-none':'').'" id="delete'.$ro['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($ro['status']!='delete'?' d-none':'').'" id="purge'.$ro['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$ro['id'].'`,`orders`);"><i class="i">purge</i></button><button class="quickeditbtn" data-qeid="'.$ro['id'].'" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>';?>
                         </div>
                       </div>
                     </div>
@@ -546,24 +548,25 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
           <?php }
 /* Tab 7 Settings */ ?>
-          <div class="tab1-8 border p-4" data-tabid="tab1-8" role="tabpanel">
-            <label id="accountTimezone" for="timezone"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTimezone" data-tooltip="tooltip" aria-label="PermaLink to Timezone Selector">&#128279;</a>':'';?>Timezone</label>
+          <div class="tab1-8 border p-3" data-tabid="tab1-8" role="tabpanel">
+            <label for="timezone">Timezone</label>
             <select id="timezone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="timezone"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','timezone',$(this).val(),'select');">
               <option value="default">System Default</option>
-              <?php $o=['Australia/Perth'      => "(GMT+08:00) Perth",
-                        'Australia/Adelaide'   => "(GMT+09:30) Adelaide",
-                        'Australia/Darwin'     => "(GMT+09:30) Darwin",
-                        'Australia/Brisbane'   => "(GMT+10:00) Brisbane",
-                        'Australia/Canberra'   => "(GMT+10:00) Canberra",
-                        'Australia/Hobart'     => "(GMT+10:00) Hobart",
-                        'Australia/Melbourne'  => "(GMT+10:00) Melbourne",
-                        'Australia/Sydney'     => "(GMT+10:00) Sydney"
-                      ];
+              <?php $o=[
+                'Australia/Perth'=>"(GMT+08:00) Perth",
+                'Australia/Adelaide'=>"(GMT+09:30) Adelaide",
+                'Australia/Darwin'=>"(GMT+09:30) Darwin",
+                'Australia/Brisbane'=>"(GMT+10:00) Brisbane",
+                'Australia/Canberra'=>"(GMT+10:00) Canberra",
+                'Australia/Hobart'=>"(GMT+10:00) Hobart",
+                'Australia/Melbourne'=>"(GMT+10:00) Melbourne",
+                'Australia/Sydney'=>"(GMT+10:00) Sydney"
+              ];
               foreach($o as$tz=>$label)echo'<option value="'.$tz.'"'.($tz==$r['timezone']?' selected':'').'>'.$tz.'</option>';?>
             </select>
             <?php if($user['id']==$r['id']||$user['options'][5]==1){?>
               <form target="sp" method="post" action="core/update.php" onsubmit="$('.page-block').addClass('d-block');">
-                <label id="accountPassword" for="password"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountPassword" data-tooltip="tooltip" aria-label="PermaLink to Password Field">&#128279;</a>':'';?>Password</label>
+                <label for="password">Password</label>
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
                 <input name="t" type="hidden" value="login">
                 <input name="c" type="hidden" value="password">
@@ -574,11 +577,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </form>
             <?php }?>
             <div class="form-row mt-3">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountActive" data-tooltip="tooltip" aria-label="PermaLink to Active Checkbox">&#128279;</a>':'';?>
-              <input id="accountActive" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="accountActive" id="loginactive0<?=$r['id'];?>">Active</label>
+              <input id="active" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="active">Active</label>
             </div>
-            <label id="accountRank" for="rank"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountRank" data-tooltip="tooltip" aria-label="PermaLink to Rank Selector">&#128279;</a>':'';?>Rank</label>
+            <label for="rank">Rank</label>
             <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="rank"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','rank',$(this).val(),'select');">
               <option value="0"<?=$r['rank']==0?' selected':'';?>>Visitor</option>
               <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber</option>
@@ -594,128 +596,114 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Gold</option>
               <option value="350"<?=$r['rank']==350?' selected':'';?>>Wholesaler Platinum</option>
               <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor</option>
-              <option value="500"<?=$r['rank']==500?' selected':'';?>>Author</option>
-              <option value="600"<?=$r['rank']==600?' selected':'';?>>Editor</option>
-              <option value="700"<?=$r['rank']==700?' selected':'';?>>Moderator</option>
-              <option value="800"<?=$r['rank']==800?' selected':'';?>>Manager</option>
-              <option value="900"<?=$r['rank']==900?' selected':'';?>>Administrator</option>
-              <?=$user['rank']==1000?'<option value="1000"'.($r['rank']==1000?' selected':'').'>Developer</option>':'';?>
+              <?=($user['rank']>400?'<option value="500"'.($r['rank']==500?' selected':'').'>Author</option>':'').
+              ($user['rank']>500?'<option value="600"'.($r['rank']==600?' selected':'').'>Editor</option>':'').
+              ($user['rank']>600?'<option value="700"'.($r['rank']==700?' selected':'').'>Moderator</option>':'').
+              ($user['rank']>700?'<option value="800"'.($r['rank']==800?' selected':'').'>Manager</option>':'').
+              ($user['rank']>800?'<option value="900"'.($r['rank']==900?' selected':'').'>Administrator</option>':'').
+              ($user['rank']==1000?'<option value="1000"'.($r['rank']==1000?' selected':'').'>Developer</option>':'');?>
             </select>
             <hr>
             <legend>Account Permissions</legend>
             <div class="form-row mt-3">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountWholesalerAccepted" data-tooltip="tooltip" aria-label="PermaLink to Wholesaler Accepted Checkbox">&#128279;</a>':'';?>
-              <input id="accountWholesalerAccepted" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"<?=($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="accountWholesalerAccepted0<?=$r['id'];?>" for="accountWholesalerAccepted">Wholesaler Accepted to Purchase</label>
+              <input id="wholesalerAccepted" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"<?=($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="wholesalerAccepted">Wholesaler Accepted to Purchase</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountForumBanned" data-tooltip="tooltip" aria-label="PermaLink to Forum Banned Checkbox">&#128279;</a>':'';?>
-              <input id="accountForumBanned" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="20" type="checkbox"<?=($r['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="accountForumBanned" id="loginforumbanned20<?=$r['id'];?>">Banned From Posting or Replying on Forum</label>
+              <input id="forumBanned" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="20" type="checkbox"<?=($r['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="forumBanned">Banned From Posting or Replying on Forum</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#loginForumHelpResponder" data-tooltip="tooltip" aria-label="PermaLink to Forum Help Responder">&#128279;</a>':'';?>
-              <input id="loginForumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginForumHelpResponder0<?=$r['id'];?>" for="loginForumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
+              <input id="forumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="forumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountNewsletterSubscriber" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Subscriber Checkbox">&#128279;</a>':'';?>
-              <input id="accountNewsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginnewsletter0<?=$r['id'];?>" for="accountNewsletterSubscriber">Newsletter Subscriber</label>
+              <input id="newsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="newsletterSubscriber">Newsletter Subscriber</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAddRemoveContent" data-tooltip="tooltip" aria-label="PermaLink to Add or Remove Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountAddRemoveContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions0<?=$r['id'];?>" for="accountAddRemoveContent">Add or Remove Content</label>
+              <input id="addRemoveContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="addRemoveContent">Add or Remove Content</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEditContent" data-tooltip="tooltip" aria-label="PermaLink to Edit Content Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountEditContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions1<?=$r['id'];?>" for="accountEditContent">Edit Content</label>
+              <input id="editContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="editContent">Edit Content</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountAddEditBookings" data-tooltip="tooltip" aria-label="PermaLink to Add or Edit Bookings Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountAddEditBookings" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions2<?=$r['id'];?>" for="accountAddEditBookings">Add or Edit Bookings</label>
+              <input id="addEditBookings" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="addEditBookings">Add or Edit Bookings</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditMessages" data-tooltip="tooltip" aria-label="PermaLink to Message Viewing or Editing Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountViewEditMessages" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions3<?=$r['id'];?>" for="accountViewEditMessages">Messages Viewing or Editing</label>
+              <input id="viewEditMessages" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="viewEditMessages">Messages Viewing or Editing</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditOrders" data-tooltip="tooltip" aria-label="PermaLink to Add or Orders Viewing or Editing Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountViewEditOrders" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4" type="checkbox"<?=($r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions4<?=$r['id'];?>" for="accountViewEditOrders">Orders Viewing or Editing</label>
+              <input id="viewEditOrders" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4" type="checkbox"<?=($r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="viewEditOrders">Orders Viewing or Editing</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditAccounts" data-tooltip="tooltip" aria-label="PermaLink to View orEdit Users Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountViewEditAccounts" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5" type="checkbox"<?=($r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions5<?=$r['id'];?>" for="accountViewEditAccounts">User Accounts Viewing or Editing</label>
+              <input id="viewEditAccounts" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5" type="checkbox"<?=($r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="viewEditAccounts">User Accounts Viewing or Editing</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountEditSEO" data-tooltip="tooltip" aria-label="PermaLink to SEO Editing Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountEditSEO" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6" type="checkbox"<?=($r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions6<?=$r['id'];?>" for="accountEditSEO">SEO Editing</label>
+              <input id="editSEO" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6" type="checkbox"<?=($r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="editSEO">SEO Editing</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountViewEditPreferences" data-tooltip="tooltip" aria-label="PermaLink to View or Edit Preferences Permissions Checkbox">&#128279;</a>':'';?>
-              <input id="accountViewEditPreferences" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7" type="checkbox"<?=($r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions7<?=$r['id'];?>" for="accountViewEditPreferences">Preferences/Settings Viewing or Editing</label>
+              <input id="viewEditPreferences" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7" type="checkbox"<?=($r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="viewEditPreferences">Preferences/Settings Viewing or Editing</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountLiveChatNotifications" data-tooltip="tooltip" aria-label="PermaLink to Email LiveChat Notifications Checkbox">&#128279;</a>':'';?>
-              <input id="accountLiveChatNotifications" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0" type="checkbox"<?=($r['liveChatNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginliveChatNotification0<?=$r['id'];?>" for="accountLiveChatNotifications">Email LiveChat notifications</label>
+              <input id="liveChatNotifications" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0" type="checkbox"<?=($r['liveChatNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="liveChatNotifications">Email LiveChat notifications</label>
             </div>
             <div class="form-row">
-              <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/accounts/edit/'.$r['id'].'#accountTrackIP" data-tooltip="tooltip" aria-label="PermaLink to Do Not Track IP Checkbox">&#128279;</a>':'';?>
-              <input id="accountTrackIP" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="18" type="checkbox"<?=($r['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginoptions18<?=$r['id'];?>" for="accountTrackIP">Do Not Track IP</label>
+              <input id="trackIP" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="18" type="checkbox"<?=($r['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
+              <label class="p-0 mt-0 ml-3" for="trackIP">Do Not Track IP</label>
             </div>
             <?php if($user['rank']>899){?>
               <?php if($user['rank']==1000||$config['options'][17]==1){?>
                 <legend class="mt-3">Media Permissions</legend>
                 <div class="form-row mt-3">
                   <input id="options17" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="17" type="checkbox"<?=($r['options'][17]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions17<?=$r['id'];?>" for="options17">Allow this Administrator to change below Permissions</label>
+                  <label class="p-0 mt-0 ml-3" for="options17">Allow this Administrator to change below Permissions</label>
                 </div>
               <?php }
               if($r['options'][17]==1||$user['rank']==1000){?>
                 <div class="form-row">
                   <input id="options16" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="16" type="checkbox"<?=($r['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions16<?=$r['id'];?>" for="options16">Hide Folders</label>
+                  <label class="p-0 mt-0 ml-3" for="options16">Hide Folders</label>
                 </div>
                 <div class="form-row">
                   <input id="options10" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="10" type="checkbox"<?=($r['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions10<?=$r['id'];?>" for="options10">Create Folders</label>
+                  <label class="p-0 mt-0 ml-3" for="options10">Create Folders</label>
                 </div>
                 <div class="form-row">
                   <input id="options11" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="11" type="checkbox"<?=($r['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions11<?=$r['id'];?>" for="options11">Read Files</label>
+                  <label class="p-0 mt-0 ml-3" for="options11">Read Files</label>
                 </div>
                 <div class="form-row">
                   <input id="options12" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="12" type="checkbox"<?=($r['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions12<?=$r['id'];?>" for="options12">Write Files</label>
+                  <label class="p-0 mt-0 ml-3" for="options12">Write Files</label>
                 </div>
                 <div class="form-row">
                   <input id="options13" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="13" type="checkbox"<?=($r['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions13<?=$r['id'];?>" for="options13">Extract Archives</label>
+                  <label class="p-0 mt-0 ml-3" for="options13">Extract Archives</label>
                 </div>
                 <div class="form-row">
                   <input id="options14" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="14" type="checkbox"<?=($r['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions14<?=$r['id'];?>" for="options14">Create Archives</label>
+                  <label class="p-0 mt-0 ml-3" for="options14">Create Archives</label>
                 </div>
                 <div class="form-row">
                   <input id="options15" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="15" type="checkbox"<?=($r['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" id="loginoptions15<?=$r['id'];?>" for="options15">Upload Files (pdf,doc,php)</label>
+                  <label class="p-0 mt-0 ml-3" for="options15">Upload Files (pdf,doc,php)</label>
                 </div>
               <?php }?>
             </div>
           <?php }
 /* Tab 1-9 Hosting */
           if($config['hoster']==1){?>
-            <div class="tab1-9 border p-4" data-tabid="tab1-9" role="tabpanel">
+            <div class="tab1-9 border p-3" data-tabid="tab1-9" role="tabpanel">
               <legend>Hosting Payments</legend>
               <div class="row">
                 <div class="col-12 col-sm-4 pr-sm-3">

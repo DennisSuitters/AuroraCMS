@@ -157,6 +157,7 @@ header.aurora{
 }
 
 .login-bg{
+  display: flex;
   margin:0;
   padding:0;
   height:100vh!important;
@@ -167,7 +168,30 @@ header.aurora{
   background-position:center;
   background-attachment:fixed;
   background-image:url(../images/login/bg.avif);
-  transition: background 1.2s linear }
+  transition: background-image 1.2s linear }
+
+.login-bg main{
+  align-content: center }
+
+.login-bg main.install{
+  align-content: normal }
+
+.login-bg .card{
+  background-color:rgba(40,40,40,.85);
+  border-color: rgba(40,40,40,.5);
+  border-radius: var(--card-border-radius);
+  box-shadow: 0 22px 64px 8px rgba(0,0,0,.75),
+              128px 128px 255px 8px rgba(0,0,255,.75),
+              -128px 128px 255px 8px rgba(255,0,0,.75),
+              -128px -128px 255px 8px rgba(255,128,0,.75),
+              128px -128px 255px 8px rgba(0,255,0,.75);
+  transition: box-shadow 3s ease-in-out }
+
+.login-bg .card a{
+  color:#ddd }
+
+.login-bg .card a:hover{
+  color:#fff }
 
 .loginattribution{
   position:absolute;
@@ -197,16 +221,6 @@ header.aurora{
 
 .loginattribution:empty{
   opacity:0 }
-
-.bg-login{
-  background-color:rgba(40,40,40,.75);
-  box-shadow:0 22px 70px 4px rgba(0,0,0,.76) }
-
-.bg-login a{
-  color:#ddd }
-
-.bg-login a:hover{
-  color:#fff }
 
 .theme,
 .certificate{
@@ -308,14 +322,8 @@ header{
 header .i{
   color:var(--header-logo-color)!important }
 
-.brand{
-  width:150px;
-  overflow:hidden }
-
-.brand svg{
-  fill:#fff;
-  width:150px;
-}
+.nav-toggle{
+  margin-top:37px !important; }
 
 .nav-toggle .line{
   background-color:var(--nav-toggle-color);
@@ -341,7 +349,7 @@ header nav{
   height:48px }
 
 header nav ul.nav-left{
-  margin-top:15px }
+ }
 
 header nav ul.ml-auto{
   margin-left:auto!important;
@@ -648,11 +656,12 @@ td img.avatar{
 
 #sidebar{
   position:absolute;
-  top:60px;
+  top:65px;
   left:0;
   width:260px;
   margin:8px!important;
-  background-color:var(--sidebar-background-color)!important }
+  background-color:var(--sidebar-background-color)!important;
+  transition:width .25s ease-in-out }
 
 #sidebar nav ul li{
   display:inline-block;
@@ -674,7 +683,8 @@ td img.avatar{
   line-height:1;
   opacity:.7;
   margin-left:0;
-  margin-right:0 }
+  margin-right:0;
+  transition: width .25s ease-in-out }
 
 #sidebar nav a:hover,
 #sidebar nav a:focus{
@@ -740,23 +750,24 @@ td img.avatar{
   overflow:visible!important }
 
 #content.navsmall{
-  margin-left:210px }
+  margin-left:210px;
+  transition: margin-left .25s ease-in-out}
 
-@media (max-width:360px){
+@media (max-width:429px){
   #content.navsmall,
   #sidebar{
     display:none }
 
   #sidebar.navsmall{
     display:block;
-    width:342px }
+    width:95% }
 
   #sidebar.navsmall .arrow{
     top:13px;
     right:-70px }
 
   #sidebar.navsmall nav ul li.open ul{
-    width:340px }
+    width:95% }
 }
 @media (min-width:768px){
   #content{
@@ -976,7 +987,7 @@ td img.avatar{
 .input-text{
   display:flex;
   align-items:center;
-  padding:0 .75rem;
+  padding:.375rem .75rem;
   margin-bottom:0;
   font-size:1rem;
   font-weight:400;
@@ -985,7 +996,10 @@ td img.avatar{
   text-align:center;
   white-space:nowrap;
   background-color:var(--form-background-color);
-  border-radius:.25rem }
+  border-width:var(--form-input-border-width);
+  border-style:var(--form-input-border-style);
+  border-color:var(--form-input-border-color);
+  border-radius:var(--form-input-border-radius) }
 
 div.input-text[contenteditable="true"],
 div.input-text[contenteditable="false"]{
@@ -1140,10 +1154,32 @@ input[type=text]~.input-text{
   margin-right:auto;
   width:100% }
 
-.tabs input.tab-control+label{
+.tabs input.tab-control + label{
   position:relative }
 
+.tabs input.tab-control + label.badge::after,
+.card.badge::after,
+.card-header.badge::after{
+  position:absolute;
+  top:-6px;
+  right:-17px;
+  background: var(--alert-warning-background-color);
+  background-clip: padding-box;
+  border-radius: .25em;
+  font-weight: 400;
+  color: var(--alert-warning-color) }
+
+.card.badge::after,
+.card-header.badge::after{
+  top:5px;
+  right:auto;
+  left:13px }
+
+.card-header.badge::after{
+  left:25px }
+
 .tabs input.tab-control,
+.tabs2 input.tab-control,
 [role=tabpanel]{
   display:none }
 
@@ -1166,10 +1202,21 @@ input[type=text]~.input-text{
 .tabs #tab1-17:checked~.tab1-17,
 .tabs #tab1-18:checked~.tab1-18,
 .tabs #tab1-19:checked~.tab1-19,
-.tabs #tab1-20:checked~.tab1-20{
+.tabs #tab1-20:checked~.tab1-20,
+.tabs2 #tab2-1:checked~.tab2-1,
+.tabs2 #tab2-2:checked~.tab2-2,
+.tabs2 #tab2-3:checked~.tab2-3,
+.tabs2 #tab2-4:checked~.tab2-4,
+.tabs2 #tab2-5:checked~.tab2-5,
+.tabs2 #tab2-6:checked~.tab2-6,
+.tabs2 #tab2-7:checked~.tab2-7,
+.tabs2 #tab2-8:checked~.tab2-8,
+.tabs2 #tab2-9:checked~.tab2-9,
+.tabs2 #tab2-10:checked~.tab2-10{
   display:block }
 
-.tabs input.tab-control+label{
+.tabs input.tab-control+label,
+.tabs2 input.tab-control+label{
   display:inline-block;
   top:1px;
   margin:0;
@@ -1181,33 +1228,40 @@ input[type=text]~.input-text{
   font-size:.95rem;
   padding:4px 10px }
 
-.tabs input.tab-control+label:hover{
+.tabs input.tab-control+label:hover,
+.tabs2 input.tab-control+label:hover{
   cursor:pointer;
   color:var(--tab-color-hover);
   background-color:var(--tab-background-color-hover) }
 
-.tabs input.tab-control+label button{
+.tabs input.tab-control+label button,
+.tabs2 input.tab-control+label button{
   margin-right:0!important;
   margin-left:10px!important;
 }
 
-.tabs input.tab-control:checked+label{
+.tabs input.tab-control:checked+label,
+.tabs2 input.tab-control:checked+label{
   border:var(--tab-border-width) var(--tab-border-style) var(--tab-border-color);
   border-bottom:2px var(--border-style) var(--tab-border-active-color);
   background-color:var(--tab-background-color-active);
   color:var(--tab-color-active);
   font-weight:700 }
 
-.tabs input.tab-control+label button{
+.tabs input.tab-control+label button,
+.tabs2 input.tab-control+label button{
   display:none }
 
-.tabs input.tab-control:checked+label button{
+.tabs input.tab-control:checked+label button,
+.tabs2 input.tab-control:checked+label button{
   display:inline-block }
 
-.tabs input.tab-control:checked+label:hover{
+.tabs input.tab-control:checked+label:hover,
+.tabs2 input.tab-control:checked+label:hover{
   background-color:var(--tab-background-color-active-hover)!important }
 
-.tabs input.tab-control~.tab{
+.tabs input.tab-control~.tab,
+.tabs2 input.tab-control~.tab{
   display:none;
   border-top:var(--border-width) var(--border-style) var(--tab-border-color);
   padding:12px;
@@ -1281,6 +1335,11 @@ input[type=text]~.input-text{
   display:inline-block!important;
   width:1em!important;
   height:1em!important }
+
+.rating.small span{
+  display:inline-block!important;
+  width:.25em!important;
+  height:.25em!important }
 
 .rating span:before{
   content:'\2606'!important;
@@ -2010,8 +2069,8 @@ input:not(:placeholder-shown)~.openimageeditor{
 
 .jumpBar {
   position: fixed;
-  top: 150px;
-  right: 0;
+  top: 80px;
+  right: 5px;
   display: flex !important;
   flex-flow: column !important;
   flex-shrink: 0 !important;

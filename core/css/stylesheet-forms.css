@@ -243,7 +243,7 @@ textarea{
   border-width:var(--form-input-border-width);
   border-style:var(--form-input-border-style);
   border-color:var(--form-input-border-color);
-  border-radius:var(--form-border-radius);
+  border-radius:var(--form-input-border-radius);
   background-clip:padding-box;
   background-color:var(--form-input-background-color);
   padding:.375rem .75rem;

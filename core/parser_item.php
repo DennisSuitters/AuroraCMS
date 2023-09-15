@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -639,7 +639,7 @@ if($skip==false){
                     '<div class="play"></div>'.
                   '</div>';
                 }elseif(stristr($rl['urlSlug'],'twitter')){
-                  $listmediaitems.='<a target="_blank" src="'.$rl['urlSlug'].'" href="'.$rl['urlSlug'].'"><img src="'.$rlm['thumb'].'" alt="'.$lh.'"></a>';
+                  $listmediaitems.='<a target="_blank" src="'.$rl['urlSlug'].'" href="'.$rl['urlSlug'].'"><img src="'.$rlm['thumb'].'" alt="'.$rl['title'].'"></a>';
                 }else
                   $listmediaitems.='<a data-fancybox="list" href="'.$rlm['file'].'" data-caption="&lt;h5&gt;'.$rl['title'].'&lt;/h5&gt;'.str_replace('"','`',strip_tags($rl['notes'])).'"><img src="'.$rlm['file'].'" alt="'.$rl['title'].'"></a>';
 
@@ -660,13 +660,13 @@ if($skip==false){
               '/<listmediaitems>/'
             ],[
               $rl['id'],
-              ($rl['code']!=''?$rl['code']:'list'.$rl['id']),
+              strtolower(str_replace(' ','-',$rl['title'])).$rl['id'],
               '',
               $rl['title'],
               htmlspecialchars($rl['notes'],ENT_QUOTES),
               $rl['notes'],
               ($rl['url']!=''?' <a href="'.$rl['url'].'">More...</a>':''),
-              URL.$r['contentType'].'/'.$r['urlSlug'].'#'.($rl['code']!=''?$rl['code']:'list'.$rl['id']),
+              URL.$r['contentType'].'/'.$r['urlSlug'].'#'.strtolower(str_replace(' ','-',$rl['title'])).$rl['id'],
               $sli,
               '',
               $listmediaitems,

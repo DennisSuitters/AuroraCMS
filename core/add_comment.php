@@ -115,7 +115,7 @@ if($not['spammer']==false){
               $mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
               if($mail->Send())$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Comment will be Appear once Approved.','reason'=>''];
               else$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Comment.','reason'=>''];
-            }
+            }else$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Comment will be Appear once Approved.','reason'=>''];
           }else$not=['spammer'=>false,'target'=>'comment','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue adding your Comment.','reason'=>''];
         }
       }

@@ -20,61 +20,55 @@
             <li class="breadcrumb-item active">Reviews</li>
           </ol>
         </div>
-        <table class="table-zebra">
-          <thead>
-            <tr>
-              <th>Author</th>
-              <th>Review</th>
-              <th>In Response To</th>
-              <th>Submitted On</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="l_comments">
-            <?php $s=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='review'");
-            $s->execute();
-            $scnt=$s->rowCount();
-            while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-              <tr id="l_<?=$r['id'];?>">
-                <td class="align-middle"><?='<a href="mailto:'.$r['email'].'">'.($r['name']!=''?$r['name']:'Anonymous').'</a>';?></td>
-                <td class="align-middle small">
-                  <span class="rating d-block d-sm-inline-block">
-                    <span<?=$r['cid']>=1?' class="set"':'';?>></span>
-                    <span<?=$r['cid']>=2?' class="set"':'';?>></span>
-                    <span<?=$r['cid']>=3?' class="set"':'';?>></span>
-                    <span<?=$r['cid']>=4?' class="set"':'';?>></span>
-                    <span<?=$r['cid']==5?' class="set"':'';?>></span>
-                  </span><br>
-                  <small><?= strip_tags($r['notes']);?></small>
-                </td>
-                <td class="align-middle">
-                  <?php $sc=$db->prepare("SELECT `id`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-                  $sc->execute([':id'=>$r['rid']]);
-                  $rc=$sc->fetch(PDO::FETCH_ASSOC);
-                  echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab1-6">'.$rc['title'].'</a>';?>
-                </td>
-                <td class="align-middle small"><?= date($config['dateFormat'],$r['ti']);?></td>
-                <td class="align-middle">
-                  <div class="btn-group float-right" id="controls-<?=$r['id'];?>">
-                    <?=($user['options'][0]==1?'<button class="add'.($r['status']=='approved'?' hidden':'').'" id="approve_'.$r['id'].'" onclick="update(`'.$r['id'].'`,`comments`,`status`,`approved`);" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>'.
-                    '<button class="trash" onclick="purge(`'.$r['id'].'`,`comments`);" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>':'');?>
+        <section class="content mt-3 overflow-visible list">
+          <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow sticky-top">
+            <div class="row">
+              <div class="col-12 col-md-2 align-middle pl-2 py-1">Author</div>
+              <div class="col-12 col-md-2 align-middle py-1">Review</div>
+              <div class="col-12 col-md-2 align-middle py-1">Rating</div>
+              <div class="col-12 col-md-2 align-middle py-1">In Response To</div>
+              <div class="col-12 col-md-2 align-middle py-1 text-center">Submitted On</div>
+              <div class="col-12 col-md-2"></div>
+            </div>
+          </article>
+          <?php $s=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='review'");
+          $s->execute();
+          $scnt=$s->rowCount();
+          while($r=$s->fetch(PDO::FETCH_ASSOC)){
+            $sc=$db->prepare("SELECT `id`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+            $sc->execute([':id'=>$r['rid']]);
+            if($sc->rowCount()>0){
+              $rc=$sc->fetch(PDO::FETCH_ASSOC);?>
+              <article class="card zebra mt-2 mb-0 p-0 overflow-visible card-list item shadow" id="l_<?=$r['id'];?>">
+                <div class="row">
+                  <div class="col-12 col-md-2 pt-2 align-top small"><?='<a href="mailto:'.$r['email'].'">'.($r['name']!=''?$r['name']:'Anonymous').'</a>';?></div>
+                  <div class="col-12 col-md-2 pt-2 small">
+                    <?= strip_tags($r['notes']);?>
                   </div>
-                </td>
-              </tr>
-            <?php }
-            if($scnt>20){?>
-              <tr id="more_20">
-                <td colspan="5">
-                  <div class="form-group">
-                    <div class="input-group">
-                      <button class="btn-block" onclick="more('comments','20','<?= isset($args[1])&&$args[1]!=''?$args[1]:'';?>');">More</button>
+                  <div class="col-12 col-md-2 pt-1">
+                    <span class="rating small">
+                      <span<?=$r['cid']>=1?' class="set"':'';?>></span>
+                      <span<?=$r['cid']>=2?' class="set"':'';?>></span>
+                      <span<?=$r['cid']>=3?' class="set"':'';?>></span>
+                      <span<?=$r['cid']>=4?' class="set"':'';?>></span>
+                      <span<?=$r['cid']==5?' class="set"':'';?>></span>
+                    </span>
+                  </div>
+                  <div class="col-12 col-md-2 pt-2 small">
+                    <?='<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$rc['id'].'#tab1-6">'.$rc['title'].'</a>';?>
+                  </div>
+                  <div class="col-12 col-md-2 pt-2 text-center small"><?= date($config['dateFormat'],$r['ti']);?></div>
+                  <div class="col-12 col-md-2 py-2 pr-2 text-right">
+                    <div class="btn-group" id="controls-<?=$r['id'];?>" role="group">
+                      <?=($user['options'][0]==1?'<button class="add'.($r['status']=='approved'?' hidden':'').'" id="approve_'.$r['id'].'" onclick="update(`'.$r['id'].'`,`comments`,`status`,`approved`);" data-tooltip="tooltip" aria-label="Approve"><i class="i">approve</i></button>'.
+                      '<button class="trash" onclick="purge(`'.$r['id'].'`,`comments`);" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>':'');?>
                     </div>
                   </div>
-                </td>
-              </tr>
-            <?php }?>
-          </tbody>
-        </table>
+                </div>
+              </article>
+            <?php }
+          }?>
+        </section>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

@@ -62,6 +62,7 @@
     <script src="core/js/shuffle/shuffle.js"></script>
     <script src="core/js/chartjs/chart.umd.min.js"></script>
     <script src="core/js/filerobot/filerobot-image-editor.min.js"></script>
+    <script src="core/js/tinysort/tinysort.min.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
   <body class="<?=($config['options'][4]==0?'no-tooltip':'').($user['rank']==1000&&$config['development']==1?' dev':'');?>" data-width="" data-theme="<?= (isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']!='')?$_COOKIE['admintheme']:'';?>">

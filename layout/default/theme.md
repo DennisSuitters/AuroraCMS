@@ -6,6 +6,8 @@
 - Improve QuickView modal display.
 - Add Account Deactivation section in Account Settings.
 - Add Pricing Page and Pricing Parser.
+- Add Recent Sale FOMO Notifican markup & processing.
+- Fix Social icons on Coming Soon & Maintenance Pages.
 
 #### v0.1.8
 - Fix input form colour.

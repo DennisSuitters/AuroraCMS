@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -55,11 +55,11 @@ else{?>
                   <option value="340">Wholesaler Gold and above</option>
                   <option value="350">Wholesaler Platinum and above</option>
                   <option value="400">Contributor and above</option>
-                  <option value="500">Author and above</option>
-                  <option value="600">Editor and above</option>
-                  <option value="700">Moderator and above</option>
-                  <option value="800">Manager and above</option>
-                  <option value="900">Administrator and above</option>
+                  <?=($user['rank']>400?'<option value="500">Author and above</option>':'').
+                  ($user['rank']>500?'<option value="600">Editor and above</option>':'').
+                  ($user['rank']>600?'<option value="700">Moderator and above</option>':'').
+                  ($user['rank']>700?'<option value="800">Manager and above</option>':'').
+                  ($user['rank']>800?'<option value="900">Administrator and above</option>':'');?>
                 </select>
                 <div class="input-text">
                   <label for="help">Help: </label><input id="help" name="help" type="checkbox">

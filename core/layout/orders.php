@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -237,6 +237,14 @@ if($user['options'][4]==1){
             </div>
             <div id="notifications" role="alert"></div>
             <section class="content mt-3 overflow-visible list" id="contentview">
+              <article class="card mx-2 mt-2 mb-0 p-0 overflow-visible card-list card-list-header shadow sticky-top">
+                <div class="row">
+                  <div class="col-12 col-md-3 text-center">Order Number</div>
+                  <div class="col-12 col-md-3 text-center">Date</div>
+                  <div class="col-12 col-md-2 text-center">Status</div>
+                  <div class="col-12 col-md"></div>
+                </div>
+              </article>
               <?php $zeb=0;
               while($r=$s->fetch(PDO::FETCH_ASSOC)){
                 if($r['due_ti']<$ti&&$r['status']!='paid'){
@@ -260,9 +268,8 @@ if($user['options'][4]==1){
                     </div>
                   </div>
                   <div class="col-3 overflow-visible pt-2 line-clamp small">
-                    Date:&nbsp;
-                      <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
-                      <small>Due:&nbsp;<?= date($config['dateFormat'],$r['due_ti']);?></small>
+                    <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
+                    <small>Due:&nbsp;<?= date($config['dateFormat'],$r['due_ti']);?></small>
                   </div>
                   <div class="col-2 p-2 align-middle justify-content-center">
                     <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
@@ -272,19 +279,9 @@ if($user['options'][4]==1){
                       <div class="btn-toolbar float-right" role="toolbar">
                         <div class="btn-group" role="group">
                           <?=($user['options'][4]==1?
-                            ($r['qid']!=''&&$r['aid']==''?
-                              '<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice"><i class="i">order-quotetoinvoice</i></a>'
-                            :
-                              ''
-                            ).
-                            ($r['aid']==''?
-                              '<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');"><i class="i">archive</i></button>'
-                            :
-                              ''
-                            )
-                          :
-                            ''
-                          ).
+                            ($r['qid']!=''&&$r['aid']==''?'<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice"><i class="i">order-quotetoinvoice</i></a>':'').
+                            ($r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');"><i class="i">archive</i></button>':'')
+                          :'').
                           '<button class="print" data-tooltip="tooltip" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=print`);"><i class="i">print</i></button>'.
                           (isset($c['email'])&&$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');"><i class="i">email-send</i></button>':'').
                           ($user['options'][0]==1?'<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Duplicate"><i class="i">copy</i></a>':'').

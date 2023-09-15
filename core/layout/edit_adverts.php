@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -37,13 +37,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         </div>
         <div class="p-4">
           <div class="form-row">
-            <label id="<?=$r['contentType'];?>Title" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Title" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Title Field">&#128279;</a>':'';?>Title</label>
+            <label id="<?=$r['contentType'];?>Title" for="title">Title</label>
           </div>
           <div class="form-row">
             <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="title" data-bs="trash" placeholder="Enter a Title...."<?=$user['options'][1]==1?'':' readonly';?>>
             <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
           </div>
-          <label id="<?=$r['contentType'];?>Image" for="file"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Image" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Image Field">&#128279;</a>':'';?>Image</label>
+          <label id="<?=$r['contentType'];?>Image" for="file">Image</label>
           <div class="form-row">
             <?php $w='';
             if(stristr($r['file'],'/thumbs/'))$w='thumbs';
@@ -65,32 +65,32 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               '');?>
           </div>
           <div id="editfile"></div>
-          <label id="<?=$r['contentType'];?>URL" for="url"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'URL" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' URL Field">&#128279;</a>':'';?>URL</label>
+          <label id="<?=$r['contentType'];?>URL" for="url">URL</label>
           <div class="form-row">
             <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="url" type="text" value="<?=$r['url'];?>"<?=$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
             <?=$user['options'][1]==1?'<button class="save" id="saveurl" data-dbid="url" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
           </div>
           <div class="row">
             <div class="col-12 col-sm-4 pr-md-3">
-              <label id="<?=$r['contentType'];?>DateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'DateCreated" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Created Date">&#128279;</a>':'';?>Created</label>
+              <label id="<?=$r['contentType'];?>DateCreated" for="ti">Created</label>
               <div class="form-row">
                 <input id="ti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['ti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`ti`,getTimestamp(`ti`),`select`);"':' readonly';?>>
               </div>
             </div>
             <div class="col-12 col-sm-4 pr-md-3">
-              <label id="<?=$r['contentType'];?>Start" for="tis"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Start" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Event Start Date Field">&#128279;</a>':'';?>Display Start Date <span class="labeldate" id="labeldatetis"><?= $r['tis']>0?date($config['dateFormat'],$r['tis']):'';?></span></label>
+              <label id="<?=$r['contentType'];?>Start" for="tis">Display Start Date <span class="labeldate" id="labeldatetis"><?= $r['tis']>0?date($config['dateFormat'],$r['tis']):'';?></span></label>
               <div class="form-row">
                 <input id="tis" type="datetime-local" value="<?=$r['tis']!=0?date('Y-m-d\TH:i',$r['tis']):'';?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`tis`,getTimestamp(`tis`));"':' readonly';?>>
               </div>
             </div>
             <div class="col-12 col-sm-4 pr-md-3">
-              <label id="<?=$r['contentType'];?>End" for="tie"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'End" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' End Date Field">&#128279;</a>':'';?>Display End Date <span class="labeldate" id="labeldatetie"><?= $r['tie']>0?date($config['dateFormat'],$r['tie']):'';?></span></label>
+              <label id="<?=$r['contentType'];?>End" for="tie">Display End Date <span class="labeldate" id="labeldatetie"><?= $r['tie']>0?date($config['dateFormat'],$r['tie']):'';?></span></label>
               <div class="form-row">
                 <input id="tie" type="datetime-local" value="<?=$r['tie']!=0?date('Y-m-d\TH:i',$r['tie']):'';?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`tie`,getTimestamp(`tie`));"':' readonly';?>>
               </div>
             </div>
           </div>
-          <label id="<?=$r['contentType'];?>Client" for="cid"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Client" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Client Field">&#128279;</a>':'';?>Client</label>
+          <label id="<?=$r['contentType'];?>Client" for="cid">Client</label>
           <div class="form-row">
             <select id="cid" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cid" onchange="update('<?=$r['id'];?>','content','cid',$(this).val(),'select');"<?=$user['options'][1]==1?'':' disabled';?>>
               <option value="0">Select a Client</option>
@@ -102,7 +102,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
           <div class="row">
             <div class="col-12 col-sm-3">
-              <label id="<?=$r['contentType'];?>Cost" for="cost"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Cost" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Cost Field">&#128279;</a>':'';?>Cost&nbsp;per&nbsp;Month</label>
+              <label id="<?=$r['contentType'];?>Cost" for="cost">Cost&nbsp;per&nbsp;Month</label>
               <div class="form-row">
                 <div class="input-text">$</div>
                 <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
@@ -110,7 +110,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="col-12 col-sm-3 pl-sm-2">
-              <label id="<?=$r['contentType'];?>Views" for="views"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Views" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Views Field">&#128279;</a>':'';?>Impressions</label>
+              <label id="<?=$r['contentType'];?>Views" for="views">Impressions</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button>'.
@@ -118,14 +118,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="col-12 col-sm-3 pl-sm-2">
-              <label id="<?=$r['contentType'];?>Quantity" for="quantity"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Quantity" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Quantity Field">&#128279;</a>':'';?>Max&nbsp;Impressions</label>
+              <label id="<?=$r['contentType'];?>Quantity" for="quantity">Max&nbsp;Impressions</label>
               <div class="form-row">
                 <input class="textinput" id="quantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?=$r['quantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="save" id="savequantity" data-dbid="quantity" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
             </div>
             <div class="col-12 col-sm-3 pl-sm-2">
-              <label id="<?=$r['contentType'];?>Clicks" for="quantity"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Clicks data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Clicks Field">&#128279;</a>':'';?>Clicks</label>
+              <label id="<?=$r['contentType'];?>Clicks" for="quantity">Clicks</label>
               <div class="form-row">
                 <input class="textinput" id="lti" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="lti" type="text" value="<?=$r['lti'];?>"<?=$user['options'][1]==1?' placeholder="Clicks..."':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="save" id="savelti" data-dbid="lti" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -134,7 +134,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
           <div class="row">
             <div class="col-12 col-sm">
-              <label id="<?=$r['contentType'];?>Size" for="size"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Size" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Size Fields">&#128279;</a>':'';?>Size</label>
+              <label id="<?=$r['contentType'];?>Size" for="size">Size</label>
               <div class="row">
                 <div class="col-12 col-sm">
                   <div class="form-row">
@@ -163,7 +163,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="row">
               <div class="col-12 col-sm-6 pr-md-3">
-                <label id="<?=$r['contentType'];?>Status" for="status"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Status" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Status Selector">&#128279;</a>':'';?>Status</label>
+                <label id="<?=$r['contentType'];?>Status" for="status">Status</label>
                 <div class="form-row">
                   <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');">
                     <option value="unpublished"<?=$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
@@ -172,7 +172,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
               <div class="col-12 col-sm-6 pl-md-3">
-                <label id="<?=$r['contentType'];?>Rank" for="rank"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#'.$r['contentType'].'Rank" data-tooltip="tooltip" aria-label="PermaLink to '.ucfirst($r['contentType']).' Access Selector">&#128279;</a>':'';?>Access</label>
+                <label id="<?=$r['contentType'];?>Rank" for="rank">Access</label>
                 <div class="form-row">
                   <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rank"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','rank',$(this).val(),'select');toggleRank($(this).val());">
                     <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>

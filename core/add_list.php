@@ -21,7 +21,6 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $rid=filter_input(INPUT_POST,'rid',FILTER_UNSAFE_RAW);
-$lid=filter_input(INPUT_POST,'lid',FILTER_UNSAFE_RAW);
 $lh=filter_input(INPUT_POST,'lh',FILTER_UNSAFE_RAW);
 $li1=filter_input(INPUT_POST,'li',FILTER_UNSAFE_RAW);
 $li2=filter_input(INPUT_POST,'li2',FILTER_UNSAFE_RAW);
@@ -32,7 +31,7 @@ $lda=filter_input(INPUT_POST,'lda',FILTER_UNSAFE_RAW);
 $ti=time();
 if($lda=='')echo'<script>window.top.window.toastr["error"]("The Notes field must contain data!");</script>';
 else{
-	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`code`,`contentType`,`title`,`urlSlug`,`notes`,`ti`) VALUES (:rid,:lid,'list',:title,:url,:notes,:ti)");
+	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`title`,`urlSlug`,`notes`,`ti`) VALUES (:rid,'list',:title,:url,:notes,:ti)");
 	$q->execute([
 		':rid'=>$rid,
 		':lid'=>$lid,

@@ -1,7 +1,7 @@
 :root {
   --tile-length: 17.5vmin;
   --animation-duration: 8s;
-  --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font: "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   --font-size: 1rem;
   --accent-color: #007bff;
@@ -227,7 +227,7 @@
   --warning-background-color: #ffc107;
   --warning-border-color: #ffc107;
   --warning-color: #ffc107;
-  --warning-color-contrast: #fff;
+  --warning-color-contrast: #000;
   --warning-link: #523e02;
 
   --justify-important: center;
@@ -272,6 +272,7 @@
   --form-input-border-style: solid;
   --form-input-border-style-focus: solid;
   --form-input-border-style-disabled: solid;
+  --form-input-border-radius:.25em;
   --form-input-color: #000;
   --form-input-color-focus: #000;
   --form-input-color-checked: #fff;
@@ -330,7 +331,7 @@
   --list-group-color-active: #212529;
   --list-group-color-disabled: #000;
 
-  --dialog-backdrop-color: rgba(0, 0, 0, .9);
+  --dialog-backdrop-color: rgba(0, 0, 0, .05);
   --dialog-background-color: #fff;
   --dialog-header-background-color: #fff;
   --dialog-header-color: #000;

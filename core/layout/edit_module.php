@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -42,9 +42,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <input class="tab-control" id="tab1-2" name="tabs" type="radio">
             <label for="tab1-2">Questions</label>
 <?php /* Content */?>
-            <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
+            <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
               <div class="form-row">
-                <label id="moduleTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleTitle" data-tooltip="tooltip" aria-label="PermaLink to Module Title Field">&#128279;</a>':'';?>Title</label>
+                <label for="title">Title</label>
               </div>
               <div class="form-row">
                 <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="title" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -52,7 +52,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 '<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
               <div class="form-row mt-3">
-                <label id="moduleTime" for="tti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleTime" data-tooltip="tooltip" aria-label="PermaLink to Module Time Field">&#128279;</a>':'';?>Time to complete</label>
+                <label for="tti">Time to complete</label>
               </div>
               <div class="form-row">
                 <select id="tti"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','modules','tti',$(this).val(),'select');">
@@ -73,7 +73,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </select>
               </div>
               <div class="form-row mt-3">
-                <label id="moduleCaption" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleCaption" data-tooltip="tooltip" aria-label="PermaLink to Module Caption Field">&#128279;</a>':'';?>Caption</label>
+                <label for="title">Caption</label>
               </div>
               <div class="form-row">
                 <input class="textinput" id="caption" type="text" value="<?=$r['caption'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="caption" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -107,7 +107,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
               <?php if($user['options'][1]==1){?>
                 <div class="form-row">
-                  <label id="moduleQuestion" for="question"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/module/'.$r['id'].'#moduleQuestion" data-tooltip="tooltip" aria-label="PermaLink to Module Question Field">&#128279;</a>':'';?>Question</label>
+                  <label for="question">Question</label>
                 </div>
                 <div class="form-row">
                   <div class="input-text" data-el="question" contenteditable="<?=$user['options'][1]==1?'true':'false';?>"><?=$r['question'];?></div>

@@ -1,19 +1,26 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
+- Fix missing Alt attribute on some items in Article Lists.
+- Fix List items images being too large, explore converting to webp/avif when uploading images.
 - Address itemCount config setting not display all items if set to '0'.
 - Update Checkout Layout for Themes.
-- Explore adding Notification or Sale/Enquiries of Products/Services.
 - Explore adding Shipping Activity to Orders.
+- Update Settings Layout for users.
 - Explore adding Referral Codes on SignUp forms, and code generation by allowed users.
   - Account Holders can generate referrals for services, products & courses.
   - Track referrals being used to account that generated referral to apply discount to.
   - Count number of referrals to number of items or orders to apply discounts to.
 - Explore allowing user to set price/tip/buy me a coffee.
 - Administration.
+  - Add instructional walkthrough on pages explaining what fields do, step by step.
+  - SEO
+    - Add AHref's site verification for those that don't use Google's services.
   - Config database, add how to adjust total costs for items, by percentage, fixed value, or multiplying value.
   - Explore update Livechat Layout.
   - Improve KanBan Item Layout.
   - Explore including Shipping Activity to Orders.
+  - Contact Preferences.
+    - Add active field to entries to allow enabling/disabling display for changing hours.
   - Dashboard.
     - Add Notification type Popup to indicate active LiveChats.
     - Layout selections, CRM, eCommerce, Learning, Analytics.
@@ -23,7 +30,6 @@ This is a quick list of things what need to be fixed or worked on to help those 
       - Popular Courses.
       - Courses Complete.
   - Accounts.
-    - Explore Theme switching, add system default.
     - Explore adding recent device activity.
     - Explore processing Referral Codes.
     - Add wage value to accounts for calculating hours costs.
@@ -35,7 +41,8 @@ This is a quick list of things what need to be fixed or worked on to help those 
     - Using @supports in CSS isn't fully supported in Safari yet either.
   - Fix update core system.
   - Inventory.
-    - Add cost of Purchase Cost Expense (eCost) value for calculating profit made on sold items. (new DB Table "materials").
+    - Add cost of Purchase Cost Expense (eCost) value for calculating profit made on sold items. (new DB Table "materials"). WIP
+    - hCost (Holding Cost/Deposit), available to code holders and restricted to states.
     - Customer/Contact List, more of a selection Widget for emails and orders.
     - Improve options selection to include other associated inventory, or add options exclusive to views inventory.
     - Explore adding a Materials List with item cost.

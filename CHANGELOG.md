@@ -1,4 +1,4 @@
-### v0.2.26-5
+### v0.2.26-6
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.
@@ -17,6 +17,13 @@
 - Add Account Deactivation section to User Account Settings.
 - Added Toast Notification when list item added.
 - Add Pricing page, along with editable list, highlighting items and highlight message.
+- Add Recent Sale FOMO notification, with added Australian State restriction.
+- Tidy up some code.
+- Fix timeago function not reporting times correctly.
+- Update jQuery for Administration to 3.7.1
+- Remove AuroraCMS Branding from Login and Installation pages.
+- Change AuroraCMS Branding in Administration to help with top bar layout on smaller devices.
+- Fix Weather Administration Widget check for valid Open Weather API Key.
 
 #### v0.2.25
 - Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.

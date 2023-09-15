@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -82,23 +82,25 @@ if($act!=''){
             if(stristr($c['gravatar'],'@'))$avatar='http://gravatar.com/avatar/'.md5($c['gravatar']);
             elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))$avatar=$c['gravatar'];
 					}
-	  			echo'window.top.window.$("#comments").append(`<div id="l_'.$id.'" class="row p-2 mt-1 swing-in-top-fwd">'.
-						'<div class="col-1">'.
-							'<img style="max-width:64px;height:64px;" alt="User" src="'.$avatar.'">'.
-						'</div>'.
-						'<div class="col-9">'.
-							'<h6 class="media-heading">'.$name.'</h6>'.
-							'<time><small>'.date($config['dateFormat'],$ti).'</small></time><br>'.
-							$da.
-						'</div>'.
-						'<div class="col-2 text-right align-top" id="controls-'.$id.'">'.
-							'<form target="sp" method="post" action="core/purge.php">'.
-								'<input name="id" type="hidden" value="'.$id.'">'.
-								'<input name="t" type="hidden" value="comments">'.
-								'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
-							'</form>'.
-						'</div>'.
-					'</div>`);';
+	  			echo'window.top.window.$("#comments").append(`'.
+          '<div id="l_'.$id.'" class="row swing-in-top-fwd">'.
+            '<article class="card zebra mt-2 mb-0 p-0 overflow-visible card-list shadow">'.
+              '<div class="row">'.
+		            '<div class="col-12 col-md-2 pl-2 py-2 align-top small">'.$name.'</div>'.
+			          '<div class="col-12 col-md-4 py-2 align-top small">'.$da.'</div>'.
+                '<div class="col-12 col-md-2 py-2 text-center small">'.date($config['dateFormat'],$ti).'</div>'.
+			          '<div class="col-12 col-md py-2 pr-2 text-right">'.
+                  '<div class="btn-group" id="controls-'.$id.'" role="group">'.
+					           '<form target="sp" method="post" action="core/purge.php">'.
+					             '<input name="id" type="hidden" value="'.$id.'">'.
+				               '<input name="t" type="hidden" value="comments">'.
+				               '<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+		                 '</form>'.
+		               '</div>'.
+                 '</div>'.
+               '</article>'.
+             '</div>'.
+           '</div>`);';
    			}else echo'window.top.window.toastr["error"]("There was an issue adding the Data!");';
       }else echo'window.top.window.toastr["error"]("The Email enter is not valid!");';
       break;

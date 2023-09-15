@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,7 +17,7 @@ else{?>
   <main>
     <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
       <div class="container-fluid">
-        <div class="card mt-3 border-radius-0 bg-transparent border-0 overflow-visible">
+        <div class="card border-radius-0 bg-transparent border-0 mt-3 overflow-visible">
           <?php $curHr=date('G');
           $msg='';
           if($curHr<12)
@@ -26,7 +26,7 @@ else{?>
             $msg.='Good Afternoon ';
           else
             $msg.='Good Evening ';
-          echo'<h5 class="welcome-message">'.$msg.($user['name']!=''?strtok($user['name'], " "):$user['username']).'!'."<br>The date is ".date($config['dateFormat'])."</h5>";
+          echo'<h5 class="welcome-message">'.$msg.($user['name']!=''?strtok($user['name'], " "):$user['username']).'!'." The date is ".date($config['dateFormat'])."</h5>";
           echo'<div id="updatecheck" class="alert alert-info hidewhenempty"></div>';
           if($user['accountsContact']==1&&$config['hosterURL']!='')echo'<div id="hostinginfo"></div>';
           echo($config['maintenance']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').($config['comingsoon']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
@@ -63,19 +63,19 @@ else{?>
             if(isset($h1[1]))
               $pageerrors++;
           }
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE `file`!='' AND `fileALT`='' AND `contentType` NOT LIKE 'testimonial%'");
+          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE `file`!='' AND `fileALT`='' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
           $sseo->execute();
           $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
           $contenterrors=$contenterrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70 AND `contentType` NOT LIKE 'testimonial%'");
+          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70 AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
           $sseo->execute();
           $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
           $contenterrors=$contenterrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160 AND `contentType` NOT LIKE 'testimonial%'");
+          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160 AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
           $sseo->execute();
           $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
           $contenterrors=$contenterrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT `notes` FROM `".$prefix."content` WHERE `notes`!='' AND `contentType` NOT LIKE 'testimonial%'");
+          $sseo=$db->prepare("SELECT `notes` FROM `".$prefix."content` WHERE `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
           $sseo->execute();
           while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
             if(strlen(strip_tags($rseo['notes']))<100)

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -101,20 +101,20 @@ if($args[0]!='compose'){
                   </div>
                 </div>
                 <?php if($args[0]!='compose'){?>
-                  <label id="messageDateCreated" for="ti">Created</label>
+                  <label for="ti">Created</label>
                   <div class="form-row">
                     <input id="ti" type="text" value="<?= isset($r['ti'])?date($config['dateFormat'],$r['ti']):date($config['dateFormat'],time());?>" readonly>
                   </div>
                 <?php }?>
-                <label id="messageSubject" for="subject">Subject</label>
+                <label for="subject">Subject</label>
                 <div class="form-row">
                   <input id="subject" name="subject" type="text" value="<?=$args[0]=='reply'?'Re: ':'';echo$args[0]!='compose'?$r['subject']:'';?>" placeholder="Enter a Subject" required data-tooltip="tooltip" aria-required="true">
                 </div>
-                <label id="messageTo" for="to_email">To</label>
+                <label for="to_email">To</label>
                 <div class="form-row">
                   <input id="to_email" name="to_email" type="text" value="<?= isset($r)&&$r['to_email']!=''?$r['to_email']:'';?>" placeholder="Enter an Email..." required data-tooltip="tooltip" aria-required="true">
                 </div>
-                <label id="messageFrom" for="from_email">From</label>
+                <label for="from_email">From</label>
                 <div class="form-row">
                   <?php if($args[0]=='compose'){?>
                     <select id="from_email" name="from_email">
@@ -127,7 +127,7 @@ if($args[0]!='compose'){
                     <input id="from_email" name="from_email" type="text" value="<?=$args[0]=='compose'?$user['email']:$r['from_email'];?>" required data-tooltip="tooltip" aria-required="true">
                   <?php }?>
                 </div>
-                <label id="messageAttachments" for="attachments">Attachments</label>
+                <label for="attachments">Attachments</label>
                 <div class="form-row">
                   <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','messages','attachments');return false;"><i class="i">browse-media</i></button>
                 </div>
@@ -163,12 +163,12 @@ if($args[0]!='compose'){
                   }
                 </script>
                 <?php if($args[0]!='compose'){?>
-                  <label id="messageNotes" for="notes">Message</label>
+                  <label for="notes">Message</label>
                   <div class="form-row note-editor note-frame">
                     <iframe id="notes" src="core/viewemail.php?id=<?=$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
                   </div>
                 <?php }?>
-                <label id="messageReply" for="bod">Reply</label>
+                <label for="bod">Reply</label>
                 <div class="row">
                   <textarea id="bod" name="bod"></textarea>
                 </div>

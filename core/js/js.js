@@ -57,6 +57,7 @@ document.addEventListener("submit",function(event){
     }).then(function(response){
       return response.text();
     }).then(function(r){
+      console.log(r);
 			var action=r.split("|");
 			var el=document.getElementById(action[0]);
 			var notification=document.createElement(action[1]);

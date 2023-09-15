@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -91,7 +91,7 @@ else{?>
                 </div>
                 <div class="card-header overflow-visible mt-0 pt-0 line-clamp">
                   <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/adverts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
-                  <?php echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+                  <?php echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
                 </div>
                 <div class="card-footer">
                   <span class="code hidewhenempty"><?=$r['code'];?></span>
@@ -101,11 +101,7 @@ else{?>
                     <div class="btn-toolbar float-right" role="toolbar">
                       <div class="btn-group" role="group">
                         <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/adverts/edit/<?=$r['id'];?>" role="button"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
-                        <?=($user['options'][0]==1?
-                          '<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`unpublished`);"><i class="i">untrash</i></button>'.
-                          '<button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`delete`);"><i class="i">trash</i></button>'.
-                          '<button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`content`);"><i class="i">purge</i></button>'
-                        :'');?>
+                        <?=($user['options'][0]==1?'<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`unpublished`);"><i class="i">untrash</i></button><button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`content`);"><i class="i">purge</i></button>':'');?>
                       </div>
                     </div>
                   </div>

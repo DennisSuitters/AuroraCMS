@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -19,7 +19,6 @@
           <div class="row">
             <div class="col-12 col-sm-6">
               <ol class="breadcrumb m-0 pl-0 pt-0">
-                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                 <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/pages';?>">Pages</a></li>
                 <li class="breadcrumb-item active"><strong>Settings</strong></li>
               </ol>
@@ -32,12 +31,11 @@
             </div>
           </div>
         </div>
-        <div class="m-4">
         <?php if($user['options'][7]==1){
           if(!file_exists('layout/'.$config['theme'].'/theme.ini'))
             echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
           else{?>
-            <legend id="quickPageEdit"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/settings#quickPageEdit" data-tooltip="tooltip" aria-label="PermaLink to Quick Page Edit Section">&#128279;</a>':'';?>Quick Page Edit</legend>
+            <legend>Quick Page Edit</legend>
             <form target="sp" method="post" action="core/updatetheme.php" onsubmit="$('#codeSave').removeClass('btn-danger');">
               <label for="fileEditSelect">File:</label>
               <div class="form-row">
@@ -71,39 +69,38 @@
                 <textarea id="code" name="code"><?=$code;?></textarea>
               </div>
             </form>
-          </div>
-          <?php require'core/layout/footer.php';?>
-          <script>
-            $(document).ready(function (){
-              var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
-                lineNumbers:true,
-                lineWrapping:true,
-                mode:"text/html",
-                theme:"base16-dark",
-                autoRefresh:true
+            <?php require'core/layout/footer.php';?>
+            <script>
+              $(document).ready(function (){
+                var editor=CodeMirror.fromTextArea(document.getElementById("code"),{
+                  lineNumbers:true,
+                  lineWrapping:true,
+                  mode:"text/html",
+                  theme:"base16-dark",
+                  autoRefresh:true
+                });
+                var charWidth=editor.defaultCharWidth(),basePadding=4;
+                editor.refresh();
+                editor.on('change',function(cMirror){
+                  $('#codeSave').addClass('btn-danger');
+                });
+                $('#filesEditLoad').on({
+                  click:function(event){
+                    event.preventDefault();
+                    var url=$('#filesEditSelect').val();
+                    $.ajax({
+                      url:url+'?<?= time();?>',
+                      dataType:"text",
+                      success:function(data){
+                        editor.setValue(data);
+                      }
+                    });
+                  }
+                });
               });
-              var charWidth=editor.defaultCharWidth(),basePadding=4;
-              editor.refresh();
-              editor.on('change',function(cMirror){
-                $('#codeSave').addClass('btn-danger');
-              });
-              $('#filesEditLoad').on({
-                click:function(event){
-                  event.preventDefault();
-                  var url=$('#filesEditSelect').val();
-                  $.ajax({
-                    url:url+'?<?= time();?>',
-                    dataType:"text",
-                    success:function(data){
-                      editor.setValue(data);
-                    }
-                  });
-                }
-              });
-            });
-          </script>
-        <?php }
-      }?>
+            </script>
+          <?php }
+        }?>
       </div>
     </div>
   </section>

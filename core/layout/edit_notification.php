@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -42,13 +42,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <label for="tab1-2">Images</label>
           <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Settings</label>':'';?>
 <?php /* Content */ ?>
-          <div class="tab1-1 border-top p-4" data-tabid="tab1-1" role="tabpanel">
-            <label id="pageTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageTitle" data-tooltip="tooltip" aria-label="PermaLink to Page Title Field">&#128279;</a>':'';?>Title</label>
+          <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
+            <label for="title">Title</label>
             <div class="form-row">
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="title" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?> onkeyup="genurl();$('#titleupdate').text($(this).val());">
               <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <label id="notificationAnimation" for="animation"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/notification/edit/'.$r['id'].'#notificationAnimation" data-tooltip="tooltip" aria-label="PermaLink to Page Access Selector">&#128279;</a>':'';?>Animation</label>
+            <label for="animation">Animation</label>
             <div class="form-row">
               <select id="animation" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="heading"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`menu`,`heading`,$(this).val(),`select`);"':' disabled';?>>
                 <option value=""<?=$r['heading']==''?' selected':'';?>>None</option>
@@ -58,8 +58,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </select>
             </div>
             <div id="pageNotes" class="row mt-3">
-              <?=($user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" data-tooltip="tooltip" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'');
-              if($user['options'][1]==1){
+              <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
                   '<div class="btn-group d-flex justify-content-end">';
                     if($r['suggestions']==1){
@@ -104,9 +103,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
 <?php /* Images */ ?>
-          <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+          <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
             <legend>Cover</legend>
-            <label id="pageCoverImage" for="cover"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageCoverImage" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image Field">&#128279;</a>':'';?>Image</label>
+            <label for="cover">Image</label>
             <div class="form-row">
               <?php $w='';
               if(stristr($r['cover'],'/thumbs/'))$w='thumbs';
@@ -128,7 +127,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 '');?>
             </div>
             <div id="editcover"></div>
-            <label id="pageImageALT" for="fileALT"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageImageALT" data-tooltip="tooltip" aria-label="PermaLink to Page Cover Image ALT Field">&#128279;</a>':'';?>Image ALT</label>
+            <label for="fileALT">Image ALT</label>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
               <input class="textinput" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Image ALT Test..."':' disabled';?>>
@@ -137,12 +136,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
 <?php /* Settings */
           if($r['file']!='comingsoon'&&$r['file']!='maintenance'){?>
-            <div class="tab1-3 border-top p-4" data-tabid="tab1-3" role="tabpanel">
+            <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
               <?php if($r['file']!='index'){?>
-                <div class="row">
-                  <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/notification/edit/'.$r['id'].'#notificationActive" data-tooltip="tooltip" aria-label="PermaLink to Notification Active Checkbox">&#128279;</a>':'';?>
+                <div class="form-row">
                   <input id="notificationActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label id="notificationactive0<?=$r['id'];?>" for="notificationActive">Active</label>
+                  <label for="notificationActive">Active</label>
                 </div>
               <?php }?>
             </div>

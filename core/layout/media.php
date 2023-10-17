@@ -22,7 +22,6 @@ else{?>
             <div class="row">
               <div class="col-12 col-sm">
                 <ol class="breadcrumb m-0 pt-0">
-                  <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                   <li class="breadcrumb-item active">Media</li>
                 </ol>
               </div>

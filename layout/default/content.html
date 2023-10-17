@@ -28,7 +28,7 @@
 					</nav>
 				</div>
 			</div>
-		</category-nav><eventsitems items="4">
+		</category-nav><eventsitems itemCount="4">
 				<div class="row mt-3">
 					<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events/" aria-label="Go to Events">Events</a></div>
 					<eventitem>
@@ -52,7 +52,7 @@
 				</div>
 			</eventsitems></aside>
 		<item>
-			<article class="card col-11 col-md mx-auto mx-md-3 mb-5">
+			<article class="card col-11 col-md mx-auto mx-md-3 mb-5 overflow-visible">
 				<json-ld>
 				<image>
 					<figure class="card-image full">
@@ -105,6 +105,28 @@
 						</div>
 					</countdown>
 					<print content="notes">
+					<options>
+						<details class="mt-5" open>
+							<summary class="h3"><print options="category"></summary>
+							<optionsitems>
+								<div class="row mx-4 mt-4 optionslist<print options=categoryunspaced>" id="optionselected<print options=id>">
+									<optionsmedia>
+										<div class="col-12 col-sm-4">
+											<optionsmediaitems>
+										</div>
+									</optionsmedia>
+									<div class="col-12 col-sm px-3">
+										<div class="h3"><print options="heading"></div>
+										<div class="pull-right mx-3 mb-3 text-center">
+											<print options="cost">
+											<label for="<print options=categoryunspaced>options" class="btn mt-3 pt-2" onclick="selectOption(<print options=id>,`<print options=categoryunspaced>`);return false;">Select this option</label>
+										</div>
+										<print options="notes">
+									</div>
+								</div>
+							</optionsitems>
+						</details>
+					</options>
 					<list>
 						<div class="row justify-content-center">
 							<listitems>
@@ -231,7 +253,7 @@
 				</related>
 			</article>
 		</item>
-		<settings itemCount="all">
+		<settings itemCount="10">
 		<contentitems>
 			<section class="col-12 col-md">
 				<pagenotes>
@@ -258,9 +280,7 @@
 								</a>
 							</div>
 							<div class="card-header h5"><a href="<print content=linktitle>" title="<print content=title>"><print content="title"></a></div>
-							<div class="corner-ribbon small top-right"><print content="cost"></div>
-							<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
-							<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
+							<div class="text-center my-3 hidewhenempty"><print content="cost"></div>
 							<div class="card-footer">
 								<a class="btn" href="<print content=linktitle>" role="button">View</a>
 								<quickview>

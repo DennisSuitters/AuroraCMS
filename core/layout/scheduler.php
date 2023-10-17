@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -39,7 +39,7 @@
             </small>
           </div>
         </div>
-        <div id="calendar-view" class="row p-3">
+        <div id="calendar-view" class="row mt-3">
           <div id="calendar"></div>
         </div>
       </div>

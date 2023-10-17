@@ -1,7 +1,8 @@
-![AuroraCMS](core/images/readmelogo.webp)
+# AuroraCMS - The Free Australian Content Management System
+
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.25
+Current version is v0.2.26
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -20,6 +21,8 @@ Current version is v0.2.25
 - Business Hours Editor.
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
+- FOMO Notifications.
+  - Limit different content types to Australian State area.
 - Custom Pages.
 - Content Types with pages, and individual item pages.
   - Activities
@@ -38,6 +41,9 @@ Current version is v0.2.25
     - Quick View Option for Inventory.
     - Product Reviews and Approval before public display.
     - Assign Points to Items, that get added to user's Earned Points.
+    - Expenses per Inventory item.
+      - Add Expense items.
+      - Button when editing inventiry to help calculate sales price.
     - Restrict Wholesale Items to Wholesale Account per Level.
     - Sales Content.
       - Determines Sales periods to current date to suggest edits a month in advance for items older than 11 months in a Dashboard widget, for Valentine's Day, Easter, Mother's Day, Father's Day, Black Friday, Halloween, Small Business Day, and Christmas.
@@ -204,12 +210,12 @@ You can get themes from our Themes GitHub Repository @ [AuroraCMS-Themes](https:
 - [FileRobot Image Editor](https://github.com/scaleflex/filerobot-image-editor)
 
 ### Tested on:
-- CentOS Linux 7.2.1511 with Webmin 1.791
-- Ubuntu Linux 14.04 + Apache v2.4.7 + PHP v5.6-7.3 + MySQL v5.5.37
-- Linux Mint Ubuntu Edition Apache 2.4.7 + PHP v5.6-7+ & MySQL v5.5.37
-- Linux Mint Debian Edition Apache 2.4.7 + PHP v5.6-7+ & MySQL v5.5.37
-- Debian 7 + nGinx + PHP 5.5-7.3 + MySQL
-- Windows 7 + WAMP + PHP 5.5 + MySQL
+- CentOS Linux 8.2 with Webmin 2.101
+- Ubuntu Linux 14.04 + Apache v2.4.57 + PHP v8.1 + MySQL v8.1.23
+- Linux Mint Ubuntu Edition Apache 2.4.57 + PHP v8.1+ & MySQL v8.1.23
+- Linux Mint Debian Edition Apache 2.4.57 + PHP v8.1+ & MySQL v8.1.23
+- Debian 7 + nGinx + PHP 8.1 + MySQL v8.1.23
+- Windows 7 + WAMP + PHP 8 + MySQL
 
 ### TODO:
 Consult the everchanging [TODO](https://github.com/DiemenDesign/AuroraCMS/blob/master/TODO.md) file.
@@ -225,16 +231,14 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
 
 ### AuroraCMS Live Sites by Diemen Design:
 - [AAAEarthworx](https://aaaearthworx.com.au/)
-- [Anime Excess](https://animeexcess.com.au/)
 - [BizzyKnits](https://bizzyknits.biz/)
 - [Corner Life Coach](https://corner.net.au/)
 - [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
 - [Diemen Design](https://diemen.design/)
 - [EntertainMe](https://entertainme.net.au/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
-- [Happy Valley Goat Farm](https://happyvalleygoat.farm/)
+- [Happy Valley Free Rang Farm](https://happyvalleyfarm.com.au/)
 - [Hays Technologies](https://haystechnologies.com.au/)
-- [K9FineDining](https://k9finedining.com/)
 - [Live Lightly Centre](https://livelightlycentre.com.au/)
 - [Lone Wolf Anime](https://lonewolfanime.com.au/)
 - [Raycraft Computer Services](https://www.raycraft.com.au/)

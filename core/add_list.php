@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -21,7 +21,6 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $rid=filter_input(INPUT_POST,'rid',FILTER_UNSAFE_RAW);
-$lid=filter_input(INPUT_POST,'lid',FILTER_UNSAFE_RAW);
 $lh=filter_input(INPUT_POST,'lh',FILTER_UNSAFE_RAW);
 $li1=filter_input(INPUT_POST,'li',FILTER_UNSAFE_RAW);
 $li2=filter_input(INPUT_POST,'li2',FILTER_UNSAFE_RAW);
@@ -32,10 +31,9 @@ $lda=filter_input(INPUT_POST,'lda',FILTER_UNSAFE_RAW);
 $ti=time();
 if($lda=='')echo'<script>window.top.window.toastr["error"]("The Notes field must contain data!");</script>';
 else{
-	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`code`,`contentType`,`title`,`urlSlug`,`notes`,`ti`) VALUES (:rid,:lid,'list',:title,:url,:notes,:ti)");
+	$q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`rid`,`contentType`,`title`,`urlSlug`,`notes`,`ti`) VALUES (:rid,'list',:title,:url,:notes,:ti)");
 	$q->execute([
 		':rid'=>$rid,
-		':lid'=>$lid,
 		':title'=>$lh,
 		':url'=>$lu,
 		':notes'=>$lda,
@@ -124,9 +122,9 @@ else{
       $media=4;
     }
     echo'<script>'.
-			'window.top.window.$("#list").append(`<div id="l_'.$id.'" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">'.
+			'window.top.window.$("#list").append(`<div id="l_'.$id.'" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible add-item">'.
 				'<div class="row">'.
-          '<div class="col-12 col-sm-4 list-images-'.$media.' overflow-hidden">';
+          '<div class="col-12 col-sm-3 list-images-'.$media.' overflow-hidden">';
           if($li1!=''){
             if(stristr($li1,'youtu')){
               preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$li1,$vidMatch);
@@ -212,6 +210,7 @@ else{
 					'</div>'.
 				'</div>'.
 			'</div>`);'.
+      'window.top.window.toastr["success"]("'.$lh.' added!")'.
 		'</script>';
 	}else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';
 }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -29,20 +29,26 @@ if($f!=''&&$t!=''&&$v!=0){
   if($v==0)$v='';
   $id=$db->lastInsertId();
 	echo'<script>'.
-				'window.top.window.$("#discountrange").append(`<div id="l_'.$id.'" class="form-row mt-1">'.
-					'<div class="input-text">From &#36;</div>'.
-					'<input type="number" value="'.$f.'" readonly>'.
-					'<div class="input-text">To &#36;</div>'.
-					'<input type="number" value="'.$t.'" readonly>'.
-					'<div class="input-text">Method</div>'.
-					'<input type="text" value="'.($m==2?'&#37; Off':'&#36; Off').'" readonly>'.
-					'<div class="input-text">Value</div>'.
-					'<input type="number" value="'.$v.'" readonly>'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="choices">'.
-						'<button type="submit" class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
-					'</form>'.
-				'</div>`);'.
-			'</script>';
+        'window.top.window.$("#discountrange").append(`<div id="l_'.$id.'" class="row add-item">'.
+          '<div class="col-12 col-md">'.
+            '<div class="input-text">'.$f.'</div>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<div class="input-text">'.$t.'</div>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<div class="input-text">'.($m==2?'&#37; Off':'&#36; Off').'</div>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<div class="form-row">'.
+              '<div class="input-text col-md">'.$v.'</div>'.
+              '<form target="sp" action="core/purge.php">'.
+                '<input type="hidden" name="id" value="'.$id.'">'.
+                '<input type="hidden" name="t" value="choices">'.
+                '<button type="submit" class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+              '</form>'.
+            '</div>'.
+          '</div>'.
+        '</div>`);'.
+      '</script>';
 }else echo'<script>window.top.window.toastr["error"]("Not all data was entered");</script>';

@@ -13,7 +13,7 @@ function serialize(form){
 }
 function quickview(id,src,el){
   document.getElementById('quickview-image'+id).src=src;
-  var elh=document.querySelectorAll(".quickview-thumbs img");
+  var elh=document.querySelectorAll(".quickview-image-"+id+" img");
   elh.forEach(function(elItem){elItem.classList.remove("active")});
   el.classList.add('active');
 }
@@ -57,6 +57,7 @@ document.addEventListener("submit",function(event){
     }).then(function(response){
       return response.text();
     }).then(function(r){
+      console.log(r);
 			var action=r.split("|");
 			var el=document.getElementById(action[0]);
 			var notification=document.createElement(action[1]);
@@ -123,10 +124,20 @@ document.addEventListener('click',function(event){
 		$('#da').summernote('pasteHTML','<blockquote><cite>'+user+' wrote:</cite>'+quote+'</blockquote>');
 	}
 	if(event.target.closest('.addCart')){
-		fetch('core/add_cart.php',{
+    var opts=document.querySelectorAll('select[name="options[]"]');
+    let opt='';
+    if(opts.length>0){
+      for(var i=0;i<opts.length;i++){
+        if(opts[i].value!=''){
+          opt+=opts[i].value+',';
+        }
+      }
+      opt=opt.replace(/[, ]+$/,"").trim();
+    }
+    fetch('core/add_cart.php',{
 			method:"POST",
 			headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
-	  	body:'id='+document.querySelector('.addCart').getAttribute("data-cartid")+'&cid='+document.querySelector('.addCart').getAttribute("data-cartchoice")
+	  	body:'id='+document.querySelector('.addCart').getAttribute("data-cartid")+'&opt='+opt
 		}).then(function(response){
 			return response.json();
 		}).then(function(j){
@@ -152,6 +163,50 @@ document.addEventListener('click',function(event){
 		});
 	}
 });
+function addQuickCart(qid){
+  var opts=document.querySelectorAll('select[name="options[]"]');
+  let opt='';
+  if(opts.length>0){
+    for(var i=0;i<opts.length;i++){
+      if(opts[i].value!=''){
+        opt+=opts[i].value+',';
+      }
+    }
+    opt=opt.replace(/[, ]+$/,"").trim();
+  }
+  fetch('core/add_cart.php',{
+    method:"POST",
+    headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
+    body:'id='+qid+'&opt='+opt
+  }).then(function(response){
+    return response.json();
+  }).then(function(j){
+    if(j=='nomore'){
+      alert('Purchase Limit Reached!');
+    }else if(j=='wholesaleoutside'){
+      alert('Wholesale purchasing is restricted only to items in your account rank!');
+    }else{
+      document.querySelector('.cart').innerHTML=j;
+      var cartage=document.querySelector('#cartage');
+      var sidecart=document.querySelector('#sidecart')
+      if(cartage.hasChildNodes()){
+        fetch('core/update_cartage.php').then(function(r){
+          return r.text();
+        }).then(function(html){
+          sidecart.classList.remove('d-none');
+          sidecart.classList.remove('jello');
+          sidecart.classList.add('jello');
+          cartage.innerHTML=html;
+        });
+      }
+    }
+  });
+}
+function selectOption(id,cat){
+  document.querySelector(`#`+cat+`options`).value=id;
+  document.querySelector(`.optionslist`+cat).classList.remove('optionselected')
+  document.querySelector(`#optionselected`+id).classList.add('optionselected');
+}
 document.addEventListener("DOMContentLoaded",function(event) {
   var youTubeVideos=document.querySelectorAll('.youtube');
   for (var i=0;i<youTubeVideos.length;i++){

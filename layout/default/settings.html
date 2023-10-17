@@ -118,6 +118,26 @@
 				</div>
 				<button class="btn btn-block mt-3" type="submit">Update Account</button>
 			</form>
+			<form class="card mt-5 p-3" method="post" action="settings">
+				<h2>Deactivate Account</h2>
+				<input type="hidden" name="act" value="deactivate">
+				<div class="form-row">
+					<div class="alert alert-danger col-12 col-md-6 mt-3 p-2 text-center">
+						Check&nbsp;to&nbsp;Confirm&nbsp;<input type="checkbox" name="sure" value="yes" required aria-required="true" oninvalid="this.setCustomValidity('Check this box to confirm Deactivating Account!')">
+					</div>
+					<div class="col-12 col-md-6">
+						<button class="btn btn-danger btn-block mt-3">Deactivate Account</button>
+					</div>
+				</div>
+				<div class="alert alert-danger">
+					This will do the below:
+					<ul>
+						<li>Remove Access Credentials.</li>
+						<li>Remove Purchase History, but not data required for existing Order Information.</li>
+						<li>Financial information such as Credit Card or Bank Information isn't stored on our system, however, transaction information such as Vendor, Transation ID, and Amounts remain present for Order information and tracing. Vendors used may be a different matter, and if concerned contacted to update, or remove information.</li>
+					</ul>
+				</div>
+			</form>
 		</article>
 	</section>
 </block>

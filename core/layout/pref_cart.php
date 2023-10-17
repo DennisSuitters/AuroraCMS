@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.23
+* @version    0.2.26-7
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */?>
@@ -21,44 +21,46 @@
             <li class="breadcrumb-item active">Cart</li>
           </ol>
         </div>
-        <div class="m-4">
-          <table class="table-zebra">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>SID</th>
-                <th class="text-center">Item</th>
-                <th>Quantity</th>
-                <th>Cost</th>
-                <th>Date</th>
-                <th>
-                  <div class="btn-group float-right">
-                    <?=($user['options'][7]==1?'<button class="btn-sm purge" data-tooltip="left" aria-label="Purge All" onclick="purge(`0`,`cart`);return false;"><i class="i">purge</i></button>':'');?>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody id="l_cart">
-              <?php $s=$db->prepare("SELECT * FROM `".$prefix."cart` ORDER BY `ti` DESC");
-              $s->execute();
-              while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                $ci=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
-                $ci->execute([':id'=>$r['iid']]);
-                $cr=$ci->fetch(PDO::FETCH_ASSOC);?>
-                <tr id="l_<?=$r['id'];?>">
-                  <td class="text-wrap align-middle"><?= trim($r['id']);?></td>
-                  <td class="text-wrap align-middle"><?= trim($r['si']);?></td>
-                  <td class="text-center align-middle"><?=($cr['code']!=''?$cr['code'].' | ':'').$cr['title'];?></td>
-                  <td class="text-center align-middle"><?=$r['quantity'];?></td>
-                  <td class="text-center align-middle"><?=$r['cost'];?></td>
-                  <td class="text-center align-middle"><?= date($config['dateFormat'],$r['ti']);?></td>
-                  <td class="align-middle">
+        <div class="sticky-i10">
+          <div class="row">
+            <article class="card py-1 overflow-visible card-list card-list-header shadow">
+              <div class="row">
+                <div class="col-12 col-md-1 text-center">dbID</div>
+                <div class="col-12 col-md pl-2">SID</div>
+                <div class="col-12 col-md pl-2">Item</div>
+                <div class="col-12 col-md-1 text-center">Quantity</div>
+                <div class="col-12 col-md-1 text-center">Cost</div>
+                <div class="col-12 col-md-2 pl-2">Date</div>
+                <div class="col-12 col-md-1 pr-2 text-right">
+                  <?=($user['options'][7]==1?'<button class="btn-sm purge" data-tooltip="left" aria-label="Purge All" onclick="purge(`0`,`cart`);return false;"><i class="i">purge</i></button>':'');?>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div id="l_cart">
+          <?php $s=$db->prepare("SELECT * FROM `".$prefix."cart` ORDER BY `ti` DESC");
+          $s->execute();
+          while($r=$s->fetch(PDO::FETCH_ASSOC)){
+            $si=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+            $si->execute([':id'=>$r['iid']]);
+            $ri=$si->fetch(PDO::FETCH_ASSOC);?>
+            <article id="l_<?=$r['id'];?>" class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow">
+              <div class="row">
+                <div class="col-12 col-md-1 pt-3 text-center small"><?= trim($r['id']);?></div>
+                <div class="col-12 col-md pl-2 pt-3 small"><?= trim($r['si']);?></div>
+                <div class="col-12 col-md pl-2 pt-3 small"><?=($ri['code']!=''?$ri['code'].' | ':'').$r['title'];?></div>
+                <div class="col-12 col-md-1 pt-3 text-center small"><?=$r['quantity'];?></div>
+                <div class="col-12 col-md-1 pt-3 text-center small"><?=$r['cost'];?></div>
+                <div class="col-12 col-md-2 pl-2 pt-3 small"><?= date($config['dateFormat'],$r['ti']);?></div>
+                <div class="col-12 col-md-1 pr-2 text-right">
+                  <div class="btn-group" role="group">
                     <?=($user['options'][7]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$r['id'].'`,`cart`);"><i class="i">trash</i></button>':'');?>
-                  </td>
-                </tr>
-              <?php }?>
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+            </article>
+          <?php }?>
         </div>
       </div>
       <?php require'core/layout/footer.php';?>

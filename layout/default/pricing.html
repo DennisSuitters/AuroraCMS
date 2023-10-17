@@ -1,0 +1,35 @@
+<block include="meta_head.html">
+<block include="header.html">
+<block inbed="pricing">
+	<pagenotes>
+    <section class="row mt-5">
+      <article class="mx-0">
+        <h1><print page="heading"></h1>
+        <print page="notes">
+      </article>
+    </section>
+  </pagenotes>
+	<section class="row my-5 justify-content-center">
+		<items>
+  		<div class="col-12 col-md-3">
+    		<div class="card text-center<highlight>">
+					<figure class="card-image">
+						<img src="<print content=image>" alt="<print content=title>">
+					</figure>
+        	<div class="price-top p-3">
+          	<h4><print content="title"></h4>
+          	<h2 class="mb-0"><print content="cost"></h2>
+        	</div>
+        	<div class="price-content text-center p-3">
+						<div class="border-bottom mb-3 mt-md-4 pb-3 text-left">
+							<print content="list">
+						</div>
+        		<a href="<print content=link>" class="btn">View More Details</a>
+      		</div>
+  			</div>
+  		</div>
+		</items>
+	</section>
+</block>
+<block include="footer.html">
+<block include="meta_footer.html">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
@@ -73,14 +73,14 @@ else{
               $avatarimg='media/avatar/'.basename($r['avatar']);
               elseif($r['gravatar']!='')
               $avatarimg=$r['gravatar'];?>
-              <article class="card zebra mx-2 mt-2 mb-0 overflow-visible card-list item shadow" id="l_<?=$r['id'];?>" data-content="<?=$r['username'].' '.$r['name']?>">
+              <article class="card zebra col-6 col-md-5 col-lg-3 col-xxl-2 mx-0 mx-md-2 mt-2 mb-0 overflow-visible card-list item shadow" id="l_<?=$r['id'];?>" data-content="<?=$r['username'].' '.$r['name']?>">
                 <div class="card-image overflow-visible">
                   <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>">
                     <img src="<?=$avatarimg;?>" alt="<?=$r['username'];?>">
                   </a>
                   <span class="status badger badge-<?= rank($r['rank']);?>" id="accountrank<?=$r['id'];?>"><?= ucwords(str_replace('-',' ',rank($r['rank'])));?></span>
                   <div class="image-toolbar">
-                    <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">Inactive</span>';?>
+                    <?=$r['active']==1?'<span class="badger badge-success">Active</span>':'<span class="badger badge-dark">'.($r['status']=='deactivated'?'Deactivated':'Inactive').'</span>';?>
                   </div>
                 </div>
                 <div class="card-header overflow-visible pt-2 line-clamp">
@@ -99,7 +99,6 @@ else{
                           <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
                         <?php }
                         echo($user['options'][1]==1?'<button class="quickeditbtn" data-qeid="'.$r['id'].'" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>'.
-                        '<a href="javascript:;" class="btn quickitemsbtn" data-fancybox="quickitems" data-type="ajax" data-src="core/quickedit.php?id='.$r['id'].'&t=login&o=modal" data-tooltip="tooltip" aria-label="View Quick Edit Modal"><i class="i">view</i></a>'.
                         '<span class="btn orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>':'');?>
                       </div>
                     </div>

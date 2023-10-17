@@ -1,6 +1,22 @@
 # Default Changelog
 
-### v0.1.7
+### v0.2
+- Adjust <settings itemCount="[num]|all" contentType="all|[content types]"> capitilisation.
+- Fix Search input field background colour.
+
+#### v0.1.9
+- Add Options markup to Content template.
+- Improve Cart display, to calculate Options taking into account, Discount and Wholesale Prices.
+- Improve QuickView modal display.
+- Add Account Deactivation section in Account Settings.
+- Add Pricing Page and Pricing Parser.
+- Add Recent Sale FOMO Notifican markup & processing.
+- Fix Social icons on Coming Soon & Maintenance Pages.
+
+#### v0.1.8
+- Fix input form colour.
+
+#### v0.1.7
 - Improve Sales display area.
 
 #### v0.1.6

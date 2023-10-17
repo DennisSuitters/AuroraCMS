@@ -1,11 +1,11 @@
 agronomy_areas
   `id` bigint(20)
   `rid` bigint(20) Reference to areas inside area, for strip grazing
+  `name` text
+  `geo_position` text
+  `geo_layout` text
   `type` text Pasture/Crop/Orchard/Veg Patch
   `code` varchar(256)
-  `name` text
-  `geo_position` TEXT
-  `geo_layout` TEXT
   `condition` TEXT
   `activity` varchar(64)
   `color` varchar(8)
@@ -48,8 +48,13 @@ cart
   `iid` bigint(20)
   `cid` bigint(20)
   `rid` bigint(20)
+  `contentType` varchar(16)
+  `title` tinytext
+  `file` varchar(128)
   `quantity` mediumint(20)
   `cost` decimal(10,2)
+  `stockStatus` TEXT
+  `points` int
   `si` varchar(128)
   `ti` int(10)
 
@@ -57,7 +62,10 @@ choices
   `id` bigint(20)
   `uid` bigint(20)
   `rid` bigint(20)
+  `oid` bigint(20)
   `contentType` varchar(16)
+  `category` text
+  `quantity` varchar(8)
   `type` varchar(16)
   `username` varchar(255)
   `password` varchar(255)
@@ -67,12 +75,18 @@ choices
   `port` varchar(8)
   `flag` tinytext
   `title` varchar(60)
+  `file` varchar(128)
   `value` int(4)
   `f` DECIMAL(10,2)
   `t` DECIMAL(10,2)
+  `code` varchar(16)
   `cost` DECIMAL(10,2)
+  `quantity` varchar(8)
+  `notes` LONGBLOB
   `tis` int(10)
   `tie` int(10)
+  `ord` bigint
+  `status` varchar(16)
   `ti` int(10)
 
 comments
@@ -97,6 +111,8 @@ config
   `development` int(1)
   `maintenance` int(1)
   `comingsoon` int(1)
+  `hoster` tinyint(1)
+  `hosterURL` text
   `options` varchar(32)
     0   Enable Points Display
     1   Enable a11y Widget
@@ -169,6 +185,15 @@ config
   `seoDescription` varchar(255)
   `seoCaption` varchar(255)
   `seoKeywords` varchar(255) Currently being used for storing which Assistant is being used.
+  `saleHeadingvalentine` TEXT
+  `saleHeadingeater` TEXT
+  `saleHeadingmothersday` text
+  `saleHeadingfathersday` text
+  `saleHeadingblackfriday` text
+  `saleHeadinghalloween` text
+  `saleHeadingsmallbusinessday` text
+  `saleHeadingchristmas` text
+  `saleHeadingEOFY` text
   `metaRobots` tinytext
   `seoRSSTitle` tinytext
   `seoRSSNotes` text
@@ -198,7 +223,6 @@ config
   `messengerFBCode` tinytext
   `messengerFBColor` varchar(16)
   `messengerFBGreeting` tinytext
-  `wv_site_id` tinytext
   `language` varchar(8)
   `timezone` varchar(128)
   `orderPayti` int(10)
@@ -208,11 +232,30 @@ config
   `orderEmailReadNotification` tinyint(1)
   `austPostAPIKey` varchar(128)
   `gst` varchar(4)
-  `purchaseLimit` varchar(6)
-  `purchaseLimitSilver` varchar(6)
-  `purchaseLimitBronze` varchar(6)
-  `purchaseLimitGold` varchar(6)
-  `purchaseLimitPlatinum` varchar(6)
+  `memberLimit` varchar(6)
+  `memberLimitSilver` varchar(6)
+  `memberLimitBronze` varchar(6)
+  `memberLimitGold` varchar(6)
+  `memberLimitPlatinum` varchar(6)
+  `wholesaleLimit` varchar(6)
+  `wholesaleLimitSilver` varchar(6)
+  `wholesaleLimitBronze` varchar(6)
+  `wholesaleLimitGold` varchar(6)
+  `wholesaleLimitPlatinum` varchar(6)
+  `wholesaleTime` int
+  `wholesaleTimeSilver` int
+  `wholesaleTimeBronze` int
+  `wholesaleTimeGold` int
+  `wholesaleTimePlatinum` int
+  `fomo` tinyint(1)
+  `fomoOptions` varchar(16)
+  `fomoIn` varchar(32)
+  `fomoOut` varchar(32)
+  `fomoState` varchar(4)
+  `fomoArea` varchar(128)
+  `fomoFullname` tinyint(1)
+  `fomoPostcodeFrom` varchar(10)
+  'fomoPostcodeTo' varchar(10)
   `passwordResetLayout` text
   `passwordResetSubject` tinytext
   `accountActivationSubject` tinytext
@@ -223,6 +266,7 @@ config
   `bookingAutoReplySubject` tinytext
   `bookingAutoReplyLayout` text
   `bookingAttachment` varchar(255)
+  `bookingAgreement` mediumtext
   `bookingBuffer` INT(10) NOT NULL,
   `contactAutoReplySubject` tinytext
   `contactAutoReplyLayout` text
@@ -236,13 +280,19 @@ config
   `bankBSB` varchar(16)
   `payPalClientID` varchar(256)
   `payPalSecret` varchar(256)
-  `showItems` int(4)
+  `stripe_publishkey` MEDIUMTEXT
+  `stripe_secretkey` mediumtext
+  `defaultOrder` varchar(8)
+  `showItems` int
+  `searchItems` int
   `idleTime` int(6)
-  `git_commits` longblob
-  `git_ti` int(10)
   `ga_clientID` varchar(128)
-  `ga_tracking` text
+  `ga_tracking` mediumtext
+  `ga_tagmanager` varchar(32)
   `ga_verification` tinytext
+  `gd_api` varchar(64)
+  `reCaptchaClient` mediumtext
+  `reCaptchaServer` mediumtext
   `seo_msvalidate` tinytext
   `seo_yandexverification` tinytext
   `seo_alexaverification` tinytext
@@ -272,9 +322,28 @@ config
   `php_APIkey` varchar(255)
   `php_honeypot` tinytext
   `php_quicklink` tinytext
+  `formMinTime` varchar(8)
+  `formMaxTime` varchar(8)
   `spamfilter` int(1)
   `notification_volume` int(4)
   `mediaOptions` VARCHAR(16)
+    0
+    1
+    2
+    3
+    4
+    5
+    6
+    7
+    8
+    9
+    10
+    11
+    12
+    13
+    14
+    15
+  `unsplash_appname` text
   `unsplash_publickey` MEDIUMTEXT
   `unsplash_secretkey` MEDIUMTEXT
   `mediaMaxWidth` int(4)
@@ -282,6 +351,8 @@ config
   `mediaMaxWidthThumb` int(4)
   `mediaMaxHeightThumb` int(4)
   `mediaQuality` int(2)
+  `templateID` bigint(20)
+  `templateQTY` int
   `suggestions` int(1)
   `bti` int(10)
   `backup_ti` int(10)
@@ -321,14 +392,14 @@ content
   `ip` varchar(20)
   `contentType` varchar(16)
     article
-    portfolio
     event
-    news
-    testimonials
-    inventory
-    service
     gallery
+    inventory
+    news
+    portfolio
     proofs
+    service
+    testimonials
   `schemaType` varchar(40)
   `seoKeywords` varchar(255)
   `barcode` varchar(128)
@@ -337,90 +408,181 @@ content
   `brand` varchar(40)
   `title` varchar(60)
   `urlSlug` text
+  `sale` varchar(32)
   `category_1` varchar(30)
   `category_2` varchar(30)
   `category_3` varchar(30)
   `category_4` varchar(30)
   `name` varchar(40)
   `url` varchar(256)
+  `exturl` varchar(256)
   `email` varchar(60)
   `business` varchar(40)
   `address` varchar(80)
   `suburb` varchar(40)
   `city` varchar(40)
   `state` varchar(40)
+  `country` varchar(40)
   `postcode` mediumint(5)
-  `phone` varchar(14) COLLATE utf8_bin NOT NULL,
-  `mobile` varchar(14) COLLATE utf8_bin NOT NULL,
-  `thumb` varchar(128) COLLATE utf8_bin NOT NULL,
-  `file` varchar(128) COLLATE utf8_bin NOT NULL,
-  `fileURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `fileALT` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageTitle` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageName` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `exifISO` varchar(4) COLLATE utf8_bin NOT NULL,
-  `exifAperture` varchar(2) COLLATE utf8_bin NOT NULL,
-  `exifFocalLength` varchar(8) COLLATE utf8_bin NOT NULL,
-  `exifShutterSpeed` varchar(10) COLLATE utf8_bin NOT NULL,
-  `exifCamera` tinytext COLLATE utf8_bin NOT NULL,
-  `exifLens` tinytext COLLATE utf8_bin NOT NULL,
-  `exifFilename` tinytext COLLATE utf8_bin NOT NULL,
-  `exifti` int(10) NOT NULL,
+  `phone` varchar(14)
+  `mobile` varchar(14)
+  `thumb` varchar(128)
+  `file` varchar(128)
+  `fileURL` varchar(256)
+  `fileALT` tinytext
+  `videoURL` varchar(255)
+  `signature` mediumtext
+  `agreementCheck` int(1)
+  `attributionImageTitle` tinytext
+  `attributionImageName` tinytext
+  `attributionImageURL` varchar(256)
+  `exifISO` varchar(4)
+  `exifAperture` varchar(2)
+  `exifFocalLength` varchar(8)
+  `exifShutterSpeed` varchar(10)
+  `exifCamera` tinytext
+  `exifLens` tinytext
+  `exifFilename` tinytext
+  `exifti` int(10)
   `rrp` decimal(10,2)
   `cost` decimal(10,2) DEFAULT NULL,
   `rCost` decimal(10,2)
+  `dCost` decimal(10,2)
+  `expense` decimal(10,2)
   `sold` bigint(20)
   `weight` varchar(6)
   `weightunit` varchar(6)
+  `width` varchar(6)
+  `widthunit` varchar(8)
   `height` varchar(6)
   `heightunit` varchar(6)
-  `subject` varchar(60) COLLATE utf8_bin NOT NULL,
-  `notes` text COLLATE utf8_bin NOT NULL,
-  `attributionContentName` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionContentURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `quantity` mediumint(20) UNSIGNED NOT NULL,
+  `length` varchar(6)
+  `lengthunit` varhchar(8)
+  `subject` varchar(60)
+  `notes` longblob
+  `notes2` longblob
+  `attributionContentName` text
+  `attributionContentURL` varchar(256)
+  `quantity` mediumint(20)
+  `cartonQuantity` mediumint(20)
   `itemCondition` varchar(32)
-  `tags` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoTitle` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoCaption` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoDescription` varchar(255) COLLATE utf8_bin NOT NULL,
-  `metaRobots` tinytext COLLATE utf8_bin NOT NULL,
-  `status` varchar(16) COLLATE utf8_bin NOT NULL,
-  `stockStatus` text COLLATE utf8_bin NOT NULL,
+  `tags` varchar(255)
+  `seoTitle` varchar(255)
+  `seoCaption` varchar(255)
+  `seoDescription` varchar(255)
+  `metaRobots` text
+  `status` varchar(16)
+  `stockStatus` text
     quantity        Dependant on Quantity (In Stock/Out of Stock)
     in stock        In Stock
     out of stock    Out Of Stock
     pre-order       Pre-Order
     available       Available
     none            No Display
-  `service` bigint(20) UNSIGNED NOT NULL,
-  `internal` tinyint(1) UNSIGNED NOT NULL,
-  `featured` tinyint(1) UNSIGNED NOT NULL,
-  `bookable` tinyint(1) NOT NULL,
-  `fti` int(10) UNSIGNED NOT NULL,
-  `assoc` varchar(128) COLLATE utf8_bin NOT NULL,
-  `ord` bigint(20) UNSIGNED NOT NULL,
-  `views` bigint(20) UNSIGNED NOT NULL,
+  `service` bigint(20)
+  `internal` tinyint(1)
+  `featured` tinyint(1)
+  `bookable` tinyint(1)
+  `fti` int(10)
+  `assoc` varchar(128)
+  `ord` bigint(20)
+  `views` bigint(20)
   `rating` int(1)
-  `suggestions` int(1) NOT NULL,
+  `attempts` int(4)
+  `suggestions` int(1)
   `checklist` varchar(16)
-  `active` tinyint(1) UNSIGNED NOT NULL,
-  `coming` tinint(1) NOT NULL DEFAULT(0),
-  `geo_position` TINYTEXT NOT NULL,
-  `pin` tinyint(1) NOT NULL,
-  `tis` int(10) UNSIGNED NOT NULL,
-  `tie` int(10) UNSIGNED NOT NULL,
-  `lti` int(10) UNSIGNED NOT NULL,
-  `ti` int(10) UNSIGNED NOT NULL,
-  `eti` int(10) NOT NULL,
-  `pti` int(10) NOT NULL
+  `active` tinyint(1)
+  `coming` tinint(1)
+  `geo_position` TEXT
+  `pin` tinyint(1)
+  `highlight` tinyint(1)
+  `highlighttext` tinytext
+  `priceord` bigint(20)
+  `tis` int(10)
+  `tie` int(10)
+  `lti` int(10)
+  `ti` int(10)
+  `eti` int(10)
+  `pti` int(10)
+  `templatelist` bigint(20)
+
+contentStats
+  `id` bigint(20)
+  `rid` bigint(20)
+  `views` bigint(20)
+  `sales` bigint(20)
+  `ti` int(10)
+
+courseTrack
+  `id` bigint(20)
+  `rid` bigint(20)
+  `uid` bigint(20)
+  `complete` varchar(16)
+  `progress` int(4)
+  `attempts` int(4)
+  `score` int(8)
+  `ti` int(10)
+
+forumCategory
+  `id` bigint(20)
+  `rank` int(4)
+  `title` TEXT
+  `notes` TEXT
+  `is_category` int(1)
+  `ti` int(10)
+  `pin` int(1)
+  `help` int(1)
+  `ord` bigint(20)
+
+forumPosts
+  `id` bigint(20)
+  `rank` int(4)
+  `cid` bigint(20)
+  `tid` bigint(20)
+  `pid` bigint(20)
+  `uid` bigint(20)
+  `title` text
+  `notes` mediumtext
+  `views` bigint(20)
+  `vote` bigint(20)
+  `pin` int(1)
+  `help` int(1)
+  `status` varchar(16)
+  `ti` int(10)
+
+formPostTrack
+  `id` bigint(20)
+  `cid` bigint(20)
+  `tid` bigint(20)
+  `pid` bigint(20)
+  `uid` bigint(20)
+  `notes` text
+
+forumTopics
+  `id` bigint(20)
+  `rank` int(4)
+  `title` text
+  `notes` text
+  `cid` bigint(20)
+  `uid` bigint(20)
+  `ti` int(10)
+  `pin` int(1)
+  `help` int(1)
+  `ord` bigint(20)
+
+forumVoteTrack
+  `id` bigint(20)
+  `pid` bigint(20)
+  `uid` bigint(20)
+  `notes` text
 
 iplist
-  `id` bigint(20) NOT NULL,
-  `ip` varchar(32) COLLATE utf8_bin NOT NULL,
-  `oti` int(10) NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `ip` varchar(32)
+  `oti` int(10)
+  `reason` mediumtext
+  `permanent` tinyint(1)
+  `ti` int(10)
 
 liveChat
   `id` bigint(20)
@@ -436,9 +598,17 @@ liveChat
   `status` tinytext
   `ti` int(10)
 
+locations
+  `id` BIGINT(20)
+  `suburb` tinytext
+  `area` tinytext
+  `state` varchar(3)
+  `postcode` varchar(4)
+  `active` tinyint(1)
+
 login
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `options` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '00000000000000000000000000000000',
+  `id` bigint(20)
+  `options` varchar(32) DEFAULT '00000000000000000000000000000000',
     0   Add or Remove Content
     1   Edit Content
     2   Add or Edit Bookings
@@ -471,6 +641,8 @@ login
     29
     30
     31
+  `theme` TEXT
+  `bio tinyint(1)`
   `bio_options` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '00000000000000000000000000000000',
     0
     1
@@ -504,48 +676,48 @@ login
     29
     30
     31
-  `username` varchar(128) COLLATE utf8_bin NOT NULL,
-  `password` varchar(256) COLLATE utf8_bin NOT NULL,
-  `tags` TEXT COLLATE utf8_bin NOT NULL,
-  `cover` varchar(60) COLLATE utf8_bin NOT NULL,
-  `coverURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `attributionImageTitle` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageName` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `avatar` varchar(60) COLLATE utf8_bin NOT NULL,
-  `gravatar` varchar(256) COLLATE utf8_bin NOT NULL,
-  `business` varchar(40) COLLATE utf8_bin NOT NULL,
-  `name` varchar(40) COLLATE utf8_bin NOT NULL,
-  `email` varchar(60) COLLATE utf8_bin NOT NULL,
-  `www` tinytext COLLATE utf8_bin NOT NULL,
-  `experience` int(4) NOT NULL,
-  `hash` varchar(32) COLLATE utf8_bin NOT NULL,
-  `emailPassword` tinytext COLLATE utf8_bin NOT NULL,
-  `liveChatNotification` INT(10) NOT NULL,
-  `email_check` int(10) NOT NULL,
+  `username` varchar(128)
+  `password` varchar(256)
+  `tags` TEXT
+  `cover` varchar(60)
+  `coverURL` varchar(256)
+  `attributionImageTitle` tinytext
+  `attributionImageName` tinytext
+  `attributionImageURL` varchar(256)
+  `avatar` varchar(60)
+  `gravatar` varchar(256)
+  `business` varchar(40)
+  `name` varchar(40)
+  `email` varchar(60)
+  `www` tinytext
+  `experience` int(4)
+  `hash` varchar(32)
+  `emailPassword` tinytext
+  `email_check` int(10)
+  `liveChatNotification` INT(10)
   `liveChatNotification` int(1)
-  `email_signature` text COLLATE utf8_bin NOT NULL,
-  `url` varchar(256) COLLATE utf8_bin NOT NULL,
-  `address` varchar(80) COLLATE utf8_bin NOT NULL,
-  `suburb` varchar(40) COLLATE utf8_bin NOT NULL,
-  `city` varchar(40) COLLATE utf8_bin NOT NULL,
-  `state` varchar(40) COLLATE utf8_bin NOT NULL,
-  `postcode` mediumint(5) UNSIGNED NOT NULL,
-  `country` tinytext COLLATE utf8_bin NOT NULL,
-  `abn` varchar(32) COLLATE utf8_bin NOT NULL,
-  `phone` varchar(14) COLLATE utf8_bin NOT NULL,
-  `mobile` varchar(14) COLLATE utf8_bin NOT NULL,
-  `caption` tinytext COLLATE utf8_bin NOT NULL,
+  `email_signature` text
+  `url` varchar(256)
+  `address` varchar(80)
+  `suburb` varchar(40)
+  `city` varchar(40)
+  `state` varchar(40)
+  `postcode` mediumint(5)
+  `country` tinytext
+  `abn` varchar(32)
+  `phone` varchar(14)
+  `mobile` varchar(14)
+  `caption` tinytext
   `seoDescription` tinytext
-  `notes` text COLLATE utf8_bin NOT NULL,
-  `resume_notes` text COLLATE utf8_bin NOT NULL,
-  `status` varchar(16) COLLATE utf8_bin NOT NULL,
-  `helpResponder` tinyint(1) UNSIGNED NOT NULL,
-  `active` tinyint(1) UNSIGNED NOT NULL,
-  `activate` varchar(255) COLLATE utf8_bin NOT NULL,
-  `newsletter` int(1) NOT NULL DEFAULT '0',
-  `language` varchar(8) COLLATE utf8_bin NOT NULL,
-  `timezone` varchar(128) COLLATE utf8_bin NOT NULL,
+  `notes` text
+  `resume_notes` text
+  `status` varchar(16)
+  `active` tinyint(1)
+  `helpResponder` tinyint(1)
+  `activate` varchar(255)
+  `newsletter` int(1)
+  `language` varchar(8)
+  `timezone` varchar(128)
   `rank` int(4) UNSIGNED NOT NULL,
         0     Vistor
         100   Subscriber
@@ -566,65 +738,79 @@ login
         800   Manager
         900   Administrator
         1000  Developer
-  `discount` varchar(4) COLLATE utf8_bin NOT NULL,
-  `spent` decimal(10,2),
-  `lti` int(10) NOT NULL,
-  `userAgent` tinytext COLLATE utf8_bin NOT NULL,
-  `userIP` varchar(32) COLLATE utf8_bin NOT NULL,
-  `pti` int(10) UNSIGNED NOT NULL,
-  `ti` int(10) UNSIGNED NOT NULL
+  `discount` varchar(4)
+  `spent` decimal(10,2)
+  `points` int(8)
+  `purchaseLimit` varchar(6)
+  `purchaseTime` int(10)
+  `infoHash` varchar(32)
+  `hostCost` decimal(8,2)
+  `siteCost` decimal(8,2)
+  `hostStatus` varchar(16)
+  `siteStatus` varchar(16)
+  `lti` int(10)
+  `hti` int(10)
+  `sti` int(10)
+  `accountsContact` tinyint(1)
+  `userAgent` tinytext
+  `userIP` varchar(32)
+  `pti` int(10)
+  `ord` bigint(20)
+  `ti` int(10)
 
 logs
-  `id` bigint(20) NOT NULL,
-  `uid` bigint(20) NOT NULL,
-  `rid` bigint(20) NOT NULL,
-  `username` varchar(128) COLLATE utf8_bin NOT NULL,
-  `name` varchar(40) COLLATE utf8_bin NOT NULL,
-  `view` varchar(16) COLLATE utf8_bin NOT NULL,
-  `contentType` varchar(16) COLLATE utf8_bin NOT NULL,
-  `refTable` varchar(64) COLLATE utf8_bin NOT NULL,
-  `refColumn` varchar(64) COLLATE utf8_bin NOT NULL,
-  `oldda` longblob NOT NULL,
-  `newda` longblob NOT NULL,
-  `action` tinytext COLLATE utf8_bin NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `uid` bigint(20)
+  `rid` bigint(20)
+  `username` varchar(128)
+  `name` varchar(40)
+  `view` varchar(16)
+  `contentType` varchar(16)
+  `refTable` varchar(64)
+  `refColumn` varchar(64)
+  `oldda` longblob
+  `newda` longblob
+  `action` tinytext
+  `ti` int(10)
 
 media
-  `id` bigint(20) NOT NULL,
-  `pid` bigint(20) NOT NULL,
-  `rid` bigint(20) NOT NULL,
-  `file` varchar(128) COLLATE utf8_bin NOT NULL,
-  `fileALT` tinytext COLLATE utf8_bin NOT NULL,
-  `title` varchar(60) COLLATE utf8_bin NOT NULL,
-  `category_1` varchar(30) COLLATE utf8_bin NOT NULL,
-  `category_2` varchar(30) COLLATE utf8_bin NOT NULL,
-  `category_3` varchar(30) COLLATE utf8_bin NOT NULL,
-  `category_4` varchar(30) COLLATE utf8_bin NOT NULL,
-  `attributionImageName` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `exifISO` varchar(4) COLLATE utf8_bin NOT NULL,
-  `exifAperture` varchar(2) COLLATE utf8_bin NOT NULL,
-  `exifFocalLength` varchar(8) COLLATE utf8_bin NOT NULL,
-  `exifShutterSpeed` varchar(10) COLLATE utf8_bin NOT NULL,
-  `exifCamera` tinytext COLLATE utf8_bin NOT NULL,
-  `exifLens` tinytext COLLATE utf8_bin NOT NULL,
-  `exifFilename` tinytext COLLATE utf8_bin NOT NULL,
-  `exifti` int(10) NOT NULL,
-  `tags` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoTitle` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoCaption` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoDescription` varchar(255) COLLATE utf8_bin NOT NULL,
-  `status` varchar(16) COLLATE utf8_bin NOT NULL,
-  `views` bigint(20) NOT NULL,
-  `suggestions` int(1) NOT NULL,
-  `ord` bigint(20) NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `rank` int(4)
+  `pid` bigint(20)
+  `rid` bigint(20)
+  `file` varchar(128)
+  `thumb` varchar(128)
+  `fileALT` tinytext
+  `title` varchar(60)
+  `category_1` varchar(30)
+  `category_2` varchar(30)
+  `category_3` varchar(30)
+  `category_4` varchar(30)
+  `attributionImageName` tinytext
+  `attributionImageURL` varchar(256)
+  `exifISO` varchar(4)
+  `exifAperture` varchar(2)
+  `exifFocalLength` varchar(8)
+  `exifShutterSpeed` varchar(10)
+  `exifCamera` tinytext
+  `exifLens` tinytext
+  `exifFilename` tinytext
+  `exifti` int(10)
+  `tags` varchar(255)
+  `seoTitle` varchar(255)
+  `seoCaption` varchar(255)
+  `seoDescription` varchar(255)
+  `status` varchar(16)
+  `views` bigint(20)
+  `suggestions` int(1)
+  `ord` bigint(20)
+  `ti` int(10)
 
 menu
-  `id` bigint(20) UNSIGNED NOT NULL,
+  `id` bigint(20)
   `rank` int(4)
-  `mid` bigint(20) NOT NULL DEFAULT '0',
-  `uid` bigint(20) NOT NULL,
+  `mid` bigint(20)
+  `uid` bigint(20)
   `options` varchar(8)
     0 Video Autoplay
     1 Video Loop
@@ -634,17 +820,17 @@ menu
     5
     6
     7
-  `login_user` varchar(128) COLLATE utf8_bin NOT NULL,
-  `title` varchar(60) COLLATE utf8_bin NOT NULL,
-  `seoTitle` varchar(255) COLLATE utf8_bin DEFAULT NULL,
-  `metaRobots` tinytext COLLATE utf8_bin NOT NULL,
-  `url` varchar(255) COLLATE utf8_bin NOT NULL,
-  `file` tinytext COLLATE utf8_bin NOT NULL,
-  `fileALT` tinytext COLLATE utf8_bin NOT NULL,
-  `cover` varchar(128) COLLATE utf8_bin NOT NULL,
-  `coverURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `coverVideo` varchar(255) COLLATE utf8_bin NOT NULL,
-  `sliderOptions` VARCHAR(16) NOT NULL DEFAULT '0000000000000000'
+  `login_user` varchar(128)
+  `title` varchar(60)
+  `seoTitle` varchar(255)
+  `metaRobots` tinytext
+  `url` varchar(255)
+  `file` tinytext
+  `fileALT` tinytext
+  `cover` varchar(128)
+  `coverURL` varchar(256)
+  `coverVideo` varchar(255)
+  `sliderOptions` VARCHAR(16)
     0   Enable
     1   loop
     2   disableOnInteraction
@@ -661,142 +847,262 @@ menu
     13
     14
     15
-  `sliderDirection` TINYTEXT NOT NULL
-  `sliderEffect` TINYTEXT NOT NULL
-  `sliderSpeed` INT(8) NOT NULL DEFAULT '300'
-  `sliderAutoplayDelay` INT(8) NOT NULL DEFAULT '3000'
-  `attributionImageTitle` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageName` tinytext COLLATE utf8_bin NOT NULL,
-  `attributionImageURL` varchar(256) COLLATE utf8_bin NOT NULL,
-  `contentType` varchar(64) COLLATE utf8_bin NOT NULL,
-  `schemaType` varchar(40) COLLATE utf8_bin NOT NULL,
-  `seoKeywords` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoDescription` varchar(255) COLLATE utf8_bin NOT NULL,
-  `seoCaption` varchar(255) COLLATE utf8_bin NOT NULL,
-  `menu` varchar(16) COLLATE utf8_bin NOT NULL,
-  `notes` text COLLATE utf8_bin NOT NULL,
-  `ord` bigint(20) UNSIGNED NOT NULL,
-  `active` tinyint(1) UNSIGNED NOT NULL,
-  `views` bigint(20) NOT NULL,
-  `suggestions` int(1) NOT NULL,
-  `eti` int(10) NOT NULL
+  `sliderDirection` TINYTEXT
+  `sliderEffect` TINYTEXT
+  `sliderSpeed` INT(8)
+  `sliderAutoplayDelay` INT(8)
+  `attributionImageTitle` tinytext
+  `attributionImageName` tinytext
+  `attributionImageURL` varchar(256)
+  `contentType` varchar(64)
+  `schemaType` varchar(40)
+  `seoKeywords` varchar(255)
+  `seoDescription` varchar(255)
+  `seoCaption` varchar(255)
+  `menu` varchar(16)
+  `notes` text
+  `ord` bigint(20)
+  `checlist` varchar(16)
+  `active` tinyint(1)
+  `views` bigint(20)
+  `suggestions` int(1)
+  `tie` int(10)
+  `eti` int(10)
 
 messages
-  `id` bigint(20) NOT NULL,
-  `uid` bigint(20) NOT NULL,
-  `ip` varchar(32) COLLATE utf8_bin NOT NULL,
-  `mid` text COLLATE utf8_bin NOT NULL,
-  `rmid` bigint(20) NOT NULL,
-  `folder` varchar(16) COLLATE utf8_bin NOT NULL,
-  `to_email` varchar(255) COLLATE utf8_bin NOT NULL,
-  `to_name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `from_email` varchar(255) COLLATE utf8_bin NOT NULL,
-  `from_name` varchar(255) COLLATE utf8_bin NOT NULL,
-  `from_business` tinytext COLLATE utf8_bin NOT NULL,
-  `from_phone` tinytext COLLATE utf8_bin NOT NULL,
-  `from_mobile` tinytext COLLATE utf8_bin NOT NULL,
-  `from_address` tinytext COLLATE utf8_bin NOT NULL,
-  `from_suburb` tinytext COLLATE utf8_bin NOT NULL,
-  `from_city` tinytext COLLATE utf8_bin NOT NULL,
-  `from_state` tinytext COLLATE utf8_bin NOT NULL,
-  `from_postcode` tinytext COLLATE utf8_bin NOT NULL,
-  `subject` tinytext COLLATE utf8_bin NOT NULL,
-  `status` tinytext COLLATE utf8_bin NOT NULL,
-  `starred` int(1) NOT NULL,
-  `important` int(1) NOT NULL,
-  `notes_raw` text COLLATE utf8_bin,
-  `notes_raw_mime` tinytext COLLATE utf8_bin NOT NULL,
-  `notes_html` text COLLATE utf8_bin NOT NULL,
-  `notes_html_mime` tinytext COLLATE utf8_bin NOT NULL,
-  `attachments` text COLLATE utf8_bin NOT NULL,
-  `email_date` int(10) NOT NULL,
-  `size` bigint(20) NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `uid` bigint(20)
+  `ip` varchar(32)
+  `mid` text
+  `rmid` bigint(20)
+  `folder` varchar(16)
+  `to_email` varchar(255)
+  `to_name` varchar(255)
+  `from_email` varchar(255)
+  `from_name` varchar(255)
+  `from_business` tinytext
+  `from_phone` tinytext
+  `from_mobile` tinytext
+  `from_address` tinytext
+  `from_suburb` tinytext
+  `from_city` tinytext
+  `from_state` tinytext
+  `from_postcode` tinytext
+  `subject` tinytext
+  `status` tinytext
+  `starred` int(1)
+  `important` int(1)
+  `notes_raw` mediumtext
+  `notes_raw_mime` text
+  `notes_html` mediumtext
+  `notes_html_mime` text
+  `attachments` mediumtext
+  `email_date` int(10)
+  `size` bigint(20)
+  `ti` int(10)
+
+moduleQuestions
+  `id` bigint(20)
+  `rid` bigint(20)
+  `type` text
+  `check_answer` int(1)
+  `title` text
+  `ord` bigint(20)
+
+moduleQuestionsTrack
+  `id` bigint(20)
+  `uid` bigint(20)
+  `cid` bigint(20)
+  `mid` bigint(20)
+  `qid` bigint(20)
+
+module
+  `id` bigint(20)
+  `rid` bigint(20)
+  `title` TEXT
+  `caption` TEXT
+  `notes` MEDIUMTEXT
+  `question` TEXT
+  `ord` bigint(20)
+  `tti` int(10)
+  `ti` int(10)
 
 orderitems
-  `id` bigint(20) NOT NULL,
-  `oid` bigint(20) UNSIGNED NOT NULL,
-  `iid` bigint(20) UNSIGNED NOT NULL,
-  `cid` bigint(20) NOT NULL,
-  `title` varchar(60) COLLATE utf8_bin NOT NULL,
-  `quantity` mediumint(9) UNSIGNED NOT NULL,
-  `cost` decimal(10,2) UNSIGNED NOT NULL,
-  `status` varchar(16) COLLATE utf8_bin NOT NULL,
-  `ti` int(10) UNSIGNED NOT NULL
+  `id` bigint(20)
+  `oid` bigint(20)
+  `iid` bigint(20)
+  `cid` bigint(20)
+  `contentType` varchar(16)
+  `title` varchar(60)
+  `file` varchar(128)
+  `quantity` mediumint(9)
+  `cost` decimal(10,2)
+  `status` varchar(16)
+  `points` int(6)
+  `ti` int(10)
 
 orders
-  `id` bigint(20) NOT NULL,
-  `cid` bigint(20) UNSIGNED NOT NULL,
-  `uid` bigint(20) UNSIGNED NOT NULL,
-  `contentType` varchar(16) COLLATE utf8_bin NOT NULL,
-  `qid` varchar(20) COLLATE utf8_bin NOT NULL,
-  `qid_ti` int(10) UNSIGNED NOT NULL,
-  `iid` varchar(20) COLLATE utf8_bin NOT NULL,
-  `iid_ti` int(10) UNSIGNED NOT NULL,
-  `did` varchar(20) COLLATE utf8_bin NOT NULL,
-  `did_ti` int(10) UNSIGNED NOT NULL,
-  `aid` varchar(20) COLLATE utf8_bin NOT NULL,
-  `aid_ti` int(10) UNSIGNED NOT NULL,
-  `due_ti` int(10) UNSIGNED NOT NULL,
-  `rid` bigint(20) NOT NULL,
-  `notes` text COLLATE utf8_bin NOT NULL,
-  `status` varchar(16) COLLATE utf8_bin NOT NULL,
-  `postageOption` tinytext COLLATE utf8_bin NOT NULL,
-  `postageCost` decimal(6,2) NOT NULL,
-  `recurring` int(1) NOT NULL,
-  `total` DECIMAL(10,2) NOT NULL,
-  `ti` int(10) UNSIGNED NOT NULL,
-  `eti` bigint(20) NOT NULL
+  `id` bigint(20)
+  `cid` bigint(20)
+  `uid` bigint(20)
+  `contentType` varchar(16)
+  `qid` varchar(20)
+  `qid_ti` int(10)
+  `iid` varchar(20)
+  `iid_ti` int(10)
+  `did` varchar(20)
+  `did_ti` int(10)
+  `aid` varchar(20)
+  `aid_ti` int(10)
+  `due_ti` int(10)
+  `rid` bigint(20)
+  `notes` mediumtext
+  `status` varchar(16)
+  `postageCode` varchar(16)
+  `postageOption` text
+  `postageCost` decimal(6,2)
+  `payOption` TEXT
+  `payMethod` int(1)
+  `payCost` decimal(6,2)
+  `trackOption` bigint(20)
+  `trackNumber` text
+  `recurring` int(1)
+  `total` DECIMAL(10,2)
+  `points` int(6)
+  `paid_via` text
+  `txn_id` varchar(50)
+  `paid_email` TEXT
+  `paid_name` TEXT
+  `paid_amount` varchar(10)
+  `paid_ti` int(10)
+  `payment_status` varchar(25)
+  `ti` int(10)
+  `eti` bigint(20)
+
+playlist
+  `id` bigint(20)
+  `rid` bigint(20)
+  `width` varchar(6)
+  `height` varchar(6)
+  `author_name` varchar(64)
+  `author_url` varchar(256)
+  `version` varchar(6)
+  `provider_url` varchar(256)
+  `provider_name` varchar(32)
+  `thumbnail_width` varchar(6)
+  `thumbnail_height` varchar(6)
+  `thumbnail_url` varchar(256)
+  `html` MEDIUMTEXT
+  `url` varchar(256)
+  `embed_url` varchar(256)
+  `type` varchar(16)
+  `title` TEXT
+  `notes` MEDIUMTEXT
+  `ord` bigint(20)
+  `active` int(1)
+  `dt` TEXT
+  `ti` int(10)
 
 rewards
-  `id` bigint(20) NOT NULL,
-  `code` varchar(16) COLLATE utf8_bin NOT NULL,
-  `title` tinytext COLLATE utf8_bin NOT NULL,
-  `method` int(1) NOT NULL,
-  `value` int(4) NOT NULL,
-  `quantity` int(4) NOT NULL,
-  `tis` int(10) NOT NULL,
-  `tie` int(10) NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `code` varchar(16)
+  `title` text
+  `method` int(1)
+  `value` int(4)
+  `quantity` int(4)
+  `tis` int(10)
+  `tie` int(10)
+  `ti` int(10)
 
 seo
-  `id` bigint(20) NOT NULL,
+  `id` bigint(20)
   `contentType` tinytext
   `type` tinytext
+  `title` TEXT
   `notes` text
-  `ti` into(10) NOT NULL
+  `ti` int(10)
+
+sidebar
+  `id` bigint(20)
+  `rank` int(4)
+  `mid` bigint(20)
+  `contentType` varchar(16)
+  `view` varchar(16)
+  `icon` varchar(16)
+  `title` TEXT
+  `ord` bigint(20)
+  `active` tinyint(1)
 
 subscribers
-  `id` bigint(20) NOT NULL,
-  `email` varchar(255) COLLATE utf8_bin NOT NULL,
-  `hash` varchar(32) COLLATE utf8_bin NOT NULL,
-  `tags` TEXT COLLATE utf8_bin NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `email` varchar(255)
+  `name` text
+  `hash` varchar(32)
+  `tags` TEXT
+  `ti` int(10)
 
 suggestions
-  `id` bigint(20) NOT NULL,
-  `rid` bigint(20) NOT NULL,
-  `uid` bigint(20) NOT NULL,
-  `t` tinytext COLLATE utf8_bin NOT NULL,
-  `c` tinytext COLLATE utf8_bin NOT NULL,
-  `notes` text COLLATE utf8_bin NOT NULL,
-  `reason` text COLLATE utf8_bin NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `rid` bigint(20)
+  `uid` bigint(20)
+  `t` tinytext
+  `c` tinytext
+  `notes` mediumtext
+  `reason` mediumtext
+  `popup` int(1)
+  `seen` int(1)
+  `sti` int(10)
+  `ti` int(10)
+
+template
+  `id` bigint(20)
+  `contentType` varchar(16)
+  `section` varchar(16)
+  `title` TEXT
+  `html` MEDIUMTEXT
+  `notes` MEDIUMTEXT
+  `image` mediumtext
 
 tracker
-  `id` bigint(20) NOT NULL,
-  `pid` bigint(20) NOT NULL,
-  `urlDest` varchar(255) COLLATE utf8_bin NOT NULL,
-  `urlFrom` varchar(255) COLLATE utf8_bin NOT NULL,
-  `userAgent` varchar(255) COLLATE utf8_bin NOT NULL,
-  `ip` varchar(15) COLLATE utf8_bin NOT NULL,
-  `browser` varchar(32) COLLATE utf8_bin NOT NULL,
-  `os` varchar(32) COLLATE utf8_bin NOT NULL,
-  `sid` varchar(64) COLLATE utf8_bin NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `pid` bigint(20)
+  `status` varchar(32)
+  `urlDest` varchar(255)
+  `urlFrom` varchar(255)
+  `userAgent` varchar(255)
+  `keywords` mediumtext
+  `ip` varchar(15)
+  `host` varchar(255)
+  `isp` varchar(255)
+  `action` varchar(16)
+  `countryName` varchar(128)
+  `countryCode` varchar(32)
+  `city` varchar(128)
+  `region` varchar(32)
+  `regionCode` varchar(8)
+  `browser` varchar(32)
+  `device` varchar(32)
+  `viewportwidth` varchar(6)
+  `os` varchar(32)
+  `sid` varchar(64)
+  `ti` int(10)
 
 whitelist
-  `id` bigint(20) NOT NULL,
-  `ip` varchar(64) COLLATE utf8_bin NOT NULL,
-  `email` tinytext COLLATE utf8_bin NOT NULL,
-  `ti` int(10) NOT NULL
+  `id` bigint(20)
+  `ip` varchar(64)
+  `email` text
+  `ti` int(10)
+
+widgets
+  `id` bigint(20)
+  `ref` varchar(16)
+  `title` varchar(256)
+  `file` varchar(64)
+  `layout` MEDIUMTEXT
+  `width_sm` varchar(3)
+  `width_md` varchar(3)
+  `width_lg` varchar(3)
+  `width_xl` varchar(3)
+  `width_xxl` varchar(3)
+  `ord` bigint(20)
+  `active` tinyint(1)

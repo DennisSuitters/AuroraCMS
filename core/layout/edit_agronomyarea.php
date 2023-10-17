@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -72,22 +72,22 @@ else{
                   <a role="button" disabled="true"><i class="i text-muted">arrow-right</i></a>
                 <?php }?>
               </div>
-              <label id="areaName" for="name"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaName" data-tooltip="tooltip" aria-label="PermaLink to Area Name Field">&#128279;</a>':'';?>Name</label>
+              <label for="name">Name</label>
               <div class="form-row">
                 <input class="textinput" id="name" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="name" type="text" value="<?=$ra['name'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?> onkeyup="updatePopup('name',$(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="savename" data-dbid="name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
-              <label id="areaColor" for="color"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaColor" data-tooltip="tooltip" aria-label="PermaLink to Area Color Field">&#128279;</a>':'';?>Color</label>
+              <label for="color">Color</label>
               <div class="form-row">
                 <input class="textinput p-0" id="color" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="color" type="color" value="<?=($ra['color']==''?'#3388ff':$ra['color']);?>"<?=$user['options'][1]==1?' placeholder="Select a Color..."':' readonly';?> oninput="polygonColor($(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="savecolor" data-dbid="color" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
-              <label id="areaCode" for="code"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaCode" data-tooltip="tooltip" aria-label="PermaLink to Area Code Field">&#128279;</a>':'';?>Code</label>
+              <label for="code">Code</label>
               <div class="form-row">
                 <input class="textinput" id="code" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="code" type="text" value="<?=$ra['code'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?> onkeyup="updatePopup('code',$(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="savecode" data-dbid="code" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
-              <label id="areaType" for="type"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaType" data-tooltip="tooltip" aria-label="PermaLink to Area Type Field">&#128279;</a>':'';?>Type</label>
+              <label for="type">Type</label>
               <div class="form-row">
                 <input class="textinput" id="type" list="agronomy_types" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="type" type="text" value="<?=$ra['type'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Type..."':' readonly';?> onkeyup="updatePopup('type',$(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="savetype" data-dbid="type" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -152,7 +152,7 @@ else{
                 }?>
                 </datalist>
               </div>
-              <label id="areaCondition" for="condition"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaCondition" data-tooltip="tooltip" aria-label="PermaLink to Area Condition Field">&#128279;</a>':'';?>Condition</label>
+              <label for="condition">Condition</label>
               <div class="form-row">
                 <input class="textinput" id="condition" list="agronomy_conditions" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="condition" type="text" value="<?=$ra['condition'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Condition..."':' readonly';?> onkeyup="updatePopup('condition',$(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="savecondition" data-dbid="condition" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -189,7 +189,7 @@ else{
                   }?>
                 </datalist>
               </div>
-              <label id="areaActivity" for="activity"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaActivity" data-tooltip="tooltip" aria-label="PermaLink to Area Activity Field">&#128279;</a>':'';?>Activity</label>
+              <label for="activity">Activity</label>
               <div class="form-row">
                 <input class="textinput" id="activity" list="agronomy_activity" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="activity" type="text" value="<?=$ra['activity'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Activity..."':' readonly';?> onkeyup="updatePopup('activity',$(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="saveactivity" data-dbid="activity" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -213,7 +213,7 @@ else{
                   }?>
                 </datalist>
               </div>
-              <label id="areaNotes" for="notes"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$ra['id'].'#areaNotes" data-tooltip="tooltip" aria-label="PermaLink to Area Notes Field">&#128279;</a>':'';?>Notes</label>
+              <label for="notes">Notes</label>
               <div class="form-row">
                 <div class="input-text" data-el="notes" contenteditable="<?=$user['options'][1]==1?'true':'false';?>" data-placeholder="Enter Notes..."><?=$ra['notes'];?></div>
                 <input class="textinput d-none" id="notes" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="notes" type="text" value="<?=$ra['notes'];?>">

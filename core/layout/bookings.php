@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -55,65 +55,85 @@ else{
         <div class="card mt-3 border-radius-0 bg-transparent border-0 overflow-visible">
           <div class="card-actions">
             <div class="row">
-              <div class="col-12 col-sm">
-                <ol class="breadcrumb m-0 pl-0 pt-0">
+              <div class="col-12 col-sm-4">
+                <ol class="breadcrumb m-0 p-0">
                   <li class="breadcrumb-item active">Bookings <?= isset($args[0])&&$args[0]!=''?' / '.$args[0]:'';?></li>
                 </ol>
-                <div class="text-left">Legend:
-                  <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/';?>" aria-label="View All Bookings">All</a>
-                  <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
-                  <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/confirmed';?>" aria-label="View Confirmed Bookings">Confirmed</a>
-                  <a class="badger badge-warning" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/in-progress';?>" aria-label="View In Progress Bookings">In Progress</a>
-                  <a class="badger badge-info" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/complete';?>" aria-label="View Complete Bookings">Complete</a>
-                  <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/archived';?>" aria-label="View Archived Bookings">Archived</a>
-                </div>
               </div>
-              <div class="col-12 col-sm text-right">
-                <div class="btn-group">
-                  <?=$user['options'][7]==1?'<a data-tooltip="left" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings"><i class="i">settings</i></a>':'';?>
-                  <button class="calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Table View" onclick="toggleBookingView()"><i class="i">table</i></button>
-                  <button class="calview<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Calendar View" onclick="toggleBookingView();"><i class="i">calendar</i></button>
-                  <?=$user['options'][2]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add"><i class="i">add</i></a>':'';?>
+              <div class="col-12 col-sm-8">
+                <div class="row">
+                  <div class="btn-group">
+                    <form class="form-row" method="post" action="">
+                      <input id="booksearch" name="booksearch" value="<?=(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
+                      <select id="bookingsort" name="booksort">
+                        <option value="">Select Display Order</option>
+                        <option value="new"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
+                        <option value="old"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
+                      </select>
+                      <button type="submit">Go</button>
+                      <?=$user['options'][7]==1?'<a data-tooltip="left" href="'.URL.$settings['system']['admin'].'/bookings/settings" role="button" aria-label="Bookings Settings"><i class="i">settings</i></a>':'';?>
+                      <button class="calview <?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Table View" onclick="toggleBookingView();return false;"><i class="i">table</i></button>
+                      <button class="calview<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='calendar')?' d-none':'');?>" data-tooltip="left" aria-label="Switch to Calendar View" onclick="toggleBookingView();return false;"><i class="i">calendar</i></button>
+                      <?=($user['options'][2]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/add/bookings" role="button" aria-label="Add"><i class="i">add</i></a>':'');?>
+                    </form>
+                  </div>
                 </div>
-                <form class="form-row justify-content-end" method="post" action="">
-                  <input class="col-3" id="booksearch" name="booksearch" value="<?=(isset($_POST['booksearch'])&&$_POST['booksearch']!=''?$_POST['booksearch']:'');?>" placeholder="Business/Name to Find">
-                  <select class="col-5" id="bookingsort" name="booksort">
-                    <option value="">Select Display Order</option>
-                    <option value="new"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='new'?' selected':'');?>>Date Old to New</option>
-                    <option value="old"<?=(isset($_POST['booksort'])&&$_POST['booksort']=='old'?' selected':'');?>>Date New to Old</option>
-                  </select>
-                  <button type="submit">Go</button>
-                </form>
               </div>
             </div>
           </div>
-          <table class="table-zebra<?=(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>">
-            <thead>
-              <tr>
-                <th class="d-table-cell d-sm-none"></th>
-                <th class="d-none d-sm-table-cell">Created</th>
-                <th class="d-none d-sm-table-cell">Start/End</th>
-                <th class="d-none d-sm-table-cell">Details</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody id="bookings">
+          <div class="row mb-2">
+            <div class="col-12">Legend:
+              <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/';?>" aria-label="View All Bookings">All</a>
+              <a class="badger badge-danger" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/unconfirmed';?>" aria-label="View Unconfirmed Bookings">Unconfirmed</a>
+              <a class="badger badge-success" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/confirmed';?>" aria-label="View Confirmed Bookings">Confirmed</a>
+              <a class="badger badge-warning" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/in-progress';?>" aria-label="View In Progress Bookings">In Progress</a>
+              <a class="badger badge-info" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/complete';?>" aria-label="View Complete Bookings">Complete</a>
+              <a class="badger badge-secondary" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/bookings/archived';?>" aria-label="View Archived Bookings">Archived</a>
+            </div>
+          </div>
+          <div id="list-view" class="mt-3<?=(isset($_COOKIE['bookingview'])&&$_COOKIE['bookingview']=='calendar'?' d-none':'');?>">
+            <div class="row sticky-top">
+              <article class="card py-2 overflow-visible card-list card-list-header shadow">
+                <div class="row">
+                  <div class="col-12 col-md"></div>
+                  <div class="col-12 col-md pl-2">Created</div>
+                  <div class="col-12 col-md pl-2">Start/End</div>
+                  <div class="col-12 col-md pl-2">Details</div>
+                  <div class="col-12 col-md"></div>
+                </div>
+              </article>
+            </div>
+            <div class="row" id="bookings">
               <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <tr class="<?php
-                if($r['status']=='confirmed')echo'bg-success';
-                elseif($r['status']=='in-progess')echo'bg-warning';
-                elseif($r['status']=='complete')echo'bg-info';
-                elseif($r['status']=='delete')echo' bg-danger';
-                elseif($r['status']=='archived')echo' bg-info';
-                elseif($r['status']=='unpublished')echo' bg-warning';?>" id="l_<?=$r['id'];?>">
-                  <td class="d-table-cell d-sm-none">
-                    <?= date($config['dateFormat'],$r['ti']).'<br>Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: ' . date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>Business: '.$r['business']:'').($r['name']!=''?'<br>Name: '.$r['name']:'').($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
-                  </td>
-                  <td class="d-none d-sm-table-cell"><?= date($config['dateFormat'],$r['ti']);?></td>
-                  <td class="d-none d-sm-table-cell"><?= date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?date($config['dateFormat'], $r['tie']):'');?></td>
-                  <td class="d-none d-sm-table-cell"><?=($r['business']!=''?'Business: '.$r['business'].'<br>':'').($r['name']!=''?'Name: '.$r['name'].'<br>':'').($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?></td>
-                  <td class="align-middle" id="controls_<?=$r['id'];?>">
-                    <div class="btn-toolbar float-right" role="toolbar">
+                <article class="card py-3 overflow-visible card-list small shadow<?php
+                  if($r['status']=='confirmed')echo' bg-success';
+                  elseif($r['status']=='in-progess')echo' bg-warning';
+                  elseif($r['status']=='complete')echo' bg-info';
+                  elseif($r['status']=='delete')echo' bg-danger';
+                  elseif($r['status']=='archived')echo' bg-info';
+                  elseif($r['status']=='unpublished')echo' bg-warning';?>" id="l_<?=$r['id'];?>">
+                  <div class="row">
+                    <div class="col-12 col-md pl-2">
+                      <?= date($config['dateFormat'],$r['ti']).'<br>'.
+                      'Start: '.date($config['dateFormat'],$r['tis']).($r['tie']>$r['tis']?'<br>End: '.
+                      date($config['dateFormat'], $r['tie']):'').($r['business']!=''?'<br>'.
+                      'Business: '.$r['business']:'').
+                      ($r['name']!=''?'<br>Name: '.$r['name']:'').
+                      ($r['email']!=''?'<br>Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a>':'').
+                      ($r['phone']!=''?'<br>Phone: '.$r['phone']:'');?>
+                    </div>
+                    <div class="col-12 col-md"><?= date($config['dateFormat'],$r['ti']);?></div>
+                    <div class="col-12 col-md">
+                      <?= date($config['dateFormat'],$r['tis']).
+                      ($r['tie']>$r['tis']?date($config['dateFormat'], $r['tie']):'');?>
+                    </div>
+                    <div class="col-12 col-md">
+                      <?=($r['business']!=''?'Business: '.$r['business'].'<br>':'').
+                      ($r['name']!=''?'Name: '.$r['name'].'<br>':'').
+                      ($r['email']!=''?'Email: <a href="mailto:'.$r['email'].'">'.$r['email'].'</a><br>':'').
+                      ($r['phone']!=''?'Phone: '.$r['phone'].'<br>':'');?>
+                    </div>
+                    <div class="col-12 col-md">
                       <div class="btn-group" role="group">
                         <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/bookings/edit/<?=$r['id'];?>" role="button" aria-label="<?=$user['options'][2]==1?'Edit':'View';?>"><i class="i"><?=$user['options'][2]==1?'edit':'view';?></i></a>
                         <button data-tooltip="tooltip" aria-label="Print Order" onclick="$('#sp').load('core/print_booking.php?id=<?=$r['id'];?>');"><i class="i">print</i></button>
@@ -126,12 +146,12 @@ else{
                         <?php }?>
                       </div>
                     </div>
-                  </td>
-                </tr>
+                  </div>
+                </article>
               <?php }?>
-            </tbody>
-          </table>
-          <div class="row p-3<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" id="calendar-view">
+            </div>
+          </div>
+          <div class="row mt-3<?=(isset($_COOKIE['bookingview'])&&($_COOKIE['bookingview']=='table'||$_COOKIE['bookingview']=='')?' d-none':'');?>" id="calendar-view">
             <div id="calendar"></div>
           </div>
         </div>

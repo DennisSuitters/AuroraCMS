@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -31,49 +31,49 @@ if(isset($r['contentType'])&&$r['contentType']!=''){
     $m2s->execute([':rid'=>$r['id'],':tis'=>$times[2][0],':tie'=>$times[2][1]]);
     $m2r=$m2s->fetch(PDO::FETCH_ASSOC);
     $my2s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my2s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my2s->execute([':rid'=>$r['id'],':tis'=>$times[2][2],':tie'=>$times[2][3]]);
     $my2r=$my2s->fetch(PDO::FETCH_ASSOC);
     $m3s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m3s->execute([':rid'=>$r['id'],':tis'=>$times[3][0],':tie'=>$times[3][1]]);
     $m3r=$m3s->fetch(PDO::FETCH_ASSOC);
     $my3s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my3s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my3s->execute([':rid'=>$r['id'],':tis'=>$times[3][2],':tie'=>$times[3][3]]);
     $my3r=$my3s->fetch(PDO::FETCH_ASSOC);
     $m4s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m4s->execute([':rid'=>$r['id'],':tis'=>$times[4][0],':tie'=>$times[4][1]]);
     $m4r=$m4s->fetch(PDO::FETCH_ASSOC);
     $my4s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my4s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my4s->execute([':rid'=>$r['id'],':tis'=>$times[4][2],':tie'=>$times[4][3]]);
     $my4r=$my4s->fetch(PDO::FETCH_ASSOC);
     $m5s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m5s->execute([':rid'=>$r['id'],':tis'=>$times[5][0],':tie'=>$times[5][1]]);
     $m5r=$m5s->fetch(PDO::FETCH_ASSOC);
     $my5s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my5s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my5s->execute([':rid'=>$r['id'],':tis'=>$times[5][2],':tie'=>$times[5][3]]);
     $my5r=$my5s->fetch(PDO::FETCH_ASSOC);
     $m6s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m6s->execute([':rid'=>$r['id'],':tis'=>$times[6][0],':tie'=>$times[6][1]]);
     $m6r=$m6s->fetch(PDO::FETCH_ASSOC);
     $my6s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my6s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my6s->execute([':rid'=>$r['id'],':tis'=>$times[6][2],':tie'=>$times[6][3]]);
     $my6r=$my6s->fetch(PDO::FETCH_ASSOC);
     $m7s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m7s->execute([':rid'=>$r['id'],':tis'=>$times[7][0],':tie'=>$times[7][1]]);
     $m7r=$m7s->fetch(PDO::FETCH_ASSOC);
     $my7s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my7s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my7s->execute([':rid'=>$r['id'],':tis'=>$times[7][2],':tie'=>$times[7][3]]);
     $my7r=$my7s->fetch(PDO::FETCH_ASSOC);
     $m8s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m8s->execute([':rid'=>$r['id'],':tis'=>$times[8][0],':tie'=>$times[8][1]]);
     $m8r=$m8s->fetch(PDO::FETCH_ASSOC);
     $my8s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my8s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my8s->execute([':rid'=>$r['id'],':tis'=>$times[8][2],':tie'=>$times[8][3]]);
     $my8r=$my8s->fetch(PDO::FETCH_ASSOC);
     $m9s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m9s->execute([':rid'=>$r['id'],':tis'=>$times[9][0],':tie'=>$times[9][1]]);
     $m9r=$m9s->fetch(PDO::FETCH_ASSOC);
     $my9s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
-    $my9s->execute([':rid'=>$r['id'],':tis'=>$times[1][2],':tie'=>$times[1][3]]);
+    $my9s->execute([':rid'=>$r['id'],':tis'=>$times[9][2],':tie'=>$times[9][3]]);
     $my9r=$my9s->fetch(PDO::FETCH_ASSOC);
     $m10s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $m10s->execute([':rid'=>$r['id'],':tis'=>$times[10][0],':tie'=>$times[10][1]]);
@@ -93,19 +93,11 @@ if(isset($r['contentType'])&&$r['contentType']!=''){
     $my12s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $my12s->execute([':rid'=>$r['id'],':tis'=>$times[12][2],':tie'=>$times[12][3]]);
     $my12r=$my12s->fetch(PDO::FETCH_ASSOC);?>
-    <div class="alert widget item mt-3 ml-2 p-0" data-dbid="<?=$rw['id'];?>" id="l_<?=$rw['id'];?>">
-      <div class="toolbar px-2 py-1">
-        <?=$rw['title'];?>
-        <div class="btn-group">
-          <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
-        </div>
-      </div>
-      <div class="mx-2 my-1 small">
-        <canvas id="barChart" style="min-height:200px;height:200px;max-height:200px;max-width:100%;"></canvas>
-        <div class="d-flex flex-row justify-content-end my-2">
-          <span class="mr-3"><i class="i" style="background-color:var(--graph-background-color-prev);color:var(--graph-color-prev);">square</i> Last year</span>
-          <span><i class="i" style="background-color:var(--graph-background-color-current);color:var(--graph-color-current);">square</i> This year</span>
-        </div>
+    <div class="alert col-12 widget item mt-3 mx-0 mx-sm-1 p-0">
+      <canvas id="barChart" style="min-height:200px;height:200px;max-height:200px;max-width:100%;"></canvas>
+      <div class="d-flex flex-row justify-content-end my-2">
+        <span class="mr-3"><i class="i" style="background-color:var(--graph-background-color-prev);color:var(--graph-color-prev);">square</i> Last year</span>
+        <span><i class="i" style="background-color:var(--graph-background-color-current);color:var(--graph-color-current);">square</i> This year</span>
       </div>
     </div>
     <script>

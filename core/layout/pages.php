@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,12 +35,11 @@ else{
     <main>
       <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
         <div class="container-fluid">
-          <div class="card mt-3 bg-transparent border-0 overflow-visible">
+          <div class="card mt-3 border-0 bg-transparent overflow-visible">
             <div class="card-actions">
               <div class="row">
                 <div class="col-12 col-sm">
                   <ol class="breadcrumb m-0 pl-0 pt-0">
-                    <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                     <li class="breadcrumb-item active">Pages</li>
                   </ol>
                 </div>
@@ -52,46 +51,55 @@ else{
                 </div>
               </div>
             </div>
-            <section class="content mt-3 overflow-visible list" id="sortable">
+            <section class="content overflow-visible list" id="sortable">
+              <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header bg-white shadow sticky-top d-none d-sm-block">
+                <div class="row">
+                  <div class="col-12 col-md pl-2">Page Title</div>
+                  <div class="col-12 col-md-1 text-center">Menu</div>
+                  <div class="col-12 col-md-2 text-center">Views</div>
+                  <div class="col-12 col-md-1 text-center mx-4">Active</div>
+                  <div class="col-12 col-md-2"></div>
+                </div>
+              </article>
               <?php $s=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `file`!='notification' ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
               $s->execute();
-              while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-                <article class="card zebra mx-2 mt-2 mb-0 p-0 overflow-visible card-list item shadow subsortable" id="l_<?=$r['id'];?>">
+              while($r=$s->fetch(PDO::FETCH_ASSOC)){
+                $seoerrors=0;
+                if(strlen($r['seoTitle'])<50)$seoerrors++;elseif(strlen($r['seoTitle'])>70)$seoerrors++;
+                if(strlen($r['seoDescription'])<1)$seoerrors++;elseif(strlen($r['seoDescription'])>70)$seoerrors++;
+                if($r['cover']!=''&&strlen($r['fileALT'])<1)$seoerrors++;
+                if(strlen(strip_tags($r['notes']))<100)$seoerrors++;
+                preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
+                if(isset($h1[1]))$seoerrors++;
+                if($r['heading']=='')$seoerrors++;?>
+                <article id="l_<?=$r['id'];?>" class="card zebra m-0 p-0 pt-2 overflow-visible card-list item shadow subsortable<?=($seoerrors>0?' badge" data-badge="There are '.$seoerrors.' SEO issues!':'');?>">
                   <div class="row">
-                    <div class="col-12 col-sm p-2 align-top">
+                    <div class="col-12 col-sm p-2 pb-0 pt-3">
                       <?php if($user['options'][1]==1){
                         $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:id");
                         $ss->execute([':id'=>$r['id']]);
                         $rs=$ss->fetch(PDO::FETCH_ASSOC);
                         echo$rs['cnt']>0?'<span class="text-info" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions"><i class="i">lightbulb</i></span>':'';
                       }
-                      echo'<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'">'.$r['title'].'</a><br>';
-                      $seoerrors=0;
-                      if(strlen($r['seoTitle'])<50)$seoerrors++;elseif(strlen($r['seoTitle'])>70)$seoerrors++;
-                      if(strlen($r['seoDescription'])<1)$seoerrors++;elseif(strlen($r['seoDescription'])>70)$seoerrors++;
-                      if($r['cover']!=''&&strlen($r['fileALT'])<1)$seoerrors++;
-                      if(strlen(strip_tags($r['notes']))<100)$seoerrors++;
-                      preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
-                      if(isset($h1[1]))$seoerrors++;
-                      if($r['heading']=='')$seoerrors++;
-                      echo($seoerrors>0?'<div class="alert alert-warning m-0 p-1 small text-black">There are '.$seoerrors.' things that could affect the SEO of this page!!!</div>':'').
-                      '<small class="text-muted">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucfirst(rank($r['rank'])).'</span> and above').'</small>';?>
+                      echo'<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'">'.$r['title'].'</a>'.
+                      '<small class="d-block text-muted">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucfirst(rank($r['rank'])).'</span> and above').'</small>';?>
                     </div>
-                    <div class="col-2 col-sm-1 align-middle text-center pt-3 small"><?= ucfirst($r['menu']);?></div>
-                    <div class="col-2 align-middle text-center pt-3">
-                      <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Click to Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`menu`,`views`,`0`);"><span id="views'.$r['id'].'" data-views="views">'.$r['views'].'</span><small> Views</small></button>':'<span class="badger badge-secondary">'.$r['views'].'</span>';?>
+                    <div class="col-2 col-sm-1 text-center pt-0 pt-sm-3 small">
+                      <div class="d-block d-sm-none"><strong>Menu</strong></div>
+                      <?=ucfirst($r['menu']);?>
                     </div>
-                    <div class="col-1 align-middle text-center m-4" id="menuactive0<?=$r['id'];?>">
-                      <?=$r['contentType']!='index'?'<input id="active'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"'.($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled').'>':'';?>
+                    <div class="col-2 text-center pt-0 pt-sm-3">
+                      <div class="d-block d-sm-none"><strong>Views</strong></div>
+                      <?=$user['options'][1]==1?'<button id="views'.$r['id'].'" class="trash" data-tooltip="tooltip" aria-label="Click to Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`menu`,`views`,`0`);">'.$r['views'].'</button>':'<span class="badger badge-secondary">'.$r['views'].'</span>';?>
                     </div>
-                    <div class="col-2 align-middle pt-3 pr-2 text-right" id="controls_<?=$r['id'];?>">
+                    <div class="col-2 col-sm-1 text-center m-0 m-sm-4 mx-2 mx-sm-4" id="menuactive0<?=$r['id'];?>">
+                      <div class="d-block d-sm-none"><strong>Active</strong></div>
+                      <?='<input id="active'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"'.($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($r['contentType']=='index'?' disabled':'').($user['options'][1]==1?'':' disabled').'>';?>
+                    </div>
+                    <div class="col col-sm-2 pt-3 pr-2 text-right" id="controls_<?=$r['id'];?>">
                       <div class="btn-group" role="group">
-                        <?=($r['active']==1?
-                          '<button data-social-share="'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/').'" data-social-desc="'.($r['seoDescription']?$r['seoDescription']:$r['title']).'" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>'
-                        :
-                          '').
-                        '<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'"'.($user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"').'">'.($user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>').'</a>'.
-                        ($user['options'][0]==1&&$r['contentType']=='page'?'<button class="purge" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');"><i class="i">trash</i></button>':'').
+                        <?=($r['active']==1?'<button data-social-share="'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/').'" data-social-desc="'.($r['seoDescription']?$r['seoDescription']:$r['title']).'" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>':'').
+                        '<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'"'.($user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"').'">'.($user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>').'</a>'.($user['options'][0]==1&&$r['contentType']=='page'?'<button class="purge" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');"><i class="i">trash</i></button>':'').
                         ($user['options'][1]==1?'<span class="btn orderhandle"><i class="i">drag</i></span>':'');?>
                       </div>
                     </div>
@@ -99,38 +107,30 @@ else{
                     $sm->execute([':mid'=>$r['id']]);
                     if($sm->rowCount()>0){?>
                       <div id="subsortable_<?=$r['id'];?>">
-                        <?php while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
-                          <article class="card zebra mx-2 mt-2 mb-0 overflow-visible item" id="l_<?=$rm['id'];?>">
+                        <?php while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
+                          $seoerrors=0;
+                          if(strlen($rm['seoTitle'])<50)$seoerrors++;elseif(strlen($rm['seoTitle'])>70)$seoerrors++;
+                          if(strlen($rm['seoDescription'])<1)$seoerrors++;elseif(strlen($rm['seoDescription'])>70)$seoerrors++;
+                          if($rm['cover']!=''&&strlen($rm['fileALT'])<1)$seoerrors++;
+                          if(strlen(strip_tags($rm['notes']))<100)$seoerrors++;
+                          preg_match('~<h1>([^{]*)</h1>~i',$rm['notes'],$h1);
+                          if(isset($h1[1]))$seoerrors++;
+                          if($rm['heading']=='')$seoerrors++;?>
+                          <article id="l_<?=$rm['id'];?>" class="card item m-0 p-0 pt-2 border-0 bg-transparent overflow-visible<?=($seoerrors>0?' badge" data-badge="There are '.$seoerrors.' SEO issues!':'');?>">
                             <div class="row">
-                              <div class="col--5 pr-2 text-center text-muted i-2x">&rdsh;</div>
-                              <div class="col--5">
-                                <?php if($rm['cover']!=''){
-                                  $imgcheck=basename($rm['cover']);
-                                  if(file_exists('media/lg/'.$imgcheck)&&file_exists('media/sm/'.$imgcheck))
-                                  echo'<a class="card-image" data-fancybox="media" data-caption="'.$rm['title'].($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="media/lg/'.$imgcheck.'"><img src="media/sm/'.$imgcheck.'" alt="'.$rm['title'].'"></a>';
-                                }?>
-                              </div>
-                              <div class="col p-2 align-top">
-                                <?php $seoerrors=0;
-                                if(strlen($rm['seoTitle'])<50)$seoerrors++;elseif(strlen($rm['seoTitle'])>70)$seoerrors++;
-                                if(strlen($rm['seoDescription'])<1)$seoerrors++;elseif(strlen($rm['seoDescription'])>70)$seoerrors++;
-                                if($rm['cover']!=''&&strlen($rm['fileALT'])<1)$seoerrors++;
-                                if(strlen(strip_tags($rm['notes']))<100)$seoerrors++;
-                                preg_match('~<h1>([^{]*)</h1>~i',$rm['notes'],$h1);
-                                if(isset($h1[1]))$seoerrors++;
-                                if($rm['heading']=='')$seoerrors++;
-                                echo$seoerrors>0?'<div class="alert alert-warning mx-0 my-1 p-1 small text-black">There are '.$seoerrors.' things that could affect the SEO of this page!!!</div>':'';
-                                if($user['options'][1]==1){
+                              <div class="col-12 col-sm p-2 pb-0 pt-3 align-top">
+                                <span class="pr-2 text-center text-muted i-2x">&rdsh;</span>
+                                <?php if($user['options'][1]==1){
                                   $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:id");
                                   $ss->execute([':id'=>$rm['id']]);
                                   $rs=$ss->fetch(PDO::FETCH_ASSOC);
                                   echo$rs['cnt']>0?'<span class="text-info" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions"><i class="i">lightbulb</i></span>':'';
                                 }
                                 echo'<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$rm['id'].'">'.$rm['title'].'</a>'.
-                                '<br><small class="text-muted">Page Available to '.($rm['rank']==0?'Everyone':ucfirst(rank($rm['rank'])).' and above').'</small>';?>
+                                '<small class="d-block text-muted">Available to '.($rm['rank']==0?'<spam class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($rm['rank']).'">'.ucfirst(rank($rm['rank'])).'</span> and above').'</small>';?>
                               </div>
                               <div class="col-1">&nbsp;</div>
-                              <div class="col-1 align-middle text-center pt-3">
+                              <div class="col-2 align-middle text-center pt-3">
                                 <?=$user['options'][0]==1?'<button class="trash align-top" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views'.$rm['id'].'`).text(`0`);update(`'.$rm['id'].'`,`menu`,`views`,`0`);"><span id="views'.$rm['id'].'">'.$rm['views'].'</span></button>':$rm['views'];?>
                               </div>
                               <div class="col-1 align-middle text-center m-4">
@@ -181,27 +181,26 @@ else{
               <article class="ghost hidden">&nbsp;</article>
               <?php $so=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `menu`='none' AND `contentType`!='notification' ORDER BY `title` ASC");
               $so->execute();
-              while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
-                <article class="card zebra mx-2 mt-2 mb-0 p-0 overflow-visible card-list shadow item" id="<?=$ro['id'];?>">
+              while($ro=$so->fetch(PDO::FETCH_ASSOC)){
+                $seoerrors=0;
+                if(strlen($ro['seoTitle'])<50)$seoerrors++;elseif(strlen($ro['seoTitle'])>70)$seoerrors++;
+                if(strlen($ro['seoDescription'])<1)$seoerrors++;elseif(strlen($ro['seoDescription'])>70)$seoerrors++;
+                if($ro['cover']!=''&&strlen($ro['fileALT'])<1)$seoerrors++;
+                if(strlen(strip_tags($ro['notes']))<100)$seoerrors++;
+                preg_match('~<h1>([^{]*)</h1>~i',$ro['notes'],$h1);
+                if(isset($h1[1]))$seoerrors++;
+                if($ro['heading']=='')$seoerrors++;?>
+                <article id="<?=$ro['id'];?>" class="card zebra mx-2 mt-2 mb-0 p-0 overflow-visible card-list shadow item<?=($seoerrors>0?' badge" data-badge="There are '.$seoerrors.' SEO isses!':'');?>">
                   <div class="row">
-                    <div class="col-12 col-sm p-2 align-top">
+                    <div class="col-12 col-sm p-2 pb-0 pt-3 align-top">
                       <?php if($user['options'][1]==1){
                         $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:id");
                         $ss->execute([':id'=>$ro['id']]);
                         $rs=$ss->fetch(PDO::FETCH_ASSOC);
                         echo$rs['cnt']>0?'<span class="text-info" data-tooltip="tooltip" aria-label="'.$rs['cnt'].' Editing Suggestions"><i class="i">lightbulb</i></span>':'';
                       }
-                      echo'<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'].'">'.$ro['title'].'</a>';
-                      $seoerrors=0;
-                      if(strlen($ro['seoTitle'])<50)$seoerrors++;elseif(strlen($ro['seoTitle'])>70)$seoerrors++;
-                      if(strlen($ro['seoDescription'])<1)$seoerrors++;elseif(strlen($ro['seoDescription'])>70)$seoerrors++;
-                      if($ro['cover']!=''&&strlen($ro['fileALT'])<1)$seoerrors++;
-                      if(strlen(strip_tags($ro['notes']))<100)$seoerrors++;
-                      preg_match('~<h1>([^{]*)</h1>~i',$ro['notes'],$h1);
-                      if(isset($h1[1]))$seoerrors++;
-                      if($ro['heading']=='')$seoerrors++;
-                      echo$seoerrors>0?'<div class="alert alert-warning mx-0 my-1 p-1 small text-black">There are '.$seoerrors.' things that could affect the SEO of this page!!!</div>':'';
-                      echo'<br><small class="text-muted">Available to '.($ro['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($ro['rank']).'">'.ucfirst(rank($ro['rank'])).'</span> and above').'</small>';?>
+                      echo'<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$ro['id'].'">'.$ro['title'].'</a>'.
+                      '<small class="d-block text-muted">Available to '.($ro['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($ro['rank']).'">'.ucfirst(rank($ro['rank'])).'</span> and above').'</small>';?>
                     </div>
                     <div class="col-2 col-sm-1 align-middle text-center pt-3 small">&nbsp;</div>
                     <div class="col-2 align-middle text-center pt-3">
@@ -237,7 +236,7 @@ else{
             $.ajax({
               type:"POST",
               dataType:"json",
-              url:"core/reorder.php",
+              url:"core/reorderpages.php",
               data:order
             });
           }

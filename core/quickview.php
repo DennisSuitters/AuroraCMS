@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,6 +17,8 @@ $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO:
 if(isset($_GET['theme'])&&file_exists('layout/'.$_GET['theme']))$config['theme']=$_GET['theme'];
 define('THEME','layout/'.$config['theme']);
 $theme=parse_ini_file('../'.THEME.'/theme.ini',TRUE);
+$uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
+$rank=isset($_SESSION['rank'])?$_SESSION['rank']:0;
 if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){
   if(!defined('PROTOCOL'))define('PROTOCOL','https://');
 }else{
@@ -60,10 +62,12 @@ if(file_exists('../'.THEME.'/quickview.html')){
 					if(basename($r['file'])==basename($rm['file']))continue;
           $item=$thumbsitem;
           $item=preg_replace([
+            '/<print thumbs=[\"\']?id[\"\']?>/',
             '/<print thumbs=[\"\']?thumb[\"\']?>/',
             '/<print thumbs=[\"\']?image[\"\']?>/',
             '/<print thumbs=[\"\']?imageALT[\"\']?>/'
           ],[
+            $rm['id'],
             file_exists('../media/sm/'.basename($rm['file']))?URL.'media/sm/'.basename($rm['file']):$rm['file'],
             $rm['file'],
             $rm['fileALT']
@@ -95,26 +99,72 @@ if(file_exists('../'.THEME.'/quickview.html')){
 			if($r['coming']==1)$sideCost.='<div class="sold">Coming Soon</div>';
 			else{
 				if($r['stockStatus']=='sold out')$sideCost.='<div class="sold">';
-				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &#36;'.$r['rrp'].'</span>':'');
-				$sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&#36;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&#36;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+				$sideCost.=($r['rrp']!=0?'<span class="rrp">RRP &dollar;'.$r['rrp'].'</span>':'');
+        if($rank>300&&$rank<400){
+          if($ru['options'][19]==1){
+            if($r['dCost']!=0)$sideCost.='<span class="reduced">&dollar;'.$r['dCost'].'</span>';
+          }
+        }else{
+		      $sideCost.=(is_numeric($r['cost'])&&$r['cost']!=0?'<span class="cost'.($r['rCost']!=0?' strike':'').'">'.(is_numeric($r['cost'])?'&dollar;':'').htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>'.($r['rCost']!=0?'<span class="reduced">&dollar;'.$r['rCost'].'</span>':''):'<span>'.htmlspecialchars($r['cost'],ENT_QUOTES,'UTF-8').'</span>');
+        }
 				if($r['stockStatus']=='sold out')$sideCost.='</div>';
 			}
 		}
     if($r['stockStatus']=='out of stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order')$r['quantity']=0;
-		$choices='';
-		if(stristr($html,'<choices>')&&$r['stockStatus']=='quantity'||$r['stockStatus']=='in stock'||$r['stockStatus']=='pre order'||$r['stockStatus']=='back order'||$r['stockStatus']=='available'){
-			$scq=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:id ORDER BY `title` ASC");
-			$scq->execute([':id'=>$r['id']]);
-			if($scq->rowCount()>0){
-				$choices='<select class="choices" onchange="$(\'.addCart\').data(\'cartchoice\',$(this).val());$(\'.choices\').val($(this).val());"><option value="0">Select an Option</option>';
-				while($rcq=$scq->fetch(PDO::FETCH_ASSOC)){
-					if($rcq['ti']==0)continue;
-					$choices.='<option value="'.$rcq['id'].'">'.$rcq['title'].':'.$rcq['ti'].'</option>';
-				}
-				$choices.='</select>';
-				$html=preg_replace('/<choices>/',$choices,$html);
+		if(stristr($html,'<choices>')){
+      $soc=$db->prepare("SELECT DISTINCT(`category`) AS 'category' FROM `".$prefix."choices` WHERE `rid`=:rid AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
+      $soc->execute([':rid'=>$r['id']]);
+      if($soc->rowCount()>0){
+        $options='<div class="row">'.
+          '<div class="col-12">'.
+            '<a href="'.URL.$r['contentType'].'/'.$r['urlSlug'].'">Click to View Options on Product page.</a>'.
+          '</div>'.
+        '</div>';
+        while($roc=$soc->fetch(PDO::FETCH_ASSOC)){
+          $soi=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid AND `category`=:cat AND `contentType`='option' AND `status`='available' ORDER BY `ord` ASC");
+          $soi->execute([
+            ':cat'=>$roc['category'],
+            ':rid'=>$r['id']
+          ]);
+          if($soi->rowCount()>0){
+            $options.='<div class="h5 text-left m-0 p-0">'.$roc['category'].'</div>'.
+              '<div class="row">'.
+                '<div class="col-12 m-0 p-0 pl-2 text-left">'.
+                  '<select id="'.strtolower(str_replace(' ','',$roc['category'])).'options" name="options[]">'.
+                    '<option value="">Select '.($roc['category']==''?'an ':'a ').$roc['category'].' Option</option>';
+            while($roi=$soi->fetch(PDO::FETCH_ASSOC)){
+              if($roi['oid']!=0){
+                $soic=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+                $soic->execute([':id'=>$roi['oid']]);
+                $roic=$soic->fetch(PDO::FETCH_ASSOC);
+                if($roi['quantity']==''){
+                  $roi['quantity']=$roic['quantity'];
+                }
+                if($roi['cost']==''){
+                  if($roic['cost']!=0)$roi['cost']=$roic['cost'];
+                  if($roic['rCost']!=0)$roi['cost']=$roic['rCost'];
+                  if(isset($user['rank'])){
+                    if($user['rank']>300&&$user['rank']<400){
+                      if(isset($user['options'])&&$user['options'][19]==1){
+                        if($roic['dCost']!=0)$roi['cost']=$roic['dCost'];
+                      }
+                    }
+                  }
+                }
+              }
+              if($roi['quantity']!=''){
+                $options.='<option value="'.$roi['id'].'">'.$roi['title'].($roi['cost']>0?' - &dollar;'.$roi['cost']:'').'</option>';
+              }
+            }
+            $options.='</select>'.
+                    '</div>'.
+                  '</div>';
+          }
+        }
+				$html=preg_replace('/<choices>/',$options,$html);
 			}else$html=preg_replace('/<choices>/','',$html);
 		}else$html=preg_replace('/<choices>/','',$html);
+
 		if($r['brand']!=0){
     	$sb=$db->prepare("SELECT `id`,`title`,`url`,`icon` FROM `".$prefix."choices` WHERE `contentType`='brand' AND `id`=:id");
     	$sb->execute([':id'=>$r['brand']]);
@@ -122,6 +172,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
     	$brand=($rb['url']!=''?'<a href="'.$rb['url'].'">':'').($rb['icon']==''?$rb['title']:'<img src="'.$rb['icon'].'" alt="'.$rb['title'].'" title="'.$rb['title'].'">').($rb['url']!=''?'</a>':'');
 		}else$brand='';
     $html=preg_replace([
+      '/<print content=[\"\']?id[\"\']?>/',
       '/<print content=[\"\']?thumb[\"\']?>/',
       '/<print content=[\"\']?image[\"\']?>/',
 			'/<print content=[\"\']?imageALT[\"\']?>/',
@@ -146,6 +197,7 @@ if(file_exists('../'.THEME.'/quickview.html')){
 			$r['points']>0&&$config['options'][0]==1?'/<[\/]?points>/':'~<points>.*?<\/points>~is',
 			'/<print content=[\"\']?points[\"\']?>/'
     ],[
+      $r['id'],
       file_exists(URL.'media/sm/'.basename($r['file']))?URL.'media/sm/'.basename($r['file']):$r['file'],
       $r['file'],
 			$r['fileALT'],

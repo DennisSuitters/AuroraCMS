@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -208,18 +208,22 @@ function requestSameDomain(){
   return parse_url($myDomain,PHP_URL_HOST)===parse_url($requestsSource,PHP_URL_HOST);
 }
 function _ago($time){
-	if($time==0)$timeDiff='Never';
-	else{
-		$fromTime=$time;
-		$timeDiff=floor(abs(time()-$fromTime)/60);
-		if($timeDiff<2)$timeDiff='Just Now';
-		elseif($timeDiff>2&&$timeDiff<60)$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
-		elseif($timeDiff>60&&$timeDiff<120)$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
-		elseif($timeDiff<1440)$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
-		elseif($timeDiff>1440&&$timeDiff<2880)$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
-		elseif($timeDiff>2880)$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
+	$time_difference=time()- $time;
+	if($time_difference<1){return'Never';}
+	$condition=array(12 * 30 * 24 * 60 * 60=>'year',30 * 24 * 60 * 60=>'month',24 * 60 * 60=>'day',60 * 60=>'hour',60=>'minute',1=>'second');
+	foreach($condition as$secs=>$str){
+			$d=$time_difference / $secs;
+			if($d>=1){$t=round($d);return'about '.$t.' '.$str.($t>1?'s':'').' ago';}
 	}
-	return$timeDiff;
+}
+function timeago($time){
+	$time_difference=time()- $time;
+	if($time_difference<1){return'Never';}
+	$condition=array(12 * 30 * 24 * 60 * 60=>'year',30 * 24 * 60 * 60=>'month',24 * 60 * 60=>'day',60 * 60=>'hour',60=>'minute',1=>'second');
+	foreach($condition as$secs=>$str){
+			$d=$time_difference / $secs;
+			if($d>=1){$t=round($d);return'about '.$t.' '.$str.($t>1?'s':'').' ago';}
+	}
 }
 function _agologgedin($time){
 	if($time==0)$timeDiff='Has Never Logged In';
@@ -642,6 +646,10 @@ class front{
 		$view='portfolio';
 		require'process.php';
 	}
+	function pricing($args=false){
+		$view='pricing';
+		require'process.php';
+	}
 	function proof($args=false){
 		$view='proofs';
 		require'process.php';
@@ -753,7 +761,7 @@ $s->execute([':rank'=>$_SESSION['rank']]);
 while($r=$s->fetch(PDO::FETCH_ASSOC)){
 	if($r['contentType']=='offline')continue;
 	if(method_exists('front',$r['contentType']))$routes[$r['contentType']]=['front',$r['contentType']];
-  else$routes[$r['contentType']]=['front','content'];
+  else$routes[$r['contentType']]=['front','index'];
 }
 $route->setRoutes($routes);
 $route->routeURL(preg_replace("|/$|","",filter_input(INPUT_GET,'url',FILTER_SANITIZE_URL)));

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -140,7 +140,11 @@
 <script>
   var weatherIconsMap={"01d":"weather-day-sunny","01n":"weather-night-clear","02d":"weather-day-cloudy","02n":"weather-night-cloudy","03d":"weather-cloud","03n":"weather-cloud","04d":"weather-cloudy","04n":"weather-cloudy","09d":"weather-showers","09n":"weather-showers","10d":"weather-day-hail","10n":"weather-night-hail","11d":"weather-thunderstorm","11n":"weather-thunderstorm","13d":"weather-snow","13n":"weather-snow","50d":"weather-fog","50n":"weather-fog"};
   $(function(){
-    getClientPosition();
+    <?php if($config['geo_weatherAPI']!=''){?>
+      getClientPosition();
+    <?php }else{?>
+      $('#protocol-modal').removeClass('d-none');
+    <?php }?>
   });
   function getClientPosition(){
     <?php if($config['geo_position']!=''){

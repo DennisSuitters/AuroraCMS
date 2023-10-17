@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -150,7 +150,7 @@ else{
         </div>
         <section class="content mt-3 overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
           <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card zebra mx-2 mt-2 mb-0 overflow-visible card-list shadow" data-content="course<?=' '.$r['title'];?>" id="l_<?=$r['id'];?>">
+            <article class="card zebra col-6 col-md-5 col-lg-3 col-xxl-2 mx-0 mx-md-2 mt-2 mb-0 overflow-visible card-list shadow" data-content="course<?=' '.$r['title'];?>" id="l_<?=$r['id'];?>">
               <div class="card-image overflow-visible">
                 <?php if($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb'])))
                   echo'<a href="'.URL.$settings['system']['admin'].'/course/edit/'.$r['id'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -174,7 +174,7 @@ else{
               <div class="card-header overflow-visible mt-0 pt-0 line-clamp">
                 <a href="<?= URL.$settings['system']['admin'].'/course/edit/'.$r['id'];?>" data-tooltip="tooltip" aria-label="Edit <?=$r['title'];?>"><?php echo$r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                 <?=($user['options'][1]==1&&$r['suggestions']==1?'<span data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></span><br>':'').
-                '<small class="text-muted d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'Everyone':'<span class="badge badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+                '<small class="text-muted d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
               </div>
               <div class="card-footer">
                 <span class="code hidewhenempty"><?=$r['code'];?></span>
@@ -183,11 +183,7 @@ else{
                     <div class="btn-group" role="group">
                       <button class="share <?=($r['status']=='published'?'':'d-none');?>" data-social-share="<?= URL.'course/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" id="share<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
                       <a href="<?= URL.$settings['system']['admin'];?>/course/edit/<?=$r['id'];?>" role="button" data-tooltip="tooltip"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
-                      <?php if($user['options'][0]==1){?>
-                        <button class="add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
-                        <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
-                        <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">purge</i></button>
-                      <?php }?>
+                      <?=($user['options'][0]==1?'<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`unpublished`);"><i class="i">untrash</i></button><button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`content`);"><i class="i">purge</i></button>':'');?>
                     </div>
                   </div>
                 </div>

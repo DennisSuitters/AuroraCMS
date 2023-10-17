@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,7 +17,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
-      <div class="card mt-3 p-4 bg-transparent border-0 overflow-visible">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -37,20 +37,20 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         </div>
         <div class="row">
           <div class="col-12 col-sm-9 order-1 order-md-1 mb-4 mb-md-0">
-            <label id="playlistTitle" for="title"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$r['id'].'#playlistTitle" data-tooltip="tooltip" aria-label="PermaLink to Playlist Title Field">&#128279;</a>':'';?>Title</label>
+            <label for="title">Title</label>
             <div class="form-row">
               <button data-fancybox data-type="ajax" data-src="core/layout/seohelper.php?t=title" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="playlist" data-dbc="title" data-bs="trash" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Playlist Item Title...."':' readonly';?>>
               <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <label id="playlistDateCreated" for="dt"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$r['id'].'#playlistDateCreated" data-tooltip="tooltip" aria-label="PermaLink to Playlist Date Created Field">&#128279;</a>':'';?>Published&nbsp;Date</label>
+            <label for="dt">Published Date</label>
             <div class="form-row">
               <input id="dt" type="text" value="<?=$r['dt'];?>" readonly>
             </div>
           </div>
           <div class="col-12 col-sm-3 order-1 order-md-2 mb-4 mb-md-0">
-            <div class="card m-3">
-              <figure class="card-image">
+            <div class="card m-1">
+              <figure class="card-image" style="height:9.5rem;">
                 <a data-fancybox="playlist" href="<?=$r['thumbnail_url'];?>">
                   <img src="<?=$r['thumbnail_url'];?>" alt="Playlist <?=$r['id'];?>">
                 </a>
@@ -58,11 +58,11 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
         </div>
-        <label id="playlistDateCreated" for="ti"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$r['id'].'#playlistDateCreated" data-tooltip="tooltip" aria-label="PermaLink to Playlist Date Created Field">&#128279;</a>':'';?>Created</label>
+        <label for="ti">Created</label>
         <div class="form-row">
           <input id="ti" type="text" value="<?= date($config['dateFormat'],$r['ti']);?>" readonly>
         </div>
-        <label id="playlistProviderName" for="provider"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$r['id'].'#playlistProviderName" data-tooltip="tooltip" aria-label="PermaLink to Playlist Provider Name Field">&#128279;</a>':'';?>Provider&nbsp;Name</label>
+        <label for="provider">Provider Name</label>
         <div class="form-row">
           <input id="provider_name" type="text" value="<?=$r['provider_name'];?>" readonly>
         </div>

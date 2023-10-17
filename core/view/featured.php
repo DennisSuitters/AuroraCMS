@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.7
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
 if($page['sliderOptions'][0]==1){
-	preg_match('/<settings itemcount="([\w\W]*?)" contenttype="([\w\W]*?)" order="([\w\W]*?)">/',$html,$matches);
+	preg_match('/<settings.*itemCount=[\"\'](.+?)[\"\'].*contentType=[\"\'](.+?)[\"\'].*order=[\"\'](.+?)[\"\']>/',$html,$matches);
 	$html=preg_replace('~<settings.*?>~is','',$html,1);
 	$itemCount=$matches[1];
 	$limit=', '.$matches[1];

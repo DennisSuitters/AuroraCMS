@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -16,7 +16,7 @@ if(stristr($html,'<hours>')){
 		preg_match('/<buildHours>([\w\W]*?)<\/buildHours>/',$html,$matches);
 		$htmlHours=$matches[1];
 		$hoursItems='';
-		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
+		$s=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' AND `status`=1 ORDER BY `ord` ASC");
 		if($s->rowCount()>0){
 			while($r=$s->fetch(PDO::FETCH_ASSOC)){
 				$buildHours=$htmlHours;

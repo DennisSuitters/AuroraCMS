@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.26-6
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,7 +60,7 @@ $html=preg_replace([
   '/<print page=[\"\']?notes[\"\']?>/',
   '/<google_analytics>/'
 ],[
-  'background-color:none!important;background-image:url('.$image.')!important;background-repeat:no-repeat!important;background-position:center!important;background-size:cover!important;',
+  'background-image:url('.$image.');',
   THEME,
   trim(htmlspecialchars($theme['title'],ENT_QUOTES,'UTF-8')),
   trim(htmlspecialchars($theme['creator'],ENT_QUOTES,'UTF-8')),

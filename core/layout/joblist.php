@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -257,10 +257,12 @@ else{
           var sourceId;
           $('[draggable=true]').bind('dragstart',function(event){
             sourceId=$(this).parent().attr('id');
+            $(this).addClass('dragging').width($(this).width());
             event.originalEvent.dataTransfer.setData("text/plain",event.target.getAttribute('id'));
           });
           $('.card-body').bind('dragover',function(event){event.preventDefault();});
           $('.card-body').bind('drop',function(event){
+            $(this).removeClass('dragging');
             var children=$(this).children();
             var targetId=children.attr('id');
             if(sourceId!=targetId){

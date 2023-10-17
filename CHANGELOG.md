@@ -1,4 +1,57 @@
-### v0.2.24
+### v0.2.26
+- Update logo and background image.
+- Update Favicons.
+- Add option check for Sales to stop Widget appearing in Dashboard if disabled.
+- Remove resize facility from the Sales widget.
+- Improve Inventory Options to allow descriptions, images, and selection.
+- Fix Cart view not showing correct calculation total of multiple individual items.
+- Update Stripe library to v10.16.0
+- Improve size display indicator when Development mode is active.
+- Remove "Content" link from Pages breadcrumbs.
+- Improve QuickView modal to include Product Options, and styling.
+- Add icon to represent "recalculate expenses".
+- Add Expenses editable field.
+- Improve Administration Theme selector, now includes System option.
+- Improve Sales Period styling.
+- Adjust Account Recovery to only find accounts that are active.
+- Add Account Deactivation section to User Account Settings.
+- Added Toast Notification when list item added.
+- Add Pricing page, along with editable list, highlighting items and highlight message.
+- Add Recent Sale FOMO notification, with added Australian State restriction.
+- Tidy up some code.
+- Fix timeago function not reporting times correctly.
+- Update jQuery for Administration to 3.7.1
+- Remove AuroraCMS Branding from Login and Installation pages.
+- Change AuroraCMS Branding in Administration to help with top bar layout on smaller devices.
+- Fix Weather Administration Widget check for valid Open Weather API Key.
+- Fix Forum Errors.
+- Remove Emoji Images to prepare for future integration of Entity Emojis to reduce CMS footprint.
+- Fix Item Count parsing not working correctly with theme set values.
+- Fix typo in core/view/bookings.php from throwing error.
+- Add ability to toggle active status of Business Hours editing.
+- Fix left side content menu from displaying if zero items should appear.
+- Fix Related Items from displaying if no related items exist.
+- Add AHref's Site Verification.
+- Improve responsive of Administation Layout.
+
+#### v0.2.25
+- Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.
+- Fix quotes display with List text for Fancybox.
+- Fix thumbnail not displaying in media, wasn't being added to the `thumb` field.
+- Fix Tracker Flag Icon and Referrer Icon displays.
+- Add version checker, installed version against github repository version, with info alert on Dashboard if behind.
+- Add Unread options to Messages.
+- Fix error of compose messages not redirecting back to main messages page when sending.
+- Improve Messages view/compose/ interface.
+- Add View more button to Dashboard Widgets.
+- Add EOFY (End Of Financial Year) sales period, with selection of less popular products suggested.
+- Fix Sales Periods not being calculated on dates correctly.
+- Reduce Weather and Sales period images by converting them to AVIF.
+- Improve Installer interface.
+- Fix Installer not always importing database.
+- Update elFinder to v2.1.62
+
+#### v0.2.24
 - Fix style variables that were missing, and make improvements.
 - Improve visibilty and functionality of quiededit/quickview content dropdowns.
 - Improve Gallery & Content Media items, can now view thumbnails via click replacement of main image, or use modal viewer.

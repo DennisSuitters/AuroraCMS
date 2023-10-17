@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -38,22 +38,26 @@ if($code!=''&&$title!=''&&$value!=0&&$quantity!=0){
 	$e=$db->errorInfo();
 	if(is_null($e[2])){
 		echo'<script>'.
-					'window.top.window.$("#rewards").append(`<tr id="l_'.$id.'">'.
-						'<td class="small text-center">'.$code.'</td>'.
-						'<td class="small text-center">'.$title.'</td>'.
-						'<td class="small text-center">'.($method==0?'% Off':'$ Off').'</td>'.
-						'<td class="small text-center">'.$value.'</td>'.
-						'<td class="small text-center">'.$quantity.'</td>'.
-						'<td class="small text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</td>'.
-						'<td class="small text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</td>'.
-						'<td>'.
-							'<form target="sp" action="core/purge.php">'.
-								'<input name="id" type="hidden" value="'.$id.'">'.
-								'<input name="t" type="hidden" value="rewards">'.
-								'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
-							'</form>'.
-						'</td>'.
-					'</tr>`);'.
+					'window.top.window.$("#rewards").append(`<div class="row" id="l_'.$id.'">'.
+						'<article class="card zebra m-0 p-0 py-3 small overflow-visible card-list item shadow add-item">'.
+							'<div class="row">'.
+								'<div class="col-12 col-md text-center">'.$code.'</div>'.
+								'<div class="col-12 col-md text-center">'.$title.'</div>'.
+								'<div class="col-12 col-md text-center">'.($method==0?'% Off':'$ Off').'</div>'.
+								'<div class="col-12 col-md text-center">'.$value.'</div>'.
+								'<div class="col-12 col-md text-center">'.$quantity.'</div>'.
+								'<div class="col-12 col-md-2 text-center">'.($tis!=0?date($config['dateFormat'],$tis):'').'</div>'.
+								'<div class="col-12 col-md-2 text-center">'.($tie!=0?date($config['dateFormat'],$tie):'').'</div>'.
+								'<div class="col-12 col-md-1 pr-2 text-right">'.
+									'<form target="sp" action="core/purge.php">'.
+										'<input name="id" type="hidden" value="'.$id.'">'.
+										'<input name="t" type="hidden" value="rewards">'.
+										'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
+									'</form>'.
+								'</did>'.
+							'</div>'.
+						'</article>'.
+					'</div>`);'.
 				'</script>';
 	}else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Reward!");</script>';
 }else echo'<script>window.top.window.toastr["error"]("Some required fields are empty!");</script>';

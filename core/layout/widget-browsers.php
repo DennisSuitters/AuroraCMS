@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -34,7 +34,7 @@
     </div>
     <?php if($cnt>5){?>
       <div class="row widget-more">
-        <button class="widget-more-btn" data-tooltip="tooltip" aria-label="Show/Hide Extra Items"  onclick="$(`#widgetbrowsers<?=$rw['id'];?>`).toggleClass('widget-limit');$(`.widgetbrowsers`).toggleClass('d-none');return false;"><i class="i widgetbrowsers">down</i><i class="i widgetbrowsers d-none">up</i></button>
+        <button class="widget-more-btn btn-ghost" data-tooltip="tooltip" aria-label="Show/Hide Extra Items"  onclick="$(`#widgetbrowsers<?=$rw['id'];?>`).toggleClass('widget-limit');$(`.widgetbrowsers`).toggleClass('d-none');return false;"><i class="i widgetbrowsers">down</i><i class="i widgetbrowsers d-none">up</i></button>
       </div>
     <?php }?>
   </div>

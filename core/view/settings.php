@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -158,6 +158,11 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		$user['postcode']==0?'':htmlspecialchars($user['postcode'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
 	],$html);
+	if(isset($act)&&$act=='deactivate'){
+		$s=$db->prepare("UPDATE `".$prefix."login` SET `active`=0,`password`='',`status`='deactivated',`points`=0 WHERE `id`=:id");
+		$s->execute([':id'=>$user['id']]);
+		header("location:".URL);
+	}
 }else{
 	if(file_exists(THEME.'/noaccess.html'))
 		$html=file_get_contents(THEME.'/noaccess.html');

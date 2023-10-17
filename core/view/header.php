@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.26-5
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -118,7 +118,7 @@ if(stristr($html,'<buildMenu')){
 				if(!in_array(
 					$r['contentType'],
 					['aboutus','activities','article','biography','bookings','cart','contactus','course','distributors',
-					'events','forum','gallery','inventory','news','newsletters','portfolio',
+					'events','forum','gallery','inventory','news','newsletters','portfolio','pricing',
 					'proofs','search','service','testimonials','tos'],
 					true)
 				)$menuURL.=str_replace(' ','-',strtolower($r['title'])).'/';
@@ -166,7 +166,7 @@ if(stristr($html,'<buildMenu')){
 						if(!in_array(
 							$rm['contentType'],
 							['aboutus','article','biography','bookings','cart','contactus','course','distributors',
-							'events','gallery','inventory','news','newsletters','portfolio',
+							'events','gallery','inventory','news','newsletters','portfolio','pricing',
 							'proofs','search','service','testimonials','tos'],
 							true)
 						)$subURL.=str_replace(' ','-',strtolower($rm['title'])).'/';

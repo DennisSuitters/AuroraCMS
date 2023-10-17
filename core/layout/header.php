@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
-<header id="back-to-top" class="aurora">
+<header id="back-to-top" class="aurora shadow-md">
   <nav>
     <ul class="nav-left">
       <li>
@@ -22,14 +22,27 @@
         </a>
       </li>
       <li>
-        <a class="brand" href="<?= URL.$settings['system']['admin'];?>/" data-tooltip="right" aria-label="AuroraCMS"><img class="auroracmslogo" src="core/images/favicon-64.jpg" alt="AuroraCMS"></a>
+        <a href="<?= URL.$settings['system']['admin'];?>/" data-tooltip="right" aria-label="AuroraCMS"><i class="i i-5x mb-3 i-color-black">auroracms</i></a>
       </li>
     </ul>
     <ul class="ml-auto mt-3">
-      <li class="text-center px-3" data-tooltip="bottom" aria-label="Search">
+      <li class="text-center" data-tooltip="left" aria-label="Search">
         <a href="<?= URL.$settings['system']['admin'].'/search';?>"><i class="i i-3x">search</i></a>
       </li>
-      <li class="badge text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
+      <li class="ml-3" data-tooltip="left" aria-label="Switch Theme Mode">
+        <input class="d-none" id="theme-checkbox" type="checkbox">
+        <label class="m-0" for="theme-checkbox">
+          <i class="i i-3x theme-mode theme-light<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'?'':' d-none');?>">light-mode</i>
+          <i class="i i-3x theme-mode theme-dark<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='dark'?'':' d-none');?>">dark-mode</i>
+          <i class="i i-3x theme-mode theme-system<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='system'||$_COOKIE['admintheme']==''?'':' d-none');?>">system-mode</i>
+        </label>
+        <ul class="p-0" id="nav-theme-list">
+          <li><a class="p-2 px-3" onclick="selectTheme('light');">Light</a></li>
+          <li><a class="p-2 px-3" onclick="selectTheme('dark');">Dark</a></li>
+          <li><a class="p-2 px-3" onclick="selectTheme('system');">System</a></li>
+        </ul>
+      </li>
+      <li class="badge ml-3 text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
         <input class="d-none" id="notification-checkbox" type="checkbox">
         <label class="m-0" for="notification-checkbox"><i class="i i-3x">bell</i></label>
         <ul class="p-0" id="nav-stat-list">
@@ -44,10 +57,10 @@
           ($nou['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts"><span class="badger badge-primary mr-2">'.$nou['cnt'].'</span>Active Users</a></li>':'');?>
         </ul>
       </li>
-      <li data-tooltip="bottom" aria-label="View Site">
+      <li data-tooltip="left" aria-label="View Site">
         <a href="<?= URL;?>"><i class="i i-3x">browser-general</i></a>
       </li>
-      <li class="text-center ml-3" id="nav-accounts" data-tooltip="bottom" aria-label="Account Settings">
+      <li class="text-center ml-3" id="nav-accounts" data-tooltip="left" aria-label="Account Settings">
         <input class="d-none" id="header-account-checkbox" type="checkbox">
         <label class="m-0" for="header-account-checkbox">
           <span class="d-inline" id="account">
@@ -60,7 +73,7 @@
           </span>
         </label>
         <ul class="p-0" id="nav-account-list">
-          <li class="text-center p-3" style="background:linear-gradient(0,rgba(28,28,28,.6),rgba(28,28,28,0)32.45%),radial-gradient(100% 100% at 0 100%,#3c164d 0,rgba(60,22,77,0)100%),radial-gradient(100% 100% at 100% 100%,#4d0119 0,rgba(77,1,25,0)100%),radial-gradient(100% 100% at 100% 0,#38004d 0,rgba(56,0,77,0)100%),radial-gradient(100% 100% at 0 0,#4d3c0d 0,rgba(77,60,13,0)100%);">
+          <li class="text-center p-3">
             <img class="img-avatar m-3" style="width:80px;height:80px;max-width:initial;max-height:80px;" src="<?php if($user['avatar']!=''&&file_exists('media/avatar/'.basename($user['avatar'])))echo'media/avatar/'.basename($user['avatar']);
               elseif($user['gravatar']!=''){
                 if(stristr($user['gravatar'],'@')) echo'http://gravatar.com/avatar/'.md5($user['gravatar']);
@@ -79,13 +92,6 @@
           <li><a class="p-2 px-3" href="https://github.com/DiemenDesign/AuroraCMS/issues">Report an issue</a></li>
           <li><a class="p-2 px-3" href="https://github.com/DiemenDesign/AuroraCMS/wiki">Documentation</a></li>
         </ul>
-      </li>
-      <li data-tooltip="bottom" aria-label="Switch to Theme Mode">
-        <button class="btn btn-ghost" onclick="toggleTheme();">
-          <?php if(!isset($_COOKIE['admintheme'])){$_COOKIE['admintheme']='light';}?>
-          <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='dark'?' d-none':'');?>">dark-mode</i>
-          <i class="i theme-mode<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'?' d-none':'');?>">light-mode</i>
-        </button>
       </li>
     </ul>
   </nav>

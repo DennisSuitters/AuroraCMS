@@ -7,12 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.20
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 if(stristr($html,'<settings')){
-	preg_match('/<settings.*orientation=[\"\'](.+?)[\"\'].*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+	preg_match('/<settings.*orientation=[\"\'](.+?)[\"\'].*itemCount=[\"\'](.+?)[\"\'].*>/',$html,$matches);
 	$orientation=isset($matches[1])&&$matches[1]!=''?$matches[1]:'horizontal';
 	$count=isset($matches[2])&&$matches[2]!=0?$matches[2]:1;
 }else{

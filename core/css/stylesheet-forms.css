@@ -208,7 +208,7 @@ form{
   margin-top:0 }
 
 legend{
-  margin-bottom:.5rem;
+  margin-bottom:0;
   padding:0;
   width:100%;
   font-size:calc(1.275rem + .3vw);
@@ -225,7 +225,7 @@ fieldset legend{
 
 label{
   display:inline-block;
-  margin:1rem 0 .5rem;
+  margin:1rem 0 .25rem;
   font-size:inherit;
   font-family:inherit }
 
@@ -243,7 +243,7 @@ textarea{
   border-width:var(--form-input-border-width);
   border-style:var(--form-input-border-style);
   border-color:var(--form-input-border-color);
-  border-radius:var(--form-border-radius);
+  border-radius:var(--form-input-border-radius);
   background-clip:padding-box;
   background-color:var(--form-input-background-color);
   padding:.375rem .75rem;

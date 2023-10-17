@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,7 +34,7 @@ else{
 		$s=$db->prepare("UPDATE `".$prefix."widgets` SET `ord`=:id WHERE `id`=:id");
 		$s->execute([':id'=>$id]);
     echo'<script>'.
-			'window.top.window.$("#loginimages").append(`<div id="li_'.$id.'" class="card stats gallery col-12 col-sm-3 m-0 border-0">'.
+			'window.top.window.$("#loginimages").append(`<div id="li_'.$id.'" class="card stats gallery col-12 col-sm-3 m-0 border-0 add-item">'.
         '<a data-fancybox="loginimage" href="'.$li.'"><img src="'.$li.'" alt="'.$lit.'"></a>'.
         '<div class="btn-group tools">'.
           '<form class="d-inline" target="sp" action="core/purge.php">'.

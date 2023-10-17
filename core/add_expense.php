@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -35,27 +35,29 @@ if($title!=''&&$cost!=''){
 			]);
 			$iid=$db->lastInsertId();
 			echo'<script>'.
-				'window.top.window.$("#expenses").append(`<div class="row m-0 p-0" id="l_'.$iid.'" data-cost="'.$cost.'">'.
-					'<div class="col-12 col-md-2">'.
-						'<div class="input-text">'.$code.'&nbsp;</div>'.
-					'</div>'.
-					'<div class="col-12 col-md-2">'.
-						'<div class="input-text">'.$brand.'</div>'.
-					'</div>'.
-					'<div class="col-12 col-md">'.
-						'<div class="input-text">'.$title.'</div>'.
-					'</div>'.
-					'<div class="col-12 col-md-2">'.
-						'<div class="form-row">'.
-							'<div class="input-text col-12">'.$cost.'</div>'.
-	  					'<form target="sp" action="core/purge.php">'.
-    						'<input name="id" type="hidden" value="'.$iid.'">'.
-    						'<input name="t" type="hidden" value="choices">'.
-    						'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
-  						'</form>'.
+				'window.top.window.$("#expenses").append(`<article id="l_'.$iid.'" class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow" data-cost="'.$cost.'">'.
+					'<div class="row">'.
+						'<div class="col-12 col-md-2">'.
+							'<div class="input-text">'.$code.'&nbsp;</div>'.
+						'</div>'.
+						'<div class="col-12 col-md-2">'.
+							'<div class="input-text">'.$brand.'</div>'.
+						'</div>'.
+						'<div class="col-12 col-md">'.
+							'<div class="input-text">'.$title.'</div>'.
+						'</div>'.
+						'<div class="col-12 col-md-2 text-right">'.
+							'<div class="form-row">'.
+								'<div class="input-text col-12">'.$cost.'</div>'.
+		  					'<form target="sp" action="core/purge.php">'.
+	    						'<input name="id" type="hidden" value="'.$iid.'">'.
+	    						'<input name="t" type="hidden" value="choices">'.
+	    						'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+	  						'</form>'.
+							'</div>'.
 						'</div>'.
 					'</div>'.
-				'</div>`);'.
+				'</article>`);'.
 				'window.top.window.toastr["success"](`'.$title.' Added!`);'.
 			'</script>';
 }

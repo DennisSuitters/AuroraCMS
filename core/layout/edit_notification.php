@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -58,8 +58,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </select>
             </div>
             <div id="pageNotes" class="row mt-3">
-              <?=($user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'#pageNotes" data-tooltip="tooltip" aria-label="PermaLink to Page Content Editor">&#128279;</a>':'');
-              if($user['options'][1]==1){
+              <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar">'.
                   '<div class="btn-group d-flex justify-content-end">';
                     if($r['suggestions']==1){
@@ -141,7 +140,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php if($r['file']!='index'){?>
                 <div class="form-row">
                   <input id="notificationActive" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="notificationActive">Active</label>
+                  <label for="notificationActive">Active</label>
                 </div>
               <?php }?>
             </div>

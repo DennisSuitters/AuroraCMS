@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -27,7 +27,7 @@
         </div>
         <div class="form-row">
           <input id="prefEnablea11y" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="1" type="checkbox"<?=($config['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="prefEnablea11y">Enable Widget</label>
+          <label for="prefEnablea11y">Enable Widget</label>
         </div>
         <label for="a11yPosition">Widget Position</label>
         <div class="form-row">

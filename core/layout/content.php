@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -145,7 +145,6 @@ else{
                 <div class="row">
                   <div class="col-12 col-sm-6">
                     <ol class="breadcrumb m-0 pl-0 pt-0">
-                      <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
                       <li class="breadcrumb-item active breadcrumb-dropdown">
                         <?= isset($args[1])&&$args[1]!=''?ucfirst($args[1]):'All';?><span class="breadcrumb-dropdown ml-2"><i class="i">chevron-down</i></span>
                         <ul class="breadcrumb-dropper">
@@ -299,7 +298,7 @@ else{
                       echo'<div id="jump'.$jumpcheck.'"></div>';
                       $jump[$jumpcheck]=1;
                     }?>
-                    <article id="l_<?=$r['id'];?>" data-content="<?=$r['contentType'].' '.$r['title'];?>" class="card zebra mx-2 mt-2 mb-0 overflow-visible card-list shadow">
+                    <article id="l_<?=$r['id'];?>" data-content="<?=$r['contentType'].' '.$r['title'];?>" class="card zebra col-6 col-md-5 col-lg-3 col-xxl-2 mx-0 mx-md-2 mt-2 mb-0 overflow-visible card-list shadow">
                       <div class="card-image overflow-visible">
                         <?php if($r['thumb']!='')
                           echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';

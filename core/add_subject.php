@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -28,16 +28,20 @@ else{
 	$e=$db->errorInfo();
 	if(is_null($e[2])){
 		echo'<script>'.
-					'window.top.window.$("#subjects").append(`<div id="l_'.$id.'" class="form-row mt-1">'.
-						'<div class="input-text">Subject</div>'.
-						'<input id="sub'.$id.'" name="da" type="text" value="'.$sub.'">'.
-						'<div class="input-text">Email</div>'.
-						'<input id="eml'.$id.'" name="da" type="text" value="'.$eml.'">'.
-						'<form target="sp" action="core/purge.php">'.
-							'<input name="id" type="hidden" value="'.$id.'">'.
-							'<input name="t" type="hidden" value="choices">'.
-							'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
-						'</form>'.
+					'window.top.window.$("#subjects").append(`<div id="l_'.$id.'" class="row add-item">'.
+						'<div class="col-12 col-md">'.
+							'<div class="input-text">'.$sub.'</div>'.
+						'</div>'.
+						'<div class="col-12 col-md">'.
+							'<div class="form-row">'.
+								'<div class="input-text col-md">'.$eml.'</div>'.
+								'<form target="sp" action="core/purge.php">'.
+									'<input name="id" type="hidden" value="'.$id.'">'.
+									'<input name="t" type="hidden" value="choices">'.
+									'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
+								'</form>'.
+							'</div>'.
+						'</div>'.
 					'</div>`);'.
 				'</script>';
 	}else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';

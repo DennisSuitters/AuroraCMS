@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,16 +25,12 @@ if($cat!=''){
 	]);
   $id=$db->lastInsertId();
 	echo'<script>'.
-				'window.top.window.$("#category").append(`<div id="l_'.$id.'" class="row">'.
-					'<div class="col-12 col-md-6">'.
-						'<div class="form-row">'.
-							'<input type="text" value="'.$cat.'" readonly>'.
-						'</div>'.
+				'window.top.window.$("#category").append(`<div id="l_'.$id.'" class="row add-item">'.
+					'<div class="col-12 col-md">'.
+						'<div class="input-text">'.$cat.'</div>'.
 					'</div>'.
-					'<div class="col-12 col-md-5">'.
-						'<div class="form-row">'.
-							'<input id="ct'.$id.'" type="text" value="'.$ct.'" readonly>'.
-						'</div>'.
+					'<div class="col-12 col-md">'.
+						'<div class="input-text">'.$ct.'</div>'.
 					'</div>'.
 					'<div class="col-12 col-md-1">'.
 						'<div class="form-row">'.
@@ -49,7 +45,8 @@ if($cat!=''){
 								'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
 							'</form>'.
 						'</div>'.
-						'</div>'.
+					'</div>'.
 				'</div>`);'.
 			'</script>';
-}
+}else
+  echo'<script>window.top.window.toastr["error"]("The Category field must contain data!");</script>';

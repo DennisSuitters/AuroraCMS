@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,7 +17,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
-      <div class="card mt-3 p-4 bg-transparent border-0 overflow-visible">
+      <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <div class="row">
             <div class="col-12 col-sm">
@@ -43,14 +43,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="playlist" data-dbc="title" data-bs="trash" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Playlist Item Title...."':' readonly';?>>
               <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <label for="dt">Published&nbsp;Date</label>
+            <label for="dt">Published Date</label>
             <div class="form-row">
               <input id="dt" type="text" value="<?=$r['dt'];?>" readonly>
             </div>
           </div>
           <div class="col-12 col-sm-3 order-1 order-md-2 mb-4 mb-md-0">
-            <div class="card m-3">
-              <figure class="card-image">
+            <div class="card m-1">
+              <figure class="card-image" style="height:9.5rem;">
                 <a data-fancybox="playlist" href="<?=$r['thumbnail_url'];?>">
                   <img src="<?=$r['thumbnail_url'];?>" alt="Playlist <?=$r['id'];?>">
                 </a>
@@ -62,7 +62,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
         <div class="form-row">
           <input id="ti" type="text" value="<?= date($config['dateFormat'],$r['ti']);?>" readonly>
         </div>
-        <label for="provider">Provider&nbsp;Name</label>
+        <label for="provider">Provider Name</label>
         <div class="form-row">
           <input id="provider_name" type="text" value="<?=$r['provider_name'];?>" readonly>
         </div>

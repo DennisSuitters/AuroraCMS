@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,10 +43,16 @@ if($id==0&&$tbl=='iplist'){
   $q->execute();
   $id=='iplist';
 }
-if($id==0&&$tbl=='logs'){
-  $q=$db->query("DELETE FROM `".$prefix."logs`");
-  $q->execute();
-  $id='timeline';
+if($tbl=='logs'){
+  if($id==0){
+    $q=$db->query("DELETE FROM `".$prefix."logs`");
+    $q->execute();
+    $id='timeline';
+  }else{
+    $q=$db->prepare("DELETE FROM `".$prefix."logs` WHERE `id`=:id");
+    $q->execute([':id'=>$id]);
+    $id='timeline';
+  }
 }
 if($tbl=='findtracker'){
   $q=$db->prepare("DELETE FROM `".$prefix."tracker` WHERE `urlDest`=:id");
@@ -97,7 +103,7 @@ if($tbl!='logs'&&$tbl!='activity'&&$tbl!='pageviews'&&$tbl!='playlist'&&$tbl!='f
     $q->execute([':id'=>$id]);
     if($tbl=='media')$el='media_items_';
     echo'<script>'.
-      'window.top.window.$("#l_'.$id.'").addClass("zoom-out");'.
+      'window.top.window.$("#l_'.$id.'").addClass("remove-item");'.
       'window.top.window.setTimeout(function(){window.top.window.$("#l_'.$id.'").remove();},500);'.
     '</script>';
   }
@@ -120,7 +126,7 @@ if($tbl=='errorlog'){
 }
 if($tbl=='choices'){
   echo'<script>'.
-    'window.top.window.$("#l_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.$("#l_'.$id.'").addClass("remove-item");'.
     'window.top.window.setTimeout(function(){window.top.window.$("#l_'.$id.'").remove();},500);'.
   '</script>';
 }
@@ -128,19 +134,19 @@ if($tbl=='courseTrack'){
   $s=$db->prepare("DELETE FROM `".$prefix."courseTrack` WHERE `id`=:id");
   $s->execute([':id'=>$id]);
   echo'<script>'.
-    'window.top.window.$("#student_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.$("#student_'.$id.'").addClass("remove-item");'.
     'window.top.window.setTimeout(function(){window.top.window.$("#student_'.$id.'").remove();},500);'.
   '</script>';
 }
 if($tbl=='modules'){
   echo'<script>'.
-    'window.top.window.$("#modules_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.$("#modules_'.$id.'").addClass("remove-item");'.
     'window.top.window.setTimeout(function(){window.top.window.$("#modules_'.$id.'").remove();},500);'.
   '</script>';
 }
 if($tbl=='widgets'){
   echo'<script>'.
-    'window.top.window.$("#li_'.$id.'").addClass("zoom-out");'.
+    'window.top.window.$("#li_'.$id.'").addClass("remove-item");'.
     'window.top.window.setTimeout(function(){window.top.window.$("#li_'.$id.'").remove();},500);'.
   '</script>';
 }

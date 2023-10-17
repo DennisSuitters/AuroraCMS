@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -33,86 +33,87 @@
         </div>
         <div class="form-row">
           <input id="configoptions3" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="3" type="checkbox"<?=($config['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="configoptions3" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Allow Account Sign Ups</label>
+          <label for="configoptions3" data-tooltip="tooltip" aria-label="Allow Users to Create Accounts.">Allow Account Sign Ups</label>
         </div>
         <div class="form-row">
           <input id="configoptions30" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="30" type="checkbox"<?=($config['options'][30]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="configoptions30" data-tooltip="tooltip" aria-label="Must be Logged In to Purchase Products.">Must be Logged In to Purchase Products</label>
+          <label for="configoptions30" data-tooltip="tooltip" aria-label="Must be Logged In to Purchase Products.">Must be Logged In to Purchase Products</label>
         </div>
         <div class="form-row">
           <input id="configiconsColor0" data-dbid="1" data-dbt="config" data-dbc="iconsColor" data-dbb="0" type="checkbox"<?=($config['iconsColor']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="configiconsColor0" data-tooltip="tooltip" aria-label="Check for Address Information for Logged in Account.">Check for Address Information for Logged in Account.</label>
+          <label for="configiconsColor0" data-tooltip="tooltip" aria-label="Check for Address Information for Logged in Account.">Check for Address Information for Logged in Account.</label>
         </div>
         <div class="form-row">
           <input id="configoptions0" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="0" type="checkbox"<?=($config['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="configoptions0" data-tooltip="tooltip" aria-label="Enable Points Value Display.">Display Points Value</label>
+          <label for="configoptions0" data-tooltip="tooltip" aria-label="Enable Points Value Display.">Display Points Value</label>
         </div>
         <?php if($user['options'][7]==1){?>
-          <legend class="mt-3">Export Accounts Information</legend>
+          <hr>
+          <legend>Export Accounts Information</legend>
           <form class="row" target="sp" method="post" action="core/export_accounts.php">
             <div class="col-4 exports" style="display:none;">
               <div class="mt-5">
-                <div class="row">
+                <div class="form-row">
                   <input id="exportID" type="checkbox" name="id" value="1" checked>
                   <label for="exportID">ID</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportActive" type="checkbox" name="act" value="1" checked>
                   <label for="act">Active Account</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportDate" type="checkbox" name="dte" value="1" checked>
                   <label for="exportDate">Date</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportRank" type="checkbox" name="rnk" value="1" checked>
                   <label for="exportRank">Rank</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportUsername" type="checkbox" name="usr" value="1" checked>
                   <label for="exportUsername">Username</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportName" type="checkbox" name="nme" value="1" checked>
                   <label for="exportName">Name</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportEmail" type="checkbox" name="eml" value="1" checked>
                   <label for="exportEmail">Email</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportPhone" type="checkbox" name="phn" value="1" checked>
                   <label for="exportPhone">Phone</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportMobile" type="checkbox" name="mob" value="1" checked>
                   <label for="exportMobile">Mobile</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportWebsite" type="checkbox" name="url" value="1" checked>
                   <label for="exportWebsite">Website</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportBusiness" type="checkbox" name="bus" value="1" checked>
                   <label for="exportBusiness">Business</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportABN" type="checkbox" name="abn" value="1" checked>
                   <label for="exportABN">ABN</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportAddress" type="checkbox" name="adr" value="1" checked>
                   <label for="exportAddress">Address</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportSpent" type="checkbox" name="spnt" value="1" checked>
                   <label for="exportSpent">Spent</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportPoints" type="checkbox" name="pnts" value="1" checked>
                   <label for="exportPoints">Points</label>
                 </div>
-                <div class="row">
+                <div class="form-row">
                   <input id="exportNewsletter" type="checkbox" name="nws" value="1" checked>
                   <label for="exportNewsletter">Newsletter Subscriber</label>
                 </div>
@@ -154,7 +155,8 @@
             </div>
           </form>
         <?php }?>
-        <legend class="mt-3">Purchase Item Limits</legend>
+        <hr>
+        <legend>Purchase Item Limits</legend>
         <div class="row">
           <div class="col-6 col-md-2 mr-md-4">
             <label class="small" for="memberLimit">Member Limit</label>
@@ -299,17 +301,15 @@
         </div>
         <hr>
         <legend>Password Reset Email Layout</legend>
-        <div id="passwordResetSubject" class="form-row">
-          <label for="pwdRstSub">Subject</label>
-          <?=($user['options'][7]==1?'<div class="form-text text-right">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`pwdRstSub`,`{business}`);return false;">{business}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`pwdRstSub`,`{date}`);return false;">{date}</a></div>':'');?>
-        </div>
+        <label for="pwdRstSub">Subject</label>
+        <?=($user['options'][7]==1?'<div class="form-text">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`pwdRstSub`,`{business}`);return false;">{business}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`pwdRstSub`,`{date}`);return false;">{date}</a></div>':'');?>
         <div class="form-row">
           <input class="textinput" id="pwdRstSub" data-dbid="1" data-dbt="config" data-dbc="passwordResetSubject" type="text" value="<?=$config['passwordResetSubject'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Password Reset Email Subject..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savepwdRstSub" data-dbid="pwdRstSub" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <?php if($user['options'][7]==1){?>
-          <div id="passwordResetLayout" class="form-row mt-3">
-            <div class="form-text text-right">
+        <div class="row mt-3">
+          <?php if($user['options'][7]==1){?>
+            <div class="form-text">
               Tokens:
               <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{name}');return false;">{name}</a>
@@ -318,10 +318,6 @@
               <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{date}');return false;">{date}</a>
               <a class="badger badge-secondary" href="#" onclick="$('#pRL').summernote('insertText','{password}');return false;">{password}</a>
             </div>
-          </div>
-        <?php }?>
-        <div class="row">
-          <?php if($user['options'][7]==1){?>
             <form method="post" target="sp" class="p-0" action="core/update.php">
               <input name="id" type="hidden" value="1">
               <input name="t" type="hidden" value="config">
@@ -344,26 +340,20 @@
         </div>
         <hr>
         <legend>Sign Up Emails</legend>
-        <div id="activatationSubject" class="form-row">
-          <label for="aS">Subject</label>
-          <?=($user['options'][7]==1?'<div class="form-text text-right">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`aS`,`{username}`);return false;">{username}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`aS`,`{site}`);return false;">{site}</a></div>':'');?>
-        </div>
+        <label for="aS">Subject</label>
+        <?=($user['options'][7]==1?'<div class="form-text">Tokens: <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`aS`,`{username}`);return false;">{username}</a> <a class="badger badge-secondary" href="#" onclick="insertAtCaret(`aS`,`{site}`);return false;">{site}</a></div>':'');?>
         <div class="form-row">
           <input class="textinput" id="aS" data-dbid="1" data-dbt="config" data-dbc="accountActivationSubject" type="text" value="<?=$config['accountActivationSubject'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Sign Up Email Subject..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="saveaS" data-dbid="aS" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <div id="activationLayout" class="form-row mt-3">
+        <div class="row mt-3">
           <?php if($user['options'][7]==1){?>
-            <div class="form-text text-right">Tokens:
+            <div class="form-text">Tokens:
               <a class="badger badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{username}');return false;">{username}</a>
               <a class="badger badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{password}');return false;">{password}</a>
               <a class="badger badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{site}');return false;">{site}</a>
               <a class="badger badge-secondary" href="#" onclick="$('#accountActivationLayout').summernote('insertText','{activation_link}');return false;">{activation_link}</a>
             </div>
-          <?php }?>
-        </div>
-        <div class="row">
-          <?php if($user['options'][7]==1){?>
             <form class="p-0" method="post" target="sp" action="core/update.php">
               <input name="id" type="hidden" value="1">
               <input name="t" type="hidden" value="config">

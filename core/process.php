@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -191,11 +191,12 @@ $head=preg_replace([
     ($config['seo_msvalidate']!=''?'<meta name="msvalidate.01" content="'.$config['seo_msvalidate'].'">':'').
     ($config['seo_yandexverification']!=''?'<meta name="yandex-verification" content="'.$config['seo_yandexverification'].'">':'').
     ($config['seo_alexaverification']!=''?'<meta name="alexaVerifyID" content="'.$config['seo_alexaverification'].'">':'').
-    ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':''),
+    ($config['seo_pinterestverify']!=''?'<meta name="p:domain_verify" content="'.$config['seo_pinterestverify'].'">':'').
+    ($config['seo_ahrefsverify']!=''?'<meta name="ahrefs-site-verification" content="'.$config['seo_ahrefsverify'].'">':''),
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-    ($config['options'][28]==1?(isset($sale['class'])?' '.$sale['class']:''):'')
+  ($config['options'][28]==1?(isset($sale['class'])?' '.$sale['class']:''):'')
 ],$head);
 if(stristr($head,'<css')){
   preg_match('/<css file=[\"\']([\w\W]*?)[\"\']>/',$head,$cssfilematch);

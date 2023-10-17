@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -425,7 +425,16 @@ if($pid==0&&$tid!=0){ // Posts
 		]);
 		$sa=$db->prepare("SELECT `id`,`username`,`name`,`avatar` FROM `".$prefix."login` WHERE `id`=:id");
 		$sa->execute([':id'=>$rp['uid']]);
-		$ra=$sa->fetch(PDO::FETCH_ASSOC);
+    if($sa->rowCount()>0){
+	    $ra=$sa->fetch(PDO::FETCH_ASSOC);
+    }else{
+      $ra=[
+        'id'=>0,
+        'username'=>'',
+        'name'=>'Anonymous',
+        'avatar'=>''
+      ];
+    }
 		$sco=$db->prepare("SELECT `id` FROM `".$prefix."forumPosts` WHERE `pid`=:pid");
 		$sco->execute([':pid'=>$rp['id']]);
 		$lp=$db->prepare("SELECT `uid`,`ti` FROM `".$prefix."forumPosts` WHERE `pid`=:pid ORDER BY `ti` DESC LIMIT 1");
@@ -440,7 +449,15 @@ if($pid==0&&$tid!=0){ // Posts
 		}
 		$lsu=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
 		$lsu->execute([':id'=>$lid]);
-		$lsr=$lsu->fetch(PDO::FETCH_ASSOC);
+    if($lsu->rowCount()>0){
+	    $lsr=$lsu->fetch(PDO::FETCH_ASSOC);
+    }else{
+      $lsr=[
+        'id'=>0,
+        'username'=>'',
+        'name'=>'Anonymous'
+      ];
+    }
 		$last='<small>'.($lsr['name']==''?$lsr['username']:$lsr['name']).' on '.date($config['dateFormat'],$lti).'</small>';
 		$items=$item;
 		preg_match('/<img.+src=[\'"](?P<src>.+?)[\'"].*>/i',$rp['notes'],$image);
@@ -450,7 +467,7 @@ if($pid==0&&$tid!=0){ // Posts
 			if($ra['avatar']!='')
 				$avatar='<img class="forum-topic-avatar '.($spt->rowCount()==0&&(isset($_SESSION['uid'])&&$_SESSION['uid'])>0?'forum-unread':'forum-read').'" src="'.URL.'media/avatar/'.$ra['avatar'].'">';
 			else
-				$avatar='<i class="i i-4x'.($spt->rowCount()==0&&$_SESSION['uid']>0?' forum-unread':' forum-read').'>forum-category</i>';
+				$avatar='<i class="i i-4x'.($spt->rowCount()==0&&$_SESSION['uid']>0?' forum-unread':' forum-read').'">forum-category</i>';
 		}
 		$items=preg_replace([
 			'/<print post=[\"\']?id[\"\']?>/',
@@ -723,8 +740,8 @@ if($pid!=0){ // Post
 		'',
 		$pagination,
 		$posts,
-		isset($_SESSION['options'][20])&&$_SESSION['options'][20]==1?'<div class="alert alert-info" role="alert">Your Account has been suspended from making Replies!</div>':'',
-		isset($_SESSION['uid'])&&$_SESSION['uid']>0?'':'<div class="alert alert-info" role="alert">An account is required to post replies</div>',
+		isset($_SESSION['options'][20])&&$_SESSION['options'][20]==1?'<div class="row"><div class="col-12"><div class="alert alert-info" role="alert">Your Account has been suspended from making Replies!</div></div></div>':'',
+		isset($_SESSION['uid'])&&$_SESSION['uid']>0?'':'<div class="row"><div class="col-12"><div class="alert alert-info" role="alert">An account is required to post replies</div></div></div>',
 		$cid,
 		$tid,
 		$pid,

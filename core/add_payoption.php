@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -27,17 +27,24 @@ if($t!=''){
   if($v==0)$v='';
   $id=$db->lastInsertId();
 	echo'<script>'.
-				'window.top.window.$("#payoptionl").append(`<div id="l_'.$id.'" class="form-row mt-1">'.
-					'<div class="input-text">Option</div>'.
-					'<input type="text" value="'.$t.'" readonly>'.
-					'<div class="input-text">Surchage</div>'.
-					'<input class="col-3" type="text" value="'.($m==2?'Add $':'Add %').'" readonly>'.
-					'<input type="text" value="'.$v.'" readonly>'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input name="id" type="hidden" value="'.$id.'">'.
-						'<input name="t" type="hidden" value="choices">'.
-						'<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
-					'</form>'.
-				'</div>`);'.
-			'</script>';
-}
+        'window.top.window.$("#payoptionl").append(`<div id="l_'.$id.'" class="row add-item">'.
+          '<div class="col-12 col-md">'.
+            '<div class="input-text">'.$t.'</div>'.
+          '</div>'.
+          '<div class="col-12 col-md-2">'.
+            '<div class="input-text">'.($m==2?'Add $':'Add %').'</div>'.
+          '</div>'.
+          '<div class="col-12 col-md-2">'.
+            '<div class="form-row">'.
+              '<div class="input-text col-md">'.($v==''?'0':$v).'</div>'.
+              '<form target="sp" action="core/purge.php">'.
+                '<input name="id" type="hidden" value="'.$id.'">'.
+                '<input name="t" type="hidden" value="choices">'.
+                '<button class="trash" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>'.
+              '</form>'.
+            '</div>'.
+          '</div>'.
+        '</div>`);'.
+      '</script>';
+}else
+  echo'<script>window.top.window.toastr["error"]("The Option field cant\'t be empty!");</script>';

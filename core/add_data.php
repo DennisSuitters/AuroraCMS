@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -83,8 +83,8 @@ if($act!=''){
             elseif(stristr($c['gravatar'],'gravatar.com/avatar/'))$avatar=$c['gravatar'];
 					}
 	  			echo'window.top.window.$("#comments").append(`'.
-          '<div id="l_'.$id.'" class="row swing-in-top-fwd">'.
-            '<article class="card zebra mt-2 mb-0 p-0 overflow-visible card-list shadow">'.
+          '<div id="l_'.$id.'" class="row add-item">'.
+            '<article class="card zebra mb-0 p-0 overflow-visible card-list shadow">'.
               '<div class="row">'.
 		            '<div class="col-12 col-md-2 pl-2 py-2 align-top small">'.$name.'</div>'.
 			          '<div class="col-12 col-md-4 py-2 align-top small">'.$da.'</div>'.

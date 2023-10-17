@@ -616,10 +616,6 @@ else
         keypress:function(event){
           var save=$(this).data("dbc");
           $('#save'+save).addClass('btn-danger');
-          console.log('keypress');
-//          if($('#qesave'+save).length > 0){
-            $('#qesave'+save).addClass('btn-danger');
-//          }
           $('.saveall').addClass('btn-danger');
           $('#'+save).addClass('unsaved');
           unsaved=true;
@@ -631,10 +627,6 @@ else
           var save=$(this).data("dbc");
           $('#'+save).addClass('unsaved');
           $('#save'+save).addClass('btn-danger');
-          console.log('change');
-//          if($('#qesave'+save).length > 0){
-            $('#qesave'+save).addClass('btn-danger');
-//          }
           unsaved=true;
         }
       });

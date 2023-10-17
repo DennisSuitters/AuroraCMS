@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,20 +22,20 @@ $cnt=$s->rowCount();?>
       </div>
     </div>
     <div class="row p-2">
-      <div class="col-3 py-1 text-muted small">Date</div>
+      <div class="col-4 py-1 text-muted small">Date</div>
       <div class="col-3 py-1 text-muted small">User</div>
-      <div class="col-6 py-1 text-muted small">Activity</div>
+      <div class="col-5 py-1 text-muted small">Activity</div>
       <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
         <div class="row widget-items">
-          <div class="col-3 py-1"><?= date($config['dateFormat'],$r['ti']);?></div>
-          <div class="col-3 py-1"><?=$r['username'].':'.$r['name'];?></div>
-          <div class="col-6 py-1"><?=$r['action'].' > '.$r['refTable'].' > '.$r['refColumn'];?></div>
+          <div class="col-4 small"><?= date($config['dateFormat'],$r['ti']);?></div>
+          <div class="col-3 small"><?=$r['username'].':'.$r['name'];?></div>
+          <div class="col-5 small"><?=$r['action'].' > '.$r['refTable'].' > '.$r['refColumn'];?></div>
         </div>
       <?php }?>
     </div>
     <?php if($cnt>5){?>
       <div class="row widget-more">
-        <button class="widget-more-btn" data-tooltip="tooltip" aria-label="Show/Hide Extra Items"  onclick="$(`#widgetrecentadminactivity<?=$rw['id'];?>`).toggleClass('widget-limit');$(`.widgetrecentadminactivity`).toggleClass('d-none');return false;"><i class="i widgetrecentadminactivity">down</i><i class="i widgetrecentadminactivity d-none">up</i></button>
+        <button class="widget-more-btn btn-ghost" data-tooltip="tooltip" aria-label="Show/Hide Extra Items"  onclick="$(`#widgetrecentadminactivity<?=$rw['id'];?>`).toggleClass('widget-limit');$(`.widgetrecentadminactivity`).toggleClass('d-none');return false;"><i class="i widgetrecentadminactivity">down</i><i class="i widgetrecentadminactivity d-none">up</i></button>
       </div>
     <?php }?>
   </div>

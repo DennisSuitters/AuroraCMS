@@ -1,10 +1,9 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
-- Fix missing Alt attribute on some items in Article Lists.
-- Fix List items images being too large, explore converting to webp/avif when uploading images.
-- Address itemCount config setting not display all items if set to '0'.
 - Update Checkout Layout for Themes.
 - Explore adding Shipping Activity to Orders.
+- Forum
+  - Replace Summernote Emoji plugin for one that uses Entities rather than images.
 - Update Settings Layout for users.
 - Explore adding Referral Codes on SignUp forms, and code generation by allowed users.
   - Account Holders can generate referrals for services, products & courses.
@@ -13,17 +12,11 @@ This is a quick list of things what need to be fixed or worked on to help those 
 - Explore allowing user to set price/tip/buy me a coffee.
 - Administration.
   - Add instructional walkthrough on pages explaining what fields do, step by step.
-  - SEO
-    - Add AHref's site verification for those that don't use Google's services.
   - Config database, add how to adjust total costs for items, by percentage, fixed value, or multiplying value.
   - Explore update Livechat Layout.
-  - Improve KanBan Item Layout.
   - Explore including Shipping Activity to Orders.
-  - Contact Preferences.
-    - Add active field to entries to allow enabling/disabling display for changing hours.
   - Dashboard.
     - Add Notification type Popup to indicate active LiveChats.
-    - Layout selections, CRM, eCommerce, Learning, Analytics.
     - Widget.
       - Revenue by month's.
       - Top Purchasers.

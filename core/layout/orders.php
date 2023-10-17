@@ -237,7 +237,7 @@ if($user['options'][4]==1){
             </div>
             <div id="notifications" role="alert"></div>
             <section class="content mt-3 overflow-visible list" id="contentview">
-              <article class="card mx-2 mt-2 mb-0 p-0 overflow-visible card-list card-list-header shadow sticky-top">
+              <article class="card mx-2 mt-2 mb-0 p-0 py-2 overflow-visible card-list card-list-header shadow sticky-top">
                 <div class="row">
                   <div class="col-12 col-md-3 text-center">Order Number</div>
                   <div class="col-12 col-md-3 text-center">Date</div>

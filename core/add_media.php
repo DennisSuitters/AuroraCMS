@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -53,7 +53,7 @@ if($fu!=''){
 				':ord'=>$iid+1
 			]);
 			echo'<script>'.
-						'window.top.window.$("#mi").append(`<div id="mi_'.$iid.'" class="card stats gallery col-12 col-sm-3 m-0 border-0">';
+						'window.top.window.$("#mi").append(`<div id="mi_'.$iid.'" class="card stats gallery col-12 col-sm-3 m-0 border-0 add-item">';
 						if(stristr($file,'youtu')){
 							preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$file,$vidMatch);
 							echo'<div class="note-video-wrapper video" data-fancybox="media" href="'.$file.'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'">'.
@@ -82,4 +82,5 @@ if($fu!=''){
 					'</script>';
 		}
 	}
-}
+}else
+	echo'<script>window.top.window.toastr["error"](`No Media has been Selected!`);</script>';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -32,7 +32,7 @@ if(filter_var($url,FILTER_VALIDATE_URL)){
 		$e=$db->errorInfo();
 		if(is_null($e[2])){
 			echo'<script>'.
-						'window.top.window.$("#social").append(`<div id="l_'.$id.'" class="row">'.
+						'window.top.window.$("#social").append(`<div id="l_'.$id.'" class="row add-item">'.
 							'<div class="col-12 col-md-3">'.
 								'<div class="input-text col-12" data-tooltip="tooltip" aria-label="'.ucfirst($icon).'"><i class="i i-social i-2x social-'.$icon.'">social-'.$icon.'</i>&nbsp;&nbsp;'.ucfirst($icon).'</div>'.
 							'</div>'.

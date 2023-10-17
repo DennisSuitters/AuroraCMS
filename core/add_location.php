@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -41,7 +41,7 @@ if($postcode==''||$area==''){
   	$id=$db->lastInsertId();
   	$e=$db->errorInfo();
     echo'<script>'.
-  		'window.top.window.$("#locationsitems").append(`<div id="l_'.$id.'" class="locationitem row border-bottom" data-postcode="'.$postcode.'" data-area="'.$area.'" data-content="'.$postcode.' '.$area.'">'.
+  		'window.top.window.$("#locationsitems").append(`<div id="l_'.$id.'" class="locationitem row border-bottom add-item" data-postcode="'.$postcode.'" data-area="'.$area.'" data-content="'.$postcode.' '.$area.'">'.
         '<div class="col-2">'.
           '<form class="form-row" target="sp" method="post" action="core/update.php">'.
             '<input type="hidden" name="id" value="'.$id.'">'.

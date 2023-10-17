@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -57,10 +57,10 @@ else{?>
   <main>
     <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
       <div class="container-fluid">
-        <div class="card col-12 col-md mt-3 bg-transparent border-0 overflow-visible">
+        <div class="card col-12 mt-3 bg-transparent border-0 overflow-visible">
           <div class="card-actions">
             <div class="row">
-              <div class="col-12 col-md">
+              <div class="col-12 col-md-8">
                 <ol class="breadcrumb m-0 pl-0 pt-0">
                   <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/orders';?>">Orders</a></li>
                   <li class="breadcrumb-item">
@@ -71,7 +71,7 @@ else{?>
                   <li class="breadcrumb-item active"><span id="ordertitle"><?=$r['qid'].$r['iid'];?></span></li>
                 </ol>
               </div>
-              <div class="col-12 col-md-2 text-right">
+              <div class="col-12 col-md text-right">
                 <div class="btn-group">
                   <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
                   '<button data-tooltip="left" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=print`);return false;"><i class="i">print</i></button>'.
@@ -84,112 +84,90 @@ else{?>
           <div class="row">
             <div class="card col-12 p-1 p-md-3">
               <div class="row">
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-sm-6 col-lg-3 pr-0 pr-sm-3">
                   <label>Order #</label>
-                  <div class="form-row">
-                    <div class="input-text">
-                      <a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i">new-window</i>';?></a>
-                    </div>
+                  <div class="input-text">
+                    <a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i">new-window</i>';?></a>
                   </div>
                 </div>
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-sm-6 col-lg-3 pr-0 pr-lg-3">
                   <label>Created</label>
-                  <div class="form-row">
-                    <div class="input-text">
-                      <?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?>
-                    </div>
+                  <div class="input-text">
+                    <?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?>
                   </div>
                 </div>
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-sm-6 col-lg-3 pr-0 pr-sm-3">
                   <label for="due_ti">Due</label>
-                  <div class="form-row">
-                    <input id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
-                  </div>
+                  <input id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
                 </div>
-                <div class="col-12 col-md-3 pl-0 pl-md-3">
+                <div class="col-12 col-sm-6 col-lg-3">
                   <label for="status_<?=$r['id'];?>">Status</label>
-                  <div class="form-row">
-                    <select id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status"<?=($r['status']=='archived'||$r['status']=='paid'?' readonly':' onchange="update(`'.$r['id'].'`,`orders`,`status`,$(this).val(),`select`);"');?>>
-                      <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
-                      <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
-                      <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
-                      <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
-                    </select>
-                  </div>
+                  <select id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status"<?=($r['status']=='archived'||$r['status']=='paid'?' readonly':' onchange="update(`'.$r['id'].'`,`orders`,`status`,$(this).val(),`select`);"');?>>
+                    <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
+                    <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
+                    <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
+                    <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
+                  </select>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-md">
+                <div class="col-12 col-sm-2 pr-0 pr-sm-3">
                   <label>Rank</label>
-                  <div class="form-row">
-                    <div class="input-text">
-                      <span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span>
-                    </div>
+                  <div class="input-text">
+                    <span id="clientRank" class="badger badge-<?= rank($client['rank']);?>"><?= ucwords(rank($client['rank']));?></span>&nbsp;
                   </div>
                 </div>
-                <div class="col-12 col-md">
+                <div class="col-12 col-sm-3 pr-0 pr-sm-3">
                   <label>Purchase Limit</label>
-                  <div class="form-row">
-                    <div class="input-text">
-                      <span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span>
-                      <?php if($client['purchaseLimit']==0){
-                        if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
-                        if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
-                        if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
-                        if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
-                        if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
-                        if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
-                        if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
-                        if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
-                        if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
-                        if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
-                      }?>
-                    </div>
+                  <div class="input-text">
+                    <span id="clientPurchaseLimit"><?=$client['purchaseLimit'];?></span>
+                    <?php if($client['purchaseLimit']!=0){
+                      if($client['rank']==200)$client['purchaseLimit']=$config['memberLimit'];
+                      if($client['rank']==210)$client['purchaseLimit']=$config['memberLimitSilver'];
+                      if($client['rank']==220)$client['purchaseLimit']=$config['memberLimitBronze'];
+                      if($client['rank']==230)$client['purchaseLimit']=$config['memberLimitGold'];
+                      if($client['rank']==240)$client['purchaseLimit']=$config['memberLimitPurchase'];
+                      if($client['rank']==310)$client['purchaseLimit']=$config['memberLimitSilver'];
+                      if($client['rank']==320)$client['purchaseLimit']=$config['memberLimitBronze'];
+                      if($client['rank']==330)$client['purchaseLimit']=$config['memberLimitGold'];
+                      if($client['rank']==340)$client['purchaseLimit']=$config['memberLimitPlatinum'];
+                      if($client['purchaseLimit']==0)$client['purchaseLimit']='No Limit';
+                    }?>&nbsp;
                   </div>
                 </div>
-                <div class="col-12 col-md">
+                <div class="col-12 col-sm-2 pr-0 pr-sm-3">
                   <label>Spent</label>
-                  <div class="form-row">
-                    <div class="input-text">$<span id="clientSpent"><?=$client['spent'];?></span></div>
-                  </div>
+                  <div class="input-text">$<span id="clientSpent"><?=$client['spent'];?></span></div>
                 </div>
-                <div class="col-12 col-md">
-                  <label>Points Earned</label>
-                  <div class="form-row">
-                    <div class="input-text"><span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
-                  </div>
+                <div class="col-12 col-sm-2 pr-0 pr-sm-3">
+                  <label>Points</label>
+                  <div class="input-text"><span id="clientPoints"><?= number_format((float)$client['points']);?></span></div>
                 </div>
-                <div class="col-12 col-md">
+                <div class="col-12 col-sm-3">
                   <label>Last Purchase</label>
-                  <div class="form-row">
-                    <div class="input-text"><span id="clientpti"><?= _ago($client['pti']);?></span></div>
-                  </div>
+                  <div class="input-text"><span id="clientpti"><?=($client['pti']==0?'Never':_ago($client['pti']));?></span>&nbsp;</div>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-md">
+                <div class="col-12 col-md pr-3">
                   <label for="status">Paid Via</label>
-                  <div class="form-row">
-                    <select id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
-                      <option value="">Select an Option</option>
-                      <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
-                      <option value="bank transfer"<?=$r['paid_via']=='bank transfer'?' selected':'';?>>Bank Transfer</option>
-                      <option value="cash"<?=$r['paid_via']=='cash'?' selected':'';?>>Cash</option>
-                      <option value="cash on delivery"<?=$r['paid_via']=='cash on delivery'?' selected':'';?>>Cash On Delivery</option>
-                      <option value="credit card"<?=$r['paid_via']=='credit card'?' selected':'';?>>Credit Card</option>
-                      <option value="paypal"<?=$r['paid_via']=='paypal'?' selected':'';?>>PayPal</option>
-                      <option value="stripe"<?=$r['paid_via']=='stripe'?' selected':'';?>>Stripe</option>
-                      <option value="afterpay"<?=$r['paid_via']=='afterpay'?' selected':'';?>>AfterPay</option>
-                    </select>
-                  </div>
+                  <select id="status" data-tooltip="tooltip" aria-label="Paid Via" onchange="update('<?=$r['id'];?>','orders','paid_via',$(this).val(),'select');">
+                    <option value="">Select an Option</option>
+                    <option value="bank deposit"<?=$r['paid_via']=='bank deposit'?' selected':'';?>>Bank Deposit</option>
+                    <option value="bank transfer"<?=$r['paid_via']=='bank transfer'?' selected':'';?>>Bank Transfer</option>
+                    <option value="cash"<?=$r['paid_via']=='cash'?' selected':'';?>>Cash</option>
+                    <option value="cash on delivery"<?=$r['paid_via']=='cash on delivery'?' selected':'';?>>Cash On Delivery</option>
+                    <option value="credit card"<?=$r['paid_via']=='credit card'?' selected':'';?>>Credit Card</option>
+                    <option value="paypal"<?=$r['paid_via']=='paypal'?' selected':'';?>>PayPal</option>
+                    <option value="stripe"<?=$r['paid_via']=='stripe'?' selected':'';?>>Stripe</option>
+                    <option value="afterpay"<?=$r['paid_via']=='afterpay'?' selected':'';?>>AfterPay</option>
+                  </select>
                 </div>
-                <div class="col-12 col-md pl-sm-3">
+                <div class="col-12 col-md pr-3">
                   <label for="paid_ti">Paid Date</label>
-                  <div class="form-row">
-                    <input id="paid_ti" type="datetime-local" value="<?=$r['paid_ti']>0?date('Y-m-d\TH:i',$r['paid_ti']):'';?>" autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`paid_ti`,getTimestamp(`paid_ti`));"<?=($r['status']=='paid'?' readonly':'');?>>
-                  </div>
+                  <input id="paid_ti" type="datetime-local" value="<?=$r['paid_ti']>0?date('Y-m-d\TH:i',$r['paid_ti']):'';?>" autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`paid_ti`,getTimestamp(`paid_ti`));"<?=($r['status']=='paid'?' readonly':'');?>>
                 </div>
-                <div class="col-12 col-md pl-sm-3">
+                <div class="col-12 col-md">
                   <label for="txn_id">Transaction ID:</label>
                   <div class="form-row">
                     <input class="textinput" id="txn_id" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="txn_id" type="text" value="<?=$r['txn_id'];?>" placeholder="Enter a Transaction Code..."<?=($r['status']=='paid'?' readonly':'');?>>
@@ -198,14 +176,14 @@ else{?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-md">
+                <div class="col-12 col-md pr-3">
                   <label for="paid_name">Name</label>
                   <div class="form-row">
                     <input class="textinput" id="paid_name" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_name" type="text" value="<?=$r['paid_name'];?>" placeholder="Enter a Name..."<?=($r['status']=='paid'?' readonly':'');?>>
                     <?=$user['options'][1]==1?'<button class="save" id="savepaid_name" data-dbid="paid_name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-md pl-sm-3">
+                <div class="col-12 col-md">
                   <label for="paid_email">Email</label>
                   <div class="form-row">
                     <input class="textinput" id="paid_email" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="paid_email" type="text" value="<?=$r['paid_email'];?>" placeholder="Enter an Email..."<?=($r['status']=='paid'?' readonly':'');?>>
@@ -214,20 +192,18 @@ else{?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-md">
+                <div class="col-12 col-md pr-3">
                   <label for="status">Shipping Service</label>
-                  <div class="form-row">
-                    <select id="status" data-tooltip="tooltip" aria-label="Tracking Service" onchange="update('<?=$r['id'];?>','orders','trackOption',$(this).val(),'select');">
-                      <option value="">Select a Tracking Service</option>
-                      <?php $sto=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' ORDER BY `title` ASC");
-                      $sto->execute();
-                      while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
-                        echo'<option value="'.$rto['id'].'"'.($rto['id']==$r['trackOption']?' selected':'').'>'.$rto['title'].'</option>';
-                      }?>
-                    </select>
-                  </div>
+                  <select id="status" data-tooltip="tooltip" aria-label="Tracking Service" onchange="update('<?=$r['id'];?>','orders','trackOption',$(this).val(),'select');">
+                    <option value="">Select a Tracking Service</option>
+                    <?php $sto=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='trackoption' ORDER BY `title` ASC");
+                    $sto->execute();
+                    while($rto=$sto->fetch(PDO::FETCH_ASSOC)){
+                      echo'<option value="'.$rto['id'].'"'.($rto['id']==$r['trackOption']?' selected':'').'>'.$rto['title'].'</option>';
+                    }?>
+                  </select>
                 </div>
-                <div class="col-12 col-md pl-sm-3">
+                <div class="col-12 col-md">
                   <label for="trackNumber">Shipping Tracking #</label>
                   <div class="form-row">
                     <input class="textinput" id="trackNumber" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="trackNumber" type="text" value="<?=$r['trackNumber'];?>" placeholder="Enter a Tracking Number...">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,17 +43,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <label for="tab1-2">Questions</label>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-              <div class="form-row">
-                <label for="title">Title</label>
-              </div>
+              <label for="title">Title</label>
               <div class="form-row">
                 <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="title" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?
                 '<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
-              <div class="form-row mt-3">
-                <label for="tti">Time to complete</label>
-              </div>
+              <label for="tti">Time to complete</label>
               <div class="form-row">
                 <select id="tti"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','modules','tti',$(this).val(),'select');">
                   <option value="0"<?=$r['tti']==0?' selected':'';?>>Undetermined</option>
@@ -72,19 +68,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <option value="2592000"<?=$r['tti']==2592000?' selected':'';?>>1 Month</option>
                 </select>
               </div>
-              <div class="form-row mt-3">
-                <label for="title">Caption</label>
-              </div>
+              <label for="title">Caption</label>
               <div class="form-row">
                 <input class="textinput" id="caption" type="text" value="<?=$r['caption'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="caption" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="save" id="savecaption" data-dbid="caption" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
               </div>
-              <div class="row mt-3">
-                <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/course/edit/'.$r['id'].'#summernote" data-tooltip="tooltip" aria-label="PermaLink to Course Notes">&#128279;</a>':'';?>
-              </div>
               <?php if($user['options'][1]==1){?>
                 <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="notes"></div>
-                <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
+                <form class="mt-3" id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
                   <input name="t" type="hidden" value="modules">
                   <input name="c" type="hidden" value="notes">
@@ -104,17 +95,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               <?php }?>
             </div>
-            <div class="tab1-2 border-top p-4" data-tabid="tab1-2" role="tabpanel">
+            <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
               <?php if($user['options'][1]==1){?>
-                <div class="form-row">
-                  <label for="question">Question</label>
-                </div>
+                <label for="question">Question</label>
                 <div class="form-row">
                   <div class="input-text" data-el="question" contenteditable="<?=$user['options'][1]==1?'true':'false';?>"><?=$r['question'];?></div>
                   <input class="textinput d-none" id="question" type="text" value="<?=$r['question'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="question" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
                   <?=$user['options'][1]==1?'<button class="save" id="savequestion" data-dbid="question" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
-                <legend class="mt-3">Multiple-Choice Answers</legend>
+                <label class="mt-3">Multiple-Choice Answers</label>
                 <form class="form-row" target="sp" method="post" action="core/add_question.php">
                   <input name="rid" type="hidden" value="<?=$r['id'];?>">
                   <select name="ct">
@@ -170,15 +159,6 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <?php }?>
           </div>
         </div>
-        <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
-        $sw->execute();
-        if($sw->rowCount()>0){
-          echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
-          while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
-            include'core/layout/widget-'.$rw['file'];
-          }
-          echo'</div>';
-        }?>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

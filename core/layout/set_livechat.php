@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -33,7 +33,7 @@
         </div>
         <div class="form-row">
           <input id="enableChat" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="13" type="checkbox"<?=($config['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="enableChat">Enable Live Chat</label>
+          <label for="enableChat">Enable Live Chat</label>
         </div>
         <label for="chatAutoRemove">Remove Messages</label>
         <div class="form-row">
@@ -48,13 +48,15 @@
         </div>
         <div class="form-row mt-3">
           <input id="chatNotifications" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="15" type="checkbox"<?=($config['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="chatNotifications">Email new LiveChat notifications to nominated accounts.</label>
+          <label for="chatNotifications">Email new LiveChat notifications to nominated accounts.</label>
         </div>
         <hr>
+        <legend>Facebook On Site Chat Messenger</legend>
         <div class="form-row mt-3">
           <input id="facebookMessenger" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="14" type="checkbox"<?=($config['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="facebookMessenger" id="configoptions141">Facebook Messenger</label>
+          <label for="facebookMessenger" id="configoptions141">Enable</label>
         </div>
+        <label for="messengerFBCode">Page ID</label>
         <?php if($user['options'][7]==1){
           if($config['messengerFBCode']==''){?>
             <div class="alert alert-info">
@@ -68,7 +70,6 @@
             </div>
           <?php }
         }?>
-        <label for="messengerFBCode">Page ID</label>
         <div class="form-row">
           <input class="textinput" id="messengerFBCode" data-dbid="1" data-dbt="config" data-dbc="messengerFBCode" type="text" value="<?=$config['messengerFBCode'];?>"<?=($user['options'][7]==1?' placeholder="Enter Page ID..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savemessengerFBCode" data-dbid="messengerFBCode" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
@@ -78,7 +79,7 @@
           <input class="textinput" id="messengerFBGreeting" data-dbid="1" data-dbt="config" data-dbc="messengerFBGreeting" type="text" value="<?=$config['messengerFBGreeting'];?>"<?=($user['options'][7]==1?' placeholder="Enter Greeting..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savemessengerFBGreeting" data-dbid="messengerFBGreeting" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <label for="messengerFBColor"><?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/livechat/settings#facebookMessengerColor" data-tooltip="tooltip" aria-label="PermaLink to Facebook Messenger Colour">&#128279;</a>':'';?>Colour</label>
+        <label for="messengerFBColor">Colour</label>
         <div class="form-row">
           <select id="messengerFBColor" name="colorpicker"<?=$user['options'][1]==0?' disabled':'';?> onchange="update('1','config','messengerFBColor',$(this).val(),'select');" data-dbid="1" data-dbt="config" data-dbc="messengerFBColor"<?=$user['options'][7]==1?'':' disabled';?>>
             <option value="#7bd148"<?=$config['messengerFBColor']=='#7bd148'?' selected':'';?>>Green</option>

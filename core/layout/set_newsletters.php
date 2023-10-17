@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -32,33 +32,27 @@
             </div>
           </div>
         </div>
-        <div class="form-row mt-3">
-          <input id="embedImages" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0" type="checkbox"<?=($config['newslettersEmbedImages']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="embedImages">Embed&nbsp;Images</label>
-          <?=($user['options'][7]==1?'<small class="form-text text-right">Enable if your hosting doesn\'t support remote image access.</small>':'');?>
-        </div>
         <div class="form-row">
-          <label for="newslettersSendMax">Send&nbsp;Max</label>
-          <?=($user['options'][7]==1?'<small class="form-text text-right">Maximum Emails to Send in one Instance. \'0\' uses the Default of \'50\'.</small>':'');?>
+          <input id="embedImages" data-dbid="1" data-dbt="config" data-dbc="newslettersEmbedImages" data-dbb="0" type="checkbox"<?=($config['newslettersEmbedImages']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+          <label for="embedImages">Embed&nbsp;Images</label>
         </div>
+        <?=($user['options'][7]==1?'<div class="form-text">Enable if your hosting doesn\'t support remote image access.</div>':'');?>
+        <label for="newslettersSendMax">Send Max</label>
+        <?=($user['options'][7]==1?'<small class="form-text text-muted">Maximum Emails to Send in one Instance. \'0\' uses the Default of \'50\'.</small>':'');?>
         <div class="form-row">
           <input class="textinput" id="newslettersSendMax" type="text" value="<?=$config['newslettersSendMax'];?>" data-dbid="1" data-dbt="config" data-dbc="newslettersSendMax"<?=($user['options'][7]==1?'':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savenewslettersSendMax" data-dbid="newslettersSendMax" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <div class="form-row">
-          <label for="newslettersSendDelay">Send&nbsp;Delay</label>
-          <?=($user['options'][7]==1?'<small class="form-text text-right">Seconds to Delay between Email Sends. \'0\' uses the default of \'1\' second.</small>':'');?>
-        </div>
+        <label for="newslettersSendDelay">Send Delay</label>
+        <?=($user['options'][7]==1?'<div class="form-text">Seconds to Delay between Email Sends. \'0\' uses the default of \'1\' second.</div>':'');?>
         <div class="form-row">
           <input class="textinput" id="newslettersSendDelay" data-dbid="1" data-dbt="config" data-dbc="newslettersSendDelay" type="text" value="<?=$config['newslettersSendDelay'];?>"<?=($user['options'][7]==1?'':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savenewslettersSendDelay" data-placement="top" data-dbid="newslettersSendDelay" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <legend class="mt-3 mb-0">Opt Out Message</legend>
+        <legend class="mt-3">Opt Out Message</legend>
         <?php if($user['options'][7]==1){?>
-          <div class="form-row">
-            <div class="form-text text-right">Tokens:
-              <a class="badge badge-secondary" href="#" onclick="$('#optOutLayout').summernote('insertText','{optOutLink}');return false;">{optOutLink}</a>
-            </div>
+          <div class="form-text">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="$('#optOutLayout').summernote('insertText','{optOutLink}');return false;">{optOutLink}</a>
           </div>
           <div class="row">
             <form method="post" target="sp" action="core/update.php">

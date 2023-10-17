@@ -31,14 +31,14 @@ if(isset($_SESSION['rank'])){
 	else
 		$sqlrank=" AND `rank` <= ".$_SESSION['rank'];
 }
-$config=$db->query("SELECT `theme`,`fomo`,`fomoStyle`,`fomoIn`,`fomoOut`,`fomoOptions`,`fomoState`,`fomoArea`,`fomoPostcodeFrom`,`fomoPostcodeTo`,`fomoFullname` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
+$config=$db->query("SELECT `theme`,`fomo`,`fomoStyle`,`fomoIn`,`fomoOut`,`fomoOptions`,`fomoActivitiesState`,`fomoCoursesState`,`fomoEventsState`,`fomoInventoryState`,`fomoServicesState`,`fomoTestimonialsState`,`fomoFullname` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 $cT='';
-$cT.=($config['fomoOptions'][0]==1?"`contentType`='activities'".($config['fomoOptions'][1]==1||$config['fomoOptions'][2]==1||$config['fomoOptions'][3]==1||$config['fomoOptions'][4]==1||$config['fomoOptions'][5]==1?" OR":""):"");
-$cT.=($config['fomoOptions'][1]==1?"`contentType`='course'".($config['fomoOptions'][2]==1||$config['fomoOptions'][3]==1||$config['fomoOptions'][4]==1||$config['fomoOptions'][5]==1?" OR":""):"");
-$cT.=($config['fomoOptions'][2]==1?"`contentType`='events'".($config['fomoOptions'][3]==1||$config['fomoOptions'][4]==1||$config['fomoOptions'][5]==1?" OR":""):"");
-$cT.=($config['fomoOptions'][3]==1?"`contentType`='inventory'".($config['fomoOptions'][4]==1||$config['fomoOptions'][5]==1?" OR":""):"");
-$cT.=($config['fomoOptions'][4]==1?"`contentType`='service'".($config['fomoOptions'][5]==1?" OR":""):"");
-$cT.=($config['fomoOptions'][5]==1?"`contentType`='testimonials'":"");
+$cT.=($config['fomoActivitiesState']!=''?"`contentType`='activities'".($config['fomoCoursesState']!=''||$config['fomoEventsState']!=''||$config['fomoInventoryState']!=''||$config['fomoServicesState']!=''||$config['fomoTestimonialsState']!=''?" OR":""):"");
+$cT.=($config['fomoCoursesState']!=''?"`contentType`='course'".($config['fomoEventsState']!=''||$config['fomoInventoryState']!=''||$config['fomoServicesState']!=''||$config['fomoTestimonialsState']!=''?" OR":""):"");
+$cT.=($config['fomoEventsState']!=''?"`contentType`='events'".($config['fomoInventoryState']!=''||$config['fomoServicesState']!=''||$config['fomoTestimonialsState']!=''?" OR":""):"");
+$cT.=($config['fomoInventoryState']!=''?"`contentType`='inventory'".($config['fomoServicesState']!=''||$config['fomoTestimonialsState']!=''?" OR":""):"");
+$cT.=($config['fomoServicesState']!=''?"`contentType`='service'".($config['fomoTestimonialsState']!=''?" OR":""):"");
+$cT.=($config['fomoTestimonialsState']!=''?"`contentType`='testimonials'":"");
 $pC='';
 $s=$db->prepare("SELECT `id`,`file`,`thumb`,`title`,`urlSlug`,`name`,`contentType`,`notes`,`quantity`,`status`,`stockStatus`,`eti`,`pti`,`ti` FROM `".$prefix."content` WHERE ".$cT." AND `status`='published'".$sqlrank." ORDER BY rand() LIMIT 1");
 $s->execute();
@@ -101,17 +101,29 @@ if($s->rowCount()>0){
 		  ];
 		}
 		$area='';
-		if(is_numeric($config['fomoFrom'])&&$config['fomoFrom']!=0){
-			$area.="`postcode` > '".$config['fomoFrom']."' AND ";
-			if(is_numeric($config['fomoPostcodeTo'])&&$config['fomoPostcodeTo']!=0){
-				$area.="`postcode` < '".$config['fomoPostcodeTo']."' AND ";
+		if($r['contentType']=='activities'){
+			if($config['fomoActivitiesState']!='All'){
+				$area.="LOWER(`state`) LIKE '%".strtolower($config['fomoActivitiesState'])."%' AND ";
 			}
-		}else{
-			if($config['fomoState']!='All'){
-				$area.="LOWER(`state`) LIKE '%".strtolower($config['fomoState'])."%' AND ";
-				if($config['fomoArea']!='All'){
-					$area.="LOWER(`area`) LIKE '%".strtolower($config['fomoArea'])."%' AND ";
-				}
+		}
+		if($r['contentType']=='course'){
+			if($config['fomoCoursesState']!='All'){
+				$area.="LOWER(`state`) LIKE '%".strtolower($config['fomoCoursesState'])."%' AND ";
+			}
+		}
+		if($r['contentType']=='events'){
+			if($config['fomoEventsState']!='All'){
+				$area.="LOWER(`state`) LIKE '%".strtolower($config['fomoEventsState'])."%' AND ";
+			}
+		}
+		if($r['contentType']=='inventory'){
+			if($config['fomoInventoryState']!='All'){
+				$area.="LOWER(`state`) LIKE '%".strtolower($config['fomoInventoryState'])."%' AND ";
+			}
+		}
+		if($r['contentType']=='service'){
+			if($config['fomoServicesState']!='All'){
+				$area.="LOWER(`state`) LIKE '%".strtolower($config['fomoServicesState'])."%' AND ";
 			}
 		}
 		$rs=$db->prepare("SELECT * FROM `".$prefix."locations` WHERE ".$area." `active`='1' ORDER BY rand() LIMIT 1");

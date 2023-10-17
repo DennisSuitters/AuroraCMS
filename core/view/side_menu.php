@@ -452,7 +452,7 @@ if(file_exists(THEME.'/side_menu.html')){
 	$sideTemp=preg_replace('~<item>.*?<\/item>~is',$outside,$sideTemp,1);
 
 	if(stristr($sideTemp,'<adverts')){
-		preg_match('/<adverts.*orientation=[\"\'](.+?)[\"\'].*items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+		preg_match('/<adverts.*orientation=[\"\'](.+?)[\"\'].*itemCount=[\"\'](.+?)[\"\'].*>/',$html,$matches);
 		$orientation=isset($matches[1])&&$matches[1]!=''?$matches[1]:'horizontal';
 		$count=isset($matches[2])&&$matches[2]!=0?$matches[2]:1;
 	}else{

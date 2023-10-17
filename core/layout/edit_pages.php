@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -136,10 +136,8 @@ if($r['heading']==''){
                 </div>
               </div>
             <?php }?>
-            <div class="form-row mt-3">
-              <label for="heading">Page&nbsp;Heading</label>
-              <small class="form-text text-right">This text is normally used in the &lt;h1&gt; heading tag. If left empty, the SEO Meta Title will be used, otherwise an auto-generated text will be used.</small>
-            </div>
+            <label for="heading">Page Heading</label>
+            <div class="form-text">This text is normally used in the &lt;h1&gt; heading tag. If left empty, the SEO Meta Title will be used, otherwise an auto-generated text will be used.</div>
             <?=$seo['contentHeading']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['contentHeading'],'<strong>').'</div>':'';?>
             <div class="form-row<?=$seo['contentHeading']!=''?' border-danger border-2 border-top-0':'';?>">
               <?php if($user['options'][1]==1){
@@ -154,11 +152,16 @@ if($r['heading']==''){
               <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
               <div class="input-text" data-el="heading" contenteditable="<?=$user['options'][1]==1?'true':'false';?>" data-placeholder="Enter a Heading..."><?=$r['heading'];?></div>
               <input class="textinput d-none" id="heading" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="heading" type="text" value="<?=$r['heading'];?>">
-              <?=($user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button><button class="analyzeTitle" data-test="heading" data-tooltip="tooltip" aria-label="Analyze Page Heading Text"><i class="i">seo</i></button><button class="save" id="saveheading" data-dbid="heading" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+              <?=($user['options'][1]==1?
+                '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=title" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
+                '<button class="analyzeTitle" data-test="heading" data-tooltip="tooltip" aria-label="Analyze Page Heading Text"><i class="i">seo</i></button>'.
+                '<button class="save" id="saveheading" data-dbid="heading" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+              :
+                '');?>
             </div>
             <?php if($r['contentType']=='comingsoon'){?>
               <div class="col-12 col-sm-4">
-                <label for="tie">Countdown Clock&nbsp;<span class="labeldate" id="labeldatetie"><?= $r['tie']>0?date($config['dateFormat'],$r['tie']):'';?></span></label>
+                <label for="tie">Countdown Clock <span class="labeldate" id="labeldatetie"><?= $r['tie']>0?date($config['dateFormat'],$r['tie']):'';?></span></label>
                 <div class="form-row">
                   <input id="tie" type="datetime-local" value="<?=$r['tie']!=0?date('Y-m-d\TH:i',$r['tie']):'';?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`menu`,`tie`,getTimestamp(`tie`));"':' readonly';?>>
                   <button class="trash" data-tooltip="tooltip" aria-label="Clear Date" onclick="$(`#tie`).val(`0`);updateButtons(`<?=$r['id'];?>`,`menu`,`tie`,`0`);"><i class="i">eraser</i></button>
@@ -177,7 +180,13 @@ if($r['heading']==''){
                   ]);
                   echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=menu&c=notes" data-dbgid="notesda" data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i">lightbulb</i></button>':'';
                 }
-                echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button><button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button><input class="col-1" id="ipsumc" value="5"><button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button><button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button></div></div>'.($seo['contentNotes']!=''?'<div class="alert alert-warning m-0">'.strip_tags($seo['contentNotes'],'<strong>').'</div>':'');?>
+                echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button>'.
+                '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>'.
+                '<input class="col-1" id="ipsumc" value="5">'.
+                '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>'.
+                '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
+                '</div></div>'.
+                ($seo['contentNotes']!=''?'<div class="alert alert-warning m-0">'.strip_tags($seo['contentNotes'],'<strong>').'</div>':'');?>
                 <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
                 <form id="summernote" data-dbid="summernote" method="post" target="sp" action="core/update.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -199,9 +208,7 @@ if($r['heading']==''){
                 </div>
               <?php }?>
             </div>
-            <div class="form-row">
-              <small class="form-text">Edited: <?=$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></small>
-            </div>
+            <div class="form-text">Edited: <?=$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></div>
           </div>
 <?php /* Media */?>
           <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
@@ -215,7 +222,7 @@ if($r['heading']==''){
               <label for="tab2-4">On Page Media</label>
               <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-                  <label for="coverURL">Cover&nbsp;Image&nbsp;URL</label>
+                  <label for="coverURL">Cover Image URL</label>
                   <div class="form-row">
                     <input class="image" id="coverURL" type="text" value="<?=$r['coverURL'];?>"<?=$user['options'][1]==1?' placeholder="Enter Cover URL..."':' readonly';?> onchange="coverUpdate('<?=$r['id'];?>','menu','coverURL',$(this).val());">
                     <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverURL`,``);"><i class="i">trash</i></button>':'';?>
@@ -237,7 +244,20 @@ if($r['heading']==''){
                   else
                     echo'<img id="coverimage" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';?>
                   <input id="cover" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="cover" type="text" value="<?=$r['cover'];?>"<?=($user['options'][1]==1?' onchange="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,$(this).val());" placeholder="Select an image from the button options..."':' disabled');?>>
-                  <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);"><i class="i">browse-media</i></button>'.($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=menu&c=cover" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editcover" data-image="'.$r['cover'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="menu" data-c="cover"><i class="i">magic</i></button>':'').'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,``);"><i class="i">trash</i></button><button class="save" id="savecover" data-dbid="cover" data-style="zoom-n" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                  <?=($user['options'][1]==1?
+                    '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`cover`);"><i class="i">browse-media</i></button>'.
+                    ($config['mediaOptions'][0]==1?
+                      '<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=menu&c=cover" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>'
+                    :
+                      '').
+                    ($config['mediaOptions'][2]==1?
+                      '<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editcover" data-image="'.$r['cover'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="menu" data-c="cover"><i class="i">magic</i></button>'
+                    :
+                      '').
+                    '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,``);"><i class="i">trash</i></button>'.
+                    '<button class="save" id="savecover" data-dbid="cover" data-style="zoom-n" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                  :
+                    '');?>
                 </div>
                 <div id="editcover"></div>
                 <label for="fileALT">Image ALT</label>
@@ -285,7 +305,7 @@ if($r['heading']==''){
                 <div class="tab2-2 border p-3" data-tabid="tab2-2" role="tabpanel">
                   <div class="form-row">
                     <input id="enableSlider" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="0" type="checkbox"<?=($r['sliderOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="enableSlider">Enable</label>
+                    <label for="enableSlider">Enable</label>
                   </div>
                   <label for="sliderDirection">Direction</label>
                   <div class="form-row">
@@ -308,7 +328,7 @@ if($r['heading']==''){
                   </div>
                   <div class="form-row mt-3">
                     <input id="sliderLoop" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="1" type="checkbox"<?=($r['sliderOptions'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="sliderLoop">Loop</label>
+                    <label for="sliderLoop">Loop</label>
                   </div>
                   <label for="sliderSpeed">Speed</label>
                   <div class="form-row">
@@ -322,23 +342,23 @@ if($r['heading']==''){
                   </div>
                   <div class="form-row mt-3">
                     <input id="sliderDisableOnInteraction" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="2" type="checkbox"<?=($r['sliderOptions'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="sliderDisableOnInteraction">Disable On Interaction</label>
+                    <label for="sliderDisableOnInteraction">Disable On Interaction</label>
                   </div>
-                  <div class="form-row mt-3">
+                  <div class="form-row">
                     <input id="sliderNavigation" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="3" type="checkbox"<?=($r['sliderOptions'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="sliderNavigation">Navigation</label>
+                    <label for="sliderNavigation">Navigation</label>
                   </div>
-                  <div class="form-row mt-3">
+                  <div class="form-row">
                     <input id="sliderPagination" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="4" type="checkbox"<?=($r['sliderOptions'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="sliderPagination">Pagination</label>
+                    <label for="sliderPagination">Pagination</label>
                   </div>
-                  <div class="form-row mt-3">
+                  <div class="form-row">
                     <input id="sliderScrollbar" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="5" type="checkbox"<?=($r['sliderOptions'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="sliderScrollbar">Scrollbar</label>
+                    <label for="sliderScrollbar">Scrollbar</label>
                   </div>
-                  <div class="form-row mt-3">
+                  <div class="form-row">
                     <input id="sliderContentBackground" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="sliderOptions" data-dbb="6" type="checkbox"<?=($r['sliderOptions'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label class="p-0 mt-0 ml-3" for="sliderContentBackground">Use Content Image as Background</label>
+                    <label for="sliderContentBackground">Use Content Image as Background</label>
                   </div>
                 </div>
               <?php }?>
@@ -346,19 +366,24 @@ if($r['heading']==''){
                 <label for="coverVideo">Video URL</label>
                 <div class="form-row">
                   <input id="coverVideo" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="coverVideo" type="text" value="<?=$r['coverVideo'];?>">
-                  <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`coverVideo`);"><i class="i">browse-media</i></button><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverVideo`,``);"><i class="i">trash</i></button><button class="save" id="savecoverVideo" data-dbid="coverVideo" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                  <?=($user['options'][1]==1?
+                    '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`coverVideo`);"><i class="i">browse-media</i></button>'.
+                    '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverVideo`,``);"><i class="i">trash</i></button>'.
+                    '<button class="save" id="savecoverVideo" data-dbid="coverVideo" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                  :
+                    '');?>
                 </div>
                 <div class="form-row mt-3">
                   <input id="videoAutoplay" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="videoAutoplay">AutoPlay Cover Video</label>
+                  <label for="videoAutoplay">AutoPlay Cover Video</label>
                 </div>
                 <div class="form-row">
                   <input id="videoLoop" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="videoLoop">Loop Cover Video</label>
+                  <label for="videoLoop">Loop Cover Video</label>
                 </div>
                 <div class="form-row">
                   <input id="videoControls" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="videoControls">Show Controls</label>
+                  <label for="videoControls">Show Controls</label>
                 </div>
                 <?php if($r['file']=='index'||$r['file']=='about'||$r['file']=='biography'||$r['file']=='gallery'){?>
                   <legend class="mt-3">Video Playlist</legend>
@@ -412,6 +437,7 @@ if($r['heading']==''){
                   </div>
                 <?php }?>
               </div>
+<?php /* On Page Media */ ?>
               <div class="tab2-4 border p-3" data-tabid="tab2-4" role="tabpanel">
                 <?php if($user['options'][1]==1){?>
                   <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
@@ -440,7 +466,12 @@ if($r['heading']==''){
                         </a>
                         <div class="btn-group tools">
                           <div class="btn" data-tooltip="right" aria-label="<?=$rm['views'];?> views"><small><?=$rm['views'];?></small></div>
-                          <?=($user['options'][1]==1?'<a href="'.URL.$settings['system']['admin'].'/media/edit/'.$rm['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$rm['id'].'`,`media`);"><i class="i">trash</i></button><div class="handle btn" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>':'');?>
+                          <?=($user['options'][1]==1?
+                            '<a href="'.URL.$settings['system']['admin'].'/media/edit/'.$rm['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
+                            '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="purge(`'.$rm['id'].'`,`media`);"><i class="i">trash</i></button>'.
+                            '<div class="handle btn" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>'
+                          :
+                            '');?>
                         </div>
                       </div>
                     <?php }
@@ -487,7 +518,7 @@ if($r['heading']==''){
                       <div class="col-sm">
                         <div class="form-row">
                           <input id="highlight<?=$rp['id'];?>" data-dbid="<?=$rp['id'];?>" data-dbt="content" data-dbc="highlight" data-dbb="0" type="checkbox"<?=($rp['highlight']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                          <label class="p-0 mt-0 ml-3" for="highlight<?=$rp['id'];?>">Highlighted</label>
+                          <label for="highlight<?=$rp['id'];?>">Highlighted</label>
                         </div>
                       </div>
                       <div class="col-sm">
@@ -570,10 +601,8 @@ if($r['heading']==''){
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
               </div>
-              <div class="form-row mt-3">
-                <label for="metaRobots">Meta&nbsp;Robots</label>
-                <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" data-tooltip="tooltip" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
-              </div>
+              <label for="metaRobots">Meta Robots</label>
+              <div class="form-text">Options for Meta Robots: <span data-tooltip="left" data-tooltip="tooltip" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Robots.md" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><i class="i">seo</i></button>
                 <input class="textinput" id="metaRobots" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="metaRobots" type="text" value="<?=$r['metaRobots'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Meta Robots Option (Left empty the default will be `index,follow`)..."':' readonly';?>>
@@ -584,10 +613,8 @@ if($r['heading']==''){
                 <div id="google-link"><?= URL;?></div>
                 <div id="google-description" data-tooltip="tooltip" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences."><?=$r['seoDescription'];?></div>
               </div>
-              <div class="form-row mt-3">
-                <label for="seoTitle">Meta&nbsp;Title</label>
-                <small class="form-text text-right">The recommended character count for Titles is a minimum of 50 and maximum of 70.</small>
-              </div>
+              <label for="seoTitle">Meta Title</label>
+              <div class="form-text">The recommended character count for Titles is a minimum of 50 and maximum of 70.</div>
               <?=($seo['seoTitle']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoTitle'],'<strong>').'</div>':'');?>
               <div class="form-row<?=$seo['seoTitle']!=''?' border-danger border-2 border-top-0':'';?>">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
@@ -604,12 +631,15 @@ if($r['heading']==''){
                 }?>
                 <div class="input-text" data-el="seoTitle" contenteditable="<?=$user['options'][1]==1?'true':'false';?>" data-placeholder="Enter a Meta Title..."><?=$r['seoTitle'];?></div>
                 <input class="textinput d-none" id="seoTitle" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="seoTitle" type="text" value="<?=$r['seoTitle'];?>">
-                <?=($user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=seoTitle" data-data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button><button class="analyzeTitle" data-test="seoTitle" data-tooltip="tooltip" aria-label="Analyze Meta Title Text"><i class="i">seo</i></button><button class="save" id="saveseoTitle" data-dbid="seoTitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                <?=($user['options'][1]==1?
+                  '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=seoTitle" data-data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
+                  '<button class="analyzeTitle" data-test="seoTitle" data-tooltip="tooltip" aria-label="Analyze Meta Title Text"><i class="i">seo</i></button>'.
+                  '<button class="save" id="saveseoTitle" data-dbid="seoTitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                :
+                  '');?>
               </div>
-              <div class="form-row mt-3">
-                <label for="seoDescription">Meta&nbsp;Description</label>
-                <small class="form-text text-right">The recommended character count for Descriptions is a minimum of 50 and a maximum of 160.</small>
-              </div>
+              <label for="seoDescription">Meta Description</label>
+              <div class="form-text">The recommended character count for Descriptions is a minimum of 50 and a maximum of 160.</div>
               <?=$seo['seoDescription']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['seoDescription'],'<strong>').'</div>':'';?>
               <div class="form-row<?=$seo['seoDescription']!=''?' border-danger border-2 border-top-0':'';?>">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><i class="i">seo</i></button>
@@ -625,7 +655,11 @@ if($r['heading']==''){
                 }?>
                 <div class="input-text" data-el="seoDescription" contenteditable="<?=$user['options'][1]==1?'true':'false';?>" data-placeholder="Enter a Meta Description..."><?=$r['seoDescription'];?></div>
                 <input class="textinput d-none" id="seoDescription" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="seoDescription" type="text" value="<?=$r['seoDescription'];?>">
-                <?=($user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout.suggestions-add.php?id='.$r['id'].'&t=menu&c=seoDescription" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button><button class="save" id="saveseoDescription" data-dbid="seoDescription" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                <?=($user['options'][1]==1?
+                  '<button data-fancybox data-type="ajax" data-src="core/layout.suggestions-add.php?id='.$r['id'].'&t=menu&c=seoDescription" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
+                  '<button class="save" id="saveseoDescription" data-dbid="seoDescription" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                :
+                  '');?>
               </div>
             </div>
           <?php }
@@ -635,58 +669,54 @@ if($r['heading']==''){
               <?php if($r['file']!='index'&&$r['file']!='offline'){?>
                 <div class="form-row">
                   <input id="active" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="active">Active</label>
+                  <label for="active">Active</label>
                 </div>
               <?php }
               if($r['file']=='offline'){?>
                 <div class="form-row">
                   <input id="prefPWA" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="18" type="checkbox"<?=$config['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
-                    <label class="p-0 mt-0 ml-3" for="prefPWA">Enable Offline Page (Progressive Web Application).</label>
+                  <label for="prefPWA">Enable Offline Page (Progressive Web Application).</label>
+                </div>
+              <?php }
+              if($r['file']!='index'&&$r['file']!='offline'){?>
+                <label for="rank">Access</label>
+                <div class="form-row">
+                  <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="rank" onchange="update('<?=$r['id'];?>','menu','rank',$(this).val(),'select');"<?=$user['options'][1]==1?'':' disabled';?>>
+                    <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
+                    <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber and above</option>
+                    <option value="200"<?=$r['rank']==200?' selected':'';?>>Member and above</option>
+                    <option value="210"<?=$r['rank']==210?' selected':'';?>>Member Silver and above</option>
+                    <option value="220"<?=$r['rank']==220?' selected':'';?>>Member Bronze and above</option>
+                    <option value="230"<?=$r['rank']==230?' selected':'';?>>Member Gold and above</option>
+                    <option value="240"<?=$r['rank']==240?' selected':'';?>>Member Platinum and above</option>
+                    <option value="300"<?=$r['rank']==300?' selected':'';?>>Client and above</option>
+                    <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler and above</option>
+                    <option value="320"<?=$r['rank']==320?' selected':'';?>>Wholesaler Bronze and above</option>
+                    <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Silver and above</option>
+                    <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Gold and above</option>
+                    <option value="350"<?=$r['rank']==350?' selected':'';?>>Wholesaler Platinum and above</option>
+                    <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor and above</option>
+                    <?=($user['rank']>400?'<option value="500"'.($r['rank']==500?' selected':'').'>Author and above</option>':'').
+                    ($user['rank']>500?'<option value="600"'.($r['rank']==600?' selected':'').'>Editor and above</option>':'').
+                    ($user['rank']>600?'<option value="700"'.($r['rank']==700?' selected':'').'>Moderator and above</option>':'').
+                    ($user['rank']>700?'<option value="800"'.($r['rank']==800?' selected':'').'>Manager and above</option>':'').
+                    ($user['rank']>800?'<option value="900"'.($r['rank']==900?' selected':'').'>Administrator and above</option>':'');?>
+                  </select>
+                </div>
+                <?php if($user['rank']>999){?>
+                  <label for="contentType">contentType</label>
+                  <div class="form-text">
+                    <?php $sct=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
+                    $sct->execute();
+                    while($rct=$sct->fetch(PDO::FETCH_ASSOC))echo$rct['contentType'].' ';?>
                   </div>
-                <?php }
-                  if($r['file']!='index'&&$r['file']!='offline'){?>
-                  <label for="rank">Access</label>
                   <div class="form-row">
-                    <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="rank" onchange="update('<?=$r['id'];?>','menu','rank',$(this).val(),'select');"<?=$user['options'][1]==1?'':' disabled';?>>
-                      <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
-                      <option value="100"<?=$r['rank']==100?' selected':'';?>>Subscriber and above</option>
-                      <option value="200"<?=$r['rank']==200?' selected':'';?>>Member and above</option>
-                      <option value="210"<?=$r['rank']==210?' selected':'';?>>Member Silver and above</option>
-                      <option value="220"<?=$r['rank']==220?' selected':'';?>>Member Bronze and above</option>
-                      <option value="230"<?=$r['rank']==230?' selected':'';?>>Member Gold and above</option>
-                      <option value="240"<?=$r['rank']==240?' selected':'';?>>Member Platinum and above</option>
-                      <option value="300"<?=$r['rank']==300?' selected':'';?>>Client and above</option>
-                      <option value="310"<?=$r['rank']==310?' selected':'';?>>Wholesaler and above</option>
-                      <option value="320"<?=$r['rank']==320?' selected':'';?>>Wholesaler Bronze and above</option>
-                      <option value="330"<?=$r['rank']==330?' selected':'';?>>Wholesaler Silver and above</option>
-                      <option value="340"<?=$r['rank']==340?' selected':'';?>>Wholesaler Gold and above</option>
-                      <option value="350"<?=$r['rank']==350?' selected':'';?>>Wholesaler Platinum and above</option>
-                      <option value="400"<?=$r['rank']==400?' selected':'';?>>Contributor and above</option>
-                      <?=($user['rank']>400?'<option value="500"'.($r['rank']==500?' selected':'').'>Author and above</option>':'').
-                      ($user['rank']>500?'<option value="600"'.($r['rank']==600?' selected':'').'>Editor and above</option>':'').
-                      ($user['rank']>600?'<option value="700"'.($r['rank']==700?' selected':'').'>Moderator and above</option>':'').
-                      ($user['rank']>700?'<option value="800"'.($r['rank']==800?' selected':'').'>Manager and above</option>':'').
-                      ($user['rank']>800?'<option value="900"'.($r['rank']==900?' selected':'').'>Administrator and above</option>':'');?>
-                    </select>
+                    <input class="textinput" id="contentType" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="contentType" type="text" value="<?=$r['contentType'];?>" placeholder="">
+                    <button class="save" id="savecontentType" data-dbid="contentType" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
                   </div>
-                  <?php if($user['rank']>999){?>
-                    <div class="form-row mt-3">
-                      <label for="contentType">contentType</label>
-                      <small class="form-text text-right">
-                        <?php $sct=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
-                        $sct->execute();
-                        while($rct=$sct->fetch(PDO::FETCH_ASSOC))echo$rct['contentType'].' ';?>
-                      </small>
-                    </div>
-                    <div class="form-row">
-                      <input class="textinput" id="contentType" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="contentType" type="text" value="<?=$r['contentType'];?>" placeholder="">
-                      <button class="save" id="savecontentType" data-dbid="contentType" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>
-                    </div>
-                  <?php }?>
-                  <div class="form-row mt-3">
-                    <label for="url">URL&nbsp;Type</label>
-                    <small class="form-text text-right">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <span class="badger badge-secondary click" style="cursor:pointer;" onclick="$('#url').val('#<?=$r['contentType'];?>');update('<?=$r['id'];?>','menu','url',$('#url').val());"><small>#<?=$r['contentType'];?></small></span> to link to Anchor on same page.</small>
-                  </div>
+                <?php }?>
+                <label for="url">URL Type</label>
+                  <div class="form-text">Leave Blank for auto-generated URL's. Enter a URL to link to another service. Or use <span class="badger badge-secondary click" style="cursor:pointer;" onclick="$('#url').val('#<?=$r['contentType'];?>');update('<?=$r['id'];?>','menu','url',$('#url').val());">#<?=$r['contentType'];?></span> to link to Anchor on same page.</div>
                   <div class="form-row">
                     <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="url" type="text" value="<?=$r['url'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                     <?=$user['options'][1]==1?'<button class="save" id="saveurl" data-dbid="url" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>

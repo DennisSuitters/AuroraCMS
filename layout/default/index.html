@@ -15,7 +15,7 @@
 		<div class="col-12 col-md-5 col-lg-7 col-xl-5 col-xxl-4 m-5">
 			<div class="row justify-content-center">
 				<div class="h3 text-center text-md-left"><a href="news/" aria-label="Go to News">News</a> and <a href="events" aria-label="Go to Events">Events</a></div>
-				<eventsitems items="3">
+				<eventsitems itemCount="3">
 					<eventitem>
 						<article class="card event col-11 col-sm-4 col-md-11 col-lg-5 col-xl-5 mx-auto">
 							<figure class="card-image">
@@ -55,7 +55,7 @@
 </block>
 <block inbed="sale">
 	<salePeriod>
-		<settings items="4">
+		<settings itemCount="4">
 		<section class="row mt-5 justify-content-center <print sale>">
 			<header>
 				<h2 class="text-center"><saleHeading></h2>
@@ -92,7 +92,7 @@
 	</section>
 </block>
 <block inbed="content3">
-	<settings items="0" contenttype="all">
+	<settings itemCount="5" contentType="inventory">
 	<section class="mt-5 justify-content-center">
 		<header>
 			<h2 class="text-center">Latest Content Additions</h2>
@@ -110,9 +110,8 @@
 				<div class="card-body">
 					<print content="notes">
 				</div>
+				<div class="text-center my-3 hidewhenempty"><print content="cost"></div>
 				<div class="corner-ribbon small top-right"><print content="contentType"></div>
-				<div class="corner-ribbon big top-right <print content=quantitycolor>"><print content="quantity"></div>
-				<div class="corner-ribbon big top-left <print content=cssrank>"><print content="rank"></div>
 				<div class="card-footer">
 					<a class="btn" href="<print content=linktitle>">View</a>
 					<quickview>
@@ -165,7 +164,7 @@
 	</section>
 </block>
 <block inbed="testimonials">
-	<settings items="6">
+	<settings itemCount="3">
 	<section class="my-5">
 		<header>
 			<h2 class="text-center"><a href="testimonials/">Testimonials</a> <small><small>Our Clients Love Us!</small></small></h2>

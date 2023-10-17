@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -31,33 +31,45 @@
           </div>
         </div>
         <legend>Business Hours</legend>
-        <div class="row mt-3">
+        <div class="row my-2">
           <div class="col-12 col-md-4">
             <div class="form-row">
               <input id="prefBusinessHours" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="19" type="checkbox"<?=($config['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="prefBusinessHours">Business Hours</label>
+              <label for="prefBusinessHours">Business Hours</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="form-row">
               <input id="prefShortDayNames" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="20" type="checkbox"<?=($config['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');;?>>
-              <label class="p-0 mt-0 ml-3" for="prefShortDayNames">Use Short Day Names</label>
+              <label for="prefShortDayNames">Use Short Day Names</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="form-row">
               <input id="pref24HourDigits" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="21" type="checkbox"<?=($config['options'][21]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');;?>>
-              <label class="p-0 mt-0 ml-3" for="pref24HourDigits">Use 24 Hour Digits</label>
+              <label for="pref24HourDigits">Use 24 Hour Digits</label>
             </div>
           </div>
         </div>
-        <?php if($user['options'][7]==1){?>
-          <form class="row" target="sp" method="post" action="core/add_hours.php">
-            <input name="user" type="hidden" value="0">
-            <input name="act" type="hidden" value="add_hours">
-            <div class="col-12 col-md-2">
-              <label for="from">From </label>
-              <div class="form-row">
+        <div class="sticky-top shadow">
+          <div class="row">
+            <article class="card py-1 overflow-visible card-list card-list-header">
+              <div class="row">
+                <div class="col-12 col-md pl-2">From</div>
+                <div class="col-12 col-md pl-2">To</div>
+                <div class="col-12 col-md pl-2">Time From</div>
+                <div class="col-12 col-md pl-2">Time To</div>
+                <div class="col-12 col-md-3 pl-2">Additional Text</div>
+                <div class="col-12 col-md-1 text-center">Active</div>
+                <div class="col-12 col-md-1"></div>
+              </div>
+            </article>
+          </div>
+          <?php if($user['options'][7]==1){?>
+            <form class="row" target="sp" method="post" action="core/add_hours.php">
+              <input name="user" type="hidden" value="0">
+              <input name="act" type="hidden" value="add_hours">
+              <div class="col-12 col-md">
                 <select id="from" name="from">
                   <option value="">No day</option>
                   <option value="monday">Monday</option>
@@ -69,10 +81,7 @@
                   <option value="sunday">Sunday</option>
                 </select>
               </div>
-            </div>
-            <div class="col-12 col-md-2">
-              <label for="to">To</label>
-              <div class="form-row">
+              <div class="col-12 col-md">
                 <select id="to" name="to">
                   <option value="">No day</option>
                   <option value="monday">Monday</option>
@@ -84,22 +93,13 @@
                   <option value="sunday">Sunday</option>
                 </select>
               </div>
-            </div>
-            <div class="col-12 col-md-2">
-              <label for="hourstimefrom">Time From</label>
-              <div class="form-row">
-                <input id="hourstimefrom" name="timefrom" type="time">
+              <div class="col-12 col-md">
+                <input id="hourstimefrom" name="hrfrom" type="time">
               </div>
-            </div>
-            <div class="col-12 col-md-2">
-              <label for="hourstimeto">Time To</label>
-              <div class="form-row">
-                <input id="hourstimeto" name="timeto" type="time">
+              <div class="col-12 col-md">
+                <input id="hourstimeto" name="hrto" type="time">
               </div>
-            </div>
-            <div class="col-12 col-md-3">
-              <label for="hoursinfo">Additional Text</label>
-              <div class="form-row">
+              <div class="col-12 col-md-3">
                 <input id="hoursinfo" name="info" list="hrsinfo">
                 <datalist id="hrsinfo">
                   <option>Closed</option>
@@ -110,75 +110,78 @@
                   <option>Call to book</option>
                 </datalist>
               </div>
-            </div>
-            <div class="col-12 col-md-1">
-              <label>&nbsp;</label>
-              <div class="form-row">
-                <button class="trash" data-tooltip="tooltip" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><i class="i">eraser</i></button>
-                <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+              <div class="col-12 col-md-1">
+                <div class="input-text border-0">
+                  <input class="mx-auto" type="checkbox" name="active" checked value="1">
+                </div>
               </div>
-            </div>
-          </form>
-        <?php }else{?>
-          <div class="row">
-            <div class="col-12 col-md-2"><label>From</label></div>
-            <div class="col-12 col-md-2"><label>To</label></div>
-            <div class="col-12 col-md-2"><label>Time From</label></div>
-            <div class="col-12 col-md-2"><label>Time To</label></div>
-            <div class="col-12 col-md-3"><label>Additional Text</label></div>
-            <div class="col-12 col-md-1"><label>&nbsp;</label></div>
-          </div>
-        <?php }?>
-        <div class="mt-1" id="hours">
+              <div class="col-12 col-md-1 text-right">
+                <div class="btn-group" role="group">
+                  <button class="trash" data-tooltip="tooltip" aria-label="Clear Values" onclick="$('#from,#to,#hourstimefrom,#hourstimeto,#hoursinfo').val('');return false;"><i class="i">eraser</i></button>
+                  <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                </div>
+              </div>
+            </form>
+          <?php }?>
+        </div>
+        <div id="hours" class="row">
           <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='hours' ORDER BY `ord` ASC");
           $ss->execute();
-          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-            <div id="l_<?=$rs['id'];?>" class="row item mt-1">
-              <div class="col-12 col-md-2">
-                <div class="form-row">
-                  <input type="text" value="<?= ucfirst($rs['username']);?>" readonly>
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
+            if($rs['tis']!=0){
+              $rs['tis']=str_pad($rs['tis'],4,'0',STR_PAD_LEFT);
+              if($config['options'][21]==1)
+                $hourFrom=$rs['tis'];
+              else{
+                $hourFromH=substr($rs['tis'],0,2);
+                $hourFromM=substr($rs['tis'],3,4);
+                $hourFrom=($hourFromH<12?ltrim($hourFromH,'0').($hourFromM>0?$hourFromM:'').'am':$hourFromH - 12 .($hourFromM>0?$hourFromM :'').'pm');
+              }
+            }else
+              $hourFrom='&nbsp;';
+            if($rs['tie']!=0){
+    					$rs['tie']=str_pad($rs['tie'],4,'0',STR_PAD_LEFT);
+    					if($config['options'][21]==1)
+    						$hourTo=$rs['tie'];
+    					else{
+    						$hourToH=substr($rs['tie'],0,2);
+    						$hourToM=substr($rs['tie'],3,4);
+    						$hourTo=($hourToH<12?ltrim($hourToH,'0').($hourToM>0?$hourToM:'').'am':$hourToH - 12 .($hourToM>0?$hourToM:'').'pm');
+    					}
+    				}else
+    					$hourTo='&nbsp;';?>
+            <article id="l_<?=$rs['id'];?>" class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow">
+              <div class="row">
+                <div class="col-12 col-md p-2"><?= ucfirst($rs['username']);?>&nbsp;</div>
+                <div class="col-12 col-md p-2"><?= ucfirst($rs['password']);?>&nbsp;</div>
+                <div class="col-12 col-md p-2"><?=$hourFrom;?></div>
+                <div class="col-12 col-md p-2"><?=$hourTo;?></div>
+                <div class="col-12 col-md-3 p-2"><?=$rs['title'];?>&nbsp;</div>
+                <div class="col-12 col-md-1 p-2 text-center">
+                  <input id="hoursactive<?=$rs['id'];?>" class="mx-auto" data-dbid="<?=$rs['id'];?>" data-dbt="choices" data-dbc="status" data-dbb="0" type="checkbox"<?=($rs['status']==1?' checked aria-checked="true"':' aria-checked="false"');?>>
                 </div>
-              </div>
-              <div class="col-12 col-md-2">
-                <div class="form-row">
-                  <input type="text" value="<?= ucfirst($rs['password']);?>" readonly>
-                </div>
-              </div>
-              <div class="col-12 col-md-2">
-                <div class="form-row">
-                  <input type="text" value="<?= $rs['tis'];?>" readonly>
-                </div>
-              </div>
-              <div class="col-12 col-md-2">
-                <div class="form-row">
-                  <input type="text" value="<?= $rs['tie'];?>" readonly>
-                </div>
-              </div>
-              <div class="col-12 col-md-3">
-                <div class="form-row">
-                  <input type="text" value="<?= $rs['title'];?>" readonly>
-                </div>
-              </div>
-              <div class="col-12 col-md-1">
-                <?php if($user['options'][7]==1){?>
-                  <div class="form-row">
-                    <form target="sp" action="core/purge.php">
-                      <input name="id" type="hidden" value="<?=$rs['id'];?>">
-                      <input name="t" type="hidden" value="choices">
-                      <button class="purge" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                      &nbsp;&nbsp;<i class="i handle">drag</i>
-                    </form>
+                <div class="col-12 col-md-1 text-right">
+                  <div class="btn-group" role="group">
+                    <?php if($user['options'][7]==1){?>
+                      <div class="form-row">
+                        <form target="sp" action="core/purge.php">
+                          <input name="id" type="hidden" value="<?=$rs['id'];?>">
+                          <input name="t" type="hidden" value="choices">
+                          <button class="purge" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                        </form>
+                        <span class="btn handle"><i class="i">drag</i></span>
+                      </div>
+                    <?php }?>
                   </div>
-                <?php }?>
-              </div>
-            </div>
+                </div>
+            </article>
           <?php }?>
-          <div class="ghost hidden"></div>
+          <article class="ghost hidden"></article>
         </div>
         <?php if($user['options'][7]==1){?>
           <script>
             $('#hours').sortable({
-              items:"div.item",
+              items:"article.item",
               handle:'.handle',
               placeholder:".ghost",
               helper:fixWidthHelper,
@@ -201,33 +204,32 @@
             }
           </script>
         <?php }?>
-        <hr>
-        <legend>Business Contact Details</legend>
-        <div class="row mt-5">
+        <legend class="mt-3">Business Contact Details</legend>
+        <div class="row mt-2">
           <div class="col-12 col-md-4">
             <div class="form-row">
               <input id="prefDisplayAddress" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="22" type="checkbox"<?=($config['options'][22]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="prefDisplayAddress">Display Address</label>
+              <label for="prefDisplayAddress">Display Address</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="form-row">
               <input id="prefDisplayEmail" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="23" type="checkbox"<?=($config['options'][23]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="prefDisplayEmail">Display Email</label>
+              <label for="prefDisplayEmail">Display Email</label>
             </div>
           </div>
           <div class="col-12 col-md-4">
             <div class="form-row">
               <input id="prefDisplayPhone" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="24" type="checkbox"<?=($config['options'][24]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="prefDisplayPhone">Display Phone Numbers</label>
+              <label for="prefDisplayPhone">Display Phone Numbers</label>
             </div>
           </div>
         </div>
-        <div class="alert alert-danger mt-4<?=$config['business']!=''?' hidden':'';?>" id="businessErrorBlock" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Bookings will NOT function currectly.</div>
+        <div class="alert alert-danger mt-3<?=$config['business']!=''?' hidden':'';?>" id="businessErrorBlock" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Bookings will NOT function currectly.</div>
         <div class="alert alert-danger<?=$config['email']!=''?' hidden':'';?>" id="emailErrorBlock" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly.</div>
-        <div class="row mt-3">
+        <div class="row">
           <div class="col-12 col-md-4 pr-md-3" id="businessHasError">
-            <label for="business">Business&nbsp;Name</label>
+            <label for="business">Business Name</label>
             <div class="form-row">
               <input class="textinput" id="business" data-dbid="1" data-dbt="config" data-dbc="business" type="text" value="<?=$config['business'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Business Name..."':' disabled');?>>
               <?=($user['options'][7]==1?'<button class="save" id="savebusiness" data-dbid="business" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
@@ -249,14 +251,14 @@
           </div>
         </div>
         <div class="row">
-          <div class="col-12 col-md-6 pr-md-1">
+          <div class="col-12 col-md-6 pr-md-3">
             <label for="phone">Phone</label>
             <div class="form-row">
               <input class="textinput" id="phone" data-dbid="1" data-dbt="config" data-dbc="phone" type="text" value="<?=$config['phone'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Phone..."':' disabled');?>>
               <?=($user['options'][7]==1?'<button class="save" id="savephone" data-dbid="phone" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
             </div>
           </div>
-          <div class="col-12 col-md-6 pl-md-1">
+          <div class="col-12 col-md-6">
             <label for="mobile">Mobile</label>
             <div class="form-row">
               <input class="textinput" id="mobile" data-dbid="1" data-dbt="config" data-dbc="mobile" type="text" value="<?=$config['mobile'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Mobile..."':' disabled');?>>
@@ -305,36 +307,32 @@
           <?=($user['options'][7]==1?'<button class="save" id="savecountry" data-dbid="country" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
         <label for="geo_weatherAPI">Open Weather API Key</label>
+        <?=($user['options'][7]==1?'<div class="form-text">Visit <a target="_blank" href="https://openweatermap.org/">Open Weather Map</a> for an API Key.</div>':'');?>
         <div class="form-row">
           <input class="textinput" id="geo_weatherAPI" data-dbid="1" data-dbt="config" data-dbc="geo_weatherAPI" type="text" value="<?=$config['geo_weatherAPI'];?>"<?=($user['options'][7]==1?' placeholder="Enter an API Key from Open Weather..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savegeo_weatherAPI" data-dbid="geo_weatherAPI" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <?php if($user['options'][7]==1){?>
-          <div class="form-row">
-            <small class="form-text text-right">Visit <a target="_blank" href="https://openweatermap.org/">Open Weather Map</a> for an API Key.</small>
-          </div>
-        <?php }?>
         <label for="mapapikey">Map Box API Key</label>
         <div class="form-row">
           <input class="textinput" id="mapapikey" data-dbid="1" data-dbt="config" data-dbc="mapapikey" type="text" value="<?=$config['mapapikey'];?>"<?=($user['options'][7]==1?' placeholder="Enter an API Key from Map Box..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savemapapikey" data-dbid="mapapikey" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <div class="col-12 mt-3">
+        <div class="col-12 mt-3 mb-2">
           <div class="form-row">
             <input id="prefMapDisplay" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="27" type="checkbox"<?=($config['options'][27]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-            <label class="p-0 mt-0 ml-3" for="prefMapDisplay">Enable Map Display</label>
+            <label for="prefMapDisplay">Enable Map Display</label>
           </div>
         </div>
         <?php if($config['mapapikey']==''){
           if($user['options'][7]==1){?>
-            <div class="col-12">
+            <div class="alert alert-info">
               There is currently no Map API Key entered above, to allow Maps to be displayed on pages.<br>
               Maps are displayed with the help of the Leaflet addon for it's ease of use.<br>
               To obtain an API Key to access Mapping, please register at <a href="https://account.mapbox.com/access-tokens/">Map Box</a>.
             </div>
           <?php }
         }else{
-          echo($user['options'][7]==1?'<div class="col-12"><div class="form-text">Drag the map marker to update your Location.</div></div>':'');?>
+          echo($user['options'][7]==1?'<div class="form-text">Drag the map marker to update your Location.</div>':'');?>
           <div class="col-12">
             <div class="row" style="height:600px;" id="map"></div>
           </div>

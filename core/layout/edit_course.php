@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -50,10 +50,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <label for="tab1-7">Students</label>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-              <div class="form-row">
-                <label for="title">Title</label>
-                <small class="form-text text-right">Course MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages.</small>
-              </div>
+              <label for="title">Title</label>
+              <div class="form-text">Course MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages.</div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
                 <?php if($user['options'][1]==1){
@@ -90,7 +88,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <label for="genurl">URL Slug</label>
               <div class="form-row">
                 <div class="input-text col-12">
-                  <a id="genurl" target="_blank" href="<?= URL.'course/'.$r['urlSlug'];?>"><?= URL.'course/'.$r['urlSlug'].' <i class="i">new-window</i>';?></a>
+                  <a id="genurl" target="_blank" href="<?= URL.'course/'.$r['urlSlug'];?>"><?= URL.'course/'.$r['urlSlug'];?></a>
                 </div>
               </div>
               <div class="row">
@@ -146,7 +144,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
               <div class="form-row mt-3">
                 <input data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label class="p-0 mt-0 ml-3" for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
+                <label for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
               </div>
               <div class="row">
                 <div class="col-12 col-sm">
@@ -190,19 +188,19 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <div class="row">
                   <div class="col-12 col-sm">
                     <label for="rating">Minimum Score to Pass</label>
+                    <div class="form-text">'0' Disables Minimum Score.</div>
                     <div class="form-row">
                       <input class="textinput" id="rating" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rating" type="number" value="<?=$r['rating'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Minimum Score to Pass this Course..."':' readonly';?>>
                       <?=$user['options'][1]==1?'<button class="save" id="saverating" data-dbid="rating" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
-                    <small class="form-text text-muted">'0' Disables Minimum Score.</small>
                   </div>
                   <div class="col-12 col-sm pl-sm-3">
                     <label for="attempts">Attempts Allowed to Pass Course</label>
+                    <div class="form-text">'0' Disables Attempts Allowed.</div>
                     <div class="form-row">
                       <input class="textinput" id="attempts" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attempts" type="text" value="<?=$r['attempts'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Number of Allowed Attempts..."':' readonly';?>>
                       <?=$user['options'][1]==1?'<button class="save" id="saveattempts" data-dbid="attempts" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
-                    <small class="form-text text-muted">'0' Disables Attempts Allowed.</small>
                   </div>
                 </div>
                 <div class="row mt-3">
@@ -259,7 +257,20 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     if(stristr($r['file'],'/lg/'))$w='lg';
                     if(stristr($r['file'],'/md/'))$w='md';
                     if(stristr($r['file'],'/sm/'))$w='sm';
-                    echo($r['file']!=''?'<a data-fancybox="course'.$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="Course: '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">').'<input class="textinput" id="file" type="text" value="'.$r['file'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="file"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`file`);"><i class="i">browse-media</i></button>'.($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=file" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editfile" data-image="'.$r['file'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="file"><i class="i">magic</i></button>':'').'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);"><i class="i">trash</i></button><button class="save" id="savefile" data-dbid="file" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                    echo($r['file']!=''?
+                      '<a data-fancybox="course'.$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="Course: '.$r['title'].'"></a>'
+                    :
+                      '<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">'
+                    ).
+                    '<input class="textinput" id="file" type="text" value="'.$r['file'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="file"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.
+                    ($user['options'][1]==1?
+                      '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`file`);"><i class="i">browse-media</i></button>'.
+                      ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=file" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
+                      ($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editfile" data-image="'.$r['file'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="file"><i class="i">magic</i></button>':'').
+                      '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);"><i class="i">trash</i></button>'.
+                      '<button class="save" id="savefile" data-dbid="file" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                    :
+                      '');?>
                   </div>
                   <div id="editfile"></div>
                   <label for="thumb">Thumbnail</label>
@@ -269,7 +280,19 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     if(stristr($r['thumb'],'/lg/'))$w='lg';
                     if(stristr($r['thumb'],'/md/'))$w='md';
                     if(stristr($r['thumb'],'/sm/'))$w='sm';
-                    echo($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">').'<input class="textinput" id="thumb" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="thumb" type="text" value="'.$r['thumb'].'"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`thumb`);"><i class="i">browse-media</i></button>'.($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=thumb" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Thumbnail Image" data-imageeditor="editthumb" data-image="'.$r['thumb'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="thumb"><i class="i">magic</i></button>':'').'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);"><i class="i">trash</i></button><button class="save" id="savethumb" data-dbid="thumb" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                    echo($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb']))?
+                      '<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>'
+                    :
+                      '<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">').
+                    '<input class="textinput" id="thumb" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="thumb" type="text" value="'.$r['thumb'].'"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.
+                    ($user['options'][1]==1?
+                      '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`thumb`);"><i class="i">browse-media</i></button>'.
+                      ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=thumb" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
+                      ($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Thumbnail Image" data-imageeditor="editthumb" data-image="'.$r['thumb'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="thumb"><i class="i">magic</i></button>':'').
+                      '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);"><i class="i">trash</i></button>'.
+                      '<button class="save" id="savethumb" data-dbid="thumb" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                    :
+                      '');?>
                   </div>
                   <div id="editthumb"></div>
                   <label for="fileALT">Image ALT</label>
@@ -305,7 +328,13 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                         <div id="mi_<?=$rm['id'];?>" class="card stats gallery col-12 col-sm-3 m-0 border-0">
                           <a data-fancybox="media" data-type="image" data-caption="<?=($rm['title']!=''?'Using Media Title: '.$rm['title']:'Using Course Title: '.$r['title']).($rm['fileALT']!=''?'<br>ALT: '.$rm['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>');?>" href="<?=$rm['file'];?>"><img src="<?=$thumb;?>" alt="Media <?=$rm['id'];?>"></a>
                           <div class="btn-group tools">
-                            <?='<div class="btn" data-tooltip="right" aria-label="'.$rm['views'].' views"><small>'.$rm['views'].'</small></div>'.($user['options'][1]==1?'<a href="'.URL.$settings['system']['admin'].'/media/edit/'.$rm['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a><button class="trash" onclick="purge(`'.$rm['id'].'`,`media`)" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button><div class="handle btn" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>':'');?>
+                            <?='<div class="btn" data-tooltip="right" aria-label="'.$rm['views'].' views"><small>'.$rm['views'].'</small></div>'.
+                            ($user['options'][1]==1?
+                              '<a href="'.URL.$settings['system']['admin'].'/media/edit/'.$rm['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
+                              '<button class="trash" onclick="purge(`'.$rm['id'].'`,`media`)" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+                              '<div class="handle btn" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>'
+                            :
+                              '');?>
                           </div>
                         </div>
                       <?php }
@@ -346,12 +375,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
               </div>
-              <div class="form-row mt-3">
-                <label for="metaRobots">Meta&nbsp;Robots</label>
-                <?php if($user['options'][1]==1){?>
-                  <small class="form-text text-right">Options for Meta Robots: <span data-tooltip="left" data-tooltip="tooltip" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></small>
-                <?php }?>
-              </div>
+              <label for="metaRobots">Meta Robots</label>
+              <?php if($user['options'][1]==1){?>
+                <div class="form-text">Options for Meta Robots: <span data-tooltip="left" data-tooltip="tooltip" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
+              <?php }?>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Robots.md" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><i class="i">seo</i></button>
                 <?php if($user['options'][1]==1){
@@ -374,10 +401,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <div id="google-link"><?= URL.'course/'.$r['urlSlug'];?></div>
                 <div id="google-description" data-tooltip="tooltip" aria-label="This is what shows up in the search results under your clickable link. This is quite important, and is the first piece of text your customers will read about your brand. If the Meta Description below is empty, the page Meta Description will be used, if that is empty a truncated version of your content text with the HTML tags removed will be used. If that is empty then the text is taken from the default text set in preferences."><?=($r['seoDescription']!=''?$r['seoDescription']:$config['seoDescription']);?></div>
               </div>
-              <div class="form-row mt-3">
-                <label for="seoTitle">Meta&nbsp;Title</label>
-                <small class="form-text text-right">The recommended character count for Title\'s is 65.</small>
-              </div>
+              <label for="seoTitle">Meta Title</label>
+              <div class="form-text">The recommended character count for Title\'s is 65.</div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
                 <?php $cntc=65-strlen($r['seoTitle']);
@@ -405,10 +430,8 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <input class="textinput d-none" id="seoTitle" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="seoTitle" type="text" value="<?=$r['seoTitle'];?>">
                 <?=($user['options'][1]==1?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=course&c=seoTitle" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button><button class="analyzeTitle" data-test="seoTitle" data-tooltip="tooltip" aria-label="Analyze Meta Title Text"><i class="i">seo</i></button><button class="save" id="saveseoTitle" data-dbid="seoTitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
               </div>
-              <div class="form-row mt-3">
-                <label for="seoDescription">Meta&nbsp;Description</label>
-                <small class="form-text text-right">The recommended character count for Descriptions is 230.</small>
-              </div>
+              <label for="seoDescription">Meta&nbsp;Description</label>
+              <div class="form-text">The recommended character count for Descriptions is 230.</div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Description.md" data-tooltip="tooltip" aria-label="SEO Meta Description Information"><i class="i">seo</i></button>
                 <?php $cntc=230-strlen($r['seoDescription']);

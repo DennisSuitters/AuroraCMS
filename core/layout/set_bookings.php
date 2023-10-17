@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -33,11 +33,11 @@
         </div>
         <div class="form-row">
           <input id="createEventInvoice" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="6" type="checkbox"<?=($config['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="createEventInvoice">Create Invoice when Event is Booked.</label>
+          <label for="createEventInvoice">Create Invoice when Event is Booked.</label>
         </div>
         <div class="form-row">
           <input id="createServiceInvoice" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="29" type="checkbox"<?=($config['options'][29]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="createServiceInvoice">Create Invoice when Service is Booked.</label>
+          <label for="createServiceInvoice">Create Invoice when Service is Booked.</label>
         </div>
         <label for="bookingBuffer">Buffer Time</label>
         <div class="form-row">
@@ -54,12 +54,12 @@
             <option value="86400"<?=$config['bookingBuffer']==86400?' selected':'';?>>24 Hours</option>
           </select>
         </div>
-        <div class="form-row mt-3">
+        <div class="form-row mt-3 mb-2">
           <input id="setArchiveBookings" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="25" type="checkbox"<?=($config['options'][25]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="setArchiveBookings">Archive Bookings when Converted to Invoice</label>
+          <label for="setArchiveBookings">Archive Bookings when Converted to Invoice</label>
         </div>
-        <legend class="mt-3">Booking Agreement Template</legend>
-        <div class="row">
+        <legend>Booking Agreement Template</legend>
+        <div class="row mt-1">
           <?php if($user['options'][7]==1){?>
             <form class="w-100" method="post" target="sp" action="core/update.php">
               <input name="id" type="hidden" value="1">
@@ -82,8 +82,8 @@
           <?php }?>
         </div>
         <hr>
-        <legend class="mt-3">Booking Notes Template</legend>
-        <div class="row">
+        <legend>Booking Notes Template</legend>
+        <div class="row mt-1">
           <?php if($user['options'][7]==1){?>
             <form class="w-100" method="post" target="sp" action="core/update.php">
               <input name="id" type="hidden" value="1">
@@ -106,30 +106,28 @@
           <?php }?>
         </div>
         <hr>
-        <legend class="mt-3">Email Layout</legend>
-        <div class="form-row">
+        <legend>Email Layout</legend>
+        <div class="form-row mt-2">
           <input id="setBookingReadReceipt" data-dbid="1" data-dbt="config" data-dbc="bookingEmailReadNotification" data-dbb="0" type="checkbox"<?=($config['bookingEmailReadNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="setBookingReadReceipt">Read Reciept</label>
+          <label for="setBookingReadReceipt">Read Reciept</label>
         </div>
-        <div id="bookingEmailSubject" class="form-row mt-3">
-          <label for="bookingEmailSubject">Subject</label>
-          <?php if($user['options'][7]==1){?>
-            <div class="form-text text-right">Tokens:
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{business}');return false;">{business}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{name}');return false;">{name}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{first}');return false;">{first}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{last}');return false;">{last}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{date}');return false;">{date}</a>
-            </div>
-          <?php }?>
-        </div>
+        <label for="bookingEmailSubject">Subject</label>
+        <?php if($user['options'][7]==1){?>
+          <div class="form-text">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{business}');return false;">{business}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('bES','{date}');return false;">{date}</a>
+          </div>
+        <?php }?>
         <div class="form-row">
           <input class="textinput" id="bES" data-dbid="1" data-dbt="config" data-dbc="bookingEmailSubject" type="text" value="<?=$config['bookingEmailSubject'];?>"<?=($user['options'][7]==1?' placeholder="Enter an Email Booking Subject..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savebES" data-dbid="bES" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
         </div>
-        <?php if($user['options'][7]==1){?>
-          <div id="bookingEmailLayout" class="form-row mt-3">
-            <div class="form-text text-right">Tokens:
+        <div class="row mt-3">
+          <?php if($user['options'][7]==1){?>
+            <div class="form-text">Tokens:
               <a class="badge badge-secondary" href="#" onclick="$('#bEL').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#bEL').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#bEL').summernote('insertText','{first}');return false;">{first}</a>
@@ -138,10 +136,6 @@
               <a class="badge badge-secondary" href="#" onclick="$('#bEL').summernote('insertText','{booking_date}');return false;">{booking_date}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#bEL').summernote('insertText','{service}');return false;">{service}</a>
             </div>
-          </div>
-        <?php }?>
-        <div class="row">
-          <?php if($user['options'][7]==1){?>
             <form class="w-100" method="post" target="sp" action="core/update.php">
               <input name="id" type="hidden" value="1">
               <input name="t" type="hidden" value="config">
@@ -163,19 +157,17 @@
           <?php }?>
         </div>
         <hr>
-        <legend class="mt-3">AutoReply Email</legend>
-        <div id="autoReplySubject" class="form-row">
-          <label for="bARSubject">Subject</label>
-          <?php if($user['options'][7]==1){?>
-            <div class="form-text text-right">Tokens:
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{business}');return false;">{business}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{name}');return false;">{name}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{first}');return false;">{first}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{last}');return false;">{last}</a>
-              <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{date}');return false;">{date}</a>
-            </div>
-          <?php }?>
-        </div>
+        <legend>AutoReply Email</legend>
+        <label for="bARSubject">Subject</label>
+        <?php if($user['options'][7]==1){?>
+          <div class="form-text">Tokens:
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{business}');return false;">{business}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{name}');return false;">{name}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{first}');return false;">{first}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{last}');return false;">{last}</a>
+            <a class="badge badge-secondary" href="#" onclick="insertAtCaret('aRS','{date}');return false;">{date}</a>
+          </div>
+        <?php }?>
         <div class="form-row">
           <input class="textinput" id="aRS" data-dbid="1" data-dbt="config" data-dbc="bookingAutoReplySubject" type="text" value="<?=$config['bookingAutoReplySubject'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Booking Auto Reply Subject..."':' disabled');?>>
           <?=($user['options'][7]==1?'<button class="save" id="savebaRS" data-dbid="aRS" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
@@ -186,9 +178,9 @@
           <?=($user['options'][7]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`1`,`config`,`bookingAttachment`);"><i class="i">browse-media</i></button>'.
           '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`1`,`config`,`bookingAttachment`,``);"><i class="i">trash</i></button>':'');?>
         </div>
-        <?php if($user['options'][7]==1){?>
-          <div id="bookingAutoReplyLayout" class="form-row mt-3">
-            <div class="form-text text-right">Tokens:
+        <div class="row mt-3">
+          <?php if($user['options'][7]==1){?>
+            <div class="form-text">Tokens:
               <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{business}');return false;">{business}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{name}');return false;">{name}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{first}');return false;">{first}</a>
@@ -199,10 +191,6 @@
               <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{event}');return false;">{event}</a>
               <a class="badge badge-secondary" href="#" onclick="$('#aRL').summernote('insertText','{externalLink}');return false;">{externalLink}</a>
             </div>
-          </div>
-        <?php }?>
-        <div class="row">
-          <?php if($user['options'][7]==1){?>
             <form class="w-100" method="post" target="sp" action="core/update.php">
               <input name="id" type="hidden" value="1">
               <input name="t" type="hidden" value="config">

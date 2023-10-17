@@ -1430,7 +1430,11 @@ dialog footer{
   width:100%;
   background-color:var(--alert-default-background-color);
   color:var(--alert-default-color);
-  border-width:var(--card-border-width) var(--card-border-style) var(--alert-default-border-color) }
+  border-width:var(--card-border-width) var(--card-border-style) var(--alert-default-border-color);
+  transform:rotate(0) }
+
+.kanban-item.dragging:active{
+  transform:rotate(3deg) }
 
 #overdue .kanban-item,
 #unconfirmed .kanban-item{
@@ -1498,7 +1502,14 @@ dialog footer{
   position:sticky;
   top:0;
   background-color:var(--card-background-color);
-  border-bottom: var(--card-border-width) var(--card-border-style) var(--card-border-color) }
+  border-bottom:var(--card-border-width) var(--card-border-style) var(--card-border-color) }
+
+.sticky-i10:has(~:nth-child(11)){
+  z-index:1;
+  position:sticky;
+  top:0;
+  background-color:var(--card-background-color);
+  border-bottom:var(--card-border-width) var(--card-border-style) var(--card-border-color) }
 
 .flag{
   display:inline-flex;

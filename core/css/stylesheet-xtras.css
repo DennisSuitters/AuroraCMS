@@ -505,15 +505,24 @@ nav.navigation ul li{
 nav.navigation ul li a{
   color:var(--menu-link-color) }
 
+
 nav.navigation ul li a:hover,
 nav.navigation ul li a:focus{
   color:var(--menu-link-color-hover) }
 
 nav.navigation ul li.active{
-  color:var(--menu-dropdown-color-active) }
+  color:var(--menu-link-color-active) }
 
 nav.navigation ul li.active a{
   color:var(--menu-link-color-active) }
+
+nav.navigation ul li ul li a{
+    color:var(--menu-dropdown-color) }
+
+nav.navigation ul li ul li a:hover,
+nav.navigation ul li ul li a:focus{
+  color:var(--menu-dropdown-color-hover) }
+
 
 .dropdown-header:empty{
   display:none!important }

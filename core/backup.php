@@ -99,7 +99,7 @@ if(file_exists('../media/backup/'.$file)){
   $q=$db->prepare("UPDATE `".$prefix."config` SET `backup_ti`=:backup_ti WHERE `id`='1'");
   $q->execute([':backup_ti'=>$ti]);
   echo'<script>'.
-		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-row mt-2">'.
+		'window.top.window.$("#backups").append(`<div id="l_'.$fileid.'" class="form-row mt-2 add-item">'.
 			'<a class="btn-block" href="media/backup/'.$file.'" role="button">Click to Download '.$file.'</a>'.
 			'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="removeBackup(\''.$fileid.'\',\''.$filename.'\');"><i class="i">trash</i></button>'.
 		'</div>`);'.

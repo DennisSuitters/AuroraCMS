@@ -519,7 +519,7 @@ s
 .list-images-2 .note-video-wrapper,
 .list-images-2 iframe {
   width:50%!important;
-  height:12rem }
+  height:8rem }
 
 .list-images-2 .note-video-wrapper,
 .list-images-2 iframe,
@@ -535,15 +535,10 @@ s
 .list-images-3 img,
 .list-images-3 .note-video-wrapper,
 .list-images-3 iframe {
-  width:50%;
-  height:6rem;
+  display:block;
+  width:33%;
+  height:10rem;
   padding:0 }
-
-.list-images-3 img:first-child,
-.list-images-3 .note-video-wrapper:first-child,
-.list-images-3 iframe:first-child {
-  width:100%;
-  height:6rem }
 
 .list-images-4 {
   display:grid;

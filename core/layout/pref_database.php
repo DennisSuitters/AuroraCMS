@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -38,8 +38,8 @@
           <form target="sp" method="post" action="core/backup.php" onsubmit="$('.page-block').addClass('d-block');">
             <div class="form-row">
               <label>Backup</label>
-              <?=($user['options'][7]==1?'<small class="form-text text-right">Note: Only the database is backed up.</small>':'');?>
             </div>
+            <?=($user['options'][7]==1?'<div class="form-text">Note: Only the database is backed up.</div>':'');?>
             <div class="form-row">
               <?=($user['options'][7]==1?'<button class="btn-block" type="submit">Perform Backup</button>':'');?>
             </div>
@@ -55,10 +55,8 @@
             <?php }?>
           </div>
           <?php if($user['options'][7]==1){?>
-            <div class="row mt-3">
-              <div class="col-12">
-                To restore a Database Backup, you will need to upload the .sql/.sql.gz file to PHPMyAdmin or other Database Configuration tool.
-              </div>
+            <div class="alert alert-info mt-3">
+              To restore a Database Backup, you will need to upload the .sql/.sql.gz file to PHPMyAdmin or other Database Configuration tool.
             </div>
           <?php }?>
 <?php /*

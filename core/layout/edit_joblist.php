@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -188,8 +188,8 @@ $rs=$sr->fetch(PDO::FETCH_ASSOC);?>
         </div>
         <hr>
         <?php if($config['bookingAgreement']!=''){?>
-          <div class="form-row">
-            <input id="agreementCheck" class="mr-3 mt-3" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="agreementCheck" data-dbb="0" type="checkbox"<?=$r['agreementCheck']==1?' checked aria-checked="true"':' aria-checked="fale"';?>>
+          <div class="form-row mt-3">
+            <input id="agreementCheck" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="agreementCheck" data-dbb="0" type="checkbox"<?=$r['agreementCheck']==1?' checked aria-checked="true"':' aria-checked="fale"';?>>
             <label for="agreementCheck"><?=$config['bookingAgreement'];?></label>
           </div>
         <?php }?>

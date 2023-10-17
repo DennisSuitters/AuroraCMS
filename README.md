@@ -2,7 +2,7 @@
 
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.26-6
+Current version is v0.2.26
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -21,8 +21,8 @@ Current version is v0.2.26-6
 - Business Hours Editor.
 - Content Scheduler with Auto Content Publishing.
 - Related Content, either Chosen or Category matched.
-- Recent Sale FOMO Notifications.
-  - Limit to Australian State area.
+- FOMO Notifications.
+  - Limit different content types to Australian State area.
 - Custom Pages.
 - Content Types with pages, and individual item pages.
   - Activities
@@ -41,6 +41,9 @@ Current version is v0.2.26-6
     - Quick View Option for Inventory.
     - Product Reviews and Approval before public display.
     - Assign Points to Items, that get added to user's Earned Points.
+    - Expenses per Inventory item.
+      - Add Expense items.
+      - Button when editing inventiry to help calculate sales price.
     - Restrict Wholesale Items to Wholesale Account per Level.
     - Sales Content.
       - Determines Sales periods to current date to suggest edits a month in advance for items older than 11 months in a Dashboard widget, for Valentine's Day, Easter, Mother's Day, Father's Day, Black Friday, Halloween, Small Business Day, and Christmas.

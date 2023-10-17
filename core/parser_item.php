@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -1055,7 +1055,7 @@ if($skip==false){
             }
           }
         }
-        if($go=true){
+        if($go==true){
           preg_match('/<related.*>([\w\W]*?)<\/related>/',$item,$matches);
           $related=$matches[1];
           preg_match('/<relitems>([\w\W]*?)<\/relitems>/',$related,$matches);

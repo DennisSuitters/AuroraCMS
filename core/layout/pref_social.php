@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -21,9 +21,9 @@
             <li class="breadcrumb-item active">Social Networking</li>
           </ol>
         </div>
-        <div class="form-row">
+        <div class="form-row mb-1">
           <input id="options9" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="9" type="checkbox"<?=($config['options'][9]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="options9" id="configoptions9">Show RSS Feed Icon</label>
+          <label for="options9" id="configoptions9">Show RSS Feed Icon</label>
         </div>
         <div class="sticky-top">
           <div class="row">

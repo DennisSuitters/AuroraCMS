@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.25
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -567,61 +567,61 @@ if($s->rowCount()>0){
 		    ':ip'=>$r['ip']
 		  ]);
 		}
-    echo'<tr class="small '.(isset($find)&&$find!=''?' findtracker':'').'" data-dbid="'.$r['id'].'" id="l_'.$r['id'].'" data-ip="'.$r['ip'].'">'.
-			'<td class="text-center align-middle">'.
-				$r['v'].'<br><small>'.date('D M d Y',$r['cti']).'<br>'.date('h:i:s A',$r['cti']).'</small>'.
-			'</td>'.
-			'<td class="text-center align-middle tracker-status">'.
-				($r['status']=='blacklisted'?'<span class="badger badge-dark">Blacklisted</span>':desiminateVisit($r['urlDest'])).
-			'</td>'.
-			'<td class="text-center align-middle">'.
-				($r['isp']!='Unkown'?deseminateReferer($r['isp']):'').deseminateReferer($r['urlFrom']).
-			'</td>'.
-			'<td class="text-center align-middle">'.
-				'<small>'._ago($r['cti']),'</small>'.($r['action']=='Visit Click'||$r['action']=='Call Click'?'<br><span class="badger badge-success">Called from Site</span>':'').
-			'</td>'.
-			'<td class="align-middle pt-2 text-wrap">'.
-				'<div class="mr-2 flag">'.
-					country2flag($r['countryCode']).
+    echo'<article class="card col-12 zebra m-0 p-0 border-0 overflow-visible card-list item shadow '.(isset($find)&&$find!=''?' findtracker':'').'" data-dbid="'.$r['id'].'" id="l_'.$r['id'].'" data-ip="'.$r['ip'].'">'.
+			'<div class="row">'.
+				'<div class="col-12 col-md-1 text-center small pt-3">'.
+					$r['v'].'<br><small>'.date('D M d Y',$r['cti']).'<br>'.date('h:i:s A',$r['cti']).'</small>'.
 				'</div>'.
-				'<div class="d-inline-block">'.
-					'<small>'.($r['countryName']==''?'Unresolved':$r['countryName']).' - <a target="_blank" href="https://dnschecker.org/ip-location.php?ip='.$r['ip'].'">'.$r['ip'].'</a></small>'.
-					($r['city']!=''?'<br><small>'.$r['city'].($r['city']!=''&&$r['region']!=''?' - ':'').$r['region'].'</small>':'<br>').
-					($r['isp']!='Unknown'?'<br><small>'.$r['isp'].'</small>':'').
+				'<div class="col-12 col-md-1 text-center tracker-status pt-3">'.
+					($r['status']=='blacklisted'?'<span class="badger badge-dark">Blacklisted</span>':desiminateVisit($r['urlDest'])).
 				'</div>'.
-			'</td>'.
-			'<td class="text-center align-middle">'.
-				'<div class="d-inline-block justify-content-center p-1 mr-1">'.
-					getOSIcon(strtolower($r['os'])).
+				'<div class="col-12 col-md-1 text-center small pt-3">'.
+					($r['isp']!='Unkown'?deseminateReferer($r['isp']):'').deseminateReferer($r['urlFrom']).
 				'</div>'.
-			'</td>'.
-			'<td class="text-center align-middle">'.
-				'<div class="d-inline-block justify-content-center p-1 ml-1">'.
-          getBrowserIcon(strtolower($r['browser'])).
+				'<div class="col-12 col-md-1 text-center pt-3">'.
+					'<small>'._ago($r['cti']),'</small>'.($r['action']=='Visit Click'||$r['action']=='Call Click'?'<br><span class="badger badge-success">Called from Site</span>':'').
 				'</div>'.
-			'</td>'.
-			'<td class="text-center align-middle">'.
-      	getDeviceIcon(strtolower($r['device']),$r['viewportwidth']).
-			'</td>'.
-			'<td class="align-middle">'.
-				'<div class="btn-group float-right">'.
+				'<div class="col-12 col-md pt-2 text-wrap">'.
+					'<div class="mr-3 flag">'.
+						country2flag($r['countryCode']).
+					'</div>'.
+					'<div class="d-inline-block">'.
+						'<small>'.($r['countryName']==''?'Unresolved':$r['countryName']).' - <a target="_blank" href="https://dnschecker.org/ip-location.php?ip='.$r['ip'].'">'.$r['ip'].'</a></small>'.
+						($r['city']!=''?'<br><small>'.$r['city'].($r['city']!=''&&$r['region']!=''?' - ':'').$r['region'].'</small>':'<br>').
+						($r['isp']!='Unknown'?'<br><small>'.$r['isp'].'</small>':'').
+					'</div>'.
+				'</div>'.
+				'<div class="col-12 col-md-1 pt-2 text-center">'.
+					'<div class="d-inline-block justify-content-center p-1 mr-1">'.
+						getOSIcon(strtolower($r['os'])).
+					'</div>'.
+				'</div>'.
+				'<div class="col-12 col-md-1 pt-2 text-center">'.
+					'<div class="d-inline-block justify-content-center p-1 ml-1">'.
+          	getBrowserIcon(strtolower($r['browser'])).
+					'</div>'.
+				'</div>'.
+				'<div class="col-12 col-md-1 pt-2 text-center">'.
+      		getDeviceIcon(strtolower($r['device']),$r['viewportwidth']).
+				'</div>'.
+				'<div class="col-12 col-md-2 text-right py-3 pr-2">'.
 					'<button data-fancybox data-type="ajax" data-src="core/layout/pathviewer.php?id='.$r['id'].'" data-tooltip="left" aria-label="View Visitor Path"><i class="i">seo-path</i></button>';
-if($config['php_options'][0]==1){
+					if($config['php_options'][0]==1){
 						echo'<a class="btn" target="_blank" href="https://www.projecthoneypot.org/ip_'.$r['ip'].'" role="button" data-tooltip="left" aria-label="Lookup IP using Project Honey Pot (Opens in New Page)"><i class="i">brand-projecthoneypot</i></a>';
-}
+					}
 					echo($r['status']!='blacklisted'?'<button class="btn" data-btnip="'.$r['ip'].'" data-tooltip="left" aria-label="Add to Blacklist" onclick="trackertoblacklist(`'.$r['ip'].'`);"><i class="i">blacklist-add</i></button>':'').
 					'<button class="trash" data-tooltip="left" aria-label="Remove all of this IP" onclick="purge(`'.$r['ip'].'`,`clearip`);"><i class="i">trash</i></button>'.
 				'</div>'.
-			'</td>'.
-		'</tr>';
+			'</div>'.
+		'</article>';
   }
 	if($cnt>19&&$b==''){
-    echo'<tr id="more_'.$c.'">'.
-          '<td colspan="9">'.
+    echo'<div class="row" id="more_'.$c.'">'.
+          '<div class="col-12">'.
             '<div class="form-row load-more justify-content-center">'.
               '<button class="btn-block btn-more" onclick="more(`tracker`,`'.$c.'`,`'.$b.'`);">More</button>'.
             '</div>'.
-          '</td>'.
-        '</tr>';
+          '</div>'.
+        '</div>';
 	}
 }else echo'nomore';

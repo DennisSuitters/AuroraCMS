@@ -208,7 +208,7 @@ form{
   margin-top:0 }
 
 legend{
-  margin-bottom:.5rem;
+  margin-bottom:0;
   padding:0;
   width:100%;
   font-size:calc(1.275rem + .3vw);
@@ -225,7 +225,7 @@ fieldset legend{
 
 label{
   display:inline-block;
-  margin:1rem 0 .5rem;
+  margin:1rem 0 .25rem;
   font-size:inherit;
   font-family:inherit }
 

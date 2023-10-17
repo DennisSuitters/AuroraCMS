@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -53,83 +53,75 @@
               </select>
             </div>
             <label for="showItems">Item Count</label>
-            <?=($user['options'][7]==1?'<small class="form-text text-muted">\'0\' to Disable and display all items.</small>':'');?>
+            <?=($user['options'][7]==1?'<div class="form-text">\'0\' to Disable and display all items. &lt;settings itemCount="[num/all]"&gt; overrides this setting.</div>':'');?>
             <div class="form-row">
               <input class="textinput" id="showItems" data-dbid="1" data-dbt="config" data-dbc="showItems" type="text" value="<?=$config['showItems'];?>"<?=($user['options'][7]==1?' placeholder="Enter Item Count..."':' disabled');?>>
               <?=($user['options'][7]==1?'<button class="save" id="saveshowItems" data-dbid="showItems" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
             </div>
             <label for="searchItems">Search Items Count</label>
-            <?=($user['options'][7]==1?'<small class="form-text text-muted">\'0\' to Default to 10 items.</small>':'');?>
+            <?=($user['options'][7]==1?'<div class="form-text">\'0\' to Default to 10 items.</div>':'');?>
             <div class="form-row">
               <input class="textinput" id="searchItems" data-dbid="1" data-dbt="config" data-dbc="searchItems" type="text" value="<?=$config['searchItems'];?>"<?=($user['options'][7]==1?' placeholder="Enter Search Items Count..."':' disabled');?>>
               <?=($user['options'][7]==1?'<button class="save" id="savesearchItems" data-dbid="searchItems" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
             </div>
             <hr>
             <legend>Related Content</legend>
-            <div class="form-row">
+            <div class="form-row mt-1">
               <input id="enableRelated" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="11" type="checkbox"<?=($config['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="enableRelated">Enable Related Content</label>
+              <label for="enableRelated">Enable Related Content</label>
             </div>
             <div class="form-row">
               <input id="displaySimilar" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="10" type="checkbox"<?=($config['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="displaySimilar">Display Similar Category if no Related Content items are selected</label>
+              <label for="displaySimilar">Display Similar Category if no Related Content items are selected</label>
             </div>
             <hr>
             <legend>Categories</legend>
-            <div class="form-row">
+            <div class="form-row mb-1">
               <input id="enableCategoryNavigation" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="31" type="checkbox"<?=($config['options'][31]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="enableCategoryNavigation">Category Navigation</label>
+              <label for="enableCategoryNavigation">Category Navigation</label>
             </div>
-            <?php if($user['options'][7]==1){?>
-              <form target="sp" method="post" action="core/add_category.php">
-                <div class="row">
-                  <div class="col-12 col-md-6">
-                    <label for="cat">Category</label>
-                    <div class="form-row">
-                      <input id="cat" name="cat" type="text" placeholder="Enter or Select a Category..." required aria-required="true">
-                    </div>
+            <div class="sticky-top">
+              <div class="row">
+                <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
+                  <div class="row">
+                    <div class="col-12 col-md pl-2">Category</div>
+                    <div class="col-12 col-md pl-2">Content Type</div>
+                    <div class="col-12 col-md-1 pl-2">Icon</div>
                   </div>
-                  <div class="col-12 col-md-5">
-                    <label for="ct">Content Type</label>
-                    <div class="form-row">
-                      <select id="ct" name="ct">
-                        <?php $sc=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
-                        $sc->execute();
-                        while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</option>';?>
-                      </select>
-                    </div>
+                </article>
+              </div>
+              <?php if($user['options'][7]==1){?>
+                <form class="row" target="sp" method="post" action="core/add_category.php">
+                  <div class="col-12 col-md">
+                    <input id="cat" name="cat" type="text" placeholder="Enter or Select a Category...">
+                  </div>
+                  <div class="col-12 col-md">
+                    <select id="ct" name="ct">
+                      <?php $sc=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
+                      $sc->execute();
+                      while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</option>';?>
+                    </select>
                   </div>
                   <div class="col-12 col-md-1">
-                    <label for="icon">Icon</label>
                     <div class="form-row">
                       <input id="icon" name="icon" type="hidden" value="" readonly>
                       <button onclick="elfinderDialog('1','category','icon');return false;" data-tooltip="tooltip" aria-label="Open Media Manager"><i class="i">browse-media</i></button>
                       <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
                     </div>
                   </div>
-                </div>
-              </form>
-            <?php }else{?>
-              <div class="row">
-                <div class="col-12 col-md-6"><label>Category</label></div>
-                <div class="col-12 col-md-5"><label>Content</label></div>
-                <div class="col-12 col-md-1">&nbsp;</div>
-              </div>
-            <?php }?>
+                </form>
+              <?php }?>
+            </div>
             <div id="category">
               <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `contentType` ASC,`title` ASC");
               $ss->execute();
               while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-                <div id="l_<?=$rs['id'];?>" class="row mt-1">
-                  <div class="col-12 col-md-6">
-                    <div class="form-row">
-                      <input type="text" value="<?=$rs['title'];?>" readonly>
-                    </div>
+                <div id="l_<?=$rs['id'];?>" class="row">
+                  <div class="col-12 col-md">
+                    <div class="input-text"><?=$rs['title'];?></div>
                   </div>
-                  <div class="col-12 col-md-5">
-                    <div class="form-row">
-                      <input type="text" value="<?=$rs['url'];?>" readonly>
-                    </div>
+                  <div class="col-12 col-md">
+                    <div class="input-text"><?=$rs['url'];?></div>
                   </div>
                   <div class="col-12 col-md-1">
                     <div class="form-row">
@@ -150,7 +142,7 @@
           <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
             <div class="form-row mt-3">
               <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=($config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="enableQuickView">Quick View for Products &amp; Gallery</label>
+              <label for="enableQuickView">Quick View for Products &amp; Gallery</label>
             </div>
             <label for="inventoryFallbackStatus">Fallback Status</label>
             <div class="form-row">
@@ -163,56 +155,43 @@
               </select>
             </div>
             <hr>
-            <legend class="mb-0">Brands</legend>
-            <?php if($user['options'][7]==1){?>
-              <form target="sp" method="post" action="core/add_brand.php">
-                <div class="row">
-                  <div class="col-12 col-md-6">
-                    <label dor="brandtitle">Brand</label>
-                    <div class="form-row">
-                      <input id="brandtitle" name="brandtitle" type="text" placeholder="Enter a Brand..." required aria-required="true">
-                    </div>
+            <legend>Brands</legend>
+            <div class="sticky-top">
+              <div class="row">
+                <article class="card py-1 overflow-visible card-list card-list-header shadow">
+                  <div class="row">
+                    <div class="col-12 col-md pl-2">Brand</div>
+                    <div class="col-12 col-md pl-2">URL</div>
                   </div>
-                  <div class="col-12 col-md-5">
-                    <label for="brandurl">URL</label>
-                    <div class="form-row">
-                      <input id="brandurl" name="brandurl" type="text" placeholder="Enter a URL...">
-                    </div>
+                </article>
+              </div>
+              <?php if($user['options'][7]==1){?>
+                <form class="row" target="sp" method="post" action="core/add_brand.php">
+                  <div class="col-12 col-md">
+                    <input id="brandtitle" name="brandtitle" type="text" placeholder="Enter a Brand...">
                   </div>
-                  <div class="col-12 col-md-1">
-                    <label for="brandicon">&nbsp;</label>
+                  <div class="col-12 col-md">
                     <div class="form-row">
+                      <input class="col-md" id="brandurl" name="brandurl" type="text" placeholder="Enter a URL...">
                       <input id="brandicon" name="brandicon" type="hidden" value="" readonly>
                       <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','brand','brandicon');return false;"><i class="i">browse-media</i></button>
                       <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
                     </div>
                   </div>
-                </div>
-              </form>
-            <?php }else{?>
-              <div class="row">
-                <div class="col-12 col-md-6"><label>Brand</label></div>
-                <div class="col-12 col-md-5"><label>URL</label></div>
-                <div class="col-12 col-md-1">&nbsp;</div>
-              </div>
-            <?php }?>
+                </form>
+              <?php }?>
+            </div>
             <div id="brand">
               <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='brand' ORDER BY `title` ASC");
               $ss->execute();
               while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
-                <div id="l_<?=$rs['id'];?>" class="row mt-1">
-                  <div class="col-12 col-md-6">
-                    <div class="form-row">
-                      <input id="title<?=$rs['id'];?>" type="text" value="<?=$rs['title'];?>" readonly>
-                    </div>
+                <div id="l_<?=$rs['id'];?>" class="row">
+                  <div class="col-12 col-md">
+                    <div class="input-text"><?=$rs['title'];?></div>
                   </div>
-                  <div class="col-12 col-md-5">
+                  <div class="col-12 col-md">
                     <div class="form-row">
-                      <input id="url<?=$rs['id'];?>" type="text" value="<?=$rs['url'];?>" readonly>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-1">
-                    <div class="form-row">
+                      <div class="input-text col-md"><?=$rs['url'];?></div>
                       <?php echo$rs['icon']!=''&&file_exists('media/'.basename($rs['icon']))?'<a href="'.$rs['icon'].'" data-fancybox="lightbox"><img src="'.$rs['icon'].'" alt="Thumbnail"></a>':'<img src="'.ADMINNOIMAGE.'" alt="No Image">';
                       if($user['options'][7]==1){?>
                         <form target="sp" action="core/purge.php">
@@ -230,7 +209,7 @@
             <legend>Sales Periods</legend>
             <div class="form-row mt-3">
               <input id="enableSalesPeriods" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?=($config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="enableSalesPeriods">Calculate Sales Periods</label>
+              <label for="enableSalesPeriods">Calculate Sales Periods</label>
             </div>
             <label for="saleHeadingvalentine">Valentine Sale Heading</label>
             <div class="form-row">
@@ -280,154 +259,120 @@
           </div>
 <? /* FOMO Notifications */?>
           <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
-            <legend>FOMO Notifications</legend>
-            <div class="row">
+            <legend class="mt-3">FOMO Notifications</legend>
+            <div class="row mt-2">
               <div class="col-12 col-md-4 pr-3">
                 <div class="form-row">
                   <input id="enablefomo" data-dbid="1" data-dbt="config" data-dbc="fomo" data-dbb="0" type="checkbox"<?=($config['fomo']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="enablefomo">Enable</label>
+                  <label for="enablefomo">Enable</label>
                 </div>
               </div>
               <div class="col-12 col-md-4 pr-3">
                 <div class="form-row">
                   <input id="fomoOptions7" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="7" type="checkbox"<?=($config['fomoOptions'][7]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions7">Show State</label>
+                  <label for="fomoOptions7">Show State</label>
                 </div>
               </div>
               <div class="col-12 col-md-4 pr-3">
                 <input id="fomoFullname" data-dbid="1" data-dbt="config" data-dbc="fomoFullname" data-dbb="0" type="checkbox"<?=($config['fomoFullname']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                <label class="p-0 mt-0 ml-3" for="fomoFullname">Show Full State Name</label>
+                <label for="fomoFullname">Show Full State Name</label>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-md-4 pr-3">
-                <label for="fomoState">State</label>
-                <div class="form-row">
-                  <select id="fomoState" data-dbid="1" data-dbt="config" data-dbc="fomoState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoState`,$(this).val(),`select`);update(`1`,`config`,`fomoArea`,`all`,`select`);fomoState($(this).val());"':' disabled';?>>
-                    <option value="All"<?=$config['fomoState']=='All'?' selected':'';?>>All</option>
-                    <option value="ACT"<?=$config['fomoState']=='ACT'?' selected':'';?>>ACT (Australian Capital Territory)</option>
-                    <option value="NSW"<?=$config['fomoState']=='NSW'?' selected':'';?>>NSW (New South Wales)</option>
-                    <option value="NT"<?=$config['fomoState']=='NT'?' selected':'';?>>NT (Northern Territory)</option>
-                    <option value="QLD"<?=$config['fomoState']=='QLD'?' selected':'';?>>QLD (Queensland)</option>
-                    <option value="SA"<?=$config['fomoState']=='SA'?' selected':'';?>>SA (South Australia)</option>
-                    <option value="TAS"<?=$config['fomoState']=='TAS'?' selected':'';?>>TAS (Tasmania)</option>
-                    <option value="VIC"<?=$config['fomoState']=='VIC'?' selected':'';?>>VIC (Victoria)</option>
-                    <option value="WA"<?=$config['fomoState']=='WA'?' selected':'';?>>WA (Western Australia)</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-12 col-md-4 pr-3">
-                <label for="fomoArea">Areas</label>
-                <div class="form-row">
-                  <select id="fomoArea" data-dbid="1" data-dbt="config" data-dbc="fomoArea"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoArea`,$(this).val(),`select`);"':' disabled';?>>
-                    <option value="All">All</option>
-                  </select>
-                </div>
-              </div>
-              <div class="col-12 col-md-4">
-                <label for="fomoPostcodeFrom">Limit to Postcodes</label>
-                <div class="form-row">
-                  <input class="textinput" id="fomoPostcodeFrom" data-dbid="1" data-dbt="config" data-dbc="fomoPostcodeFrom" type="text" value="<?=$config['fomoPostcodeFrom'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Postcode From Value..."':' disabled');?>>
-                  <?=($user['options'][7]==1?'<button class="save" id="savefomoPostcodeFrom" data-dbid="fomoPostcodeFrom" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                  <div class="input-text">to</div>
-                  <input class="textinput" id="fomoPostcodeTo" data-dbid="1" data-dbt="config" data-dbc="fomoPostcodeTo" type="text" value="<?=$config['fomoPostcodeTo'];?>"<?=($user['options'][7]==1?' placeholder="Enter a Postcode Value To..."':' disabled');?>>
-                  <?=($user['options'][7]==1?'<button class="save" id="savefomoPostcodeTo" data-dbid="fomoPostcodeTo" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                </div>
-              </div>
-              <div class="row">
-                <div class="card overflow-visible">
-                  <div id="locationsShow" class="col-12 p-3 d-none"></div>
-                  <div class="col-12">
-                    <div class="row p-3">
-                      <button class="btn" data-tooltip="bottom" aria-label="Show/Hide Areas"  onclick="editLocations($('#fomoState').val(),$('#fomoArea').val());"><i class="i fomoarrow">down</i><i class="i fomoarrow d-none">up</i></button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <script>
-                function fomoState(s){
-                  var d=['All'];
-                  <?php $sp=$db->prepare("SELECT DISTINCT(`state`) FROM `".$prefix."locations` ORDER BY `state` ASC");
-                  $sp->execute();
-                  while($rp=$sp->fetch(PDO::FETCH_ASSOC)){?>
-                    if(s=='<?=$rp['state'];?>'){
-                      var d=[
-                        "All",
-                        <?php $sr=$db->prepare("SELECT DISTINCT(`area`) FROM `".$prefix."locations` WHERE `state`=:state ORDER BY `area` ASC");
-                        $sr->execute([':state'=>$rp['state']]);
-                        while($rr=$sr->fetch(PDO::FETCH_ASSOC)){
-                          echo($rr['area']!=''?'"'.$rr['area'].'",':'');
-                        }?>
-                      ];
-                    }
-                  <?php }?>
-                  var option='';
-                  for(var i=0;i<d.length;i++){
-                    option+='<option value="'+d[i]+'">'+d[i]+'</option>';
-                  }
-                  $('#fomoArea').empty();
-                  $('#fomoArea').append(option);
-                }
-                fomoState('<?=$config['fomoState'];?>');
-                $(`#fomoArea option[value="<?=$config['fomoArea'];?>"]`).prop("selected",true);
-                function editLocations(s,a){
-                  if($("#locationsShow").hasClass("d-none")){
-                    $('#locationsShow').html('<div class="row"><div class="col-12 text-center"><i class="i i-spin">spinner</i></div></div>');
-                    $("#locationsShow").removeClass('d-none');
-                    fetch('core/edit_postcodes.php',{
-                      method:"POST",
-                      headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
-                      body:'st='+s+'&s='+a+'&pcf='+$(`#fomoPostcodeFrom`).val()+'&pct='+$(`#fomoPostcodeTo`).val()
-                    }).then(function(response){
-                      return response.text();
-                    }).then(function(r){
-                      $('#locationsShow').html(r);
-                      $(".fomoarrow").toggleClass('d-none');
-                    });
-                  }else{
-                    $("#locationsShow").addClass('d-none');
-                    $('#locationsShow').empty();
-                    $(".fomoarrow").toggleClass('d-none');
-                  }
-                }
-              </script>
-            </div>
-            <div class="row mt-3">
               <label>Display FOMO Content Types</label>
-              <div class="col-6 col-md-2 pr-3">
+              <div class="col-12 col-md-6 pr-3">
                 <div class="form-row">
-                  <input id="fomoOptions0" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="0" type="checkbox"<?=($config['fomoOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions0">Activities</label>
+                  <div class="input-text col-4">Activities</div>
+                  <select id="fomoActivitiesState" data-dbid="1" data-dbt="config" data-dbc="fomoActivitiesState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoActivitiesState`,$(this).val(),`select`);"':' disabled';?>>
+                    <option value=""<?=$config['fomoActivitiesState']==''?' selected':'';?>>Disabled</option>
+                    <option value="All"<?=$config['fomoActivitiesState']=='All'?' selected':'';?>>All</option>
+                    <option value="ACT"<?=$config['fomoActivitiesState']=='ACT'?' selected':'';?>>ACT (Australian Capital Territory)</option>
+                    <option value="NSW"<?=$config['fomoActivitiesState']=='NSW'?' selected':'';?>>NSW (New South Wales)</option>
+                    <option value="NT"<?=$config['fomoActivitiesState']=='NT'?' selected':'';?>>NT (Northern Territory)</option>
+                    <option value="QLD"<?=$config['fomoActivitiesState']=='QLD'?' selected':'';?>>QLD (Queensland)</option>
+                    <option value="SA"<?=$config['fomoActivitiesState']=='SA'?' selected':'';?>>SA (South Australia)</option>
+                    <option value="TAS"<?=$config['fomoActivitiesState']=='TAS'?' selected':'';?>>TAS (Tasmania)</option>
+                    <option value="VIC"<?=$config['fomoActivitiesState']=='VIC'?' selected':'';?>>VIC (Victoria)</option>
+                    <option value="WA"<?=$config['fomoActivitiesState']=='WA'?' selected':'';?>>WA (Western Australia)</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-6 col-md-2 pr-3">
+
+              <div class="col-12 col-md-6">
                 <div class="form-row">
-                  <input id="fomoOptions1" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="1" type="checkbox"<?=($config['fomoOptions'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions1">Courses</label>
+                  <div class="input-text col-4">Courses</div>
+                  <select id="fomoCoursesState" data-dbid="1" data-dbt="config" data-dbc="fomoCoursesState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoCoursesState`,$(this).val(),`select`);"':' disabled';?>>
+                    <option value=""<?=$config['fomoCoursesState']==''?' selected':'';?>>Disabled</option>
+                    <option value="All"<?=$config['fomoCoursesState']=='All'?' selected':'';?>>All</option>
+                    <option value="ACT"<?=$config['fomoCoursesState']=='ACT'?' selected':'';?>>ACT (Australian Capital Territory)</option>
+                    <option value="NSW"<?=$config['fomoCoursesState']=='NSW'?' selected':'';?>>NSW (New South Wales)</option>
+                    <option value="NT"<?=$config['fomoCoursesState']=='NT'?' selected':'';?>>NT (Northern Territory)</option>
+                    <option value="QLD"<?=$config['fomoCoursesState']=='QLD'?' selected':'';?>>QLD (Queensland)</option>
+                    <option value="SA"<?=$config['fomoCoursesState']=='SA'?' selected':'';?>>SA (South Australia)</option>
+                    <option value="TAS"<?=$config['fomoCoursesState']=='TAS'?' selected':'';?>>TAS (Tasmania)</option>
+                    <option value="VIC"<?=$config['fomoCoursesState']=='VIC'?' selected':'';?>>VIC (Victoria)</option>
+                    <option value="WA"<?=$config['fomoCoursesState']=='WA'?' selected':'';?>>WA (Western Australia)</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-6 col-md-2 pr-3">
+              <div class="col-12 col-md-6 pr-3">
                 <div class="form-row">
-                  <input id="fomoOptions2" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="2" type="checkbox"<?=($config['fomoOptions'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions2">Events</label>
+                  <div class="input-text col-4">Events</div>
+                  <select id="fomoEventsState" data-dbid="1" data-dbt="config" data-dbc="fomoEventsState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoEventsState`,$(this).val(),`select`);"':' disabled';?>>
+                    <option value=""<?=$config['fomoEventsState']==''?' selected':'';?>>Disabled</option>
+                    <option value="All"<?=$config['fomoEventsState']=='All'?' selected':'';?>>All</option>
+                    <option value="ACT"<?=$config['fomoEventsState']=='ACT'?' selected':'';?>>Australian Capital Territory</option>
+                    <option value="NSW"<?=$config['fomoEventsState']=='NSW'?' selected':'';?>>New South Wales</option>
+                    <option value="NT"<?=$config['fomoEventsState']=='NT'?' selected':'';?>>Northern Territory</option>
+                    <option value="QLD"<?=$config['fomoEventsState']=='QLD'?' selected':'';?>>Queensland</option>
+                    <option value="SA"<?=$config['fomoEventsState']=='SA'?' selected':'';?>>South Australia</option>
+                    <option value="TAS"<?=$config['fomoEventsState']=='TAS'?' selected':'';?>>Tasmania</option>
+                    <option value="VIC"<?=$config['fomoEventsState']=='VIC'?' selected':'';?>>Victoria</option>
+                    <option value="WA"<?=$config['fomoEventsState']=='WA'?' selected':'';?>>Western Australia</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-6 col-md-2 pr-3">
+              <div class="col-12 col-md-6">
                 <div class="form-row">
-                  <input id="fomoOptions3" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="3" type="checkbox"<?=($config['fomoOptions'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions3">Inventory</label>
+                  <div class="input-text col-4">Inventory</div>
+                  <select id="fomoInventoryState" data-dbid="1" data-dbt="config" data-dbc="fomoInventoryState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoInventoryState`,$(this).val(),`select`);"':' disabled';?>>
+                    <option value=""<?=$config['fomoInventoryState']==''?' selected':'';?>>Disabled</option>
+                    <option value="All"<?=$config['fomoInventoryState']=='All'?' selected':'';?>>All</option>
+                    <option value="ACT"<?=$config['fomoInventoryState']=='ACT'?' selected':'';?>>Australian Capital Territory</option>
+                    <option value="NSW"<?=$config['fomoInventoryState']=='NSW'?' selected':'';?>>New South Wales</option>
+                    <option value="NT"<?=$config['fomoInventoryState']=='NT'?' selected':'';?>>Northern Territory</option>
+                    <option value="QLD"<?=$config['fomoInventoryState']=='QLD'?' selected':'';?>>Queensland</option>
+                    <option value="SA"<?=$config['fomoInventoryState']=='SA'?' selected':'';?>>South Australia</option>
+                    <option value="TAS"<?=$config['fomoInventoryState']=='TAS'?' selected':'';?>>Tasmania</option>
+                    <option value="VIC"<?=$config['fomoInventoryState']=='VIC'?' selected':'';?>>Victoria</option>
+                    <option value="WA"<?=$config['fomoInventoryState']=='WA'?' selected':'';?>>Western Australia</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-6 col-md-2 pr-3">
+              <div class="col-12 col-md-6 pr-3">
                 <div class="form-row">
-                  <input id="fomoOptions4" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="4" type="checkbox"<?=($config['fomoOptions'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions4">Services</label>
+                  <div class="input-text col-4">Services</div>
+                  <select id="fomoServicesState" data-dbid="1" data-dbt="config" data-dbc="fomoServicesState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoServicesState`,$(this).val(),`select`);"':' disabled';?>>
+                    <option value=""<?=$config['fomoServicesState']==''?' selected':'';?>>Disabled</option>
+                    <option value="All"<?=$config['fomoServicesState']=='All'?' selected':'';?>>All</option>
+                    <option value="ACT"<?=$config['fomoServicesState']=='ACT'?' selected':'';?>>Australian Capital Territory</option>
+                    <option value="NSW"<?=$config['fomoServicesState']=='NSW'?' selected':'';?>>New South Wales</option>
+                    <option value="NT"<?=$config['fomoServicesState']=='NT'?' selected':'';?>>Northern Territory</option>
+                    <option value="QLD"<?=$config['fomoServicesState']=='QLD'?' selected':'';?>>Queensland</option>
+                    <option value="SA"<?=$config['fomoServicesState']=='SA'?' selected':'';?>>South Australia</option>
+                    <option value="TAS"<?=$config['fomoServicesState']=='TAS'?' selected':'';?>>Tasmania</option>
+                    <option value="VIC"<?=$config['fomoServicesState']=='VIC'?' selected':'';?>>Victoria</option>
+                    <option value="WA"<?=$config['fomoServicesState']=='WA'?' selected':'';?>>Western Australia</option>
+                  </select>
                 </div>
               </div>
-              <div class="col-6 col-md-2 pr-3">
+              <div class="col-12 col-md-6">
                 <div class="form-row">
-                  <input id="fomoOptions5" data-dbid="1" data-dbt="config" data-dbc="fomoOptions" data-dbb="5" type="checkbox"<?=($config['fomoOptions'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="fomoOptions5">Testimonials</label>
+                  <div class="input-text col-4">Testimonials</div>
+                  <select id="fomoTestimonialsState" data-dbid="1" data-dbt="config" data-dbc="fomoTestimonialsState"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`fomoTestimonialsState`,$(this).val(),`select`);"':' disabled';?>>
+                    <option value=""<?=$config['fomoTestimonialsState']=='none'?' selected':'';?>>Disabled</option>
+                    <option value="enabled"<?=$config['fomoTestimonialsState']=='enabled'?' selected':'';?>>Enabled</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -491,16 +436,66 @@
                 </div>
               </div>
             </div>
+            <div class="row mt-3">
+              <div class="col-12">
+                <label for="fomoState">Edit State Locations</label>
+                <div class="form-row">
+                  <select id="fomoState" data-dbid="1" data-dbt="config" data-dbc="fomoState"<?=$user['options'][7]==1?'':' disabled';?>>
+                    <option value="All">All</option>
+                    <option value="ACT">ACT (Australian Capital Territory)</option>
+                    <option value="NSW">NSW (New South Wales)</option>
+                    <option value="NT">NT (Northern Territory)</option>
+                    <option value="QLD">QLD (Queensland)</option>
+                    <option value="SA">SA (South Australia)</option>
+                    <option value="TAS">TAS (Tasmania)</option>
+                    <option value="VIC">VIC (Victoria)</option>
+                    <option value="WA">WA (Western Australia)</option>
+                  </select>
+                </div>
+              </div>
+              <div class="row">
+                <div class="card overflow-visible">
+                  <div id="locationsShow" class="col-12 p-3 d-none"></div>
+                  <div class="col-12">
+                    <div class="row p-3">
+                      <button class="btn" data-tooltip="bottom" aria-label="Show/Hide Areas"  onclick="editLocations($('#fomoState').val());"><i class="i fomoarrow">down</i><i class="i fomoarrow d-none">up</i></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script>
+                function editLocations(s,a){
+                  if($("#locationsShow").hasClass("d-none")){
+                    $('#locationsShow').html('<div class="row"><div class="col-12 text-center"><i class="i i-spin">spinner</i></div></div>');
+                    $("#locationsShow").removeClass('d-none');
+                    fetch('core/edit_postcodes.php',{
+                      method:"POST",
+                      headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
+                      body:'st='+s
+                    }).then(function(response){
+                      return response.text();
+                    }).then(function(r){
+                      $('#locationsShow').html(r);
+                      $(".fomoarrow").toggleClass('d-none');
+                    });
+                  }else{
+                    $("#locationsShow").addClass('d-none');
+                    $('#locationsShow').empty();
+                    $(".fomoarrow").toggleClass('d-none');
+                  }
+                }
+              </script>
+            </div>
           </div>
 <?php /* Templates */ ?>
           <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
-            <label class="mt-3" for="templateQTY">Item Template Quantity</label>
-            <?=($user['options'][7]==1?'<small class="form-text text-muted">\'0\' to Disable.</small>':'');?>
+            <label for="templateQTY" class="mt-3">Item Template Quantity</label>
+            <?=($user['options'][7]==1?'<div class="form-text">\'0\' to Disable.</div>':'');?>
             <div class="form-row">
               <input class="textinput" id="templateQTY" data-dbid="1" data-dbt="config" data-dbc="templateQTY" type="text" value="<?=$config['templateQTY'];?>"<?=($user['options'][7]==1?' placeholder="Enter Template Item Quantity..."':' disabled');?>>
               <?=($user['options'][7]==1?'<button class="save" id="savetemplateQTY" data-dbid="templateQTY" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
             </div>
-            <section class="content overflow-visible theme-chooser mt-5" id="templates">
+            <section class="content overflow-visible theme-chooser mt-3" id="templates">
               <article class="card col-6 col-sm-2 m-1 m-sm-2 overflow-visible theme<?=$config['templateID']==0?' theme-selected':'';?>" id="l_0" data-template="0">
                 <figure class="card-image">
                   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none"></svg>

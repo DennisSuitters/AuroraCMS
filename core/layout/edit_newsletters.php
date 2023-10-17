@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,7 +18,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
       <div class="row">
-        <div class="card col-12 col-sm m-4 mt-3 bg-transparent border-0 overflow-visible order-2 order-sm-1">
+        <div class="card col-12 col-sm mt-3 bg-transparent border-0 overflow-visible order-2 order-sm-1">
           <div class="card-actions">
             <div class="row">
               <div class="col-12 col-sm">
@@ -88,16 +88,11 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <option value="delete"<?=$r['status']=='delete'?' selected':'';?>>Delete</option>
             </select>
           </div>
-          <?php if($user['options'][1]==1){?>
-            <div class="form-row mt-3">
-              <small class="form-text text-right">Tokens:
-                <a class="badge badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{name}');return false;">{name}</a>
-              </small>
-            </div>
-          <?php }?>
           <div class="row mt-3">
-            <?=$user['rank']>899?'<a class="permalink" href="'.URL.$settings['system']['admin'].'/newsletters/edit/'.$r['id'].'#summernote" data-tooltip="tooltip" aria-label="PermaLink to Newsletter Content Field">&#128279;</a>':'';?>
             <?php if($user['options'][1]==1){?>
+              <div class="form-text">Tokens:
+                <a class="badge badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{name}');return false;">{name}</a>
+              </div>
               <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
               <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -120,15 +115,6 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <?php }?>
           </div>
         </div>
-        <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='content' AND `active`='1' ORDER BY ord ASC");
-        $sw->execute();
-        if($sw->rowCount()>0){
-          echo'<div id="widgets" class="card col-12 col-sm-3 m-0 p-0 bg-transparent border-0 order-1 order-sm-2">';
-            while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
-              include'core/layout/widget-'.$rw['file'];
-            }
-          echo'</div>';
-        }?>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

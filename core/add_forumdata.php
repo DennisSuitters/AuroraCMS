@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -57,7 +57,7 @@ if($act=='category'){
 		':id'=>$id,
 		':ord'=>$id
 	]);
-	$html='<div id="cats_'.$id.'" class="item row mb-3 border-1 bg-white">'.
+	$html='<div id="cats_'.$id.'" class="item row mb-3 border-1 bg-white add-item">'.
 		'<div class="card col-12 border-0">'.
 			'<div class="form-row">'.
 				'<form class="d-inline-flex" target="sp" method="post" action="core/update.php">'.
@@ -141,7 +141,7 @@ if($act=='topic'){
 		':id'=>$id,
 		':ord'=>$id
 	]);
-	$html='<div id="topic_'.$id.'" class="item row mt-3 bg-white">'.
+	$html='<div id="topic_'.$id.'" class="item row mt-3 bg-white add-item">'.
     '<div class="card col-12">'.
 			'<div class="form-row">'.
 				'<form class="d-inline-flex" target="sp" method="post" action="core/update.php">'.

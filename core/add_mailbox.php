@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,25 +34,33 @@ if($port!=''&&$url!=''&&$mailusr!=''&&$mailpwd!=''){
 		':password'=>$mailpwd
 	]);
   $id=$db->lastInsertId();
-	echo'<script>'.'
-				window.top.window.$("#mailboxes").append(`<div id="l'.$id.'" class="form-row mt-1">'.
-					'<div class="input-text">Type</div>'.
-					'<input type="text" value="'.strtoupper($type).'" readonly>'.
-					'<div class="input-text">Port</div>'.
-					'<input type="text" value="'.$port.'" readonly>'.
-					'<div class="input-text">Flag</div>'.
-					'<input type="text" value="'.$flag.'" readonly>'.
-					'<div class="input-text">Server</div>'.
-					'<input type="text" value="'.$url.'" readonly>'.
-					'<div class="input-text">Username</div>'.
-					'<input type="text" value="'.$mailusr.'" readonly>'.
-					'<div class="input-text">Password</div>'.
-					'<input type="text" value="'.$mailpwd.'" readonly>'.
-					'<form target="sp" action="core/purge.php">'.
-						'<input type="hidden" name="id" value="'.$id.'">'.
-						'<input type="hidden" name="t" value="choices">'.
-						'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
-					'</form>'.
-				'</div>`);'.
-			'</script>';
+	echo'<script>'.
+        'window.top.window.$("#mailboxes").append(`<div id="l'.$id.'" class="row add-item">'.
+          '<div class="col-12 col-md">'.
+            '<input type="text" value="'.strtoupper($type).'" readonly>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<input type="text" value="'.$port.'" readonly>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<input type="text" value="'.$flag.'" readonly>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<input type="text" value="'.$url.'" readonly>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<input type="text" value="'.$mailusr.'" readonly>'.
+          '</div>'.
+          '<div class="col-12 col-md">'.
+            '<div class="form-row">'.
+              '<input type="text" value="'.$mailpwd.'" readonly>'.
+              '<form target="sp" action="core/purge.php">'.
+                '<input type="hidden" name="id" value="'.$id.'">'.
+                '<input type="hidden" name="t" value="choices">'.
+                '<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+              '</form>'.
+            '</div>'.
+          '</div>'.
+        '</div>`);'.
+      '</script>';
 }else echo'<script>window.top.window.toastr["error"]("Not all fields were entered!");</script>';

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,11 +33,11 @@ else{?>
           </div>
           <div class="row chat">
             <input id="chatactive" type="hidden" value="0">
-            <div class="col-12 col-md-4 pr-3">
-              <div class="form-row mb-3">
+            <div class="col-12 col-md-4">
+              <div class="row">
                 <input id="filter-input" type="text" value="" placeholder="Search for People, Email..." onkeyup="filterTextInput2();">
               </div>
-              <div id="chatList" class="chatList card overflow-visible">
+              <div id="chatList" class="chatList card border border-right-0 overflow-visible" style="height:58vh;">
               <?php $s=$db->prepare("SELECT * FROM `".$prefix."livechat` WHERE `who`!='admin' GROUP BY `sid` ORDER BY `ti` ASC");
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){?>

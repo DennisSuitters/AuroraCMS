@@ -1,4 +1,4 @@
-### v0.2.26-6
+### v0.2.26
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.
@@ -24,6 +24,15 @@
 - Remove AuroraCMS Branding from Login and Installation pages.
 - Change AuroraCMS Branding in Administration to help with top bar layout on smaller devices.
 - Fix Weather Administration Widget check for valid Open Weather API Key.
+- Fix Forum Errors.
+- Remove Emoji Images to prepare for future integration of Entity Emojis to reduce CMS footprint.
+- Fix Item Count parsing not working correctly with theme set values.
+- Fix typo in core/view/bookings.php from throwing error.
+- Add ability to toggle active status of Business Hours editing.
+- Fix left side content menu from displaying if zero items should appear.
+- Fix Related Items from displaying if no related items exist.
+- Add AHref's Site Verification.
+- Improve responsive of Administation Layout.
 
 #### v0.2.25
 - Fix itemCount settings for Testimonials where '0' to disable count & show all was failing.

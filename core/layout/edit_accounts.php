@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -110,7 +110,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   <input class="textinput" id="purchaseLimit" type="number" value="<?=$r['purchaseLimit'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseLimit"<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savepurchaseLimit" data-dbid="purchaseLimit" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
-                <small class="form-text">(Set to "0" or no value to use default for this account level, currently allowed to purchase <?=$purchaseLimit;?> items.)</small>
+                <div class="form-text">(Set to "0" or no value to use default for this account level, currently allowed to purchase <?=$purchaseLimit;?> items.)</div>
               </div>
               <div class="col-12 col-sm-6">
                 <label for="purchaseTime">Wholesale Purchase Time</label>
@@ -266,7 +266,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="form-row mt-3">
               <input data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
+              <label id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
             </div>
             <label for="caption">Caption</label>
             <div class="form-row">
@@ -288,8 +288,8 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="form-row mt-3">
               <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="accountsContact">Accounts Contact</label>
-              <small class="help-text">Set this to indicate Accounts that belong to the Accounts Payable Person</small>
+              <label for="accountsContact">Accounts&nbsp;Contact</label>
+              <div class="form-text ml-2 mt-1">Set this to indicate Accounts that belong to the Accounts Payable Person</div>
             </div>
           </div>
 <?php /* Tab 3 Media */ ?>
@@ -308,11 +308,11 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </form>
             <label for="gravatar">Gravatar</label>
+            <div class="form-text"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
             <div class="form-row">
               <input class="textinput" id="gravatar" type="text" value="<?=$r['gravatar'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="gravatar" placeholder="Enter a Gravatar Link..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savegravatar" data-dbid="gravatar" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <div class="form-text small text-muted text-right"><a target="_blank" href="http://www.gravatar.com/">Gravatar</a> link will override any image uploaded as your Avatar.</div>
           </div>
 <?php /* Tab 4 Proofs */ ?>
           <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
@@ -375,10 +375,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <div class="tab1-5 border" data-tabid="tab1-5" role="tabpanel">
             <div class="sticky-top">
               <div class="row">
-                <article class="card mb-0 p-0 overflow-visible card-list card-list-header bg-white shadow">
+                <article class="card mb-0 p-0 py-2 overflow-visible card-list card-list-header bg-white shadow">
                   <div class="row">
-                    <div class="col-12 col-md-3 align-middle pl-2 py-1">Social Network</div>
-                    <div class="col-12 col-md-9 align-middle pl-2 py-1">URL</div>
+                    <div class="col-12 col-md-3 pl-2">Social Network</div>
+                    <div class="col-12 col-md-9 pl-2">URL</div>
                   </div>
                 </article>
               </div>
@@ -510,7 +510,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <?php if($user['options'][4]==1){?>
             <div class="tab1-7 border" data-tabid="tab1-7" role="tabpanel">
               <div class="row sticky-top">
-                <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
+                <article class="card mb-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
                   <div class="row">
                     <div class="col-12 col-md text-center">Order Number</div>
                     <div class="col-12 col-md text-center">Date</div>
@@ -534,11 +534,9 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                     <div class="col-md pt-2 text-center">
                       <span class="badger badge-<?=$ro['status'];?> badge-2x"><?= ucfirst($ro['status']);?></span>
                     </div>
-                    <div class="col-md">
-                      <div id="controls_<?=$ro['id'];?>" class="justify-content-end">
-                        <div class="btn-group float-right" role="group">
-                          <?='<button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=print`);"><i class="i">print</i></button>'.(isset($r['email'])&&$r['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=`);"><i class="i">email-send</i></button>':'').'<a class="rounded-right '.($ro['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit Order"><i class="i">edit</i></a><button class="add'.($ro['status']!='delete'?' d-none':'').'" id="untrash'.$ro['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,``);"><i class="i">untrash</i></button><button class="trash'.($ro['status']=='delete'?' d-none':'').'" id="delete'.$ro['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($ro['status']!='delete'?' d-none':'').'" id="purge'.$ro['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$ro['id'].'`,`orders`);"><i class="i">purge</i></button><button class="quickeditbtn" data-qeid="'.$ro['id'].'" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>';?>
-                        </div>
+                    <div class="col-md text-right">
+                      <div class="btn-group" role="group">
+                        <?='<button class="btn print" data-tooltip="tooltip" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=print`);"><i class="i">print</i></button>'.(isset($r['email'])&&$r['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$ro['id'].'&act=`);"><i class="i">email-send</i></button>':'').'<a class="rounded-right '.($ro['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit Order"><i class="i">edit</i></a><button class="add'.($ro['status']!='delete'?' d-none':'').'" id="untrash'.$ro['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,``);"><i class="i">untrash</i></button><button class="trash'.($ro['status']=='delete'?' d-none':'').'" id="delete'.$ro['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$ro['id'].'`,`orders`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($ro['status']!='delete'?' d-none':'').'" id="purge'.$ro['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$ro['id'].'`,`orders`);"><i class="i">purge</i></button><button class="quickeditbtn" data-qeid="'.$ro['id'].'" data-qet="orders" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>';?>
                       </div>
                     </div>
                   </article>
@@ -578,7 +576,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <?php }?>
             <div class="form-row mt-3">
               <input id="active" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="active" data-dbb="0" type="checkbox"<?=($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="active">Active</label>
+              <label for="active">Active</label>
             </div>
             <label for="rank">Rank</label>
             <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="rank"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','rank',$(this).val(),'select');">
@@ -607,59 +605,59 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             <legend>Account Permissions</legend>
             <div class="form-row mt-3">
               <input id="wholesalerAccepted" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="19" type="checkbox"<?=($r['options'][19]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="wholesalerAccepted">Wholesaler Accepted to Purchase</label>
+              <label for="wholesalerAccepted">Wholesaler Accepted to Purchase</label>
             </div>
             <div class="form-row">
               <input id="forumBanned" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="20" type="checkbox"<?=($r['options'][20]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="forumBanned">Banned From Posting or Replying on Forum</label>
+              <label for="forumBanned">Banned From Posting or Replying on Forum</label>
             </div>
             <div class="form-row">
               <input id="forumHelpResponder" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="helpResponder" data-dbb="0" type="checkbox"<?=($r['helpResponder']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="forumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
+              <label for="forumHelpResponder">Forum Help Ticket Responder (Receives Urgent Emails).</label>
             </div>
             <div class="form-row">
               <input id="newsletterSubscriber" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="newsletter" data-dbb="0" type="checkbox"<?=($r['newsletter']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="newsletterSubscriber">Newsletter Subscriber</label>
+              <label for="newsletterSubscriber">Newsletter Subscriber</label>
             </div>
             <div class="form-row">
               <input id="addRemoveContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checkd="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="addRemoveContent">Add or Remove Content</label>
+              <label for="addRemoveContent">Add or Remove Content</label>
             </div>
             <div class="form-row">
               <input id="editContent" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="editContent">Edit Content</label>
+              <label for="editContent">Edit Content</label>
             </div>
             <div class="form-row">
               <input id="addEditBookings" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="2" type="checkbox"<?=($r['options'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="addEditBookings">Add or Edit Bookings</label>
+              <label for="addEditBookings">Add or Edit Bookings</label>
             </div>
             <div class="form-row">
               <input id="viewEditMessages" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="3" type="checkbox"<?=($r['options'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="viewEditMessages">Messages Viewing or Editing</label>
+              <label for="viewEditMessages">Messages Viewing or Editing</label>
             </div>
             <div class="form-row">
               <input id="viewEditOrders" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="4" type="checkbox"<?=($r['options'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="viewEditOrders">Orders Viewing or Editing</label>
+              <label for="viewEditOrders">Orders Viewing or Editing</label>
             </div>
             <div class="form-row">
               <input id="viewEditAccounts" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="5" type="checkbox"<?=($r['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="viewEditAccounts">User Accounts Viewing or Editing</label>
+              <label for="viewEditAccounts">User Accounts Viewing or Editing</label>
             </div>
             <div class="form-row">
               <input id="editSEO" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="6" type="checkbox"<?=($r['options'][6]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="editSEO">SEO Editing</label>
+              <label for="editSEO">SEO Editing</label>
             </div>
             <div class="form-row">
               <input id="viewEditPreferences" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="7" type="checkbox"<?=($r['options'][7]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="viewEditPreferences">Preferences/Settings Viewing or Editing</label>
+              <label for="viewEditPreferences">Preferences/Settings Viewing or Editing</label>
             </div>
             <div class="form-row">
               <input id="liveChatNotifications" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="liveChatNotification" data-dbb="0" type="checkbox"<?=($r['liveChatNotification']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="liveChatNotifications">Email LiveChat notifications</label>
+              <label for="liveChatNotifications">Email LiveChat notifications</label>
             </div>
             <div class="form-row">
               <input id="trackIP" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="18" type="checkbox"<?=($r['options'][18]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label class="p-0 mt-0 ml-3" for="trackIP">Do Not Track IP</label>
+              <label for="trackIP">Do Not Track IP</label>
             </div>
             <?php if($user['rank']>899){?>
               <?php if($user['rank']==1000||$config['options'][17]==1){?>
@@ -672,31 +670,31 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               if($r['options'][17]==1||$user['rank']==1000){?>
                 <div class="form-row">
                   <input id="options16" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="16" type="checkbox"<?=($r['options'][16]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options16">Hide Folders</label>
+                  <label for="options16">Hide Folders</label>
                 </div>
                 <div class="form-row">
                   <input id="options10" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="10" type="checkbox"<?=($r['options'][10]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options10">Create Folders</label>
+                  <label for="options10">Create Folders</label>
                 </div>
                 <div class="form-row">
                   <input id="options11" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="11" type="checkbox"<?=($r['options'][11]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options11">Read Files</label>
+                  <label for="options11">Read Files</label>
                 </div>
                 <div class="form-row">
                   <input id="options12" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="12" type="checkbox"<?=($r['options'][12]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options12">Write Files</label>
+                  <label for="options12">Write Files</label>
                 </div>
                 <div class="form-row">
                   <input id="options13" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="13" type="checkbox"<?=($r['options'][13]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options13">Extract Archives</label>
+                  <label for="options13">Extract Archives</label>
                 </div>
                 <div class="form-row">
                   <input id="options14" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="14" type="checkbox"<?=($r['options'][14]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options14">Create Archives</label>
+                  <label for="options14">Create Archives</label>
                 </div>
                 <div class="form-row">
                   <input id="options15" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="options" data-dbb="15" type="checkbox"<?=($r['options'][15]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-                  <label class="p-0 mt-0 ml-3" for="options15">Upload Files (pdf,doc,php)</label>
+                  <label for="options15">Upload Files (pdf,doc,php)</label>
                 </div>
               <?php }?>
             </div>

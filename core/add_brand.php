@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,19 +26,13 @@ if($title!=''){
 	]);
   $id=$db->lastInsertId();
 	echo'<script>'.
-				'window.top.window.$("#brand").append(`<div id="l_'.$id.'" class="row">'.
-					'<div class="col-12 col-md-6">'.
-						'<div class="form-row">'.
-							'<input id="title'.$id.'" type="text" value="'.$title.'" readonly>'.
-						'</div>'.
+				'window.top.window.$("#brand").append(`<div id="l_'.$id.'" class="row add-item">'.
+					'<div class="col-12 col-md">'.
+						'<div class="input-text">'.$title.'</div>'.
 					'</div>'.
-					'<div class="col-12 col-md-5">'.
+					'<div class="col-12 col-md">'.
 						'<div class="form-row">'.
-							'<input id="url'.$id.'" type="text" value="'.$url.'" readonly>'.
-						'</div>'.
-					'</div>'.
-					'<div class="col-12 col-md-1">'.
-						'<div class="form-row">'.
+							'<div class="input-text col-md">'.$url.'</div>'.
 							($icon!=''?
 								'<a data-fancybox="lightbox" href="'.$icon.'"><img id="thumbimage" src="'.$icon.'" alt="Thumbnail"></a>'
 							:

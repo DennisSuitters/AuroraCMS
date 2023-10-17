@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -33,7 +33,7 @@
         </div>
         <div class="form-row">
           <input id="helpTicketEmailNotifications" data-dbid="1" data-dbt="config" data-dbc="forumOptions" data-dbb="0" type="checkbox"<?=($config['forumOptions'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-          <label class="p-0 mt-0 ml-3" for="helpTicketEmailNotifications">Help Ticket Email Notifications</label>
+          <label for="helpTicketEmailNotifications">Help Ticket Email Notifications</label>
         </div>
       </div>
       <?php require'core/layout/footer.php';?>

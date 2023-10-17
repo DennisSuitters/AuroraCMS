@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,7 +25,7 @@ if($t!=''){
   $s=$db->prepare("UPDATE `".$prefix."choices` SET `ord`=:id WHERE `id`=:id");
   $s->execute([':id'=>$id]);
 	echo'<script>'.
-				'window.top.window.$("#pricelist'.$rid.'").append(`<div id="l_'.$id.'" class="col-12">'.
+				'window.top.window.$("#pricelist'.$rid.'").append(`<div id="l_'.$id.'" class="col-12 add-item">'.
           '<div class="form-row">'.
             '<div class="input-text">Item</div>'.
               '<input type="text" name="t" value="'.$t.'">'.

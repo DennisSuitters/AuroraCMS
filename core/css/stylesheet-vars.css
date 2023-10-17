@@ -35,9 +35,9 @@
   --busy-bg:transparent;
   --busy-fill:#000;
 
-  --header-background-color: #000;
-  --header-color: #eee;
-  --header-logo-color: #fff;
+  --header-background-color: #fff;
+  --header-color: #000;
+  --header-logo-color: #000;
 
   --nav-toggle-color: #aaa;
 
@@ -131,7 +131,7 @@
   --table-background-color: #fff;
   --table-background-color-zebra: #f8f8f8;
   --table-color: #000;
-  --table-head-background-color: rgba(0,0,0,.15);
+  --table-head-background-color: #fff;
   --table-head-color: #000;
   --table-border-color: #e9e9e9;
 
@@ -426,9 +426,9 @@
   --mark-background-color: #ff0;
   --figcaption-color: #888;
 
-  --header-background-color: #000000;
+  --header-background-color: rgba(0,0,0,.15);
   --header-color: #eee;
-  --header-logo-color: #fff;
+  --header-logo-color: #eee;
 
   --nav-toggle-color: #aaa;
 

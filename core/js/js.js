@@ -163,6 +163,45 @@ document.addEventListener('click',function(event){
 		});
 	}
 });
+function addQuickCart(qid){
+  var opts=document.querySelectorAll('select[name="options[]"]');
+  let opt='';
+  if(opts.length>0){
+    for(var i=0;i<opts.length;i++){
+      if(opts[i].value!=''){
+        opt+=opts[i].value+',';
+      }
+    }
+    opt=opt.replace(/[, ]+$/,"").trim();
+  }
+  fetch('core/add_cart.php',{
+    method:"POST",
+    headers:{"Content-type":"application/x-www-form-urlencoded; charset=UTF-8"},
+    body:'id='+qid+'&opt='+opt
+  }).then(function(response){
+    return response.json();
+  }).then(function(j){
+    if(j=='nomore'){
+      alert('Purchase Limit Reached!');
+    }else if(j=='wholesaleoutside'){
+      alert('Wholesale purchasing is restricted only to items in your account rank!');
+    }else{
+      document.querySelector('.cart').innerHTML=j;
+      var cartage=document.querySelector('#cartage');
+      var sidecart=document.querySelector('#sidecart')
+      if(cartage.hasChildNodes()){
+        fetch('core/update_cartage.php').then(function(r){
+          return r.text();
+        }).then(function(html){
+          sidecart.classList.remove('d-none');
+          sidecart.classList.remove('jello');
+          sidecart.classList.add('jello');
+          cartage.innerHTML=html;
+        });
+      }
+    }
+  });
+}
 function selectOption(id,cat){
   document.querySelector(`#`+cat+`options`).value=id;
   document.querySelector(`.optionslist`+cat).classList.remove('optionselected')

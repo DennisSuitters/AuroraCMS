@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,7 +33,7 @@ if($t!=''||$da!=''){
   $id=$db->lastInsertId();
 	echo'<script>'.
 				'window.top.window.$("#faqs").append(`'.
-					'<div id="l_'.$id.'">'.
+					'<div id="l_'.$id.'" class=" add-item">'.
 						'<div class="row">'.
               '<h5>'.$c.'</h5>'.
 							'<details'.($open==1?' open':'').'>'.

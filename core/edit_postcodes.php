@@ -13,30 +13,13 @@
  */
 require'db.php';
 $st=filter_input(INPUT_POST,'st',FILTER_UNSAFE_RAW);
-$s=filter_input(INPUT_POST,'s',FILTER_UNSAFE_RAW);
-$pcf=filter_input(INPUT_POST,'pcf',FILTER_UNSAFE_RAW);
-$pct=filter_input(INPUT_POST,'pct',FILTER_UNSAFE_RAW);
 $html='';
-if($st=='All'&&$pcf==''&&$pct==''){
+if($st=='All'){
 	$html='<div class="row"><div class="col-12"><div class="alert alert-info text-center">A State selection other than All needs to be selected, or Postcode values need to be entered!</div></div></div>';
 }else{
 	$config=$db->query("SELECT `development` FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
-	if($pcf!=''){
-		if($pct==''||$pct<$pcf){
-			$html='<div class="row"><div class="col-12"><div class="alert alert-danger text-center">A Postcode To value can`t be empty or smaller than the Postcode From value!</div></div></div>';
-		}
-		$q=$db->prepare("SELECT * FROM `".$prefix."locations` WHERE `postcode`>:pcf AND `postcode`<:pct ORDER BY `postcode` ASC");
-		$q->execute([
-			':pcf'=>$pcf,
-			':pct'=>$pct
-		]);
-	}else{
-		$q=$db->prepare("SELECT * FROM `".$prefix."locations` WHERE `state`=:state AND `area` LIKE :area ORDER BY `postcode` ASC");
-		$q->execute([
-			':state'=>$st,
-			':area'=>($s=='All'?'%':str_replace(' ','%',$s))
-		]);
-	}
+	$q=$db->prepare("SELECT * FROM `".$prefix."locations` WHERE `state`=:state ORDER BY `postcode` ASC");
+	$q->execute([':state'=>$st]);
 	$html.='<div class="sticky-top">'.
 		'<div class="row mb-3">'.
 			'<button class="btn" data-tooltip="bottom" aria-label="Hide FOMO Areas" onclick="editLocations();"><i class="i fomoarrow">down</i><i class="i fomoarrow d-none">up</i></button>'.
@@ -66,26 +49,26 @@ if($st=='All'&&$pcf==''&&$pct==''){
 			'</div>'.
 			'<div class="col-1"></div>'.
 		'</div>'.
-	'</div>'.
-	($config['development']==1?
-		'<form class="row" target="sp" method="post" action="core/add_location.php">'.
-			'<input type="hidden" name="state" value="'.$st.'">'.
-			'<div class="col-2">'.
-				'<input type="text" name="postcode" value="" placeholder="Postcode...">'.
-			'</div>'.
-			'<div class="col-8">'.
-				'<input type="text" name="area" value="" placeholder="Area...">'.
-			'</div>'.
-			'<div class="col-1 text-center p-2">'.
-				'<input type="checkbox" name="in" value="1" checked>'.
-			'</div>'.
-			'<div class="col-1 text-right">'.
-				'<button class="add" type="submit"><i class="i">add</i></button>'.
-			'</div>'.
-		'</form>'
+		($config['development']==1?
+			'<form class="row" target="sp" method="post" action="core/add_location.php">'.
+				'<input type="hidden" name="state" value="'.$st.'">'.
+				'<div class="col-2">'.
+					'<input type="number" name="postcode" value="" placeholder="Postcode...">'.
+				'</div>'.
+				'<div class="col-8">'.
+					'<input type="text" name="area" value="" placeholder="Area...">'.
+				'</div>'.
+				'<div class="col-1 text-center p-2">'.
+					'<input type="checkbox" name="in" value="1" checked>'.
+				'</div>'.
+				'<div class="col-1 text-right">'.
+					'<button class="add" type="submit"><i class="i">add</i></button>'.
+				'</div>'.
+			'</form>'
 	:
 		''
 	).
+	'</div>'.
 	'<div id="locationsitems">';
 	while($r=$q->fetch(PDO::FETCH_ASSOC)){
 		$html.='<div id="l_'.$r['id'].'" class="locationitem row border-bottom" data-postcode="'.$r['postcode'].'" data-area="'.$r['area'].'" data-content="'.$r['postcode'].' '.$r['area'].'">'.
@@ -116,7 +99,7 @@ if($st=='All'&&$pcf==''&&$pct==''){
 				'<input id="locations'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="locations" data-dbc="active" type="checkbox"'.($r['active']==1?' checked':'').'>'.
 			'</div>'.
 			'<div class="col-1 text-right">'.
-				'<a class="btn" href="https://www.google.com/maps/place/'.str_replace(' ','+',$r['area']).'+'.$r['state'].'+'.$r['postcode'].'" target="child" data-tooltip="tooltip" aria-label="View Location in Google Maps"><i class="i">map</i></a>'.
+				'<a class="btn" href="https://www.google.com/maps/place/'.str_replace(' ','+',$r['area']).'+'.$r['state'].'+'.$r['postcode'].'/data=!3m1!1e3" target="child" data-tooltip="tooltip" aria-label="View Location in Google Maps"><i class="i">map</i></a>'.
 				($config['development']==1?
 					'<button class="trash" onclick="purge(`'.$r['id'].'`,`locations`);"><i class="i">trash</i></button>'
 				:

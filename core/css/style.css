@@ -31,7 +31,7 @@ body.dev:after{
 header.aurora{
   background-color:var(--header-background-color)!important;
   background-image:none!important;
-  color:var(--header-color);
+  color:var(--header-color)!important;
   border-radius:4px;
   font-size:13px;
   width:initial;
@@ -745,6 +745,7 @@ td img.avatar{
   box-shadow:none}
 
 #content{
+  position:relative;
   margin:0 0 0 0;
   background-color:var(--body-background-color)!important;
   overflow:visible!important }
@@ -973,10 +974,17 @@ td img.avatar{
 .form-row label{
   display:content!important }
 
-.form-row .form-text{
+.form-row input[type="checkbox"] + label{
   display:inline-block!important;
+  padding:0!important;
+  margin:0 0 0 .5rem!important }
+
+.form-text{
+  display:block!important;
   color:var(--color-muted)!important;
-  width:100% }
+  font-size:small;
+  width:100%;
+  margin-bottom:.25rem }
 
 .form-row .img-avatar,
 .form-row img{
@@ -984,7 +992,8 @@ td img.avatar{
   max-width:38px;
   height:38px }
 
-.input-text{
+.input-text,
+.input-text2{
   display:flex;
   align-items:center;
   padding:.375rem .75rem;
@@ -1026,7 +1035,9 @@ div.input-text[contenteditable]:empty:before{
   color:var(--form-placeholder-color) }
 
 .input-text input[type=checkbox],
-.input-text input[type=radio]{
+.input-text2 input[type=checkbox],
+.input-text input[type=radio],
+.input-text2 input[type=radio]{
   margin-top:0 }
 
 input[type=text]~button,
@@ -1040,7 +1051,8 @@ input[type=text]~.input-text{
 .form-row>.btn>.btn:not(:last-child),
 .form-row>input:not(:last-child),
 .form-row>select:not(:last-child),
-.form-row>.input-text:not(:last-child){
+.form-row>.input-text:not(:last-child),
+.form-row>.input-text2:not(:last-child){
   border-top-right-radius:0;
   border-bottom-right-radius:0 }
 
@@ -1050,7 +1062,8 @@ input[type=text]~.input-text{
 .form-row>.btn>.btn:not(:first-child),
 .form-row>input:not(:first-child),
 .form-row>select:not(:first-child),
-.form-row>.input-text:not(:first-child){
+.form-row>.input-text:not(:first-child),
+.form-row>.input-text2:not(:first-child){
   border-top-left-radius:0;
   border-bottom-left-radius:0 }
 
@@ -2099,5 +2112,15 @@ input:not(:placeholder-shown)~.openimageeditor{
   transition: color .2s !important }
 
 .rotate-180 {
-  rotate:180deg;
+  rotate:180deg }
+
+.add-item{-webkit-animation:add-item .6s cubic-bezier(.390,.575,.565,1) both;animation:add-item .6s cubic-bezier(.390,.575,.565,1) both}@-webkit-keyframes add-item{0%{-webkit-transform:translateZ(-80px);transform:translateZ(-80px);opacity:0}100%{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}@keyframes add-item{0%{-webkit-transform:translateZ(-80px);transform:translateZ(-80px);opacity:0}100%{-webkit-transform:translateZ(0);transform:translateZ(0);opacity:1}}
+.remove-item{-webkit-animation:remove-item .5s cubic-bezier(.550,.085,.680,.530) both;animation:remove-item .5s cubic-bezier(.550,.085,.680,.530) both}
+@-webkit-keyframes remove-item{
+  0%{-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:50% 0%;transform-origin:50% 0%;opacity:1;height:auto}
+  100%{-webkit-transform:scale(0);transform:scale(0);-webkit-transform-origin:50% 0%;transform-origin:50% 0%;opacity:0;height:0}
+}
+@keyframes remove-item{
+  0%{-webkit-transform:scale(1);transform:scale(1);-webkit-transform-origin:50% 0%;transform-origin:50% 0%;opacity:1;height:auto}
+  100%{-webkit-transform:scale(0);transform:scale(0);-webkit-transform-origin:50% 0%;transform-origin:50% 0%;opacity:0;height:0}
 }

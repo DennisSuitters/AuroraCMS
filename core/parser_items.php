@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -16,10 +16,17 @@ $rowItems=$s->rowCount();
 $html=preg_replace('~<item>.*?<\/item>~is','',$html,1);
 $skip=false;
 if(stristr($html,'<settings')){
-	preg_match_all('/<settings items="(.*?)" contenttype="(.*?)">/',$html,$matches);
-	$count=$matches[0];
+	preg_match('/<settings.*itemCount=[\"\'](.+?)[\"\'].*>/',$html,$match);
+	$itemCount=(int)(isset($match[1])?
+		($match[1]>0||$match[1]!='all'?$match[1]:$config['showItems'])
+	:$config['showItems']);
+	preg_match('/<settings.*contentType=[\"\'](.*?)[\"\'].*>/',$html,$match);
+	$contentType=isset($match[1])&&($match[1]!='all')?$match[1]:'%';
 	$html=preg_replace('~<settings.*?>~is','',$html,1);
-}else$count=1;
+}else{
+	$itemCount=$config['showItems'];
+	$contentType='%';
+}
 $html=preg_replace([
 	'/<print view>/',
 	'/<print content=[\"\']?category[\"\']?>/',
@@ -260,7 +267,7 @@ if(stristr($html,'<categories>')){
 		$html=preg_replace('~<categories>.*?<\/categories>~is','',$html,1);
 }
 if(stristr($html,'<eventsitems')){
-	preg_match('/<eventsitems.*?items=[\"\'](.+?)[\"\'].*>/',$html,$matches);
+	preg_match('/<eventsitems.*?itemCount=[\"\'](.+?)[\"\'].*>/',$html,$matches);
 	$limit=isset($matches[1])&&$matches[1]==0?4:$matches[1];
 	preg_match('/<eventitem>([\w\W]*?)<\/eventitem>/',$html,$matches);
 	$eventitem=$matches[1];
@@ -273,8 +280,12 @@ if(stristr($html,'<eventsitems')){
 		':rank'=>(isset($_SESSION['rank'])?$_SESSION['rank'] + 1:0)
 	]);
 	if($se->rowCount()>0){
+		$eventcnt=0;
 		while($re=$se->fetch(PDO::FETCH_ASSOC)){
-			if($re['tis']>0&&$re['tis'] < time())continue;
+			if($re['tis']>0&&$re['tis'] < time()){
+				$eventcnt++;
+				continue;
+			}
 			$eventitems=$eventitem;
 			$re['file']=rawurldecode($re['file']);
 			$eventitems=preg_replace([
@@ -305,7 +316,7 @@ if(stristr($html,'<eventsitems')){
 		}
 		$html=preg_replace([
 			'~<eventitem>.*?<\/eventitem>~is',
-			'/<[\/]?eventsitems.*?>/'
+			($eventcnt>0?'~<eventsitems.*?>.*?<\/eventsitems>~is':'/<[\/]?eventsitems.*?>/')
 		],[
 			$eventoutput,
 			''
@@ -473,10 +484,10 @@ $html=preg_replace([
 ],'',$html);
 if(stristr($html,'<pagination')){
 	$pagination='';
-	if($config['showItems']>0){
+	if($itemCount>0){
 		require_once'core/pagination.php';
 		$totalItems=$rowCount;
-		$itemsPerPage=$config['showItems'];
+		$itemsPerPage=$itemCount;
 		$currentPage=$itemPage==0?1:$itemPage;
 		$urlPattern=URL.$view.'?page=(:num)';
 		$pagination=new Paginator($totalItems,$itemsPerPage,$currentPage,$urlPattern);

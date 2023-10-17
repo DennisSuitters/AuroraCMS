@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -38,7 +38,7 @@ else{
 				$si->execute([':id'=>$rid]);
 				$ri=$si->fetch(PDO::FETCH_ASSOC);
 				echo'<script>'.
-							'window.top.window.$("#relateditems").append(`<div id="l_'.$id.'" class="form-row mt-1">'.
+							'window.top.window.$("#relateditems").append(`<div id="l_'.$id.'" class="form-row mt-1 add-item">'.
 								'<input type="text" value="'.ucfirst($ri['contentType']).': '.$ri['title'].'" readonly>'.
 								'<form target="sp" action="core/purge.php">'.
 									'<input name="id" type="hidden" value="'.$id.'">'.

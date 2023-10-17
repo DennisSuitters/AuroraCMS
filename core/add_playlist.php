@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-7
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -173,7 +173,7 @@ if($fu!=''){
 			':ord'=>$iid+1
 		]);
 		echo'<script>'.
-					'window.top.window.$("#pi").append(`<div class="play items card gallery col-6 col-sm-3 m-0 border-0" id="pi_'.$iid.'">'.
+					'window.top.window.$("#pi").append(`<div class="play items card gallery col-6 col-sm-3 m-0 border-0 add-item" id="pi_'.$iid.'">'.
 						'<img src="'.$vidarray['th_url'].'">'.
 						'<div class="btn-group tools">'.
 							'<a href="'.URL.$settings['system']['admin'].'/playlist/edit/'.$iid.'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.

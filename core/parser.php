@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -34,10 +34,6 @@ $parse=preg_replace([
 	isset($r['id'])?$r['id']:$page['id'],
 	isset($r['schemaType'])?htmlentities($r['schemaType'],ENT_QUOTES,'UTF-8'):htmlentities($page['schemaType'],ENT_QUOTES,'UTF-8')
 ],$parse);
-if(preg_match('/<author>([\w\W]*?)<\/author>/',$parse)&&$view=='article'&&$r['uid']!=0)
-	$parse=preg_replace('/<[\/]?author>/','',$parse);
-else
-	$parse=preg_replace('~<author>.*?<\/author>~is','',$parse,1);
 $tags=$doc->getElementsByTagName('print');
 foreach($tags as$tag){
 	$parsing='';
@@ -45,13 +41,6 @@ foreach($tags as$tag){
 	if($tag->hasAttribute('content'))$attribute='content';
 	if($tag->hasAttribute('user'))$attribute='user';
 	if($tag->hasAttribute('config'))$attribute='config';
-	if($tag->hasAttribute('author')){
-		$attribute='author';
-		$r['uid']=isset($r['uid'])?$r['uid']:0;
-		$sa=$db->prepare("SELECT * FROM `".$prefix."login` WHERE `id`=:id");
-		$sa->execute([':id'=>$r['uid']]);
-		$author=$sa->fetch(PDO::FETCH_ASSOC);
-	}
 	if($tag->hasAttribute('comments'))$attribute='comments';
 	$container=$tag->hasAttribute('container')?$tag->getAttribute('container'):'';
 	$leadingtext=$tag->hasAttribute('leadingtext')?$tag->getAttribute('leadingtext'):'';
@@ -231,27 +220,6 @@ foreach($tags as$tag){
 			$parsing.=$r['fileURL'];
 		case'avatar':
 			$parsing.='<img class="'.$class.'" src="';
-			if($attribute=='author'&&isset($author['avatar'])){
-				if($author['avatar']!=''&&file_exists('media/avatar/'.basename($author['avatar'])))
-					$parsing.='media/avatar/'.basename($author['avatar']).'"';
-				elseif(isset($author['gravatar'])&&$author['gravatar']!=''){
-					if(stristr($author['avatar'],'@'))
-						$parsing.='http://gravatar.com/avatar/'.md5($author['gravatar']).'"';
-					elseif(stristr($author['gravatar'],'gravatar.com/avatar'))
-						$parsing.=$author['gravatar'].'"';
-					else
-						$parsing.=NOAVATAR.'"';
-				}else
-					$parsing.=NOAVATAR.'"';
-				if($alt=='name'){
-					$parsing.=' alt="';
-					if(isset($author['name'])&&$author['name'])
-						$parsing.=$author['name'];
-					elseif(isset($author['username']))
-						$parsing.=$author['username'];
-					$parsing.='"';
-				}
-			}
 			if($attribute=='comments'){
 				if($rc['uid']!=0){
 					$scu=$db->prepare("SELECT `avatar`,`gravatar` FROM `".$prefix."login` WHERE `id`=:rcuid");
@@ -277,8 +245,6 @@ foreach($tags as$tag){
 			$parsing.='>';
 			break;
 		case'name':
-			if($attribute=='author')
-				$parsing.=$author['name']?htmlspecialchars($author['name'],ENT_QUOTES, 'UTF-8'):htmlspecialchars($author['username'],ENT_QUOTES,'UTF-8');
 			if($attribute=='comments')
 				$parsing.=$rc['name']==''?'Anonymous':htmlspecialchars($rc['name'],ENT_QUOTES,'UTF-8');
 			if($attribute=='content')
@@ -287,8 +253,6 @@ foreach($tags as$tag){
 		case'caption':
 			$parsing.=$length!=0?strtok(wordwrap($r['seoCaption'],$length,"...\n"),"\n"):$r['seoCaption'];
 		case'notes':
-			if($attribute=='author'&&isset($author['notes']))
-				$notes=rawurldecode($author['notes']);
 			if($attribute=='comments')
 				$notes=rawurldecode($rc['notes']);
 			if($attribute=='page')
@@ -302,8 +266,6 @@ foreach($tags as$tag){
 			$parsing.=$notes;
 			break;
 		case'notesCount':
-			if($attribute=='author')
-				$notesCount=strlen(strip_tags(rawurldecode($author['notes'])));
 			if($attribute=='comments')
 				$notesCount=strlen(strip_tags(rawurldecode($rc['notes'])));
 			if($attribute=='page')
@@ -311,19 +273,6 @@ foreach($tags as$tag){
 			if($attribute=='content')
 				$notesCount=strlen(strip_tags(rawurldecode($r['notes'])));
 			$parsing.=$notesCount;
-		case'email':
-			if($attribute=='author'){
-				if($author['email'])
-					$parsing.='<a href="mailto:'.$author['email'].'">'.($type=='icon'?'<'.$theme['settings']['icon_container'].' class="'.$class.'"><i class="i">email</i></'.$theme['settings']['icon_container'].'>':$author['email']).'</a>';
-			}
-			break;
-		case'social':
-			if($attribute=='author'){
-				$sa =$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='social'");
-				$sa->execute([':uid'=>$r['uid']]);
-				while($sr=$sa->fetch(PDO::FETCH_ASSOC))$parsing.='<a href="'.$sr['url'].'" aria-label="'.ucfirst($sr['icon']).'"><i class="i i-social i-3x mr-1 social-'.$sr['icon'].'">social-'.$sr['icon'].'</i></a>';
-			}
-			break;
 		case'time':
 				if($attribute=='comments')
 					$parsing.=date($config['dateFormat'],$rc['ti']);

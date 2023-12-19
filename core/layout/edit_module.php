@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,7 +43,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <label for="tab1-2">Questions</label>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-              <label for="title">Title</label>
+              <label for="title" class="mt-0">Title</label>
               <div class="form-row">
                 <input class="textinput" id="title" type="text" value="<?=$r['title'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="title" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?
@@ -68,7 +68,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   <option value="2592000"<?=$r['tti']==2592000?' selected':'';?>>1 Month</option>
                 </select>
               </div>
-              <label for="title">Caption</label>
+              <label for="caption">Caption</label>
               <div class="form-row">
                 <input class="textinput" id="caption" type="text" value="<?=$r['caption'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="caption" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="save" id="savecaption" data-dbid="caption" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -97,7 +97,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
               <?php if($user['options'][1]==1){?>
-                <label for="question">Question</label>
+                <label for="question" class="mt-0">Question</label>
                 <div class="form-row">
                   <div class="input-text" data-el="question" contenteditable="<?=$user['options'][1]==1?'true':'false';?>"><?=$r['question'];?></div>
                   <input class="textinput d-none" id="question" type="text" value="<?=$r['question'];?>" data-dbid="<?=$r['id'];?>" data-dbt="modules" data-dbc="question" data-bs="trash"<?=$user['options'][1]==1?'':' readonly';?>>

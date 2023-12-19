@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -269,14 +269,14 @@ if(is_null($e[2])){
 		}
 	}
 }
-echo'<script>window.top.window.$(".page-block").removeClass("d-block");</script>';
+echo'<script>window.top.window.$(".page-block").addClass("d-none");</script>';
 if($col=='status'&&$tbl!='forumPosts'){
 	if($da=='archived')echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';
 	if($tbl!='comments'||$da=='delete'||$da=='')echo'<script>window.top.window.statusSet(`'.$id.'`,`'.$da.'`);</script>';
 	if($da=='delete')echo'<script>window.top.window.$("#l_'.$id.'").addClass("danger");</script>';
 	else echo'<script>window.top.window.$("#l_'.$id.'").removeClass("danger");</script>';
 }
-if($col=='password')echo'<script>window.top.window.$("#passButton").removeClass("btn-danger");window.top.window.$(".page-block").removeClass("d-block");</script>';
+if($col=='password')echo'<script>window.top.window.$("#passButton").removeClass("btn-danger");window.top.window.$(".page-block").addClass("d-none");</script>';
 if($col=='notes')echo'<script>window.top.window.$(".page-block").addClass("d-none");window.top.window.$(".note-save button").removeClass("btn-danger");</script>';
 if($config['options'][12]==1){
 	$s=$db->prepare("INSERT IGNORE INTO `".$prefix."logs` (`uid`,`rid`,`username`,`name`,`view`,`contentType`,`refTable`,`refColumn`,`oldda`,`newda`,`action`,`ti`) VALUES (:uid,:rid,:username,:name,:view,:contentType,:refTable,:refColumn,:oldda,:newda,:action,:ti)");

@@ -137,7 +137,7 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
       $msgd.='<br /><hr>';
     }
     $sl=$db->prepare("SELECT `contentType`,`title`,`url`,`tie` FROM `".$prefix."choices` WHERE `contentType`='link' AND `rid`=:id");
-    $sl->execute([':id'=>$roi['iid']]);
+    $sl->execute([':id'=>$ro['iid']]);
     if($sl->rowCount()>0){
       while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
         $msgl.='Link for <a href="'.$rl['url'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> available';
@@ -155,11 +155,11 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
         if($rl['tie']==15552000)$msgl.=' for 6 Months';
         if($rl['tie']==31536000)$msgl.=' for 1 Year';
         $msgl.='<br />';
-        $i++;
+//        $i++;
       }
     }
     $se=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-    $se->execute([':id'=>$roi['iid']]);
+    $se->execute([':id'=>$ro['iid']]);
     if($se->rowCount()>0){
       while($re=$se->fetch(PDO::FETCH_ASSOC)){
         if($re['contentType']=='event'){
@@ -175,7 +175,7 @@ $html='<div style="width:800px;height:30px;text-align:right;">'.
           ]);
           $msgc='<p>To access the Course/s purchased, it is required to be logged in. You can view purchased Courses via the "Courses" in the logged in menu area.</p>';
         }
-        $i++;
+//        $i++;
       }
     }
 
@@ -326,7 +326,7 @@ if($act=='print'){
   require'phpmailer/PHPMailer.php';
   require'phpmailer/SMTP.php';
   require'phpmailer/Exception.php';
-	$mail = new PHPMailer\PHPMailer\PHPMailer;
+	$mail=new PHPMailer\PHPMailer\PHPMailer;
 	$mail->isSendmail();
 	$toname=$c['name']!=''?$c['name']:$c['business'];
 	$mail->SetFrom($config['email'],$config['business']);

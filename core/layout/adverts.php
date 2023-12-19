@@ -4,13 +4,15 @@
  *
  * @category   Administration - Adverts
  * @package    core/layout/adverts.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='62'");
+$sv->execute();
 $rank=0;
 $show='categories';
 if($view=='add'){
@@ -31,9 +33,7 @@ if($view=='add'){
   $args[1]=$id;
   echo'<script>/*<![CDATA[*/window.location.replace("'.URL.$settings['system']['admin'].'/adverts/edit/'.$args[1].'");/*]]>*/</script>';
 }
-if(isset($args[0])&&$args[0]=='settings')
-  require'core/layout/set_adverts.php';
-elseif(isset($args[0])&&$args[0]=='edit'){
+if(isset($args[0])&&$args[0]=='edit'){
   $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='advert' AND `id`=:id");
   $s->execute([':id'=>$args[1]]);
   $show='item';
@@ -59,8 +59,7 @@ else{?>
                 <div class="form-row justify-content-end">
                   <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
                   <div class="btn-group">
-                    <?=($user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/adverts/settings" role="button" data-tooltip="left" aria-label="Advertisements Settings"><i class="i">settings</i></a>':'').
-                    ($user['options'][0]==1?'<a class="add" href="'.URL.$settings['system']['admin'].'/add/adverts" role="button" data-tooltip="left" aria-label="Add Advertisement"><i class="i">add</i></a>':'');?>
+                    <?=($user['options'][0]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/add/adverts" role="button" aria-label="Add Advertisement"><i class="i">add</i></a>':'');?>
                   </div>
                 </div>
               </div>

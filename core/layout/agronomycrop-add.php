@@ -4,10 +4,10 @@
  *
  * @category   Administration - Popup - Add Agronomy Crop
  * @package    core/layout/agronomycrop-add.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,16 +22,16 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');?>
 <div class="fancybox-ajax p-2">
   <h5>Add a Crop</h5>
-  <iframe id="sp" name="sp" class="d-none"></iframe>
+  <iframe class="d-none" id="sp" name="sp"></iframe>
   <form id="agronmyform" target="sp" method="post" action="core/add_agronomyarea.php">
     <div class="quickedit">
       <label for="agronomyname">Name</label>
       <div class="form-row">
-        <input type="text" id="agronmyname" name="name" value="" placeholder="Enter a Name...">
+        <input id="agronmyname" name="name" type="text" value="" placeholder="Enter a Name...">
       </div>
       <label for="agronomytype">Type</label>
       <div class="form-row">
-        <input type="text" id="agronomytype" list="agronomy_types" name="type" value="" placeholder="Select or Enter a Type...">
+        <input id="agronomytype" name="type" list="agronomy_types" type="text" value="" placeholder="Select or Enter a Type...">
         <?php $s=$db->prepare("SELECT DISTINCT `type` FROM `".$prefix."agronomy_crop` WHERE `type`!='' ORDER BY `type` ASC ");
         $s->execute();
         echo'<datalist id="agronomy_types">'.
@@ -68,11 +68,11 @@ define('UNICODE','UTF-8');?>
       </div>
       <label for="agronomycode">Code</label>
       <div class="form-row">
-        <input type="text" id="agronomycode" name="code" value="" placeholder="Enter a Code...">
+        <input id="agronomycode" name="code" type="text" value="" placeholder="Enter a Code...">
       </div>
       <label for="agronomycondition">Condition</label>
       <div class="form-row">
-        <input type="text" id="agronomycondition" list="agronomy_conditions" name="condition" value="" placeholder="Enter a Condition...">
+        <input id="agronomycondition" name="condition" list="agronomy_conditions" type="text" value="" placeholder="Enter a Condition...">
         <?php $s=$db->prepare("SELECT DISTINCT `condition` FROM `".$prefix."agronomy_crop` WHERE `condition`!='' ORDER BY `condition` ASC ");
         $s->execute();
         echo'<datalist id="agronomy_conditions">'.
@@ -109,7 +109,7 @@ define('UNICODE','UTF-8');?>
       </div>
       <label for="agronomyactivity">Activity</label>
       <div class="form-row">
-        <input type="text" id="agronomyactivity" list="agronomy_activity" name="activity" value="" placeholder="Enter an Activity...">
+        <input id="agronomyactivity" name="activity" list="agronomy_activity" type="text" value="" placeholder="Enter an Activity...">
         <?php $s=$db->prepare("SELECT DISTINCT `activity` FROM `".$prefix."agronomy_crop` WHERE `activity`!='' ORDER BY `activity` ASC");
         $s->execute();
         echo'<datalist id="agronomy_activity">'.

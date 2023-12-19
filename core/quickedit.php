@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -71,7 +71,7 @@ $o=isset($_POST['o'])?filter_input(INPUT_POST,'o',FILTER_UNSAFE_RAW):filter_inpu
 if($o=='modal'){
   echo'<div class="fancybox-ajax quickedit p-2">';
 }
-if($t=='content'||$t=='login'||$t=='orders'){
+if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
 	$s=$db->prepare("SELECT * FROM `".$prefix.$t."` WHERE id=:id");
 	$s->execute([':id'=>$id]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
@@ -89,18 +89,21 @@ if($t=='content'||$t=='login'||$t=='orders'){
         '<div class="row">'.
           '<div class="col-12 col-sm-4 p-1">'.
             '<div class="row">'.
-              '<div class="col-12 col-sm-6 pr-1">'.
+              '<div class="col-12 col-sm-6 pr-2">'.
                 '<label>Name</label>'.
                 '<div class="input-text">'.$r['name'].'</div>'.
               '</div>'.
-              '<div class="col-12 col-sm-6 pl-1">'.
+              '<div class="col-12 col-sm-6">'.
                 '<label>Business</label>'.
                 '<div class="input-text">'.$r['business'].'&nbsp;</div>'.
               '</div>'.
             '</div>'.
             '<div class="row">'.
               '<label>Email</label>'.
-              '<div class="input-text">';
+              '<div class="form-row">'.
+                '<div class="input-text">'.
+                  $r['email'].
+                '</div>';
                 $sm=$db->prepare("SELECT id FROM `".$prefix."choices` WHERE `contentType`='mailbox'");
                 $sm->execute();
                 if($sm->rowCount()>0){
@@ -111,7 +114,6 @@ if($t=='content'||$t=='login'||$t=='orders'){
                   $emailwin=true;
                 }
                 echo'<button class="mr-2" data-tooltip="tooltip" aria-label="Send Email" onclick="window.open(`'.$email.'`+$(`#qeemail'.$r['id'].'`).val(),'.($emailwin==true?'`_blank`':'`_self`').');"><i class="i">email-send</i></button>'.
-                $r['email'].
               '</div>'.
             '</div>'.
             '<div class="row">'.
@@ -119,11 +121,11 @@ if($t=='content'||$t=='login'||$t=='orders'){
               '<div class="input-text">'.'<a target="_blank" href="'.$r['url'].'">'.$r['url'].'</a>&nbsp;'.'</div>'.
             '</div>'.
             '<div class="row">'.
-              '<div class="col-12 col-sm-6 pr-1">'.
+              '<div class="col-12 col-sm-6 pr-2">'.
                 '<label>Phone</label>'.
                 '<div class="input-text">'.$r['phone'].'&nbsp;</div>'.
               '</div>'.
-              '<div class="col-12 col-sm-6 pl-1">'.
+              '<div class="col-12 col-sm-6">'.
                 '<label>Mobile</label>'.
                 '<div class="input-text">'.$r['mobile'].'&nbsp;</div>'.
               '</div>'.
@@ -135,21 +137,21 @@ if($t=='content'||$t=='login'||$t=='orders'){
               '<div class="input-text">'.$r['address'].'</div>'.
             '</div>'.
             '<div class="row">'.
-              '<div class="col-12 col-sm-6 pr-1">'.
+              '<div class="col-12 col-sm-6 pr-2">'.
                 '<label>Suburb</label>'.
                 '<div class="input-text">'.$r['suburb'].'</div>'.
               '</div>'.
-              '<div class="col-12 col-sm-6 pl-1">'.
+              '<div class="col-12 col-sm-6">'.
                 '<label>City</label>'.
                 '<div class="input-text">'.$r['city'].'</div>'.
               '</div>'.
             '</div>'.
             '<div class="row">'.
-              '<div class="col-12 col-sm-6 pr-1">'.
+              '<div class="col-12 col-sm-6 pr-2">'.
                 '<label>State</label>'.
                 '<div class="input-text">'.$r['state'].'</div>'.
               '</div>'.
-              '<div class="col-12 col-sm-6 pl-1">'.
+              '<div class="col-12 col-sm-6">'.
                 '<label>Postcode</label>'.
                 '<div class="input-text">'.($r['postcode']!=0?$r['postcode']:'').'</div>'.
               '</div>'.
@@ -387,36 +389,36 @@ if($t=='content'||$t=='login'||$t=='orders'){
         '</article>'.
         '<article class="col-12 col-sm mx-0 px-0 py-0 pl-1 text-left">'.
           '<div class="form-row">'.
-            '<label class="pt-1">Paid&nbsp;Via:</label>'.
-            '<div class="input-text col-12">'.ucwords($r['paid_via']).'&nbsp;</div>'.
+            '<label class="col-3">Paid&nbsp;Via</label>'.
+            '<div class="input-text border-0 bg-transparent">'.ucwords($r['paid_via']).'&nbsp;</div>'.
           '</div>'.
           '<div class="form-row">'.
-            '<label class="pt-1">Transaction&nbsp;ID:</label>'.
-            '<div class="input-text col-12">'.$r['txn_id'].'&nbsp;</div>'.
+            '<label class="col-3">Transaction&nbsp;ID</label>'.
+            '<div class="input-text border-0 bg-transparent">'.$r['txn_id'].'&nbsp;</div>'.
           '</div>'.
           '<div class="form-row">'.
-            '<label class="pt-1">Date&nbsp;Paid:</label>'.
-            '<div class="input-text col-12">'.($r['paid_ti']!=0?date($config['dateFormat'],$r['paid_ti']):'&nbsp;').'</div>'.
+            '<label class="col-3">Date&nbsp;Paid</label>'.
+            '<div class="input-text border-0 bg-transparent">'.($r['paid_ti']!=0?date($config['dateFormat'],$r['paid_ti']):'&nbsp;').'</div>'.
           '</div>'.
           '<div class="form-row">'.
-            '<label class="pt-1">Paid&nbsp;Name:</label>'.
-            '<div class="input-text col-12">'.$r['paid_name'].'&nbsp;</div>'.
+            '<label class="col-3">Paid&nbsp;Name</label>'.
+            '<div class="input-text border-0 bg-transparent">'.$r['paid_name'].'&nbsp;</div>'.
           '</div>'.
           '<div class="form-row">'.
-            '<label class="pt-1">Paid&nbsp;Email:</label>'.
-            '<div class="input-text col-12">'.$r['paid_email'].'</div>'.
+            '<label class="col-3">Paid&nbsp;Email</label>'.
+            '<div class="input-text border-0 bg-transparent">'.$r['paid_email'].'</div>'.
           '</div>'.
           ($track['title']!=''?
             '<div class="form-row">'.
-              '<label class="pt-1">Tracking&nbsp;Details:</label>'.
+              '<label>Tracking&nbsp;Details:</label>'.
             '</div>'.
             '<div class="form-row ml-3">'.
-              '<label class="pt-1">Service:</label>'.
-              '<div class="input-text col-12">'.$track['title'].'&nbsp;</div>'.
+              '<label class="col-3">Service:</label>'.
+              '<div class="input-text border-0 bg-transparent">'.$track['title'].'&nbsp;</div>'.
             '</div>'.
             '<div class="form-row ml-3">'.
-              '<label class="pt-1">Tracking&nbsp;Number:</label>'.
-              '<div class="input-text col-12">'.$track['trackNumber'].'&nbsp;<div>'.
+              '<label class="col-3">Tracking&nbsp;Number:</label>'.
+              '<div class="input-text border-0 bg-transparent">'.$track['trackNumber'].'&nbsp;<div>'.
             '</div>'
           :'').
         '</article>'.
@@ -564,6 +566,82 @@ if($t=='content'||$t=='login'||$t=='orders'){
         '</section>'.
       '</div>';
     }
+  }
+  if($t=='agronomy_data'){
+    $sl=$db->prepare("SELECT * FROM `".$prefix."agronomy_livestock` WHERE `id`=:lid LIMIT 1");
+    $sl->execute([':lid'=>$r['lid']]);
+    $rl=$sl->fetch(PDO::FETCH_ASSOC);
+/*
+    Yield
+    Yield Quality
+*/
+    echo'<div class="row p-0 m-0">'.
+      '<div class="col-12">'.
+        '<div class="row">'.
+          '<div class="col-12 col-sm-5 p-1">'.
+            '<div class="row">'.
+              '<div class="col-12 col-sm-6 pr-2">'.
+                '<label for="fibre_yield'.$r['id'].'">Fibre Yield</label>'.
+                '<div class="form-row">'.
+                  '<input class="textinput" id="fibre_yield'.$r['id'].'" type="text" value="'.$r['fibre_yield'].'" placeholder="Fibre Yield..." onkeyup="$(`#savefibre_yield'.$r['id'].'`).addClass(`btn-danger`);">'.
+                  '<div class="input-text border-top border-bottom">Kgs</div>'.
+                  '<button class="save" id="savefibre_yield'.$r['id'].'" data-dbid="fibre_yield'.$r['id'].'" data-tooltip="tooltip" aria-label="Save" onclick="update(`'.$r['id'].'`,`agronomy_data`,`fibre_yield`,$(`#fibre_yield'.$r['id'].'`).val());$(`#savefibre_yield'.$r['id'].'`).removeClass(`btn-danger`);"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="col-12 col-sm-6">'.
+                '<label for="fibre_quality">Fibre Quality</label>'.
+                '<div class="form-row">'.
+                  '<select id="fibre_quality" onchange="update(`'.$r['id'].'`,`agronomy_data`,`fibre_quality`,$(this).val());">'.
+                    '<option value="">None</option>'.
+                    '<option value="Bad">Bad</option>'.
+                    '<option value="Mediocre">Mediocre</option>'.
+                  '</select>'.
+                '</div>'.
+              '</div>'.
+            '</div>'.
+            '<div class="row">'.
+              '<div class="col-12 col-sm-6 pr-2">'.
+                '<label for="milk_yield">Milk Yield</label>'.
+                '<div class="form-row">'.
+                  '<input class="textinput" id="milk_yield" type="text" value="'.$r['milk_yield'].'" placeholder="Milk Yield..." onkeyup="$(`#savemilk_yield`).addClass(`btn-danger`);">'.
+                  '<div class="input-text">Litres</div>'.
+                  '<button class="save" id="savemilk_yield" data-dbid="milk_yield" data-tooltip="tooltip" aria-label="Save" onclick="update(`'.$r['id'].'`,`agronomy_data`,`milk_yield`,$(`#milk_yield`).val());$(`#savemilk_yield`).removeClass(`btn-danger`);"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+              '<div class="col-12 col-sm-6">'.
+                '<label for="milk_quality">Milk Quality</label>'.
+                '<div class="form-row">'.
+                  '<input class="textinput" id="milk_quality" data-dbid="'.$r['id'].'" data-dbt="agronomy_data" data-dbc="milk_quality" type="text" value="'.$r['milk_quality'].'" placeholder="Milk Quality..." onkeyup="$(`#savemilk_quality`).addClass(`btn-danger`);">'.
+                  '<button class="save" id="savemilk_quality" data-dbid="milk_quality" data-tooltip="tooltip" aria-label="Save" onclick="update(`'.$r['id'].'`,`agronomy_data`,`milk_quality`,$(`#milk_quality`).val());$(`#savemilk_quality`).removeClass(`btn-danger`);"><i class="i">save</i></button>'.
+                '</div>'.
+              '</div>'.
+            '</div>'.
+          '</div>'.
+          '<div class="col-12 col-sm-5 p-1">'.
+            'Growth Rate Data'.
+          '</div>'.
+          '<div class="col-12 col-sm-2 py-1">'.
+            '<div class="float-right">'.
+              '<form target="sp" method="post" action="core/purge.php">'.
+                '<input type="hidden" name="id" value="'.$r['id'].'">'.
+                '<input type="hidden" name="t" value="agronomy_data">'.
+                '<button class="purge" data-toolip="tooltip" aria-label="Delete"><i class="i">purge</i></button>'.
+              '</form>'.
+            '</div>'.
+          '</div>'.
+        '</div>'.
+        ($r['notes']!=''?
+          '<div class="row">'.
+            '<div class="col-12 px-2 pt-1">'.
+              '<label for="notes'.$r['id'].'">Notes</label>'.
+              $r['notes'].
+            '</div>'.
+          '</div>'
+        :
+          '').
+      '</div>'.
+    '</div>';
+
   }
   if($o=='modal'){
     echo'</div>';

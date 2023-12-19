@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -27,9 +27,17 @@ if($adminfolder==''){
     'window.top.window.toastr["error"]("Change not saved!");'.
   '</script>';
 }else{
-  $s=$db->prepare("SELECT `id` FROM `".$prefix."menu` WHERE `file` LIKE :file");
-  $s->execute([':file'=>$adminfolder]);
-  if($s->rowCount()>0){
+  $sc1=$db->prepare("SELECT `id` FROM `".$prefix."menu` WHERE `file` LIKE :file");
+  $sc1->execute([':file'=>$adminfolder]);
+  $sc2=$db->prepare("SELECT `id` FROM `".$prefix."sidebar` WHERE `contentType` LIKE :file OR `view` LIKE :file");
+  $sc2->execute([':file'=>$adminfolder]);
+  if($sc1->rowCount()>0){
+    echo'<script>'.
+      'window.top.window.$("#adminfolder").addClass("is-invalid");'.
+      'window.top.window.toastr["info"]("Folder must NOT be the same as an already existing Page!");'.
+      'window.top.window.toastr["error"]("Change not saved!")'.
+    '</script>';
+  }elseif($sc2->rowCount()>0){
     echo'<script>'.
       'window.top.window.$("#adminfolder").addClass("is-invalid");'.
       'window.top.window.toastr["info"]("Folder must NOT be the same as an already existing Page!");'.

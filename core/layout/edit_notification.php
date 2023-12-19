@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -43,7 +43,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           <?=$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Settings</label>':'';?>
 <?php /* Content */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-            <label for="title">Title</label>
+            <label for="title" class="mt-0">Title</label>
             <div class="form-row">
               <input class="textinput" id="title" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="title" type="text" value="<?=$r['title'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?> onkeyup="genurl();$('#titleupdate').text($(this).val());">
               <?=$user['options'][1]==1?'<button class="save" id="savetitle" data-dbid="title" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -104,7 +104,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
 <?php /* Images */ ?>
           <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
-            <legend>Cover</legend>
+            <legend class="mt-0">Background</legend>
             <label for="cover">Image</label>
             <div class="form-row">
               <?php $w='';

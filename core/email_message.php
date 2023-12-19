@@ -45,7 +45,7 @@ if($to!=''){
     $ms->execute([':id'=>$id]);
     if($ms->rowCount()>0)$mr=$ms->fetch(PDO::FETCH_ASSOC);
   }
-  $mail = new PHPMailer\PHPMailer\PHPMailer;
+  $mail=new PHPMailer\PHPMailer\PHPMailer;
   $mail->isSendmail();
   $mail->isHTML(true);
   if($act=='reply'){

@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='35'");
+$sv->execute();
 $rank=0;
 $show='pages';
 if(isset($args[0])&&$args[0]=='add'){
@@ -65,16 +67,29 @@ else{
               $s->execute();
               while($r=$s->fetch(PDO::FETCH_ASSOC)){
                 $seoerrors=0;
-                if(strlen($r['seoTitle'])<50)$seoerrors++;elseif(strlen($r['seoTitle'])>70)$seoerrors++;
-                if(strlen($r['seoDescription'])<1)$seoerrors++;elseif(strlen($r['seoDescription'])>70)$seoerrors++;
-                if($r['cover']!=''&&strlen($r['fileALT'])<1)$seoerrors++;
+                if(strlen($r['seoTitle'])<50||strlen($r['seoTitle'])>70)$seoerrors++;
+                if(strlen($r['seoDescription'])<1||strlen($r['seoDescription'])>70)$seoerrors++;
+                if($r['cover']!=''){
+                  if(strlen($r['fileALT'])<1)$seoerrors++;
+                  list($width,$height,$type,$attr)=@getimagesize($r['cover']);
+                  if($width==null||$height==null)$seoerrors++;
+                }
+                if($r['heading']=='')$seoerrors++;
                 if(strlen(strip_tags($r['notes']))<100)$seoerrors++;
                 preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
                 if(isset($h1[1]))$seoerrors++;
-                if($r['heading']=='')$seoerrors++;?>
+                preg_match_all('~src="\K[^"]+~',$r['notes'],$imgs);
+                if($imgs!=''){
+                  foreach($imgs[0] as $img){
+                    list($width,$height,$type,$attr)=@getimagesize($img);
+                    if($width==null||$height==null){
+                      $seoerrors++;
+                    }
+                  }
+                }?>
                 <article id="l_<?=$r['id'];?>" class="card zebra m-0 p-0 pt-2 overflow-visible card-list item shadow subsortable<?=($seoerrors>0?' badge" data-badge="There are '.$seoerrors.' SEO issues!':'');?>">
                   <div class="row">
-                    <div class="col-12 col-sm p-2 pb-0 pt-3">
+                    <div class="col-12 col-md p-2 pb-0 pt-3">
                       <?php if($user['options'][1]==1){
                         $ss=$db->prepare("SELECT COUNT(`id`) as cnt FROM `".$prefix."suggestions` WHERE `rid`=:id");
                         $ss->execute([':id'=>$r['id']]);
@@ -84,19 +99,19 @@ else{
                       echo'<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'">'.$r['title'].'</a>'.
                       '<small class="d-block text-muted">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucfirst(rank($r['rank'])).'</span> and above').'</small>';?>
                     </div>
-                    <div class="col-2 col-sm-1 text-center pt-0 pt-sm-3 small">
+                    <div class="col-2 col-md-1 text-center pt-0 pt-sm-3 small">
                       <div class="d-block d-sm-none"><strong>Menu</strong></div>
                       <?=ucfirst($r['menu']);?>
                     </div>
-                    <div class="col-2 text-center pt-0 pt-sm-3">
+                    <div class="col-2 col-md-2 text-center pt-0 pt-sm-3">
                       <div class="d-block d-sm-none"><strong>Views</strong></div>
                       <?=$user['options'][1]==1?'<button id="views'.$r['id'].'" class="trash" data-tooltip="tooltip" aria-label="Click to Clear" onclick="$(`#views'.$r['id'].'`).text(`0`);updateButtons(`'.$r['id'].'`,`menu`,`views`,`0`);">'.$r['views'].'</button>':'<span class="badger badge-secondary">'.$r['views'].'</span>';?>
                     </div>
-                    <div class="col-2 col-sm-1 text-center m-0 m-sm-4 mx-2 mx-sm-4" id="menuactive0<?=$r['id'];?>">
+                    <div class="col-2 col-md-1 text-center m-0 m-sm-4 mx-2 mx-sm-4" id="menuactive0<?=$r['id'];?>">
                       <div class="d-block d-sm-none"><strong>Active</strong></div>
                       <?='<input id="active'.$r['id'].'" data-dbid="'.$r['id'].'" data-dbt="menu" data-dbc="active" data-dbb="0" type="checkbox"'.($r['active']==1?' checked aria-checked="true"':' aria-checked="false"').($r['contentType']=='index'?' disabled':'').($user['options'][1]==1?'':' disabled').'>';?>
                     </div>
-                    <div class="col col-sm-2 pt-3 pr-2 text-right" id="controls_<?=$r['id'];?>">
+                    <div class="col-2 col-md-2 pt-3 pr-2 text-right" id="controls_<?=$r['id'];?>">
                       <div class="btn-group" role="group">
                         <?=($r['active']==1?'<button data-social-share="'.URL.($r['contentType']=='index'?'':$r['contentType'].($r['contentType']=='page'?'/'.strtolower(str_replace(' ','-',$r['title'])):'').'/').'" data-social-desc="'.($r['seoDescription']?$r['seoDescription']:$r['title']).'" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>':'').
                         '<a href="'.URL.$settings['system']['admin'].'/pages/edit/'.$r['id'].'"'.($user['options'][1]==1?' role="button" data-tooltip="tooltip" aria-label="Edit"':' role="button" data-tooltip="tooltip" aria-label="View"').'">'.($user['options'][1]==1?'<i class="i">edit</i>':'<i class="i">view</i>').'</a>'.($user['options'][0]==1&&$r['contentType']=='page'?'<button class="purge" data-tooltip="tooltip" aria-label="Delete" onclick="purge(\''.$r['id'].'\',\'menu\');"><i class="i">trash</i></button>':'').

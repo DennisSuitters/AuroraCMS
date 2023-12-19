@@ -4,10 +4,10 @@
  *
  * @category   Administration - Popup - Add Agronomy Area
  * @package    core/layout/agronomyarea-add.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,19 +22,20 @@ define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 define('UNICODE','UTF-8');?>
 <div class="fancybox-ajax p-2">
   <h5>Add an Agronomy Area</h5>
-  <iframe id="sp" name="sp" class="d-none"></iframe>
+  <iframe class="d-none" id="sp" name="sp"></iframe>
   <form id="agronmyform" target="sp" method="post" action="core/add_agronomyarea.php">
     <div class="quickedit">
       <label for="agronomyareaname">Name</label>
       <div class="form-row">
-        <input type="text" id="agronmyname" name="name" value="" placeholder="Enter a Name...">
+        <input id="agronmyname" name="name" type="text" value="" placeholder="Enter a Name...">
       </div>
       <label for="agronomyareatype">Type</label>
       <div class="form-row">
-        <input type="text" id="agronomytype" list="agronomy_types" name="type" value="" placeholder="Select or Enter a Type...">
+        <input id="agronomytype" name="type" list="agronomy_types" type="text" value="" placeholder="Select or Enter a Type...">
         <?php $s=$db->prepare("SELECT DISTINCT `type` FROM `".$prefix."agronomy_areas` WHERE `type`!='' ORDER BY `type` ASC ");
         $s->execute();
         echo'<datalist id="agronomy_types">'.
+          '<option value="Apiary"/>'.
           '<option value="Barbecue"/>'.
           '<option value="Barn"/>'.
           '<option value="Beehive"/>'.
@@ -63,6 +64,7 @@ define('UNICODE','UTF-8');?>
           '<option value="Woodland"/>';
         if($s->rowCount()>0){
           while($r=$s->fetch(PDO::FETCH_ASSOC)){
+            if($r['type']=='Apiary')continue;
             if($r['type']=='Barbecue')continue;
             if($r['type']=='Barn')continue;
             if($r['type']=='Beehive')continue;
@@ -94,13 +96,13 @@ define('UNICODE','UTF-8');?>
       </div>
       <label for="agronomycode">Code</label>
       <div class="form-row">
-        <input type="text" id="agronomycode" name="code" value="" placeholder="Enter a Code...">
+        <input id="agronomycode" name="code" type="text" value="" placeholder="Enter a Code...">
       </div>
       <div class="row">
         <div class="col-12 col-sm-6">
           <label for="agronomycondition">Condition</label>
           <div class="form-row">
-            <input type="text" id="agronomycondition" list="agronomy_conditions" name="condition" value="" placeholder="Enter a Condition...">
+            <input id="agronomycondition" name="condition" list="agronomy_conditions" type="text" value="" placeholder="Enter a Condition...">
             <datalist id="agronomy_conditions">
               <?php $s=$db->prepare("SELECT DISTINCT `condition` FROM `".$prefix."agronomy_areas` WHERE `condition`!='' ORDER BY `condition` ASC ");
               $s->execute();
@@ -112,24 +114,26 @@ define('UNICODE','UTF-8');?>
                 '<option value="Dry"/>'.
                 '<option value="Dusty"/>'.
                 '<option value="Fallow"/>'.
+                '<option value="Healthy"/>'.
                 '<option value="NonArable"/>'.
                 '<option value="Swamp"/>'.
                 '<option value="wet"/>'.
                 '<option value="Wetland"/>';
               if($s->rowCount()>0){
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                  if($r['type']=='Arable')continue;
-                  if($r['type']=='Arid')continue;
-                  if($r['type']=='Degraded')continue;
-                  if($r['type']=='Desertified')continue;
-                  if($r['type']=='Dry')continue;
-                  if($r['type']=='Dusty')continue;
-                  if($r['type']=='Fallow')continue;
-                  if($r['type']=='NonArable')continue;
-                  if($r['type']=='Swamp')continue;
-                  if($r['type']=='wet')continue;
-                  if($r['type']=='Wetland')continue;
-                  echo'<option value="'.$r['type'].'"/>';
+                  if($r['condition']=='Arable')continue;
+                  if($r['condition']=='Arid')continue;
+                  if($r['condition']=='Degraded')continue;
+                  if($r['condition']=='Desertified')continue;
+                  if($r['condition']=='Dry')continue;
+                  if($r['condition']=='Dusty')continue;
+                  if($r['condition']=='Fallow')continue;
+                  if($r['condition']=='Healthy')continue;
+                  if($r['condition']=='NonArable')continue;
+                  if($r['condition']=='Swamp')continue;
+                  if($r['condition']=='wet')continue;
+                  if($r['condition']=='Wetland')continue;
+                  echo'<option value="'.$r['condition'].'"/>';
                 }
               }?>
             </datalist>
@@ -138,24 +142,28 @@ define('UNICODE','UTF-8');?>
         <div class="col-12 col-sm-6">
           <label for="agronomyactivity">Activity</label>
           <div class="form-row">
-            <input type="text" id="agronomyactivity" list="agronomy_activity" name="activity" value="" placeholder="Enter an Activity...">
+            <input id="agronomyactivity" name="activity" list="agronomy_activity" type="text" value="" placeholder="Enter an Activity...">
             <datalist id="agronomy_activity">
               <?php $s=$db->prepare("SELECT DISTINCT `activity` FROM `".$prefix."agronomy_areas` WHERE `activity`!='' ORDER BY `activity` ASC");
               $s->execute();
               echo
                 '<option value="Cultivating"/>'.
+                '<option value="Foraging"/>'.
+                '<option value="Gathering"/>'.
                 '<option value="Grazing"/>'.
                 '<option value="Growing"/>'.
                 '<option value="Irrigation"/>'.
                 '<option value="Resting"/>';
               if($s->rowCount()>0){
                 while($r=$s->fetch(PDO::FETCH_ASSOC)){
-                  if($r['type']=='Cultivating')continue;
-                  if($r['type']=='Grazing')continue;
-                  if($r['type']=='Growing')continue;
-                  if($r['type']=='Irrigation')continue;
-                  if($r['type']=='Resting')continue;
-                  echo'<option value="'.$r['type'].'"/>';
+                  if($r['activity']=='Cultivating')continue;
+                  if($r['activity']=='Foraging')continue;
+                  if($r['activity']=='Gathering')continue;
+                  if($r['activity']=='Grazing')continue;
+                  if($r['activity']=='Growing')continue;
+                  if($r['activity']=='Irrigation')continue;
+                  if($r['activity']=='Resting')continue;
+                  echo'<option value="'.$r['activity'].'"/>';
                 }
               }?>
             </datalist>

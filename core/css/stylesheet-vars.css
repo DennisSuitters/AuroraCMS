@@ -1,8 +1,8 @@
 :root {
   --tile-length: 17.5vmin;
   --animation-duration: 8s;
-  --font: "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font: "Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  --font-family-monospace:SFMono-Regular,Menlo,Monaco, Consolas,"Liberation Mono","Courier New",monospace;
   --font-size: 1rem;
   --accent-color: #007bff;
   --body-background-color: #fafbff;
@@ -47,8 +47,8 @@
   --footer-background-color: #fff;
   --footer-color: #000;
   --footer-link-color: #6c757d;
-  --footer-link-color-hover: #6c757d;
-  --footer-link-color-active: #6c757d;
+  --footer-link-color-hover: var(--link-color-hover);
+  --footer-link-color-active: var(--link-color-hover);
   --footer-link-decoration-hover: underline;
 
   --menu-background-color: transparent;
@@ -77,7 +77,7 @@
   --menu-dropdown-background-color-active: #f5f5f5;
   --menu-dropdown-border-color: transparent;
   --menu-dropdown-header-color: #000;
-  --menu-dropdown-shadow: rgba(0,0,0,.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px;
+  --menu-dropdown-shadow: rgba(0,0,0,.15) 0 15px 25px, rgba(0,0,0,.05) 0 5px 10px;
 
   --sidebar-background-color: #fff;
   --sidebar-background-color-active: #fff;
@@ -92,7 +92,7 @@
   --tab-background-color-active-hover: #fff;
   --tab-background-color-disabled: #aaa;
   --tab-color: #565e64;
-  --tab-color-hover: #6169d0;
+  --tab-color-hover: var(--link-color-hover);
   --tab-color-active: #000;
   --tab-color-disabled: #aaa;
   --tab-border-width: 1px;
@@ -137,6 +137,8 @@
 
   --bg-white: #fff;
   --text-white: #fff;
+  --bg-black: #000;
+  --text-black: #000;
 
   --alert-danger-background-color: #f8d7da;
   --alert-danger-border-color: #f5c2c7;
@@ -309,7 +311,7 @@
   --card-header-background-color: transparent;
   --card-hover: #f5f5f5;
   --card-link-color: #000;
-  --card-link-color-hover: #08f;
+  --card-link-color-hover: var(--link-color-hover);
   --card-border-width: 1px;
   --card-border-style: solid;
   --card-border-radius: .25rem;
@@ -331,7 +333,7 @@
   --list-group-color-active: #212529;
   --list-group-color-disabled: #000;
 
-  --dialog-backdrop-color: rgba(0, 0, 0, .05);
+  --dialog-backdrop-color: rgba(24,24,27,.98);
   --dialog-background-color: #fff;
   --dialog-header-background-color: #fff;
   --dialog-header-color: #000;

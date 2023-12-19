@@ -1,6 +1,5 @@
 .i,
-.i-social{
-  display:inline-block }
+.i-social{display:inline-block}
 
 @font-face{
   font-family:'i';
@@ -42,30 +41,26 @@
   height:14px!important }
 
 .i-2x,
-.i-lg{
-  font-size:18px!important }
+.i-lg{font-size:18px!important}
 
 .a-lg svg,
 .a-2x svg{
   width:28px!important;
   height:28px!important }
 
-.i-3x{
-  font-size:24px!important }
+.i-3x{font-size:24px!important}
 
 .a-3x svg{
   width:42px!important;
   height:42px!important }
 
-.i-4x{
-  font-size:36px!important }
+.i-4x{font-size:36px!important}
 
 .a-4x svg{
   width:56px!important;
   height:56px!important }
 
-.i-5x{
-  font-size:48px!important }
+.i-5x{font-size:48px!important}
 
 .a-5x svg{
   width:70px!important;
@@ -76,49 +71,7 @@
   width:1.28571429em;
   text-align:center }
 
-.a-color-muted,
-.i-color-muted{
-  color:#ccc }
-
-.a-color-block,
-.i-color-black{
-  color:#000 }
-
-.a-color-white,
-.i-color-white{
-  color:#fff }
-
-.a-color-danger,
-.i-color-danger{
-  color:var(--danger-color) }
-
-.i-color-dark{
-  color:var(--dark-color) }
-
-.i-color-default{
-  color:var(--default-color) }
-
-.i-color-info{
-  color:var(--info-color) }
-
-.i-color-light{
-  color:var(--light-color) }
-
-.i-color-primary{
-  color:var(--primary-color) }
-
-.i-color-secondary{
-  color:var(--secondary-color) }
-
-.i-color-success{
-  color:var(--success-color) }
-
-.i-color-warning{
-  color:var(--warning-color) }
-
 .i-spin{
-  width:14px;
-  height:14px;
   animation-name:i-spin;
   animation-duration:1.5s;
   animation-iteration-count:infinite;

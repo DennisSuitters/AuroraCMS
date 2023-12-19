@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,53 +18,76 @@ $seo=[
   'contentHeading' => '',
   'contentNotesHeading' => '',
   'contentNotes' => '',
+  'contentImagesNotes' => '',
   'contentcnt' => 0,
   'seoTitle' => '',
   'seoDescription' => '',
   'seocnt' => 0,
   'imagesALT' => '',
   'imagescnt' => 0,
+  'imagesCover' => ''
 ];
 $seoerrors=0;
 if($r['seoTitle']==''){
-  $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+  $seo['seoTitle']='<div>The <strong>Meta Title</strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!</div>';
   $seo['seocnt']++;
 }elseif(strlen($r['seoTitle'])<50){
-  $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+  $seo['seoTitle']='<div>The <strong>Meta Title</strong> is less than <strong>50</strong> characters!</div>';
   $seo['seocnt']++;
 }elseif(strlen($r['seoTitle'])>70){
-  $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-4`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+  $seo['seoTitle']='<div>The <strong>Meta Title</strong> is longer than <strong>70</strong> characters!</div>';
   $seo['seocnt']++;
 }
 if($r['seoDescription']==''){
-  $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!';
+  $seo['seoDescription']='<div>The <strong>Meta Description</strong> is empty, while AuroraCMS tries to autofill this entry when build the page, it is better to fill in this information yourself!</div>';
   $seo['seocnt']++;
 }elseif(strlen($r['seoDescription'])<1){
-  $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is empty!';
+  $seo['seoDescription']='<div>The <strong>Meta Description</strong> is empty!</div>';
   $seo['seocnt']++;
 }elseif(strlen($r['seoDescription'])>160){
-  $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-4`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+  $seo['seoDescription']='<div>The <strong>Meta Description</strong> is longer than <strong>160</strong> characters!</div>';
   $seo['seocnt']++;
 }
-if($r['cover']!=''&&strlen($r['fileALT'])<1){
-  $seo['imagesALT']='<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
-  $seo['imagescnt']++;
+if($r['cover']!=''){
+  if(strlen($r['fileALT'])<1){
+    $seo['imagesALT']='<div>The <strong>Image ALT</strong> text is empty!</div>';
+    $seo['imagescnt']++;
+  }
+  list($width,$height,$type,$attr)=@getimagesize($r['cover']);
+  if($width==null||$height==null){
+    $seo['imagescnt']++;
+    $seo['imagesCover']='<div>The <strong>Cover Image</strong> is broken!</div>';
+  }
 }
 if(strip_tags($r['notes'])==''){
-  $seo['contentNotes']='<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
+  $seo['contentNotes']='<div>The <strong>Description</strong> is empty. At least <strong>100</strong> characters is recommended!</div>';
   $seo['contentcnt']++;
 }elseif(strlen(strip_tags($r['notes']))<100){
-  $seo['notes']='<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text is less than <strong>100</strong> Characters!';
+  $seo['contentNotes']='<div>The <strong>Description</strong> test is less than <strong>100</strong> characters!</div>';
   $seo['contentcnt']++;
 }
 preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
 if(isset($h1[1])){
-  $seo['contentNotesHeading']='<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Heading</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+  $seo['contentNotesHeading']='<div>Do not use <strong>H1</strong> headings in the <strong>Description</strong> Text, as AuroraCMS uses the <strong>Heading</strong> Field to place H1 headings on page, and uses them for other areas for SEO!</div>';
   $seo['contentcnt']++;
 }
 if($r['heading']==''){
-  $seo['contentHeading']='<br>The <strong><a href="javascript:seoLink(`heading`,`tab1-1`);">Heading</a></strong> Field is empty, this is what is used for your H1 heading!';
+  $seo['contentHeading']='<div>The <strong>Heading</strong> Field is empty, this is what is used for your H1 heading!</div>';
   $seo['contentcnt']++;
+}
+preg_match_all('~src="\K[^"]+~',$r['notes'],$imgs);
+if($imgs!=''){
+  $imagescnt=0;
+  foreach($imgs[0] as $img){
+    list($width,$height,$type,$attr)=@getimagesize($img);
+    if($width==null||$height==null){
+      $seo['contentcnt']++;
+      $imagescnt++;
+    }
+    if($imagescnt>0){
+      $seo['contentImagesNotes']='<div>There are <strong>Broken Images</strong> within the Description Text!</div>';
+    }
+  }
 }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
@@ -105,7 +128,7 @@ if($r['heading']==''){
 <?php /* Content */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
-              <label for="title">Menu Title</label>
+              <label for="title" class="mt-0">Menu Title</label>
               <div class="form-row">
                 <?php if($user['options'][1]==1){
                   $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
@@ -168,7 +191,7 @@ if($r['heading']==''){
                 </div>
               </div>
             <?php }?>
-            <div class="row mt-3<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''?' border-danger border-2':'';?>" id="pageNotes">
+            <div class="row mt-3<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?' border-danger border-2':'';?>" id="pageNotes">
               <?php if($user['options'][1]==1){
                 echo'<div class="wysiwyg-toolbar"><div class="btn-group d-flex justify-content-end">';
                 if($r['suggestions']==1){
@@ -186,7 +209,7 @@ if($r['heading']==''){
                 '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>'.
                 '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=menu&c=notes" data-tooltip="tooltip" aria-label="Add Suggestion"><i class="i">idea</i></button>'.
                 '</div></div>'.
-                ($seo['contentNotes']!=''?'<div class="alert alert-warning m-0">'.strip_tags($seo['contentNotes'],'<strong>').'</div>':'');?>
+                ($seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?'<div class="alert alert-warning m-0">'.$seo['contentNotesHeading'].$seo['contentNotes'].$seo['contentImagesNotes'].'</div>':'');?>
                 <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
                 <form id="summernote" data-dbid="summernote" method="post" target="sp" action="core/update.php" enctype="multipart/form-data">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -222,14 +245,15 @@ if($r['heading']==''){
               <label for="tab2-4">On Page Media</label>
               <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-                  <label for="coverURL">Cover Image URL</label>
-                  <div class="form-row">
+                  <label for="coverURL" class="mt-0">Cover Image URL</label>
+                  <div class="form-row mb-3">
                     <input class="image" id="coverURL" type="text" value="<?=$r['coverURL'];?>"<?=$user['options'][1]==1?' placeholder="Enter Cover URL..."':' readonly';?> onchange="coverUpdate('<?=$r['id'];?>','menu','coverURL',$(this).val());">
                     <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverURL`,``);"><i class="i">trash</i></button>':'';?>
                   </div>
                 <?php }?>
-                <label for="cover">Image</label>
-                <div class="form-row">
+                <label for="cover" class="mt-0">Image</label>
+                <?=($seo['imagesCover']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.$seo['imagesCover'].'</div>':'');?>
+                <div class="form-row<?=($seo['imagesCover']!=''?' border-danger border-2 border-top-0':'');?>">
                   <?php $w='';
                   if(stristr($r['cover'],'/thumbs/'))$w='thumbs';
                   if(stristr($r['cover'],'/lg/'))$w='lg';
@@ -363,7 +387,7 @@ if($r['heading']==''){
                 </div>
               <?php }?>
               <div class="tab2-3 border p-3" data-tabid="tab2-3" role="tabpanel">
-                <label for="coverVideo">Video URL</label>
+                <label for="coverVideo" class="mt-0">Video URL</label>
                 <div class="form-row">
                   <input id="coverVideo" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="coverVideo" type="text" value="<?=$r['coverVideo'];?>">
                   <?=($user['options'][1]==1?
@@ -596,7 +620,7 @@ if($r['heading']==''){
 /* SEO */
           if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
             <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
-              <label for="views">Views</label>
+              <label for="views" class="mt-0">Views</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>

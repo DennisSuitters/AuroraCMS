@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,7 +26,25 @@ else{
                 <ol class="breadcrumb m-0 pl-0 pt-0">
                   <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/agronomy';?>">Agronomy</a></li>
                   <li class="breadcrumb-item active">Edit</i>
-                  <li class="breadcrumb-item active"><?=$ra['name'];?></li>
+                  <li class="breadcrumb-item active breadcrumb-dropdown p-0 pl-3 m-0">
+                    <?php $ss=$db->prepare("SELECT `id`,`name` FROM `".$prefix."agronomy_areas` WHERE `id`!=:id ORDER BY `id` ASC");
+                    $ss->execute([':id'=>$ra['id']]);
+                    echo$ra['name'].
+                    '<span class="breadcrumb-dropdown mx-2"><i class="i pt-1">chevron-down</i></span>'.
+                    '<ol class="breadcrumb-dropper">';
+                      while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
+                        echo'<li><a href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$rs['id'].'">'.$rs['name'].'</a></li>';
+                      }
+                    echo'</ol>';
+                    $sp=$db->prepare("SELECT `id` AS `prev` FROM `".$prefix."agronomy_areas` WHERE `id`<:id ORDER BY `id` DESC LIMIT 1");
+                    $sp->execute([':id'=>$ra['id']]);
+                    $prev=$sp->fetch(PDO::FETCH_ASSOC);
+                    $sn=$db->prepare("SELECT `id` AS `next` FROM `".$prefix."agronomy_areas` WHERE `id`>:id ORDER BY `id` ASC LIMIT 1");
+                    $sn->execute([':id'=>$ra['id']]);
+                    $next=$sn->fetch(PDO::FETCH_ASSOC);
+                    echo'<a class="btn btn-sm btn-ghost"'.($sp->rowCount()>0?' href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$prev['prev'].'" data-tooltip="tooltip" aria-label="Go to previous Livestock."':' disabled="true"').'><i class="i'.($sp->rowCount()>0?'':' text-muted').'">arrow-left</i></a>'.
+                    '<a class="btn btn-sm btn-ghost"'.($sn->rowCount()>0?' href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$next['next'].'" data-tooltip="tooltip" aria-label="Go to next Livestock."':' disabled="true"').'><i class="i'.($sn->rowCount()>0?'':' text-muted').'">arrow-right</i></a>';?>
+                  </li>
                 </ol>
               </div>
               <div class="col-12 col-sm-2 text-right">
@@ -39,40 +57,7 @@ else{
           </div>
           <div class="row">
             <div class="col-12 col-sm-5 col-lg-4 col-xl-3 col-xxl-2">
-              <div class="form-row">
-                <?php $sp=$db->prepare("SELECT `id` AS `prev` FROM `".$prefix."agronomy_areas` WHERE `id`<:id ORDER BY `id` DESC");
-                $sp->execute([':id'=>$ra['id']]);
-                if($sp->rowCount()>0){
-                  $prev=$sp->fetch(PDO::FETCH_ASSOC);?>
-                  <a href="<?= URL.$settings['system']['admin'].'/agronomy/area/'.$prev['prev'];?>" role="button" data-tooltip="tooltip" aria-label="Go to previous area."><i class="i">arrow-left</i></a>
-                <?php }else{?>
-                  <a role="button" disabled="true"><i class="i text-muted">arrow-left</i></a>
-                <?php }
-                $ss=$db->prepare("SELECT `id`,`name` FROM `".$prefix."agronomy_areas` WHERE `id`!=:id ORDER BY `id` ASC");
-                $ss->execute([':id'=>$ra['id']]);
-                echo'<div class="input-text border-top border-bottom w-100">'.
-                  '<ul class="breadcrumb m-0 p-0">'.
-                    '<li class="breadcrumb-item active breadcrumb-dropdown">'.
-                      $ra['name'].
-                      '<span class="breadcrumb-dropdown pt-2 ml-2"><i class="i pt-1">chevron-down</i></span>'.
-                      '<ul class="breadcrumb-dropper">';
-                        while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-                          echo'<li><a href="'.URL.$settings['system']['admin'].'/agronomy/area/'.$rs['id'].'">'.$rs['name'].'</a></li>';
-                        }
-                      echo'</ul>'.
-                    '</li>'.
-                  '</ul>'.
-                '</div>';
-                $sn=$db->prepare("SELECT `id` AS `next` FROM `".$prefix."agronomy_areas` WHERE `id`>:id");
-                $sn->execute([':id'=>$ra['id']]);
-                if($sn->rowCount()>0){
-                  $next=$sn->fetch(PDO::FETCH_ASSOC);?>
-                  <a class="float-right" href="<?= URL.$settings['system']['admin'].'/agronomy/area/'.$next['next'];?>" role="button" data-tooltip="tooltip" aria-label="Go to next area."><i class="i">arrow-right</i></a>
-                <?php }else{?>
-                  <a role="button" disabled="true"><i class="i text-muted">arrow-right</i></a>
-                <?php }?>
-              </div>
-              <label for="name">Name</label>
+              <label class="mt-0" for="name">Name</label>
               <div class="form-row">
                 <input class="textinput" id="name" data-dbid="<?=$ra['id'];?>" data-dbt="agronomy_areas" data-dbc="name" type="text" value="<?=$ra['name'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?> onkeyup="updatePopup('name',$(this).val());">
                 <?=$user['options'][1]==1?'<button class="save" id="savename" data-dbid="name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
@@ -245,7 +230,7 @@ else{
               navigator.geolocation.getCurrentPosition(
                 function(position){
                   var map=L.map('map').setView([position.coords.latitude,position.coords.longitude],13);
-                  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
+                  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
                     attribution:'',
                     maxZoom:20,
                     id:'mapbox/streets-v11',

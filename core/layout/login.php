@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -76,7 +76,7 @@
           <button onclick="$('#login,#panel-rst,.btn-message').toggleClass('d-none');"><span class="btn-message">Reset Password</span><span class="btn-message d-none">I remembered, take me back to Login</span></button>
         </div>
         <div class="row mt-4 text-center">
-          <a href="<?= URL;?>">&larr; Back to <?=$config['business']!=''?$config['business']:'Main Site';?></a>
+          <a href="<?= URL;?>"><i class="i align-middle">arrow-left</i> Back to <?=$config['business']!=''?$config['business']:'Main Site';?></a>
         </div>
       </div>
     </main>

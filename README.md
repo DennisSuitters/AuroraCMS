@@ -2,7 +2,7 @@
 
 AuroraCMS the **Free** Australian Open Source [MIT](https://github.com/DiemenDesign/AuroraCMS/blob/master/LICENSE) licensed Content Management System, built primarily for Australian Businesses, built utilising [PHP](http://php.net/), PDO, [jQuery](http://jquery.com/) and [iCONS](https://github.com/DiemenDesign/iCONS). Built to take advantage of HTML5 and CSS3, with necessary SEO attributes that fit in with Google's recommendations, Micro-formats, JSON-LD, ARIA (A11Y), and general SEO Markup.
 
-Current version is v0.2.26
+Current version is v0.2.26-1
 
 ### Features
 - AuroraCMS is a Quasi-MVC, Front End is completely MVC, with some AJAX Functions for Form Processing.
@@ -23,6 +23,7 @@ Current version is v0.2.26
 - Related Content, either Chosen or Category matched.
 - FOMO Notifications.
   - Limit different content types to Australian State area.
+  - Choose differents per contentType.
 - Custom Pages.
 - Content Types with pages, and individual item pages.
   - Activities
@@ -230,11 +231,10 @@ By downloading AuroraCMS you hereby agree not to hold Diemen Design liable for a
   - Windows Testing, bug finding and reporting.
 
 ### AuroraCMS Live Sites by Diemen Design:
-- [AAAEarthworx](https://aaaearthworx.com.au/)
 - [BizzyKnits](https://bizzyknits.biz/)
 - [Corner Life Coach](https://corner.net.au/)
 - [Cradle Mountain Fishery and Camping](https://cradlemountainfisheryandcamping.com.au/)
-- [Diemen Design](https://diemen.design/)
+- [Diemen Design](https://diemendesign.com.au/)
 - [EntertainMe](https://entertainme.net.au/)
 - [Fast Track Business Club](https://www.fasttrackbusinessclub.com.au/)
 - [Happy Valley Free Rang Farm](https://happyvalleyfarm.com.au/)

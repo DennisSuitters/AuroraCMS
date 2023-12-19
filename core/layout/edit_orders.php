@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -85,23 +85,23 @@ else{?>
             <div class="card col-12 p-1 p-md-3">
               <div class="row">
                 <div class="col-12 col-sm-6 col-lg-3 pr-0 pr-sm-3">
-                  <label>Order #</label>
+                  <label class="mt-0">Order #</label>
                   <div class="input-text">
                     <a target="_blank" href="<?= URL.'orders/'.($r['iid']==''?$r['qid']:$r['iid']);?>"><?=$r['iid']==''?$r['qid']:$r['iid'].' <i class="i">new-window</i>';?></a>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 pr-0 pr-lg-3">
-                  <label>Created</label>
+                  <label class="mt-0">Created</label>
                   <div class="input-text">
                     <?=$r['iid_ti']!=0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']);?>
                   </div>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3 pr-0 pr-sm-3">
-                  <label for="due_ti">Due</label>
+                  <label for="due_ti" class="mt-0">Due</label>
                   <input id="due_ti" type="date" value="<?= date('Y-m-d',$r['due_ti']);?>"<?php if($r['status']!='archived'){?> autocomplete="off" data-tooltip="tooltip" aria-label="Order Due Date" onchange="update(`<?=$r['id'];?>`,`orders`,`due_ti`,getTimestamp(`due_ti`));"<?php }?>>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3">
-                  <label for="status_<?=$r['id'];?>">Status</label>
+                  <label for="status_<?=$r['id'];?>" class="mt-0">Status</label>
                   <select id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status"<?=($r['status']=='archived'||$r['status']=='paid'?' readonly':' onchange="update(`'.$r['id'].'`,`orders`,`status`,$(this).val(),`select`);"');?>>
                     <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
                     <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
@@ -245,25 +245,25 @@ else{?>
                   </p>
                 </div>
                 <?php if($r['status']!='archived'){?>
-                  <div class="form-row">
-                    <div class="input-text"><strong>Client</strong></div>
+                  <div class="form-row pl-2">
+                    <label>Client</label>
                     <select id="changeClient" data-tooltip="tooltip" aria-label="Select a Client..." onchange="changeClient($(this).val(),'<?=$r['id'];?>');">
-                    <option value="0"<?=$r['cid']=='0'?' selected':'';?>>None</option>
-                    <?php $q=$db->query("SELECT `id`,`business`,`username`,`name` FROM `".$prefix."login` WHERE `status`!='delete' AND `status`!='suspended' AND `id`!='0'");
-                    if($q->rowCount()>0){
-                      while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($r['cid']==$rs['id']?' selected':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business'].'</option>':'');
-                    }?>
-                  </select>
-                </div>
-              <?php }?>
-            </div>
+                      <option value="0"<?=$r['cid']=='0'?' selected':'';?>>None</option>
+                      <?php $q=$db->query("SELECT `id`,`business`,`username`,`name` FROM `".$prefix."login` WHERE `status`!='delete' AND `status`!='suspended' AND `id`!='0'");
+                      if($q->rowCount()>0){
+                        while($rs=$q->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($r['cid']==$rs['id']?' selected':'').'>'.$rs['username'].($rs['name']!=''?' ['.$rs['name'].']':'').($rs['business']!=''?' -> '.$rs['business'].'</option>':'');
+                      }?>
+                    </select>
+                  </div>
+                <?php }?>
+              </div>
             <?php if($r['status']!='archived'){?>
-              <form class="form-row mt-1" target="sp" method="post" action="core/updateorder.php">
+              <form class="form-row mt-1 pl-2" target="sp" method="post" action="core/updateorder.php">
                 <input name="act" type="hidden" value="additem">
                 <input name="id" type="hidden" value="<?=$r['id'];?>">
                 <input name="t" type="hidden" value="orderitems">
                 <input name="c" type="hidden" value="">
-                <div class="input-text"><strong>Inventory/Services/Events/Courses</strong></div>
+                <label>Inventory/Services/Events/Courses</label>
                 <select name="da" data-tooltip="tooltip" aria-label="Select Inventory, Service, Event or Empty Entry">
                   <option value="0">Add Empty Entry...</option>
                   <option value="neg">Add Deducation Entry...</option>
@@ -285,12 +285,12 @@ else{?>
               </form>
               <?php $so=$db->query("SELECT `id`,`rid`,`code`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='option' ORDER BY `code` ASC,`title` ASC");
               if($so->rowCount()>0){?>
-                <form class="form-row mt-1" target="sp" method="post" action="core/updateorder.php">
+                <form class="form-row mt-1 pl-2" target="sp" method="post" action="core/updateorder.php">
                   <input name="act" type="hidden" value="addoption">
                   <input name="id" type="hidden" value="<?=$r['id'];?>">
                   <input name="t" type="hidden" value="orderitems">
                   <input name="c" type="hidden" value="">
-                  <div class="input-text"><strong>Option</strong></div>
+                  <label>Option</label>
                   <select name="da" data-tooltip="tooltip" aria-label="Select Option">
                     <option value="">Select Option...</option>
                     <?php while($ro=$so->fetch(PDO::FETCH_ASSOC)){

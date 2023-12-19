@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -133,7 +133,7 @@
     <div style="position:absolute;top:0;right:0;bottom:0;left:0;background-color:rgba(0,0,0,.75);" class="justify-content-center p-5 d-none" id="protocol-modal">
       <p class="text-white">Due to weather api restrictions, data can only be shown via HTTP request.</p>
       <p class="text-white">Sorry for the inconvenience.</p>
-      <?=($config['geo_weatherAPI']==''?'<p class="text-danger small">There is no API Key added for <a class="text-danger" target="_blank" href="https://openweathermap.org/">Open Weather Map</a></p><p class="small">Once obtained, enter key at <a class="text-white" href="http://localhost/AuroraCMS2/admin/preferences/contact#prefgeo_weatherAPI">Preferences > Contact > API Key</a></p>':'');?>
+      <?=($config['geo_weatherAPI']==''?'<p class="text-danger small">There is no API Key added for <a class="text-danger" target="_blank" href="https://openweathermap.org/">Open Weather Map</a></p><p class="small">Once obtained, enter key at <a class="text-white" href="'.URL.$settings['system']['admin'].'/interface/settings#tab1-3">Settings > Interface > API Key</a></p>':'');?>
     </div>
   </div>
 </div>

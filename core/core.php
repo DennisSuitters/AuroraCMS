@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -84,7 +84,6 @@ if(isset($config['php_options'])&&$config['php_options'][5]==1){
 define('THEME','layout'.DS.$config['theme']);
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $ti=time();
-$sale=getSaleTime();
 $s=$db->prepare("UPDATE `".$prefix."content` SET `status`='published' WHERE `status`='autopublish' AND `pti`<:pti");
 $s->execute([':pti'=>time()]);
 $s=$db->prepare("UPDATE `".$prefix."login` SET `hti`=:ti,`hostStatus`='overdue' WHERE `hti`<:ti AND `hostStatus`='outstanding'");
@@ -287,46 +286,6 @@ function secondsToWords($inputSeconds) {
   }
   return implode(', ', $timeParts);
 }
-function getSaleTime(){
-  $chkti=time();
-  $sale=[
-    'tis'=>0,
-		'tie'=>0,
-    'sale'=>'',
-    'class'=>'',
-		'title'=>'',
-  ];
-  $year=date('Y',$chkti);
-	$month=strtotime("1 month");
-  $vatie=strtotime("2/14/$year"); // Valentine's Day
-	$vatis=$vatie - $month;
-	if($chkti>$vatis&&$chkti<$vatie)$sale=['tis'=>$vatis,'tie'=>$vatie,'sale'=>'valentine','class'=>'valentine','title'=>'Checkout our products in our Valentine\'s Day Sale!'];
-  $eatie=strtotime("last sunday of march $year"); // Easter
-	$eatis=$eatie - $month;
-	if($chkti>$eatis&&$chkti<$eatie)$sale=['tis'=>$eatis,'tie'=>$eatie,'sale'=>'easter','class'=>'easter','title'=>'Checkout our products in our Easter Sale!'];
-  $mdtie=strtotime("5/8/$year"); // Mother's Day
-	$mdtis=$mdtie - $month;
-	if($chkti>$mdtis&&$chkti<$mdtie)$sale=['tis'=>$mdtis,'tie'=>$mdtie,'sale'=>'mothersday','class'=>'mothersday','title'=>'Spoil your Mother with something from our Mother\'s Day Sale!'];
-  $fdtie=strtotime("9/4/$year"); // Father's Day
-	$fdtis=$fdtie - $month;
-	if($chkti>$fdtis&&$chkti<$fdtie)$sale=['tis'=>$fdtis,'tie'=>$fdtie,'sale'=>'fathersday','class'=>'fathersday','title'=>'Spoil your Father with something from our Father\'s Day Sale!'];
-  $bftie=strtotime("last friday of october $year"); // Black Friday
-	$bftis=$bftie - $month;
-	if($chkti>$bftis&&$chkti<$bftie)$sale=['tis'=>$bftis,'tie'=>$bftie,'sale'=>'blackfriday','class'=>'blackfriday','title'=>'Get something from our Black Friday Sale!'];
-  $hwtie=strtotime("10/31/$year"); // Halloween
-	$hwtis=$hwtie - $month;
-	if($chkti>$hwtis&&$chkti<$hwtie)$sale=['tis'=>$hwtis,'tie'=>$hwtie,'sale'=>'halloween','class'=>'halloween','title'=>'Get something spooky from our Halloween Sale!'];
-  $sbtie=strtotime("last saturday of november $year"); // Small Business Day
-	$sbtis=$sbtie - $month;
-	if($chkti>$sbtis&&$chkti<$sbtie)$sale=['tis'=>$sbtis,'tie'=>$sbtie,'sale'=>'smallbusinessday','class'=>'smallbusinessday','title'=>'Support our business by getting something from our Small Business Day Sale!'];
-  $cdtie=strtotime("12/25/$year"); // Christmas Day
-	$cdtis=$cdtie - $month;
-	if($chkti>$cdtis&&$chkti<$cdtie)$sale=['tis'=>$cdtis,'tie'=>$cdtie,'sale'=>'christmas','class'=>'christmas','title'=>'Get something Jolly from a Christmas Sale!'];
-	$eofytie=strtotime("7/30/$year"); // End Of Financial Year
-	$eofytis=$eofytie - $month;
-	if($chkti>$eofytis&&$chkti<$eofytie)$sale=['tis'=>$eofytis,'tie'=>$eofytie,'sale'=>'eofy','class'=>'eofy','title'=>'Get a great deal with our recommended End Of Financial Year selected products!'];
-  return$sale;
-}
 function size_format($B,$D=2){
   $S='kMGTPEZY';
   $F=floor((strlen($B) - 1) / 3);
@@ -425,8 +384,20 @@ class admin{
 		$view='livechat';
 		require'admin.php';
 	}
+	function cart($args=false){
+		$view='cart';
+		require'admin.php';
+	}
 	function comments($args=false){
 		$view='comments';
+		require'admin.php';
+	}
+	function contact($args=false){
+		$view='contact';
+		require'admin.php';
+	}
+	function contacts($args=false){
+		$view='contacts';
 		require'admin.php';
 	}
 	function content($args=false){
@@ -441,12 +412,20 @@ class admin{
 		$view='dashboard';
 		require'admin.php';
 	}
+	function database($args=false){
+		$view='database';
+		require'admin.php';
+	}
 	function faq($args=false){
 		$view='faq';
 		require'admin.php';
 	}
 	function forum($args=false){
 		$view='forum';
+		require'admin.php';
+	}
+	function interface($args=false){
+		$view='interface';
 		require'admin.php';
 	}
 	function joblist($args=false){
@@ -506,16 +485,28 @@ class admin{
 		$view='settings';
 		require'admin.php';
 	}
-	function security($args=false){
-		$view='security';
-		require'admin.php';
-	}
 	function search($args=false){
 		$view='search';
 		require'admin.php';
 	}
+	function security($args=false){
+		$view='security';
+		require'admin.php';
+	}
+	function seo($args=false){
+		$view='seo';
+		require'admin.php';
+	}
+	function system($args=false){
+		$view='system';
+		require'admin.php';
+	}
 	function templates($args=false){
 		$view='templates';
+		require'admin.php';
+	}
+	function theme($args=false){
+		$view='theme';
 		require'admin.php';
 	}
   function tracker($args=false){
@@ -708,12 +699,17 @@ $routes=[
 	$settings['system']['admin'].'/agronomy'=>['admin','agronomy'],
 	$settings['system']['admin'].'/bookings'=>['admin','bookings'],
 	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
+	$settings['system']['admin'].'/cart'=>['admin','cart'],
 	$settings['system']['admin'].'/comments'=>['admin','comments'],
+	$settings['system']['admin'].'/contact'=>['admin','contact'],
+	$settings['system']['admin'].'/contacts'=>['admin','contacts'],
 	$settings['system']['admin'].'/content'=>['admin','content'],
 	$settings['system']['admin'].'/course'=>['admin','course'],
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],
+	$settings['system']['admin'].'/database'=>['admin','database'],
 	$settings['system']['admin'].'/faq'=>['admin','faq'],
 	$settings['system']['admin'].'/forum'=>['admin','forum'],
+	$settings['system']['admin'].'/interface'=>['admin','interface'],
 	$settings['system']['admin'].'/joblist'=>['admin','joblist'],
 	$settings['system']['admin'].'/logout'=>['admin','logout'],
 	$settings['system']['admin'].'/media'=>['admin','media'],
@@ -730,6 +726,10 @@ $routes=[
 	$settings['system']['admin'].'/reviews'=>['admin','reviews'],
 	$settings['system']['admin'].'/search'=>['admin','search'],
 	$settings['system']['admin'].'/security'=>['admin','security'],
+	$settings['system']['admin'].'/seo'=>['admin','seo'],
+	$settings['system']['admin'].'/system'=>['admin','system'],
+	$settings['system']['admin'].'/social'=>['admin','social'],
+	$settings['system']['admin'].'/theme'=>['admin','theme'],
 	$settings['system']['admin'].'/templates'=>['admin','templates'],
   $settings['system']['admin'].'/tracker'=>['admin','tracker'],
 	$settings['system']['admin']=>['admin','dashboard'],

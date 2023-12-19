@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -124,7 +124,8 @@ if($act!=''){
 						if($act=='add_tstavatar'){
 							$fn='tst'.$fn;
 							$q=$db->prepare("UPDATE `".$prefix."content` SET `file`=:avatar WHERE `id`=:id");
-						}else$q=$db->prepare("UPDATE `".$prefix."login` SET `avatar`=:avatar WHERE `id`=:id");
+						}else
+              $q=$db->prepare("UPDATE `".$prefix."login` SET `avatar`=:avatar WHERE `id`=:id");
 						$q->execute([
 							':avatar'=>'avatar'.$fn,
 							':id'=>$id
@@ -134,8 +135,10 @@ if($act!=''){
             $image->target_path='../media/avatar/avatar'.$fn;
             $image->resize(150,150,ZEBRA_IMAGE_CROP_CENTER);
             rename($tp,'../media/avatar/avatar'.$fn);
-						if($act=='add_tstavatar')echo'window.top.window.$("#tstavatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
- 						else echo'window.top.window.$(".img-avatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
+						if($act=='add_tstavatar')
+              echo'window.top.window.$("#tstavatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
+ 						else
+              echo'window.top.window.$(".account-avatar").attr("src","media/avatar/avatar'.$fn.'?'.time().'");';
 					}
         }
       }

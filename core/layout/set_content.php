@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- */?>
+ */
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='36'")->execute();
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='32'")->execute();?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
@@ -19,8 +21,8 @@
           <div class="row">
             <div class="col-12 col-sm-6">
               <ol class="breadcrumb m-0 pl-0 pt-0">
-                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
-                <li class="breadcrumb-item active">Settings</li>
+                <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
+                <li class="breadcrumb-item active"><a href="<?= URL.$settings['system']['admin'].'/content';?>">Content</a></li>
               </ol>
             </div>
             <div class="col-12 col-sm-6 text-right">
@@ -40,9 +42,9 @@
           <label for="tab1-3">Notifications</label>
           <input class="tab-control" id="tab1-4" name="tabs" type="radio">
           <label for="tab1-4">Templates</label>
-<?php /* Tab 1 General */ ?>
+<?php /* General */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-            <label for="defaultOrder">Default Order for Content Items</label>
+            <label for="defaultOrder" class="mt-0">Default Order for Content Items</label>
             <div class="form-row">
               <select id="defaultOrder" data-dbid="1" data-dbt="config" data-dbc="defaultOrder"<?=$user['options'][7]==1?' onchange="update(`1`,`config`,`defaultOrder`,$(this).val(),`select`);"':' disabled';?>>
                 <option value="new"<?=$config['defaultOrder']=='new'?' selected':'';?>>Newest</option>
@@ -80,38 +82,36 @@
               <input id="enableCategoryNavigation" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="31" type="checkbox"<?=($config['options'][31]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
               <label for="enableCategoryNavigation">Category Navigation</label>
             </div>
-            <div class="sticky-top">
-              <div class="row">
-                <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
-                  <div class="row">
-                    <div class="col-12 col-md pl-2">Category</div>
-                    <div class="col-12 col-md pl-2">Content Type</div>
-                    <div class="col-12 col-md-1 pl-2">Icon</div>
-                  </div>
-                </article>
-              </div>
-              <?php if($user['options'][7]==1){?>
-                <form class="row" target="sp" method="post" action="core/add_category.php">
-                  <div class="col-12 col-md">
-                    <input id="cat" name="cat" type="text" placeholder="Enter or Select a Category...">
-                  </div>
-                  <div class="col-12 col-md">
-                    <select id="ct" name="ct">
-                      <?php $sc=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
-                      $sc->execute();
-                      while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</option>';?>
-                    </select>
-                  </div>
-                  <div class="col-12 col-md-1">
-                    <div class="form-row">
-                      <input id="icon" name="icon" type="hidden" value="" readonly>
-                      <button onclick="elfinderDialog('1','category','icon');return false;" data-tooltip="tooltip" aria-label="Open Media Manager"><i class="i">browse-media</i></button>
-                      <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
-                    </div>
-                  </div>
-                </form>
-              <?php }?>
+            <div class="row">
+              <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
+                <div class="row">
+                  <div class="col-12 col-md pl-2">Category</div>
+                  <div class="col-12 col-md pl-2">Content Type</div>
+                  <div class="col-12 col-md-1 pl-2">Icon</div>
+                </div>
+              </article>
             </div>
+            <?php if($user['options'][7]==1){?>
+              <form class="row" target="sp" method="post" action="core/add_category.php">
+                <div class="col-12 col-md">
+                  <input id="cat" name="cat" type="text" placeholder="Enter or Select a Category...">
+                </div>
+                <div class="col-12 col-md">
+                  <select id="ct" name="ct">
+                    <?php $sc=$db->prepare("SELECT DISTINCT(`contentType`) FROM `".$prefix."content` WHERE `contentType`!='' ORDER BY contentType ASC");
+                    $sc->execute();
+                    while($rc=$sc->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rc['contentType'].'">'.ucfirst($rc['contentType']).'</option>';?>
+                  </select>
+                </div>
+                <div class="col-12 col-md-1">
+                  <div class="form-row">
+                    <input id="icon" name="icon" type="hidden" value="" readonly>
+                    <button onclick="elfinderDialog('1','category','icon');return false;" data-tooltip="tooltip" aria-label="Open Media Manager"><i class="i">browse-media</i></button>
+                    <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                  </div>
+                </div>
+              </form>
+            <?php }?>
             <div id="category">
               <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='category' ORDER BY `contentType` ASC,`title` ASC");
               $ss->execute();
@@ -139,8 +139,9 @@
               <?php }?>
             </div>
           </div>
+<?php /* Inventory */ ?>
           <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
-            <div class="form-row mt-3">
+            <div class="form-row">
               <input id="enableQuickView" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="5" type="checkbox"<?=($config['options'][5]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
               <label for="enableQuickView">Quick View for Products &amp; Gallery</label>
             </div>
@@ -155,32 +156,95 @@
               </select>
             </div>
             <hr>
-            <legend>Brands</legend>
-            <div class="sticky-top">
-              <div class="row">
-                <article class="card py-1 overflow-visible card-list card-list-header shadow">
-                  <div class="row">
-                    <div class="col-12 col-md pl-2">Brand</div>
-                    <div class="col-12 col-md pl-2">URL</div>
+            <legend>Discount Ranges</legend>
+            <div class="form-row mt-2 mb-1">
+              <input id="discountRangeCalculations" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="26" type="checkbox"<?=$config['options'][26]==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+              <label for="discountRangeCalculations">Discount Range Calculations</label>
+            </div>
+            <div class="row">
+              <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
+                <div class="row">
+                  <div class="col-12 col-md pl-2">From</div>
+                  <div class="col-12 col-md pl-2">To</div>
+                  <div class="col-12 col-md pl-2">Method</div>
+                  <div class="col-12 col-md pl-2">Value</div>
+                </div>
+              </article>
+            </div>
+            <?php if($user['options'][7]==1){?>
+              <form class="row" target="sp" method="post" action="core/add_discountrange.php">
+                <div class="col-12 col-md">
+                  <input name="f" type="number" value="" placeholder="Enter Value...">
+                </div>
+                <div class="col-12 col-md">
+                  <input name="t" type="number" value="" placeholder="Enter Value...">
+                </div>
+                <div class="col-12 col-md">
+                  <select name="m">
+                    <option value="1">$ Off</option>
+                    <option value="2">&#37; Off</option>
+                  </select>
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input name="v" type="number" value="" placeholder="Enter Cost...">
+                    <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
                   </div>
-                </article>
-              </div>
-              <?php if($user['options'][7]==1){?>
-                <form class="row" target="sp" method="post" action="core/add_brand.php">
+                </div>
+              </form>
+            <?php }?>
+            <div id="discountrange">
+              <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='discountrange' AND `uid`=0 ORDER BY `t` ASC");
+              $ss->execute();
+              while($rs=$ss->fetch(PDO::FETCH_ASSOC)){?>
+                <div id="l_<?=$rs['id'];?>" class="row">
                   <div class="col-12 col-md">
-                    <input id="brandtitle" name="brandtitle" type="text" placeholder="Enter a Brand...">
+                    <div class="input-text"><?=$rs['f'];?></div>
+                  </div>
+                  <div class="col-12 col-md">
+                    <div class="input-text"><?=$rs['t'];?></div>
+                  </div>
+                  <div class="col-12 col-md">
+                    <div class="input-text"><?=$rs['value']==2?'&#37; Off':'&#36; Off';?></div>
                   </div>
                   <div class="col-12 col-md">
                     <div class="form-row">
-                      <input class="col-md" id="brandurl" name="brandurl" type="text" placeholder="Enter a URL...">
-                      <input id="brandicon" name="brandicon" type="hidden" value="" readonly>
-                      <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','brand','brandicon');return false;"><i class="i">browse-media</i></button>
-                      <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                      <div class="input-text col-md"><?=$rs['cost'];?></div>
+                      <form target="sp" action="core/purge.php">
+                        <input name="id" type="hidden" value="<?=$rs['id'];?>">
+                        <input name="t" type="hidden" value="choices">
+                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                      </form>
                     </div>
                   </div>
-                </form>
+                </div>
               <?php }?>
             </div>
+            <hr>
+            <legend>Brands</legend>
+            <div class="row">
+              <article class="card py-1 overflow-visible card-list card-list-header shadow">
+                <div class="row">
+                  <div class="col-12 col-md pl-2">Brand</div>
+                  <div class="col-12 col-md pl-2">URL</div>
+                </div>
+              </article>
+            </div>
+            <?php if($user['options'][7]==1){?>
+              <form class="row" target="sp" method="post" action="core/add_brand.php">
+                <div class="col-12 col-md">
+                  <input id="brandtitle" name="brandtitle" type="text" placeholder="Enter a Brand...">
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input class="col-md" id="brandurl" name="brandurl" type="text" placeholder="Enter a URL...">
+                    <input id="brandicon" name="brandicon" type="hidden" value="" readonly>
+                    <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('1','brand','brandicon');return false;"><i class="i">browse-media</i></button>
+                    <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                  </div>
+                </div>
+              </form>
+            <?php }?>
             <div id="brand">
               <?php $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='brand' ORDER BY `title` ASC");
               $ss->execute();
@@ -209,57 +273,86 @@
             <legend>Sales Periods</legend>
             <div class="form-row mt-3">
               <input id="enableSalesPeriods" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="28" type="checkbox"<?=($config['options'][28]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-              <label for="enableSalesPeriods">Calculate Sales Periods</label>
+              <label for="enableSalesPeriods">Enable Sales Periods</label>
             </div>
-            <label for="saleHeadingvalentine">Valentine Sale Heading</label>
+            <label for="saleHeading">Sale Heading</label>
             <div class="form-row">
-              <input class="textinput" id="saleHeadingvalentine" data-dbid="1" data-dbt="config" data-dbc="saleHeadingvalentine" type="text" value="<?=$config['saleHeadingvalentine'];?>"<?=($user['options'][7]==1?' placeholder="Enter Valentine Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingvalentine" data-dbid="saleHeadingvalentine" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+              <input class="textinput" id="saleHeading" data-dbid="1" data-dbt="config" data-dbc="saleHeading" type="text" value="<?=$config['saleHeading'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Sale Heading..."':' readonly';?>>
+              <?=$user['options'][1]==1?'<button class="save" id="savesaleHeading" data-dbid="saleHeading" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <label for="saleHeadingeaster">Easter Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingeaster" data-dbid="1" data-dbt="config" data-dbc="saleHeadingeaster" type="text" value="<?=$config['saleHeadingeaster'];?>"<?=($user['options'][7]==1?' placeholder="Enter Easter Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingeaster" data-dbid="saleHeadingeaster" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+            <div class="row mt-3">
+              <article class="card py-1 overflow-visible card-list card-list-header shadow">
+                <div class="row">
+                  <div class="col-12 col-md pl-2">Sale Period</div>
+                  <div class="col-12 col-md pl-2">Class</div>
+                  <div class="col-12 col-md pl-2">Start Date</div>
+                  <div class="col-12 col-md pl-2">End Date</div>
+                </div>
+              </article>
             </div>
-            <label for="saleHeadingmothersday">Mother's Day Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingmothersday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingmothersday" type="text" value="<?=$config['saleHeadingmothersday'];?>"<?=($user['options'][7]==1?' placeholder="Enter Mother\'s Day Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingmothersday" data-dbid="saleHeadingmothersday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-            </div>
-            <label for="saleHeadingfathersday">Father's Day Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingfathersday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingfathersday" type="text" value="<?=$config['saleHeadingfathersday'];?>"<?=($user['options'][7]==1?' placeholder="Enter Father\'s Day Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingfathersday" data-dbid="saleHeadingfathersday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-            </div>
-            <label for="saleHeadingblackfriday">Black Friday Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingblackfriday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingblackfriday" type="text" value="<?=$config['saleHeadingblackfriday'];?>"<?=($user['options'][7]==1?' placeholder="Enter Black Friday Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingblackfriday" data-dbid="saleHeadingblackfriday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-            </div>
-            <label for="saleHeadinghalloween">Halloween Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadinghalloween" data-dbid="1" data-dbt="config" data-dbc="saleHeadinghalloween" type="text" value="<?=$config['saleHeadinghalloween'];?>"<?=($user['options'][7]==1?' placeholder="Enter Halloween Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadinghalloween" data-dbid="saleHeadinghalloween" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-            </div>
-            <label for="saleHeadingsmallbusinessday">Small Business Day Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingsmallbusinessday" data-dbid="1" data-dbt="config" data-dbc="saleHeadingsmallbusinessday" type="text" value="<?=$config['saleHeadingsmallbusinessday'];?>"<?=($user['options'][7]==1?' placeholder="Enter Small Business Day Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingsmallbusinessday" data-dbid="saleHeadingsmallbusinessday" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-            </div>
-            <label for="saleHeadingchristmas">Christmas Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingchristmas" data-dbid="1" data-dbt="config" data-dbc="saleHeadingchristmas" type="text" value="<?=$config['saleHeadingchristmas'];?>"<?=($user['options'][7]==1?' placeholder="Enter Christmas Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingchristmas" data-dbid="saleHeadingchristmas" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-            </div>
-            <label for="saleHeadingEOFY">End Of Financial Year Sale Heading</label>
-            <div class="form-row">
-              <input class="textinput" id="saleHeadingEOFY" data-dbid="1" data-dbt="config" data-dbc="saleHeadingEOFY" type="text" value="<?=$config['saleHeadingEOFY'];?>"<?=($user['options'][7]==1?' placeholder="Enter End Of Financial Year Sale Heading..."':' disabled');?>>
-              <?=($user['options'][7]==1?'<button class="save" id="savesaleHeadingEOFY" data-dbid="saleHeadingEOFY" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+            <?php if($user['options'][7]==1){?>
+              <form class="row" target="sp" method="post" action="core/add_saleperiod.php">
+                <div class="col-12 col-md">
+                  <input id="saleperiod" list="saleperiodlist" name="p" type="text" placeholder="Enter a Sale Period...">
+                  <datalist id="saleperiodlist">
+                    <option value="Black Friday">
+                    <option value="Christmas">
+                    <option value="Easter">
+                    <option value="End of Financial Year">
+                    <option value="Father's Day">
+                    <option value="Halloween">
+                    <option value="Mother's Day">
+                    <option value="Small Business Day">
+                    <option value="Valentine">
+                  </datalist>
+                </div>
+                <div class="col-12 col-md">
+                  <input id="saleClass" name="c" type="text" placeholder="Enter a Class...">
+                </div>
+                <div class="col-12 col-md">
+                  <input id="tis" name="tis" type="date" value="" onchange="$(`#tisx`).val(getTimestamp(`tis`));">
+                  <input id="tisx" name="tisx" type="hidden" value="<?= time();?>">
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="tie" name="tie" type="date" value="" onchange="$(`#tiex`).val(getTimestamp(`tie`));">
+                    <input id="tiex" name="tiex" type="hidden" value="<?= time();?>">
+                    <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                  </div>
+                </div>
+              </form>
+            <?php }?>
+            <div id="saleperiods">
+              <?php $sp=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='sales' ORDER BY `title` ASC, `ti` ASC");
+              $sp->execute();
+              while($rp=$sp->fetch(PDO::FETCH_ASSOC)){?>
+                <div class="card zebra border-0" id="l_<?=$rp['id'];?>">
+                  <div class="row">
+                    <div class="col-12 col-md pl-2 py-2"><?=$rp['code'];?></div>
+                    <div class="col-12 col-md pl-2 py-2"><?=$rp['type'];?></div>
+                    <div class="col-12 col-md pl-2 py-2">
+                      <?=date($config['dateFormat'],$rp['tis']);?>
+                    </div>
+                    <div class="col-12 col-md pl-2 pr-1">
+                      <div class="d-inline-block py-2"><?=date($config['dateFormat'],$rp['tie']);?></div>
+                      <?php if($user['options'][7]==1){?>
+                        <div class="float-right">
+                          <form target="sp" action="core/purge.php">
+                            <input name="id" type="hidden" value="<?=$rp['id'];?>">
+                            <input name="t" type="hidden" value="choices">
+                            <button class="trash" type="submit" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                          </form>
+                        </div>
+                      <?php }?>
+                    </div>
+                  </div>
+                </div>
+              <?php }?>
             </div>
           </div>
-<? /* FOMO Notifications */?>
+<?php /* FOMO Notifications */?>
           <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
-            <legend class="mt-3">FOMO Notifications</legend>
+            <legend>FOMO Notifications</legend>
             <div class="row mt-2">
               <div class="col-12 col-md-4 pr-3">
                 <div class="form-row">
@@ -273,9 +366,11 @@
                   <label for="fomoOptions7">Show State</label>
                 </div>
               </div>
-              <div class="col-12 col-md-4 pr-3">
-                <input id="fomoFullname" data-dbid="1" data-dbt="config" data-dbc="fomoFullname" data-dbb="0" type="checkbox"<?=($config['fomoFullname']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
-                <label for="fomoFullname">Show Full State Name</label>
+              <div class="col-12 col-md-4">
+                <div class="form-row">
+                  <input id="fomoFullname" data-dbid="1" data-dbt="config" data-dbc="fomoFullname" data-dbb="0" type="checkbox"<?=($config['fomoFullname']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                  <label for="fomoFullname">Show Full State Name</label>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -489,7 +584,7 @@
           </div>
 <?php /* Templates */ ?>
           <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
-            <label for="templateQTY" class="mt-3">Item Template Quantity</label>
+            <label for="templateQTY" class="mt-0">Item Template Quantity</label>
             <?=($user['options'][7]==1?'<div class="form-text">\'0\' to Disable.</div>':'');?>
             <div class="form-row">
               <input class="textinput" id="templateQTY" data-dbid="1" data-dbt="config" data-dbc="templateQTY" type="text" value="<?=$config['templateQTY'];?>"<?=($user['options'][7]==1?' placeholder="Enter Template Item Quantity..."':' disabled');?>>

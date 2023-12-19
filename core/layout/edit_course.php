@@ -7,10 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='61'");
+$sv->execute();
 $r=$s->fetch(PDO::FETCH_ASSOC);?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
@@ -50,7 +52,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <label for="tab1-7">Students</label>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-              <label for="title">Title</label>
+              <label for="title" class="mt-0">Title</label>
               <div class="form-text">Course MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages.</div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information"><i class="i">seo</i></button>
@@ -142,12 +144,14 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
               </div>
-              <div class="form-row mt-3">
-                <input data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                <label for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
-              </div>
               <div class="row">
-                <div class="col-12 col-sm">
+                <div class="col-12 col-sm pr-sm-3">
+                  <div class="form-row mt-5">
+                    <input data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                    <label for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
+                  </div>
+                </div>
+                <div class="col-12 col-sm pr-sm-3">
                   <label for="cost">Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
@@ -166,7 +170,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <?=$user['options'][1]==1?'<button class="save" id="savecost" data-dbid="cost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
-                <div class="col-12 col-sm pl-sm-3">
+                <div class="col-12 col-sm">
                   <label for="rCost">Reduced Cost</label>
                   <div class="form-row">
                     <div class="input-text">$</div>
@@ -246,7 +250,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 <label for="tab2-2">On Page Media</label>
                 <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                   <div id="error"></div>
-                  <label for="fileURL">URL</label>
+                  <label for="fileURL" class="mt-0">URL</label>
                   <div class="form-row">
                     <?=$r['fileURL']!=''?'<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>':'<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">'.'<input class="textinput" id="fileURL" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="fileURL" type="text" value="'.$r['fileURL'].'"'.($user['options'][1]==1?' placeholder="Enter a URL..."':' readonly').'>'.($user['options'][1]==1?'<button class="save" id="savefileURL" data-dbid="fileURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
                   </div>
@@ -370,7 +374,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
 <?php /* SEO */?>
             <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
-              <label for="views">Views</label>
+              <label for="views" class="mt-0">Views</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
@@ -463,7 +467,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
               <div class="row">
                 <div class="col-12 col-sm-6 pr-md-3">
-                  <label for="status">Status</label>
+                  <label for="status" class="mt-0">Status</label>
                   <div class="form-row">
                     <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');changeShareStatus($(this).val());">
                       <option value="unpublished"<?=$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
@@ -484,7 +488,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   }
                 </script>
                 <div class="col-12 col-sm-6">
-                  <label for="rank">Access</label>
+                  <label for="rank" class="mt-0">Access</label>
                   <div class="form-row">
                     <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rank"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','rank',$(this).val(),'select');toggleRank($(this).val());">
                       <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>

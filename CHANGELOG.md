@@ -1,4 +1,26 @@
-### v0.2.26
+### v0.2.26-1
+- Fix PHPMailer not being called correctly. Was stopping emails being sent.
+- Fix deprecated option in preg_split function in Spam Filter.
+- Update Summernote to fix Save Button color indication being overridden.
+- Add updated Summernote Image Attributes plugin.
+- Add Enquiry output for Activities in FOMO Notifications.
+- Fix page-block activity not being set to display none.
+- Separate various Administation Settings into tabbed panels for better Organization.
+- Add sorting by usage to Administration sidemenu, so most commonly used pages appear at the top.
+- Fix Administration sidemenu dropdowns.
+- Administration Settings Options to more applicable areas.
+- Fix changing Administration access folder to check for already existing pages to avoid conflict.
+- Add Tagify Javascript library, to make adding/editing tags much easier.
+- Make Dashboard Welcome message more friendly.
+- Fix link in Weather Widget for API Link.
+- Add Contacts editing to Administration.
+- Improve Toast Notification Colours.
+- Add LiveChat Notification for when new LiveChat participants are online.
+- Reconfigure how Sales Periods work.
+  - Add ability to add any type of Sale Period, including choosing dates.
+  - Adding a class to a Sale Period also adds class to the body tag to allow styling overrides for the Sale Period duration.
+
+#### v0.2.26
 - Update logo and background image.
 - Update Favicons.
 - Add option check for Sales to stop Widget appearing in Dashboard if disabled.

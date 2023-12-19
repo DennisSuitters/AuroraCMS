@@ -4,10 +4,10 @@
  *
  * @category   Index - The Beginning
  * @package    index.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.16
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */

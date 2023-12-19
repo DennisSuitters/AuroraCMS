@@ -4,13 +4,15 @@
  *
  * @category   Administration - Bookings
  * @package    core/layout/bookings.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='20'");
+$sv->execute();
 if($view=='add'){
   $ti=time();
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content` (`uid`,`contentType`,`status`,`ti`,`tis`) VALUES (:uid,'booking','unconfirmed',:ti,:tis)");

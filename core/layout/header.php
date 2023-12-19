@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -31,10 +31,11 @@
       </li>
       <li class="ml-3" data-tooltip="left" aria-label="Switch Theme Mode">
         <input class="d-none" id="theme-checkbox" type="checkbox">
+        <?php if(!isset($_COOKIE['admintheme']))$_COOKIE['admintheme']='';?>
         <label class="m-0" for="theme-checkbox">
-          <i class="i i-3x theme-mode theme-light<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='light'?'':' d-none');?>">light-mode</i>
-          <i class="i i-3x theme-mode theme-dark<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='dark'?'':' d-none');?>">dark-mode</i>
-          <i class="i i-3x theme-mode theme-system<?=(isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']=='system'||$_COOKIE['admintheme']==''?'':' d-none');?>">system-mode</i>
+          <i class="i i-3x theme-mode theme-system<?=($_COOKIE['admintheme']=='system'||$_COOKIE['admintheme']==''?'':' d-none');?>">system-mode</i>
+          <i class="i i-3x theme-mode theme-light<?=($_COOKIE['admintheme']=='light'?'':' d-none');?>">light-mode</i>
+          <i class="i i-3x theme-mode theme-dark<?=($_COOKIE['admintheme']=='dark'?'':' d-none');?>">dark-mode</i>
         </label>
         <ul class="p-0" id="nav-theme-list">
           <li><a class="p-2 px-3" onclick="selectTheme('light');">Light</a></li>
@@ -42,25 +43,16 @@
           <li><a class="p-2 px-3" onclick="selectTheme('system');">System</a></li>
         </ul>
       </li>
-      <li class="badge ml-3 text-center" id="nav-stat" aria-label="Notifications" data-badge="<?=$navStat>0?$navStat:'';?>">
+      <li class="badge position-relative mx-3" id="nav-stat" aria-label="Notifications" data-badge="">
         <input class="d-none" id="notification-checkbox" type="checkbox">
         <label class="m-0" for="notification-checkbox"><i class="i i-3x">bell</i></label>
         <ul class="p-0" id="nav-stat-list">
-          <li class="dropdown-heading py-2">Notifications</li>
-          <?=($nc['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/comments"><span class="badger badge-primary mr-2">'.$nc['cnt'].'</span>Comments</a></li>':'').
-          ($nr['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/reviews"><span class="badger badge-primary mr-2">'.$nr['cnt'].'</span>Reviews</a></li>':'').
-          ($nm['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/messages"><span class="badger badge-primary mr-2">'.$nm['cnt'].'</span>Messages</a></li>':'').
-          ($po['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/orders/pending"><span class="badger badge-primary mr-2">'.$po['cnt'].'</span>Orders</a></li>':'').
-          ($nb['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/bookings"><span class="badger badge-primary mr-2">'.$nb['cnt'].'</span>Bookings</a></li>':'').
-          ($nu['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts"><span class="badger badge-primary mr-2">'.$nu['cnt'].'</span>Users</a></li>':'').
-          ($nt['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/content/type/testimonials"><span class="badger badge-primary mr-2">'.$nt['cnt'].'</span>Testimonials</a></li>':'').
-          ($nou['cnt']>0?'<li><a href="'.URL.$settings['system']['admin'].'/accounts"><span class="badger badge-primary mr-2">'.$nou['cnt'].'</span>Active Users</a></li>':'');?>
         </ul>
       </li>
-      <li data-tooltip="left" aria-label="View Site">
+      <li class="mr-3" data-tooltip="left" aria-label="View Site">
         <a href="<?= URL;?>"><i class="i i-3x">browser-general</i></a>
       </li>
-      <li class="text-center ml-3" id="nav-accounts" data-tooltip="left" aria-label="Account Settings">
+      <li class="text-center" id="nav-accounts" data-tooltip="left" aria-label="Account Settings">
         <input class="d-none" id="header-account-checkbox" type="checkbox">
         <label class="m-0" for="header-account-checkbox">
           <span class="d-inline" id="account">

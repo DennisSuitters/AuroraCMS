@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -421,6 +421,7 @@
             lineWrapping:true,
             theme:'base16-dark',
           },
+          dialogsAnim: 'elastic',
           isNotSplitEdgePoint:true,
           stickyToolbar: true,
           tabsize:2,
@@ -438,7 +439,7 @@
           ],
           popover:{
             image:[
-              ['custom',['picture','imageShapes','captionIt']],
+              ['custom',['imageAttributes','captionIt','imageShapes']],
               ['imagesize',['imageSize100','imageSize50','imageSize25']],
               ['float',['floatLeft','floatRight','floatNone']],
               ['remove',['removeMedia']],
@@ -681,7 +682,11 @@ else
         }
       }
     }
+    getNavStats();
     setInterval(function(){
+      getNavStats();
+    },30000);
+    function getNavStats(){
       $.get("<?= URL;?>core/nav-stats.php",{},function(results){
         var stats=results.split(",");
         var navStat=$('#nav-stat').html();
@@ -703,8 +708,13 @@ else
           document.title='<?=$config['business']!=''?$config['business']:'';?> Administration';
         }
         if(stats[0]>0)document.title='('+stats[0]+') <?=$config['business']!=''?$config['business']:'';?> Administration';
+        <?php if($view!='livechat'){
+          if($config['options'][13]==1){?>
+            if(stats[10]>0)toastr["info"]("There are "+stats[10]+" LiveChat people waiting to Chat!");
+          <?php }
+        }?>
       });
-    },30000);
+    }
     $(document).on("click","[data-social-share]",function(){
       var url=$(this).data("social-share");
       var desc=$(this).data("social-desc");

@@ -190,21 +190,25 @@
 				<author>
 					<hr>
 					<aside class="card border-0">
-						<div class="card-header h5">About the Author</div>
-						<div class="card-body">
-							<div class="row">
-								<div class="col-2 col-md-1">
-									<print author="avatar" alt="name" class="img-thumbnail">
-								</div>
-								<div class="col-9 col-md-10 ml-2">
-				      		<div class="h5"><print author="name"></div>
-									<div>
-										<print author="social" type="icon" class="i i-social i-2x m-1">
+						<div class="card-header h3">Content Authored by</div>
+						<authors>
+							<div class="card-body">
+								<div class="row">
+									<div class="col-2 col-md-1">
+										<img src="<print author=avatar>" alt="<print author=name>" class="img-thumbnail">
 									</div>
-	  							<print author="notes">
+									<div class="col-9 col-md-10 ml-2">
+					      		<div class="h5"><print author="name"></div>
+										<div>
+											<authorsocial>
+												<a href="<print author=sociallink>" aria-label="<print author=sociallabel>"><i class="i i-social i-3x mr-1 social-<print author=socialicon>">social-<print author=socialicon></i></a>
+											</authorsocial>
+										</div>
+		  							<print author="notes">
+									</div>
 								</div>
 							</div>
-						</div>
+						</authors>
 					</aside>
 				</author>
 				<review>

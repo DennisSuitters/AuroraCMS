@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -1020,11 +1020,6 @@ if($skip==false){
       $item=str_replace('<json-ld>',$jsonld,$item);
     }
     $sidecat=isset($r['category_1'])&&$r['category_1']!=''?$r['category_1']:'';
-    $item=preg_replace([
-      '/<print author=[\"\']?name[\"\']?>/'
-    ],[
-      isset($ua['name'])&&$ua['name']!=''?htmlspecialchars($ua['name'],ENT_QUOTES,'UTF-8'):(isset($ua['username'])&&$ua['username']!=''?htmlspecialchars($ua['username'],ENT_QUOTES,'UTF-8'):'')
-    ],$item);
   /* Related */
     if($view=='article'||$view=='inventory'||$view=='service'||$view=='portfolio'&&stristr($item,'<related')){
       if($config['options'][11]==1){
@@ -1137,6 +1132,95 @@ if($skip==false){
         ],$item,1);
       }else
         $item=preg_replace('~<downloads>.*?<\/downloads>~is','',$item,1);
+    }
+  /* Authors */
+    if($view=='article'&&stristr($item,'<author')){
+      preg_match('/<authors>([\w\W]*?)<\/authors>/',$item,$match);
+      $authors=$match[1];
+      preg_match('/<authorsocial>([\w\W]*?)<\/authorsocial>/',$item,$match);
+      $authorsocial=$match[1];
+      $sa=$db->prepare("SELECT `id`,`username`,`name`,`rank`,`avatar`,`gravatar`,`caption`,`notes` FROM `".$prefix."login` WHERE `id`=:uid");
+      $sa->execute([':uid'=>$r['uid']]);
+      $ra=$sa->fetch(PDO::FETCH_ASSOC);
+      $aavatar=NOAVATAR;
+      if($ra['avatar']!=''&&file_exists('media/avatar/'.basename($ra['avatar'])))
+        $aavatar='media/avatar/'.basename('media/avatar/'.basename($ra['avatar']));
+      elseif(isset($ra['gravatar'])&&$ra['gravatar']!=''){
+        if(stristr($ra['gravatar'],'@'))
+          $aavatar='http://gravatar.com/avatar/'.md5($ra['gravatar']);
+        elseif(stristr($ra['gravatar'],'gravatar/avatar'))
+          $aavatar=$ra['gravatar'];
+      }
+      $authorsocialout='';
+      $saa=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='social' ORDER BY `ord` ASC");
+      $saa->execute([':uid'=>$r['uid']]);
+      while($sar=$saa->fetch(PDO::FETCH_ASSOC)){
+        $authorsocialout.=preg_replace([
+          '/<print author=[\'\"]?sociallink[\'\"]?>/',
+          '/<print author=[\'\"]?sociallabel[\'\"]?>/',
+          '/<print author=[\'\"]?socialicon[\'\"]?>/'
+        ],[
+          $sar['url'],
+          ucwords($sar['icon']),
+          $sar['icon']
+        ],$authorsocial);
+      }
+      $authorout=preg_replace([
+        '/<print author=[\'\"]?avatar[\'\"]?>/',
+        '/<print author=[\'\"]?name[\'\"]?>/',
+        '~<authorsocial>.*?<\/authorsocial>~is',
+        '/<print author=[\'\"]?notes[\'\"]?>/'
+      ],[
+        $aavatar,
+        ($ra['name']!=''?$ra['name']:$ra['username']),
+        $authorsocialout,
+        rawurldecode($ra['notes'])
+      ],$authors);
+      if($r['cuid']!=''){
+        $caid=explode(",",$r['cuid']);
+        foreach($caid as $aid){
+          $sa=$db->prepare("SELECT `id`,`username`,`name`,`rank`,`avatar`,`gravatar`,`caption`,`notes` FROM `".$prefix."login` WHERE `id`=:uid");
+          $sa->execute([':uid'=>$aid]);
+          $ra=$sa->fetch(PDO::FETCH_ASSOC);
+          $aavatar=NOAVATAR;
+          if($ra['avatar']!=''&&file_exists('media/avatar/'.basename($ra['avatar'])))
+            $aavatar='media/avatar/'.basename('media/avatar/'.basename($ra['avatar']));
+          elseif(isset($ra['gravatar'])&&$ra['gravatar']!=''){
+            if(stristr($ra['gravatar'],'@'))
+              $aavatar='http://gravatar.com/avatar/'.md5($ra['gravatar']);
+            elseif(stristr($ra['gravatar'],'gravatar/avatar'))
+              $aavatar=$ra['gravatar'];
+          }
+          $authorsocialout='';
+          $saa=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `uid`=:uid AND `contentType`='social' ORDER BY `ord` ASC");
+          $saa->execute([':uid'=>$aid]);
+          while($sar=$saa->fetch(PDO::FETCH_ASSOC)){
+            $authorsocialout.=preg_replace([
+              '/<print author=[\'\"]?sociallink[\'\"]?>/',
+              '/<print author=[\'\"]?sociallabel[\'\"]?>/',
+              '/<print author=[\'\"]?socialicon[\'\"]?>/'
+            ],[
+              $sar['url'],
+              ucwords($sar['icon']),
+              $sar['icon']
+            ],$authorsocial);
+          }
+          $authorout.=preg_replace([
+            '/<print author=[\'\"]?avatar[\'\"]?>/',
+            '/<print author=[\'\"]?name[\'\"]?>/',
+            '~<authorsocial>.*?<\/authorsocial>~is',
+            '/<print author=[\'\"]?notes[\'\"]?>/'
+          ],[
+            $aavatar,
+            ($ra['name']!=''?$ra['name']:$ra['username']),
+            $authorsocialout,
+            rawurldecode($ra['notes'])
+          ],$authors);
+        }
+      }
+      $item=preg_replace('~<authors>.*?<\/authors>~is',$authorout,$item,1);
+    }else{
+      $item=preg_replace('~<author>.*?<\/author>~is','',$item,1);
     }
   /* Reviews */
     if($view!='page'&&stristr($item,'<review')){

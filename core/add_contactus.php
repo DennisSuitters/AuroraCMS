@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,7 +52,7 @@ if($not['spammer']==false){
       $name=filter_input(INPUT_POST,'name',FILTER_UNSAFE_RAW);
       $subject=filter_input(INPUT_POST,'subject',FILTER_UNSAFE_RAW);
   		$notes=filter_input(INPUT_POST,'notes',FILTER_UNSAFE_RAW);
-      if($config['spamfilter']==1&&$note['spammer']==false&&$ip='127.0.0.1'){
+      if($config['spamfilter']==1&&$not['spammer']==false&&$ip='127.0.0.1'){
         $filter=new SpamFilter();
         $result=$filter->check_email($email);
         if($result)$not=['spammer'=>true,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'The data entered into the Form fields has been detected by our Filters as Spammy.','reason'=>'Contact Form, Spam Detected via Form Field Data.'];
@@ -90,9 +90,9 @@ if($not['spammer']==false){
               require'phpmailer/PHPMailer.php';
               require'phpmailer/SMTP.php';
               require'phpmailer/Exception.php';
-  						$mail = new PHPMailer\PHPMailer\PHPMailer;
+  						$mail=new PHPMailer\PHPMailer\PHPMailer;
               $mail->isSendmail();
-    					$mail->SetFrom($email, $name);
+    					$mail->SetFrom($email,$name);
   						$toname=$config['email'];
   						$mail->AddAddress($config['email']);
   						$mail->IsHTML(true);
@@ -104,9 +104,11 @@ if($not['spammer']==false){
   								 'Message: '.$notes;
   						$mail->Body=$msg;
   						$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));
-  						if($mail->Send())$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
-  						else$not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
-  						$mail2=new PHPMailer;
+  						if($mail->Send())
+                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-success','text'=>'Thank You for Contacting Us.','reason'=>''];
+  						else
+                $not=['spammer'=>false,'target'=>'contact','element'=>'div','action'=>'replace','class'=>'not alert alert-danger','text'=>'There was an Issue Sending Your Message. But we have a record of your contact, so never fear, we still got your message.','reason'=>''];
+  						$mail2=new PHPMailer\PHPMailer\PHPMailer;
   						$mail2->isSendmail();
   						$mail2->SetFrom($config['email'],$config['business']);
   						$toname=$email;

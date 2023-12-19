@@ -4,10 +4,10 @@
  *
  * @category   Administration - Accounts - Edit
  * @package    core/layout/edit_accounts.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -29,7 +29,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="col-12 col-sm-6 text-right">
               <div class="btn-group">
-                <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
+                <?=(isset($_SERVER['HTTP_REFERER'])?'<a data-tooltip="left" href="'.$_SERVER['HTTP_REFERER'].'" role="button" aria-label="Back"><i class="i">back</i></a>':'').
                 ($user['options'][5]==1?'<button class="btn saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
               </div>
             </div>
@@ -52,163 +52,78 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           <input class="tab-control" id="tab1-8" name="tabs" type="radio">
           <label for="tab1-8">Settings</label>
           <?=($config['hoster']==1?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Hosting/Website Payments</label>':'');?>
-<?php /* Tab 1 General */?>
+<?php /* General */?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-            <?=($user['rank']==1000?'<div class="row"><div id="accountIP" class="col-12"><div class="form-text text-muted"><small>IP: '.$r['userIP'].' | '.$r['userAgent'].'</small></div></div></div>':'');?>
             <div class="row">
               <div class="col-12 col-md-6 pr-md-2">
-                <label for="ti">Created</label>
+                <label for="ti" class="mt-0">Created</label>
                 <div class="form-row">
                   <input id="ti" type="text" value="<?= date($config['dateFormat'],$r['ti']);?>" readonly>
                 </div>
               </div>
               <div class="col-12 col-md-6 pl-md-2">
-                <label for="lti">Last Login</label>
+                <label for="lti" class="mt-0">Last Login</label>
                 <div class="form-row">
                   <input id="lti" type="text" value="<?= _ago($r['lti']);?>" readonly>
                 </div>
               </div>
             </div>
-            <div class="row">
-              <div class="col-12 col-md-6 pr-md-2">
-                <label for="username">Username</label>
-                <div class="form-row">
-                  <input class="textinput" id="username" type="text" value="<?=$r['username'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?=$user['options'][5]==1?'':' readonly';?>>
-                  <?=$user['options'][5]==1?'<button class="save" id="saveusername" data-dbid="username" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-                <div class="alert alert-danger d-none" id="uerror" role="alert">Username already exists!</div>
-              </div>
-              <div class="col-12 col-md-6 pl-md-2">
-                <label for="email">Email</label>
-                <div class="form-row">
-                  <input class="textinput" id="email" type="text" value="<?=$r['email'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?=$user['options'][5]==1?'':' readonly';?>>
-                  <?=$user['options'][5]==1?'<button class="save" id="saveemail" data-dbid="email" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <legend role="heading">Orders Information</legend>
-            <?php $purchaseLimit=$config['memberLimit'];
-            if($r['purchaseLimit']==0||$r['purchaseLimit']==''){
-              if($r['rank']==200)$purchaseLimit=$config['memberLimit'];
-              if($r['rank']==210)$purchaseLimit=$config['memberLimitSilver'];
-              if($r['rank']==220)$purchaseLimit=$config['memberLimitBronze'];
-              if($r['rank']==230)$purchaseLimit=$config['memberLimitGold'];
-              if($r['rank']==240)$purchaseLimit=$config['memberLimitPlatinum'];
-              if($r['rank']==310)$purchaseLimit=$config['memberLimitSilver'];
-              if($r['rank']==320)$purchaseLimit=$config['memberLimitBronze'];
-              if($r['rank']==330)$purchaseLimit=$config['memberLimitGold'];
-              if($r['rank']==340)$purchaseLimit=$config['memberLimitPlatinum'];
-            }else
-              $purchaseLimit=$r['purchaseLimit'];
-            if($purchaseLimit==0||$purchaseLimit=='')
-              $purchaseLimit='Unlimited';?>
-            <div class="row">
-              <div class="col-12 col-sm-6 pr-md-3">
-                <label for="purchaseLimit">Purchase Limit Override</label>
-                <div class="form-row">
-                  <input class="textinput" id="purchaseLimit" type="number" value="<?=$r['purchaseLimit'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseLimit"<?=$user['options'][5]==1?'':' readonly';?>>
-                  <?=$user['options'][5]==1?'<button class="save" id="savepurchaseLimit" data-dbid="purchaseLimit" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-                <div class="form-text">(Set to "0" or no value to use default for this account level, currently allowed to purchase <?=$purchaseLimit;?> items.)</div>
-              </div>
-              <div class="col-12 col-sm-6">
-                <label for="purchaseTime">Wholesale Purchase Time</label>
-                <select id="purchaseTime" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseTime"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','purchaseTime',$(this).val(),'select');">
-                  <option value="0"<?=$r['purchaseTime']==0?' selected':'';?>>Use System Default</option>
-                  <option value="2629743"<?=$r['purchaseTime']==2629743?' selected':'';?>>1 Month</option>
-                  <option value="5259486"<?=$r['purchaseTime']==5259486?' selected':'';?>>2 Months</option>
-                  <option value="7889229"<?=$r['purchaseTime']==7889229?' selected':'';?>>3 Months</option>
-                  <option value="15778458"<?=$r['purchaseTime']==15778458?' selected':'';?>>6 Months</option>
-                  <option value="31556926"<?=$r['purchaseTime']==31556926?' selected':'';?>>1 Year</option>
-                  <option value="63113852"<?=$r['purchaseTime']==63113852?' selected':'';?>>2 Years</option>
-                  <option value="94670778"<?=$r['purchaseTime']==94670778?' selected':'';?>>3 Years</option>
-                </select>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-12 col-sm-4 pr-md-3">
-                <label for="pti">Last Purchase Date</label>
-                <div class="form-row">
-                  <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('.timeago($r['pti']).')';?>
-                </div>
-              </div>
-              <div class="col-12 col-sm-4 pr-md-3">
-                <label for="spent">Spent</label>
-                <div class="form-row">
-                  <div class="input-text">$</div>
-                  <input class="textinput" id="spent" type="number" value="<?=$r['spent'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="spent"<?=$user['options'][5]==1?'':' readonly';?>>
-                  <?=$user['options'][5]==1?'<button class="save" id="savespent" data-dbid="spent" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-              </div>
-              <div class="col-12 col-sm-4">
-                <label for="points">Points Earned</label>
-                <div class="form-row">
-                  <input class="textinput" id="points" type="number" value="<?=$r['points'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="points"<?=$user['options'][5]==1?'':' readonly';?>>
-                  <?=$user['options'][5]==1?'<button class="save" id="savepoints" data-dbid="points" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-              </div>
-            </div>
-            <hr>
-            <legend role="heading">Subject Tags</legend>
-            <label for="tags">Tags</label>
+            <label for="username">Username</label>
             <div class="form-row">
-              <input class="textinput" id="tags" type="text" value="<?=$r['tags'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="tags"<?=$user['options'][5]==1?'':' readonly';?>>
-              <?=$user['options'][5]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+              <input class="textinput" id="username" type="text" value="<?=$r['username'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="username" placeholder="Enter a Username..."<?=$user['options'][5]==1?'':' readonly';?>>
+                <?=$user['options'][5]==1?'<button class="save" id="saveusername" data-dbid="username" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <?php if($user['options'][1]==1){
-              $tags=array();
-              $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
-              if($st->rowCount()>0){
-                while($rt=$st->fetch(PDO::FETCH_ASSOC)){
-                  $tagslist=explode(",",$rt['tags']);
-                  foreach($tagslist as$t){
-                    $tgs[]=$t;
-                  }
-                }
-              }
-              if(!empty($tags)){
-                $tags=array_unique($tgs);
-                asort($tags);
-              }
-              echo'<select id="tags_options" onchange="addTag($(this).val());">'.
-                '<option value="none">Clear All</option>';
-                foreach($tags as$t)echo'<option value="'.$t.'">'.$t.'</option>';
-              echo'</select>';
-            }?>
+            <div class="alert alert-danger d-none" id="uerror" role="alert">Username already exists!</div>
+            <?=($user['rank']==1000?'<div class="row mt-3"><div id="accountIP" class="col-12"><div class="form-text text-muted"><small>IP: '.$r['userIP'].' | '.$r['userAgent'].'</small></div></div></div>':'');?>
           </div>
-<?php /* Tab 2 Contact */ ?>
+<?php /* Contact */ ?>
           <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
+            <label for="name" class="mt-0">Name</label>
+            <div class="form-row">
+              <input class="textinput" id="name" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="name" type="text" value="<?=$r['name'];?>" placeholder="Enter a Name..."<?=$user['options'][5]==1?'':' readonly';?>>
+              <?=$user['options'][5]==1?'<button class="save" id="savename" data-dbid="name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+            </div>
             <div class="row">
-              <div class="col-12 col-md-6 pr-md-2">
-                <label for="name">Name</label>
-                <div class="form-row">
-                  <input class="textinput" id="name" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="name" type="text" value="<?=$r['name'];?>" placeholder="Enter a Name..."<?=$user['options'][5]==1?'':' readonly';?>>
-                  <?=$user['options'][5]==1?'<button class="save" id="savename" data-dbid="name" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-              </div>
-              <div class="col-12 col-md-6 pl-md-2">
+              <div class="col-12 col-md-6 pr-md-3">
                 <label for="business">Business</label>
                 <div class="form-row">
                   <input class="textinput" id="business" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="business" type="text" value="<?=$r['business'];?>" placeholder="Enter a Business..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savebusiness" data-dbid="business" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
-            </div>
-            <label for="url">URL</label>
-            <div class="form-row">
-              <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="url" type="text" value="<?=$r['url'];?>" placeholder="Enter a URL..."<?=$user['options'][5]==1?'':' readonly';?>>
-              <?=$user['options'][5]==1?'<button class="save" id="saveurl" data-dbid="url" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+              <div class="col-12 col-md-6">
+                <label for="jobtitle">Job Title/Position</label>
+                <div class="form-row">
+                  <input class="textinput" id="jobtitle" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="jobtitle" type="text" value="<?=$r['jobtitle'];?>" placeholder="Enter a Job Title/Position..."<?=$user['options'][5]==1?'':' readonly';?>>
+                  <?=$user['options'][5]==1?'<button class="save" id="savejobtitle" data-dbid="jobtitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                </div>
+              </div>
             </div>
             <div class="row">
-              <div class="col-12 col-md-6 pr-md-2">
+              <div class="col-12 col-md-6 pr-md-3">
+                <label for="email">Email</label>
+                <div class="form-row">
+                  <input class="textinput" id="email" type="text" value="<?=$r['email'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="email" placeholder="Enter an Email..."<?=$user['options'][5]==1?'':' readonly';?>>
+                  <?=$user['options'][5]==1?'<button class="save" id="saveemail" data-dbid="email" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                </div>
+              </div>
+              <div class="col-12 col-md-6">
+                <label for="url">URL</label>
+                <div class="form-row">
+                  <input class="textinput" id="url" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="url" type="text" value="<?=$r['url'];?>" placeholder="Enter a URL..."<?=$user['options'][5]==1?'':' readonly';?>>
+                  <?=$user['options'][5]==1?'<button class="save" id="saveurl" data-dbid="url" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 col-md-6 pr-md-3">
                 <label for="phone">Phone</label>
                 <div class="form-row">
                   <input class="textinput" id="phone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="phone" type="text" value="<?=$r['phone'];?>" placeholder="Enter a Phone..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savephone" data-dbid="phone" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
-              <div class="col-12 col-md-6 pl-md-2">
+              <div class="col-12 col-md-6">
                 <label for="mobile">Mobile</label>
                 <div class="form-row">
                   <input class="textinput" id="mobile" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="mobile" type="text" value="<?=$r['mobile'];?>" placeholder="Enter a Mobile..."<?=$user['options'][5]==1?'':' readonly';?>>
@@ -217,14 +132,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-md-6 pr-md-2">
+              <div class="col-12 col-md-6 pr-md-3">
                 <label for="address">Address</label>
                 <div class="form-row">
                   <input class="textinput" id="address" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="address" type="text" value="<?=$r['address'];?>" placeholder="Enter an Address..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="saveaddress" data-dbid="address" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
-              <div class="col-12 col-md-6 pl-md-2">
+              <div class="col-12 col-md-6">
                 <label for="suburb">Suburb</label>
                 <div class="form-row">
                   <input class="textinput" id="suburb" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="suburb" type="text" value="<?=$r['suburb'];?>" placeholder="Enter a Suburb..."<?=$user['options'][5]==1?'':' readonly';?>>
@@ -233,14 +148,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-md-6 pr-md-2">
+              <div class="col-12 col-md-6 pr-md-3">
                 <label for="city">City</label>
                 <div class="form-row">
                   <input class="textinput" id="city" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="city" type="text" value="<?=$r['city'];?>" placeholder="Enter a City..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savecity" data-dbid="city" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
-              <div class="col-12 col-md-6 pl-md-2">
+              <div class="col-12 col-md-6">
                 <label for="state">State</label>
                 <div class="form-row">
                   <input class="textinput" id="state" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="state" type="text" value="<?=$r['state'];?>" placeholder="Enter a State..."<?=$user['options'][5]==1?'':' readonly';?>>
@@ -249,14 +164,14 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
             <div class="row">
-              <div class="col-12 col-md-6 pr-md-2">
+              <div class="col-12 col-md-6 pr-md-3">
                 <label for="postcode">Postcode</label>
                 <div class="form-row">
                   <input class="textinput" id="postcode" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="postcode" type="text" value="<?=$r['postcode']!=0?$r['postcode']:'';?>" placeholder="Enter a Postcode..."<?=$user['options'][5]==1?'':' readonly';?>>
                   <?=$user['options'][5]==1?'<button class="save" id="savepostcode" data-dbid="postcode" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
               </div>
-              <div class="col-12 col-md-6 pl-md-2">
+              <div class="col-12 col-md-6">
                 <label for="country">Country</label>
                 <div class="form-row">
                   <input class="textinput" id="country" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="country" type="text" value="<?=$r['country'];?>" placeholder="Enter a Country..."<?=$user['options'][5]==1?'':' readonly';?>>
@@ -264,16 +179,12 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
             </div>
-            <div class="form-row mt-3">
-              <input data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="bio" data-dbb="0" type="checkbox"<?=($r['bio']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label id="loginbio0<?=$r['id'];?>" for="bio0">Enable Bio</label>
-            </div>
             <label for="caption">Caption</label>
             <div class="form-row">
               <input class="textinput" id="caption" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="caption" type="text" value="<?=$r['caption'];?>" placeholder="Enter a Caption..."<?=$user['options'][5]==1?'':' readonly';?>>
               <?=$user['options'][5]==1?'<button class="save" id="savecaption" data-dbid="caption" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
-            <label for="notes">Bio Notes</label>
+            <label for="notes" onclick="$('#notes').summernote({focus:true});">Notes</label>
             <div class="row">
               <?=($user['options'][5]==1?
                 '<form target="sp" method="post" action="core/update.php">'.
@@ -288,16 +199,16 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
             </div>
             <div class="form-row mt-3">
               <input id="accountsContact" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="accountsContact" data-dbb="0" type="checkbox"<?=($r['accountsContact']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][5]==1?'':' disabled');?>>
-              <label for="accountsContact">Accounts&nbsp;Contact</label>
+              <label for="accountsContact">Accounts Contact</label>
               <div class="form-text ml-2 mt-1">Set this to indicate Accounts that belong to the Accounts Payable Person</div>
             </div>
           </div>
-<?php /* Tab 3 Media */ ?>
+<?php /* Media */ ?>
           <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
             <form target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
-              <label for="avatar">Avatar</label>
+              <label for="avatar" class="mt-0">Avatar</label>
               <div class="form-row">
-                <img class="img-avatar border-radius-0" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
+                <img class="img-avatar account-avatar border-radius-0" src="<?php if($r['avatar']!=''&&file_exists('media/avatar/'.basename($r['avatar'])))
                   echo'media/avatar/'.basename($r['avatar']);
                 elseif($r['gravatar']!='')
                   echo$r['gravatar'];
@@ -314,13 +225,13 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <?=$user['options'][5]==1?'<button class="save" id="savegravatar" data-dbid="gravatar" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
           </div>
-<?php /* Tab 4 Proofs */ ?>
+<?php /* Proofs */ ?>
           <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
             <div class="row" id="mi">
               <?php $sm=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='proofs' AND `uid`=:id ORDER BY `ord` ASC");
               $sm->execute([':id'=>$r['id']]);
               while($rm=$sm->fetch(PDO::FETCH_ASSOC)){
-                if(file_exists('media/sm/'.basename($rm['file'])))
+                if($rm['file']!=''&&file_exists('media/sm/'.basename($rm['file'])))
                   $thumb='media/md/'.basename($rm['file']);
                 elseif($rm['file']!='')
                   $thumb=$rm['file'];
@@ -371,7 +282,7 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </script>
             <?php }?>
           </div>
-<?php /* Tab 5 Social */ ?>
+<?php /* Social */ ?>
           <div class="tab1-5 border" data-tabid="tab1-5" role="tabpanel">
             <div class="sticky-top">
               <div class="row">
@@ -499,16 +410,114 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
             </div>
           </div>
-<?php /* Tab 6 Messages */ ?>
+<?php /* Messages */ ?>
           <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
-            <label for="email_signature">Email Signature</label>
+            <label for="email_signature" class="mt-0" onclick="$('#email_signature').summernote({focus:true});">Email Signature</label>
             <div class="row">
               <?=($user['options'][5]==1?'<form target="sp" method="post" action="core/update.php"><input name="id" type="hidden" value="'.$r['id'].'"><input name="t" type="hidden" value="login"><input name="c" type="hidden" value="email_signature"><textarea class="summernote" id="email_signature" name="da">'.rawurldecode($r['email_signature']).'</textarea></form>':'<textarea class="field" disabled>'.rawurldecode($r['email_signature']).'</textarea>');?>
             </div>
+            <hr>
+            <legend role="heading">Newsletter Subject Tags</legend>
+            <label for="tags">Tags</label>
+            <div class="form-row">
+              <input class="textinput" id="tags" type="text" value="<?=$r['tags'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="tags"<?=$user['options'][5]==1?'':' readonly';?>>
+              <?=$user['options'][5]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+            </div>
+            <script>
+            var input = document.querySelector('#tags');
+            tagify = new Tagify(input, {
+              whitelist: [
+                <?php if($user['options'][1]==1){
+                  $tags=array();
+                  $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+                  if($st->rowCount()>0){
+                    while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                      $tagslist=explode(",",$rt['tags']);
+                      foreach($tagslist as $t)$tgs[]=$t;
+                    }
+                  }
+                  if(isset($tgs)&&$tgs!='')$tags=array_unique($tgs);
+                  asort($tags);
+                  foreach($tags as $t)echo'"'.$t.'",';
+                }?>
+              ],
+              maxTags: 10,
+              dropdown: {
+                maxItems: 20,           // <- mixumum allowed rendered suggestions
+                classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                enabled: 0,             // <- show suggestions on focus
+                closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+              },
+              originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+            });
+            </script>
           </div>
-<?php /* Tab 7 Orders */ ?>
+<?php /* Orders */ ?>
           <?php if($user['options'][4]==1){?>
             <div class="tab1-7 border" data-tabid="tab1-7" role="tabpanel">
+              <?php $purchaseLimit=$config['memberLimit'];
+              if($r['purchaseLimit']==0||$r['purchaseLimit']==''){
+                if($r['rank']==200)$purchaseLimit=$config['memberLimit'];
+                if($r['rank']==210)$purchaseLimit=$config['memberLimitSilver'];
+                if($r['rank']==220)$purchaseLimit=$config['memberLimitBronze'];
+                if($r['rank']==230)$purchaseLimit=$config['memberLimitGold'];
+                if($r['rank']==240)$purchaseLimit=$config['memberLimitPlatinum'];
+                if($r['rank']==310)$purchaseLimit=$config['memberLimitSilver'];
+                if($r['rank']==320)$purchaseLimit=$config['memberLimitBronze'];
+                if($r['rank']==330)$purchaseLimit=$config['memberLimitGold'];
+                if($r['rank']==340)$purchaseLimit=$config['memberLimitPlatinum'];
+              }else
+                $purchaseLimit=$r['purchaseLimit'];
+              if($purchaseLimit==0||$purchaseLimit=='')
+                $purchaseLimit='Unlimited';?>
+              <div class="p-3">
+                <div class="row">
+                  <div class="col-12 col-sm-6 pr-md-3">
+                    <label for="purchaseLimit" class="mt-0">Purchase Limit Override</label>
+                    <div class="form-row">
+                      <input class="textinput" id="purchaseLimit" type="number" value="<?=$r['purchaseLimit'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseLimit"<?=$user['options'][5]==1?'':' readonly';?>>
+                      <?=$user['options'][5]==1?'<button class="save" id="savepurchaseLimit" data-dbid="purchaseLimit" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                    </div>
+                    <div class="form-text">(Set to "0" or no value to use default for this account level, currently allowed to purchase <?=$purchaseLimit;?> items.)</div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                    <label for="purchaseTime" class="mt-0">Wholesale Purchase Time</label>
+                    <select id="purchaseTime" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="purchaseTime"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','purchaseTime',$(this).val(),'select');">
+                      <option value="0"<?=$r['purchaseTime']==0?' selected':'';?>>Use System Default</option>
+                      <option value="2629743"<?=$r['purchaseTime']==2629743?' selected':'';?>>1 Month</option>
+                      <option value="5259486"<?=$r['purchaseTime']==5259486?' selected':'';?>>2 Months</option>
+                      <option value="7889229"<?=$r['purchaseTime']==7889229?' selected':'';?>>3 Months</option>
+                      <option value="15778458"<?=$r['purchaseTime']==15778458?' selected':'';?>>6 Months</option>
+                      <option value="31556926"<?=$r['purchaseTime']==31556926?' selected':'';?>>1 Year</option>
+                      <option value="63113852"<?=$r['purchaseTime']==63113852?' selected':'';?>>2 Years</option>
+                      <option value="94670778"<?=$r['purchaseTime']==94670778?' selected':'';?>>3 Years</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="row mb-3">
+                  <div class="col-12 col-sm-4 pr-md-3">
+                    <label for="pti">Last Purchase Date</label>
+                    <div class="form-row small">
+                      <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('.timeago($r['pti']).')';?>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4 pr-md-3">
+                    <label for="spent">Spent</label>
+                    <div class="form-row">
+                      <div class="input-text">$</div>
+                      <input class="textinput" id="spent" type="number" value="<?=$r['spent'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="spent"<?=$user['options'][5]==1?'':' readonly';?>>
+                      <?=$user['options'][5]==1?'<button class="save" id="savespent" data-dbid="spent" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-4">
+                    <label for="points">Points Earned</label>
+                    <div class="form-row">
+                      <input class="textinput" id="points" type="number" value="<?=$r['points'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="points"<?=$user['options'][5]==1?'':' readonly';?>>
+                      <?=$user['options'][5]==1?'<button class="save" id="savepoints" data-dbid="points" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                    </div>
+                  </div>
+                </div>
+              </div>
               <div class="row sticky-top">
                 <article class="card mb-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
                   <div class="row">
@@ -545,9 +554,9 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               </section>
             </div>
           <?php }
-/* Tab 7 Settings */ ?>
+/* Settings */ ?>
           <div class="tab1-8 border p-3" data-tabid="tab1-8" role="tabpanel">
-            <label for="timezone">Timezone</label>
+            <label for="timezone" class="mt-0">Timezone</label>
             <select id="timezone" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="timezone"<?=$user['options'][5]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','login','timezone',$(this).val(),'select');">
               <option value="default">System Default</option>
               <?php $o=[
@@ -699,10 +708,10 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
             </div>
           <?php }
-/* Tab 1-9 Hosting */
+/* Hosting */
           if($config['hoster']==1){?>
             <div class="tab1-9 border p-3" data-tabid="tab1-9" role="tabpanel">
-              <legend>Hosting Payments</legend>
+              <legend class="mt-0">Hosting Payments</legend>
               <div class="row">
                 <div class="col-12 col-sm-4 pr-sm-3">
                   <label for="hostCost">Hosting Cost</label>

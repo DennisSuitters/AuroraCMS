@@ -1,6 +1,9 @@
 # Default Changelog
 
-### v0.2
+### v0.2.1
+- Add ability to have multiple Co-Authors in Articles.
+
+#### v0.2
 - Adjust <settings itemCount="[num]|all" contentType="all|[content types]"> capitilisation.
 - Fix Search input field background colour.
 

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -572,23 +572,23 @@ if($s->rowCount()>0){
 				'<div class="col-12 col-md-1 text-center small pt-3">'.
 					$r['v'].'<br><small>'.date('D M d Y',$r['cti']).'<br>'.date('h:i:s A',$r['cti']).'</small>'.
 				'</div>'.
-				'<div class="col-12 col-md-1 text-center tracker-status pt-3">'.
+				'<div class="col-12 col-md-1 text-center tracker-status small pt-3">'.
 					($r['status']=='blacklisted'?'<span class="badger badge-dark">Blacklisted</span>':desiminateVisit($r['urlDest'])).
 				'</div>'.
 				'<div class="col-12 col-md-1 text-center small pt-3">'.
 					($r['isp']!='Unkown'?deseminateReferer($r['isp']):'').deseminateReferer($r['urlFrom']).
 				'</div>'.
-				'<div class="col-12 col-md-1 text-center pt-3">'.
+				'<div class="col-12 col-md-1 small text-center pt-3">'.
 					'<small>'._ago($r['cti']),'</small>'.($r['action']=='Visit Click'||$r['action']=='Call Click'?'<br><span class="badger badge-success">Called from Site</span>':'').
 				'</div>'.
 				'<div class="col-12 col-md pt-2 text-wrap">'.
-					'<div class="mr-3 flag">'.
+					'<div class="d-inline-block flag">'.
 						country2flag($r['countryCode']).
 					'</div>'.
-					'<div class="d-inline-block">'.
-						'<small>'.($r['countryName']==''?'Unresolved':$r['countryName']).' - <a target="_blank" href="https://dnschecker.org/ip-location.php?ip='.$r['ip'].'">'.$r['ip'].'</a></small>'.
-						($r['city']!=''?'<br><small>'.$r['city'].($r['city']!=''&&$r['region']!=''?' - ':'').$r['region'].'</small>':'<br>').
-						($r['isp']!='Unknown'?'<br><small>'.$r['isp'].'</small>':'').
+					'<div class="d-inline-block small">'.
+						'<div class="small">'.($r['countryName']==''?'Unresolved':$r['countryName']).' - <a target="_blank" href="https://dnschecker.org/ip-location.php?ip='.$r['ip'].'">'.$r['ip'].'</a></div>'.
+						($r['city']!=''?'<div class="small">'.$r['city'].($r['city']!=''&&$r['region']!=''?' - ':'').$r['region'].'</div>':'').
+						($r['isp']!='Unknown'?'<div class="small">'.$r['isp'].'</div>':'').
 					'</div>'.
 				'</div>'.
 				'<div class="col-12 col-md-1 pt-2 text-center">'.

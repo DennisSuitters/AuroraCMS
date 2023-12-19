@@ -133,7 +133,7 @@ if($error==''){
               require'phpmailer/PHPMailer.php';
               require'phpmailer/SMTP.php';
               require'phpmailer/Exception.php';
-              $mail = new PHPMailer\PHPMailer\PHPMailer;
+              $mail=new PHPMailer\PHPMailer\PHPMailer;
               $mail->isSendMail();
               $mail->SetFrom($config['email'],$config['business']);
               $mail->AddAddress($ru['email']);

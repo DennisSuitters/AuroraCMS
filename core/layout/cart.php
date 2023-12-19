@@ -2,28 +2,30 @@
 /**
 * AuroraCMS - Copyright (C) Diemen Design 2019
 *
-* @category   Administration - Preferences - Cart
-* @package    core/layout/pref_cart.php
-* @author     Dennis Suitters <dennis@diemen.design>
+* @category   Administration - Settings - Cart
+* @package    core/layout/cart.php
+* @author     Dennis Suitters <dennis@diemendesign.com.au>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.26-7
+* @version    0.2.26-1
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
-*/?>
+*/
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='51'");
+$sv->execute();?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
     <div class="container-fluid">
       <div class="card mt-3 bg-transparent border-0 overflow-visible">
         <div class="card-actions">
           <ol class="breadcrumb m-0 pl-0 pt-0">
-            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/preferences';?>">Preferences</a></li>
+            <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/settings';?>">Settings</a></li>
             <li class="breadcrumb-item active">Cart</li>
           </ol>
         </div>
         <div class="sticky-i10">
           <div class="row">
-            <article class="card py-1 overflow-visible card-list card-list-header shadow">
+            <article class="card py-2 overflow-visible card-list card-list-header shadow">
               <div class="row">
                 <div class="col-12 col-md-1 text-center">dbID</div>
                 <div class="col-12 col-md pl-2">SID</div>
@@ -45,7 +47,7 @@
             $si=$db->prepare("SELECT `id`,`code`,`title` FROM `".$prefix."content` WHERE `id`=:id");
             $si->execute([':id'=>$r['iid']]);
             $ri=$si->fetch(PDO::FETCH_ASSOC);?>
-            <article id="l_<?=$r['id'];?>" class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow">
+            <article class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow" id="l_<?=$r['id'];?>">
               <div class="row">
                 <div class="col-12 col-md-1 pt-3 text-center small"><?= trim($r['id']);?></div>
                 <div class="col-12 col-md pl-2 pt-3 small"><?= trim($r['si']);?></div>

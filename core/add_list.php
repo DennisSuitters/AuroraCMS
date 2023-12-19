@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -198,13 +198,13 @@ else{
 								($lu!=''?' <a target="_blank" href="'.$lu.'">More...</a>':'').
 							'</div>'.
 							'<div class="col-12 text-right">'.
-								'<a class="btn-sm" href="'.URL.$settings['system']['admin'].'/content/edit/'.$id.'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
+								'<a class="btn" href="'.URL.$settings['system']['admin'].'/content/edit/'.$id.'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
 								'<form class="d-inline" target="sp" action="core/purge.php">'.
 									'<input name="id" type="hidden" value="'.$id.'">'.
 									'<input name="t" type="hidden" value="content">'.
-									'<button class="btn-sm trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+									'<button class="btn trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
 								'</form>'.
-								'<span class="btn btn-sm orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>'.
+								'<span class="btn orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>'.
 							'</div>'.
 						'</div>'.
 					'</div>'.

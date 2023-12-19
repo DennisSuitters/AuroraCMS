@@ -4,10 +4,249 @@
 While there are no coding conventions per se, you can, if you wish include commenting to explain changes, though, after approval and merging they may be removed to save space, but comments acknowledging changes added to the header block comment. However, generally, we try to build code in such a way that it's easy to work out what the code is achieving, but overall, we are more interested in writing code in such a way that it runs fast. This usually includes removing white spaces with code itself, but formatting the code with tabs, more so, for readability.
 
 ## Versioning Information
-v[full].[release].[patch]
+v[full].[release]-[patch]
 
 [full] is a release that has it's features frozen, and can sometimes be a full version, and precursor to major changes.
 
 [release] number is where releases are published when [patch] reaches a point where features are full implemented.
 
 [patch] are repository updates, which I am now looking at doing more often for backup purposes, so we don't have one place where changes have been made and don't exist anywhere else. When patches have features or major fixes are complete, we can move to a [release] publish. This way there will be less releases, but better fixed or feature rich release.
+
+## Toolbar Button Order
+- Header Toolbar
+  - Back, Fullscreen, Settings, Print, Email, Send, Add, SaveAll
+- Content Button Toolbar
+  - Edit, Restore (hidden), Delete, Purge (hidden)
+
+## Element Attribute Order
+class, id, style, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, checked, disabled, selected, placeholder, role, required, aria-*, onEvents
+
+## CSS Styling Order
+- all
+  - all: ;
+- content
+  - content: ;
+  - quotes: ;
+- box-sizing
+  - box-sizing: [content-box|border-box|inherit|initial|unset];
+- position
+  -display: ;
+  -position: ;
+  -top: ;
+  -right: ;
+  -bottom: ;
+  -left: ;
+- float
+  - float: ;
+  - clear: ;
+- flex
+  - flex: ;
+  - flex-basis: ;
+  - flex-direction: ;
+  - flex-flow: ;
+  - flex-grow: ;
+  - flex-shrink: ;
+  - flex-wrap: ;
+- grid
+  - grid: ;
+  - grid-area: ;
+  - grid-template: ;
+  - grid-template-areas: ;
+  - grid-template-rows: ;
+  - grid-template-columns: ;
+  - grid-row: ;
+  - grid-row-start: ;
+  - grid-row-end: ;
+  - grid-column: ;
+  - grid-column-start: ;
+  - grid-column-end: ;
+  - grid-auto-rows: ;
+  - grid-auto-columns: ;
+  - grid-auto-flow: ;
+  - grid-gap: ;
+  - grid-row-gap: ;
+  - grid-column-gap: ;
+- align-content
+  - align-content: ;
+  - align-items: ;
+  - align-self: ;
+- justify-content
+  - justify-content: ;
+  - justify-items: ;
+  - justify-self: ;
+- order
+  - order: ;
+- columns
+  - columns: ;
+  - column-gap: ;
+  - column-fill: ;
+  - column-rule: ;
+  - column-rule-width: ;
+  - column-rule-style: ;
+  - column-rule-color: ;
+  - column-span: ;
+  - column-count: ;
+  - column-width: ;
+- transform
+  - backface-visibility: ;
+  - perspective: ;
+  - perspective-origin: ;
+  - transform: ;
+  - transform-origin: ;
+  - transform-style: ;
+- transitions
+  - transition: ;
+  - transition-delay: ;
+  - transition-duration: ;
+  - transition-property: ;
+  - transition-timing-function: ;
+- visibility
+  - visibility: ;
+  - opacity: ;
+  - z-index: ;
+- margin
+  - margin: ;
+  - margin-top: ;
+  - margin-right: ;
+  - margin-bottom: ;
+  - margin-left: ;
+- outline
+  - outline: ;
+  - outline-offset: ;
+  - outline-width: ;
+  - outline-style: ;
+  - outline-color: ;
+- border
+  - border: ;
+  - border-top: ;
+  - border-right: ;
+  - border-bottom: ;
+  - border-left: ;
+  - border-width: ;
+  - border-top-width: ;
+  - border-right-width: ;
+  - border-bottom-width: ;
+  - border-left-width: ;
+- border-style
+  - border-style: ;
+  - border-top-style: ;
+  - border-right-style: ;
+  - border-bottom-style: ;
+  - border-left-style: ;
+- border-radius
+  - border-radius: ;
+  - border-top-left-radius: ;
+  - border-top-right-radius: ;
+  - border-bottom-left-radius: ;
+  - border-bottom-right-radius: ;
+- border-color
+  - border-color: ;
+  - border-top-color: ;
+  - border-right-color: ;
+  - border-bottom-color: ;
+  - border-left-color: ;
+- border-image
+  - border-image: ;
+  - border-image-source: ;
+  - border-image-width: ;
+  - border-image-outset: ;
+  - border-image-repeat: ;
+  - border-image-slice: ;
+- box-shadow
+  - box-shadow: ;
+- background
+  - background: ;
+  - background-attachment: ;
+  - background-clip: ;
+  - background-color: ;
+  - background-image: ;
+  - background-origin: ;
+  - background-position: ;
+  - background-repeat: ;
+  - background-size: ;
+- cursor
+  - cursor: ;
+- padding
+  - padding: ;
+  - padding-top: ;
+  - padding-right: ;
+  - padding-bottom: ;
+  - padding-left: ;
+- width
+  - width: ;
+  - min-width: ;
+  - max-width: ;
+- height
+  - height: ;
+  - min-height: ;
+  - max-height: ;
+- overflow
+  - overflow: ;
+  - overflow-x: ;
+  - overflow-y: ;
+  - resize: ;
+- list-style
+  - list-style: ;
+  - list-style-type: ;
+  - list-style-position: ;
+  - list-style-image: ;
+  - caption-side: ;
+- tables
+  - table-layout: ;
+  - border-collapse: ;
+  - border-spacing: ;
+  - empty-cells: ;
+- animation
+  - animation-[[name] [duration] [timing-function] [delay] [iteration-count] [direction] [fill-mode] [play-state]]
+  - animation: ;
+  - animation-name: ;
+  - animation-duration: ;
+  - animation-timing-function: ;
+  - animation-delay: ;
+  - animation-iteration-count: ;
+  - animation-direction: ;
+  - animation-fill-mode: ;
+  - animation-play-state: ;
+- vertical-alignment
+  - vertical-align: ;
+- text-alignment & decoration
+  - direction: ;
+  - tab-size: ;
+  - text-align: ;
+  - text-align-last: ;
+  - text-justify: ;
+  - text-indent: ;
+  - text-transform: ;
+  - text-decoration: ;
+  - text-decoration-color: ;
+  - text-decoration-line: ;
+  - text-decoration-style: ;
+  - text-rendering: ;
+  - text-shadow: ;
+  - text-overflow: ;
+- text-spacing
+  - line-height: ;
+  - word-spacing: ;
+  - letter-spacing: ;
+  - white-space: ;
+  - word-break: ;
+  - word-wrap: ;
+  - color: ;
+- font
+  - font: ;
+  - font-family: ;
+  - font-size: ;
+  - font-size-adjust: ;
+  - font-stretch: ;
+  - font-weight: ;
+  - font-smoothing: ;
+  - osx-font-smoothing: ;
+  - font-variant: ;
+  - font-style: ;
+- counters
+  - counter-reset: ;
+  - counter-increment: ;
+- breaks
+  - page-break-before: ;
+  - page-break-after: ;
+  - page-break-inside: ;

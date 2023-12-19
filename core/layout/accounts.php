@@ -4,16 +4,15 @@
  *
  * @category   Administration - Accounts
  * @package    core/layout/accounts.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
- * class, style, id, name, list, data-*, target, rel, src, for, type, method, action, href, value, title, alt, placeholder, role, required, aria-*, onEvents
- * Header Toolbar: Back, Fullscreen, Settings, Print, Email, Send, Add, SaveAll
- * Button Toolbar: Edit, Restore (hidden), Delete, Purge (hidden)
  */
+$sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='29'");
+$sv->execute();
 if(isset($args[0])&&$args[0]=='add'){
   $type=filter_input(INPUT_GET,'type',FILTER_UNSAFE_RAW);
   $q=$db->prepare("INSERT IGNORE INTO `".$prefix."login` (`active`,`timezone`,`ti`) VALUES ('1','default',:ti)");
@@ -59,8 +58,8 @@ else{
                   <input id="filter-input" type="text" value="" placeholder="Type to Filter Items" onkeyup="filterTextInput();">
                   <div class="btn-group">
                     <button class="accountview" data-tooltip="left" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button>
-                    <?=($user['options'][7]==1?'<a href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" data-tooltip="left" aria-label="Accounts Settings"><i class="i">settings</i></a>':'').
-                    ($user['options'][0]==1?'<a class="add" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" data-tooltip="left" aria-label="Add"><i class="i">add</i></a>':'');?>
+                    <?=($user['options'][7]==1?'<a data-tooltip="left" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" aria-label="Accounts Settings"><i class="i">settings</i></a>':'').
+                    ($user['options'][0]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add"><i class="i">add</i></a>':'');?>
                   </div>
                 </div>
               </div>

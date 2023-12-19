@@ -4,10 +4,10 @@
  *
  * @category   Administration - Dashboard
  * @package    core/layout/dashboard.php
- * @author     Dennis Suitters <dennis@diemen.design>
+ * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,84 +18,100 @@ else{?>
     <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
       <div class="container-fluid">
         <div class="card border-radius-0 bg-transparent border-0 mt-3 overflow-visible">
-          <?php $curHr=date('G');
-          $msg='';
-          if($curHr<12)
-            $msg.='Good Morning ';
-          elseif($curHr<18)
-            $msg.='Good Afternoon ';
-          else
-            $msg.='Good Evening ';
-          echo'<h5 class="welcome-message">'.$msg.($user['name']!=''?strtok($user['name'], " "):$user['username']).'!'." The date is ".date($config['dateFormat'])."</h5>";
-          echo'<div id="updatecheck" class="alert alert-info hidewhenempty"></div>';
-          if($user['accountsContact']==1&&$config['hosterURL']!='')echo'<div id="hostinginfo"></div>';
-          echo($config['maintenance']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').($config['comingsoon']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
+          <div class="row">
+            <div class="card col-12 mb-3 p-3">
+              <div class="row">
+                <?php if($user['avatar']!=''&&file_exists('media/avatar/'.$user['avatar'])){?>
+                  <div class="col-1 mr-2">
+                    <img class="rounded border-1 border-default p-1 float-left" style="width:80px;max-height:80px;" src="<?='media/avatar/'.$user['avatar'];?>">
+                  </div>
+                <?php }?>
+                <div class="col">
+                  <?php $curHr=date('G');
+                  $msg='';
+                  if($curHr<12)
+                    $msg.='Good Morning ';
+                  elseif($curHr<18)
+                    $msg.='Good Afternoon ';
+                  else
+                    $msg.='Good Evening ';
+                  $quotes=file("core/insp-quotes.txt");
+                  $line=$quotes[rand(0,count($quotes)-1)];
+                  echo'<h5 class="welcome-message mb-0">'.$msg.($user['name']!=''?strtok($user['name'], " "):$user['username']).'!</h5>'.
+                  '<h6 class="text-muted">'.date($config['dateFormat']).'</h6>'.
+                  '<div class="text-muted">'.$line.'</div>';?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="alert alert-info hidewhenempty" id="updatecheck"></div>
+          <?php if($user['accountsContact']==1&&$config['hosterURL']!='')echo'<div id="hostinginfo"></div>';
+          echo($config['maintenance']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Maintenance Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#maintenance">Set Now</a></div>':'').
+          ($config['comingsoon']==1?'<div class="alert alert-info" role="alert">Note: Site is currently in Coming Soon Mode! <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/interface#comingsoon">Set Now</a></div>':'');
           if(!file_exists('layout/'.$config['theme'].'/theme.ini'))
             echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
           $tid=$ti-2592000;
           if($config['business']=='')
-            echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Booking will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
+            echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
           if($config['email']=='')
             echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
-          $pageerrors=$contenterrors=0;
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE `cover`!='' AND `fileALT`='' AND `active`=1");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $pageerrors=$pageerrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $pageerrors=$pageerrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $pageerrors=$pageerrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."menu` WHERE `heading`=''");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $pageerrors=$pageerrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT `notes` FROM `".$prefix."menu` WHERE `notes`!=''");
+          $seopageerrors=$seocontenterrors=0;
+          $sseo=$db->prepare("SELECT `id`,`cover`,`fileALT`,`seoTitle`,`seoDescription`,`heading`,`notes` FROM `".$prefix."menu`");
           $sseo->execute();
           while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
-            if(strlen(strip_tags($rseo['notes']))<100)
-              $pageerrors++;
+            if(strlen($rseo['seoTitle'])<50||strlen($rseo['seoTitle'])>70)$seopageerrors++;
+            if(strlen($rseo['seoDescription'])<1||strlen($rseo['seoDescription'])>70)$seopageerrors++;
+            if($rseo['cover']!=''){
+              if(strlen($rseo['fileALT'])<1)$seopageerrors++;
+              list($width,$height,$type,$attr)=@getimagesize($rseo['cover']);
+              if($width==null|$height==null){
+                $seopageerrors++;
+              }
+            }
+            if($rseo['heading']=='')$seopageerrors++;
+            if(strlen(strip_tags($rseo['notes']))<100)$seopageerrors++;
             preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
-            if(isset($h1[1]))
-              $pageerrors++;
+            if(isset($h1[1]))$seopageerrors++;
+            preg_match_all('~src="\K[^"]+~',$rseo['notes'],$imgs);
+            if($imgs!=''){
+              foreach($imgs[0] as $img){
+                list($width,$height,$type,$attr)=@getimagesize($img);
+                if($width==null||$height==null)$seopageerrors++;
+              }
+            }
           }
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE `file`!='' AND `fileALT`='' AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $contenterrors=$contenterrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoTitle`) < 50 OR CHAR_LENGTH(`seoTitle`) > 70 AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $contenterrors=$contenterrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT COUNT(`id`) AS `cnt` FROM `".$prefix."content` WHERE CHAR_LENGTH(`seoDescription`) < 50 OR CHAR_LENGTH(`seoDescription`) > 160 AND `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
-          $sseo->execute();
-          $rseo=$sseo->fetch(PDO::FETCH_ASSOC);
-          $contenterrors=$contenterrors+$rseo['cnt'];
-          $sseo=$db->prepare("SELECT `notes` FROM `".$prefix."content` WHERE `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType` NOT LIKE 'list' AND `contentType` NOT LIKE 'advert' AND `contentType` NOT LIKE 'booking'");
+          $sseo=$db->prepare("SELECT `file`,`fileALT`,`seoTitle`,`seoDescription`,`notes` FROM `".$prefix."content` WHERE `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType`!='list' AND `contentType`!='advert' AND `contentType`!='booking'");
           $sseo->execute();
           while($rseo=$sseo->fetch(PDO::FETCH_ASSOC)){
-            if(strlen(strip_tags($rseo['notes']))<100)
-              $contenterrors++;
+            if(strlen($rseo['seoTitle'])<50||strlen($rseo['seoTitle'])>70)$seocontenterrors++;
+            if(strlen($rseo['seoDescription'])<1||strlen($rseo['seoDescription'])>70)$seocontenterrors++;
+            if($rseo['file']!=''){
+              if(strlen($rseo['fileALT'])<1)$seocontenterrors++;
+              list($width,$height,$type,$attr)=@getimagesize($rseo['file']);
+              if($width==null||$height==null)$seocontenterrors++;
+            }
+            if(strlen(strip_tags($rseo['notes']))<100)$seocontenterrors++;
             preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
-            if(isset($h1[1]))
-              $contenterrors++;
+            if(isset($h1[1]))$seocontenterrors++;
+            preg_match_all('~src="\K[^"]+~',$rseo['notes'],$imgs);
+            if($imgs!=''){
+              foreach($imgs[0] as $img){
+                list($width,$height,$type,$attr)=@getimagesize($img);
+                if($width==null||$height==null)$seocontenterrors++;
+              }
+            }
           }
-          if($pageerrors>0 || $contenterrors>0){
+          if($seoerrors>0||$seocontenterrors>0){
             echo'<div class="alert alert-warning">'.
-              ($pageerrors>0?'There are <strong>'.$pageerrors.'</strong> SEO issues with various Pages that could affect their ranking!!!':'').
-              ($contenterrors>0?($pageerrors>0?'<br>':'').'There are <strong>'.$contenterrors.'</strong> SEO issues with various Content items that could affect their ranking!!!':'').
+              ($seopageerrors>0?'<div>There are <a href="'.URL.$settings['system']['admin'].'/pages">'.$seopageerrors.'</a> SEO issues with various <a href="'.URL.$settings['system']['admin'].'/pages">Pages</a> that can adversely affect their ranking!!!</div>':'').
+              ($seocontenterrors>0?'<div>There are <a href="'.URL.$settings['system']['admin'].'/content">'.$seocontenterrors.'</a> SEO issues with various <a href="'.URL.$settings['system']['admin'].'/content">Content</a> items that could adversely affect their ranking!!!</div>':'').
             '</div>';
           }?>
         <div class="row" id="dashboardview">
           <?php $sw=$db->prepare("SELECT * FROM `".$prefix."widgets` WHERE `ref`='dashboard' AND `active`=1 ORDER BY `ord` ASC");
           $sw->execute();
           while($rw=$sw->fetch(PDO::FETCH_ASSOC)){
-            if(file_exists('core/layout/widget-'.$rw['file']))
-              include'core/layout/widget-'.$rw['file'];
+            if(file_exists('core/layout/widget-'.$rw['file']))include'core/layout/widget-'.$rw['file'];
           }?>
           <div class="ghost hidden"></div>
         </div>
@@ -237,8 +253,6 @@ else{?>
               });
               $(this).addClass('col-'+col+'-'+newWidthStyle);
               $(this).css({'width':newWidthCSS+'%','height':'auto'});
-              if($('#width_'+wid).length>0)
-                $('#width_'+wid).text(' | col-'+col+'-'+newWidthStyle);
               $.ajax({
                 type:"POST",
                 url:"core/update.php",
@@ -262,32 +276,5 @@ else{?>
       <?php }?>
     </div>
   </section>
-  <?php $ss=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE `popup`=1 AND `seen`=0 AND `uid`=:uid ORDER BY `ti` ASC");
-  $ss->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
-  if($ss->rowCount()>0){
-    $rs=$ss->fetch(PDO::FETCH_ASSOC);
-    $su=$db->prepare("UPDATE `".$prefix."suggestions` SET `seen`=1,`sti`=:sti WHERE `id`=:id");
-    $su->execute([
-      ':id'=>$rs['id'],
-      ':sti'=>time()
-    ]);
-    $su=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
-    $su->execute([':id'=>$rs['uid']]);
-    $rt=$su->fetch(PDO::FETCH_ASSOC);
-    $su=$db->prepare("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `id`=:id");
-    $su->execute([':id'=>$rs['rid']]);
-    $rf=$su->fetch(PDO::FETCH_ASSOC);
-    $mhtml='<div class="popupmessage col-12 col-sm-8 p-5">'.
-      '<h5>To: '.$rt['username'].($rt['name']!=''?':'.$rt['name']:'').'<br>From: '.$rf['username'].($rf['name']!=''?':'.$rf['name']:'').'</h5>'.
-      '<div class="mt-3 p-3">'.
-        $rs['notes'].
-      '</div>'.
-    '</div>';?>
-    <script>
-    $(document).ready(function(){
-      $.fancybox.open(`<?=$mhtml;?>`);
-    });
-  </script>
-  <?php }?>
 </main>
 <?php }

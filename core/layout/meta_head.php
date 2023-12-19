@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -32,19 +32,13 @@
     <link rel="manifest" href="<?= URL.'core/manifestadmin.php';?>">
     <link rel="icon" href="core/images/favicon-64.png">
     <link rel="apple-touch-icon" href="core/images/favicon-64.png">
-    <link rel="stylesheet" type="text/css" href="core/js/jquery/jquery-ui.min.css" media="all">
-    <link rel="stylesheet" type="text/css" href="core/elfinder/css/elfinder.min.css" media="all">
-    <link rel="stylesheet" type="text/css" href="core/js/simplecolorpicker/jquery.simplecolorpicker.css" media="all">
-    <Link rel="stylesheet" type="text/css" href="core/js/summernote/plugin/summernote-text-findnreplace/css/lite.css" media="all">
-    <Link rel="stylesheet" type="text/css" href="core/js/summernote/plugin/summernote-templates/css/summernote-templates.css" media="all">
-    <link rel="stylesheet" type="text/css" href="core/js/codemirror/codemirror.css" media="all">
-    <link rel="stylesheet" type="text/css" href="core/js/leaflet/leaflet.css" media="all">
     <Link rel="stylesheet" type="text/css" href="core/css/style.css" media="all">
     <script src="core/js/jquery/jquery.min.js"></script>
     <script src="core/js/jquery/jquery-ui.min.js"></script>
     <script src="core/js/summernote/summernote.min.js"></script>
     <script src="core/js/summernote/plugin/summernote-save-button/summernote-save-button.js"></script>
     <script src="core/js/summernote/plugin/summernote-cleaner/summernote-cleaner.js"></script>
+    <script src="core/js/summernote/plugin/summernote-image-attributes/skunkworks/summernote-image-attributes.js"></script>
     <script src="core/js/summernote/plugin/summernote-image-captionit/summernote-image-captionit.js"></script>
     <script src="core/js/summernote/plugin/summernote-classes/summernote-classes.js"></script>
     <script src="core/js/summernote/plugin/summernote-checkbox/summernote-checkbox.js"></script>
@@ -63,6 +57,7 @@
     <script src="core/js/chartjs/chart.umd.min.js"></script>
     <script src="core/js/filerobot/filerobot-image-editor.min.js"></script>
     <script src="core/js/tinysort/tinysort.min.js"></script>
+    <script src="core/js/tagify/tagify.min.js"></script>
     <script src="core/js/aurora.min.js"></script>
   </head>
   <body class="<?=($config['options'][4]==0?'no-tooltip':'').($user['rank']==1000&&$config['development']==1?' dev':'');?>" data-width="" data-theme="<?= (isset($_COOKIE['admintheme'])&&$_COOKIE['admintheme']!='')?$_COOKIE['admintheme']:'';?>">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,6 +26,14 @@ if($id!=0&&$tbl!='logs'&&$tbl!='livechat'&&$tbl!='forumCategory'&&$tbl!='forumTo
   if($tbl=='config'||$tbl=='login')$r['contentType']='';
   $nda='';
   foreach($r as$o)$nda.=$o.'|';
+}
+if($tbl=='agronomy_livestock'){
+  echo'<script>'.
+    'var stock=window.top.window.$(`#stock'.$col.'`).data(`stock`);'.
+    'stock=stock - 1;'.
+    'alert(stock);'.
+    'window.top.window.$(`#stock'.$col.'`).data(`stock`,stock).html(stock);'.
+  '</script>';
 }
 if($tbl=='suggestions'){
   $s=$db->prepare("SELECT * FROM `".$prefix."suggestions` WHERE `id`=:id");

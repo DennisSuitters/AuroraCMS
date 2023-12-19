@@ -7,14 +7,17 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-7
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $r=$s->fetch(PDO::FETCH_ASSOC);
+$sv=$db->prepare("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `contentType`=:cT");
+$sv->execute([':cT'=>$r['contentType']]);
 $seo=[
   'contentNotesHeading' => '',
   'contentNotes' => '',
+  'contentImagesNotes' => '',
   'contentcnt' => 0,
   'notescnt' => 0,
   'seoTitle' => '',
@@ -22,40 +25,65 @@ $seo=[
   'seocnt' => 0,
   'imagesALT' => '',
   'imagescnt' => 0,
+  'imagesFile' => ''
 ];
-if($r['contentType']!='testimonials'){
+if(!in_array($r['contentType'],['testimonials','list'])){
   if($r['seoTitle']==''){
-    $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+    $seo['seoTitle']='<div>The <strong>Meta Title</strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!</div>';
     $seo['seocnt']++;
   }elseif(strlen($r['seoTitle'])<50){
-    $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is less than <strong>50</strong> characters!';
+    $seo['seoTitle']='<div>The <strong>Meta Title</strong> is less than <strong>50</strong> characters!</div>';
     $seo['seocnt']++;
-  }elseif(strlen($r['seotitle'])>70){
-    $seo['seoTitle']='<br>The <strong><a href="javascript:seoLink(`seoTitle`,`tab1-8`);">Meta Title</a></strong> is longer than <strong>70</strong> characters!';
+  }elseif(strlen($r['seoTitle'])>70){
+    $seo['seoTitle']='<div>The <strong>Meta Title</strong> is longer than <strong>70</strong> characters!</div>';
     $seo['seocnt']++;
   }
   if($r['seoDescription']==''){
-    $seo['seoDescription']='<br> The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!';
+    $seo['seoDescription']='<div>The <strong>Meta Description</strong> is empty, while AuroraCMS tries to autofill this entry when building the page, it is better to fill in this information yourself!</div>';
     $seo['seocnt']++;
   }elseif(strlen($r['seoDescription'])<1){
-    $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is empty!';
+    $seo['seoDescription']='<div>The <strong>Meta Description</strong> is empty!</div>';
     $seo['seocnt']++;
   }elseif(strlen($r['seoDescription'])>160){
-    $seo['seoDescription']='<br>The <strong><a href="javascript:seoLink(`seoDescription`,`tab1-8`);">Meta Description</a></strong> is longer than <strong>160</strong> characters!';
+    $seo['seoDescription']='<div>The <strong>Meta Description</strong> is longer than <strong>160</strong> characters!</div>';
     $seo['seocnt']++;
   }
-  if(strlen($r['fileALT'])<1){
-    $seo['imagesALT']='<br>The <strong><a href="javascript:seoLink(`fileALT`,`tab1-2`);">Image ALT</a></strong> text is empty!';
-    $seo['imagescnt']++;
+  if($r['file']!=''){
+    if(strlen($r['fileALT'])<1){
+      $seo['imagesALT']='<div>The <strong>Image ALT</strong> text is empty!</div>';
+      $seo['imagescnt']++;
+    }
+    list($width,$height,$type,$attr)=@getimagesize($r['file']);
+    if($width==null||$height==null){
+      $seo['imagescnt']++;
+      $seo['imagesFile']='<div>The <strong>Image</strong> is broken!</div>';
+    }
   }
-  if(strlen(strip_tags($r['notes']))<100){
-    $seo['contentNotes']='<br>The <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> is empty. At least <strong>100</strong> characters is recommended!';
+  if(strip_tags($r['notes'])==''){
+    $seo['contentNotes']='<div>The <strong>Description</strong> is empty. At least <strong>100</strong> characters is recommended!</div>';
+    $seo['contentcnt']++;
+  }elseif(strlen(strip_tags($r['notes']))<100){
+    $seo['contentNotes']='<div>The <strong>Description</strong> test is less than <strong>100</strong> characters!</div>';
     $seo['contentcnt']++;
   }
   preg_match('~<h1>([^{]*)</h1>~i',$r['notes'],$h1);
   if(isset($h1[1])){
-    $seo['contentNotesHeading']='<br>Do not use <strong>H1</strong> headings in the <strong><a href="javascript:seoLink(`notesda`,`tab1-1`);">Description</a></strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!';
+    $seo['contentNotesHeading']='<div>Do not use <strong>H1</strong> headings in the <strong>Description</strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!</div>';
     $seo['contentcnt']++;
+  }
+  preg_match_all('~src="\K[^"]+~',$r['notes'],$imgs);
+  if($imgs!=''){
+    $imagescnt=0;
+    foreach($imgs[0] as $img){
+      list($width,$height,$type,$attr)=@getimagesize($img);
+      if($width==null||$height==null){
+        $seo['contentcnt']++;
+        $imagescnt++;
+      }
+      if($imagescnt>0){
+        $seo['contentImagesNotes']='<div>There are <strong>Broken Images</strong> within the Description Text!</div>';
+      }
+    }
   }
 }?>
 <main>
@@ -67,7 +95,7 @@ if($r['contentType']!='testimonials'){
             <div class="row">
               <div class="col-12 col-sm-6">
                 <ol class="breadcrumb m-0 pl-0 pt-0">
-                  <li class="breadcrumb-item"><a href="<?= URL.$settings['system']['admin'].'/content/type/'.$r['contentType'];?>"><?= ucfirst($r['contentType']).(in_array($r['contentType'],array('article'))?'s':'');?></a></li>
+                  <li class="breadcrumb-item active"><?=($r['contentType']!='list'?'<a href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).(in_array($r['contentType'],array('article'))?'s':'').'</a>':'List');?></li>
                   <li class="breadcrumb-item active"><?=$user['options'][1]==1?'Edit':'View';?></li>
                   <li class="breadcrumb-item active"><?=$r['title'];?></li>
                 </ol>
@@ -85,7 +113,7 @@ if($r['contentType']!='testimonials'){
           <div class="tabs" role="tablist">
             <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
             '<label for="tab1-1"'.($seo['contentcnt']>0?' class="badge" data-badge="'.$seo['contentcnt'].'"':'').'>'.($seo['contentcnt']>0?'<span data-tooltip="tooltip" title aria-label="There'.($seo['contentcnt']>1?' are '.$seo['contentcnt'].' SEO related issues!':' is 1 SEO related issue!').'">Content</span>':'Content').'</label>'.
-            ($r['contentType']!='list'?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>':'').
+            '<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>'.
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Options</label>':'').
             ($r['contentType']=='article'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Comments</label>':'').
             ($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Reviews</label>':'').
@@ -98,7 +126,7 @@ if($r['contentType']!='testimonials'){
             ($r['contentType']=='article'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">List</label>':'').
             ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">Expenses</label>':'');?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
-              <label for="title">Title</label>
+              <label for="title" class="mt-0">Title</label>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Title.md" data-tooltip="tooltip" aria-label="SEO Title Information. Note: Content MUST contain a Title, to be able to generate a URL Slug or the content won't be accessible. This Title is also used For H1 Headings on pages."><i class="i">seo</i></button>
                 <?php if($user['options'][1]==1){
@@ -183,12 +211,88 @@ if($r['contentType']!='testimonials'){
               if($r['contentType']!='list'){?>
                 <label for="uid">Author</label>
                 <div class="form-row">
-                  <select id="uid" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="uid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','uid',$(this).val(),'select');">
+                  <select id="uid" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="uid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','uid',$(this).val(),'select');">
                     <?php $su=$db->query("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `username`!='' AND `status`!='delete' ORDER BY `username` ASC, `name` ASC");
                     while($ru=$su->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$ru['id'].'"'.($ru['id']==$r['uid']?' selected':'').'>'.$ru['username'].':'.$ru['name'].'</option>';?>
                   </select>
                 </div>
-              <?php }
+                <?php if($r['contentType']=='article'){?>
+                  <label for="cuid">Co-Author's</label>
+                  <div class="form-row">
+                    <div class="input-text col-12" id="coauthors">&nbsp;
+                      <?php $sc=$db->prepare("SELECT `id`,`username`,`name`,`avatar`,`gravatar`,`rank` FROM `".$prefix."login` WHERE `rank` > 399 ORDER BY `name` ASC, `username` ASC");
+                      $sc->execute();
+                      $coptions='';
+                      $ca=explode(",",$r['cuid']);
+                      while($rc=$sc->fetch(PDO::FETCH_ASSOC)){
+                        $aimg=($rc['avatar']!=''?'media/avatar/'.$rc['avatar']:NOAVATAR);
+                        if(in_array($rc['id'],$ca)){
+                          echo'<span id="coauthors'.$rc['id'].'" class="badger badge-'.rank($rc['rank']).' mr-2 cursor-default" id="cuid'.$rc['id'].'"><img class="mr-2" src="'.$aimg.'" style="max-width:16px;height:16px;">'.($rc['name']!=''?$rc['name']:$rc['username']).'<i class="i pl-2 cursor-pointer" onclick="removeCoauthor(`'.$rc['id'].'`);">close</i></span>';
+                        }
+                        $coptions.='<option id="cuidopt'.$rc['id'].'" value="'.$rc['id'].'" data-authorname="'.($rc['name']!=''?$rc['name']:$rc['username']).'" data-authorimg="'.$aimg.'" data-authorrank="'.rank($rc['rank']).'">'.
+                          ($rc['name']!=''?$rc['name']:$rc['username']).
+                        '</option>';
+                      }?>
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <input id="cuid" type="hidden" value="<?=$r['cuid'];?>">
+                    <select onchange="modifyCoauthor($(this).val());">
+                      <option value="0">Select a User to add as a Co-Author</option>
+                      <option value="clear">Clear All</option>
+                      <hr>
+                      <?=$coptions;?>
+                    </select>
+                    <script>
+                      function removeValue(list,value){
+                        return list.replace(new RegExp(",?"+value+",?"),function(match){
+                          var first_comma=match.charAt(0)===',',
+                          second_comma;
+                          if(first_comma&&(second_comma=match.charAt(match.length- 1)===',')){
+                            return',';
+                          }
+                          return'';
+                        });
+                      };
+                      function removeCoauthor(id){
+                        var authors=removeValue($('#cuid').val(),id);
+                        $('#cuid').val(authors);
+                        $('#coauthors'+id).remove();
+                        update(<?=$r['id'];?>,'content','cuid',authors);
+                      }
+                      function modifyCoauthor(id){
+                        if(id=='0')return false;
+                        if(id=='clear'){
+                          $('#coauthors').html('&nbsp;');
+                          $('#cuid').val('');
+                          update(<?=$r['id'];?>,'content','cuid','');
+                        }else{
+                          var uid=$('#uid').val()
+                          if(uid==id){
+                            toastr["warning"]("User is already set as the Lead Author!");
+                          }else{
+                            var ids=$('#cuid').val();
+                            var authorname=$('#cuidopt'+id).data('authorname');
+                            var authorimg=$('#cuidopt'+id).data('authorimg');
+                            var authorrank=$('#cuidopt'+id).data('authorrank');
+                            if(ids.split(",").indexOf(id.toString()) === -1){
+                              if(ids.length > 0){
+                                ids+=',';
+                              }
+                              ids+=id;
+                              update(<?=$r['id'];?>,'content','cuid',ids);
+                              $('#cuid').val(ids);
+                              $('#coauthors').append('<span id="coauthors'+id+'" class="badger badge-'+authorrank+' mr-2 cursor-default"><img class="mr-2" src="'+authorimg+'" style="max-width:16px;height:16px;">'+authorname+'<i class="i pl-2 cursor-pointer" onclick="removeCoauthor(`'+id+'`);">close</i></span>');
+                            }else{
+                              toastr["warning"](authorname+" is already added as a Co-Author!");
+                            }
+                          }
+                        }
+                      }
+                      </script>
+                    </div>
+                  <?php }
+                }
               if($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']!='list'){?>
                 <label for="code">Code</label>
                 <div class="form-row">
@@ -368,15 +472,11 @@ if($r['contentType']!='testimonials'){
                 <div class="form-row">
                   <select id="sale"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Sale"':' disabled';?> onchange="update('<?=$r['id'];?>','content','sale',$(this).val(),'select');">
                     <option value=""<?=$r['sale']==''?' selected':''?>>No Holiday</option>
-                    <option value="valentine"<?=$r['sale']=='valentine'?' selected':''?>>Valentine's Day</option>
-                    <option value="easter"<?=$r['sale']=='easter'?' selected':''?>>Easter</option>
-                    <option value="mothersday"<?=$r['sale']=='mothersday'?' selected':''?>>Mother's Day</option>
-                    <option value="fathersday"<?=$r['sale']=='fathersday'?' selected':''?>>Father's Day</option>
-                    <option value="blackfriday"<?=$r['sale']=='blackfriday'?' selected':''?>>Black Friday</option>
-                    <option value="halloween"<?=$r['sale']=='halloween'?' selected':''?>>Halloween</option>
-                    <option value="smallbusinessday"<?=$r['sale']=='smallbusinessday'?' selected':''?>>Small Business Day</option>
-                    <option value="christmas"<?=$r['sale']=='christmas'?' selected':''?>>Christmas</option>
-                    <option value="eofy"<?=$r['sale']=='eofy'?' selected':''?>>End Of Financial Year</option>
+                    <?php $ssa=$db->prepare("SELECT DISTINCT(`code`) FROM `".$prefix."choices` WHERE `contentType`='sales' ORDER BY `code` ASC");
+                    $ssa->execute();
+                    while($rsa=$ssa->fetch(PDO::FETCH_ASSOC)){
+                      echo'<option value="'.$rsa['code'].'"'.($r['sale']==$rsa['code']?' selected':'').'>'.$rsa['code'].'</option>';
+                    }?>
                   </select>
                 </div>
               <?php }
@@ -456,54 +556,45 @@ if($r['contentType']!='testimonials'){
                     <input class="textinput" id="tags" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="tags" type="text" value="<?=$r['tags'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Tag or Select from List..."':' readonly';?>>
                     <?=($user['options'][1]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
                   </div>
-                  <?php if($user['options'][1]==1){
-                    $tags=array();
-                    $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
-                    if($st->rowCount()>0){
-                      while($rt=$st->fetch(PDO::FETCH_ASSOC)){
-                        $tagslist=explode(",",$rt['tags']);
-                        foreach($tagslist as $t)$tgs[]=$t;
-                      }
-                    }
-                    if(isset($tgs)&&$tgs!='')$tags=array_unique($tgs);
-                    asort($tags);
-                    echo'<select id="tags_options" onchange="addTag($(this).val());">'.
-                      '<option value="none">Clear All</option>';
-                      foreach($tags as $t)echo'<option value="'.$t.'">'.$t.'</option>';
-                    echo'</select>';
-                  }?>
+                  <script>
+                    var input = document.querySelector('#tags');
+                    tagify = new Tagify(input, {
+                      whitelist: [
+                        <?php if($user['options'][1]==1){
+                          $tags=array();
+                          $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+                          if($st->rowCount()>0){
+                            while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                              $tagslist=explode(",",$rt['tags']);
+                              foreach($tagslist as $t)$tgs[]=$t;
+                            }
+                          }
+                          if(isset($tgs)&&$tgs!='')$tags=array_unique($tgs);
+                          asort($tags);
+                          foreach($tags as $t)echo'"'.$t.'",';
+                        }?>
+                      ],
+                      maxTags: 10,
+                      dropdown: {
+                        maxItems: 20,           // <- mixumum allowed rendered suggestions
+                        classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                        enabled: 0,             // <- show suggestions on focus
+                        closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                      },
+                      originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+                    });
+                  </script>
                 </div>
               <?php }
               if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
                 <div class="row">
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm">
                     <div class="form-row mt-5">
                       <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
                       <label for="<?=$r['contentType'];?>showCost">Show Cost</label>
                     </div>
                   </div>
-                  <div class="col-12 col-sm-6">
-                    <label for="expense" data-tooltip="tooltip" aria-label="Expenses Cost">Expense</label>
-                    <div class="form-row">
-                      <div class="input-text">$</div>
-                      <input class="textinput" id="expense" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="expense" type="text" value="<?=$r['expense'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Expenses Value..."':' readonly';?>>
-                      <?=($user['options'][1]==1?'<button class="expense" data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Recalculate Expense" onclick="recalcExpense();"><i class="i">recalculate-expenses</i></button>'.
-                      '<button class="save" id="saveexpense" data-dbid="expense" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <?php if($r['contentType']!='activities'){?>
-                    <div class="col-12 col-sm pr-md-3">
-                      <label for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>
-                      <div class="form-row">
-                        <div class="input-text">$</div>
-                        <input class="textinput" id="rrp" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?=$r['rrp'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
-                        <?=$user['options'][1]==1?'<button class="save" id="saverrp" data-dbid="rrp" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                      </div>
-                    </div>
-                  <?php }?>
-                  <div class="col-12 col-sm">
+                  <div class="col-12 col-sm pl-3">
                     <label for="cost">Cost</label>
                     <div class="form-row">
                       <div class="input-text">$</div>
@@ -519,12 +610,44 @@ if($r['contentType']!='testimonials'){
                           $gst=0;
                       }?>
                       <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstcost" data-gst="Incl. GST"><?=$gst;?></div>
-                      <?=$user['options'][1]==1?'<button data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Calculate Cost from Expense + Wholesale'.($config['gst']>0?' + GST':'').'" onclick="calcCost();"><i class="i">recalculate-expenses</i></button>'.
-                      '<button class="save" id="savecost" data-dbid="cost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      <?=($user['options'][1]==1?
+                        ($r['contentType']=='inventory'?
+                          '<button data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Calculate Cost from Expense + Wholesale'.($config['gst']>0?' + GST':'').'" onclick="calcCost();"><i class="i">recalculate-expenses</i></button>'
+                        :
+                          '').
+                        '<button class="save" id="savecost" data-dbid="cost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                      :
+                        '');?>
                     </div>
                   </div>
+                  <?php if($r['contentType']=='inventory'){?>
+                    <div class="col-12 col-sm pl-3">
+                      <label for="expense" data-tooltip="tooltip" aria-label="Expenses Cost">Expense</label>
+                      <div class="form-row">
+                        <div class="input-text">$</div>
+                        <input class="textinput" id="expense" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="expense" type="text" value="<?=$r['expense'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Expenses Value..."':' readonly';?>>
+                        <?=($user['options'][1]==1?
+                          '<button class="expense" data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Recalculate Expense" onclick="recalcExpense();"><i class="i">recalculate-expenses</i></button>'.
+                          '<button class="save" id="saveexpense" data-dbid="expense" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                        :
+                          '');?>
+                      </div>
+                    </div>
+                  <?php }?>
+                </div>
+                <div class="row">
                   <?php if($r['contentType']!='activities'){?>
-                    <div class="col-12 col-sm pl-md-3">
+                    <div class="col-12 col-sm pr-3">
+                      <label for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>
+                      <div class="form-row">
+                        <div class="input-text">$</div>
+                        <input class="textinput" id="rrp" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?=$r['rrp'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
+                        <?=$user['options'][1]==1?'<button class="save" id="saverrp" data-dbid="rrp" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      </div>
+                    </div>
+                  <?php }?>
+                  <?php if($r['contentType']!='activities'){?>
+                    <div class="col-12 col-sm pr-3">
                       <label for="rCost">Reduced Cost</label>
                       <div class="form-row">
                         <div class="input-text">$</div>
@@ -543,7 +666,7 @@ if($r['contentType']!='testimonials'){
                         <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-dbid="rCost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                       </div>
                     </div>
-                    <div class="col-12 col-sm pl-sm-3">
+                    <div class="col-12 col-sm">
                       <label for="dCost">Wholesale Cost</label>
                       <div class="form-row">
                         <div class="input-text">$</div>
@@ -685,11 +808,10 @@ if($r['contentType']!='testimonials'){
                   </select>
                   <?=$user['options'][1]==1?'<button class="save" id="saveweight"  data-dbid="weight" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                 </div>
-                <label for="size">Size</label>
                 <div class="row">
                   <div class="col-12 col-sm pr-md-3">
+                    <label for="width">Width</label>
                     <div class="form-row">
-                      <div class="input-text">Width</div>
                       <input class="textinput" id="width" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="width" type="text" value="<?=$r['width'];?>"<?=$user['options'][1]==1?' placeholder="Width"':' readonly';?>>
                       <select id="widthunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Width Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','widthunit',$(this).val(),'select');">
                         <option value="um"<?=$r['widthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
@@ -707,8 +829,8 @@ if($r['contentType']!='testimonials'){
                     </div>
                   </div>
                   <div class="col-12 col-sm pr-md-3">
+                    <label for="height">Height</label>
                     <div class="form-row">
-                      <div class="input-text">Height</div>
                       <input class="textinput" id="height" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="height"<?=$user['options'][1]==1?' placeholder="Height"':' readonly';?> type="text" value="<?=$r['height'];?>">
                       <select id="heightunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Height Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','heightunit',$(this).val(),'select');">
                         <option value="um"<?=$r['heightunit']=='um'?' selected':'';?>>Micrometre (um)</option>
@@ -726,8 +848,8 @@ if($r['contentType']!='testimonials'){
                     </div>
                   </div>
                   <div class="col-12 col-sm">
+                    <label for="length">Length</label>
                     <div class="form-row">
-                      <div class="input-text">Length</div>
                       <input class="textinput" id="length" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="length" type="text" value="<?=$r['length'];?>"<?=$user['options'][1]==1?' placeholder="Length"':' readonly';?>>
                       <select id="lengthunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Length Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','lengthunit',$(this).val(),'select');">
                         <option value="um"<?=$r['lengthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
@@ -746,7 +868,7 @@ if($r['contentType']!='testimonials'){
                   </div>
                 </div>
               <?php }?>
-              <div class="row mt-3<?=$seo['contentcnt']>0?' border-danger border-2':'';?>">
+              <div class="row mt-3<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?' border-danger border-2':'';?>">
                 <?php if($user['options'][1]==1){?>
                   <div class="wysiwyg-toolbar"><div class="btn-group d-flex justify-content-end">
                     <?php if($r['suggestions']==1){
@@ -762,7 +884,8 @@ if($r['contentType']!='testimonials'){
                     '<button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>'.
                     '<input class="col-1" id="ipsumc" value="5">'.
                     '<button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button>'.
-                    '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button></div></div>'.($seo['contentNotes']!=''?'<div class="alert alert-warning m-0">'.strip_tags($seo['contentNotes'],'<strong>').'</div>':'');?>
+                    '<button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=content&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button></div></div>'.
+                    ($seo['contentNotes']!=''||$seo['contentNotesHeading']||$seo['contentImagesNotes']!=''?'<div class="alert alert-warning m-0">'.$seo['contentNotesHeading'].$seo['contentNotes'].$seo['contentImagesNotes'].'</div>':'');?>
                     <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
                     <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -787,7 +910,7 @@ if($r['contentType']!='testimonials'){
               <div class="tabs2" role="tablist">
                 <input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>
                 <label for="tab2-1">Images</label>
-                <?=($r['contentType']!='testimonials'?
+                <?=(!in_array($r['contentType'],['testimonials','list'])?
                   '<input class="tab-control" id="tab2-2" name="tabs2" type="radio">'.
                   '<label for="tab2-2">Video</label>'.
                   '<input class="tab-control" id="tab2-3" name="tabs2" type="radio">'.
@@ -797,256 +920,238 @@ if($r['contentType']!='testimonials'){
                 :'');?>
                 <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                   <div id="error"></div>
-                  <?php if($r['contentType']=='testimonials'){?>
-                    <div class="alert alert-info<?=$r['cid']==0?' hidden':'';?>" id="tstavinfo" role="alert">Currently using the Avatar associated with the selected Client Account.</div>
-                    <?php if($user['options'][1]==1){?>
-                      <form target="sp" method="post" action="core/add_data.php" enctype="multipart/form-data">
-                        <label for="avatar">Avatar</label>
-                        <div class="form-row">
-                          <img id="tstavatar" src="<?=$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
-                          <input id="av" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?=$r['file'];?>" readonly>
-                          <input name="id" type="hidden" value="<?=$r['id'];?>">
-                          <input name="act" type="hidden" value="add_tstavatar">
-                          <div class="custom-file" data-tooltip="tooltip" aria-label="Browse Computer for Image">
-                            <input class="custom-file-input hidden" id="avatarfu" name="fu" type="file" onchange="form.submit();">
-                            <label for="avatarfu" class="m-0"><i class="i">browse-computer</i></label>
+                  <?php if($r['contentType']!='list'){
+                    if($r['contentType']=='testimonials'){?>
+                      <div class="alert alert-info<?=$r['cid']==0?' hidden':'';?>" id="tstavinfo" role="alert">Currently using the Avatar associated with the selected Client Account.</div>
+                      <?php if($user['options'][1]==1){?>
+                        <form target="sp" method="post" action="core/add_data.php" enctype="multipart/form-data">
+                          <label for="avatar" class="mt-0">Avatar</label>
+                          <div class="form-row">
+                            <img id="tstavatar" src="<?=$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>" alt="Avatar">
+                            <input id="av" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?=$r['file'];?>" readonly>
+                            <input name="id" type="hidden" value="<?=$r['id'];?>">
+                            <input name="act" type="hidden" value="add_tstavatar">
+                            <div class="custom-file" data-tooltip="tooltip" aria-label="Browse Computer for Image">
+                              <input class="custom-file-input hidden" id="avatarfu" name="fu" type="file" onchange="form.submit();">
+                              <label for="avatarfu" class="m-0"><i class="i">browse-computer</i></label>
+                            </div>
+                            <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate('<?=$r['id'];?>','content','file','');"><i class="i">trash</i></button>
                           </div>
-                          <button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate('<?=$r['id'];?>','content','file','');"><i class="i">trash</i></button>
+                        </form>
+                      <?php }else{?>
+                        <label for="avatar" class="mt-0">Avatar</label>
+                        <div class="form-row">
+                          <img id="tstavatar" src="<?=$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>"  alt="Avatar">
+                          <input id="av" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?=$r['file'];?>" readonly>
                         </div>
-                      </form>
-                    <?php }else{?>
-                      <label for="avatar">Avatar</label>
+                      <?php }
+                    }
+                    if($r['contentType']!='testimonials'){?>
+                      <label for="fileURL" class="mt-0">URL</label>
                       <div class="form-row">
-                        <img id="tstavatar" src="<?=$r['file']!=''&&file_exists('media/avatar/'.basename($r['file']))?'media/avatar/'.basename($r['file']):ADMINNOAVATAR;?>"  alt="Avatar">
-                        <input id="av" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="avatar" type="text" value="<?=$r['file'];?>" readonly>
+                        <?=($r['fileURL']!=''?'<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>':'<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">').
+                        '<input class="textinput" id="fileURL" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="fileURL" type="text" value="'.$r['fileURL'].'"'.($user['options'][1]==1?' placeholder="Enter a URL..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="savefileURL" data-dbid="fileURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="file">Image</label>
+                      <?=($seo['imagesFile']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.$seo['imagesFile'].'</div>':'');?>
+                      <div class="form-row<?=($seo['imagesFile']!=''?' border-danger border-2 border-top-0':'');?>">
+                        <?php $w='';
+                        if(stristr($r['file'],'youtu')){
+                          preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$r['file'],$vidMatch);
+                          $r['file']='https://i.ytimg.com/vi/'.$vidMatch[0].'/maxresdefault.jpg';
+                        }
+                        if(stristr($r['file'],'/thumbs/'))$w='thumbs';
+                        if(stristr($r['file'],'/lg/'))$w='lg';
+                        if(stristr($r['file'],'/md/'))$w='md';
+                        if(stristr($r['file'],'/sm/'))$w='sm';
+                        echo($r['file']!=''?'<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>':'<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">').
+                        '<input class="textinput" id="file" type="text" value="'.$r['file'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="file"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.
+                        ($user['options'][1]==1?
+                          '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`file`);"><i class="i">browse-media</i></button>'.
+                          ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=file" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
+                          ($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editfile" data-image="'.$r['file'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="file"><i class="i">magic</i></button>':'').
+                          '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);"><i class="i">trash</i></button>'.
+                          '<button class="save" id="savefile" data-dbid="file" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                        :
+                          '');?>
+                      </div>
+                      <div id="editfile"></div>
+                      <label for="thumb">Thumbnail</label>
+                      <div class="form-row">
+                        <?php $w='';
+                        if(stristr($r['thumb'],'/thumbs/'))$w='thumbs';
+                        if(stristr($r['thumb'],'/lg/'))$w='lg';
+                        if(stristr($r['thumb'],'/md/'))$w='md';
+                        if(stristr($r['thumb'],'/sm/'))$w='sm';
+                        echo($r['thumb']!=''?'<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>':'<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">').
+                        '<input class="textinput" id="thumb" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="thumb" type="text" value="'.$r['thumb'].'"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.
+                        ($user['options'][1]==1?
+                          '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`thumb`);"><i class="i">browse-media</i></button>'.
+                          ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=thumb" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
+                          ($config['mediaOptions'][2]==1?'<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Thumbnail Image" data-imageeditor="editthumb" data-image="'.$r['thumb'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="thumb"><i class="i">magic</i></button>':'').
+                          '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);"><i class="i">trash</i></button>'.
+                          '<button class="save" id="savethumb" data-dbid="thumb" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                        :
+                          '');?>
+                      </div>
+                      <div id="editthumb"></div>
+                      <label for="fileALT">Image ALT</label>
+                      <?=($seo['imagesALT']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.$seo['imagesALT'].'</div>':'');?>
+                      <div class="form-row<?=($seo['imagesALT']!=''?' border-danger border-2 border-top-0':'');?>">
+                        <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
+                        <div class="input-text" data-el="fileALT" contenteditable="<?=$user['options'][1]==1?'true':'false';?>" data-placeholder="Enter an Image ALT Text..."><?=$r['fileALT'];?></div>
+                        <input class="textinput d-none" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>">
+                        <?=($user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <legend class="mt-3">Image Attribution</legend>
+                      <label for="attributionImageTitle">Title</label>
+                      <div class="form-row">
+                        <input class="textinput" id="attributionImageTitle" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle" type="text" value="<?=$r['attributionImageTitle'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
+                        <?=($user['options'][1]==1?'<button class="save" id="saveattributionImageTitle" data-dbid="attributionImageTitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="attributionImageName">Name</label>
+                      <div class="form-row">
+                        <input class="textinput" id="attributionImageName" list="attributionImageName_option" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attributionImageName" type="text" value="<?=$r['attributionImageName'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
+                        <?php if($user['options'][1]==1){
+                          $s=$db->query("SELECT DISTINCT `attributionImageName` AS name FROM `".$prefix."content` UNION SELECT DISTINCT `name` AS name FROM `".$prefix."content` UNION SELECT DISTINCT `name` AS name FROM login ORDER BY `name` ASC");
+                          if($s->rowCount()>0){
+                            echo'<datalist id="attributionImageName_option">';
+                              while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['name'].'"/>';
+                            echo'</datalist>';
+                          }
+                        }
+                        echo($user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-dbid="attributionImageName" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="attributionImageURL">URL</label>
+                      <div class="form-row">
+                        <input class="textinput" id="attributionImageURL" list="attributionImageURL_option" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attributionImageURL" type="text" value="<?=$r['attributionImageURL'];?>"<?=$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
+                        <?php if($user['options'][1]==1){
+                          $s=$db->query("SELECT DISTINCT `attributionImageURL` AS url FROM `".$prefix."content` ORDER BY `attributionImageURL` ASC");
+                          if($s->rowCount()>0){
+                            echo'<datalist id="attributionImageURL_option">';
+                              while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['url'].'"/>';
+                            echo'</datalist>';
+                          }
+                        }
+                        echo($user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-dbid="attributionImageURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <legend class="mt-3">EXIF Information</legend>
+                      <label for="exifFilename">Original Filename</label>
+                      <?=($user['options'][1]==1?'<div class="form-text">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</div>':'');?>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifFilename" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifFilename" type="text" value="'.$r['exifFilename'].'"'.($user['options'][1]==1?' placeholder="Original Filename..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifFilename" data-dbid="exifFilename" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifCamera">Camera</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifCamera" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifCamera" type="text" value="'.$r['exifCamera'].'"'.($user['options'][1]==1?' placeholder="Enter a Camera"':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifCamera" data-dbid="exifCamera" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifLens">Lens</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);"><i class="i">magic</i></button>':'').
+                        '<input type="text" id="exifLens" class="textinput" value="'.$r['exifLens'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifLens"'.($user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifLens" data-dbid="exifLens" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifAperture">Aperture</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifAperture" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifAperture" type="text" value="'.$r['exifAperture'].'"'.($user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifAperture" data-dbid="exifAperture" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifFocalLength">Focal Length</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifFocalLength" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifFocalLength" type="text" value="'.$r['exifFocalLength'].'"'.($user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-dbid="exifFocalLength" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifShutterSpeed">Shutter Speed</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifShutterSpeed" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifShutterSpeed" type="text" value="'.$r['exifShutterSpeed'].'"'.($user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-dbid="exifShutterSpeed" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifISO">ISO</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifISO" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifISO" type="text" value="'.$r['exifISO'].'"'.($user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifISO" data-dbid="exifISO" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+                      </div>
+                      <label for="exifti">Taken</label>
+                      <div class="form-row">
+                        <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);"><i class="i">magic</i></button>':'').
+                        '<input class="textinput" id="exifti" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifti" type="text" value="'.($r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'').'"'.($user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly').'>'.
+                        ($user['options'][1]==1?'<button class="save" id="saveexifti" data-dbid="exifti" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
                       </div>
                     <?php }
-                  }
-                  if($r['contentType']!='testimonials'){?>
-                    <label for="fileURL">URL</label>
-                    <div class="form-row">
-                      <?=($r['fileURL']!=''?
-                        '<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>'
-                      :
-                        '<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">').
-                      '<input class="textinput" id="fileURL" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="fileURL" type="text" value="'.$r['fileURL'].'"'.($user['options'][1]==1?' placeholder="Enter a URL..."':' readonly').'>'.
-                      ($user['options'][1]==1?
-                        '<button class="save" id="savefileURL" data-dbid="fileURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
-                      :
-                        '');?>
-                    </div>
-                    <label for="file">Image</label>
-                    <div class="form-row">
-                      <?php $w='';
-                      if(stristr($r['file'],'youtu')){
-                        preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$r['file'],$vidMatch);
-                            $r['file']='https://i.ytimg.com/vi/'.$vidMatch[0].'/maxresdefault.jpg';
-                      }
-                      if(stristr($r['file'],'/thumbs/'))$w='thumbs';
-                      if(stristr($r['file'],'/lg/'))$w='lg';
-                      if(stristr($r['file'],'/md/'))$w='md';
-                      if(stristr($r['file'],'/sm/'))$w='sm';
-                      echo($r['file']!=''?
-                        '<a data-fancybox="'.$r['contentType'].$r['id'].'" data-caption="'.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['file'].'"><img id="fileimage" src="'.$r['file'].'" alt="'.$r['contentType'].': '.$r['title'].'"></a>'
-                      :
-                        '<img id="fileimage" src="'.ADMINNOIMAGE.'" alt="No Image">').
-                      '<input class="textinput" id="file" type="text" value="'.$r['file'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="file"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.
-                      ($user['options'][1]==1?
-                        '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`file`);"><i class="i">browse-media</i></button>'.
-                        ($config['mediaOptions'][0]==1?
-                          '<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=file" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
-                        ($config['mediaOptions'][2]==1?
-                          '<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editfile" data-image="'.$r['file'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="file"><i class="i">magic</i></button>':'').
-                        '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`file`,``);"><i class="i">trash</i></button>'.
-                        '<button class="save" id="savefile" data-dbid="file" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
-                      :
-                        ''
-                      );?>
-                    </div>
-                    <div id="editfile"></div>
-                    <label for="thumb">Thumbnail</label>
-                    <div class="form-row">
-                      <?php $w='';
-                      if(stristr($r['thumb'],'/thumbs/'))$w='thumbs';
-                      if(stristr($r['thumb'],'/lg/'))$w='lg';
-                      if(stristr($r['thumb'],'/md/'))$w='md';
-                      if(stristr($r['thumb'],'/sm/'))$w='sm';
-                      echo($r['thumb']!=''?
-                        '<a data-fancybox="thumb'.$r['id'].'" data-caption="Thumbnail: '.$r['title'].($r['fileALT']!=''?'<br>ALT: '.$r['fileALT']:'<br>ALT: <span class=text-danger>Edit the ALT Text for SEO (Will use above Title instead)</span>').'" href="'.$r['thumb'].'"><img id="thumbimage" src="'.$r['thumb'].'" alt="Thumbnail: '.$r['title'].'"></a>'
-                      :
-                        '<img id="thumbimage" src="'.ADMINNOIMAGE.'" alt="No Image">'
-                      ).
-                      '<input class="textinput" id="thumb" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="thumb" type="text" value="'.$r['thumb'].'"'.($user['options'][1]==1?' placeholder="Select an image from the button options..."':' disabled').'>'.
-                      ($user['options'][1]==1?
-                        '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`thumb`);"><i class="i">browse-media</i></button>'.
-                        ($config['mediaOptions'][0]==1?'<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=content&c=thumb" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>':'').
-                        ($config['mediaOptions'][2]==1?
-                          '<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Thumbnail Image" data-imageeditor="editthumb" data-image="'.$r['thumb'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="content" data-c="thumb"><i class="i">magic</i></button>'
-                        :
-                          ''
-                        ).
-                        '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="imageUpdate(`'.$r['id'].'`,`content`,`thumb`,``);"><i class="i">trash</i></button>'.
-                        '<button class="save" id="savethumb" data-dbid="thumb" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
-                      :
-                        ''
-                      );?>
-                    </div>
-                    <div id="editthumb"></div>
-                    <label for="fileALT">Image ALT</label>
-                    <?=$seo['imagesALT']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.strip_tags($seo['imagesALT'],'<strong>').'</div>':'';?>
-                    <div class="form-row<?=$seo['imagesALT']!=''?' border-danger border-2 border-top-0':'';?>">
-                      <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Image-Alt-Text.md" data-type="alt" data-tooltip="tooltip" aria-label="SEO Image Alt Information"><i class="i">seo</i></button>
-                      <div class="input-text" data-el="fileALT" contenteditable="<?=$user['options'][1]==1?'true':'false';?>" data-placeholder="Enter an Image ALT Text..."><?=$r['fileALT'];?></div>
-                      <input class="textinput d-none" id="fileALT" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="fileALT" type="text" value="<?=$r['fileALT'];?>">
-                      <?=$user['options'][1]==1?'<button class="save" id="savefileALT" data-tooltip="tooltip" aria-label="Save" data-dbid="fileALT" data-style="zoom-in"><i class="i">save</i></button>':'';?>
-                    </div>
-                    <legend class="mt-3">Image Attribution</legend>
-                    <label for="attributionImageTitle">Title</label>
-                    <div class="form-row">
-                      <input class="textinput" id="attributionImageTitle" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attributionImageTitle" type="text" value="<?=$r['attributionImageTitle'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Title..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="saveattributionImageTitle" data-dbid="attributionImageTitle" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                    <label for="attributionImageName">Name</label>
-                    <div class="form-row">
-                      <input class="textinput" id="attributionImageName" list="attributionImageName_option" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attributionImageName" type="text" value="<?=$r['attributionImageName'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Name..."':' readonly';?>>
-                      <?php if($user['options'][1]==1){
-                        $s=$db->query("SELECT DISTINCT `attributionImageName` AS name FROM `".$prefix."content` UNION SELECT DISTINCT `name` AS name FROM `".$prefix."content` UNION SELECT DISTINCT `name` AS name FROM login ORDER BY `name` ASC");
-                        if($s->rowCount()>0){
-                          echo'<datalist id="attributionImageName_option">';
-                            while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['name'].'"/>';
-                          echo'</datalist>';
-                        }
-                      }
-                      echo$user['options'][1]==1?'<button class="save" id="saveattributionImageName" data-dbid="attributionImageName" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                    <label for="attributionImageURL">URL</label>
-                    <div class="form-row">
-                      <input class="textinput" id="attributionImageURL" list="attributionImageURL_option" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attributionImageURL" type="text" value="<?=$r['attributionImageURL'];?>"<?=$user['options'][1]==1?' placeholder="Enter a URL..."':' readonly';?>>
-                      <?php if($user['options'][1]==1){
-                        $s=$db->query("SELECT DISTINCT `attributionImageURL` AS url FROM `".$prefix."content` ORDER BY `attributionImageURL` ASC");
-                        if($s->rowCount()>0){
-                          echo'<datalist id="attributionImageURL_option">';
-                            while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['url'].'"/>';
-                          echo'</datalist>';
-                        }
-                      }
-                      echo$user['options'][1]==1?'<button class="save" id="saveattributionImageURL" data-dbid="attributionImageURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                    <legend class="mt-3">EXIF Information</legend>
-                    <label for="exifFilename">Original Filename</label>
-                    <?=$user['options'][1]==1?'<div class="form-text">Using the "Magic Wand" button will attempt to get the EXIF Information embedded in the Uploaded Image.</div>':'';?>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFilename`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifFilename" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifFilename" type="text" value="'.$r['exifFilename'].'"'.($user['options'][1]==1?' placeholder="Original Filename..."':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifFilename" data-dbid="exifFilename" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifCamera">Camera</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifCamera`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifCamera" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifCamera" type="text" value="'.$r['exifCamera'].'"'.($user['options'][1]==1?' placeholder="Enter a Camera"':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifCamera" data-dbid="exifCamera" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifLens">Lens</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifLens`);"><i class="i">magic</i></button>':'').
-                      '<input type="text" id="exifLens" class="textinput" value="'.$r['exifLens'].'" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifLens"'.($user['options'][1]==1?' placeholder="Enter a Lens..."':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifLens" data-dbid="exifLens" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifAperture">Aperture</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifAperture`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifAperture" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifAperture" type="text" value="'.$r['exifAperture'].'"'.($user['options'][1]==1?' placeholder="Enter an Aperture..."':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifAperture" data-dbid="exifAperture" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifFocalLength">Focal Length</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifFocalLength`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifFocalLength" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifFocalLength" type="text" value="'.$r['exifFocalLength'].'"'.($user['options'][1]==1?' placeholder="Enter a Focal Length..."':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifFocalLength" data-dbid="exifFocalLength" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifShutterSpeed">Shutter Speed</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifShutterSpeed`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifShutterSpeed" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifShutterSpeed" type="text" value="'.$r['exifShutterSpeed'].'"'.($user['options'][1]==1?' placeholder="Enter a Shutter Speed..."':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifShutterSpeed" data-dbid="exifShutterSpeed" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifISO">ISO</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifISO`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifISO" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifISO" type="text" value="'.$r['exifISO'].'"'.($user['options'][1]==1?' placeholder="Enter an ISO..."':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifISO" data-dbid="exifISO" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <label for="exifti">Taken</label>
-                    <div class="form-row">
-                      <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Get EXIF Information" onclick="getExif(`'.$r['id'].'`,`content`,`exifti`);"><i class="i">magic</i></button>':'').
-                      '<input class="textinput" id="exifti" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="exifti" type="text" value="'.($r['exifti']!=0?date($config['dateFormat'],$r['exifti']):'').'"'.($user['options'][1]==1?' placeholder="Select the Date/Time Image was Taken... (fix)"':' readonly').'>'.
-                      ($user['options'][1]==1?'<button class="save" id="saveexifti" data-dbid="exifti" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                    </div>
-                    <legend class="mt-3">On Page Media</legend>
-                    <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
-                      <input name="id" type="hidden" value="<?=$r['id'];?>">
-                      <input name="rid" type="hidden" value="<?=$r['id'];?>">
-                      <input name="t" type="hidden" value="content">
-                      <input id="mediafile" name="fu" type="text" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
-                      <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','media','mediafile');return false;"><i class="i">browse-media</i></button>
-                      <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
-                    </form>
-                    <div class="row mt-3" id="mi">
-                      <?php $sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `file`!='' AND `pid`=:id ORDER BY `ord` ASC");
-                      $sm->execute([':id'=>$r['id']]);
-                      if($sm->rowCount()>0){
-                        while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
-                          <div id="mi_<?=$rm['id'];?>" class="card stats gallery col-12 col-sm-3 m-0 border-0">
-                            <?php if(stristr($rm['file'],'youtu')){
-                              preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$rm['file'],$vidMatch);
-                              echo'<div class="note-video-wrapper video" style="padding-bottom:67%;" data-fancybox="media" href="'.$rm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'"><img class="note-video-clip" src="'.$rm['thumb'].'"><div class="play"></div></div>';
-                            }elseif(stristr($rm['file'],'vimeo')){
-                              preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$rm['file'],$vidMatch);
-                              echo'<div class="note-video-wrapper video" style="padding-bottom:67%;" data-fancybox="media" href="'.$rm['file'].'" data-fancybox-plyr data-embed="https://vimeo.com/'.$vidMatch[5].'"><img class="note-video-clip" src="'.$rm['thumb'].'"><div class="play"></div></div>';
-                            }else
-                              echo'<a data-fancybox="media" href="'.$rm['file'].'"><img   src="'.$rm['thumb'].'" alt="'.$rm['title'].'"></a>';?>
-                            <div class="btn-group tools">
-                              <div class="btn" data-tooltip="right" aria-label="<?=$rm['views'];?> views"><small><?=$rm['views'];?></small></div>
-                              <?php if($user['options'][1]==1){?>
-                                <a href="<?= URL.$settings['system']['admin'].'/media/edit/'.$rm['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
-                                <button class="trash" onclick="purge('<?=$rm['id'];?>','media')" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                                <div class="btn handle" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>
-                              <?php }?>
-                            </div>
-                          </div>
-                        <?php }
-                      }?>
-                    </div>
-                    <?php if($user['options'][1]==1){?>
-                      <div class="ghost"></div>
-                      <script>
-                        $('#mi').sortable({
-                          items:".card.stats",
-                          placeholder:"ghost",
-                          helper:fixWidthHelper,
-                          update:function(e,ui){
-                            var order=$("#mi").sortable("serialize");
-                            $.ajax({
-                              type:"POST",
-                              dataType:"json",
-                              url:"core/reordermedia.php",
-                              data:order
-                            });
-                          }
-                        }).disableSelection();
-                        function fixWidthHelper(e,ui){
-                          ui.children().each(function(){
-                            $(this).width($(this).width());
-                          });
-                          return ui;
-                        }
-                      </script>
-                    <?php }
                   }?>
+                  <legend class="mt-3">On Page Media</legend>
+                  <form class="form-row" target="sp" method="post" action="core/add_media.php" enctype="multipart/form-data">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="content">
+                    <input id="mediafile" name="fu" type="text" value="" placeholder="Enter a URL, or Select Images using the Media Manager...">
+                    <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog('<?=$r['id'];?>','media','mediafile');return false;"><i class="i">browse-media</i></button>
+                    <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
+                  </form>
+                  <div class="row mt-3" id="mi">
+                    <?php $sm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `file`!='' AND `pid`=:id ORDER BY `ord` ASC");
+                    $sm->execute([':id'=>$r['id']]);
+                    if($sm->rowCount()>0){
+                      while($rm=$sm->fetch(PDO::FETCH_ASSOC)){?>
+                        <div id="mi_<?=$rm['id'];?>" class="card stats gallery col-12 col-sm-3 m-0 border-0">
+                          <?php if(stristr($rm['file'],'youtu')){
+                            preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$rm['file'],$vidMatch);
+                            echo'<div class="note-video-wrapper video" style="padding-bottom:67%;" data-fancybox="media" href="'.$rm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'"><img class="note-video-clip" src="'.$rm['thumb'].'"><div class="play"></div></div>';
+                          }elseif(stristr($rm['file'],'vimeo')){
+                            preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$rm['file'],$vidMatch);
+                            echo'<div class="note-video-wrapper video" style="padding-bottom:67%;" data-fancybox="media" href="'.$rm['file'].'" data-fancybox-plyr data-embed="https://vimeo.com/'.$vidMatch[5].'"><img class="note-video-clip" src="'.$rm['thumb'].'"><div class="play"></div></div>';
+                          }else
+                            echo'<a data-fancybox="media" href="'.$rm['file'].'"><img   src="'.$rm['thumb'].'" alt="'.$rm['title'].'"></a>';?>
+                          <div class="btn-group tools">
+                            <div class="btn" data-tooltip="right" aria-label="<?=$rm['views'];?> views"><small><?=$rm['views'];?></small></div>
+                            <?php if($user['options'][1]==1){?>
+                              <a href="<?= URL.$settings['system']['admin'].'/media/edit/'.$rm['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
+                              <button class="trash" onclick="purge('<?=$rm['id'];?>','media')" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                              <div class="btn handle" data-tooltip="left" aria-label="Drag to Reorder"><i class="i">drag</i></div>
+                            <?php }?>
+                          </div>
+                        </div>
+                      <?php }
+                    }?>
+                  </div>
+                  <?php if($user['options'][1]==1){?>
+                    <div class="ghost"></div>
+                    <script>
+                      $('#mi').sortable({
+                        items:".card.stats",
+                        placeholder:"ghost",
+                        helper:fixWidthHelper,
+                        update:function(e,ui){
+                          var order=$("#mi").sortable("serialize");
+                          $.ajax({
+                            type:"POST",
+                            dataType:"json",
+                            url:"core/reordermedia.php",
+                            data:order
+                          });
+                        }
+                      }).disableSelection();
+                      function fixWidthHelper(e,ui){
+                        ui.children().each(function(){
+                          $(this).width($(this).width());
+                        });
+                        return ui;
+                      }
+                    </script>
+                  <?php }?>
                 </div>
-                <?php if($r['contentType']!='testimonials'){?>
+                <?php if(!in_array($r['contentType'],['testimonials','list'])){?>
                   <div class="tab2-2 border p-3" data-tabid="tab2-2" role="tabpanel">
-                    <label for="videoURL">Video URL</label>
+                    <label for="videoURL" class="mt-0">Video URL</label>
                     <div class="form-row">
                       <input class="textinput" id="videoURL" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="videoURL" type="text" value="<?=$r['videoURL'];?>">
                       <?=($user['options'][1]==1?'<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`content`,`videoURL`);"><i class="i">browse-media</i></button><button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`content`,`videoURL`,``);"><i class="i">trash</i></button><button class="save" id="savevideoURL" data-dbid="videoURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
@@ -1065,7 +1170,7 @@ if($r['contentType']!='testimonials'){
                     </div>
                   </div>
                 <?php }
-                if($r['contentType']!='testimonials'){?>
+                if(!in_array($r['contentType'],['testimonials','list'])){?>
                   <div class="tab2-3 border p-3" data-tabid="tab2-3" role="tabpanel">
                     <?php if($user['options'][1]==1){
                       if($r['contentType']!='list'){?>
@@ -1150,7 +1255,7 @@ if($r['contentType']!='testimonials'){
                     }?>
                   </div>
                 <?php }
-                if($r['contentType']!='list'||$$r['contentType']!='testimonials'){?>
+                if(!in_array($r['contentType'],['testimonials','list'])){?>
                   <div class="tab2-4 border p-3" data-tabid="tab2-4" role="tabpanel">
                     <form class="row mb-3" target="sp" method="post" action="core/add_link.php">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -1635,7 +1740,7 @@ if($r['contentType']!='testimonials'){
 /* SEO */
           if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
             <div class="tab1-7 border p-3" data-tabid="tab1-7" role="tabpanel">
-              <label for="views">Views</label>
+              <label for="views" class="mt-0">Views</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
                 <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button>'.
@@ -1732,7 +1837,7 @@ if($r['contentType']!='testimonials'){
           <div class="tab1-8 border p-3" data-tabid="tab1-8" role="tabpanel">
             <div class="row">
               <div class="col-12 col-sm-6 pr-md-3">
-                <label for="status">Status</label>
+                <label for="status" class="mt-0">Status</label>
                 <div class="form-row">
                   <select id="status"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','status',$(this).val(),'select');changeShareStatus($(this).val());">
                     <option value="unpublished"<?=$r['status']=='unpublished'?' selected':'';?>>Unpublished</option>
@@ -1753,7 +1858,7 @@ if($r['contentType']!='testimonials'){
                 }
               </script>
               <div class="col-12 col-sm-6 pl-md-3">
-                <label for="rank">Access</label>
+                <label for="rank" class="mt-0">Access</label>
                 <div class="form-row">
                   <select id="rank" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rank"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','rank',$(this).val(),'select');toggleRank($(this).val());">
                     <option value="0"<?=$r['rank']==0?' selected':'';?>>Available to Everyone</option>
@@ -2217,7 +2322,7 @@ if($r['contentType']!='testimonials'){
                   <?php $sl=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='list' AND `rid`=:rid ORDER BY `ord` ASC, `ti` ASC");
                   $sl->execute([':rid'=>$r['id']]);
                   while($rl=$sl->fetch(PDO::FETCH_ASSOC)){?>
-                    <div id="l_<?=$rl['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">
+                    <div id="l_<?=$rl['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible add-item">
                       <div class="row">
                         <?php $slm=$db->prepare("SELECT * FROM `".$prefix."media` WHERE `rid`=:id ORDER BY `ord` ASC, `ti` ASC LIMIT 4");
                         $slm->execute([':id'=>$rl['id']]);
@@ -2245,9 +2350,9 @@ if($r['contentType']!='testimonials'){
                             </div>
                             <?php if($user['options'][0]==1){?>
                               <div class="col-12 text-right">
-                                <a class="btn-sm" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$rl['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
-                                <button class="btn-sm trash" id="purge<?=$rl['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rl['id'];?>','content')"><i class="i">trash</i></button>
-                                <span class="btn btn-sm orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
+                                <a class="btn" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$rl['id'];?>" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>
+                                <button class="btn trash" id="purge<?=$rl['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$rl['id'];?>','content')"><i class="i">trash</i></button>
+                                <span class="btn orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
                               </div>
                             <?php }?>
                           </div>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-6
+ * @version    0.2.26-1
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -168,7 +168,7 @@ if($args[0]!='compose'){
                     <iframe id="notes" src="core/viewemail.php?id=<?=$r['id'];?>" width="100%" frameborder="0" scrolling="no" onload="this.style.height=this.contentDocument.body.scrollHeight+'px';" style="background:#fff;color:#000;"></iframe>
                   </div>
                 <?php }?>
-                <label for="bod">Reply</label>
+                <label for="bod" onclick="$('#bod').summernote({focus:true});">Reply</label>
                 <div class="row">
                   <textarea id="bod" name="bod"></textarea>
                 </div>

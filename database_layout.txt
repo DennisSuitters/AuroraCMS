@@ -327,10 +327,10 @@ config
   `spamfilter` int(1)
   `notification_volume` int(4)
   `mediaOptions` VARCHAR(16)
-    0
-    1
-    2
-    3
+    0 Unsplash Search Browser
+    1 Get Thumbnail
+    2 On Page Image Editor
+    3 Order Administration Sidebar based on usage/views
     4
     5
     6

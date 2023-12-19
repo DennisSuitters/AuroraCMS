@@ -1094,6 +1094,11 @@ svg.leaflet-image-layer.leaflet-interactive path{
   box-shadow:none;
   border-color:var(--form-border-color) }
 
+.fade-in {
+	-webkit-animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+	        animation: fade-in 1.2s cubic-bezier(0.390, 0.575, 0.565, 1.000) both;
+}
+
 @-webkit-keyframes fade-in{
   0%{
     opacity:0 }
@@ -1106,6 +1111,11 @@ svg.leaflet-image-layer.leaflet-interactive path{
     opacity:0 }
   100%{
     opacity:1 }
+}
+
+.fade-out {
+	-webkit-animation: fade-out 1s ease-out both;
+	        animation: fade-out 1s ease-out both;
 }
 
 @-webkit-keyframes fade-out{

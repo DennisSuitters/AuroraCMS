@@ -272,9 +272,9 @@ if(is_null($e[2])){
 echo'<script>window.top.window.$(".page-block").addClass("d-none");</script>';
 if($col=='status'&&$tbl!='forumPosts'){
 	if($da=='archived')echo'<script>window.top.window.$("#l_'.$id.'").slideUp(500,function(){$(this).remove()});</script>';
-	if($tbl!='comments'||$da=='delete'||$da=='')echo'<script>window.top.window.statusSet(`'.$id.'`,`'.$da.'`);</script>';
-	if($da=='delete')echo'<script>window.top.window.$("#l_'.$id.'").addClass("danger");</script>';
-	else echo'<script>window.top.window.$("#l_'.$id.'").removeClass("danger");</script>';
+	if($tbl!='comments'||$da=='delete'||$da=='')echo'<script>window.top.window.statusSet(`'.$id.'`,`'.$tbl.'`,`'.$col.'`,`'.$da.'`);</script>';
+	if($da=='delete')echo'<script>window.top.window.$("#l_'.$id.'").addClass("delete");</script>';
+	else echo'<script>window.top.window.$("#l_'.$id.'").removeClass("delete");</script>';
 }
 if($col=='password')echo'<script>window.top.window.$("#passButton").removeClass("btn-danger");window.top.window.$(".page-block").addClass("d-none");</script>';
 if($col=='notes')echo'<script>window.top.window.$(".page-block").addClass("d-none");window.top.window.$(".note-save button").removeClass("btn-danger");</script>';

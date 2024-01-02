@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -63,22 +63,11 @@ else{?>
             if(strlen($rseo['seoDescription'])<1||strlen($rseo['seoDescription'])>70)$seopageerrors++;
             if($rseo['cover']!=''){
               if(strlen($rseo['fileALT'])<1)$seopageerrors++;
-              list($width,$height,$type,$attr)=@getimagesize($rseo['cover']);
-              if($width==null|$height==null){
-                $seopageerrors++;
-              }
             }
             if($rseo['heading']=='')$seopageerrors++;
             if(strlen(strip_tags($rseo['notes']))<100)$seopageerrors++;
             preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
             if(isset($h1[1]))$seopageerrors++;
-            preg_match_all('~src="\K[^"]+~',$rseo['notes'],$imgs);
-            if($imgs!=''){
-              foreach($imgs[0] as $img){
-                list($width,$height,$type,$attr)=@getimagesize($img);
-                if($width==null||$height==null)$seopageerrors++;
-              }
-            }
           }
           $sseo=$db->prepare("SELECT `file`,`fileALT`,`seoTitle`,`seoDescription`,`notes` FROM `".$prefix."content` WHERE `contentType` NOT LIKE 'testimonial%' AND `contentType` NOT LIKE 'newsletter%' AND `contentType`!='list' AND `contentType`!='advert' AND `contentType`!='booking'");
           $sseo->execute();
@@ -87,21 +76,12 @@ else{?>
             if(strlen($rseo['seoDescription'])<1||strlen($rseo['seoDescription'])>70)$seocontenterrors++;
             if($rseo['file']!=''){
               if(strlen($rseo['fileALT'])<1)$seocontenterrors++;
-              list($width,$height,$type,$attr)=@getimagesize($rseo['file']);
-              if($width==null||$height==null)$seocontenterrors++;
             }
             if(strlen(strip_tags($rseo['notes']))<100)$seocontenterrors++;
             preg_match('~<h1>([^{]*)</h1>~i',$rseo['notes'],$h1);
             if(isset($h1[1]))$seocontenterrors++;
-            preg_match_all('~src="\K[^"]+~',$rseo['notes'],$imgs);
-            if($imgs!=''){
-              foreach($imgs[0] as $img){
-                list($width,$height,$type,$attr)=@getimagesize($img);
-                if($width==null||$height==null)$seocontenterrors++;
-              }
-            }
           }
-          if($seoerrors>0||$seocontenterrors>0){
+          if($seopageerrors>0||$seocontenterrors>0){
             echo'<div class="alert alert-warning">'.
               ($seopageerrors>0?'<div>There are <a href="'.URL.$settings['system']['admin'].'/pages">'.$seopageerrors.'</a> SEO issues with various <a href="'.URL.$settings['system']['admin'].'/pages">Pages</a> that can adversely affect their ranking!!!</div>':'').
               ($seocontenterrors>0?'<div>There are <a href="'.URL.$settings['system']['admin'].'/content">'.$seocontenterrors.'</a> SEO issues with various <a href="'.URL.$settings['system']['admin'].'/content">Content</a> items that could adversely affect their ranking!!!</div>':'').

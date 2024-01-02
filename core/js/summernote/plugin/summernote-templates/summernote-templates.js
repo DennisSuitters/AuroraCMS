@@ -51,7 +51,8 @@
     blocks:{
       icon:'<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="16" height="16" style="fill:currentColor"><path d="M 1,6.249111 H 6.25031 V 1 H 1 V 6.249111 z M 7.74969,1 V 6.249111 H 13 V 1 H 7.74969 z m 0,12 H 13 V 7.750444 H 7.74969 V 13 z M 1,13 H 6.25031 V 7.750444 H 1 V 13 z"/></svg></i>',
       templates: '../summernote-templates/block-templates/',
-      generatedBlockTemplates:[],
+      blockTemplatesTitle:[],
+      blockTemplates:[],
     }
   });
   $.extend($.summernote.plugins,{
@@ -238,32 +239,7 @@
       });
       this.initialize = function () {
         var $container = options.dialogsInBody ? $(document.body) : $editor;
-        var body = '<div class="quickedit">' +
-          '<div class="row">' +
-            '<div class="col-12 col-sm-2">' +
-              '<label for="note-dialog-blocks-id" class="note-form-label">ID</label>' +
-              '<div class="note-form-group">' +
-                '<input id="note-dialog-blocks-id" class="note-blocks-id note-input" type="text"/>' +
-                '</div>' +
-            '</div>' +
-            '<div class="col-12 col-sm-10">' +
-              '<label for="note-dialog-blocks-heading" class="note-form-label">Heading</label>' +
-              '<div class="note-form-group">' +
-                '<input id="note-dialog-blocks-heading" class="note-blocks-heading note-input" type="text"/>' +
-              '</div>' +
-            '</div>' +
-          '</div>' +
-          '<label for="note-dialog-blocks-image" class="note-form-label">Image</label>' +
-          '<div class="note-form-group">' +
-            '<input id="note-dialog-blocks-image" class="note-blocks-image note-input" type="text"/>' +
-            '<button class="note-btn" onclick="elfinderDialog(`note-dialog-blocks-image`);">File&nbsp;Browser</button>' +
-          '</div>' +
-          '<label for="note-dialog-blocks-notes" class="note-form-label">Notes</label>' +
-          '<div class="note-form-group">' +
-            '<textarea id="note-dialog-blocks-notes" class="note-blocks-notes" note-input"></textarea>' +
-          '</div>' +
-        '</div>' +
-        '<div id="note-blocks" class="container"></div>';
+        var body = '<div id="note-blocks" class="container"></div>';
         this.$dialog = ui.dialog({
           title:  lang.blocks.dialogTitle,
           body:   body,
@@ -296,14 +272,15 @@
             var ii = 0;
             var pT = '';
             $('#note-blocks').html('');
-            if (options.blocks.generatedBlockTemplates != '') {
-              options.blocks.generatedBlockTemplates.forEach((template, index) => {
-                pT = '<div class="note-blocks">' +
+            if (options.blocks.blockTemplates != '') {
+              options.blocks.blockTemplates.forEach((template, index) => {
+                pT = '<fieldset class="note-blocks">' +
+                  '<legend class="small w-auto">' + options.blocks.blockTemplatesTitle[ii] + '</legend>' +
                   '<input id="note-select-' + ii + '" type="radio" value="' + ii + '" name="note-blocks-select" hidden>' +
                   '<label for="note-select-' + ii + '" class="note-blocks-label">' +
                     template +
                   '</label>' +
-                '</div>';
+                '</fieldset>';
                 $('#note-blocks').append(pT);
                ii++;
              });
@@ -326,80 +303,18 @@
               });
             }
             $blocksBtn.click(function (e) {
-              var blocksSelected = $('input[name=note-blocks-select]:checked').val();
-              if (blocksSelected) {
-                const blocksId = self.$dialog.find('.note-blocks-id').val();
-                const blocksHeading = self.$dialog.find('.note-blocks-heading').val();
-                const blocksImage = self.$dialog.find('.note-blocks-image').val();
-                const blocksNotes = self.$dialog.find('.note-blocks-notes').val();
-                console.log(blocksHeading);
-                if(options.blocks.generatedBlockTemplates != '') {
+              var blockSelected = $('input[name=note-blocks-select]:checked').val();
+              if (blockSelected) {
+                if(options.blocks.blockTemplates != '') {
                   if ($('input[name=note-blocks-replaceContent]:checked').length > 0) {
-                    let data=options.blocks.generatedBlockTemplates[blocksSelected];
-                    var find = [
-                      "[id]",
-                      "[heading]",
-                      "[image]",
-                      "[notes]"
-                    ];
-                    var replace = [
-                      blocksId,
-                      blocksHeading,
-                      blocksImage,
-                      blocksNotes
-                    ];
-                    data = data.replaceAll(
-                      new RegExp("(" + find.map(function (i) {
-                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
-                      }).join("|") + ")", "g"),function (s) {
-                        return replace[find.indexOf(s)];
-                      }
-                    );
+                    let data=options.blocks.blockTemplates[blockSelected];
                     $note.summernote('pasteHTML', data);
                   } else {
-                    let data=options.blocks.generatedBlockTemplates[blocksSelected];
-                    var find = [
-                      "[id]",
-                      "[heading]",
-                      "[image]",
-                      "[notes]"
-                    ];
-                    var replace = [
-                      blocksId,
-                      blocksHeading,
-                      blocksImage,
-                      blocksNotes
-                    ];
-                    data = data.replaceAll(
-                      new RegExp("(" + find.map(function (i) {
-                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
-                      }).join("|") + ")", "g"),function (s) {
-                        return replace[find.indexOf(s)];
-                      }
-                    );
+                    let data=options.blocks.blockTemplates[blockSelected];
                     $note.summernote('pasteHTML', data);
                   }
                 } else {
-                  $.get(options.blocks.templates + blocksSelected).done(function (data) {
-                    var find = [
-                      "[id]",
-                      "[heading]",
-                      "[image]",
-                      "[notes]"
-                    ];
-                    var replace = [
-                      blocksId,
-                      blocksHeading,
-                      blocksImage,
-                      blocksNotes
-                    ];
-                    data = data.replaceAll(
-                      new RegExp("(" + find.map(function (i) {
-                        return i.replace(/[.?*+^$[\]\\(){}|-]/g, "\\$&");
-                      }).join("|") + ")", "g"),function (s) {
-                        return replace[find.indexOf(s)];
-                      }
-                    );
+                  $.get(options.blocks.templates + blockSelected).done(function (data) {
                     $note.summernote('pasteHTML', data);
                   });
                 }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -94,7 +94,7 @@ if($su->rowCount()>0){
       $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=:uid ORDER BY `icon` ASC");
       $ss->execute([':uid'=>$user['id']]);
       while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
-        echo'<a class="m-1" href="'.$rs['url'].'"><i class="i i-3x i-social social-'.$rs['icon'].'">social-'.$rs['icon'].'</i></a>';
+        echo'<a href="'.$rs['url'].'"><i class="i i-3x m-1 i-social social-'.$rs['icon'].'">social-'.$rs['icon'].'</i></a>';
       }
     echo'</div>'.
   '</div>'.

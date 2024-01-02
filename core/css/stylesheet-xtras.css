@@ -999,12 +999,12 @@ figcaption:empty,
   color:var(--alert-warning-link) }
 
 .alert-danger{
-  border-color:var(--alert-danger-border-color);
-  background-color:var(--alert-danger-background-color);
-  color:var(--alert-danger-color) }
+  border-color:var(--alert-danger-border-color)!important;
+  background-color:var(--alert-danger-background-color)!important;
+  color:var(--alert-danger-color)!important }
 
 .alert-danger a{
-  color:var(--alert-danger-link) }
+  color:var(--alert-danger-link)!important }
 
 .tabs{
   margin-right:auto;

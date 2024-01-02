@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -152,7 +152,7 @@ else{
         </div>
         <section class="content mt-3 overflow-visible<?= isset($_COOKIE['contentview'])&&$_COOKIE['contentview']=='list'?' list':'';?>" id="contentview">
           <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <article class="card zebra col-6 col-md-5 col-lg-3 col-xxl-2 mx-0 mx-md-2 mt-2 mb-0 overflow-visible card-list shadow" id="l_<?=$r['id'];?>" data-content="course<?=' '.$r['title'];?>">
+            <article class="card zebra mx-3 my-2 overflow-visible card-list shadow" id="l_<?=$r['id'];?>" data-content="course<?=' '.$r['title'];?>">
               <div class="card-image overflow-visible">
                 <?php if($r['thumb']!=''&&file_exists('media/sm/'.basename($r['thumb'])))
                   echo'<a href="'.URL.$settings['system']['admin'].'/course/edit/'.$r['id'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';

@@ -14,6 +14,17 @@
 $rank=0;
 $notification='';
 $html=str_replace('<print view>',$view,$html);
+$page['notes']=preg_replace([
+  '/{business}/',
+  '/&lbrace;business&rcub;/',
+  '/{url}/',
+  '/&lbrace;url&rcub;/'
+],[
+  $config['business'],
+  $config['business'],
+  URL,
+  URL,
+],$page['notes']);
 if(!isset($args[0])){
   $page['id']=0;
   $page['cover']='';
@@ -28,17 +39,6 @@ if(!isset($args[0])){
 }
 require'inc-cover.php';
 require'inc-breadcrumbs.php';
-$page['notes']=preg_replace([
-  '/{business}/',
-  '/&lbrace;business&rcub;/',
-  '/{url}/',
-  '/&lbrace;url&rcub;/'
-],[
-  $config['business'],
-  $config['business'],
-  URL,
-  URL,
-],$page['notes']);
 $html=preg_replace([
   '/<print page=[\"\']?heading[\"\']?>/',
   '/<print page=[\"\']?notes[\"\']?>/',

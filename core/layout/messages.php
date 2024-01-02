@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -108,7 +108,7 @@ if($user['options'][3]==1){
               }
               $ur=$db->query("SELECT COUNT(`status`) AS cnt FROM `".$prefix."messages` WHERE `status`='unread' AND `folder`='INBOX'")->fetch(PDO::FETCH_ASSOC);
               $sp=$db->query("SELECT COUNT(`folder`) AS cnt FROM `".$prefix."messages` WHERE `folder`='spam' AND `status`='unread'")->fetch(PDO::FETCH_ASSOC);?>
-              <div class="messages-menu col-12 col-sm-5 col-lg-4 col-xl-3 col-xxl-2 p-3 border">
+              <div class="messages-menu col-12 col-sm-5 col-lg-4 col-xl-3 col-xxl-3 p-3 border">
                 <?=$user['options'][0]==1?'<a class="btn-block mb-2" href="'.URL.$settings['system']['admin'].'/messages/compose" role="button">Compose New Email</a>':'';?>
                 <nav class="mt-3">
                   <ul>

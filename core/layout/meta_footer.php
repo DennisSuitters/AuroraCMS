@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -118,58 +118,15 @@
             });
           },
           annotationsCommon:{
-            fill:'#ff0000',
+            fill:'#ffffff',
+          },
+          Crop:{
+            ratio:'custom',
           },
           Text:{text:fileAlt},
           Rotate:{angle:90,componentType:'slider'},
-          translations:{
-            profile:'Profile',
-            coverPhoto:'Cover photo',
-            facebook:'Facebook',
-            socialMedia:'Social Media',
-            fbProfileSize:'180x180px',
-            fbCoverPhotoSize:'820x312px',
-          },
-          Crop:{
-            presetsItems:[
-              {
-                titleKey:'classicTv',
-                descriptionKey:'4:3',
-                ratio:4 / 3,
-              },
-              {
-                titleKey:'cinemascope',
-                descriptionKey:'21:9',
-                ratio:21 / 9,
-              },
-            ],
-            presetsFolders:[
-              {
-                titleKey:'socialMedia',
-                groups:[
-                  {
-                    titleKey:'facebook',
-                    items:[
-                      {
-                        titleKey:'profile',
-                        width:180,
-                        height:180,
-                        descriptionKey:'fbProfileSize',
-                      },
-                      {
-                        titleKey:'coverPhoto',
-                        width:820,
-                        height:312,
-                        descriptionKey:'fbCoverPhotoSize',
-                      },
-                    ],
-                  },
-                ],
-              },
-            ],
-          },
-          tabsIds:[TABS.FINETUNE,TABS.FILTERS,TABS.WATERMARK,TABS.DRAW,TABS.RESIZE,TABS.ADJUST,TABS.ANNOTATE,],
-          defaultTabId:TABS.FINETUNE,
+          tabsIds:[TABS.ADJUST,TABS.FINETUNE,TABS.FILTERS,TABS.WATERMARK,TABS.DRAW,TABS.RESIZE,TABS.ANNOTATE,],
+          defaultTabId:TABS.ADJUST,
           defaultToolId:TOOLS.TEXT,
         };
         const filerobotImageEditor=new FilerobotImageEditor(
@@ -204,43 +161,6 @@
       $('select[name="colorpicker"]').simplecolorpicker({theme: 'regularfont'});
     });
   <?php }?>
-  $('#seoTitle').keyup(function(){
-  	var length=$(this).val().length;
-  	var max=70;
-  	$("#seoTitlecnt").text(length);
-    $('#google-title').text($(this).val());
-  	if(length<50){
-  		$("#seoTitlecnt").addClass('text-danger');
-  	}else if(length>max){
-      $("#seoTitlecnt").addClass('text-danger');
-    }else{
-  		$("#seoTitlecnt").removeClass('text-danger');
-  	}
-  });
-  $('#seoCaption').keyup(function(){
-  	var length=$(this).val().length;
-  	var max=160;
-  	var length=max-length;
-  	$("#seoCaptioncnt").text(length);
-  	if(length<0){
-  		$("#seoCaptioncnt").addClass('text-danger');
-  	}else{
-  		$("#seoCaptioncnt").removeClass('text-danger');
-  	}
-  });
-  $('#seoDescription').keyup(function(){
-  	var length=$(this).val().length;
-  	var max=160;
-  	$("#seoDescriptioncnt").text(length);
-    $('#google-description').text($(this).val());
-  	if(length<50){
-  		$("#seoDescriptioncnt").addClass('text-danger');
-  	}else if(length>max){
-  		$("#seoDescriptioncnt").addClass('text-danger');
-  	}else{
-      $("#seoDescriptioncnt").removeClass('text-danger');
-    }
-  });
   $('.save').click(function(e){
 	 	e.preventDefault();
     var el=$(this).data("dbid");
@@ -421,22 +341,29 @@
             lineWrapping:true,
             theme:'base16-dark',
           },
-          dialogsAnim: 'elastic',
           isNotSplitEdgePoint:true,
           stickyToolbar: true,
+          stickyStatus: true,
           tabsize:2,
-          disableUpload:true,
-          fileExplorer:'elfinderDialog',
-          styleTags:[
-            'p',
-            {title:'Blockquote',tag:'blockquote',className:'blockquote',value:'blockquote'},
-            'pre',
-            'h2',
-            'h3',
-            'h4',
-            'h5',
-            'h6'
+          linkList: [
+            <?php $sl=$db->prepare("SELECT `title`,`contentType` FROM `".$prefix."menu` WHERE `active`=1 AND `contentType`!='activate' AND `contentType`!='cart' AND `contentType`!='checkout' AND `contentType`!='comingsoon' AND `contentType`!='course' AND `contentType`!='maintenance' AND `contentType`!='offline' AND `contentType`!='settings' AND `contentType`!='orders' ORDER BY `title` ASC");
+            $sl->execute();
+            while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+              echo'["'.$rl['title'].'","'.URL.$rl['contentType'].'/","'.$rl['title'].'"],';
+              $slc=$db->prepare("SELECT `title`,`urlSlug` FROM `".$prefix."content` WHERE `contentType`=:contentType AND `contentType` NOT LIKE 'testimonial%' AND `status`='published' ORDER BY `title` ASC");
+              $slc->execute([':contentType'=>$rl['contentType']]);
+              if($slc->rowCount()>0){
+                while($rlc=$slc->fetch(PDO::FETCH_ASSOC)){
+                  echo'["'.$rlc['title'].'","'.URL.$rl['contentType'].'/'.$rlc['urlSlug'].'","'.$rl['title'].' > '.$rlc['title'].'"],';
+                }
+              }
+            }?>
           ],
+          disableUpload:true,
+          imageService: '<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?t=note-image-url" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>',
+          fileExplorer:'elfinderDialog',
+          blockTags:['div','p','pre','h2','h3','h4','h5','h6'],
+          inlineTags:['abbr','b','cite','code','del','dfn','em','i','ins','kbd','mark','q','s','small', 'span','strong','sub','sup','time','u'],
           popover:{
             image:[
               ['custom',['imageAttributes','captionIt','imageShapes']],
@@ -452,15 +379,21 @@
               ['para',['ul','paragraph']],
               ['table',['table']],
               ['insert',['media','link','picture']]
-            ]
+            ],
+            table:[
+              ['add',['addRowDown','addRowUp','addColLeft','addColRight']],
+              ['delete',['deleteRow','deleteCol','deleteTable']],
+            ],
           },
           lang:'en-US',
           toolbar:[
             ['save',['save']],
+            ['clipboard', ['undo', 'redo']],
+            ['style', ['block','inline']],
             ['custom',['cleaner','findnreplace','blocks',<?=$view=='newsletters'?",'pageTemplates'":"";?>]],
 //            ['custom',['cleaner','findnreplace']],
 //            ['style',['style']],
-            ['font',['bold','italic','underline','clear']],
+            ['font',['bold','italic','underline','strikethrough','superscript','subscript','clear']],
             ['para',['ul','ol','paragraph']],
             ['table',['table']],
             ['insert',['picture','video','audio','link','hr','checkbox']],
@@ -495,7 +428,27 @@ else
             socialLinkEmail: 'example@example.com/',
             socialLinkLinkedIn: 'https://linkedin.com/',
             templates:     '../summernote-templates/page-templates/',
-            cssFile:       '<?= URL.'layout/'.$config['theme'].'/css/newsletter.css';?>'
+            cssFile:       '<?= URL.'layout/'.$config['theme'].'/css/newsletter.css';?>',
+          },
+<?php }else{?>
+          blocks: {
+            icon:'<i class="note-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14" width="16" height="16" style="fill:currentColor"><path d="M 1,6.249111 H 6.25031 V 1 H 1 V 6.249111 z M 7.74969,1 V 6.249111 H 13 V 1 H 7.74969 z m 0,12 H 13 V 7.750444 H 7.74969 V 13 z M 1,13 H 6.25031 V 7.750444 H 1 V 13 z"/></svg></i>',
+            blockTemplatesTitle:[
+              'Figure',
+              'Block 2',
+              'Block 3',
+              'Details (FAQ)',
+              'Blockquote',
+              'Definition List',
+            ],
+            blockTemplates:[
+              '<figure class="border p-1"><img src="https://via.placeholder.com/700x300" class="img-fluid" alt="Temp"><figcaption>Caption</figcaption></figure>',
+              '<div class="row"><div class="col-6"><img class="img-fluid mb-3 mb-md-0" src="https://via.placeholder.com/700x300" alt=""></div><div class="col-6 pl-3"><h3>Title to Edit</h3><p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p><a class="btn" href="#">View</a></div></div>',
+              '<div class="row"><div class="col-6"><div class="card"><figure class="card-image"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt=""></figure><h4 class="card-title"><a href="#">Title to Edit</a></h4><div class="card-body"><p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p></div></div></div><div class="col-6"><div class="card"><figure class="card-image"><img class="card-img-top" src="https://via.placeholder.com/700x400" alt=""></figure><h4 class="card-title"><a href="#">Title to Edit</a></h4><div class="card-body"><p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit aliquam aperiam nulla perferendis dolor nobis numquam, rem expedita, aliquid optio, alias illum eaque. Non  magni, voluptates quae, necessitatibus unde temporibus.</p></div></div></div></div>',
+              '<details class="border p-1" open><summary>Summary Text, good for FAQs</summary><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p></details>',
+              '<blockquote><p class="p-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</p></blockqoute>',
+              '<dl><dt><dfn>Definition List Title</dfn></dt><dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</dd><dt><dfn>Definition List Title</dfn></dt><dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</dd><dt><dfn>Definition List Title</dfn></dt><dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</dd><dt><dfn>Definition List Title</dfn></dt><dd>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae.</dd></dl>',
+            ],
           },
 <?php }?>
           callbacks:{
@@ -570,7 +523,7 @@ else
         $('#save'+el).addClass('btn-danger');
         $('#'+el).addClass('unsaved');
         unsaved=true;
-        if(el='seoTitle'){
+        if(el=='seoTitle'){
           var length=$('#'+el).val().length;
         	var max=70;
         	$("#seoTitlecnt").text(length);
@@ -586,12 +539,13 @@ else
         if(el=='seoDescription'){
           var length=$('#'+el).val().length;
         	var max=160;
-        	var length=max-length;
-        	$("#seoCaptioncnt").text(length);
-        	if(length<0){
-        		$("#seoCaptioncnt").addClass('text-danger');
+        	$("#seoDescriptioncnt").text(length);
+        	if(length<1){
+        		$("#seoDescriptioncnt").addClass('text-danger');
+          }else if(length>max){
+            $("#seoDescriptioncnt").addClass('text-danger');
         	}else{
-        		$("#seoCaptioncnt").removeClass('text-danger');
+        		$("#seoDescriptioncnt").removeClass('text-danger');
         	}
         }
       });

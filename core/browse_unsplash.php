@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.24
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -181,7 +181,26 @@ $config=$db->query("SELECT mediaOptions,mediaMaxWidth,mediaMaxWidthThumb,unsplas
       };
       function addUnsplash(iid,id,t,c,da,dt){
         da=da.substring(0,da.indexOf('?'));
-        if(t=='loginimage'){
+        if(t=='note-image-url'){
+          da=da+'?w=<?=$config['mediaMaxWidth'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+          $('.note-image-url').val(da);
+          var alt=$('.note-image-alt').val();
+          if(alt==''){
+            $('.note-image-alt').val($('#unsplash_'+iid).data('alt') + ' by ' + $('#unsplash_'+iid).data('name'));
+          }
+          $('.note-image-btn').removeAttr("disabled");
+        }else if(t=='note-imageAttributes-src'){
+          da=da+'?w=<?=$config['mediaMaxWidth'];?>&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
+          $('.note-imageAttributes-src').val(da);
+          var alt=$('.note-imageAttributes-alt').val();
+          if(alt==''){
+            $('.note-imageAttributes-alt').val($('#unsplash_'+iid).data('alt') + ' by ' + $('#unsplash_'+iid).data('name'));
+          }
+          var caption=$('.note-imageAttributes-caption').val();
+          if(caption==''){
+            $('.note-imageAttributes-caption').val($('#unsplash_'+iid).data('alt') + ' by ' + $('#unsplash_'+iid).data('name'));
+          }
+        }else if(t=='loginimage'){
           da=da+'?w=1900&utm_source=<?=$config['unsplash_appname'];?>&utm_medium=referral';
           $('#limage').val(da);
           $('#lit').val($('#unsplash_'+iid).data('alt'));

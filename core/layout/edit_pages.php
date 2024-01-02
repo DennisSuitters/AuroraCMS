@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -53,11 +53,6 @@ if($r['cover']!=''){
     $seo['imagesALT']='<div>The <strong>Image ALT</strong> text is empty!</div>';
     $seo['imagescnt']++;
   }
-  list($width,$height,$type,$attr)=@getimagesize($r['cover']);
-  if($width==null||$height==null){
-    $seo['imagescnt']++;
-    $seo['imagesCover']='<div>The <strong>Cover Image</strong> is broken!</div>';
-  }
 }
 if(strip_tags($r['notes'])==''){
   $seo['contentNotes']='<div>The <strong>Description</strong> is empty. At least <strong>100</strong> characters is recommended!</div>';
@@ -74,20 +69,6 @@ if(isset($h1[1])){
 if($r['heading']==''){
   $seo['contentHeading']='<div>The <strong>Heading</strong> Field is empty, this is what is used for your H1 heading!</div>';
   $seo['contentcnt']++;
-}
-preg_match_all('~src="\K[^"]+~',$r['notes'],$imgs);
-if($imgs!=''){
-  $imagescnt=0;
-  foreach($imgs[0] as $img){
-    list($width,$height,$type,$attr)=@getimagesize($img);
-    if($width==null||$height==null){
-      $seo['contentcnt']++;
-      $imagescnt++;
-    }
-    if($imagescnt>0){
-      $seo['contentImagesNotes']='<div>There are <strong>Broken Images</strong> within the Description Text!</div>';
-    }
-  }
 }?>
 <main>
   <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -72,7 +72,7 @@ else{
               $avatarimg='media/avatar/'.basename($r['avatar']);
               elseif($r['gravatar']!='')
               $avatarimg=$r['gravatar'];?>
-              <article class="card zebra col-6 col-md-5 col-lg-3 col-xxl-2 mx-0 mx-md-2 mt-2 mb-0 overflow-visible card-list item shadow" id="l_<?=$r['id'];?>" data-content="<?=$r['username'].' '.$r['name']?>">
+              <article class="card zebra mx-3 my-2 overflow-visible card-list item shadow<?=($r['status']=='delete'?' delete':'');?>" id="l_<?=$r['id'];?>" data-content="<?=$r['username'].' '.$r['name']?>">
                 <div class="card-image overflow-visible">
                   <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['username'].':'.$r['name'];?>">
                     <img src="<?=$avatarimg;?>" alt="<?=$r['username'];?>">
@@ -88,18 +88,16 @@ else{
                   <?=$r['active']==1?'<br><span class="badger badge-success">Active</span>':'<br><span class="badger badge-dark">Inactive</span>';?>
                 </div>
                 <div class="card-footer">
-                  <div id="controls_<?=$r['id'];?>">
-                    <div class="btn-toolbar float-right" role="toolbar">
-                      <div class="btn-group" role="group">
-                        <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="<?=($user['options'][1]==1?'Edit ':'View ').$r['username'].':'.$r['name'];?>"><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
-                        <?php if($user['options'][0]==1){?>
-                          <button class="add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><i class="i">untrash</i></button>
-                          <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><i class="i">trash</i></button>
-                          <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
-                        <?php }
-                        echo($user['options'][1]==1?'<button class="quickeditbtn" data-qeid="'.$r['id'].'" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>'.
-                        '<span class="btn orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>':'');?>
-                      </div>
+                  <div class="btn-toolbar" id="controls_<?=$r['id'];?>" role="toolbar">
+                    <div class="btn-group">
+                      <a data-tooltip="tooltip" href="<?=$settings['system']['admin'].'/accounts/edit/'.$r['id'];?>" role="button" aria-label="<?=($user['options'][1]==1?'Edit ':'View ').$r['username'].':'.$r['name'];?>"><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
+                      <?php if($user['options'][0]==1){?>
+                        <button class="add<?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','login','status','unpublished');"><i class="i">untrash</i></button>
+                        <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','login','status','delete');"><i class="i">trash</i></button>
+                        <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','login');"><i class="i">purge</i></button>
+                      <?php }
+                      echo($user['options'][1]==1?'<button class="quickeditbtn" data-qeid="'.$r['id'].'" data-qet="login" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>'.
+                      '<span class="btn orderhandle m-0" data-tooltip="tooltip" aria-label="Drag to ReOrder"><i class="i">drag</i></span>':'');?>
                     </div>
                   </div>
                 </div>

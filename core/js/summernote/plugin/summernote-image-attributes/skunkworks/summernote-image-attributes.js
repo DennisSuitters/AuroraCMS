@@ -52,10 +52,12 @@
       classHide: 'note-hide',
       class: true,
       style: true,
-      sizing: true,
-      figure: false,
+      sizing: false,
+      figure: true,
       removeEmpty: true,
       imageFolder: '',
+      imageService: '<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?t=note-imageAttributes-src" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>' +
+      '<button data-fancybox="editimage" data-type="ajax" data-src="core/edit_image.php?f=note-imageAttributes-src" data-tooltip="tooltip" aria-label="Open Image Editor"><i class="i">magic</i></button>',
     }
   });
   $.extend($.summernote.plugins, {
@@ -91,67 +93,70 @@
         var $container = options.dialogsInBody ? this.$body : options.container;
         $.summernote.options.imageAttributes._counter++;
         var i = $.summernote.options.imageAttributes._counter;
-        var body =
-          (options.disableUpload === false ?
-            '<label for="note-imageAttributes-input' + i + '" class="note-form-label">' + lang.imageAttributes.source + '</label>' +
-            '<div class="note-form-group">' +
-              '<input id="note-imageAttributes-input' + i +'" class="note-imageAttributes-input note-input" type="file" name="files" accept="image/*" multiple="multiple">' +
-              imageAttributesLimitation +
-            '</div>'
-          :
-            ''
-          ) +
-          '<label for="note-imageAttributes-src' + i + '" class="note-form-label">' + lang.imageAttributes.url + '</label>' +
+        var body = (options.disableUpload === false ?
+          '<label for="note-imageAttributes-input' + i + '" class="note-form-label">' + lang.imageAttributes.source + '</label>' +
           '<div class="note-form-group">' +
-            '<input id="note-imageAttributes-src-' + i + '" class="note-imageAttributes-src note-input" type="text">' +
-            (options.fileExplorer !== '' ?
-              '<button class="note-btn" onclick="' + options.fileExplorer + '(`note-imageAttributes-src-' + i + '`);">' + lang.image.fileBrowser + '</button>'
-            :
-              ''
-            ) +
-          '</div>' +
-          '<label for="note-imageAttributes-alt' + i + '" class="note-form-label">' + lang.imageAttributes.alt + '</label>' +
+            '<input id="note-imageAttributes-input' + i +'" class="note-imageAttributes-input note-input" type="file" name="files" accept="image/*" multiple="multiple">' +
+            imageAttributesLimitation +
+          '</div>'
+        :
+          ''
+        ) +
+        '<div class="note-form-group">' +
+          '<input id="note-imageAttributes-src-' + i + '" class="note-imageAttributes-src note-input" type="text">' +
+          (options.imageAttributes.imageService !== '' ?
+            options.imageAttributes.imageService
+          :
+            ''
+          ) +
+          (options.fileExplorer !== '' ?
+            '<button class="note-btn" onclick="' + options.fileExplorer + '(`note-imageAttributes-src' + i + '`);">' + lang.image.fileBrowser + '</button>'
+          :
+            ''
+          ) +
+        '</div>' +
+        '<label for="note-imageAttributes-alt' + i + '" class="note-form-label">' + lang.imageAttributes.alt + '</label>' +
+        '<div class="note-form-group">' +
+          '<input id="note-imageAttributes-alt' + i + '" class="note-imageAttributes-alt note-input" type="text">' +
+        '</div>' +
+        ( options.imageAttributes.figure === true ?
+          '<label for="note-imageAttributes-caption' + i + '" class="note-form-label">' + lang.imageAttributes.caption + '</label>' +
           '<div class="note-form-group">' +
-            '<input id="note-imageAttributes-alt' + i + '" class="note-imageAttributes-alt note-input" type="text">' +
+            '<input id="note-imageAttributes-caption' + i + '" class="note-imageAttributes-caption note-input" type="text" placeholder="' + lang.imageAttributes.captionHelp + '">' +
+          '</div>'
+        :
+          ''
+        ) +
+        ( options.imageAttributes.class === true ?
+          '<label for="note-imageAttributes-class' + i + '" class="note-form-label">' + lang.imageAttributes.class + '</label>' +
+          '<div class="note-form-group">' +
+            '<input id="note-imageAttributes-class' + i + '" class="note-imageAttributes-class note-input" type="text">' +
+          '</div>'
+        :
+          ''
+        ) +
+        ( options.imageAttributes.style === true ?
+          '<label for="note-imageAttributes-style' + i + '" class="note-form-label">' + lang.imageAttributes.style + '</label>' +
+          '<div class="note-form-group">' +
+            '<input id="note-imageAttributes-style' + i + '" class="note-imageAttributes-style note-input" type="text">' +
+          '</div>'
+        :
+          ''
+        ) +
+        ( options.imageAttributes.sizing === true ?
+          '<div class="note-form-group pb-0">' +
+            '<label for="note-imageAttributes-width' + i +'" class="note-form-label">' + lang.imageAttributes.width + '</label>' +
+            '<label for="note-imageAttributes-height' + i +'" class="note-form-label">' + lang.imageAttributes.height + '</label>' +
           '</div>' +
-          (options.imageAttributes.figure === true ?
-            '<label for="note-imageAttributes-caption' + i + '" class="note-form-label">' + lang.imageAttributes.caption + '</label>' +
-            '<div class="note-form-group">' +
-              '<input id="note-imageAttributes-caption' + i + '" class="note-imageAttributes-caption note-input" type="text" placeholder="' + lang.imageAttributes.captionHelp + '">' +
-            '</div>'
-          :
-            ''
-          ) +
-          (options.imageAttributes.class === true ?
-            '<label for="note-imageAttributes-class' + i + '" class="note-form-label">' + lang.imageAttributes.class + '</label>' +
-            '<div class="note-form-group">' +
-              '<input id="note-imageAttributes-class' + i + '" class="note-imageAttributes-class note-input" type="text">' +
-            '</div>'
-          :
-            ''
-          ) +
-          ( options.imageAttributes.style === true ?
-            '<label for="note-imageAttributes-style' + i + '" class="note-form-label">' + lang.imageAttributes.style + '</label>' +
-            '<div class="note-form-group">' +
-              '<input id="note-imageAttributes-style' + i + '" class="note-imageAttributes-style note-input" type="text">' +
-            '</div>'
-          :
-            ''
-          ) +
-          (options.imageAttributes.sizing === true ?
-            '<div class="note-form-group pb-0">' +
-              '<label for="note-imageAttributes-width' + i +'" class="note-form-label">' + lang.imageAttributes.width + '</label>' +
-              '<label for="note-imageAttributes-height' + i +'" class="note-form-label">' + lang.imageAttributes.height + '</label>' +
+          '<div class="note-form-group">' +
+            '<div style="width:50%">' +
+              '<input id="note-imageAttributes-width' + i +'" class="note-imageAttributes-width note-input" type="text">' +
             '</div>' +
-            '<div class="note-form-group">' +
-              '<div style="width:50%">' +
-                '<input id="note-imageAttributes-width' + i +'" class="note-imageAttributes-width note-input" type="text">' +
-              '</div>' +
-              '<div style="width:50%">' +
-                '<div class="note-form-group">' +
-                  '<input id="note-imageAttributes-height' + i +'" class="note-imageAttributes-height note-input" type="text">' +
-                  '<button class="note-btn note-btn-default note-imageAttributes-lock-button" aria-label="' + lang.imageAttributes.tooltipButtonLock + '" title="' + lang.imageAttributes.tooltipButtonLock + '">' +
-                    '<span class="note-icon note-imageAttributes-icon-lock"><svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 1000 1000"><g><path d="M321.8,455.5h356.4V321.8c0-49.2-17.4-91.2-52.2-126c-34.8-34.8-76.8-52.2-126-52.2c-49.2,0-91.2,17.4-126,52.2c-34.8,34.8-52.2,76.8-52.2,126L321.8,455.5L321.8,455.5z M900.9,522.3v400.9c0,18.6-6.5,34.3-19.5,47.3c-13,13-28.8,19.5-47.3,19.5H165.9c-18.6,0-34.3-6.5-47.3-19.5c-13-13-19.5-28.8-19.5-47.3V522.3c0-18.6,6.5-34.3,19.5-47.3c13-13,28.8-19.5,47.3-19.5h22.3V321.8c0-85.4,30.6-158.7,91.9-219.9C341.3,40.7,414.7,10,500,10c85.3,0,158.7,30.6,219.9,91.9c61.3,61.3,91.9,134.6,91.9,219.9v133.6h22.3c18.6,0,34.3,6.5,47.3,19.5C894.4,488,900.9,503.7,900.9,522.3L900.9,522.3z"/></g></svg></span>' +
+            '<div style="width:50%">' +
+              '<div class="note-form-group">' +
+                '<input id="note-imageAttributes-height' + i +'" class="note-imageAttributes-height note-input" type="text">' +
+                '<button class="note-btn note-btn-default note-imageAttributes-lock-button" aria-label="' + lang.imageAttributes.tooltipButtonLock + '" title="' + lang.imageAttributes.tooltipButtonLock + '">' +
+                  '<span class="note-icon note-imageAttributes-icon-lock"><svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 1000 1000"><g><path d="M321.8,455.5h356.4V321.8c0-49.2-17.4-91.2-52.2-126c-34.8-34.8-76.8-52.2-126-52.2c-49.2,0-91.2,17.4-126,52.2c-34.8,34.8-52.2,76.8-52.2,126L321.8,455.5L321.8,455.5z M900.9,522.3v400.9c0,18.6-6.5,34.3-19.5,47.3c-13,13-28.8,19.5-47.3,19.5H165.9c-18.6,0-34.3-6.5-47.3-19.5c-13-13-19.5-28.8-19.5-47.3V522.3c0-18.6,6.5-34.3,19.5-47.3c13-13,28.8-19.5,47.3-19.5h22.3V321.8c0-85.4,30.6-158.7,91.9-219.9C341.3,40.7,414.7,10,500,10c85.3,0,158.7,30.6,219.9,91.9c61.3,61.3,91.9,134.6,91.9,219.9v133.6h22.3c18.6,0,34.3,6.5,47.3,19.5C894.4,488,900.9,503.7,900.9,522.3L900.9,522.3z"/></g></svg></span>' +
                   '<span class="note-icon note-imageAttributes-icon-unlock note-hide"><svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 438.533 438.533"><g><path d="M375.721,227.259c-5.331-5.331-11.8-7.992-19.417-7.992H146.176v-91.36c0-20.179,7.139-37.402,21.415-51.678 c14.277-14.273,31.501-21.411,51.678-21.411c20.175,0,37.402,7.137,51.673,21.411c14.277,14.276,21.416,31.5,21.416,51.678   c0,4.947,1.807,9.229,5.42,12.845c3.621,3.617,7.905,5.426,12.847,5.426h18.281c4.945,0,9.227-1.809,12.848-5.426 c3.606-3.616,5.42-7.898,5.42-12.845c0-35.216-12.515-65.331-37.541-90.362C284.603,12.513,254.48,0,219.269,0 c-35.214,0-65.334,12.513-90.366,37.544c-25.028,25.028-37.542,55.146-37.542,90.362v91.36h-9.135 c-7.611,0-14.084,2.667-19.414,7.992c-5.33,5.325-7.994,11.8-7.994,19.414v164.452c0,7.617,2.665,14.089,7.994,19.417   c5.33,5.325,11.803,7.991,19.414,7.991h274.078c7.617,0,14.092-2.666,19.417-7.991c5.325-5.328,7.994-11.8,7.994-19.417V246.673 C383.719,239.059,381.053,232.591,375.721,227.259z"/></g></svg></span>' +
                 '</button>' +
                 '<button class="note-btn note-btn-default note-imageAttributes-reset-size-button" aria-label="' + lang.imageAttributes.tooltipButtonReset + '" title="' + lang.imageAttributes.tooltipButtonReset + '">' +
@@ -198,8 +203,8 @@
           width:   (options.imageAttributes.sizing ? $img.attr('width') : null),
           height:  (options.imageAttributes.sizing ? $img.attr('height') : null),
           caption: (options.imageAttributes.figure ? ($($img).next("figcaption") ? $img.next("figcaption").text() : null) : null),
-          width:   $img.width(),
-          height:  $img.height()
+          width:   (options.imageAttributes.sizing ? $img.width() : null),
+          height:  (options.imageAttributes.sizing ? $img.height() : null)
         };
 
         var img = new Image()
@@ -237,8 +242,8 @@
           }
 
           if (options.imageAttributes.figure === true) {
-            $img.find("figcaption").remove();
-            $img.unwrap("figure");
+            $img.parent("figure").find("figcaption").remove();
+            $img.unwrap();
             $img.wrap('<figure></figure>');
             if(imgInfo.caption)$('<figcaption>' + imgInfo.caption + '</figcaption>').insertAfter($img);
           }

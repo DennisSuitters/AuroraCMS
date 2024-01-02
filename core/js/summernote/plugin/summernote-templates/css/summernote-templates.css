@@ -1,33 +1,22 @@
 #note-pageTemplates,
 #note-blocks {
-  max-height: 310px;
+  max-height:350px;
   overflow-y: auto;
   overflow-x: hidden;
-  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-color);
-}
+  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-color) }
 
-#note-blocks {
-  max-height: 170px!important;
-}
-
-#note-pageTemplates input[type=radio] + label img,
+#note-pageTemplates input[type=radio] + label img{
+  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-color) }
 #note-blocks input[type=radio] + label.note-blocks-label {
-  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-color);
-}
+  padding:5px;
+  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-color) }
 
-#note-pageTemplates input[type=radio]:checked + label img,
+#note-pageTemplates input[type=radio]:checked + label img{
+  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-focus) }
 #note-blocks input[type=radio]:checked + label.note-blocks-label {
-  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-focus);
-}
+  padding:5px;
+  border: var(--note-form-input-border-width) var(--note-form-input-border-style) var(--note-form-input-border-focus) }
 
 .note-pageTemplates,
 .note-blocks {
-  float: left;
-}
-
-.note-blocks {
-}
-
-.note-pageTemplates img,
-.note-blocks img {
-}
+  float: left }

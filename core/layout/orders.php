@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -279,22 +279,20 @@ if($user['options'][4]==1){
                   <div class="col-sm align-middle">
                     <div id="controls_<?=$r['id'];?>" class="justify-content-end">
                       <div class="btn-toolbar float-right" role="toolbar">
-                        <div class="btn-group" role="group">
-                          <?=($user['options'][4]==1?
-                            ($r['qid']!=''&&$r['aid']==''?'<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice"><i class="i">order-quotetoinvoice</i></a>':'').
-                            ($r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');"><i class="i">archive</i></button>':'')
-                          :'').
-                          '<button class="print" data-tooltip="tooltip" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=print`);"><i class="i">print</i></button>'.
-                          (isset($c['email'])&&$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');"><i class="i">email-send</i></button>':'').
-                          ($user['options'][0]==1?'<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Duplicate"><i class="i">copy</i></a>':'').
-                          '<a class="'.($user['options'][0]==1?' rounded-right':'').($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/edit/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
-                          ($user['options'][4]==1?
-                            '<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`orders`,`status`,``);"><i class="i">untrash</i></button>'.
-                            '<button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`orders`,`status`,`delete`);"><i class="i">trash</i></button>'.
-                            '<button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`orders`)"><i class="i">purge</i></button>'.
-                            '<button class="quickeditbtn" data-qeid="'.$r['id'].'" data-qet="orders" data-tooltip="left" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>'
-                          :'');?>
-                        </div>
+                        <?=($user['options'][4]==1?
+                          ($r['qid']!=''&&$r['aid']==''?'<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/to_invoice/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Convert to Invoice"><i class="i">order-quotetoinvoice</i></a>':'').
+                          ($r['aid']==''?'<button class="btn archive'.($r['status']=='delete'?' d-none':'').'" data-tooltip="tooltip" aria-label="Archive" onclick="update(\''.$r['id'].'\',\'orders\',\'status\',\'archived\');"><i class="i">archive</i></button>':'')
+                        :'').
+                        '<button class="print" data-tooltip="tooltip" aria-label="Print Order" onclick="$(`#sp`).load(`core/email_order.php?id='.$r['id'].'&act=print`);"><i class="i">print</i></button>'.
+                        (isset($c['email'])&&$c['email']!=''?'<button class="email" data-tooltip="tooltip" aria-label="Email Order" onclick="$(\'#sp\').load(\'core/email_order.php?id='.$r['id'].'&act=\');"><i class="i">email-send</i></button>':'').
+                        ($user['options'][0]==1?'<a class="'.($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/duplicate/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Duplicate"><i class="i">copy</i></a>':'').
+                        '<a class="'.($user['options'][0]==1?' rounded-right':'').($r['status']=='delete'?' d-none':'').'" href="'.URL.$settings['system']['admin'].'/orders/edit/'.$r['id'].'" role="button" data-tooltip="tooltip" aria-label="Edit"><i class="i">edit</i></a>'.
+                        ($user['options'][4]==1?
+                          '<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`orders`,`status`,``);"><i class="i">untrash</i></button>'.
+                          '<button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`orders`,`status`,`delete`);"><i class="i">trash</i></button>'.
+                          '<button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`orders`)"><i class="i">purge</i></button>'.
+                          '<button class="quickeditbtn" data-qeid="'.$r['id'].'" data-qet="orders" data-tooltip="left" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>'
+                        :'');?>
                       </div>
                     </div>
                   </div>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -108,7 +108,7 @@ if($s->rowCount()>0){
 			$enq=[
 				'enquired about',
 				'enquired about',
-			]
+			];
 		}
 		if($r['contentType']=='course'){
 			if($config['fomoCoursesState']!='All'){

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -309,7 +309,7 @@ else{
                       echo'<div id="jump'.$jumpcheck.'"></div>';
                       $jump[$jumpcheck]=1;
                     }?>
-                    <article class="card zebra col-6 col-md-5 col-lg-3 col-xxl-2 mx-0 mx-md-2 mt-2 mb-0 overflow-visible card-list shadow" id="l_<?=$r['id'];?>" data-content="<?=$r['contentType'].' '.$r['title'];?>">
+                    <article class="card zebra mx-3 my-2 overflow-visible card-list shadow" id="l_<?=$r['id'];?>" data-content="<?=$r['contentType'].' '.$r['title'];?>">
                       <div class="card-image overflow-visible">
                         <?php if($r['thumb']!='')
                           echo'<a href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'"><img src="'.$r['thumb'].'" alt="'.$r['title'].'"></a>';
@@ -377,24 +377,22 @@ else{
                         echo'<small class="text-muted d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
                       </div>
                       <div class="card-footer">
-                        <span class="code hidewhenempty"><?=$r['code'];?></span>
-                        <?=($rr['num']>0?($user['options'][1]==1?'<span class="reviws"><a data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a></span>':'<span class="btn" data-tooltip="tooltip" aria-label="'.$rr['name'].' New Reviews">'.$rr['name'].'<i class="i">review</i></span>'):'').
-                        (isset($sccc)&&$sccc>0?($user['options'][1]==1?'<a data-tooltip="tooltip" class="views'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" aria-label="'.$sccc.' New Comments">'.$sccc.' <i class="i">comments</i></a>':'<span class="btn views" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$sccc.' <i class="i">comments</i></span>'):'').
-                        ($r['views']>0?($user['options'][1]==1?'<button class="views" data-tooltip="tooltip" aria-label="Content viewed '.$r['views'].' times. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span> <i class="i">view</i></button>':'<span class="btn views" data-tooltip="tooltip" aria-label="'.ucwords(rtrim($r['contentType'],'s')).' viewed '.$r['views'].' times.">'.$r['views'].' <i class="i">view</i></span>'):'').
-                        ($rss['cnt']>0?'<span class="btn views" data-tooltip="tooltip" aria-label="'.$rss['cnt'].' Sales this Month">'.$rss['cnt'].' <i class="i">shipping</i></span>':'');?>
-                        <div id="controls_<?=$r['id'];?>">
-                          <div class="btn-toolbar float-right" role="toolbar">
-                            <div class="btn-group" role="group">
-                              <button class="share <?=($r['status']=='published'?'':'d-none');?>" id="share<?=$r['id'];?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
-                              <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$r['id'];?>" role="button"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
-                              <a data-tooltip="tooltip" href="javascript:;" class="btn quickitemsbtn" data-fancybox="quickitems" data-type="ajax" data-src="core/quickedit.php?id=<?=$r['id'];?>&t=content&o=modal" aria-label="View Quick Edit Modal"><i class="i">view</i></a>
-                              <?php if($user['options'][0]==1){?>
-                                <button class="add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
-                                <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
-                                <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">purge</i></button>
-                                <button class="quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
-                              <?php }?>
-                            </div>
+                        <div class="btn-toolbar" id="controls_<?=$r['id'];?>" role="toolbar">
+                          <span class="code hidewhenempty"><?=$r['code'];?></span>
+                          <div class="btn-group">
+                            <?=($rr['num']>0?($user['options'][1]==1?'<span class="reviews"><a data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a></span>':'<span class="btn" data-tooltip="tooltip" aria-label="'.$rr['name'].' New Reviews">'.$rr['name'].'<i class="i">review</i></span>'):'').
+                            (isset($sccc)&& $sccc>0?($user['options'][1]==1?'<a data-tooltip="tooltip" class="views'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" aria-label="'.$sccc.' New Comments">'.$sccc.'&nbsp;<i class="i">comments</i></a>':'<span class="btn views" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$sccc.'&nbsp;<i class="i">comments</i></span>'):'').
+                            ($r['views']>0?($user['options'][1]==1?'<button class="btn views d-inline-block" data-tooltip="tooltip" aria-label="Content viewed '.$r['views'].' times. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span>&nbsp;<i class="i">view</i></button>':'<span class="btn views" data-tooltip="tooltip" aria-label="'.ucwords(rtrim($r['contentType'],'s')).' viewed '.$r['views'].' times.">'.$r['views'].'&nbsp;<i class="i">view</i></span>'):'').
+                            ($rss['cnt']>0?'<span class="btn views" data-tooltip="tooltip" aria-label="'.$rss['cnt'].' Sales this Month">'.$rss['cnt'].'&nbsp;<i class="i">shipping</i></span>':'');?>
+                            <button class="share <?=($r['status']=='published'?'':'d-none');?>" id="share<?=$r['id'];?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
+                            <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/content/edit/<?=$r['id'];?>" role="button"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
+                            <a data-tooltip="tooltip" href="javascript:;" class="btn quickitemsbtn" data-fancybox="quickitems" data-type="ajax" data-src="core/quickedit.php?id=<?=$r['id'];?>&t=content&o=modal" aria-label="View Quick Edit Modal"><i class="i">view</i></a>
+                            <?php if($user['options'][0]==1){?>
+                              <button class="add <?=$r['status']!='delete'?' d-none':'';?>" id="untrash<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons('<?=$r['id'];?>','content','status','unpublished');"><i class="i">untrash</i></button>
+                              <button class="trash<?=$r['status']=='delete'?' d-none':'';?>" id="delete<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons('<?=$r['id'];?>','content','status','delete');"><i class="i">trash</i></button>
+                              <button class="purge<?=$r['status']!='delete'?' d-none':'';?>" id="purge<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Purge" onclick="purge('<?=$r['id'];?>','content');"><i class="i">purge</i></button>
+                              <button class="quickeditbtn" data-qeid="<?=$r['id'];?>" data-qet="content" data-tooltip="tooltip" aria-label="Open/Close Quick Edit Options"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
+                            <?php }?>
                           </div>
                         </div>
                       </div>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -50,7 +50,7 @@
   }?>
   <body class="login-bg">
     <main class="row m-0 p-0 justify-content-center">
-      <div class="card col-11 col-sm-6 col-md-6 col-lg-3 col-xl-4 col-xxl-3 m-0 my-5 p-5">
+      <div class="card col-11 col-sm-8 col-md-6 col-lg-5 col-xl-4 col-xxl-3 m-0 my-5 p-5">
         <noscript><div class="alert alert-danger" role="alert">Javascript MUST BE ENABLED for AuroraCMS to function correctly!</div></noscript>
         <form id="login" method="post" action="<?=(isset($_SERVER['HTTP_REFERER'])&&stristr($_SERVER['REQUEST_URI'],'logout')?$_SERVER['HTTP_REFERER']:URL.$settings['system']['admin'].'/'.$config['defaultPage']);?>" accept-charset="UTF-8">
           <input name="act" type="hidden" value="login">

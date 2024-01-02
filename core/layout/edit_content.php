@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -53,11 +53,6 @@ if(!in_array($r['contentType'],['testimonials','list'])){
       $seo['imagesALT']='<div>The <strong>Image ALT</strong> text is empty!</div>';
       $seo['imagescnt']++;
     }
-    list($width,$height,$type,$attr)=@getimagesize($r['file']);
-    if($width==null||$height==null){
-      $seo['imagescnt']++;
-      $seo['imagesFile']='<div>The <strong>Image</strong> is broken!</div>';
-    }
   }
   if(strip_tags($r['notes'])==''){
     $seo['contentNotes']='<div>The <strong>Description</strong> is empty. At least <strong>100</strong> characters is recommended!</div>';
@@ -70,20 +65,6 @@ if(!in_array($r['contentType'],['testimonials','list'])){
   if(isset($h1[1])){
     $seo['contentNotesHeading']='<div>Do not use <strong>H1</strong> headings in the <strong>Description</strong> Text, as AuroraCMS uses the <strong>Title</strong> Field to place H1 headings on page, and uses them for other areas for SEO!</div>';
     $seo['contentcnt']++;
-  }
-  preg_match_all('~src="\K[^"]+~',$r['notes'],$imgs);
-  if($imgs!=''){
-    $imagescnt=0;
-    foreach($imgs[0] as $img){
-      list($width,$height,$type,$attr)=@getimagesize($img);
-      if($width==null||$height==null){
-        $seo['contentcnt']++;
-        $imagescnt++;
-      }
-      if($imagescnt>0){
-        $seo['contentImagesNotes']='<div>There are <strong>Broken Images</strong> within the Description Text!</div>';
-      }
-    }
   }
 }?>
 <main>
@@ -2332,14 +2313,14 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                           while($rlm=$slm->fetch(PDO::FETCH_ASSOC)){
                             if(stristr($rlm['file'],'youtu')){
                               preg_match("#(?<=v=)[a-zA-Z0-9-]+(?=&)|(?<=v\/)[^&\n]+(?=\?)|(?<=v=)[^&\n]+|(?<=youtu.be/)[^&\n]+#",$rlm['file'],$vidMatch);
-                              echo'<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'"><img class="note-video-clip" src="'.$rlm['thumb'].'"><div class="play"></div></div>';
+                              echo'<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://www.youtube.com/embed/'.$vidMatch[0].'"><img class="note-video-clip" src="media/sm/'.basename($rlm['thumb']).'"><div class="play"></div></div>';
                             }elseif(stristr($rlm['file'],'vimeo')){
                               preg_match('/(https?:\/\/)?(www\.)?(player\.)?vimeo\.com\/([a-z]*\/)*([0-9]{6,11})[?]?.*/',$rlm['file'],$vidMatch);
                               echo'<div class="note-video-wrapper video" data-fancybox="list" href="'.$rlm['file'].'" data-fancybox-plyr data-embed="https://vimeo.com/'.$vidMatch[5].'"><img class="note-video-clip" src="https://vumbnail.com/'.$vidMatch[5].'.jpg"><div class="play"></div></div>';
                             }elseif(stristr($rl['urlSlug'],'twitter')){
-                              echo'<a target="_blank" href="'.$rl['urlSlug'].'"><img src="'.$rlm['thumb'].'" alt="'.$rl['title'].'"></a>';
+                              echo'<a target="_blank" href="'.$rl['urlSlug'].'"><img src="media/sm/'.basename($rlm['thumb']).'" alt="'.$rl['title'].'"></a>';
                             }else
-                              echo'<a data-fancybox="list" href="'.$rlm['file'].'"><img src="'.$rlm['thumb'].'" alt="'.$rl['title'].'"></a>';
+                              echo'<a data-fancybox="list" href="'.$rlm['file'].'"><img src="media/sm/'.basename($rlm['thumb']).'" alt="'.$rl['title'].'"></a>';
                           }
                           echo'</div>';
                         }?>

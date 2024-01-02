@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -26,7 +26,7 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='38
           </div>
         </div>
         <div class="row mt-3">
-          <div class="messages-menu col-12 col-sm-5 col-lg-4 col-xl-4 col-xxl-2 border">
+          <div class="messages-menu col-12 col-sm-5 col-md-2 col-lg-4 col-xl-3 border">
             <div class="p-3">
               <?=$user['options'][0]==1?'<div class="mb-3"><a class="btn-block" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button">Add Contact</a></div>':'';?>
               <input class="" id="filter-input" type="text" value="" placeholder="Search..." onkeyup="filterTextInput2();">
@@ -36,13 +36,14 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='38
                 <?php $sc=$db->prepare("SELECT * FROM `".$prefix."login` ORDER BY `name` ASC, `username` ASC, `email` ASC");
                 $sc->execute();
                 while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
-                  <li class="card chatListItem zebra border-1 border-light m-0 px-4 py-3 cursor-default" id="contactListItem<?=$rc['id'];?>" data-rank="<?=$rc['rank'];?>" data-content="<?=$rc['username'].' '.$rc['name'].' '.$rc['email'].' '.$rc['business'].' '.$rc['phone'].' '.$rc['mobile'];?>" onclick="getContact(`<?=$rc['id'];?>`);">
+                  <li class="card chatListItem zebra border-1 border-light m-0 px-4 py-3 cursor-default" id="contactListItem<?=$rc['id'];?>" data-content="<?=$rc['username'].' '.$rc['name'].' '.$rc['email'].' '.$rc['business'].' '.$rc['phone'].' '.$rc['mobile'];?>" onclick="getContact(`<?=$rc['id'];?>`);">
                     <div class="row">
-                      <div class="col-2 d-inline-block">
+                      <div class="col-2 col-md-12 col-lg-2 col-xxl-2 d-inline-block text-center">
                         <img class="rounded" style="width:40px;max-height:40px" src="<?=($rc['avatar']==''?NOAVATAR:'media/avatar/'.$rc['avatar']);?>">
                       </div>
-                      <div class="col ml-2 d-inline-block">
+                      <div class="col col-md-12 col-lg ml-2 ml-md-0 ml-lg-1 d-inline-block text-left text-md-center text-lg-left">
                         <div class="small text-black"><?=$rc['name'];?></div>
+                        <div><span class="badger badge-<?=rank($rc['rank']);?>"><?=ucwords(str_replace('-',' ',rank($rc['rank'])));?></span></div>
                         <div class="small text-muted hidewhenempty"><?=($rc['business']!=''?$rc['business'].($rc['jobtitle']!=''?'<span class="badger badge-default pl-2">'.$rc['jobtitle'].'</span>':''):'');?></div>
                         <?=($rc['email']!=''?'<div class="small text-muted">'.$rc['email'].'</div>':'').
                         ($rc['phone']!=''?'<div class="small text-muted">'.$rc['phone'].'</div>':'').

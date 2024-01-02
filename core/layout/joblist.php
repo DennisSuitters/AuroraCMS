@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -60,7 +60,7 @@ else{
               <div class="alert alert-info d-block d-sm-none" role="alert"></div>
               <div class="col-sm-3">
                 <div class="card m-1">
-                  <div class="card-header bg-danger text-danger font-weight-bold p-2">Unconfirmed</div>
+                  <div class="card-header bg-danger text-white font-weight-bold p-2">Unconfirmed</div>
                   <div class="card-body p-1 overflow-y" data-dbda="unconfirmed">
                     <div id="unconfirmed">
                       <?php $ti=time();
@@ -97,7 +97,7 @@ else{
               </div>
               <div class="col-sm-3">
                 <div class="card m-1">
-                  <div class="card-header bg-warning text-warning font-weight-bold p-2">Confirmed</div>
+                  <div class="card-header bg-warning text-white font-weight-bold p-2">Confirmed</div>
                   <div class="card-body p-1 overflow-y" data-dbda="confirmed">
                     <div id="confirmed">
                       <?php $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='job' AND `status`='confirmed' ORDER BY `ti` DESC");
@@ -133,7 +133,7 @@ else{
               </div>
               <div class="col-sm-3">
                 <div class="card m-1">
-                  <div class="card-header bg-info text-info font-weight-bold p-2">In Progress</div>
+                  <div class="card-header bg-info text-white font-weight-bold p-2">In Progress</div>
                   <div class="card-body p-1 overflow-y" data-dbda="in-progress">
                     <div id="in-progress">
                       <?php $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='job' AND `status`='in-progress' ORDER BY `ti` DESC");
@@ -169,7 +169,7 @@ else{
               </div>
               <div class="col-sm-3">
                 <div class="card m-1">
-                  <div class="card-header bg-success text-success font-weight-bold p-2">Complete</div>
+                  <div class="card-header bg-success text-white font-weight-bold p-2">Complete</div>
                   <div class="card-body p-1 overflow-y" data-dbda="complete">
                     <div id="complete">
                       <?php $s=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='job' AND `status`='complete' ORDER BY `ti` DESC");

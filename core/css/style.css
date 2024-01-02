@@ -146,12 +146,13 @@ section.content .status.unpublished{
   color:#212529!important;
   background-color:#ffc107!important }
 
-section.content .status .delete,
-section.content .status.delete,
+.card.delete{border-color:var(--alert-danger-border-color)!important}
+.card.delete .card-header,
+.card.delete .card-footer,
 .status .unavailable,
 .status.unavailable{
-  color:#fff!important;
-  background-color:#dc3545!important }
+  color:var(--alert-danger-color)!important;
+  background-color:var(--alert-danger-background-color)!important }
 
 section.content .status .archived,
 section.content .status.archived{
@@ -181,7 +182,7 @@ section.content .card .card-header small{font-size:.65rem!important}
 section.content.list .card .card-header small{font-size:.9rem!important}
 
 section.list .card .card-footer{
-  align-self:center;
+  align-self:stretch;
   margin-left:auto!important;
   margin-right:0!important }
 
@@ -239,7 +240,7 @@ section.content .card-footer{
   position:absolute;
   top:15px;
   left:0;
-  z-index:100;
+  z-index:1200;
   box-shadow:var(--box-shadow-x) var(--box-shadow-y) var(--box-shadow-spread) var(--box-shadow-spread) var(--box-shadow-color);
   border:var(--border-width) var(--border-style) var(--menu-dropdown-border-color);
   border-radius:var(--border-radius);
@@ -491,6 +492,13 @@ dialog section{display:block}
   background:rgba(0,0,0,.15) }
 
 .alert .toolbar.handle:hover{cursor:move!important}
+
+.btn-toolbar{
+  display:inline-flex;
+  align-items:center }
+
+.card-footer .btn-group {
+  display:inline-block!important }
 
 .alert .toolbar .btn-group{
   position:absolute;
@@ -1266,8 +1274,7 @@ nav[role=menubar] ul li.active a{color:var(--menu-link-color-active)}
 
 .list .quickedit{
   width:100%!important;
-  margin:0 15px!important;
-  padding: 3px !important;
+  margin:-9px 17px 15px 15px!important;
   border:1px solid var(--border-color)!important;
   border-top:0!important }
 
@@ -1354,6 +1361,7 @@ td img.avatar{
   vertical-align:middle }
 
 #sidebar{
+  z-index:1030;
   position:absolute;
   top:65px;
   left:0;
@@ -1741,14 +1749,15 @@ nav[role=menubar]{position:relative}
   margin-left:0 }
 
 .card .card-body,
-.card .card-footer,
 .card .card-header{padding:.1rem .8rem 0}
 
+.card .card-footer{padding:.1rem 2.1rem 0}
 .card .card-header{
   background-color:var(--card-header-background-color);
   overflow:hidden;
   text-overflow:ellipsis;
-  white-space:normal }
+  white-space:normal;
+  width:inherit }
 
 .card-actions{margin-left:auto }
 
@@ -1767,7 +1776,9 @@ nav[role=menubar]{position:relative}
   text-align:center;
   margin:.5rem 0 }
 
-.card.stats{color:var(--color) }
+.card.stats{
+  position:relative;
+  color:var(--color) }
 .card.stats:hover{color:var(--color) }
 .card.stats:hover{text-decoration:none }
 
@@ -1960,6 +1971,336 @@ nav[role=menubar]{position:relative}
 .wysiwyg-toolbar [role=button]:hover{
   background-color:var(--note-btn-background-color-hover);color:var(--note-btn-color-hover);
   border-color:var(--note-btn-border-color-hover) }
+
+.note-show-block *{
+  position:relative!important;
+  outline:1px solid #b94a48!important }
+
+.note-show-block{overflow:visible!important}
+.note-show-block::before,
+.note-show-block::after{
+  content:'Allowed'!important;
+  z-index:2147483647!important;
+  display:inline!important;
+  position:absolute!important;
+  top:-1px!important;
+  right:90px!important;
+  bottom:auto!important;
+  left:auto!important;
+  margin:1px!important;
+  padding:1px!important;
+  font-family:Monaco,Menlo,Consolas,"Courier New",monospace!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  line-height:15px!important;
+  white-space:nowrap!important;
+  background-color:#48b94a!important;
+  color:#fff!important;
+  -webkit-border-radius:3px!important;
+  -moz-border-radius:3px!important;
+  border-radius:3px!important;
+  -webkit-box-shadow:0 3px 7px rgba(0,0,0,.3)!important;
+  -moz-box-shadow:0 3px 7px rgba(0,0,0,.3)!important;
+  box-shadow:0 3px 7px rgba(0,0,0,.3)!important;
+  text-transform:uppercase!important;
+  overflow:visible!important
+}
+
+.note-show-block::after{
+  content:'Not Allowed'!important;
+  top:-1px!important;
+  right:0!important;
+  background-color:#b9484a!important;
+}
+
+.note-show-block a,
+.note-show-block abbr,
+.note-show-block address,
+.note-show-block audio,
+.note-show-block b,
+.note-show-block blockquote,
+.note-show-block br,
+.note-show-block button,
+.note-show-block caption,
+.note-show-block cite,
+.note-show-block code,
+.note-show-block col,
+.note-show-block colgroup,
+.note-show-block dd,
+.note-show-block del,
+.note-show-block details,
+.note-show-block dfn,
+.note-show-block div,
+.note-show-block dl,
+.note-show-block dt,
+.note-show-block em,
+.note-show-block fieldset,
+.note-show-block figcaption,
+.note-show-block figure,
+.note-show-block h1,
+.note-show-block h2,
+.note-show-block h3,
+.note-show-block h4,
+.note-show-block h5,
+.note-show-block h6,
+.note-show-block hr,
+.note-show-block i,
+.note-show-block img,
+.note-show-block ins,
+.note-show-block kbd,
+.note-show-block legend,
+.note-show-block li,
+.note-show-block mark,
+.note-show-block ol,
+.note-show-block p,
+.note-show-block pre,
+.note-show-block q,
+.note-show-block s,
+.note-show-block small,
+.note-show-block span,
+.note-show-block strong,
+.note-show-block sub,
+.note-show-block summary,
+.note-show-block sup,
+.note-show-block svg,
+.note-show-block table,
+.note-show-block tbody,
+.note-show-block td,
+.note-show-block tfoot,
+.note-show-block th,
+.note-show-block thead,
+.note-show-block time,
+.note-show-block tr,
+.note-show-block u,
+.note-show-block ul,
+.note-show-block wbr{outline:1px solid #48b94a!important}
+
+.note-show-block a::before,
+.note-show-block abbr::before,
+.note-show-block address::before,
+.note-show-block audio::before,
+.note-show-block b::before,
+.note-show-block blockquote::before,
+.note-show-block br::before,
+.note-show-block button::before,
+.note-show-block caption::before,
+.note-show-block cite::before,
+.note-show-block code::before,
+.note-show-block col::before,
+.note-show-block colgroup::before,
+.note-show-block dd::before,
+.note-show-block del::before,
+.note-show-block details::before,
+.note-show-block dfn::before,
+.note-show-block div::before,
+.note-show-block dl::before,
+.note-show-block dt::before,
+.note-show-block em::before,
+.note-show-block fieldset::before,
+.note-show-block figcaption::before,
+.note-show-block figure::before,
+.note-show-block h1::before,
+.note-show-block h2::before,
+.note-show-block h3::before,
+.note-show-block h4::before,
+.note-show-block h5::before,
+.note-show-block h6::before,
+.note-show-block hr::before,
+.note-show-block i::before,
+.note-show-block img::before,
+.note-show-block ins::before,
+.note-show-block kbd::before,
+.note-show-block legend::before,
+.note-show-block li::before,
+.note-show-block mark::before,
+.note-show-block ol::before,
+.note-show-block p::before,
+.note-show-block pre::before,
+.note-show-block q::before,
+.note-show-block s::before,
+.note-show-block small::before,
+.note-show-block span::before,
+.note-show-block strong::before,
+.note-show-block sub::before,
+.note-show-block summary::before,
+.note-show-block sup::before,
+.note-show-block svg::before,
+.note-show-block table::before,
+.note-show-block tbody::before,
+.note-show-block td::before,
+.note-show-block tfoot::before,
+.note-show-block th::before,
+.note-show-block thead::before,
+.note-show-block time::before,
+.note-show-block tr::before,
+.note-show-block u::before,
+.note-show-block ul::before,
+.note-show-block wbr::before{
+  content:'wbr';
+  z-index:2147483647!important;
+  display:inline!important;
+  position:absolute!important;
+  top:-10px!important;
+  right:auto!important;
+  bottom:auto!important;
+  left:-5px!important;
+  margin:1px!important;
+  padding:1px!important;
+  font-family:Monaco,Menlo,Consolas,"Courier New",monospace!important;
+  font-size:13px!important;
+  font-weight:400!important;
+  line-height:15px!important;
+  white-space:nowrap!important;
+  background-color:#48b94a!important;
+  color:#fff!important;
+  -webkit-border-radius:3px!important;
+  -moz-border-radius:3px!important;
+  border-radius:3px!important;
+  -webkit-box-shadow:0 3px 7px rgba(0,0,0,.3)!important;
+  -moz-box-shadow:0 3px 7px rgba(0,0,0,.3)!important;
+  box-shadow:0 3px 7px rgba(0,0,0,.3)!important;
+  text-transform:uppercase!important;
+  overflow:visible!important }
+
+.note-show-block a::before{content:'a'}
+.note-show-block abbr::before{content:'abbr'}
+.note-show-block acronym::before{content:'acronym'}
+.note-show-block address::before{content:'address'}
+.note-show-block applet::before{content:'applet'}
+.note-show-block area::before{content:'area'}
+.note-show-block article::before{content:'article'}
+.note-show-block aside::before{content:'aside'}
+.note-show-block audio::before{content:'audio'}
+.note-show-block b::before{content:'b'}
+.note-show-block base::before{content:'base'}
+.note-show-block basefont::before{content:'basefont'}
+.note-show-block bdi::before{content:'bdi'}
+.note-show-block bdo::before{content:'bdo'}
+.note-show-block big::before{content:'big'}
+.note-show-block blockquote::before{content:'blockquote'}
+.note-show-block body::before{content:'body'}
+.note-show-block br::before{content:'br'}
+.note-show-block button::before{content:'button'}
+.note-show-block canvas::before{content:'canvas'}
+.note-show-block caption::before{content:'caption'}
+.note-show-block center::before{content:'center'}
+.note-show-block cite::before{content:'cite'}
+.note-show-block code::before{content:'code'}
+.note-show-block col::before{content:'col'}
+.note-show-block colgroup::before{content:'colgroup'}
+.note-show-block command::before{content:'command'}
+.note-show-block content::before{content:'content'}
+.note-show-block datalist::before{content:'datalist'}
+.note-show-block dd::before{content:'dd'}
+.note-show-block del::before{content:'del'}
+.note-show-block details::before{content:'details'}
+.note-show-block dialog::before{content:'dialog'}
+.note-show-block dfn::before{content:'dfn'}
+.note-show-block dir::before{content:'dir'}
+.note-show-block div::before{content:'div'}
+.note-show-block dl::before{content:'dl'}
+.note-show-block doctype::before{content:'doctype'}
+.note-show-block dt::before{content:'dt'}
+.note-show-block em::before{content:'em'}
+.note-show-block embed::before{content:'embed'}
+.note-show-block fieldset::before{content:'fieldset'}
+.note-show-block figcaption::before{content:'figcaption'}
+.note-show-block figure::before{content:'figure'}
+.note-show-block font::before{content:'font'}
+.note-show-block footer::before{content:'footer'}
+.note-show-block frame::before{content:'frame'}
+.note-show-block frameset::before{content:'frameset'}
+.note-show-block h1::before{content:'h1'}
+.note-show-block h2::before{content:'h2'}
+.note-show-block h3::before{content:'h3'}
+.note-show-block h4::before{content:'h4'}
+.note-show-block h5::before{content:'h5'}
+.note-show-block h6::before{content:'h6'}
+.note-show-block head::before{content:'head'}
+.note-show-block header::before{content:'header'}
+.note-show-block hgroup::before{content:'hgroup'}
+.note-show-block hr::before{content:'hr'}
+.note-show-block html::before{content:'html'}
+.note-show-block i::before{content:'i'}
+.note-show-block iframe::before{content:'iframe'}
+.note-show-block image::before{content:'image'}
+.note-show-block img::before{content:'img'}
+.note-show-block input::before{content:'input'}
+.note-show-block ins::before{content:'ins'}
+.note-show-block kbd::before{content:'kbd'}
+.note-show-block keygen::before{content:'keygen'}
+.note-show-block label::before{content:'label'}
+.note-show-block legend::before{content:'legend'}
+.note-show-block li::before{content:'li'}
+.note-show-block link::before{content:'link'}
+.note-show-block main::before{content:'main'}
+.note-show-block map::before{content:'map'}
+.note-show-block mark::before{content:'mark'}
+.note-show-block marquee::before{content:'marquee'}
+.note-show-block menu::before{content:'menu'}
+.note-show-block menuitem::before{content:'menuitem'}
+.note-show-block meta::before{content:'meta'}
+.note-show-block meter::before{content:'meter'}
+.note-show-block nav::before{content:'nav'}
+.note-show-block nobr::before{content:'nobr'}
+.note-show-block noembed::before{content:'noembed'}
+.note-show-block noframes::before{content:'noframes'}
+.note-show-block noscript::before{content:'noscript'}
+.note-show-block object::before{content:'object'}
+.note-show-block ol::before{content:'ol'}
+.note-show-block optgroup::before{content:'optgroup'}
+.note-show-block option::before{content:'option'}
+.note-show-block output::before{content:'output'}
+.note-show-block p::before{content:'p'}
+.note-show-block param::before{content:'param'}
+.note-show-block picture::before{content:'picture'}
+.note-show-block plaintext::before{content:'plaintext'}
+.note-show-block portal::before{content:'portal'}
+.note-show-block pre::before{content:'pre'}
+.note-show-block progress::before{content:'progress'}
+.note-show-block q::before{content:'q'}
+.note-show-block rb::before{content:'rb'}
+.note-show-block rp::before{content:'rp'}
+.note-show-block rt::before{content:'rt'}
+.note-show-block rtc::before{content:'rtc'}
+.note-show-block ruby::before{content:'ruby'}
+.note-show-block s::before{content:'s'}
+.note-show-block samp::before{content:'samp'}
+.note-show-block script::before{content:'script'}
+.note-show-block search::before{content:'search'}
+.note-show-block section::before{content:'section'}
+.note-show-block select::before{content:'select'}
+.note-show-block shadow::before{content:'shadow'}
+.note-show-block slot::before{content:'slot'}
+.note-show-block small::before{content:'small'}
+.note-show-block source::before{content:'source'}
+.note-show-block span::before{content:'span'}
+.note-show-block strike::before{content:'strike'}
+.note-show-block strong::before{content:'strong'}
+.note-show-block style::before{content:'style'}
+.note-show-block sub::before{content:'sub'}
+.note-show-block summary::before{content:'summary'}
+.note-show-block sup::before{content:'sup'}
+.note-show-block svg::before{content:'svg'}
+.note-show-block table::before{content:'table'}
+.note-show-block tbody::before{content:'tbody'}
+.note-show-block td::before{content:'td'}
+.note-show-block template::before{content:'template'}
+.note-show-block textarea::before{content:'textarea'}
+.note-show-block tfoot::before{content:'tfoot'}
+.note-show-block th::before{content:'th'}
+.note-show-block thead::before{content:'thead'}
+.note-show-block time::before{content:'time'}
+.note-show-block title::before{content:'title'}
+.note-show-block tr::before{content:'tr'}
+.note-show-block track::before{content:'track'}
+.note-show-block tt::before{content:'tt'}
+.note-show-block u::before{content:'u'}
+.note-show-block ul::before{content:'ul'}
+.note-show-block var::before{content:'var'}
+.note-show-block video::before{content:'video'}
+.note-show-block wbr::before{content:'wbr'}
+.note-show-block xmp::before{content:'xmp'}
 
 .starRating:not(old){
   display:block!important;
@@ -2554,7 +2895,7 @@ dialog header .close{
 
 .note-editable a,
 .note-editable a:visited{
-  color:#0000ee;
+  color:#00e;
   text-decoration:none }
 
 .note-editable a:hover{
@@ -2584,6 +2925,12 @@ input:not(:placeholder-shown)~.openimageeditor{display:inline-block }
   background-color:var(--card-background-color)!important;
   border:1px solid var(--card-border-color)!important;
   border-top:0!important }
+
+.konvajs-content{
+  height:400px!important }
+
+.FIE_filters-item-preview .konvajs-content{
+  height:40px!important }
 
 .eqwZOE,
 .eoCJQK,
@@ -2728,7 +3075,7 @@ input:not(:placeholder-shown)~.openimageeditor{display:inline-block }
   display:flex!important;
   align-items:center!important;
   padding:.295rem .75rem!important;
-  margin-bottom:17px!important;
+  margin-bottom:7px!important;
   font-size:1rem!important;
   font-weight:400!important;
   line-height:1.5!important;

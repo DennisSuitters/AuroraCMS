@@ -202,6 +202,114 @@ button[disabled]:hover{
 .btn-dark.focus{
   box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
 
+.btn-default{
+  color:var(--default-color-contrast)!important;
+  fill:var(--default-color-contrast)!important;
+  background-color:var(--default-background-color)!important;
+  border-color:var(--default-border-color)!important;
+  -webkit-box-shadow:var(--default-shadow)!important;
+  box-shadow:var(--default-shadow)!important }
+
+.btn-default:hover{
+  color:var(--default-color-contrast)!important;
+  fill:var(--default-color-contrast)!important;
+  background-color:var(--default-background-color-hover)!important;
+  border-color:var(--default-border-color-hover)!important }
+
+.btn-default:focus,
+.btn-default.focus{
+  box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
+
+.btn-info{
+  color:var(--info-color-contrast)!important;
+  fill:var(--info-color-contrast)!important;
+  background-color:var(--info-background-color)!important;
+  border-color:var(--info-border-color)!important;
+  -webkit-box-shadow:var(--info-shadow)!important;
+  box-shadow:var(--info-shadow)!important }
+
+.btn-info:hover{
+  color:var(--info-color-contrast)!important;
+  fill:var(--info-color-contrast)!important;
+  background-color:var(--info-background-color-hover)!important;
+  border-color:var(--info-border-color-hover)!important }
+
+.btn-info:focus,
+.btn-info.focus{
+  box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
+
+.btn-light{
+  color:var(--light-color-contrast)!important;
+  fill:var(--light-color-contrast)!important;
+  background-color:var(--light-background-color)!important;
+  border-color:var(--light-border-color)!important;
+  -webkit-box-shadow:var(--light-shadow)!important;
+  box-shadow:var(--light-shadow)!important }
+
+.btn-light:hover{
+  color:var(--light-color-contrast)!important;
+  fill:var(--light-color-contrast)!important;
+  background-color:var(--light-background-color-hover)!important;
+  border-color:var(--light-border-color-hover)!important }
+
+.btn-light:focus,
+.btn-light.focus{
+  box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
+
+.btn-primary{
+  color:var(--primary-color-contrast)!important;
+  fill:var(--primary-color-contrast)!important;
+  background-color:var(--primary-background-color)!important;
+  border-color:var(--primary-border-color)!important;
+  -webkit-box-shadow:var(--primary-shadow)!important;
+  box-shadow:var(--primary-shadow)!important }
+
+.btn-primary:hover{
+  color:var(--primary-color-contrast)!important;
+  fill:var(--primary-color-contrast)!important;
+  background-color:var(--primary-background-color-hover)!important;
+  border-color:var(--primary-border-color-hover)!important }
+
+.btn-primary:focus,
+.btn-primary.focus{
+  box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
+
+.btn-secondary{
+  color:var(--secondary-color-contrast)!important;
+  fill:var(--secondary-color-contrast)!important;
+  background-color:var(--secondary-background-color)!important;
+  border-color:var(--secondary-border-color)!important;
+  -webkit-box-shadow:var(--secondary-shadow)!important;
+  box-shadow:var(--secondary-shadow)!important }
+
+.btn-secondary:hover{
+  color:var(--secondary-color-contrast)!important;
+  fill:var(--secondary-color-contrast)!important;
+  background-color:var(--secondary-background-color-hover)!important;
+  border-color:var(--secondary-border-color-hover)!important }
+
+.btn-secondary:focus,
+.btn-secondary.focus{
+  box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
+
+.btn-warning{
+  color:var(--warning-color-contrast)!important;
+  fill:var(--warning-color-contrast)!important;
+  background-color:var(--warning-background-color)!important;
+  border-color:var(--warning-border-color)!important;
+  -webkit-box-shadow:var(--warning-shadow)!important;
+  box-shadow:var(--warning-shadow)!important }
+
+.btn-warning:hover{
+  color:var(--warning-color-contrast)!important;
+  fill:var(--warning-color-contrast)!important;
+  background-color:var(--warning-background-color-hover)!important;
+  border-color:var(--warning-border-color-hover)!important }
+
+.btn-warning:focus,
+.btn-warning.focus{
+  box-shadow:0 0 0 0 rgba(88,205,145,.5)!important }
+
 .btn-row>.btn,
 .btn-row>button{
   display:flex;
@@ -284,7 +392,6 @@ button[disabled]:hover{
   background-color:#e9ecef;
   border-left:inherit;
   border-radius:0 .25rem .25rem 0 }
-
 
 form{
   display:block;
@@ -912,12 +1019,11 @@ iframe{
   background-clip:padding-box;
   background-color:var(--form-input-background-color);
   padding:.375rem .75rem;
-  width:100%;
   color:var(--form-input-color);
   font-weight:400;
   font-size:1rem;
   line-height:1.5;
-  height:2.3em;
+  height:auto;
   white-space:nowrap }
 
 .input-text.minus{

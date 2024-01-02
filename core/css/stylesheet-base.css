@@ -143,7 +143,7 @@ nav ul li:hover ul{
 nav ul li ul{
   display:none;
   position:absolute;
-  top:1.8rem;
+  top:1rem;
   right:0;
   z-index:1040;
   box-shadow:var(--box-shadow-x) var(--box-shadow-y) var(--box-shadow-spread) var(--box-shadow-spread) var(--box-shadow-color);

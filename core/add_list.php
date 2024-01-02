@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -139,7 +139,7 @@ else{
                 '<div class="play"></div>'.
               '</div>';
             }else
-              echo'<a data-fancybox="list" href="'.$li1.'"><img src="'.$li1.'" alt="'.$lh.'"></a>';
+              echo'<a data-fancybox="list" href="'.$li1.'"><img src="media/sm/'.basename($li1).'" alt="'.$lh.'"></a>';
           }
           if($li2!=''){
             if(stristr($li2,'youtu')){
@@ -155,7 +155,7 @@ else{
                 '<div class="play"></div>'.
               '</div>';
             }else
-              echo'<a data-fancybox="list" href="'.$li2.'"><img src="'.$li2.'" alt="'.$lh.'"></a>';
+              echo'<a data-fancybox="list" href="'.$li2.'"><img src="media/sm/'.basename($li2).'" alt="'.$lh.'"></a>';
           }
           if($li3!=''){
             if(stristr($li3,'youtu')){
@@ -171,7 +171,7 @@ else{
                 '<div class="play"></div>'.
               '</div>';
             }else
-              echo'<a data-fancybox="list" href="'.$li3.'"><img src="'.$li3.'" alt="'.$lh.'"></a>';
+              echo'<a data-fancybox="list" href="'.$li3.'"><img src="media/sm/'.basename($li3).'" alt="'.$lh.'"></a>';
           }
           if($li4!=''){
             if(stristr($li4,'youtu')){
@@ -187,7 +187,7 @@ else{
                 '<div class="play"></div>'.
               '</div>';
             }else
-              echo'<a data-fancybox="list" href="'.$li4.'"><img src="'.$li4.'" alt="'.$lh.'"></a>';
+              echo'<a data-fancybox="list" href="'.$li4.'"><img src="media/sm/'.basename($li4).'" alt="'.$lh.'"></a>';
           }
           echo'</div>'.
 					'<div class="card-footer col-12 col-sm m-0 p-1">'.

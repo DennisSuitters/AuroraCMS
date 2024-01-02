@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-2
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -89,10 +89,19 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                   });
                 </script>
               </div>
+              <style>
+                <?php $css=file_get_contents(THEME.'/css/newsletter.css');
+                echo $css;?>
+              </style>
               <div class="row mt-3">
                 <?php if($user['options'][1]==1){?>
                   <div class="form-text">Tokens:
                     <a class="badge badge-secondary" href="#" onclick="$('#notes').summernote('insertText','{name}');return false;">{name}</a>
+                  </div>
+                  <div class="wysiwyg-toolbar">
+                    <div class="btn-group d-flex justify-content-end">
+                      <button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button>
+                    </div>
                   </div>
                   <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="notes"></div>
                   <form id="summernote" enctype="multipart/form-data" method="post" target="sp" action="core/update.php">

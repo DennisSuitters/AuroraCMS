@@ -1,4 +1,18 @@
-### v0.2.26-1
+### v0.2.26-2
+- Fix SEO Title, and Description fields not expanding or counting correctly.
+- Improve list thumbnails to use resized image to help page loading times with many list items.
+- Fix inadvertent change made to Dashboard Stats icon position.
+- Fix missing semi-colon in array in core/fomo.php.
+- Remove check for broken images in Administration, as it was increasing page load times.
+- Add more options to the Summernote Toolbar to allow for more block and inline elements.
+- Add & improve page templates and block templates.
+- Add classes to the element classes plugin in Summernote for easy styling.
+- Update Filerobot to v4.7.0.
+- Adjust Administration content item widths to display better across more devices.
+- Fix indication that an item has been set to deleted for purging.
+- Update summernote-image-attributes for image editing, with option for editing images.
+
+#### v0.2.26-1
 - Fix PHPMailer not being called correctly. Was stopping emails being sent.
 - Fix deprecated option in preg_split function in Spam Filter.
 - Update Summernote to fix Save Button color indication being overridden.

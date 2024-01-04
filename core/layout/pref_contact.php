@@ -225,7 +225,7 @@
             </div>
           </div>
         </div>
-        <div class="alert alert-danger mt-3<?=$config['business']!=''?' hidden':'';?>" id="businessErrorBlock" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Bookings will NOT function currectly.</div>
+        <div class="alert alert-danger mt-3<?=$config['business']!=''?' hidden':'';?>" id="businessErrorBlock" role="alert">The Business Name has not been set. Some functions such as Messages,Newsletters and Bookings will NOT function correctly.</div>
         <div class="alert alert-danger<?=$config['email']!=''?' hidden':'';?>" id="emailErrorBlock" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly.</div>
         <div class="row">
           <div class="col-12 col-md-4 pr-md-3" id="businessHasError">

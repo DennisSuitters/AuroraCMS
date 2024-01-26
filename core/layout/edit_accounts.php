@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -36,22 +36,22 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
           </div>
         </div>
         <div class="tabs" role="tablist">
-          <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-          <label for="tab1-1">General</label>
-          <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-          <label for="tab1-2">Contact</label>
-          <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-          <label for="tab1-3">Media</label>
-          <input class="tab-control" id="tab1-4" name="tabs" type="radio">
-          <label for="tab1-4">Proofs</label>
-          <input class="tab-control" id="tab1-5" name="tabs" type="radio">
-          <label for="tab1-5">Social</label>
-          <input class="tab-control" id="tab1-6" name="tabs" type="radio">
-          <label for="tab1-6">Messages</label>
-          <?=($user['options'][4]==1?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Orders</label>':'');?>
-          <input class="tab-control" id="tab1-8" name="tabs" type="radio">
-          <label for="tab1-8">Settings</label>
-          <?=($config['hoster']==1?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Hosting/Website Payments</label>':'');?>
+          <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+          '<label for="tab1-1">General</label>'.
+          '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+          '<label for="tab1-2">Contact</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+          '<label for="tab1-3">Media</label>'.
+          '<input class="tab-control" id="tab1-4" name="tabs" type="radio">'.
+          '<label for="tab1-4">Proofs</label>'.
+          '<input class="tab-control" id="tab1-5" name="tabs" type="radio">'.
+          '<label for="tab1-5">Social</label>'.
+          '<input class="tab-control" id="tab1-6" name="tabs" type="radio">'.
+          '<label for="tab1-6">Messages</label>'.
+          ($user['options'][4]==1?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Orders</label>':'').
+          '<input class="tab-control" id="tab1-8" name="tabs" type="radio">'.
+          '<label for="tab1-8">Settings</label>'.
+          ($config['hoster']==1?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Hosting/Website Payments</label>':'');?>
 <?php /* General */?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="row">
@@ -424,32 +424,32 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
               <?=$user['options'][5]==1?'<button class="save" id="savetags" data-dbid="tags" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
             </div>
             <script>
-            var input = document.querySelector('#tags');
-            tagify = new Tagify(input, {
-              whitelist: [
-                <?php if($user['options'][1]==1){
-                  $tags=array();
-                  $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
-                  if($st->rowCount()>0){
-                    while($rt=$st->fetch(PDO::FETCH_ASSOC)){
-                      $tagslist=explode(",",$rt['tags']);
-                      foreach($tagslist as $t)$tgs[]=$t;
+              var input = document.querySelector('#tags');
+              tagify = new Tagify(input, {
+                whitelist: [
+                  <?php if($user['options'][1]==1){
+                    $tags=array();
+                    $st=$db->query("SELECT DISTINCT `tags` FROM `".$prefix."content` WHERE `tags`!='' UNION SELECT DISTINCT `tags` FROM `".$prefix."login` WHERE `tags`!=''");
+                    if($st->rowCount()>0){
+                      while($rt=$st->fetch(PDO::FETCH_ASSOC)){
+                        $tagslist=explode(",",$rt['tags']);
+                        foreach($tagslist as $t)$tgs[]=$t;
+                      }
                     }
-                  }
-                  if(isset($tgs)&&$tgs!='')$tags=array_unique($tgs);
-                  asort($tags);
-                  foreach($tags as $t)echo'"'.$t.'",';
-                }?>
-              ],
-              maxTags: 10,
-              dropdown: {
-                maxItems: 20,           // <- mixumum allowed rendered suggestions
-                classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
-                enabled: 0,             // <- show suggestions on focus
-                closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
-              },
-              originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
-            });
+                    if(isset($tgs)&&$tgs!='')$tags=array_unique($tgs);
+                    asort($tags);
+                    foreach($tags as $t)echo'"'.$t.'",';
+                  }?>
+                ],
+                maxTags: 10,
+                dropdown: {
+                  maxItems: 20,           // <- mixumum allowed rendered suggestions
+                  classname: "tags-look", // <- custom classname for this dropdown, so it could be targeted
+                  enabled: 0,             // <- show suggestions on focus
+                  closeOnSelect: false    // <- do not hide the suggestions dropdown once an item has been selected
+                },
+                originalInputValueFormat: valuesArr => valuesArr.map(item => item.value).join(',')
+              });
             </script>
           </div>
 <?php /* Orders */ ?>

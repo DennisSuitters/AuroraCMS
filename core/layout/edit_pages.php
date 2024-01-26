@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -217,13 +217,13 @@ if($r['heading']==''){
 <?php /* Media */?>
           <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
             <div class="tabs2" role="tablist">
-              <input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>
-              <label for="tab2-1">Images</label>
-              <?=($r['file']=='index'?'<input class="tab-control" id="tab2-2" name="tabs2" type="radio"><label for="tab2-2">Featured Content</label>':'');?>
-              <input class="tab-control" id="tab2-3" name="tabs2" type="radio">
-              <label for="tab2-3">Video</label>
-              <input class="tab-control" id="tab2-4" name="tabs2" type="radio">
-              <label for="tab2-4">On Page Media</label>
+              <?='<input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>'.
+              '<label for="tab2-1">Images</label>'.
+              ($r['file']=='index'?'<input class="tab-control" id="tab2-2" name="tabs2" type="radio"><label for="tab2-2">Featured Content</label>':'').
+              '<input class="tab-control" id="tab2-3" name="tabs2" type="radio">'.
+              '<label for="tab2-3">Video</label>'.
+              '<input class="tab-control" id="tab2-4" name="tabs2" type="radio">'.
+              '<label for="tab2-4">On Page Media</label>';?>
               <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
                   <label for="coverURL" class="mt-0">Cover Image URL</label>

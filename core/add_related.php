@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -38,13 +38,17 @@ else{
 				$si->execute([':id'=>$rid]);
 				$ri=$si->fetch(PDO::FETCH_ASSOC);
 				echo'<script>'.
-							'window.top.window.$("#relateditems").append(`<div id="l_'.$id.'" class="form-row mt-1 add-item">'.
-								'<input type="text" value="'.ucfirst($ri['contentType']).': '.$ri['title'].'" readonly>'.
-								'<form target="sp" action="core/purge.php">'.
-									'<input name="id" type="hidden" value="'.$id.'">'.
-									'<input name="t" type="hidden" value="choices">'.
-									'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
-								'</form>'.
+							'window.top.window.$("#relateditems").append(`<div class="row add-item" id="l_'.$id.'">'.
+								'<div class="col-12">'.
+									'<div class="form-row">'.
+										'<div class="input-text col-12">'.ucfirst($ri['contentType']).': '.$ri['title'].'</div>'.
+										'<form target="sp" action="core/purge.php">'.
+											'<input name="id" type="hidden" value="'.$id.'">'.
+											'<input name="t" type="hidden" value="choices">'.
+											'<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>'.
+										'</form>'.
+									'</div>'.
+								'</div>'.
 							'</div>`);'.
 						'</script>';
 			}else echo'<script>window.top.window.toastr["error"]("There was an issue adding the Data!");</script>';

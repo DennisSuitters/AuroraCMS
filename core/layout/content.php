@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -17,6 +17,29 @@ $rank=0;
 $show='categories';
 if(isset($args[0])&&$args[0]=='scheduler')require'core/layout/scheduler.php';
 else{
+  if($view=='copy'){
+    $sc=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+    $sc->execute([':id'=>$args[1]]);
+    $rc=$sc->fetch(PDO::FETCH_ASSOC);
+    unset($rc['id']);
+    $columns=array_keys($rc);
+    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."content`  (`".implode('`, `', $columns)."`) SELECT `".implode('`, `', $columns)."` from `".$prefix."content` WHERE `id` = ".$args[1].";");
+    $q->execute();
+    $id=$db->lastInsertId();
+    $args[0]=ucfirst($rc['title'].' '.$id);
+    $s=$db->prepare("UPDATE `".$prefix."content` SET `title`=:title,`urlSlug`=:urlslug,`status`='unpublished',`ti`=:ti WHERE `id`=:id");
+    $s->execute([
+      ':id'=>$id,
+      ':title'=>$args[0],
+      ':urlslug'=>str_replace(' ','-',$args[0]),
+      ':ti'=>$ti
+    ]);
+    if($view!='bookings')$show='item';
+    $rank=0;
+    $args[0]='edit';
+    $args[1]=$id;
+    echo'<script>/*<![CDATA[*/window.location.replace("'.URL.$settings['system']['admin'].'/content/edit/'.$args[1].'");/*]]>*/</script>';
+  }
   if($view=='add'){
     $stockStatus='none';
     $ti=time();

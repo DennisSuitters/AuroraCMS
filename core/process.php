@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -196,7 +196,7 @@ $head=preg_replace([
   ($config['geo_region']!=''?'<meta name="geo.region" content="'.$config['geo_region'].'">':'').
     ($config['geo_placename']!=''?'<meta name="geo.placename" content="'.$config['geo_placename'].'">':'').
     ($config['geo_position']!=''?'<meta name="geo.position" content="'.$config['geo_position'].'"><meta name="ICBM" content="'.$config['geo_position'].'">':''),
-  $saleClass
+  (isset($saleClass)?$saleClass:'')
 ],$head);
 if(stristr($head,'<css')){
   preg_match('/<css file=[\"\']([\w\W]*?)[\"\']>/',$head,$cssfilematch);

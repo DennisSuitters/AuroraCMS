@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -23,70 +23,72 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='38
                 <li class="breadcrumb-item active">Contacts</li>
               </ol>
             </div>
-          </div>
-        </div>
-        <div class="row mt-3">
-          <div class="messages-menu col-12 col-sm-5 col-md-2 col-lg-4 col-xl-3 border">
-            <div class="p-3">
-              <?=$user['options'][0]==1?'<div class="mb-3"><a class="btn-block" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button">Add Contact</a></div>':'';?>
-              <input class="" id="filter-input" type="text" value="" placeholder="Search..." onkeyup="filterTextInput2();">
+            <div class="col-12 col-sm-6 text-right">
+              <div class="form-row justify-content-end">
+                <input class="" id="filter-input" type="text" value="" placeholder="Search..." onkeyup="filterTextInput2();">
+                <div class="btn-group">
+                  <?=$user['options'][0]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add Contact"><i class="i">add</i></a>':'';?>
+                </div>
+              </div>
             </div>
-            <nav class="mt-3">
-              <ul>
-                <?php $sc=$db->prepare("SELECT * FROM `".$prefix."login` ORDER BY `name` ASC, `username` ASC, `email` ASC");
-                $sc->execute();
-                while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
-                  <li class="card chatListItem zebra border-1 border-light m-0 px-4 py-3 cursor-default" id="contactListItem<?=$rc['id'];?>" data-content="<?=$rc['username'].' '.$rc['name'].' '.$rc['email'].' '.$rc['business'].' '.$rc['phone'].' '.$rc['mobile'];?>" onclick="getContact(`<?=$rc['id'];?>`);">
-                    <div class="row">
-                      <div class="col-2 col-md-12 col-lg-2 col-xxl-2 d-inline-block text-center">
-                        <img class="rounded" style="width:40px;max-height:40px" src="<?=($rc['avatar']==''?NOAVATAR:'media/avatar/'.$rc['avatar']);?>">
-                      </div>
-                      <div class="col col-md-12 col-lg ml-2 ml-md-0 ml-lg-1 d-inline-block text-left text-md-center text-lg-left">
-                        <div class="small text-black"><?=$rc['name'];?></div>
-                        <div><span class="badger badge-<?=rank($rc['rank']);?>"><?=ucwords(str_replace('-',' ',rank($rc['rank'])));?></span></div>
-                        <div class="small text-muted hidewhenempty"><?=($rc['business']!=''?$rc['business'].($rc['jobtitle']!=''?'<span class="badger badge-default pl-2">'.$rc['jobtitle'].'</span>':''):'');?></div>
-                        <?=($rc['email']!=''?'<div class="small text-muted">'.$rc['email'].'</div>':'').
-                        ($rc['phone']!=''?'<div class="small text-muted">'.$rc['phone'].'</div>':'').
-                        ($rc['mobile']!=''?'<div class="small text-muted">'.$rc['mobile'].'</div>':'');?>
-                      </div>
-                    </div>
-                  </li>
-                <?php }?>
-              </ul>
-            </nav>
-            <script>
-              function getContact(id){
-                if(!$('#contactListItem'+id).hasClass('border-success')){
-                  $('.chatListItem').removeClass("border-success");
-                  $('#contactListItem'+id).addClass("border-success");
-                  $('#contactsScreen').fadeOut('slow',function(){
-                    $.ajax({
-                      type:"GET",
-                      url:"core/get_contact.php",
-                      data:{
-                        id:id,
-                        edit:<?=($user['options'][1]==1?1:0);?>,
-                        del:<?=($user['rank']<1000?($user['options'][0]==1?1:0):0);?>
-                      }
-                    }).done(function(msg){
-                      if(msg!='failed'){
-                        $('#contactsScreen').html(msg);
-                        $('#contactsScreen').fadeIn('slow');
-                      }else{
-                        toastr["error"]("There was an issue processing the request!");
-                      }
-                    });
-                  });
-                }
-              }
-            </script>
           </div>
-          <section class="col-12 col-sm ml-3 overflow-visible list">
-            <article class="card overflow-visible" id="contactsview">
-              <div id="contactsScreen" style="width:100%;min-height:54vh;" data-empty="Select a Contact to view on the left!"></div>
-            </article>
-          </section>
         </div>
+        <section class="content mt-3 overflow-visible list" id="contentview">
+          <article class="card mt-2 mb-0 p-0 py-2 overflow-visible card-list card-list-header shadow sticky-top d-none d-md-block">
+            <div class="row">
+              <div class="col-12 col-md-1">&nbsp;</div>
+              <div class="col-12 col-md">Name</div>
+              <div class="col-12 col-md">Email</div>
+              <div class="col-12 col-md">Phone Number/s</div>
+              <div class="col-12 col-md">Company</div>
+              <div class="col-12 col-md-1">&nbsp;</div>
+            </div>
+          </article>
+          <?php $sc=$db->prepare("SELECT * FROM `".$prefix."login` ORDER BY `name` ASC, `username` ASC, `email` ASC");
+          $sc->execute();
+          while($rc=$sc->fetch(PDO::FETCH_ASSOC)){?>
+            <article class="card list zebra my-2 p-2 border-0 overflow-visible shadow" id="l_<?=$rc['id'];?>" data-content="<?=$rc['username'].' '.$rc['name'].' '.$rc['email'].' '.$rc['business'].' '.$rc['phone'].' '.$rc['mobile'];?>">
+              <div class="row">
+                <div class="col-1 align-middle">
+                  <img class="rounded align-top" src="<?=($rc['avatar']!=''?'media/avatar/'.$rc['avatar']:NOAVATAR);?>" style="width:50px;max-height:50px">
+                </div>
+                <div class="col col-md small align-middle pl-2 pl-md-0">
+                  <div>
+                    <?=$rc['name'];?><span class="badger badge-<?=rank($rc['rank']);?> ml-2 d-inline d-md-none"><?=ucwords(rank($rc['rank']));?></span>
+                  </div>
+                  <div class="badger badge-<?=rank($rc['rank']);?> d-none d-md-block">
+                    <?=rank($rc['rank']);?>
+                  </div>
+                  <div class="d-block d-md-none">
+                    <?=($rc['email']!=''?'<a href="mailto:'.$rc['email'].'">'.$rc['email'].'</a>':'');?>
+                  </div>
+                  <div class="d-block d-md-none">
+                    <?=($rc['phone']!=''?'<div><a href="tel:'.$rc['phone'].'">'.$rc['phone'].'</a></div>':'').
+                    ($rc['mobile']!=''?'<div><a href="tel:'.$rc['mobile'].'">'.$rc['mobile'].'</a></div>':'');?>
+                  </div>
+                  <div class="d-block d-md-none">
+                    <?=($rc['business']!=''?'<div>'.$rc['business'].($rc['jobtitle']!=''?'<span class="pl-1 text-muted">'.$rc['jobtitle'].'</span>':'').'</div>':'');?>
+                  </div>
+                </div>
+                <div class="col-md small align-middle d-none d-md-flex">
+                  <?=($rc['email']!=''?'<a href="mailto:'.$rc['email'].'">'.$rc['email'].'</a>':'');?>
+                </div>
+                <div class="col-md small align-middle d-none d-md-flex">
+                  <?=($rc['phone']!=''?'<div><a href="tel:'.$rc['phone'].'">'.$rc['phone'].'</a></div>':'').
+                  ($rc['mobile']!=''?'<div><a href="tel:'.$rc['mobile'].'">'.$rc['mobile'].'</a></div>':'');?>
+                </div>
+                <div class="col-md small align-middle d-none d-md-flex">
+                  <?=($rc['business']!=''?'<div>'.$rc['business'].'</div>':'');?>
+                  <?=($rc['jobtitle']!=''?'<div class="text-muted">'.$rc['jobtitle'].'</div>':'');?>
+                </div>
+                <div class="col align-middle align-content-end">
+                  <button class="quickeditbtn" data-qeid="<?=$rc['id'];?>" data-qet="contacts" data-tooltip="left" aria-label="Open/Close Contact Details"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
+                </div>
+              </div>
+            </article>
+            <div class="quickedit" id="quickedit<?=$rc['id'];?>"></div>
+          <?php }?>
+        </section>
       </div>
       <?php require'core/layout/footer.php';?>
     </div>

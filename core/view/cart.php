@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -28,6 +28,7 @@ $html=preg_replace([
 ],$html);
 $notification='';
 $ti=time();
+$overquantity=false;
 $uid=isset($_SESSION['uid'])?$_SESSION['uid']:0;
 if(isset($_POST['qid'])&&isset($_POST['qty'])){
 	$qid=filter_input(INPUT_POST,'qid',FILTER_SANITIZE_NUMBER_INT);
@@ -61,6 +62,17 @@ if(isset($_POST['qid'])&&isset($_POST['qty'])){
 		    if($qty > $limit)$qty=$limit;
 		  }
 		}
+		$sc=$db->prepare("SELECT `iid` FROM `".$prefix."cart` WHERE `id`=:id");
+		$sc->execute([
+			':id'=>$qid
+		]);
+		$rc=$sc->fetch(PDO::FETCH_ASSOC);
+		$si=$db->prepare("SELECT `quantity` FROM `".$prefix."content` WHERE `id`=:id");
+		$si->execute([
+			':id'=>$rc['iid']
+		]);
+		$ri=$si->fetch(PDO::FETCH_ASSOC);
+		if($qty>$ri['quantity'])$overquantity=true;
 		$s=$db->prepare("UPDATE `".$prefix."cart` SET `quantity`=:quantity WHERE `id`=:id");
 		$s->execute([
 			':quantity'=>$qty,
@@ -73,6 +85,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 		$email=filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
 		$rewards=filter_input(INPUT_POST,'rewards',FILTER_UNSAFE_RAW);
 		$pid=filter_input(INPUT_POST,'pid',FILTER_UNSAFE_RAW);
+		$hid=isset($_POST['hid'])?filter_input(INPUT_POST,'hid',FILTER_UNSAFE_RAW):0;
 		$postoption='';
 		if($pid=='AUS_PARCEL_REGULAR')$postoption='Australia Post Regular Post'; // AUS_PARCEL_REGULAR
 		if($pid=='AUS_PARCEL_EXPRESS')$postoption='Australia Post Express Post'; // AUS_PARCEL_EXPRESS
@@ -168,7 +181,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 			}else$reward['id']=0;
 			$dti=$ti+$config['orderPayti'];
 			$qid='Q'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-			$q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`qid`,`qid_ti`,`due_ti`,`rid`,`status`,`postageCode`,`postageOption`,`payOption`,`payMethod`,`payCost`,`ti`) VALUES (:cid,:uid,:qid,:qid_ti,:due_ti,:rid,'pending',:postagecode,:postageoption,:payoption,:paymethod,:paycost,:ti)");
+			$q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`qid`,`qid_ti`,`due_ti`,`rid`,`status`,`postageCode`,`postageOption`,`payOption`,`payMethod`,`payCost`,`process`,`hold`,`hold_event`,`ti`) VALUES (:cid,:uid,:qid,:qid_ti,:due_ti,:rid,'pending',:postagecode,:postageoption,:payoption,:paymethod,:paycost,:process,:hold,:hid,:ti)");
 			$q->execute([
 				':cid'=>$uid,
 				':uid'=>(isset($uid)?$uid:0),
@@ -181,6 +194,9 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				':payoption'=>$po['title'],
 				':paymethod'=>$po['type'],
 				':paycost'=>$po['value'],
+				':process'=>'1000000000000000',
+				':hold'=>($hid>0?1:0),
+				':hid'=>($hid>0?$hid:''),
 				':ti'=>$ti
 			]);
 			$oid=$db->lastInsertId();
@@ -245,7 +261,21 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$mail->AltBody=strip_tags(preg_replace('/<br(\s+)?\/?>/i',"\n",$msg));;
 				if($mail->Send()){}
 			}
-			$notification.=preg_replace(['/<print alert>/','/<print text>/'],['success','Thank you for placing an Order.<br>Once payment is made, you will receive an invoice, containing links to content associated with your purchase.<br><br>'.(isset($qid)&&$qid!=0?'You can use this link to view your order:<br><a href="'.URL.'orders/'.$qid.'">Order #'.$qid.'</a><br><br>':'').'<a class="btn" href="'.URL.'checkout/'.$qid.'">Proceed to Checkout</a>'],$theme['settings']['alert']);
+			if($hid>0){
+				$sh=$db->prepare("SELECT `title`,`value` FROM `".$prefix."choices` WHERE `id`=:id");
+				$sh->execute([':id'=>$hid]);
+				$rh=$sh->fetch(PDO::FETCH_ASSOC);
+			}
+			$notification.=preg_replace([
+				'/<print alert>/',
+				'/<print text>/'
+			],[
+				'success',
+				'Thank you for placing an Order.<br>Once payment is made, you will receive an invoice, containing links to content associated with your purchase.<br><br>'.
+					(isset($qid)&&$qid!=0?'You can use this link to view your order:<br><a href="'.URL.'orders/'.$qid.'">Order #'.$qid.'</a><br><br>':'').
+					($hid>0?'Your Order has be flagged as being Held for Pickup at '.$rh['title'].'.'.($rh['value']>0?' '.$rh['value'].'% payment is Required to Hold Orders.':'').'<br><br>':'').
+					'<a class="btn" href="'.URL.'checkout/'.$qid.'">Proceed to Checkout</a>'
+			],$theme['settings']['alert']);
 		}else
 			$notification.=preg_replace(['/<print alert>/','/<print text>/'],['danger','The account associated with the details provided has been suspended, or the email supplied is invalid.'],$theme['settings']['alert']);
 		$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$notification,$html,1);
@@ -282,6 +312,7 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				$cartitem=preg_replace([
 					'/<print zebra>/',
 					'/<print carturl>/',
+					'/<print content=[\"\']?id[\"\']?>/',
 					'/<print content=[\"\']?image[\"\']?>/',
 					'/<print content=[\"\']?code[\"\']?>/',
 					'/<print content=[\"\']?title[\"\']?>/',
@@ -296,21 +327,22 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				],[
 					'zebra'.$zebra,
 					URL.'cart',
-					($ci['file']!=''?$ci['file']:NOIMAGE),
-					htmlspecialchars($i['code'],ENT_QUOTES,'UTF-8'),
-					($i['code']!=''?$i['code'].' : ':''),
+					$i['id'],
+					($i['file']!=''?$i['file']:NOIMAGE),
+					($i['code']!=''?$i['code']:''),
+					$i['title'],
 					$i['weight']>0?'Weight: '.$i['weight'].$i['weightunit'].'<br>':'',
 					($i['width']>0||$i['length']>0||$i['height']>0?'Dimensions:'.
 						($i['width']>0?' W:'.$i['width'].$i['widthunit']:'').
 						($i['length']>0?' L:'.$i['length'].$i['lengthunit']:'').
 						($i['height']>0?' H:'.$i['height'].$i['heightunit']:'')
 					:''),
-					$ci['title'],
+					($i['id']==$ci['id']?$ci['title']:''),
 					$ci['id'],
-					$ci['cost'],
+					number_format((float)$ci['cost'],2,'.',''),
 					$ci['quantity'],
 					$gst,
-					$itemtotal
+					number_format((float)$itemtotal,2,'.','')
 				],$cartitem);
 				$cartitems.=$cartitem;
 				if($i['weightunit']!='kg')$i['weight']=weight_converter($i['weight'],$i['weightunit'],'kg');
@@ -330,12 +362,12 @@ if(isset($args[0])&&$args[0]=='confirm'){
 				'/<print totalcalculate>/'
 			],[
 		 		$cartitems,
-				($dimW>0||$dimL>0||$dimH>0?'<small>Estimated Dimensions:'.
+				($dimW>0||$dimL>0||$dimH>0?'Estimated Dimensions:'.
 					($dimW>0?' W: '.$dimW.'cm':'').
 					($dimL>0?' L: '.$dimL.'cm':'').
-					($dimH>0?' H: '.$dimH.'cm':'').
-				'</small>':''),
-				($weight>0?'<small>Total Weight: '.$weight.'kg</small>'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''):''),
+					($dimH>0?' H: '.$dimH.'cm':'')
+				:''),
+				($weight>0?'Total Weight: '.$weight.'kg'.($weight>22?'<br><div class="alert alert-danger">As the weight of your items exceeds 22kg you will not be able to use Australia Post.</div>':''):''),
 				$total
 			],$html);
 
@@ -385,13 +417,30 @@ if(isset($args[0])&&$args[0]=='confirm'){
 						$spo->rowCount()>0?'/<[\/]?postageoptions>/':'~<postageoptions>.*?<\/postageoptions>~is',
 						'/<postoptions>/',
 						'/<payoptions>/',
-						'/<[\/]?emptycart>/'
+						'/<[\/]?emptycart>/',
+						'/<[\/]?noaddress>/'
 					],[
 						$sco->rowCount()>0?'':'<input type="hidden" name="payoption" value="0">',
 						$spo->rowCount()>0?'':'<input type="hidden" name="postoption" value="0">',
 						$postageoptions,
 						$payoptions,
+						'',
 						''
+					],$html);
+
+					$sh=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='holdoption' ORDER BY `title` ASC");
+					$sh->execute();
+					$opts='';
+					while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
+						if($rh['tie']!=0&&$rh['tie']<$ti)continue;
+						$opts.='<option value="'.$rh['id'].'">'.ucwords($rh['title']).'.'.($rh['value']>0?' '.$rh['value'].'% Required to Hold Order':'').'</option>';
+					}
+					$html=preg_replace([
+						($opts!=''?'/<[\/]?holdingoptions>/':'~<holdingoptions>.*?<\/holdingoptions>~is'),
+						'/<holdoptions>/'
+					],[
+						'',
+						$opts
 					],$html);
 				}
 				if(isset($user['rank'])){
@@ -399,10 +448,13 @@ if(isset($args[0])&&$args[0]=='confirm'){
 					$us->execute([':id'=>$uid]);
 					$u=$us->fetch(PDO::FETCH_ASSOC);
 				}
-				$html=preg_replace(
+				$html=preg_replace([
+					($overquantity==true?'/<[\/]?overquantity>/':'~<overquantity>.*?<\/overquantity>~is'),
 					isset($user['rank'])&&$user['rank']>0?'~<loggedin>.*?<\/loggedin>~is':'/<[\/]?loggedin>/',
+				],[
+					'',
 					isset($u['email'])&&$u['email']!=''?'<input type="hidden" name="email" value="'.$u['email'].'">':'',
-				$html);
+				],$html);
 			}
 		}else
 			$html=preg_replace('~<emptycart>.*?<\/emptycart>~is',$theme['settings']['cart_empty'],$html,1);

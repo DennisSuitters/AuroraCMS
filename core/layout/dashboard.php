@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -52,7 +52,7 @@ else{?>
             echo'<div class="alert alert-danger" role="alert">A Website Theme has not been set.</div>';
           $tid=$ti-2592000;
           if($config['business']=='')
-            echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function currectly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
+            echo'<div class="alert alert-danger" role="alert">The Business Name has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#business">Set Now</a></div>';
           if($config['email']=='')
             echo$config['email']==''?'<div class="alert alert-danger" role="alert">The Email has not been set. Some functions such as Messages, Newsletters and Bookings will NOT function correctly. <a class="alert-link" href="'.URL.$settings['system']['admin'].'/preferences/contact#email">Set Now</a></div>':'';
           $seopageerrors=$seocontenterrors=0;

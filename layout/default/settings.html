@@ -2,20 +2,20 @@
 <block include="header.html">
 <block inbed="settings">
 	<pagenotes>
-    <section class="row mt-5">
+    <section class="row my-5">
       <article class="mx-0">
         <h1><print page="heading"></h1>
         <print page="notes">
       </article>
     </section>
   </pagenotes>
-	<section class="row mb-5 justify-content-center">
-		<article class="col-12 col-md-6">
+	<section class="row mt-5 mb-3 justify-content-center">
+		<article class="col-12 col-md-4">
 			<iframe id="sp" name="sp" class="d-none"></iframe>
-			<form class="card p-3" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
+			<form class="card mb-3 p-3" target="sp" method="post" enctype="multipart/form-data" action="core/add_data.php">
 				<input type="hidden" name="id" value="<print user=id>">
 				<input type="hidden" name="act" value="add_avatar">
-				<h2>Avatar</h2>
+				<h4>Avatar</h4>
 				<div class="text-center">
 					<img class="img-avatar avatar xxl" src="<print user=avatar>" alt="<print user=name>">
 				</div>
@@ -23,8 +23,8 @@
 				<label for="fu">Choose File</label>
 				<button class="btn btn-block mt-3">Upload</button>
 			</form>
-			<form class="card mt-5 p-3" method="post" action="settings">
-				<h2>Reset Password</h2>
+			<form class="card mb-3 p-3" method="post" action="settings">
+				<h4>Reset Password</h4>
 				<input type="hidden" name="act" value="updatePassword">
 				<input type="hidden" name="emailtrap" value="none">
 				<div class="alert alert-danger<error currentPassHidden>" role="alert">The Password you entered was incorrect!</div>
@@ -37,30 +37,22 @@
 				<button class="btn btn-block mt-3" type="submit">Update Password</button>
 				<div class="form-text text-muted small">Changing Password will Sign you Out</div>
 			</form>
-			<form class="card mt-5 p-3" method="post" action="settings">
-				<h2>Account Details</h2>
+			<form class="card p-3" method="post" action="settings">
+				<h4>Account Details</h4>
 				<input type="hidden" name="act" value="updateAccount">
 				<div class="alert alert-success<success accountHidden>" role="alert">Account Details Updated!</div>
 				<div class="alert alert-danger<error accountHidden>" role="alert">There was an Issue Updating your Account Details!</div>
 				<label for="ti">Created</label>
 				<div class="form-row">
-					<input type="text" id="ti" value="<print user=ti>" readonly>
+					<input type="text" id="ti" value="<print user=ti>" disabled>
 				</div>
 				<label for="username">Username</label>
 				<div class="form-row">
-					<input type="text" id="username" name="usrname" value="<print user=username>" readonly>
+					<input type="text" id="username" name="usrname" value="<print user=username>" disabled>
 				</div>
 				<label for="rank">Rank</label>
 				<div class="form-row">
-					<input type="text" id="rank" value="<print user=rank>" readonly>
-				</div>
-				<label for="spent">Spent</label>
-				<div class="form-row">
-					<input type="text" id="spent" value="$<print user=spent>" readonly>
-				</div>
-				<label for="points">Points Earned</label>
-				<div class="form-row">
-					<input type="text" id="points" value="<print user=points>" readonly>
+					<input type="text" id="rank" value="<print user=rank>" disabled>
 				</div>
 				<label class="required" for="email">Email</label>
 				<div class="form-row flex-wrap">
@@ -118,8 +110,148 @@
 				</div>
 				<button class="btn btn-block mt-3" type="submit">Update Account</button>
 			</form>
-			<form class="card mt-5 p-3" method="post" action="settings">
-				<h2>Deactivate Account</h2>
+		</article>
+		<article class="col-12 col-md-7">
+			<div class="card mb-3 p-3">
+				<h4>Rewards</h4>
+				<div class="row">
+					<div class="card col-6 col-sm m-3 py-5 text-center">
+						<div>Spent</div>
+						<div class="text-2x">&dollar;<print user="spent"></div>
+					</div>
+					<div class="card col-6 col-sm m-3 py-5 text-center">
+						<div>Points</div>
+						<div class="text-2x"><print user="points"></div>
+					</div>
+				</div>
+				<div class="col-12 zebra">
+					<rewarditems>
+						<div class="row p-2">
+							<div class="col py-3 small">
+								<print reward="title">
+								<print reward="code">
+							</div>
+							<div class="col py-3 small">
+								<print reward="method">
+							</div>
+							<div class="col py-3 small">
+								<print reward="quantity">
+							</div>
+							<div class="col py-3 small text-right">
+								<print reward="tis">
+								<print reward="tie">
+							</div>
+						</div>
+					</rewarditems>
+				</div>
+			</div>
+			<div class="card mb-3 p-3">
+				<h4>Orders</h4>
+				<div class="col-12 zebra">
+					<orderitems>
+						<div class="row p-2">
+							<div class="col py-3 small">
+								<a href="<print link>"><print order="ordernumber"></a>
+							</div>
+							<div class="col py-3 text-center">
+								<span class="badger badge-<print order=status>"><print order="status"></span>
+								<print order="hold">
+							</div>
+							<div class="col py-3 small text-right">
+								Created: <print order="date"><br>
+								Due: <print order="duedate">
+							</div>
+						</div>
+					</orderitems>
+				</div>
+			</div>
+			<div class="card mb-3 p-3">
+				<h4>Reviews</h4>
+				<div class="col-12 zebra">
+					<reviewitems>
+						<div class="row p-2 pl-0">
+							<div class="col-1">
+								<img src="<print content=image>" alt="<print content=title>">
+							</div>
+							<div class="col py-3 pl-2 small">
+								<print content="title">
+							</div>
+							<div class="col py-3 small">
+								<print review="rating">
+								<print review="notes">
+							</div>
+							<div class="col py-3 text-right">
+								<span class="badger badge-<print review=status>"><print review="status"></span>
+							</div>
+						</div>
+					</reviewitems>
+				</div>
+			</div>
+			<div class="card mb-3 p-3">
+				<h4>Comments</h4>
+				<div class="col-12 zebra">
+					<commentitems>
+						<div class="row p-2 pl-0">
+							<div class="col-1">
+								<img src="<print content=image>" alt="<print content=title>">
+							</div>
+							<div class="col py-3 pl-2 small">
+								<print content="title">
+							</div>
+							<div class="col py-3 small">
+								<print comment="notes">
+							</div>
+							<div class="col py-3 text-right">
+								<span class="badger badge-<print comment=status>"><print comment="status"></span>
+							</div>
+						</div>
+					</commentitems>
+				</div>
+			</div>
+			<div class="card mb-3 p-3">
+				<h4>Testimonials</h4>
+				<div class="col-12 zebra">
+					<testimonialitems>
+						<div class="row p-2">
+							<div class="col py-3 small">
+								<print testimonial="name">
+							</div>
+							<div class="col py-3 small">
+								<print testimonial="rating">
+								<print testimonial="notes">
+							</div>
+							<div class="col py-3 text-right">
+								<span class="badger badge-<print testimonial=status>"><print testimonial="status"></span>
+							</div>
+						</div>
+					</testimonialitems>
+				</div>
+			</div>
+			<div class="card mb-3 p-3">
+				<h4>Forum</h4>
+				<div class="row">
+					<div class="card col-6 col-sm m-3 py-5 text-center">
+						<div>Posts</div>
+						<div class="text-2x"><print forum="posts"></div>
+					</div>
+					<div class="card col-6 col-sm m-3 py-5 text-center">
+						<div>Comments</div>
+						<div class="text-2x"><print forum="comments"></div>
+					</div>
+					<div class="card col-6 col-sm m-3 py-5 text-center">
+						<div>Views</div>
+						<div class="text-2x"><print forum="views"></div>
+					</div>
+					<div class="card col-6 col-sm m-3 py-5 text-center">
+						<div>Tickets</div>
+						<div class="text-2x"><print forum="tickets"></div>
+					</div>
+				</div>
+			</div>
+		</article>
+		<article class="col-12 col-sm-11">
+			<form class="card mb-5 p-3" method="post" action="settings">
+				<h4>Deactivate Account</h4>
 				<input type="hidden" name="act" value="deactivate">
 				<div class="form-row">
 					<div class="alert alert-danger col-12 col-md-6 mt-3 p-2 text-center">

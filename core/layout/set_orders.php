@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  * https://auspost.com.au/forms/pacpcs-registration.html
@@ -38,14 +38,72 @@ $sv->execute();?>
           </div>
         </div>
         <div class="tabs" role="tablist">
-          <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-          <label for="tab1-1">Shipping</label>
-          <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-          <label for="tab1-2">Payment</label>
-          <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-          <label for="tab1-3">Processing</label>
+          <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+          '<label for="tab1-1">Shipping</label>'.
+          '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+          '<label for="tab1-2">Payment</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+          '<label for="tab1-3">Processing</label>';?>
 <?php /* Tab 1 Postage */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
+            <legend>Holding Options</legend>
+            <div class="row">
+              <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
+                <div class="row">
+                  <div class="col-12 col-md pl-2">Pickup Location</div>
+                  <div class="col-12 col-md pl-2">Postcode From</div>
+                  <div class="col-12 col-md pl-2">Postcode To</div>
+                  <div class="col-12 col-md pl-2" data-tooltip="tooltip" aria-label="Percentage Requirement to Hold Order">% Payment Requirement</div>
+                  <div class="col-12 col-md pl-2">Date Cutoff</div>
+                </div>
+              </article>
+            </div>
+            <?php if($user['options'][7]==1){?>
+              <form class="row" target="sp" method="post" action="core/add_holdoption.php">
+                <div class="col-12 col-md">
+                  <input id="loc" name="loc" type="text" value="" placeholder="Enter Pickup Location...">
+                </div>
+                <div class="col-12 col-md">
+                  <input id="pcfrom" name="pcfrom" type="text" value="" placeholder="Enter Postcode From...">
+                </div>
+                <div class="col-12 col-md">
+                  <input id="pcto" name="pcto" type="text" value="" placeholder="Enter Postcode From...">
+                </div>
+                <div class="col-12 col-md">
+                  <input id="req" name="req" type="text" value="" placholder="% Requirement...">
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="tie" name="tie" type="date" value="" onchange="$(`#tiex`).val(getTimestamp(`tie`));">
+                    <input id="tiex" name="tiex" type="hidden" value="0">
+                    <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                  </div>
+                </div>
+              </form>
+            <?php }?>
+            <div id="holdoptions">
+              <?php $sh=$db->prepare("SELECT `id`,`title`,`postcodeFrom`,`postcodeFrom`,`value`,`tie` FROM `".$prefix."choices` WHERE `contentType`='holdoption' ORDER BY `title` ASC");
+              $sh->execute();
+              while($rh=$sh->fetch(PDO::FETCH_ASSOC)){?>
+                <article id="l_<?=$rh['id'];?>" class="card col-12 zebra m-0 p-0 overflow-visible card-list item shadow">
+                  <div class="row">
+                    <div class="col-12 col-md pl-2 pt-2"><?=$rh['title'];?></div>
+                    <div class="col-12 col-md pl-2 pt-2"><?=$rh['postcodeFrom'];?>&nbsp;</div>
+                    <div class="col-12 col-md pl-2 pt-2"><?=$rh['postcodeTo'];?>&nbsp;</div>
+                    <div class="col-12 col-md pl-2 pt-2"><?=($rh['value']>0?$rh['value'].'% Required':'No Requirement');?></div>
+                    <div class="col-12 col-md pl-2">
+                      <span class="d-inline-block mt-2"><?=($rh['tie']>0?date($config['dateFormat'],$rh['tie']):'No Cutoff');?></span>
+                      <form class="btn-group float-right" target="sp" action="core/purge.php">
+                        <input name="id" type="hidden" value="<?=$rh['id'];?>">
+                        <input name="t" type="hidden" value="choices">
+                        <button class="purge" data-tooltip="tooltip" type="submit" aria-label="Delete"><i class="i">trash</i></button>
+                      </form>
+                    </div>
+                  </div>
+                </article>
+              <?php }?>
+            </div>
+            <hr>
             <legend>Shipping Options</legend>
             <div class="row">
               <article class="card m-0 p-0 py-2 overflow-visible card-list card-list-header shadow">

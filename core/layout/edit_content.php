@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -86,6 +86,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   <?=(isset($_SERVER['HTTP_REFERER'])?'<a href="'.$_SERVER['HTTP_REFERER'].'" role="button" data-tooltip="left" aria-label="Back"><i class="i">back</i></a>':'').
                   '<button class="'.($r['status']=='published'?'':'hidden').'" data-social-share="'.URL.$r['contentType'].'/'.$r['urlSlug'].'" data-social-desc="'.($r['seoDescription']?$r['seoDescription']:$r['title']).'" data-tooltip="left" aria-label="Share on Social Media"><i class="i">share</i></button>'.
                   ($user['options'][0]==1?'<a class="add" href="'.URL.$settings['system']['admin'].'/add/'.$r['contentType'].'" role="button" data-tooltip="left" aria-label="Add '.ucfirst($r['contentType']).'"><i class="i">add</i></a>':'').
+                  ($user['options'][0]==1?'<a class="add" href="'.URL.$settings['system']['admin'].'/copy/'.$r['contentType'].'/'.$r['id'].'" role="button" data-tooltip="left" aria-label="Duplicate '.ucfirst($r['contentType']).'"><i class="i">copy</i></a>':'').
                   ($user['options'][1]==1?'<button class="saveall" data-tooltip="left" aria-label="Save All Edited Fields (ctrl+s)"><i class="i">save-all</i></button>':'');?>
                 </div>
               </div>
@@ -94,18 +95,19 @@ if(!in_array($r['contentType'],['testimonials','list'])){
           <div class="tabs" role="tablist">
             <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
             '<label for="tab1-1"'.($seo['contentcnt']>0?' class="badge" data-badge="'.$seo['contentcnt'].'"':'').'>'.($seo['contentcnt']>0?'<span data-tooltip="tooltip" title aria-label="There'.($seo['contentcnt']>1?' are '.$seo['contentcnt'].' SEO related issues!':' is 1 SEO related issue!').'">Content</span>':'Content').'</label>'.
-            '<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>'.
-            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3">Options</label>':'').
-            ($r['contentType']=='article'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Comments</label>':'').
-            ($r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Reviews</label>':'').
-            ($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Related</label>':'').
-            ($r['contentType']!='testimonials'&&$r['contentType']!='proofs'&&$r['contentType']!='list'?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7" id="seo"'.($seo['seocnt']>0?' class="badge" data-badge="'.$seo['seocnt'].'"':'').'>'.($seo['seocnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['seocnt']>1?' are '.$seo['seocnt'].' SEO related issues!':' is 1 SEO related issue!').'">SEO</span>':'SEO').'</label>':'').
-            ($r['contentType']!='list'?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8">Settings</label>':'').
-            ($r['contentType']=='events'?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Bookings</label>':'').
-            ($r['contentType']!='testimonials'&&$r['contentType']!='list'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Template</label>':'').
-            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-11" name="tabs" type="radio"><label for="tab1-11">Purchases</label>':'').
-            ($r['contentType']=='article'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">List</label>':'').
-            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">Expenses</label>':'');?>
+            (in_array($r['contentType'],['event','inventory','service','events','activities'])?'<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2">Pricing</label>':'').
+            '<input class="tab-control" id="tab1-3" name="tabs" type="radio"><label for="tab1-3"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>'.
+            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4">Options</label>':'').
+            ($r['contentType']=='article'?'<input class="tab-control" id="tab1-5" name="tabs" type="radio"><label for="tab1-5">Comments</label>':'').
+            (in_array($r['contentType'],['inventory','service'])?'<input class="tab-control" id="tab1-6" name="tabs" type="radio"><label for="tab1-6">Reviews</label>':'').
+            (in_array($r['contentType'],['article','inventory','service'])?'<input class="tab-control" id="tab1-7" name="tabs" type="radio"><label for="tab1-7">Related</label>':'').
+            (!in_array($r['contentType'],['testimonials','proofs','list'])?'<input class="tab-control" id="tab1-8" name="tabs" type="radio"><label for="tab1-8" id="seo"'.($seo['seocnt']>0?' class="badge" data-badge="'.$seo['seocnt'].'"':'').'>'.($seo['seocnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['seocnt']>1?' are '.$seo['seocnt'].' SEO related issues!':' is 1 SEO related issue!').'">SEO</span>':'SEO').'</label>':'').
+            ($r['contentType']!='list'?'<input class="tab-control" id="tab1-9" name="tabs" type="radio"><label for="tab1-9">Settings</label>':'').
+            ($r['contentType']=='events'?'<input class="tab-control" id="tab1-10" name="tabs" type="radio"><label for="tab1-10">Bookings</label>':'').
+            (!in_array($r['contentType'],['testimonials','list'])?'<input class="tab-control" id="tab1-11" name="tabs" type="radio"><label for="tab1-11">Template</label>':'').
+            ($r['contentType']=='inventory'?'<input class="tab-control" id="tab1-12" name="tabs" type="radio"><label for="tab1-12">Purchases</label>':'').
+            ($r['contentType']=='article'?'<input class="tab-control" id="tab1-13" name="tabs" type="radio"><label for="tab1-13">List</label>':'');?>
+<?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
               <label for="title" class="mt-0">Title</label>
               <div class="form-row">
@@ -141,7 +143,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   return str;
                 }
               </script>
-              <?php echo($r['contentType']=='inventory'?'<div class="row"><div class="col-12 col-sm-7">':'');
+              <?php echo($r['contentType']=='inventory'?'<div class="row"><div class="col-12 col-sm">':'');
               if($r['contentType']=='list'){?>
                 <label for="urlSlug">URL</label>
                 <div class="form-row">
@@ -164,7 +166,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                       <input id="ti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['ti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`ti`,getTimestamp(`ti`),`select`);"':' readonly';?>>
                     </div>
                   </div>
-                  <div class="col-12<?=($r['contentType']=='inventory'?'':' col-sm-6');?>">
+                  <div class="col-12<?=($r['contentType']=='inventory'?'':' col-sm-6');?> mb-3">
                     <label for="pti">Published On <span class="labeldate" id="labeldatepti">(<?= date($config['dateFormat'],$r['pti']);?>)</span></label>
                     <div class="form-row">
                       <input id="pti" type="datetime-local" value="<?= date('Y-m-d\TH:i',$r['pti']);?>" autocomplete="off"<?=$user['options'][1]==1?' onchange="update(`'.$r['id'].'`,`content`,`pti`,getTimestamp(`pti`),`select`);"':' readonly';?>>
@@ -172,7 +174,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   </div>
                 </div>
               <?php }
-              echo($r['contentType']=='inventory'?'</div><div class="col-12 col-sm-5 pl-0 pl-sm-3">':'');
+              echo($r['contentType']=='inventory'?'</div><div class="col-12 col-sm-6 pl-0 pl-sm-3">':'');
                 if($r['contentType']=='inventory'){
                   include'core/layout/widget-contentstats.php';
                 }
@@ -190,7 +192,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                 </div>
               <?php }
               if($r['contentType']!='list'){?>
-                <label for="uid">Author</label>
+                <label for="uid" class="mt-0">Author</label>
                 <div class="form-row">
                   <select id="uid" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="uid"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','uid',$(this).val(),'select');">
                     <?php $su=$db->query("SELECT `id`,`username`,`name` FROM `".$prefix."login` WHERE `username`!='' AND `status`!='delete' ORDER BY `username` ASC, `name` ASC");
@@ -273,43 +275,46 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                       </script>
                     </div>
                   <?php }
-                }
-              if($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']!='list'){?>
-                <label for="code">Code</label>
-                <div class="form-row">
-                  <input class="textinput" id="code" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?=$r['code'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
-                  <?=$user['options'][1]==1?'<button class="save" id="savecode" data-dbid="code" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-              <?php }
-              if($r['contentType']=='inventory'){?>
+                }?>
                 <div class="row">
-                  <div class="col-12 col-sm-6 pr-md-3">
-                    <label for="barcode">Barcode</label>
-                    <div class="form-row">
-                      <input class="textinput" id="barcode" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="barcode" type="text" value="<?=$r['barcode'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Barcode..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="savebarcode" data-dbid="barcode" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                  <?php if($r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']!='list'){?>
+                    <div class="col-12 col-sm pr-sm-3">
+                      <label for="code">Code</label>
+                      <div class="form-row">
+                        <input class="textinput" id="code" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="code" type="text" value="<?=$r['code'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Code..."':' readonly';?>>
+                        <?=$user['options'][1]==1?'<button class="save" id="savecode" data-dbid="code" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      </div>
                     </div>
-                  </div>
-                  <div class="col-12 col-sm-6 pl-md-3">
-                    <label for="fccid">FCCID</label>
-                    <div class="form-row">
-                      <input class="textinput" id="fccid" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="fccid" type="text" value="<?=$r['fccid'];?>"<?=$user['options'][1]==1?' placeholder="Enter an FCCID..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="savefccid" data-dbid="fccid" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                  <?php }
+                  if($r['contentType']=='inventory'){?>
+                    <div class="col-12 col-sm pr-sm-3">
+                      <label for="barcode">Barcode</label>
+                      <div class="form-row">
+                        <input class="textinput" id="barcode" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="barcode" type="text" value="<?=$r['barcode'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Barcode..."':' readonly';?>>
+                        <?=$user['options'][1]==1?'<button class="save" id="savebarcode" data-dbid="barcode" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      </div>
                     </div>
-                    <?=$user['options'][1]==1?'<div class="form-text small text-muted float-right"><a target="_blank" href="https://fccid.io/">fccid.io</a> for more information or to look up an FCC ID.</div>':'';?>
+                    <div class="col-12 col-sm">
+                      <label for="fccid">FCCID<?=$user['options'][1]==1?'<i class="i ml-3" data-tooltip="tooltip" aria-label="Visit https://fccid.io/ for more information or to look up an FCC ID.">help</i>':'';?></label>
+                      <div class="form-row">
+                        <input class="textinput" id="fccid" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="fccid" type="text" value="<?=$r['fccid'];?>"<?=$user['options'][1]==1?' placeholder="Enter an FCCID..."':' readonly';?>>
+                        <?=$user['options'][1]==1?'<button class="save" id="savefccid" data-dbid="fccid" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                      </div>
+                    </div>
+                  <?php }?>
+                </div>
+                <?php if($r['contentType']=='inventory'){?>
+                  <label for="brand">Brand</label>
+                  <div class="form-row">
+                    <select id="brand" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="brand"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','brand',$(this).val(),'select');">
+                      <option value="">None</option>
+                      <?php $s=$db->query("SELECT `id`,`title` FROM `".$prefix."choices` WHERE `contentType`='brand' ORDER BY `title` ASC");
+                      if($s->rowCount()>0){
+                        while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['brand']?' selected':'').'>'.$rs['title'].'</option>';
+                      }?>
+                    </select>
                   </div>
-                </div>
-                <label for="brand">Brand</label>
-                <div class="form-row">
-                  <select id="brand" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="brand"<?=$user['options'][1]==1?'':' disabled';?> onchange="update('<?=$r['id'];?>','content','brand',$(this).val(),'select');">
-                    <option value="">None</option>
-                    <?php $s=$db->query("SELECT `id`,`title` FROM `".$prefix."choices` WHERE `contentType`='brand' ORDER BY `title` ASC");
-                    if($s->rowCount()>0){
-                      while($rs=$s->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rs['id'].'"'.($rs['id']==$r['brand']?' selected':'').'>'.$rs['title'].'</option>';
-                    }?>
-                  </select>
-                </div>
-              <?php }
+                <?php }
               if($r['contentType']=='events'){?>
                 <div class="row">
                   <div class="col-12 col-sm-4 pr-md-3">
@@ -448,22 +453,9 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   </div>
                 </div>
               <?php }
-              if($r['contentType']=='inventory'){?>
-                <label for="sale">Associate with Sale Period</label>
-                <div class="form-row">
-                  <select id="sale"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Sale"':' disabled';?> onchange="update('<?=$r['id'];?>','content','sale',$(this).val(),'select');">
-                    <option value=""<?=$r['sale']==''?' selected':''?>>No Holiday</option>
-                    <?php $ssa=$db->prepare("SELECT DISTINCT(`code`) FROM `".$prefix."choices` WHERE `contentType`='sales' ORDER BY `code` ASC");
-                    $ssa->execute();
-                    while($rsa=$ssa->fetch(PDO::FETCH_ASSOC)){
-                      echo'<option value="'.$rsa['code'].'"'.($r['sale']==$rsa['code']?' selected':'').'>'.$rsa['code'].'</option>';
-                    }?>
-                  </select>
-                </div>
-              <?php }
               if($r['contentType']=='article'||$r['contentType']=='portfolio'||$r['contentType']=='event'||$r['contentType']=='news'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
                 <div class="row">
-                  <div class="col-12 col-sm-6 pr-md-3">
+                  <div class="col-12 col-sm pr-sm-3">
                     <label for="category_1">Category One</label>
                     <div class="form-row">
                       <input class="textinput" id="category_1" list="category_1_options" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="category_1" type="text" value="<?=$r['category_1'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
@@ -483,7 +475,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                       }?>
                     </div>
                   </div>
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm pr-sm-3">
                     <label for="category_2">Category Two</label>
                     <div class="form-row">
                       <input class="textinput" id="category_2" list="category_2_options" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="category_2" type="text" value="<?=$r['category_2'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
@@ -498,9 +490,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                       }?>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-6 pr-md-3">
+                  <div class="col-12 col-sm pr-sm-3">
                     <label for="category_3">Category Three</label>
                     <div class="form-row">
                       <input class="textinput" id="category_3" list="category_3_options" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="category_3" type="text" value="<?=$r['category_3'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
@@ -515,7 +505,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                       }?>
                     </div>
                   </div>
-                  <div class="col-12 col-sm-6">
+                  <div class="col-12 col-sm">
                     <label for="category_4">Category Four</label>
                     <div class="form-row">
                       <input class="textinput" id="category_4" list="category_4_options" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="category_4" type="text" value="<?=$r['category_4'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Category or Select from List..."':' readonly';?>>
@@ -567,127 +557,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   </script>
                 </div>
               <?php }
-              if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
-                <div class="row">
-                  <div class="col-12 col-sm">
-                    <div class="form-row mt-5">
-                      <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                      <label for="<?=$r['contentType'];?>showCost">Show Cost</label>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm pl-3">
-                    <label for="cost">Cost</label>
-                    <div class="form-row">
-                      <div class="input-text">$</div>
-                      <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
-                      <?php if($r['cost']==0)
-                        $gst=0;
-                      else{
-                        if(isset($config['gst'])&&is_numeric($config['gst'])){
-                          $gst=$r['cost'] * ($config['gst'] / 100);
-                          $gst=$r['cost'] + $gst;
-                          $gst=number_format((float)$gst,2,'.','');
-                        }else
-                          $gst=0;
-                      }?>
-                      <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstcost" data-gst="Incl. GST"><?=$gst;?></div>
-                      <?=($user['options'][1]==1?
-                        ($r['contentType']=='inventory'?
-                          '<button data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Calculate Cost from Expense + Wholesale'.($config['gst']>0?' + GST':'').'" onclick="calcCost();"><i class="i">recalculate-expenses</i></button>'
-                        :
-                          '').
-                        '<button class="save" id="savecost" data-dbid="cost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
-                      :
-                        '');?>
-                    </div>
-                  </div>
-                  <?php if($r['contentType']=='inventory'){?>
-                    <div class="col-12 col-sm pl-3">
-                      <label for="expense" data-tooltip="tooltip" aria-label="Expenses Cost">Expense</label>
-                      <div class="form-row">
-                        <div class="input-text">$</div>
-                        <input class="textinput" id="expense" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="expense" type="text" value="<?=$r['expense'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Expenses Value..."':' readonly';?>>
-                        <?=($user['options'][1]==1?
-                          '<button class="expense" data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Recalculate Expense" onclick="recalcExpense();"><i class="i">recalculate-expenses</i></button>'.
-                          '<button class="save" id="saveexpense" data-dbid="expense" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
-                        :
-                          '');?>
-                      </div>
-                    </div>
-                  <?php }?>
-                </div>
-                <div class="row">
-                  <?php if($r['contentType']!='activities'){?>
-                    <div class="col-12 col-sm pr-3">
-                      <label for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>
-                      <div class="form-row">
-                        <div class="input-text">$</div>
-                        <input class="textinput" id="rrp" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?=$r['rrp'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
-                        <?=$user['options'][1]==1?'<button class="save" id="saverrp" data-dbid="rrp" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                      </div>
-                    </div>
-                  <?php }?>
-                  <?php if($r['contentType']!='activities'){?>
-                    <div class="col-12 col-sm pr-3">
-                      <label for="rCost">Reduced Cost</label>
-                      <div class="form-row">
-                        <div class="input-text">$</div>
-                        <input class="textinput" id="rCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?=$r['rCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
-                        <?php if($r['cost']==0)
-                          $gst=0;
-                        else{
-                          if(isset($config['gst'])&&is_numeric($config['gst'])){
-                            $gst=$r['rCost']*($config['gst']/100);
-                            $gst=$r['rCost']+$gst;
-                            $gst=number_format((float)$gst,2,'.','');
-                          }else
-                            $gst=0;
-                        }?>
-                        <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstrCost" data-gst="Incl. GST"><?=$gst;?></div>
-                        <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-dbid="rCost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                      </div>
-                    </div>
-                    <div class="col-12 col-sm">
-                      <label for="dCost">Wholesale Cost</label>
-                      <div class="form-row">
-                        <div class="input-text">$</div>
-                        <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Wholesale Cost..."':' readonly';?>>
-                        <?=$user['options'][1]==1?'<button class="save" id="savedCost" data-dbid="dCost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                      </div>
-                    </div>
-                  <?php }?>
-                  <script>
-                    function recalcExpense(){
-                      var total = [].slice
-                        .call(document.querySelectorAll('#expenses [data-cost]'))
-                        .map(el => Number(el.getAttribute('data-cost')))
-                        .reduce((a, b) => {
-                          return a + b;
-                        });
-                      $('#expense').val((Math.round(total * 100) / 100).toFixed(2));
-                      update(`<?=$r['id'];?>`,`content`,`expense`,total);
-                    }
-                    function calcCost(){
-                      <?php if(isset($config['gst'])&&is_numeric($config['gst'])){?>
-                        var gst=<?php echo$config['gst'];?>;
-                      <?php }else{?>
-                        var gst=0;
-                      <?php }?>
-                      var expense=parseInt($('#expense').val());
-                      if(expense==0){
-                        toastr["error"](`Expense requires a value!`);
-                      }else{
-                        var wholesale=parseInt($('#dCost').val());
-                        var total=expense + wholesale;
-                        var totalgst=total + (total * (gst / 100));
-                        $('#cost').val((Math.round(total * 100) / 100).toFixed(2));
-                        $('#gstcost').text((Math.round(totalgst * 100) / 100).toFixed(2));
-                        update(`<?=$r['id'];?>`,`content`,`cost`,total);
-                      }
-                    }
-                  </script>
-                </div>
-              <?php }
+
               if($r['contentType']=='events'){?>
                 <div class="col-12">
                   <label for="exturl">External URL</label>
@@ -696,160 +566,8 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                     <?=$user['options'][1]==1?'<button class="save" id="saveexturl" data-dbid="exturl" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
-              <?php }
-              if($r['contentType']=='inventory'||$r['contentType']=='activities'){?>
-                <div class="row">
-                  <div class="col-12 col-sm-4 pr-md-3">
-                    <label for="quantity">Quantity</label>
-                    <div class="form-row">
-                      <input class="textinput" id="quantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?=$r['quantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="savequantity" data-dbid="quantity" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-4 pr-md-3">
-                    <label for="cartonQuantity">Carton Quantity</label>
-                    <div class="form-row">
-                      <input class="textinput" id="cartonQuantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="cartonQuantity" type="text" value="<?=$r['cartonQuantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Carton Quantity..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="savecartonQuantity" data-dbid="cartonQuantity" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm-4">
-                    <label for="points">Points Value</label>
-                    <div class="form-row">
-                      <input class="textinput" id="points" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="points" type="text" value="<?=$r['points'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Points Value..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="savepoints" data-dbid="points" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm pr-md-3">
-                    <label for="stockStatus">Stock Status</label>
-                    <div class="form-row">
-                      <select id="stockStatus"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');">
-                        <option value="quantity"<?=$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
-                        <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
-                        <option value="discontinued"<?=$r['stockStatus']=='discontinued'?' selected':'';?>>Discontinued</option>
-                        <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
-                        <option value="in store only"<?=$r['stockStatus']=='in store only'?' selected':'';?>>In Store Only</option>
-                        <option value="limited availability"<?=$r['stockStatus']=='limited availability'?' selected':'';?>>Limited Availability</option>
-                        <option value="online only"<?=$r['stockStatus']=='online only'?' selected':'';?>>Online Only</option>
-                        <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
-                        <option value="pre order"<?=$r['stockStatus']=='pre order'?' selected':'';?>>Pre Order</option>
-                        <option value="pre sale"<?=$r['stockStatus']=='pre sale'?' selected':'';?>>Pre Sale</option>
-                        <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
-                        <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
-                        <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'');?>>No Display</option>
-                      </select>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm">
-                    <label for="itemCondition">Condition</label>
-                    <div class="form-row">
-                      <select id="itemCondition"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?=$r['id'];?>','content','itemCondition',$(this).val(),'select');">
-                        <option value=""<?=$r['itemCondition']==''?' selected':'';?>>None</option>
-                        <option value="acceptable"<?=$r['itemCondition']=='acceptable'?' selected':'';?>>Acceptable</option>
-                        <option value="brand new"<?=$r['itemCondition']=='brand new'?' selected':'';?>>Brand New</option>
-                        <option value="certified pre-owned"<?=$r['itemCondition']=='certified pre-owned'?' selected':'';?>>Certified Pre-Owned</option>
-                        <option value="damaged"<?=$r['itemCondition']=='damaged'?' selected':'';?>>Damaged</option>
-                        <option value="excellent"<?=$r['itemCondition']=='excellent'?' selected':'';?>>Excellent</option>
-                        <option value="fair"<?=$r['itemCondition']=='fair'?' selected':'';?>>Fair</option>
-                        <option value="for parts"<?=$r['itemCondition']=='for parts'?' selected':'';?>>For Parts</option>
-                        <option value="good"<?=$r['itemCondition']=='good'?' selected':'';?>>Good</option>
-                        <option value="like new"<?=$r['itemCondition']=='like new'?' selected':'';?>>Like New</option>
-                        <option value="mint"<?=$r['itemCondition']=='mint'?' selected':'';?>>Mint</option>
-                        <option value="mint in box"<?=$r['itemCondition']=='mint in box'?' selected':'';?>>Mint In Box</option>
-                        <option value="new"<?=$r['itemCondition']=='new'?' selected':'';?>>New</option>
-                        <option value="new with box"<?=$r['itemCondition']=='new with box'?' selected':'';?>>New With Box</option>
-                        <option value="new with defects"<?=$r['itemCondition']=='new with defects'?' selected':'';?>>New With Defects</option>
-                        <option value="new with tags"<?=$r['itemCondition']=='new with tags'?' selected':'';?>>New With Tags</option>
-                        <option value="new without box"<?=$r['itemCondition']=='new without box'?' selected':'';?>>New Without Box</option>
-                        <option value="new without tags"<?=$r['itemCondition']=='new without tags'?' selected':'';?>>New Without Tags</option>
-                        <option value="non functioning"<?=$r['itemCondition']=='non functioning'?' selected':'';?>>Non Functioning</option>
-                        <option value="poor"<?=$r['itemCondition']=='poor'?' selected':'';?>>Poor</option>
-                        <option value="pre-owned"<?=$r['itemCondition']=='pre-owned'?' selected':'';?>>Pre-Owned</option>
-                        <option value="refurbished"<?=$r['itemCondition']=='refurbished'?' selected':'';?>>Refurbished</option>
-                        <option value="remanufactured"<?=$r['itemCondition']=='remanufactured'?' selected':'';?>>Remanufactured</option>
-                        <option value="seasoned"<?=$r['itemCondition']=='seasoned'?' selected':'';?>>Seasoned</option>
-                        <option value="unseasoned"<?=$r['itemCondition']=='unseasoned'?' selected':'';?>>Unseasoned</option>
-                        <option value="used"<?=$r['itemCondition']=='used'?' selected':'';?>>Used</option>
-                        <option value="very good"<?=$r['itemCondition']=='very good'?' selected':'';?>>Very Good</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-                <label for="weight">Weight</label>
-                <div class="form-row">
-                  <input class="textinput" id="weight" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="weight" type="text" value="<?=$r['weight'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Weight..."':' readonly';?>>
-                  <select id="weightunit" onchange="update('<?=$r['id'];?>','content','weightunit',$(this).val(),'select');"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Weight Unit"':' disabled';?>>
-                    <option value="mg"<?=$r['weightunit']=='mg'?' selected':'';?>>Milligrams (mg)</option>
-                    <option value="g"<?=$r['weightunit']=='g'?' selected':'';?>>Grams (g)</option>
-                    <option value="kg"<?=$r['weightunit']=='kg'?' selected':'';?>>Kilograms (kg)</option>
-                    <option value="lb"<?=$r['weightunit']=='lb'?' selected':'';?>>Pound (lb)</option>
-                    <option value="t"<?=$r['weightunit']=='t'?' selected':'';?>>Tonne (t)</option>
-                  </select>
-                  <?=$user['options'][1]==1?'<button class="save" id="saveweight"  data-dbid="weight" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm pr-md-3">
-                    <label for="width">Width</label>
-                    <div class="form-row">
-                      <input class="textinput" id="width" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="width" type="text" value="<?=$r['width'];?>"<?=$user['options'][1]==1?' placeholder="Width"':' readonly';?>>
-                      <select id="widthunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Width Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','widthunit',$(this).val(),'select');">
-                        <option value="um"<?=$r['widthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
-                        <option value="mm"<?=$r['widthunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
-                        <option value="cm"<?=$r['widthunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
-                        <option value="in"<?=$r['widthunit']=='in'?' selected':'';?>>Inch (in)</option>
-                        <option value="ft"<?=$r['widthunit']=='ft'?' selected':'';?>>Foot (ft)</option>
-                        <option value="m"<?=$r['widthunit']=='m'?' selected':'';?>>Metre (m)</option>
-                        <option value="km"<?=$r['widthunit']=='km'?' selected':'';?>>Kilometre (km)</option>
-                        <option value="mi"<?=$r['widthunit']=='mi'?' selected':'';?>>Mile (mi)</option>
-                        <option value="nm"<?=$r['widthunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
-                        <option value="yard"<?=$r['widthunit']=='yd'?' selected':'';?>>Yard (yd)</option>
-                      </select>
-                      <?=$user['options'][1]==1?'<button class="save" id="savewidth" data-dbid="width" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm pr-md-3">
-                    <label for="height">Height</label>
-                    <div class="form-row">
-                      <input class="textinput" id="height" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="height"<?=$user['options'][1]==1?' placeholder="Height"':' readonly';?> type="text" value="<?=$r['height'];?>">
-                      <select id="heightunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Height Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','heightunit',$(this).val(),'select');">
-                        <option value="um"<?=$r['heightunit']=='um'?' selected':'';?>>Micrometre (um)</option>
-                        <option value="mm"<?=$r['heightunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
-                        <option value="cm"<?=$r['heightunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
-                        <option value="in"<?=$r['heightunit']=='in'?' selected':'';?>>Inch (in)</option>
-                        <option value="ft"<?=$r['heightunit']=='ft'?' selected':'';?>>Foot (ft)</option>
-                        <option value="m"<?=$r['heightunit']=='m'?' selected':'';?>>Metre (m)</option>
-                        <option value="km"<?=$r['heightunit']=='km'?' selected':'';?>>Kilometre (km)</option>
-                        <option value="mi"<?=$r['heightunit']=='mi'?' selected':'';?>>Mile (mi)</option>
-                        <option value="nm"<?=$r['heightunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
-                        <option value="yard"<?=$r['heightunit']=='yd'?' selected':'';?>>Yard (yd)</option>
-                      </select>
-                      <?=$user['options'][1]==1?'<button class="save" id="saveheight" data-dbid="height" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm">
-                    <label for="length">Length</label>
-                    <div class="form-row">
-                      <input class="textinput" id="length" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="length" type="text" value="<?=$r['length'];?>"<?=$user['options'][1]==1?' placeholder="Length"':' readonly';?>>
-                      <select id="lengthunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Length Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','lengthunit',$(this).val(),'select');">
-                        <option value="um"<?=$r['lengthunit']=='um'?' selected':'';?>>Micrometre (um)</option>
-                        <option value="mm"<?=$r['lengthunit']=='mm'?' selected':'';?>>Millimetre (mm)</option>
-                        <option value="cm"<?=$r['lengthunit']=='cm'?' selected':'';?>>Centimetre (cm)</option>
-                        <option value="in"<?=$r['lengthunit']=='in'?' selected':'';?>>Inch (in)</option>
-                        <option value="ft"<?=$r['lengthunit']=='ft'?' selected':'';?>>Foot (ft)</option>
-                        <option value="m"<?=$r['lengthunit']=='m'?' selected':'';?>>Metre (m)</option>
-                        <option value="km"<?=$r['lengthunit']=='km'?' selected':'';?>>Kilometre (km)</option>
-                        <option value="mi"<?=$r['lengthunit']=='mi'?' selected':'';?>>Mile (mi)</option>
-                        <option value="nm"<?=$r['lengthunit']=='nm'?' selected':'';?>>Nanomatre (nm)</option>
-                        <option value="yard"<?=$r['lengthunit']=='yd'?' selected':'';?>>Yard (yd)</option>
-                      </select>
-                      <?=$user['options'][1]==1?'<button class="save" id="savelength" data-dbid="length" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                </div>
               <?php }?>
-              <div class="row mt-3<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?' border-danger border-2':'';?>">
+              <div class="row mt-4<?=$seo['contentNotes']!=''||$seo['contentNotesHeading']!=''||$seo['contentImagesNotes']!=''?' border-danger border-2':'';?>">
                 <?php if($user['options'][1]==1){?>
                   <div class="wysiwyg-toolbar"><div class="btn-group d-flex justify-content-end">
                     <?php if($r['suggestions']==1){
@@ -886,14 +604,409 @@ if(!in_array($r['contentType'],['testimonials','list'])){
               </div>
               <div class="form-text small text-muted">Edited: <?=$r['eti']==0?'Never':date($config['dateFormat'],$r['eti']).' by '.$r['login_user'];?></div>
             </div>
+<?php /* Pricing */?>
+            <?php if($r['contentType']=='event'||$r['contentType']=='inventory'||$r['contentType']=='service'||$r['contentType']=='events'||$r['contentType']=='activities'){?>
+              <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
+                <div class="tabs3" role="tablist">
+                  <?='<input class="tab-control" id="tab3-1" name="tabs3" type="radio" checked>'.
+                  '<label for="tab3-1">Prices</label>'.
+                  (in_array($r['contentType'],['activities','events','inventory','service'])?
+                    '<input class="tab-control" id="tab3-2" name="tabs3" type="radio">'.
+                    '<label for="tab3-2">Expenses</label>'
+                  :'');?>
+<?php /* Prices */ ?>
+                  <div class="tab3-1 border p-3 pt-0" data-tabid="tab3-1" role="tabpanel">
+                    <div class="form-row">
+                      <input id="<?=$r['contentType'];?>showCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                      <label for="<?=$r['contentType'];?>showCost">Show Cost</label>
+                    </div>
+                    <div class="row">
+                      <div class="col-12 col-sm">
+                        <label for="cost">Cost</label>
+                        <div class="form-row">
+                          <div class="input-text">$</div>
+                          <input class="textinput" id="cost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="cost" type="text" value="<?=$r['cost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Cost..."':' readonly';?>>
+                          <?php if($r['cost']==0)
+                            $gst=0;
+                          else{
+                            if(isset($config['gst'])&&is_numeric($config['gst'])){
+                              $gst=$r['cost'] * ($config['gst'] / 100);
+                              $gst=$r['cost'] + $gst;
+                              $gst=number_format((float)$gst,2,'.','');
+                            }else
+                              $gst=0;
+                          }?>
+                          <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstcost" data-gst="Incl. GST"><?=$gst;?></div>
+                          <?=($user['options'][1]==1?
+                            (in_array($r['contentType'],['activities','events','inventory','services'])?
+                              '<button data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Calculate Cost from Expense + Wholesale'.($config['gst']>0?' + GST':'').'" onclick="calcCost();"><i class="i">recalculate-expenses</i></button>'
+                            :
+                              '').
+                            '<button class="save" id="savecost" data-dbid="cost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                          :
+                            '');?>
+                        </div>
+                      </div>
+                      <?php if(in_array($r['contentType'],['activities','events','inventory','service'])){?>
+                        <div class="col-12 col-sm pl-sm-3">
+                          <label for="expense" data-tooltip="tooltip" aria-label="Expenses Cost">Expense</label>
+                          <div class="form-row">
+                            <div class="input-text">$</div>
+                            <input class="textinput" id="expense" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="expense" type="text" value="<?=$r['expense'];?>"<?=$user['options'][1]==1?' placeholder="Enter an Expenses Value..."':' readonly';?>>
+                            <?=($user['options'][1]==1?
+                              '<button class="expense" data-dbid="'.$r['id'].'" data-tooltip="tooltip" aria-label="Recalculate Expense" onclick="recalcExpense();"><i class="i">recalculate-expenses</i></button>'.
+                              '<button class="save" id="saveexpense" data-dbid="expense" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                            :
+                              '');?>
+                          </div>
+                        </div>
+                      <?php }
+                      if($r['contentType']!='activities'){?>
+                        <div class="col-12 col-sm pl-sm-3">
+                          <label for="rrp" data-tooltip="tooltip" aria-label="Recommended Retail Price">RRP</label>
+                          <div class="form-row">
+                            <div class="input-text">$</div>
+                            <input class="textinput" id="rrp" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rrp" type="text" value="<?=$r['rrp'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Recommended Retail Cost..."':' readonly';?>>
+                            <?=$user['options'][1]==1?'<button class="save" id="saverrp" data-dbid="rrp" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                          </div>
+                        </div>
+                      <?php }?>
+                      <div class="col-12 col-sm pl-sm-3">
+                        <label for="rCost">Reduced Cost</label>
+                        <div class="form-row">
+                          <div class="input-text">$</div>
+                          <input class="textinput" id="rCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rCost" type="text" value="<?=$r['rCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Reduced Cost..."':' readonly';?>>
+                          <?php if($r['cost']==0)
+                            $gst=0;
+                          else{
+                            if(isset($config['gst'])&&is_numeric($config['gst'])){
+                              $gst=$r['rCost']*($config['gst']/100);
+                              $gst=$r['rCost']+$gst;
+                              $gst=number_format((float)$gst,2,'.','');
+                            }else
+                              $gst=0;
+                          }?>
+                          <div class="input-text<?=$config['gst']==0?' d-none':'';?>" id="gstrCost" data-gst="Incl. GST"><?=$gst;?></div>
+                          <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-dbid="rCost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                        </div>
+                      </div>
+                      <?php if(!in_array($r['contentType'],['activities','events'])){?>
+                        <div class="col-12 col-sm pl-sm-3">
+                          <label for="dCost">Wholesale Cost</label>
+                          <div class="form-row">
+                            <div class="input-text">$</div>
+                            <input class="textinput" id="dCost" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="dCost" type="text" value="<?=$r['dCost'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Wholesale Cost..."':' readonly';?>>
+                            <?=$user['options'][1]==1?'<button class="save" id="savedCost" data-dbid="dCost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                          </div>
+                        </div>
+                      <?php }?>
+                      <script>
+                        function recalcExpense(){
+                          var total = [].slice
+                            .call(document.querySelectorAll('#expenses [data-cost]'))
+                            .map(el => Number(el.getAttribute('data-cost')))
+                            .reduce((a, b) => {
+                              return a + b;
+                            });
+                            $('#expense').val((Math.round(total * 100) / 100).toFixed(2));
+                            update(`<?=$r['id'];?>`,`content`,`expense`,total);
+                          }
+                          function calcCost(){
+                            <?php if(isset($config['gst'])&&is_numeric($config['gst'])){?>
+                              var gst=<?php echo$config['gst'];?>;
+                            <?php }else{?>
+                              var gst=0;
+                            <?php }?>
+                            var expense=parseInt($('#expense').val());
+                            if(expense==0){
+                              toastr["error"](`Expense requires a value!`);
+                            }else{
+                              var wholesale=parseInt($('#dCost').val());
+                              var total=expense + wholesale;
+                              var totalgst=total + (total * (gst / 100));
+                              $('#cost').val((Math.round(total * 100) / 100).toFixed(2));
+                              $('#gstcost').text((Math.round(totalgst * 100) / 100).toFixed(2));
+                              update(`<?=$r['id'];?>`,`content`,`cost`,total);
+                            }
+                          }
+                        </script>
+                      </div>
+                      <?php if(in_array($r['contentType'],['activities','inventory'])){?>
+                        <div class="row">
+                          <div class="col-12 col-sm">
+                            <label for="quantity">Quantity</label>
+                            <div class="form-row">
+                              <input class="textinput" id="quantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="quantity" type="text" value="<?=$r['quantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Quantity..."':' readonly';?>>
+                              <?=$user['options'][1]==1?'<button class="save" id="savequantity" data-dbid="quantity" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                            </div>
+                          </div>
+                          <?php if($r['contentType']=='inventory'){?>
+                            <div class="col-12 col-sm pl-sm-3">
+                              <label for="cartonQuantity">Carton Quantity</label>
+                              <div class="form-row">
+                                <input class="textinput" id="cartonQuantity" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="cartonQuantity" type="text" value="<?=$r['cartonQuantity'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Carton Quantity..."':' readonly';?>>
+                                <?=$user['options'][1]==1?'<button class="save" id="savecartonQuantity" data-dbid="cartonQuantity" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                              </div>
+                            </div>
+                          <?php }?>
+                          <div class="col-12 col-sm pl-sm-3">
+                            <label for="points">Points Value</label>
+                            <div class="form-row">
+                              <input class="textinput" id="points" data-dbid="<?= $r['id'];?>" data-dbt="content" data-dbc="points" type="text" value="<?=$r['points'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Points Value..."':' readonly';?>>
+                              <?=$user['options'][1]==1?'<button class="save" id="savepoints" data-dbid="points" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                            </div>
+                          </div>
+                        </div>
+                      <?php }
+                      if($r['contentType']=='inventory'){?>
+                        <label for="sale">Associate with Sale Period</label>
+                        <div class="form-row">
+                          <select id="sale"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Sale"':' disabled';?> onchange="update('<?=$r['id'];?>','content','sale',$(this).val(),'select');">
+                            <option value=""<?=$r['sale']==''?' selected':''?>>No Holiday</option>
+                            <?php $ssa=$db->prepare("SELECT DISTINCT(`code`) FROM `".$prefix."choices` WHERE `contentType`='sales' ORDER BY `code` ASC");
+                            $ssa->execute();
+                            while($rsa=$ssa->fetch(PDO::FETCH_ASSOC)){
+                              echo'<option value="'.$rsa['code'].'"'.($r['sale']==$rsa['code']?' selected':'').'>'.$rsa['code'].'</option>';
+                            }?>
+                          </select>
+                        </div>
+                      <?php }
+                      if($r['contentType']=='inventory'){?>
+                        <div class="row">
+                          <div class="col-12 col-sm">
+                            <label for="stockStatus">Stock Status</label>
+                            <div class="form-row">
+                              <select id="stockStatus"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Stock Status"':' disabled';?> onchange="update('<?=$r['id'];?>','content','stockStatus',$(this).val(),'select');">
+                                <option value="quantity"<?=$r['stockStatus']=='quantity'?' selected':''?>>Dependant on Quantity (In Stock/Out Of Stock)</option>
+                                <option value="back order"<?=$r['stockStatus']=='back order'?' selected':'';?>>Back Order</option>
+                                <option value="discontinued"<?=$r['stockStatus']=='discontinued'?' selected':'';?>>Discontinued</option>
+                                <option value="in stock"<?=$r['stockStatus']=='in stock'?' selected':'';?>>In Stock</option>
+                                <option value="in store only"<?=$r['stockStatus']=='in store only'?' selected':'';?>>In Store Only</option>
+                                <option value="limited availability"<?=$r['stockStatus']=='limited availability'?' selected':'';?>>Limited Availability</option>
+                                <option value="online only"<?=$r['stockStatus']=='online only'?' selected':'';?>>Online Only</option>
+                                <option value="out of stock"<?=$r['stockStatus']=='out of stock'?' selected':'';?>>Out Of Stock</option>
+                                <option value="pre order"<?=$r['stockStatus']=='pre order'?' selected':'';?>>Pre Order</option>
+                                <option value="pre sale"<?=$r['stockStatus']=='pre sale'?' selected':'';?>>Pre Sale</option>
+                                <option value="sold out"<?=$r['stockStatus']=='sold out'?' selected':'';?>>Sold Out</option>
+                                <option value="available"<?=$r['stockStatus']=='available'?' selected':'';?>>Available</option>
+                                <option value="none"<?=($r['stockStatus']=='none'||$r['stockStatus']==''?' selected':'');?>>No Display</option>
+                              </select>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm pl-sm-3">
+                            <label for="itemCondition">Condition</label>
+                            <div class="form-row">
+                              <select id="itemCondition"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Condition"':' disabled';?> onchange="update('<?=$r['id'];?>','content','itemCondition',$(this).val(),'select');">
+                                <option value=""<?=$r['itemCondition']==''?' selected':'';?>>None</option>
+                                <option value="acceptable"<?=$r['itemCondition']=='acceptable'?' selected':'';?>>Acceptable</option>
+                                <option value="brand new"<?=$r['itemCondition']=='brand new'?' selected':'';?>>Brand New</option>
+                                <option value="certified pre-owned"<?=$r['itemCondition']=='certified pre-owned'?' selected':'';?>>Certified Pre-Owned</option>
+                                <option value="damaged"<?=$r['itemCondition']=='damaged'?' selected':'';?>>Damaged</option>
+                                <option value="excellent"<?=$r['itemCondition']=='excellent'?' selected':'';?>>Excellent</option>
+                                <option value="fair"<?=$r['itemCondition']=='fair'?' selected':'';?>>Fair</option>
+                                <option value="for parts"<?=$r['itemCondition']=='for parts'?' selected':'';?>>For Parts</option>
+                                <option value="good"<?=$r['itemCondition']=='good'?' selected':'';?>>Good</option>
+                                <option value="like new"<?=$r['itemCondition']=='like new'?' selected':'';?>>Like New</option>
+                                <option value="mint"<?=$r['itemCondition']=='mint'?' selected':'';?>>Mint</option>
+                                <option value="mint in box"<?=$r['itemCondition']=='mint in box'?' selected':'';?>>Mint In Box</option>
+                                <option value="new"<?=$r['itemCondition']=='new'?' selected':'';?>>New</option>
+                                <option value="new with box"<?=$r['itemCondition']=='new with box'?' selected':'';?>>New With Box</option>
+                                <option value="new with defects"<?=$r['itemCondition']=='new with defects'?' selected':'';?>>New With Defects</option>
+                                <option value="new with tags"<?=$r['itemCondition']=='new with tags'?' selected':'';?>>New With Tags</option>
+                                <option value="new without box"<?=$r['itemCondition']=='new without box'?' selected':'';?>>New Without Box</option>
+                                <option value="new without tags"<?=$r['itemCondition']=='new without tags'?' selected':'';?>>New Without Tags</option>
+                                <option value="non functioning"<?=$r['itemCondition']=='non functioning'?' selected':'';?>>Non Functioning</option>
+                                <option value="poor"<?=$r['itemCondition']=='poor'?' selected':'';?>>Poor</option>
+                                <option value="pre-owned"<?=$r['itemCondition']=='pre-owned'?' selected':'';?>>Pre-Owned</option>
+                                <option value="refurbished"<?=$r['itemCondition']=='refurbished'?' selected':'';?>>Refurbished</option>
+                                <option value="remanufactured"<?=$r['itemCondition']=='remanufactured'?' selected':'';?>>Remanufactured</option>
+                                <option value="seasoned"<?=$r['itemCondition']=='seasoned'?' selected':'';?>>Seasoned</option>
+                                <option value="unseasoned"<?=$r['itemCondition']=='unseasoned'?' selected':'';?>>Unseasoned</option>
+                                <option value="used"<?=$r['itemCondition']=='used'?' selected':'';?>>Used</option>
+                                <option value="very good"<?=$r['itemCondition']=='very good'?' selected':'';?>>Very Good</option>
+                              </select>
+                            </div>
+                          </div>
+                        </div>
+                      <?php }
+                      if($r['contentType']=='inventory'){?>
+                        <div class="row">
+                          <div class="col-12 col-sm">
+                            <label for="weight">Weight</label>
+                            <div class="form-row">
+                              <input class="textinput" id="weight" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="weight" type="text" value="<?=$r['weight'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Weight..."':' readonly';?>>
+                              <select id="weightunit" onchange="update('<?=$r['id'];?>','content','weightunit',$(this).val(),'select');"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Weight Unit"':' disabled';?>>
+                                <option value="mg"<?=$r['weightunit']=='mg'?' selected':'';?>>mg (Milligrams)</option>
+                                <option value="g"<?=$r['weightunit']=='g'?' selected':'';?>>g (Grams)</option>
+                                <option value="kg"<?=$r['weightunit']=='kg'?' selected':'';?>>kg (Kilograms)</option>
+                                <option value="lb"<?=$r['weightunit']=='lb'?' selected':'';?>>lb (Pound)</option>
+                                <option value="t"<?=$r['weightunit']=='t'?' selected':'';?>>t (Tonne)</option>
+                              </select>
+                              <?=$user['options'][1]==1?'<button class="save" id="saveweight"  data-dbid="weight" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm pl-sm-3">
+                            <label for="width">Width</label>
+                            <div class="form-row">
+                              <input class="textinput" id="width" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="width" type="text" value="<?=$r['width'];?>"<?=$user['options'][1]==1?' placeholder="Width"':' readonly';?>>
+                              <select id="widthunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Width Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','widthunit',$(this).val(),'select');">
+                                <option value="um"<?=$r['widthunit']=='um'?' selected':'';?>>um (Micrometre)</option>
+                                <option value="mm"<?=$r['widthunit']=='mm'?' selected':'';?>>mm (Millimetre)</option>
+                                <option value="cm"<?=$r['widthunit']=='cm'?' selected':'';?>>cm (Centimetre)</option>
+                                <option value="in"<?=$r['widthunit']=='in'?' selected':'';?>>in (Inch)</option>
+                                <option value="ft"<?=$r['widthunit']=='ft'?' selected':'';?>>ft (Foot)</option>
+                                <option value="m"<?=$r['widthunit']=='m'?' selected':'';?>>m (Metre)</option>
+                                <option value="km"<?=$r['widthunit']=='km'?' selected':'';?>>km (Kilometre)</option>
+                                <option value="mi"<?=$r['widthunit']=='mi'?' selected':'';?>>mi (Mile)</option>
+                                <option value="nm"<?=$r['widthunit']=='nm'?' selected':'';?>>nm (Nanomatre)</option>
+                                <option value="yard"<?=$r['widthunit']=='yd'?' selected':'';?>>yd (Yard)</option>
+                              </select>
+                              <?=$user['options'][1]==1?'<button class="save" id="savewidth" data-dbid="width" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm pl-sm-3">
+                            <label for="height">Height</label>
+                            <div class="form-row">
+                              <input class="textinput" id="height" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="height"<?=$user['options'][1]==1?' placeholder="Height"':' readonly';?> type="text" value="<?=$r['height'];?>">
+                              <select id="heightunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Height Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','heightunit',$(this).val(),'select');">
+                                <option value="um"<?=$r['heightunit']=='um'?' selected':'';?>>um (Micrometre)</option>
+                                <option value="mm"<?=$r['heightunit']=='mm'?' selected':'';?>>mm (Millimetre)</option>
+                                <option value="cm"<?=$r['heightunit']=='cm'?' selected':'';?>>cm (Centimetre)</option>
+                                <option value="in"<?=$r['heightunit']=='in'?' selected':'';?>>in (Inch)</option>
+                                <option value="ft"<?=$r['heightunit']=='ft'?' selected':'';?>>ft (Foot)</option>
+                                <option value="m"<?=$r['heightunit']=='m'?' selected':'';?>>m (Metre)</option>
+                                <option value="km"<?=$r['heightunit']=='km'?' selected':'';?>>km (Kilometre)</option>
+                                <option value="mi"<?=$r['heightunit']=='mi'?' selected':'';?>>mi (Mile)</option>
+                                <option value="nm"<?=$r['heightunit']=='nm'?' selected':'';?>>nm (Nanomatre)</option>
+                                <option value="yard"<?=$r['heightunit']=='yd'?' selected':'';?>>yd (Yard)</option>
+                              </select>
+                              <?=$user['options'][1]==1?'<button class="save" id="saveheight" data-dbid="height" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                            </div>
+                          </div>
+                          <div class="col-12 col-sm pl-sm-3">
+                            <label for="length">Length</label>
+                            <div class="form-row">
+                              <input class="textinput" id="length" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="length" type="text" value="<?=$r['length'];?>"<?=$user['options'][1]==1?' placeholder="Length"':' readonly';?>>
+                              <select id="lengthunit"<?=$user['options'][1]==1?' data-tooltip="tooltip" aria-label="Change Length Unit"':' disabled';?> onchange="update('<?=$r['id'];?>','content','lengthunit',$(this).val(),'select');">
+                                <option value="um"<?=$r['lengthunit']=='um'?' selected':'';?>>um (Micrometre)</option>
+                                <option value="mm"<?=$r['lengthunit']=='mm'?' selected':'';?>>mm (Millimetre)</option>
+                                <option value="cm"<?=$r['lengthunit']=='cm'?' selected':'';?>>cm (Centimetre)</option>
+                                <option value="in"<?=$r['lengthunit']=='in'?' selected':'';?>>in (Inch)</option>
+                                <option value="ft"<?=$r['lengthunit']=='ft'?' selected':'';?>>ft (Foot)</option>
+                                <option value="m"<?=$r['lengthunit']=='m'?' selected':'';?>>m (Metre)</option>
+                                <option value="km"<?=$r['lengthunit']=='km'?' selected':'';?>>km (Kilometre)</option>
+                                <option value="mi"<?=$r['lengthunit']=='mi'?' selected':'';?>>mi (Mile)</option>
+                                <option value="nm"<?=$r['lengthunit']=='nm'?' selected':'';?>>nm (Nanomatre)</option>
+                                <option value="yard"<?=$r['lengthunit']=='yd'?' selected':'';?>>yd (Yard)</option>
+                              </select>
+                              <?=$user['options'][1]==1?'<button class="save" id="savelength" data-dbid="length" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                            </div>
+                          </div>
+                        </div>
+                      <?php }?>
+
+                  </div>
+<?php /* Expenses */ ?>
+                  <?php if(in_array($r['contentType'],['activities','events','inventory','service'])){?>
+                    <div class="tab3-2 border" data-tabid="tab3-2" role="tabpanel">
+                      <div class="row sticky-top">
+                        <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
+                          <div class="row m-0 p-0">
+                            <div class="col-12 col-md-2 pl-2 py-2">Code</div>
+                            <div class="col-12 col-md-2 pl-2 py-2">Brand</div>
+                            <div class="col-12 col-md pl-2 py-2">Title</div>
+                            <div class="col-12 col-md-2 pl-2 py-2">Cost</div>
+                          </div>
+                          <?php if($user['options'][1]==1){?>
+                            <div class="row m-0 p-0">
+                              <div class="col-12">
+                                <select onchange="fillExpense($(this).val());">
+                                  <option value="0">Select an Expense to AutoFill (Selecting this will clear values)...</option>
+                                  <?php $se=$db->prepare("SELECT `id`,`type`,`category`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='expense' GROUP BY (`type`) ORDER BY `type` ASC,`title` ASC");
+                                  $se->execute();
+                                  while($re=$se->fetch(PDO::FETCH_ASSOC)){
+                                    echo'<option value="'.$re['type'].'|'.$re['category'].'|'.$re['title'].'|'.$re['cost'].'">Code:'.$re['type'].' | Brand:'.$re['category'].' | Title:'.$re['title'].' | Cost:'.$re['cost'].'</option>';
+                                  }?>
+                                </select>
+                              </div>
+                            </div>
+                            <script>
+                            function fillExpense(id){
+                              if(id==0){
+                                $('#ecode,#ebrand,#etitle,#ecost').val('');
+                              }else{
+                                var expense=id.split("|");
+                                $('#ecode').val(expense[0]);
+                                $('#ebrand').val(expense[1]);
+                                $('#etitle').val(expense[2]);
+                                $('#ecost').val(expense[3]);
+                              }
+                            }
+                            </script>
+                            <form class="row m-0 p-0" target="sp" method="POST" action="core/add_expense.php">
+                              <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                              <div class="col-12 col-md-2">
+                                <input type="text" id="ecode" name="c" value="" placeholder="Enter a Code...">
+                              </div>
+                              <div class="col-12 col-md-2">
+                                <input type="text" id="ebrand" name="b" value="" placeholder="Enter a Brand...">
+                              </div>
+                              <div class="col-12 col-md">
+                                <input type="text" id="etitle" name="t" value="" placeholder="Enter a Title...">
+                              </div>
+                              <div class="col-12 col-md-2">
+                                <div class="form-row">
+                                  <input type="text" id="ecost" name="cost" value="" placeholder="Enter a Cost...">
+                                  <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                                </div>
+                              </div>
+                            </form>
+                          <?php }?>
+                        </article>
+                      </div>
+                      <div id="expenses">
+                        <?php $se=$db->prepare("SELECT `id`,`type`,`category`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='expense' AND `rid`=:rid ORDER BY `type` ASC, `title` ASC");
+                        $se->execute([':rid'=>$r['id']]);
+                        if($se->rowCount()>0){
+                          while($re=$se->fetch(PDO::FETCH_ASSOC)){?>
+                            <article id="l_<?=$re['id'];?>" class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow" data-cost="<?=$re['cost'];?>">
+                              <div class="row">
+                                <div class="col-12 col-md-2">
+                                  <div class="input-text"><?=$re['type'];?>&nbsp;</div>
+                                </div>
+                                <div class="col-12 col-md-2">
+                                  <div class="input-text"><?=$re['category'];?>&nbsp;</div>
+                                </div>
+                                <div class="col-12 col-md">
+                                  <div class="input-text"><?=$re['title'];?></div>
+                                </div>
+                                <div class="col-12 col-md-2">
+                                  <div class="form-row">
+                                    <div class="input-text col-12"><?=$re['cost'];?></div>
+                                    <form target="sp" action="core/purge.php">
+                          						<input name="id" type="hidden" value="<?=$re['id'];?>">
+                          						<input name="t" type="hidden" value="choices">
+                          						<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                        						</form>
+                                  </div>
+                                </div>
+                              </div>
+                            </article>
+                          <?php }
+                        }?>
+                      </div>
+                    </div>
+                  <?php }?>
+                </div>
+              </div>
+            <?php }?>
 <?php /* Media */?>
-            <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
+            <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
               <div class="tabs2" role="tablist">
-                <input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>
-                <label for="tab2-1">Images</label>
-                <?=(!in_array($r['contentType'],['testimonials','list'])?
-                  '<input class="tab-control" id="tab2-2" name="tabs2" type="radio">'.
-                  '<label for="tab2-2">Video</label>'.
+                <?='<input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>'.
+                '<label for="tab2-1">Images</label>'.
+                (!in_array($r['contentType'],['testimonials'])?'<input class="tab-control" id="tab2-2" name="tabs2" type="radio"><label for="tab2-2">Video</label>':'').
+                (!in_array($r['contentType'],['activities','events','list','testimonials'])?
                   '<input class="tab-control" id="tab2-3" name="tabs2" type="radio">'.
                   '<label for="tab2-3">Downloadable Media</label>'.
                   '<input class="tab-control" id="tab2-4" name="tabs2" type="radio">'.
@@ -1151,49 +1264,51 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                     </div>
                   </div>
                 <?php }
-                if(!in_array($r['contentType'],['testimonials','list'])){?>
-                  <div class="tab2-3 border p-3" data-tabid="tab2-3" role="tabpanel">
+                if(!in_array($r['contentType'],['activities','events','list','testimonials'])){?>
+                  <div class="tab2-3 border" data-tabid="tab2-3" role="tabpanel">
                     <?php if($user['options'][1]==1){
                       if($r['contentType']!='list'){?>
-                        <form class="row mb-3" target="sp" method="post" action="core/add_download.php" enctype="multipart/form-data">
-                          <input name="id" type="hidden" value="<?=$r['id'];?>">
-                          <div class="form-row">
-                            <div class="input-text">Title</div>
-                            <input type="text" name="t" value="" placeholder="Enter a Title, leave empty to use filename...">
-                          </div>
-                          <?php if($r['contentType']=='inventory'){?>
+                        <div class="sticky-top">
+                          <form class="row" target="sp" method="post" action="core/add_download.php" enctype="multipart/form-data">
+                            <input name="id" type="hidden" value="<?=$r['id'];?>">
                             <div class="form-row">
-                              <div class="input-text border-top-0 border-right-0 border-bottom-0">Requires Order</div>
-                              <div class="input-text2 pt-2 border-0"><input type="checkbox" name="r" value="1"></div>
-                              <div class="input-text border-0">and is available for download for</div>
-                              <select class="border-top-0 border-bottom-0 border-left-0" id="downloada" name="a">
-                                <option value="0" selected>Forever</option>
-                                <option value="3600">1 Hour</option>
-                                <option value="7200">2 Hours</option>
-                                <option value="14400">4 Hours</option>
-                                <option value="28800">8 Hours</option>
-                                <option value="86400">24 Hours</option>
-                                <option value="172800">48 Hours</option>
-                                <option value="604800">1 Week</option>
-                                <option value="1209600">2 Weeks</option>
-                                <option value="2592000">1 Month</option>
-                                <option value="7776000">3 Months</option>
-                                <option value="15552000">6 Months</option>
-                                <option value="31536000">1 Year</option>
-                              </select>
+                              <div class="input-text">Title</div>
+                              <input type="text" name="t" value="" placeholder="Enter a Title, leave empty to use filename...">
                             </div>
-                          <?php }?>
-                          <div class="form-row">
-                            <input class="field" style="opacity:1;" id="downloadfu" name="fu" type="file" placeholder="Select File from your computer to upload..." onchange="$(`#downloadfile`).val($(this).val());">
-                            <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
-                          </div>
-                        </form>
+                            <?php if($r['contentType']=='inventory'){?>
+                              <div class="form-row">
+                                <div class="input-text border-top-0 border-right-0 border-bottom-0">Requires Order</div>
+                                <div class="input-text2 pt-2 border-0"><input type="checkbox" name="r" value="1"></div>
+                                <div class="input-text border-0">and is available for download for</div>
+                                <select class="border-top-0 border-bottom-0 border-left-0" id="downloada" name="a">
+                                  <option value="0" selected>Forever</option>
+                                  <option value="3600">1 Hour</option>
+                                  <option value="7200">2 Hours</option>
+                                  <option value="14400">4 Hours</option>
+                                  <option value="28800">8 Hours</option>
+                                  <option value="86400">24 Hours</option>
+                                  <option value="172800">48 Hours</option>
+                                  <option value="604800">1 Week</option>
+                                  <option value="1209600">2 Weeks</option>
+                                  <option value="2592000">1 Month</option>
+                                  <option value="7776000">3 Months</option>
+                                  <option value="15552000">6 Months</option>
+                                  <option value="31536000">1 Year</option>
+                                </select>
+                              </div>
+                            <?php }?>
+                            <div class="form-row">
+                              <input class="field" style="opacity:1;" id="downloadfu" name="fu" type="file" placeholder="Select File from your computer to upload..." onchange="$(`#downloadfile`).val($(this).val());">
+                              <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
+                            </div>
+                          </form>
+                        </div>
                         <div id="downloads">
                           <?php $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='download' AND `rid`=:id");
                           $sd->execute([':id'=>$r['id']]);
                           if($sd->rowCount()>0){
                             while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
-                              <div class="row mt-1" id="l_<?=$rd['id'];?>">
+                              <div class="row" id="l_<?=$rd['id'];?>">
                                 <div class="form-row">
                                   <div class="input-text">Title</div>
                                   <input type="text" name="t" value="<?=$rd['title'];?>" placeholder="Uses Filename in place of title..." readonly>
@@ -1236,315 +1351,318 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                     }?>
                   </div>
                 <?php }
-                if(!in_array($r['contentType'],['testimonials','list'])){?>
-                  <div class="tab2-4 border p-3" data-tabid="tab2-4" role="tabpanel">
-                    <form class="row mb-3" target="sp" method="post" action="core/add_link.php">
-                      <input name="id" type="hidden" value="<?=$r['id'];?>">
-                      <div class="form-row">
-                        <div class="input-text">Title</div>
-                        <input type="text" name="t" value="" placeholder="Enter a Title...">
-                      </div>
-                      <?php if($r['contentType']=='inventory'){?>
+                if(!in_array($r['contentType'],['activities','events','list','testimonials'])){?>
+                  <div class="tab2-4 border" data-tabid="tab2-4" role="tabpanel">
+                    <div class="sticky-top">
+                      <form class="row" target="sp" method="post" action="core/add_link.php">
+                        <input name="id" type="hidden" value="<?=$r['id'];?>">
                         <div class="form-row">
-                          <div class="input-text border-top-0 border-right-0 border-bottom-0">Requires Order</div>
-                          <div class="input-text2 pt-2 border-0"><input type="checkbox" name="r" value="1"></div>
-                          <div class="input-text border-0">and is available for</div>
-                          <select class="border-top-0 border-bottom-0 border-left-0" id="linka" name="a">
-                            <option value="0" selected>Forever</option>
-                            <option value="3600">1 Hour</option>
-                            <option value="7200">2 Hours</option>
-                            <option value="14400">4 Hours</option>
-                            <option value="28800">8 Hours</option>
-                            <option value="86400">24 Hours</option>
-                            <option value="172800">48 Hours</option>
-                            <option value="604800">1 Week</option>
-                            <option value="1209600">2 Weeks</option>
-                            <option value="2592000">1 Month</option>
-                            <option value="7776000">3 Months</option>
-                            <option value="15552000">6 Months</option>
-                            <option value="31536000">1 Year</option>
-                          </select>
+                          <div class="input-text">Title</div>
+                          <input type="text" name="t" value="" placeholder="Enter a Title...">
                         </div>
-                      <?php }?>
-                      <div class="form-row">
-                        <input class="field" style="opacity:1;" id="downloadfu" name="l" type="text" placeholder="Enter Link to Service/Content...">
-                        <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
-                      </div>
-                    </form>
-                    <div id="links">
-                    <?php $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='link' AND `rid`=:id");
-                    $sd->execute([':id'=>$r['id']]);
-                    if($sd->rowCount()>0){
-                      while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
-                        <div class="row mt-1" id="l_<?=$rd['id'];?>">
+                        <?php if($r['contentType']=='inventory'){?>
                           <div class="form-row">
-                            <div class="input-text border-right-0 border-bottom-0">
-                              <label>Title:</label>
-                            </div>
-                            <input class="border-bottom-0 border-left-0" type="text" name="t" value="<?=$rd['title'];?>" placeholder="Title..." readonly>
+                            <div class="input-text border-top-0 border-right-0 border-bottom-0">Requires Order</div>
+                            <div class="input-text2 pt-2 border-0"><input type="checkbox" name="r" value="1"></div>
+                            <div class="input-text border-0">and is available for</div>
+                            <select class="border-top-0 border-bottom-0 border-left-0" id="linka" name="a">
+                              <option value="0" selected>Forever</option>
+                              <option value="3600">1 Hour</option>
+                              <option value="7200">2 Hours</option>
+                              <option value="14400">4 Hours</option>
+                              <option value="28800">8 Hours</option>
+                              <option value="86400">24 Hours</option>
+                              <option value="172800">48 Hours</option>
+                              <option value="604800">1 Week</option>
+                              <option value="1209600">2 Weeks</option>
+                              <option value="2592000">1 Month</option>
+                              <option value="7776000">3 Months</option>
+                              <option value="15552000">6 Months</option>
+                              <option value="31536000">1 Year</option>
+                            </select>
                           </div>
-                          <?php if($r['contentType']=='inventory'){?>
+                        <?php }?>
+                        <div class="form-row">
+                          <input class="field" style="opacity:1;" id="downloadfu" name="l" type="text" placeholder="Enter Link to Service/Content...">
+                          <button class="add" data-tooltip="tooltip" aria-label="Add" type="submit"><i class="i">add</i></button>
+                        </div>
+                      </form>
+                    </div>
+                    <div id="links">
+                      <?php $sd=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='link' AND `rid`=:id");
+                      $sd->execute([':id'=>$r['id']]);
+                      if($sd->rowCount()>0){
+                        while($rd=$sd->fetch(PDO::FETCH_ASSOC)){?>
+                          <div class="row mt-1" id="l_<?=$rd['id'];?>">
                             <div class="form-row">
                               <div class="input-text border-right-0 border-bottom-0">
-                                <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password']==1?' checked':''?> disabled>
+                                <label>Title:</label>
                               </div>
-                              <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
-                                <label>and is available for download for:</label>
+                              <input class="border-bottom-0 border-left-0" type="text" name="t" value="<?=$rd['title'];?>" placeholder="Title..." readonly>
+                            </div>
+                            <?php if($r['contentType']=='inventory'){?>
+                              <div class="form-row">
+                                <div class="input-text border-right-0 border-bottom-0">
+                                  <label>Requires Order</label>&nbsp;<input type="checkbox" name="r"<?=$rd['password']==1?' checked':''?> disabled>
+                                </div>
+                                <div class="input-text border-right-0 border-bottom-0 border-left-0 pr-0">
+                                  <label>and is available for download for:</label>
+                                </div>
+                                <select class="border-bottom-0 border-left-0" id="downloada" name="a" onchange="update('<?=$rd['id'];?>','choices','tie',$(this).val(),'select');">
+                                  <option value="0"<?=($rd['tie']==0?' selected':'');?>>Forever</option>
+                                  <option value="3600"<?=($rd['tie']==3600?' selected':'');?>>1 Hour</option>
+                                  <option value="7200"<?=($rd['tie']==7200?' selected':'');?>>2 Hours</option>
+                                  <option value="14400"<?=($rd['tie']==14400?' selected':'');?>>4 Hours</option>
+                                  <option value="28800"<?=($rd['tie']==28800?' selected':'');?>>8 Hours</option>
+                                  <option value="86400"<?=($rd['tie']==86400?' selected':'');?>>24 Hours</option>
+                                  <option value="172800"<?=($rd['tie']==172800?' selected':'');?>>48 Hours</option>
+                                  <option value="604800"<?=($rd['tie']==604800?' selected':'');?>>1 Week</option>
+                                  <option value="1209600"<?=($rd['tie']==1209600?' selected':'');?>>2 Weeks</option>
+                                  <option value="2592000"<?=($rd['tie']==2592000?' selected':'');?>>1 Month</option>
+                                  <option value="7776000"<?=($rd['tie']==7776000?' selected':'');?>>3 Months</option>
+                                  <option value="15552000"<?=($rd['tie']==15552000?' selected':'');?>>6 Months</option>
+                                  <option value="31536000"<?=($rd['tie']==31536000?' selected':'');?>>1 Year</option>
+                                </select>
                               </div>
-                              <select class="border-bottom-0 border-left-0" id="downloada" name="a" onchange="update('<?=$rd['id'];?>','choices','tie',$(this).val(),'select');">
-                                <option value="0"<?=($rd['tie']==0?' selected':'');?>>Forever</option>
-                                <option value="3600"<?=($rd['tie']==3600?' selected':'');?>>1 Hour</option>
-                                <option value="7200"<?=($rd['tie']==7200?' selected':'');?>>2 Hours</option>
-                                <option value="14400"<?=($rd['tie']==14400?' selected':'');?>>4 Hours</option>
-                                <option value="28800"<?=($rd['tie']==28800?' selected':'');?>>8 Hours</option>
-                                <option value="86400"<?=($rd['tie']==86400?' selected':'');?>>24 Hours</option>
-                                <option value="172800"<?=($rd['tie']==172800?' selected':'');?>>48 Hours</option>
-                                <option value="604800"<?=($rd['tie']==604800?' selected':'');?>>1 Week</option>
-                                <option value="1209600"<?=($rd['tie']==1209600?' selected':'');?>>2 Weeks</option>
-                                <option value="2592000"<?=($rd['tie']==2592000?' selected':'');?>>1 Month</option>
-                                <option value="7776000"<?=($rd['tie']==7776000?' selected':'');?>>3 Months</option>
-                                <option value="15552000"<?=($rd['tie']==15552000?' selected':'');?>>6 Months</option>
-                                <option value="31536000"<?=($rd['tie']==31536000?' selected':'');?>>1 Year</option>
-                              </select>
+                            <?php }?>
+                            <div class="form-row">
+                              <div class="input-text col-sm">
+                                <a target="_blank" href="<?=$rd['url'];?>"><?=$rd['url'];?></a>
+                              </div>
+                              <form target="sp" action="core/purge.php">
+                                <input name="id" type="hidden" value="<?=$rd['id'];?>">
+                                <input name="t" type="hidden" value="choices">
+                                <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                              </form>
                             </div>
-                          <?php }?>
-                          <div class="form-row">
-                            <div class="input-text col-sm">
-                              <a target="_blank" href="<?=$rd['url'];?>"><?=$rd['url'];?></a>
-                            </div>
-                            <form target="sp" action="core/purge.php">
-                              <input name="id" type="hidden" value="<?=$rd['id'];?>">
-                              <input name="t" type="hidden" value="choices">
-                              <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                            </form>
                           </div>
-                        </div>
-                      <?php }
-                    }?>
-                  </div>
-                </div>
-              <?php }?>
-            </div>
-          </div>
-<?php /* Options */ ?>
-          <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
-            <?php if($user['options'][1]==1){?>
-              <form target="sp" method="post" action="core/add_option.php">
-                <input name="rid" type="hidden" value="<?=$r['id'];?>">
-                <?php $so=$db->prepare("SELECT `id`,`title`,`code` FROM `".$prefix."content` WHERE `contentType`='inventory' AND `id`!=:id ORDER BY `code` ASC, `title` ASC");
-                $so->execute([':id'=>$r['id']]);
-                if($so->rowCount()>0){?>
-                  <div class="row">
-                    <div class="col-12 col-sm-4">
-                      <label for="ooid" class="m-2">Link to Inventory Item</label>
+                        <?php }
+                      }?>
                     </div>
-                    <div class="col-12 col-sm">
-                      <select id="ooid" name="oid" onchange="selectInvOption($(this).val(),$('#ooid'+$(this).val()).attr('data-title'));">
-                        <option id="ooid0" value="0" data-title="">Select or Clear an Inventory Item to Link to this Option</option>
-                        <?php while($ro=$so->fetch(PDO::FETCH_ASSOC)){
-                          echo'<option id="ooid'.$ro['id'].'" value="'.$ro['id'].'" data-title="'.$ro['title'].'">'.($ro['code']!=''?$ro['code'].':':'').$ro['title'].'</option>';
-                        }?>
+                  </div>
+                <?php }?>
+              </div>
+            </div>
+<?php /* Options */ ?>
+            <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
+              <?php if($user['options'][1]==1){?>
+                <form target="sp" method="post" action="core/add_option.php">
+                  <input name="rid" type="hidden" value="<?=$r['id'];?>">
+                  <?php $so=$db->prepare("SELECT `id`,`title`,`code` FROM `".$prefix."content` WHERE `contentType`='inventory' AND `id`!=:id ORDER BY `code` ASC, `title` ASC");
+                  $so->execute([':id'=>$r['id']]);
+                  if($so->rowCount()>0){?>
+                    <div class="row">
+                      <div class="col-12 col-sm-4">
+                        <label for="ooid" class="m-2">Link to Inventory Item</label>
+                      </div>
+                      <div class="col-12 col-sm">
+                        <select id="ooid" name="oid" onchange="selectInvOption($(this).val(),$('#ooid'+$(this).val()).attr('data-title'));">
+                          <option id="ooid0" value="0" data-title="">Select or Clear an Inventory Item to Link to this Option</option>
+                          <?php while($ro=$so->fetch(PDO::FETCH_ASSOC)){
+                            echo'<option id="ooid'.$ro['id'].'" value="'.$ro['id'].'" data-title="'.$ro['title'].'">'.($ro['code']!=''?$ro['code'].':':'').$ro['title'].'</option>';
+                          }?>
+                        </select>
+                      </div>
+                    </div>
+                  <?php }?>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="otitle"class="m-2">Title</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <input id="otitle" name="ttl" type="text" value="" placeholder="Enter a Title...">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="ocategory"class="m-2">Category</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <input id="ocategory" name="cat" type="text" value="" placeholder="Category for Options Grouping...">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="oqty" class="m-2">Quantity</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <input id="oqty" name="qty" type="text" value="" placeholder="Set to 0 or leave empty to use Linked Product Quantity...">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="ocost" class="m-2">Cost</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <input id="ocost" name="cost" type="text" value="" placeholder="Set to 0 or leave empty to use Linked Product Cost...">
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="oimage" class="m-2">Image/Video</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <div class="form-row">
+                        <input id="oimage" name="oi" type="text" value="" placeholder="Leave empty to use Linked Product image...">
+                        <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`oimage`);return false;"><i class="i">browse-media</i></button>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="ostatus" class="m-2">Status</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <select id="ostatus" name="status">
+                        <option value="unavailable">Unavailable</option>
+                        <option value="available">Available</option>
                       </select>
                     </div>
                   </div>
-                <?php }?>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="otitle"class="m-2">Title</label>
-                  </div>
-                  <div class="col-12 col-sm-10">
-                    <input id="otitle" name="ttl" type="text" value="" placeholder="Enter a Title...">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="ocategory"class="m-2">Category</label>
-                  </div>
-                  <div class="col-12 col-sm-10">
-                    <input id="ocategory" name="cat" type="text" value="" placeholder="Category for Options Grouping...">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="oqty" class="m-2">Quantity</label>
-                  </div>
-                  <div class="col-12 col-sm-10">
-                    <input id="oqty" name="qty" type="text" value="" placeholder="Set to 0 or leave empty to use Linked Product Quantity...">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="ocost" class="m-2">Cost</label>
-                  </div>
-                  <div class="col-12 col-sm-10">
-                    <input id="ocost" name="cost" type="text" value="" placeholder="Set to 0 or leave empty to use Linked Product Cost...">
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="oimage" class="m-2">Image/Video</label>
-                  </div>
-                  <div class="col-12 col-sm-10">
-                    <div class="form-row">
-                      <input id="oimage" name="oi" type="text" value="" placeholder="Leave empty to use Linked Product image...">
-                      <button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`<?=$r['id'];?>`,`content`,`oimage`);return false;"><i class="i">browse-media</i></button>
+                  <div class="row">
+                    <div class="col-12 col-sm-2">
+                      <label for="oda" class="m-2">Notes</label>
+                    </div>
+                    <div class="col-12 col-sm-10">
+                      <textarea id="oda" name="da" placeholder="Leave empty to use Linked Product Text..."></textarea>
                     </div>
                   </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="ostatus" class="m-2">Status</label>
+                  <div class="text-right">
+                    <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
                   </div>
-                  <div class="col-12 col-sm-10">
-                    <select id="ostatus" name="status">
-                      <option value="unavailable">Unavailable</option>
-                      <option value="available">Available</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-12 col-sm-2">
-                    <label for="oda" class="m-2">Notes</label>
-                  </div>
-                  <div class="col-12 col-sm-10">
-                    <textarea id="oda" name="da" placeholder="Leave empty to use Linked Product Text..."></textarea>
-                  </div>
-                </div>
-                <div class="text-right">
-                  <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
-                </div>
-              </form>
-              <script>
-                function selectInvOption(id,da){
-                  if(id==0){
-                    $('#otitle,#oqty,#ocost,#oimage,#oda').val('');
-                  }else{
-                    $('#otitle').val(da);
+                </form>
+                <script>
+                  function selectInvOption(id,da){
+                    if(id==0){
+                      $('#otitle,#oqty,#ocost,#oimage,#oda').val('');
+                    }else{
+                      $('#otitle').val(da);
+                    }
                   }
-                }
-              </script>
-            <?php }?>
-            <div id="options" class="row m-1">
-              <?php $so=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid ORDER BY `ord` ASC");
-              $so->execute([':rid'=>$r['id']]);
-              if($so->rowCount()>0){
-                while($ro=$so->fetch(PDO::FETCH_ASSOC)){
-                  if($ro['oid']!=0){
-                    $soo=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
-                    $soo->execute([':id'=>$ro['oid']]);
-                    $roo=$soo->fetch(PDO::FETCH_ASSOC);
-                  }?>
-                  <div id="l_<?=$ro['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">
-                    <div class="row">
-                      <?=($ro['file']!=''?
-                        '<div class="col-12 col-sm-3 list-images-1 overflow-hidden"><a data-fancybox href="'.$ro['file'].'"><img src="'.$ro['file'].'"></a></div>'
-                      :
-                        (isset($roo['file'])&&$roo['file']!=''?
-                          '<div class="col-12 col-sm-3 list-images-1 overflow-hidden"><a data-fancybox href="'.$roo['file'].'"><img src="'.($roo['thumb']!=''?$roo['thumb']:$roo['file']).'"></a></div>'
-                        :
-                          '')
-                      );?>
-                      <div class="card-footer col-12 col-sm m-0 p-1">
-                        <div class="row m-0 p-0">
-                          <div class="col-12 small m-0 p-0">
-                            <div class="col-12">
-                              <select class="status <?=$ro['status'];?>" onchange="update('<?=$ro['id'];?>','choices','status',$(this).val(),'select');$(this).removeClass().addClass('status '+$(this).val());changeShareStatus($(this).val());"<?=$user['options'][1]==1?'':' disabled';?>>
-                                <option class="unavailable" value="unavailable"<?=$ro['status']=='unavailable'?' selected':'';?>>Unavailable</option>
-                                <option class="available" value="available"<?=$ro['status']=='available'?' selected':'';?>>Available</option>
-                              </select>
-                            </div>
-                            <?=($ro['category']!=''?'<div class="h6 col-12">Category: '.$ro['category'].'</div>':'');?>
-                            <div class="h6 col-12">Title: <?=$ro['title'];?></div>
-                            <?=($ro['quantity']>0?
-                              '<div class="col-12">Quantity: '.$ro['quantity'].'</div>'
+                  </script>
+                <?php }?>
+                <div id="options" class="row m-1">
+                  <?php $so=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `rid`=:rid ORDER BY `ord` ASC");
+                  $so->execute([':rid'=>$r['id']]);
+                  if($so->rowCount()>0){
+                    while($ro=$so->fetch(PDO::FETCH_ASSOC)){
+                      if($ro['oid']!=0){
+                        $soo=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`=:id");
+                        $soo->execute([':id'=>$ro['oid']]);
+                        $roo=$soo->fetch(PDO::FETCH_ASSOC);
+                      }?>
+                      <div id="l_<?=$ro['id'];?>" class="card col-12 mx-0 my-1 m-sm-1 overflow-visible">
+                        <div class="row">
+                          <?=($ro['file']!=''?
+                            '<div class="col-12 col-sm-3 list-images-1 overflow-hidden"><a data-fancybox href="'.$ro['file'].'"><img src="'.$ro['file'].'"></a></div>'
+                          :
+                            (isset($roo['file'])&&$roo['file']!=''?
+                              '<div class="col-12 col-sm-3 list-images-1 overflow-hidden"><a data-fancybox href="'.$roo['file'].'"><img src="'.($roo['thumb']!=''?$roo['thumb']:$roo['file']).'"></a></div>'
                             :
-                              (isset($roo['quantity'])&&$roo['quantity']>0?
-                                '<div class="col-12">Quantity: '.$roo['quantity'].' (Linked)</div>'
-                              :
-                                '')
-                            );?>
-                            <div class="row">
-                              <?=($ro['cost']>0?
-                                '<div class="col-12">$'.$ro['cost'].'</div>'
-                              :
-                                (isset($roo['rrp'])&&$roo['rrp']>0?
-                                  '<div class="col-12 col-sm-6">RRP $'.$roo['rrp'].' (Linked)</div>'
+                              '')
+                          );?>
+                          <div class="card-footer col-12 col-sm m-0 p-1">
+                            <div class="row m-0 p-0">
+                              <div class="col-12 small m-0 p-0">
+                                <div class="col-12">
+                                  <select class="status <?=$ro['status'];?>" onchange="update('<?=$ro['id'];?>','choices','status',$(this).val(),'select');$(this).removeClass().addClass('status '+$(this).val());changeShareStatus($(this).val());"<?=$user['options'][1]==1?'':' disabled';?>>
+                                    <option class="unavailable" value="unavailable"<?=$ro['status']=='unavailable'?' selected':'';?>>Unavailable</option>
+                                    <option class="available" value="available"<?=$ro['status']=='available'?' selected':'';?>>Available</option>
+                                  </select>
+                                </div>
+                                <?=($ro['category']!=''?'<div class="h6 col-12">Category: '.$ro['category'].'</div>':'');?>
+                                <div class="h6 col-12">Title: <?=$ro['title'];?></div>
+                                <?=($ro['quantity']>0?
+                                  '<div class="col-12">Quantity: '.$ro['quantity'].'</div>'
                                 :
-                                  '').
-                                (isset($roo['cost'])&&$roo['cost']>0?
-                                  '<div class="col-12 col-sm-6">Cost $'.$roo['cost'].' (Linked)</div>'
+                                  (isset($roo['quantity'])&&$roo['quantity']>0?
+                                    '<div class="col-12">Quantity: '.$roo['quantity'].' (Linked)</div>'
+                                  :
+                                    '')
+                                );?>
+                                <div class="row">
+                                  <?=($ro['cost']>0?
+                                    '<div class="col-12">$'.$ro['cost'].'</div>'
+                                  :
+                                    (isset($roo['rrp'])&&$roo['rrp']>0?
+                                      '<div class="col-12 col-sm-6">RRP $'.$roo['rrp'].' (Linked)</div>'
+                                    :
+                                      '').
+                                    (isset($roo['cost'])&&$roo['cost']>0?
+                                      '<div class="col-12 col-sm-6">Cost $'.$roo['cost'].' (Linked)</div>'
+                                    :
+                                      '').
+                                    (isset($roo['rCost'])&&$roo['rCost']>0?
+                                      '<div class="col-12 col-sm-6">Reduced $'.$roo['rCost'].' (Linked)</div>'
+                                    :
+                                      '').
+                                    (isset($roo['dCost'])&&$roo['dCost']>0?
+                                      '<div class="col-12 col-sm-6">Wholesale $'.$roo['dCost'].' (Linked)</div>'
+                                    :
+                                      '')
+                                  );?>
+                                </div>
+                                <?=($ro['notes']!=''?
+                                  '<div id="listmore'.$ro['id'].'" class="'.(strlen($ro['notes'])>100?'list-more ':'').'col-12">'.$ro['notes'].'</div>'.
+                                  (strlen($ro['notes'])>100?
+                                    '<div class="col-12"><button class="btn-block p-0 mb-3" onclick="$(`#listmore'.$ro['id'].'`).toggleClass(`list-more`);$(`.list-arrow-'.$ro['id'].'`).toggleClass(`d-none`);"><i class="i list-arrow-'.$ro['id'].'">down</i><i class="i list-arrow-'.$ro['id'].' d-none">up</i></button></div>'
+                                  :
+                                    '')
                                 :
-                                  '').
-                                (isset($roo['rCost'])&&$roo['rCost']>0?
-                                  '<div class="col-12 col-sm-6">Reduced $'.$roo['rCost'].' (Linked)</div>'
-                                :
-                                  '').
-                                (isset($roo['dCost'])&&$roo['dCost']>0?
-                                  '<div class="col-12 col-sm-6">Wholesale $'.$roo['dCost'].' (Linked)</div>'
-                                :
-                                  '')
-                              );?>
+                                  (isset($roo['notes'])&&$roo['notes']!=''?
+                                    '<div id="listmore'.$ro['id'].'" class="'.(strlen($roo['notes'])>100?'list-more '
+                                  :
+                                    '').
+                                  'col-12">'.$roo['notes'].'</div>'.
+                                  (strlen($roo['notes'])>100?
+                                    '<div class="col-12"><button class="btn-block p-0 mb-3" onclick="$(`#listmore'.$ro['id'].'`).toggleClass(`list-more`);$(`.list-arrow-'.$ro['id'].'`).toggleClass(`d-none`);"><i class="i list-arrow-'.$ro['id'].'">down</i><i class="i list-arrow-'.$ro['id'].' d-none">up</i></button></div>'
+                                  :
+                                    '')
+                                  :
+                                    '')
+                                );?>
+                              </div>
+                              <?php if($user['options'][0]==1){?>
+                                <div class="col-12 text-right">
+                                  <button class="btn-sm trash" id="purge<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$ro['id'];?>','choices')"><i class="i">trash</i></button>
+                                  <span class="btn btn-sm orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
+                                </div>
+                              <?php }?>
                             </div>
-                            <?=($ro['notes']!=''?
-                              '<div id="listmore'.$ro['id'].'" class="'.(strlen($ro['notes'])>100?'list-more ':'').'col-12">'.$ro['notes'].'</div>'.
-                              (strlen($ro['notes'])>100?
-                                '<div class="col-12"><button class="btn-block p-0 mb-3" onclick="$(`#listmore'.$ro['id'].'`).toggleClass(`list-more`);$(`.list-arrow-'.$ro['id'].'`).toggleClass(`d-none`);"><i class="i list-arrow-'.$ro['id'].'">down</i><i class="i list-arrow-'.$ro['id'].' d-none">up</i></button></div>'
-                              :
-                                '')
-                              :
-                                (isset($roo['notes'])&&$roo['notes']!=''?
-                                  '<div id="listmore'.$ro['id'].'" class="'.(strlen($roo['notes'])>100?'list-more '
-                                :
-                                  '').'col-12">'.$roo['notes'].'</div>'.
-                                (strlen($roo['notes'])>100?
-                                  '<div class="col-12"><button class="btn-block p-0 mb-3" onclick="$(`#listmore'.$ro['id'].'`).toggleClass(`list-more`);$(`.list-arrow-'.$ro['id'].'`).toggleClass(`d-none`);"><i class="i list-arrow-'.$ro['id'].'">down</i><i class="i list-arrow-'.$ro['id'].' d-none">up</i></button></div>'
-                                :
-                                  '')
-                              :
-                                '')
-                            );?>
                           </div>
-                          <?php if($user['options'][0]==1){?>
-                            <div class="col-12 text-right">
-                              <button class="btn-sm trash" id="purge<?=$ro['id'];?>" data-tooltip="tooltip" aria-label="Delete" onclick="purge('<?=$ro['id'];?>','choices')"><i class="i">trash</i></button>
-                              <span class="btn btn-sm orderhandle" data-tooltip="tooltip" aria-label="Drag to Reorder"><i class="i">drag</i></span>
-                            </div>
-                          <?php }?>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                    <?php }?>
+                    <div class="ghost hidden">&nbsp;</div>
+                    <script>
+                      $('#options').sortable({
+                        items:".card",
+                        handle:'.orderhandle',
+                        placeholder:".ghost",
+                        helper:fixWidthHelper,
+                        axis:"y",
+                        update:function(e,ui){
+                          var order=$("#options").sortable("serialize");
+                          $.ajax({
+                            type:"POST",
+                            dataType:"json",
+                            url:"core/reorderoptions.php",
+                            data:order
+                          });
+                        }
+                      }).disableSelection();
+                      function fixWidthHelper(e,ui){
+                        ui.children().each(function(){
+                          $(this).width($(this).width());
+                        });
+                        return ui;
+                      }
+                    </script>
                 <?php }?>
-                <div class="ghost hidden">&nbsp;</div>
-                <script>
-                  $('#options').sortable({
-                    items:".card",
-                    handle:'.orderhandle',
-                    placeholder:".ghost",
-                    helper:fixWidthHelper,
-                    axis:"y",
-                    update:function(e,ui){
-                      var order=$("#options").sortable("serialize");
-                      $.ajax({
-                        type:"POST",
-                        dataType:"json",
-                        url:"core/reorderoptions.php",
-                        data:order
-                      });
-                    }
-                  }).disableSelection();
-                  function fixWidthHelper(e,ui){
-                    ui.children().each(function(){
-                      $(this).width($(this).width());
-                    });
-                    return ui;
-                  }
-                </script>
-              <?php }?>
+              </div>
             </div>
-          </div>
 <?php /* Comments */ ?>
-          <div class="tab1-4 border" data-tabid="tab1-4" role="tabpanel">
+          <div class="tab1-5 border" data-tabid="tab1-5" role="tabpanel">
             <div class="form-row p-3">
               <input id="options1" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="1" type="checkbox"<?=($r['options'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
               <label for="options1">Enable</label>
@@ -1629,7 +1747,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             <?php }?>
           </div>
 <?php /* Reviews */ ?>
-          <div class="tab1-5 border" data-tabid="tab1-5" role="tabpanel">
+          <div class="tab1-6 border" data-tabid="tab1-6" role="tabpanel">
             <div class="row sticky-top">
               <article class="card mb-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
                 <div class="row">
@@ -1680,23 +1798,33 @@ if(!in_array($r['contentType'],['testimonials','list'])){
           </div>
 <?php /* Related */ ?>
           <?php if($r['contentType']=='article'||$r['contentType']=='inventory'||$r['contentType']=='service'){?>
-            <div class="tab1-6 border p-3"  data-tabid="tab1-6" role="tabpanel">
-              <?php if($user['options'][1]==1){?>
-                <form target="sp" method="post" action="core/add_related.php">
-                  <input name="id" type="hidden" value="<?=$r['id'];?>">
-                  <?php $sr=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`!=:id AND `contentType`='article' OR `contentType`='inventory' OR `contentType`='service' ORDER BY `contentType` ASC, `title` ASC");
-                  $sr->execute([':id'=>$r['id']]);
-                  if($sr->rowCount()>0){?>
-                    <div class="form-row">
-                      <select id="rid" name="rid"<?=$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> data-tooltip="tooltip" aria-label="Select a Content Item to Relate to this one...">
-                        <option value="0">Select a Content Item to Relate to this one...</option>
-                        <?php while($rr=$sr->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rr['id'].'">'.$rr['contentType'].': '.$rr['title'].'</option>';?>
-                      </select>
-                      <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+            <div class="tab1-7 border" data-tabid="tab1-7" role="tabpanel">
+              <div class="sticky-top">
+                <div class="row">
+                  <article class="card mb-0 p-0 overflow-visible card-list card-list-header bg-white shadow">
+                    <div class="row">
+                      <div class="col-12 col-md">
+                        <?php if($user['options'][1]==1){?>
+                          <form target="sp" method="post" action="core/add_related.php">
+                            <input name="id" type="hidden" value="<?=$r['id'];?>">
+                            <?php $sr=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `id`!=:id AND `contentType`='article' OR `contentType`='inventory' OR `contentType`='service' ORDER BY `contentType` ASC, `title` ASC");
+                            $sr->execute([':id'=>$r['id']]);
+                            if($sr->rowCount()>0){?>
+                              <div class="form-row">
+                                <select id="rid" name="rid"<?=$user['options'][1]==1?' data-tooltip="tooltip"':' disabled';?> data-tooltip="tooltip" aria-label="Select a Content Item to Relate to this one...">
+                                  <option value="0">Select a Content Item to Relate to this one...</option>
+                                  <?php while($rr=$sr->fetch(PDO::FETCH_ASSOC))echo'<option value="'.$rr['id'].'">'.$rr['contentType'].': '.$rr['title'].'</option>';?>
+                                </select>
+                                <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                              </div>
+                            <?php }?>
+                          </form>
+                        <?php }?>
+                      </div>
                     </div>
-                  <?php }?>
-                </form>
-              <?php }?>
+                  </article>
+                </div>
+              </div>
               <div id="relateditems">
                 <?php $sr=$db->prepare("SELECT `id`,`rid` FROM `".$prefix."choices` WHERE `uid`=:id AND `contentType`='related' ORDER BY `ti` ASC");
                 $sr->execute([':id'=>$r['id']]);
@@ -1704,15 +1832,19 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   $si=$db->prepare("SELECT `contentType`,`title` FROM `".$prefix."content` WHERE `id`=:id");
                   $si->execute([':id'=>$rr['rid']]);
                   $ri=$si->fetch(PDO::FETCH_ASSOC);?>
-                  <div class="form-row mt-1" id="l_<?=$rr['id'];?>">
-                    <input type="text" value="<?= ucfirst($ri['contentType']).': '.$ri['title'];?>" readonly>
-                    <?php if($user['options'][1]==1){?>
-                      <form target="sp" action="core/purge.php">
-                        <input name="id" type="hidden" value="<?=$rr['id'];?>">
-                        <input name="t" type="hidden" value="choices">
-                        <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                      </form>
-                    <?php }?>
+                  <div class="row" id="l_<?=$rr['id'];?>">
+                    <div class="col-12">
+                      <div class="form-row">
+                        <div class="input-text col-12"><?= ucfirst($ri['contentType']).': '.$ri['title'];?></div>
+                        <?php if($user['options'][1]==1){?>
+                          <form target="sp" action="core/purge.php">
+                            <input name="id" type="hidden" value="<?=$rr['id'];?>">
+                            <input name="t" type="hidden" value="choices">
+                            <button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
+                          </form>
+                        <?php }?>
+                      </div>
+                    </div>
                   </div>
                 <?php }?>
               </div>
@@ -1720,7 +1852,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
           <?php }
 /* SEO */
           if($r['contentType']!='testimonials'&&$r['contentType']!='proofs'){?>
-            <div class="tab1-7 border p-3" data-tabid="tab1-7" role="tabpanel">
+            <div class="tab1-8 border p-3" data-tabid="tab1-8" role="tabpanel">
               <label for="views" class="mt-0">Views</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -1815,7 +1947,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             </div>
           <?php }
 /* Settings */ ?>
-          <div class="tab1-8 border p-3" data-tabid="tab1-8" role="tabpanel">
+          <div class="tab1-9 border p-3" data-tabid="tab1-9" role="tabpanel">
             <div class="row">
               <div class="col-12 col-sm-6 pr-md-3">
                 <label for="status" class="mt-0">Status</label>
@@ -2072,7 +2204,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             }?>
           </div>
           <?php if($r['contentType']=='events'){?>
-            <div class="tab1-9 border p-3" data-tabid="tab1-9" role="tabpanel">
+            <div class="tab1-10 border p-3" data-tabid="tab1-10" role="tabpanel">
               <div class="row">
                 <?php $sbb=$db->prepare("SELECT * FROM `".$prefix."content` WHERE `contentType`='booking' AND `rid`=:rid ORDER BY `ti` DESC");
                 $sbb->execute([':rid'=>$r['id']]);
@@ -2101,15 +2233,16 @@ if(!in_array($r['contentType'],['testimonials','list'])){
               </div>
             </div>
           <?php }
+/* Templates */
           if($r['contentType']!='testimonials'){?>
-            <div class="tab1-10 border p-3" data-tabid="tab1-10" role="tabpanel">
+            <div class="tab1-11 border p-3" data-tabid="tab1-11" role="tabpanel">
               <section class="content overflow-visible theme-chooser" id="templates">
-                <article class="card col-12 col-md-2 m-1 overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
-                  <figure class="card-image">
+                <article class="card m-1 overflow-visible theme<?=$r['templatelist']==0?' theme-selected':'';?>" id="l_0" data-template="0">
+                  <figure class="card-image position-relative overflow-visible">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 260 180" fill="none"></svg>
                     <div class="image-toolbar overflow-visible"><i class="i icon enable text-white i-4x pt-2 pr-1">approve</i></div>
                   </figure>
-                  <div class="card-header line-clamp">Theme Generated</div>
+                  <div class="card-header w-auto">Theme Generated</div>
                   <div class="card-body no-clamp">
                     <p class="small"><small>This selection uses the item template in the theme file.</small></p>
                   </div>
@@ -2117,12 +2250,12 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                 <?php $st=$db->prepare("SELECT * FROM `".$prefix."templates` WHERE `contentType`='all' ORDER BY `contentType` ASC, `section` ASC");
                 $st->execute();
                 while($rt=$st->fetch(PDO::FETCH_ASSOC)){?>
-                  <article class="card col-12 col-md-2 m-1 overflow-visible theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
+                  <article class="card m-1 overflow-visible theme<?=$rt['id']==$r['templatelist']?' theme-selected':'';?>" id="l_<?=$rt['id'];?>" data-template="<?=$rt['id'];?>">
                     <figure class="card-image position-relative overflow-visible">
                       <?=$rt['image'];?>
                       <div class="image-toolbar overflow-visible"><i class="i icon enable text-white i-4x pt-2 pr-1">approve</i></div>
                     </figure>
-                    <div class="card-header line-clamp"><?=$rt['title'];?></div>
+                    <div class="card-header w-auto"><?=$rt['title'];?></div>
                     <div class="card-body no-clamp">
                       <p class="small"><small><?=$rt['notes'];?></small></p>
                     </div>
@@ -2150,7 +2283,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
           <?php }
 /* Purchases */
           if($r['contentType']=='inventory'){?>
-            <div class="tab1-11 border" data-tabid="tab1-11" role="tabpanel">
+            <div class="tab1-12 border" data-tabid="tab1-12" role="tabpanel">
               <div class="row sticky-top">
                 <article class="card mb-0 p-0 py-2 overflow-visible card-list card-list-header shadow">
                   <div class="row">
@@ -2204,7 +2337,7 @@ if(!in_array($r['contentType'],['testimonials','list'])){
             <?php }
 /* List */
             if($r['contentType']=='article'){?>
-              <div class="tab1-12 border" data-tabid="tab1-12" role="tabpanel">
+              <div class="tab1-13 border" data-tabid="tab1-13" role="tabpanel">
                 <?php if($user['options'][1]==1){?>
                   <form target="sp" method="post" enctype="multipart/form-data" action="core/add_list.php">
                     <input name="rid" type="hidden" value="<?=$r['id'];?>">
@@ -2368,97 +2501,6 @@ if(!in_array($r['contentType'],['testimonials','list'])){
                   return ui;
                 }
               </script>
-            <?php }
-/* Expenses */
-            if($r['contentType']=='inventory'){?>
-              <div class="tab1-13 border" data-tabid="tab1-13" role="tabpanel">
-                <div class="row sticky-top">
-                  <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
-                    <div class="row m-0 p-0">
-                      <div class="col-12 col-md-2 pl-2 py-2">Code</div>
-                      <div class="col-12 col-md-2 pl-2 py-2">Brand</div>
-                      <div class="col-12 col-md pl-2 py-2">Title</div>
-                      <div class="col-12 col-md-2 pl-2 py-2">Cost</div>
-                    </div>
-                    <?php if($user['options'][1]==1){?>
-                      <div class="row m-0 p-0">
-                        <div class="col-12">
-                          <select onchange="fillExpense($(this).val());">
-                            <option value="0">Select an Expense to AutoFill (Selecting this will clear values)...</option>
-                            <?php $se=$db->prepare("SELECT `id`,`type`,`category`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='expense' GROUP BY (`type`) ORDER BY `type` ASC,`title` ASC");
-                            $se->execute();
-                            while($re=$se->fetch(PDO::FETCH_ASSOC)){
-                              echo'<option value="'.$re['type'].'|'.$re['category'].'|'.$re['title'].'|'.$re['cost'].'">Code:'.$re['type'].' | Brand:'.$re['category'].' | Title:'.$re['title'].' | Cost:'.$re['cost'].'</option>';
-                            }?>
-                          </select>
-                        </div>
-                      </div>
-                      <script>
-                      function fillExpense(id){
-                        if(id==0){
-                          $('#ecode,#ebrand,#etitle,#ecost').val('');
-                        }else{
-                          var expense=id.split("|");
-                          $('#ecode').val(expense[0]);
-                          $('#ebrand').val(expense[1]);
-                          $('#etitle').val(expense[2]);
-                          $('#ecost').val(expense[3]);
-                        }
-                      }
-                      </script>
-                      <form class="row m-0 p-0" target="sp" method="POST" action="core/add_expense.php">
-                        <input name="rid" type="hidden" value="<?=$r['id'];?>">
-                        <div class="col-12 col-md-2">
-                          <input type="text" id="ecode" name="c" value="" placeholder="Enter a Code...">
-                        </div>
-                        <div class="col-12 col-md-2">
-                          <input type="text" id="ebrand" name="b" value="" placeholder="Enter a Brand...">
-                        </div>
-                        <div class="col-12 col-md">
-                          <input type="text" id="etitle" name="t" value="" placeholder="Enter a Title...">
-                        </div>
-                        <div class="col-12 col-md-2">
-                          <div class="form-row">
-                            <input type="text" id="ecost" name="cost" value="" placeholder="Enter a Cost...">
-                            <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
-                          </div>
-                        </div>
-                      </form>
-                    <?php }?>
-                  </article>
-                </div>
-                <div id="expenses">
-                  <?php $se=$db->prepare("SELECT `id`,`type`,`category`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='expense' AND `rid`=:rid ORDER BY `type` ASC, `title` ASC");
-                  $se->execute([':rid'=>$r['id']]);
-                  if($se->rowCount()>0){
-                    while($re=$se->fetch(PDO::FETCH_ASSOC)){?>
-                      <article id="l_<?=$re['id'];?>" class="card col-12 zebra mb-0 p-0 overflow-visible card-list item shadow" data-cost="<?=$re['cost'];?>">
-                        <div class="row">
-                          <div class="col-12 col-md-2">
-                            <div class="input-text"><?=$re['type'];?>&nbsp;</div>
-                          </div>
-                          <div class="col-12 col-md-2">
-                            <div class="input-text"><?=$re['category'];?>&nbsp;</div>
-                          </div>
-                          <div class="col-12 col-md">
-                            <div class="input-text"><?=$re['title'];?></div>
-                          </div>
-                          <div class="col-12 col-md-2">
-                            <div class="form-row">
-                              <div class="input-text col-12"><?=$re['cost'];?></div>
-                              <form target="sp" action="core/purge.php">
-                    						<input name="id" type="hidden" value="<?=$re['id'];?>">
-                    						<input name="t" type="hidden" value="choices">
-                    						<button class="trash" data-tooltip="tooltip" aria-label="Delete"><i class="i">trash</i></button>
-                  						</form>
-                            </div>
-                          </div>
-                        </div>
-                      </article>
-                    <?php }
-                  }?>
-                </div>
-              </div>
             <?php }?>
           </div>
         </div>

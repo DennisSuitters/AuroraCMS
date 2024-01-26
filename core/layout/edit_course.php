@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -36,20 +36,22 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
           <div class="tabs" role="tablist">
-            <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-            <label for="tab1-1">Content</label>
-            <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-            <label for="tab1-2">Media</label>
-            <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-            <label for="tab1-3">SEO</label>
-            <input class="tab-control" id="tab1-4" name="tabs" type="radio">
-            <label for="tab1-4">Settings</label>
-            <input class="tab-control" id="tab1-5" name="tabs" type="radio">
-            <label for="tab1-5">Modules</label>
-            <input class="tab-control" id="tab1-6" name="tabs" type="radio">
-            <label for="tab1-6">Certificate</label>
-            <input class="tab-control" id="tab1-7" name="tabs" type="radio">
-            <label for="tab1-7">Students</label>
+            <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+            '<label for="tab1-1">Content</label>'.
+            '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+            '<label for="tab1-2">Pricing</label>'.
+            '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+            '<label for="tab1-3">Media</label>'.
+            '<input class="tab-control" id="tab1-4" name="tabs" type="radio">'.
+            '<label for="tab1-4">SEO</label>'.
+            '<input class="tab-control" id="tab1-5" name="tabs" type="radio">'.
+            '<label for="tab1-5">Settings</label>'.
+            '<input class="tab-control" id="tab1-6" name="tabs" type="radio">'.
+            '<label for="tab1-6">Modules</label>'.
+            '<input class="tab-control" id="tab1-7" name="tabs" type="radio">'.
+            '<label for="tab1-7">Certificate</label>'.
+            '<input class="tab-control" id="tab1-8" name="tabs" type="radio">'.
+            '<label for="tab1-8">Students</label>';?>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
               <label for="title" class="mt-0">Title</label>
@@ -145,12 +147,63 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-sm pr-sm-3">
-                  <div class="form-row mt-5">
-                    <input data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
-                    <label for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
+                <div class="col-12 col-sm">
+                  <label for="rating">Minimum Score to Pass</label>
+                  <div class="form-text">'0' Disables Minimum Score.</div>
+                  <div class="form-row">
+                    <input class="textinput" id="rating" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rating" type="number" value="<?=$r['rating'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Minimum Score to Pass this Course..."':' readonly';?>>
+                    <?=$user['options'][1]==1?'<button class="save" id="saverating" data-dbid="rating" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
+                <div class="col-12 col-sm pl-sm-3">
+                  <label for="attempts">Attempts Allowed to Pass Course</label>
+                  <div class="form-text">'0' Disables Attempts Allowed.</div>
+                  <div class="form-row">
+                    <input class="textinput" id="attempts" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attempts" type="text" value="<?=$r['attempts'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Number of Allowed Attempts..."':' readonly';?>>
+                    <?=$user['options'][1]==1?'<button class="save" id="saveattempts" data-dbid="attempts" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-4">
+                <?php if($user['options'][1]==1){
+                  echo'<div class="wysiwyg-toolbar"><div class="btn-group d-flex justify-content-end">';
+                  if($r['suggestions']==1){
+                    $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
+                    $ss->execute([
+                      ':rid'=>$r['id'],
+                      ':t'=>'course',
+                      ':c'=>'notes'
+                    ]);
+                    echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=course&c=notes" data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></button>':'';
+                  }
+                  echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button><button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button><input class="col-1" id="ipsumc" value="5"><button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button><button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=course&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button></div></div>';?>
+                  <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
+                  <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
+                    <input name="id" type="hidden" value="<?=$r['id'];?>">
+                    <input name="t" type="hidden" value="content">
+                    <input name="c" type="hidden" value="notes">
+                    <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
+                  </form>
+                <?php }else{?>
+                  <div class="note-editor note-frame">
+                    <div class="note-editing-area">
+                      <div class="note-viewport-area">
+                        <div class="note-editable">
+                          <?= rawurldecode($r['notes']);?>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <?php }?>
+              </div>
+            </div>
+<?php /* Pricing */ ?>
+            <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
+              <div class="form-row">
+                <input data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="options" data-dbb="0" type="checkbox"<?=($r['options'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][1]==1?'':' disabled');?>>
+                <label for="courseshowCost" id="courseoptions0<?=$r['id'];?>">Show Cost</label>
+              </div>
+              <div class="row">
                 <div class="col-12 col-sm pr-sm-3">
                   <label for="cost">Cost</label>
                   <div class="form-row">
@@ -189,65 +242,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     <?=$user['options'][1]==1?'<button class="save" id="saverCost" data-dbid="rCost" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col-12 col-sm">
-                    <label for="rating">Minimum Score to Pass</label>
-                    <div class="form-text">'0' Disables Minimum Score.</div>
-                    <div class="form-row">
-                      <input class="textinput" id="rating" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="rating" type="number" value="<?=$r['rating'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Minimum Score to Pass this Course..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="saverating" data-dbid="rating" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                  <div class="col-12 col-sm pl-sm-3">
-                    <label for="attempts">Attempts Allowed to Pass Course</label>
-                    <div class="form-text">'0' Disables Attempts Allowed.</div>
-                    <div class="form-row">
-                      <input class="textinput" id="attempts" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="attempts" type="text" value="<?=$r['attempts'];?>"<?=$user['options'][1]==1?' placeholder="Enter a Number of Allowed Attempts..."':' readonly';?>>
-                      <?=$user['options'][1]==1?'<button class="save" id="saveattempts" data-dbid="attempts" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
-                    </div>
-                  </div>
-                </div>
-                <div class="row mt-3">
-                  <?php if($user['options'][1]==1){
-                    echo'<div class="wysiwyg-toolbar"><div class="btn-group d-flex justify-content-end">';
-                    if($r['suggestions']==1){
-                      $ss=$db->prepare("SELECT `rid` FROM `".$prefix."suggestions` WHERE `rid`=:rid AND `t`=:t AND `c`=:c");
-                      $ss->execute([
-                        ':rid'=>$r['id'],
-                        ':t'=>'course',
-                        ':c'=>'notes'
-                      ]);
-                      echo$ss->rowCount()>0?'<button data-fancybox data-type="ajax" data-src="core/layout/suggestions.php?id='.$r['id'].'&t=course&c=notes" data-tooltip="tooltip" aria-label="Editing Suggestions"><i class="i text-success">lightbulb</i></button>':'';
-                    }
-                    echo'<button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Content.md" data-type="content" data-tooltip="tooltip" aria-label="SEO Content Information"><i class="i">seo</i></button><button data-tooltip="tooltip" aria-label="Show Element Blocks" onclick="$(`.note-editable`).toggleClass(`note-show-block`);return false;"><i class="i">blocks</i></button><input class="col-1" id="ipsumc" value="5"><button data-tooltip="tooltip" aria-label="Add Aussie Lorem Ipsum" onclick="ipsuMe(`editor`,$(`#ipsumc`).val());return false;"><i class="i">loremipsum</i></button><button data-fancybox data-type="ajax" data-src="core/layout/suggestions-add.php?id='.$r['id'].'&t=course&c=notes" data-tooltip="tooltip" aria-label="Add Suggestions"><i class="i">idea</i></button></div></div>';?>
-                    <div id="notesda" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes"></div>
-                    <form id="summernote" target="sp" method="post" action="core/update.php" enctype="multipart/form-data">
-                      <input name="id" type="hidden" value="<?=$r['id'];?>">
-                      <input name="t" type="hidden" value="content">
-                      <input name="c" type="hidden" value="notes">
-                      <textarea class="summernote" id="notes" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="notes" name="da"><?= rawurldecode($r['notes']);?></textarea>
-                    </form>
-                  <?php }else{?>
-                    <div class="note-editor note-frame">
-                      <div class="note-editing-area">
-                        <div class="note-viewport-area">
-                          <div class="note-editable">
-                            <?= rawurldecode($r['notes']);?>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  <?php }?>
-                </div>
               </div>
             </div>
-<?php /* Images */ ?>
-            <div class="tab1-2 border p-3" data-tabid="tab1-2" role="tabpanel">
+<?php /* Media */ ?>
+            <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
               <div class="tabs2" role="tablist">
-                <input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>
-                <label for="tab2-1">Images</label>
-                <input class="tab-control" id="tab2-2" name="tabs2" type="radio">
-                <label for="tab2-2">On Page Media</label>
+                <?='<input class="tab-control" id="tab2-1" name="tabs2" type="radio" checked>'.
+                '<label for="tab2-1">Images</label>'.
+                '<input class="tab-control" id="tab2-2" name="tabs2" type="radio">'.
+                '<label for="tab2-2">On Page Media</label>';?>
                 <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                   <div id="error"></div>
                   <label for="fileURL" class="mt-0">URL</label>
@@ -373,7 +376,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
 <?php /* SEO */?>
-            <div class="tab1-3 border p-3" data-tabid="tab1-3" role="tabpanel">
+            <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
               <label for="views" class="mt-0">Views</label>
               <div class="form-row">
                 <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
@@ -464,7 +467,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
 <?php /* Settings */ ?>
-            <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
+            <div class="tab1-5 border p-3" data-tabid="tab1-5" role="tabpanel">
               <div class="row">
                 <div class="col-12 col-sm-6 pr-md-3">
                   <label for="status" class="mt-0">Status</label>
@@ -533,7 +536,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </div>
             </div>
 <?php /* Modules */ ?>
-            <div class="tab1-5 border p-3" data-tabid="tab1-5" role="tabpanel">
+            <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
               <?php if($user['options'][1]==1){?>
                 <form class="form-row" target="sp" method="post" action="core/add_module.php">
                   <input name="rid" type="hidden" value="<?=$r['id'];?>">
@@ -582,7 +585,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               </script>
             <?php }
 /* Certificate */ ?>
-            <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
+            <div class="tab1-7 border p-3" data-tabid="tab1-7" role="tabpanel">
               <div class="form-row justify-content-end">
                 <div class="btn-group">
                   <a target="_blank" href="core/view_certificate.php?id=<?=$r['id'];?>" role="button">View Selected Certificate</a>
@@ -650,7 +653,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
               <?php }?>
             </div>
 <?php /* Students */ ?>
-            <div class="tab1-7 border p-3" data-tabid="tab1-7" role="tabpanel">
+            <div class="tab1-8 border p-3" data-tabid="tab1-8" role="tabpanel">
               <?php if($user['options'][0]==1){?>
                 <div class="row">
                   <form target="sp" method="post" action="core/add_student.php">

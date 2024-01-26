@@ -22,7 +22,7 @@ $sv->execute();?>
             <li class="breadcrumb-item active">Frequently Asked Questions (FAQ's)</li>
           </ol>
         </div>
-        <div class="sticky-top">
+        <div class="">
           <div class="row">
             <article class="card mb-0 p-0 overflow-visible card-list card-list-header shadow">
               <div class="row py-2">
@@ -48,7 +48,7 @@ $sv->execute();?>
                   </div>
                   <div class="row">
                     <div class="col-12 col-md">
-                      <textarea class="summernote" id="da" name="da"></textarea>
+                      <textarea class="summernote2" id="da" name="da"></textarea>
                     </div>
                     <div class="col-12 col-md-1 text-right align-bottom">
                       <button class="add" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
@@ -56,37 +56,35 @@ $sv->execute();?>
                   </div>
                 </form>
                 <script>
-                  document.addEventListener("DOMContentLoaded",function(event){
-                    $('.summernote').summernote({
-                      toolbar:[
-                        ['insert',['link']],
-                      ],
-                      linkList:[
-                        <?php $sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
-                        $sl->execute();
-                        while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
-                          echo'['.
-                            '"'.$rl['title'].'",'.
-                            '"'.URL.$rl['contentType'].'/'.$rl['url'].'",'.
-                            '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
-                          '],';
-                        }
-                        $sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
-                        $sl->execute();
-                        while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
-                          echo'['.
-                            '"'.$rl['title'].'",'.
-                            '"'.URL.$rl['contentType'].'/'.$rl['urlSlug'].'/",'.
-                            '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
-                          '],';
-                        }?>
-                      ],
-                      callbacks:{
-                        onInit:function(){
-                          $('body > .note-popover').appendTo(".note-editing-area");
-                        }
+                  $('.summernote2').summernote({
+                    toolbar:[
+                      ['insert',['link']],
+                    ],
+                    linkList:[
+                      <?php $sl=$db->prepare("SELECT * FROM `".$prefix."menu` WHERE `mid`=0 AND `menu`!='none' AND `active`=1 ORDER BY FIELD(`menu`,'head','footer','account','other'), `ord` ASC");
+                      $sl->execute();
+                      while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                        echo'['.
+                          '"'.$rl['title'].'",'.
+                          '"'.URL.$rl['contentType'].'/'.$rl['url'].'",'.
+                          '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+                        '],';
                       }
-                    })
+                      $sl=$db->query("SELECT `id`,`title`,`urlSlug`,`contentType` FROM `".$prefix."content` WHERE `contentType`!='testimonials' AND `contentType`!='faq' AND `contentType`!='booking' AND `status`='published' ORDER BY `contentType` ASC");
+                      $sl->execute();
+                      while($rl=$sl->fetch(PDO::FETCH_ASSOC)){
+                        echo'['.
+                          '"'.$rl['title'].'",'.
+                          '"'.URL.$rl['contentType'].'/'.$rl['urlSlug'].'/",'.
+                          '"'.ucwords($rl['contentType']).' - '.$rl['title'].'",'.
+                        '],';
+                      }?>
+                    ],
+                    callbacks:{
+                      onInit:function(){
+                        $('body > .note-popover').appendTo(".note-editing-area");
+                      }
+                    }
                   });
                 </script>
               <?php }?>

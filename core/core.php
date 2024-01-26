@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -206,6 +206,15 @@ function requestSameDomain(){
   $requestsSource=$_SERVER['HTTP_REFERER'];
   return parse_url($myDomain,PHP_URL_HOST)===parse_url($requestsSource,PHP_URL_HOST);
 }
+function ago($time){
+	$time_difference=time()- $time;
+	if($time_difference<1){return'Never';}
+	$condition=array(12 * 30 * 24 * 60 * 60=>'year',30 * 24 * 60 * 60=>'month',24 * 60 * 60=>'day',60 * 60=>'hour',60=>'minute',1=>'second');
+	foreach($condition as$secs=>$str){
+			$d=$time_difference / $secs;
+			if($d>=1){$t=round($d);return$t.' '.$str.($t>1?'s':'');}
+	}
+}
 function _ago($time){
 	$time_difference=time()- $time;
 	if($time_difference<1){return'Never';}
@@ -380,6 +389,10 @@ class admin{
 		$view='bookings';
 		require'admin.php';
 	}
+	function copy($args=false){
+		$view='copy';
+		require'admin.php';
+	}
 	function livechat($args=false){
 		$view='livechat';
 		require'admin.php';
@@ -457,10 +470,6 @@ class admin{
 		$view='orders';
 		require'admin.php';
 	}
-	function playlist($args=false){
-		$view='playlist';
-		require'admin.php';
-	}
 	function reviews($args=false){
 		$view='reviews';
 		require'admin.php';
@@ -475,6 +484,10 @@ class admin{
 	}
 	function payments($args=false){
 		$view='payments';
+		require'admin.php';
+	}
+	function playlist($args=false){
+		$view='playlist';
 		require'admin.php';
 	}
 	function preferences($args=false){
@@ -698,12 +711,12 @@ $routes=[
 	$settings['system']['admin'].'/adverts'=>['admin','adverts'],
 	$settings['system']['admin'].'/agronomy'=>['admin','agronomy'],
 	$settings['system']['admin'].'/bookings'=>['admin','bookings'],
-	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
 	$settings['system']['admin'].'/cart'=>['admin','cart'],
 	$settings['system']['admin'].'/comments'=>['admin','comments'],
 	$settings['system']['admin'].'/contact'=>['admin','contact'],
 	$settings['system']['admin'].'/contacts'=>['admin','contacts'],
 	$settings['system']['admin'].'/content'=>['admin','content'],
+	$settings['system']['admin'].'/copy'=>['admin','copy'],
 	$settings['system']['admin'].'/course'=>['admin','course'],
 	$settings['system']['admin'].'/dashboard'=>['admin','dashboard'],
 	$settings['system']['admin'].'/database'=>['admin','database'],
@@ -711,9 +724,9 @@ $routes=[
 	$settings['system']['admin'].'/forum'=>['admin','forum'],
 	$settings['system']['admin'].'/interface'=>['admin','interface'],
 	$settings['system']['admin'].'/joblist'=>['admin','joblist'],
+	$settings['system']['admin'].'/livechat'=>['admin','livechat'],
 	$settings['system']['admin'].'/logout'=>['admin','logout'],
 	$settings['system']['admin'].'/media'=>['admin','media'],
-	$settings['system']['admin'].'/playlist'=>['admin','playlist'],
 	$settings['system']['admin'].'/messages'=>['admin','messages'],
 	$settings['system']['admin'].'/newsletters'=>['admin','newsletters'],
 	$settings['system']['admin'].'/notification'=>['admin','notification'],
@@ -721,6 +734,7 @@ $routes=[
   $settings['system']['admin'].'/rewards'=>['admin','rewards'],
 	$settings['system']['admin'].'/pages'=>['admin','pages'],
 	$settings['system']['admin'].'/payments'=>['admin','payments'],
+	$settings['system']['admin'].'/playlist'=>['admin','playlist'],
 	$settings['system']['admin'].'/preferences'=>['admin','preferences'],
 	$settings['system']['admin'].'/settings'=>['admin','settings'],
 	$settings['system']['admin'].'/reviews'=>['admin','reviews'],

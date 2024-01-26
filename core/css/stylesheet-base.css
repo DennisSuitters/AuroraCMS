@@ -188,7 +188,8 @@ td,
 th{
   padding:.5rem }
 
-.card.zebra:nth-child(even){
+.card.zebra:nth-child(even),
+.zebra .row:nth-child(even){
   background-color:var(--card-background-color-zebra)!important }
 
 table.table-zebra tbody tr:nth-child(odd){

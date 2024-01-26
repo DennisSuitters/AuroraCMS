@@ -10,6 +10,11 @@
     </article>
     <article class="col-12 col-sm-5 mx-auto hidewhenempty"><error><paypal>
         <div class="card p-3 mb-3">
+          <paypalhold>
+            <div class="alert alert-info mb-3 text-center">
+              &dollar;<print checkout="paypaltotal"> will be charged via PayPal.
+            </div>
+          </paypalhold>
           <div id="smart-button-container">
             <div class="text-center">
               <div id="paypal-button-container"></div>
@@ -27,12 +32,14 @@
                 },
                 createOrder:function(data,actions){
                   return actions.order.create({
-                    purchase_units:[{
-                      "amount":{
-                        "currency_code":"AUD",
-                        "value":<print checkout=total>
+                    purchase_units:[
+                      {
+                        "amount":{
+                          "currency_code":"AUD",
+                          "value":<print checkout="paypaltotal">
+                        }
                       }
-                    }]
+                    ]
                   });
                 },
                 onApprove:function(data,actions){
@@ -49,7 +56,7 @@
                         name:name,
                         email:email,
                         txnid:txnid,
-                        amount:<print checkout="total">,
+                        amount:<print checkout="paypaltotal">,
                         act:act
                       }
                     }).done(
@@ -90,6 +97,15 @@
           </afterpay>
           <form target="sp" action="core/stripepayment.php" method="post" id="paymentFrm">
             <input type="hidden" name="oid" value="<print checkout=orderid>">
+            <holding>
+              <label for="hold">Pay mininum holding cost.</label>
+              <div class="form-row flex-wrap">
+                <select id="hold" name="hold">
+                  <option value="0">Pay Full Cost.</option>
+                  <option value="1" selected>Pay Mininum Hold Cost.</option>
+                </select>
+              </div>
+            </holding>
             <label class="required" for="email">Email</label>
             <div class="form-row flex-wrap">
               <input type="email" name="email" id="email" class="field" placeholder="Enter your Email..." required aria-reqired="true" enterkeyhint="next">
@@ -111,7 +127,7 @@
                 <div id="card_cvc" class="field"></div>
               </div>
             </div>
-            <button type="submit" class="btn btn-success mt-4" id="payBtn">Pay $<print checkout="total"></button>
+            <button type="submit" class="btn btn-success mt-4" id="payBtn">Pay $<print checkout="total"><print checkout="holdtotal"></button>
           </form>
           <iframe id="sp" name="sp" class="d-none"></iframe>
           <div class="col-12 small text-center mt-3">

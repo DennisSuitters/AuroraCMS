@@ -88,20 +88,18 @@ else{?>
                     <button class="badger badger-primary <?=($r['status']=='published'?'':' d-none');?>" id="share<?=$r['id'];?>" data-social-share="<?= URL.$r['contentType'].'/'.$r['urlSlug'];?>" data-social-desc="<?=$r['seoDescription']?$r['seoDescription']:$r['title'];?>" data-tooltip="tooltip" aria-label="Share on Social Media"><i class="i">share</i></button>
                   </div>
                 </div>
-                <div class="card-header overflow-visible mt-0 pt-0 line-clamp">
-                  <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/adverts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
-                  <?php echo'<br><small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+                <div class="card-header overflow-visible mt-0 pt-0 align-middle line-clamp">
+                  <a class="d-block" data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/adverts/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
+                  <?php echo'<small class="text-muted" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).' p-0 px-1 text-white">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
                 </div>
                 <div class="card-footer">
-                  <span class="code hidewhenempty"><?=$r['code'];?></span>
-                  <?=($r['views']>0?($user['options'][0]==1?'<button class="btn views" data-tooltip="tooltip" aria-label="'.$r['views'].' impressions. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span>'.($r['quantity']>0?' of '.$r['quantity']:'').' <i class="i">view</i></button>':'<span class="btn" data-tooltip="tooltip" aria-label="'.$r['lti'].' Views">'.$r['lti'].' <i class="i">view</i></span>'):'');?>
-                  <span class="btn" data-tooltip="tooltip" aria-label="<?=$r['lti'];?> Clicks"><?=$r['lti'];?> <i class="i">opennew</i></span>
-                  <div id="controls_<?=$r['id'];?>">
-                    <div class="btn-toolbar float-right" role="toolbar">
-                      <div class="btn-group" role="group">
-                        <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/adverts/edit/<?=$r['id'];?>" role="button"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
-                        <?=($user['options'][0]==1?'<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`unpublished`);"><i class="i">untrash</i></button><button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`content`);"><i class="i">purge</i></button>':'');?>
-                      </div>
+                  <div class="btn-toolbar float-right" id="controls_<?=$r['id'];?>" role="toolbar">
+                    <div class="btn-group" role="group">
+                      <span class="code hidewhenempty"><?=$r['code'];?></span>
+                      <?=($r['views']>0?($user['options'][0]==1?'<button class="btn views" data-tooltip="tooltip" aria-label="'.$r['views'].' impressions. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span>'.($r['quantity']>0?' of '.$r['quantity']:'').' <i class="i">view</i></button>':'<span class="btn" data-tooltip="tooltip" aria-label="'.$r['lti'].' Views">'.$r['lti'].' <i class="i">view</i></span>'):'');?>
+                      <span class="btn" data-tooltip="tooltip" aria-label="<?=$r['lti'];?> Clicks"><?=$r['lti'];?> <i class="i">opennew</i></span>
+                      <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'];?>/adverts/edit/<?=$r['id'];?>" role="button"<?=$user['options'][1]==1?' aria-label="Edit"':' aria-label="View"';?>><i class="i"><?=$user['options'][1]==1?'edit':'view';?></i></a>
+                      <?=($user['options'][0]==1?'<button class="add'.($r['status']!='delete'?' d-none':'').'" id="untrash'.$r['id'].'" data-tooltip="tooltip" aria-label="Restore" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`unpublished`);"><i class="i">untrash</i></button><button class="trash'.($r['status']=='delete'?' d-none':'').'" id="delete'.$r['id'].'" data-tooltip="tooltip" aria-label="Delete" onclick="updateButtons(`'.$r['id'].'`,`content`,`status`,`delete`);"><i class="i">trash</i></button><button class="purge'.($r['status']!='delete'?' d-none':'').'" id="purge'.$r['id'].'" data-tooltip="tooltip" aria-label="Purge" onclick="purge(`'.$r['id'].'`,`content`);"><i class="i">purge</i></button>':'');?>
                     </div>
                   </div>
                 </div>

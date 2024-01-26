@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -22,6 +22,7 @@ if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT
 }
 define('URL',PROTOCOL.$_SERVER['HTTP_HOST'].$settings['system']['url'].'/');
 $oid=filter_input(INPUT_POST,'oid',FILTER_UNSAFE_RAW);
+$hold=filter_input(INPUT_POST,'hold',FILTER_UNSAFE_RAW);
 $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `qid`=:oid OR `iid`=:oid AND `status`!='archived'");
 $s->execute([':oid'=>$oid]);
 $payment_id=0;
@@ -42,7 +43,14 @@ if($error==''){
 if($error==''){
   $itemName=$r['qid'].$r['iid'];
   $itemNumber=$r['qid'].$r['iid'];
-  $itemPrice=$r['total'];
+  if($hold==1){
+    $sh=$db->prepare("SELECT `id`,`title`,`value` FROM `".$prefix."choices` WHERE `contentType`='holdoption' AND `id`=:id");
+    $sh->execute([':id'=>$r['hold_event']]);
+    $rh=$sh->fetch(PDO::FETCH_ASSOC);
+    $itemPrice=($rh['value'] / 100 ) * $r['total'];
+  }else{
+    $itemPrice=$r['total'];
+  }
   $currency="AUD";
   define('STRIPE_PUBLISHABLE_KEY',$config['stripe_publishkey']);
   define('STRIPE_API_KEY',$config['stripe_secretkey']);
@@ -91,7 +99,7 @@ if($error==''){
           $paidCurrency=$chargeJson['currency'];
           $payment_status=$chargeJson['status'];
           if($payment_status=='succeeded'){
-            $st=$db->prepare("UPDATE `".$prefix."orders` SET `iid`=:iid,`iid_ti`=:iid_ti,`qid`='',`qid_ti`='0',`paid_via`=:paid_via,`txn_id`=:txn_id,`paid_email`=:paid_email,`paid_name`=:paid_name,`paid_amount`=:paid_amount,`payment_status`=:payment_status,`paid_ti`=:paid_ti,`status`=:status WHERE `id`=:id");
+            $st=$db->prepare("UPDATE `".$prefix."orders` SET `iid`=:iid,`iid_ti`=:iid_ti,`qid`='',`qid_ti`='0',`paid_via`=:paid_via,`txn_id`=:txn_id,`paid_email`=:paid_email,`paid_name`=:paid_name,`paid_amount`=:paid_amount,`payment_status`=:payment_status,`paid_ti`=:paid_ti,`status`=:status,`process`=:process WHERE `id`=:id");
             $r['iid']='I'.date("ymd",$ti).sprintf("%06d",$r['id'],6);
             $st->execute([
               ':id'=>$r['id'],
@@ -104,7 +112,8 @@ if($error==''){
               ':paid_amount'=>$paidAmount,
               ':payment_status'=>($payment_status=='succeeded'?'paid':'error'),
               ':paid_ti'=>time(),
-              ':status'=>($payment_status=='succeeded'?'paid':$r['status'])
+              ':status'=>($payment_status=='succeeded'?'paid':$r['status']),
+              ':process'=>'1100000000000000'
             ]);
             $payment_id=$r['id'];
             $sp=$db->prepare("SELECT `id`,`iid`,`quantity`,`points` FROM `".$prefix."orderitems` WHERE `oid`=:oid");
@@ -255,6 +264,22 @@ $html='';
 $el='payment-info';
 if($error==''){
   if($payment_id>0){
+    if($msgd!=''||$msgl!=''||$msge!=''||$msgc!=''){
+      $sp=$db->prepare("UPDATE `".$prefix."orders` SET `process`=:process WHERE `id`=:id");
+      $sp->execute([
+        ':id'=>$r['id'],
+        ':process'=>'1111000000000000'
+      ]);
+    }
+    if($hold==1){
+      $sp=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:title,'1',:cost,'neg',:ti)");
+      $sp->execute([
+        ':oid'=>$r['id'],
+        ':title'=>'Holding Deposit for '.$rh['title'],
+        ':cost'=>$itemPrice,
+        ':ti'=>$ti
+      ]);
+    }
     $html.='<article class="col-12 text-center"><div class="alert alert-success">'.
       $statusMsg.
       ($msgd!=''?'<br>Download links to your purchase are within the Confirmation Email that has been sent to the email associated with your account':'').

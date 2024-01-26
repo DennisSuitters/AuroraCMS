@@ -7,17 +7,12 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
-<div class="item m-0 p-0 col-12 col-sm-<?=$rw['width_sm'];?> col-md-<?=$rw['width_md'];?> col-lg-<?=$rw['width_lg'];?> col-xl-<?=$rw['width_xl'];?> col-xxl-<?=$rw['width_xxl'];?>" data-dbid="<?=$rw['id'];?>" data-smmin="12" data-smmax="12" data-mdmin="12" data-mdmax="12" data-lgmin="12" data-lgmax="12" data-xlmin="12" data-xlmax="12" data-xxlmin="12" data-xxlmax="12" id="l_<?=$rw['id'];?>">
+<div class="item m-0 p-0 col-12" data-dbid="<?=$rw['id'];?>" id="l_<?=$rw['id'];?>">
   <div class="alert m-3 p-0 bg-transparent border-0">
-    <div class="toolbar px-2 py-1 bg-transparent handle">
-      <div class="btn-group">
-        <button class="btn btn-sm btn-ghost close-widget" data-dbid="<?=$rw['id'];?>" data-dbref="dashboard" data-tooltip="left" aria-label="Close"><i class="i">close</i></button>
-      </div>
-    </div>
     <div class="row">
       <?php if($config['hoster']==1&&$user['rank']==1000){
         $rh=$db->query("SELECT COUNT(DISTINCT `id`) AS cnt FROM `".$prefix."login` WHERE `hostStatus`='overdue'")->fetch(PDO::FETCH_ASSOC);

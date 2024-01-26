@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.18
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -184,19 +184,33 @@ if($s->rowCount()==1){
       ''
     ],$html);
   }else{
+    if($r['hold']==1){
+      $sh=$db->prepare("SELECT `id`,`value` FROM `".$prefix."choices` WHERE `contentType`='holdoption' AND `id`=:id");
+      $sh->execute([':id'=>$r['hold_event']]);
+      $rh=$sh->fetch(PDO::FETCH_ASSOC);
+      $holdtotal=($rh['value'] / 100 ) * $r['total'];
+      $holdtotal=number_format((float)$holdtotal, 2, '.', '');
+    }else{
+      $holdtotal=0;
+    }
     $html=preg_replace([
       '/<error>/',
-      $config['bank']==''?'~<direct>.*?</direct>~is':'/<[\/]?direct>/',
+      ($config['bank']==''?'~<direct>.*?</direct>~is':'/<[\/]?direct>/'),
       '/<print checkout=[\"\']?bank[\"\']?>/',
       '/<print checkout=[\"\']?accountName[\"\']?>/',
       '/<print checkout=[\"\']?accountNumber[\"\']?>/',
       '/<print checkout=[\"\']?accountBSB[\"\']?>/',
-      $config['payPalClientID']==''?'~<paypal>.*?</paypal>~is':'/<[\/]?paypal>/',
+      ($config['payPalClientID']==''?'~<paypal>.*?</paypal>~is':'/<[\/]?paypal>/'),
       '/<print paypal=[\"\']?clientID[\"\']?>/',
       '/<print url>/',
-      $config['options'][16]==1?'/<[\/]?afterpay>/':'~<afterpay>.*?</afterpay>~is',
-      $config['stripe_publishkey']==''?'~<stripe>.*?</stripe>~is':'/<[\/]?stripe>/',
+      ($config['options'][16]==1?'/<[\/]?afterpay>/':'~<afterpay>.*?</afterpay>~is'),
+      ($config['stripe_publishkey']==''?'~<stripe>.*?</stripe>~is':'/<[\/]?stripe>/'),
+      ($holdtotal>0?'/<[\/]?holding>/':'~<holding>.*?</holding>~is'),
+      ($holdtotal>0?'/<[\/]?paypalhold>/':'~<paypalhold>.*?</paypalhold>~is'),
       '/<print checkout=[\"\']?total[\"\']?>/',
+      '/<print checkout=[\"\']?hold[\"\']?>/',
+      '/<print checkout=[\"\']?holdtotal[\"\']?>/',
+      '/<print checkout=[\"\']?paypaltotal[\"\']?>/',
       '/<print order=[\"\']?id[\"\']?>/',
       '/<print checkout=[\"\']?orderid[\"\']?>/',
       '/<print stripe=[\"\']?publishkey[\"\']?>/',
@@ -212,7 +226,12 @@ if($s->rowCount()==1){
       URL,
       '',
       '',
+      ($holdtotal>0?'':'<input type="hidden" name="hold" value="0">'),
+      '',
       $r['total'],
+      $holdtotal,
+      ($holdtotal>0?' (&dollar;'.$holdtotal.' for Holding Payment).':''),
+      ($holdtotal>0?$holdtotal:$r['total']),
       $r['id'],
       $r['qid'].$r['iid'],
       $config['stripe_publishkey'],

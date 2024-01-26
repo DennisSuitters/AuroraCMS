@@ -1,21 +1,16 @@
 This is a quick list of things what need to be fixed or worked on to help those contributing to know what features or bugs are needing to be worked on.
 
-- Update Checkout Layout for Themes.
-- Explore adding Shipping Activity to Orders.
 - Forum
   - Replace Summernote Emoji plugin for one that uses Entities rather than images.
-- Update Settings Layout for users.
-- Explore add an account time based rewards feature.
-- Explore adding Referral Codes on SignUp forms, and code generation by allowed users.
-  - Account Holders can generate referrals for services, products & courses.
-  - Track referrals being used to account that generated referral to apply discount to.
-  - Count number of referrals to number of items or orders to apply discounts to.
+- Explore adding an account time based rewards feature.
+- Explore adding Referral Codes on SignUp forms.
 - Explore allowing user to set price/tip/buy me a coffee.
+- Check why categorised item pages don't use image set for the page instead of the favicon.
 - Administration.
+  - Uploadable Favicons, for each size. With an option for a single full sized upload that creates the other sizes.
   - Add instructional walk through on pages explaining what fields do, step by step.
   - Config database, add how to adjust total costs for items, by percentage, fixed value, or multiplying value.
   - Explore update Livechat Layout.
-  - Explore including Shipping Activity to Orders.
   - Dashboard.
     - Widget.
       - Revenue by month's.

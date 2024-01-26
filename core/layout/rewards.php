@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -26,6 +26,7 @@ $sv->execute();?>
           <div class="row">
             <article class="card m-0 p-0 overflow-visible card-list card-list-header shadow">
               <div class="row py-2">
+                <div class="col-12 col-md text-center">User</div>
                 <div class="col-12 col-md text-center">Code</div>
                 <div class="col-12 col-md text-center">Title</div>
                 <div class="col-12 col-md text-center">Method</div>
@@ -38,6 +39,16 @@ $sv->execute();?>
               <?php if($user['options'][0]==1){?>
                 <form class="row m-0 p-0" target="sp" method="post" action="core/add_reward.php">
                   <input name="act" type="hidden" value="add_reward">
+                  <div class="col-12 col-md">
+                    <select id="uid" name="uid">
+                      <option value="0">Select User, or select this to leave open...</option>
+                      <?php $su=$db->prepare("SELECT `id`,`username`,`name`,`rank` FROM `".$prefix."login` WHERE `active`=1 ORDER BY `name` ASC, `username` ASC");
+                      $su->execute();
+                      while($ru=$su->fetch(PDO::FETCH_ASSOC)){
+                        echo'<option value="'.$ru['id'].'">'.($ru['name']!=''?$ru['name'].' | ':'').$ru['username'].' | Rank: '.ucwords(rank($ru['rank'])).'</option>';
+                      }?>
+                    </select>
+                  </div>
                   <div class="col-12 col-md">
                     <input id="code" name="code" type="text" value="" placeholder="Code...">
                   </div>
@@ -75,17 +86,25 @@ $sv->execute();?>
         <div id="rewards">
           <?php $s=$db->prepare("SELECT * FROM `".$prefix."rewards` ORDER BY `ti` ASC, `code` ASC");
           $s->execute();
-          while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
-            <div class="row" id="l_<?=$r['id'];?>">
-              <article class="card zebra m-0 p-0 py-3 small overflow-visible card-list item shadow">
+          while($r=$s->fetch(PDO::FETCH_ASSOC)){
+            if($r['uid']>0){
+              $su=$db->prepare("SELECT `id`,`username`,`name`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+              $su->execute([
+                ':id'=>$r['uid']
+              ]);
+              $ru=$su->fetch(PDO::FETCH_ASSOC);
+            }?>
+            <div class="row zebra" id="l_<?=$r['id'];?>">
+              <article class="card m-0 p-0 py-1 small overflow-visible card-list item shadow">
                 <div class="row">
-                  <div class="col-12 col-md text-center"><?=$r['code'];?></div>
-                  <div class="col-12 col-md text-center"><?=$r['title'];?></div>
-                  <div class="col-12 col-md text-center"><?=$r['method']==0?'% Off':'$ Off';?></div>
-                  <div class="col-12 col-md text-center"><?=$r['value'];?></div>
-                  <div class="col-12 col-md text-center"><?=$r['quantity'];?></div>
-                  <div class="col-12 col-md-2 text-center"><?=$r['tis']!=0?date($config['dateFormat'],$r['tis']):'';?></div>
-                  <div class="col-12 col-md-2 text-center"><?=$r['tie']!=0?date($config['dateFormat'],$r['tie']):'';?></div>
+                  <div class="col-12 col-md pl-2"><?=($r['uid']>0?($ru['name']!=''?'<div data-tooltip="tooltip" aria-label="Name">'.$ru['name'].'</div>':'').'<div data-tooltip="tooltip" aria-label="Username">'.$ru['username'].'</div><div class="badger badge-'.rank($ru['rank']).'">'.ucwords(rank($ru['rank'])).'</div>':'<span class="badger badge-visitor mt-2">Anyone</span>');?></div>
+                  <div class="col-12 col-md text-center pt-2"><?=$r['code'];?></div>
+                  <div class="col-12 col-md text-center pt-2"><?=$r['title'];?></div>
+                  <div class="col-12 col-md text-center pt-2"><?=$r['method']==0?'% Off':'$ Off';?></div>
+                  <div class="col-12 col-md text-center pt-2"><?=$r['value'];?></div>
+                  <div class="col-12 col-md text-center pt-2"><?='<span data-tooltip="tooltip" aria-label="Used">'.$r['used'].'</span>'.($r['quantity']>0?'/'.$r['quantity']:'');?></div>
+                  <div class="col-12 col-md-2 text-center pt-2"><?=$r['tis']!=0?date($config['dateFormat'],$r['tis']):'';?></div>
+                  <div class="col-12 col-md-2 text-center pt-2"><?=$r['tie']!=0?date($config['dateFormat'],$r['tie']):'No Time Limit';?></div>
                   <div class="col-12 col-md-1 pr-2 text-right">
                     <?php if($user['options'][0]==1){?>
                       <form target="sp" action="core/purge.php">

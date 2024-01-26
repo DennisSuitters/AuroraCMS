@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.21
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -45,7 +45,15 @@ if($error==''){
     $error='<div class="alert alert-danger">User Does NOT Exist!</div>';
 }
 if($error==''){
-  $st=$db->prepare("UPDATE `".$prefix."orders` SET `paid_via`=:paid_via,`txn_id`=:txn_id,`paid_email`=:paid_email,`paid_name`=:paid_name,`paid_amount`=:paid_amount,`payment_status`=:payment_status,`paid_ti`=:paid_ti,`status`=:status WHERE `id`=:id");
+  if($r['hold']==1){
+    $sh=$db->prepare("SELECT `id`,`title`,`value` FROM `".$prefix."choices` WHERE `contentType`='holdoption' AND `id`=:id");
+    $sh->execute([':id'=>$r['hold_event']]);
+    $rh=$sh->fetch(PDO::FETCH_ASSOC);
+    $itemPrice=($rh['value'] / 100 ) * $r['total'];
+  }else{
+    $itemPrice=$r['total'];
+  }
+  $st=$db->prepare("UPDATE `".$prefix."orders` SET `paid_via`=:paid_via,`txn_id`=:txn_id,`paid_email`=:paid_email,`paid_name`=:paid_name,`paid_amount`=:paid_amount,`payment_status`=:payment_status,`paid_ti`=:paid_ti,`status`=:status,`process`=:process WHERE `id`=:id");
   $st->execute([
     ':id'=>$r['id'],
     ':paid_via'=>'paypal',
@@ -55,7 +63,8 @@ if($error==''){
     ':paid_amount'=>$paidAmount,
     ':payment_status'=>'paid',
     ':paid_ti'=>time(),
-    ':status'=>'paid'
+    ':status'=>'paid',
+    ':process'=>'1100000000000000'
   ]);
   $payment_id=$r['id'];
   $sp=$db->prepare("SELECT `id`,`iid`,`quantity`,`points` FROM `".$prefix."orderitems` WHERE `oid`=:oid");
@@ -103,7 +112,7 @@ if($error==''){
       $sd->execute([':id'=>$roi['iid']]);
       if($sd->rowCount()>0){
         while($rd=$sd->fetch(PDO::FETCH_ASSOC)){
-          $msgd.='Test Link for <a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> available';
+          $msgd.='Link for <a href="'.URL.'downloads/'.$rd['url'].'?oc='.$r['iid'].'">'.($rd['title']!=''?$rd['title']:$rd['url']).'</a> available';
           if($rd['tie']==0)$msgd.=' forever';
           if($rd['tie']==3600)$msgd.=' for 1 Hour';
           if($rd['tie']==7200)$msgd.=' for 2 Hours';
@@ -197,6 +206,22 @@ $html='';
 $el='payment-info';
 if($error==''){
   if($payment_id>0){
+    if($msgd!=''||$msgl!=''||$msge!=''||$msgc!=''){
+      $sp=$db->prepare("UPDATE `".$prefix."orders` SET `process`=:process WHERE `id`=:id");
+      $sp->execute([
+        ':id'=>$id,
+        ':process'=>'1111000000000000'
+      ]);
+    }
+    if($r['hold']==1){
+      $sp=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,:title,'1',:cost,'neg',:ti)");
+      $sp->execute([
+        ':oid'=>$r['id'],
+        ':title'=>'Holding Deposit for '.$rh['title'],
+        ':cost'=>$paidAmount,
+        ':ti'=>$ti
+      ]);
+    }
     $html.='<article class="col-12 text-center"><div class="alert alert-success">'.
       $statusMsg.
       ($msgd!=''?'<br>Download links to your purchase are within the Confirmation Email that has been sent to the email associated with your account':'').

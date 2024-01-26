@@ -287,6 +287,57 @@ footer [role="menu"] li.active a{
   display:table;
   margin:0 auto }
 
+.progress-container{
+  margin:2em auto!important;
+  width:100%!important }
+
+.progress-steps{
+  counter-reset:step!important }
+
+.progress-steps li{
+  color:#ccc!important;
+  float:left!important;
+  list-style-type:none!important;
+  position:relative!important;
+  text-align:center!important;
+  width:140px!important }
+
+.progress-steps li::before{
+  content:""!important;
+  background-color:#ccc!important;
+  border:2px solid #ccc!important;
+  border-radius:50%!important;
+  counter-increment:step!important;
+  display:block!important;
+  height:14px!important;
+  line-height:2.5em!important;
+  margin:0 auto .7em!important;
+  text-align:center!important;
+  width:14px!important }
+
+.progress-steps li::after{
+  content:""!important;
+  background-color:#ccc!important;
+  height:3px!important;
+  left:-50%!important;
+  position:absolute!important;
+  top:.4em!important;
+  width:100%!important;
+  z-index:-1!important }
+
+.progress-steps li:first-child::after{
+  content:none!important }
+
+.progress-steps li.active{
+  color:#000!important }
+
+.progress-steps li.active::before{
+  border-color:#000!important }
+
+.progress-steps li.active+li::after,
+.progress-steps li.active::before{
+  background-color:#000!important }
+
 .orderstheme{
   background-color:#fff!important;
   color:#000!important;
@@ -346,20 +397,11 @@ footer [role="menu"] li.active a{
   color:var(--button-color-hover)!important;
   text-decoration:none!important }
 
-#cart *,
-.cart-address *{
+#cart button{
   background:#fff!important;
   color:#000!important;
   font-family:Arial!important;
   text-shadow:none!important }
-
-.cart-address button{
-  background-color:var(--button-background-color)!important;
-  color:var(--button-color)!important) }
-
-#cart thead *{
-  background:#000!important;
-  color:#fff!important }
 
 .cart{
   display:inline-block;

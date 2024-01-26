@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.19
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -41,6 +41,7 @@ if(stristr($html,'<items>')){
       '/<print zebra>/',
       '/<print order=[\"\']?ordernumber[\"\']?>/',
       '/<print order=[\"\']?status[\"\']?>/',
+      '/<print order=[\"\']?tablehold[\"\']?>/',
       '/<print order=[\"\']?date[\"\']?>/',
       '/<print order=[\"\']?duedate[\"\']?>/',
       '/<print link>/'
@@ -48,7 +49,8 @@ if(stristr($html,'<items>')){
       'zebra'.$zebra,
       $r['qid'].$r['iid'],
       $r['status'],
-      $r['iid_ti']>0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti']),
+      ($r['hold']==1?'<span class="badger badge-info mt-1">Order Held For Pickup!</span>':''),
+      ($r['iid_ti']>0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti'])),
       date($config['dateFormat'],$r['due_ti']),
       URL.'orders/'.$r['qid'].$r['iid'].'/',
     ],$item);
@@ -79,7 +81,21 @@ if(isset($args[0])&&$args[0]!=''){
         $tracklink='<strong>Tracking Link: </strong><a target="_blank" href="'.$rtrack['url'].$r['trackNumber'].'">'.$rtrack['title'].'</a><br><strong>Tracking ID: </strong> '.$r['trackNumber'];
       }
     }
+    if($r['hold']==1){
+      $sh=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='holdoption' AND `id`=:id");
+      $sh->execute([
+        ':id'=>$r['hold_event']
+      ]);
+      $rh=$sh->fetch(PDO::FETCH_ASSOC);
+    }
     $order=preg_replace([
+      '/<print process=[\"\']?placed[\"\']?>/',
+      '/<print process=[\"\']?paid[\"\']?>/',
+      '/<print process=[\"\']?packed[\"\']?>/',
+      '/<print process=[\"\']?shipped[\"\']?>/',
+      '/<print process=[\"\']?delivered[\"\']?>/',
+      '/<print order=[\"\']?hold[\"\']?>/',
+      (in_array($r['status'],['archived','cancelled','refunded'])?'~<processStatus>.*?<\/processStatus>~is':'/<[\/]?processStatus>/'),
       ($r['notes']==''?'~<orderNotes>.*?<\/orderNotes>~is':'/<[\/]?orderNotes>/'),
       '/<print order=[\"\']?notes[\"\']?>/',
       '/<print config=[\"\']?business[\"\']?>/',
@@ -112,6 +128,13 @@ if(isset($args[0])&&$args[0]!=''){
       '/<print order=[\"\']?status[\"\']?>/',
       '/<tracklink>/'
     ],[
+      ($r['process'][0]==1?' class="active"':''),
+      ($r['process'][1]==1?' class="active"':''),
+      ($r['process'][2]==1?' class="active"':''),
+      ($r['process'][3]==1?' class="active"':''),
+      ($r['process'][4]==1?' class="active"':''),
+      ($r['hold']==1?'<div class="row"><div class="col-12 col-sm-7 mt-5 p-0 mx-auto"><div class="alert alert-info">Order is being Held for pick up at '.ucwords($rh['title']).'!</div></div></div>':''),
+      (in_array($r['status'],['archived','cancelled','refunded'])?'<p class="text-center">This Order has been '.ucwords($r['status']).'</p>':''),
       '',
       $r['notes'],
       htmlspecialchars($config['business'],ENT_QUOTES,'UTF-8'),
@@ -352,7 +375,7 @@ if(isset($args[0])&&$args[0]!=''){
         '~<bankdetails>.*?<\/bankdetails>~is'
       ],[
         '',
-        $r['status']!='paid'?'<a class="btn" href="'.URL.'checkout/'.$r['qid'].$r['iid'].'">Proceed to Checkout</a>':'<div class="alert alert-success">Order Already Paid</div>',
+        ($r['status']=='paid'||$r['status']=='refunded'||$r['status']=='archived'?'<div class="alert alert-success">Order has been Paid, Refunded or Archived!</div>':'<a class="btn" href="'.URL.'checkout/'.$r['qid'].$r['iid'].'">Proceed to Checkout</a>'),
         ''
       ],$html,1);
     }

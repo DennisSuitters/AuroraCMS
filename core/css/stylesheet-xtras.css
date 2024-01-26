@@ -195,7 +195,6 @@
 .starRating:not(old){
   display:block;
   vertical-align:bottom;
-  width:12.5em;
   height:2.5em;
   overflow:hidden }
 
@@ -1242,7 +1241,9 @@ a.badge-primary:focus{
   box-shadow:0 0 0 .2rem rgba(0,123,255,.5) }
 
 .badge-secondary,
-.badge-cancelled{
+.badge-cancelled,
+.badge-unapproved,
+.badge-unpublished{
   color:#fff;
   background-color:#6c757d }
 
@@ -1256,8 +1257,10 @@ a.badge-secondary:focus{
   outline:0;
   box-shadow:0 0 0 .2rem rgba(108,117,125,.5) }
 
+.badge-approved,
 .badge-success,
-.badge-paid{
+.badge-paid,
+.badge-published{
   color:#fff;
   background-color:#28a745 }
 

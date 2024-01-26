@@ -59,7 +59,7 @@ else{
                   <div class="btn-group">
                     <button class="accountview" data-tooltip="left" aria-label="View Accounts as Cards or List" onclick="toggleAccountView();return false;"><i class="i<?=($_COOKIE['accountview']=='list'?' d-none':'');?>">list</i><i class="i<?=($_COOKIE['accountview']=='cards'?' d-none':'');?>">cards</i></button>
                     <?=($user['options'][7]==1?'<a data-tooltip="left" href="'.URL.$settings['system']['admin'].'/accounts/settings" role="button" aria-label="Accounts Settings"><i class="i">settings</i></a>':'').
-                    ($user['options'][0]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add"><i class="i">add</i></a>':'');?>
+                    ($user['options'][0]==1?'<a class="add" data-tooltip="left" href="'.URL.$settings['system']['admin'].'/accounts/add" role="button" aria-label="Add Account"><i class="i">add</i></a>':'');?>
                   </div>
                 </div>
               </div>

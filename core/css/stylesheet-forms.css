@@ -415,7 +415,7 @@ fieldset legend{
 
 label{
   display:inline-block;
-  margin:.5rem 0 .25rem;
+  margin:1rem 0 .25rem;
   padding-right:var(--spacing-2);
   font-size:inherit;
   font-family:inherit }

@@ -1,4 +1,23 @@
-### v0.2.26-2
+### v0.2.26-3
+- Fix Browsing Unsplash from closing prematurily.
+- Fix Administration sidebar shadow.
+- Fix Administration sidebar tooltips not working on dropdown options when minimised.
+- Add "Refunded" option to order status.
+- Add processing or Order Process Status.
+- Improve Administration footer layout.
+- Fix error thrown with $saleClass var not existing.
+- Fix table cell display in dashboard widget for orders.
+- Separate Pricing into it's own tab area within content editing.
+- Adjust colours for text styling to match alert colours.
+- Fix FAQ Editor Summernote modals appearing behind backdrop.
+- Add ability to hold/reserve orders for pickup from choices.
+- Fix cart parser, and add easier editing of items.
+- Update orders parser to include hold/reserve options.
+- Add ability to duplicate/copy content items.
+- Fix large star rating to show all 5 stars.
+- Fix incorrect date showing for Latest Orders Dashboard Widget.
+
+#### v0.2.26-2
 - Fix SEO Title, and Description fields not expanding or counting correctly.
 - Improve list thumbnails to use resized image to help page loading times with many list items.
 - Fix inadvertent change made to Dashboard Stats icon position.

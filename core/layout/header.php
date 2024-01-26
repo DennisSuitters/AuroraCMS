@@ -11,7 +11,7 @@
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
-<header id="back-to-top" class="aurora shadow-md">
+<header id="back-to-top" class="aurora border shadow">
   <nav>
     <ul class="nav-left">
       <li>

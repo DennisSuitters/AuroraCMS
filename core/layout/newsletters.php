@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -66,10 +66,10 @@ else{
                 <tbody>
                   <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){?>
                     <tr class="item" id="l_<?=$r['id'];?>">
-                      <td class="align-middle"><a href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>"><?=$r['title'];?></a></td>
-                      <td class="text-center align-middle"><?= date($config['dateFormat'],$ti);?></td>
-                      <td class="text-center align-middle"><?=$r['status']=='unpublished'?'Unpublished':date($config['dateFormat'],$r['tis']);?></td>
-                      <td class="align-middle" id="controls_<?=$r['id'];?>">
+                      <td class="align-middle d-table-cell"><a href="<?=$settings['system']['admin'].'/newsletters/edit/'.$r['id'];?>"><?=$r['title'];?></a></td>
+                      <td class="text-center align-middle d-table-cell"><?= date($config['dateFormat'],$ti);?></td>
+                      <td class="text-center align-middle d-table-cell"><?=$r['status']=='unpublished'?'Unpublished':date($config['dateFormat'],$r['tis']);?></td>
+                      <td class="align-middle d-table-cell" id="controls_<?=$r['id'];?>">
                         <div class="btn-toolbar float-right" role="toolbar">
                           <div class="btn-group" role="group">
                             <?=$user['options'][1]==1?'<button class="email" data-tooltip="tooltip" aria-label="Send Newsletters" onclick="$(`#sp`).load(`core/newsletter.php?id='.$r['id'].'&act=`);"><i class="i">email-send</i></button>':'';?>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.13
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -25,7 +25,7 @@ if($id>0){
     $r=$db->query("SELECT MAX(`id`) as id FROM `".$prefix."orders`")->fetch(PDO::FETCH_ASSOC);
     $dti=$ti+$config['orderPayti'];
     $oid='I'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending')");
+    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`cid`,`iid`,`iid_ti`,`due_ti`,`status`,`process`) VALUES (:uid,:cid,:iid,:iid_ti,:due_ti,'pending','1000000000000000')");
     $q->execute([
       ':uid'=>$ro['uid'],
       ':cid'=>$ro['cid'],

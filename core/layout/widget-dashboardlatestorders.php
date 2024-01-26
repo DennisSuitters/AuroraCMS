@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,9 +33,9 @@ $so->execute();?>
         <tbody>
           <?php while($ro=$so->fetch(PDO::FETCH_ASSOC)){?>
             <tr>
-              <td class="px-2 py-1 small align-middle"><?= date($config['dateFormat'],$ro['ti']);?></td>
-              <td class="px-2 py-1 small align-middle"><a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'];?>"><?=$ro['iid']!=''?$ro['iid']:$ro['qid'];?></a></td>
-              <td class="px-2 py-1 text-center align-middle"><span class="badger badge-<?=$ro['status'];?>"><?=$ro['status'];?></span></td>
+              <td class="px-2 py-1 small align-middle d-table-cell"><?= date($config['dateFormat'],($ro['iid_ti']>0?$ro['iid_ti']:$ro['qid_ti']));?></td>
+              <td class="px-2 py-1 small align-middle d-table-cell"><a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$ro['id'];?>"><?=$ro['iid']!=''?$ro['iid']:$ro['qid'];?></a></td>
+              <td class="px-2 py-1 text-center align-middle d-table-cell"><span class="badger badge-<?=$ro['status'];?>"><?=$ro['status'];?></span></td>
             </tr>
           <?php }?>
         </tbody>

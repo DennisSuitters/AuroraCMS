@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -18,12 +18,13 @@ if($user['options'][4]==1){
   $error=0;
   $ti=time();
   $oid='';
+  if(!isset($args[0]))$args[0]='';
   if(isset($args[1]))$id=$args[1];
   if(isset($args[0])&&$args[0]=='duplicate'){
     $sd=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `id`=:id");
     $sd->execute([':id'=>$id]);
     $rd=$sd->fetch(PDO::FETCH_ASSOC);
-    $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`contentType`,`due_ti`,`notes`,`status`,`recurring`,`ti`) VALUES (:cid,:uid,:contentType,:due_ti,:notes,:status,:recurring,:ti)");
+    $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`cid`,`uid`,`contentType`,`due_ti`,`notes`,`status`,`recurring`,`ti`,`process`) VALUES (:cid,:uid,:contentType,:due_ti,:notes,:status,:recurring,:ti,'1000000000000000')");
     $s->execute([
       ':cid'=>$rd['cid'],
       ':uid'=>$uid,
@@ -81,7 +82,7 @@ if($user['options'][4]==1){
     $dti=$ti+$config['orderPayti'];
     if(isset($args[0])&&$args[0]=='addquote'){
       $oid='Q'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`qid`,`qid_ti`,`due_ti`,`status`) VALUES (:uid,:qid,:qid_ti,:due_ti,'pending')");
+      $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`qid`,`qid_ti`,`due_ti`,`status`,`process`) VALUES (:uid,:qid,:qid_ti,:due_ti,'pending','1000000000000000')");
       $q->execute([
         ':uid'=>$uid,
         ':qid'=>$oid,
@@ -91,7 +92,7 @@ if($user['options'][4]==1){
     }
     if(isset($args[0])&&$args[0]=='addinvoice'){
       $oid='I'.date("ymd",$ti).sprintf("%06d",$r['id']+1,6);
-      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`iid`,`iid_ti`,`due_ti`,`status`) VALUES (:uid,:iid,:iid_ti,:due_ti,'pending')");
+      $s=$db->prepare("INSERT IGNORE INTO `".$prefix."orders` (`uid`,`iid`,`iid_ti`,`due_ti`,`status`,`process`) VALUES (:uid,:iid,:iid_ti,:due_ti,'pending','1000000000000000')");
       $s->execute([
         ':uid'=>$uid,
         ':iid'=>$oid,
@@ -197,6 +198,10 @@ if($user['options'][4]==1){
     if(isset($args[0])&&$args[0]=='overdue'){
       $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `status`='overdue' ORDER BY `ti` DESC");
       $s->execute();
+    }
+    if(isset($args[0])&&$args[0]=='refunded'){
+      $s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `status`='refunded' ORDER BY `ti` DESC");
+      $s->execute();
     }?>
     <main>
       <section class="<?=(isset($_COOKIE['sidebar'])&&$_COOKIE['sidebar']=='small'?'navsmall':'');?>" id="content">
@@ -218,6 +223,7 @@ if($user['options'][4]==1){
                       <a class="badger badge-<?= isset($args[0])&&$args[0]=='recurring'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/recurring" data-tooltip="tooltip" aria-label="Display Recurring Orders">Recurring</a>&nbsp;
                       <a class="badger badge-<?= isset($args[0])&&$args[0]=='overdue'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/overdue" data-tooltip="tooltip" aria-label="Display Overdue Orders">Overdue</a>&nbsp;
                       <a class="badger badge-<?= isset($args[0])&&$args[0]=='archived'?'success':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/archived" data-tooltip="tooltip" aria-label="Display Archived Items">Archived</a>
+                      <a class="badger badge-<?= isset($args[0])&&$args[0]=='refunded'?'dark':'secondary';?>" href="<?= URL.$settings['system']['admin'];?>/orders/refunded" data-tooltip="tooltip" aria-label="Display Refunded Items">Refunded</a>
                     </small>
                   </div>
                 </div>
@@ -233,7 +239,7 @@ if($user['options'][4]==1){
                         }
                       }?>
                     </div>
-                  <div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -247,8 +253,7 @@ if($user['options'][4]==1){
                   <div class="col-12 col-md"></div>
                 </div>
               </article>
-              <?php $zeb=0;
-              while($r=$s->fetch(PDO::FETCH_ASSOC)){
+              <?php while($r=$s->fetch(PDO::FETCH_ASSOC)){
                 if($r['due_ti']<$ti&&$r['status']!='paid'){
                   $us=$db->prepare("UPDATE `".$prefix."orders` SET `status`='overdue' WHERE `id`=:id AND `status`!='paid'");
                   $us->execute([':id'=>$r['id']]);
@@ -259,6 +264,7 @@ if($user['options'][4]==1){
                 $c=$cs->fetch(PDO::FETCH_ASSOC);?>
                 <article class="card zebra mx-2 mt-2 mb-0 p-2 border-0 overflow-visible shadow" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
                   <div class="col-3 overflow-visible">
+                    <?=($r['status']!='refunded'&&$r['status']!='cancelled'&&$r['hold']==1&&$r['process'][3]==0&&$r['process'][4]==0?'<span class="badger badge-info">Order is on Hold for Pickup!</span>':'');?>
                     <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     <div class="small">Client:&nbsp;
                       <?php if(isset($c['username'])&&isset($c['name'])){
@@ -269,11 +275,11 @@ if($user['options'][4]==1){
                       }?>
                     </div>
                   </div>
-                  <div class="col-3 overflow-visible pt-2 line-clamp small">
+                  <div class="col-3 overflow-visible line-clamp small align-middle align-content-center">
                     <?=' '.date($config['dateFormat'],($r['iid_ti']==0?$r['qid_ti']:$r['iid_ti']));?><br>
                     <small>Due:&nbsp;<?= date($config['dateFormat'],$r['due_ti']);?></small>
                   </div>
-                  <div class="col-2 p-2 align-middle justify-content-center">
+                  <div class="col-2 p-2 align-middle align-content-center">
                     <span class="badger badge-<?= $r['status'];?> badge-2x"><?= ucfirst($r['status']);?></span>
                   </div>
                   <div class="col-sm align-middle">

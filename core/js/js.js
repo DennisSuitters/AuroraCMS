@@ -105,9 +105,36 @@ function setAddress(el){
   document.getElementById("postcodelist").innerHTML='';
 }
 document.addEventListener('click',function(event){
+  if(event.target.closest(".qtyminus")){
+    event.preventDefault();
+    const id=event.target.getAttribute("data-id");
+    const qid=event.target.getAttribute("data-qid");
+    const form = document.getElementById('qtyform'+id);
+    const displayField = document.getElementById('dqty'+id);
+    const inputField = document.getElementById('qty'+id);
+    let cV=Number(inputField.value) || 0;
+    cV = cV - 1;
+    inputField.value = cV;
+    displayField.innerText = cV;
+    form.submit();
+  }
+  if(event.target.closest(".qtyplus")){
+    event.preventDefault();
+    const id=event.target.getAttribute("data-id");
+    const qid=event.target.getAttribute("data-qid");
+    const form = document.getElementById('qtyform'+id);
+    const displayField = document.getElementById('dqty'+id);
+    const inputField = document.getElementById('qty'+id);
+    let cV = Number(inputField.value) || 0;
+    cV = cV + 1;
+    if(cV<1)cV=1;
+    inputField.value = cV;
+    displayField.innerText = cV;
+    form.submit();
+  }
   if(event.target.closest(".banner-dismiss")){
     event.preventDefault();
-    var banner=document.querySelector('.banner').getAttribute("data-banner")
+    var banner=document.querySelector('.banner').getAttribute("data-banner");
     document.querySelector("#banner").classList.add("slide-out-bottom");
     localStorage.setItem("banner"+banner+"Closed","true");
   }

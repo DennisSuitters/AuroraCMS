@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -33,16 +33,16 @@ $sv->execute();?>
           </div>
         </div>
         <div class="tabs" role="tablist">
-          <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-          <label for="tab1-1">General</label>
-          <input class="tab-control" id="tab1-5" name="tabs" type="radio">
-          <label for="tab1-5">Accessibility</label>
-          <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-          <label for="tab1-2">Sidebar Menu</label>
-          <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-          <label for="tab1-3">Widgets</label>
-          <input class="tab-control" id="tab1-4" name="tabs" type="radio">
-          <label for="tab1-4">Login</label>
+          <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+          '<label for="tab1-1">General</label>'.
+          '<input class="tab-control" id="tab1-5" name="tabs" type="radio">'.
+          '<label for="tab1-5">Accessibility</label>'.
+          '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+          '<label for="tab1-2">Sidebar Menu</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+          '<label for="tab1-3">Widgets</label>'.
+          '<input class="tab-control" id="tab1-4" name="tabs" type="radio">'.
+          '<label for="tab1-4">Login</label>';?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <div class="form-row">
               <input id="prefGDPR" data-dbid="1" data-dbt="config" data-dbc="options" data-dbb="8" type="checkbox"<?=($config['options'][8]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
@@ -234,33 +234,27 @@ $sv->execute();?>
               while($rw=$sw->fetch(PDO::FETCH_ASSOC)){?>
                 <article class="card col-12 zebra m-0 p-0 py-2 border-0 overflow-visible card-list item shadow">
                   <div class="row">
-                    <div class="col-12 col-md pl-2 py-2">
-                      <?=$rw['title'];?>
-                    </div>
-                    <div class="col-12 col-md pl-2 py-2">
-                      <?= ucfirst($rw['ref']);?>
-                    </div>
+                    <div class="col-12 col-md pl-2 py-2"><?=$rw['title'];?></div>
+                    <div class="col-12 col-md pl-2 py-2"><?=ucfirst($rw['ref']);?></div>
                     <div class="col-12 col-md-1 py-2 text-center">
-                      <input id="widget<?=$rw['id'];?>" data-dbid="<?=$rw['id'];?>" data-dbt="widgets" data-dbc="active" data-dbb="0" type="checkbox"<?=$rw['active']==1?' checked aria-checked="true"':' aria-checked="false"';?>>
+                      <input id="widget<?=$rw['id'];?>" data-dbid="<?=$rw['id'];?>" data-dbt="widgets" data-dbc="active" data-dbb="0" type="checkbox"<?=($rw['active']==1?' checked aria-checked="true"':' aria-checked="false"').($rw['id']==3?' disabled':'');?>>
                     </div>
                     <div class="col-12 col-md-1 text-right pr-2">
-                      <?php if($rw['id']==17){?>
-                        <button class="widgetdropdownbtn" data-sdid="<?=$rw['id'];?>" data-tooltip="left" aria-label="Open/Close Settings"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>
-                      <?php }?>
+                      <?=($rw['id']==17?'<button class="widgetdropdownbtn" data-sdid="'.$rw['id'].'" data-tooltip="left" aria-label="Open/Close Settings"><i class="i">chevron-down</i><i class="i d-none">chevron-up</i></button>':'');?>
                     </div>
                   </div>
-                  <div class="row m-0 p-0 d-none" id="widgetdropdown<?=$rw['id'];?>">
-                    <div class="item zebra m-0 p-2 col-12 position-relative">
-                      <?php if($rw['id']==17){?>
+                  <?php if($rw['id']==17){?>
+                    <div class="row m-0 p-0 d-none" id="widgetdropdown<?=$rw['id'];?>">
+                      <div class="item zebra m-0 p-2 col-12 position-relative">
                         <label for="geo_weatherAPI">Open Weather API Key</label>
                         <?=($user['options'][7]==1?'<div class="form-text">Visit <a target="_blank" href="https://openweatermap.org/">Open Weather Map</a> for an API Key.</div>':'');?>
                         <div class="form-row">
                           <input class="textinput" id="geo_weatherAPI" data-dbid="1" data-dbt="config" data-dbc="geo_weatherAPI" type="text" value="<?=$config['geo_weatherAPI'];?>"<?=($user['options'][7]==1?' placeholder="Enter an API Key from Open Weather..."':' disabled');?>>
                           <?=($user['options'][7]==1?'<button class="save" id="savegeo_weatherAPI" data-dbid="geo_weatherAPI" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
                         </div>
-                      <?php }?>
+                      </div>
                     </div>
-                  </div>
+                  <?php }?>
                 </article>
               <?php }?>
             </div>

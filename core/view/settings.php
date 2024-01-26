@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-5
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -157,6 +157,170 @@ if((isset($_SESSION['loggedin'])&&$_SESSION['loggedin']==true)&&(isset($user)&&$
 		htmlspecialchars($user['state'],ENT_QUOTES,'UTF-8'),
 		$user['postcode']==0?'':htmlspecialchars($user['postcode'],ENT_QUOTES,'UTF-8'),
 		htmlspecialchars($user['country'],ENT_QUOTES,'UTF-8')
+	],$html);
+	if(stristr($html,'<orderitems')){
+		preg_match('/<orderitems>([\w\W]*?)<\/orderitems>/',$html,$match);
+		$items=$match[1];
+		$s=$db->prepare("SELECT * FROM `".$prefix."orders` WHERE `cid`=:cid AND `status`!='archived' ORDER BY `ti` DESC");
+	  $s->execute([':cid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+		$output='';
+		if($s->rowCount()>0){
+	  	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$item=$items;
+				$item=preg_replace([
+					'/<print order=[\"\']?ordernumber[\"\']?>/',
+	      	'/<print order=[\"\']?status[\"\']?>/',
+					'/<print order=[\"\']?hold[\"\']?>/',
+	      	'/<print order=[\"\']?date[\"\']?>/',
+	      	'/<print order=[\"\']?duedate[\"\']?>/',
+	      	'/<print link>/'
+				],[
+					$r['qid'].$r['iid'],
+					$r['status'],
+					($r['hold']==1?($r['process'][3]==1 || $r['process'][4]==1?'':'<br><span class="badger badge-info mt-1">Order Held For Pickup!</span>'):''),
+		      ($r['iid_ti']>0?date($config['dateFormat'],$r['iid_ti']):date($config['dateFormat'],$r['qid_ti'])),
+	      	date($config['dateFormat'],$r['due_ti']),
+		      URL.'orders/'.$r['qid'].$r['iid'].'/',
+				],$item);
+				$output.=$item;
+			}
+		}else $output='<div class="row"><div class="col-12 p-3 text-center text-3x">No Orders made via Your Account!</div></div>';
+		$html=preg_replace('~<orderitems>.*?<\/orderitems>~is',$output,$html,1);
+	}
+	if(stristr($html,'<reviewitems')){
+		preg_match('/<reviewitems>([\w\W]*?)<\/reviewitems>/',$html,$match);
+		$items=$match[1];
+		$s=$db->prepare("SELECT `id`,`rid`,`cid`,`notes`,`status` FROM `".$prefix."comments` WHERE `contentType`='review' AND `email`=:email");
+	  $s->execute([':email'=>$user['email']]);
+		$output='';
+		if($s->rowCount()>0){
+	  	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$si=$db->prepare("SELECT `id`,`file`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+				$si->execute([':id'=>$r['rid']]);
+				$i=$si->fetch(PDO::FETCH_ASSOC);
+				$item=$items;
+				$item=preg_replace([
+					'/<print content=[\"\']?image[\"\']?>/',
+					'/<print content=[\"\']?title[\"\']?>/',
+	      	'/<print review=[\"\']?rating[\"\']?>/',
+					'/<print review=[\"\']?notes[\"\']?>/',
+	      	'/<print review=[\"\']?status[\"\']?>/',
+				],[
+					($i['file']!=''?$i['file']:NOIMAGE),
+					$i['title'],
+					'<span class="rating small"><span'.($r['cid']>=1?' class="set"':'').'></span><span'.($r['cid']>=2?' class="set"':'').'></span><span'.($r['cid']>=3?' class="set"':'').'></span><span'.($r['cid']>=4?' class="set"':'').'></span><span'.($r['cid']==5?' class="set"':'').'></span></span>',
+					'<div>'.strip_tags($r['notes']).'</div>',
+					strtolower($r['status']),
+				],$item);
+				$output.=$item;
+			}
+		}else $output='<div class="row"><div class="col-12 p-3 text-center text-3x">No Reviews made via Your Account!</div></div>';
+		$html=preg_replace('~<reviewitems>.*?<\/reviewitems>~is',$output,$html,1);
+	}
+	if(stristr($html,'<commentitems')){
+		preg_match('/<commentitems>([\w\W]*?)<\/commentitems>/',$html,$match);
+		$items=$match[1];
+		$s=$db->prepare("SELECT * FROM `".$prefix."comments` WHERE `contentType`='article' AND `uid`=:uid");
+	  $s->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+		$output='';
+		if($s->rowCount()>0){
+	  	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$si=$db->prepare("SELECT `file`,`title` FROM `".$prefix."content` WHERE `id`=:id");
+				$si->execute([':id'=>$r['rid']]);
+				$i=$si->fetch(PDO::FETCH_ASSOC);
+				$item=$items;
+				$item=preg_replace([
+					'/<print content=[\"\']?image[\"\']?>/',
+					'/<print content=[\"\']?title[\"\']?>/',
+					'/<print comment=[\"\']?notes[\"\']?>/',
+	      	'/<print comment=[\"\']?status[\"\']?>/',
+				],[
+					($i['file']!=''?$i['file']:NOIMAGE),
+					$i['title'],
+					'<div>'.strip_tags($r['notes']).'</div>',
+					strtolower($r['status']),
+				],$item);
+				$output.=$item;
+			}
+		}else $output='<div class="row"><div class="col-12 p-3 text-center text-3x">No Comments made via Your Account!</div></div>';
+		$html=preg_replace('~<commentitems>.*?<\/commentitems>~is',$output,$html,1);
+	}
+	if(stristr($html,'<testimonialitems')){
+		preg_match('/<testimonialitems>([\w\W]*?)<\/testimonialitems>/',$html,$match);
+		$items=$match[1];
+		$s=$db->prepare("SELECT `id`,`name`,`rating`,`notes`,`status` FROM `".$prefix."content` WHERE `contentType`='testimonials' AND `email`=:email");
+	  $s->execute([':email'=>$user['email']]);
+		$output='';
+		if($s->rowCount()>0){
+	  	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$item=$items;
+				$item=preg_replace([
+					'/<print testimonial=[\"\']?name[\"\']?>/',
+					'/<print testimonial=[\"\']?rating[\"\']?>/',
+					'/<print testimonial=[\"\']?notes[\"\']?>/',
+	      	'/<print testimonial=[\"\']?status[\"\']?>/',
+				],[
+					$r['name'],
+					'<span class="rating small"><span'.($r['rating']>=1?' class="set"':'').'></span><span'.($r['rating']>=2?' class="set"':'').'></span><span'.($r['rating']>=3?' class="set"':'').'></span><span'.($r['rating']>=4?' class="set"':'').'></span><span'.($r['rating']==5?' class="set"':'').'></span></span>',
+					'<div>'.strip_tags($r['notes']).'</div>',
+					strtolower($r['status']),
+				],$item);
+				$output.=$item;
+			}
+		}else $output='<div class="row"><div class="col-12 p-3 text-center text-3x">No Testimonials made via Your Account!</div></div>';
+		$html=preg_replace('~<testimonialitems>.*?<\/testimonialitems>~is',$output,$html,1);
+	}
+	if(stristr($html,'<rewarditems')){
+		preg_match('/<rewarditems>([\w\W]*?)<\/rewarditems>/',$html,$match);
+		$items=$match[1];
+		$s=$db->prepare("SELECT * FROM `".$prefix."rewards` WHERE `uid`=:uid");
+	  $s->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+		$output='';
+		if($s->rowCount()>0){
+	  	while($r=$s->fetch(PDO::FETCH_ASSOC)){
+				$item=$items;
+				$item=preg_replace([
+					'/<print reward=[\"\']?code[\"\']?>/',
+					'/<print reward=[\"\']?title[\"\']?>/',
+					'/<print reward=[\"\']?method[\"\']?>/',
+	      	'/<print reward=[\"\']?quantity[\"\']?>/',
+					'/<print reward=[\"\']?tis[\"\']?>/',
+					'/<print reward=[\"\']?tie[\"\']?>/'
+				],[
+					($r['code']!=''?'<div>Code: '.$r['code'].'</div>':''),
+					'<div>'.$r['title'].'</div>',
+					($r['method']==0?$r['value'].'% Off':'&dollar;'.$r['value'].' Off'),
+					'<span title="Used">'.$r['used'].'</span>'.($r['quantity']>0?'/'.$r['quantity']:''),
+					($r['tis']>0?'<div>Start: '.date($config['dateFormat'],$r['tis']).'</div>':''),
+					($r['tie']>0?'<div>End: '.date($config['dateFormat'],$r['tie']).'</div>':'No Time Limit')
+				],$item);
+				$output.=$item;
+			}
+		}else $output='<div class="row"><div class="col-12 p-3 text-center text-3x">No Rewards are assigned to Your Account!</div></div>';
+		$html=preg_replace('~<rewarditems>.*?<\/rewarditems>~is',$output,$html,1);
+	}
+	$sp=$db->prepare("SELECT COUNT(`pid`) AS `cnt` FROM `".$prefix."forumPosts` WHERE `pid`=0 AND `uid`=:uid");
+	$sp->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+	$rp=$sp->fetch(PDO::FETCH_ASSOC);
+	$sv=$db->prepare("SELECT SUM(`views`) AS `cnt` FROM `".$prefix."forumPosts` WHERE `pid`=0 AND `uid`=:uid");
+	$sv->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+	$rv=$sv->fetch(PDO::FETCH_ASSOC);
+	$sc=$db->prepare("SELECT COUNT(`pid`) AS `cnt` FROM `".$prefix."forumPosts` WHERE `pid`!=0 AND `uid`=:uid");
+	$sc->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+	$rc=$sc->fetch(PDO::FETCH_ASSOC);
+	$st=$db->prepare("SELECT COUNT(`tid`) AS `cnt` FROM `".$prefix."forumPosts` WHERE `tid`!=0 AND `uid`=:uid");
+	$st->execute([':uid'=>isset($_SESSION['uid'])?$_SESSION['uid']:0]);
+	$rt=$st->fetch(PDO::FETCH_ASSOC);
+	$html=preg_replace([
+		'/<print forum=[\"\']?posts[\"\']?>/',
+		'/<print forum=[\"\']?comments[\"\']?>/',
+		'/<print forum=[\"\']?views[\"\']?>/',
+		'/<print forum=[\"\']?tickets[\"\']?>/'
+	],[
+		($rp['cnt']>0?short_number($rp['cnt']):0),
+		($rc['cnt']>0?short_number($rc['cnt']):0),
+		($rv['cnt']>0?short_number($rv['cnt']):0),
+		($rt['cnt']>0?short_number($rt['cnt']):0)
 	],$html);
 	if(isset($act)&&$act=='deactivate'){
 		$s=$db->prepare("UPDATE `".$prefix."login` SET `active`=0,`password`='',`status`='deactivated',`points`=0 WHERE `id`=:id");

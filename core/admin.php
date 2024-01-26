@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -48,7 +48,7 @@ if($_SESSION['rank']>399){
   require'core/layout/meta_head.php';
   require'core/layout/header.php';
   require'core/layout/sidebar.php';
-  if($view=='add'){
+  if($view=='add'||$view=='copy'){
     if($args[0]=='bookings')require'core/layout/bookings.php';
     elseif($args[0]=='course')require'core/layout/course.php';
     elseif($args[0]=='adverts')require'core/layout/adverts.php';

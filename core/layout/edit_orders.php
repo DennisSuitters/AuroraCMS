@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -102,11 +102,12 @@ else{?>
                 </div>
                 <div class="col-12 col-sm-6 col-lg-3">
                   <label for="status_<?=$r['id'];?>" class="mt-0">Status</label>
-                  <select id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status"<?=($r['status']=='archived'||$r['status']=='paid'?' readonly':' onchange="update(`'.$r['id'].'`,`orders`,`status`,$(this).val(),`select`);"');?>>
+                  <select id="status_<?=$r['id'];?>" data-tooltip="tooltip" aria-label="Order Status"<?=($r['status']=='archived'||$r['status']=='paid'||$r['status']=='refunded'?' readonly':' onchange="update(`'.$r['id'].'`,`orders`,`status`,$(this).val(),`select`);"');?>>
                     <option value="pending"<?=$r['status']=='pending'?' selected':'';?>>Pending</option>
                     <option value="overdue"<?=$r['status']=='overdue'?' selected':'';?>>Overdue</option>
                     <option value="cancelled"<?=$r['status']=='cancelled'?' selected':'';?>>Cancelled</option>
                     <option value="paid"<?=$r['status']=='paid'?' selected':'';?>>Paid</option>
+                    <option value="refunded"<?=$r['status']=='refunded'?' selected':'';?>>Refunded</option>
                   </select>
                 </div>
               </div>
@@ -192,7 +193,28 @@ else{?>
                 </div>
               </div>
               <div class="row">
-                <div class="col-12 col-md pr-3">
+                <div class="col-12 col-md-2">
+                  <div class="form-row mt-5">
+                    <input id="hold" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="hold" data-dbb="0" type="checkbox"<?=($r['hold']==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                    <label for="hold" data-tooltip="tooltip" aria-label="Check to Hold for Order Pickup.">Hold Order</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md">
+                  <label for="hold_event">Location</label>
+                  <div class="form-row">
+                    <select id="hold_event" onchange="update('<?=$r['id'];?>','orders','hold_event',$(this).val(),'select');">
+                      <option value="0">Select Location for Order Pickup...</option>
+                      <?php $sh=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='holdoption' ORDER BY `title` ASC");
+                      $sh->execute();
+                      while($rh=$sh->fetch(PDO::FETCH_ASSOC)){
+                        echo'<option value="'.$rh['id'].'"'.($r['hold_event']==$rh['id']?' selected':'').'>'.$rh['title'].' ('.$rh['postcodeFrom'].'-'.$rh['postcodeTo'].')</option>';
+                      }?>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12 col-md">
                   <label for="status">Shipping Service</label>
                   <select id="status" data-tooltip="tooltip" aria-label="Tracking Service" onchange="update('<?=$r['id'];?>','orders','trackOption',$(this).val(),'select');">
                     <option value="">Select a Tracking Service</option>
@@ -203,11 +225,44 @@ else{?>
                     }?>
                   </select>
                 </div>
-                <div class="col-12 col-md">
+                <div class="col-12 col-md pl-md-3">
                   <label for="trackNumber">Shipping Tracking #</label>
                   <div class="form-row">
                     <input class="textinput" id="trackNumber" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="trackNumber" type="text" value="<?=$r['trackNumber'];?>" placeholder="Enter a Tracking Number...">
                     <?=$user['options'][1]==1?'<button class="save" id="savetrackNumber" data-dbid="trackNumber" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                  </div>
+                </div>
+              </div>
+              <div class="row mt-3">
+                <label class="mb-3">Order Process Status</label>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="ordersprocess0" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="process" data-dbb="0" type="checkbox"<?=($r['process'][0]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                    <label for="ordersprocess0" data-tooltip="tooltip" aria-label="Check for to indicate Order Placed.">Placed</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="ordersprocess1" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="process" data-dbb="1" type="checkbox"<?=($r['process'][1]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                    <label for="ordersprocess1" data-tooltip="tooltip" aria-label="Check for to indicate Order Paid.">Paid</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="ordersprocess2" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="process" data-dbb="2" type="checkbox"<?=($r['process'][2]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                    <label for="ordersprocess2" data-tooltip="tooltip" aria-label="Check for to indicate Order Packed.">Packed</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="ordersprocess3" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="process" data-dbb="3" type="checkbox"<?=($r['process'][3]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                    <label for="ordersprocess3" data-tooltip="tooltip" aria-label="Check for to indicate Order Shipped.">Shipped</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md">
+                  <div class="form-row">
+                    <input id="ordersprocess4" data-dbid="<?=$r['id'];?>" data-dbt="orders" data-dbc="process" data-dbb="4" type="checkbox"<?=($r['process'][4]==1?' checked aria-checked="true"':' aria-checked="false"').($user['options'][7]==1?'':' disabled');?>>
+                    <label for="ordersprocess4" data-tooltip="tooltip" aria-label="Check for to indicate Order Delivered.">Delivered</label>
                   </div>
                 </div>
               </div>
@@ -345,7 +400,7 @@ else{?>
                   <th class="col-1 text-center">Cost</th>
                   <th class="col-1 text-right">GST</th>
                   <th class="col-1 text-right">Total</th>
-                  <th class="col-1 align-middle">
+                  <th class="col-1 align-middle d-table-cell">
                     <form target="sp" type="post" action="core/updateorder.php">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
                       <input id="actionda" name="da" type="hidden" value="">
@@ -381,11 +436,11 @@ else{?>
                   $sc->execute([':id'=>$oi['cid']]);
                   $c=$sc->fetch(PDO::FETCH_ASSOC);?>
                   <tr class="<?=($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'');?>">
-                    <td class="align-middle">
+                    <td class="align-middle d-table-cell">
                       <input type="checkbox" class="orderitems" name="item" value="<?=$oi['id'];?>">
                     </td>
-                    <td class="text-left align-middle small px-0"><?=(isset($i['code'])?$i['code']:'');?></td>
-                    <td class="text-left align-middle px-0">
+                    <td class="text-left align-middle d-table-cell small px-0"><?=(isset($i['code'])?$i['code']:'');?></td>
+                    <td class="text-left align-middle d-table-cell px-0">
                       <?php if($r['iid_ti']!=0)
                         echo($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'];
                       else{?>
@@ -398,8 +453,8 @@ else{?>
                         </form>
                       <?php }?>
                     </td>
-                    <td class="text-left align-middle px-0"><?= isset($c['title'])?$c['title']:'';?></td>
-                    <td class="text-center align-middle px-0">
+                    <td class="text-left align-middle d-table-cell px-0"><?= isset($c['title'])?$c['title']:'';?></td>
+                    <td class="text-center align-middle d-table-cell px-0">
                       <?php if($oi['iid']!=0){?>
                         <form target="sp" method="post" action="core/updateorder.php">
                           <input name="act" type="hidden" value="quantity">
@@ -412,7 +467,7 @@ else{?>
                         if($r['iid']!=0)echo$oi['quantity'];
                       }?>
                     </td>
-                    <td class="text-right align-middle px-0">
+                    <td class="text-right align-middle d-table-cell px-0">
                       <?php if($r['iid_ti']!=0){
                         echo number_format((float)$oi['cost'],2,'.','');
                       }else{?>
@@ -425,7 +480,7 @@ else{?>
                         </form>
                       <?php }?>
                     </td>
-                    <td class="text-right align-middle px-0">
+                    <td class="text-right align-middle d-table-cell px-0">
                       <?php $gst=0;
                       if($oi['status']!='pre order'||$oi['status']!='back order'){
                         if($config['gst']>0){
@@ -436,14 +491,14 @@ else{?>
                         echo$gst>0?$gst:'';
                       }?>
                     </td>
-                    <td class="text-right align-middle px-0">
+                    <td class="text-right align-middle d-table-cell px-0">
                       <?php if($oi['status']!='pre order'||$oi['status']!='back order'){
                         echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
                       }else{
                         echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
                       }?>
                     </td>
-                    <td class="align-middle text-right px-0">
+                    <td class="align-middle text-right d-table-cell px-0">
                       <form target="sp" method="post" action="core/updateorder.php">
                         <input name="act" type="hidden" value="trash">
                         <input name="id" type="hidden" value="<?=$oi['id'];?>">
@@ -465,9 +520,9 @@ else{?>
                 $sr->execute([':rid'=>$r['rid']]);
                 $reward=$sr->fetch(PDO::FETCH_ASSOC);?>
                 <tr>
-                  <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Rewards</div></td>
+                  <td class="text-right align-middle d-table-cell px-0" colspan="2"><div class="input-text">Rewards</div></td>
                   <form class="form-row" id="rewardsinput" target="sp" method="post" action="core/updateorder.php">
-                    <td class="text-center px-0" colspan="1">
+                    <td class="text-center d-table-cell px-0" colspan="1">
                       <input name="act" type="hidden" value="reward">
                       <input name="id" type="hidden" value="<?=$r['id'];?>">
                       <input name="t" type="hidden" value="orders">
@@ -483,12 +538,12 @@ else{?>
                         </select>
                       <?php }?>
                     </td>
-                    <td class="align-middle px-0" colspan="3">
+                    <td class="align-middle d-table-cell px-0" colspan="3">
                       <input id="rewardselect" name="da" type="text" value="<?=$sr->rowCount()==1?$reward['code']:'';?>" onchange="$('#rewardsinput:first').submit();">
                     </td>
                   </form>
                 </td>
-                <td class="text-center align-middle px-0">
+                <td class="text-center align-middle d-table-cell px-0">
                   <?php if($sr->rowCount()==1){
                     if($reward['method']==1){
                       echo'$';
@@ -503,7 +558,7 @@ else{?>
                     echo' Off';
                   }?>
                 </td>
-                <td class="text-right align-middle px-0"><?=(isset($reward['value'])?($reward['value']>0?$total:''):'');?></td>
+                <td class="text-right align-middle d-table-cell px-0"><?=(isset($reward['value'])?($reward['value']>0?$total:''):'');?></td>
                 <td>&nbsp;</td>
               </tr>
               <?php if($config['options'][26]==1){
@@ -519,16 +574,16 @@ else{?>
                   if($rd['value']==2)$dedtot=$total*($rd['cost']/100);
                   $total=$total - $dedtot;?>
                   <tr>
-                    <td class="align-middle text-right px-0" colspan="2"><div class="input-text">Spent</div></td>
-                    <td class="align-middle" colspan="5">&#36;<?=$client['spent'];?> within Discount Range &#36;<?=$rd['f'].'-&#36;'.$rd['t'];?> granting <?=($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off');?></td>
-                    <td class="text-right align-middle px-0">-<?=$dedtot;?></td>
+                    <td class="align-middle text-right d-table-cell px-0" colspan="2"><div class="input-text">Spent</div></td>
+                    <td class="align-middle d-table-cell" colspan="5">&#36;<?=$client['spent'];?> within Discount Range &#36;<?=$rd['f'].'-&#36;'.$rd['t'];?> granting <?=($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off');?></td>
+                    <td class="text-right align-middle d-table-cell px-0">-<?=$dedtot;?></td>
                     <td>&nbsp;</td>
                   </tr>
                 <?php }
               }?>
               <tr>
-                <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Shipping</div></td>
-                <td class="align-middle px-0" colspan="1">
+                <td class="text-right align-middle d-table-cell px-0" colspan="2"><div class="input-text">Shipping</div></td>
+                <td class="align-middle d-table-cell px-0" colspan="1">
                   <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                     <input name="act" type="hidden" value="postselect">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -545,7 +600,7 @@ else{?>
                     </select>
                   </form>
                 </td>
-                <td class="text-right align-middle px-0" colspan="4">
+                <td class="text-right align-middle d-table-cell px-0" colspan="4">
                   <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                     <input name="act" type="hidden" value="postoption">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -554,7 +609,7 @@ else{?>
                     <input name="da" type="text" value="<?=$r['postageOption'];?>">
                   </form>
                 </td>
-                <td class="text-right px-0">
+                <td class="text-right d-table-cell px-0">
                   <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                     <input name="act" type="hidden" value="postcost">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -570,8 +625,8 @@ else{?>
                 <td></td>
               </tr>
               <tr>
-                <td class="text-right align-middle px-0" colspan="2"><div class="input-text">Payment</div></td>
-                <td class="align-middle px-0" colspan="1">
+                <td class="text-right align-middle d-table-cell px-0" colspan="2"><div class="input-text">Payment</div></td>
+                <td class="align-middle d-table-cell px-0" colspan="1">
                   <?php $spo=$db->query("SELECT * FROM `".$prefix."choices` WHERE `contentType`='payoption' ORDER BY title ASC");
                   if($spo->rowCount()>0){?>
                     <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
@@ -586,7 +641,7 @@ else{?>
                     </form>
                   <?php }?>
                 </td>
-                <td class="text-right align-middle px-0" colspan="3">
+                <td class="text-right align-middle d-table-cell px-0" colspan="3">
                   <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                     <input name="act" type="hidden"value="paytext">
                     <input name="id" type="hidden"value="<?=$r['id'];?>">
@@ -595,7 +650,7 @@ else{?>
                     <input name="da" type="text" value="<?=$r['payOption'];?>">
                   </form>
                 </td>
-                <td class="text-right align-middle px-0">
+                <td class="text-right align-middle d-table-cell px-0">
                   <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                     <input name="act" type="hidden" value="paymethod">
                     <input name="id" type="hidden" value="<?=$r['id'];?>">
@@ -612,7 +667,7 @@ else{?>
                     $paytot=$r['payCost'];
                   }?>
                 </td>
-                <td class="align-middle text-right px-0">
+                <td class="align-middle d-table-cell text-right px-0">
                   <?php if($r['payMethod']==2){?>
                     <form target="sp" method="post" action="core/updateorder.php" onchange="$(this).submit();">
                       <input name="act" type="hidden" value="paycost">
@@ -628,8 +683,8 @@ else{?>
                 <td></td>
               </tr>
               <tr>
-                <td class="text-right font-weight-bold" colspan="7">Total</td>
-                <td class="total text-right font-weight-bold border-2 border-black border-left-0 border-right-0 px-0"><?=$total;?></td>
+                <td class="text-right font-weight-bold d-table-cell" colspan="7">Total</td>
+                <td class="total text-right font-weight-bold border-2 border-black border-left-0 border-right-0 px-0 d-table-cell"><?=$total;?></td>
                 <td>&nbsp;</td>
               </tr>
               <?php $su=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE `id`=:id");
@@ -642,8 +697,8 @@ else{?>
               if($sn->rowCount()>0){
                 while($rn=$sn->fetch(PDO::FETCH_ASSOC)){?>
                   <tr>
-                    <td class="small align-middle px-0" colspan="2"><small><?= date($config['dateFormat'],$rn['ti']);?></small></td>
-                    <td class="align-middle px-0" colspan="5">
+                    <td class="small align-middle d-table-cell px-0" colspan="2"><small><?= date($config['dateFormat'],$rn['ti']);?></small></td>
+                    <td class="align-middle d-table-cell px-0" colspan="5">
                       <form target="sp" method="post" action="core/updateorder.php">
                         <input name="act" type="hidden" value="title">
                         <input name="id" type="hidden" value="<?=$rn['id'];?>">
@@ -655,7 +710,7 @@ else{?>
                         </div>
                       </form>
                     </td>
-                    <td class="text-right align-middle px-0">
+                    <td class="text-right align-middle d-table-cell px-0">
                       <form target="sp" method="post" action="core/updateorder.php">
                         <input name="act" type="hidden" value="cost">
                         <input name="id" type="hidden" value="<?=$rn['id'];?>">
@@ -664,7 +719,7 @@ else{?>
                         <input class="text-right" name="da" value="<?=$rn['cost'];?>">
                       </form>
                     </td>
-                    <td class="text-right px-0">
+                    <td class="text-right d-table-cell px-0">
                       <form target="sp" method="post" action="core/updateorder.php">
                         <input name="act" type="hidden" value="trash">
                         <input name="id" type="hidden" value="<?=$rn['id'];?>">
@@ -679,8 +734,8 @@ else{?>
                 }
                 $total=number_format((float)$total,2,'.','');?>
                 <tr>
-                  <td class="text-right" colspan="7"><strong>Balance</strong></td>
-                  <td class="total text-right border-2 border-black border-top border-bottom px-0"><strong><?=$total;?></td>
+                  <td class="text-right d-table-cell" colspan="7"><strong>Balance</strong></td>
+                  <td class="total text-right font-weight-bold border-2 border-black border-left-0 border-right-0 px-0 d-table-cell"><strong><?=$total;?></td>
                   <td></td>
                 </tr>
                 <?php $so=$db->prepare("UPDATE `".$prefix."orders` SET `total`=:total WHERE id=:id");

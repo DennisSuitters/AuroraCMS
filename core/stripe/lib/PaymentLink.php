@@ -16,8 +16,9 @@ namespace Stripe;
  * @property bool $active Whether the payment link's <code>url</code> is active. If <code>false</code>, customers visiting the URL will be shown a page saying that the link has been deactivated.
  * @property \Stripe\StripeObject $after_completion
  * @property bool $allow_promotion_codes Whether user redeemable promotion codes are enabled.
+ * @property null|string|\Stripe\StripeObject $application The ID of the Connect application that created the Payment Link.
  * @property null|int $application_fee_amount The amount of the application fee (if any) that will be requested to be applied to the payment and transferred to the application owner's Stripe account.
- * @property null|float $application_fee_percent This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner's Stripe account.
+ * @property null|float $application_fee_percent This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account.
  * @property \Stripe\StripeObject $automatic_tax
  * @property string $billing_address_collection Configuration for collecting the customer's billing address.
  * @property null|\Stripe\StripeObject $consent_collection When set, provides configuration to gather active consent from customers.
@@ -25,6 +26,7 @@ namespace Stripe;
  * @property \Stripe\StripeObject[] $custom_fields Collect additional information from your customer using custom fields. Up to 2 fields are supported.
  * @property \Stripe\StripeObject $custom_text
  * @property string $customer_creation Configuration for Customer creation during checkout.
+ * @property null|string $inactive_message The custom message to be displayed to a customer when a payment link is no longer active.
  * @property null|\Stripe\StripeObject $invoice_creation Configuration for creating invoice for payment mode payment links.
  * @property null|\Stripe\Collection<\Stripe\LineItem> $line_items The line items representing what is being sold.
  * @property bool $livemode Has the value <code>true</code> if the object exists in live mode or the value <code>false</code> if the object exists in test mode.
@@ -34,6 +36,7 @@ namespace Stripe;
  * @property string $payment_method_collection Configuration for collecting a payment method during checkout.
  * @property null|string[] $payment_method_types The list of payment method types that customers can use. When <code>null</code>, Stripe will dynamically show relevant payment methods you've enabled in your <a href="https://dashboard.stripe.com/settings/payment_methods">payment method settings</a>.
  * @property \Stripe\StripeObject $phone_number_collection
+ * @property null|\Stripe\StripeObject $restrictions Settings that restrict the usage of a payment link.
  * @property null|\Stripe\StripeObject $shipping_address_collection Configuration for collecting the customer's shipping address.
  * @property \Stripe\StripeObject[] $shipping_options The shipping rate options applied to the session.
  * @property string $submit_type Indicates the type of transaction being performed which customizes relevant text on the page, such as the submit button.
@@ -72,7 +75,7 @@ class PaymentLink extends ApiResource
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\Collection<\Stripe\LineItem> list of LineItems
+     * @return \Stripe\Collection<\Stripe\LineItem> list of line items
      */
     public static function allLineItems($id, $params = null, $opts = null)
     {

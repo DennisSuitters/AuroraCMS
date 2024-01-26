@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-3
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -65,14 +65,32 @@ function rankclass($rank){
   if($rank==900)return"administrator";
   if($rank==1000)return"developer";
 }
+function _agologgedin($time){
+	if($time==0)$timeDiff='Never';
+	else{
+		$fromTime=$time;
+		$timeDiff=floor(abs(time()-$fromTime)/60);
+		if($timeDiff<2)$timeDiff='Online Now';
+		elseif($timeDiff>2&&$timeDiff<60)$timeDiff=floor(abs($timeDiff)).' Minutes Ago';
+		elseif($timeDiff>60&&$timeDiff<120)$timeDiff=floor(abs($timeDiff/60)).' Hour Ago';
+		elseif($timeDiff<1440)$timeDiff=floor(abs($timeDiff/60)).' Hours Ago';
+		elseif($timeDiff>1440&&$timeDiff<2880)$timeDiff=floor(abs($timeDiff/1440)).' Day Ago';
+		elseif($timeDiff>2880)$timeDiff=floor(abs($timeDiff/1440)).' Days Ago';
+	}
+	return$timeDiff;
+}
 $id=isset($_POST['id'])?filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT):filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
 $t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'t',FILTER_UNSAFE_RAW);
 $o=isset($_POST['o'])?filter_input(INPUT_POST,'o',FILTER_UNSAFE_RAW):filter_input(INPUT_GET,'o',FILTER_UNSAFE_RAW);
 if($o=='modal'){
   echo'<div class="fancybox-ajax quickedit p-2">';
 }
-if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
-	$s=$db->prepare("SELECT * FROM `".$prefix.$t."` WHERE id=:id");
+if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'||$t=='contacts'){
+  if($t=='contacts'){
+    $s=$db->prepare("SELECT * FROM `".$prefix."login` WHERE id=:id");
+  }else{
+	   $s=$db->prepare("SELECT * FROM `".$prefix.$t."` WHERE id=:id");
+  }
 	$s->execute([':id'=>$id]);
 	$r=$s->fetch(PDO::FETCH_ASSOC);
 	if(!isset($r['id']))$r['id']=0;
@@ -449,12 +467,12 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
                 $sc->execute([':id'=>$oi['cid']]);
                 $c=$sc->fetch(PDO::FETCH_ASSOC);
                 echo'<tr class="'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?'bg-warning':'').'">'.
-                  '<td class="text-left align-middle small px-0">'.(isset($i['code'])?$i['code']:'').'</td>'.
-                  '<td class="text-left align-middle px-0">'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'].'</td>'.
-                  '<td class="text-left align-middle px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
-                  '<td class="text-center align-middle px-0">'.($r['iid']!=0?$oi['quantity']:'').'</td>'.
+                  '<td class="text-left align-middle d-table-cell small px-0">'.(isset($i['code'])?$i['code']:'').'</td>'.
+                  '<td class="text-left align-middle d-table-cell px-0">'.($oi['status']=='back order'||$oi['status']=='pre order'||$oi['status']=='out of stock'?ucwords($oi['status']).': ':'').$oi['title'].'</td>'.
+                  '<td class="text-left align-middle d-table-cell px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
+                  '<td class="text-center align-middle d-table-cell px-0">'.($r['iid']!=0?$oi['quantity']:'').'</td>'.
                   '<td class="text-right align-middle">'.($r['iid_ti']!=0?number_format((float)$oi['cost'],2,'.',''):'').'</td>'.
-                  '<td class="text-right align-middle">';
+                  '<td class="text-right align-middle d-table-cell">';
                   $gst=0;
                   if($oi['status']!='pre order'||$oi['status']!='back order'){
                     if($config['gst']>0){
@@ -465,7 +483,7 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
                     echo$gst>0?$gst:'';
                   }
                   echo'</td>'.
-                  '<td class="text-right align-middle">';
+                  '<td class="text-right align-middle d-table-cell">';
                     if($oi['status']!='pre order'||$oi['status']!='back order'){
                       echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
                     }else{
@@ -485,11 +503,11 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
                 $sr->execute([':rid'=>$r['rid']]);
                 $reward=$sr->fetch(PDO::FETCH_ASSOC);
                 echo'<tr>'.
-                  '<td class="text-right align-middle px-0 font-weight-bold">Rewards</td>'.
-                  '<td colspan="5" class="text-right align-middle">Code: '.($reward['method']==1?'$':'%').' Off</td>'.
+                  '<td class="text-right align-middle d-table-cell px-0 font-weight-bold">Rewards</td>'.
+                  '<td colspan="5" class="text-right align-middle d-table-cell">Code: '.($reward['method']==1?'$':'%').' Off</td>'.
                   '<td class="text-right">'.$reward['value'].'</td>'.
-                  '<td class="align-middle px-0" colspan="3">'.$reward['code'].'</td>'.
-                  '<td class="text-center align-middle px-0">';
+                  '<td class="align-middle d-table-cell px-0" colspan="3">'.$reward['code'].'</td>'.
+                  '<td class="text-center align-middle d-table-cell px-0">';
                     if($sr->rowCount()==1){
                       if($reward['method']==1){
                         echo'$';
@@ -504,7 +522,7 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
                       echo' Off';
                     }
                   echo'</td>'.
-                  '<td class="text-right align-middle">'.(isset($reward['value'])?($reward['value']>0?$total:''):'').'</td>'.
+                  '<td class="text-right align-middle d-table-cell">'.(isset($reward['value'])?($reward['value']>0?$total:''):'').'</td>'.
                 '</tr>';
               }
               if($config['options'][26]==1){
@@ -520,17 +538,17 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
                   if($rd['value']==2)$dedtot=$total*($rd['cost']/100);
                   $total=$total - $dedtot;
                   echo'<tr>'.
-                    '<td colspan="2" class="align-middle text-right font-px-0 weight-bold">Spent</td>'.
-                    '<td colspan="5" class="align-middle text-right px-0">&#36;'.$ru['spent'].' within Discount Range &#36;'.$rd['f'].'-&#36;'.$rd['t'].' granting '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off').'</td>'.
-                    '<td colspan="5" class="align-middle text-right">-'.$dedtot.'</td>'.
+                    '<td colspan="2" class="align-middle d-table-cell text-right font-px-0 weight-bold">Spent</td>'.
+                    '<td colspan="5" class="align-middle d-table-cell text-right px-0">&#36;'.$ru['spent'].' within Discount Range &#36;'.$rd['f'].'-&#36;'.$rd['t'].' granting '.($rd['value']==2?$rd['cost'].'&#37;':'&#36;'.$rd['cost'].' Off').'</td>'.
+                    '<td colspan="5" class="align-middle d-table-cell text-right">-'.$dedtot.'</td>'.
                   '</tr>';
                 }
               }
               if($r['postageOption']!=''){
                 echo'<tr>'.
-                  '<td class="text-right align-middle font-weight-bolod">Shipping</td>'.
-                  '<td colspan="5" class="text-right align-middle">'.$r['postageOption'].'</td>'.
-                  '<td class="text-right align-middle">'.$r['postageCost'].'</td>'.
+                  '<td class="text-right align-middle d-table-cell font-weight-bolod">Shipping</td>'.
+                  '<td colspan="5" class="text-right align-middle d-table-cell">'.$r['postageOption'].'</td>'.
+                  '<td class="text-right align-middle d-table-cell">'.$r['postageCost'].'</td>'.
                 '</tr>';
                 if($r['postageCost']>0){
                   $total=$total+$r['postageCost'];
@@ -540,17 +558,17 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
               echo'</tbody>'.
               '<tfoot>'.
                 '<tr>'.
-                  '<td colspan="6" class="text-right align-middle font-weight-bold">Total</td>'.
-                  '<td class="total align-middle">'.$total.'</td>'.
+                  '<td colspan="6" class="text-right align-middle d-table-cell font-weight-bold">Total</td>'.
+                  '<td class="total align-middle d-table-cell">'.$total.'</td>'.
                 '</tr>';
                 $sn=$db->prepare("SELECT * FROM `".$prefix."orderitems` WHERE `oid`=:oid AND `status`='neg' ORDER BY `ti` ASC");
                 $sn->execute([':oid'=>$r['id']]);
                 if($sn->rowCount()>0){
                   while($rn=$sn->fetch(PDO::FETCH_ASSOC)){
                     echo'<tr>'.
-                      '<td colspan="2" class="small align-middle">'.date($config['dateFormat'],$rn['ti']).'</td>'.
-                      '<td colspan="4" class="align-middle">'.$rn['title'].'</td>'.
-                      '<td class="align-middle text-right">-'.number_format((float)$rn['cost'],2,'.','').'</td>'.
+                      '<td colspan="2" class="small align-middle d-table-cell">'.date($config['dateFormat'],$rn['ti']).'</td>'.
+                      '<td colspan="4" class="align-middle d-table-cell">'.$rn['title'].'</td>'.
+                      '<td class="align-middle d-table-cell text-right">-'.number_format((float)$rn['cost'],2,'.','').'</td>'.
                     '</tr>';
                     $total=$total-$rn['cost'];
                     $total=number_format((float)$total,2,'.','');
@@ -642,6 +660,62 @@ if($t=='content'||$t=='login'||$t=='orders'||$t=='agronomy_data'){
       '</div>'.
     '</div>';
 
+  }
+  if($t=='contacts'){
+echo
+  '<section class="row mx-auto p-2 border-0 bg-white">'.
+    '<article class="col-12 col-sm mx-0 px-0 py-0 pl-1 text-left">'.
+      '<div class="row">'.
+        '<div class="col-6 col-sm-2 p-1 p-sm-3">'.
+          '<img class="rounded" src="'.($r['avatar']!=''?'media/avatar/'.$r['avatar']:'core/images/noavatar.jpg').'" style="width:80px;max-height:80px;">'.
+        '</div>'.
+        '<div class="col-6 col-sm p-1 p-sm-3 pt-sm-4">'.
+          '<div class=""><strong>'.($r['name']!=''?$r['name']:$r['username']).'</strong></div>'.
+          ($r['business']!=''?'<div>'.$r['business'].'</div>':'').
+          ($r['jobtitle']!=''?'<div class="text-muted">'.$r['jobtitle'].'</div>':'').
+        '</div>'.
+        '<div class="col-6 col-sm p-1 p-sm-3">'.
+          '<div class="small text-muted">Account Details</div>'.
+          '<div><span class="badger badge-'.rankclass($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span></div>'.
+          ($r['spent']!=0?'<div class="small"><span class="text-muted">Spent: </span>&dollar;'.$r['spent'].'</div>':'').
+          ($r['points']!=0?'<div class="small"><span class="text-muted">Points: </span>'.$r['points'].'</div>':'').
+          ($r['lti']!=0?'<div class="small"><span class="text-muted">Active: </span>'._agologgedin($r['lti']).'</div>':'').
+        '</div>'.
+        '<div class="col-6 col-sm p-1 p-sm-3">'.
+          '<div class="small text-muted">Social Media</div>';
+          $ss=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='social' AND `uid`=:uid ORDER BY `icon` ASC");
+          $ss->execute([':uid'=>$r['id']]);
+          while($rs=$ss->fetch(PDO::FETCH_ASSOC)){
+            echo'<a href="'.$rs['url'].'"><i class="i i-3x m-1 i-social social-'.$rs['icon'].'">social-'.$rs['icon'].'</i></a>';
+          }
+        echo'</div>'.
+      '</div>'.
+
+      '<div class="row">'.
+        '<div class="col-6 col-sm p-1 p-sm-3">'.
+          '<div class="small text-muted">Phone Numbers</div>'.
+          ($r['phone']!=''?'<div><a class="text-black" href="tel:'.$r['phone'].'">'.$r['phone'].'</a></div>':'').
+          ($r['mobile']!=''?'<div><a class="text-black" href="tel:'.$r['mobile'].'">'.$r['mobile'].'</a></div>':'').
+        '</div>'.
+        '<div class="col-6 col-sm p-1 p-sm-3">'.
+          '<div class="small text-muted">Email</div>'.
+          ($r['email']!=''?'<div><a class="text-black" href="mailto:'.$r['email'].'">'.$r['email'].'</a></div>':'').
+        '</div>'.
+        '<div class="col-12 col-sm p-1 p-sm-3">'.
+          '<div class="small text-muted">Address</div>'.
+          ($r['address']!=''?'<div>'.$r['address'].',</div>':'').
+          ($r['suburb']!=''?'<div>'.$r['suburb'].','.($r['postcode']!=0?' '.$r['postcode'].',':'').'</div>':'').
+          ($r['state']!=''?'<div>'.$r['state'].','.($r['country']!=''?' '.$r['country']:'').'</div>':'').
+        '</div>'.
+      '</div>'.
+      '<div class="row">'.
+        '<div class="col-12 p-1 px-sm-3 pb-sm-3">'.
+          '<div class="small text-muted">Notes</div>'.
+          ($r['notes']!=''?$r['notes']:'').
+        '</div>'.
+      '</div>'.
+    '</article>'.
+  '</section>';
   }
   if($o=='modal'){
     echo'</div>';

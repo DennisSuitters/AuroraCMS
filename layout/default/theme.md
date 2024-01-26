@@ -1,6 +1,11 @@
 # Default Changelog
 
-### v0.2.1
+### v0.2.2
+- Add Order Process Status to Orders page.
+- Improve Cart layout, add easier editing for items.
+- Add warning for cart when items exceed inventory quantity.
+
+#### v0.2.1
 - Add ability to have multiple Co-Authors in Articles.
 
 #### v0.2

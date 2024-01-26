@@ -47,6 +47,7 @@ namespace Stripe;
  * @property null|\Stripe\StripeObject $pix
  * @property null|\Stripe\StripeObject $promptpay
  * @property null|\Stripe\StripeObject $radar_options Options to configure Radar. See <a href="https://stripe.com/docs/radar/radar-session">Radar Session</a> for more information.
+ * @property null|\Stripe\StripeObject $revolut_pay
  * @property null|\Stripe\StripeObject $sepa_debit
  * @property null|\Stripe\StripeObject $sofort
  * @property string $type The type of the PaymentMethod. An additional hash is included on the PaymentMethod with a name matching this value. It contains additional information specific to the PaymentMethod type.
@@ -62,6 +63,41 @@ class PaymentMethod extends ApiResource
     use ApiOperations\Create;
     use ApiOperations\Retrieve;
     use ApiOperations\Update;
+
+    const TYPE_ACSS_DEBIT = 'acss_debit';
+    const TYPE_AFFIRM = 'affirm';
+    const TYPE_AFTERPAY_CLEARPAY = 'afterpay_clearpay';
+    const TYPE_ALIPAY = 'alipay';
+    const TYPE_AU_BECS_DEBIT = 'au_becs_debit';
+    const TYPE_BACS_DEBIT = 'bacs_debit';
+    const TYPE_BANCONTACT = 'bancontact';
+    const TYPE_BLIK = 'blik';
+    const TYPE_BOLETO = 'boleto';
+    const TYPE_CARD = 'card';
+    const TYPE_CARD_PRESENT = 'card_present';
+    const TYPE_CASHAPP = 'cashapp';
+    const TYPE_CUSTOMER_BALANCE = 'customer_balance';
+    const TYPE_EPS = 'eps';
+    const TYPE_FPX = 'fpx';
+    const TYPE_GIROPAY = 'giropay';
+    const TYPE_GRABPAY = 'grabpay';
+    const TYPE_IDEAL = 'ideal';
+    const TYPE_INTERAC_PRESENT = 'interac_present';
+    const TYPE_KLARNA = 'klarna';
+    const TYPE_KONBINI = 'konbini';
+    const TYPE_LINK = 'link';
+    const TYPE_OXXO = 'oxxo';
+    const TYPE_P24 = 'p24';
+    const TYPE_PAYNOW = 'paynow';
+    const TYPE_PAYPAL = 'paypal';
+    const TYPE_PIX = 'pix';
+    const TYPE_PROMPTPAY = 'promptpay';
+    const TYPE_REVOLUT_PAY = 'revolut_pay';
+    const TYPE_SEPA_DEBIT = 'sepa_debit';
+    const TYPE_SOFORT = 'sofort';
+    const TYPE_US_BANK_ACCOUNT = 'us_bank_account';
+    const TYPE_WECHAT_PAY = 'wechat_pay';
+    const TYPE_ZIP = 'zip';
 
     /**
      * @param null|array $params

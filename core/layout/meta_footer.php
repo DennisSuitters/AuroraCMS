@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */?>
@@ -234,9 +234,10 @@
                 if(t=='config'&&c=='php_honeypot'){
                   $('#php_honeypot_link').html('<a target="_blank" href="'+file.url+'">'+file.url+'</a>');
                 }else{
-                  if(t=='menu'&&c=='cover'){
+                  var c2=c.toLowerCase();
+                  if(t=='menu'&&(c=='cover'||c=='shareImage')){
                     coverUpdate(id,t,c,file.url);
-                    $('#'+c+'image').attr('src',file.url);
+                    $('#'+c2+'image').attr('src',file.url);
                   }else{
                     $('#'+c+'image').attr('src',file.url);
                   }

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -51,7 +51,9 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             '<input class="tab-control" id="tab1-7" name="tabs" type="radio">'.
             '<label for="tab1-7">Certificate</label>'.
             '<input class="tab-control" id="tab1-8" name="tabs" type="radio">'.
-            '<label for="tab1-8">Students</label>';?>
+            '<label for="tab1-8">Students</label>'.
+            '<input class="tab-control" id="tab1-9" name="tabs" type="radio">'.
+            '<label for="tab1-9">Analytics</label>';?>
 <?php /* Content */?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
               <label for="title" class="mt-0">Title</label>
@@ -253,11 +255,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                 '<label for="tab2-2">On Page Media</label>';?>
                 <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                   <div id="error"></div>
-                  <label for="fileURL" class="mt-0">URL</label>
-                  <div class="form-row">
-                    <?=$r['fileURL']!=''?'<a data-fancybox="url" href="'.$r['fileURL'].'"><img id="urlimage" src="'.$r['fileURL'].'"></a>':'<img id="urlimage" src="'.ADMINNOIMAGE.'" alt="No Image">'.'<input class="textinput" id="fileURL" data-dbid="'.$r['id'].'" data-dbt="content" data-dbc="fileURL" type="text" value="'.$r['fileURL'].'"'.($user['options'][1]==1?' placeholder="Enter a URL..."':' readonly').'>'.($user['options'][1]==1?'<button class="save" id="savefileURL" data-dbid="fileURL" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-                  </div>
-                  <label id="courseImage" for="file">Image</label>
+                  <label id="courseImage" for="file" class="mt-0">Image</label>
                   <div class="form-row">
                     <?php $w='';
                     if(stristr($r['file'],'/thumbs/'))$w='thumbs';
@@ -377,12 +375,7 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
 <?php /* SEO */?>
             <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
-              <label for="views" class="mt-0">Views</label>
-              <div class="form-row">
-                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-              </div>
-              <label for="metaRobots">Meta Robots</label>
+              <label for="metaRobots" class="mt-0">Meta Robots</label>
               <?php if($user['options'][1]==1){?>
                 <div class="form-text">Options for Meta Robots: <span data-tooltip="left" data-tooltip="tooltip" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
               <?php }?>
@@ -713,6 +706,15 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
                     </article>
                   <?php }?>
                 </section>
+              </div>
+            </div>
+<?php /* Analytics */ ?>
+            <div class="tab1-9 border p-3" data-tabid="tab1-9" role="tabpanel">
+              <div class="alert alert-info">The Analytics is a Work In Progress at the moment.</div>
+              <label for="views" class="mt-0">Views</label>
+              <div class="form-row">
+                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="content" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
+                <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`content`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
               </div>
             </div>
           </div>

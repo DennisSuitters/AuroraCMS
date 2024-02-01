@@ -7,7 +7,7 @@
 * @author     Dennis Suitters <dennis@diemen.design>
 * @copyright  2014-2019 Diemen Design
 * @license    http://opensource.org/licenses/MIT  MIT License
-* @version    0.2.26-1
+* @version    0.2.26-4
 * @link       https://github.com/DiemenDesign/AuroraCMS
 * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -32,18 +32,18 @@ $sv=$db->query("UPDATE `".$prefix."sidebar` SET `views`=`views`+1 WHERE `id`='54
           </div>
         </div>
         <div class="tabs" role="tablist">
-          <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-          <label for="tab1-1">Settings</label>
-          <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-          <label for="tab1-2">Filters</label>
-          <input class="tab-control" id="tab1-5" name="tabs" type="radio">
-          <label for="tab1-5">Project Honey Pot</label>
-          <input class="tab-control" id="tab1-6" name="tabs" type="radio">
-          <label for="tab1-6">reCaptcha</label>
-          <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-          <label for="tab1-3">Blacklist</label>
-          <input class="tab-control" id="tab1-4" name="tabs" type="radio">
-          <label for="tab1-4">Whitelist</label>
+          <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+          '<label for="tab1-1">Settings</label>'.
+          '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+          '<label for="tab1-2">Filters</label>'.
+          '<input class="tab-control" id="tab1-5" name="tabs" type="radio">'.
+          '<label for="tab1-5">Project Honey Pot</label>'.
+          '<input class="tab-control" id="tab1-6" name="tabs" type="radio">'.
+          '<label for="tab1-6">reCaptcha</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+          '<label for="tab1-3">Blacklist</label>'.
+          '<input class="tab-control" id="tab1-4" name="tabs" type="radio">'.
+          '<label for="tab1-4">Whitelist</label>';?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <form target="sp" method="post" action="core/change_adminaccess.php">
               <label for="adminfolder" class="mt-0">Administration Access Folder</label>

@@ -7,11 +7,11 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-2
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
-$f=isset($_GET['f'])?filter_input(INPUT_GET,'f',FILTER_SANITIZE_STRING):'';
+$f=isset($_GET['f'])?filter_input(INPUT_GET,'f',FILTER_UNSAFE_RAW):'';
 require'db.php';
 $config=$db->query("SELECT mediaOptions,mediaMaxWidth,mediaMaxWidthThumb,unsplash_appname,unsplash_publickey,unsplash_secretkey FROM `".$prefix."config` WHERE `id`=1")->fetch(PDO::FETCH_ASSOC);
 if((!empty($_SERVER['HTTPS'])&&$_SERVER['HTTPS']!=='off')||$_SERVER['SERVER_PORT']==443){

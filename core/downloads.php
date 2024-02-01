@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.22
+ * @version    0.2.22-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -15,7 +15,7 @@ require'core/db.php';
 $config=$db->query("SELECT `development`,`seoTitle`,`theme` FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $ti=time();
 $file=isset($args[0])?$args[0]:'';
-$oc=isset($_GET['oc'])?filter_input(INPUT_GET,'oc',FILTER_SANITIZE_STRING):'';
+$oc=isset($_GET['oc'])?filter_input(INPUT_GET,'oc',FILTER_UNSAFE_RAW):'';
 if($file!=''){
   $s=$db->prepare("SELECT * FROM `".$prefix."choices` WHERE `contentType`='download' AND `url`=:file");
   $s->execute([':file'=>$file]);

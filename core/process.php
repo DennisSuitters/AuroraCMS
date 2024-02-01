@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -24,17 +24,6 @@ $ti=time();
 $show=$html=$head=$content=$foot='';
 $css=THEME.'/css/';
 $favicon=FAVICON;
-if(file_exists(THEME.'/images/favicon-512.png'))
-	$shareImage=URL.THEME.'/images/favicon-512.png';
-elseif(file_exists(THEME.'/images/favicon-512.gif'))
-	$shareImage=URL.THEME.'/images/favicon-512.gif';
-elseif(file_exists(THEME.'/images/favicon-512.jpg'))
-	$shareImage=URL.THEME.'/images/favicon-512.jpg';
-elseif(file_exists(THEME.'/images/favicon-512.ico'))
-	$shareImage=URL.THEME.'/images/favicon-512.ico';
-else
-	$shareImage=URL.'core/images/shareicon.jpg';
-
 $noimage=NOIMAGE;
 $noavatar=NOAVATAR;
 if($view=='page'){
@@ -50,6 +39,21 @@ if($view=='page'){
   ]);
 }
 $page=$sp->fetch(PDO::FETCH_ASSOC);
+if($page['shareImage']!='')
+  $shareImage=$page['shareImage'];
+elseif($page['cover']!='')
+  $shareImage=$page['cover'];
+elseif(file_exists(THEME.'/images/favicon-512.png'))
+	$shareImage=URL.THEME.'/images/favicon-512.png';
+elseif(file_exists(THEME.'/images/favicon-512.gif'))
+	$shareImage=URL.THEME.'/images/favicon-512.gif';
+elseif(file_exists(THEME.'/images/favicon-512.jpg'))
+	$shareImage=URL.THEME.'/images/favicon-512.jpg';
+elseif(file_exists(THEME.'/images/favicon-512.ico'))
+	$shareImage=URL.THEME.'/images/favicon-512.ico';
+else
+	$shareImage=URL.'core/images/shareicon.jpg';
+
 $seoTitle=isset($page['seoTitle'])?$page['seoTitle']:'';
 $metaRobots=isset($page['metaRobots'])?$page['metaRobots']:'';
 $seoCaption=isset($page['seoCaption'])?$page['seoCaption']:'';

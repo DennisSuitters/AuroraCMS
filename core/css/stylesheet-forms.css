@@ -318,7 +318,7 @@ button[disabled]:hover{
 
 .btn-group{
   position:relative;
-  display:inline-flex;
+  display:flex;
   vertical-align:middle }
 
 .btn-group>.btn{

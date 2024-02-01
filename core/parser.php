@@ -193,8 +193,6 @@ foreach($tags as$tag){
 			if($attribute=='page'){
 				if(isset($page['cover'])&&$page['cover']!='')
 					$parsing.='<img class="'.$class.'" src="'.$page['cover'].'">';
-				elseif(isset($page['coverURL'])&&$page['coverURL']!='')
-					$parsing.='<img class="'.$class.'" src="'.$page['coverURL'].'">';
 				else
 					$parsing.='';
 			}

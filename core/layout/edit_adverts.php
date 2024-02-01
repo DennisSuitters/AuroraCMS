@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -38,12 +38,12 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
           </div>
         </div>
         <div class="tabs" role="tablist">
-          <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-          <label for="tab1-1">General</label>
-          <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-          <label for="tab1-2">Media</label>
-          <input class="tab-control" id="tab1-3" name="tabs" type="radio">
-          <label for="tab1-3">Settings</label>
+          <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+          '<label for="tab1-1">General</label>'.
+          '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+          '<label for="tab1-2">Media</label>'.
+          '<input class="tab-control" id="tab1-3" name="tabs" type="radio">'.
+          '<label for="tab1-3">Settings</label>';?>
 <?php /* General */?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <label for="title" class="mt-0">Title</label>

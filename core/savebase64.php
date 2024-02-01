@@ -7,13 +7,13 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2021 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.23
+ * @version    0.2.23-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
 $f=isset($_POST['filename'])?filter_input(INPUT_POST,'filename',FILTER_UNSAFE_RAW):'';
 if($f!=''){
-  $w=isset($_POST['where'])?filter_input(INPUT_POST,'where',FILTER_SANITIZE_STRING)."/":"";
+  $w=isset($_POST['where'])?filter_input(INPUT_POST,'where',FILTER_UNSAFE_RAW)."/":"";
   $f=substr($f,0,strrpos($f,'.'));
   $d=isset($_POST['imgBase64'])?filter_input(INPUT_POST,'imgBase64',FILTER_UNSAFE_RAW):'';
   if($d!=''){

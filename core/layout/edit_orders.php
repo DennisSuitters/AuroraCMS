@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -338,7 +338,24 @@ else{?>
                 </select>
                 <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
               </form>
-              <?php $so=$db->query("SELECT `id`,`rid`,`code`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='option' ORDER BY `code` ASC,`title` ASC");
+              <?php $sw=$db->query("SELECT `id`,`username`,`name`,`rate` FROM `".$prefix."login` WHERE `rate`!=0 ORDER BY `username` ASC, `name` ASC");
+              if($sw->rowCount()>0){?>
+                <form class="form-row mt-1 pl-2" target="sp" method="post" action="core/updateorder.php">
+                  <input name="act" type="hidden" value="addrate">
+                  <input name="id" type="hidden" value="<?=$r['id'];?>">
+                  <input name="t" type="hidden" value="orderitems">
+                  <input name="c" type="hidden" value="">
+                  <label>Worker&nbsp;Wage&nbsp;Rate</label>
+                  <select name="da" data-tooltip="tooltip" aria-label="Select Option">
+                    <option value="">Select Option...</option>
+                    <?php while($rw=$sw->fetch(PDO::FETCH_ASSOC)){?>
+                      <option value="<?=$rw['id'];?>"><?=$rw['username'].' : '.$rw['name'].' : &dollar;'.$rw['rate'].' per hour';?></option>
+                    <?php }?>
+                  </select>
+                  <button class="add" type="submit" data-tooltip="tooltip" aria-label="Add"><i class="i">add</i></button>
+                </form>
+              <?php }
+              $so=$db->query("SELECT `id`,`rid`,`code`,`title`,`cost` FROM `".$prefix."choices` WHERE `contentType`='option' ORDER BY `code` ASC,`title` ASC");
               if($so->rowCount()>0){?>
                 <form class="form-row mt-1 pl-2" target="sp" method="post" action="core/updateorder.php">
                   <input name="act" type="hidden" value="addoption">
@@ -455,16 +472,16 @@ else{?>
                     </td>
                     <td class="text-left align-middle d-table-cell px-0"><?= isset($c['title'])?$c['title']:'';?></td>
                     <td class="text-center align-middle d-table-cell px-0">
-                      <?php if($oi['iid']!=0){?>
-                        <form target="sp" method="post" action="core/updateorder.php">
-                          <input name="act" type="hidden" value="quantity">
-                          <input name="id" type="hidden" value="<?=$oi['id'];?>">
-                          <input name="t" type="hidden" value="orderitems">
-                          <input name="c" type="hidden" value="quantity">
-                          <input class="text-center" name="da" type="text" value="<?=$oi['quantity'];?>"<?=$r['status']=='archived'?' readonly':'';?>>
-                        </form>
-                      <?php }else{
-                        if($r['iid']!=0)echo$oi['quantity'];
+                      <form target="sp" method="post" action="core/updateorder.php">
+                        <input name="act" type="hidden" value="quantity">
+                        <input name="id" type="hidden" value="<?=$oi['id'];?>">
+                        <input name="t" type="hidden" value="orderitems">
+                        <input name="c" type="hidden" value="quantity">
+                        <input class="text-center" name="da" type="text" value="<?=($oi['contentType']=='rate'?rtrim(rtrim($oi['quantity'],0),'.'):round($oi['quantity']));?>"<?=$r['status']=='archived'?' readonly':'';?>>
+                      </form>
+                      <?php if($oi['contentType']=='rate'){
+                        $total=$total+($oi['cost']*$oi['quantity'])+$gst;
+                        $total=number_format((float)$total,2,'.','');
                       }?>
                     </td>
                     <td class="text-right align-middle d-table-cell px-0">
@@ -492,11 +509,12 @@ else{?>
                       }?>
                     </td>
                     <td class="text-right align-middle d-table-cell px-0">
-                      <?php if($oi['status']!='pre order'||$oi['status']!='back order'){
-                        echo$oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'';
-                      }else{
-                        echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
-                      }?>
+                      <?php // if($oi['status']!='pre order'||$oi['status']!='back order'){
+                        echo number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.','');
+                      //}else{
+                        //echo'<small>'.($oi['status']=='pre order'?'Pre Order':'Back Order').'</small>';
+                      //}
+                      ?>
                     </td>
                     <td class="align-middle text-right d-table-cell px-0">
                       <form target="sp" method="post" action="core/updateorder.php">

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -386,6 +386,7 @@ else{
                         </div>
                       </div>
                       <div class="card-header overflow-visible mt-0 pt-0 line-clamp<?=($seoerrors>0?' pt-3 badge" data-badge="There are '.$seoerrors.' SEO issues!':'');?>">
+                        <div class="code small hidewhenempty"><?=$r['code'];?></div>
                         <?= !isset($args[1])?'<span class="d-block"><a class="badger badge-success small text-white" href="'.URL.$settings['system']['admin'].'/content/type/'.$r['contentType'].'">'.ucfirst($r['contentType']).'</a></span>':'';?>
                         <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/content/edit/'.$r['id'];?>" aria-label="Edit <?=$r['title'];?>"><?= $r['thumb']!=''&&file_exists($r['thumb'])?'<img src="'.$r['thumb'].'"> ':'';echo$r['title'];?></a>
                         <?php if($user['options'][1]==1){
@@ -397,13 +398,12 @@ else{
                             <div class="small">Belongs to <a data-tooltip="tooltip" href="<?= URL.$settings['system']['admin'].'/accounts/edit/'.$sr['id'].'#account-proofs';?>" aria-label="View Proofs"><?=$sr['name']!=''?$sr['name']:$sr['username'];?></a></div>
                           <?php }
                         }
-                        echo'<small class="text-muted d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</small>';?>
+                        echo'<div class="text-muted small d-block" id="rank'.$r['id'].'">Available to '.($r['rank']==0?'<span class="badger badge-secondary">Everyone</span>':'<span class="badger badge-'.rank($r['rank']).'">'.ucwords(str_replace('-',' ',rank($r['rank']))).'</span> and above').'</div>';?>
                       </div>
-                      <div class="card-footer">
+                      <div class="card-footer p-2">
                         <div class="btn-toolbar" id="controls_<?=$r['id'];?>" role="toolbar">
-                          <span class="code hidewhenempty"><?=$r['code'];?></span>
                           <div class="btn-group">
-                            <?=($rr['num']>0?($user['options'][1]==1?'<span class="reviews"><a data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].' <i class="i">review</i></a></span>':'<span class="btn" data-tooltip="tooltip" aria-label="'.$rr['name'].' New Reviews">'.$rr['name'].'<i class="i">review</i></span>'):'').
+                            <?=($rr['num']>0?($user['options'][1]==1?'<span class="reviews"><a data-tooltip="tooltip" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-6" role="button" aria-label="'.$rr['num'].' New Reviews">'.$rr['num'].'&nbsp;<i class="i">review</i></a></span>':'<span class="btn" data-tooltip="tooltip" aria-label="'.$rr['name'].'&nbsp;New Reviews">'.$rr['name'].'&nbsp;<i class="i">review</i></span>'):'').
                             (isset($sccc)&& $sccc>0?($user['options'][1]==1?'<a data-tooltip="tooltip" class="views'.($sccc>0?' add':'').'" href="'.URL.$settings['system']['admin'].'/content/edit/'.$r['id'].'#tab1-5" role="button" aria-label="'.$sccc.' New Comments">'.$sccc.'&nbsp;<i class="i">comments</i></a>':'<span class="btn views" data-tooltip="tooltip" aria-label="'.$sccc.' New Comments">'.$sccc.'&nbsp;<i class="i">comments</i></span>'):'').
                             ($r['views']>0?($user['options'][1]==1?'<button class="btn views d-inline-block" data-tooltip="tooltip" aria-label="Content viewed '.$r['views'].' times. Click to Clear" onclick="$(`[data-views=\''.$r['id'].'\'`).text(`0`);updateButtons(`'.$r['id'].'`,`content`,`views`,`0`);"><span data-views="'.$r['id'].'">'.$r['views'].'</span>&nbsp;<i class="i">view</i></button>':'<span class="btn views" data-tooltip="tooltip" aria-label="'.ucwords(rtrim($r['contentType'],'s')).' viewed '.$r['views'].' times.">'.$r['views'].'&nbsp;<i class="i">view</i></span>'):'').
                             ($rss['cnt']>0?'<span class="btn views" data-tooltip="tooltip" aria-label="'.$rss['cnt'].' Sales this Month">'.$rss['cnt'].'&nbsp;<i class="i">shipping</i></span>':'');?>

@@ -181,7 +181,7 @@ section.list .card{
   width:100% }
 
 section.list .card .card-image{
-  width:92px!important;
+  width:144px!important;
   height:92px }
 
 section.list .card .card-image img{
@@ -511,8 +511,7 @@ dialog section{display:block}
   display:inline-flex;
   align-items:center }
 
-.card-footer .btn-group {
-  display:inline-block!important }
+.card-footer .btn-group { }
 
 .alert .toolbar .btn-group{
   position:absolute;

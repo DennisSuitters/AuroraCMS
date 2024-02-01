@@ -259,20 +259,33 @@ if($user['options'][4]==1){
                   $us->execute([':id'=>$r['id']]);
                   $r['status']='overdue';
                 }
-                $cs=$db->prepare("SELECT `username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
+                $cs=$db->prepare("SELECT `id`,`username`,`name`,`email`,`business`,`rank` FROM `".$prefix."login` WHERE `id`=:id");
                 $cs->execute([':id'=>$r['cid']]);
                 $c=$cs->fetch(PDO::FETCH_ASSOC);?>
-                <article class="card zebra mx-2 mt-2 mb-0 p-2 border-0 overflow-visible shadow" data-content="<?=($r['aid']!=''?'Archived '.$r['aid'].' | ':'').($r['qid']!=''?'Quote '.$r['qid']:'Invoice '.$r['iid']).' '.(isset($c['business'])&&$c['business']!=''?$c['business']:'').' '.(isset($c['name'])&&$c['name']!=''?$c['name']:$c['username']);?>" id="l_<?=$r['id'];?>">
+                <article class="card zebra mx-2 mt-2 mb-0 p-2 border-0 overflow-visible shadow" data-content="<?=($r['aid']!=''?
+                  'Archived '.$r['aid'].' | '
+                :
+                  '').
+                ($r['qid']!=''?
+                  'Quote '.$r['qid']
+                :
+                  'Invoice '.$r['iid']).
+                ' '.
+                (isset($c['business'])&&$c['business']!=''?
+                  $c['business']
+                :
+                  '').
+                ' '.
+                (isset($c['name'])&&$c['name']!=''?
+                  $c['name']
+                :
+                  (isset($c['username'])&&$c['username']!=''?$c['username']:'')
+                );?>" id="l_<?=$r['id'];?>">
                   <div class="col-3 overflow-visible">
                     <?=($r['status']!='refunded'&&$r['status']!='cancelled'&&$r['hold']==1&&$r['process'][3]==0&&$r['process'][4]==0?'<span class="badger badge-info">Order is on Hold for Pickup!</span>':'');?>
                     <a href="<?= URL.$settings['system']['admin'].'/orders/edit/'.$r['id'];?>"><?=$r['aid']!=''?$r['aid'].'<br>':'';echo$r['qid'].$r['iid'];?></a>
                     <div class="small">Client:&nbsp;
-                      <?php if(isset($c['username'])&&isset($c['name'])){
-                        echo$c['username'].(isset($c['name'])&&$c['name']!=''?' ['.$c['name'].']':'').
-                          ':'.
-                        ($c['name']!=''&&$c['business']!=''?'<br>':'').
-                        ($c['business']!=''?$c['business']:'');
-                      }?>
+                      <?=(isset($c['username'])&&isset($c['name'])?$c['username'].(isset($c['name'])&&$c['name']!=''?' ['.$c['name'].']':'').':'.($c['name']!=''&&$c['business']!=''?'<br>':'').($c['business']!=''?$c['business']:''):'Not Set');?>
                     </div>
                   </div>
                   <div class="col-3 overflow-visible line-clamp small align-middle align-content-center">

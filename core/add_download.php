@@ -15,7 +15,7 @@ if(session_status()==PHP_SESSION_NONE)session_start();
 require'db.php';
 $config=$db->query("SELECT * FROM `".$prefix."config` WHERE `id`='1'")->fetch(PDO::FETCH_ASSOC);
 $id=filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_SANITIZE_STRING):'';
+$t=isset($_POST['t'])?filter_input(INPUT_POST,'t',FILTER_UNSAFE_RAW):'';
 $r=isset($_POST['r'])?filter_input(INPUT_POST,'r',FILTER_SANITIZE_NUMBER_INT):0;
 $a=isset($_POST['a'])?filter_input(INPUT_POST,'a',FILTER_SANITIZE_NUMBER_INT):0;
 $fu=$_FILES['fu'];

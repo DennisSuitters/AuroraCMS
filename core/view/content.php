@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -56,7 +56,7 @@ if(isset($_POST['act'])=='sort')
 	$sort=isset($_POST['sort'])?filter_input(INPUT_POST,'sort',FILTER_UNSAFE_RAW):'';
 else
 	$sort=$config['defaultOrder']!=''?$config['defaultOrder']:'';
-$sortOrder=" ORDER BY ".($view=='events'||$view=='index'?"`tis` ASC, ":"`pin` DESC, ");
+$sortOrder=" ORDER BY ".($view=='events'||$view=='index'?"`pin` DESC, `tis` ASC, ":"`pin` DESC, ");
 if($sort=="")$sortOrder.="`ti` DESC ";
 if($sort=="new")$sortOrder.="`ti` DESC ";
 if($sort=="old")$sortOrder.="`ti` ASC ";

@@ -38,10 +38,10 @@ $r=$s->fetch(PDO::FETCH_ASSOC);?>
             </div>
           </div>
           <div class="tabs" role="tablist">
-            <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-            <label for="tab1-1">General</label>
-            <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-            <label for="tab1-2">Settings</label>
+            <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+            '<label for="tab1-1">General</label>'.
+            '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+            '<label for="tab1-2">Settings</label>';?>
 <?php /* General */ ?>
             <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
               <div id="notification" role="alert"></div>

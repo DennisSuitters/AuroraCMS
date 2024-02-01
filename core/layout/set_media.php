@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-1
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -36,10 +36,10 @@ $sv->execute();?>
          </div>
        </div>
        <div class="tabs" role="tablist">
-         <input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>
-         <label for="tab1-1">General</label>
-         <input class="tab-control" id="tab1-2" name="tabs" type="radio">
-         <label for="tab1-2">Unsplash</label>
+         <?='<input class="tab-control" id="tab1-1" name="tabs" type="radio" checked>'.
+         '<label for="tab1-1">General</label>'.
+         '<input class="tab-control" id="tab1-2" name="tabs" type="radio">'.
+         '<label for="tab1-2">Unsplash</label>';?>
          <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
            <legend class="mt-0">Image Processing</legend>
            <div class="form-text mt-1">Uploaded Images larger than the above size will be resized to their long edge. If either value is '0', resizing will be disabled.</div>

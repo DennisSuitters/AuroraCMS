@@ -1,4 +1,14 @@
-### v0.2.26-3
+### v0.2.26-4
+- Fix tab spacing on pages with multiple tabs in Administration.
+- Update Summernote WYSIWYG Editor.
+- Fix ShareImage not showing when sharing to Social Media.
+- Reconfigure Images to allow for ShareImage and Standard Cover Image.
+- Add Wage Rate to Accounts.
+- Fix Expenses to Calculate Wage Rates and Quantity/Hours.
+- Change all instances of the deprecated FILTER_SANITIZE_STRING for FILTER_UNSAFE_RAW.
+- Fix pinned items not working on home page.
+
+#### v0.2.26-3
 - Fix Browsing Unsplash from closing prematurily.
 - Fix Administration sidebar shadow.
 - Fix Administration sidebar tooltips not working on dropdown options when minimised.

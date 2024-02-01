@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -93,7 +93,7 @@ if(isset($r['contentType'])&&$r['contentType']!=''){
     $my12s=$db->prepare("SELECT SUM(`sales`) AS `cnt` FROM `".$prefix."contentStats` WHERE `rid`=:rid AND `ti`>:tis AND `ti`<:tie");
     $my12s->execute([':rid'=>$r['id'],':tis'=>$times[12][2],':tie'=>$times[12][3]]);
     $my12r=$my12s->fetch(PDO::FETCH_ASSOC);?>
-    <div class="alert col-12 widget item mt-3 mx-0 mx-sm-1 p-0">
+    <div class="alert col-12 widget item m-0 p-0">
       <canvas id="barChart" style="min-height:200px;height:200px;max-height:200px;max-width:100%;"></canvas>
       <div class="d-flex flex-row justify-content-end my-2">
         <span class="mr-3"><i class="i" style="background-color:var(--graph-background-color-prev);color:var(--graph-color-prev);">square</i> Last year</span>

@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -105,7 +105,8 @@ if($r['heading']==''){
           '<input class="tab-control" id="tab1-2" name="tabs" type="radio"><label for="tab1-2"'.($seo['imagescnt']>0?' class="badge" data-badge="'.$seo['imagescnt'].'"':'').'>'.($seo['imagescnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['imagescnt']>1?' are '.$seo['imagescnt'].' SEO related issues!':' is 1 SEO related issue!').'">Media</span>':'Media').'</label>'.
           ($r['file']=='pricing'?'<input id="tab1-3" class="tab-control" name="tabs" type="radio"><label for="tab1-3">Price Items</label>':'').
           ($r['file']!='activate'&&$r['file']!='offline'?'<input class="tab-control" id="tab1-4" name="tabs" type="radio"><label for="tab1-4"'.($seo['seocnt']>0?' class="badge" data-badge="'.$seo['seocnt'].'"':'').'>'.($seo['seocnt']>0?'<span data-tooltip="tooltip" aria-label="There'.($seo['seocnt']>1?' are '.$seo['seocnt'].' SEO related issues!':' is 1 SEO related issue!').'">SEO</span>':'SEO').'</label>':'').
-          ($r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'');?>
+          ($r['id']!=1&&$r['file']!='activate'&&$r['file']!='comingsoon'&&$r['file']!='maintenance'?'<input id="tab1-5" class="tab-control" name="tabs" type="radio"><label for="tab1-5">Settings</label>':'').
+          '<input id="tab1-6" class="tab-control" name="tabs" type="radio"><label for="tab1-6">Analytics</label>';?>
 <?php /* Content */ ?>
           <div class="tab1-1 border p-3" data-tabid="tab1-1" role="tabpanel">
             <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'&&$r['contentType']!='offline'){?>
@@ -226,11 +227,34 @@ if($r['heading']==''){
               '<label for="tab2-4">On Page Media</label>';?>
               <div class="tab2-1 border p-3" data-tabid="tab2-1" role="tabpanel">
                 <?php if($r['contentType']!='comingsoon'&&$r['contentType']!='maintenance'){?>
-                  <label for="coverURL" class="mt-0">Cover Image URL</label>
+                  <label for="shareImage" class="mt-0">Share Image</label>
                   <div class="form-row mb-3">
-                    <input class="image" id="coverURL" type="text" value="<?=$r['coverURL'];?>"<?=$user['options'][1]==1?' placeholder="Enter Cover URL..."':' readonly';?> onchange="coverUpdate('<?=$r['id'];?>','menu','coverURL',$(this).val());">
-                    <?=$user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`coverURL`,``);"><i class="i">trash</i></button>':'';?>
+                    <?php $w='';
+                    if(stristr($r['shareImage'],'/thumbs/'))$w='thumbs';
+                    if(stristr($r['shareImage'],'/lg/'))$w='lg';
+                    if(stristr($r['shareImage'],'/md/'))$w='md';
+                    if(stristr($r['shareImage'],'/sm/'))$w='sm';
+                    if($r['shareImage']!='')
+                      echo'<a data-fancybox="shareImage" data-type="image" href="'.$r['shareImage'].'"><img class="bg-white" id="shareimageimage" src="'.$r['shareImage'].'" alt="'.$r['title'].'"></a>';
+                    else
+                      echo'<img id="shareimageimage" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';?>
+                    <input id="shareImage" name="shareImage" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="shareImage" type="text" value="<?=$r['shareImage'];?>"<?=$user['options'][1]==1?' onchange="coverUpdate(`'.$r['id'].'`,`menu`,`shareImage`,$(this).val());" placeholder="Select an Image from the Button Options..."':' disabled';?>>
+                    <?=($user['options'][1]==1?
+                      '<button data-tooltip="tooltip" aria-label="Open Media Manager" onclick="elfinderDialog(`'.$r['id'].'`,`menu`,`shareImage`);"><i class="i">browse-media</i></button>'.
+                      ($config['mediaOptions'][0]==1?
+                        '<button data-fancybox data-type="ajax" data-src="core/browse_unsplash.php?id='.$r['id'].'&t=menu&c=shareImage" data-tooltip="tooltip" aria-label="Browse Unsplash for Image"><i class="i">social-unsplash</i></button>'
+                      :
+                        '').
+                      ($config['mediaOptions'][2]==1?
+                        '<button class="openimageeditor" data-tooltip="tooltip" aria-label="Edit Image" data-imageeditor="editshareImage" data-image="'.$r['shareImage'].'" data-name="'.$r['title'].'" data-alt="'.$r['fileALT'].'" data-w="'.$w.'" data-id="'.$r['id'].'" data-t="menu" data-c="shareImage"><i class="i">magic</i></button>'
+                      :
+                        '').
+                      '<button class="trash" data-tooltip="tooltip" aria-label="Delete" onclick="coverUpdate(`'.$r['id'].'`,`menu`,`shareImage`,``);"><i class="i">trash</i></button>'.
+                      '<button class="save" id="saveshareImage" data-dbid="shareImage" data-style="zoom-n" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>'
+                    :
+                      '');?>
                   </div>
+                  <div id="editshareImage"></div>
                 <?php }?>
                 <label for="cover" class="mt-0">Image</label>
                 <?=($seo['imagesCover']!=''?'<div class="alert alert-warning m-0 border-danger border-2 border-bottom-0">'.$seo['imagesCover'].'</div>':'');?>
@@ -242,10 +266,6 @@ if($r['heading']==''){
                   if(stristr($r['cover'],'/sm/'))$w='sm';
                   if($r['cover']!='')
                     echo'<a data-fancybox="cover" data-type="image" href="'.$r['cover'].'"><img class="bg-white" id="coverimage" src="'.$r['cover'].'" alt="'.$r['title'].'"></a>';
-                  elseif($r['coverURL']!='')
-                    echo'<a data-fslightbox="cover" data-type="image" href="'.$r['coverURL'].'"><img class="bg-white" id="coverimage" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
-                  elseif($r['coverURL']!='')
-                    echo'<a data-fancybox="cover" data-type="image" href="'.$r['coverURL'].'"><img class="bg-white" id="coverimage" src="'.$r['coverURL'].'" alt="'.$r['title'].'"></a>';
                   else
                     echo'<img id="coverimage" src="'.ADMINNOIMAGE.'" alt="'.$r['title'].'">';?>
                   <input id="cover" name="feature_image" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="cover" type="text" value="<?=$r['cover'];?>"<?=($user['options'][1]==1?' onchange="coverUpdate(`'.$r['id'].'`,`menu`,`cover`,$(this).val());" placeholder="Select an image from the button options..."':' disabled');?>>
@@ -601,12 +621,7 @@ if($r['heading']==''){
 /* SEO */
           if($r['contentType']!='activate'&&$r['contentType']!='offline'){?>
             <div class="tab1-4 border p-3" data-tabid="tab1-4" role="tabpanel">
-              <label for="views" class="mt-0">Views</label>
-              <div class="form-row">
-                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
-                <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
-              </div>
-              <label for="metaRobots">Meta Robots</label>
+              <label for="metaRobots" class="mt-0">Meta Robots</label>
               <div class="form-text">Options for Meta Robots: <span data-tooltip="left" data-tooltip="tooltip" aria-label="Allow search engines robots to index the page, you don’t have to add this to your pages, as it’s the default.">index</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from showing this page in their results.">noindex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Disallow search engines from spidering images on that page. Of course if images are linked to directly from elsewhere, Google can still index them, so using an X-Robots-Tag HTTP header is a better idea.">noimageIndex</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="This is a shortcut for noindex,nofollow, or basically saying to search engines: don’t do anything with this page at all.">none</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to follow the links on the page, whether it can index it or not.">follow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Tells the search engines robots to not follow any links on the page at all.">nofollow</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a cached copy of this page.">noarchive</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Same as noarchive, but only used by MSN/Live.">nocache</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Prevents the search engines from showing a snippet of this page in the search results and prevents them from caching the page.">nosnippet</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks search engines from using the description for this page in DMOZ (aka ODP) as the snippet for your page in the search results.">noodp</span>, <span data-tooltip="left" data-tooltip="tooltip" aria-label="Blocks Yahoo! from using the description for this page in the Yahoo! directory as the snippet for your page in the search results. No other search engines use the Yahoo! directory for this purpose, so they don’t support the tag.">noydir</span></div>
               <div class="form-row">
                 <button data-fancybox data-type="ajax" data-src="https://raw.githubusercontent.com/wiki/DiemenDesign/AuroraCMS/SEO-Meta-Robots.md" data-tooltip="tooltip" aria-label="SEO Meta Robots Information"><i class="i">seo</i></button>
@@ -755,7 +770,16 @@ if($r['heading']==''){
                   <?php }
                 }?>
               </div>
-            <?php }?>
+            <?php }
+/* Analytics */?>
+            <div class="tab1-6 border p-3" data-tabid="tab1-6" role="tabpanel">
+              <div class="alert alert-info">The Analytics is a Work In Progress at the moment.</div>
+              <label for="views" class="mt-0">Views</label>
+              <div class="form-row">
+                <input class="textinput" id="views" data-dbid="<?=$r['id'];?>" data-dbt="menu" data-dbc="views" type="number" value="<?=$r['views'];?>"<?=$user['options'][1]==1?'':' readonly';?>>
+                <?=($user['options'][1]==1?'<button class="trash" data-tooltip="tooltip" aria-label="Clear" onclick="$(`#views`).val(`0`);update(`'.$r['id'].'`,`menu`,`views`,`0`);"><i class="i">eraser</i></button><button class="save" id="saveviews" data-dbid="views" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'');?>
+              </div>
+            </div>
           </div>
         </div>
       </div>

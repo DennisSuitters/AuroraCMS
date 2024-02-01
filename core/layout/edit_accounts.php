@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemendesign.com.au>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
 */
@@ -495,13 +495,13 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                   </div>
                 </div>
                 <div class="row mb-3">
-                  <div class="col-12 col-sm-4 pr-md-3">
+                  <div class="col-12 col-sm-3">
                     <label for="pti">Last Purchase Date</label>
                     <div class="form-row small">
-                      <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).' ('.timeago($r['pti']).')';?>
+                      <?=$r['pti']==0?'Has Not Purchased Yet':date($config['dateFormat'],$r['pti']).'<br>('.timeago($r['pti']).')';?>
                     </div>
                   </div>
-                  <div class="col-12 col-sm-4 pr-md-3">
+                  <div class="col-12 col-sm-3">
                     <label for="spent">Spent</label>
                     <div class="form-row">
                       <div class="input-text">$</div>
@@ -509,11 +509,19 @@ $r=$q->fetch(PDO::FETCH_ASSOC);?>
                       <?=$user['options'][5]==1?'<button class="save" id="savespent" data-dbid="spent" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
-                  <div class="col-12 col-sm-4">
+                  <div class="col-12 col-sm-3 pl-sm-3">
                     <label for="points">Points Earned</label>
                     <div class="form-row">
                       <input class="textinput" id="points" type="number" value="<?=$r['points'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="points"<?=$user['options'][5]==1?'':' readonly';?>>
                       <?=$user['options'][5]==1?'<button class="save" id="savepoints" data-dbid="points" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
+                    </div>
+                  </div>
+                  <div class="col-12 col-sm-3 pl-sm-3">
+                    <label for="rate">Wage Rate (per hr)</label>
+                    <div class="form-row">
+                      <div class="input-text">$</div>
+                      <input class="textinput" id="rate" type="number" value="<?=$r['rate'];?>" data-dbid="<?=$r['id'];?>" data-dbt="login" data-dbc="rate"<?=$user['options'][5]==1?'':' readonly';?>>
+                      <?=$user['options'][5]==1?'<button class="save" id="saverate" data-dbid="rate" data-tooltip="tooltip" aria-label="Save"><i class="i">save</i></button>':'';?>
                     </div>
                   </div>
                 </div>

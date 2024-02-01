@@ -7,7 +7,7 @@
  * @author     Dennis Suitters <dennis@diemen.design>
  * @copyright  2014-2019 Diemen Design
  * @license    http://opensource.org/licenses/MIT  MIT License
- * @version    0.2.26-3
+ * @version    0.2.26-4
  * @link       https://github.com/DiemenDesign/AuroraCMS
  * @notes      This PHP Script is designed to be executed using PHP 7+
  */
@@ -197,6 +197,20 @@ if($act=='additem'){
 		':status'=>$rc['stockStatus'],
     ':ti'=>time()
   ]);
+}
+if($act=='addrate'){
+  if(is_numeric($da)&&$da!=0){
+    $su=$db->prepare("SELECT `id`,`username`,`name`,`rate` FROM `".$prefix."login` WHERE `id`=:id");
+    $su->execute([':id'=>$da]);
+    $ru=$su->fetch(PDO::FETCH_ASSOC);
+    $q=$db->prepare("INSERT IGNORE INTO `".$prefix."orderitems` (`oid`,`contentType`,`title`,`quantity`,`cost`,`status`,`ti`) VALUES (:oid,'rate',:title,1,:cost,'in stock',:ti)");
+    $q->execute([
+      ':oid'=>$id,
+      ':title'=>'Labour ('.($ru['name']!=''?$ru['name']:$ru['username']).').',
+      ':cost'=>$ru['rate'],
+      ':ti'=>$ti
+    ]);
+  }
 }
 if($act=='addoption'){
   if($da!=0){
@@ -500,20 +514,13 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
     '</td>'.
     '<td class="text-left align-middle d-table-cell px-0">'.(isset($c['title'])?$c['title']:'').'</td>'.
     '<td class="text-center align-middle d-table-cell px-0">'.
-      ($oi['iid']!=0?
-        '<form target="sp" method="post" action="core/updateorder.php">'.
-          '<input name="act" type="hidden" value="quantity">'.
-          '<input name="id" type="hidden" value="'.$oi['id'].'">'.
-          '<input name="t" type="hidden" value="orderitems">'.
-          '<input name="c" type="hidden" value="quantity">'.
-          '<input name="da" class="text-center" value="'.$oi['quantity'].'"'.($r['status']=='archived'?' readonly':'').'>'.
-        '</form>'
-      :
-        ($oi['iid']!=0?
-          $oi['quantity']
-        :
-          '')
-      ).
+      '<form target="sp" method="post" action="core/updateorder.php">'.
+        '<input name="act" type="hidden" value="quantity">'.
+        '<input name="id" type="hidden" value="'.$oi['id'].'">'.
+        '<input name="t" type="hidden" value="orderitems">'.
+        '<input name="c" type="hidden" value="quantity">'.
+        '<input name="da" class="text-center" value="'.($oi['contentType']=='rate'?rtrim(rtrim($oi['quantity'],0),'.'):round($oi['quantity'])).'"'.($r['status']=='archived'?' readonly':'').'>'.
+      '</form>'.
     '</td>'.
     '<td class="text-right align-middle d-table-cell px-0">'.
       ($oi['iid_ti']!=0?
@@ -531,7 +538,7 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
         '</form>'
       ).
     '</td>'.
-    '<td class="test-right align-middle d-table-cell px-0">';
+    '<td class="text-right align-middle d-table-cell px-0">&nbsp;';
       $gst=0;
       if($oi['status']!='pre-order'){
         if($config['gst']>0){
@@ -541,10 +548,14 @@ while($oi=$si->fetch(PDO::FETCH_ASSOC)){
         }
         $html.=$gst>0?$gst:'';
       }
-    $html.='</td>'.
-    '<td class="text-right align-middle d-table-cell px-0">';
+    $html.='</td>';
+    if($oi['contentType']=='rate'){
+      $total=$total+($oi['cost']*$oi['quantity'])+$gst;
+      $total=number_format((float)$total,2,'.','');
+    }
+    $html.='<td class="text-right align-middle d-table-cell px-0">';
       if($oi['status']!='pre-order'){
-        $html.=($oi['iid']!=0?number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.',''):'');
+        $html.=number_format((float)$oi['cost']*$oi['quantity']+$gst,2,'.','');
       }else{
         $html.='<small>Pre-Order</small>';
       }
